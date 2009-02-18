@@ -112,6 +112,8 @@ class Tinebase_Notes
         $_filter->appendFilterSql($select);
         $_pagination->appendPaginationSql($select);
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
         $rows = $this->_db->fetchAssoc($select);
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
 
@@ -185,6 +187,11 @@ class Tinebase_Notes
                     'field' => 'record_id',
                     'operator' => 'equals',
                     'value' => $_id
+                ),
+                array(
+                    'field' => 'note_type_id',
+                    'operator' => 'in',
+                    'value' => $this->getNoteTypes(TRUE)->getArrayOfIds()
                 )
             ));
             
@@ -348,13 +355,16 @@ class Tinebase_Notes
     /**
      * get all note types
      *
+     * @param boolean|optional $onlyNonSystemNotes
      * @return Tinebase_Record_RecordSet of Tinebase_Model_NoteType
      */
-    public function getNoteTypes()
+    public function getNoteTypes($onlyNonSystemNotes = FALSE)
     {
         $types = new Tinebase_Record_RecordSet('Tinebase_Model_NoteType');
         foreach ($this->_noteTypesTable->fetchAll() as $type) {
-            $types->addRecord(new Tinebase_Model_NoteType($type->toArray(), true));
+            if (!$onlyNonSystemNotes || $type->is_user_type) {
+                $types->addRecord(new Tinebase_Model_NoteType($type->toArray(), true));
+            }
         }
         return $types;         
     }

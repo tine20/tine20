@@ -13,487 +13,18 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:116
-msgid "Report bugs"
-msgstr "Рапорт на грешките"
-
-#: Acl/Rights.php:117
-msgid "Report bugs to tine20.org directly when they occour"
-msgstr "Директен рапорт на настъпилите грешките към tine20.org"
-
-#: Acl/Rights.php:120
-msgid "Check version"
-msgstr "Провери версия"
-
-#: Acl/Rights.php:121
-msgid "Check tine20.org for new versions"
-msgstr "Провери tine20.org за нови версии"
-
-#: Application/Rights/Abstract.php:56
-msgid "admin"
-msgstr "Администратор"
-
-#: Application/Rights/Abstract.php:57
-msgid "admin right description"
-msgstr "oписание на администраторските права"
-
-#: Application/Rights/Abstract.php:60
-msgid "run"
-msgstr "изпълни"
-
-#: Application/Rights/Abstract.php:61
-msgid "run right description"
-msgstr ""
-"За да бъде операцията изпълнена. Вие се нуждаете от администраторски права."
-
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
-msgid "Tags"
-msgstr "Категории"
-
-#: Export/Pdf.php:404
-msgid "Export Date"
-msgstr "Експортирай датата"
-
-#: Export/Pdf.php:408
-msgid "Created by"
-msgstr "Обработен/създаден от "
-
-#: Export/Pdf.php:462 js/widgets/ActivitiesPanel.js:512
-msgid "Activities"
-msgstr "Операции"
-
-#: Frontend/Http.php:265 js/tineInit.js:227
-msgid "Authorisation Required"
-msgstr "Изискано упълномощаване"
-
-#: Frontend/Http.php:266
-#, fuzzy
-msgid "Your session is not valid. You need to login again."
-msgstr ""
-"Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
-
-#: Frontend/Http.php:292 js/ExceptionDialog.js:26
-msgid "Abnormal End"
-msgstr "Програмен срив"
-
-#: Frontend/Http.php:293 js/ExceptionDialog.js:51
-msgid "An error occurred, the program ended abnormal."
-msgstr "Грешка, водеща до рограмен срив."
-
-#: js/common.js:100
-msgid "{0} minute"
-msgid_plural "{0} minutes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/common.js:101
-msgid "{0} hour"
-msgid_plural "{0} hours"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/common.js:102
-msgid "{0} workday"
-msgid_plural "{0} workdays"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/ExceptionDialog.js:34 js/MainScreen.js:357
-#: js/widgets/AccountpickerPanel.js:149
-#: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:161
-#: js/widgets/EditRecord.js:136
-msgid "Cancel"
-msgstr "Прекъсни"
-
-#: js/ExceptionDialog.js:42
-msgid "Send Report"
-msgstr "Изпрати рапорт"
-
-#: js/ExceptionDialog.js:52
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Възможно е вашата последна операция до не е изпълнена коректно."
-
-#: js/ExceptionDialog.js:53
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occoured."
-msgstr ""
-"Изпращайки протокол Вие бихте подпомогнали усавършенстването на програмата. "
-"Моля опишете вашите стъпки преди настъпването на грешката."
-
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:560
-msgid "Description"
-msgstr "Описание"
-
-#: js/ExceptionDialog.js:69
-msgid "Show Details:"
-msgstr "Покажи детайли:"
-
-#: js/ExceptionDialog.js:92
-msgid "Sending report..."
-msgstr "Изпраща рапорт..."
-
-#: js/ExceptionDialog.js:92
-msgid "Please wait a moment"
-msgstr "Моля изчакайте малко"
-
-#: js/ExceptionDialog.js:121
-msgid "Transmission Completed"
-msgstr "Край на изпращането"
-
-#: js/ExceptionDialog.js:122
-#, fuzzy
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Вашият протокол е изпратен. Блегодарим Ви за помощта."
-
-#: js/Login.js:37
-msgid "Login"
-msgstr "Вход"
-
-#: js/Login.js:44
-msgid "Register"
-msgstr "Регистрация"
-
-#: js/Login.js:58 js/Login.js:92
-msgid "Please enter your login data"
-msgstr "Моля задайте Вашите входни данни."
-
-#: js/Login.js:75
-msgid "Username"
-msgstr "Потребителско име"
-
-#: js/Login.js:81
-msgid "Password"
-msgstr "Парола"
-
-#: js/Login.js:120
-msgid "Logging you in..."
-msgstr "Вашите входни данни се обработват..."
-
-#: js/Login.js:120 js/widgets/container/ContainerGrants.js:34
-#: js/widgets/container/ContainerTree.js:277
-#: js/widgets/container/ContainerTree.js:305
-#: js/widgets/container/ContainerTree.js:337
-msgid "Please wait"
-msgstr "Моля изчакайте"
-
-#: js/Login.js:132
-msgid "Login successful. Loading Tine 2.0..."
-msgstr "Влизането е успешно. Tine 2.0 ще бъде заредена..."
-
-#: js/Login.js:132 js/MainScreen.js:435
-msgid "Please wait!"
-msgstr "Моля изчакайте!"
-
-#: js/Login.js:138
-msgid "Login failure"
-msgstr "Неуспешен вход"
-
-#: js/Login.js:139
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Вашето(-ите) потребителско име или(и) парола е (са) грешни!!!"
-
-#: js/MainScreen.js:54 js/widgets/container/ContainerGrants.js:105
-msgid "Admin"
-msgstr "Администратор"
-
-#: js/MainScreen.js:62
-msgid "Preferences"
-msgstr "Настройки"
-
-#: js/MainScreen.js:78
-#, fuzzy
-msgid "User: {0}"
-msgstr "Потребители: {0}"
-
-#: js/MainScreen.js:79
-#, fuzzy
-msgid "Timezone: {0}"
-msgstr "Часова зона: {0}"
-
-#: js/MainScreen.js:80 js/widgets/TimezoneChooser.js:34
-msgid "Timezone"
-msgstr "Часова зона"
-
-#: js/MainScreen.js:81 js/widgets/LangChooser.js:40
-msgid "Language"
-msgstr "Език"
-
-#: js/MainScreen.js:172
-msgid "Change password"
-msgstr "Смени парола"
-
-#: js/MainScreen.js:178
-msgid "Install Google Gears"
-msgstr ""
-"Инсталира Гоогел-Гиерс (Google Gears - помощни програми за работа в off line)"
-
-#: js/MainScreen.js:184
-msgid "Logout"
-msgstr "Изход"
-
-#: js/MainScreen.js:185
-msgid "Logout from Tine 2.0"
-msgstr "Излизане от Tine 2.0"
-
-#: js/MainScreen.js:321
-#, fuzzy
-msgid "Change Password For \"{0}\""
-msgstr "Смени парола за \"{0}\""
-
-#: js/MainScreen.js:345
-msgid "Old Password"
-msgstr "Стара парола"
-
-#: js/MainScreen.js:349
-msgid "New Password"
-msgstr "Нова парола"
-
-#: js/MainScreen.js:353
-msgid "Repeat new Password"
-msgstr "Повтори новата парола"
-
-#: js/MainScreen.js:363 js/widgets/AccountpickerPanel.js:141
-#: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:144
-#: js/widgets/EditRecord.js:115
-msgid "Ok"
-msgstr "Ok"
-
-#: js/MainScreen.js:372
-msgid "Please Wait!"
-msgstr "Моля изчакайте"
-
-#: js/MainScreen.js:373
-msgid "changing password..."
-msgstr "сменя парола..."
-
-#: js/MainScreen.js:384
-msgid "Success"
-msgstr "Успех"
-
-#: js/MainScreen.js:385
-msgid "Your password has been changed."
-msgstr "Вашата парола е сменена."
-
-#: js/MainScreen.js:391 js/MainScreen.js:401
-msgid "Failure"
-msgstr "Грешка"
-
-#: js/MainScreen.js:402
-msgid "The new passwords mismatch, please correct them."
-msgstr "Новито пароли не съвпадат. Моля задай повторно"
-
-#: js/MainScreen.js:420
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Инсталирането на Гиерс (Gears) ще провери актуалното състояние на Tine 2.0 и "
-"ще кочи всички необходими полета  на вашия компютър."
-
-#: js/MainScreen.js:433 js/widgets/app/GridPanel.js:494
-#: js/widgets/container/ContainerTree.js:303 js/widgets/EditDialog.js:386
-msgid "Confirm"
-msgstr "Потвърди"
-
-#: js/MainScreen.js:433
-msgid "Are you sure you want to logout?"
-msgstr "Наистина ли желаете да излезете?"
-
-#: js/MainScreen.js:435
-msgid "Logging you out..."
-msgstr "Подготвя излизане..."
-
-#: js/Record.js:92
-#, fuzzy
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Тагове"
-msgstr[1] "Тагове"
-
-#: js/Record.js:96
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/tineInit.js:217
-msgid "Connection lost, please check your network!"
-msgstr "Връзка е прекъсната. Моля проверете връзката Ви с интернет!"
-
-#: js/tineInit.js:228
-msgid "Your session timed out. You need to login again."
-msgstr ""
-"Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
-
-#: js/tineInit.js:241
-msgid "Insufficient Rights"
-msgstr ""
-
-#: js/tineInit.js:242
-msgid "Sorry, you are not permitted to perform this action"
-msgstr ""
-
-#: js/tineInit.js:251
-msgid "Concurrent Updates"
-msgstr "Конкурентно актуализиране"
-
-#: js/tineInit.js:252
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Някой друг е запаметил документацията докато Вие сте редактирали данните. "
-"Трябва да заредите и наново да направите промяната."
-
-#: js/UserRegistration.js:33
-msgid "Registration Wizard"
-msgstr "Упътване за влизане"
-
-#: js/UserRegistration.js:86
-msgid "Given name"
-msgstr "Собствено име"
-
-#: js/UserRegistration.js:97
-msgid "Family name"
-msgstr "Фамилия"
-
-#: js/UserRegistration.js:108
-msgid "Login name"
-msgstr "Потребителско име"
-
-#: js/UserRegistration.js:121
-msgid "Emailaddress"
-msgstr "Имейл"
-
-#: js/UserRegistration.js:167
-msgid "Congratulations!"
-msgstr "Поздравления!"
-
-#: js/UserRegistration.js:167
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr ""
-"Вие зададохте необходимата информация. След като натиснете бутона `Край` ще "
-"Ви бъде изпратеп регистрационен имейл."
-
-#: js/ux/ConnectionStatus.js:52
-msgid "online"
-msgstr "мрежов режим на работа"
-
-#: js/ux/ConnectionStatus.js:53
-msgid "offline"
-msgstr "локален режим на работа"
-
-#: js/ux/ConnectionStatus.js:54 User/Abstract.php:76 User/Abstract.php:77
-#: User/Abstract.php:78 User/Abstract.php:79 User/Abstract.php:80
+#: User/Abstract.php:76 User/Abstract.php:77 User/Abstract.php:78
+#: User/Abstract.php:79 User/Abstract.php:80 js/ux/ConnectionStatus.js:54
 msgid "unknown"
 msgstr "неоппределен"
 
-#: js/ux/form/ImageField.js:59
-msgid "click to edit"
-msgstr "Кликнете за да редактирате"
-
-#: js/ux/form/ImageField.js:108
-msgid "Not An Image"
-msgstr "Не е снимка (изображение)"
-
-#: js/ux/form/ImageField.js:108
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Моля селектирайте снимка (gif/png/jpeg)"
-
-#: js/ux/form/ImageField.js:125
-msgid "Loading"
-msgstr "Зарежда"
-
-#: js/ux/form/ImageField.js:133
-msgid "Upload Failed"
-msgstr "Неуспешено зареждане (Upload)"
-
-#: js/ux/form/ImageField.js:133
-msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
-"Неуспешено зареждане (Upload) на снимка. Моля обърнете се към Вашият "
-"администратор."
-
-#: js/ux/form/ImageField.js:145
-msgid "Change Image"
-msgstr "Замени снимка"
-
-#: js/ux/form/ImageField.js:166 js/ux/form/ImageField.js:184
-msgid "Crop Image"
-msgstr "Обрежи снимка"
-
-#: js/ux/form/ImageField.js:192
-msgid "Delete Image"
-msgstr "Изтрий снимка"
-
-#: js/ux/form/ImageField.js:218
-msgid "Image Failed"
-msgstr "Грешка при обработка на снимка"
-
-#: js/ux/form/ImageField.js:218
-msgid "Could not load image. Please notify your Administrator"
-msgstr ""
-"Неуспешено зареждане (Upload) на снимка. Моля обърнете се към Вашият "
-"администратор."
-
-#: js/ux/grid/PagingToolbar.js:47
-#, fuzzy
-msgid "{0} selected"
-msgstr "селектирай поле"
-
-#: js/ux/grid/PagingToolbar.js:48
-#, fuzzy
-msgid "Unselect all"
-msgstr "селектирай поле"
-
-#: js/ux/grid/PagingToolbar.js:49
-msgid "Select all visible ({0} records)"
+#: js/widgets/customfields/CustomfieldsPanel.js:36
+msgid "Custom Fields"
 msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:50
-msgid "Select all pages ({0} records)"
+#: js/widgets/customfields/CustomfieldsPanel.js:68
+msgid "There are no custom fields yet"
 msgstr ""
-
-#: js/ux/grid/PagingToolbar.js:51
-msgid "Toggle selection"
-msgstr ""
-
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
-msgstr "Изтрий достъп"
-
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
-msgid "Name"
-msgstr "Име"
-
-#: js/widgets/account/PickerPanel.js:70
-msgid "add account"
-msgstr "Вкарай достъп"
-
-#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
-msgid "enter searchfilter"
-msgstr "задай филтър на търсене"
-
-#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
-msgid "Search"
-msgstr "Търси"
-
-#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
-msgid "Browse"
-msgstr "Разлисти"
-
-#: js/widgets/AccountpickerPanel.js:55
-#, fuzzy
-msgid "none"
-msgstr "бележка"
-
-#: js/widgets/AccountpickerPanel.js:135
-msgid "please select an account"
-msgstr "Моля избери достъп"
 
 #: js/widgets/ActivitiesPanel.js:138
 msgid "Add a Note..."
@@ -505,7 +36,7 @@ msgid "Add"
 msgstr "Добави "
 
 #: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:396
-#: js/widgets/ActivitiesPanel.js:524
+#: js/widgets/ActivitiesPanel.js:525
 msgid "Note"
 msgstr "Записка"
 
@@ -514,8 +45,9 @@ msgid "Add new note"
 msgstr "Добави нова записка"
 
 #: js/widgets/ActivitiesPanel.js:197
-msgid "Recent Activities"
-msgstr "Последно изпълнени операции"
+#, fuzzy
+msgid "Notes"
+msgstr "Записка"
 
 #: js/widgets/ActivitiesPanel.js:261 js/widgets/ActivitiesPanel.js:322
 msgid "Add Note"
@@ -530,7 +62,7 @@ msgstr "Задай нова записка"
 msgid "Add a {0} Note"
 msgstr "Добави една {0} бележка"
 
-#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:529
+#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:530
 msgid "Type"
 msgstr "Тип"
 
@@ -543,102 +75,280 @@ msgid "Timestamp"
 msgstr "Дата"
 
 #: js/widgets/ActivitiesPanel.js:412
-msgid "Displaying notes {0} - {1} of {2}"
+#, fuzzy
+msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Покажи записки {0} - {1} от {2}"
 
 #: js/widgets/ActivitiesPanel.js:413
-msgid "No notes to display"
+#, fuzzy
+msgid "No history to display"
 msgstr "Няма намерени записи"
 
-#: js/widgets/ActivitiesPanel.js:525
+#: js/widgets/ActivitiesPanel.js:511
+msgid "History"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:526
 msgid "Time"
 msgstr "Време"
 
-#: js/widgets/ActivitiesPanel.js:527
+#: js/widgets/ActivitiesPanel.js:528
 msgid "User"
 msgstr "Потребител"
 
-#: js/widgets/app/GridPanel.js:178
-#, fuzzy
-msgid "Edit {0}"
-msgstr "Редакция"
+#: js/widgets/EditDialog.js:144 js/widgets/container/ContainerSelect.js:260
+#: js/widgets/AccountpickerPanel.js:141 js/widgets/EditRecord.js:115
+#: js/MainScreen.js:363
+msgid "Ok"
+msgstr "Ok"
 
-#: js/widgets/app/GridPanel.js:189 js/widgets/container/ContainerTree.js:384
+#: js/widgets/EditDialog.js:153 js/widgets/EditRecord.js:126
+msgid "Apply"
+msgstr "Добави "
+
+#: js/widgets/EditDialog.js:161 js/widgets/container/ContainerSelect.js:251
+#: js/widgets/AccountpickerPanel.js:149 js/widgets/EditRecord.js:136
+#: js/MainScreen.js:357 js/ExceptionDialog.js:34
+msgid "Cancel"
+msgstr "Прекъсни"
+
+#: js/widgets/EditDialog.js:170 js/widgets/EditRecord.js:146
+msgid "delete"
+msgstr "изтрий"
+
+#: js/widgets/EditDialog.js:235
+#, fuzzy
+msgid "Add New {0}"
+msgstr "Добави нов собствен таг"
+
+#: js/widgets/EditDialog.js:237
+msgid "Edit {0} \"{1}\""
+msgstr ""
+
+#: js/widgets/EditDialog.js:266 js/widgets/EditRecord.js:185
+msgid "Saved in"
+msgstr "Съхранен в"
+
+#: js/widgets/EditDialog.js:285
+#, fuzzy
+msgid "Transfering {0}..."
+msgstr "Създаване {0}..."
+
+#: js/widgets/EditDialog.js:366 js/widgets/EditDialog.js:402
+#: js/widgets/app/GridPanel.js:509 js/widgets/tags/TagsPanel.js:254
+#: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
+msgid "Failed"
+msgstr "Грешка"
+
+#: js/widgets/EditDialog.js:366
+#, fuzzy
+msgid "Could not save {0}."
+msgstr "Тага не беше създаден."
+
+#: js/widgets/EditDialog.js:381
+msgid "Errors"
+msgstr ""
+
+#: js/widgets/EditDialog.js:381
+#, fuzzy
+msgid "Please fix the errors noted."
+msgstr "Моля задайте новото име на"
+
+#: js/widgets/EditDialog.js:389 js/widgets/container/ContainerTree.js:379
+#: js/widgets/app/GridPanel.js:494
+#: js/widgets/grid/PersistentFilterPicker.js:123 js/MainScreen.js:433
+msgid "Confirm"
+msgstr "Потвърди"
+
+#: js/widgets/EditDialog.js:389
+#, fuzzy
+msgid "Do you really want to delete this {0}?"
+msgstr "Наистина ли желаете да изтриете "
+
+#: js/widgets/EditDialog.js:391 js/widgets/app/GridPanel.js:497
+#, fuzzy
+msgid "Deleting {0}"
+msgstr "Изтрива таг"
+
+#: js/widgets/EditDialog.js:402 js/widgets/app/GridPanel.js:509
+#, fuzzy
+msgid "Could not delete {0}."
+msgstr "Неуспешно изтриване на тага(-овете)"
+
+#: js/widgets/LangChooser.js:40 js/MainScreen.js:81
+msgid "Language"
+msgstr "Език"
+
+#: js/widgets/LangChooser.js:72
+msgid "setting new language..."
+msgstr "задава нов език..."
+
+#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:94
+#: js/widgets/TimezoneChooser.js:74 js/widgets/grid/FilterToolbar.js:574
+msgid "Please Wait"
+msgstr "Моля изчакайте"
+
+#: js/widgets/LangChooser.js:94
+msgid "loading new language..."
+msgstr "зарежда нов език..."
+
+#: js/widgets/TimezoneChooser.js:34 js/MainScreen.js:80
+msgid "Timezone"
+msgstr "Часова зона"
+
+#: js/widgets/TimezoneChooser.js:74
+msgid "setting new timezone..."
+msgstr "поставя нова часова зона..."
+
+#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+msgid "New version of Tine 2.0 available"
+msgstr "Предлага се нова версия на Tine 2.0"
+
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#, fuzzy
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Предлага се версия \"{0}\" на Tine 2.0."
+
+#: js/widgets/VersionCheck.js:41
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr ""
+"Това е един нестабилен ъпдейт и трябва да бъде инсталиран възможно най-бързо!"
+
+#: js/widgets/VersionCheck.js:50
+#, fuzzy
+msgid "Please consider updating!"
+msgstr "Моля имайте пред вид актуализацията!"
+
+#: js/widgets/GridPicker.js:78
+msgid "remove record"
+msgstr "изтрий запис"
+
+#: js/widgets/GridPicker.js:389 js/widgets/account/PickerPanel.js:177
+msgid "enter searchfilter"
+msgstr "задай филтър на търсене"
+
+#: js/widgets/GridPicker.js:410 js/widgets/account/PickerPanel.js:221
+msgid "Search"
+msgstr "Търси"
+
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
+#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+msgid "Browse"
+msgstr "Разлисти"
+
+#: js/widgets/account/PickerPanel.js:70
+msgid "add account"
+msgstr "Вкарай достъп"
+
+#: js/widgets/account/PickerPanel.js:166 js/widgets/account/ConfigGrid.js:79
+msgid "Name"
+msgstr "Име"
+
+#: js/widgets/account/ConfigGrid.js:55
+msgid "remove account"
+msgstr "Изтрий достъп"
+
+#: js/widgets/container/ContainerTree.js:130
+#, fuzzy
+msgid "All {0}"
+msgstr "Всички {0}"
+
+#: js/widgets/container/ContainerTree.js:135
+msgid "My {0}"
+msgstr "Моите {0}"
+
+#: js/widgets/container/ContainerTree.js:142
+msgid "Shared {0}"
+msgstr "Общи  {0}"
+
+#: js/widgets/container/ContainerTree.js:150
+#, fuzzy
+msgid "Other Users {0}"
+msgstr "Други потребители {0}"
+
+#: js/widgets/container/ContainerTree.js:347
+#, fuzzy
+msgid "New {0}"
+msgstr "Нови {0}"
+
+#: js/widgets/container/ContainerTree.js:347
+#, fuzzy
+msgid "Please enter the name of the new {0}:"
+msgstr "Моля задай името на новите {0}:"
+
+#: js/widgets/container/ContainerTree.js:350
+msgid "No {0} added"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:350
+#: js/widgets/container/ContainerTree.js:414
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+#: js/widgets/container/ContainerTree.js:353
+#: js/widgets/container/ContainerTree.js:381
+#: js/widgets/container/ContainerTree.js:417
+#: js/widgets/container/ContainerGrants.js:34
+#: js/widgets/grid/PersistentFilterPicker.js:125 js/Login.js:120
+msgid "Please wait"
+msgstr "Моля изчакайте"
+
+#: js/widgets/container/ContainerTree.js:353
+#, fuzzy
+msgid "Creating {0}..."
+msgstr "Създаване {0}..."
+
+#: js/widgets/container/ContainerTree.js:379
+#, fuzzy
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "Наистина ли искате да изтриете {0} \"{0}\"?"
+
+#: js/widgets/container/ContainerTree.js:381
+#, fuzzy
+msgid "Deleting {0} \"{1}\""
+msgstr "Изтриване {0} \"{0}\""
+
+#: js/widgets/container/ContainerTree.js:408
+#, fuzzy
+msgid "Please enter the new name of the {0}:"
+msgstr "Моля задай новото име на  {0}:"
+
+#: js/widgets/container/ContainerTree.js:414
+#, fuzzy
+msgid "Not renamed {0}"
+msgstr "Преименуване {0}"
+
+#: js/widgets/container/ContainerTree.js:417
+#, fuzzy
+msgid "Updating {0} \"{1}\""
+msgstr "Актуализиране {0} \"{0}\""
+
+#: js/widgets/container/ContainerTree.js:451
+#, fuzzy
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "Управление на правата за {0} :\"{0}\""
+
+#: js/widgets/container/ContainerTree.js:464 js/widgets/app/GridPanel.js:189
 #, fuzzy
 msgid "Add {0}"
 msgstr "Добавяне {0}"
 
-#: js/widgets/app/GridPanel.js:199 js/widgets/app/GridPanel.js:200
-#: js/widgets/app/GridPanel.js:202 js/widgets/container/ContainerTree.js:390
+#: js/widgets/container/ContainerTree.js:470 js/widgets/app/GridPanel.js:199
+#: js/widgets/app/GridPanel.js:200 js/widgets/app/GridPanel.js:202
 #, fuzzy
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Изтриване {0}"
 msgstr[1] "Изтриване {0}"
 
-#: js/widgets/app/GridPanel.js:273
+#: js/widgets/container/ContainerTree.js:476
 #, fuzzy
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Покажи записки {0} - {1} от {2}"
+msgid "Rename {0}"
+msgstr "Преименуване {0}"
 
-#: js/widgets/app/GridPanel.js:274
-#, fuzzy
-msgid "No {0} to display"
-msgstr "Няма намерени тагове"
-
-#: js/widgets/app/GridPanel.js:294
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
-
-#: js/widgets/app/GridPanel.js:492
-#, fuzzy
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Наистина ли желаете да изтриете "
-msgstr[1] "Наистина ли желаете да изтриете "
-
-#: js/widgets/app/GridPanel.js:497 js/widgets/EditDialog.js:388
-#, fuzzy
-msgid "Deleting {0}"
-msgstr "Изтрива таг"
-
-#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:363
-#: js/widgets/EditDialog.js:399 js/widgets/tags/TagsPanel.js:254
-#: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
-msgid "Failed"
-msgstr "Грешка"
-
-#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:399
-#, fuzzy
-msgid "Could not delete {0}."
-msgstr "Неуспешно изтриване на тага(-овете)"
-
-#: js/widgets/container/ContainerGrants.js:34
-#, fuzzy
-msgid "Updating Grants"
-msgstr "Запаметяване на правата"
-
-#: js/widgets/container/ContainerGrants.js:66
-msgid "Folder"
-msgstr "Папка"
-
-#: js/widgets/container/ContainerGrants.js:82
-msgid "Read"
-msgstr "Четене"
-
-#: js/widgets/container/ContainerGrants.js:92
-msgid "Edit"
-msgstr "Редакция"
-
-#: js/widgets/container/ContainerGrants.js:97
-msgid "Delete"
-msgstr "Изтриване"
-
-#: js/widgets/container/ContainerGrants.js:113
-msgid "Permissions"
-msgstr "Права"
+#: js/widgets/container/ContainerTree.js:482
+msgid "Manage permissions"
+msgstr "Управление и обработка на правата"
 
 #: js/widgets/container/ContainerSelect.js:74
 #, fuzzy
@@ -665,125 +375,99 @@ msgstr "Отворен за общо ползване"
 msgid "please select a {0}"
 msgstr "Моля селектирай един {0}"
 
-#: js/widgets/container/ContainerTree.js:130
+#: js/widgets/container/ContainerGrants.js:34
 #, fuzzy
-msgid "All {0}"
-msgstr "Всички {0}"
+msgid "Updating Grants"
+msgstr "Запаметяване на правата"
 
-#: js/widgets/container/ContainerTree.js:135
-msgid "My {0}"
-msgstr "Моите {0}"
+#: js/widgets/container/ContainerGrants.js:66
+msgid "Folder"
+msgstr "Папка"
 
-#: js/widgets/container/ContainerTree.js:142
-msgid "Shared {0}"
-msgstr "Общи  {0}"
+#: js/widgets/container/ContainerGrants.js:82
+msgid "Read"
+msgstr "Четене"
 
-#: js/widgets/container/ContainerTree.js:149
+#: js/widgets/container/ContainerGrants.js:92
+msgid "Edit"
+msgstr "Редакция"
+
+#: js/widgets/container/ContainerGrants.js:97
+msgid "Delete"
+msgstr "Изтриване"
+
+#: js/widgets/container/ContainerGrants.js:105 js/MainScreen.js:54
+msgid "Admin"
+msgstr "Администратор"
+
+#: js/widgets/container/ContainerGrants.js:113
+msgid "Permissions"
+msgstr "Права"
+
+#: js/widgets/app/MainScreen.js:101
 #, fuzzy
-msgid "Other Users {0}"
-msgstr "Други потребители {0}"
+msgid "Saved filter"
+msgstr "съхрани филтър"
 
-#: js/widgets/container/ContainerTree.js:275
+#: js/widgets/app/GridPanel.js:178
 #, fuzzy
-msgid "New {0}"
-msgstr "Нови {0}"
+msgid "Edit {0}"
+msgstr "Редакция"
 
-#: js/widgets/container/ContainerTree.js:275
+#: js/widgets/app/GridPanel.js:273
 #, fuzzy
-msgid "Please enter the name of the new {0}:"
-msgstr "Моля задай името на новите {0}:"
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Покажи записки {0} - {1} от {2}"
 
-#: js/widgets/container/ContainerTree.js:277
+#: js/widgets/app/GridPanel.js:274
 #, fuzzy
-msgid "Creating {0}..."
-msgstr "Създаване {0}..."
+msgid "No {0} to display"
+msgstr "Няма намерени тагове"
 
-#: js/widgets/container/ContainerTree.js:303
-#, fuzzy
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Наистина ли искате да изтриете {0} \"{0}\"?"
-
-#: js/widgets/container/ContainerTree.js:305
-#, fuzzy
-msgid "Deleting {0} \"{1}\""
-msgstr "Изтриване {0} \"{0}\""
-
-#: js/widgets/container/ContainerTree.js:332
-#, fuzzy
-msgid "Please enter the new name of the {0}:"
-msgstr "Моля задай новото име на  {0}:"
-
-#: js/widgets/container/ContainerTree.js:337
-#, fuzzy
-msgid "Updating {0} \"{1}\""
-msgstr "Актуализиране {0} \"{0}\""
-
-#: js/widgets/container/ContainerTree.js:371
-#, fuzzy
-msgid "Manage Permissions for {0} :\"{1}\""
-msgstr "Управление на правата за {0} :\"{0}\""
-
-#: js/widgets/container/ContainerTree.js:396
-#, fuzzy
-msgid "Rename {0}"
-msgstr "Преименуване {0}"
-
-#: js/widgets/container/ContainerTree.js:402
-msgid "Manage permissions"
-msgstr "Управление и обработка на правата"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:36
-msgid "Custom Fields"
+#: js/widgets/app/GridPanel.js:294
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
 msgstr ""
 
-#: js/widgets/customfields/CustomfieldsPanel.js:68
-msgid "There are no custom fields yet"
+#: js/widgets/app/GridPanel.js:492
+#, fuzzy
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Наистина ли желаете да изтриете "
+msgstr[1] "Наистина ли желаете да изтриете "
+
+#: js/widgets/GroupSelect.js:94
+msgid "Please Select a Group"
+msgstr "Моля селектирай група"
+
+#: js/widgets/AccountpickerPanel.js:55
+msgid "nobody"
 msgstr ""
 
-#: js/widgets/EditDialog.js:153 js/widgets/EditRecord.js:126
-msgid "Apply"
-msgstr "Добави "
+#: js/widgets/AccountpickerPanel.js:135
+msgid "please select an account"
+msgstr "Моля избери достъп"
 
-#: js/widgets/EditDialog.js:170 js/widgets/EditRecord.js:146
-msgid "delete"
-msgstr "изтрий"
-
-#: js/widgets/EditDialog.js:235
+#: js/widgets/grid/PersistentFilterPicker.js:78
 #, fuzzy
-msgid "Add New {0}"
-msgstr "Добави нов собствен таг"
+msgid "My saved filters"
+msgstr "съхрани филтър"
 
-#: js/widgets/EditDialog.js:237
-msgid "Edit {0} \"{1}\""
-msgstr ""
-
-#: js/widgets/EditDialog.js:266 js/widgets/EditRecord.js:185
-msgid "Saved in"
-msgstr "Съхранен в"
-
-#: js/widgets/EditDialog.js:285
+#: js/widgets/grid/PersistentFilterPicker.js:119
 #, fuzzy
-msgid "Transfering {0}..."
-msgstr "Създаване {0}..."
+msgid "Delete Filter"
+msgstr "Изтрий всички филтри"
 
-#: js/widgets/EditDialog.js:363
+#: js/widgets/grid/PersistentFilterPicker.js:123
 #, fuzzy
-msgid "Could not save {0}."
-msgstr "Тага не беше създаден."
-
-#: js/widgets/EditDialog.js:378
-msgid "Errors"
-msgstr ""
-
-#: js/widgets/EditDialog.js:378
-#, fuzzy
-msgid "Please fix the errors noted."
-msgstr "Моля задайте новото име на"
-
-#: js/widgets/EditDialog.js:386
-#, fuzzy
-msgid "Do you really want to delete this {0}?"
+msgid "Do you really want to delete the Filter \"{0}\"?"
 msgstr "Наистина ли желаете да изтриете "
+
+#: js/widgets/grid/PersistentFilterPicker.js:125
+#, fuzzy
+msgid "Deleting Filter \"{0}\""
+msgstr "Изтрива таг"
 
 #: js/widgets/grid/FilterModel.js:129
 msgid "contains"
@@ -908,58 +592,56 @@ msgstr "равно на"
 msgid "next year"
 msgstr "Търси"
 
-#: js/widgets/grid/FilterToolbar.js:115
+#: js/widgets/grid/FilterToolbar.js:120
 msgid "add new filter"
 msgstr "Добови филтър"
 
-#: js/widgets/grid/FilterToolbar.js:121
-msgid "Delete all filters"
+#: js/widgets/grid/FilterToolbar.js:126
+#, fuzzy
+msgid "reset all filters"
 msgstr "Изтрий всички филтри"
 
-#: js/widgets/grid/FilterToolbar.js:127
+#: js/widgets/grid/FilterToolbar.js:132
 msgid "start search"
 msgstr "започни търсене"
 
-#: js/widgets/grid/FilterToolbar.js:136
+#: js/widgets/grid/FilterToolbar.js:140 js/widgets/grid/FilterToolbar.js:568
 msgid "save filter"
 msgstr "съхрани филтър"
 
-#: js/widgets/grid/FilterToolbar.js:206
+#: js/widgets/grid/FilterToolbar.js:223
 msgid "select a field"
 msgstr "селектирай поле"
 
-#: js/widgets/grid/FilterToolbar.js:231
+#: js/widgets/grid/FilterToolbar.js:248
 msgid "Delete this filter"
 msgstr "Изтрий филтър"
 
-#: js/widgets/grid/FilterToolbar.js:262
+#: js/widgets/grid/FilterToolbar.js:279
 msgid "and"
 msgstr "и"
 
-#: js/widgets/grid/FilterToolbar.js:281
+#: js/widgets/grid/FilterToolbar.js:298
 msgid "Show"
 msgstr "Покажи"
 
-#: js/widgets/GridPicker.js:78
-msgid "remove record"
-msgstr "изтрий запис"
+#: js/widgets/grid/FilterToolbar.js:568
+#, fuzzy
+msgid "Please enter a name for the filter"
+msgstr "Моля задай името на новите {0}:"
 
-#: js/widgets/GroupSelect.js:94
-msgid "Please Select a Group"
-msgstr "Моля селектирай група"
+#: js/widgets/grid/FilterToolbar.js:571
+msgid "Filter not Saved"
+msgstr ""
 
-#: js/widgets/LangChooser.js:72
-msgid "setting new language..."
-msgstr "задава нов език..."
+#: js/widgets/grid/FilterToolbar.js:571
+msgid "You have to supply a name for the filter!"
+msgstr ""
 
-#: js/widgets/LangChooser.js:72 js/widgets/LangChooser.js:94
-#: js/widgets/TimezoneChooser.js:74
-msgid "Please Wait"
-msgstr "Моля изчакайте"
-
-#: js/widgets/LangChooser.js:94
-msgid "loading new language..."
-msgstr "зарежда нов език..."
+#: js/widgets/grid/FilterToolbar.js:574
+#, fuzzy
+msgid "Saving filter"
+msgstr "съхрани филтър"
 
 #: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
@@ -968,6 +650,10 @@ msgstr "име на таг"
 #: js/widgets/tags/TagFilter.js:27
 msgid "Tag"
 msgstr "Таг"
+
+#: js/widgets/tags/TagsPanel.js:53 Export/Pdf.php:206
+msgid "Tags"
+msgstr "Категории"
 
 #: js/widgets/tags/TagsPanel.js:87
 msgid "Add a new personal tag"
@@ -1081,72 +767,482 @@ msgstr "Задай име на таг"
 msgid "Searching..."
 msgstr "Търси..."
 
+#: js/widgets/tags/TagsPanel.js:560 js/ExceptionDialog.js:59
+msgid "Description"
+msgstr "Описание"
+
 #: js/widgets/tags/TagsPanel.js:564
 msgid "Color"
 msgstr "Цвят"
 
-#: js/widgets/TimezoneChooser.js:74
-msgid "setting new timezone..."
-msgstr "поставя нова часова зона..."
+#: js/MainScreen.js:62
+msgid "Preferences"
+msgstr "Настройки"
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
-msgid "New version of Tine 2.0 available"
-msgstr "Предлага се нова версия на Tine 2.0"
-
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#: js/MainScreen.js:78
 #, fuzzy
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Предлага се версия \"{0}\" на Tine 2.0."
+msgid "User: {0}"
+msgstr "Потребители: {0}"
 
-#: js/widgets/VersionCheck.js:41
-msgid "It's a critical update and must be installed as soon as possible!"
+#: js/MainScreen.js:79
+#, fuzzy
+msgid "Timezone: {0}"
+msgstr "Часова зона: {0}"
+
+#: js/MainScreen.js:172
+msgid "Change password"
+msgstr "Смени парола"
+
+#: js/MainScreen.js:178
+msgid "Install Google Gears"
 msgstr ""
-"Това е един нестабилен ъпдейт и трябва да бъде инсталиран възможно най-бързо!"
+"Инсталира Гоогел-Гиерс (Google Gears - помощни програми за работа в off line)"
 
-#: js/widgets/VersionCheck.js:50
+#: js/MainScreen.js:184
+msgid "Logout"
+msgstr "Изход"
+
+#: js/MainScreen.js:185
+msgid "Logout from Tine 2.0"
+msgstr "Излизане от Tine 2.0"
+
+#: js/MainScreen.js:321
 #, fuzzy
-msgid "Please consider updating!"
-msgstr "Моля имайте пред вид актуализацията!"
+msgid "Change Password For \"{0}\""
+msgstr "Смени парола за \"{0}\""
 
-#: Setup/setup.xml:1830
+#: js/MainScreen.js:345
+msgid "Old Password"
+msgstr "Стара парола"
+
+#: js/MainScreen.js:349
+msgid "New Password"
+msgstr "Нова парола"
+
+#: js/MainScreen.js:353
+msgid "Repeat new Password"
+msgstr "Повтори новата парола"
+
+#: js/MainScreen.js:372
+msgid "Please Wait!"
+msgstr "Моля изчакайте"
+
+#: js/MainScreen.js:373
+msgid "changing password..."
+msgstr "сменя парола..."
+
+#: js/MainScreen.js:384
+msgid "Success"
+msgstr "Успех"
+
+#: js/MainScreen.js:385
+msgid "Your password has been changed."
+msgstr "Вашата парола е сменена."
+
+#: js/MainScreen.js:391 js/MainScreen.js:401
+msgid "Failure"
+msgstr "Грешка"
+
+#: js/MainScreen.js:402
+msgid "The new passwords mismatch, please correct them."
+msgstr "Новито пароли не съвпадат. Моля задай повторно"
+
+#: js/MainScreen.js:420
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"Инсталирането на Гиерс (Gears) ще провери актуалното състояние на Tine 2.0 и "
+"ще кочи всички необходими полета  на вашия компютър."
+
+#: js/MainScreen.js:433
+msgid "Are you sure you want to logout?"
+msgstr "Наистина ли желаете да излезете?"
+
+#: js/MainScreen.js:435
+msgid "Logging you out..."
+msgstr "Подготвя излизане..."
+
+#: js/MainScreen.js:435 js/Login.js:132
+msgid "Please wait!"
+msgstr "Моля изчакайте!"
+
+#: js/UserRegistration.js:33
+msgid "Registration Wizard"
+msgstr "Упътване за влизане"
+
+#: js/UserRegistration.js:86
+msgid "Given name"
+msgstr "Собствено име"
+
+#: js/UserRegistration.js:97
+msgid "Family name"
+msgstr "Фамилия"
+
+#: js/UserRegistration.js:108
+msgid "Login name"
+msgstr "Потребителско име"
+
+#: js/UserRegistration.js:121
+msgid "Emailaddress"
+msgstr "Имейл"
+
+#: js/UserRegistration.js:167
+msgid "Congratulations!"
+msgstr "Поздравления!"
+
+#: js/UserRegistration.js:167
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr ""
+"Вие зададохте необходимата информация. След като натиснете бутона `Край` ще "
+"Ви бъде изпратеп регистрационен имейл."
+
+#: js/ux/form/ImageField.js:59
+msgid "click to edit"
+msgstr "Кликнете за да редактирате"
+
+#: js/ux/form/ImageField.js:108
+msgid "Not An Image"
+msgstr "Не е снимка (изображение)"
+
+#: js/ux/form/ImageField.js:108
+msgid "Plase select an image file (gif/png/jpeg)"
+msgstr "Моля селектирайте снимка (gif/png/jpeg)"
+
+#: js/ux/form/ImageField.js:125
+msgid "Loading"
+msgstr "Зарежда"
+
+#: js/ux/form/ImageField.js:133
+msgid "Upload Failed"
+msgstr "Неуспешено зареждане (Upload)"
+
+#: js/ux/form/ImageField.js:133
+msgid "Could not upload image. Please notify your Administrator"
+msgstr ""
+"Неуспешено зареждане (Upload) на снимка. Моля обърнете се към Вашият "
+"администратор."
+
+#: js/ux/form/ImageField.js:145
+msgid "Change Image"
+msgstr "Замени снимка"
+
+#: js/ux/form/ImageField.js:166 js/ux/form/ImageField.js:184
+msgid "Crop Image"
+msgstr "Обрежи снимка"
+
+#: js/ux/form/ImageField.js:192
+msgid "Delete Image"
+msgstr "Изтрий снимка"
+
+#: js/ux/form/ImageField.js:218
+msgid "Image Failed"
+msgstr "Грешка при обработка на снимка"
+
+#: js/ux/form/ImageField.js:218
+msgid "Could not load image. Please notify your Administrator"
+msgstr ""
+"Неуспешено зареждане (Upload) на снимка. Моля обърнете се към Вашият "
+"администратор."
+
+#: js/ux/form/RecordsComboBox.js:27
+msgid "Software Version"
+msgstr ""
+
+#: js/ux/ConnectionStatus.js:52
+msgid "online"
+msgstr "мрежов режим на работа"
+
+#: js/ux/ConnectionStatus.js:53
+msgid "offline"
+msgstr "локален режим на работа"
+
+#: js/ux/grid/PagingToolbar.js:47
+#, fuzzy
+msgid "{0} selected"
+msgstr "селектирай поле"
+
+#: js/ux/grid/PagingToolbar.js:48
+#, fuzzy
+msgid "Unselect all"
+msgstr "селектирай поле"
+
+#: js/ux/grid/PagingToolbar.js:49
+msgid "Select all visible ({0} records)"
+msgstr ""
+
+#: js/ux/grid/PagingToolbar.js:50
+msgid "Select all pages ({0} records)"
+msgstr ""
+
+#: js/ux/grid/PagingToolbar.js:51
+msgid "Toggle selection"
+msgstr ""
+
+#: js/Record.js:92
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Тагове"
+msgstr[1] "Тагове"
+
+#: js/Record.js:96
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ExceptionDialog.js:26 Frontend/Http.php:294
+msgid "Abnormal End"
+msgstr "Програмен срив"
+
+#: js/ExceptionDialog.js:42
+msgid "Send Report"
+msgstr "Изпрати рапорт"
+
+#: js/ExceptionDialog.js:51 Frontend/Http.php:295
+msgid "An error occurred, the program ended abnormal."
+msgstr "Грешка, водеща до рограмен срив."
+
+#: js/ExceptionDialog.js:52
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Възможно е вашата последна операция до не е изпълнена коректно."
+
+#: js/ExceptionDialog.js:53
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occoured."
+msgstr ""
+"Изпращайки протокол Вие бихте подпомогнали усавършенстването на програмата. "
+"Моля опишете вашите стъпки преди настъпването на грешката."
+
+#: js/ExceptionDialog.js:69
+msgid "Show Details:"
+msgstr "Покажи детайли:"
+
+#: js/ExceptionDialog.js:92
+msgid "Sending report..."
+msgstr "Изпраща рапорт..."
+
+#: js/ExceptionDialog.js:92
+msgid "Please wait a moment"
+msgstr "Моля изчакайте малко"
+
+#: js/ExceptionDialog.js:121
+msgid "Transmission Completed"
+msgstr "Край на изпращането"
+
+#: js/ExceptionDialog.js:122
+#, fuzzy
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Вашият протокол е изпратен. Блегодарим Ви за помощта."
+
+#: js/tineInit.js:218
+msgid "Connection lost, please check your network!"
+msgstr "Връзка е прекъсната. Моля проверете връзката Ви с интернет!"
+
+#: js/tineInit.js:226
+msgid ""
+"The server did not respond to your request. Please check your network or "
+"contact your administrator."
+msgstr ""
+
+#: js/tineInit.js:235 Frontend/Http.php:267
+msgid "Authorisation Required"
+msgstr "Изискано упълномощаване"
+
+#: js/tineInit.js:236
+msgid "Your session timed out. You need to login again."
+msgstr ""
+"Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
+
+#: js/tineInit.js:249
+msgid "Insufficient Rights"
+msgstr ""
+
+#: js/tineInit.js:250
+msgid "Sorry, you are not permitted to perform this action"
+msgstr ""
+
+#: js/tineInit.js:259
+msgid "Concurrent Updates"
+msgstr "Конкурентно актуализиране"
+
+#: js/tineInit.js:260
+msgid ""
+"Someone else saved this record while you where editing the data. You need to "
+"reload and make your changes again."
+msgstr ""
+"Някой друг е запаметил документацията докато Вие сте редактирали данните. "
+"Трябва да заредите и наново да направите промяната."
+
+#: js/common.js:100
+msgid "{0} minute"
+msgid_plural "{0} minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/common.js:101
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/common.js:102
+msgid "{0} workday"
+msgid_plural "{0} workdays"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Login.js:37
+msgid "Login"
+msgstr "Вход"
+
+#: js/Login.js:44
+msgid "Register"
+msgstr "Регистрация"
+
+#: js/Login.js:58 js/Login.js:92
+msgid "Please enter your login data"
+msgstr "Моля задайте Вашите входни данни."
+
+#: js/Login.js:75
+msgid "Username"
+msgstr "Потребителско име"
+
+#: js/Login.js:81
+msgid "Password"
+msgstr "Парола"
+
+#: js/Login.js:120
+msgid "Logging you in..."
+msgstr "Вашите входни данни се обработват..."
+
+#: js/Login.js:132
+msgid "Login successful. Loading Tine 2.0..."
+msgstr "Влизането е успешно. Tine 2.0 ще бъде заредена..."
+
+#: js/Login.js:138
+msgid "Login failure"
+msgstr "Неуспешен вход"
+
+#: js/Login.js:139
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Вашето(-ите) потребителско име или(и) парола е (са) грешни!!!"
+
+#: Frontend/Http.php:268
+#, fuzzy
+msgid "Your session is not valid. You need to login again."
+msgstr ""
+"Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
+
+#: Setup/setup.xml:1941
 msgid "note"
 msgstr "бележка"
 
-#: Setup/setup.xml:1835
+#: Setup/setup.xml:1946
 msgid "default note type"
 msgstr "отсъстващ тип на бележка"
 
-#: Setup/setup.xml:1861
+#: Setup/setup.xml:1972
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:1866
+#: Setup/setup.xml:1977
 msgid "telephone call"
 msgstr "телефонно позвъняване"
 
-#: Setup/setup.xml:1892
+#: Setup/setup.xml:2003
 msgid "email"
 msgstr "Имейл"
 
-#: Setup/setup.xml:1897
+#: Setup/setup.xml:2008
 msgid "email contact"
 msgstr "Имейл контакт"
 
-#: Setup/setup.xml:1923
+#: Setup/setup.xml:2034
 msgid "created"
 msgstr "създаден"
 
-#: Setup/setup.xml:1928
+#: Setup/setup.xml:2039
 msgid "record created"
 msgstr "създадена документация"
 
-#: Setup/setup.xml:1954
+#: Setup/setup.xml:2065
 msgid "changed"
 msgstr "променен"
 
-#: Setup/setup.xml:1959
+#: Setup/setup.xml:2070
 msgid "record changed"
 msgstr "променена документация"
+
+#: Application/Rights/Abstract.php:56
+msgid "admin"
+msgstr "Администратор"
+
+#: Application/Rights/Abstract.php:57
+msgid "admin right description"
+msgstr "oписание на администраторските права"
+
+#: Application/Rights/Abstract.php:60
+msgid "run"
+msgstr "изпълни"
+
+#: Application/Rights/Abstract.php:61
+msgid "run right description"
+msgstr ""
+"За да бъде операцията изпълнена. Вие се нуждаете от администраторски права."
+
+#: Export/Pdf.php:404
+msgid "Export Date"
+msgstr "Експортирай датата"
+
+#: Export/Pdf.php:408
+msgid "Created by"
+msgstr "Обработен/създаден от "
+
+#: Export/Pdf.php:462
+msgid "Activities"
+msgstr "Операции"
+
+#: Notes.php:295
+msgid "by"
+msgstr ""
+
+#: Notes.php:301
+msgid "Changed fields:"
+msgstr ""
+
+#: Acl/Rights.php:116
+msgid "Report bugs"
+msgstr "Рапорт на грешките"
+
+#: Acl/Rights.php:117
+msgid "Report bugs to tine20.org directly when they occour"
+msgstr "Директен рапорт на настъпилите грешките към tine20.org"
+
+#: Acl/Rights.php:120
+msgid "Check version"
+msgstr "Провери версия"
+
+#: Acl/Rights.php:121
+msgid "Check tine20.org for new versions"
+msgstr "Провери tine20.org за нови версии"
+
+#, fuzzy
+#~ msgid "none"
+#~ msgstr "бележка"
+
+#~ msgid "Recent Activities"
+#~ msgstr "Последно изпълнени операции"
+
+#~ msgid "Displaying notes {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
+
+#~ msgid "No notes to display"
+#~ msgstr "Няма намерени записи"
 
 #, fuzzy
 #~ msgid "Loading {0}..."
@@ -1711,10 +1807,6 @@ msgstr "променена документация"
 #~ msgstr "Задай име на таг"
 
 #, fuzzy
-#~ msgid "Notes"
-#~ msgstr "Записка"
-
-#, fuzzy
 #~ msgid "Enter description..."
 #~ msgstr "Задай описание"
 
@@ -1733,10 +1825,6 @@ msgstr "променена документация"
 #, fuzzy
 #~ msgid "Displaying software {0} - {1} of {2}"
 #~ msgstr "Покажи записки {0} - {1} от {2}"
-
-#, fuzzy
-#~ msgid "No software to display"
-#~ msgstr "Няма намерени записи"
 
 #, fuzzy
 #~ msgid "add template"

@@ -194,7 +194,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         this.translation.textdomain('Tinebase');
         
         // translate / update title
-        this.title = this.translation._('Recent Activities');
+        this.title = this.translation._('Notes');
         
         // init recordNotesStore
         this.notes = [];
@@ -409,8 +409,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             pageSize: 20,
             store: this.store,
             displayInfo: true,
-            displayMsg: this.translation._('Displaying notes {0} - {1} of {2}'),
-            emptyMsg: this.translation._("No notes to display")
+            displayMsg: this.translation._('Displaying history records {0} - {1} of {2}'),
+            emptyMsg: this.translation._("No history to display")
         }); 
 
         // the gridpanel
@@ -429,8 +429,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                autoScroll: true,
-                emptyText: 'No activities to display'
+                autoScroll: true
             })            
         });
         
@@ -509,13 +508,15 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         this.translation.textdomain('Tinebase');
         
         // translate / update title
-        this.title = this.translation._('Activities');
+        this.title = this.translation._('History');
         
     	// get store
         this.initStore();
 
         // get grid
         this.activitiesGrid = this.getActivitiesGrid();
+        
+        console.log(this.store);
         
         // the filter toolbar
         var filterToolbar = new Tine.widgets.grid.FilterToolbar({

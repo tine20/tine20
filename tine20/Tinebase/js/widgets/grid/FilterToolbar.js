@@ -151,13 +151,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     onRender: function(ct, position) {
         Tine.widgets.grid.FilterToolbar.superclass.onRender.call(this, ct, position);
         
+        // only get app and enable saving if this.store is available (that is not the case in the activities panel)
         // at this point the plugins are initialised
-        if (! this.app) {
+        if (! this.app && this.store) {
             this.app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'));
         }
         
         // automaticly enable saving
-        if (this.app.getMainScreen().filterPanel) {
+        if (this.app && this.app.getMainScreen().filterPanel) {
             this.allowSaving = true;
         }
         
