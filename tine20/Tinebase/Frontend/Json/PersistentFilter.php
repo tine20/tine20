@@ -85,7 +85,7 @@ class Tinebase_Frontend_Json_PersistentFilter
      *
      * @param string $filterData
      * @param string $name
-     * @param string $model
+     * @param string $model model name (Application_Model_Record)
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function save($filterData, $name, $model) 
