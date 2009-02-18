@@ -79,4 +79,21 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
     {
         $this->_filterGroup->setRequiredGrants($_grants);
     }
+    
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = array(
+            'field'     => $this->_field,
+            'operator'  => $this->_operator,
+            'value'     => $this->_filterGroup->toArray($_valueToJson)
+        );
+        
+        return $result;
+    }    
 }
