@@ -9,7 +9,7 @@
  * @version     $Id$
  * 
  * @todo        simplify relations tests: create related_records with relations class
- * @todo        create new ids for tasks/contacts each time
+ * @todo        make tests standalone
  */
 
 /**
@@ -142,7 +142,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
-            'id'                    => 120,
             'note'                  => 'Bla Bla Bla',
             'container_id'          => $addressbookContainer->id,
             'role'                  => 'Role',
@@ -218,6 +217,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {	
+        //Addressbook_Controller_Contact::getInstance()->delete($this->objects['contact']->getId());
     }    
     
     /**
@@ -227,13 +227,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddLead()
     {
-        // create test contact
-        try {
-            $contact = Addressbook_Controller_Contact::getInstance()->get($this->objects['contact']->getId());
-        } catch ( Exception $e ) {
-            $contact = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact']);
-        }
-
+        // create contact
+        $this->objects['contact'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact']);        
+        
         // create test task
         $task = Tasks_Controller_Task::getInstance()->create($this->objects['task']);
         $GLOBALS['Crm_JsonTest']['taskId'] = $task->getId();
