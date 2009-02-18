@@ -81,6 +81,15 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
     },
     
     /**
+     * Deselects a row.
+     * @param {Number} row The index of the row to deselect
+     */
+    deselectRow : function(index, preventViewNotify) {
+        this.isFilterSelect = false;
+        Tine.Tinebase.widgets.grid.FilterSelectionModel.superclass.deselectRow.call(this, index, preventViewNotify);
+    },
+    
+    /**
      * Clears all selections.
      */
     clearSelections: function(silent) {
