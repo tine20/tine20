@@ -32,7 +32,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('ts.description'))),
         'ts.description' => array('filter' => 'Tinebase_Model_Filter_Text'),
         'timeaccount_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Timetracker_Model_TimeaccountFilter', 'controller' => 'Timetracker_Controller_Timeaccount', 'useTimesheetAcl' => TRUE)),
-        'account_id'     => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'account_id'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
         'ts.is_billable' => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
