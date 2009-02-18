@@ -110,7 +110,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     },
     
     onContextMenu: function(node, e) {
-        if (! node.isPersistentFilter) {
+        if (! node.attributes.isPersistentFilter) {
             return;
         }
         
