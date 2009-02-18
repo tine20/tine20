@@ -551,8 +551,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $persistentFiltersJson->save(
             Zend_Json::encode($tsFilter), 
             $filterName, 
-            'Timetracker_Model_TimesheetFilter',
-            Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId()
+            'Timetracker_Model_Timesheet'
         );
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet(Zend_Json::encode($timesheet->toArray()));
