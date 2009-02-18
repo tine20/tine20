@@ -32,6 +32,11 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     /**
+     * @var bool allow the use of GLOBALS to exchange data between tests
+     */
+    protected $backupGlobals = false;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -51,6 +56,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $GLOBALS['Addressbook_ControllerTest'] = array_key_exists('Addressbook_ControllerTest', $GLOBALS) ? $GLOBALS['Addressbook_ControllerTest'] : array();
+        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -77,7 +84,6 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
             'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../Tinebase/ImageHelper/phpunit-logo.gif'),
             'note'                  => 'Bla Bla Bla',
             'container_id'          => $container->id,
@@ -121,7 +127,6 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
             'jpegphoto'             => '',
             'note'                  => 'Bla Bla Bla',
             'container_id'          => $container->id,
@@ -177,8 +182,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact = $this->objects['initialContact'];
         $contact->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        $GLOBALS['Addressbook_ControllerTest']['contactId'] = $contact->getId();
         
-        $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
     }
     
@@ -188,9 +193,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContact()
     {
-        $contact = Addressbook_Controller_Contact::getInstance()->get($this->objects['initialContact']);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['contactId']);
         
-        $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
     }
     
@@ -200,7 +204,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetImage()
     {
-        $image = Addressbook_Controller::getInstance()->getImage($this->objects['initialContact']->id);
+        $image = Addressbook_Controller::getInstance()->getImage($GLOBALS['Addressbook_ControllerTest']['contactId']);
         $this->assertType('Tinebase_Model_Image', $image);
         $this->assertEquals($image->width, 94);
     }
@@ -290,7 +294,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testGetImageException()
     {
         $this->setExpectedException('Exception');
-        Addressbook_Controller::getInstance()->getImage($this->objects['initialContact']->id);
+        Addressbook_Controller::getInstance()->getImage($GLOBALS['Addressbook_ControllerTest']['contactId']);
     }
     
     /**
