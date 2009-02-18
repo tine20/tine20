@@ -50,10 +50,12 @@ Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker
     	Tine.Timetracker.TreePanel.superclass.initComponent.call(this);
         
         this.on('click', function(node) {
-            var contentType = node.getPath().split('/')[2];
-            
-            this.app.getMainScreen().activeContentType = contentType;
-            this.app.getMainScreen().show();
+            if (node.attributes.isPersistentFilter != true) {
+                var contentType = node.getPath().split('/')[2];
+                
+                this.app.getMainScreen().activeContentType = contentType;
+                this.app.getMainScreen().show();
+            }
         }, this);
 	},
     
