@@ -329,6 +329,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     onFieldChange: function(filter, newField) {
         filter.set('field', newField);
+        filter.set('operator', '');
+        filter.set('value', '');
         
         filter.formFields.operator.destroy();
         filter.formFields.value.destroy();
