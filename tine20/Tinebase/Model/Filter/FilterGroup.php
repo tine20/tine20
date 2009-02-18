@@ -254,7 +254,7 @@ class Tinebase_Model_Filter_FilterGroup
      */
     public function createFilter($_field, $_operator, $_value)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating filter: $_field $_operator " . print_r($_value, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating filter: $_field $_operator " . print_r($_value, true));
         
         if (empty($this->_filterModel[$_field])) {
             throw new Tinebase_Exception_NotFound('no such field in this filter model');
