@@ -561,15 +561,17 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     },
                     scope: this,
                     success: function(result) {
-                        // push into filterPanel
-                        if (this.app.getMainScreen().filterPanel && this.app.getMainScreen().filterPanel.getRootNode().isExpanded()) {
-                            var filter = Ext.util.JSON.decode(result.responseText);
+                        if (typeof this.app.getMainScreen().getTreePanel().getPersistentFilterNode == 'function') {
+                            var persistentFilterNode = this.app.getMainScreen().getTreePanel().getPersistentFilterNode();
                             
-                            if (this.app.getMainScreen().filterPanel && this.app.getMainScreen().filterPanel.getNodeById(filter.id)) {
-                                // nothing to do, but we have the condition this way, as undefined != false
-                            } else {
-                                var newNode = this.app.getMainScreen().filterPanel.loader.createNode(filter);
-                                this.app.getMainScreen().filterPanel.getRootNode().appendChild(newNode);
+                            if (persistentFilterNode.isExpanded()) {
+                                var filter = Ext.util.JSON.decode(result.responseText);
+                                
+                                if (! persistentFilterNode.findChild('id', filter.id)) {
+                                    var newNode = persistentFilterNode.getOwnerTree().loader.createNode(filter);
+                                    persistentFilterNode.appendChild(newNode);
+                                }
+                                
                             }
                         }
                         Ext.Msg.hide();

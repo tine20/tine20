@@ -21,11 +21,25 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      */
     filterMountId: '/',
     
+    /**
+     * @private
+     */
     autoScroll: true,
     border: false,
-    
     rootVisible: false,
-        
+
+    /**
+     * returns persistent filter tree node
+     * 
+     * @return {Ext.tree.AsyncTreeNode}
+     */
+    getPersistentFilterNode: function() {
+        return this.filterNode;
+    },
+    
+    /**
+     * @private
+     */
     initComponent: function() {
         this.loader = new Tine.widgets.grid.PersistentFilterLoader({
             app: this.app
@@ -60,14 +74,14 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     afterRender: function() {
         Tine.widgets.grid.PersistentFilterPicker.superclass.afterRender.call(this);
         
-        var filterNode = new Ext.tree.AsyncTreeNode({
+        this.filterNode = new Ext.tree.AsyncTreeNode({
             text: _('My saved filters'),
             id: '_persistentFilters',
             leaf: false,
             expanded: false
         });
         
-        this.getNodeById(this.filterMountId).appendChild(filterNode);
+        this.getNodeById(this.filterMountId).appendChild(this.filterNode);
     },
     
     /**

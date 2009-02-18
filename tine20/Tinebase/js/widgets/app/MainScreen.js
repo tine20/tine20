@@ -84,6 +84,7 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
                 treePanel: this.treePanel
             });
         }
+        
         if (this.filterPanel) {
             var containersName = this.app.i18n.n_hidden(this.treePanel.recordClass.getMeta('containerName'), this.treePanel.recordClass.getMeta('containersName'), 50);
             
@@ -91,13 +92,17 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
                 border: false,
                 activeItem: 0,
                 layoutOnTabChange: true,
+                autoScroll: true,
                 items: [{
                     title: containersName,
-                    items: this.treePanel
+                    items: this.treePanel,
+                    autoScroll: true
                 }, {
                     title: _('Saved filter'),
-                    items: this.filterPanel
-                }]
+                    items: this.filterPanel,
+                    autoScroll: true
+                }],
+                getPersistentFilterNode: this.filterPanel.getPersistentFilterNode.createDelegate(this.filterPanel)
             
             });
             
