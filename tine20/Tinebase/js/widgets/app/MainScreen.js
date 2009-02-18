@@ -95,10 +95,12 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
                 autoScroll: true,
                 items: [{
                     title: containersName,
+                    layout: 'fit',
                     items: this.treePanel,
                     autoScroll: true
                 }, {
                     title: _('Saved filter'),
+                    layout: 'fit',
                     items: this.filterPanel,
                     autoScroll: true
                 }],
