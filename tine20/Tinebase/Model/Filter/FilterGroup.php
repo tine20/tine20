@@ -340,7 +340,16 @@ class Tinebase_Model_Filter_FilterGroup
     {
         $result = array();
         foreach ($this->_filterObjects as $filter) {
-            $result[] = $filter->toArray($_valueToJson);
+            if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
+                $result[] = array(
+                    'condition' => $filter->getCondition(),
+                    'filters'   => $filter->toArray($_valueToJson)
+                );
+                
+            } else {
+                $result[] = $filter->toArray($_valueToJson);
+            }
+            
         }
         
         // add custom fields
