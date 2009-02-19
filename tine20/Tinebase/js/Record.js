@@ -11,11 +11,22 @@
  
 Ext.ns('Tine.Tinebase');
 
+Tine.Tinebase.Record = function(data, id){
+    if (id || id === 0) {
+        this.id = id;
+    } else if (data[this.idProperty]) {
+        this.id = data[this.idProperty];
+    } else {
+        this.id = ++Ext.data.Record.AUTO_ID;
+    }
+    this.data = data;
+};
+
 /**
  * @class Tine.Tinebase.Record
  * @extends {Ext.data.Record}
  */
-Tine.Tinebase.Record = Ext.extend(Ext.data.Record, {
+Ext.extend(Tine.Tinebase.Record, Ext.data.Record, {
     /**
      * @cfg {String} appName
      * internal/untranslated app name (required)
