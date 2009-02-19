@@ -117,7 +117,7 @@ class Tinebase_ImageHelper
                ->from(SQL_TABLE_PREFIX . 'temp_files')
                ->where($db->quoteInto('id = ?', $imageParams['id']))
                ->where($db->quoteInto('session_id = ?', session_id()));
-            $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
+            $tempFile = $db->fetchRow($select);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not fetch row from temp_files table." .
                 ' given $imageParams : ' . print_r($imageParams,true) . 

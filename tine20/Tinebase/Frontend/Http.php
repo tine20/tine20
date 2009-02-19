@@ -436,7 +436,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
                ->from(SQL_TABLE_PREFIX . 'temp_files')
                ->where($db->quoteInto($db->quoteIdentifier('id') . ' = ?', $id))
                ->where($db->quoteInto($db->quoteIdentifier('session_id') . ' = ?', session_id()));
-            $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
+            $tempFile = $db->fetchRow($select);
 
             $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile['path']));
             $image = new Tinebase_Model_Image($imgInfo + array(
