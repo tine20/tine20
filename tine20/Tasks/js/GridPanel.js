@@ -54,7 +54,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             filterModels: [
                 {label: this.app.i18n._('Task'),    field: 'query',    operators: ['contains']},
                 {label: this.app.i18n._('Summary'), field: 'summary' },
-                //{label: this.app.i18n._('Due Date'), field: 'due', valueType: 'date'},
+                {label: this.app.i18n._('Due Date'), field: 'due', valueType: 'date'},
                 {label: this.app.i18n._('Responsible'), field: 'organizer', valueType: 'user'},
                 new Tine.widgets.tags.TagFilter({app: this.app})
              ],
