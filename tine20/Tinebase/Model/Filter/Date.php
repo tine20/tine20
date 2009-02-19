@@ -57,6 +57,10 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
+            if ($this->_operator == 'equals') {
+                $value[$num] .= '%';
+            }
+            
             $_select->where($field . $operator, $value[$num]);
         }
     }

@@ -47,7 +47,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
      */
     public function setValue($_value)
     {
-        if ($this->_operator != 'within' && $this->_options['timezone'] !== 'UTC') {
+        if ($this->_operator != 'within' && isset($this->_options['timezone']) && $this->_options['timezone'] !== 'UTC') {
             date_default_timezone_set($this->_options['timezone']);
             $date = new Zend_Date($_value, Tinebase_Record_Abstract::ISO8601LONG);
             $date->setTimezone('UTC');
