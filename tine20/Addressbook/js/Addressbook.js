@@ -212,7 +212,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                 success: function(response) {
                     this.onContactLoad(response);
 
-                    this.fireEvent('update', this.contact); 
+                    this.fireEvent('update', Ext.util.JSON.encode(this.contact.data)); 
                 	
                     if(_closeWindow === true) {
                       	this.purgeListeners();
@@ -245,7 +245,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             },
             text: this.translation.gettext('Deleting contact...'),
             success: function(_result, _request) {
-                this.fireEvent('update', this.contact);
+                this.fireEvent('update', Ext.util.JSON.encode(this.contact.data)); 
                 this.window.close();
             },
             failure: function ( result, request) { 
