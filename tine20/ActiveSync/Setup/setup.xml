@@ -3,6 +3,7 @@
     <name>ActiveSync</name>
     <version>0.1</version>
     <order>90</order>
+    <status>disabled</status>    
     <depends>
         <application>Tinebase</application>
     </depends>
