@@ -35,7 +35,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
         if ($this->_operator != 'within' && $_valueToJson == true) {
             $date = new Zend_Date($result['value'], Tinebase_Record_Abstract::ISO8601LONG);
             $date->setTimezone(Tinebase_Core::get('userTimezone'));
-            $result['value'] = $date->get(Tinebase_Record_Abstract::ISO8601LONG);
+            $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
         }
         return $result;
     }
@@ -47,12 +47,8 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
      */
     public function setValue($_value)
     {
-        if ($this->_operator != 'within' && isset($this->_options['timezone']) && $this->_options['timezone'] !== 'UTC') {
-            date_default_timezone_set($this->_options['timezone']);
-            $date = new Zend_Date($_value, Tinebase_Record_Abstract::ISO8601LONG);
-            $date->setTimezone('UTC');
-            $_value = $date->get(Tinebase_Record_Abstract::ISO8601LONG);
-            date_default_timezone_set('UTC');
+        if ($this->_operator != 'within') {
+            $_value = $this->_convertStringToUTC($_value);
         }
         
         $this->_value = $_value;
@@ -66,18 +62,48 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
      * @param string $_dateFormat
      * @return array|string date value
      */
-    protected function _getDateValues($_operator, $_value, $_dateFormat = NULL)
+    protected function _getDateValues($_operator, $_value)
     {        
         if ($_operator === 'within') {
+            // get beginning / end date and add 00:00:00 / 23:59:59
+            date_default_timezone_set($this->_options['timezone']);
             $value = parent::_getDateValues(
                 $_operator, 
-                $_value, 
-                ($_dateFormat === NULL) ? Tinebase_Record_Abstract::ISO8601LONG : $_dateFormat
+                $_value
             );
+            $value[0] .= ' 00:00:00';
+            $value[1] .= ' 23:59:59';
+            date_default_timezone_set('UTC');
+            
+            // convert to utc
+            $value[0] = $this->_convertStringToUTC($value[0]);
+            $value[1] = $this->_convertStringToUTC($value[1]);
+            
         } else  {            
             $value = $_value;
         }
         
         return $value;
+    }
+    
+    /**
+     * convert string in user time to UTC
+     *
+     * @param string $_string
+     * @return string
+     */
+    protected function _convertStringToUTC($_string)
+    {
+        if (isset($this->_options['timezone']) && $this->_options['timezone'] !== 'UTC') {
+            date_default_timezone_set($this->_options['timezone']);
+            $date = new Zend_Date($_string, Tinebase_Record_Abstract::ISO8601LONG);
+            $date->setTimezone('UTC');
+            $result = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            date_default_timezone_set('UTC');
+        } else {
+            $result = $_string;
+        }
+        
+        return $result;
     }
 }

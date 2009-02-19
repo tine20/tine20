@@ -42,6 +42,13 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     );
     
     /**
+     * date format string
+     *
+     * @var string
+     */
+    protected $_dateFormat = 'yyyy-MM-dd';
+    
+    /**
      * appeds sql to given select statement
      *
      * @param Zend_Db_Select $_select
@@ -57,10 +64,6 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
-            if ($this->_operator == 'equals') {
-                $value[$num] .= '%';
-            }
-            
             $_select->where($field . $operator, $value[$num]);
         }
     }
@@ -70,14 +73,13 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      *
      * @param string $_operator
      * @param string $_value
-     * @param string $_dateFormat
      * @return array|string date value
      * 
      * @todo fix problem with day of week in 'this week' filter (sunday is first day of the week in english locales) 
      * --> get that info from locale
      */
-    protected function _getDateValues($_operator, $_value, $_dateFormat = 'yyyy-MM-dd')
-    {        
+    protected function _getDateValues($_operator, $_value)
+    {
         if ($_operator === 'within') {
             $date = new Zend_Date();
             
@@ -94,12 +96,10 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     // in german locale sunday is last day of the week
                     $dayOfWeek = ($dayOfWeek == 0) ? 7 : $dayOfWeek;
                     $date->sub($dayOfWeek-1, Zend_Date::DAY);
-                    $date->setTime('00:00:00', 'HH:mm:ss');
-                    $monday = $date->toString($_dateFormat);
+                    $monday = $date->toString($this->_dateFormat);
                     
                     $date->add(6, Zend_Date::DAY);
-                    $date->setTime('23:59:59', 'HH:mm:ss');
-                    $sunday = $date->toString($_dateFormat);
+                    $sunday = $date->toString($this->_dateFormat);
                     
                     $value = array(
                         $monday, 
@@ -114,10 +114,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $dayOfMonth = $date->get(Zend_Date::DAY_SHORT);
                     $monthDays = $date->get(Zend_Date::MONTH_DAYS);
                     
-                    $first = $date->toString('yyyy-MM');
+                    $first = $date->toString('yyyy-MM') . '-01';
                     $date->add($monthDays-$dayOfMonth, Zend_Date::DAY);
-                    $date->setTime('23:59:59', 'HH:mm:ss');
-                    $last = $date->toString($_dateFormat);
+                    $last = $date->toString($this->_dateFormat);
     
                     $value = array(
                         $first, 
@@ -162,11 +161,11 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $date->add(2, Zend_Date::DAY);
                 case 'dayLast':
                     $date->sub(1, Zend_Date::DAY);
-                case 'today':
+                case 'dayThis':
                     $value = array(
-                        $date->toString('yyyy-MM-dd'), 
-                        $date->toString('yyyy-MM-dd'), 
-                    );                
+                        $date->toString($this->_dateFormat), 
+                        $date->toString($this->_dateFormat), 
+                    );
                     break;
                 default:
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_value);
