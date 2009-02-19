@@ -80,7 +80,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field' => 'query',
             'operator' => 'contains',
-            'value' => 'phpunit'
+            'value' => 'phpunit test note'
         ));
         $paging = array();
         
