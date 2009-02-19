@@ -59,7 +59,8 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             $persitentFilter = new Tinebase_Frontend_Json_PersistentFilter();
             $filter = $persitentFilter->get($filterData);
         } else {
-            $filter = new Tasks_Model_TaskFilter($filterData);
+            $filter = new Tasks_Model_TaskFilter(array());
+            $filter->setFromArrayInUsersTimezone($filterData);
         }
         
         $pagination = new Tasks_Model_Pagination(Zend_Json::decode($paging));
