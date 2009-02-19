@@ -81,12 +81,13 @@ Ext.util.JSON.encodeDate = function(o){
         return n < 10 ? "0" + n : n;
     };
     return '"' + o.getFullYear() + "-" +
-            pad(o.getMonth() + 1) + "-" +
-            pad(o.getDate()) + " " +
-            pad(o.getHours()) + ":" +
-            pad(o.getMinutes()) + ":" +
-            pad(o.getSeconds()) + '"';
-    };
+        pad(o.getMonth() + 1) + "-" +
+        pad(o.getDate()) + " " +
+        pad(o.getHours()) + ":" +
+        pad(o.getMinutes()) + ":" +
+        pad(o.getSeconds()) + '"';
+};
+
 /**
  * addidional formats
  */
