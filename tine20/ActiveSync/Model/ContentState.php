@@ -11,11 +11,11 @@
  */
 
 /**
- * class to hold SyncState data
+ * class to hold ContentState data
  * 
  * @package     ActiveSync
  */
-class ActiveSync_Model_SyncState extends Tinebase_Record_Abstract
+class ActiveSync_Model_ContentState extends Tinebase_Record_Abstract
 {  
     /**
      * key in $_validators/$_properties array for the filed which 

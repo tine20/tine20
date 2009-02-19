@@ -2,17 +2,17 @@
 /**
  * Tine 2.0
  * 
- * @package     ActiveSyncTasks
+ * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: TaskFilter.php 5543 2008-11-20 16:22:28Z p.schuele@metaways.de $
+ * @version     $Id$
  *
  */
 
 /**
- * Tasks Filter Class
- * @package Tasks
+ * device filter class
+ * @package     ActiveSync
  */
 class ActiveSync_Model_DeviceFilter extends Tinebase_Model_Filter_FilterGroup
 {    

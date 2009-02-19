@@ -1,19 +1,19 @@
 <?php
 /**
- * class to hold device data
+ * Tine 2.0
  * 
- * @package     ActiveSyncActiveSync
+ * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  */
 
 /**
- * class to hold SyncState data
+ * class to hold device data
  * 
- * @package     ActiveSyncActiveSync
+ * @package     ActiveSync
  */
 class ActiveSync_Model_Device extends Tinebase_Record_Abstract
 {  
