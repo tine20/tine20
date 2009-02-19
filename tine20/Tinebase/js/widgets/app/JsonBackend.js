@@ -231,7 +231,12 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         var recordData = Ext.util.JSON.decode('{results: [' + response.responseText + ']}');
         var data = this.jsonReader.readRecords(recordData);
         
-        return data.records[0];
+        var record = data.records[0];
+        var recordId = record.get(record.idProperty);
+        
+        record.id = recordId ? recordId : 0;
+        
+        return record;
     },
     
     /**
