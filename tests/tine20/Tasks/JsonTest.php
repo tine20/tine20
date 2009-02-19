@@ -200,6 +200,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         return new Tasks_Model_Task(array(
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
+            'due'           => new Zend_Date()
         ));
     }
 
@@ -210,10 +211,13 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _getFilter()
     {
+        $date = new Zend_Date();
+        
         // define filter
         return array(
             array('field' => 'container_id', 'operator' => 'specialNode', 'value' => 'all'),
             array('field' => 'summary'     , 'operator' => 'contains',    'value' => 'minimal task by PHPUnit'),
+            array('field' => 'due'         , 'operator' => 'equals',      'value' => $date->get('yyyy-MM-dd')),
         );
     }
     
