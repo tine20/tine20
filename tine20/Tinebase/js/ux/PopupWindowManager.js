@@ -29,8 +29,9 @@ Ext.ux.PopupWindowGroup = function(){
                 doc = false;
             }
             if (! doc) {
-                delete list[list[id].name];
                 accessList.remove(list[id]);
+                delete list[id];
+                
             }
         }
     };
@@ -84,6 +85,7 @@ Ext.ux.PopupWindowGroup = function(){
     return {
 
         register : function(win){
+            cleanupClosedWindows();
             if (! win.popup) {
                 console.error('pure window instead of Ext.ux.PopupWindow got registered');
             }
