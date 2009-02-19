@@ -84,7 +84,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $date = new Zend_Date();
             
             // special values like this week, ...
+            
             switch($_value) {
+                /******* week *********/
                 case 'weekNext':
                     $date->add(21, Zend_Date::DAY);
                 case 'weekBeforeLast':    
@@ -106,6 +108,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                         $sunday,
                     );
                     break;
+                /******* month *********/
                 case 'monthNext':
                     $date->add(2, Zend_Date::MONTH);
                 case 'monthLast':
@@ -123,6 +126,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                         $last,
                     );
                     break;
+                /******* year *********/
                 case 'yearNext':
                     $date->add(2, Zend_Date::YEAR);
                 case 'yearLast':
@@ -133,6 +137,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                         $date->toString('yyyy') . '-12-31',
                     );                
                     break;
+                /******* quarter *********/
                 case 'quarterNext':
                     $date->add(6, Zend_Date::MONTH);
                 case 'quarterLast':
@@ -157,6 +162,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                         $last
                     );                
                     break;
+                /******* day *********/
                 case 'dayNext':
                     $date->add(2, Zend_Date::DAY);
                 case 'dayLast':
@@ -167,6 +173,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                         $date->toString($this->_dateFormat), 
                     );
                     break;
+                /******* error *********/
                 default:
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_value);
                     $value = '';
