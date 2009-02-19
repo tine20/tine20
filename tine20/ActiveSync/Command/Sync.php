@@ -84,6 +84,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             $class          = (string)$xmlCollection->Class;
             $collectionId   = (string)$xmlCollection->CollectionId;
             $windowSize     = isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100;
+            $getChanges     = isset($xmlCollection->GetChanges) ? true : false;
             $itemsInCollection = 0;
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " SyncKey is $clientSyncKey Class: $class CollectionId: $collectionId WindowSize: $windowSize");
@@ -93,10 +94,12 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'class'         => $class,
                 'collectionId'  => $collectionId,
                 'windowSize'    => $windowSize,
+                'getChanges'    => $getChanges,
                 'added'         => array(),
                 'changed'       => array(),
                 'deleted'       => array()
             );
+            $this->_collections[$class] = $collectionData;
             
             $this->_dataController = ActiveSync_Controller::dataFactory($class, $this->_syncTimeStamp);
             $this->_added   = array();
@@ -131,7 +134,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     }
                 }
                 
-                if(isset($xmlCollection->GetChanges)) {
+                if($getChanges === true) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " client requested changes");
                     $syncState = $controller->getSyncState($this->_device, $class . '-' . $collectionId, $clientSyncKey);
                     
@@ -305,6 +308,11 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         
         #return $outputStream;
     }    
+    
+    public function getResponse()
+    {
+        parent::getResponse();
+    }
     
     protected function _handleSync0($_collections, $_class, $_collectionId)
     {

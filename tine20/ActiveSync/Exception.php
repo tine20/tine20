@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id: Exception.php 5137 2008-10-28 11:45:22Z p.schuele@metaways.de $
+ * @version     $Id$
  *
  * @todo        add methods/attributes? application name for example?
  */

@@ -9,7 +9,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Controller.php 6000 2008-12-16 15:01:13Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  */
 
