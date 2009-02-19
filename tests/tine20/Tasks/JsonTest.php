@@ -217,7 +217,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         return array(
             array('field' => 'container_id', 'operator' => 'specialNode', 'value' => 'all'),
             array('field' => 'summary'     , 'operator' => 'contains',    'value' => 'minimal task by PHPUnit'),
-            array('field' => 'due'         , 'operator' => 'equals',      'value' => $date->get('yyyy-MM-dd')),
+            array('field' => 'due'         , 'operator' => 'within',      'value' => 'dayThis'),
         );
     }
     
