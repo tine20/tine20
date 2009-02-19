@@ -87,9 +87,11 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         // check name and company name
         $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), 'name not found');   
 
-        // check notes
+        // check notes (removed that because system notes are no longer shown in pdf)
+        /*
         $translatedNoteString = $translate->_('created') . ' ' . $translate->_('by');
-        $this->assertEquals(1, preg_match("/$translatedNoteString/", $pdfOutput), 'note not found');   
+        $this->assertEquals(1, preg_match("/$translatedNoteString/", $pdfOutput), 'note not found');
+        */   
     }
 
     /**
@@ -154,7 +156,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'note'                  => 'Bla Bla Bla',
-            'container_id'                 => $container->id,
+            'container_id'          => $container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
