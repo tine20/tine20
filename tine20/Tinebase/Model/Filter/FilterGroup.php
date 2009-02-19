@@ -349,22 +349,9 @@ class Tinebase_Model_Filter_FilterGroup
     public function setFromArrayInUsersTimezone($_data)
     {
         $this->_options['timezone'] = Tinebase_Core::get('userTimeZone');
-        $this->setFromJson($_data);
+        $this->setFromArray($_data);
     }
     
-    /**
-     * fills a filter group from json data
-     *
-     * @param string $_data json encoded data
-     * @return void
-     */
-    public function setFromJson($_data)
-    {
-        $filterData = Zend_Json::decode($_data);
-        
-        $this->setFromArray($filterData);
-    }
-
     /**
      * return filter object
      *
