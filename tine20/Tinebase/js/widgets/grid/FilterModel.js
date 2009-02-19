@@ -211,6 +211,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      */
     onOperatorChange: function(filter, newOperator) {
         filter.set('operator', newOperator);
+        filter.set('value', '');
         
         // for date filters we need to rerender the value section
         if (this.valueType == 'date') {
@@ -362,25 +363,42 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             ['yearNext',        _('next year')]
         ];
         
+        var comboOps = this.pastOnly ? pastOps : futureOps.concat(pastOps);
+        var comboValue = 'weekThis';
+        if (filter.data.value && filter.data.value.toString().match(/^[a-zA-Z]+$/)) {
+            comboValue = filter.data.value.toString();
+        } else if (this.defaultValue && this.defaultValue.toString().match(/^[a-zA-Z]+$/)) {
+            comboValue = this.defaultValue.toString();
+        }
+        
         filter.withinCombo = new Ext.form.ComboBox({
             hidden: valueType != 'withinCombo',
             filter: filter,
             width: 200,
-            value: filter.data.value ? filter.data.value : ( this.defaultValue ? this.defaultValue : 'weekThis'),
+            value: comboValue,
             renderTo: el,
             mode: 'local',
             lazyInit: false,
             forceSelection: true,
             typeAhead: true,
             triggerAction: 'all',
-            store: this.pastOnly ? pastOps : futureOps.concat(pastOps)
+            store: comboOps
         });
 
+        var pickerValue = '';
+        if (Ext.isDate(filter.data.value)) {
+            pickerValue = filter.data.value;
+        } else if (Ext.isDate(Date.parseDate(filter.data.value, Date.patterns.ISO8601Long))) {
+            pickerValue = Date.parseDate(filter.data.value, Date.patterns.ISO8601Long);
+        } else if (Ext.isDate(this.defaultValue)) {
+            pickerValue = this.defaultValue;
+        }
+        
         filter.datePicker = new Ext.form.DateField({
             hidden: valueType != 'datePicker',
             filter: filter,
             width: 200,
-            value: filter.data.value ? filter.data.value : this.defaultValue,
+            value: pickerValue,
             renderTo: el
         });
         
