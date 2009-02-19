@@ -66,7 +66,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
      */
     public function setTimezone($_timezone)
     {
-        if (!empty($this->_value) {
+        if (!empty($this->_value)) {
             throw new Tinebase_Exception_NotImplemented('Could not set timezone of existing filter!');
         }
         
