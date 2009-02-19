@@ -62,25 +62,6 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     }
     
     /**
-     * returns array with the filter settings of this filter
-     * - convert value to user timezone
-     *
-     * @param  bool $_valueToJson resolve value for json api?
-     * @return array
-     * 
-     * @todo    finish implementation
-     */
-    public function toArray($_valueToJson = false)
-    {
-        $result = parent::toArray($_valueToJson);
-        
-        if ($_valueToJson == true) {
-            // @todo use _convertISO8601ToZendDate and then setTimezone(Tinebase_Core::get('userTimeZone')
-        }
-        return $result;
-    }
-    
-    /**
      * calculates the date filter values
      *
      * @param string $_operator
