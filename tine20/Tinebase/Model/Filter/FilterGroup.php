@@ -344,11 +344,10 @@ class Tinebase_Model_Filter_FilterGroup
      * wrapper for setFromJson which expects datetimes in array to be in
      * users timezone and converts them to UTC
      *
-     * @param  string $_data json encoded data
+     * @param array $_data 
      */
-    public function setFromJsonInUsersTimezone($_data)
+    public function setFromArrayInUsersTimezone($_data)
     {
-        //$this->_timezone = 
         $this->_options['timezone'] = Tinebase_Core::get('userTimeZone');
         $this->setFromJson($_data);
     }
