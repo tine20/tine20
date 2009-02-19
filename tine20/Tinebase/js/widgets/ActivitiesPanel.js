@@ -516,8 +516,6 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         // get grid
         this.activitiesGrid = this.getActivitiesGrid();
         
-        console.log(this.store);
-        
         // the filter toolbar
         var filterToolbar = new Tine.widgets.grid.FilterToolbar({
             id : 'activitiesFilterToolbar',
