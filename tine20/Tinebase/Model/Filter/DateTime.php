@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        extend Tinebase_Model_Filter_Date and overwrite some functions (toArray, ....)
  */
 
 /**
@@ -20,49 +19,27 @@
  * 
  * filters date in one property
  */
-class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Abstract
+class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
 {
     /**
-     * @var array list of allowed operators
-     */
-    protected $_operators = array(
-        0 => 'equals',
-        1 => 'within',
-        2 => 'before',
-        3 => 'after',
-    );
-    
-    /**
-     * @var array maps abstract operators to sql operators
-     */
-    protected $_opSqlMap = array(
-        'equals'     => array('sqlop' => ' LIKE ?'),
-        'within'     => array('sqlop' => array(' >= ? ', ' <= ?')),
-        'before'     => array('sqlop' => ' < ?'),
-        'after'      => array('sqlop' => ' > ?')
-    );
-    
-    /**
-     * appeds sql to given select statement
+     * returns array with the filter settings of this filter
+     * - convert value to user timezone
      *
-     * @param Zend_Db_Select $_select
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     * 
+     * @todo    finish implementation
      */
-     public function appendFilterSql($_select)
-     {
-         // prepare value
-         $value = (array)$this->_getDateValues($this->_operator, $this->_value);
-         
-         // quote field identifier
-         // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
-         $field = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
-         
-         // append query to select object
-         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
-             $_select->where($field . $operator, $value[$num]);
-         }
-         
-     }
-     
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        if ($_valueToJson == true) {
+            // @todo use _convertISO8601ToZendDate and then setTimezone(Tinebase_Core::get('userTimeZone')
+        }
+        return $result;
+    }
+    
     /**
      * calculates the date filter values
      *
@@ -70,102 +47,11 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Abstract
      * @param string $_value
      * @param string $_dateFormat
      * @return array|string date value
-     * 
-     * @todo fix problem with day of week in 'this week' filter (sunday is first day of the week in english locales) 
-     * --> get that info from locale
      */
     protected function _getDateValues($_operator, $_value, $_dateFormat = 'yyyy-MM-dd HH:mm:ss')
     {        
         if ($_operator === 'within') {
-            $date = new Zend_Date();
-            
-            // special values like this week, ...
-            switch($_value) {
-                case 'weekNext':
-                    $date->add(21, Zend_Date::DAY);
-                case 'weekBeforeLast':    
-                    $date->sub(7, Zend_Date::DAY);
-                case 'weekLast':    
-                    $date->sub(7, Zend_Date::DAY);
-                case 'weekThis':
-                    $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
-                    // in german locale sunday is last day of the week
-                    $dayOfWeek = ($dayOfWeek == 0) ? 7 : $dayOfWeek;
-                    $date->sub($dayOfWeek-1, Zend_Date::DAY);
-                    $monday = $date->toString($_dateFormat);
-                    $date->add(6, Zend_Date::DAY);
-                    $sunday = $date->toString($_dateFormat);
-                    
-                    $value = array(
-                        $monday, 
-                        $sunday,
-                    );
-                    break;
-                case 'monthNext':
-                    $date->add(2, Zend_Date::MONTH);
-                case 'monthLast':
-                    $date->sub(1, Zend_Date::MONTH);
-                case 'monthThis':
-                    $dayOfMonth = $date->get(Zend_Date::DAY_SHORT);
-                    $monthDays = $date->get(Zend_Date::MONTH_DAYS);
-                    
-                    $first = $date->toString('yyyy-MM');
-                    $date->add($monthDays-$dayOfMonth, Zend_Date::DAY);
-                    $last = $date->toString($_dateFormat);
-    
-                    $value = array(
-                        $first, 
-                        $last,
-                    );
-                    break;
-                case 'yearNext':
-                    $date->add(2, Zend_Date::YEAR);
-                case 'yearLast':
-                    $date->sub(1, Zend_Date::YEAR);
-                case 'yearThis':
-                    $value = array(
-                        $date->toString('yyyy') . '-01-01 00:00:00', 
-                        $date->toString('yyyy') . '-12-31 23:59:59',
-                    );                
-                    break;
-                case 'quarterNext':
-                    $date->add(6, Zend_Date::MONTH);
-                case 'quarterLast':
-                    $date->sub(3, Zend_Date::MONTH);
-                case 'quarterThis':
-                    $month = $date->get(Zend_Date::MONTH);
-                    if ($month < 4) {
-                        $first = $date->toString('yyyy' . '-01-01 00:00:00');
-                        $last = $date->toString('yyyy' . '-03-31 23:59:59');
-                    } elseif ($month < 7) {
-                        $first = $date->toString('yyyy' . '-04-01 00:00:00');
-                        $last = $date->toString('yyyy' . '-06-30 23:59:59');
-                    } elseif ($month < 10) {
-                        $first = $date->toString('yyyy' . '-07-01 00:00:00');
-                        $last = $date->toString('yyyy' . '-09-30 23:59:59');
-                    } else {
-                        $first = $date->toString('yyyy' . '-10-01 00:00:00');
-                        $last = $date->toString('yyyy' . '-12-31 23:59:59');
-                    }
-                    $value = array(
-                        $first, 
-                        $last
-                    );                
-                    break;
-                case 'dayNext':
-                    $date->add(2, Zend_Date::DAY);
-                case 'dayLast':
-                    $date->sub(1, Zend_Date::DAY);
-                case 'today':
-                    $value = array(
-                        $date->toString($_dateFormat), 
-                        $date->toString($_dateFormat), 
-                    );                
-                    break;
-                default:
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_value);
-                    $value = '';
-            }        
+            $value = parent::_getDateValues($_operator, $_value, $_dateFormat);
         } else  {            
             $value = $_value;
         }
