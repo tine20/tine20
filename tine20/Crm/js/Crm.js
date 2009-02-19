@@ -751,21 +751,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
                 listeners: {
                     scope: this,
-                    'update': function(contact) {
-                        // @deprecated
-                        switch ( _button.contactType ) {
-                            case 'responsible':
-                               contact.data.relation_type = 'responsible';
-                               break;
-                            case 'customer':
-                               contact.data.relation_type = 'customer';
-                               break;
-                            case 'partner':
-                               contact.data.relation_type = 'partner';
-                               break;
-                        }
-                        this.onContactUpdate(contact);
-                    }
+                    'update': this.onContactUpdate
                 }
             });        	
         },
@@ -897,8 +883,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * update event handler for related contacts
      */
     onContactUpdate: function(contact) {
+        var response = {
+            responseText: contact
+        };
+        contact = Tine.Addressbook.contactBackend.recordReader(response);
+        
         var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
-        contact.id = contact.data.id;
+
         var myContact = storeContacts.getById(contact.id);
         if (myContact) {
             myContact.beginEdit();
@@ -907,6 +898,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             }
             myContact.endEdit();
         } else {
+            contact.data.relation_type = 'customer';
             storeContacts.add(contact);
         }        
     },
@@ -915,7 +907,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * update event handler for related tasks
      */
     onTaskUpdate: function(task) {
-        console.log(task);
+        var response = {
+            responseText: task
+        };
+        task = Tine.Tasks.JsonBackend.recordReader(response);
+        
         var storeTasks = Ext.StoreMgr.lookup('TasksStore');
         var myTask = storeTasks.getById(task.id);
         
@@ -1103,7 +1099,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         grid.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
             Tine.Addressbook.ContactEditDialog.openWindow({
-                contact: record,
+                record: record,
                 listeners: {
                     scope: this,
                     'update': this.onContactUpdate
