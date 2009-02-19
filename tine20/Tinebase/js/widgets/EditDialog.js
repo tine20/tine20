@@ -104,7 +104,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             /**
              * @event update
              * @desc  Fired when the record got updated
-             * @param {Ext.data.record} data data of the entry
+             * @param {Json String} data data of the entry
              */
             'update',
             /**
@@ -346,16 +346,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     success: function(record) {
                         // override record with returned data
                         this.record = record;
-                        this.fireEvent('update', this.record);
-                        
-                        // free 0 namespace if record got created
-                        this.window.rename(this.windowNamePrefix + this.record.id);
                         
                         // update form with this new data
                         // NOTE: We update the form also when window should be closed,
                         //       cause sometimes security restrictions might prevent
                         //       closing of native windows
                         this.onRecordLoad();
+                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                        
+                        // free 0 namespace if record got created
+                        this.window.rename(this.windowNamePrefix + this.record.id);
                         
                         if (closeWindow) {
                             this.purgeListeners();
@@ -367,14 +367,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     }
                 });
             } else {
-                this.fireEvent('update', this.record);
+                this.onRecordLoad();
+                this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
                 
+                // free 0 namespace if record got created
+                this.window.rename(this.windowNamePrefix + this.record.id);
+                        
                 if (closeWindow) {
                     this.purgeListeners();
                     this.window.close();
-                } else {
-                    // update form with this new data
-                    this.onRecordLoad();
                 }
             }
         } else {
@@ -394,7 +395,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 this.recordProxy.deleteRecords(this.record, {
                     scope: this,
                     success: function() {
-                        this.fireEvent('update', this.record);
                         this.purgeListeners();
                         this.window.close();
                     },
