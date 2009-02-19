@@ -100,7 +100,7 @@ class Tinebase_Frontend_Json_PersistentFilter
         }
         
         // set filter data und create persistent filter record
-        $filter->setFromJsonInUsersTimezone($filterData);
+        $filter->setFromArrayInUsersTimezone(Zend_Json::decode($filterData));
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
         $persistentFilter = new Tinebase_Model_PersistentFilter(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),

@@ -85,7 +85,8 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
         $decodedFilter = Zend_Json::decode($_filter);
         
         if (is_array($decodedFilter)) {
-            $filter = new $_filterModel($decodedFilter);
+            $filter = new $_filterModel(array());
+            $filter->setFromArrayInUsersTimezone($decodedFilter);
         } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
             $persistentFilterJson = new Tinebase_Frontend_Json_PersistentFilter(); 
             $filter = $persistentFilterJson->get($decodedFilter);
