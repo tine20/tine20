@@ -112,11 +112,6 @@ class Tinebase_Model_Filter_FilterGroup
      */
     protected $_concatenationCondition = NULL;
     
-    /**
-     * @var string timezone of this filtergroup
-     */
-    protected $_timezone = 'UTC';
-    
     /******************************** functions ********************************/
     
     /**
@@ -176,19 +171,6 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
-     * sets timezone of this filter group
-     *
-     * @param string $_timezone
-     */
-    public function setTimezone($_timezone)
-    {
-        $this->_timezone = $_timezone;
-        foreach ($this->_filterObjects as $filter) {
-            $filter->setTimezone($_timezone);
-        }
-    }
-    
-    /**
      * set options 
      *
      * @param array $_options
@@ -220,7 +202,6 @@ class Tinebase_Model_Filter_FilterGroup
         }
         
         $this->_filterObjects[] = $_filter;
-        $_filter->setTimezone($this->_timezone);
         
         return $this;
     }
@@ -239,7 +220,6 @@ class Tinebase_Model_Filter_FilterGroup
         }
         
         $this->_filterObjects[] = $_filtergroup;
-        $_filtergroup->setTimezone($this->_timezone);
         
         return $this;
     }
@@ -368,7 +348,8 @@ class Tinebase_Model_Filter_FilterGroup
      */
     public function setFromJsonInUsersTimezone($_data)
     {
-        $this->_timezone = Tinebase_Core::get('userTimeZone');
+        //$this->_timezone = 
+        $this->_options['timezone'] = Tinebase_Core::get('userTimeZone');
         $this->setFromJson($_data);
     }
     
