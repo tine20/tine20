@@ -111,9 +111,8 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
             'note'                  => 'Bla Bla Bla',
-            'container_id'                 => $this->testContainer->id,
+            'container_id'          => $this->testContainer->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -148,7 +147,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             // already there
         }
         try {
-            $contact = Addressbook_Controller_Contact::getInstance()->create($this->objects['linkedContact']);
+            $this->objects['linkedContact'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['linkedContact']);
         } catch ( Exception $e ) {
             // already there
         }
