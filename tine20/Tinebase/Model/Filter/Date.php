@@ -90,8 +90,11 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     // in german locale sunday is last day of the week
                     $dayOfWeek = ($dayOfWeek == 0) ? 7 : $dayOfWeek;
                     $date->sub($dayOfWeek-1, Zend_Date::DAY);
+                    $date->setTime('00:00:00', 'HH:mm:ss');
                     $monday = $date->toString($_dateFormat);
+                    
                     $date->add(6, Zend_Date::DAY);
+                    $date->setTime('23:59:59', 'HH:mm:ss');
                     $sunday = $date->toString($_dateFormat);
                     
                     $value = array(
@@ -109,6 +112,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     
                     $first = $date->toString('yyyy-MM');
                     $date->add($monthDays-$dayOfMonth, Zend_Date::DAY);
+                    $date->setTime('23:59:59', 'HH:mm:ss');
                     $last = $date->toString($_dateFormat);
     
                     $value = array(
