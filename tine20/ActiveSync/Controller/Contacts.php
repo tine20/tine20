@@ -99,14 +99,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         
         if($_startTimeStamp === NULL && $_endTimeStamp === NULL) {
-            $filter = new Addressbook_Model_ContactFilter(); 
+            $filter = new Addressbook_Model_ContactFilter(array()); 
             $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
         } elseif($_endTimeStamp === NULL) {
             foreach(array('creation_time', 'last_modified_time', 'deleted_time') as $fieldName) {
                 $filter = new Addressbook_Model_ContactFilter(array(
                     array(
                         'field'     => $fieldName,
-                        'operator'  => 'greater',
+                        'operator'  => 'after',
                         'value'     => $startTimeStamp
                     ),
                 )); 
@@ -183,6 +183,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $_data->bday->getIso()));
                         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Birthday " . $_data->bday->getIso());
                         break;
+                    case 'jpegphoto':
+                        break;
                     default:
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $_data->$value));
                         break;
@@ -193,7 +195,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     
     public function add($_collectionId, SimpleXMLElement $_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Data: " .print_r($_data, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId");
         
         $contact = $this->_toTine20Contact($_data);
         $contact->creation_time = $this->_syncTimeStamp;
@@ -207,7 +209,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     
     public function search($_collectionId, SimpleXMLElement $_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Data: " .print_r($_data, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId");
         
         $filter = $this->_toTine20ContactFilter($_data);
         
@@ -220,7 +222,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     
     public function change($_collectionId, $_id, SimpleXMLElement $_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Data: " .print_r($_data, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id");
         
         $contactsController = Addressbook_Controller_Contact::getInstance();
         
@@ -264,7 +266,6 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     {
         $contactData = array();
         $xmlData = $_data->children('uri:Contacts');
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " field in data " . count($xmlData));
         
         foreach($this->_mapping as $fieldName => $value) {
             if(isset($xmlData->$fieldName)) {
@@ -313,6 +314,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 );
             }
         }
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($contactFilter, true));
         
         return $contactFilter;
     }
