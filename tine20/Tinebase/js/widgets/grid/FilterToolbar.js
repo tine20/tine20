@@ -587,7 +587,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                         if (typeof this.app.getMainScreen().getTreePanel().getPersistentFilterNode == 'function') {
                             var persistentFilterNode = this.app.getMainScreen().getTreePanel().getPersistentFilterNode();
                             
-                            if (persistentFilterNode.isExpanded()) {
+                            if (persistentFilterNode && persistentFilterNode.isExpanded()) {
                                 var filter = Ext.util.JSON.decode(result.responseText);
                                 
                                 if (! persistentFilterNode.findChild('id', filter.id)) {
