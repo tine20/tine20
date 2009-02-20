@@ -96,14 +96,6 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey");
             $folderSync = $this->_outputDom->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'FolderSync'));
             $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_INVALID_SYNC_KEY));
-        }
-        
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
-        
-        #$outputStream = fopen("php://temp", 'r+');
-        #$encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
-        #$encoder->encode($this->_outputDom);
-        
-        #return $outputStream;
+        }        
     }
 }
