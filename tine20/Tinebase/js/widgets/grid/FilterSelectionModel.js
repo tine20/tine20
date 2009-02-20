@@ -48,9 +48,33 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
             //console.log(opts.params.filter);
             return opts.params.filter;
             */
-            
-            return this.store.lastFilter;
+            var filterData = this.getAllFilterData();
+            return filterData;
+            //return this.store.lastFilter;
         }
+    },
+    
+    /**
+     * gets filter data of all filter plugins
+     * 
+     * NOTE: As we can't find all filter plugins directly we need a litte hack 
+     *       to get their data
+     *       
+     *       We register ourselve as latest beforeload.
+     *       In the options.filter we have the filters then.
+     */
+    getAllFilterData: function() {
+        this.store.on('beforeload', this.storeOnBeforeload, this);
+        this.store.load();
+        this.store.un('beforeload', this.storeOnBeforeload, this);
+        
+        return this.allFilterData;
+    },
+    
+    storeOnBeforeload: function(store, options) {
+        this.allFilterData = options.params.filter;
+        this.store.fireEvent('loadexception');
+        return false;
     },
     
     /**

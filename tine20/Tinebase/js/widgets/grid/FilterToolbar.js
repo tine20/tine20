@@ -623,6 +623,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     storeOnBeforeload: function(store, options) {
         this.allFilterData = options.params.filter;
+        this.store.fireEvent('loadexception');
+        return false;
     }
     
 });
