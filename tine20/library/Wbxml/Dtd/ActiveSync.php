@@ -91,7 +91,8 @@ class Wbxml_Dtd_ActiveSync
     {
         $dtd = DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
         $dom = DOMImplementation::createDocument($_nameSpace, $_tag, $dtd);
-        $dom->encoding = 'utf-8';
+        $dom->encoding      = 'utf-8';
+        $dom->formatOutput  = false;
         
         return $dom;
     }
