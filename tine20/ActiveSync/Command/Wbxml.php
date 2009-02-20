@@ -11,7 +11,7 @@
  */
 
 /**
- * class documentation
+ * abstract class for all commands using wbxml encoded content
  *
  * @package     ActiveSync
  * @subpackage  ActiveSync
@@ -20,14 +20,14 @@
 abstract class ActiveSync_Command_Wbxml
 {
     /**
-     * Enter description here...
+     * the domDocument containing the xml response from the server
      *
      * @var DOMDocument
      */
     protected $_outputDom;
 
     /**
-     * Enter description here...
+     * the domDocucment containing the xml request from the client
      *
      * @var DOMDocument
      */
@@ -76,7 +76,11 @@ abstract class ActiveSync_Command_Wbxml
     const TRUNCATION_5K             = 4;
     const TRUNCATION_ALL            = 9;
     
-    
+    /**
+     * the constructor
+     *
+     * @param ActiveSync_Model_Device $_device
+     */
     public function __construct(ActiveSync_Model_Device $_device)
     {
         $this->_device      = $_device;
@@ -100,8 +104,17 @@ abstract class ActiveSync_Command_Wbxml
         
     }
     
+    /**
+     * this abstract function must be implemented the commands
+     * this function processes the incoming request
+     *
+     */
     abstract public function handle();    
     
+    /**
+     * this function generates the response for the client
+     * should get overwriten by the command
+     */
     public function getResponse()
     {
         Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
