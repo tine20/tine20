@@ -36,7 +36,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
         'ts.is_billable' => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag')
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'ts.id'))
     );
     
     /**
