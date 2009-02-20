@@ -377,6 +377,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     onStoreBeforeload: function(store, options) {
         options.params = options.params || {};
         
+        // allways start with an empty filter set!
+        // this is important for paging and sort header!
+        options.params.filter = [];
+        
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
     },
