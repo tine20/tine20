@@ -19,10 +19,6 @@
  
 abstract class ActiveSync_Command_Wbxml
 {
-    #protected $_inputStream;
-    
-    #protected $_backend;
-    
     /**
      * Enter description here...
      *
@@ -37,18 +33,26 @@ abstract class ActiveSync_Command_Wbxml
      */
     protected $_inputDom;
         
-    #protected $_user;
-    
-    #protected $_deviceId;
-    
-    #protected $_deviceType;   
-
     /**
-     * Enter description here...
+     * informations about the currently device
      *
      * @var ActiveSync_Model_Device
      */
     protected $_device;
+    
+    /**
+     * the default namespace
+     *
+     * @var string
+     */
+    protected $_defaultNameSpace;
+    
+    /**
+     * the main xml tag
+     *
+     * @var string
+     */
+    protected $_documentElement;
     
     /**
      * timestamp to use for all sync requests
@@ -81,7 +85,7 @@ abstract class ActiveSync_Command_Wbxml
         try {
             $decoder = new Wbxml_Decoder($inputStream);
             $this->_inputDom = $decoder->decode();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_inputDom->saveXML());
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " decoded wbxml content: " . $this->_inputDom->saveXML());
         } catch(Wbxml_Exception_UnexpectedEndOfFile $e) {
             $this->_inputDom = NULL;
         }
@@ -89,10 +93,11 @@ abstract class ActiveSync_Command_Wbxml
         $this->_syncTimeStamp = Zend_Date::now();
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG));
         
-        $imp = new DOMImplementation;
-        $dtd = $imp->createDocumentType('AirSync', '-//AIRSYNC//DTD AirSync//EN', 'http://www.microsoft.com/');
-        $this->_outputDom = $imp->createDocument('', '', $dtd);
+        $dtd = DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        $this->_outputDom = DOMImplementation::createDocument($this->_defaultNameSpace, $this->_documentElement, $dtd);
         $this->_outputDom->formatOutput = false;
+        $this->_outputDom->encoding     = 'utf-8';
+        
     }
     
     abstract public function handle();    
