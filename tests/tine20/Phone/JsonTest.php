@@ -211,7 +211,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             $call = $phoneController->callStarted($this->_objects['call2']);
         } catch (Zend_Db_Statement_Exception $e) {
             // exists
-            echo $e->getMessage();
+            //echo $e->getMessage();
         }        
     }
 
