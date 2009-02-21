@@ -120,13 +120,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         $added = $existing[0];
                     }
                     $this->_collections[$class]['added'][$added->getId()] = (string)$add->ClientId;
-                    $contentState = new ActiveSync_Model_ContentState(array(
-                        'device_id'     => $this->_device->getId(),
-                        'class'         => $collectionData['class'],
-                        'contentid'     => $added->getId(),
-                        'creation_time' => $this->_syncTimeStamp
-                    ));
-                    $contentStateBackend->create($contentState);
+                    $this->_addContentState($collectionData['class'], $added->getId());
                 }
             }
         
@@ -151,6 +145,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . (string)$delete->ServerId . ' but entry was not found');
                     }
                     $this->_collections[$class]['deleted'][(string)$delete->ServerId] = (string)$delete->ServerId;
+                    $this->_deleteContentState($collectionData['class'], (string)$delete->ServerId);
                 }
             }            
         }        
@@ -159,7 +154,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     public function getResponse()
     {
         $controller             = ActiveSync_Controller::getInstance();
-        $contentStateBackend    = new ActiveSync_Backend_ContentState();
         
         // add aditional namespaces for contacts and tasks
         $this->_outputDom->documentElement->setAttribute('xmlns:' . 'Contacts', 'uri:Contacts');
@@ -244,13 +238,8 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverAdd->getId()));
                             $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
                             $dataController->appendXML($this->_outputDom, $applicationData, $serverAdd);
-                            $contentState = new ActiveSync_Model_ContentState(array(
-                                'device_id'     => $this->_device->getId(),
-                                'class'         => $collectionData['class'],
-                                'contentid'     => $serverAdd->getId(),
-                                'creation_time' => $this->_syncTimeStamp
-                            ));
-                            $contentStateBackend->create($contentState);
+
+                            $this->_addContentState($collectionData['class'], $serverAdd->getId());
                             
                             #$itemsInCollection++;                                
                         }
@@ -308,5 +297,60 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             $controller->updateSyncKey($this->_device, $newSyncKey, $collectionData['class'] . '-' . $collectionData['collectionId'], $this->_syncTimeStamp);
         }
         parent::getResponse();
+    }
+
+    /**
+     * save contentstate (aka: remember that we have sent the entry to the client)
+     *
+     * @param string $_class the class from the xml
+     * @param string $_contentId the Tine 2.0 id of the entry
+     */
+    protected function _addContentState($_class, $_contentId)
+    {
+        $contentStateBackend    = new ActiveSync_Backend_ContentState();
+        
+        $contentState = new ActiveSync_Model_ContentState(array(
+            'device_id'     => $this->_device->getId(),
+            'class'         => $_class,
+            'contentid'     => $_contentId,
+            'creation_time' => $this->_syncTimeStamp
+        ));
+        $contentStateBackend->create($contentState);
+    }
+    
+    /**
+     * delete contentstate (aka: forget that we have sent the entry to the client)
+     *
+     * @param string $_class the class from the xml
+     * @param string $_contentId the Tine 2.0 id of the entry
+     */
+    protected function _deleteContentState($_class, $_contentId)
+    {
+        $contentStateBackend    = new ActiveSync_Backend_ContentState();
+
+        $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
+            array(
+                    'field'     => 'device_id',
+                    'operator'  => 'equals',
+                    'value'     => $this->_device->getId()
+            ),
+            array(
+                    'field'     => 'class',
+                    'operator'  => 'equals',
+                    'value'     => $_class
+            ),
+            array(
+                    'field'     => 'contentid',
+                    'operator'  => 'equals',
+                    'value'     => $_contentId
+            )
+        ));
+        $state = $contentStateBackend->search($contentStateFilter, NULL, true);
+        
+        if(count($state) > 0) {
+            $contentStateBackend->delete($state[0]);
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no contentstate found for " . print_r($contentStateFilter->toArray(), true));
+        }
     }
 }
