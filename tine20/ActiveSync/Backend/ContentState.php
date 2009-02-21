@@ -25,4 +25,40 @@ class ActiveSync_Backend_ContentState extends Tinebase_Application_Backend_Sql_A
     {
         parent::__construct(SQL_TABLE_PREFIX . 'acsync_content', 'ActiveSync_Model_ContentState');
     }    
+    
+    /**
+     * delete all stored contentId's for given device and class
+     *
+     * @param ActiveSync_Model_Device $_deviceId
+     * @param string $_class
+     */
+    public function resetState(ActiveSync_Model_Device $_deviceId, $_class)
+    {
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $_deviceId->getId()),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('class') . ' = ?', $_class)
+        );
+        
+        $this->_db->delete($this->_tableName, $where);
+    }
+    
+    /**
+     * get array of ids which got send to the client for a given class
+     *
+     * @param ActiveSync_Model_Device $_deviceId
+     * @param string $_class
+     * @return array
+     */
+    public function getClientState(ActiveSync_Model_Device $_deviceId, $_class)
+    {
+        # contentid
+        $select = $this->_getSelect('contentid');
+        $select->where($this->_db->quoteIdentifier('device_id') . ' = ?', $_deviceId->getId())
+            ->where($this->_db->quoteIdentifier('class') . ' = ?', $_class);
+        
+        $stmt = $this->_db->query($select);
+        $result = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+
+        return $result;
+    }
 }
