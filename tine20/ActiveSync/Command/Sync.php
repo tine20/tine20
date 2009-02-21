@@ -44,13 +44,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      * @var array
      */
     protected $_collections = array();
-    
+
     /**
-     * controller to handle contacts, task, calendar or email
+     * the contentState sql backend
      *
-     * @var ActiveSync_Controller_Abstract
+     * @var ActiveSync_Backend_ContentState
      */
-    protected $_dataController;
+    protected $_contentStateBackend;
     
     protected $_session;
     
@@ -62,9 +62,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     public function handle()
     {
-        $controller             = ActiveSync_Controller::getInstance();
-        $contentStateBackend    = new ActiveSync_Backend_ContentState();
-        $this->_session         = new Zend_Session_Namespace('moreData');
+        $controller                 = ActiveSync_Controller::getInstance();
+        $this->_contentStateBackend  = new ActiveSync_Backend_ContentState();
+        $this->_session             = new Zend_Session_Namespace('moreData');
         
         // input xml
         $xml = new SimpleXMLElement($this->_inputDom->saveXML());
@@ -175,6 +175,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $newSyncKey));
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData['collectionId']));
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
+                
+                $this->_contentStateBackend->resetState($this->_device, $collectionData['class']);
+                
                                 
             } else {
                 $newSyncKey = $collectionData['syncKey'] + 1;
@@ -211,8 +214,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($serverAdds) . ' for first sync');
 
+                    $commands = NULL;
+                    
                     if(count($serverAdds) > 0) {
-                        $commands = NULL;
                         
                         foreach($serverAdds as $id => $serverAdd) {
                             #if($itemsInCollection === $windowSize) {
@@ -281,12 +285,23 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         /**
                          * process deleted entries
                          */
-                        $serverDeletes = $dataController->getSince('deleted', $syncState->lastsync, $this->_syncTimeStamp);
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($serverDeletes) . ' deleted entries');
-                        foreach($serverDeletes as $delete) {
-                        #    $this->_serverDelete($commands, $delete);
+                        $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class']);
+                        $allServerEntries = $dataController->getServerEntries();
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($allClientEntries) . ' deleted entries' . count($allServerEntries));
+                        $serverDeletes = array_diff($allClientEntries, $allServerEntries);
+                        foreach($serverDeletes as $serverId) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " need to delete entry " . $serverId);
+                            
+                            if($commands === NULL) {
+                                $commands = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Commands'));
+                            }
+                            
+                            $change = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Delete'));
+                            $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                            
+                            $this->_deleteContentState($collectionData['class'], $serverId);
 
-                        #    $itemsInCollection++;
+                            $itemsInCollection++;
                         }
                     }
                 }
@@ -307,15 +322,23 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     protected function _addContentState($_class, $_contentId)
     {
-        $contentStateBackend    = new ActiveSync_Backend_ContentState();
-        
         $contentState = new ActiveSync_Model_ContentState(array(
             'device_id'     => $this->_device->getId(),
             'class'         => $_class,
             'contentid'     => $_contentId,
             'creation_time' => $this->_syncTimeStamp
         ));
-        $contentStateBackend->create($contentState);
+        
+        /**
+         * if the entry got added earlier, and there was an error, the entry gets added again
+         * @todo it's better to wrap the whole process into a transation
+         */
+        try {
+            $this->_contentStateBackend->create($contentState);
+        } catch (Zend_Db_Statement_Exception $e) {
+            $this->_deleteContentState($_class, $_contentId);
+            $this->_contentStateBackend->create($contentState);
+        }
     }
     
     /**
@@ -326,8 +349,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     protected function _deleteContentState($_class, $_contentId)
     {
-        $contentStateBackend    = new ActiveSync_Backend_ContentState();
-
         $contentStateFilter = new ActiveSync_Model_ContentStateFilter(array(
             array(
                     'field'     => 'device_id',
@@ -345,12 +366,12 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     'value'     => $_contentId
             )
         ));
-        $state = $contentStateBackend->search($contentStateFilter, NULL, true);
+        $state = $this->_contentStateBackend->search($contentStateFilter, NULL, true);
         
         if(count($state) > 0) {
-            $contentStateBackend->delete($state[0]);
+            $this->_contentStateBackend->delete($state[0]);
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no contentstate found for " . print_r($contentStateFilter->toArray(), true));
         }
-    }
+    }    
 }
