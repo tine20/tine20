@@ -68,8 +68,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     public function handle()
     {
-        $controller = ActiveSync_Controller::getInstance();
-        $this->_session = new Zend_Session_Namespace('moreData');
+        $controller             = ActiveSync_Controller::getInstance();
+        $contentStateBackend    = new ActiveSync_Backend_ContentState();
+        $this->_session         = new Zend_Session_Namespace('moreData');
         
         // input xml
         $xml = new SimpleXMLElement($this->_inputDom->saveXML());
@@ -125,6 +126,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         $added = $existing[0];
                     }
                     $this->_collections[$class]['added'][$added->getId()] = (string)$add->ClientId;
+                    $contentState = new ActiveSync_Model_ContentState(array(
+                        'device_id'     => $this->_device->getId(),
+                        'class'         => $collectionData['class'],
+                        'contentid'     => $added->getId(),
+                        'creation_time' => $this->_syncTimeStamp
+                    ));
+                    $contentStateBackend->create($contentState);
                 }
             }
         
@@ -156,7 +164,8 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     
     public function getResponse()
     {
-        $controller = ActiveSync_Controller::getInstance();
+        $controller             = ActiveSync_Controller::getInstance();
+        $contentStateBackend    = new ActiveSync_Backend_ContentState();
         
         // add aditional namespaces for contacts and tasks
         $this->_outputDom->documentElement->setAttribute('xmlns:' . 'Contacts', 'uri:Contacts');
@@ -241,7 +250,14 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverAdd->getId()));
                             $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
                             $dataController->appendXML($this->_outputDom, $applicationData, $serverAdd);
-    
+                            $contentState = new ActiveSync_Model_ContentState(array(
+                                'device_id'     => $this->_device->getId(),
+                                'class'         => $collectionData['class'],
+                                'contentid'     => $serverAdd->getId(),
+                                'creation_time' => $this->_syncTimeStamp
+                            ));
+                            $contentStateBackend->create($contentState);
+                            
                             #$itemsInCollection++;                                
                         }
                     }
