@@ -184,6 +184,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Birthday " . $_data->bday->getIso());
                         break;
                     case 'jpegphoto':
+                        // do nothing currently
                         break;
                     default:
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $_data->$value));
