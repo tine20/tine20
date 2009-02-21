@@ -81,7 +81,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @param $_getDeleted get deleted records
      * @throws Tinebase_Exception_NotFound
      */
-    public function get($_id, $_getDeleted = FALSE) {
+    public function get($_id, $_getDeleted = FALSE) 
+    {
         
         $id = $this->_convertId($_id);
         
@@ -115,7 +116,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * 
      * @todo get custom fields here as well
      */
-    public function getMultiple($_id) {
+    public function getMultiple($_id) 
+    {
         
         if (empty($_id)) {
             return new Tinebase_Record_RecordSet($this->_modelName);
@@ -142,7 +144,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Record_RecordSet
      */
-    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') {
+    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') 
+    {
         if(!in_array($_orderDirection, array('ASC', 'DESC'))) {
             throw new Tinebase_Exception_InvalidArgument('$_orderDirection is invalid');
         }
@@ -172,7 +175,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * 
      * @todo add typehint again when voipmanager refactoring is finished
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    {
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
+    {
         $result = ($_onlyIds) ? array() : new Tinebase_Record_RecordSet($this->_modelName);
         
         if ($_pagination === NULL) {
@@ -231,7 +235,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * 
      * @todo    remove autoincremental ids later
      */
-    public function create(Tinebase_Record_Interface $_record) {
+    public function create(Tinebase_Record_Interface $_record) 
+    {
     	
     	$identifier = $this->_getRecordIdentifier();
     	
@@ -288,7 +293,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
      * @return Tinebase_Record_Interface Record|NULL
      */
-    public function update(Tinebase_Record_Interface $_record) {
+    public function update(Tinebase_Record_Interface $_record) 
+    {
         
         $identifier = $this->_getRecordIdentifier();
         
@@ -330,7 +336,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @return integer number of affected rows
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
      */
-    public function updateMultiple($_ids, $_data) {
+    public function updateMultiple($_ids, $_data) 
+    {
 
         if (empty($_ids)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records updated.');
@@ -362,7 +369,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
       * 
       * @todo   delete custom fields?
       */
-    public function delete($_id) {
+    public function delete($_id) 
+    {
         $id = $this->_convertId($_id);
         $identifier = $this->_getRecordIdentifier();
         
@@ -571,7 +579,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @param array &$_recordArray
      * @return array with the prepared data
      */
-    protected function _prepareData(&$_recordArray) {
+    protected function _prepareData(&$_recordArray) 
+    {
         
         foreach ($_recordArray as $key => $value) {
             if (is_bool($value)) {
