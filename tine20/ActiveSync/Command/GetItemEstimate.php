@@ -115,7 +115,18 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                             // this is the first sync. in most cases there are data on the server.
                             $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $dataController->getItemEstimate()));
                         } else {
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $dataController->getItemEstimate($syncState->lastsync, $this->_syncTimeStamp)));
+                            // this returns only changed or modified entries
+                            $modifiedEntries = $dataController->getItemEstimate($syncState->lastsync, $this->_syncTimeStamp);
+                            
+                            // get the count of deleted entries
+                            $contentStateBackend  = new ActiveSync_Backend_ContentState();
+                            $allClientEntries = $contentStateBackend->getClientState($this->_device, $collectionData['class']);
+                            $allServerEntries = $dataController->getServerEntries();
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($allClientEntries) . ' deleted entries' . count($allServerEntries));
+                            
+                            $modifiedEntries += count(array_diff($allClientEntries, $allServerEntries));
+                            
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $modifiedEntries));
                         }
                     } else {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey ${collectionData['syncKey']} provided");
