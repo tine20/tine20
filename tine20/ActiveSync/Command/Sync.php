@@ -3,18 +3,16 @@
  * Tine 2.0
  *
  * @package     ActiveSync
- * @subpackage  ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
 
 /**
- * class documentation
+ * class to handle ActiveSync Sync command
  *
  * @package     ActiveSync
- * @subpackage  ActiveSync
  */
  
 class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml 
