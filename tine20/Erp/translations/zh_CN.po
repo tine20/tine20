@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Erp\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-11-24 21:59-0800\n"
+"PO-Revision-Date: 2009-02-20 21:48-0800\n"
 "Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -13,19 +13,21 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/ContractEditDialog.js:69 js/ContractGridPanel.js:46 js/Erp.js:84
+#: js/ContractEditDialog.js:69
+#: js/ContractGridPanel.js:46
+#: js/Erp.js:84
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "联系人"
 
-#: js/ContractEditDialog.js:86 js/ContractGridPanel.js:93
+#: js/ContractEditDialog.js:86
+#: js/ContractGridPanel.js:93
 msgid "Title"
 msgstr "头衔"
 
 #: js/ContractEditDialog.js:92
-#, fuzzy
 msgid "Description"
-msgstr "输入描述 ..."
+msgstr "描述"
 
 #: js/ContractEditDialog.js:93
 msgid "Enter description..."
@@ -36,16 +38,14 @@ msgid "Summary"
 msgstr "摘要"
 
 #: js/ContractGridPanel.js:87
-#, fuzzy
 msgid "Contract number"
-msgstr "联系人"
+msgstr "联系号码"
 
 #: js/ContractGridPanel.js:99
 msgid "Status"
 msgstr "状态"
 
 #: js/Erp.js:50
-#, fuzzy
 msgid "Contracts"
 msgstr "联系人"
 
@@ -60,18 +60,14 @@ msgstr "共享的联系人"
 
 #~ msgid "Due date"
 #~ msgstr "过期日"
-
 #~ msgid "Priority"
 #~ msgstr "优先级"
-
 #~ msgid "Responsible"
 #~ msgstr "责任"
-
 #~ msgid "Notes"
 #~ msgstr "注释"
-
 #~ msgid "Percentage"
 #~ msgstr "百分比"
-
 #~ msgid "Completed"
 #~ msgstr "完成的"
+
