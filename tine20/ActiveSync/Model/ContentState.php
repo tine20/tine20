@@ -23,7 +23,7 @@ class ActiveSync_Model_ContentState extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'device_id';    
+    protected $_identifier = 'id';    
     
     /**
      * application the record belongs to
@@ -40,18 +40,20 @@ class ActiveSync_Model_ContentState extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'device_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'type'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'counter'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lastsync'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'id'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'device_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'class'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'contentid'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'creation_time'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
     );
-
+    
     /**
      * name of fields containing datetime or an array of datetime information
      *
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-        'lastsync'
+        'creation_time'
     );    
+    
 }
