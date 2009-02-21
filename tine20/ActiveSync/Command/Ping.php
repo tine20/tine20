@@ -139,10 +139,15 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                     #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
                     try {
                         $syncState = $controller->getSyncState($this->_device, $folder['folderType'] . '-' . $folder['serverEntryId']);
-                        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($syncState->toArray(), true));
-                        #$syncState = $syncStateClass->getSyncState($this->_deviceId, $folder['folderType'] . '-' . $folder['serverEntryId']);
-                        #$count = $dataBackend->getItemEstimate($syncState->lastsync);
                         $count = $dataController->getItemEstimate($syncState->lastsync);
+                        // get the count of deleted entries
+                        $contentStateBackend  = new ActiveSync_Backend_ContentState();
+                        $allClientEntries = $contentStateBackend->getClientState($this->_device, $folder['folderType']);
+                        $allServerEntries = $dataController->getServerEntries();
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($allClientEntries) . ' deleted entries' . count($allServerEntries));
+                        
+                        $count += count(array_diff($allClientEntries, $allServerEntries));
+                        
                         if($count > 0) {
                             $folderWithChanges[] = array(
                                 'serverEntryId' => $folder['serverEntryId'],

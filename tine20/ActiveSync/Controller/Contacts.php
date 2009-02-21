@@ -148,7 +148,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @param unknown_type $_field
      * @param unknown_type $_startTimeStamp
      * @param unknown_type $_endTimeStamp
-     * @return unknown
+     * @return array
      */
     public function getSince($_field, $_startTimeStamp, $_endTimeStamp)
     {
@@ -181,7 +181,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 'value'     => $endTimeStamp
             ),
         ));
-        $result = Addressbook_Controller_Contact::getInstance()->search($filter);
+        $result = Addressbook_Controller_Contact::getInstance()->search($filter, NULL, false, true);
         
         return $result;
     }    
@@ -189,25 +189,27 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     /**
      * append contact to xml parent node
      *
-     * @param unknown_type $_xmlDocument
-     * @param unknown_type $_xmlNode
-     * @param unknown_type $_data
+     * @param DOMDocument $_xmlDocument
+     * @param DOMElement $_xmlNode
+     * @param string $_serverId
      */
-    public function appendXML($_xmlDocument, $_xmlNode, $_data)
+    public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_serverId)
     {
+        $data = Addressbook_Controller_Contact::getInstance()->get($_serverId);
+        
         foreach($this->_mapping as $key => $value) {
-            if(isset($_data->$value)) {
+            if(isset($data->$value)) {
                 switch($value) {
                     case 'bday':
                         # 2008-12-18T23:00:00.000Z
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $_data->bday->getIso()));
+                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $data->bday->getIso()));
                         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Birthday " . $_data->bday->getIso());
                         break;
                     case 'jpegphoto':
                         // do nothing currently
                         break;
                     default:
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $_data->$value));
+                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $data->$value));
                         break;
                 }
             }
@@ -272,7 +274,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             )
         ));
         
-        #$foundContacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, true);
+        #$foundContacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, false, true);
         $foundContacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundContacts));

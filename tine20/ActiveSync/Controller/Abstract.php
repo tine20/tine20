@@ -57,5 +57,5 @@ abstract class ActiveSync_Controller_Abstract
     
     abstract public function getSince($_field, $_startTimeStamp, $_endTimeStamp);
     
-    abstract public function appendXML($_xmlDocument, $_xmlNode, $_data);
+    abstract public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_serverId);
 }
