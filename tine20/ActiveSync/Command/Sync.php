@@ -236,7 +236,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         // all entries added since last sync
                         $syncState  = $controller->getSyncState($this->_device, $collectionData['class'] . '-' . $collectionData['collectionId'], $collectionData['syncKey']);
                         $serverAdds = $dataController->getSince('added', $syncState->lastsync, $this->_syncTimeStamp);
-                        $serverAdds = array_merge($serverAdds + $this->_collections[$class]['forceAdd']);
+                        // add entries which produced problems during delete from client
+                        $serverAdds = array_merge($serverAdds, $this->_collections[$class]['forceAdd']);
+                        // add entries which got available because of new permissions
+                        $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class']);
+                        $allServerEntries = $dataController->getServerEntries();
+                        $serverDiff = array_diff($allServerEntries, $allClientEntries);
+                        $serverAdds = array_merge($serverAdds, $serverDiff);
                     }
                     
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($serverAdds) . ' entry for sync from server to client');
