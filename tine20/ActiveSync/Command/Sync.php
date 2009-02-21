@@ -17,30 +17,26 @@
  
 class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml 
 {
-    const STATUS_SUCCESS                              = 1;
-    const STATUS_PROTOCOL_VERSION_MISMATCH            = 2;
-    const STATUS_INVALID_SYNC_KEY                     = 3;
-    const STATUS_PROTOCOL_ERROR                       = 4;
-    const STATUS_SERVER_ERROR                         = 5;
-    const STATUS_ERROR_IN_CLIENT_SERVER_CONVERSION    = 6;
+    const STATUS_SUCCESS                                = 1;
+    const STATUS_PROTOCOL_VERSION_MISMATCH              = 2;
+    const STATUS_INVALID_SYNC_KEY                       = 3;
+    const STATUS_PROTOCOL_ERROR                         = 4;
+    const STATUS_SERVER_ERROR                           = 5;
+    const STATUS_ERROR_IN_CLIENT_SERVER_CONVERSION      = 6;
     const STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT = 7;
-    const STATUS_OBJECT_NOT_FOUND                     = 8;
-    const STATUS_USER_ACCOUNT_MAYBE_OUT_OF_DISK_SPACE = 9;
+    const STATUS_OBJECT_NOT_FOUND                       = 8;
+    const STATUS_USER_ACCOUNT_MAYBE_OUT_OF_DISK_SPACE   = 9;
     
-    const CONFLICT_OVERWRITE_SERVER = 0;
-    const CONFLICT_OVERWRITE_PIM    = 1;
+    const CONFLICT_OVERWRITE_SERVER                     = 0;
+    const CONFLICT_OVERWRITE_PIM                        = 1;
 
     /**
      * An error occurred while setting the notification GUID. = 10
      * Device has not been provisioned for notifications yet. = 11
      */
     
-    protected $_defaultNameSpace = 'uri:AirSync';
-    protected $_documentElement = 'Sync';
-    
-    #protected $_added;
-    #protected $_changed;
-    #protected $_deleted;
+    protected $_defaultNameSpace    = 'uri:AirSync';
+    protected $_documentElement     = 'Sync';
     
     /**
      * list of collections
