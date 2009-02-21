@@ -37,6 +37,6 @@ class ActiveSync_Model_ContentStateFilter extends Tinebase_Model_Filter_FilterGr
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
         'device_id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
         'class'                => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'contentid'            => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'contentid'            => array('filter' => 'Tinebase_Model_Filter_Id')
     );    
 }
