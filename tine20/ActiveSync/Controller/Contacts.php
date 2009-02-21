@@ -264,8 +264,6 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      */
     public function getServerEntries()
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ");
-        
         $contactFilter = new Addressbook_Model_ContactFilter(array(
             array(
                 'field'     => 'containerType',
@@ -274,12 +272,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             )
         ));
         
-        #$foundContacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, false, true);
-        $foundContacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
+        $foundContacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, false, true);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundContacts));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundContacts) . ' entries');
             
-        return $foundContacts->getArrayOfIds();
+        return $foundContacts;
     }
     
     /**
