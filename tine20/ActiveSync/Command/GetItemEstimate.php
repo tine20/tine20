@@ -122,9 +122,9 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                             $contentStateBackend  = new ActiveSync_Backend_ContentState();
                             $allClientEntries = $contentStateBackend->getClientState($this->_device, $collectionData['class']);
                             $allServerEntries = $dataController->getServerEntries();
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($allClientEntries) . ' deleted entries' . count($allServerEntries));
                             
-                            $modifiedEntries += count(array_diff($allClientEntries, $allServerEntries));
+                            // add difference of entries available on the server and entries sent to the server
+                            $modifiedEntries += abs(count($allClientEntries) - count($allServerEntries));
                             
                             $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $modifiedEntries));
                         }

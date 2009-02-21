@@ -140,13 +140,13 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                     try {
                         $syncState = $controller->getSyncState($this->_device, $folder['folderType'] . '-' . $folder['serverEntryId']);
                         $count = $dataController->getItemEstimate($syncState->lastsync);
-                        // get the count of deleted entries
+                        
+                        // get the count of deleted entries or entries available becuase of change permissions
                         $contentStateBackend  = new ActiveSync_Backend_ContentState();
                         $allClientEntries = $contentStateBackend->getClientState($this->_device, $folder['folderType']);
                         $allServerEntries = $dataController->getServerEntries();
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($allClientEntries) . ' deleted entries' . count($allServerEntries));
-                        
-                        $count += count(array_diff($allClientEntries, $allServerEntries));
+
+                        $count += abs(count($allClientEntries) - count($allServerEntries));
                         
                         if($count > 0) {
                             $folderWithChanges[] = array(
