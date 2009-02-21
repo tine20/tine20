@@ -398,9 +398,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         if (this.store.getCount() > 0) {
             this.grid.getView().focusRow(0);
         }
-        
-        // save used filter
-        this.store.lastFilter = this.store.reader.jsonData.filter;
     },
     
     /**

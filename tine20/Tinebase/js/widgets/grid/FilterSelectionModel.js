@@ -50,7 +50,6 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
             */
             var filterData = this.getAllFilterData();
             return filterData;
-            //return this.store.lastFilter;
         }
     },
     
