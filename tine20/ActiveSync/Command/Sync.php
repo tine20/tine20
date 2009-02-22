@@ -68,6 +68,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         
         // input xml
         $xml = new SimpleXMLElement($this->_inputDom->saveXML());
+        #$xml = simplexml_import_dom($this->_inputDom);
                 
         foreach ($xml->Collections->Collection as $xmlCollection) {
             $clientSyncKey  = (int)$xmlCollection->SyncKey;

@@ -53,6 +53,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
         $controller = ActiveSync_Controller::getInstance();
         
         $xml = new SimpleXMLElement($this->_inputDom->saveXML(), LIBXML_NOWARNING);
+        #$xml = simplexml_import_dom($this->_inputDom);
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
             $class          = (string)$xmlCollection->Class;
