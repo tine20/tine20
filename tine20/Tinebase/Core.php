@@ -82,6 +82,9 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
+        // disable magic_quotes_runtime
+        ini_set('magic_quotes_runtime', 0);
+        
         self::setupExceptionErrorHandler();
         
         $server = NULL;
@@ -305,6 +308,19 @@ class Tinebase_Core
                 'cookie_secure'     => true,
             ));
         }
+        
+        // set max session lifetime
+        // defaults to one day (86400 seconds)
+        $maxLifeTime     = $config->get('gc_maxlifetime', 86400);
+        ini_set('session.gc_maxlifetime', $maxLifeTime);
+        
+        // set the session save path
+        $sessionSavepath = $config->get('session.save_path', ini_get('session.save_path') . '/tine20_sessions');
+        if (!is_dir($sessionSavepath)) { 
+            mkdir($sessionSavepath, 0700); 
+        }
+        ini_set('session.save_path', $sessionSavepath);
+        
         Zend_Session::start();
         
         define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
