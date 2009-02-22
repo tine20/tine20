@@ -32,8 +32,8 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
     const STATUS_SYNC_STATE_NOT_PRIMED  = 3;
     const STATUS_INVALID_SYNC_KEY       = 4;
     
-    protected $_defaultNameSpace = 'uri:ItemEstimate';
-    protected $_documentElement = 'GetItemEstimate';
+    protected $_defaultNameSpace    = 'uri:ItemEstimate';
+    protected $_documentElement     = 'GetItemEstimate';
     
     /**
      * list of collections
