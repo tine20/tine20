@@ -85,8 +85,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($task['summary'], $returnedGet['summary']);
         
         $returnedGet = $this->_backend->getTask('');
-        $this->assertEquals($returnedGet['organizer']['accountDisplayName'], 'Tine 2.0 Admin Account');
-        $this->assertEquals($returnedGet['container_id']['type'], 'personal');
+        $this->assertEquals('Tine 2.0 Admin', $returnedGet['organizer']['accountFirstName']);
+        $this->assertEquals('personal', $returnedGet['container_id']['type']);
         
         $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
     }
