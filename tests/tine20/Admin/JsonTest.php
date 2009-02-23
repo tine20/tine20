@@ -305,7 +305,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $getGroupMembersArray = $this->_backend->getGroupMembers($group->getId());
         
         $this->assertTrue(isset($getGroupMembersArray['results'][0]));
-        $this->assertEquals($this->objects['user']->accountDisplayName, $getGroupMembersArray['results'][0]['accountDisplayName']);
+        $this->assertEquals($this->objects['user']->accountFirstName, $getGroupMembersArray['results'][0]['accountFirstName']);
         $this->assertGreaterThan(0, $getGroupMembersArray['totalcount']);
     }       
     
