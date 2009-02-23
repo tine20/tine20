@@ -90,9 +90,9 @@ class Tinebase_Application
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?' , $applicationId);
-        $row = $this->_applicationTable->fetchRow($where);
+        $rows = $this->_applicationTable->fetchAll($where)->toArray();
         
-        $result = new Tinebase_Model_Application($row->toArray());
+        $result = new Tinebase_Model_Application($rows[0]);
         
         return $result;
     }
@@ -114,11 +114,16 @@ class Tinebase_Application
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty.');
         }
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
-        if(!$row = $this->_applicationTable->fetchRow($where)) {
+        if(!$rows = $this->_applicationTable->fetchAll($where)->toArray()) {
             throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
         }
         
-        $result = new Tinebase_Model_Application($row->toArray());
+        if (count($rows) > 1) {
+            throw new Tinebase_Exception_UnexpectedValue("Application $_applicationName not unique.");
+        }
+        
+        
+        $result = new Tinebase_Model_Application($rows[0]);
         
         return $result;
     }
