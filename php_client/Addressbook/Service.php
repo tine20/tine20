@@ -81,20 +81,10 @@ class Addressbook_Service extends Tinebase_Service_Abstract
             'method' => 'Addressbook.searchContacts',
             'filter' => Zend_Json::encode(array(
                 array(
-                    'field'    => 'containerType',
-                    'operator' => 'equals',
-                    'value'    => 'all'
-                ),
-                array(
-                    'field'    => 'container',
-                    'operator' => 'equals',
-                    'value'    => NULL
-                ),
-                array(
                     'field'    => 'container_id',
-                    'operator' => 'equals',
-                    'value'    => NULL
-                ),
+                    'operator' => 'specialNode',
+                    'value'    => 'all'
+                )
             )),
            'paging' => Zend_Json::encode(array(
                'sort' => 'n_fileas', 
@@ -158,7 +148,7 @@ class Addressbook_Service extends Tinebase_Service_Abstract
     {
         $response = $this->_connection->request(array(
             'method'   => 'Addressbook.deleteContacts',
-            '_contactIds'  => Zend_Json::encode(array($_id))
+            'ids'  => Zend_Json::encode(array($_id))
         ));
 
         if(!$response->isSuccessful()) {
