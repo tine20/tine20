@@ -58,29 +58,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         
         return self::$_instance;
     }
-    
-    /**
-     * get list of accounts -> obsolete
-     *
-     * @param string $_filter string to search accounts for
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
-     */
-    /*
-    public function getUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
-    {
-        $this->checkRight('VIEW_ACCOUNTS');
-        
-        $backend = Tinebase_User::getInstance();
 
-        $result = $backend->getUsers($_filter, $_sort, $_dir, $_start, $_limit);
-        
-        return $result;
-    }
-    */
     /**
      * get list of full accounts -> renamed to search full users
      *
