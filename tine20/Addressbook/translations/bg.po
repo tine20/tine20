@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-15 14:23+0100\n"
+"PO-Revision-Date: 2009-02-16 05:50+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -314,7 +314,7 @@ msgstr "Факс"
 
 #: js/ContactGrid.js:105
 msgid "Car phone"
-msgstr "Мобилен (кола)"
+msgstr "Телефон (кола)"
 
 #: js/ContactGrid.js:106
 msgid "Pager"
@@ -359,7 +359,7 @@ msgstr "Географско местонахождение/Координати
 
 #: js/ContactGrid.js:125
 msgid "Export"
-msgstr ""
+msgstr "Ехрорт"
 
 #: js/ContactGrid.js:134
 #, fuzzy
@@ -377,7 +377,7 @@ msgstr "Отвори контакт"
 
 #: js/ContactGrid.js:203
 msgid "Work"
-msgstr ""
+msgstr "Работа"
 
 #: js/ContactGrid.js:212
 #, fuzzy
@@ -386,12 +386,11 @@ msgstr "URL  (приват)"
 
 #: js/ContactGrid.js:221
 msgid "Cell"
-msgstr ""
+msgstr "Мобилен"
 
 #: js/ContactGrid.js:230
-#, fuzzy
 msgid "Cell private"
-msgstr "Град (приват)"
+msgstr "Мобилен (частен)"
 
 #: js/ContactGrid.js:312
 msgid "Select contact"

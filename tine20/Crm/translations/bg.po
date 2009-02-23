@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-15 15:44+0100\n"
+"PO-Revision-Date: 2009-02-16 06:10+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -67,24 +67,24 @@ msgid "Updated Fields:"
 msgstr "Актуализирани полета:"
 
 #: Controller/Lead.php:231
-#, fuzzy, python-format
+#, python-format
 msgid "%s changed from %s to %s."
-msgstr "{0} променено от {0} на {0}"
+msgstr "%s променени от %s на %s."
 
 #: Controller/Lead.php:237
-#, fuzzy, python-format
+#, python-format
 msgid "Lead %s has been changed"
-msgstr "Променено {0} предложение"
+msgstr "Предложението е %s променено"
 
 #: Controller/Lead.php:239
-#, fuzzy, python-format
+#, python-format
 msgid "Lead %s has been creaded"
-msgstr "Подготвено {0} предложение"
+msgstr "Предложението е %s готово"
 
 #: Controller.php:100
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal leads"
-msgstr "{0}'s лични предложения"
+msgstr "%s's лични предложения"
 
 #: Export/Pdf.php:74
 msgid "Lead Data"
@@ -349,7 +349,7 @@ msgstr "Добави нов клиентски контакт"
 
 #: js/Crm.js:1635
 msgid "Change type to Customer"
-msgstr "Сменя тип с `Клиент`"
+msgstr "Сменя типа контакт с Клиент"
 
 #: js/Crm.js:1644 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
 msgid "Responsible"
@@ -357,11 +357,11 @@ msgstr "Отговорник"
 
 #: js/Crm.js:1645
 msgid "Change type to Responsible"
-msgstr "Сменя тип с `Отговорник`"
+msgstr "Сменя типа контакт с Отговорник"
 
 #: js/Crm.js:1655
 msgid "Change type to Partner"
-msgstr "Сменя тип с `Партньор`"
+msgstr "Сменя типа контакт с Партньор"
 
 #: js/Crm.js:1663
 msgid "Edit contact"

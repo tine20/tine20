@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-15 16:01+0100\n"
+"PO-Revision-Date: 2009-02-16 06:23+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 
 #: js/Phone.js:27 js/Phone.js:436 js/Phone.js:437
 msgid "Edit phone settings"
-msgstr "Редактирай телефонни(-те) условия/среда"
+msgstr "Редактирай условията на телефонниране"
 
 #: js/Phone.js:44 js/Phone.js:239
 msgid "Phone"
@@ -62,7 +62,7 @@ msgstr "Излизащи позвънявания"
 
 #: js/Phone.js:487
 msgid "unknown number"
-msgstr ""
+msgstr "непознат номер"
 
 #: js/Phone.js:498
 msgid "enter searchfilter"

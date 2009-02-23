@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-15 16:16+0100\n"
+"PO-Revision-Date: 2009-02-23 16:21+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -14,15 +14,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Controller.php:97
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal tasks"
-msgstr "{0}'s лични задачи"
+msgstr "%s's лични задачи"
 
 #: js/EditDialog.js:96 js/Tasks.js:74
-#, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] "Задачи"
+msgstr[0] "Задачa"
 msgstr[1] "Задачи"
 
 #: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
@@ -39,7 +38,7 @@ msgstr "Приоритет"
 
 #: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
 msgid "Responsible"
-msgstr ""
+msgstr "Отговорен"
 
 #: js/EditDialog.js:128
 msgid "Notes"
@@ -59,7 +58,7 @@ msgstr "Статус"
 
 #: js/EditDialog.js:142
 msgid "Completed"
-msgstr ""
+msgstr "Завършен"
 
 #: js/GridPanel.js:31
 #, fuzzy
@@ -90,7 +89,7 @@ msgstr "Процент"
 
 #: js/GridPanel.js:180
 msgid "Creation Time"
-msgstr ""
+msgstr "Създаден на"
 
 #: js/GridPanel.js:208
 msgid "Show closed"
@@ -106,11 +105,10 @@ msgid "Tasks"
 msgstr "Задачи"
 
 #: js/Tasks.js:78
-#, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "списък със задачи"
-msgstr[1] "списък със задачи"
+msgstr[1] "списъци със задачи"
 
 #: js/Tasks.js:78
 msgid "to do lists"
