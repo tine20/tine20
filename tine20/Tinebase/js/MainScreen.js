@@ -204,6 +204,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         if (this.appPicker.getTreeCardPanel().rendered) {
             var defaultApp = Tine.Tinebase.appMgr.get(this.defaultAppName);
         	defaultApp.getMainScreen().show();
+            document.title = 'Tine 2.0 - ' + defaultApp.getTitle();
         } else {
             this.ativateDefaultApp.defer(10, this);
         }
