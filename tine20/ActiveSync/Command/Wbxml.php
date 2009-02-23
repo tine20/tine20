@@ -115,11 +115,11 @@ abstract class ActiveSync_Command_Wbxml
      * this function generates the response for the client
      * could get overwriten by the command
      * 
-     * @param boolean $_logout logout client(aka destroy session)
+     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse($_logout = true)
+    public function getResponse($_keepSession = false)
     {
-        if($_logout === true) {
+        if($_keepSession !== true) {
             Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         }
         
