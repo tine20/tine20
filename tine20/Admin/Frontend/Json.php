@@ -239,14 +239,25 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             $account->setFromArray($decodedAccountData);
         } catch (Tinebase_Exception_Record_Validation $e) {
             // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errors'            => $account->getValidationErrors(),
-                            'errorMessage'      => 'invalid data for some fields');
+            $result = array(
+                'errors'            => $account->getValidationErrors(),
+                'errorMessage'      => 'invalid data for some fields',
+                'status'            => 'failure'
+            );
 
             return $result;
         }
         
         if ($account->getId() == NULL) {
+            if(!Tinebase_User_Registration::getInstance()->checkUniqueUsername($account->accountLoginName)) {
+                $result = array(
+                    'errors'            => 'invalid username',
+                    'errorMessage'      => 'Username already used.',
+                    'status'            => 'failure'
+                );
+                return $result;
+            }
+            
             $account = Admin_Controller_User::getInstance()->create($account, $password, $passwordRepeat);
         } else {
             $account = Admin_Controller_User::getInstance()->update($account, $password, $passwordRepeat);
@@ -255,9 +266,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
         $result = $account->toArray();
         
-        
         return $result;
-        
     }
     
     /**

@@ -474,44 +474,55 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var form = this.getForm();
 
         if(form.isValid()) {
-            Ext.MessageBox.wait(this.translation._('Please Wait'), this.translation._('Saving User Account'));
-            form.updateRecord(this.accountRecord);
-            if(this.accountRecord.data.accountFirstName) {
-                this.accountRecord.data.accountFullName = this.accountRecord.data.accountFirstName + ' ' + this.accountRecord.data.accountLastName;
-                this.accountRecord.data.accountDisplayName = this.accountRecord.data.accountLastName + ', ' + this.accountRecord.data.accountFirstName;
-            } else {
-                this.accountRecord.data.accountFullName = this.accountRecord.data.accountLastName;
-                this.accountRecord.data.accountDisplayName = this.accountRecord.data.accountLastName;
-            }
-    
-            Ext.Ajax.request({
-                params: {
-                    method: 'Admin.saveUser', 
-                    accountData: Ext.util.JSON.encode(this.accountRecord.data),
-                    password: form.findField('accountPassword').getValue(),
-                    passwordRepeat: form.findField('accountPassword2').getValue()                        
-                },
-                success: function(response) {
-                    if(window.opener.Tine.Admin.Users) {
-                        window.opener.Tine.Admin.Users.Main.reload();
-                    }
-                    if(_closeWindow === true) {
-                        window.close();
-                    } else {
-                        this.onRecordLoad(response);
-                        /*
-                        this.updateRecord(Ext.util.JSON.decode(_result.responseText));
-                        this.updateToolbarButtons();
-                        form.loadRecord(this.accountRecord);
-                        */
-                    }
-                    Ext.MessageBox.hide();
-                },
-                failure: function ( result, request) { 
-                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save user account.')); 
-                },
-                scope: this 
-            });
+        	
+        	if (form.findField('accountPassword').getValue() != form.findField('accountPassword2').getValue()) {
+        		Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Passwords do not match!'));
+        		form.findField('accountPassword').markInvalid(this.translation.gettext('Passwords do not match!'));
+        		form.findField('accountPassword2').markInvalid(this.translation.gettext('Passwords do not match!'));
+        	} else {
+        	
+                Ext.MessageBox.wait(this.translation._('Please Wait'), this.translation._('Saving User Account'));
+                form.updateRecord(this.accountRecord);
+                if(this.accountRecord.data.accountFirstName) {
+                    this.accountRecord.data.accountFullName = this.accountRecord.data.accountFirstName + ' ' + this.accountRecord.data.accountLastName;
+                    this.accountRecord.data.accountDisplayName = this.accountRecord.data.accountLastName + ', ' + this.accountRecord.data.accountFirstName;
+                } else {
+                    this.accountRecord.data.accountFullName = this.accountRecord.data.accountLastName;
+                    this.accountRecord.data.accountDisplayName = this.accountRecord.data.accountLastName;
+                }
+        
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Admin.saveUser', 
+                        accountData: Ext.util.JSON.encode(this.accountRecord.data),
+                        password: form.findField('accountPassword').getValue(),
+                        passwordRepeat: form.findField('accountPassword2').getValue()                        
+                    },
+                    success: function(response) {
+                    	var responseData = Ext.util.JSON.decode(response.responseText);
+                    	if (responseData.status == 'failure') {
+                    		Ext.MessageBox.alert(this.translation.gettext('Failed'), responseData.errorMessage);
+                    		if (responseData.errors == 'invalid username') {
+                    			form.findField('accountLoginName').markInvalid();
+                    		}
+                    	} else {
+                            if(window.opener.Tine.Admin.Users) {
+                                window.opener.Tine.Admin.Users.Main.reload();
+                            }
+                            if(_closeWindow === true) {
+                                window.close();
+                            } else {
+                                this.onRecordLoad(response);
+                            }
+                            Ext.MessageBox.hide();
+                    	}
+                    },
+                    failure: function ( result, request) { 
+                        Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save user account.')); 
+                    },
+                    scope: this 
+                });
+        	}
         } else {
             Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
         }
