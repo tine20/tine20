@@ -12,17 +12,24 @@
 Ext.namespace('Tine.widgets');
 
 Ext.namespace('Tine.widgets.Priority');
-Tine.widgets.Priority.store = new Ext.data.SimpleStore({
-    storeId: 'Priorities',
-    id: 'key',
-    fields: ['key','value', 'icon'],
-    data: [
-            ['0', 'low',    '' ],
-            ['1', 'normal', '' ],
-            ['2', 'high',   '' ],
-            ['3', 'urgent', '' ]
-        ]
-});
+
+Tine.widgets.Priority.getStore = function() {
+    if (! Tine.widgets.Priority.store) {
+        Tine.widgets.Priority.store = new Ext.data.SimpleStore({
+            storeId: 'Priorities',
+            id: 'key',
+            fields: ['key','value', 'icon'],
+            data: [
+                    ['0', _('low'),    '' ],
+                    ['1', _('normal'), '' ],
+                    ['2', _('high'),   '' ],
+                    ['3', _('urgent'), '' ]
+                ]
+        });
+    }
+    
+    return Tine.widgets.Priority.store;
+}
 
 Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
     /**
@@ -50,7 +57,7 @@ Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
             this.value = 1;
         }
             
-        this.store = Tine.widgets.Priority.store;
+        this.store = Tine.widgets.Priority.getStore();
         
         if (this.autoExpand) {
             this.on('focus', function(){
@@ -74,7 +81,7 @@ Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
 Ext.reg('tineprioritycombo', Tine.widgets.Priority.Combo);
 
 Tine.widgets.Priority.renderer = function(priority) {
-    var s = Tine.widgets.Priority.store;
+    var s = Tine.widgets.Priority.getStore();
     var idx = s.find('key', priority);
     return (idx !== undefined && idx >= 0) ? s.getAt(idx).data.value : priority;
 };

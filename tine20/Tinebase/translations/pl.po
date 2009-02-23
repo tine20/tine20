@@ -986,6 +986,23 @@ msgstr ""
 msgid "loading new language..."
 msgstr ""
 
+#: js/widgets/Priority.js:23
+msgid "low"
+msgstr ""
+
+#: js/widgets/Priority.js:24
+#, fuzzy
+msgid "normal"
+msgstr "Nietypowe zakończenie"
+
+#: js/widgets/Priority.js:25
+msgid "high"
+msgstr ""
+
+#: js/widgets/Priority.js:26
+msgid "urgent"
+msgstr ""
+
 #: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
 msgstr ""

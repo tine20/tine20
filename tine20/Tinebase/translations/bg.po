@@ -1037,6 +1037,24 @@ msgstr "задава нов език..."
 msgid "loading new language..."
 msgstr "зарежда нов език..."
 
+#: js/widgets/Priority.js:23
+#, fuzzy
+msgid "low"
+msgstr "Всички"
+
+#: js/widgets/Priority.js:24
+#, fuzzy
+msgid "normal"
+msgstr "Програмен срив"
+
+#: js/widgets/Priority.js:25
+msgid "high"
+msgstr ""
+
+#: js/widgets/Priority.js:26
+msgid "urgent"
+msgstr ""
+
 #: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
 msgstr "име на таг"
@@ -1900,10 +1918,6 @@ msgstr "променена документация"
 #~ msgstr "Задай име на таг"
 
 #, fuzzy
-#~ msgid "normal"
-#~ msgstr "Програмен срив"
-
-#, fuzzy
 #~ msgid "add location"
 #~ msgstr "Вкарай достъп"
 
@@ -1994,10 +2008,6 @@ msgstr "променена документация"
 #, fuzzy
 #~ msgid "From User"
 #~ msgstr "Потребител"
-
-#, fuzzy
-#~ msgid "Allow"
-#~ msgstr "Всички"
 
 #, fuzzy
 #~ msgid "Auth User"

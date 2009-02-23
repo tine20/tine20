@@ -984,6 +984,24 @@ msgstr "nastavuji nový jazyk..."
 msgid "loading new language..."
 msgstr "nahrávám nový jazyk..."
 
+#: js/widgets/Priority.js:23
+#, fuzzy
+msgid "low"
+msgstr "Všechny"
+
+#: js/widgets/Priority.js:24
+#, fuzzy
+msgid "normal"
+msgstr "Abnormální ukončení"
+
+#: js/widgets/Priority.js:25
+msgid "high"
+msgstr ""
+
+#: js/widgets/Priority.js:26
+msgid "urgent"
+msgstr ""
+
 #: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
 msgstr "název štítku"
@@ -1846,10 +1864,6 @@ msgstr "záznam byl změněn"
 #~ msgstr "Zadejte název štítku"
 
 #, fuzzy
-#~ msgid "normal"
-#~ msgstr "Abnormální ukončení"
-
-#, fuzzy
 #~ msgid "add location"
 #~ msgstr "přidat účet"
 
@@ -1940,10 +1954,6 @@ msgstr "záznam byl změněn"
 #, fuzzy
 #~ msgid "From User"
 #~ msgstr "Uživatel"
-
-#, fuzzy
-#~ msgid "Allow"
-#~ msgstr "Všechny"
 
 #, fuzzy
 #~ msgid "Auth User"

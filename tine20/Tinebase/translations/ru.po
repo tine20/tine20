@@ -1044,6 +1044,24 @@ msgstr "Урегулирование нового языка..."
 msgid "loading new language..."
 msgstr "Загрузка нового языка..."
 
+#: js/widgets/Priority.js:23
+#, fuzzy
+msgid "low"
+msgstr "Все"
+
+#: js/widgets/Priority.js:24
+#, fuzzy
+msgid "normal"
+msgstr "Неправильное завершение"
+
+#: js/widgets/Priority.js:25
+msgid "high"
+msgstr ""
+
+#: js/widgets/Priority.js:26
+msgid "urgent"
+msgstr ""
+
 #: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
 msgstr "Название тэга"
@@ -1918,10 +1936,6 @@ msgstr "Запись изменена"
 #~ msgstr "Введите название тэга"
 
 #, fuzzy
-#~ msgid "normal"
-#~ msgstr "Неправильное завершение"
-
-#, fuzzy
 #~ msgid "add location"
 #~ msgstr "Добавить счет"
 
@@ -2016,10 +2030,6 @@ msgstr "Запись изменена"
 #, fuzzy
 #~ msgid "From User"
 #~ msgstr "Пользователь"
-
-#, fuzzy
-#~ msgid "Allow"
-#~ msgstr "Все"
 
 #, fuzzy
 #~ msgid "Auth User"

@@ -958,6 +958,22 @@ msgstr "setting new language..."
 msgid "loading new language..."
 msgstr "loading new language..."
 
+#: js/widgets/Priority.js:23
+msgid "low"
+msgstr "low"
+
+#: js/widgets/Priority.js:24
+msgid "normal"
+msgstr "normal"
+
+#: js/widgets/Priority.js:25
+msgid "high"
+msgstr "high"
+
+#: js/widgets/Priority.js:26
+msgid "urgent"
+msgstr "urgent"
+
 #: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
 msgstr "tag name"
