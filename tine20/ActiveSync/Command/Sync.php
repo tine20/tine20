@@ -62,9 +62,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     public function handle()
     {
-        $controller                 = ActiveSync_Controller::getInstance();
+        $controller                  = ActiveSync_Controller::getInstance();
         $this->_contentStateBackend  = new ActiveSync_Backend_ContentState();
-        $this->_session             = new Zend_Session_Namespace('moreData');
+        $this->_session              = new Zend_Session_Namespace('moreData');
         
         // input xml
         $xml = new SimpleXMLElement($this->_inputDom->saveXML());

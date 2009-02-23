@@ -113,11 +113,15 @@ abstract class ActiveSync_Command_Wbxml
     
     /**
      * this function generates the response for the client
-     * should get overwriten by the command
+     * could get overwriten by the command
+     * 
+     * @param boolean $_logout logout client(aka destroy session)
      */
-    public function getResponse()
+    public function getResponse($_logout = true)
     {
-        Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
+        if($_logout === true) {
+            Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
+        }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $this->_outputDom->saveXML());
         
