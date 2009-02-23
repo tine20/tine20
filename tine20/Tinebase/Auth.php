@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -94,12 +94,11 @@ class Tinebase_Auth
      * the constructor
      *
      * don't use the constructor. use the singleton 
-     * @todo use the config setting from the registry
      */
     private function __construct() {
         try {
             $authConfig = Tinebase_Core::getConfig()->authentication;
-            if ( isset($authConfig) ) {
+            if (isset($authConfig)) {
                 $this->_backendType = $authConfig->get('backend', Tinebase_Auth_Factory::SQL);
                 $this->_backendType = ucfirst($this->_backendType);
             }            
@@ -141,6 +140,13 @@ class Tinebase_Auth
         return self::$_instance;
     }
     
+    /**
+     * authenticate user
+     *
+     * @param string $_username
+     * @param string $_password
+     * @return Zend_Auth_Result
+     */
     public function authenticate($_username, $_password)
     {
         $this->_backend->setIdentity($_username);
@@ -151,6 +157,13 @@ class Tinebase_Auth
         return $result;
     }
     
+    /**
+     * check if password is valid
+     *
+     * @param string $_username
+     * @param string $_password
+     * @return boolean
+     */
     public function isValidPassword($_username, $_password)
     {
         $this->_backend->setIdentity($_username);
@@ -177,7 +190,7 @@ class Tinebase_Auth
     public function setPassword($_loginName, $_password1, $_password2, $_encrypt = TRUE)
     {
         if($_password1 !== $_password2) {
-            throw new Tinebase_Exception_InvalidArgument('$_password1 and $_password2 don not match');
+            throw new Tinebase_Exception_InvalidArgument('Password 1 and Password 2 do not match!');
         }
         
         $this->_backend->setPassword($_loginName, $_password1, $_encrypt);
