@@ -229,6 +229,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                 }
                             }
                             
+                            // @todo use correct strings: Realy -> Really / disapear -> disappear
                             Ext.MessageBox.confirm(
                                 Tine.Tinebase.tranlation.ngettext('Realy Delete Selected Tag?', 'Realy Delete Selected Tags?', selectedTags.length), 
                                 Tine.Tinebase.tranlation.ngettext('the selected tag will be deleted and disapear for all entries', 
