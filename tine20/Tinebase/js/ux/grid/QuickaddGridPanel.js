@@ -69,6 +69,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // The customized header template
         this.initTemplates();
         
+        // add our fields after view is rendered
+        this.getView().afterRender = this.getView().afterRender.createSequence(this.renderQuickAddFields, this);
+        
         // init handlers
         this.quickaddHandlers = {
         	scope: this,
@@ -86,21 +89,20 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         };
     },
+    
     /**
-     * @private
+     * renders the quick add fields
      */
-    onRender : function(ct, position){
-    	Ext.ux.grid.QuickaddGridPanel.superclass.onRender.apply(this, arguments);
-    	
-    	// generate quickadd form fields before grid gets rendered
-    	Ext.each(this.getVisibleCols(), function(item){
-    		if (item.quickaddField) {
-    			item.quickaddField.render('new-' + item.id);
-    			item.quickaddField.setDisabled(item.id != this.quickaddMandatory);
-    			item.quickaddField.on(this.quickaddHandlers);
-    		}
+    renderQuickAddFields: function() {
+        
+        Ext.each(this.getVisibleCols(), function(item){
+            if (item.quickaddField) {
+                item.quickaddField.render('new-' + item.id);
+                item.quickaddField.setDisabled(item.id != this.quickaddMandatory);
+                item.quickaddField.on(this.quickaddHandlers);
+            }
         },this);
-    	
+        
         // rezise quickeditor fields according to parent column
         this.on('resize', this.syncFields);
         this.on('columnresize', this.syncFields);
@@ -108,6 +110,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.colModel.getColumnById(this.quickaddMandatory).quickaddField.on('focus', this.onMandatoryFocus, this);
     },
+    
     /**
      * @private
      */
@@ -175,6 +178,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             '</tr></tbody>',
             '</table>'
         );
+        
         
         /*
         ts.master = new Ext.Template(
