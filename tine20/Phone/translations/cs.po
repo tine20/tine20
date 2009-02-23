@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-10-12 11:37+0100\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2009-02-21 09:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,11 +15,14 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Phone\n"
 
-#: js/Phone.js:27 js/Phone.js:436 js/Phone.js:437
+#: js/Phone.js:27
+#: js/Phone.js:436
+#: js/Phone.js:437
 msgid "Edit phone settings"
 msgstr "Editovat nastavení telefonu"
 
-#: js/Phone.js:44 js/Phone.js:239
+#: js/Phone.js:44
+#: js/Phone.js:239
 msgid "Phone"
 msgstr "Telefon"
 
@@ -65,7 +68,7 @@ msgstr "Odchozí hovor"
 
 #: js/Phone.js:487
 msgid "unknown number"
-msgstr ""
+msgstr "neznámé číslo"
 
 #: js/Phone.js:498
 msgid "enter searchfilter"
@@ -83,7 +86,8 @@ msgstr "Zdroj nebo cíl"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Zobrazuji "
 
-#: js/Phone.js:614 js/Phone.js:652
+#: js/Phone.js:614
+#: js/Phone.js:652
 msgid "No calls to display"
 msgstr "Žádné hovory ke zobrazení"
 
@@ -126,3 +130,4 @@ msgstr "Vyzvání"
 #: js/Phone.js:628
 msgid "Call ID"
 msgstr "ID hovoru"
+

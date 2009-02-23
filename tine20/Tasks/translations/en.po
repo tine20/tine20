@@ -3,7 +3,7 @@
 msgid "%s's personal tasks"
 msgstr "%s's personal tasks"
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:73
+#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:75
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Task"
@@ -87,7 +87,7 @@ msgstr "IN-PROCESS"
 msgid "Tasks"
 msgstr "Tasks"
 
-#: js/Tasks.js:77
+#: js/Tasks.js:79
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "to do list"

@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "{0}'s личные задания"
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:73
+#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:75
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -111,7 +111,7 @@ msgstr "НЕЗАВЕРШЕННЫЙ"
 msgid "Tasks"
 msgstr "Задания"
 
-#: js/Tasks.js:77
+#: js/Tasks.js:79
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"

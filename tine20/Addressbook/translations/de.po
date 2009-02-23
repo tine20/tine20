@@ -121,73 +121,73 @@ msgstr "Berufs-Bezeichnung"
 msgid "Addressbook"
 msgstr "Adressbuch"
 
-#: js/Addressbook.js:61 js/ContactGrid.js:285 Setup/setup.xml:486
+#: js/Addressbook.js:67 js/ContactGrid.js:285 Setup/setup.xml:486
 msgid "Internal Contacts"
 msgstr "Interne Kontakte"
 
-#: js/Addressbook.js:129 js/Addressbook.js:131
+#: js/Addressbook.js:139 js/Addressbook.js:141
 msgid "contacts"
 msgstr "Kontakte"
 
-#: js/Addressbook.js:130 js/Addressbook.js:417
+#: js/Addressbook.js:140 js/Addressbook.js:426
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "Adressbuch"
 msgstr[1] "Adressbücher"
 
-#: js/Addressbook.js:136 js/ContactGrid.js:154
+#: js/Addressbook.js:146 js/ContactGrid.js:154
 msgid "export as pdf"
 msgstr "Als Pdf exportieren"
 
-#: js/Addressbook.js:153
+#: js/Addressbook.js:163
 msgid "Loading Contact..."
 msgstr "Kontakt laden..."
 
-#: js/Addressbook.js:153
+#: js/Addressbook.js:163
 msgid "Please Wait"
 msgstr "Bitte warten"
 
-#: js/Addressbook.js:167
+#: js/Addressbook.js:177
 msgid "Add new contact"
 msgstr "Kontakt hinzufügen"
 
-#: js/Addressbook.js:169
+#: js/Addressbook.js:179
 msgid "Edit Contact \"{0}\""
 msgstr "Kontakt \"{0}\" bearbeiten"
 
-#: js/Addressbook.js:192
+#: js/Addressbook.js:202
 msgid "Please wait a moment..."
 msgstr "Bitte warten Sie einen Moment..."
 
-#: js/Addressbook.js:192
+#: js/Addressbook.js:202
 msgid "Saving Contact"
 msgstr "Kontakt wird gespeichert"
 
-#: js/Addressbook.js:217 js/Addressbook.js:242
+#: js/Addressbook.js:227 js/Addressbook.js:252
 msgid "Failed"
 msgstr "Fehler"
 
-#: js/Addressbook.js:217
+#: js/Addressbook.js:227
 msgid "Could not save contact."
 msgstr "Der Kontakt konnte nicht gespeichert werden."
 
-#: js/Addressbook.js:223
+#: js/Addressbook.js:233
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/Addressbook.js:223
+#: js/Addressbook.js:233
 msgid "Please fix the errors noted."
 msgstr "Bitte korrigieren sie die angegebenen Fehler."
 
-#: js/Addressbook.js:236
+#: js/Addressbook.js:246
 msgid "Deleting contact..."
 msgstr "Kontakt wird gelöscht..."
 
-#: js/Addressbook.js:242
+#: js/Addressbook.js:252
 msgid "Some error occured while trying to delete the contact."
 msgstr "Beim Löschen des Kontaktes ist ein Fehler ist aufgetreten."
 
-#: js/Addressbook.js:413 js/EditDialog.js:423
+#: js/Addressbook.js:422 js/EditDialog.js:423
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Kontakt"
