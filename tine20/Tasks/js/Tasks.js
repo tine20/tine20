@@ -9,7 +9,6 @@
  *
  */
 
-//tranlate appName:  _('Tasks') 
 Ext.namespace('Tine', 'Tine.Tasks');
 
 // default mainscreen
@@ -72,11 +71,11 @@ Tine.Tasks.Task = Tine.Tinebase.Record.create(Tine.Tasks.TaskArray, {
     modelName: 'Task',
     idProperty: 'id',
     titleProperty: 'summary',
-    // ngettext('Task', 'Tasks', n);
+    // ngettext('Task', 'Tasks', n); gettext('Tasks');
     recordName: 'Task',
     recordsName: 'Tasks',
     containerProperty: 'container_id',
-    // ngettext('to do list', 'to do lists', n);
+    // ngettext('to do list', 'to do lists', n); gettext('to do lists');
     containerName: 'to do list',
     containersName: 'to do lists'
 });
