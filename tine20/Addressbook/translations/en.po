@@ -178,6 +178,14 @@ msgid_plural "Contacts"
 msgstr[0] "Contact"
 msgstr[1] "Contacts"
 
+#: js/Addressbook.js:422
+msgid "Contacts"
+msgstr "Contacts"
+
+#: js/Addressbook.js:426
+msgid "addressbooks"
+msgstr "addressbooks"
+
 #: js/ContactGrid.js:56 js/ContactGrid.js:83 js/EditDialog.js:106
 #: js/EditDialog.js:165
 msgid "First Name"

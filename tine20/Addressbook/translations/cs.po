@@ -199,6 +199,16 @@ msgstr[0] "Kontakt"
 msgstr[1] "Kontakty"
 msgstr[2] "Kontaktů"
 
+#: js/Addressbook.js:422
+#, fuzzy
+msgid "Contacts"
+msgstr "Kontakt"
+
+#: js/Addressbook.js:426
+#, fuzzy
+msgid "addressbooks"
+msgstr "adresář"
+
 #: js/ContactGrid.js:56 js/ContactGrid.js:83 js/EditDialog.js:106
 #: js/EditDialog.js:165
 msgid "First Name"

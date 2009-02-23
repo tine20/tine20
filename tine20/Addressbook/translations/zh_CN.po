@@ -191,6 +191,16 @@ msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "联系人"
 
+#: js/Addressbook.js:422
+#, fuzzy
+msgid "Contacts"
+msgstr "联系人"
+
+#: js/Addressbook.js:426
+#, fuzzy
+msgid "addressbooks"
+msgstr "地址本"
+
 #: js/ContactGrid.js:56 js/ContactGrid.js:83 js/EditDialog.js:106
 #: js/EditDialog.js:165
 msgid "First Name"

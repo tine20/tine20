@@ -457,8 +457,7 @@ msgstr[1] "seznamy telefonů"
 msgstr[2] "seznamů telefonů"
 
 #: js/Models.js:133 js/MyPhones.js:152 js/Snom/LocationGridPanel.js:50
-#: js/Snom/PhoneEditDialog.js:327 js/Snom/PhoneGridPanel.js:81
-#: js/Voipmanager.js:116
+#: js/Snom/PhoneGridPanel.js:81 js/Voipmanager.js:116
 msgid "Location"
 msgid_plural "Locations"
 msgstr[0] "Umístění"
@@ -472,8 +471,8 @@ msgstr[0] "seznam umístění"
 msgstr[1] "seznamy umístění"
 msgstr[2] "seznamů umístění"
 
-#: js/Models.js:170 js/MyPhones.js:162 js/Snom/PhoneEditDialog.js:311
-#: js/Snom/PhoneGridPanel.js:89 js/Snom/TemplateGridPanel.js:51
+#: js/Models.js:170 js/MyPhones.js:162 js/Snom/PhoneGridPanel.js:89
+#: js/Snom/TemplateGridPanel.js:51
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] "Šablona"

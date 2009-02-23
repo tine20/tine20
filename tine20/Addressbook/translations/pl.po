@@ -203,6 +203,15 @@ msgstr[0] "Kontakt"
 msgstr[1] "Kontakt"
 msgstr[2] "Kontakt"
 
+#: js/Addressbook.js:422
+#, fuzzy
+msgid "Contacts"
+msgstr "Kontakt"
+
+#: js/Addressbook.js:426
+msgid "addressbooks"
+msgstr "Książki adresowe"
+
 #: js/ContactGrid.js:56 js/ContactGrid.js:83 js/EditDialog.js:106
 #: js/EditDialog.js:165
 msgid "First Name"
@@ -489,6 +498,3 @@ msgstr ""
 #, fuzzy
 #~ msgid "Some error occured while trying to delete the conctact."
 #~ msgstr "Wystąpiły pewne błędy z powodu próby wmazania kontaktu."
-
-#~ msgid "addressbooks"
-#~ msgstr "Książki adresowe"
