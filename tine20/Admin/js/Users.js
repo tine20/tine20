@@ -664,8 +664,7 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
         
         this.getForm().loadRecord(this.accountRecord);
-        this.updateToolbarButtons();
-        Ext.MessageBox.hide();
+        //this.updateToolbarButtons();
     }
 });
 
