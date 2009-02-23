@@ -90,8 +90,10 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     public function testAddAccount()
     {
         $account = Tinebase_User_Sql::getInstance()->addUser($this->objects['initialAccount']);
-        
         $this->assertEquals($this->objects['initialAccount']['accountId'], $account->accountId);
+        
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->accountId);
+        $this->assertTrue(!empty($contact->creation_time));
     }
     
     /**

@@ -458,19 +458,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $accountData['id'] = $_account->accountId;
         }
         
-        $contactData = array(
+        $contact = new Addressbook_Model_Contact(array(
             'n_family'      => $_account->accountLastName,
             'n_given'       => $_account->accountFirstName,
             'n_fn'          => $_account->accountFullName,
             'n_fileas'      => $_account->accountDisplayName,
             'email'         => $_account->accountEmailAddress
-        );
+        ));
 
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
-            $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-            $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
             
             // add new user
             $accountId = $accountsTable->insert($accountData);
@@ -487,11 +484,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $_account->accountId = $accountId;
             }
             
-            $contactData['account_id'] = $accountId;
-            $contactData['tid'] = 'n';
-            $contactData['container_id'] = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL)->getId();
-            //var_dump($contactData);
-            $contactsTable->insert($contactData);
+            $contact->account_id = $accountId;
+            //$contact->tid = 'n';
+            $contact->container_id = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL)->getId();
+            
+            // add modlog info
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
+
+            // create new contact
+            $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+            $contactsBackend->create($contact);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
