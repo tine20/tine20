@@ -419,11 +419,11 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.Record.create(Tine.Addressbook.Mo
     modelName: 'Contact',
     idProperty: 'id',
     titleProperty: 'n_fn',
-    // ngettext('Contact', 'Contacts', n);
+    // ngettext('Contact', 'Contacts', n); gettext('Contacts');
     recordName: 'Contact',
     recordsName: 'Contacts',
     containerProperty: 'container_id',
-    // ngettext('addressbook', 'addressbooks', n);
+    // ngettext('addressbook', 'addressbooks', n); gettext('addressbooks');
     containerName: 'addressbook',
     containersName: 'addressbooks'
 });
