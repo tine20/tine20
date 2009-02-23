@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
@@ -30,13 +30,13 @@ class Tinebase_Frontend_Json_UserRegistration
 	 * 			get method from config (email, firstname+lastname, other strings)?
 	 * @todo 	replace special chars in username
 	 */
-	public function suggestUsername ( $regData ) 
+	public function suggestUsername($regData) 
 	{
 		$regDataArray = Zend_Json_Decoder::decode($regData);
 
         // build username from firstname (first char) & lastname
-		$firstname = ( isset($regDataArray['accountFirstName']) ) ? substr($regDataArray['accountFirstName'], 0, 1) : '';
-        $lastname = ( isset($regDataArray['accountLastName']) ) ? $regDataArray['accountLastName'] : '';		
+		$firstname = (isset($regDataArray['accountFirstName'])) ? substr($regDataArray['accountFirstName'], 0, 1) : '';
+        $lastname = (isset($regDataArray['accountLastName'])) ? $regDataArray['accountLastName'] : '';		
 		$suggestedUsername = $firstname.$lastname;
 		
 		return $suggestedUsername;
@@ -49,7 +49,7 @@ class Tinebase_Frontend_Json_UserRegistration
 	 * @return 	bool
 	 * 
 	 */
-	public function checkUniqueUsername ( $username ) 
+	public function checkUniqueUsername($username) 
 	{
 		$username = Zend_Json_Decoder::decode($username);
 		
@@ -63,9 +63,8 @@ class Tinebase_Frontend_Json_UserRegistration
 	 * @return 	bool
 	 * 
 	 */
-	public function registerUser ( $regData ) 
+	public function registerUser($regData) 
 	{
-
 		$regData = Zend_Json_Decoder::decode($regData);
 		
 		return Tinebase_User_Registration::getInstance()->registerUser($regData);
