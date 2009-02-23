@@ -324,7 +324,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     }], [{
                         xtype:'reccombo',
                         name: 'location_id',
-                        fieldLabel: this.app.i18n._('Location'),
+                        fieldLabel: this.app.i18n.n_('Location', 'Locations', 1),
                         displayField: 'name',
                         store: new Ext.data.Store({
                         	fields: Tine.Voipmanager.Model.SnomLocation,
