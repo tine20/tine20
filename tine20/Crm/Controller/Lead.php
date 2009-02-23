@@ -114,6 +114,14 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
         return $lead;
     }
     
+    /**
+     * search for leads
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Record_Interface $_pagination
+     * @param boolean $_getRelations
+     * @return Tinebase_Record_RecordSet
+     */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
     {
         $leads = parent::search($_filter, $_pagination);
@@ -132,6 +140,8 @@ class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstrac
      * - add creator as internal contact
      *
      * @return Crm_Model_Lead
+     * 
+     * @todo make use of Tinebase_Config possible here
      */
     public function getEmptyLead()
     {
