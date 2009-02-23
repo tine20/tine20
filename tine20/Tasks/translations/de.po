@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-02-09 15:27+0100\n"
+"PO-Revision-Date: 2009-02-23 11:46+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%ss persönliche Aufgaben"
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:75
+#: js/EditDialog.js:96 js/Tasks.js:74
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Aufgabe"
@@ -98,15 +98,19 @@ msgstr "Geschlossene Aufgaben anzeigen"
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
-#: js/Tasks.js:12
+#: js/Tasks.js:74
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:78
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
 msgstr[1] "Aufgabenlisten"
+
+#: js/Tasks.js:78
+msgid "to do lists"
+msgstr "Aufgabenlisten"
 
 #: Setup/setup.xml:390
 msgid "NEEDS-ACTION"
@@ -119,6 +123,9 @@ msgstr "ERLEDIGT"
 #: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
+
+#~ msgid "to to list"
+#~ msgstr "Aufgabenliste"
 
 #, fuzzy
 #~ msgid "Tasks) "
@@ -137,9 +144,6 @@ msgstr "ZURÜCKGESTELLT"
 #~ msgid_plural "Delete tasks"
 #~ msgstr[0] "Aufgabe löschen"
 #~ msgstr[1] "Aufgaben löschen"
-
-#~ msgid "to do lists"
-#~ msgstr "Aufgabenlisten"
 
 #~ msgid "Enter searchfilter"
 #~ msgstr "Suchfilter eingeben"

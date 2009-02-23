@@ -18,7 +18,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "{0}'s лични задачи"
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:75
+#: js/EditDialog.js:96 js/Tasks.js:74
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -100,17 +100,21 @@ msgstr "Покажи приключени задачи"
 msgid "IN-PROCESS"
 msgstr "В ПРОЦЕС"
 
-#: js/Tasks.js:12
+#: js/Tasks.js:74
 #, fuzzy
 msgid "Tasks"
 msgstr "Задачи"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:78
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "списък със задачи"
 msgstr[1] "списък със задачи"
+
+#: js/Tasks.js:78
+msgid "to do lists"
+msgstr "списъци със задачи"
 
 #: Setup/setup.xml:390
 msgid "NEEDS-ACTION"
@@ -123,6 +127,10 @@ msgstr "ЗАВЪРШЕНИ"
 #: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "ПРЕКЪСНАТИ"
+
+#, fuzzy
+#~ msgid "to to list"
+#~ msgstr "списък със задачи"
 
 #, fuzzy
 #~ msgid "Tasks) "
@@ -141,9 +149,6 @@ msgstr "ПРЕКЪСНАТИ"
 #~ msgid_plural "Delete tasks"
 #~ msgstr[0] "Изтрий задача"
 #~ msgstr[1] "Изтрий задачи"
-
-#~ msgid "to do lists"
-#~ msgstr "списъци със задачи"
 
 #~ msgid "Enter searchfilter"
 #~ msgstr "Задай филтър на търсене"

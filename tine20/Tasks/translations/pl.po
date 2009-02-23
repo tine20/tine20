@@ -20,7 +20,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "{0}'s osobiste zadania"
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:75
+#: js/EditDialog.js:96 js/Tasks.js:74
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -104,18 +104,22 @@ msgstr "Pokaż zamknięte"
 msgid "IN-PROCESS"
 msgstr "W PRZETWARZANIU"
 
-#: js/Tasks.js:12
+#: js/Tasks.js:74
 #, fuzzy
 msgid "Tasks"
 msgstr "Zadania"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:78
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Lista to do"
 msgstr[1] "Lista to do"
 msgstr[2] "Lista to do"
+
+#: js/Tasks.js:78
+msgid "to do lists"
+msgstr "Listy to do"
 
 #: Setup/setup.xml:390
 msgid "NEEDS-ACTION"
@@ -128,6 +132,10 @@ msgstr "ZAKOŃCZONY"
 #: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "ODWOŁANY "
+
+#, fuzzy
+#~ msgid "to to list"
+#~ msgstr "Lista to do"
 
 #, fuzzy
 #~ msgid "Tasks) "
@@ -147,9 +155,6 @@ msgstr "ODWOŁANY "
 #~ msgstr[0] "Wymazanie zadanie"
 #~ msgstr[1] "Wymazanie zadań"
 #~ msgstr[2] "Wymazanie zadań"
-
-#~ msgid "to do lists"
-#~ msgstr "Listy to do"
 
 #~ msgid "Enter searchfilter"
 #~ msgstr "Wprowadź filtr szukania"

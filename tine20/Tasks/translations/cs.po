@@ -20,7 +20,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "osobní úkoly uživatele %s"
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:75
+#: js/EditDialog.js:96 js/Tasks.js:74
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Úkol"
@@ -102,16 +102,20 @@ msgstr "Zobrazit uzavřené"
 msgid "IN-PROCESS"
 msgstr "ROZPRACOVANÝ"
 
-#: js/Tasks.js:12
+#: js/Tasks.js:74
 msgid "Tasks"
 msgstr "Úkoly"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:78
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "seznam úkolů"
 msgstr[1] "seznamy úkolů"
 msgstr[2] "seznamy úkolů"
+
+#: js/Tasks.js:78
+msgid "to do lists"
+msgstr "Seznamy úkolů"
 
 #: Setup/setup.xml:390
 msgid "NEEDS-ACTION"
@@ -124,6 +128,10 @@ msgstr "DOKONČENÝ"
 #: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "ZRUŠENÝ"
+
+#, fuzzy
+#~ msgid "to to list"
+#~ msgstr "seznam úkolů"
 
 #, fuzzy
 #~ msgid "Tasks) "
@@ -143,9 +151,6 @@ msgstr "ZRUŠENÝ"
 #~ msgstr[0] "Smazat úkol"
 #~ msgstr[1] "Smazat úkoly"
 #~ msgstr[2] "Smazat úkoly"
-
-#~ msgid "to do lists"
-#~ msgstr "Seznamy úkolů"
 
 #~ msgid "Enter searchfilter"
 #~ msgstr "Zadejte hledaný výraz"

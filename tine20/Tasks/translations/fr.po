@@ -18,7 +18,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr ""
 
-#: js/EditDialog.js:96 js/GridPanel.js:55 js/Tasks.js:75
+#: js/EditDialog.js:96 js/Tasks.js:74
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] ""
@@ -98,15 +98,19 @@ msgstr ""
 msgid "IN-PROCESS"
 msgstr ""
 
-#: js/Tasks.js:12
+#: js/Tasks.js:74
 msgid "Tasks"
 msgstr ""
 
-#: js/Tasks.js:79
+#: js/Tasks.js:78
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/Tasks.js:78
+msgid "to do lists"
+msgstr ""
 
 #: Setup/setup.xml:390
 msgid "NEEDS-ACTION"
