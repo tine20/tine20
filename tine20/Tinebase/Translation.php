@@ -259,6 +259,9 @@ class Tinebase_Translation
     
     /**
      * convertes po file to js object
+     * 
+     * @todo rewrite this in a way that we can automatically add singulars
+     *       seperatly into the js output
      *
      * @param  string $filePath
      * @return string
