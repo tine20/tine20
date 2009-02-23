@@ -28,8 +28,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     // spechialised translations
-    // ngettext('Do you realy want to delte the selected task?', 'Do you relay want to delete the selected tasks?', n);
-    i18nDeleteQuestion: ['Do you realy want to delte the selected task?', 'Do you relay want to delete the selected tasks?'],
+    // ngettext('Do you really want to delete the selected task?', 'Do you really want to delete the selected tasks?', n);
+    i18nDeleteQuestion: ['Do you really want to delete the selected task?', 'Do you really want to delete the selected tasks?'],
     
     initComponent: function() {
         this.recordProxy = Tine.Tasks.JsonBackend;
