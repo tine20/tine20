@@ -95,12 +95,13 @@ class Tinebase_Config
     /**
      * returns one config value identified by config name and application id
      * 
-     * @param   string  $_name config name/key
-     * @param   string  $_applicationId application id
+     * @param   string          $_name config name/key
+     * @param   string          $_applicationId application id
+     * @param   mixed|optional  $_default the default value
      * @return  Tinebase_Model_Config  the config record
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getConfig($_name, $_applicationId = NULL)
+    public function getConfig($_name, $_applicationId = NULL, $_default = NULL)
     {
         $applicationId = ($_applicationId !== NULL ) 
             ? Tinebase_Model_Application::convertApplicationIdToInt($_applicationId) 
@@ -111,10 +112,18 @@ class Tinebase_Config
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name));
         
         if (!$row = $this->_configTable->fetchRow($select)) {
-            throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found!");
+            if ($_default === NULL) {
+                throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found and no default value given!");
+            } else {
+                $result = new Tinebase_Model_Config(array(
+                    'application_id'    => $applicationId,
+                    'name'              => $_name,
+                    'value'             => $_default
+                ));
+            }
+        } else {
+            $result = new Tinebase_Model_Config($row->toArray());
         }
-        
-        $result = new Tinebase_Model_Config($row->toArray());
         
         return $result;
     }
