@@ -41,7 +41,7 @@ Tine.widgets.container.TreePanel = function(config) {
         
         if (this.recordClass) {
             this.containerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
-            this.containersName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 50);
+            this.containersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         }
     }
     Tine.widgets.container.TreePanel.superclass.constructor.call(this);
