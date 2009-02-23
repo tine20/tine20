@@ -184,11 +184,13 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     public function login()
     {
         // check if setup/update required
-        $setupController = new Setup_Controller(FALSE);
-        error_log(__FILE__ . __LINE__ . " lars fix me!!!"); 
-        //if ($setupController->updateRequired()) {
-        //    $this->setupRequired();
-        //}
+        $setupController = new Setup_Controller();
+        $applications = Tinebase_Application::getInstance()->getApplications();
+        foreach ($applications as $application) {
+            if ($application->status == 'enabled' && $setupController->updateNeeded($application)) {
+                $this->setupRequired();
+            }
+        }
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
