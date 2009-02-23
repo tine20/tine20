@@ -93,7 +93,10 @@ Ext.util.JSON.encodeDate = function(o){
  */
 Ext.util.Format = Ext.apply(Ext.util.Format, {
     euMoney: function(v){
-        v = (Math.round((v-0)*100))/100;
+        v.toString().replace(/,/, '.');
+        
+        v = (Math.round(parseFloat(v)*100))/100;
+        
         v = (v == Math.floor(v)) ? v + ".00" : ((v*10 == Math.floor(v*10)) ? v + "0" : v);
         v = String(v);
         var ps = v.split('.');

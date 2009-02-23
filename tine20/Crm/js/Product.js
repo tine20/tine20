@@ -101,7 +101,7 @@ Tine.Crm.Product.EditDialog = function() {
         var p = new Tine.Crm.Product.Model({
             'id': 'NULL',
             productsource: '',
-            price: '0,00'
+            price: '0.00'
         });
         productsourceGridPanel.stopEditing();
         Tine.Crm.Product.getStore().insert(0, p);
