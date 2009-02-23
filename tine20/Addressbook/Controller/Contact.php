@@ -63,6 +63,22 @@ class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Rec
 
     /****************************** overwritten functions ************************/
     
+    /**
+     * delete one record
+     * - don't delete if it belongs to an user account
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Addressbook_Exception_AccessDenied
+     */
+    protected function _deleteRecord(Tinebase_Record_Interface $_record)
+    {
+        if (!empty($_record->account_id)) {
+            throw new Addressbook_Exception_AccessDenied('It is not allowed to delete a contact linked to an user account!');
+        }
+        
+        parent::_deleteRecord($_record);
+    }
+    
     /****************************** public functions ************************/
             
     /**

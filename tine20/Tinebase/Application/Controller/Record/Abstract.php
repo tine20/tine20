@@ -377,7 +377,7 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
     /*********** helper funcs **************/
     
     /**
-     * delete one recod
+     * delete one record
      *
      * @param Tinebase_Record_Interface $_record
      * @throws Tinebase_Exception_AccessDenied
