@@ -80,7 +80,10 @@ Tine.Crm.Product.EditDialog = function() {
               width: 170, 
               hideable: false, 
               sortable: false, 
-              editor: new Ext.form.TextField({allowBlank: false}) 
+              editor: new Ext.form.TextField({
+                allowBlank: false,
+                maxLength: 60
+            }) 
             }, 
             {
               id: 'price',  
