@@ -15,57 +15,10 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../\n"
 
-#: js/GridPanel.js:31
-#, fuzzy
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Opravdu chcete smazat vybraný úkol"
-msgstr[1] "Opravdu chcete smazat vybrané úkoly"
-msgstr[2] "Opravdu chcete smazat vybrané úkoly"
-
-#: js/GridPanel.js:56 js/GridPanel.js:115 js/EditDialog.js:113
-msgid "Summary"
-msgstr "Přehled"
-
-#: js/GridPanel.js:57 js/GridPanel.js:127
-msgid "Due Date"
-msgstr "Termín dokončení"
-
-#: js/GridPanel.js:58 js/GridPanel.js:188 js/EditDialog.js:124
-msgid "Responsible"
-msgstr "Zodpovídá"
-
-#: js/GridPanel.js:79
-msgid "Failed"
-msgstr "Nepodařilo se"
-
-#: js/GridPanel.js:79
-msgid "Could not save task."
-msgstr "Nepodařilo se uložit úkol."
-
-#: js/GridPanel.js:123
-msgid "Add a task..."
-msgstr "Přidat úkol..."
-
-#: js/GridPanel.js:136 js/EditDialog.js:121
-msgid "Priority"
-msgstr "Priorita"
-
-#: js/GridPanel.js:151
-msgid "Percent"
-msgstr "Procent"
-
-#: js/GridPanel.js:165 js/EditDialog.js:138
-msgid "Status"
-msgstr "Status"
-
-#: js/GridPanel.js:180
-msgid "Creation Time"
-msgstr "Čas vytvoření"
-
-#: js/GridPanel.js:208
-msgid "Show closed"
-msgstr "Zobrazit uzavřené"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "osobní úkoly uživatele %s"
 
 #: js/EditDialog.js:96 js/Tasks.js:74
 msgid "Task"
@@ -74,9 +27,21 @@ msgstr[0] "Úkol"
 msgstr[1] "Úkoly"
 msgstr[2] "Úkolů"
 
+#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
+msgid "Summary"
+msgstr "Přehled"
+
 #: js/EditDialog.js:118
 msgid "Due date"
 msgstr "Termín dokončení"
+
+#: js/EditDialog.js:121 js/GridPanel.js:136
+msgid "Priority"
+msgstr "Priorita"
+
+#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
+msgid "Responsible"
+msgstr "Zodpovídá"
 
 #: js/EditDialog.js:128
 msgid "Notes"
@@ -90,9 +55,49 @@ msgstr "Zadejte popis..."
 msgid "Percentage"
 msgstr "Procenta"
 
+#: js/EditDialog.js:138 js/GridPanel.js:165
+msgid "Status"
+msgstr "Status"
+
 #: js/EditDialog.js:142
 msgid "Completed"
 msgstr "Dokončený"
+
+#: js/GridPanel.js:31
+#, fuzzy
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Opravdu chcete smazat vybraný úkol"
+msgstr[1] "Opravdu chcete smazat vybrané úkoly"
+msgstr[2] "Opravdu chcete smazat vybrané úkoly"
+
+#: js/GridPanel.js:57 js/GridPanel.js:127
+msgid "Due Date"
+msgstr "Termín dokončení"
+
+#: js/GridPanel.js:79
+msgid "Failed"
+msgstr "Nepodařilo se"
+
+#: js/GridPanel.js:79
+msgid "Could not save task."
+msgstr "Nepodařilo se uložit úkol."
+
+#: js/GridPanel.js:123
+msgid "Add a task..."
+msgstr "Přidat úkol..."
+
+#: js/GridPanel.js:151
+msgid "Percent"
+msgstr "Procent"
+
+#: js/GridPanel.js:180
+msgid "Creation Time"
+msgstr "Čas vytvoření"
+
+#: js/GridPanel.js:208
+msgid "Show closed"
+msgstr "Zobrazit uzavřené"
 
 #: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
@@ -124,11 +129,6 @@ msgstr "DOKONČENÝ"
 #: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "ZRUŠENÝ"
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "osobní úkoly uživatele %s"
 
 #, fuzzy
 #~ msgid "to to list"

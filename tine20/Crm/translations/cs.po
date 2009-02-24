@@ -23,62 +23,62 @@ msgstr "spravovat leady"
 msgid "add, edit and delete leads"
 msgstr "přidat, editovat a smazat leady"
 
-#: Controller/Lead.php:220
+#: Controller/Lead.php:230
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:221 js/Crm.js:1046
+#: Controller/Lead.php:231 js/Crm.js:1046
 msgid "Type"
 msgstr "Typ"
 
-#: Controller/Lead.php:222
+#: Controller/Lead.php:232
 msgid "Source"
 msgstr "Zdroj"
 
-#: Controller/Lead.php:223 Export/Pdf.php:92 js/LeadEditDialog.js:112
+#: Controller/Lead.php:233 Export/Pdf.php:92 js/LeadEditDialog.js:112
 msgid "Start"
 msgstr "Začátek"
 
-#: Controller/Lead.php:224
+#: Controller/Lead.php:234
 msgid "Scheduled end"
 msgstr "Plánovaný konec"
 
-#: Controller/Lead.php:225 Export/Pdf.php:95 js/LeadEditDialog.js:126
+#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:126
 msgid "End"
 msgstr "Konec"
 
-#: Controller/Lead.php:226 Export/Pdf.php:86 js/Crm.js:309 js/Crm.js:357
+#: Controller/Lead.php:236 Export/Pdf.php:86 js/Crm.js:309 js/Crm.js:357
 msgid "Turnover"
 msgstr "Obrat"
 
-#: Controller/Lead.php:227 Export/Pdf.php:89 js/Crm.js:308 js/Crm.js:356
+#: Controller/Lead.php:237 Export/Pdf.php:89 js/Crm.js:308 js/Crm.js:356
 #: js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr "Pravděpodobnost"
 
-#: Controller/Lead.php:228
+#: Controller/Lead.php:238
 msgid "Folder"
 msgstr "Složka"
 
-#: Controller/Lead.php:229
+#: Controller/Lead.php:239
 msgid "Updated by"
 msgstr "Aktualizoval(a)"
 
-#: Controller/Lead.php:230
+#: Controller/Lead.php:240
 msgid "Updated Fields:"
 msgstr "Aktualizované položky:"
 
-#: Controller/Lead.php:231
+#: Controller/Lead.php:241
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s změněn z %s na %s."
 
-#: Controller/Lead.php:237
+#: Controller/Lead.php:247
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s byl změněn"
 
-#: Controller/Lead.php:239
+#: Controller/Lead.php:249
 #, python-format
 msgid "Lead %s has been creaded"
 msgstr "Lead %s byl vytvořen"

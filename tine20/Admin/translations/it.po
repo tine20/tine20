@@ -181,7 +181,7 @@ msgstr ""
 msgid "Session ID"
 msgstr ""
 
-#: js/Admin.js:527 js/Users.js:544
+#: js/Admin.js:527 js/Users.js:555
 msgid "Login Name"
 msgstr ""
 
@@ -268,7 +268,7 @@ msgstr ""
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
 #: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
-#: js/Users.js:468 js/Users.js:511
+#: js/Users.js:468 js/Users.js:479 js/Users.js:504 js/Users.js:521
 msgid "Failed"
 msgstr ""
 
@@ -317,11 +317,11 @@ msgstr ""
 msgid "Could not save group."
 msgstr ""
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
 msgid "Errors"
 msgstr ""
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -413,7 +413,7 @@ msgstr ""
 msgid "Loading Role..."
 msgstr ""
 
-#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:484
 msgid "Please Wait"
 msgstr ""
 
@@ -529,7 +529,7 @@ msgstr ""
 msgid "No accounts to display"
 msgstr ""
 
-#: js/Users.js:271 js/Users.js:582
+#: js/Users.js:271 js/Users.js:593
 msgid "Status"
 msgstr ""
 
@@ -553,11 +553,11 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: js/Users.js:277 js/Users.js:606
+#: js/Users.js:277 js/Users.js:617
 msgid "Last login at"
 msgstr ""
 
-#: js/Users.js:278 js/Users.js:613
+#: js/Users.js:278 js/Users.js:624
 msgid "Last login from"
 msgstr ""
 
@@ -565,7 +565,7 @@ msgstr ""
 msgid "Password changed"
 msgstr ""
 
-#: js/Users.js:280 js/Users.js:601
+#: js/Users.js:280 js/Users.js:612
 msgid "Expires"
 msgstr ""
 
@@ -597,58 +597,62 @@ msgstr ""
 msgid "Some error occurred while trying to delete the account."
 msgstr ""
 
-#: js/Users.js:477
+#: js/Users.js:479 js/Users.js:480 js/Users.js:481
+msgid "Passwords do not match!"
+msgstr ""
+
+#: js/Users.js:484
 msgid "Saving User Account"
 msgstr ""
 
-#: js/Users.js:511
+#: js/Users.js:521
 msgid "Could not save user account."
 msgstr ""
 
-#: js/Users.js:535
+#: js/Users.js:546
 msgid "First Name"
 msgstr ""
 
-#: js/Users.js:539
+#: js/Users.js:550
 msgid "Last Name"
 msgstr ""
 
-#: js/Users.js:549
+#: js/Users.js:560
 msgid "Password"
 msgstr ""
 
-#: js/Users.js:552 js/Users.js:558
+#: js/Users.js:563 js/Users.js:569
 msgid "no password set"
 msgstr ""
 
-#: js/Users.js:555
+#: js/Users.js:566
 msgid "Password again"
 msgstr ""
 
-#: js/Users.js:560
+#: js/Users.js:571
 msgid "Primary group"
 msgstr ""
 
-#: js/Users.js:568
+#: js/Users.js:579
 msgid "Emailaddress"
 msgstr ""
 
-#: js/Users.js:603 js/Users.js:621
+#: js/Users.js:614 js/Users.js:632
 msgid "never"
 msgstr ""
 
-#: js/Users.js:608 js/Users.js:615
+#: js/Users.js:619 js/Users.js:626
 msgid "never logged in"
 msgstr ""
 
-#: js/Users.js:619
+#: js/Users.js:630
 msgid "Password set"
 msgstr ""
 
-#: js/Users.js:661
+#: js/Users.js:672
 msgid "Add New User Account"
 msgstr ""
 
-#: js/Users.js:663
+#: js/Users.js:674
 msgid "Edit User Account \"{0}\""
 msgstr ""

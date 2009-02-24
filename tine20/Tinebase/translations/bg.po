@@ -62,21 +62,21 @@ msgstr "Обработен/създаден от "
 msgid "Activities"
 msgstr "Операции"
 
-#: Frontend/Http.php:267 js/tineInit.js:235
+#: Frontend/Http.php:269 js/tineInit.js:235
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
-#: Frontend/Http.php:268
+#: Frontend/Http.php:270
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 "Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
 
-#: Frontend/Http.php:294 js/ExceptionDialog.js:26
+#: Frontend/Http.php:296 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
-#: Frontend/Http.php:295 js/ExceptionDialog.js:51
+#: Frontend/Http.php:297 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Грешка, водеща до рограмен срив."
 
@@ -121,7 +121,7 @@ msgstr ""
 "Изпращайки протокол Вие бихте подпомогнали усавършенстването на програмата. "
 "Моля опишете вашите стъпки преди настъпването на грешката."
 
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:560
+#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
 msgstr "Описание"
 
@@ -623,8 +623,8 @@ msgid "Deleting {0}"
 msgstr "Изтрива таг"
 
 #: js/widgets/app/GridPanel.js:510 js/widgets/EditDialog.js:366
-#: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:254
-#: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
+#: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Грешка"
 
@@ -674,8 +674,8 @@ msgid "choose other {0}..."
 msgstr "избери друг {0}..."
 
 #: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:410
-#: js/widgets/tags/TagsPanel.js:414
+#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:411
+#: js/widgets/tags/TagsPanel.js:415
 msgid "personal"
 msgstr "личен"
 
@@ -1125,57 +1125,57 @@ msgid_plural "Delete Tags"
 msgstr[0] "Изтрий таг"
 msgstr[1] "Изтрий тагове"
 
-#: js/widgets/tags/TagsPanel.js:233
+#: js/widgets/tags/TagsPanel.js:234
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Наистина ли желаете да изтриете селектираният таг?"
 msgstr[1] "Наистина ли желаете да изтриете селектираните тагове?"
 
-#: js/widgets/tags/TagsPanel.js:234
+#: js/widgets/tags/TagsPanel.js:235
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Селектираният таг ще бъде изтрит и от всички останали записи"
 msgstr[1] "Селектираните тагове ще бъде изтрит и от всички останали записи"
 
-#: js/widgets/tags/TagsPanel.js:238
+#: js/widgets/tags/TagsPanel.js:239
 msgid "Please wait a moment..."
 msgstr "Моля изчакайте"
 
-#: js/widgets/tags/TagsPanel.js:238
+#: js/widgets/tags/TagsPanel.js:239
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Изтрива таг"
 msgstr[1] "Изтрива тагове"
 
-#: js/widgets/tags/TagsPanel.js:254
+#: js/widgets/tags/TagsPanel.js:255
 msgid "Could not delete Tag(s)."
 msgstr "Неуспешно изтриване на тага(-овете)"
 
-#: js/widgets/tags/TagsPanel.js:315 js/widgets/tags/TagsPanel.js:377
+#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
 msgid "Notice"
 msgstr "Бележка"
 
-#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
+#: js/widgets/tags/TagsPanel.js:317 js/widgets/tags/TagsPanel.js:379
 msgid "The minimum tag length is three."
 msgstr "Минималната дължина на един таг е 3 знака."
 
-#: js/widgets/tags/TagsPanel.js:363
+#: js/widgets/tags/TagsPanel.js:364
 msgid "Could not create tag."
 msgstr "Тага не беше създаден."
 
-#: js/widgets/tags/TagsPanel.js:396
+#: js/widgets/tags/TagsPanel.js:397
 msgid "Could not update tag."
 msgstr "Тага не бе актуализиран."
 
-#: js/widgets/tags/TagsPanel.js:429 js/widgets/tags/TagsPanel.js:487
+#: js/widgets/tags/TagsPanel.js:430 js/widgets/tags/TagsPanel.js:488
 msgid "Enter tag name"
 msgstr "Задай име на таг"
 
-#: js/widgets/tags/TagsPanel.js:430
+#: js/widgets/tags/TagsPanel.js:431
 msgid "Searching..."
 msgstr "Търси..."
 
-#: js/widgets/tags/TagsPanel.js:564
+#: js/widgets/tags/TagsPanel.js:565
 msgid "Color"
 msgstr "Цвят"
 

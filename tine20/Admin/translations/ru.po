@@ -187,7 +187,7 @@ msgstr "Некаких записей регистрации доступа дл
 msgid "Session ID"
 msgstr "Cессия ID"
 
-#: js/Admin.js:527 js/Users.js:544
+#: js/Admin.js:527 js/Users.js:555
 msgid "Login Name"
 msgstr "Имя для регистрации"
 
@@ -275,7 +275,7 @@ msgstr "Удаление групп(ы)..."
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
 #: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
-#: js/Users.js:468 js/Users.js:511
+#: js/Users.js:468 js/Users.js:479 js/Users.js:504 js/Users.js:521
 msgid "Failed"
 msgstr "Неудача"
 
@@ -325,11 +325,11 @@ msgstr "Обновить членство"
 msgid "Could not save group."
 msgstr "Группа не могла быть сохранена."
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, устраните показанные ошибки."
 
@@ -423,7 +423,7 @@ msgstr "Название роли"
 msgid "Loading Role..."
 msgstr "З"
 
-#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:484
 msgid "Please Wait"
 msgstr "Пожалуйста подождите"
 
@@ -542,7 +542,7 @@ msgstr "Показ счетов {0} - {1} of {2}"
 msgid "No accounts to display"
 msgstr "Некаких счетов для показа нет"
 
-#: js/Users.js:271 js/Users.js:582
+#: js/Users.js:271 js/Users.js:593
 msgid "Status"
 msgstr "Статус"
 
@@ -566,11 +566,11 @@ msgstr "Имя"
 msgid "Email"
 msgstr "Электронная почта"
 
-#: js/Users.js:277 js/Users.js:606
+#: js/Users.js:277 js/Users.js:617
 msgid "Last login at"
 msgstr "Последний регистрировался в"
 
-#: js/Users.js:278 js/Users.js:613
+#: js/Users.js:278 js/Users.js:624
 msgid "Last login from"
 msgstr "Последная регистрацыя от"
 
@@ -578,7 +578,7 @@ msgstr "Последная регистрацыя от"
 msgid "Password changed"
 msgstr "Пароль бил изменен"
 
-#: js/Users.js:280 js/Users.js:601
+#: js/Users.js:280 js/Users.js:612
 msgid "Expires"
 msgstr "Истекает"
 
@@ -611,59 +611,63 @@ msgstr "Счет удаляется..."
 msgid "Some error occurred while trying to delete the account."
 msgstr "При удаление счета произошла  ошибка."
 
-#: js/Users.js:477
+#: js/Users.js:479 js/Users.js:480 js/Users.js:481
+msgid "Passwords do not match!"
+msgstr ""
+
+#: js/Users.js:484
 msgid "Saving User Account"
 msgstr "Счет пользователя выл сохранен"
 
-#: js/Users.js:511
+#: js/Users.js:521
 msgid "Could not save user account."
 msgstr "Счет пользователя не мог бить сохранен."
 
-#: js/Users.js:535
+#: js/Users.js:546
 msgid "First Name"
 msgstr "Имя"
 
-#: js/Users.js:539
+#: js/Users.js:550
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/Users.js:549
+#: js/Users.js:560
 msgid "Password"
 msgstr "Пароль"
 
-#: js/Users.js:552 js/Users.js:558
+#: js/Users.js:563 js/Users.js:569
 msgid "no password set"
 msgstr "Пароль не выл введен"
 
-#: js/Users.js:555
+#: js/Users.js:566
 msgid "Password again"
 msgstr "Повторите пароль"
 
-#: js/Users.js:560
+#: js/Users.js:571
 msgid "Primary group"
 msgstr "Уставная группа"
 
-#: js/Users.js:568
+#: js/Users.js:579
 msgid "Emailaddress"
 msgstr "Адрес электронной почти"
 
-#: js/Users.js:603 js/Users.js:621
+#: js/Users.js:614 js/Users.js:632
 msgid "never"
 msgstr "Никогда"
 
-#: js/Users.js:608 js/Users.js:615
+#: js/Users.js:619 js/Users.js:626
 msgid "never logged in"
 msgstr "никогда не зарегистрировался"
 
-#: js/Users.js:619
+#: js/Users.js:630
 msgid "Password set"
 msgstr "никакого пароля не выло установлено"
 
-#: js/Users.js:661
+#: js/Users.js:672
 msgid "Add New User Account"
 msgstr "Добавить новый счет пользователя"
 
-#: js/Users.js:663
+#: js/Users.js:674
 #, fuzzy
 msgid "Edit User Account \"{0}\""
 msgstr "Обработать счёт пользователя \"{0}\""

@@ -64,19 +64,19 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Frontend/Http.php:267 js/tineInit.js:235
+#: Frontend/Http.php:269 js/tineInit.js:235
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Frontend/Http.php:268
+#: Frontend/Http.php:270
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:294 js/ExceptionDialog.js:26
+#: Frontend/Http.php:296 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:295 js/ExceptionDialog.js:51
+#: Frontend/Http.php:297 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
@@ -125,7 +125,7 @@ msgstr ""
 "Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
 "uveďte stručný popis to co jste dělal(a), když došlo k chybě."
 
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:560
+#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
 msgstr "Popis"
 
@@ -611,8 +611,8 @@ msgid "Deleting {0}"
 msgstr "Mažu {0}"
 
 #: js/widgets/app/GridPanel.js:510 js/widgets/EditDialog.js:366
-#: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:254
-#: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
+#: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Nepodařilo se"
 
@@ -657,8 +657,8 @@ msgid "choose other {0}..."
 msgstr "vyberte jiné {0}..."
 
 #: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:410
-#: js/widgets/tags/TagsPanel.js:414
+#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:411
+#: js/widgets/tags/TagsPanel.js:415
 msgid "personal"
 msgstr "osobní"
 
@@ -1072,60 +1072,60 @@ msgstr[0] "Smazat štítek"
 msgstr[1] "Smazat štítky"
 msgstr[2] "Smazat štítky"
 
-#: js/widgets/tags/TagsPanel.js:233
+#: js/widgets/tags/TagsPanel.js:234
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Opravdu chcete smazat vybraný štítek?"
 msgstr[1] "Opravdu chcete smazat vybrané štítky?"
 msgstr[2] "Opravdu chcete smazat vybrané štítky?"
 
-#: js/widgets/tags/TagsPanel.js:234
+#: js/widgets/tags/TagsPanel.js:235
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Vybraný štítek bude smazán a zmizí u všech záznamů"
 msgstr[1] "Vybrané štítky budou smazány a zmizí u všech záznamů"
 msgstr[2] "Vybrané štítky budou smazány a zmizí u všech záznamů"
 
-#: js/widgets/tags/TagsPanel.js:238
+#: js/widgets/tags/TagsPanel.js:239
 msgid "Please wait a moment..."
 msgstr "Počkejte prosím okamžik..."
 
-#: js/widgets/tags/TagsPanel.js:238
+#: js/widgets/tags/TagsPanel.js:239
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Mažu štítek"
 msgstr[1] "Mažu štítky"
 msgstr[2] "Mažu štítky"
 
-#: js/widgets/tags/TagsPanel.js:254
+#: js/widgets/tags/TagsPanel.js:255
 msgid "Could not delete Tag(s)."
 msgstr "Nepodařilo se smazat štítek/štítky."
 
-#: js/widgets/tags/TagsPanel.js:315 js/widgets/tags/TagsPanel.js:377
+#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
 msgid "Notice"
 msgstr "Upozornění"
 
-#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
+#: js/widgets/tags/TagsPanel.js:317 js/widgets/tags/TagsPanel.js:379
 msgid "The minimum tag length is three."
 msgstr "Minimální délka štítku jsou tři znaky."
 
-#: js/widgets/tags/TagsPanel.js:363
+#: js/widgets/tags/TagsPanel.js:364
 msgid "Could not create tag."
 msgstr "Nepodařilo se vytvořit štítek."
 
-#: js/widgets/tags/TagsPanel.js:396
+#: js/widgets/tags/TagsPanel.js:397
 msgid "Could not update tag."
 msgstr "Nepodařilo se aktualizovat štítek."
 
-#: js/widgets/tags/TagsPanel.js:429 js/widgets/tags/TagsPanel.js:487
+#: js/widgets/tags/TagsPanel.js:430 js/widgets/tags/TagsPanel.js:488
 msgid "Enter tag name"
 msgstr "Zadejte název štítku"
 
-#: js/widgets/tags/TagsPanel.js:430
+#: js/widgets/tags/TagsPanel.js:431
 msgid "Searching..."
 msgstr "Vyhledávám..."
 
-#: js/widgets/tags/TagsPanel.js:564
+#: js/widgets/tags/TagsPanel.js:565
 msgid "Color"
 msgstr "Barva"
 

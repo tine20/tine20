@@ -62,8 +62,8 @@ msgstr "Завършен"
 
 #: js/GridPanel.js:31
 #, fuzzy
-msgid "Do you realy want to delte the selected task?"
-msgid_plural "Do you relay want to delete the selected tasks?"
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
 msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
 

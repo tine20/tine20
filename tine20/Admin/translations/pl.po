@@ -187,7 +187,7 @@ msgstr ""
 msgid "Session ID"
 msgstr "ID sesji"
 
-#: js/Admin.js:527 js/Users.js:544
+#: js/Admin.js:527 js/Users.js:555
 msgid "Login Name"
 msgstr "Imię logowania"
 
@@ -275,7 +275,7 @@ msgstr "Wymazywanie grup(y) …"
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
 #: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
-#: js/Users.js:468 js/Users.js:511
+#: js/Users.js:468 js/Users.js:479 js/Users.js:504 js/Users.js:521
 msgid "Failed"
 msgstr ""
 
@@ -325,11 +325,11 @@ msgstr ""
 msgid "Could not save group."
 msgstr "Zapisanie grupy nie jest możliwe."
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
 msgid "Errors"
 msgstr "Błędy"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:516
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -423,7 +423,7 @@ msgstr "Nazwa roli"
 msgid "Loading Role..."
 msgstr "Wprowadzanie danych roli …"
 
-#: js/Roles.js:686 js/Tags.js:584 js/Users.js:477
+#: js/Roles.js:686 js/Tags.js:584 js/Users.js:484
 msgid "Please Wait"
 msgstr "Proszę czekać"
 
@@ -544,7 +544,7 @@ msgstr "Wyświetl konta {0} - {1} of {2}"
 msgid "No accounts to display"
 msgstr "Nigdy nie zalogowany"
 
-#: js/Users.js:271 js/Users.js:582
+#: js/Users.js:271 js/Users.js:593
 msgid "Status"
 msgstr "Status"
 
@@ -568,11 +568,11 @@ msgstr "Imię"
 msgid "Email"
 msgstr "Email"
 
-#: js/Users.js:277 js/Users.js:606
+#: js/Users.js:277 js/Users.js:617
 msgid "Last login at"
 msgstr "Ostatnie zalogowanie "
 
-#: js/Users.js:278 js/Users.js:613
+#: js/Users.js:278 js/Users.js:624
 msgid "Last login from"
 msgstr "Ostatnie zalogowanie przez "
 
@@ -580,7 +580,7 @@ msgstr "Ostatnie zalogowanie przez "
 msgid "Password changed"
 msgstr "Hasło zostało zmienione"
 
-#: js/Users.js:280 js/Users.js:601
+#: js/Users.js:280 js/Users.js:612
 msgid "Expires"
 msgstr "Wygasa"
 
@@ -614,59 +614,63 @@ msgstr "Wymazywanie konta …"
 msgid "Some error occurred while trying to delete the account."
 msgstr "Wystąpiły pewne błędy z powodu próby wymazania konta."
 
-#: js/Users.js:477
+#: js/Users.js:479 js/Users.js:480 js/Users.js:481
+msgid "Passwords do not match!"
+msgstr ""
+
+#: js/Users.js:484
 msgid "Saving User Account"
 msgstr "Zapisywanie konta użytkownika"
 
-#: js/Users.js:511
+#: js/Users.js:521
 msgid "Could not save user account."
 msgstr "Konto użytkownika nie może zostać zapisane."
 
-#: js/Users.js:535
+#: js/Users.js:546
 msgid "First Name"
 msgstr "Imię"
 
-#: js/Users.js:539
+#: js/Users.js:550
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/Users.js:549
+#: js/Users.js:560
 msgid "Password"
 msgstr "Hało"
 
-#: js/Users.js:552 js/Users.js:558
+#: js/Users.js:563 js/Users.js:569
 msgid "no password set"
 msgstr "Hasło nie ustawione"
 
-#: js/Users.js:555
+#: js/Users.js:566
 msgid "Password again"
 msgstr "Hasło ponownie"
 
-#: js/Users.js:560
+#: js/Users.js:571
 msgid "Primary group"
 msgstr "Grupa nadżędna"
 
-#: js/Users.js:568
+#: js/Users.js:579
 msgid "Emailaddress"
 msgstr "Email"
 
-#: js/Users.js:603 js/Users.js:621
+#: js/Users.js:614 js/Users.js:632
 msgid "never"
 msgstr "nigdy"
 
-#: js/Users.js:608 js/Users.js:615
+#: js/Users.js:619 js/Users.js:626
 msgid "never logged in"
 msgstr "Nigdy nie zalogowany"
 
-#: js/Users.js:619
+#: js/Users.js:630
 msgid "Password set"
 msgstr "Hasło ustawione"
 
-#: js/Users.js:661
+#: js/Users.js:672
 msgid "Add New User Account"
 msgstr "Utwórz nowe konto użytkownika"
 
-#: js/Users.js:663
+#: js/Users.js:674
 #, fuzzy
 msgid "Edit User Account \"{0}\""
 msgstr "Edycja konta użytkownika \"{0}\""

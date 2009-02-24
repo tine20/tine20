@@ -65,20 +65,20 @@ msgstr "Установлено"
 msgid "Activities"
 msgstr "Действия"
 
-#: Frontend/Http.php:267 js/tineInit.js:235
+#: Frontend/Http.php:269 js/tineInit.js:235
 msgid "Authorisation Required"
 msgstr "Регистрация необходима"
 
-#: Frontend/Http.php:268
+#: Frontend/Http.php:270
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: Frontend/Http.php:294 js/ExceptionDialog.js:26
+#: Frontend/Http.php:296 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Frontend/Http.php:295 js/ExceptionDialog.js:51
+#: Frontend/Http.php:297 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла Ошибка, программа закончилась неправильно."
 
@@ -128,7 +128,7 @@ msgstr ""
 "Пожалуйста помогите улучшению этого программного обеспечения. И сообщите "
 "издателю коротким описанием, что и где Вы делаете если возникла ошибка. "
 
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:560
+#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
 msgstr "Описание"
 
@@ -630,8 +630,8 @@ msgid "Deleting {0}"
 msgstr "Тэг удаляется"
 
 #: js/widgets/app/GridPanel.js:510 js/widgets/EditDialog.js:366
-#: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:254
-#: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
+#: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Неудалось"
 
@@ -681,8 +681,8 @@ msgid "choose other {0}..."
 msgstr "Выберите другое {0}..."
 
 #: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:410
-#: js/widgets/tags/TagsPanel.js:414
+#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:411
+#: js/widgets/tags/TagsPanel.js:415
 msgid "personal"
 msgstr "Личное"
 
@@ -1134,60 +1134,60 @@ msgstr[0] "Удалить тэг"
 msgstr[1] "Удалить тэги"
 msgstr[2] "Удалить тэгов"
 
-#: js/widgets/tags/TagsPanel.js:233
+#: js/widgets/tags/TagsPanel.js:234
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Вы уверены, что хотите удалить тэг?"
 msgstr[1] "Вы уверени, что хотите удалить выбранные тэги?"
 msgstr[2] "Вы уверени, что хотите удалить выбранных тэгов?"
 
-#: js/widgets/tags/TagsPanel.js:234
+#: js/widgets/tags/TagsPanel.js:235
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Выбранный тэг будет удален и исчезнет из всех записях."
 msgstr[1] "Выбранные тэги будут удалены и исчезнут из всех записях."
 msgstr[2] "Выбранные тэгоф будут удалены и исчезнут из всех записях."
 
-#: js/widgets/tags/TagsPanel.js:238
+#: js/widgets/tags/TagsPanel.js:239
 msgid "Please wait a moment..."
 msgstr "Пожалуйста подождите момент..."
 
-#: js/widgets/tags/TagsPanel.js:238
+#: js/widgets/tags/TagsPanel.js:239
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Тэг удаляется"
 msgstr[1] "Тэги удаляются"
 msgstr[2] "Тэгоф удаляются"
 
-#: js/widgets/tags/TagsPanel.js:254
+#: js/widgets/tags/TagsPanel.js:255
 msgid "Could not delete Tag(s)."
 msgstr "Не смог удалить тэг(и)."
 
-#: js/widgets/tags/TagsPanel.js:315 js/widgets/tags/TagsPanel.js:377
+#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
 msgid "Notice"
 msgstr "Обратите внимание"
 
-#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
+#: js/widgets/tags/TagsPanel.js:317 js/widgets/tags/TagsPanel.js:379
 msgid "The minimum tag length is three."
 msgstr "Один тэг должен состоять, по меньшей мере из 3 знаков."
 
-#: js/widgets/tags/TagsPanel.js:363
+#: js/widgets/tags/TagsPanel.js:364
 msgid "Could not create tag."
 msgstr "Не мог установить  тэг."
 
-#: js/widgets/tags/TagsPanel.js:396
+#: js/widgets/tags/TagsPanel.js:397
 msgid "Could not update tag."
 msgstr "Не мог обновить тэг."
 
-#: js/widgets/tags/TagsPanel.js:429 js/widgets/tags/TagsPanel.js:487
+#: js/widgets/tags/TagsPanel.js:430 js/widgets/tags/TagsPanel.js:488
 msgid "Enter tag name"
 msgstr "Введите название тэга"
 
-#: js/widgets/tags/TagsPanel.js:430
+#: js/widgets/tags/TagsPanel.js:431
 msgid "Searching..."
 msgstr "Поиск..."
 
-#: js/widgets/tags/TagsPanel.js:564
+#: js/widgets/tags/TagsPanel.js:565
 msgid "Color"
 msgstr "Цвет"
 

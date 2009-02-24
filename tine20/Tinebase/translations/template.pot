@@ -46,19 +46,19 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: Frontend/Http.php:267 js/tineInit.js:235
+#: Frontend/Http.php:269 js/tineInit.js:235
 msgid "Authorisation Required"
 msgstr ""
 
-#: Frontend/Http.php:268
+#: Frontend/Http.php:270
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 
-#: Frontend/Http.php:294 js/ExceptionDialog.js:26
+#: Frontend/Http.php:296 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr ""
 
-#: Frontend/Http.php:295 js/ExceptionDialog.js:51
+#: Frontend/Http.php:297 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
@@ -101,7 +101,7 @@ msgid ""
 "description of what you where doing when the error occoured."
 msgstr ""
 
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:560
+#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
 msgstr ""
 
@@ -573,8 +573,8 @@ msgid "Deleting {0}"
 msgstr ""
 
 #: js/widgets/app/GridPanel.js:510 js/widgets/EditDialog.js:366
-#: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:254
-#: js/widgets/tags/TagsPanel.js:363 js/widgets/tags/TagsPanel.js:396
+#: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr ""
 
@@ -619,8 +619,8 @@ msgid "choose other {0}..."
 msgstr ""
 
 #: js/widgets/container/ContainerSelect.js:105
-#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:410
-#: js/widgets/tags/TagsPanel.js:414
+#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:411
+#: js/widgets/tags/TagsPanel.js:415
 msgid "personal"
 msgstr ""
 
@@ -1030,57 +1030,57 @@ msgid_plural "Delete Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:233
+#: js/widgets/tags/TagsPanel.js:234
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:234
+#: js/widgets/tags/TagsPanel.js:235
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:238
+#: js/widgets/tags/TagsPanel.js:239
 msgid "Please wait a moment..."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:238
+#: js/widgets/tags/TagsPanel.js:239
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:254
+#: js/widgets/tags/TagsPanel.js:255
 msgid "Could not delete Tag(s)."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:315 js/widgets/tags/TagsPanel.js:377
+#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
 msgid "Notice"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
+#: js/widgets/tags/TagsPanel.js:317 js/widgets/tags/TagsPanel.js:379
 msgid "The minimum tag length is three."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:363
+#: js/widgets/tags/TagsPanel.js:364
 msgid "Could not create tag."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:396
+#: js/widgets/tags/TagsPanel.js:397
 msgid "Could not update tag."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:429 js/widgets/tags/TagsPanel.js:487
+#: js/widgets/tags/TagsPanel.js:430 js/widgets/tags/TagsPanel.js:488
 msgid "Enter tag name"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:430
+#: js/widgets/tags/TagsPanel.js:431
 msgid "Searching..."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:564
+#: js/widgets/tags/TagsPanel.js:565
 msgid "Color"
 msgstr ""
 

@@ -13,64 +13,31 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/GridPanel.js:31
-#, fuzzy
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "确实想删除选中的任务？"
-
-#: js/GridPanel.js:56 js/GridPanel.js:115 js/EditDialog.js:113
-msgid "Summary"
-msgstr "摘要"
-
-#: js/GridPanel.js:57 js/GridPanel.js:127
-msgid "Due Date"
-msgstr "过期日期"
-
-#: js/GridPanel.js:58 js/GridPanel.js:188 js/EditDialog.js:124
-msgid "Responsible"
-msgstr "有责任的"
-
-#: js/GridPanel.js:79
-msgid "Failed"
-msgstr "失败"
-
-#: js/GridPanel.js:79
-msgid "Could not save task."
-msgstr "不能保存任务"
-
-#: js/GridPanel.js:123
-msgid "Add a task..."
-msgstr "添加任务"
-
-#: js/GridPanel.js:136 js/EditDialog.js:121
-msgid "Priority"
-msgstr "优先"
-
-#: js/GridPanel.js:151
-msgid "Percent"
-msgstr "百分比"
-
-#: js/GridPanel.js:165 js/EditDialog.js:138
-msgid "Status"
-msgstr "状态"
-
-#: js/GridPanel.js:180
-msgid "Creation Time"
-msgstr "创建时间"
-
-#: js/GridPanel.js:208
-msgid "Show closed"
-msgstr "显示关闭的"
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s 的个人任务"
 
 #: js/EditDialog.js:96 js/Tasks.js:74
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "任务"
 
+#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
+msgid "Summary"
+msgstr "摘要"
+
 #: js/EditDialog.js:118
 msgid "Due date"
 msgstr "过期日期"
+
+#: js/EditDialog.js:121 js/GridPanel.js:136
+msgid "Priority"
+msgstr "优先"
+
+#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
+msgid "Responsible"
+msgstr "有责任的"
 
 #: js/EditDialog.js:128
 msgid "Notes"
@@ -84,9 +51,47 @@ msgstr "输入描述"
 msgid "Percentage"
 msgstr "百分比"
 
+#: js/EditDialog.js:138 js/GridPanel.js:165
+msgid "Status"
+msgstr "状态"
+
 #: js/EditDialog.js:142
 msgid "Completed"
 msgstr "完成的"
+
+#: js/GridPanel.js:31
+#, fuzzy
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "确实想删除选中的任务？"
+
+#: js/GridPanel.js:57 js/GridPanel.js:127
+msgid "Due Date"
+msgstr "过期日期"
+
+#: js/GridPanel.js:79
+msgid "Failed"
+msgstr "失败"
+
+#: js/GridPanel.js:79
+msgid "Could not save task."
+msgstr "不能保存任务"
+
+#: js/GridPanel.js:123
+msgid "Add a task..."
+msgstr "添加任务"
+
+#: js/GridPanel.js:151
+msgid "Percent"
+msgstr "百分比"
+
+#: js/GridPanel.js:180
+msgid "Creation Time"
+msgstr "创建时间"
+
+#: js/GridPanel.js:208
+msgid "Show closed"
+msgstr "显示关闭的"
 
 #: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
@@ -116,11 +121,6 @@ msgstr "完成"
 #: Setup/setup.xml:456
 msgid "CANCELLED"
 msgstr "取消了"
-
-#: Controller.php:97
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s 的个人任务"
 
 #, fuzzy
 #~ msgid "to to list"
