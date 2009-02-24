@@ -380,15 +380,6 @@ Tine.Tinebase.tineInit = {
                                         Tine[app].registry.add(key, appData[key]);
                                     }
                                 }
-                            } else {
-                            	// @todo perhaps we could add more information here
-                                // an error occured
-                                Ext.MessageBox.show({
-                                    title: 'Error', 
-                                    msg: 'Something went wrong with Application ' + app,
-                                    buttons: Ext.Msg.OK,
-                                    icon: Ext.MessageBox.WARNING
-                                });                            	
                             }
                         }
                     }
