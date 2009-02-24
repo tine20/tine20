@@ -11,6 +11,11 @@
  */
 
 /**
+ * php helpers
+ */
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'Tinebase' . DIRECTORY_SEPARATOR . 'Helper.php';
+
+/**
  * class to handle setup of Tine 2.0
  *
  * @package     Setup
@@ -37,7 +42,7 @@ class Setup_Controller
      */
     public function __construct()
     {
-        $this->_baseDir = dirname(dirname(__FILE__)) . '/';
+        $this->_baseDir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
         $this->_db = Tinebase_Core::getDb();
         
         switch(get_class($this->_db)) {

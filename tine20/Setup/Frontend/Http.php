@@ -141,13 +141,16 @@ class Setup_Frontend_Http
         
         foreach ($requiredIniSettings as $variable => $newValue) {
             $oldValue = ini_get($variable);
+            
             if ($variable == 'memory_limit') {
-                $required = intval(substr($newValue,0,strpos($newValue,'M')));
-                $set = intval(substr($oldValue,0,strpos($oldValue,'M')));  
+                $required = convertToBytes($newValue);
+                $set = convertToBytes($oldValue);
+                
                 if ( $set < $required) {
-                    echo "Sorry, your environment is not supported. You need to set $variable equal or greater than $newValue (now: $oldValue).";
+                    echo "Sorry, your environment is not supported. You need to set $variable equal or greater than $required (now: $set).";
                     $success = FALSE;
                 }
+
             } elseif ($oldValue != $newValue) {
                 if (ini_set($variable, $newValue) === false) {
                     echo "Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.";
