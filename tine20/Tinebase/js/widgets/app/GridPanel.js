@@ -485,6 +485,16 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * generic delete handler
      */
     onDeleteRecords: function(btn, e) {
+        if (this.grid.getSelectionModel().isFilterSelect) {
+            Ext.MessageBox.show({
+                title: _('Not Allowed'), 
+                msg: _('You are not allowed to delete all pages at once'),
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO
+            });
+            
+            return;
+        }
         var records = this.grid.getSelectionModel().getSelections();
         
         var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
