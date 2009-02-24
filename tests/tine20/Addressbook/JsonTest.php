@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo fix some of the search tests ("this is not working with a new database")
  */
 
 /**
@@ -84,92 +86,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         } else {
             $this->container = $personalContainer[0];
         }
-        
-        $this->objects['initialContact'] = new Addressbook_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
-            'note'                  => 'Bla Bla Bla',
-            'container_id'                 => $this->container->id,
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Kneschke',
-            'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
-        )); 
-        
-        $this->objects['updatedContact'] = new Addressbook_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
-            'note'                  => 'Bla Bla Bla',
-            'container_id'          => $this->container->id,
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Kneschke',
-            'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
-        )); 
             	
         // define filter
         $this->objects['paging'] = array(
@@ -211,41 +127,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }    
 
     /**
-     * try to get contacts by owner / container_id
-     *
-     */
-    public function testGetContactsByOwner()
-    {
-        $paging = $this->objects['paging'];
-        
-        $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
-            array('field' => 'owner',  'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
-        );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
-        
-        // this is not working with a new database
-        //$this->assertGreaterThan(0, $contacts['totalcount']);
-    }
-        
-    /**
-     * try to get shared contacts
-     *
-     */
-    public function testGetSharedContacts()
-    {
-        $paging = $this->objects['paging'];
-        
-        $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'shared'),
-        );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
-        
-        // this is not working with a new database        
-        #$this->assertGreaterThan(0, $contacts['totalcount']);
-    }
-        
-    /**
      * try to get other people contacts
      *
      */
@@ -262,24 +143,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
         
     /**
-     * try to get contacts by owner
-     *
-     */
-    public function testGetContactsByAddressbookId()
-    {
-        $paging = $this->objects['paging'];
-        
-        $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'singleContainer'),
-            array('field' => 'container', 'operator' => 'equals',   'value' => $this->container->id),
-        );
-        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
-        
-        // this is not working with a new database
-        #$this->assertGreaterThan(0, $contacts['totalcount']);
-    }
-    
-    /**
      * try to get accounts
      *
      */
@@ -295,6 +158,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
     
+    
     /**
      * test to add a contact
      *
@@ -307,9 +171,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
         
         $newContactData = array(
-            'n_family'  => 'PHPUNIT',
-            'container_id'     => $this->container->id,
-            'notes'     => array($note)
+            'n_family'          => 'PHPUNIT',
+            'container_id'      => $this->container->id,
+            'notes'             => array($note),
+            'tel_cell_private'  => '+49TELCELLPRIVATE',
         );        
 
         $newContact = $this->_backend->saveContact(Zend_Json::encode($newContactData));
@@ -317,6 +182,73 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $GLOBALS['Addressbook_JsonTest']['addedContactId'] = $newContact['id'];
     }
+    
+    /**
+     * try to get contacts by owner
+     *
+     */
+    public function testGetContactsByTelephone()
+    {
+        $paging = $this->objects['paging'];
+        
+        $filter = array(
+            array('field' => 'telephone', 'operator' => 'contains', 'value' => '+49TELCELLPRIVATE')
+        );
+        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        $this->assertEquals(1, $contacts['totalcount']);
+    }
+
+    /**
+     * try to get contacts by owner
+     *
+     */
+    public function testGetContactsByAddressbookId()
+    {
+        $paging = $this->objects['paging'];
+        
+        $filter = array(
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'singleContainer'),
+            array('field' => 'container', 'operator' => 'equals',   'value' => $this->container->id),
+        );
+        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        
+        $this->assertGreaterThan(0, $contacts['totalcount']);
+    }
+    
+    /**
+     * try to get contacts by owner / container_id
+     *
+     */
+    public function testGetContactsByOwner()
+    {
+        $paging = $this->objects['paging'];
+        
+        $filter = array(
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'owner',  'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
+        );
+        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        
+        $this->assertGreaterThan(0, $contacts['totalcount']);
+    }
+        
+    /**
+     * try to get shared contacts
+     *
+     */
+    public function testGetSharedContacts()
+    {
+        $paging = $this->objects['paging'];
+        
+        $filter = array(
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'shared'),
+        );
+        $contacts = $this->_backend->searchContacts(Zend_Json::encode($filter), Zend_Json::encode($paging));
+        
+        // this is not working with a new database
+        #$this->assertGreaterThan(0, $contacts['totalcount']);
+    }
+    
     
     /**
      * test getting contact

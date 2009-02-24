@@ -56,6 +56,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                 {label: this.app.i18n._('First Name'), field: 'n_given' },
                 {label: this.app.i18n._('Last Name'),  field: 'n_family'},
                 {label: this.app.i18n._('Company'),    field: 'org_name'},
+                {label: this.app.i18n._('Phone'), field: 'telephone', operators: ['contains']},
                 {label: this.app.i18n._('Job Title'),    field: 'title'},
                 {label: this.app.i18n._('Job Role'),    field: 'role'},
                 new Tine.widgets.tags.TagFilter({app: this.app}),

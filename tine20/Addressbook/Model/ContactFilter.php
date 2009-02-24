@@ -34,7 +34,26 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'email', 'adr_one_locality',))),
+        'query'                => array(
+            'filter' => 'Tinebase_Model_Filter_Query', 
+            'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'email', 'adr_one_locality'))
+        ),
+        'telephone'            => array(
+            'filter' => 'Tinebase_Model_Filter_Query', 
+            'options' => array('fields' => array(
+                'tel_assistent',
+                'tel_car',
+                'tel_cell',
+                'tel_cell_private',
+                'tel_fax',
+                'tel_fax_home',
+                'tel_home',
+                'tel_other',
+                'tel_pager',
+                'tel_prefer',
+                'tel_work'
+            ))
+        ),
         'n_given'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'n_family'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'org_name'             => array('filter' => 'Tinebase_Model_Filter_Text'),
