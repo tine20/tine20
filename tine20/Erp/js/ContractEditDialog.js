@@ -66,7 +66,7 @@ Tine.Erp.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             items:[
                 {            	
-                title: this.app.i18n._('Contract'),
+                title: this.app.i18n.n_('Contract', 'Contract', 1),
                 autoScroll: true,
                 border: false,
                 frame: true,
