@@ -84,6 +84,8 @@ class Tinebase_Core
     {
         // disable magic_quotes_runtime
         ini_set('magic_quotes_runtime', 0);
+        ini_set('display_errors', 0);
+        ini_set('log_errors', 1);
         
         self::setupExceptionErrorHandler();
         
