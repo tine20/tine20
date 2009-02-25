@@ -498,6 +498,8 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
         
         $_exclude[]  = '.';
         $_exclude[]  = 'Tinebase';
+        $_exclude[]  = 'Setup';
+        
         	    
         $d = dir($tine20path);
 	    while (false !== ($appName = $d->read())) {
