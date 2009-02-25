@@ -413,7 +413,8 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     });
                     break;
                 case e.A:
-                    this.grid.getSelectionModel().selectAll();
+                    // select only current page
+                    this.grid.getSelectionModel().selectAll(true);
                     e.preventDefault();
                     break;
             }
