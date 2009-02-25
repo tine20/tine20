@@ -4,9 +4,12 @@
  * 
  * MAIN controller for acticesync
  *
- * @package     ActiveSyncActiceSync
+ * @package     ActiveSync
  * @subpackage  ActiveSync
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     http://www.tine20.org/licenses/agpl-nonus.html AGPL Version 1 (Non-US)
+ *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
+ *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
+ *              United States of America is excluded from the scope of this license.
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
@@ -16,7 +19,7 @@
 /**
  * main controller for ActiveSync
  *
- * @package     ActiveSyncActiceSync
+ * @package     ActiveSync
  * @subpackage  ActiveSync
  */
 class ActiveSync_Controller extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface
