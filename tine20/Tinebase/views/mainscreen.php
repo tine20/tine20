@@ -65,29 +65,6 @@
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all.js'></script>";
                 break;
         }?>
-    
-    
-    <!-- Tine 2.0 dynamic initialisation -->
-    <script type="text/javascript" language="javascript"><?php
-        // registry data
-        foreach ((array)$this->registryData as $appname => $data) {
-            if ($appname != 'Tinebase') {
-                echo "\n        Tine.$appname.registry = new Ext.util.MixedCollection();";
-            }
-            
-            if (!empty($data) ) {
-                foreach ($data as $var => $content) {
-                    echo "\n        Tine.$appname.registry.add('$var'," . Zend_Json::encode($content). ");";
-                }
-            }
-        }
-        if(isset($this->jsExecute)) {
-            echo "
-            Tine.onReady = function() {
-                $this->jsExecute
-            };";
-        }?>        
-    </script>
 </head>
 <body>
     <noscript>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></noscript>
