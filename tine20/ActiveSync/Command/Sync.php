@@ -52,7 +52,47 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     protected $_contentStateBackend;
     
+    /**
+     * total count of items in all collections
+     *
+     * @var integer
+     */
+    protected $_totalCount;
+    
+    /**
+     * there are more entries than WindowSize available
+     * the MoreAvailable tag hot added to the xml output
+     *
+     * @var boolean
+     */
+    protected $_moreAvailable = false;
+    
+    /**
+     * instance of ActiveSync_Controller
+     *
+     * @var ActiveSync_Controller
+     */
+    protected $_controller;
+    
     protected $_session;
+    
+    /**
+     * the constructor
+     *
+     * @param ActiveSync_Model_Device $_device
+     */
+    public function __construct(ActiveSync_Model_Device $_device)
+    {
+        parent::__construct($_device);
+        
+        $this->_contentStateBackend  = new ActiveSync_Backend_ContentState();
+        $this->_session              = new Zend_Session_Namespace('moreData');
+        $this->_controller           = ActiveSync_Controller::getInstance();
+        // continue sync / MoreAvailable sent in previous repsonse
+        if(isset($this->_session->syncTimeStamp)) {
+            $this->_syncTimeStamp = $this->_session->syncTimeStamp;
+        }
+    }
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -62,10 +102,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
      */
     public function handle()
     {
-        $controller                  = ActiveSync_Controller::getInstance();
-        $this->_contentStateBackend  = new ActiveSync_Backend_ContentState();
-        $this->_session              = new Zend_Session_Namespace('moreData');
-        
         // input xml
         $xml = new SimpleXMLElement($this->_inputDom->saveXML());
         #$xml = simplexml_import_dom($this->_inputDom);
@@ -92,7 +128,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             );
             $this->_collections[$class] = $collectionData;
             
-            if($clientSyncKey === 0 || $controller->validateSyncKey($this->_device, $clientSyncKey, $class . '-' . $collectionId) !== true) {
+            if($clientSyncKey === 0 || $this->_controller->validateSyncKey($this->_device, $clientSyncKey, $class . '-' . $collectionId) !== true) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey $clientSyncKey provided");
                 $this->_collections[$class]['syncKeyValid'] = false;
                 continue;
@@ -127,7 +163,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 }
             }
         
-            // handle changes, but only when not first sync
+            // handle changes, but only if not first sync
             if($clientSyncKey > 1 && isset($xmlCollection->Commands->Change)) {
                 $changes = $xmlCollection->Commands->Change;
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($changes) . " entries to be updated on server");
@@ -143,7 +179,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 }
             }
         
-            // handle deletes, but only when not first sync
+            // handle deletes, but only if not first sync
             if($clientSyncKey > 1 && isset($xmlCollection->Commands->Delete)) {
                 $deletes = $xmlCollection->Commands->Delete;
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($deletes) . " entries to be deleted on server");
@@ -166,8 +202,6 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     
     public function getResponse()
     {
-        $controller             = ActiveSync_Controller::getInstance();
-        
         // add aditional namespaces for contacts and tasks
         $this->_outputDom->documentElement->setAttribute('xmlns:' . 'Contacts', 'uri:Contacts');
         $this->_outputDom->documentElement->setAttribute('xmlns:' . 'Tasks', 'uri:Tasks');
@@ -203,7 +237,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                 
                 $responses = NULL;
-                // ids of newly added entries
+                // sent reponse for newly added entries
                 if(!empty($collectionData['added'])) {
                     if($responses === NULL) {
                         $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
@@ -216,6 +250,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     }
                 }
                 
+                // sent reponse for changed entries
                 if(!empty($collectionData['changed'])) {
                     if($responses === NULL) {
                         $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
@@ -234,32 +269,36 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         // all entries available
                         $serverAdds = $dataController->getSince('added', '0000-00-00 00:00:00', $this->_syncTimeStamp);
                     } else {
-                        // all entries added since last sync
-                        $syncState  = $controller->getSyncState($this->_device, $collectionData['class'] . '-' . $collectionData['collectionId'], $collectionData['syncKey']);
-                        $serverAdds = $dataController->getSince('added', $syncState->lastsync, $this->_syncTimeStamp);
-                        // add entries which produced problems during delete from client
-                        $serverAdds = array_merge($serverAdds, $this->_collections[$class]['forceAdd']);
-                        // add entries which got available because of new permissions
-                        $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class']);
-                        $allServerEntries = $dataController->getServerEntries();
-                        $serverDiff = array_diff($allServerEntries, $allClientEntries);
-                        $serverAdds = array_merge($serverAdds, $serverDiff);
+                        if(isset($this->_session->serverAdds[$collectionData['class']])) {
+                            $serverAdds = $this->_session->serverAdds[$collectionData['class']];
+                        } else {
+                            // all entries added since last sync
+                            $syncState  = $this->_controller->getSyncState($this->_device, $collectionData['class'] . '-' . $collectionData['collectionId'], $collectionData['syncKey']);
+                            $serverAdds = $dataController->getSince('added', $syncState->lastsync, $this->_syncTimeStamp);
+                            // add entries which produced problems during delete from client
+                            $serverAdds = array_merge($serverAdds, $this->_collections[$class]['forceAdd']);
+                            // add entries which got available because of new permissions
+                            $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class']);
+                            $allServerEntries = $dataController->getServerEntries();
+                            $serverDiff = array_diff($allServerEntries, $allClientEntries);
+                            $serverAdds = array_merge($serverAdds, $serverDiff);
+                        }
                     }
                     
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($serverAdds) . ' entry for sync from server to client');
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($serverAdds) . ' entry for sync from server to client' . print_r($serverAdds, true));
 
                     $commands = NULL;
                     
                     if(count($serverAdds) > 0) {
+                        if(count($serverAdds) > $collectionData['windowSize']) {
+                            $this->_moreAvailable = true;
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
+                        }
                         
-                        foreach($serverAdds as $serverId) {
-                            #if($itemsInCollection === $windowSize) {
-                            #    $this->_session->serverAdds = $serverAdds;
-                            #    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
-                            #    break;
-                            #}
-                            
-                            #unset($serverAdds[$id]);
+                        foreach($serverAdds as $id => $serverId) {
+                            if($this->_totalCount === $collectionData['windowSize']) {
+                                break;
+                            }
                             
                             // skip entry, was added by client
                             if(isset($collectionData['added'][$serverId]) && !isset($this->_collections[$class]['forceAdd'][$serverId])) {
@@ -275,29 +314,38 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $add = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
                             $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                             $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " add ID " . $serverId);
                             $dataController->appendXML($this->_outputDom, $applicationData, $serverId);
 
                             $this->_addContentState($collectionData['class'], $serverId);
                             
-                            #$itemsInCollection++;                                
+                            $this->_totalCount++;                                
+                            unset($serverAdds[$id]);    
                         }
                     }
 
                     if($collectionData['syncKey'] > 1) {
-                        $serverChanges = $dataController->getSince('changed', $syncState->lastsync, $this->_syncTimeStamp);
-                        $serverChanges = array_merge($serverChanges + $this->_collections[$class]['forceChange']);
-
-
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($serverChanges) . ' changed entries');
-                        foreach($serverChanges as $serverId) {
-                            #if($itemsInCollection === $windowSize) {
-                            #    $this->_session->serverChanges = $serverChanges;
-                            #    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
-                            #    break;
-                            #}
-                            
-                            #unset($serverChanges[$id]);
-                            
+                        if(isset($this->_session->serverChanges[$collectionData['class']])) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " add ID ");
+                            $serverChanges = $this->_session->serverChanges[$collectionData['class']];
+                        } else {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " add ID ");
+                            $serverChanges = $dataController->getSince('changed', $syncState->lastsync, $this->_syncTimeStamp);
+                            $serverChanges = array_merge($serverChanges + $this->_collections[$class]['forceChange']);
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " add ID ");
+                        }
+                        
+                        if(count($serverChanges) > $collectionData['windowSize']) {
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
+                            $this->_moreAvailable = true;
+                        }
+                        
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found " . count($serverChanges) . ' changed entries' . print_r($serverChanges, true));
+                        foreach($serverChanges as $id => $serverId) {
+                            if($this->_totalCount === $collectionData['windowSize']) {
+                                break;
+                            }
+                                                        
                             // skip entry, was changed by client
                             if(isset($collectionData['changed'][$serverId]) && !isset($this->_collections[$class]['forceChange'][$serverId])) {
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
@@ -314,16 +362,26 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
                             $dataController->appendXML($this->_outputDom, $applicationData, $serverId);
 
-                            $itemsInCollection++;
+                            $this->_totalCount++;
+                            unset($serverChanges[$id]);    
                         }
                         
                         /**
                          * process deleted entries
                          */
-                        $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class']);
-                        $allServerEntries = $dataController->getServerEntries();
-                        $serverDeletes = array_diff($allClientEntries, $allServerEntries);
-                        foreach($serverDeletes as $serverId) {
+                        if(isset($this->_session->serverDeletes[$collectionData['class']])) {
+                            $serverDeletes = $this->_session->serverDeletes[$collectionData['class']];
+                        } else {
+                            $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class']);
+                            $allServerEntries = $dataController->getServerEntries();
+                            $serverDeletes = array_diff($allClientEntries, $allServerEntries);
+                        }
+                        foreach($serverDeletes as $id => $serverId) {
+                            if($this->_totalCount === $collectionData['windowSize']) {
+                                $this->_moreAvailable = true;
+                                $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
+                                break;
+                            }
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " need to delete entry " . $serverId);
                             
                             if($commands === NULL) {
@@ -335,17 +393,28 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             
                             $this->_deleteContentState($collectionData['class'], $serverId);
 
-                            $itemsInCollection++;
+                            $this->_totalCount++;
+                            unset($serverDeletes[$id]);    
                         }
                     }
                 }
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " new synckey is $newSyncKey");                
             }
+            
+            // save data to session if more data available
+            if($this->_moreAvailable === true) {
+                $this->_session->syncTimeStamp = $this->_syncTimeStamp;
+                $this->_session->serverAdds[$collectionData['class']]    = (array)$serverAdds;
+                $this->_session->serverChanges[$collectionData['class']] = (array)$serverChanges;
+                $this->_session->serverDeletes[$collectionData['class']] = (array)$serverDeletes;
+            }
+            
             // increment sync timestamp by 1 second
             $this->_syncTimeStamp->add('1', Zend_Date::SECOND);
-            $controller->updateSyncKey($this->_device, $newSyncKey, $collectionData['class'] . '-' . $collectionData['collectionId'], $this->_syncTimeStamp);
+            $this->_controller->updateSyncKey($this->_device, $newSyncKey, $collectionData['class'] . '-' . $collectionData['collectionId'], $this->_syncTimeStamp);
         }
-        parent::getResponse();
+        
+        parent::getResponse($this->_moreAvailable);
     }
 
     /**
