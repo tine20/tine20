@@ -38,8 +38,8 @@ class AllTests
         $suite->addTest(Phone_AllTests::suite());
         $suite->addTest(Erp_AllTests::suite());
         $suite->addTest(Timetracker_AllTests::suite());
+        $suite->addTest(Setup_AllTests::suite());
         
-        //$suite->addTest(Setup_AllTests::suite());
         return $suite;
     }
 }
