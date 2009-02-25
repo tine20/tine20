@@ -420,7 +420,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
     };
 
     var contactTabPanel = {
-        title: translation._('Contact'),
+        title: translation.n_('Contact', 'Contacts', 1),
         autoScroll: true,
         layout: 'border',
         border: false,
