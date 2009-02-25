@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-16 05:50+0100\n"
+"PO-Revision-Date: 2009-02-25 10:03+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,9 +15,9 @@ msgstr ""
 "X-Poedit-Bookmarks: 23,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: Controller.php:96
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal addressbook"
-msgstr "{0}'s лични адреси"
+msgstr "%s's лични адреси"
 
 #: Export/Pdf.php:38
 msgid "Business Contact Data"
@@ -25,13 +25,13 @@ msgstr "Бизнес контакти"
 
 #: Export/Pdf.php:40
 msgid "Organisation / Unit"
-msgstr "Организация/Отдел"
+msgstr "Организация / Отдел"
 
 #: Export/Pdf.php:45
 msgid "Business Address"
 msgstr "Адрес на фирмата"
 
-#: Export/Pdf.php:53 js/ContactGrid.js:101
+#: Export/Pdf.php:53 js/ContactGrid.js:102
 msgid "Email"
 msgstr "Имейл"
 
@@ -63,7 +63,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Длъжност"
 
-#: Export/Pdf.php:77 js/ContactGrid.js:90 js/EditDialog.js:40
+#: Export/Pdf.php:77 js/ContactGrid.js:91 js/EditDialog.js:40
 msgid "Room"
 msgstr "Стая"
 
@@ -79,8 +79,8 @@ msgstr "Асистент-телефон"
 msgid "Private Contact Data"
 msgstr "Данни за личен контакт"
 
-#: Export/Pdf.php:89 js/ContactGrid.js:66 js/ContactGrid.js:67
-#: js/ContactGrid.js:68 js/EditDialog.js:373
+#: Export/Pdf.php:89 js/ContactGrid.js:67 js/ContactGrid.js:68
+#: js/ContactGrid.js:69 js/EditDialog.js:373
 msgid "Private Address"
 msgstr "Личен адрес"
 
@@ -108,12 +108,12 @@ msgstr "URL  (личен адрес)"
 msgid "Other Data"
 msgstr "Други данни"
 
-#: Export/Pdf.php:115 js/ContactGrid.js:62 js/ContactGrid.js:116
+#: Export/Pdf.php:115 js/ContactGrid.js:63 js/ContactGrid.js:117
 #: js/EditDialog.js:153 js/EditDialog.js:204
 msgid "Birthday"
 msgstr "Дата на раждане"
 
-#: Export/Pdf.php:118 js/ContactGrid.js:59 js/ContactGrid.js:88
+#: Export/Pdf.php:118 js/ContactGrid.js:60 js/ContactGrid.js:89
 #: js/EditDialog.js:148 js/EditDialog.js:187
 msgid "Job Title"
 msgstr "Длъжност"
@@ -122,7 +122,7 @@ msgstr "Длъжност"
 msgid "Addressbook"
 msgstr "Адреси"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:285 Setup/setup.xml:486
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:486
 msgid "Internal Contacts"
 msgstr "Международни контакти"
 
@@ -131,13 +131,12 @@ msgid "contacts"
 msgstr "Контакти"
 
 #: js/Addressbook.js:140 js/Addressbook.js:426
-#, fuzzy
 msgid "addressbook"
 msgid_plural "addressbooks"
-msgstr[0] "лични адреси"
-msgstr[1] "лични адреси"
+msgstr[0] "Списък адреси"
+msgstr[1] "Списъка на адреси"
 
-#: js/Addressbook.js:146 js/ContactGrid.js:154
+#: js/Addressbook.js:146 js/ContactGrid.js:155
 msgid "export as pdf"
 msgstr "Експортирай като pdf"
 
@@ -154,9 +153,8 @@ msgid "Add new contact"
 msgstr "Прибави нов контакт"
 
 #: js/Addressbook.js:179
-#, fuzzy
 msgid "Edit Contact \"{0}\""
-msgstr "Промени контакт  \"{0}\""
+msgstr "Редактирай контакт  \"{0}\""
 
 #: js/Addressbook.js:202
 msgid "Please wait a moment..."
@@ -193,210 +191,207 @@ msgid "Some error occured while trying to delete the contact."
 msgstr "Настъпила е грешка при опит за изтриване на контакта."
 
 #: js/Addressbook.js:422 js/EditDialog.js:423
-#, fuzzy
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Контакт"
-msgstr[1] "Контакт"
+msgstr[1] "Контакта"
 
 #: js/Addressbook.js:422
-#, fuzzy
 msgid "Contacts"
-msgstr "Контакт"
+msgstr "Контакти"
 
 #: js/Addressbook.js:426
-#, fuzzy
 msgid "addressbooks"
-msgstr "лични адреси"
+msgstr "Списъци на адреси"
 
-#: js/ContactGrid.js:56 js/ContactGrid.js:83 js/EditDialog.js:106
+#: js/ContactGrid.js:56 js/ContactGrid.js:84 js/EditDialog.js:106
 #: js/EditDialog.js:165
 msgid "First Name"
 msgstr "Име"
 
-#: js/ContactGrid.js:57 js/ContactGrid.js:82 js/EditDialog.js:114
+#: js/ContactGrid.js:57 js/ContactGrid.js:83 js/EditDialog.js:114
 #: js/EditDialog.js:169
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/ContactGrid.js:58 js/ContactGrid.js:86 js/EditDialog.js:128
+#: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
 #: js/EditDialog.js:195 Setup/setup.xml:548
 msgid "Company"
 msgstr "Фирма"
 
-#: js/ContactGrid.js:60 js/ContactGrid.js:89 js/EditDialog.js:35
+#: js/ContactGrid.js:59 js/ContactGrid.js:103 js/ContactGrid.js:382
+#: js/ContactGrid.js:412 js/EditDialog.js:225
+msgid "Phone"
+msgstr "Телефон"
+
+#: js/ContactGrid.js:61 js/ContactGrid.js:90 js/EditDialog.js:35
 msgid "Job Role"
 msgstr "Длъжност"
 
-#: js/ContactGrid.js:63 js/ContactGrid.js:66 js/ContactGrid.js:91
+#: js/ContactGrid.js:64 js/ContactGrid.js:67 js/ContactGrid.js:92
 #: js/EditDialog.js:342 js/EditDialog.js:385
 msgid "Street"
 msgstr "Улица"
 
-#: js/ContactGrid.js:63 js/ContactGrid.js:64 js/ContactGrid.js:65
+#: js/ContactGrid.js:64 js/ContactGrid.js:65 js/ContactGrid.js:66
 #: js/EditDialog.js:326
 msgid "Company Address"
 msgstr "Фирмен адрес"
 
-#: js/ContactGrid.js:64 js/ContactGrid.js:67 js/EditDialog.js:356
+#: js/ContactGrid.js:65 js/ContactGrid.js:68 js/EditDialog.js:356
 #: js/EditDialog.js:399
 msgid "Postal Code"
 msgstr "Пощенски код"
 
-#: js/ContactGrid.js:65 js/ContactGrid.js:68 js/ContactGrid.js:92
+#: js/ContactGrid.js:66 js/ContactGrid.js:69 js/ContactGrid.js:93
 #: js/EditDialog.js:360 js/EditDialog.js:403
 msgid "City"
 msgstr "Град"
 
-#: js/ContactGrid.js:81
+#: js/ContactGrid.js:82
 msgid "Type"
 msgstr "Вид"
 
-#: js/ContactGrid.js:84
+#: js/ContactGrid.js:85
 msgid "Full Name"
 msgstr "Пълно име"
 
-#: js/ContactGrid.js:85 js/EditDialog.js:17 js/EditDialog.js:142
+#: js/ContactGrid.js:86 js/EditDialog.js:17 js/EditDialog.js:142
 #: js/EditDialog.js:181
 msgid "Display Name"
 msgstr "Име"
 
-#: js/ContactGrid.js:87 js/EditDialog.js:132 js/EditDialog.js:199
+#: js/ContactGrid.js:88 js/EditDialog.js:132 js/EditDialog.js:199
 msgid "Unit"
 msgstr "Отдел"
 
-#: js/ContactGrid.js:93 js/EditDialog.js:350 js/EditDialog.js:393
+#: js/ContactGrid.js:94 js/EditDialog.js:350 js/EditDialog.js:393
 msgid "Region"
 msgstr "Област"
 
-#: js/ContactGrid.js:94
+#: js/ContactGrid.js:95
 msgid "Postalcode"
 msgstr "Пощенски код"
 
-#: js/ContactGrid.js:95 js/EditDialog.js:365 js/EditDialog.js:408
+#: js/ContactGrid.js:96 js/EditDialog.js:365 js/EditDialog.js:408
 msgid "Country"
 msgstr "Държава"
 
-#: js/ContactGrid.js:96
+#: js/ContactGrid.js:97
 msgid "Street (private)"
 msgstr "Улица (личен адрес)"
 
-#: js/ContactGrid.js:97
+#: js/ContactGrid.js:98
 msgid "City (private)"
 msgstr "Град (личен адрес)"
 
-#: js/ContactGrid.js:98
+#: js/ContactGrid.js:99
 msgid "Region (private)"
 msgstr "Област (приват)"
 
-#: js/ContactGrid.js:99
+#: js/ContactGrid.js:100
 msgid "Postalcode (private)"
 msgstr "Пощенски код (личен адрес)"
 
-#: js/ContactGrid.js:100
+#: js/ContactGrid.js:101
 msgid "Country (private)"
 msgstr "Народност (рерсонална)"
 
-#: js/ContactGrid.js:102 js/ContactGrid.js:381 js/ContactGrid.js:411
-#: js/EditDialog.js:225
-msgid "Phone"
-msgstr "Телефон"
-
-#: js/ContactGrid.js:103 js/ContactGrid.js:382 js/ContactGrid.js:412
+#: js/ContactGrid.js:104 js/ContactGrid.js:383 js/ContactGrid.js:413
 #: js/EditDialog.js:230
 msgid "Mobile"
 msgstr "Мобилен телефон"
 
-#: js/ContactGrid.js:104 js/ContactGrid.js:383 js/ContactGrid.js:413
+#: js/ContactGrid.js:105 js/ContactGrid.js:384 js/ContactGrid.js:414
 #: js/EditDialog.js:235
 msgid "Fax"
 msgstr "Факс"
 
-#: js/ContactGrid.js:105
+#: js/ContactGrid.js:106
 msgid "Car phone"
 msgstr "Телефон (кола)"
 
-#: js/ContactGrid.js:106
+#: js/ContactGrid.js:107
 msgid "Pager"
 msgstr "Пейджер"
 
-#: js/ContactGrid.js:107 js/EditDialog.js:242
+#: js/ContactGrid.js:108 js/EditDialog.js:242
 msgid "Phone (private)"
 msgstr "Телефон (личен)"
 
-#: js/ContactGrid.js:108 js/EditDialog.js:252
+#: js/ContactGrid.js:109 js/EditDialog.js:252
 msgid "Fax (private)"
 msgstr "Факс  (личен)"
 
-#: js/ContactGrid.js:109 js/EditDialog.js:247
+#: js/ContactGrid.js:110 js/EditDialog.js:247
 msgid "Mobile (private)"
 msgstr "Мобилен телефон (личен)"
 
-#: js/ContactGrid.js:110
+#: js/ContactGrid.js:111
 msgid "Email (private)"
 msgstr "Имейл (личен адрес)"
 
-#: js/ContactGrid.js:111 js/ContactGrid.js:385 js/ContactGrid.js:415
+#: js/ContactGrid.js:112 js/ContactGrid.js:386 js/ContactGrid.js:416
 #: js/EditDialog.js:272
 msgid "Web"
 msgstr "Уеб"
 
-#: js/ContactGrid.js:112
+#: js/ContactGrid.js:113
 msgid "URL (private)"
 msgstr "URL (личен адрес)"
 
-#: js/ContactGrid.js:113
+#: js/ContactGrid.js:114
 msgid "Note"
 msgstr "Бележки"
 
-#: js/ContactGrid.js:114
+#: js/ContactGrid.js:115
 msgid "Timezone"
 msgstr "Часова зона"
 
-#: js/ContactGrid.js:115
+#: js/ContactGrid.js:116
 msgid "Geo"
-msgstr "Географско местонахождение/Координати"
+msgstr "Географско местонахождение / Координати"
 
-#: js/ContactGrid.js:125
+#: js/ContactGrid.js:126
 msgid "Export"
 msgstr "Ехрорт"
 
-#: js/ContactGrid.js:134
+#: js/ContactGrid.js:135
 #, fuzzy
 msgid "Export as PDF"
 msgstr "Експортирай като pdf"
 
-#: js/ContactGrid.js:141
+#: js/ContactGrid.js:142
 #, fuzzy
 msgid "Export as CSV"
 msgstr "Експортирай като pdf"
 
-#: js/ContactGrid.js:165
+#: js/ContactGrid.js:166
 msgid "call contact"
 msgstr "Отвори контакт"
 
-#: js/ContactGrid.js:203
+#: js/ContactGrid.js:204
 msgid "Work"
 msgstr "Работа"
 
-#: js/ContactGrid.js:212
+#: js/ContactGrid.js:213
 #, fuzzy
 msgid "Home"
 msgstr "URL  (приват)"
 
-#: js/ContactGrid.js:221
+#: js/ContactGrid.js:222
 msgid "Cell"
 msgstr "Мобилен"
 
-#: js/ContactGrid.js:230
+#: js/ContactGrid.js:231
 msgid "Cell private"
 msgstr "Мобилен (частен)"
 
-#: js/ContactGrid.js:312
+#: js/ContactGrid.js:313
 msgid "Select contact"
 msgstr "Избери контакт"
 
-#: js/ContactGrid.js:384 js/ContactGrid.js:414 js/EditDialog.js:259
+#: js/ContactGrid.js:385 js/ContactGrid.js:415 js/EditDialog.js:259
 msgid "E-Mail"
 msgstr "Имейл"
 
@@ -459,40 +454,40 @@ msgstr "Господин"
 msgid "Ms"
 msgstr "Госпожа"
 
-#~ msgid "Are you Sure?"
-#~ msgstr "Сигурни ли сте?"
+msgid "Are you Sure?"
+msgstr "Сигурни ли сте?"
 
-#~ msgid "Do you really want to delete the selected contact?"
-#~ msgid_plural "Do you really want to delete the selected contacts?"
-#~ msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
-#~ msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
+msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
 
-#~ msgid "add contact"
-#~ msgstr "Прибави контакт"
+msgid "add contact"
+msgstr "Прибави контакт"
 
-#~ msgid "edit contact"
-#~ msgstr "Промени контакт"
+msgid "edit contact"
+msgstr "Промени контакт"
 
-#~ msgid "delete contact"
-#~ msgid_plural "delete contacts"
-#~ msgstr[0] "Изтрий контакт"
-#~ msgstr[1] "Изтрий контакти"
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "Изтрий контакт"
+msgstr[1] "Изтрий контакти"
 
-#~ msgid "Displaying contacts {0} - {1} of {2}"
-#~ msgstr "Контакти {0} - {1} от {2}"
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Контакти {0} - {1} от {2}"
 
-#~ msgid "No contacts to display"
-#~ msgstr "Няма намерени контакти"
+msgid "No contacts to display"
+msgstr "Няма намерени контакти"
 
-#~ msgid "Tags"
-#~ msgstr "Тагове"
+msgid "Tags"
+msgstr "Тагове"
 
 #, fuzzy
-#~ msgid "Some error occured while trying to delete the conctact."
-#~ msgstr "Настъпила е грешка при опит за изтриване но контакта."
+msgid "Some error occured while trying to delete the conctact."
+msgstr "Настъпила е грешка при опит за изтриване но контакта."
 
-#~ msgid "Saved in"
-#~ msgstr "Запаметен в"
+msgid "Saved in"
+msgstr "Запаметен в"
 
-#~ msgid "Map"
-#~ msgstr "Карта"
+msgid "Map"
+msgstr "Карта"

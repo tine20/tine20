@@ -298,7 +298,7 @@ msgstr ""
 "Инсталляция Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
 "local на компьютере."
 
-#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:495
+#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:505
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
@@ -616,7 +616,15 @@ msgid ""
 "or the {1} you search in."
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:493
+#: js/widgets/app/GridPanel.js:490
+msgid "Not Allowed"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:491
+msgid "You are not allowed to delete all pages at once"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:503
 #, fuzzy
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
@@ -624,18 +632,18 @@ msgstr[0] "Вы уверены что хотите удалить"
 msgstr[1] "Вы уверены что хотите удалить"
 msgstr[2] "Вы уверены что хотите удалить"
 
-#: js/widgets/app/GridPanel.js:498 js/widgets/EditDialog.js:392
+#: js/widgets/app/GridPanel.js:508 js/widgets/EditDialog.js:392
 #, fuzzy
 msgid "Deleting {0}"
 msgstr "Тэг удаляется"
 
-#: js/widgets/app/GridPanel.js:510 js/widgets/EditDialog.js:366
+#: js/widgets/app/GridPanel.js:520 js/widgets/EditDialog.js:366
 #: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Неудалось"
 
-#: js/widgets/app/GridPanel.js:510 js/widgets/EditDialog.js:402
+#: js/widgets/app/GridPanel.js:520 js/widgets/EditDialog.js:402
 #, fuzzy
 msgid "Could not delete {0}."
 msgstr "Не смог удалить тэг(и)."

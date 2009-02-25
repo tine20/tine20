@@ -27,7 +27,7 @@ msgstr "přidat, editovat a smazat leady"
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:231 js/Crm.js:1046
+#: Controller/Lead.php:231 js/Crm.js:1044
 msgid "Type"
 msgstr "Typ"
 
@@ -47,11 +47,11 @@ msgstr "Plánovaný konec"
 msgid "End"
 msgstr "Konec"
 
-#: Controller/Lead.php:236 Export/Pdf.php:86 js/Crm.js:309 js/Crm.js:357
+#: Controller/Lead.php:236 Export/Pdf.php:86 js/Crm.js:299 js/Crm.js:347
 msgid "Turnover"
 msgstr "Obrat"
 
-#: Controller/Lead.php:237 Export/Pdf.php:89 js/Crm.js:308 js/Crm.js:356
+#: Controller/Lead.php:237 Export/Pdf.php:89 js/Crm.js:298 js/Crm.js:346
 #: js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr "Pravděpodobnost"
@@ -92,7 +92,7 @@ msgstr "osobní leady uživatele %s"
 msgid "Lead Data"
 msgstr "Data leadu"
 
-#: Export/Pdf.php:77 js/Crm.js:355 js/LeadEditDialog.js:41 js/LeadState.js:220
+#: Export/Pdf.php:77 js/Crm.js:345 js/LeadEditDialog.js:41 js/LeadState.js:220
 msgid "Leadstate"
 msgstr "Stav leadu"
 
@@ -108,11 +108,11 @@ msgstr "Zdroj leadu"
 msgid "End Scheduled"
 msgstr "Plánovaný konec"
 
-#: Export/Pdf.php:176 js/Crm.js:1077
+#: Export/Pdf.php:176 js/Crm.js:1075
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: Export/Pdf.php:203 js/Crm.js:1024
+#: Export/Pdf.php:203 js/Crm.js:1022
 msgid "Address"
 msgstr "Adresa"
 
@@ -124,19 +124,19 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "Email"
 
-#: Export/Pdf.php:224 js/Crm.js:1211
+#: Export/Pdf.php:224 js/Crm.js:1209
 msgid "Tasks"
 msgstr "Úkoly"
 
-#: Export/Pdf.php:243 js/Crm.js:1135
+#: Export/Pdf.php:243 js/Crm.js:1133
 msgid "Due Date"
 msgstr "Termín dokončení"
 
-#: Export/Pdf.php:248 js/Crm.js:1149
+#: Export/Pdf.php:248 js/Crm.js:1147
 msgid "Priority"
 msgstr "Priorita"
 
-#: Export/Pdf.php:262 js/Crm.js:620 js/Crm.js:1351
+#: Export/Pdf.php:262 js/Crm.js:618 js/Crm.js:1349
 msgid "Products"
 msgstr "Produkty"
 
@@ -156,280 +156,280 @@ msgstr "vysoká"
 msgid "urgent"
 msgstr "urgentní"
 
-#: js/Crm.js:155
+#: js/Crm.js:145
 msgid "Are you sure you want to delete this lead?"
 msgstr "Určitě chcete smazat tento lead?"
 
-#: js/Crm.js:171
+#: js/Crm.js:161
 msgid "Deleting lead"
 msgstr "Mažu lead"
 
-#: js/Crm.js:176
+#: js/Crm.js:166
 msgid "Some error occured while trying to delete the lead."
 msgstr "Při pokusu o smazání tohoto leadu došlo k chybě."
 
-#: js/Crm.js:261
+#: js/Crm.js:251
 msgid "Show details"
 msgstr "Zobrazit detaily"
 
-#: js/Crm.js:269
+#: js/Crm.js:259
 msgid "Show closed leads"
 msgstr "Zobrazit uzavřené leady"
 
-#: js/Crm.js:305
+#: js/Crm.js:295
 msgid "Lead"
 msgstr "Lead"
 
-#: js/Crm.js:306 js/Crm.js:352
+#: js/Crm.js:296 js/Crm.js:342
 msgid "Lead name"
 msgstr "Jméno leadu"
 
-#: js/Crm.js:324
+#: js/Crm.js:314
 msgid "Displaying leads {0} - {1} of {2}"
 msgstr "Zobrazuji leady {0} - {1} z {2}"
 
-#: js/Crm.js:325 js/Crm.js:389
+#: js/Crm.js:315 js/Crm.js:379
 msgid "No leads found."
 msgstr "Žádné leady nebyly nalezeny."
 
-#: js/Crm.js:351
+#: js/Crm.js:341
 msgid "Lead id"
 msgstr "ID Leadu"
 
-#: js/Crm.js:353 js/Crm.js:1654 js/LeadEditDialog.js:333
+#: js/Crm.js:343 js/Crm.js:1652 js/LeadEditDialog.js:333
 #: js/LeadEditDialog.js:376
 msgid "Partner"
 msgstr "Partner"
 
-#: js/Crm.js:354 js/Crm.js:1634 js/LeadEditDialog.js:332
+#: js/Crm.js:344 js/Crm.js:1632 js/LeadEditDialog.js:332
 #: js/LeadEditDialog.js:372
 msgid "Customer"
 msgstr "Zákazník"
 
-#: js/Crm.js:454
+#: js/Crm.js:444
 msgid "Add lead"
 msgstr "Přidat lead"
 
-#: js/Crm.js:455
+#: js/Crm.js:445
 msgid "Add new lead"
 msgstr "Přidat nový lead"
 
-#: js/Crm.js:470
+#: js/Crm.js:460
 msgid "Edit lead"
 msgstr "Editovat lead"
 
-#: js/Crm.js:471
+#: js/Crm.js:461
 msgid "Edit selected lead"
 msgstr "Editovat vybraný lead"
 
-#: js/Crm.js:484
+#: js/Crm.js:474
 msgid "Delete lead"
 msgid_plural "Delete leads"
 msgstr[0] "Smazat lead"
 msgstr[1] "Smazat leady"
 msgstr[2] "Smazat leady"
 
-#: js/Crm.js:485
+#: js/Crm.js:475
 msgid "Delete selected leads"
 msgstr "Smazat vybrané leady"
 
-#: js/Crm.js:495 js/Crm.js:1741 js/Crm.js:1742
+#: js/Crm.js:485 js/Crm.js:1739 js/Crm.js:1740
 msgid "Export as PDF"
 msgstr "Exportovat do PDF"
 
-#: js/Crm.js:496
+#: js/Crm.js:486
 msgid "Export selected lead as PDF"
 msgstr "Exportovat vybrané leady do PDF"
 
-#: js/Crm.js:505 js/Crm.js:1686 js/Crm.js:1705
+#: js/Crm.js:495 js/Crm.js:1684 js/Crm.js:1703
 msgid "Add task"
 msgstr "Přidat úkol"
 
-#: js/Crm.js:506
+#: js/Crm.js:496
 msgid "Add task for selected lead"
 msgstr "Přiat úkol pro vybraný lead"
 
-#: js/Crm.js:617
+#: js/Crm.js:615
 msgid "Lead states"
 msgstr "Status leadů"
 
-#: js/Crm.js:618
+#: js/Crm.js:616
 msgid "Lead sources"
 msgstr "Zroje leadů"
 
-#: js/Crm.js:619
+#: js/Crm.js:617
 msgid "Lead types"
 msgstr "Typy leadů"
 
-#: js/Crm.js:679 js/Crm.js:1038
+#: js/Crm.js:677 js/Crm.js:1036
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Crm.js:680 js/Crm.js:1039
+#: js/Crm.js:678 js/Crm.js:1037
 msgid "Cellphone"
 msgstr "Mobilní telefon"
 
-#: js/Crm.js:850
+#: js/Crm.js:848
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
-#: js/Crm.js:850
+#: js/Crm.js:848
 msgid "Saving lead"
 msgstr "Ukládám lead"
 
-#: js/Crm.js:874
+#: js/Crm.js:872
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/Crm.js:874
+#: js/Crm.js:872
 msgid "Could not save lead."
 msgstr "Nepodařilo se uložit lead."
 
-#: js/Crm.js:878
+#: js/Crm.js:876
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím vyznačené chyby."
 
-#: js/Crm.js:1015
+#: js/Crm.js:1013
 msgid "Name"
 msgstr "Jméno"
 
-#: js/Crm.js:1035
+#: js/Crm.js:1033
 msgid "Contactdata"
 msgstr "Kontaktní údaje"
 
-#: js/Crm.js:1091
+#: js/Crm.js:1089
 msgid "Search for Contacts to add ..."
 msgstr "Hledat kontakty pro přidání"
 
-#: js/Crm.js:1123
+#: js/Crm.js:1121
 msgid "Summary"
 msgstr "Přehled"
 
-#: js/Crm.js:1131
+#: js/Crm.js:1129
 msgid "Add a task..."
 msgstr "Přidat úkol..."
 
-#: js/Crm.js:1164
+#: js/Crm.js:1162
 msgid "Percent"
 msgstr "Procent"
 
-#: js/Crm.js:1178
+#: js/Crm.js:1176
 msgid "Status"
 msgstr "Status"
 
-#: js/Crm.js:1228
+#: js/Crm.js:1226
 msgid "No Tasks to display"
 msgstr "Žádné úkoly ke zobrazení"
 
-#: js/Crm.js:1280
+#: js/Crm.js:1278
 msgid "Product"
 msgstr "Produkt"
 
-#: js/Crm.js:1289
+#: js/Crm.js:1287
 msgid "Add a product..."
 msgstr "Přidat produkt..."
 
-#: js/Crm.js:1298 js/LeadEditDialog.js:163
+#: js/Crm.js:1296 js/LeadEditDialog.js:163
 msgid "Description"
 msgstr "Popis"
 
-#: js/Crm.js:1311
+#: js/Crm.js:1309
 msgid "Price"
 msgstr "Cena"
 
-#: js/Crm.js:1395
+#: js/Crm.js:1393
 msgid "Change contact type"
 msgstr "Změnit typ kontaktu"
 
-#: js/Crm.js:1624
+#: js/Crm.js:1622
 msgid "Add new contact"
 msgstr "Přidat nový kontakt"
 
-#: js/Crm.js:1625
+#: js/Crm.js:1623
 msgid "Add new customer contact"
 msgstr "Přidat nový kontakt na zákazníka"
 
-#: js/Crm.js:1635
+#: js/Crm.js:1633
 msgid "Change type to Customer"
 msgstr "Změnit typ na Zákazník"
 
-#: js/Crm.js:1644 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
+#: js/Crm.js:1642 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
 msgid "Responsible"
 msgstr "Odpovědná osoba"
 
-#: js/Crm.js:1645
+#: js/Crm.js:1643
 msgid "Change type to Responsible"
 msgstr "Změnit typ na Odpovědná osoba"
 
-#: js/Crm.js:1655
+#: js/Crm.js:1653
 msgid "Change type to Partner"
 msgstr "Změnit typ na Partner"
 
-#: js/Crm.js:1663
+#: js/Crm.js:1661
 msgid "Edit contact"
 msgstr "Editovat kontakt"
 
-#: js/Crm.js:1664
+#: js/Crm.js:1662
 msgid "Edit selected contact"
 msgstr "Editovat vybraný kontakt"
 
-#: js/Crm.js:1673
+#: js/Crm.js:1671
 msgid "Unlink contact"
 msgstr "Zrušit odkaz na kontakt"
 
-#: js/Crm.js:1674
+#: js/Crm.js:1672
 msgid "Unlink selected contacts"
 msgstr "Zrušit odkazy na vybrané kontakty"
 
-#: js/Crm.js:1687
+#: js/Crm.js:1685
 msgid "Add new task"
 msgstr "Přidat nový úkol"
 
-#: js/Crm.js:1695
+#: js/Crm.js:1693
 msgid "Edit task"
 msgstr "Editovat úkol"
 
-#: js/Crm.js:1696
+#: js/Crm.js:1694
 msgid "Edit selected task"
 msgstr "Editovat vybraný úkol"
 
-#: js/Crm.js:1706
+#: js/Crm.js:1704
 msgid "Add existing task to lead"
 msgstr "Přidat k leadu existující úkol"
 
-#: js/Crm.js:1715
+#: js/Crm.js:1713
 msgid "Remove tasks"
 msgstr "Odstranit úkoly"
 
-#: js/Crm.js:1716
+#: js/Crm.js:1714
 msgid "Remove selected tasks"
 msgstr "Odstranit vybrané úkoly"
 
-#: js/Crm.js:1728
+#: js/Crm.js:1726
 msgid "Remove products"
 msgstr "Odstranit produkty"
 
-#: js/Crm.js:1729
+#: js/Crm.js:1727
 msgid "Remove selected products"
 msgstr "Odstranit vybrané produkty"
 
-#: js/Crm.js:1770 js/Crm.js:1771
+#: js/Crm.js:1768 js/Crm.js:1769
 msgid "Leads"
 msgstr "Leady"
 
-#: js/Crm.js:1817
+#: js/Crm.js:1815
 msgid "Loading Lead..."
 msgstr "Načítám lead..."
 
-#: js/Crm.js:1817
+#: js/Crm.js:1815
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
-#: js/Crm.js:1848
+#: js/Crm.js:1846
 msgid "Add New Lead"
 msgstr "Přidat nový lead"
 
-#: js/Crm.js:1850
+#: js/Crm.js:1848
 msgid "Edit Lead \"{0}\""
 msgstr "Editovat lead \"{0}\""
 

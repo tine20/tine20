@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-16 06:23+0100\n"
+"PO-Revision-Date: 2009-02-25 10:14+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -110,7 +110,7 @@ msgstr "Свързан"
 
 #: js/Phone.js:625
 msgid "Disconnected"
-msgstr "Несвързан"
+msgstr "Несвързан (прекъсната връзка)"
 
 #: js/Phone.js:626
 msgid "Duration"
@@ -124,8 +124,8 @@ msgstr "Позвъняване"
 msgid "Call ID"
 msgstr "Идентификатор (ID) на обаждането"
 
-#~ msgid "Incoming"
-#~ msgstr "Входящ"
+msgid "Incoming"
+msgstr "Входящ"
 
-#~ msgid "Outgoing"
-#~ msgstr "Изходящ"
+msgid "Outgoing"
+msgstr "Изходящ"

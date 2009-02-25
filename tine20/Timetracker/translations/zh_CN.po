@@ -33,11 +33,8 @@ msgstr "合计"
 msgid "Not billable"
 msgstr "不记帐"
 
-#: Export/Ods.php:377
-#: Export/Ods.php:446
-#: js/TimesheetEditDialog.js:179
-#: js/TimesheetGridPanel.js:48
-#: js/TimesheetGridPanel.js:188
+#: Export/Ods.php:377 Export/Ods.php:446 js/TimesheetEditDialog.js:183
+#: js/TimesheetGridPanel.js:48 js/TimesheetGridPanel.js:188
 #: js/TimesheetGridPanel.js:254
 msgid "Billable"
 msgstr "记帐"
@@ -46,19 +43,14 @@ msgstr "记帐"
 msgid "Total"
 msgstr "所有"
 
-#: Export/Ods.php:410
-#: js/TimesheetEditDialog.js:141
-#: js/TimesheetGridPanel.js:186
-#: js/TimesheetGridPanel.js:208
+#: Export/Ods.php:410 js/TimesheetEditDialog.js:145
+#: js/TimesheetGridPanel.js:186 js/TimesheetGridPanel.js:208
 msgid "Date"
 msgstr "日期"
 
-#: Export/Ods.php:415
-#: js/TimeaccountEditDialog.js:146
-#: js/TimeaccountGridPanel.js:52
-#: js/TimesheetEditDialog.js:163
-#: js/TimesheetGridPanel.js:187
-#: js/TimesheetGridPanel.js:244
+#: Export/Ods.php:415 js/TimeaccountEditDialog.js:146
+#: js/TimeaccountGridPanel.js:52 js/TimesheetEditDialog.js:167
+#: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
 msgid "Description"
 msgstr "描述"
 
@@ -74,16 +66,13 @@ msgstr "时间帐户"
 msgid "Staff Member"
 msgstr "员工成员"
 
-#: Export/Ods.php:439
-#: js/TimesheetEditDialog.js:136
+#: Export/Ods.php:439 js/TimesheetEditDialog.js:140
 #: js/TimesheetGridPanel.js:283
 msgid "Duration"
 msgstr "期间"
 
-#: Export/Ods.php:451
-#: js/TimesheetEditDialog.js:186
-#: js/TimesheetGridPanel.js:53
-#: js/TimesheetGridPanel.js:189
+#: Export/Ods.php:451 js/TimesheetEditDialog.js:190
+#: js/TimesheetGridPanel.js:53 js/TimesheetGridPanel.js:189
 #: js/TimesheetGridPanel.js:262
 msgid "Cleared"
 msgstr "已清除"
@@ -92,14 +81,11 @@ msgstr "已清除"
 msgid "{0}"
 msgstr "{0}"
 
-#: js/DurationSpinner.js:56
-#: js/DurationSpinner.js:66
+#: js/DurationSpinner.js:56 js/DurationSpinner.js:66
 msgid "Not a valid time"
 msgstr "不是有效时间"
 
-#: js/Models.js:45
-#: js/TimesheetEditDialog.js:109
-#: js/TimesheetGridPanel.js:180
+#: js/Models.js:45 js/TimesheetEditDialog.js:113 js/TimesheetGridPanel.js:180
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "时间表"
@@ -109,14 +95,10 @@ msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] "时间表列表"
 
-#: js/Models.js:105
-#: js/TimeaccountEditDialog.js:68
-#: js/TimeaccountGridPanel.js:51
-#: js/TimeaccountSelect.js:166
-#: js/TimesheetEditDialog.js:126
-#: js/TimesheetGridPanel.js:182
-#: js/TimesheetGridPanel.js:183
-#: js/TimesheetGridPanel.js:223
+#: js/Models.js:105 js/TimeaccountEditDialog.js:68
+#: js/TimeaccountGridPanel.js:51 js/TimeaccountSelect.js:166
+#: js/TimesheetEditDialog.js:130 js/TimesheetGridPanel.js:182
+#: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:223
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "时间帐户"
@@ -126,14 +108,12 @@ msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "时间帐户列表"
 
-#: js/TimeaccountEditDialog.js:84
-#: js/TimeaccountGridPanel.js:69
+#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:69
 #: js/TimesheetGridPanel.js:182
 msgid "Number"
 msgstr "号码"
 
-#: js/TimeaccountEditDialog.js:89
-#: js/TimeaccountGridPanel.js:75
+#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:75
 #: js/TimesheetGridPanel.js:183
 msgid "Title"
 msgstr "头衔"
@@ -146,8 +126,7 @@ msgstr "单位"
 msgid "Unit Price"
 msgstr "单价"
 
-#: js/TimeaccountEditDialog.js:104
-#: js/TimeaccountGridPanel.js:81
+#: js/TimeaccountEditDialog.js:104 js/TimeaccountGridPanel.js:81
 msgid "Budget"
 msgstr "预算"
 
@@ -159,8 +138,7 @@ msgstr "记帐的时间表"
 msgid "Status"
 msgstr "状态"
 
-#: js/TimeaccountEditDialog.js:118
-#: js/TimeaccountSelect.js:79
+#: js/TimeaccountEditDialog.js:118 js/TimeaccountSelect.js:79
 msgid "closed"
 msgstr "已结清"
 
@@ -172,20 +150,17 @@ msgstr "打开"
 msgid "Billed"
 msgstr "已记帐"
 
-#: js/TimeaccountEditDialog.js:128
-#: js/TimeaccountSelect.js:235
+#: js/TimeaccountEditDialog.js:128 js/TimeaccountSelect.js:235
 #: Setup/setup.xml:71
 msgid "not yet billed"
 msgstr "还没记帐"
 
-#: js/TimeaccountEditDialog.js:129
-#: js/TimeaccountSelect.js:236
+#: js/TimeaccountEditDialog.js:129 js/TimeaccountSelect.js:236
 #: Setup/setup.xml:73
 msgid "to bill"
 msgstr "记帐"
 
-#: js/TimeaccountEditDialog.js:130
-#: js/TimeaccountSelect.js:237
+#: js/TimeaccountEditDialog.js:130 js/TimeaccountSelect.js:237
 #: Setup/setup.xml:75
 msgid "billed"
 msgstr "已记帐"
@@ -230,42 +205,40 @@ msgstr "关闭展示"
 msgid "Time Account - Status"
 msgstr "时间帐户－状态"
 
-#: js/TimesheetEditDialog.js:81
-#: js/TimesheetEditDialog.js:82
+#: js/TimesheetEditDialog.js:85 js/TimesheetEditDialog.js:86
 msgid "Billed in ..."
 msgstr "记帐于"
 
-#: js/TimesheetEditDialog.js:127
+#: js/TimesheetEditDialog.js:131
 msgid "Select Time Account..."
 msgstr "选择时间帐户"
 
-#: js/TimesheetEditDialog.js:128
+#: js/TimesheetEditDialog.js:132
 msgid "Searching..."
 msgstr "搜索 ..."
 
-#: js/TimesheetEditDialog.js:146
+#: js/TimesheetEditDialog.js:150
 msgid "Start"
 msgstr "开始"
 
-#: js/TimesheetEditDialog.js:147
+#: js/TimesheetEditDialog.js:151
 msgid "not set"
 msgstr "没有设置"
 
-#: js/TimesheetEditDialog.js:164
+#: js/TimesheetEditDialog.js:168
 msgid "Enter description..."
 msgstr "输入描述 ..."
 
-#: js/TimesheetEditDialog.js:173
-#: js/TimesheetGridPanel.js:185
+#: js/TimesheetEditDialog.js:177 js/TimesheetGridPanel.js:185
 #: js/TimesheetGridPanel.js:276
 msgid "Account"
 msgstr "帐户"
 
-#: js/TimesheetEditDialog.js:196
+#: js/TimesheetEditDialog.js:200
 msgid "not cleared yet..."
 msgstr "还没有清除"
 
-#: js/TimesheetEditDialog.js:197
+#: js/TimesheetEditDialog.js:201
 msgid "Cleared In"
 msgstr "已清除于"
 
@@ -277,8 +250,7 @@ msgstr "整个更新"
 msgid "Update field:"
 msgstr "更新字段："
 
-#: js/TimesheetGridPanel.js:58
-#: js/TimesheetGridPanel.js:270
+#: js/TimesheetGridPanel.js:58 js/TimesheetGridPanel.js:270
 msgid "Cleared in"
 msgstr "已清除于"
 
@@ -368,6 +340,6 @@ msgstr "时间跟踪器"
 
 #~ msgid "Times could be added"
 #~ msgstr "可能要加时间"
+
 #~ msgid "Implementation"
 #~ msgstr "实现"
-

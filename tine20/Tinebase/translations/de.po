@@ -289,7 +289,7 @@ msgstr ""
 "Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
 "indem alle benötigten Dateien local auf dem Computer gespeichert werden."
 
-#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:495
+#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:505
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
@@ -598,23 +598,31 @@ msgstr ""
 "Keine {0} gefunden. Versuchen Sie die Suchkriterien, Anzeigeoptionen oder "
 "{1} in denen Sie suchen zu ändern."
 
-#: js/widgets/app/GridPanel.js:493
+#: js/widgets/app/GridPanel.js:490
+msgid "Not Allowed"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:491
+msgid "You are not allowed to delete all pages at once"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:503
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Möchten sie den ausgewählten Eintrag wirklich löschen?"
 msgstr[1] "Möchten Sie die ausgewählten Einträge wirklich löschen?"
 
-#: js/widgets/app/GridPanel.js:498 js/widgets/EditDialog.js:392
+#: js/widgets/app/GridPanel.js:508 js/widgets/EditDialog.js:392
 msgid "Deleting {0}"
 msgstr "Lösche {0}"
 
-#: js/widgets/app/GridPanel.js:510 js/widgets/EditDialog.js:366
+#: js/widgets/app/GridPanel.js:520 js/widgets/EditDialog.js:366
 #: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/widgets/app/GridPanel.js:510 js/widgets/EditDialog.js:402
+#: js/widgets/app/GridPanel.js:520 js/widgets/EditDialog.js:402
 msgid "Could not delete {0}."
 msgstr "Konnte {0} nicht löschen."
 
