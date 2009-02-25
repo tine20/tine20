@@ -794,7 +794,7 @@ msgstr "výstup pro náhlavní soupravu"
 #: js/MyPhones.js:769 js/Snom/PhoneEditDialog.js:559
 #: js/Snom/SettingEditDialog.js:246 js/Snom/SettingGridPanel.js:118
 msgid "message_led_other"
-msgstr "Indikace zmeškaných hovorů a stavů hovoru diodou hlasové pošty"
+msgstr "indikace zmeškaných hovorů a stavů hovoru diodou hlasové pošty"
 
 #: js/MyPhones.js:797 js/Snom/PhoneEditDialog.js:568
 #: js/Snom/SettingEditDialog.js:259 js/Snom/SettingGridPanel.js:124

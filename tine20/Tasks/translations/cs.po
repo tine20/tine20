@@ -64,12 +64,11 @@ msgid "Completed"
 msgstr "Dokončený"
 
 #: js/GridPanel.js:31
-#, fuzzy
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Opravdu chcete smazat vybraný úkol"
-msgstr[1] "Opravdu chcete smazat vybrané úkoly"
-msgstr[2] "Opravdu chcete smazat vybrané úkoly"
+msgstr[0] "Opravdu chcete smazat vybraný úkol?"
+msgstr[1] "Opravdu chcete smazat vybrané úkoly?"
+msgstr[2] "Opravdu chcete smazat vybrané úkoly?"
 
 #: js/GridPanel.js:57 js/GridPanel.js:127
 msgid "Due Date"
@@ -112,11 +111,11 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "seznam úkolů"
 msgstr[1] "seznamy úkolů"
-msgstr[2] "seznamy úkolů"
+msgstr[2] "seznamů úkolů"
 
 #: js/Tasks.js:78
 msgid "to do lists"
-msgstr "Seznamy úkolů"
+msgstr "seznamy úkolů"
 
 #: Setup/setup.xml:390
 msgid "NEEDS-ACTION"

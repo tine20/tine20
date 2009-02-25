@@ -30,9 +30,7 @@ msgstr "spravovat účty"
 
 #: Acl/Rights.php:167
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"přidat a editovat uživatele a skupiny, přidat členy do skupin, měnit hesla "
-"uživatelů"
+msgstr "přidat a editovat uživatele a skupiny, přidat členy do skupin, měnit hesla uživatelů"
 
 #: Acl/Rights.php:170
 msgid "manage applications"
@@ -47,11 +45,8 @@ msgid "manage roles"
 msgstr "spravovat role"
 
 #: Acl/Rights.php:175
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"přidat a editovat role, přidat nové členy do rolí, přidat rolím aplikační "
-"práva"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "přidat a editovat role, přidat nové členy do rolí, přidat rolím aplikační práva"
 
 #: Acl/Rights.php:178
 msgid "manage shared tags"
@@ -121,7 +116,10 @@ msgstr "Role"
 msgid "Admin"
 msgstr "Administrátor"
 
-#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Admin.js:251
+#: js/Groups.js:47
+#: js/Roles.js:48
+#: js/Tags.js:41
 #: js/Users.js:166
 msgid "Confirm"
 msgstr "Potvrdit"
@@ -138,8 +136,12 @@ msgstr "smazat záznam"
 msgid "select all"
 msgstr "vybrat vše"
 
-#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
-#: js/Tags.js:103 js/Users.js:204
+#: js/Admin.js:372
+#: js/Admin.js:770
+#: js/Groups.js:111
+#: js/Roles.js:112
+#: js/Tags.js:103
+#: js/Users.js:204
 msgid "enter searchfilter"
 msgstr "zadejte hledaný výraz"
 
@@ -151,8 +153,12 @@ msgstr "Zobrazit od:"
 msgid "to:"
 msgstr "do:"
 
-#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
-#: js/Tags.js:123 js/Users.js:220
+#: js/Admin.js:411
+#: js/Admin.js:787
+#: js/Groups.js:131
+#: js/Roles.js:132
+#: js/Tags.js:123
+#: js/Users.js:220
 msgid "Search:"
 msgstr "Hledat:"
 
@@ -188,11 +194,15 @@ msgstr "Žádné záznamy přístupového logu ke zobrazení"
 msgid "Session ID"
 msgstr "ID relace"
 
-#: js/Admin.js:527 js/Users.js:555
+#: js/Admin.js:527
+#: js/Users.js:555
 msgid "Login Name"
 msgstr "Přihlašovací jméno"
 
-#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
+#: js/Admin.js:528
+#: js/Groups.js:176
+#: js/Groups.js:488
+#: js/Roles.js:177
 #: js/Tags.js:165
 msgid "Name"
 msgstr "Jméno"
@@ -273,13 +283,23 @@ msgstr "Opravdu chcete smazat vybrané skupiny?"
 msgid "Deleting group(s)..."
 msgstr "Mažu skupinu(y)..."
 
-#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
-#: js/Users.js:468 js/Users.js:479 js/Users.js:504 js/Users.js:521
+#: js/Groups.js:69
+#: js/Groups.js:378
+#: js/Groups.js:406
+#: js/Roles.js:70
+#: js/Roles.js:439
+#: js/Roles.js:467
+#: js/Tags.js:341
+#: js/Users.js:186
+#: js/Users.js:468
+#: js/Users.js:479
+#: js/Users.js:504
+#: js/Users.js:521
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/Groups.js:69 js/Groups.js:406
+#: js/Groups.js:69
+#: js/Groups.js:406
 msgid "Some error occurred while trying to delete the group."
 msgstr "Během mazání skupiny došlo k chybě."
 
@@ -299,24 +319,35 @@ msgstr "smazat skupinu"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Zobrazuji skupiny {0} - {1} z {2}"
 
-#: js/Groups.js:170 js/Groups.js:221
+#: js/Groups.js:170
+#: js/Groups.js:221
 msgid "No groups to display"
 msgstr "Žádné skupiny ke zobrazení"
 
-#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
+#: js/Groups.js:175
+#: js/Roles.js:176
+#: js/Users.js:270
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
-#: js/Tags.js:166 js/Tags.js:547
+#: js/Groups.js:177
+#: js/Groups.js:558
+#: js/Roles.js:178
+#: js/Roles.js:653
+#: js/Tags.js:166
+#: js/Tags.js:547
 msgid "Description"
 msgstr "Popis"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+#: js/Groups.js:343
+#: js/Roles.js:399
+#: js/Tags.js:297
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+#: js/Groups.js:343
+#: js/Roles.js:399
+#: js/Tags.js:297
 msgid "Updating Memberships"
 msgstr "Aktualizuji členství"
 
@@ -324,11 +355,17 @@ msgstr "Aktualizuji členství"
 msgid "Could not save group."
 msgstr "Nepodařilo se uložit skupinu."
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
+#: js/Groups.js:385
+#: js/Roles.js:446
+#: js/Tags.js:346
+#: js/Users.js:527
 msgid "Errors"
 msgstr "Chyby"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
+#: js/Groups.js:385
+#: js/Roles.js:446
+#: js/Tags.js:346
+#: js/Users.js:527
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím vyznačené chyby."
 
@@ -344,7 +381,8 @@ msgstr "Členové skupiny"
 msgid "Group Name"
 msgstr "Název skupiny"
 
-#: js/Groups.js:594 js/Users.js:361
+#: js/Groups.js:594
+#: js/Users.js:361
 msgid "add account"
 msgstr "přidat účet"
 
@@ -368,7 +406,8 @@ msgstr "Určitě chcete smazat vybrané role?"
 msgid "Deleting role(s)..."
 msgstr "Mažu roli(e)..."
 
-#: js/Roles.js:70 js/Roles.js:467
+#: js/Roles.js:70
+#: js/Roles.js:467
 msgid "Some error occurred while trying to delete the role."
 msgstr "Během mazání role došlo k chybě."
 
@@ -388,7 +427,8 @@ msgstr "smazat roli"
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Zobrazuji role  {0} - {1} z {2}"
 
-#: js/Roles.js:171 js/Roles.js:222
+#: js/Roles.js:171
+#: js/Roles.js:222
 msgid "No roles to display"
 msgstr "Žádné role ke zobrazení"
 
@@ -408,7 +448,8 @@ msgstr "Členové role"
 msgid "Members"
 msgstr "Členové"
 
-#: js/Roles.js:616 js/Tags.js:563
+#: js/Roles.js:616
+#: js/Tags.js:563
 msgid "Rights"
 msgstr "Práva"
 
@@ -420,7 +461,9 @@ msgstr "Název role"
 msgid "Loading Role..."
 msgstr "Načítám roli..."
 
-#: js/Roles.js:686 js/Tags.js:584 js/Users.js:484
+#: js/Roles.js:686
+#: js/Tags.js:584
+#: js/Users.js:484
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
@@ -456,11 +499,13 @@ msgstr "smazat štítek"
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Zobrazuji štítky {0} - {1} of {2}"
 
-#: js/Tags.js:159 js/Tags.js:210
+#: js/Tags.js:159
+#: js/Tags.js:210
 msgid "No tags to display"
 msgstr "Žádné štítky ke zobrazení"
 
-#: js/Tags.js:164 js/Tags.js:489
+#: js/Tags.js:164
+#: js/Tags.js:489
 msgid "Color"
 msgstr "Barva"
 
@@ -536,7 +581,8 @@ msgstr "Zobrazuji účty {0} - {1} z {2}"
 msgid "No accounts to display"
 msgstr "Žádné účty ke zobrazení"
 
-#: js/Users.js:271 js/Users.js:593
+#: js/Users.js:271
+#: js/Users.js:593
 msgid "Status"
 msgstr "Stav"
 
@@ -560,11 +606,13 @@ msgstr "Křestní jméno"
 msgid "Email"
 msgstr "Email"
 
-#: js/Users.js:277 js/Users.js:617
+#: js/Users.js:277
+#: js/Users.js:617
 msgid "Last login at"
 msgstr "Poslední přihlášení v"
 
-#: js/Users.js:278 js/Users.js:624
+#: js/Users.js:278
+#: js/Users.js:624
 msgid "Last login from"
 msgstr "Poslední přihlášení z"
 
@@ -572,7 +620,8 @@ msgstr "Poslední přihlášení z"
 msgid "Password changed"
 msgstr "Heslo změněno"
 
-#: js/Users.js:280 js/Users.js:612
+#: js/Users.js:280
+#: js/Users.js:612
 msgid "Expires"
 msgstr "Vyprší"
 
@@ -604,9 +653,11 @@ msgstr "Mažu účet..."
 msgid "Some error occurred while trying to delete the account."
 msgstr "Během mazání účtu došlo k chybě."
 
-#: js/Users.js:479 js/Users.js:480 js/Users.js:481
+#: js/Users.js:479
+#: js/Users.js:480
+#: js/Users.js:481
 msgid "Passwords do not match!"
-msgstr ""
+msgstr "Hesla se neshodují!"
 
 #: js/Users.js:484
 msgid "Saving User Account"
@@ -628,7 +679,8 @@ msgstr "Příjmení"
 msgid "Password"
 msgstr "Heslo"
 
-#: js/Users.js:563 js/Users.js:569
+#: js/Users.js:563
+#: js/Users.js:569
 msgid "no password set"
 msgstr "heslo nebylo nastaveno"
 
@@ -644,11 +696,13 @@ msgstr "Primární skupina"
 msgid "Emailaddress"
 msgstr "Emailová adresa"
 
-#: js/Users.js:614 js/Users.js:632
+#: js/Users.js:614
+#: js/Users.js:632
 msgid "never"
 msgstr "nikdy"
 
-#: js/Users.js:619 js/Users.js:626
+#: js/Users.js:619
+#: js/Users.js:626
 msgid "never logged in"
 msgstr "nikdy nepřihlášen"
 
@@ -663,3 +717,4 @@ msgstr "Přidat nový uživatelský účet"
 #: js/Users.js:674
 msgid "Edit User Account \"{0}\""
 msgstr "Editovat uživatelský účet \"{0}\""
+

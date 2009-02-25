@@ -286,7 +286,7 @@ msgstr ""
 "Инсталирането на Гиерс (Gears) ще провери актуалното състояние на Tine 2.0 и "
 "ще кочи всички необходими полета  на вашия компютър."
 
-#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:505
+#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:506
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
@@ -596,32 +596,32 @@ msgstr ""
 "Няма {0} намерени. Моля оритайте до промените Вашите критерий на търсене, "
 "опции на показване или {1} в които търсите."
 
-#: js/widgets/app/GridPanel.js:490
+#: js/widgets/app/GridPanel.js:491
 #, fuzzy
 msgid "Not Allowed"
 msgstr "Всички"
 
-#: js/widgets/app/GridPanel.js:491
+#: js/widgets/app/GridPanel.js:492
 msgid "You are not allowed to delete all pages at once"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:503
+#: js/widgets/app/GridPanel.js:504
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Наистина ли желаете да изтриете записа"
 msgstr[1] "Наистина ли желаете да изтриете записите"
 
-#: js/widgets/app/GridPanel.js:508 js/widgets/EditDialog.js:392
+#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:392
 msgid "Deleting {0}"
 msgstr "Изтрива {0}"
 
-#: js/widgets/app/GridPanel.js:520 js/widgets/EditDialog.js:366
+#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:366
 #: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Грешка"
 
-#: js/widgets/app/GridPanel.js:520 js/widgets/EditDialog.js:402
+#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:402
 msgid "Could not delete {0}."
 msgstr "Не може да изтрие {0}."
 

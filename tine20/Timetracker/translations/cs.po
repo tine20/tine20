@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-21 12:35+0100\n"
+"PO-Revision-Date: 2009-02-25 17:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -55,10 +55,9 @@ msgstr "Popis"
 
 #: Export/Ods.php:420
 msgid "Timeaccount Number"
-msgstr ""
+msgstr "Číslo časového fondu"
 
 #: Export/Ods.php:426
-#, fuzzy
 msgid "Timeaccount"
 msgstr "Časový fond"
 
@@ -103,12 +102,11 @@ msgstr[2] "seznamů pracovních výkazů"
 #: js/TimeaccountGridPanel.js:51 js/TimeaccountSelect.js:166
 #: js/TimesheetEditDialog.js:130 js/TimesheetGridPanel.js:182
 #: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:223
-#, fuzzy
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Časový fond"
-msgstr[1] "Časový fond"
-msgstr[2] "Časový fond"
+msgstr[1] "Časové fondy"
+msgstr[2] "Časových fondů"
 
 #: js/Models.js:109
 msgid "timeaccount list"
@@ -157,22 +155,22 @@ msgstr "otevřený"
 
 #: js/TimeaccountEditDialog.js:120
 msgid "Billed"
-msgstr ""
+msgstr "Účtovaný"
 
 #: js/TimeaccountEditDialog.js:128 js/TimeaccountSelect.js:235
 #: Setup/setup.xml:71
 msgid "not yet billed"
-msgstr ""
+msgstr "zatím neúčtovaný"
 
 #: js/TimeaccountEditDialog.js:129 js/TimeaccountSelect.js:236
 #: Setup/setup.xml:73
 msgid "to bill"
-msgstr ""
+msgstr "k účtování"
 
 #: js/TimeaccountEditDialog.js:130 js/TimeaccountSelect.js:237
 #: Setup/setup.xml:75
 msgid "billed"
-msgstr ""
+msgstr "účtovaný"
 
 #: js/TimeaccountEditDialog.js:160
 msgid "Enter description"
@@ -180,7 +178,7 @@ msgstr "Zadejte popis"
 
 #: js/TimeaccountEditDialog.js:176
 msgid "Access"
-msgstr ""
+msgstr "Přístup"
 
 #: js/TimeaccountEditDialog.js:198
 msgid "Book Own"
@@ -212,7 +210,7 @@ msgstr "Zobrazit uzavřené"
 
 #: js/TimeaccountSelect.js:212
 msgid "Time Account - Status"
-msgstr ""
+msgstr "Stav časového fondu"
 
 #: js/TimesheetEditDialog.js:85 js/TimesheetEditDialog.js:86
 msgid "Billed in ..."
@@ -289,15 +287,15 @@ msgstr "Počáteční čas"
 
 #: js/TimesheetGridPanel.js:233
 msgid "Time Account closed"
-msgstr ""
+msgstr "Časový fond uzavřen"
 
 #: js/TimesheetGridPanel.js:304
 msgid "timeframe"
-msgstr ""
+msgstr "časový rámec"
 
 #: js/TimesheetGridPanel.js:328
 msgid "summary"
-msgstr ""
+msgstr "přehled"
 
 #: js/TimesheetGridPanel.js:331
 msgid "Total Timesheets"

@@ -138,7 +138,7 @@ msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "adresář"
 msgstr[1] "adresáře"
-msgstr[2] "adresáře"
+msgstr[2] "adresářů"
 
 #: js/Addressbook.js:146 js/ContactGrid.js:155
 msgid "export as pdf"
@@ -200,14 +200,12 @@ msgstr[1] "Kontakty"
 msgstr[2] "Kontaktů"
 
 #: js/Addressbook.js:422
-#, fuzzy
 msgid "Contacts"
-msgstr "Kontakt"
+msgstr "Kontakty"
 
 #: js/Addressbook.js:426
-#, fuzzy
 msgid "addressbooks"
-msgstr "adresář"
+msgstr "adresáře"
 
 #: js/ContactGrid.js:56 js/ContactGrid.js:84 js/EditDialog.js:106
 #: js/EditDialog.js:165

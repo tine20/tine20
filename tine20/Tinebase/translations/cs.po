@@ -291,7 +291,7 @@ msgstr ""
 "Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech "
 "potřebných souborů na tomto počítači."
 
-#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:505
+#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:506
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
@@ -599,32 +599,32 @@ msgstr ""
 "Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby "
 "zobrazování nebo {1} ve kterém hledáte."
 
-#: js/widgets/app/GridPanel.js:490
-msgid "Not Allowed"
-msgstr ""
-
 #: js/widgets/app/GridPanel.js:491
-msgid "You are not allowed to delete all pages at once"
-msgstr ""
+msgid "Not Allowed"
+msgstr "Není povoleno"
 
-#: js/widgets/app/GridPanel.js:503
+#: js/widgets/app/GridPanel.js:492
+msgid "You are not allowed to delete all pages at once"
+msgstr "Nemáte oprávnění smazat všechny stránky najednou."
+
+#: js/widgets/app/GridPanel.js:504
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Opravdu chcete smazat vybraný záznam"
 msgstr[1] "Opravdu chcete smazat vybrané záznamy"
 msgstr[2] "Opravdu chcete smazat vybrané záznamy"
 
-#: js/widgets/app/GridPanel.js:508 js/widgets/EditDialog.js:392
+#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:392
 msgid "Deleting {0}"
 msgstr "Mažu {0}"
 
-#: js/widgets/app/GridPanel.js:520 js/widgets/EditDialog.js:366
+#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:366
 #: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/app/GridPanel.js:520 js/widgets/EditDialog.js:402
+#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:402
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat {0}."
 
@@ -993,22 +993,20 @@ msgid "loading new language..."
 msgstr "nahrávám nový jazyk..."
 
 #: js/widgets/Priority.js:23
-#, fuzzy
 msgid "low"
-msgstr "Všechny"
+msgstr "nízká"
 
 #: js/widgets/Priority.js:24
-#, fuzzy
 msgid "normal"
-msgstr "Abnormální ukončení"
+msgstr "normální"
 
 #: js/widgets/Priority.js:25
 msgid "high"
-msgstr ""
+msgstr "vysoká"
 
 #: js/widgets/Priority.js:26
 msgid "urgent"
-msgstr ""
+msgstr "urgentní"
 
 #: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
