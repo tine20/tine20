@@ -122,16 +122,6 @@ Tine.Crm.Main = {
      */
     store: null,
     
-    /**
-     * holds paging information
-     */
-    paging: {
-        start: 0,
-        limit: 50,
-        sort: 'lead_name',
-        dir: 'ASC'
-    },
-
 	handlers: {
 		/**
 		 * edit lead
@@ -543,13 +533,22 @@ Tine.Crm.Main = {
                 options.params = {};
             }
             
-            // paging toolbar only works with this properties in the options!
-            options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort;
-            options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir;
-            options.params.start = options.params.start ? options.params.start : this.paging.start;
-            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit;
+            // fix nasty paging tb
+            Ext.applyIf(options.params, {
+                start: 0,
+                limit: 50,
+                sort: 'lead_name',
+                dir: 'ASC'
+            });
             
-            options.params.paging = Ext.util.JSON.encode(options.params);
+            // move paging to own object
+            var paging = {
+                sort:  options.params.sort,
+                dir:   options.params.dir,
+                start: options.params.start,
+                limit: options.params.limit
+            };
+            
             
             var filterToolbar = Ext.getCmp('crmLeadsFilterToolbar');
             var filter = filterToolbar ? filterToolbar.getValue() : [];
@@ -567,6 +566,7 @@ Tine.Crm.Main = {
                 filter.push({field: 'showClosed', operator: 'equals', value: true});
             }
             
+            options.params.paging = Ext.util.JSON.encode(paging);
             options.params.filter = Ext.util.JSON.encode(filter);
         }, this);
         
@@ -591,16 +591,14 @@ Tine.Crm.Main = {
                 this.initComponent();
             }
             Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-            this.store.load({
-                params: this.paging
-            });
+            this.store.load({});
             
             this.showCrmToolbar();
             this.updateMainToolbar();
         } else {
             // note: if node is clicked, it is not selected!
             _node.getOwnerTree().selectPath(_node.getPath());
-        	this.store.load({params: this.paging});
+        	this.store.load({});
         }
         
     },    
