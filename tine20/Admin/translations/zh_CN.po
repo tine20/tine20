@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-11-24 21:56-0800\n"
+"PO-Revision-Date: 2009-02-24 21:44-0800\n"
 "Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -42,8 +42,7 @@ msgid "manage roles"
 msgstr "管理角色"
 
 #: Acl/Rights.php:175
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
 msgstr "添加并编辑角色，给角色添加新成员，给角色添加应用程序权限"
 
 #: Acl/Rights.php:178
@@ -114,7 +113,10 @@ msgstr "角色"
 msgid "Admin"
 msgstr "管理"
 
-#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Admin.js:251
+#: js/Groups.js:47
+#: js/Roles.js:48
+#: js/Tags.js:41
 #: js/Users.js:166
 msgid "Confirm"
 msgstr "确认"
@@ -131,8 +133,12 @@ msgstr "删除条目"
 msgid "select all"
 msgstr "全选"
 
-#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
-#: js/Tags.js:103 js/Users.js:204
+#: js/Admin.js:372
+#: js/Admin.js:770
+#: js/Groups.js:111
+#: js/Roles.js:112
+#: js/Tags.js:103
+#: js/Users.js:204
 msgid "enter searchfilter"
 msgstr "输入搜索过滤器"
 
@@ -144,8 +150,12 @@ msgstr "显示从："
 msgid "to:"
 msgstr "到："
 
-#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
-#: js/Tags.js:123 js/Users.js:220
+#: js/Admin.js:411
+#: js/Admin.js:787
+#: js/Groups.js:131
+#: js/Roles.js:132
+#: js/Tags.js:123
+#: js/Users.js:220
 msgid "Search:"
 msgstr "搜索："
 
@@ -181,11 +191,15 @@ msgstr "没有访问日志条目要显示"
 msgid "Session ID"
 msgstr "会话 ID"
 
-#: js/Admin.js:527 js/Users.js:555
+#: js/Admin.js:527
+#: js/Users.js:555
 msgid "Login Name"
 msgstr "登录名"
 
-#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
+#: js/Admin.js:528
+#: js/Groups.js:176
+#: js/Groups.js:488
+#: js/Roles.js:177
 #: js/Tags.js:165
 msgid "Name"
 msgstr "名字"
@@ -266,13 +280,23 @@ msgstr "真的要删除选中的组？"
 msgid "Deleting group(s)..."
 msgstr "删除组..."
 
-#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
-#: js/Users.js:468 js/Users.js:479 js/Users.js:504 js/Users.js:521
+#: js/Groups.js:69
+#: js/Groups.js:378
+#: js/Groups.js:406
+#: js/Roles.js:70
+#: js/Roles.js:439
+#: js/Roles.js:467
+#: js/Tags.js:341
+#: js/Users.js:186
+#: js/Users.js:468
+#: js/Users.js:479
+#: js/Users.js:504
+#: js/Users.js:521
 msgid "Failed"
 msgstr "失败"
 
-#: js/Groups.js:69 js/Groups.js:406
+#: js/Groups.js:69
+#: js/Groups.js:406
 msgid "Some error occurred while trying to delete the group."
 msgstr "当试图删除组时发生错误"
 
@@ -292,24 +316,35 @@ msgstr "删除组"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "显示组 {0} - {1} of {2}"
 
-#: js/Groups.js:170 js/Groups.js:221
+#: js/Groups.js:170
+#: js/Groups.js:221
 msgid "No groups to display"
 msgstr "没有组要显示"
 
-#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
+#: js/Groups.js:175
+#: js/Roles.js:176
+#: js/Users.js:270
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
-#: js/Tags.js:166 js/Tags.js:547
+#: js/Groups.js:177
+#: js/Groups.js:558
+#: js/Roles.js:178
+#: js/Roles.js:653
+#: js/Tags.js:166
+#: js/Tags.js:547
 msgid "Description"
 msgstr "描述"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+#: js/Groups.js:343
+#: js/Roles.js:399
+#: js/Tags.js:297
 msgid "Please wait"
 msgstr "请稍等"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+#: js/Groups.js:343
+#: js/Roles.js:399
+#: js/Tags.js:297
 msgid "Updating Memberships"
 msgstr "更新会员身份"
 
@@ -317,11 +352,17 @@ msgstr "更新会员身份"
 msgid "Could not save group."
 msgstr "不能保存组"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
+#: js/Groups.js:385
+#: js/Roles.js:446
+#: js/Tags.js:346
+#: js/Users.js:527
 msgid "Errors"
 msgstr "错误"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
+#: js/Groups.js:385
+#: js/Roles.js:446
+#: js/Tags.js:346
+#: js/Users.js:527
 msgid "Please fix the errors noted."
 msgstr "请修复标明的错误"
 
@@ -337,7 +378,8 @@ msgstr "组成员"
 msgid "Group Name"
 msgstr "组名"
 
-#: js/Groups.js:594 js/Users.js:361
+#: js/Groups.js:594
+#: js/Users.js:361
 msgid "add account"
 msgstr "添加账户"
 
@@ -361,7 +403,8 @@ msgstr "真的想删除选中的角色？"
 msgid "Deleting role(s)..."
 msgstr "删除角色 ..."
 
-#: js/Roles.js:70 js/Roles.js:467
+#: js/Roles.js:70
+#: js/Roles.js:467
 msgid "Some error occurred while trying to delete the role."
 msgstr "当试图删除角色是发生错误"
 
@@ -381,7 +424,8 @@ msgstr "删除角色"
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "显示角色{0} - {1} of {2}"
 
-#: js/Roles.js:171 js/Roles.js:222
+#: js/Roles.js:171
+#: js/Roles.js:222
 msgid "No roles to display"
 msgstr "没有角色要显示"
 
@@ -401,7 +445,8 @@ msgstr "角色成员"
 msgid "Members"
 msgstr "成员"
 
-#: js/Roles.js:616 js/Tags.js:563
+#: js/Roles.js:616
+#: js/Tags.js:563
 msgid "Rights"
 msgstr "权限"
 
@@ -413,7 +458,9 @@ msgstr "角色名"
 msgid "Loading Role..."
 msgstr "加载角色"
 
-#: js/Roles.js:686 js/Tags.js:584 js/Users.js:484
+#: js/Roles.js:686
+#: js/Tags.js:584
+#: js/Users.js:484
 msgid "Please Wait"
 msgstr "请稍等"
 
@@ -449,11 +496,13 @@ msgstr "删除标签"
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "显示标签{0} - {1} of {2}"
 
-#: js/Tags.js:159 js/Tags.js:210
+#: js/Tags.js:159
+#: js/Tags.js:210
 msgid "No tags to display"
 msgstr "没有标签要显示"
 
-#: js/Tags.js:164 js/Tags.js:489
+#: js/Tags.js:164
+#: js/Tags.js:489
 msgid "Color"
 msgstr "颜色"
 
@@ -529,7 +578,8 @@ msgstr "显示账户{0} - {1} of {2}"
 msgid "No accounts to display"
 msgstr "没有账户要显示"
 
-#: js/Users.js:271 js/Users.js:593
+#: js/Users.js:271
+#: js/Users.js:593
 msgid "Status"
 msgstr "状态"
 
@@ -553,11 +603,13 @@ msgstr "名"
 msgid "Email"
 msgstr "电子邮件"
 
-#: js/Users.js:277 js/Users.js:617
+#: js/Users.js:277
+#: js/Users.js:617
 msgid "Last login at"
 msgstr "上次登录时间"
 
-#: js/Users.js:278 js/Users.js:624
+#: js/Users.js:278
+#: js/Users.js:624
 msgid "Last login from"
 msgstr "上次登录于"
 
@@ -565,7 +617,8 @@ msgstr "上次登录于"
 msgid "Password changed"
 msgstr "密码已修改"
 
-#: js/Users.js:280 js/Users.js:612
+#: js/Users.js:280
+#: js/Users.js:612
 msgid "Expires"
 msgstr "过期"
 
@@ -597,9 +650,11 @@ msgstr "删除账户 ..."
 msgid "Some error occurred while trying to delete the account."
 msgstr "当试图删除账户时有错误发生"
 
-#: js/Users.js:479 js/Users.js:480 js/Users.js:481
+#: js/Users.js:479
+#: js/Users.js:480
+#: js/Users.js:481
 msgid "Passwords do not match!"
-msgstr ""
+msgstr "密码不匹配！"
 
 #: js/Users.js:484
 msgid "Saving User Account"
@@ -621,7 +676,8 @@ msgstr "姓"
 msgid "Password"
 msgstr "密码"
 
-#: js/Users.js:563 js/Users.js:569
+#: js/Users.js:563
+#: js/Users.js:569
 msgid "no password set"
 msgstr "没有设置密码"
 
@@ -637,11 +693,13 @@ msgstr "基本组"
 msgid "Emailaddress"
 msgstr "电子邮件地址"
 
-#: js/Users.js:614 js/Users.js:632
+#: js/Users.js:614
+#: js/Users.js:632
 msgid "never"
 msgstr "从不"
 
-#: js/Users.js:619 js/Users.js:626
+#: js/Users.js:619
+#: js/Users.js:626
 msgid "never logged in"
 msgstr "从未登录"
 
@@ -656,3 +714,4 @@ msgstr "添加新用户账户"
 #: js/Users.js:674
 msgid "Edit User Account \"{0}\""
 msgstr "编辑用户账户 \"{0}\""
+
