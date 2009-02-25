@@ -15,7 +15,7 @@
  *
  * @package     Tinebase
  */
-class Setup_Frontend_Http
+class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 {
     /**
      * the internal name of the application
@@ -23,7 +23,58 @@ class Setup_Frontend_Http
      * @var string
      */
     protected $_appname = 'Setup';
-
+    
+    /**
+     * Returns all JS files which must be included for Setup
+     *
+     * @return array Array of filenames
+     */
+    public function getJsFilesToInclude()
+    {
+        return array(
+            'Setup/js/onReady.js',
+            'Setup/js/Setup.js'
+        );
+    }
+    
+    
+    /**
+     * renders the tine main screen 
+     */
+    public function mainScreen()
+    {
+        //$this->checkAuth();
+        
+        $view = new Zend_View();
+        $view->setScriptPath('Setup/views');
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
+    
+    
+    /**
+     * returns an array with all css and js files which needs to be included
+     * 
+     * @return array 
+     */
+    public static function getAllIncludeFiles() {
+        // we start with all Tinebase include files
+        $tinebase = new Tinebase_Frontend_Http();
+        $jsFiles  = $tinebase->getJsFilesToInclude();
+        $cssFiles = $tinebase->getCssFilesToInclude();
+        
+        // we only remove the tineinit, as it has the Ext.onReady which we implement 
+        // our own for the setup
+        unset($jsFiles[array_search('Tinebase/js/tineInit.js', $jsFiles)]);
+        
+        // now we fetch our own files
+        $setup = new Setup_Frontend_Http();
+        return array(
+            'js'  => array_merge($jsFiles, $setup->getJsFilesToInclude()),
+            'css' => array_merge($cssFiles, $setup->getCssFilesToInclude())
+        );
+    }
     /**
      * authentication
      *
@@ -42,6 +93,8 @@ class Setup_Frontend_Http
      */
     public function handle()
     {
+        //return $this->mainScreen();
+        
         $updateDone = $this->_update();
         $this->_install($updateDone);
     }
