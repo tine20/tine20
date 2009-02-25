@@ -93,7 +93,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             activeTab: 0,
             border: false,
             items:[{
-                title: this.app.i18n._('Task'),
+                title: this.app.i18n.n_('Task', 'Tasks', 1),
                 autoScroll: true,
                 border: false,
                 frame: true,
