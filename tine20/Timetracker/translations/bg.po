@@ -342,5 +342,5 @@ msgstr "Всички времеви конта"
 msgid "Timetracker"
 msgstr "Обхващане на работното време"
 
-msgid "Times could be added"
-msgstr "Времената могат дабъдат добавени"
+#~ msgid "Times could be added"
+#~ msgstr "Времената могат дабъдат добавени"

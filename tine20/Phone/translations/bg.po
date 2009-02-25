@@ -124,8 +124,8 @@ msgstr "Позвъняване"
 msgid "Call ID"
 msgstr "Идентификатор (ID) на обаждането"
 
-msgid "Incoming"
-msgstr "Входящ"
+#~ msgid "Incoming"
+#~ msgstr "Входящ"
 
-msgid "Outgoing"
-msgstr "Изходящ"
+#~ msgid "Outgoing"
+#~ msgstr "Изходящ"

@@ -508,44 +508,44 @@ msgstr "приет"
 msgid "lost"
 msgstr "изгубен"
 
-msgid "Enter searchfilter"
-msgstr "Вкарай филтър за търсене"
+#~ msgid "Enter searchfilter"
+#~ msgstr "Вкарай филтър за търсене"
 
-msgid "leadstate"
-msgstr "статус"
+#~ msgid "leadstate"
+#~ msgstr "статус"
 
-msgid "Search Contacts"
-msgstr "Търси контакт"
+#~ msgid "Search Contacts"
+#~ msgstr "Търси контакт"
 
-msgid "Add existing contact"
-msgstr "Добави съществуващ контакт"
+#~ msgid "Add existing contact"
+#~ msgstr "Добави съществуващ контакт"
 
-msgid "Add existing contact to lead"
-msgstr "Добави съществуващ контакт към предложение"
+#~ msgid "Add existing contact to lead"
+#~ msgstr "Добави съществуващ контакт към предложение"
 
-msgid "Add contact"
-msgstr "Прибави контакт"
+#~ msgid "Add contact"
+#~ msgstr "Прибави контакт"
 
-msgid "Organisation"
-msgstr "Организация"
+#~ msgid "Organisation"
+#~ msgstr "Организация"
 
-msgid "Lead updated"
-msgstr "Предложението е актуализирано"
+#~ msgid "Lead updated"
+#~ msgstr "Предложението е актуализирано"
 
-msgid "Lead added"
-msgstr "Предложението е прибавено"
+#~ msgid "Lead added"
+#~ msgstr "Предложението е прибавено"
 
-msgid "Add responsible"
-msgstr "Добави отговорник"
+#~ msgid "Add responsible"
+#~ msgstr "Добави отговорник"
 
-msgid "Add new responsible contact"
-msgstr "Добави нов отговорник"
+#~ msgid "Add new responsible contact"
+#~ msgstr "Добави нов отговорник"
 
-msgid "Add customer"
-msgstr "Добави клиент"
+#~ msgid "Add customer"
+#~ msgstr "Добави клиент"
 
-msgid "Add partner"
-msgstr "Добави партньор"
+#~ msgid "Add partner"
+#~ msgstr "Добави партньор"
 
-msgid "Add new partner contact"
-msgstr "Добави нов партньорски контакт"
+#~ msgid "Add new partner contact"
+#~ msgstr "Добави нов партньорски контакт"

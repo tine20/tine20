@@ -981,251 +981,251 @@ msgstr "Phones"
 msgid "Templates"
 msgstr "Темплейтс"
 
-msgid "add context"
-msgstr "добави контекст"
+#~ msgid "add context"
+#~ msgstr "добави контекст"
 
-msgid "edit context"
-msgstr "редактирай контекст"
+#~ msgid "edit context"
+#~ msgstr "редактирай контекст"
 
-msgid "delete context"
-msgstr "Изтрий контекст"
+#~ msgid "delete context"
+#~ msgstr "Изтрий контекст"
 
-msgid "Displaying context {0} - {1} of {2}"
-msgstr "Намерени контексти {0} - {1} oт {2}"
+#~ msgid "Displaying context {0} - {1} of {2}"
+#~ msgstr "Намерени контексти {0} - {1} oт {2}"
 
-msgid "No context to display"
-msgstr "Няма намерен контекст"
+#~ msgid "No context to display"
+#~ msgstr "Няма намерен контекст"
 
-msgid "add meetme"
-msgstr "добави meetme"
+#~ msgid "add meetme"
+#~ msgstr "добави meetme"
 
-msgid "edit meetme"
-msgstr "редактирай meetme"
+#~ msgid "edit meetme"
+#~ msgstr "редактирай meetme"
 
-msgid "delete meetme"
-msgstr "изтрий meetme"
+#~ msgid "delete meetme"
+#~ msgstr "изтрий meetme"
 
-msgid "Displaying meetme {0} - {1} of {2}"
-msgstr "Показва meetme {0} - {1} oт {2}"
+#~ msgid "Displaying meetme {0} - {1} of {2}"
+#~ msgstr "Показва meetme {0} - {1} oт {2}"
 
-msgid "No meetme to display"
-msgstr "Няма намерен meetme"
+#~ msgid "No meetme to display"
+#~ msgstr "Няма намерен meetme"
 
-msgid "edit sipPeer"
-msgstr "редактирай sipPeer"
+#~ msgid "edit sipPeer"
+#~ msgstr "редактирай sipPeer"
 
-msgid "delete sipPeer"
-msgstr "изтрий sipPeer"
+#~ msgid "delete sipPeer"
+#~ msgstr "изтрий sipPeer"
 
-msgid "Context: "
-msgstr "Контекст:"
+#~ msgid "Context: "
+#~ msgstr "Контекст:"
 
-msgid "Displaying sipPeers {0} - {1} of {2}"
-msgstr "Намерени sipPeer {0} - {1} oт {2}"
+#~ msgid "Displaying sipPeers {0} - {1} of {2}"
+#~ msgstr "Намерени sipPeer {0} - {1} oт {2}"
 
-msgid "Amaflags"
-msgstr "Amaflags (предпочитани маркери?)"
+#~ msgid "Amaflags"
+#~ msgstr "Amaflags (предпочитани маркери?)"
 
-msgid "Can reinvite"
-msgstr "Възможна повторна покана"
+#~ msgid "Can reinvite"
+#~ msgstr "Възможна повторна покана"
 
-msgid "Default IP"
-msgstr "IP по настройки"
+#~ msgid "Default IP"
+#~ msgstr "IP по настройки"
 
-msgid "DTMF mode"
-msgstr "DTMF режим"
+#~ msgid "DTMF mode"
+#~ msgstr "DTMF режим"
 
-msgid "From User"
-msgstr "От потребител"
+#~ msgid "From User"
+#~ msgstr "От потребител"
 
-msgid "From Domain"
-msgstr "От домейн"
+#~ msgid "From Domain"
+#~ msgstr "От домейн"
 
-msgid "Full Contact"
-msgstr "Пълен контакт"
+#~ msgid "Full Contact"
+#~ msgstr "Пълен контакт"
 
-msgid "Host"
-msgstr "Хост"
+#~ msgid "Host"
+#~ msgstr "Хост"
 
-msgid "Insecure"
-msgstr "Несигурност"
+#~ msgid "Insecure"
+#~ msgstr "Несигурност"
 
-msgid "MD5 Secret"
-msgstr "MD5 Тайна"
+#~ msgid "MD5 Secret"
+#~ msgstr "MD5 Тайна"
 
-msgid "Deny"
-msgstr "Забрана"
+#~ msgid "Deny"
+#~ msgstr "Забрана"
 
-msgid "Permit"
-msgstr "Позволение"
+#~ msgid "Permit"
+#~ msgstr "Позволение"
 
-msgid "Mask"
-msgstr "Маска"
+#~ msgid "Mask"
+#~ msgstr "Маска"
 
-msgid "Port"
-msgstr "Вход (порт)"
+#~ msgid "Port"
+#~ msgstr "Вход (порт)"
 
-msgid "Restrict CID"
-msgstr "Ограничен CID (блокиране на изскачащи pop-up-прозорци)"
+#~ msgid "Restrict CID"
+#~ msgstr "Ограничен CID (блокиране на изскачащи pop-up-прозорци)"
 
-msgid "RTP Timeout"
-msgstr "RTP `изтичане на времето`"
+#~ msgid "RTP Timeout"
+#~ msgstr "RTP `изтичане на времето`"
 
-msgid "RTP Hold Timeout"
-msgstr "RTP спиране на `изтичане на времето`"
+#~ msgid "RTP Hold Timeout"
+#~ msgstr "RTP спиране на `изтичане на времето`"
 
-msgid "Username"
-msgstr "Име на потребител"
+#~ msgid "Username"
+#~ msgstr "Име на потребител"
 
-msgid "Allow"
-msgstr "Позволен"
+#~ msgid "Allow"
+#~ msgstr "Позволен"
 
-msgid "Music on hold"
-msgstr "Спиране но мелодията"
+#~ msgid "Music on hold"
+#~ msgstr "Спиране но мелодията"
 
-msgid "Reg Seconds"
-msgstr "Втори Reg"
+#~ msgid "Reg Seconds"
+#~ msgstr "Втори Reg"
 
-msgid "Reg Exten"
-msgstr "Външен Reg"
+#~ msgid "Reg Exten"
+#~ msgstr "Външен Reg"
 
-msgid "Can forward call"
-msgstr "Позволено следващо обаждане"
+#~ msgid "Can forward call"
+#~ msgstr "Позволено следващо обаждане"
 
-msgid "Set Var"
-msgstr "Set Var"
+#~ msgid "Set Var"
+#~ msgstr "Set Var"
 
-msgid "Notify Ringing"
-msgstr "Отбележи (нанеси) обаждане"
+#~ msgid "Notify Ringing"
+#~ msgstr "Отбележи (нанеси) обаждане"
 
-msgid "Use Client Code"
-msgstr "Използвай клиентски код (Client Code)"
+#~ msgid "Use Client Code"
+#~ msgstr "Използвай клиентски код (Client Code)"
 
-msgid "Auth User"
-msgstr "Потребител с права"
+#~ msgid "Auth User"
+#~ msgstr "Потребител с права"
 
-msgid "Call Limit"
-msgstr "Допустима граница на позвънявания"
+#~ msgid "Call Limit"
+#~ msgstr "Допустима граница на позвънявания"
 
-msgid "Busy Level"
-msgstr "Заето ниво"
+#~ msgid "Busy Level"
+#~ msgstr "Заето ниво"
 
-msgid "edit voicemail"
-msgstr "редактирай гласова поща"
+#~ msgid "edit voicemail"
+#~ msgstr "редактирай гласова поща"
 
-msgid "delete voicemail"
-msgstr "изтрий гласова поща"
+#~ msgid "delete voicemail"
+#~ msgstr "изтрий гласова поща"
 
-msgid "Displaying voicemail {0} - {1} of {2}"
-msgstr "Показва гласова поща"
+#~ msgid "Displaying voicemail {0} - {1} of {2}"
+#~ msgstr "Показва гласова поща"
 
-msgid "No voicemail to display"
-msgstr "Няма намерена гласова поща"
+#~ msgid "No voicemail to display"
+#~ msgstr "Няма намерена гласова поща"
 
-msgid "add location"
-msgstr "добавя локализация"
+#~ msgid "add location"
+#~ msgstr "добавя локализация"
 
-msgid "edit location"
-msgstr "обработва локализация"
+#~ msgid "edit location"
+#~ msgstr "обработва локализация"
 
-msgid "delete location"
-msgstr "изтрий локализация"
+#~ msgid "delete location"
+#~ msgstr "изтрий локализация"
 
-msgid "Displaying location {0} - {1} of {2}"
-msgstr "Показва локализации {0} - {1} от {2}"
+#~ msgid "Displaying location {0} - {1} of {2}"
+#~ msgstr "Показва локализации {0} - {1} от {2}"
 
-msgid "No location to display"
-msgstr "Няма намерена локализация"
+#~ msgid "No location to display"
+#~ msgstr "Няма намерена локализация"
 
-msgid "add phone"
-msgstr "добави телефон"
+#~ msgid "add phone"
+#~ msgstr "добави телефон"
 
-msgid "edit phone"
-msgstr "редактирай телефон"
+#~ msgid "edit phone"
+#~ msgstr "редактирай телефон"
 
-msgid "delete phone"
-msgstr "изтрий телефон"
+#~ msgid "delete phone"
+#~ msgstr "изтрий телефон"
 
-msgid "reset phones HTTP authentication"
-msgstr "върни телефонната HTTP-автентичност"
+#~ msgid "reset phones HTTP authentication"
+#~ msgstr "върни телефонната HTTP-автентичност"
 
-msgid "Open phones web gui"
-msgstr "Open phones web gui"
+#~ msgid "Open phones web gui"
+#~ msgstr "Open phones web gui"
 
-msgid "Displaying phones {0} - {1} of {2}"
-msgstr "Намерени телефонни номера {0} - {1} of {2}"
+#~ msgid "Displaying phones {0} - {1} of {2}"
+#~ msgstr "Намерени телефонни номера {0} - {1} of {2}"
 
-msgid "No phones to display"
-msgstr "Няма намерени телефонни номера"
+#~ msgid "No phones to display"
+#~ msgstr "Няма намерени телефонни номера"
 
-msgid "add account"
-msgstr "добави конто"
+#~ msgid "add account"
+#~ msgstr "добави конто"
 
-msgid "remove account"
-msgstr "изтрий конто"
+#~ msgid "remove account"
+#~ msgstr "изтрий конто"
 
-msgid "add setting"
-msgstr "добави настройка"
+#~ msgid "add setting"
+#~ msgstr "добави настройка"
 
-msgid "edit setting"
-msgstr "редактирай настройка"
+#~ msgid "edit setting"
+#~ msgstr "редактирай настройка"
 
-msgid "delete setting"
-msgstr "изтрий настройка"
+#~ msgid "delete setting"
+#~ msgstr "изтрий настройка"
 
-msgid "Displaying settings {0} - {1} of {2}"
-msgstr "Намерени настройки {0} - {1} от {2}"
+#~ msgid "Displaying settings {0} - {1} of {2}"
+#~ msgstr "Намерени настройки {0} - {1} от {2}"
 
-msgid "No settings to display"
-msgstr "Няма намерени настройки"
+#~ msgid "No settings to display"
+#~ msgstr "Няма намерени настройки"
 
-msgid "SettingsMain"
-msgstr "Главни настройки"
+#~ msgid "SettingsMain"
+#~ msgstr "Главни настройки"
 
-msgid "add software"
-msgstr "добави програма"
+#~ msgid "add software"
+#~ msgstr "добави програма"
 
-msgid "edit software"
-msgstr "редактирай програма"
+#~ msgid "edit software"
+#~ msgstr "редактирай програма"
 
-msgid "delete software"
-msgstr "изтрий програма"
+#~ msgid "delete software"
+#~ msgstr "изтрий програма"
 
-msgid "Displaying software {0} - {1} of {2}"
-msgstr "Намерени програми {0} - {1} от {2}"
+#~ msgid "Displaying software {0} - {1} of {2}"
+#~ msgstr "Намерени програми {0} - {1} от {2}"
 
-msgid "No software to display"
-msgstr "Няма намерени програми"
+#~ msgid "No software to display"
+#~ msgstr "Няма намерени програми"
 
-msgid "add template"
-msgstr "добави темплейт"
+#~ msgid "add template"
+#~ msgstr "добави темплейт"
 
-msgid "edit template"
-msgstr "редактирай темплейт"
+#~ msgid "edit template"
+#~ msgstr "редактирай темплейт"
 
-msgid "delete template"
-msgstr "изтрий темплейтс"
+#~ msgid "delete template"
+#~ msgstr "изтрий темплейтс"
 
-msgid "Displaying template {0} - {1} of {2}"
-msgstr "Показви темплейтс {0} - {1} от {2}"
+#~ msgid "Displaying template {0} - {1} of {2}"
+#~ msgstr "Показви темплейтс {0} - {1} от {2}"
 
-msgid "No template to display"
-msgstr "Няма намерени темрлейтс"
+#~ msgid "No template to display"
+#~ msgstr "Няма намерени темрлейтс"
 
-msgid "send HTTP Client Info"
-msgstr "Изпрати HTTP Client Info"
+#~ msgid "send HTTP Client Info"
+#~ msgstr "Изпрати HTTP Client Info"
 
-msgid "Model"
-msgstr "Модел"
+#~ msgid "Model"
+#~ msgstr "Модел"
 
-msgid "FW Status"
-msgstr "FW Статус"
+#~ msgid "FW Status"
+#~ msgstr "FW Статус"
 
-msgid "Server Setting"
-msgstr "Настройки на сървъра"
+#~ msgid "Server Setting"
+#~ msgstr "Настройки на сървъра"
 
-msgid "Settings URL"
-msgstr "URL на настройките"
+#~ msgid "Settings URL"
+#~ msgstr "URL на настройките"
 
-msgid "Firmware URL"
-msgstr "Програмен URL"
+#~ msgid "Firmware URL"
+#~ msgstr "Програмен URL"
