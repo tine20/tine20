@@ -49,9 +49,10 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      */
     public function install($applicationNames)
     {
-        $this->_controller->installApplications(Zend_Json::decode($applicationNames));
+        $decodedNames = Zend_Json::decode($applicationNames);
+        $this->_controller->installApplications($decodedNames);
 
-        if(in_array('Tinebase', $applications)) {
+        if(in_array('Tinebase', $decodedNames)) {
             $import = new Setup_Import_TineInitial();
             //$import = new Setup_Import_Egw14();
             $import->import();
@@ -99,21 +100,29 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      */
     public function search()
     {
-        // get installed apps
-        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id')->toArray();
-        foreach ($applications as &$application) {
-            $application['current_version'] = $this->_controller->getSetupXml($application['name'])->version;
-        }
-        
         // get installable apps
         $installable = $this->_controller->getInstallableApplications();
+        
+        // get installed apps
+        $installed = Tinebase_Application::getInstance()->getApplications(NULL, 'id')->toArray();
+        
+        // merge to create result array
+        $applications = array();
+        foreach ($installed as $application) {
+            $application['current_version'] = (string) $installable[$application['name']]->version;
+            $applications[] = $application;
+            unset($installable[$application['name']]);
+        }
         foreach ($installable as $name => $setupXML) {
             $applications[] = array(
                 'name'              => $name,
-                'current_version'   => $setupXML->version
+                'current_version'   => (string) $setupXML->version
             );
         }
         
-        return $applications;
+        return array(
+            'results'       => $applications,
+            'totalcount'    => count($applications)
+        );
     }
 }
