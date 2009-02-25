@@ -623,7 +623,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
         this.getForm().loadRecord(this.group);
         this.updateToolbarButtons();
-        Ext.MessageBox.hide();
+        //Ext.MessageBox.hide();
     }
 });
 
