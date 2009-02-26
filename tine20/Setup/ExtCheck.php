@@ -476,10 +476,29 @@ class Setup_ExtCheck
      * get check result data
      *
      * @return array
+     * 
+     * @todo    add message
      */
     public function getData()
     {
-        $result = $this->_check();
+        $result = array(
+            'success'   => TRUE,
+            'message'   => array(),
+            'result'    => array(),
+        );
+        
+        $data = $this->_check();
+        
+        foreach ($data as $check) {
+            list($key, $value) = $check;
+            if ($value != 'SUCCESS') {
+                $result['success'] = FALSE;
+                $result['result'][$key] = FALSE;
+            } else {
+                $result['result'][$key] = TRUE;
+            }
+        }
+        
         return $result;
     }
 

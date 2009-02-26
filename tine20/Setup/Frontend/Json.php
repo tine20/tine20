@@ -135,21 +135,16 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
     public function envCheck()
     {
         $controller = new Setup_Controller();
-        $envCheck = $controller->environmentCheck();
-        $success = $envCheck['success'];
+        $result = $controller->environmentCheck();
         
-        if (!$success) {
-            echo $envCheck['message'];
-            return $success;
-        }
+        $extCheck = new Setup_ExtCheck(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'essentials.xml');
+        $extResult = $extCheck->getData();
+
+        $result['success'] = $result['success'] && $extResult['success'];
+        $result['result'] = array_merge($result['result'], $extResult['result']);
+        $result['message'] = array_merge($result['message'], $extResult['message']);
         
-        $extCheck = new Setup_ExtCheck('Setup/essentials.xml');
-        $extOutput = $extCheck->getOutput();
-        echo $extOutput;
-        
-        $success = ($success && !preg_match("/FAILURE/", $extOutput));
-        
-        return array();
+        return $result;
     }
     
     /**

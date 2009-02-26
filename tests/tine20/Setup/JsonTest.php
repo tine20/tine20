@@ -130,4 +130,16 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     {
         
     }
+
+    /**
+     * test env check
+     *
+     */
+    public function testEnvCheck()
+    {
+        $result = $this->_json->envCheck();
+        
+        $this->assertTrue(isset($result['success']));
+        $this->assertGreaterThan(16, count($result['result']));
+    }
 }
