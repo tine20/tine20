@@ -71,6 +71,7 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
     typeAhead: false,
     loadingText: 'Searching...',
     //hideTrigger: true, // IE7 doesn't like that!
+    triggerAction: 'all',
     pageSize: 10,
     itemSelector: 'div.search-item',
     store: null,
@@ -129,8 +130,12 @@ Tine.Crm.Contact.ComboBox = Ext.extend(Ext.form.ComboBox, {
     onSelect: function(record){  
         record.data.relation_type = 'customer';            
         var store = Ext.StoreMgr.lookup('ContactsStore');
-        store.add([record]);
-
+        
+        // check if already in
+        if (!store.getById(record.id)) {
+            store.add([record]);
+        }
+            
         this.collapse();
         this.clearValue();
     },
