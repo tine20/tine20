@@ -22,7 +22,8 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      *
      * @var string
      */
-    protected $_appname = 'Setup';
+    protected $_applicationName = 'Setup';
+    
     
     /**
      * Returns all JS files which must be included for Setup

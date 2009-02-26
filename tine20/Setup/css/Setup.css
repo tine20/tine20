@@ -8,3 +8,7 @@
  * @version     $Id$
  *
  */
+ 
+.SetupIconCls {
+    background-image:url(../../images/oxygen/16x16/apps/package-utilities.png) !important;
+}
