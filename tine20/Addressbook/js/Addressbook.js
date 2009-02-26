@@ -253,11 +253,43 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
             } 
         });                           
     },
-    
+
+    /**
+     * export pdf handler
+     * 
+     * @todo think about using the generic export button here
+     * 
+     * @param _button
+     * @param _event
+     */
     handlerExport: function(_button, _event) {
+    	
     	var contactId = Ext.util.JSON.encode(this.contact.id);
 
-        Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContacts&_format=pdf&_filter=' + contactId, 200, 150);                   
+        //Tine.Tinebase.common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContacts&_format=pdf&_filter=' + contactId, 200, 150);
+    	
+        var form = Ext.getBody().createChild({
+            tag:'form',
+            method:'post',
+            cls:'x-hidden'
+        });
+        
+        Ext.Ajax.request({
+            isUpload: true,
+            form: form,
+            params: {
+                method: 'Addressbook.exportContacts',
+                requestType: 'HTTP',
+                _filter: contactId,
+                _format: 'pdf'
+            },
+            success: function() {
+                form.remove();
+            },
+            failure: function() {
+                form.remove();
+            }
+        });
     },
     
     updateContactRecord: function(_contactData) {
