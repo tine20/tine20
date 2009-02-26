@@ -41,6 +41,15 @@ Tine.Build = '$Build: $';
  */
 Tine.Tinebase.tineInit = {
     /**
+     * @cfg {String} getAllRegistryDataMethod
+     */
+    getAllRegistryDataMethod: 'Tinebase.getAllRegistryData',
+    /**
+     * @cfg {String} requestUrl
+     */
+    requestUrl: 'index.php',
+    
+    /**
      * list of initialised items
      */
     initList: {
@@ -180,7 +189,7 @@ Tine.Tinebase.tineInit = {
          * send custom headers and json key on Ext.Ajax.requests
          */
         Ext.Ajax.on('beforerequest', function(connection, options){
-            options.url = options.url ? options.url : 'index.php';
+            options.url = options.url ? options.url : Tine.Tinebase.tineInit.requestUrl;
             options.params.jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
             options.params.requestType = options.params.requestType || 'JSON';
             
@@ -365,7 +374,7 @@ Tine.Tinebase.tineInit = {
         if (window.isMainWindow) {
             Ext.Ajax.request({
                 params: {
-                    method: 'Tinebase.getAllRegistryData'
+                    method: Tine.Tinebase.tineInit.getAllRegistryDataMethod
                 },
                 success: function(response, request) {
                     var registryData = Ext.util.JSON.decode(response.responseText);
