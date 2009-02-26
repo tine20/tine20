@@ -8,3 +8,13 @@
  * @version     $Id$
  *
  */
+ 
+Ext.ns('Tine', 'Tine.Setup');
+
+// default mainscreen
+Tine.Setup.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
+
+Tine.Setup.TreePanel = Ext.extend(Ext.Panel, {
+    border: false,
+    html: ''
+});

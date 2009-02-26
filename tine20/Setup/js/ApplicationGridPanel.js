@@ -8,7 +8,9 @@
  * @version     $Id$
  *
  */
+ 
+ Ext.ns('Tine', 'Tine.Setup');
 
-Ext.onReady(function() {
-    Ext.Msg.alert('Tine 2.0 Setup', 'Press OK to do nothing');
+Tine.Setup.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+
 });

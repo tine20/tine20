@@ -32,8 +32,9 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'Setup/js/onReady.js',
-            'Setup/js/Setup.js'
+            'Setup/js/init.js',
+            'Setup/js/Setup.js',
+            'Setup/js/ApplicationGridPanel.js',
         );
     }
     
@@ -59,16 +60,12 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      * @return array 
      */
     public static function getAllIncludeFiles() {
-        // we start with all Tinebase include files
+        // we start with all Tinebase include files ...
         $tinebase = new Tinebase_Frontend_Http();
         $jsFiles  = $tinebase->getJsFilesToInclude();
         $cssFiles = $tinebase->getCssFilesToInclude();
         
-        // we only remove the tineinit, as it has the Ext.onReady which we implement 
-        // our own for the setup
-        unset($jsFiles[array_search('Tinebase/js/tineInit.js', $jsFiles)]);
-        
-        // now we fetch our own files
+        // ... and add only the setup files
         $setup = new Setup_Frontend_Http();
         return array(
             'js'  => array_merge($jsFiles, $setup->getJsFilesToInclude()),
@@ -93,7 +90,9 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     public function handle()
     {
-        //return $this->mainScreen();
+        if ($_GET['mode'] == 'beta') {
+            return $this->mainScreen();
+        }
         
         $updateDone = $this->_update();
         $this->_install($updateDone);
