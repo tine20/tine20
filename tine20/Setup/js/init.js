@@ -30,7 +30,7 @@ Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createIntercep
  * init registry
  */
 Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(function() {
-    Tine.Tinebase.tineInit.initList.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
+    Tine.Tinebase.tineInit.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
     
     return true;
 });
