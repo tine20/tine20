@@ -149,7 +149,9 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      * @param {String} iconCls (optional) iconCls A user-defined CSS class that provides the icon image for this panel
      */
     setTitle: function(title, iconCls) {
-        this.popup.document.title = title;
+        if (this.popup && this.popup.document) {
+            this.popup.document.title = title;
+        }
     },
     
     /**
