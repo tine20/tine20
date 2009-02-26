@@ -12,3 +12,15 @@
 .SetupIconCls {
     background-image:url(../../images/oxygen/16x16/apps/package-utilities.png) !important;
 }
+
+.setup_action_install {
+    background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
+}
+
+.setup_action_uninstall {
+    background-image:url(../../images/oxygen/16x16/actions/list-remove.png) !important;
+}
+
+.setup_action_update {
+    background-image:url(../../images/oxygen/16x16/apps/system-software-update.png) !important;
+}
