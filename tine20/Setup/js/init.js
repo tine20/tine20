@@ -17,6 +17,27 @@ Tine.Tinebase.tineInit.renderWindow = function() {
 }
 */
 
+/**
+ * init ajax
+ */
+Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createInterceptor(function() {
+    Tine.Tinebase.tineInit.requestUrl = 'setup.php'
+    
+    return true;
+});
+
+/**
+ * init registry
+ */
+Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(function() {
+    Tine.Tinebase.tineInit.initList.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
+    
+    return true;
+});
+
+/**
+ * render window
+ */
 Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.createInterceptor(function() {
     
     // fake a setup user
