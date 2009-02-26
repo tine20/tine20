@@ -22,14 +22,6 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "{0}'s личные задания"
 
-#: js/EditDialog.js:96 js/Tasks.js:74
-#, fuzzy
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Задания"
-msgstr[1] "Задания"
-msgstr[2] "Задания"
-
 #: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
 msgid "Summary"
 msgstr "Содержание"
@@ -105,6 +97,14 @@ msgstr "Показ закрылся"
 #: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
 msgstr "НЕЗАВЕРШЕННЫЙ"
+
+#: js/Tasks.js:74
+#, fuzzy
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Задания"
+msgstr[1] "Задания"
+msgstr[2] "Задания"
 
 #: js/Tasks.js:74
 #, fuzzy

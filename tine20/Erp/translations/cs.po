@@ -12,17 +12,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/ContractEditDialog.js:69
-#: js/ContractGridPanel.js:46
-#: js/Erp.js:84
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Kontrakt"
-msgstr[1] "Kontrakty"
-msgstr[2] "Kontraktů"
-
-#: js/ContractEditDialog.js:86
-#: js/ContractGridPanel.js:93
+#: js/ContractEditDialog.js:86 js/ContractGridPanel.js:93
 msgid "Title"
 msgstr "Název"
 
@@ -50,6 +40,13 @@ msgstr "Stav"
 msgid "Contracts"
 msgstr "Kontrakty"
 
+#: js/Erp.js:84
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Kontrakt"
+msgstr[1] "Kontrakty"
+msgstr[2] "Kontraktů"
+
 #: js/Erp.js:88
 msgid "contracts list"
 msgid_plural "contracts lists"
@@ -60,4 +57,3 @@ msgstr[2] "seznamů kontraktů"
 #: Setup/setup.xml:160
 msgid "Shared Contracts"
 msgstr "Sdílené kontrakty"
-

@@ -18,12 +18,6 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr ""
 
-#: js/EditDialog.js:96 js/Tasks.js:74
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
 msgid "Summary"
 msgstr ""
@@ -97,6 +91,12 @@ msgstr ""
 #: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
 msgstr ""
+
+#: js/Tasks.js:74
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Tasks.js:74
 msgid "Tasks"

@@ -1,9 +1,3 @@
-#: js/ContractEditDialog.js:69 js/ContractGridPanel.js:46 js/Erp.js:84
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/ContractEditDialog.js:86 js/ContractGridPanel.js:93
 msgid "Title"
 msgstr ""
@@ -31,6 +25,12 @@ msgstr ""
 #: js/Erp.js:50
 msgid "Contracts"
 msgstr ""
+
+#: js/Erp.js:84
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Erp.js:88
 msgid "contracts list"

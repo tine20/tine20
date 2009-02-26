@@ -192,7 +192,7 @@ msgstr "Mažu kontakt..."
 msgid "Some error occured while trying to delete the contact."
 msgstr "Při mazání kontaktu došlo k chybě."
 
-#: js/Addressbook.js:422 js/EditDialog.js:423
+#: js/Addressbook.js:422
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Kontakt"

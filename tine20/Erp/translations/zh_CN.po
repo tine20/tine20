@@ -13,15 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/ContractEditDialog.js:69
-#: js/ContractGridPanel.js:46
-#: js/Erp.js:84
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "联系人"
-
-#: js/ContractEditDialog.js:86
-#: js/ContractGridPanel.js:93
+#: js/ContractEditDialog.js:86 js/ContractGridPanel.js:93
 msgid "Title"
 msgstr "头衔"
 
@@ -49,6 +41,11 @@ msgstr "状态"
 msgid "Contracts"
 msgstr "联系人"
 
+#: js/Erp.js:84
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "联系人"
+
 #: js/Erp.js:88
 msgid "contracts list"
 msgid_plural "contracts lists"
@@ -60,14 +57,18 @@ msgstr "共享的联系人"
 
 #~ msgid "Due date"
 #~ msgstr "过期日"
+
 #~ msgid "Priority"
 #~ msgstr "优先级"
+
 #~ msgid "Responsible"
 #~ msgstr "责任"
+
 #~ msgid "Notes"
 #~ msgstr "注释"
+
 #~ msgid "Percentage"
 #~ msgstr "百分比"
+
 #~ msgid "Completed"
 #~ msgstr "完成的"
-

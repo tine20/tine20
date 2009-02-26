@@ -18,12 +18,6 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s's лични задачи"
 
-#: js/EditDialog.js:96 js/Tasks.js:74
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Задачa"
-msgstr[1] "Задачи"
-
 #: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
 msgid "Summary"
 msgstr "Общо"
@@ -98,6 +92,12 @@ msgstr "Покажи приключени задачи"
 #: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
 msgstr "В ПРОЦЕС"
+
+#: js/Tasks.js:74
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Задачa"
+msgstr[1] "Задачи"
 
 #: js/Tasks.js:74
 #, fuzzy

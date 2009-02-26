@@ -196,7 +196,7 @@ msgstr "Контакт удаляется"
 msgid "Some error occured while trying to delete the contact."
 msgstr "При удаление контакта возникла ошибка."
 
-#: js/Addressbook.js:422 js/EditDialog.js:423
+#: js/Addressbook.js:422
 #, fuzzy
 msgid "Contact"
 msgid_plural "Contacts"

@@ -190,7 +190,7 @@ msgstr "Изтрива контакт..."
 msgid "Some error occured while trying to delete the contact."
 msgstr "Настъпила е грешка при опит за изтриване на контакта."
 
-#: js/Addressbook.js:422 js/EditDialog.js:423
+#: js/Addressbook.js:422
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Контакт"

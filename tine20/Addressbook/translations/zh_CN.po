@@ -186,7 +186,7 @@ msgstr "正删除联系人..."
 msgid "Some error occured while trying to delete the contact."
 msgstr "当试图删除联系人的时候有错误发生"
 
-#: js/Addressbook.js:422 js/EditDialog.js:423
+#: js/Addressbook.js:422
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "联系人"

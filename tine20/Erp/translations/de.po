@@ -12,16 +12,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ContractEditDialog.js:69
-#: js/ContractGridPanel.js:46
-#: js/Erp.js:84
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Vertrag"
-msgstr[1] "Verträge"
-
-#: js/ContractEditDialog.js:86
-#: js/ContractGridPanel.js:93
+#: js/ContractEditDialog.js:86 js/ContractGridPanel.js:93
 msgid "Title"
 msgstr "Titel"
 
@@ -49,6 +40,12 @@ msgstr "Status"
 msgid "Contracts"
 msgstr "Verträge"
 
+#: js/Erp.js:84
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Vertrag"
+msgstr[1] "Verträge"
+
 #: js/Erp.js:88
 msgid "contracts list"
 msgid_plural "contracts lists"
@@ -61,14 +58,18 @@ msgstr "Gemeinsame Verträge"
 
 #~ msgid "Due date"
 #~ msgstr "Fälligkeitsdatum"
+
 #~ msgid "Priority"
 #~ msgstr "Priorität"
+
 #~ msgid "Responsible"
 #~ msgstr "Verantwortlicher"
+
 #~ msgid "Notes"
 #~ msgstr "Notiz"
+
 #~ msgid "Percentage"
 #~ msgstr "Prozentsatz"
+
 #~ msgid "Completed"
 #~ msgstr "Fertig"
-

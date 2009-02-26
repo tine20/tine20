@@ -20,13 +20,6 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "osobní úkoly uživatele %s"
 
-#: js/EditDialog.js:96 js/Tasks.js:74
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Úkol"
-msgstr[1] "Úkoly"
-msgstr[2] "Úkolů"
-
 #: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
 msgid "Summary"
 msgstr "Přehled"
@@ -101,6 +94,13 @@ msgstr "Zobrazit uzavřené"
 #: js/Status.js:45 Setup/setup.xml:434
 msgid "IN-PROCESS"
 msgstr "ROZPRACOVANÝ"
+
+#: js/Tasks.js:74
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Úkol"
+msgstr[1] "Úkoly"
+msgstr[2] "Úkolů"
 
 #: js/Tasks.js:74
 msgid "Tasks"

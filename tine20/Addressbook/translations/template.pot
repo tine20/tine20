@@ -172,7 +172,7 @@ msgstr ""
 msgid "Some error occured while trying to delete the contact."
 msgstr ""
 
-#: js/Addressbook.js:422 js/EditDialog.js:423
+#: js/Addressbook.js:422
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] ""
