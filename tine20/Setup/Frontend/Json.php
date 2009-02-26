@@ -47,7 +47,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      *
      * @param string $applicationNames application names to install
      */
-    public function install($applicationNames)
+    public function installApplications($applicationNames)
     {
         $decodedNames = Zend_Json::decode($applicationNames);
         $this->_controller->installApplications($decodedNames);
@@ -64,7 +64,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      *
      * @param string $applicationNames application names to update
      */
-    public function update($applicationNames)
+    public function updateApplications($applicationNames)
     {
         $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
         foreach (Zend_Json::decode($applicationNames) as $applicationName) {
@@ -81,7 +81,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      *
      * @param string $applicationNames application names to uninstall
      */
-    public function uninstall($applicationNames)
+    public function uninstallApplications($applicationNames)
     {
         $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
         foreach (Zend_Json::decode($applicationNames) as $applicationName) {
@@ -98,7 +98,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      *
      * @return array
      */
-    public function search()
+    public function searchApplications()
     {
         // get installable apps
         $installable = $this->_controller->getInstallableApplications();
