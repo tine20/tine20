@@ -125,4 +125,39 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
             'totalcount'    => count($applications)
         );
     }
+    
+    /**
+     * Returns registry data of tinebase.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        $locale = Tinebase_Core::get('locale');
+        
+        $registryData =  array(
+            'timeZone'         => Tinebase_Core::get('userTimeZone'),
+            'locale'           => array(
+                'locale'   => $locale->toString(), 
+                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                'region'   => $locale->getCountryTranslation($locale->getRegion()),
+            ),
+        );
+        
+        return $registryData;
+    }
+    
+    /**
+     * Returns registry data of all applications current user has access to
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getAllRegistryData()
+    {
+        $registryData['Tinebase'] = $this->getRegistryData();
+        
+        die(Zend_Json::encode($registryData));
+    }
 }
