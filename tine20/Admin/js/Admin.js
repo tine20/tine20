@@ -866,7 +866,7 @@ Tine.Admin.Applications.Main = function() {
         
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
-            var selected = _selectionModel.getSelected();
+            var selected = _selectionModel.getSelections();
 
             if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'apps') ) {
                 if (rowCount < 1) {
@@ -879,16 +879,20 @@ Tine.Admin.Applications.Main = function() {
                     _action_disable.setDisabled(false);
                     _action_settings.setDisabled(true);
                     //_action_permissions.setDisabled(true);
-                } else if (selected.data.name == 'Tinebase') {
-                    _action_enable.setDisabled(true);
-                    _action_disable.setDisabled(true);
-                    _action_settings.setDisabled(true);            	
-                    //_action_permissions.setDisabled(false);
                 } else {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     _action_settings.setDisabled(true);                
                     //_action_permissions.setDisabled(false);
+                }
+                
+                // don't allow to disable Admin, Tinebase or Addressbook as we can't deal with this yet
+                for (var i=0; i<selected.length; i++) {
+                    if (typeof selected[i].get == 'function' && selected[i].get('name').toString().match(/Tinebase|Admin|Addressbook/)) {
+                        _action_enable.setDisabled(true);
+                        _action_disable.setDisabled(true);
+                        break;
+                    }
                 }
             }
         });
