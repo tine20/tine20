@@ -175,41 +175,17 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      *
      * @return boolean if check is successful
      * 
-     * @todo use this in cli as well (move to controller?)
-     * @todo move ini requirements elsewhere
+     * @todo use this in cli as well
      */
     protected function _check()
     {
-        $success = TRUE;
+        $controller = new Setup_Controller();
+        $envCheck = $controller->environmentCheck();
+        $success = $envCheck['result'];
         
-        // check php environment
-        $requiredIniSettings = array(
-            'magic_quotes_sybase'  => 0,
-            'magic_quotes_gpc'     => 0,
-            'magic_quotes_runtime' => 0,
-            'mbstring.func_overload' => 0,
-            'eaccelerator.enable' => 0,
-            'memory_limit' => '48M'
-        );
-        
-        foreach ($requiredIniSettings as $variable => $newValue) {
-            $oldValue = ini_get($variable);
-            
-            if ($variable == 'memory_limit') {
-                $required = convertToBytes($newValue);
-                $set = convertToBytes($oldValue);
-                
-                if ( $set < $required) {
-                    echo "Sorry, your environment is not supported. You need to set $variable equal or greater than $required (now: $set).";
-                    $success = FALSE;
-                }
-
-            } elseif ($oldValue != $newValue) {
-                if (ini_set($variable, $newValue) === false) {
-                    echo "Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.";
-                    $success = FALSE;
-                }
-            }
+        if (!$success) {
+            echo $envCheck['message'];
+            return $success;
         }
         
         $extCheck = new Setup_ExtCheck('Setup/essentials.xml');

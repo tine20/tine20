@@ -68,7 +68,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUninstallApplications()
     {
-        $this->_json->uninstall(Zend_Json::encode(array('ActiveSync')));
+        $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
     }
     
     /**
@@ -77,7 +77,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchApplications()
     {
-        $apps = $this->_json->search();
+        $apps = $this->_json->searchApplications();
         //print_r($apps);
         
         $this->assertGreaterThan(0, $apps['totalcount']);
@@ -93,6 +93,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         // checks
         $this->assertTrue(isset($activeSyncApp));
         $this->assertTrue(!isset($activeSyncApp['id']));
+        $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
     }
     
     /**
@@ -101,9 +102,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testInstallApplications()
     {
-        $this->_json->install(Zend_Json::encode(array('ActiveSync')));
+        $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
 
-        $apps = $this->_json->search();
+        $apps = $this->_json->searchApplications();
         
         // get active sync
         foreach ($apps['results'] as $app) {
@@ -117,6 +118,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($activeSyncApp));
         $this->assertTrue(isset($activeSyncApp['id']));
         $this->assertEquals('disabled', $activeSyncApp['status']);
+        $this->assertEquals('uptodate', $activeSyncApp['install_status']);
     }
 
     /**

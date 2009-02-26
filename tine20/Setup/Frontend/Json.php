@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add tests
  * @todo        add ext/environment check
  */
 
@@ -110,13 +109,15 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
         $applications = array();
         foreach ($installed as $application) {
             $application['current_version'] = (string) $installable[$application['name']]->version;
+            $application['install_status'] = (version_compare($application['version'], $application['current_version']) === -1) ? 'updateable' : 'uptodate';
             $applications[] = $application;
             unset($installable[$application['name']]);
         }
         foreach ($installable as $name => $setupXML) {
             $applications[] = array(
                 'name'              => $name,
-                'current_version'   => (string) $setupXML->version
+                'current_version'   => (string) $setupXML->version,
+                'install_status'    => 'uninstalled'
             );
         }
         
@@ -124,6 +125,16 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
             'results'       => $applications,
             'totalcount'    => count($applications)
         );
+    }
+    
+    /**
+     * do the environment check
+     *
+     * @return array
+     */
+    public function envCheck()
+    {
+        return array();
     }
     
     /**
