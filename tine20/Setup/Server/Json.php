@@ -30,25 +30,19 @@ class Setup_Server_Json extends Setup_Server_Abstract
         try {
             $this->_initFramework();
             
-            // 2008-09-12 temporary bug hunting for FF or ExtJS bug. 
-            if ($_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] !== $_POST['requestType']) {
-                Tinebase_Core::getLogger()->debug('HEADER - POST API REQUEST MISMATCH! Header is:"' . $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] .
-                    '" whereas POST is "' . $_POST['requestType'] . '"' . ' HTTP_USER_AGENT: "' . $_SERVER['HTTP_USER_AGENT'] . '"');
-            }
-            
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is json request. method: ' . $_REQUEST['method']);
             
+            /*
             $anonymnousMethods = array(
-                'Tinebase.getRegistryData',
-                'Tinebase.getAllRegistryData',
-                'Tinebase.login',
-                'Tinebase.getAvailableTranslations',
-                'Tinebase.getTranslations',
-                'Tinebase.setLocale'
+                'Setup.getRegistryData',
+                'Setup.getAllRegistryData',
+                'Setup.login',
+                //'Setup.getAvailableTranslations',
+                //'Tinebase.getTranslations',
+                //'Setup.setLocale'
             );
             // check json key for all methods but some exceptoins
-            if ( !(in_array($_POST['method'], $anonymnousMethods) || preg_match('/Tinebase_UserRegistration/', $_POST['method']))  
-                    && $_POST['jsonKey'] != Tinebase_Core::get('jsonKey') ) {
+            if ( ! in_array($_POST['method'], $anonymnousMethods)  && $_POST['jsonKey'] != Tinebase_Core::get('jsonKey') ) {
     
                 if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
                     Tinebase_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
@@ -64,13 +58,12 @@ class Setup_Server_Json extends Setup_Server_Abstract
                     //throw new Exception('Possible CSRF attempt detected!');
                 }
             }
-    
+            */
+            
             $server = new Zend_Json_Server();
+            $server->setClass('Setup_Frontend_Json', 'Setup');
             
-            // add json apis which require no auth
-            $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
-            $server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
-            
+            /*
             // register additional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
                 
@@ -79,23 +72,13 @@ class Setup_Server_Json extends Setup_Server_Abstract
                 $applicationParts = explode('.', $_REQUEST['method']);
                 $applicationName = ucfirst($applicationParts[0]);
                 
-                switch($applicationName) {
-                    case 'Tinebase_Container':
-                        // additional Tinebase json apis
-                        $server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');                
-                        break;
-                        
-                    default;
-                        if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
-                            try {
-                                $server->setClass($applicationName.'_Frontend_Json', $applicationName);
-                            } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
-                            }
-                        }
-                        break;
+                try {
+                    $server->setClass($applicationName.'_Frontend_Json', $applicationName);
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
                 }
             }
+            */
             
         } catch (Exception $exception) {
             
