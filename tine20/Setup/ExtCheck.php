@@ -462,19 +462,38 @@ class Setup_ExtCheck
         return $data;
     }
 
+    /**
+     * get output
+     *
+     * @return string
+     */
     public function getOutput()
     {
         return $this->output = $this->list->showTable($this->_check());
     }
+    
+    /**
+     * get check result data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        $result = $this->_check();
+        return $result;
+    }
 
+    /**
+     * the constructor
+     *
+     * @param string $_file
+     */
     public function __construct($_file = NULL)
     {
-        if (isset($_SERVER['SHELL']) || isset($_SERVER['ProgramFiles']))  // Unix-Shell; Windows-Kommandozeile
-        {
+        if (isset($_SERVER['SHELL']) || isset($_SERVER['ProgramFiles'])) {
+            // Unix-Shell; Windows-Kommandozeile
             $this->list = new ExtensionList(new TextTableFactory());
-        }
-        else
-        {
+        } else {
             $this->list = new ExtensionList(new HTMLTableFactory());
         }
 

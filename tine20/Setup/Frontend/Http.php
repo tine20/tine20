@@ -181,10 +181,10 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     {
         $controller = new Setup_Controller();
         $envCheck = $controller->environmentCheck();
-        $success = $envCheck['result'];
+        $success = $envCheck['success'];
         
         if (!$success) {
-            echo $envCheck['message'];
+            echo implode('<br/>', $envCheck['message']) . '<br/>';
             return $success;
         }
         

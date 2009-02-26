@@ -276,8 +276,9 @@ class Setup_Controller
      */
     public function environmentCheck()
     {
+        $result = array();
+        $message = array();
         $success = TRUE;
-        $message = '';
         
         // check php environment
         $requiredIniSettings = array(
@@ -297,21 +298,26 @@ class Setup_Controller
                 $set = convertToBytes($oldValue);
                 
                 if ( $set < $required) {
-                    $message = "Sorry, your environment is not supported. You need to set $variable equal or greater than $required (now: $set).";
+                    $message[$variable] = "Sorry, your environment is not supported. You need to set $variable equal or greater than $required (now: $set).";
+                    $result[$variable] = FALSE;
                     $success = FALSE;
                 }
 
             } elseif ($oldValue != $newValue) {
                 if (ini_set($variable, $newValue) === false) {
-                    $message = "Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.";
+                    $message[$variable] = "Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.";
+                    $result[$variable] = FALSE;
                     $success = FALSE;
                 }
+            } else {
+                $result[$variable] = TRUE;
             }
         }
         
         return array(
-            'result'        => $success,
-            'message'       => $message
+            'result'        => $result,
+            'message'       => $message,
+            'success'       => $success,
         );
     }
     
