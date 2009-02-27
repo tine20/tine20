@@ -85,6 +85,8 @@ class Setup_Core extends Tinebase_Core
      */
     public static function setupDatabaseConnection()
     {
+        self::set('checkDB', TRUE);
+        
         // check database first
         try {
             parent::setupDatabaseConnection();
@@ -92,9 +94,8 @@ class Setup_Core extends Tinebase_Core
             self::set('checkDB', FALSE);
         }
         
-        //-- try to write to db
+        //-- try to write to db, if it fails: self::set('checkDB', FALSE);
         
-        self::set('checkDB', TRUE);
     }
     
     /**
