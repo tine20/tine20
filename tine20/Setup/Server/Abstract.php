@@ -46,7 +46,7 @@ abstract class Setup_Server_Abstract
 
         //Setup_Core::setupUserTimezone();
         
-        //Setup_Core::setupUserLocale();
+        Setup_Core::setupUserLocale();
         
         //Setup_Core::setupCache();
         

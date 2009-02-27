@@ -218,7 +218,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
         // setup also need some core tinebase regdata
         $locale = Tinebase_Core::get('locale');
         $registryData['Tinebase'] = array(
-            'timeZone'         => Setup_Core::get('userTimeZone'),
+            //'timeZone'         => Setup_Core::get('userTimeZone'),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
