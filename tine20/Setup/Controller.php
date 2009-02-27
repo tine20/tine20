@@ -380,7 +380,7 @@ class Setup_Controller
         $authResult = Zend_Auth::getInstance()->authenticate($setupAuth);
         
         if ($authResult->isValid()) {
-            Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
+            //Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
             Zend_Session::regenerateId();
             
             Tinebase_Core::set(Setup_Core::USER, $_username);

@@ -41,16 +41,16 @@ class Setup_Server_Json extends Setup_Server_Abstract
                 'Tinebase.setLocale',
             );
             // check json key for all methods but some exceptoins
-            if ( ! in_array($_POST['method'], $anonymnousMethods) 
+            if (! in_array($_POST['method'], $anonymnousMethods) 
                      && ( empty($_POST['jsonKey']) || $_POST['jsonKey'] != Tinebase_Core::get('jsonKey')
                             || !Setup_Core::isRegistered(Setup_Core::USER)
                         )
                ) {
     
                 if (! Setup_Core::isRegistered(Setup_Core::USER)) {
-                    Setup_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
+                    Setup_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without authorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
                     
-                    throw new Tinebase_Exception_AccessDenied('Not Autorised', 401);
+                    throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                 } else {
                     Setup_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
                         ' affected account: ' . print_r(Setup_Core::getUser(), true) .

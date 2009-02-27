@@ -54,7 +54,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
             $response = array(
                 'success'       => TRUE,
                 //'account'       => Tinebase_Core::getUser()->getPublicUser()->toArray(),
-                'jsonKey'       => Setup_Core::get('jsonKey'),
+                //'jsonKey'       => Setup_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0 Setup!"
             );
         } else {

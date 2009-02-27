@@ -55,10 +55,12 @@ class Setup_Auth implements Zend_Auth_Adapter_Interface
         if (isset(Setup_Core::getConfig()->setupuser)) {
             $setupConfig = Setup_Core::getConfig()->setupuser;
             
-            if ($setupConfig->username == $this->_username && $setupConfig->username == $this->_password) {
+            if ($setupConfig->username == $this->_username && $setupConfig->password == $this->_password) {
                 $code = Zend_Auth_Result::SUCCESS;
                 $messages = array('Login successful');
             } else {
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . " $setupConfig->username == $this->_username && $setupConfig->password == $this->_password ");
+                
                 $code = Zend_Auth_Result::FAILURE;
                 $messages = array('Login failed');
             }
@@ -66,7 +68,7 @@ class Setup_Auth implements Zend_Auth_Adapter_Interface
             $code = Zend_Auth_Result::FAILURE;
             $messages = array('No setup user found in config.inc.php');
         }
-        
+                
         $result = new Zend_Auth_Result(
             $code,
             $this->_username,
