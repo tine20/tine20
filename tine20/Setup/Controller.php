@@ -88,6 +88,25 @@ class Setup_Controller
     }
 
     /**
+     * check system/php requirements (env + ext check)
+     *
+     * @return unknown
+     */
+    public function checkRequirements()
+    {
+        $result = $this->environmentCheck();
+        
+        $extCheck = new Setup_ExtCheck(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'essentials.xml');
+        $extResult = $extCheck->getData();
+
+        $result['success'] = $result['success'] && $extResult['success'];
+        $result['result'] = array_merge($result['result'], $extResult['result']);
+        $result['message'] = array_merge($result['message'], $extResult['message']);
+        
+        return $result;
+    }
+    
+    /**
      * get list of applications as found in the filesystem
      *
      * @return array appName => setupXML
