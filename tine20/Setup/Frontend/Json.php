@@ -187,13 +187,13 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
     {
         $registryData =  array(
             'configExists'     => Setup_Core::configFileExists(),
+            'checkDB'          => Setup_Core::get('checkDB'),
             'setupChecks'      => $this->envCheck(),
         );
         
         if (Setup_Core::isRegistered(Setup_Core::USER)) {
             $registryData += array(    
-                'currentAccount'   => Setup_Core::getUser()->toArray(),
-                'jsonKey'          => Tinebase_Core::get('jsonKey'),
+                'currentAccount'   => Setup_Core::getUser(),
                 'version'          => array(
                     'codename'      => TINE20SETUP_CODENAME,
                     'packageString' => TINE20SETUP_PACKAGESTRING,

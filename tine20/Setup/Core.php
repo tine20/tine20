@@ -79,6 +79,25 @@ class Setup_Core extends Tinebase_Core
     }
     
     /**
+     * initializes the database connection
+     *
+     * @throws  Tinebase_Exception_UnexpectedValue
+     */
+    public static function setupDatabaseConnection()
+    {
+        // check database first
+        try {
+            parent::setupDatabaseConnection();
+        } catch (Zend_Db_Adapter_Exception $zae) {
+            self::set('checkDB', FALSE);
+        }
+        
+        //-- try to write to db
+        
+        self::set('checkDB', TRUE);
+    }
+    
+    /**
      * setups the logger
      * 
      * NOTE: if no logger is configured, we write to stderr in setup
@@ -155,8 +174,8 @@ class Setup_Core extends Tinebase_Core
         }
         self::set('jsonKey', $session->jsonKey);
 
-        if (isset($session->currentAccount)) {
-            self::set(self::USER, $session->currentAccount);
+        if (isset($session->setupuser)) {
+            self::set(self::USER, $session->setupuser);
         }
         
         self::set(self::SESSION, $session);

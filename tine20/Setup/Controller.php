@@ -70,21 +70,26 @@ class Setup_Controller
     private function __construct()
     {
         $this->_baseDir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
-        $this->_db = Tinebase_Core::getDb();
         
-        switch(get_class($this->_db)) {
-            case 'Zend_Db_Adapter_Pdo_Mysql':
-                $this->_backend = Setup_Backend_Factory::factory('Mysql');
-                break;
-                
-            case 'Zend_Db_Adapter_Pdo_Oci':
-                $this->_backend = Setup_Backend_Factory::factory('Oracle');
-                break;
-                
-            default:
-                throw new InvalidArgumentException('Invalid database backend type defined.');
-                break;
-        }        
+        if (Setup_Core::get('checkDB')) {
+            $this->_db = Setup_Core::getDb();
+            
+            switch(get_class($this->_db)) {
+                case 'Zend_Db_Adapter_Pdo_Mysql':
+                    $this->_backend = Setup_Backend_Factory::factory('Mysql');
+                    break;
+                    
+                case 'Zend_Db_Adapter_Pdo_Oci':
+                    $this->_backend = Setup_Backend_Factory::factory('Oracle');
+                    break;
+                    
+                default:
+                    throw new InvalidArgumentException('Invalid database backend type defined.');
+                    break;
+            }        
+        } else {
+            $this->_db = NULL;
+        }
     }
 
     /**

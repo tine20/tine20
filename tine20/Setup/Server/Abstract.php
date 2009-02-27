@@ -44,14 +44,15 @@ abstract class Setup_Server_Abstract
 
         Setup_Core::setupDatabaseConnection();
 
-        Setup_Core::setupUserTimezone();
+        //Setup_Core::setupUserTimezone();
         
-        Setup_Core::setupUserLocale();
+        //Setup_Core::setupUserLocale();
         
-        Setup_Core::setupCache();
+        //Setup_Core::setupCache();
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
+    
     
     /**
      * handler for tine requests
