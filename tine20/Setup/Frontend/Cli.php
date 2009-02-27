@@ -63,7 +63,7 @@ class Setup_Frontend_Cli
      */
     protected function _install(Zend_Console_Getopt $_opts)
     {
-        $controller = new Setup_Controller();
+        $controller = Setup_Controller::getInstance();
         
         if($_opts->install === true) {
             $applications = $controller->getInstallableApplications();
@@ -100,7 +100,7 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        $controller = new Setup_Controller();
+        $controller = Setup_Controller::getInstance();
         
         if($_opts->update === true) {
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
@@ -139,7 +139,7 @@ class Setup_Frontend_Cli
      */
     protected function _uninstall(Zend_Console_Getopt $_opts)
     {
-        $controller = new Setup_Controller();
+        $controller = Setup_Controller::getInstance();
         
         if($_opts->uninstall === true) {
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');

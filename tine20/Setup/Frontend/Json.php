@@ -38,7 +38,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      */
     public function __construct()
     {
-        $this->_controller = new Setup_Controller();
+        $this->_controller = Setup_Controller::getInstance();
     }
     
     /**
@@ -134,7 +134,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      */
     public function envCheck()
     {
-        $controller = new Setup_Controller();
+        $controller = Setup_Controller::getInstance();
         $result = $controller->environmentCheck();
         
         $extCheck = new Setup_ExtCheck(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'essentials.xml');

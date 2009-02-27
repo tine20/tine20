@@ -106,7 +106,7 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     protected function _install($_updated = FALSE)
     {
-        $controller = new Setup_Controller();
+        $controller = Setup_Controller::getInstance();
         
         if ($_updated || $this->_check()) {
             $applications = $controller->getInstallableApplications();
@@ -146,7 +146,7 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     protected function _update()
     {
-        $controller = new Setup_Controller();
+        $controller = Setup_Controller::getInstance();
         
         try {
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
@@ -179,7 +179,7 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     protected function _check()
     {
-        $controller = new Setup_Controller();
+        $controller = Setup_Controller::getInstance();
         $envCheck = $controller->environmentCheck();
         $success = $envCheck['success'];
         

@@ -23,6 +23,13 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'Tinebase' . DIR
 class Setup_Controller
 {
     /**
+     * holdes the instance of the singleton
+     *
+     * @var Setup_Controller
+     */
+    private static $_instance = NULL;
+    
+    /**
      * setup backend
      *
      * @var Setup_Backend_Interface
@@ -37,10 +44,30 @@ class Setup_Controller
     protected $_baseDir;
     
     /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() {}
+
+    /**
+     * the singleton pattern
+     *
+     * @return Setup_Controller
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Setup_Controller;
+        }
+        
+        return self::$_instance;
+    }
+
+    /**
      * the constructor
      *
      */
-    public function __construct()
+    private function __construct()
     {
         $this->_baseDir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
         $this->_db = Tinebase_Core::getDb();
@@ -322,53 +349,43 @@ class Setup_Controller
     }
     
     /**
-     * uninstall app
+     * create new setup user session
      *
-     * @param Tinebase_Model_Application $_application
+     * @param   string $_username
+     * @param   string $_password
+     * @return  bool
      */
-    protected function _uninstallApplication(Tinebase_Model_Application $_application)
+    public function login($_username, $_password)
     {
-        #echo "Uninstall $_application\n";
-        $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
+        $setupAuth = new Setup_Auth($_username, $_password); 
+        $authResult = Zend_Auth::getInstance()->authenticate($setupAuth);
         
-        do {
-            $oldCount = count($applicationTables);
+        if ($authResult->isValid()) {
             
-            foreach($applicationTables as $key => $table) {
-                #echo "Remove table: $table\n";
-                try {
-                    $this->_backend->dropTable($table);
-                    if($_application != 'Tinebase') {
-                        Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
-                    }
-                    unset($applicationTables[$key]);
-                } catch(Zend_Db_Statement_Exception $e) {
-                    // we need to catch exceptions here, as we don't want to break here, as a table
-                    // migth still have some foreign keys
-                    #echo $e->getMessage() . "\n";
-                }
-                
-            }
+            //Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
+            Zend_Session::regenerateId();
             
-            if($oldCount > 0 && count($applicationTables) == $oldCount) {
-                throw new Setup_Exception('dead lock detected oldCount: ' . $oldCount);
-            }
-        } while(count($applicationTables) > 0);
-                
-        if($_application != 'Tinebase') {
-            // remove application from table of installed applications
-            $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
-            $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $applicationId)
-            );
+            Tinebase_Core::set('setupuser', $_username);
+            Tinebase_Core::getSession()->setupuser = $_username;            
+            return true;
             
-            $this->_db->delete(SQL_TABLE_PREFIX . 'role_rights', $where);        
-            $this->_db->delete(SQL_TABLE_PREFIX . 'container', $where);
-                    
-            Tinebase_Application::getInstance()->deleteApplication($_application);
+        } else {
+            Zend_Session::destroy();
+            sleep(2);
+            return false;
         }
     }
-
+    
+    /**
+     * destroy session
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        Zend_Session::destroy();
+    }   
+    
     /**
      * install list of applications
      *
@@ -419,6 +436,54 @@ class Setup_Controller
             foreach ($_xml->defaultRecords[0] as $record) {
                 $this->_backend->execInsertStatement($record);
             }
+        }
+    }
+
+    /**
+     * uninstall app
+     *
+     * @param Tinebase_Model_Application $_application
+     */
+    protected function _uninstallApplication(Tinebase_Model_Application $_application)
+    {
+        #echo "Uninstall $_application\n";
+        $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
+        
+        do {
+            $oldCount = count($applicationTables);
+            
+            foreach($applicationTables as $key => $table) {
+                #echo "Remove table: $table\n";
+                try {
+                    $this->_backend->dropTable($table);
+                    if($_application != 'Tinebase') {
+                        Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
+                    }
+                    unset($applicationTables[$key]);
+                } catch(Zend_Db_Statement_Exception $e) {
+                    // we need to catch exceptions here, as we don't want to break here, as a table
+                    // migth still have some foreign keys
+                    #echo $e->getMessage() . "\n";
+                }
+                
+            }
+            
+            if($oldCount > 0 && count($applicationTables) == $oldCount) {
+                throw new Setup_Exception('dead lock detected oldCount: ' . $oldCount);
+            }
+        } while(count($applicationTables) > 0);
+                
+        if($_application != 'Tinebase') {
+            // remove application from table of installed applications
+            $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $applicationId)
+            );
+            
+            $this->_db->delete(SQL_TABLE_PREFIX . 'role_rights', $where);        
+            $this->_db->delete(SQL_TABLE_PREFIX . 'container', $where);
+                    
+            Tinebase_Application::getInstance()->deleteApplication($_application);
         }
     }
 }
