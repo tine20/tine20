@@ -66,13 +66,13 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
     }
         
     // fake a setup user
-    var setupUser = new Tine.Tinebase.Model.User({
-        accountId           : 0,
-        accountDisplayName  : 'Setup Admin',
+    var setupUser = {
+        accountId           : 1,
+        accountDisplayName  : Tine.Setup.registry.get('currentAccount'),
         accountLastName     : 'Admin',
         accountFirstName    : 'Setup',
         accountFullName     : 'Setup Admin'
-    }, 0);
+    };
     Tine.Tinebase.registry.add('currentAccount', setupUser);
     
     // enable setup app
@@ -81,7 +81,6 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
         status: 'enabled'
     }]);
     Tine.Tinebase.MainScreen.prototype.defaultAppName = 'Setup';
-    
     
     return true;
 });
