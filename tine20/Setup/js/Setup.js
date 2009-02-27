@@ -24,22 +24,23 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var dbMissing     = !Tine.Setup.registry.get('checkDB');
         
         this.root = {
+            id: '/',
             children: [{
                 text: this.app.i18n._('Setup Checks'),
                 iconCls: testsFailed ? 'setup_checks_fail' : 'setup_checks_success',
-                ContentType: 'EnvCheck',
+                id: 'EnvCheck',
                 leaf: true
             }, {
                 text: this.app.i18n._('Config Manager'),
                 iconCls: 'setup_config_manager',
                 disabled: testsFailed,
-                ContentType: 'ConfigManager',
+                id: 'ConfigManager',
                 leaf: true
             }, {
                 text: this.app.i18n._('Application Manager'),
                 iconCls: 'setup_application_manager',
                 disabled: testsFailed || configMissing || dbMissing,
-                ContentType: 'Application',
+                id: 'Application',
                 leaf: true
             }]
         };
@@ -54,7 +55,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onNodeClick: function(node) {
         if (! node.disabled) {
-            this.app.getMainScreen().activeContentType = node.attributes.ContentType;
+            this.app.getMainScreen().activeid = node.id;
             this.app.getMainScreen().show();
         } else {
             return false;
@@ -77,7 +78,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
         
         activeType.select();
-        this.app.getMainScreen().activeContentType = activeType.attributes.ContentType;
+        this.app.getMainScreen().activeid = activeType.id;
     }
 });
 

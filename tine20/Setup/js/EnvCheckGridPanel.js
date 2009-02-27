@@ -67,6 +67,22 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
         });
         
         this.store.on('beforeload', function() {
+            Ext.Ajax.request({
+                params: {
+                    method: 'Setup.envCheck'
+                },
+                scope: this,
+                success: function(response) {
+                    var data = Ext.util.JSON.decode(response.responseText);
+                    this.store.loadData(data.results);
+                    
+                    var iconEl = Ext.get(this.app.getMainScreen().getTreePanel().getNodeById('EnvCheck').ui.iconNode);
+                    iconEl.removeClass('setup_checks_success');
+                    iconEl.removeClass('setup_checks_fail');
+                    iconEl.addClass(data.success ? 'setup_checks_success' : 'setup_checks_fail');
+                }
+            })
+            
             return false;
         }, this);
         
