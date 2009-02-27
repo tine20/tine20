@@ -25,7 +25,7 @@ require_once 'Helper.php';
 class Tinebase_Controller
 {
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Controller
      */
