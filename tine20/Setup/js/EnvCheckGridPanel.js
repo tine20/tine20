@@ -7,10 +7,13 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add env check model
+ * @todo        include this file
+ * @todo        add env check model (to Setup.js)
+ * @todo        make it available from tree menu
  * @todo        add column model
  * @todo        fill store with check registry data
  * @todo        make it work!
+ * 
  */
  
 Ext.ns('Tine', 'Tine.Setup');
