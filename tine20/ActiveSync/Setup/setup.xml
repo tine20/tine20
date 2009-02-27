@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>0.2</version>
+    <version>0.3</version>
     <order>90</order>
     <status>disabled</status>    
     <depends>
@@ -254,4 +254,33 @@
             </declaration>
         </table>
     </tables>
+    <defaultRecords>
+        <record>
+            <table>
+                <name>acsync_policy</name>
+            </table>
+            <field>
+                <name>id</name>
+                <value>1</value>
+            </field>
+            <field>
+                <name>name</name>
+                <value>Default Policy</value>
+                <!-- gettext('Default Policy') -->
+            </field>
+            <field>
+                <name>description</name>
+                <value>Default Policy installed during setup</value>
+                <!-- gettext('Default Policy installed during setup') -->
+            </field>
+            <field>
+                <name>policykey</name>
+                <value>1</value>
+            </field>
+            <field>
+                <name>devicepasswordenabled</name>
+                <value>1</value>
+            </field>
+        </record>
+    </defaultRecords>     
 </application>

@@ -97,4 +97,20 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
                 
         $this->setApplicationVersion('ActiveSync', '0.2');
     }    
+    /**
+     * add default policy
+     * 
+     */    
+    public function update_2()
+    {
+        $this->_db->insert(SQL_TABLE_PREFIX . 'acsync_policy', array(
+            'id'                    => 1,
+            'name'                  => 'Default policy',
+            'description'           => 'Default policy installed during setup',
+            'policykey'             => 1,
+            'devicepasswordenabled' => 1 
+        ));
+        
+        $this->setApplicationVersion('ActiveSync', '0.3');
+    }
 }
