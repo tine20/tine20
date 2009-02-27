@@ -91,3 +91,11 @@ Tine.Setup.ApplicationBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     modelName: 'Application',
     recordClass: Tine.Setup.Model.Application
 });
+
+/**
+ * Model of a grant
+ */
+Tine.Setup.Model.EnvCheck = Ext.data.Record.create([
+    {name: 'key'},
+    {name: 'value'}
+]);

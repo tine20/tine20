@@ -45,9 +45,10 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initStore: function() {
-    	/*
         this.store = new Ext.data.Store({
-            fields: this.recordClass,
+            fields: Tine.Setup.Model.EnvCheck,
+            mode: 'local'
+            /*
             proxy: this.recordProxy,
             reader: this.recordProxy.getReader(),
             remoteSort: true,
@@ -58,8 +59,10 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
                 'beforeload': this.onStoreBeforeload,
                 'load': this.onStoreLoad
             }
+            */
         });
-        */
+            
+        this.store.loadData(Tine.Setup.registry.get('setupChecks').results);
     },
 
     /**
@@ -160,17 +163,15 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
     
     getColumns: function() {
         return  [
-            /*
-            {id: 'name',            width: 400, sortable: true, dataIndex: 'name',            header: this.app.i18n._("Name")}, 
-            {id: 'status',          width: 70,  sortable: true, dataIndex: 'status',          header: this.app.i18n._("Enabled"),       renderer: this.enabledRenderer}, 
-            {id: 'order',           width: 50,  sortable: true, dataIndex: 'order',           header: this.app.i18n._("Order")},
-            {id: 'current_version', width: 70,  sortable: true, dataIndex: 'current_version', header: this.app.i18n._("Current ersion")},
-            {id: 'version',         width: 70,  sortable: true, dataIndex: 'version',         header: this.app.i18n._("Version")},
-            {id: 'install_status',  width: 70,  sortable: true, dataIndex: 'install_status',  header: this.app.i18n._("Status"),        renderer: this.upgradeStatusRenderer.createDelegate(this)}
-            */
+            {id: 'key',             width: 400, sortable: true, dataIndex: 'key',             header: this.app.i18n._("Check")}, 
+            {id: 'value',            width: 400, sortable: true, dataIndex: 'value',          header: this.app.i18n._("Result"), renderer: this.resultRenderer}
         ];
-    }
+    },
 
+    resultRenderer: function(value) {
+        return Tine.Tinebase.common.booleanRenderer(value);
+    }
+    
     /*
     initActions: function() {
         this.action_installApplications = new Ext.Action({
@@ -265,10 +266,6 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
                 Ext.Msg.alert(this.app.i18n._('Shit'), this.app.i18n._('Where are the backup tapes'));
             }
         });
-    },
-    
-    enabledRenderer: function(value) {
-        return Tine.Tinebase.common.booleanRenderer(value == 'enabled');
     },
     
     upgradeStatusRenderer: function(value) {
