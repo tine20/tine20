@@ -155,17 +155,9 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      */
     public function getRegistryData()
     {
-        $locale = Tinebase_Core::get('locale');
-        
         $registryData =  array(
             'configExists'     => Setup_Core::configFileExists(),
             'setupChecks'      => $this->envCheck(),
-            'timeZone'         => Setup_Core::get('userTimeZone'),
-            'locale'           => array(
-                'locale'   => $locale->toString(), 
-                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                'region'   => $locale->getCountryTranslation($locale->getRegion()),
-            ),
         );
         
         if (Setup_Core::isRegistered(Setup_Core::USER)) {
@@ -191,7 +183,18 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      */
     public function getAllRegistryData()
     {
-        $registryData['Tinebase'] = $this->getRegistryData();
+        $registryData['Setup'] = $this->getRegistryData();
+        
+        // setup also need some core tinebase regdata
+        $locale = Tinebase_Core::get('locale');
+        $registryData['Tinebase'] = array(
+            'timeZone'         => Setup_Core::get('userTimeZone'),
+            'locale'           => array(
+                'locale'   => $locale->toString(), 
+                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
+                'region'   => $locale->getCountryTranslation($locale->getRegion()),
+            ),
+        );
         
         die(Zend_Json::encode($registryData));
     }
