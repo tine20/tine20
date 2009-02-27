@@ -95,6 +95,13 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             return $this->mainScreen();
         }
         
+        if ($_REQUEST['method'] == 'Tinebase.getJsTranslations') {
+            $locale = Setup_Core::get('locale');
+            $translations = Tinebase_Translation::getJsTranslations($locale);
+            header('Content-Type: application/javascript');
+            die($translations);
+        }
+        
         $updateDone = $this->_update();
         $this->_install($updateDone);
     }
