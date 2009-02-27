@@ -63,7 +63,7 @@
                 }
                 
                 // laguage file
-                echo "\n    ". '<script type="text/javascript" language="javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+                echo "\n    ". '<script type="text/javascript" language="javascript" src="setup.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
                 break;
         }?>
 </head>
