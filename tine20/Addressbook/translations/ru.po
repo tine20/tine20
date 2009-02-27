@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-08-05 17:42+0100\n"
-"PO-Revision-Date: 2009-02-26 10:38+0100\n"
+"PO-Revision-Date: 2009-02-27 15:18+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,9 @@ msgstr ""
 "X-Poedit-SearchPath-0: Addressbook\n"
 
 #: Controller.php:96
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal addressbook"
-msgstr "{0}'s Личная книга адресов"
+msgstr "%s's Личная книга адресов"
 
 #: Export/Pdf.php:38
 msgid "Business Contact Data"
@@ -451,12 +451,12 @@ msgid "Enter description"
 msgstr "Введите описание"
 
 #: js/EditDialog.js:506
-#, fuzzy, python-format
+#, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
 msgstr[0] "Линк"
-msgstr[1] "Линка"
-msgstr[2] "Линков"
+msgstr[1] "Линка [%d]"
+msgstr[2] "Линков [%d]"
 
 #: Setup/setup.xml:512
 msgid "Mr"

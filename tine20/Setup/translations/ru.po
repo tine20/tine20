@@ -2,95 +2,96 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-02-27 15:50+0100\n"
+"Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Russian\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/ApplicationGridPanel.js:37 js/EnvCheckGridPanel.js:164
+#: js/ApplicationGridPanel.js:37
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
-#: js/ApplicationGridPanel.js:38 js/EnvCheckGridPanel.js:165
+#: js/ApplicationGridPanel.js:38
 msgid "Enabled"
-msgstr ""
+msgstr "Позволенный"
 
-#: js/ApplicationGridPanel.js:39 js/EnvCheckGridPanel.js:166
+#: js/ApplicationGridPanel.js:39
 msgid "Order"
-msgstr ""
+msgstr "Последовательность"
 
 #: js/ApplicationGridPanel.js:40
 msgid "Current Version"
-msgstr ""
+msgstr "Нынешная версия"
 
-#: js/ApplicationGridPanel.js:41 js/EnvCheckGridPanel.js:168
+#: js/ApplicationGridPanel.js:41
 msgid "Version"
-msgstr ""
+msgstr "Версия"
 
-#: js/ApplicationGridPanel.js:42 js/EnvCheckGridPanel.js:169
+#: js/ApplicationGridPanel.js:42
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
-#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:177
+#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:139
 msgid "Install application"
-msgstr ""
+msgstr "Установить программу пользования"
 
-#: js/ApplicationGridPanel.js:57 js/EnvCheckGridPanel.js:186
+#: js/ApplicationGridPanel.js:57
 msgid "Uninstall application"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:66 js/EnvCheckGridPanel.js:195
+#: js/ApplicationGridPanel.js:66
 msgid "Update application"
-msgstr ""
+msgstr "Обновить программу пользования"
 
-#: js/ApplicationGridPanel.js:136 js/EnvCheckGridPanel.js:265
+#: js/ApplicationGridPanel.js:136
 msgid "Shit"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:136 js/EnvCheckGridPanel.js:265
+#: js/ApplicationGridPanel.js:136
 msgid "Where are the backup tapes"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:87
-msgid "Displaying records {0} - {1} of {2}"
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:88
-msgid "No {0} to display"
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:109
+#: js/EnvCheckGridPanel.js:95
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:167
-msgid "Current ersion"
+#: js/EnvCheckGridPanel.js:125
+msgid "Check"
 msgstr ""
 
-#: js/Setup.js:27
+#: js/EnvCheckGridPanel.js:126
+msgid "Result"
+msgstr ""
+
+#: js/Setup.js:28
 msgid "Setup Checks"
 msgstr ""
 
-#: js/Setup.js:32
+#: js/Setup.js:33
 msgid "Config Manager"
-msgstr ""
+msgstr "Упровление конфигурации"
 
-#: js/Setup.js:38
+#: js/Setup.js:39
 msgid "Application Manager"
-msgstr ""
+msgstr "Упровление программы пользования"
 
-#: js/Setup.js:81
+#: js/Setup.js:105
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Программа пользования"
+msgstr[1] "Программы пользования"
+msgstr[2] "Программ пользования"
+
+#~ msgid "Displaying records {0} - {1} of {2}"
+#~ msgstr "Показываю действия {0} - {1} of {2}"
+
+#~ msgid "No {0} to display"
+#~ msgstr "Не {0} для показа"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-08-05 17:48+0100\n"
-"PO-Revision-Date: 2009-02-26 11:02+0100\n"
+"PO-Revision-Date: 2009-02-27 15:21+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -71,24 +71,24 @@ msgid "Updated Fields:"
 msgstr "Обновленные поля:"
 
 #: Controller/Lead.php:241
-#, fuzzy, python-format
+#, python-format
 msgid "%s changed from %s to %s."
-msgstr "{0} изменен с {0} на {0}."
+msgstr "%s изменен с %s на %s."
 
 #: Controller/Lead.php:247
-#, fuzzy, python-format
+#, python-format
 msgid "Lead %s has been changed"
-msgstr "Совет продажи {0} был изменен"
+msgstr "Совет продажи %s был изменен"
 
 #: Controller/Lead.php:249
-#, fuzzy, python-format
+#, python-format
 msgid "Lead %s has been creaded"
-msgstr "Совет продажи {0} был произведен"
+msgstr "Совет продажи %s был произведен"
 
 #: Controller.php:100
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal leads"
-msgstr "{0}'s Личные советы продажи"
+msgstr "%s's Личные советы продажи"
 
 #: Export/Pdf.php:74
 msgid "Lead Data"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-08-05 17:48+0100\n"
-"PO-Revision-Date: 2008-10-01 13:55+0100\n"
+"PO-Revision-Date: 2009-02-27 15:20+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -11,8 +11,7 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: Acl/Rights.php:162
 msgid "manage access log"
@@ -28,9 +27,7 @@ msgstr "Управлять пользовательскими счетами"
 
 #: Acl/Rights.php:167
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"Добавить и обработать пользователей и группы, присоединить пользователей к "
-"группам, ставить пароли по-новому. "
+msgstr "Добавить и обработать пользователей и группы, присоединить пользователей к группам, ставить пароли по-новому. "
 
 #: Acl/Rights.php:170
 msgid "manage applications"
@@ -45,11 +42,8 @@ msgid "manage roles"
 msgstr "Управлять ролями"
 
 #: Acl/Rights.php:175
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"Добавить и обработать роли, добавить новых участников к ролям, добавить "
-"прикладные права на роли"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "Добавить и обработать роли, добавить новых участников к ролям, добавить прикладные права на роли"
 
 #: Acl/Rights.php:178
 msgid "manage shared tags"
@@ -119,15 +113,17 @@ msgstr "Роли"
 msgid "Admin"
 msgstr "Администратор"
 
-#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Admin.js:251
+#: js/Groups.js:47
+#: js/Roles.js:48
+#: js/Tags.js:41
 #: js/Users.js:166
 msgid "Confirm"
 msgstr "Подтверждать"
 
 #: js/Admin.js:251
 msgid "Do you really want to delete the selected access log entries?"
-msgstr ""
-"Вы действительно хотели удалить выбранные элементы из лага(ов) доступа?"
+msgstr "Вы действительно хотели удалить выбранные элементы из лага(ов) доступа?"
 
 #: js/Admin.js:366
 msgid "delete entry"
@@ -137,8 +133,12 @@ msgstr "Удалить элемент"
 msgid "select all"
 msgstr "Выбрать все"
 
-#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
-#: js/Tags.js:103 js/Users.js:204
+#: js/Admin.js:372
+#: js/Admin.js:770
+#: js/Groups.js:111
+#: js/Roles.js:112
+#: js/Tags.js:103
+#: js/Users.js:204
 msgid "enter searchfilter"
 msgstr "Введите поисковый фильтр"
 
@@ -150,8 +150,12 @@ msgstr "Показ от:"
 msgid "to:"
 msgstr "До:"
 
-#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
-#: js/Tags.js:123 js/Users.js:220
+#: js/Admin.js:411
+#: js/Admin.js:787
+#: js/Groups.js:131
+#: js/Roles.js:132
+#: js/Tags.js:123
+#: js/Users.js:220
 msgid "Search:"
 msgstr "Поиск:"
 
@@ -177,7 +181,7 @@ msgstr "Успех"
 
 #: js/Admin.js:521
 msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Показ элемента лога доступа{0} - {1} of {2}"
+msgstr "Показ элемента лога доступа {0} - {1} of {2}"
 
 #: js/Admin.js:522
 msgid "No access log entries to display"
@@ -187,11 +191,15 @@ msgstr "Некаких записей регистрации доступа дл
 msgid "Session ID"
 msgstr "Cессия ID"
 
-#: js/Admin.js:527 js/Users.js:555
+#: js/Admin.js:527
+#: js/Users.js:555
 msgid "Login Name"
 msgstr "Имя для регистрации"
 
-#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
+#: js/Admin.js:528
+#: js/Groups.js:176
+#: js/Groups.js:488
+#: js/Roles.js:177
 #: js/Tags.js:165
 msgid "Name"
 msgstr "Имя"
@@ -243,7 +251,7 @@ msgstr "Неизвестные статусы ({0})"
 
 #: js/Admin.js:852
 msgid "Displaying application {0} - {1} of {2}"
-msgstr "Показ аппликаций"
+msgstr "Показ аппликаций {0} - {1} of {2}"
 
 #: js/Admin.js:853
 msgid "No applications to display"
@@ -273,13 +281,23 @@ msgstr "Вы уверены что хотите удалить выбранны�
 msgid "Deleting group(s)..."
 msgstr "Удаление групп(ы)..."
 
-#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
-#: js/Users.js:468 js/Users.js:479 js/Users.js:504 js/Users.js:521
+#: js/Groups.js:69
+#: js/Groups.js:378
+#: js/Groups.js:406
+#: js/Roles.js:70
+#: js/Roles.js:439
+#: js/Roles.js:467
+#: js/Tags.js:341
+#: js/Users.js:186
+#: js/Users.js:468
+#: js/Users.js:479
+#: js/Users.js:504
+#: js/Users.js:521
 msgid "Failed"
 msgstr "Неудача"
 
-#: js/Groups.js:69 js/Groups.js:406
+#: js/Groups.js:69
+#: js/Groups.js:406
 #, fuzzy
 msgid "Some error occurred while trying to delete the group."
 msgstr "При удаление группы возникла ошибка."
@@ -300,24 +318,35 @@ msgstr "Удалить группу"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Показ групп {0} - {1} of {2}"
 
-#: js/Groups.js:170 js/Groups.js:221
+#: js/Groups.js:170
+#: js/Groups.js:221
 msgid "No groups to display"
 msgstr "Некаких групп для показа нет"
 
-#: js/Groups.js:175 js/Roles.js:176 js/Users.js:270
+#: js/Groups.js:175
+#: js/Roles.js:176
+#: js/Users.js:270
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
-#: js/Tags.js:166 js/Tags.js:547
+#: js/Groups.js:177
+#: js/Groups.js:558
+#: js/Roles.js:178
+#: js/Roles.js:653
+#: js/Tags.js:166
+#: js/Tags.js:547
 msgid "Description"
 msgstr "Описание"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+#: js/Groups.js:343
+#: js/Roles.js:399
+#: js/Tags.js:297
 msgid "Please wait"
 msgstr "Пожалуйста подождите"
 
-#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+#: js/Groups.js:343
+#: js/Roles.js:399
+#: js/Tags.js:297
 msgid "Updating Memberships"
 msgstr "Обновить членство"
 
@@ -325,11 +354,17 @@ msgstr "Обновить членство"
 msgid "Could not save group."
 msgstr "Группа не могла быть сохранена."
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
+#: js/Groups.js:385
+#: js/Roles.js:446
+#: js/Tags.js:346
+#: js/Users.js:527
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:527
+#: js/Groups.js:385
+#: js/Roles.js:446
+#: js/Tags.js:346
+#: js/Users.js:527
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, устраните показанные ошибки."
 
@@ -345,7 +380,8 @@ msgstr "Члены группы"
 msgid "Group Name"
 msgstr "Название группы"
 
-#: js/Groups.js:594 js/Users.js:361
+#: js/Groups.js:594
+#: js/Users.js:361
 msgid "add account"
 msgstr "Добавить счет"
 
@@ -370,7 +406,8 @@ msgstr "Вы уверены что хотите удалить выбранну�
 msgid "Deleting role(s)..."
 msgstr "Удаление роли(ей)..."
 
-#: js/Roles.js:70 js/Roles.js:467
+#: js/Roles.js:70
+#: js/Roles.js:467
 #, fuzzy
 msgid "Some error occurred while trying to delete the role."
 msgstr "При удаление роли возникла ошибка."
@@ -391,7 +428,8 @@ msgstr "Удалить роль"
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Показ ролей {0} - {1} of {2}"
 
-#: js/Roles.js:171 js/Roles.js:222
+#: js/Roles.js:171
+#: js/Roles.js:222
 msgid "No roles to display"
 msgstr "Некаких ролей для показа нет"
 
@@ -411,7 +449,8 @@ msgstr "Участники роли"
 msgid "Members"
 msgstr "Участники"
 
-#: js/Roles.js:616 js/Tags.js:563
+#: js/Roles.js:616
+#: js/Tags.js:563
 msgid "Rights"
 msgstr "Права"
 
@@ -423,7 +462,9 @@ msgstr "Название роли"
 msgid "Loading Role..."
 msgstr "З"
 
-#: js/Roles.js:686 js/Tags.js:584 js/Users.js:484
+#: js/Roles.js:686
+#: js/Tags.js:584
+#: js/Users.js:484
 msgid "Please Wait"
 msgstr "Пожалуйста подождите"
 
@@ -460,11 +501,13 @@ msgstr "Удалить тэг"
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Показ тэгов {0} - {1} of {2}"
 
-#: js/Tags.js:159 js/Tags.js:210
+#: js/Tags.js:159
+#: js/Tags.js:210
 msgid "No tags to display"
 msgstr "Некаких тэгов для показа нет"
 
-#: js/Tags.js:164 js/Tags.js:489
+#: js/Tags.js:164
+#: js/Tags.js:489
 msgid "Color"
 msgstr "Цвет"
 
@@ -542,7 +585,8 @@ msgstr "Показ счетов {0} - {1} of {2}"
 msgid "No accounts to display"
 msgstr "Некаких счетов для показа нет"
 
-#: js/Users.js:271 js/Users.js:593
+#: js/Users.js:271
+#: js/Users.js:593
 msgid "Status"
 msgstr "Статус"
 
@@ -566,11 +610,13 @@ msgstr "Имя"
 msgid "Email"
 msgstr "Электронная почта"
 
-#: js/Users.js:277 js/Users.js:617
+#: js/Users.js:277
+#: js/Users.js:617
 msgid "Last login at"
 msgstr "Последний регистрировался в"
 
-#: js/Users.js:278 js/Users.js:624
+#: js/Users.js:278
+#: js/Users.js:624
 msgid "Last login from"
 msgstr "Последная регистрацыя от"
 
@@ -578,7 +624,8 @@ msgstr "Последная регистрацыя от"
 msgid "Password changed"
 msgstr "Пароль бил изменен"
 
-#: js/Users.js:280 js/Users.js:612
+#: js/Users.js:280
+#: js/Users.js:612
 msgid "Expires"
 msgstr "Истекает"
 
@@ -611,7 +658,9 @@ msgstr "Счет удаляется..."
 msgid "Some error occurred while trying to delete the account."
 msgstr "При удаление счета произошла  ошибка."
 
-#: js/Users.js:479 js/Users.js:480 js/Users.js:481
+#: js/Users.js:479
+#: js/Users.js:480
+#: js/Users.js:481
 msgid "Passwords do not match!"
 msgstr ""
 
@@ -635,7 +684,8 @@ msgstr "Фамилия"
 msgid "Password"
 msgstr "Пароль"
 
-#: js/Users.js:563 js/Users.js:569
+#: js/Users.js:563
+#: js/Users.js:569
 msgid "no password set"
 msgstr "Пароль не выл введен"
 
@@ -651,11 +701,13 @@ msgstr "Уставная группа"
 msgid "Emailaddress"
 msgstr "Адрес электронной почти"
 
-#: js/Users.js:614 js/Users.js:632
+#: js/Users.js:614
+#: js/Users.js:632
 msgid "never"
 msgstr "Никогда"
 
-#: js/Users.js:619 js/Users.js:626
+#: js/Users.js:619
+#: js/Users.js:626
 msgid "never logged in"
 msgstr "никогда не зарегистрировался"
 
@@ -671,3 +723,4 @@ msgstr "Добавить новый счет пользователя"
 #, fuzzy
 msgid "Edit User Account \"{0}\""
 msgstr "Обработать счёт пользователя \"{0}\""
+

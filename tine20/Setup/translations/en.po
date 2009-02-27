@@ -1,12 +1,12 @@
-#: js/ApplicationGridPanel.js:37 js/EnvCheckGridPanel.js:164
+#: js/ApplicationGridPanel.js:37
 msgid "Name"
 msgstr "Name"
 
-#: js/ApplicationGridPanel.js:38 js/EnvCheckGridPanel.js:165
+#: js/ApplicationGridPanel.js:38
 msgid "Enabled"
 msgstr "Enabled"
 
-#: js/ApplicationGridPanel.js:39 js/EnvCheckGridPanel.js:166
+#: js/ApplicationGridPanel.js:39
 msgid "Order"
 msgstr "Order"
 
@@ -14,43 +14,35 @@ msgstr "Order"
 msgid "Current Version"
 msgstr "Current Version"
 
-#: js/ApplicationGridPanel.js:41 js/EnvCheckGridPanel.js:168
+#: js/ApplicationGridPanel.js:41
 msgid "Version"
 msgstr "Version"
 
-#: js/ApplicationGridPanel.js:42 js/EnvCheckGridPanel.js:169
+#: js/ApplicationGridPanel.js:42
 msgid "Status"
 msgstr "Status"
 
-#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:177
+#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:139
 msgid "Install application"
 msgstr "Install application"
 
-#: js/ApplicationGridPanel.js:57 js/EnvCheckGridPanel.js:186
+#: js/ApplicationGridPanel.js:57
 msgid "Uninstall application"
 msgstr "Uninstall application"
 
-#: js/ApplicationGridPanel.js:66 js/EnvCheckGridPanel.js:195
+#: js/ApplicationGridPanel.js:66
 msgid "Update application"
 msgstr "Update application"
 
-#: js/ApplicationGridPanel.js:136 js/EnvCheckGridPanel.js:265
+#: js/ApplicationGridPanel.js:136
 msgid "Shit"
 msgstr "Shit"
 
-#: js/ApplicationGridPanel.js:136 js/EnvCheckGridPanel.js:265
+#: js/ApplicationGridPanel.js:136
 msgid "Where are the backup tapes"
 msgstr "Where are the backup tapes"
 
-#: js/EnvCheckGridPanel.js:87
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Displaying records {0} - {1} of {2}"
-
-#: js/EnvCheckGridPanel.js:88
-msgid "No {0} to display"
-msgstr "No {0} to display"
-
-#: js/EnvCheckGridPanel.js:109
+#: js/EnvCheckGridPanel.js:95
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -58,23 +50,27 @@ msgstr ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 
-#: js/EnvCheckGridPanel.js:167
-msgid "Current ersion"
-msgstr "Current ersion"
+#: js/EnvCheckGridPanel.js:125
+msgid "Check"
+msgstr "Check"
 
-#: js/Setup.js:27
+#: js/EnvCheckGridPanel.js:126
+msgid "Result"
+msgstr "Result"
+
+#: js/Setup.js:28
 msgid "Setup Checks"
 msgstr "Setup Checks"
 
-#: js/Setup.js:32
+#: js/Setup.js:33
 msgid "Config Manager"
 msgstr "Config Manager"
 
-#: js/Setup.js:38
+#: js/Setup.js:39
 msgid "Application Manager"
 msgstr "Application Manager"
 
-#: js/Setup.js:81
+#: js/Setup.js:105
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Application"

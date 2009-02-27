@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2009-02-27 14:51+0100\n"
+"PO-Revision-Date: 2009-02-27 15:27+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -210,9 +210,8 @@ msgid "Preferences"
 msgstr "Предпочтение"
 
 #: js/MainScreen.js:78
-#, fuzzy
 msgid "User: {0}"
-msgstr "Пользователь"
+msgstr "Пользователь: {0}"
 
 #: js/MainScreen.js:79
 #, fuzzy
@@ -459,9 +458,8 @@ msgid "Software Version"
 msgstr "Версия программного обеспечения"
 
 #: js/ux/grid/PagingToolbar.js:47
-#, fuzzy
 msgid "{0} selected"
-msgstr "Выберите поле"
+msgstr "Выберите поле {0} "
 
 #: js/ux/grid/PagingToolbar.js:48
 #, fuzzy
@@ -584,9 +582,8 @@ msgid "User"
 msgstr "Пользователь"
 
 #: js/widgets/app/GridPanel.js:178
-#, fuzzy
 msgid "Edit {0}"
-msgstr "Обработать"
+msgstr "Обработать {0}"
 
 #: js/widgets/app/GridPanel.js:189 js/widgets/container/ContainerTree.js:464
 #, fuzzy
@@ -595,12 +592,11 @@ msgstr "Добавить {0}"
 
 #: js/widgets/app/GridPanel.js:199 js/widgets/app/GridPanel.js:200
 #: js/widgets/app/GridPanel.js:202 js/widgets/container/ContainerTree.js:470
-#, fuzzy
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
-msgstr[0] "Удалить"
-msgstr[1] "Удалить"
-msgstr[2] "Удалить"
+msgstr[0] "Удалить {0}"
+msgstr[1] "Удалить {0}"
+msgstr[2] "Удалить {0}"
 
 #: js/widgets/app/GridPanel.js:273
 #, fuzzy
@@ -622,11 +618,11 @@ msgstr ""
 
 #: js/widgets/app/GridPanel.js:491
 msgid "Not Allowed"
-msgstr ""
+msgstr "Не Позволенно"
 
 #: js/widgets/app/GridPanel.js:492
 msgid "You are not allowed to delete all pages at once"
-msgstr ""
+msgstr "Вам не позволяется удалить все страницы сразу"
 
 #: js/widgets/app/GridPanel.js:504
 #, fuzzy
@@ -637,9 +633,8 @@ msgstr[1] "Вы уверены что хотите удалить"
 msgstr[2] "Вы уверены что хотите удалить"
 
 #: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:392
-#, fuzzy
 msgid "Deleting {0}"
-msgstr "Тэг удаляется"
+msgstr "Тэг удаляется  {0}"
 
 #: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:366
 #: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
@@ -648,9 +643,8 @@ msgid "Failed"
 msgstr "Неудалось"
 
 #: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:402
-#, fuzzy
 msgid "Could not delete {0}."
-msgstr "Не смог удалить тэг(и)."
+msgstr "Не смог удалить тэг(и).  {0}."
 
 #: js/widgets/app/MainScreen.js:102
 #, fuzzy
@@ -750,14 +744,12 @@ msgid "Creating {0}..."
 msgstr "Производ {0}..."
 
 #: js/widgets/container/ContainerTree.js:379
-#, fuzzy
 msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Вы уверены что хотите удалить {0} \"{0}\"?"
+msgstr "Вы уверены что хотите удалить {0} \"{1}\"?"
 
 #: js/widgets/container/ContainerTree.js:381
-#, fuzzy
 msgid "Deleting {0} \"{1}\""
-msgstr "Удаление {0} \"{0}\""
+msgstr "Удаление {0} \"{1}\""
 
 #: js/widgets/container/ContainerTree.js:408
 #, fuzzy
@@ -770,14 +762,12 @@ msgid "Not renamed {0}"
 msgstr "Переименовать {0}"
 
 #: js/widgets/container/ContainerTree.js:417
-#, fuzzy
 msgid "Updating {0} \"{1}\""
-msgstr "Обновление {0} \"{0}\""
+msgstr "Обновление {0} \"{1}\""
 
 #: js/widgets/container/ContainerTree.js:451
-#, fuzzy
 msgid "Manage Permissions for {0} \"{1}\""
-msgstr "Управлять правами {0} :\"{0}\""
+msgstr "Управлять правами {0} \"{1}\""
 
 #: js/widgets/container/ContainerTree.js:476
 #, fuzzy
@@ -823,9 +813,8 @@ msgid "Transfering {0}..."
 msgstr "Производ {0}..."
 
 #: js/widgets/EditDialog.js:366
-#, fuzzy
 msgid "Could not save {0}."
-msgstr "Не мог установить  тэг."
+msgstr "Не мог установить  тэг. {0}."
 
 #: js/widgets/EditDialog.js:382
 msgid "Errors"
@@ -837,9 +826,8 @@ msgid "Please fix the errors noted."
 msgstr "Пожалуйста введите новое имя"
 
 #: js/widgets/EditDialog.js:390
-#, fuzzy
 msgid "Do you really want to delete this {0}?"
-msgstr "Вы уверены что хотите удалить"
+msgstr "Вы уверены что хотите удалить {0}?"
 
 #: js/widgets/grid/FilterModel.js:129
 msgid "contains"
@@ -998,9 +986,8 @@ msgid "Show"
 msgstr "Показать"
 
 #: js/widgets/grid/FilterToolbar.js:568
-#, fuzzy
 msgid "Please enter a name for the filter"
-msgstr "Пожалуйста введите новое имя {0}:"
+msgstr "Пожалуйста введите новое имя"
 
 #: js/widgets/grid/FilterToolbar.js:571
 msgid "Filter not Saved"
@@ -1031,14 +1018,12 @@ msgid "Delete Filter"
 msgstr "Удалить все фильтры"
 
 #: js/widgets/grid/PersistentFilterPicker.js:123
-#, fuzzy
 msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "Вы уверены что хотите удалить"
+msgstr "Вы уверены что хотите удалить  \"{0}\"?"
 
 #: js/widgets/grid/PersistentFilterPicker.js:125
-#, fuzzy
 msgid "Deleting Filter \"{0}\""
-msgstr "Тэг удаляется"
+msgstr "Тэг удаляется \"{0}\""
 
 #: js/widgets/GridPicker.js:78
 msgid "remove record"

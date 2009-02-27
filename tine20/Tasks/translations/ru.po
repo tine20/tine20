@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2009-02-26 11:42+0100\n"
+"PO-Revision-Date: 2009-02-27 15:24+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,9 @@ msgstr ""
 "X-Poedit-SearchPath-0: Tasks\n"
 
 #: Controller.php:97
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal tasks"
-msgstr "{0}'s личные задания"
+msgstr "%s's личные задания"
 
 #: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
 msgid "Summary"
