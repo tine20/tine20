@@ -19,7 +19,7 @@
  * 
  * @package     Setup
  */
-class Setup_Core
+class Setup_Core extends Tinebase_Core
 {
     /**
      * dispatch request
@@ -48,5 +48,5 @@ class Setup_Core
         }        
         
         $server->handle();
-    }    
+    }
 }

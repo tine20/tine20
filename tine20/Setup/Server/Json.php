@@ -30,27 +30,30 @@ class Setup_Server_Json extends Setup_Server_Abstract
         try {
             $this->_initFramework();
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is json request. method: ' . $_REQUEST['method']);
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ ." is json request. method: '{$_POST['method']}' ");
             
-            /*
             $anonymnousMethods = array(
                 'Setup.getRegistryData',
                 'Setup.getAllRegistryData',
                 'Setup.login',
-                //'Setup.getAvailableTranslations',
-                //'Tinebase.getTranslations',
-                //'Setup.setLocale'
+                'Tinebase.getAvailableTranslations',
+                'Tinebase.getTranslations',
+                'Tinebase.setLocale',
             );
             // check json key for all methods but some exceptoins
-            if ( ! in_array($_POST['method'], $anonymnousMethods)  && $_POST['jsonKey'] != Tinebase_Core::get('jsonKey') ) {
+            if ( ! in_array($_POST['method'], $anonymnousMethods) 
+                     && ( empty($_POST['jsonKey']) || $_POST['jsonKey'] != Tinebase_Core::get('jsonKey')
+                            || !Setup_Core::isRegistered(Setup_Core::USER)
+                        )
+               ) {
     
-                if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-                    Tinebase_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
+                if (! Tinebase_Core::isRegistered(Setup_Core::USER)) {
+                    Setup_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
                     
                     throw new Tinebase_Exception_AccessDenied('Not Autorised', 401);
                 } else {
-                    Tinebase_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
-                        ' affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), true) .
+                    Setup_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
+                        ' affected account: ' . print_r(Setup_Core::getUser()->toArray(), true) .
                         ' request: ' . print_r($_REQUEST, true)
                     );
                     
@@ -58,27 +61,10 @@ class Setup_Server_Json extends Setup_Server_Abstract
                     //throw new Exception('Possible CSRF attempt detected!');
                 }
             }
-            */
             
             $server = new Zend_Json_Server();
             $server->setClass('Setup_Frontend_Json', 'Setup');
-            
-            /*
-            // register additional Json apis only available for authorised users
-            if (Zend_Auth::getInstance()->hasIdentity()) {
-                
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
-                
-                $applicationParts = explode('.', $_REQUEST['method']);
-                $applicationName = ucfirst($applicationParts[0]);
-                
-                try {
-                    $server->setClass($applicationName.'_Frontend_Json', $applicationName);
-                } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for application '$applicationName' Exception: \n". $e);
-                }
-            }
-            */
+            $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
             
         } catch (Exception $exception) {
             

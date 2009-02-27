@@ -20,35 +20,34 @@
 abstract class Setup_Server_Abstract
 {
     /**
-     * init tine framework
+     * init setup framework
      *
      */
     protected function _initFramework()
     {
-        Tinebase_Core::setupConfig();
+        Setup_Core::setupConfig();
                 
         // Server Timezone must be setup before logger, as logger has timehandling!
-        Tinebase_Core::setupServerTimezone();
+        Setup_Core::setupServerTimezone();
         
-        Tinebase_Core::setupLogger();
+        Setup_Core::setupLogger();
 
-        #Tinebase_Core::setupSession();
+        #Setup_Core::setupSession();
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
-        // @todo add fallback locale to config file
-        Tinebase_Core::set('locale', new Zend_Locale('en_US'));
-        Tinebase_Core::set('userTimeZone', 'UTC');
+        Setup_Core::set('locale', new Zend_Locale('en_US'));
+        Setup_Core::set('userTimeZone', 'UTC');
         
         #Tinebase_Core::setupMailer();
 
-        Tinebase_Core::setupDatabaseConnection();
+        Setup_Core::setupDatabaseConnection();
 
         #Tinebase_Core::setupUserTimezone();
         
         #Tinebase_Core::setupUserLocale();
         
-        Tinebase_Core::setupCache();
+        Setup_Core::setupCache();
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
