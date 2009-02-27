@@ -354,18 +354,27 @@ class Setup_Controller
                 
                 if ( $set < $required) {
                     $message[$variable] = "Sorry, your environment is not supported. You need to set $variable equal or greater than $required (now: $set).";
-                    $result[$variable] = FALSE;
+                    $result[] = array(
+                        'key'   => $variable,
+                        'value' => FALSE
+                    );
                     $success = FALSE;
                 }
 
             } elseif ($oldValue != $newValue) {
                 if (ini_set($variable, $newValue) === false) {
                     $message[$variable] = "Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.";
-                    $result[$variable] = FALSE;
+                    $result[] = array(
+                        'key'   => $variable,
+                        'value' => FALSE
+                    );
                     $success = FALSE;
                 }
             } else {
-                $result[$variable] = TRUE;
+                $result[] = array(
+                    'key'   => $variable,
+                    'value' => TRUE
+                );
             }
         }
         
