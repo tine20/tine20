@@ -42,7 +42,7 @@ class Setup_Server_Json extends Setup_Server_Abstract
             );
             // check json key for all methods but some exceptoins
             if (! in_array($_POST['method'], $anonymnousMethods) 
-                     && ( empty($_POST['jsonKey']) || $_POST['jsonKey'] != Tinebase_Core::get('jsonKey')
+                     && ( empty($_POST['jsonKey']) || $_POST['jsonKey'] != Setup_Core::get('jsonKey')
                             || !Setup_Core::isRegistered(Setup_Core::USER)
                         )
                ) {
