@@ -12,9 +12,41 @@
 Ext.ns('Tine', 'Tine.Setup');
 
 
-Tine.Setup.TreePanel = Ext.extend(Ext.Panel, {
+Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     border: false,
-    html: ''
+    rootVisible: false, 
+    rooot: {
+        children: [{
+            text: 'Setup Checks',
+            leaf: true
+        }, {
+            text: 'Config Manager',
+            leaf: true
+        }, {
+            text: 'Application Manager',
+            leaf: true
+        }]
+    },
+    
+    initComponent: function() {
+        this.root = {
+            children: [{
+                text: 'Setup Checks',
+                iconCls: Tine.Setup.registry.get('setupChecks').success ? 'setup_checks_success' : 'setup_checks_fail',
+                leaf: true
+            }, {
+                text: 'Config Manager',
+                disabled: true,
+                leaf: true
+            }, {
+                text: 'Application Manager',
+                disabled: true,
+                leaf: true
+            }]
+        };
+        
+        Tine.Setup.TreePanel.superclass.initComponent.call(this);
+    }
 });
 
 Ext.ns('Tine', 'Tine.Setup', 'Tine.Setup.Model');
