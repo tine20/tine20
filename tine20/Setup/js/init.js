@@ -11,12 +11,6 @@
 
 Ext.ns('Tine', 'Tine.Setup');
  
-/*
-Tine.Tinebase.tineInit.renderWindow = function() {
-    Ext.Msg.alert('Tine 2.0 Setup', 'Press OK to do nothing');
-}
-*/
-
 /**
  * init ajax
  */
