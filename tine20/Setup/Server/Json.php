@@ -47,13 +47,13 @@ class Setup_Server_Json extends Setup_Server_Abstract
                         )
                ) {
     
-                if (! Tinebase_Core::isRegistered(Setup_Core::USER)) {
+                if (! Setup_Core::isRegistered(Setup_Core::USER)) {
                     Setup_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
                     
                     throw new Tinebase_Exception_AccessDenied('Not Autorised', 401);
                 } else {
                     Setup_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
-                        ' affected account: ' . print_r(Setup_Core::getUser()->toArray(), true) .
+                        ' affected account: ' . print_r(Setup_Core::getUser(), true) .
                         ' request: ' . print_r($_REQUEST, true)
                     );
                     

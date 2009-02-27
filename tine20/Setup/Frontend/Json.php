@@ -42,6 +42,46 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
     }
     
     /**
+     * authenticate user by username and password
+     *
+     * @param string $username the username
+     * @param string $password the password
+     * @return array
+     */
+    public function login($username, $password)
+    {
+        if (Setup_Controller::getInstance()->login($username, $password)) {
+            $response = array(
+                'success'       => TRUE,
+                //'account'       => Tinebase_Core::getUser()->getPublicUser()->toArray(),
+                'jsonKey'       => Setup_Core::get('jsonKey'),
+                'welcomeMessage' => "Welcome to Tine 2.0 Setup!"
+            );
+        } else {
+            $response = array(
+                'success'      => FALSE,
+                'errorMessage' => "Wrong username or password!"
+            );
+        }
+
+        return $response;
+    }
+
+    /**
+     * destroy session
+     *
+     * @return array
+     */
+    public function logout()
+    {
+        Setup_Controller::getInstance()->logout();
+
+        return array(
+            'success'=> true,
+        );
+    }
+    
+    /**
      * install new applications
      *
      * @param string $applicationNames application names to install
