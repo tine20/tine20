@@ -44,9 +44,9 @@ abstract class Setup_Server_Abstract
 
         Setup_Core::setupDatabaseConnection();
 
-        Tinebase_Core::setupUserTimezone();
+        Setup_Core::setupUserTimezone();
         
-        Tinebase_Core::setupUserLocale();
+        Setup_Core::setupUserLocale();
         
         Setup_Core::setupCache();
         
