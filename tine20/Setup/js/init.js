@@ -38,7 +38,7 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
         
         // tweak login dlg
         Tine.Login.loginMethod = 'Setup.login',
-        Tine.Login.loginLogo = 'images/tine_logo_enjoy.gif',
+        Tine.Login.loginLogo = 'images/tine_logo_enjoy_setup.gif',
  
         Tine.Login.showLoginDialog({
             scope: this,
