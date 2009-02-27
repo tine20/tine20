@@ -35,6 +35,7 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
         return array(
             'Setup/js/init.js',
             'Setup/js/Setup.js',
+            'Setup/js/MainScreen.js',
             'Setup/js/ApplicationGridPanel.js',
         );
     }

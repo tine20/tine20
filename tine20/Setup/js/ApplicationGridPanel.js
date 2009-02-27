@@ -11,7 +11,7 @@
  
  Ext.ns('Tine', 'Tine.Setup');
 
-Tine.Setup.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     recordClass: Tine.Setup.Model.Application,
     recordProxy: Tine.Setup.ApplicationBackend,
     
@@ -29,7 +29,7 @@ Tine.Setup.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         //this.actionToolbarItems = this.getToolbarItems();
         //this.initDetailsPanel();
         
-        Tine.Setup.GridPanel.superclass.initComponent.call(this);
+        Tine.Setup.ApplicationGridPanel.superclass.initComponent.call(this);
     },
     
     getColumns: function() {
@@ -90,7 +90,7 @@ Tine.Setup.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     initGrid: function() {
-        Tine.Setup.GridPanel.superclass.initGrid.call(this);
+        Tine.Setup.ApplicationGridPanel.superclass.initGrid.call(this);
         this.selectionModel.purgeListeners();
         
         this.selectionModel.on('selectionchange', this.onSelectionChange, this);
