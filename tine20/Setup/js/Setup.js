@@ -78,7 +78,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
         
         activeType.select();
-        this.app.getMainScreen().activeid = activeType.id;
+        this.app.getMainScreen().activeContentType = activeType.id;
     }
 });
 
