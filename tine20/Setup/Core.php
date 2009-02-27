@@ -49,4 +49,116 @@ class Setup_Core extends Tinebase_Core
         
         $server->handle();
     }
+    
+    /**
+     * setups golbal config
+     * 
+     * NOTE a config object will be intanciated regardless of the existance of 
+     *      the conffile!
+     *
+     * @return void
+     */
+    public static function setupConfig()
+    {
+        if(self::configFileExists()) {
+            $config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
+        } else {
+            $config = new Zend_Config(array());
+        }
+        self::set(self::CONFIG, $config);  
+    }
+    
+    /**
+     * checks if global config file exists
+     *
+     * @return bool
+     */
+    public static function configFileExists()
+    {
+        return file_exists(dirname(__FILE__) . '/../config.inc.php');
+    }
+    
+    /**
+     * setups the logger
+     * 
+     * NOTE: if no logger is configured, we write to stderr in setup
+     *
+     */
+    public static function setupLogger()
+    {
+        $config = self::getConfig();
+        $logger = new Zend_Log();
+        
+        if (isset($config->logger)) {
+            try {
+                $loggerConfig = $config->logger;
+                
+                $filename = $loggerConfig->filename;
+                $priority = (int)$loggerConfig->priority;
+    
+                $writer = new Zend_Log_Writer_Stream($filename);
+                $logger->addWriter($writer);
+    
+                $filter = new Zend_Log_Filter_Priority($priority);
+                $logger->addFilter($filter);
+            } catch (Exception $e) {
+                error_log("Tine 2.0 can't setup the configured logger! The Server responded: $e");
+                $writer = new Zend_Log_Writer_Null;
+                $logger->addWriter($writer);
+            }
+        } else {
+            $writer = new Zend_Log_Writer_Stream('php://stderr');;
+            $logger->addWriter($writer);
+        }
+
+        self::set(self::LOGGER, $logger);
+
+        $logger->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
+    }
+    
+    /**
+     * initializes the session
+     *
+     */
+    public static function setupSession()
+    {
+        $config = self::getConfig();
+        
+        Zend_Session::setOptions(array(
+            'name'              => 'TINE20SETUPSESSID',
+            'cookie_httponly'   => true,
+            'hash_function'     => 1,
+        
+        ));
+        if(isset($_SERVER['HTTPS'])) {
+            Zend_Session::setOptions(array(
+                'cookie_secure'     => true,
+            ));
+        }
+        
+        Zend_Session::start();
+        
+        define('TINE20SETUP_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20SETUP_CODENAME',      'trunk');
+        define('TINE20SETUP_PACKAGESTRING', 'none');
+        define('TINE20SETUP_RELEASETIME',   Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG));
+
+        if (TINE20SETUP_BUILDTYPE == 'RELEASE') {
+            // set error mode to suppress notices & warnings in release mode
+            error_reporting(E_ERROR);
+        }
+                
+        $session = new Zend_Session_Namespace('tinesetup');
+        
+        if (!isset($session->jsonKey)) {
+            $session->jsonKey = Tinebase_Record_Abstract::generateUID();
+        }
+        self::set('jsonKey', $session->jsonKey);
+
+        if (isset($session->currentAccount)) {
+            self::set(self::USER, $session->currentAccount);
+        }
+        
+        self::set(self::SESSION, $session);
+    }
 }

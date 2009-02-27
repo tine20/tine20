@@ -25,6 +25,7 @@ abstract class Setup_Server_Abstract
      */
     protected function _initFramework()
     {
+        
         Setup_Core::setupConfig();
                 
         // Server Timezone must be setup before logger, as logger has timehandling!
@@ -32,7 +33,7 @@ abstract class Setup_Server_Abstract
         
         Setup_Core::setupLogger();
 
-        #Setup_Core::setupSession();
+        Setup_Core::setupSession();
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
@@ -43,9 +44,9 @@ abstract class Setup_Server_Abstract
 
         Setup_Core::setupDatabaseConnection();
 
-        #Tinebase_Core::setupUserTimezone();
+        Tinebase_Core::setupUserTimezone();
         
-        #Tinebase_Core::setupUserLocale();
+        Tinebase_Core::setupUserLocale();
         
         Setup_Core::setupCache();
         
