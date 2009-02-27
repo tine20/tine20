@@ -36,6 +36,7 @@ class Setup_Server_Json extends Setup_Server_Abstract
                 'Setup.getRegistryData',
                 'Setup.getAllRegistryData',
                 'Setup.login',
+                'Setup.envCheck',
                 'Tinebase.getAvailableTranslations',
                 'Tinebase.getTranslations',
                 'Tinebase.setLocale',
