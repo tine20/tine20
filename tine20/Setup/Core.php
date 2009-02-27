@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id: Core.php 5153 2008-10-29 14:23:09Z p.schuele@metaways.de $
  *
@@ -97,7 +97,7 @@ class Setup_Core extends Tinebase_Core
             }
         }
         
-        //-- try to write to db, if it fails: self::set('checkDB', FALSE);
+        // @todo try to write to db, if it fails: self::set('checkDB', FALSE);
     }
     
     /**
