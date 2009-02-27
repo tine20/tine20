@@ -42,6 +42,11 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
         Tine.Timetracker.DurationSpinner.superclass.setValue.call(this, value);
     },
     
+    validateValue: function(value) {
+        var time = Date.parseDate(value, this.format);
+        return Ext.isDate(time);
+    },
+    
     getValue: function() {
         var value = Tine.Timetracker.DurationSpinner.superclass.getValue.call(this);
         if(value && typeof value == 'string') {
