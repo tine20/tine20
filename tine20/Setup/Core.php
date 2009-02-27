@@ -85,17 +85,19 @@ class Setup_Core extends Tinebase_Core
      */
     public static function setupDatabaseConnection()
     {
-        self::set('checkDB', TRUE);
+        self::set('checkDB', FALSE);
         
         // check database first
-        try {
-            parent::setupDatabaseConnection();
-        } catch (Zend_Db_Adapter_Exception $zae) {
-            self::set('checkDB', FALSE);
+        if (self::configFileExists()) {
+            try {
+                parent::setupDatabaseConnection();
+                self::set('checkDB', TRUE);
+            } catch (Zend_Db_Adapter_Exception $zae) {
+                
+            }
         }
         
         //-- try to write to db, if it fails: self::set('checkDB', FALSE);
-        
     }
     
     /**
