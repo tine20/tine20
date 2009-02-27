@@ -45,9 +45,13 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initStore: function() {
-        this.store = new Ext.data.Store({
+    	var checkData = Tine.Setup.registry.get('setupChecks').result;
+    	
+        //this.store = new Ext.data.SimpleStore({
+    	this.store = new Ext.data.Store({
             fields: Tine.Setup.Model.EnvCheck,
             mode: 'local'
+            //data: checkData
             /*
             proxy: this.recordProxy,
             reader: this.recordProxy.getReader(),
@@ -62,7 +66,10 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
             */
         });
             
-        this.store.loadData(Tine.Setup.registry.get('setupChecks').results);
+        console.log(this.store);
+        console.log(checkData);
+        
+        this.store.load(checkData);
     },
 
     /**

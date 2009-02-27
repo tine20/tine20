@@ -50,7 +50,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     onNodeClick: function(node) {
         if (! node.disabled) {
-            this.app.getMainScreen().activeContentType = node.ContentType;
+            this.app.getMainScreen().activeContentType = node.attributes.ContentType;
             this.app.getMainScreen().show();
         }
         

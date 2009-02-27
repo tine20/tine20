@@ -14,7 +14,8 @@ Ext.ns('Tine', 'Tine.Setup');
 // default mainscreen
 Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
-    activeContentType: 'EnvCheck',
+    //activeContentType: 'EnvCheck',
+	activeContentType: 'Application',
     
     /*
     show: function() {
@@ -38,7 +39,6 @@ Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
             this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
                 app: this.app
             });
-            
         }
         
         Tine.Tinebase.MainScreen.setActiveContentPanel(this[type + 'GridPanel'], true);
