@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-15 11:02+0100\n"
-"PO-Revision-Date: 2009-02-25 14:42+0100\n"
+"PO-Revision-Date: 2009-02-27 09:48+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -301,7 +301,7 @@ msgstr "ausblenden"
 
 #: js/Asterisk/SipPeerGridPanel.js:194
 msgid "pickup group"
-msgstr ""
+msgstr "pickup group"
 
 #: js/Asterisk/SipPeerGridPanel.js:199
 msgid "port"
@@ -321,11 +321,11 @@ msgstr "RTP-Timeout"
 
 #: js/Asterisk/SipPeerGridPanel.js:223
 msgid "rtp hold timeout"
-msgstr ""
+msgstr "rtp hold timeout"
 
 #: js/Asterisk/SipPeerGridPanel.js:229
 msgid "secret"
-msgstr ""
+msgstr "secret"
 
 #: js/Asterisk/SipPeerGridPanel.js:235
 msgid "type"
@@ -349,7 +349,7 @@ msgstr "Warteschleife"
 
 #: js/Asterisk/SipPeerGridPanel.js:264
 msgid "reg seconds"
-msgstr ""
+msgstr "reg seconds"
 
 #: js/Asterisk/SipPeerGridPanel.js:269
 msgid "ip address"
@@ -357,35 +357,35 @@ msgstr "IP-Adresse"
 
 #: js/Asterisk/SipPeerGridPanel.js:275
 msgid "reg exten"
-msgstr ""
+msgstr "reg exten"
 
 #: js/Asterisk/SipPeerGridPanel.js:281
 msgid "can call forward"
-msgstr ""
+msgstr "can call forward"
 
 #: js/Asterisk/SipPeerGridPanel.js:287
 msgid "set var"
-msgstr ""
+msgstr "set var"
 
 #: js/Asterisk/SipPeerGridPanel.js:293
 msgid "notify ringing"
-msgstr ""
+msgstr "notify ringing"
 
 #: js/Asterisk/SipPeerGridPanel.js:299
 msgid "use client code"
-msgstr ""
+msgstr "use client code"
 
 #: js/Asterisk/SipPeerGridPanel.js:305
 msgid "auth user"
-msgstr ""
+msgstr "auth user"
 
 #: js/Asterisk/SipPeerGridPanel.js:311
 msgid "call limit"
-msgstr ""
+msgstr "call limit"
 
 #: js/Asterisk/SipPeerGridPanel.js:317
 msgid "busy level"
-msgstr ""
+msgstr "busy level"
 
 #: js/Asterisk/VoicemailEditDialog.js:78
 msgid "Password"
@@ -579,8 +579,8 @@ msgstr[1] "Lines"
 #: js/Models.js:283
 msgid "lines list"
 msgid_plural "lines lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "lines list"
+msgstr[1] "lines lists"
 
 #: js/Models.js:336
 #: js/Snom/SettingGridPanel.js:51
@@ -605,8 +605,8 @@ msgstr[1] "Besitzer"
 #: js/Models.js:385
 msgid "owners list"
 msgid_plural "owners lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "owners list"
+msgstr[1] "owners lists"
 
 #: js/Models.js:462
 #: js/Voipmanager.js:32
@@ -636,8 +636,8 @@ msgstr[1] "Voicemail Listen"
 #: js/Models.js:590
 msgid "meetmes list"
 msgid_plural "meetmes lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "meetmes list"
+msgstr[1] "meetmes lists"
 
 #: js/MyPhones.js:50
 msgid "edit myphone"
@@ -1091,7 +1091,7 @@ msgstr "Besitzer"
 
 #: js/Snom/PhoneEditDialog.js:719
 msgid "Rights"
-msgstr ""
+msgstr "Rechte"
 
 #: js/Snom/TemplateEditDialog.js:56
 msgid "Software Version"
@@ -1124,7 +1124,7 @@ msgstr "Dialplan"
 
 #: js/Voipmanager.js:83
 msgid "Queues"
-msgstr ""
+msgstr "Queues"
 
 #: js/Voipmanager.js:99
 msgid "Snom"
