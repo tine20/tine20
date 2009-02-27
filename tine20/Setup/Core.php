@@ -93,7 +93,7 @@ class Setup_Core extends Tinebase_Core
                 parent::setupDatabaseConnection();
                 self::set('checkDB', TRUE);
             } catch (Zend_Db_Adapter_Exception $zae) {
-                
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zae->getMessage());
             }
         }
         
