@@ -21,6 +21,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         var testsFailed   = !Tine.Setup.registry.get('setupChecks').success;
         var configMissing = !Tine.Setup.registry.get('configExists');
+        var dbMissing     = !Tine.Setup.registry.get('checkDB');
         
         this.root = {
             children: [{
@@ -37,7 +38,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             }, {
                 text: this.app.i18n._('Application Manager'),
                 iconCls: 'setup_application_manager',
-                disabled: testsFailed || configMissing,
+                disabled: testsFailed || configMissing || dbMissing,
                 ContentType: 'Application',
                 leaf: true
             }]
@@ -48,12 +49,35 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.on('click', this.onNodeClick, this);
     },
     
+    /**
+     * @private
+     */
     onNodeClick: function(node) {
         if (! node.disabled) {
             this.app.getMainScreen().activeContentType = node.attributes.ContentType;
             this.app.getMainScreen().show();
+        } else {
+            return false;
         }
         
+    },
+    
+    /**
+     * @private
+     */
+    afterRender: function() {
+        Tine.Setup.TreePanel.superclass.afterRender.call(this);
+        
+        var activeType = '';
+        var contentTypes = this.getRootNode().childNodes;
+        for (var i=0; i<contentTypes.length; i++) {
+            if(! contentTypes[i].disabled) {
+                activeType = contentTypes[i];
+            }
+        }
+        
+        activeType.select();
+        this.app.getMainScreen().activeContentType = activeType.attributes.ContentType;
     }
 });
 
