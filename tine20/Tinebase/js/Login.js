@@ -22,6 +22,9 @@ Tine.Login = {
     defaultUsername: '',
     defaultPassword: '',
     
+    loginMethod: 'Tinebase.login',
+    loginLogo: 'images/tine_logo_enjoy.gif',
+    
     
     /**
      * show the login dialog
@@ -68,7 +71,7 @@ Tine.Login = {
                     xtype: 'panel',
                     width: 250,
                     border: false,
-                    html: '<img src="images/tine_logo_enjoy.gif" width="250" height="43"/><br /><br />'
+                    html: '<img src="' + this.loginLogo +'" width="250" height="43"/><br /><br />'
                 }, new Tine.widgets.LangChooser({
                     
                 }), {
@@ -122,7 +125,7 @@ Tine.Login = {
             Ext.Ajax.request({
                 scope: this,
                 params : {
-                    method: 'Tinebase.login',
+                    method: this.loginMethod,
                     username: values.username,
                     password: values.password
                 },
