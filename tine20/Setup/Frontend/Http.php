@@ -194,7 +194,11 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
         $success = $envCheck['success'];
         
         if (!$success) {
-            echo implode('<br/>', $envCheck['message']) . '<br/>';
+            foreach ($envCheck['result'] as $result) {
+                if (!empty($result['message'])) {
+                    echo $result['message'] . '<br/>';
+                }
+            }
             return $success;
         }
         

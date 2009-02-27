@@ -336,7 +336,7 @@ class Setup_Controller
         $message = array();
         $success = TRUE;
         
-        $helperLink = '<a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto">Check the Tine 2.0 wiki for support.</a>';
+        $helperLink = ' <a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
         
         // check php environment
         $requiredIniSettings = array(
