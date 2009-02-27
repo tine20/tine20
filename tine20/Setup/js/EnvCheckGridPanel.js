@@ -7,8 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        make it work!
- * 
  */
  
 Ext.ns('Tine', 'Tine.Setup');
@@ -135,13 +133,15 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
     
     getColumns: function() {
         return  [
-            {id: 'key',   width: 400, sortable: true, dataIndex: 'key',   header: this.app.i18n._("Check")}, 
-            {id: 'value', width: 400, sortable: true, dataIndex: 'value', header: this.app.i18n._("Result"), renderer: this.resultRenderer}
+            {id: 'key',   width: 150, sortable: true, dataIndex: 'key',   header: this.app.i18n._("Check")}, 
+            {id: 'value', width: 50, sortable: true, dataIndex: 'value', header: this.app.i18n._("Result"), renderer: this.resultRenderer},
+            {id: 'message', width: 600, sortable: true, dataIndex: 'message', header: this.app.i18n._("Error")}
         ];
     },
 
     resultRenderer: function(value) {
-        return Tine.Tinebase.common.booleanRenderer(value);
+    	var icon = (value) ? 'images/oxygen/16x16/actions/dialog-apply.png' : 'images/oxygen/16x16/actions/dialog-cancel.png';
+        return '<img class="TasksMainGridStatus" src="' + icon + '">';
     },
     
     initActions: function() {
@@ -179,7 +179,6 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
             xtype: 'panel',
             layout: 'fit',
             border: false,
-//            tbar: this.pagingToolbar,
             items: this.grid
         }];
     }

@@ -483,7 +483,6 @@ class Setup_ExtCheck
     {
         $result = array(
             'success'   => TRUE,
-            'message'   => array(),
             'result'    => array(),
         );
         
@@ -494,13 +493,15 @@ class Setup_ExtCheck
             if ($value != 'SUCCESS') {
                 $result['success'] = FALSE;
                 $result['result'][] = array(
-                    'key'   => $key,
-                    'value' => FALSE
+                    'key'       => $key,
+                    'value'     => FALSE,
+                    'message'   => 'Extension ' . $key . 'not found.'
                 );
             } else {
                 $result['result'][] = array(
                     'key'   => $key,
-                    'value' => TRUE
+                    'value' => TRUE,
+                    'message'   => ''
                 );
             }
         }

@@ -122,5 +122,6 @@ Tine.Setup.ApplicationBackend = new Tine.Tinebase.widgets.app.JsonBackend({
  */
 Tine.Setup.Model.EnvCheck = Ext.data.Record.create([
     {name: 'key'},
-    {name: 'value'}
+    {name: 'value'},
+    {name: 'message'}
 ]);

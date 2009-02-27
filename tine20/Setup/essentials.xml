@@ -14,5 +14,6 @@
         <extension name="SPL" />
         <extension name="SimpleXML" />
         <extension name="ctype" />
+        <extension name="dom" />
 	</extensions>	
 </essential>	

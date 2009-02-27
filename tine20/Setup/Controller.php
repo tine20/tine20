@@ -95,7 +95,9 @@ class Setup_Controller
     /**
      * check system/php requirements (env + ext check)
      *
-     * @return unknown
+     * @return array
+     * 
+     * @todo add message to results array
      */
     public function checkRequirements()
     {
@@ -107,7 +109,6 @@ class Setup_Controller
         $result = array(
             'success' => ($envCheck['success'] && $extResult['success']),
             'results' => array_merge($envCheck['result'], $extResult['result']),
-            'message' => array_merge($envCheck['message'], $extResult['message']),
         );
 
         $result['totalcount'] = count($result['results']);
@@ -335,6 +336,8 @@ class Setup_Controller
         $message = array();
         $success = TRUE;
         
+        $helperLink = '<a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto">Check the Tine 2.0 wiki for support.</a>';
+        
         // check php environment
         $requiredIniSettings = array(
             'magic_quotes_sybase'  => 0,
@@ -353,34 +356,34 @@ class Setup_Controller
                 $set = convertToBytes($oldValue);
                 
                 if ( $set < $required) {
-                    $message[$variable] = "Sorry, your environment is not supported. You need to set $variable equal or greater than $required (now: $set).";
                     $result[] = array(
-                        'key'   => $variable,
-                        'value' => FALSE
+                        'key'       => $variable,
+                        'value'     => FALSE,
+                        'message'   => "You need to set $variable equal or greater than $required (now: $set)." . $helperLink 
                     );
                     $success = FALSE;
                 }
 
             } elseif ($oldValue != $newValue) {
                 if (ini_set($variable, $newValue) === false) {
-                    $message[$variable] = "Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.";
                     $result[] = array(
-                        'key'   => $variable,
-                        'value' => FALSE
+                        'key'       => $variable,
+                        'value'     => FALSE,
+                        'message'   => "You need to set $variable from $oldValue to $newValue."  . $helperLink
                     );
                     $success = FALSE;
                 }
             } else {
                 $result[] = array(
-                    'key'   => $variable,
-                    'value' => TRUE
+                    'key'       => $variable,
+                    'value'     => TRUE,
+                    'message'   => ''
                 );
             }
         }
         
         return array(
             'result'        => $result,
-            'message'       => $message,
             'success'       => $success,
         );
     }
