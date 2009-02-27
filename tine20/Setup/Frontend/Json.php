@@ -158,13 +158,27 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
         $locale = Tinebase_Core::get('locale');
         
         $registryData =  array(
-            'timeZone'         => Tinebase_Core::get('userTimeZone'),
+            'configExists'     => Setup_Core::configFileExists(),
+            'setupChecks'      => $this->envCheck(),
+            'timeZone'         => Setup_Core::get('userTimeZone'),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
                 'region'   => $locale->getCountryTranslation($locale->getRegion()),
             ),
         );
+        
+        if (Setup_Core::isRegistered(Setup_Core::USER)) {
+            $registryData += array(    
+                'currentAccount'   => Setup_Core::getUser()->toArray(),
+                'jsonKey'          => Tinebase_Core::get('jsonKey'),
+                'version'          => array(
+                    'codename'      => TINE20SETUP_CODENAME,
+                    'packageString' => TINE20SETUP_PACKAGESTRING,
+                    'releasetime'   => TINE20SETUP_RELEASETIME
+                ), 
+            );
+        }
         
         return $registryData;
     }
