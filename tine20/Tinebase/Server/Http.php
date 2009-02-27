@@ -69,7 +69,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
                 $server->handle(array('method' => 'Tinebase.sessionException'));
             } else {
                 // check if setup is required
-                $setupController = new Setup_Controller(FALSE); 
+                $setupController = Setup_Controller::getInstance(); 
                 if ($setupController->setupRequired()) {
                     $server->handle(array('method' => 'Tinebase.setupRequired'));
                 } else {                
