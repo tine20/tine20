@@ -78,7 +78,6 @@ class Tinebase_Core
     /**
      * dispatch request
      *
-     * @todo add ActiveSync
      */
     public static function dispatchRequest()
     {
