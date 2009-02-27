@@ -32,3 +32,11 @@
 .setup_checks_fail {
     background-image:url(../../images/oxygen/16x16/actions/dialog-error.png) !important;
 }
+
+.setup_config_manager {
+    background-image:url(../../images/oxygen/16x16/status/dialog-password.png) !important;
+}
+
+.setup_application_manager {
+    background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
+}
