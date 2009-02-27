@@ -79,6 +79,26 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         activeType.select();
         this.app.getMainScreen().activeContentType = activeType.id;
+    },
+    
+    applyRegistryState: function() {
+        var setupChecks  = Tine.Setup.registry.get('setupChecks').success;
+        var configExists = Tine.Setup.registry.get('configExists');
+        var checkDB      = Tine.Setup.registry.get('checkDB');
+        
+        var envNode = this.getNodeById('EnvCheck');
+        var envIconCls = setupChecks ? 'setup_checks_success' : 'setup_checks_fail';
+        if (envNode.rendered) {
+            var envIconEl = Ext.get(envNode.ui.iconNode);
+            envIconEl.removeClass('setup_checks_success');
+            envIconEl.removeClass('setup_checks_fail');
+            envIconEl.addClass(envIconCls);
+        } else {
+            envNode.iconCls = envIconCls;
+        }
+        
+        this.getNodeById('ConfigManager')[setupChecks ? 'enable': 'disable']();
+        this.getNodeById('Application')[setupChecks && configExists && checkDB ? 'enable': 'disable']();
     }
 });
 
