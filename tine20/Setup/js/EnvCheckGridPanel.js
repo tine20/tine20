@@ -65,6 +65,7 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
         });
         
         this.store.on('beforeload', function() {
+            console.log(arguments);
             Ext.Ajax.request({
                 params: {
                     method: 'Setup.envCheck'
@@ -152,6 +153,14 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
     initActions: function() {
     	// @todo add re-run checks here
     	
+        this.action_reCheck = new Ext.Action({
+            text: this.app.i18n._('Check again'),
+            handler: function() {
+                this.store.load({});
+            },
+            iconCls: 'setup_action_recheck',
+            scope: this
+        });
     	/*
         this.action_installApplications = new Ext.Action({
             text: this.app.i18n._('Install application'),
@@ -168,6 +177,9 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
         */
         
         this.actionToolbar = new Ext.Toolbar({
+            items: [
+                this.action_reCheck
+            ]
         });
     },
     
