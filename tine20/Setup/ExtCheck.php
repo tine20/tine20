@@ -493,9 +493,15 @@ class Setup_ExtCheck
             list($key, $value) = $check;
             if ($value != 'SUCCESS') {
                 $result['success'] = FALSE;
-                $result['result'][$key] = FALSE;
+                $result['result'][] = array(
+                    'key'   => $key,
+                    'value' => FALSE
+                );
             } else {
-                $result['result'][$key] = TRUE;
+                $result['result'][] = array(
+                    'key'   => $key,
+                    'value' => TRUE
+                );
             }
         }
         

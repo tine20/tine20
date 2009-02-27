@@ -99,14 +99,18 @@ class Setup_Controller
      */
     public function checkRequirements()
     {
-        $result = $this->environmentCheck();
+        $envCheck = $this->environmentCheck();
         
         $extCheck = new Setup_ExtCheck(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'essentials.xml');
         $extResult = $extCheck->getData();
 
-        $result['success'] = $result['success'] && $extResult['success'];
-        $result['result'] = array_merge($result['result'], $extResult['result']);
-        $result['message'] = array_merge($result['message'], $extResult['message']);
+        $result = array(
+            'success' => ($envCheck['success'] && $extResult['success']),
+            'results' => array_merge($envCheck['result'], $extResult['result']),
+            'message' => array_merge($envCheck['message'], $extResult['message']),
+        );
+
+        $result['totalcount'] = count($result['results']);
         
         return $result;
     }
