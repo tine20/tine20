@@ -157,7 +157,7 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
             handler: function() {
                 this.store.load({});
             },
-            iconCls: 'setup_action_recheck',
+            iconCls: 'x-tbar-loading',
             scope: this
         });
     	/*
