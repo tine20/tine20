@@ -481,6 +481,8 @@ class Setup_ExtCheck
      */
     public function getData()
     {
+        $helperLink = ' <a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
+        
         $result = array(
             'success'   => TRUE,
             'result'    => array(),
@@ -495,7 +497,7 @@ class Setup_ExtCheck
                 $result['result'][] = array(
                     'key'       => $key,
                     'value'     => FALSE,
-                    'message'   => 'Extension ' . $key . 'not found.'
+                    'message'   => 'Extension ' . $key . ' not found.' . $helperLink
                 );
             } else {
                 $result['result'][] = array(

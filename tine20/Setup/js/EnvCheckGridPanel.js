@@ -135,13 +135,18 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
         return  [
             {id: 'key',   width: 150, sortable: true, dataIndex: 'key',   header: this.app.i18n._("Check")}, 
             {id: 'value', width: 50, sortable: true, dataIndex: 'value', header: this.app.i18n._("Result"), renderer: this.resultRenderer},
-            {id: 'message', width: 600, sortable: true, dataIndex: 'message', header: this.app.i18n._("Error")}
+            {id: 'message', width: 600, sortable: true, dataIndex: 'message', header: this.app.i18n._("Error"), renderer: this.messageRenderer}
         ];
     },
 
     resultRenderer: function(value) {
     	var icon = (value) ? 'images/oxygen/16x16/actions/dialog-apply.png' : 'images/oxygen/16x16/actions/dialog-cancel.png';
         return '<img class="TasksMainGridStatus" src="' + icon + '">';
+    },
+    
+    messageRenderer: function(value) {
+    	// overwrite the default renderer to show links correctly
+        return value;
     },
     
     initActions: function() {
