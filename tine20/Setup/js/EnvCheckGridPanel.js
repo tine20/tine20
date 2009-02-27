@@ -36,7 +36,7 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
      */
     gridConfig: {
         loadMask: true,
-        autoExpandColumn: 'name'
+        autoExpandColumn: 'key'
     },
 	
     /**
@@ -59,21 +59,19 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initStore: function() {
-    	
     	this.store = new Ext.data.JsonStore({
             fields: Tine.Setup.Model.EnvCheck,
             mode: 'local',
-            root: 'results',
-            totalProperty: 'totalcount',
             id: 'key',
             remoteSort: false
         });
-
-        var checkData = Tine.Setup.registry.get('setupChecks');
-        this.store.load(checkData);
         
-        //console.log(this.store);
-        //console.log(checkData);
+        this.store.on('beforeload', function() {
+            return false;
+        }, this);
+        
+        var checkData = Tine.Setup.registry.get('setupChecks').results;
+        this.store.loadData(checkData);
     },
 
     /**
