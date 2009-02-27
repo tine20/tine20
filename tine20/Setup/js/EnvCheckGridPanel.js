@@ -65,7 +65,6 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
         });
         
         this.store.on('beforeload', function() {
-            console.log(arguments);
             Ext.Ajax.request({
                 params: {
                     method: 'Setup.envCheck'
