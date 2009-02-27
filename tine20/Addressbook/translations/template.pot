@@ -114,7 +114,7 @@ msgstr ""
 msgid "contacts"
 msgstr ""
 
-#: js/Addressbook.js:140 js/Addressbook.js:426
+#: js/Addressbook.js:140 js/Addressbook.js:458
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] ""
@@ -172,17 +172,17 @@ msgstr ""
 msgid "Some error occured while trying to delete the contact."
 msgstr ""
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 msgid "Contacts"
 msgstr ""
 
-#: js/Addressbook.js:426
+#: js/Addressbook.js:458
 msgid "addressbooks"
 msgstr ""
 

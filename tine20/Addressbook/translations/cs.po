@@ -133,7 +133,7 @@ msgstr "Interní kontakty"
 msgid "contacts"
 msgstr "kontakty"
 
-#: js/Addressbook.js:140 js/Addressbook.js:426
+#: js/Addressbook.js:140 js/Addressbook.js:458
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "adresář"
@@ -192,18 +192,18 @@ msgstr "Mažu kontakt..."
 msgid "Some error occured while trying to delete the contact."
 msgstr "Při mazání kontaktu došlo k chybě."
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Kontakt"
 msgstr[1] "Kontakty"
 msgstr[2] "Kontaktů"
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: js/Addressbook.js:426
+#: js/Addressbook.js:458
 msgid "addressbooks"
 msgstr "adresáře"
 

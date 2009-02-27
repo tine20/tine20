@@ -12,3 +12,82 @@ msgstr ""
 "X-Poedit-Country: CHINA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: js/ApplicationGridPanel.js:37 js/EnvCheckGridPanel.js:164
+msgid "Name"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:38 js/EnvCheckGridPanel.js:165
+msgid "Enabled"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:39 js/EnvCheckGridPanel.js:166
+msgid "Order"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:40
+msgid "Current Version"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:41 js/EnvCheckGridPanel.js:168
+msgid "Version"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:42 js/EnvCheckGridPanel.js:169
+msgid "Status"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:177
+msgid "Install application"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:57 js/EnvCheckGridPanel.js:186
+msgid "Uninstall application"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:66 js/EnvCheckGridPanel.js:195
+msgid "Update application"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:136 js/EnvCheckGridPanel.js:265
+msgid "Shit"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:136 js/EnvCheckGridPanel.js:265
+msgid "Where are the backup tapes"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:87
+msgid "Displaying records {0} - {1} of {2}"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:88
+msgid "No {0} to display"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:109
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:167
+msgid "Current ersion"
+msgstr ""
+
+#: js/Setup.js:27
+msgid "Setup Checks"
+msgstr ""
+
+#: js/Setup.js:32
+msgid "Config Manager"
+msgstr ""
+
+#: js/Setup.js:38
+msgid "Application Manager"
+msgstr ""
+
+#: js/Setup.js:81
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""

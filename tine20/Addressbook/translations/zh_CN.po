@@ -129,7 +129,7 @@ msgstr "内部联系人"
 msgid "contacts"
 msgstr "联系人"
 
-#: js/Addressbook.js:140 js/Addressbook.js:426
+#: js/Addressbook.js:140 js/Addressbook.js:458
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "地址本"
@@ -186,16 +186,16 @@ msgstr "正删除联系人..."
 msgid "Some error occured while trying to delete the contact."
 msgstr "当试图删除联系人的时候有错误发生"
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "联系人"
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 msgid "Contacts"
 msgstr "联系人"
 
-#: js/Addressbook.js:426
+#: js/Addressbook.js:458
 msgid "addressbooks"
 msgstr "地址本"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-08-05 17:48+0100\n"
-"PO-Revision-Date: 2008-10-01 14:42+0100\n"
+"PO-Revision-Date: 2009-02-26 11:02+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,7 @@ msgstr "Обновленно"
 
 #: Controller/Lead.php:240
 msgid "Updated Fields:"
-msgstr ""
+msgstr "Обновленные поля:"
 
 #: Controller/Lead.php:241
 #, fuzzy, python-format
@@ -343,7 +343,7 @@ msgstr "Цена"
 
 #: js/Crm.js:1393
 msgid "Change contact type"
-msgstr ""
+msgstr "Поменять тип контакта"
 
 #: js/Crm.js:1622
 msgid "Add new contact"
@@ -355,7 +355,7 @@ msgstr "Добавьте нового клиента"
 
 #: js/Crm.js:1633
 msgid "Change type to Customer"
-msgstr ""
+msgstr "Поменять тип клиента"
 
 #: js/Crm.js:1642 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
 msgid "Responsible"
@@ -363,11 +363,11 @@ msgstr "Ответственный"
 
 #: js/Crm.js:1643
 msgid "Change type to Responsible"
-msgstr ""
+msgstr "Поменять тип ответственного"
 
 #: js/Crm.js:1653
 msgid "Change type to Partner"
-msgstr ""
+msgstr "Поменять тип рартнера"
 
 #: js/Crm.js:1661
 msgid "Edit contact"
@@ -504,7 +504,7 @@ msgstr "Ожидание ответа"
 
 #: Setup/setup.xml:517
 msgid "quote sent"
-msgstr ""
+msgstr "послать quote"
 
 #: Setup/setup.xml:535
 msgid "accepted"

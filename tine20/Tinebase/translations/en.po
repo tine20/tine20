@@ -46,7 +46,7 @@ msgstr "Created by"
 msgid "Activities"
 msgstr "Activities"
 
-#: Frontend/Http.php:269 js/tineInit.js:235
+#: Frontend/Http.php:269 js/tineInit.js:244
 msgid "Authorisation Required"
 msgstr "Authorisation Required"
 
@@ -127,31 +127,31 @@ msgstr "Transmission Completed"
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "Your report has been sent. Thanks for your contribution"
 
-#: js/Login.js:37
+#: js/Login.js:40
 msgid "Login"
 msgstr "Login"
 
-#: js/Login.js:44
+#: js/Login.js:47
 msgid "Register"
 msgstr "Register"
 
-#: js/Login.js:58 js/Login.js:92
+#: js/Login.js:61 js/Login.js:95
 msgid "Please enter your login data"
 msgstr "Please enter your login data"
 
-#: js/Login.js:75
+#: js/Login.js:78
 msgid "Username"
 msgstr "Username"
 
-#: js/Login.js:81
+#: js/Login.js:84
 msgid "Password"
 msgstr "Password"
 
-#: js/Login.js:120
+#: js/Login.js:123
 msgid "Logging you in..."
 msgstr "Logging you in..."
 
-#: js/Login.js:120 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:123 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/container/ContainerTree.js:353
 #: js/widgets/container/ContainerTree.js:381
 #: js/widgets/container/ContainerTree.js:417
@@ -159,19 +159,19 @@ msgstr "Logging you in..."
 msgid "Please wait"
 msgstr "Please wait"
 
-#: js/Login.js:132
+#: js/Login.js:135
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Login successful. Loading Tine 2.0..."
 
-#: js/Login.js:132 js/MainScreen.js:436
+#: js/Login.js:135 js/MainScreen.js:436
 msgid "Please wait!"
 msgstr "Please wait!"
 
-#: js/Login.js:138
+#: js/Login.js:141
 msgid "Login failure"
 msgstr "Login failure"
 
-#: js/Login.js:139
+#: js/Login.js:142
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Your username and/or your password are wrong!!!"
 
@@ -295,11 +295,11 @@ msgid_plural "to do lists"
 msgstr[0] "to do list"
 msgstr[1] "to do lists"
 
-#: js/tineInit.js:218
+#: js/tineInit.js:227
 msgid "Connection lost, please check your network!"
 msgstr "Connection lost, please check your network!"
 
-#: js/tineInit.js:226
+#: js/tineInit.js:235
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -307,23 +307,23 @@ msgstr ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
 
-#: js/tineInit.js:236
+#: js/tineInit.js:245
 msgid "Your session timed out. You need to login again."
 msgstr "Your session timed out. You need to login again."
 
-#: js/tineInit.js:249
+#: js/tineInit.js:258
 msgid "Insufficient Rights"
 msgstr "Insufficient Rights"
 
-#: js/tineInit.js:250
+#: js/tineInit.js:259
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sorry, you are not permitted to perform this action"
 
-#: js/tineInit.js:259
+#: js/tineInit.js:268
 msgid "Concurrent Updates"
 msgstr "Concurrent Updates"
 
-#: js/tineInit.js:260
+#: js/tineInit.js:269
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."

@@ -131,7 +131,7 @@ msgstr "Kontakty wewnętrzne"
 msgid "contacts"
 msgstr "Kontakty"
 
-#: js/Addressbook.js:140 js/Addressbook.js:426
+#: js/Addressbook.js:140 js/Addressbook.js:458
 #, fuzzy
 msgid "addressbook"
 msgid_plural "addressbooks"
@@ -195,7 +195,7 @@ msgstr "Wymazywanie kontaktu …"
 msgid "Some error occured while trying to delete the contact."
 msgstr "Wystąpiły pewne błędy z powodu próby wmazania kontaktu."
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 #, fuzzy
 msgid "Contact"
 msgid_plural "Contacts"
@@ -203,12 +203,12 @@ msgstr[0] "Kontakt"
 msgstr[1] "Kontakt"
 msgstr[2] "Kontakt"
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 #, fuzzy
 msgid "Contacts"
 msgstr "Kontakt"
 
-#: js/Addressbook.js:426
+#: js/Addressbook.js:458
 msgid "addressbooks"
 msgstr "Książki adresowe"
 

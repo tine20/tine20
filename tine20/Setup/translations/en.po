@@ -1,14 +1,81 @@
+#: js/ApplicationGridPanel.js:37 js/EnvCheckGridPanel.js:164
+msgid "Name"
+msgstr "Name"
+
+#: js/ApplicationGridPanel.js:38 js/EnvCheckGridPanel.js:165
+msgid "Enabled"
+msgstr "Enabled"
+
+#: js/ApplicationGridPanel.js:39 js/EnvCheckGridPanel.js:166
+msgid "Order"
+msgstr "Order"
+
+#: js/ApplicationGridPanel.js:40
+msgid "Current Version"
+msgstr "Current Version"
+
+#: js/ApplicationGridPanel.js:41 js/EnvCheckGridPanel.js:168
+msgid "Version"
+msgstr "Version"
+
+#: js/ApplicationGridPanel.js:42 js/EnvCheckGridPanel.js:169
+msgid "Status"
+msgstr "Status"
+
+#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:177
+msgid "Install application"
+msgstr "Install application"
+
+#: js/ApplicationGridPanel.js:57 js/EnvCheckGridPanel.js:186
+msgid "Uninstall application"
+msgstr "Uninstall application"
+
+#: js/ApplicationGridPanel.js:66 js/EnvCheckGridPanel.js:195
+msgid "Update application"
+msgstr "Update application"
+
+#: js/ApplicationGridPanel.js:136 js/EnvCheckGridPanel.js:265
+msgid "Shit"
+msgstr "Shit"
+
+#: js/ApplicationGridPanel.js:136 js/EnvCheckGridPanel.js:265
+msgid "Where are the backup tapes"
+msgstr "Where are the backup tapes"
+
+#: js/EnvCheckGridPanel.js:87
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Displaying records {0} - {1} of {2}"
+
+#: js/EnvCheckGridPanel.js:88
+msgid "No {0} to display"
+msgstr "No {0} to display"
+
+#: js/EnvCheckGridPanel.js:109
 msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Setup\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: English\n"
-"X-Poedit-Country: \n"
-"X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
+
+#: js/EnvCheckGridPanel.js:167
+msgid "Current ersion"
+msgstr "Current ersion"
+
+#: js/Setup.js:27
+msgid "Setup Checks"
+msgstr "Setup Checks"
+
+#: js/Setup.js:32
+msgid "Config Manager"
+msgstr "Config Manager"
+
+#: js/Setup.js:38
+msgid "Application Manager"
+msgstr "Application Manager"
+
+#: js/Setup.js:81
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Application"
+msgstr[1] "Applications"

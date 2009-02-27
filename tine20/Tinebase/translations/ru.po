@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-10-02 10:31+0100\n"
+"PO-Revision-Date: 2009-02-27 14:51+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgstr "Установлено"
 msgid "Activities"
 msgstr "Действия"
 
-#: Frontend/Http.php:269 js/tineInit.js:235
+#: Frontend/Http.php:269 js/tineInit.js:244
 msgid "Authorisation Required"
 msgstr "Регистрация необходима"
 
@@ -85,23 +85,23 @@ msgstr "Произошла Ошибка, программа закончилас
 #: js/common.js:100
 msgid "{0} minute"
 msgid_plural "{0} minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} минута"
+msgstr[1] "{0} минуты"
+msgstr[2] "{0} минут"
 
 #: js/common.js:101
 msgid "{0} hour"
 msgid_plural "{0} hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} час"
+msgstr[1] "{0} часа"
+msgstr[2] "{0} часов"
 
 #: js/common.js:102
 msgid "{0} workday"
 msgid_plural "{0} workdays"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} рабочий день"
+msgstr[1] "{0} рабочих дня"
+msgstr[2] "{0} рабочих дней"
 
 #: js/ExceptionDialog.js:34 js/MainScreen.js:358
 #: js/widgets/AccountpickerPanel.js:149
@@ -153,31 +153,31 @@ msgstr "Передача завершена"
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "Ваш отчет был отправлен. Спасибо за Ваше содействие"
 
-#: js/Login.js:37
+#: js/Login.js:40
 msgid "Login"
 msgstr "вход в систему"
 
-#: js/Login.js:44
+#: js/Login.js:47
 msgid "Register"
 msgstr "Регистрироваться"
 
-#: js/Login.js:58 js/Login.js:92
+#: js/Login.js:61 js/Login.js:95
 msgid "Please enter your login data"
 msgstr "Пожалуйста введите свои данные входа в систему"
 
-#: js/Login.js:75
+#: js/Login.js:78
 msgid "Username"
 msgstr "Имя пользователя"
 
-#: js/Login.js:81
+#: js/Login.js:84
 msgid "Password"
 msgstr "Пароль"
 
-#: js/Login.js:120
+#: js/Login.js:123
 msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
-#: js/Login.js:120 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:123 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/container/ContainerTree.js:353
 #: js/widgets/container/ContainerTree.js:381
 #: js/widgets/container/ContainerTree.js:417
@@ -185,19 +185,19 @@ msgstr "Регистрирую Вас в..."
 msgid "Please wait"
 msgstr "Пожалуйста подождите"
 
-#: js/Login.js:132
+#: js/Login.js:135
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
 
-#: js/Login.js:132 js/MainScreen.js:436
+#: js/Login.js:135 js/MainScreen.js:436
 msgid "Please wait!"
 msgstr "Пожалуйста подождите!"
 
-#: js/Login.js:138
+#: js/Login.js:141
 msgid "Login failure"
 msgstr "Регистрация не удалась"
 
-#: js/Login.js:139
+#: js/Login.js:142
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
@@ -323,37 +323,39 @@ msgstr[2] "Тэги"
 #: js/Record.js:107
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Список заданий"
+msgstr[1] "Списока заданий"
+msgstr[2] "Списоков заданий"
 
-#: js/tineInit.js:218
+#: js/tineInit.js:227
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/tineInit.js:226
+#: js/tineInit.js:235
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
 msgstr ""
+"Сервер не ответил на Ваш запрос. Пожалуйста проверьте свою сеть или "
+"свяжитесь с Вашим администратором."
 
-#: js/tineInit.js:236
+#: js/tineInit.js:245
 msgid "Your session timed out. You need to login again."
 msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: js/tineInit.js:249
+#: js/tineInit.js:258
 msgid "Insufficient Rights"
-msgstr ""
-
-#: js/tineInit.js:250
-msgid "Sorry, you are not permitted to perform this action"
-msgstr ""
+msgstr "Недостаточно права"
 
 #: js/tineInit.js:259
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "К сожалению Вам не позволяется выполнить это действие"
+
+#: js/tineInit.js:268
 msgid "Concurrent Updates"
 msgstr "Параллельные Обновления"
 
-#: js/tineInit.js:260
+#: js/tineInit.js:269
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -454,7 +456,7 @@ msgstr ""
 
 #: js/ux/form/RecordsComboBox.js:27
 msgid "Software Version"
-msgstr ""
+msgstr "Версия программного обеспечения"
 
 #: js/ux/grid/PagingToolbar.js:47
 #, fuzzy
@@ -468,15 +470,15 @@ msgstr "Выберите поле"
 
 #: js/ux/grid/PagingToolbar.js:49
 msgid "Select all visible ({0} records)"
-msgstr ""
+msgstr "Выберите все видимые ({0} записи)"
 
 #: js/ux/grid/PagingToolbar.js:50
 msgid "Select all pages ({0} records)"
-msgstr ""
+msgstr "Выберите все видимые страницы ({0} записей)"
 
 #: js/ux/grid/PagingToolbar.js:51
 msgid "Toggle selection"
-msgstr ""
+msgstr "Перевернуть выбор"
 
 #: js/widgets/account/ConfigGrid.js:55
 msgid "remove account"
@@ -505,7 +507,7 @@ msgstr "Листать"
 
 #: js/widgets/AccountpickerPanel.js:55
 msgid "nobody"
-msgstr ""
+msgstr "никто"
 
 #: js/widgets/AccountpickerPanel.js:135
 msgid "please select an account"
@@ -571,7 +573,7 @@ msgstr "Никаких примечаний в наличии"
 
 #: js/widgets/ActivitiesPanel.js:511
 msgid "History"
-msgstr ""
+msgstr "История"
 
 #: js/widgets/ActivitiesPanel.js:524
 msgid "Time"
@@ -615,6 +617,8 @@ msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
+"Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
+"фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
 
 #: js/widgets/app/GridPanel.js:491
 msgid "Not Allowed"
@@ -733,12 +737,12 @@ msgstr "Пожалуйста введите новое имя {0}:"
 
 #: js/widgets/container/ContainerTree.js:350
 msgid "No {0} added"
-msgstr ""
+msgstr "{0} Не добавлины"
 
 #: js/widgets/container/ContainerTree.js:350
 #: js/widgets/container/ContainerTree.js:414
 msgid "You have to supply a {0} name!"
-msgstr ""
+msgstr "Вы должны назвать {0}!"
 
 #: js/widgets/container/ContainerTree.js:353
 #, fuzzy
@@ -786,11 +790,11 @@ msgstr "Управлять правами доступа"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:36
 msgid "Custom Fields"
-msgstr ""
+msgstr "Дополнительные поля"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:68
 msgid "There are no custom fields yet"
-msgstr ""
+msgstr "Пока дополнительные поля не имеются "
 
 #: js/widgets/EditDialog.js:153 js/widgets/EditRecord.js:126
 msgid "Apply"
@@ -807,7 +811,7 @@ msgstr "Добавить новый личный тэг"
 
 #: js/widgets/EditDialog.js:237
 msgid "Edit {0} \"{1}\""
-msgstr ""
+msgstr "Редактировать {0} \"{1}\""
 
 #: js/widgets/EditDialog.js:266 js/widgets/EditRecord.js:185
 msgid "Saved in"
@@ -825,7 +829,7 @@ msgstr "Не мог установить  тэг."
 
 #: js/widgets/EditDialog.js:382
 msgid "Errors"
-msgstr ""
+msgstr "Ошибки"
 
 #: js/widgets/EditDialog.js:382
 #, fuzzy
@@ -863,7 +867,7 @@ msgstr "В"
 
 #: js/widgets/grid/FilterModel.js:135
 msgid "is before"
-msgstr ""
+msgstr "существует"
 
 #: js/widgets/grid/FilterModel.js:136
 #, fuzzy
@@ -891,23 +895,23 @@ msgstr "Выберите оператора"
 
 #: js/widgets/grid/FilterModel.js:345
 msgid "today"
-msgstr ""
+msgstr "сегодня"
 
 #: js/widgets/grid/FilterModel.js:346
 msgid "yesterday"
-msgstr ""
+msgstr "вчера"
 
 #: js/widgets/grid/FilterModel.js:347
 msgid "this week"
-msgstr ""
+msgstr "эта неделя"
 
 #: js/widgets/grid/FilterModel.js:348
 msgid "last week"
-msgstr ""
+msgstr "последния неделя"
 
 #: js/widgets/grid/FilterModel.js:349
 msgid "the week before last"
-msgstr ""
+msgstr "предроследния неделя"
 
 #: js/widgets/grid/FilterModel.js:350
 #, fuzzy
@@ -931,19 +935,19 @@ msgstr "Пожалуйста подождите"
 
 #: js/widgets/grid/FilterModel.js:354
 msgid "this year"
-msgstr ""
+msgstr "этот год"
 
 #: js/widgets/grid/FilterModel.js:355
 msgid "last year"
-msgstr ""
+msgstr "прошлый год"
 
 #: js/widgets/grid/FilterModel.js:359
 msgid "tomorrow"
-msgstr ""
+msgstr "завтра"
 
 #: js/widgets/grid/FilterModel.js:360
 msgid "next week"
-msgstr ""
+msgstr "следующия неделя"
 
 #: js/widgets/grid/FilterModel.js:361
 #, fuzzy
@@ -1000,11 +1004,11 @@ msgstr "Пожалуйста введите новое имя {0}:"
 
 #: js/widgets/grid/FilterToolbar.js:571
 msgid "Filter not Saved"
-msgstr ""
+msgstr "Фильтр не сохранен"
 
 #: js/widgets/grid/FilterToolbar.js:571
 msgid "You have to supply a name for the filter!"
-msgstr ""
+msgstr "Вы должны дать фильтру название!"
 
 #: js/widgets/grid/FilterToolbar.js:574 js/widgets/LangChooser.js:72
 #: js/widgets/LangChooser.js:94 js/widgets/TimezoneChooser.js:74
@@ -1064,11 +1068,11 @@ msgstr "Неправильное завершение"
 
 #: js/widgets/Priority.js:25
 msgid "high"
-msgstr ""
+msgstr "Высоко"
 
 #: js/widgets/Priority.js:26
 msgid "urgent"
-msgstr ""
+msgstr "Срочный"
 
 #: js/widgets/tags/TagCombo.js:38
 msgid "tag name"
@@ -1223,11 +1227,11 @@ msgstr "Пожалуйста рассмотрите обновление!"
 
 #: Notes.php:295
 msgid "by"
-msgstr ""
+msgstr "у"
 
 #: Notes.php:301
 msgid "Changed fields:"
-msgstr ""
+msgstr "Измененые поля:"
 
 #: Setup/setup.xml:1941
 msgid "note"

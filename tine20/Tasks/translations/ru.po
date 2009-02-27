@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2008-10-01 16:53+0100\n"
+"PO-Revision-Date: 2009-02-26 11:42+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgstr "Приоритет"
 
 #: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
 msgid "Responsible"
-msgstr ""
+msgstr "Ответственный"
 
 #: js/EditDialog.js:128
 msgid "Notes"
@@ -56,7 +56,7 @@ msgstr "Статус"
 
 #: js/EditDialog.js:142
 msgid "Completed"
-msgstr ""
+msgstr "Закончено"
 
 #: js/GridPanel.js:31
 #, fuzzy
@@ -88,7 +88,7 @@ msgstr "Процент"
 
 #: js/GridPanel.js:180
 msgid "Creation Time"
-msgstr ""
+msgstr "Время Создания"
 
 #: js/GridPanel.js:208
 msgid "Show closed"
@@ -218,3 +218,10 @@ msgstr "ОТСТАВЛЕНО"
 
 #~ msgid "Delete tasks"
 #~ msgstr "Удолить задания"
+
+#, fuzzy
+#~ msgid "Do you realy want to delte the selected task?"
+#~ msgid_plural "Do you relay want to delete the selected tasks?"
+#~ msgstr[0] "Вы уверены что хотите удалить выбранное задание"
+#~ msgstr[1] "Вы уверены что хотите удалить выбранные задания"
+#~ msgstr[2] "Вы уверены что хотите удалить выбранных заданий"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-08-05 17:42+0100\n"
-"PO-Revision-Date: 2008-09-29 11:48+0100\n"
+"PO-Revision-Date: 2009-02-26 10:38+0100\n"
 "Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -133,7 +133,7 @@ msgstr "Внутренние контакты"
 msgid "contacts"
 msgstr "Контакты"
 
-#: js/Addressbook.js:140 js/Addressbook.js:426
+#: js/Addressbook.js:140 js/Addressbook.js:458
 #, fuzzy
 msgid "addressbook"
 msgid_plural "addressbooks"
@@ -196,7 +196,7 @@ msgstr "Контакт удаляется"
 msgid "Some error occured while trying to delete the contact."
 msgstr "При удаление контакта возникла ошибка."
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 #, fuzzy
 msgid "Contact"
 msgid_plural "Contacts"
@@ -204,12 +204,12 @@ msgstr[0] "Контакт"
 msgstr[1] "Контакт"
 msgstr[2] "Контакт"
 
-#: js/Addressbook.js:422
+#: js/Addressbook.js:454
 #, fuzzy
 msgid "Contacts"
 msgstr "Контакт"
 
-#: js/Addressbook.js:426
+#: js/Addressbook.js:458
 #, fuzzy
 msgid "addressbooks"
 msgstr "Книга адресов"
@@ -364,7 +364,7 @@ msgstr "Координаты"
 
 #: js/ContactGrid.js:126
 msgid "Export"
-msgstr ""
+msgstr "Экспорт"
 
 #: js/ContactGrid.js:135
 #, fuzzy
@@ -382,7 +382,7 @@ msgstr "Позвонит контакту"
 
 #: js/ContactGrid.js:204
 msgid "Work"
-msgstr ""
+msgstr "Работа "
 
 #: js/ContactGrid.js:213
 #, fuzzy
@@ -391,7 +391,7 @@ msgstr "Домашний URL (Единый указатель ресурсов)"
 
 #: js/ContactGrid.js:222
 msgid "Cell"
-msgstr ""
+msgstr "Сотовый"
 
 #: js/ContactGrid.js:231
 #, fuzzy
@@ -416,7 +416,7 @@ msgstr "Личная  информация"
 
 #: js/EditDialog.js:85
 msgid "Salutation"
-msgstr ""
+msgstr "Приветствие"
 
 #: js/EditDialog.js:96 js/EditDialog.js:160
 msgid "Title"
@@ -460,11 +460,11 @@ msgstr[2] "Линков"
 
 #: Setup/setup.xml:512
 msgid "Mr"
-msgstr ""
+msgstr "Мистер"
 
 #: Setup/setup.xml:530
 msgid "Ms"
-msgstr ""
+msgstr "Женщина"
 
 #~ msgid "Are you Sure?"
 #~ msgstr "Вы уверены?"
