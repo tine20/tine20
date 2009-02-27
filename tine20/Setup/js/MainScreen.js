@@ -14,7 +14,7 @@ Ext.ns('Tine', 'Tine.Setup');
 // default mainscreen
 Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
-    activeContentType: 'Application',
+    activeContentType: 'EnvCheck',
     
     /*
     show: function() {

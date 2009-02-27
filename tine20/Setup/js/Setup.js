@@ -11,44 +11,53 @@
  
 Ext.ns('Tine', 'Tine.Setup');
 
-
+/**************************** Tree Panel *****************************/
 Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     border: false,
     rootVisible: false, 
-    rooot: {
-        children: [{
-            text: 'Setup Checks',
-            leaf: true
-        }, {
-            text: 'Config Manager',
-            leaf: true
-        }, {
-            text: 'Application Manager',
-            leaf: true
-        }]
-    },
     
     initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Setup');
+        
+        var testsFailed   = !Tine.Setup.registry.get('setupChecks').success;
+        var configMissing = !Tine.Setup.registry.get('configExists');
+        
         this.root = {
             children: [{
-                text: 'Setup Checks',
-                iconCls: Tine.Setup.registry.get('setupChecks').success ? 'setup_checks_success' : 'setup_checks_fail',
+                text: this.app.i18n._('Setup Checks'),
+                iconCls: testsFailed ? 'setup_checks_fail' : 'setup_checks_success',
+                ContentType: 'EnvCheck',
                 leaf: true
             }, {
-                text: 'Config Manager',
-                disabled: true,
+                text: this.app.i18n._('Config Manager'),
+                iconCls: 'setup_config_manager',
+                disabled: testsFailed,
+                ContentType: 'ConfigManager',
                 leaf: true
             }, {
-                text: 'Application Manager',
-                disabled: true,
+                text: this.app.i18n._('Application Manager'),
+                iconCls: 'setup_application_manager',
+                disabled: testsFailed || configMissing,
+                ContentType: 'Application',
                 leaf: true
             }]
         };
         
         Tine.Setup.TreePanel.superclass.initComponent.call(this);
+        
+        this.on('click', this.onNodeClick, this);
+    },
+    
+    onNodeClick: function(node) {
+        if (! node.disabled) {
+            this.app.getMainScreen().activeContentType = node.ContentType;
+            this.app.getMainScreen().show();
+        }
+        
     }
 });
 
+/**************************** Models *****************************/
 Ext.ns('Tine', 'Tine.Setup', 'Tine.Setup.Model');
 
 Tine.Setup.Model.ApplicationArray = Tine.Tinebase.Model.genericFields.concat([
