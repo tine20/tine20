@@ -39,7 +39,32 @@ Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.create
  * render window
  */
 Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.createInterceptor(function() {
-    
+    // if a config file exists, the admin needs to login!        
+    if (Tine.Setup.registry.get('configExists') && !Tine.Setup.registry.get('currentAccount')) {
+        
+        // tweak login dlg
+        Tine.Login.loginMethod = 'Setup.login',
+        Tine.Login.loginLogo = 'images/tine_logo_enjoy.gif',
+ 
+        Tine.Login.showLoginDialog({
+            scope: this,
+            onLogin: function(response) {
+                Tine.Tinebase.tineInit.initList.initRegistry = false;
+                Tine.Tinebase.tineInit.initRegistry();
+                var waitForRegistry = function() {
+                    if (Tine.Tinebase.tineInit.initList.initRegistry) {
+                        Ext.MessageBox.hide();
+                        Tine.Tinebase.tineInit.renderWindow();
+                    } else {
+                        waitForRegistry.defer(100);
+                    }
+                };
+                waitForRegistry();
+            }
+        });
+        return false;
+    }
+        
     // fake a setup user
     var setupUser = new Tine.Tinebase.Model.User({
         accountId           : 0,
