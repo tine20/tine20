@@ -103,14 +103,17 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_2()
     {
-        $this->_db->insert(SQL_TABLE_PREFIX . 'acsync_policy', array(
-            'id'                    => 1,
-            'name'                  => 'Default policy',
-            'description'           => 'Default policy installed during setup',
-            'policykey'             => 1,
-            'devicepasswordenabled' => 1 
-        ));
-        
+        try {
+            $this->_db->insert(SQL_TABLE_PREFIX . 'acsync_policy', array(
+                'id'                    => 1,
+                'name'                  => 'Default policy',
+                'description'           => 'Default policy installed during setup',
+                'policykey'             => 1,
+                'devicepasswordenabled' => 1 
+            ));
+        } catch(Zend_Db_Statement_Exception $e) {
+            // do nothing! The default policy is already there
+        }
         $this->setApplicationVersion('ActiveSync', '0.3');
     }
 }
