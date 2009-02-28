@@ -192,7 +192,7 @@ class Tinebase_Translation
         
         $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
         if (file_exists("$baseDir/ExtJS/source/locale/ext-lang-$localeString.js")) {
-            $jsTranslations  .= file_get_contents("$baseDir/ExtJS/build/locale/ext-lang-$localeString-min.js");
+            $jsTranslations  .= file_get_contents("$baseDir/ExtJS/source/locale/ext-lang-$localeString.js");
         } else {
             $jsTranslations  .= "console.error('Translation Error: extjs chaged their lang file name again ;-(');";
         }
