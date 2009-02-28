@@ -290,7 +290,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class']);
                             $allServerEntries = $dataController->getServerEntries();
                             $serverDiff = array_diff($allServerEntries, $allClientEntries);
-                            $serverAdds = array_merge($serverAdds, $serverDiff);
+                            $serverAdds = array_unique(array_merge($serverAdds, $serverDiff));
 
                             foreach($serverAdds as $id => $serverId) {
                                 // skip entries added by client during this sync session
