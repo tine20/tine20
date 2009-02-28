@@ -201,7 +201,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         $data = Addressbook_Controller_Contact::getInstance()->get($_serverId);
         
         foreach($this->_mapping as $key => $value) {
-            if(isset($data->$value)) {
+            // change to !empty only after release
+            if(isset($data->$value) && !empty($data->$value)) {
                 switch($value) {
                     case 'bday':
                         # 2008-12-18T23:00:00.000Z
