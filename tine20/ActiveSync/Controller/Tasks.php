@@ -97,39 +97,6 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         }
         
     }
-    
-    public function search($_collectionId, SimpleXMLElement $_data)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Data: " .print_r($_data, true));
-        
-        $filter = $this->_toTineFilter($_data);
-        
-        $foundTasks = Tasks_Controller_Task::getInstance()->search($filter);
-
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundTasks));
-            
-        return $foundTasks;
-    }
-    
-    public function change($_collectionId, $_id, SimpleXMLElement $_data)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Data: " .print_r($_data, true));
-        
-        $tasksController = Tasks_Controller_Task::getInstance();
-        
-        $oldTask = $tasksController->get($_id); 
-        
-        $task = $this->_toTineModel($_data);
-        $task->setId($_id);
-        $task->container_id = $oldTask->container_id;
-        $task->last_modified_time = $this->_syncTimeStamp;
-        
-        $task = $tasksController->update($task);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated contact id " . $task->getId());
-
-        return $task;
-    }
         
     /**
      * convert contact from xml to Addressbook_Model_Contact

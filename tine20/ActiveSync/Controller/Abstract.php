@@ -140,10 +140,31 @@ abstract class ActiveSync_Controller_Abstract
 
         return $entry;
     }
-    
-    
-    abstract public function change($_collectionId, $_id, SimpleXMLElement $_data);
-    
+        
+    /**
+     * update existing entry
+     *
+     * @param unknown_type $_collectionId
+     * @param string $_id
+     * @param SimpleXMLElement $_data
+     * @return Tinebase_Record_Abstract
+     */
+    public function change($_collectionId, $_id, SimpleXMLElement $_data)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id");
+        
+        $oldEntry = $this->_contentController->get($_id); 
+        
+        $entry = $this->_toTineModel($_data, $oldEntry);
+        $entry->last_modified_time = $this->_syncTimeStamp;
+        
+        $entry = $this->_contentController->update($entry);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $entry->getId());
+
+        return $entry;
+    }
+        
     /**
      * delete entry
      *
@@ -157,6 +178,26 @@ abstract class ActiveSync_Controller_Abstract
         $this->_contentController->delete($_id);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleted entry id " . $_id);
+    }
+    
+    /**
+     * search for existing entry
+     *
+     * @param unknown_type $_collectionId
+     * @param SimpleXMLElement $_data
+     * @return Tinebase_Record_Abstract
+     */
+    public function search($_collectionId, SimpleXMLElement $_data)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId");
+        
+        $filter = $this->_toTineFilter($_data);
+        
+        $foundEmtries = $this->_contentController->search($filter);
+
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEmtries));
+            
+        return $foundEmtries;
     }
     
     /**
@@ -204,8 +245,6 @@ abstract class ActiveSync_Controller_Abstract
         return $result;
     }    
     
-    abstract public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_serverId);
-    
     /**
      * get id's of all contacts available on the server
      *
@@ -231,4 +270,6 @@ abstract class ActiveSync_Controller_Abstract
     abstract protected function _toTineModel(SimpleXMLElement $_data, $_entry = null);
     
     abstract protected function _toTineFilter(SimpleXMLElement $_data);
+    
+    abstract public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_serverId);    
 }

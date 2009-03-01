@@ -109,7 +109,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         $data = Addressbook_Controller_Contact::getInstance()->get($_serverId);
         
         foreach($this->_mapping as $key => $value) {
-            // change to !empty only after release
+            // change to !empty after release
             if(isset($data->$value) && !empty($data->$value)) {
                 switch($value) {
                     case 'bday':
@@ -126,50 +126,6 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 }
             }
         }        
-    }
-    
-    /**
-     * search for existing contact
-     *
-     * @param unknown_type $_collectionId
-     * @param SimpleXMLElement $_data
-     * @return unknown
-     */
-    public function search($_collectionId, SimpleXMLElement $_data)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId");
-        
-        $filter = $this->_toTineFilter($_data);
-        
-        $foundContacts = $this->_contentController->search($filter);
-
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundContacts));
-            
-        return $foundContacts;
-    }
-    
-    /**
-     * update existing contact
-     *
-     * @param unknown_type $_collectionId
-     * @param unknown_type $_id
-     * @param SimpleXMLElement $_data
-     * @return unknown
-     */
-    public function change($_collectionId, $_id, SimpleXMLElement $_data)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id");
-        
-        $oldContact = $this->_contentController->get($_id); 
-        
-        $contact = $this->_toTineModel($_data, $oldContact);
-        $contact->last_modified_time = $this->_syncTimeStamp;
-        
-        $contact = $this->_contentController->update($contact);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated contact id " . $contact->getId());
-
-        return $contact;
     }
         
     /**
