@@ -299,9 +299,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         
         $oldContact = $contactsController->get($_id); 
         
-        $contact = $this->_toTine20Contact($_data);
-        $contact->setId($_id);
-        $contact->container_id = $oldContact->container_id;
+        $contact = $this->_toTine20Contact($_data, $oldContact);
         $contact->last_modified_time = $this->_syncTimeStamp;
         
         $contact = $contactsController->update($contact);
@@ -333,28 +331,44 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_Contact
      */
-    protected function _toTine20Contact(SimpleXMLElement $_data)
+    protected function _toTine20Contact(SimpleXMLElement $_data, $_contact = null)
     {
-        $contactData = array();
-        $xmlData = $_data->children('uri:Contacts');
+        if($_contact instanceof Addressbook_Model_Contact) {
+            $contact = $_contact;
+        } else {
+            $contact = new Addressbook_Model_Contact(null, true);
+        }
         
+        $xmlData = $_data->children('uri:Contacts');
+
         foreach($this->_mapping as $fieldName => $value) {
-            if(isset($xmlData->$fieldName)) {
-                switch($value) {
-                    case 'jpegphoto':
-                        $contactData[$value] = base64_decode((string)$xmlData->$fieldName);
-                        #$fp = fopen('/tmp/data.txt', 'w');
-                        #fwrite($fp, base64_decode((string)$_data->Picture));
-                        #fclose($fp);
-                        break;
-                    default:
-                        $contactData[$value] = (string)$xmlData->$fieldName;
-                        break;
-                }
+            switch($value) {
+                case 'jpegphoto':
+                    // do not change if not set
+                    if(isset($xmlData->$fieldName)) {
+                        $contact->$value = base64_decode((string)$xmlData->$fieldName);
+                    }
+                    break;
+                default:
+                    if(isset($xmlData->$fieldName)) {
+                        $contact->$value = (string)$xmlData->$fieldName;
+                    } else {
+                        $contact->$value = null;
+                    }
+                    break;
             }
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($contactData, true));
-        $contact = new Addressbook_Model_Contact($contactData);
+        // force update of n_fileas and n_fn
+        $contact->setFromArray(array(
+            'n_given'   => $contact->n_given,
+            'n_family'  => $contact->n_family,
+            'org_name'  => $contact->org_name
+        ));
+        
+        // contact should be valid now
+        $contact->isValid();
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($contact->toArray(), true));
         
         return $contact;
     }
