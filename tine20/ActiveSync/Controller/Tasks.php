@@ -98,25 +98,11 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         
     }
     
-    public function add($_collectionId, SimpleXMLElement $_data)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Data: " .print_r($_data, true));
-        
-        $task = $this->_toTine20Task($_data);
-        $task->creation_time = $this->_syncTimeStamp;
-        
-        $task = Tasks_Controller_Task::getInstance()->create($task);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added task id " . $task->getId());
-
-        return $task;
-    }
-    
     public function search($_collectionId, SimpleXMLElement $_data)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Data: " .print_r($_data, true));
         
-        $filter = $this->_toTine20TaskFilter($_data);
+        $filter = $this->_toTineFilter($_data);
         
         $foundTasks = Tasks_Controller_Task::getInstance()->search($filter);
 
@@ -133,7 +119,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         
         $oldTask = $tasksController->get($_id); 
         
-        $task = $this->_toTine20Task($_data);
+        $task = $this->_toTineModel($_data);
         $task->setId($_id);
         $task->container_id = $oldTask->container_id;
         $task->last_modified_time = $this->_syncTimeStamp;
@@ -152,8 +138,16 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_Contact
      */
-    protected function _toTine20Task(SimpleXMLElement $_data)
+    protected function _toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
+        if($_entry instanceof Tasks_Model_Task) {
+            $task = $_entry;
+        } else {
+            $task = new Tasks_Model_Task(null, true);
+        }
+        
+        die('fix me');
+        
         $taskData = array();
         
         foreach($this->_mapping as $fieldName => $value) {
@@ -192,7 +186,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_ContactFilter
      */
-    protected function _toTine20TaskFilter(SimpleXMLElement $_data)
+    protected function _toTineFilter(SimpleXMLElement $_data)
     {
         $taskFilter = new Tasks_Model_TaskFilter(array(
             array(

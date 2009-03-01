@@ -43,10 +43,13 @@ abstract class ActiveSync_Controller_Abstract
      */
     protected $_contentController;
     
+    #protected $_contentModel;
+    
     public function __construct(Zend_Date $_syncTimeStamp)
     {
         $this->_syncTimeStamp = $_syncTimeStamp;
         $this->_contentFilterClass = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
+        #$this->_contentModel       = $this->_applicationName . '_Model_' . $this->_modelName;
         $this->_contentController = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
     }
     
@@ -117,8 +120,28 @@ abstract class ActiveSync_Controller_Abstract
         return $count;
     }
     
-    abstract public function add($_collectionId, SimpleXMLElement $_data);
+    /**
+     * add entry from xml data
+     *
+     * @param unknown_type $_collectionId
+     * @param SimpleXMLElement $_data
+     * @return Tinebase_Record_Abstract
+     */
+    public function add($_collectionId, SimpleXMLElement $_data)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry");
+        
+        $entry = $this->_toTineModel($_data);
+        $entry->creation_time = $this->_syncTimeStamp;
+        
+        $entry = $this->_contentController->create($entry);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added entry id " . $entry->getId());
 
+        return $entry;
+    }
+    
+    
     abstract public function change($_collectionId, $_id, SimpleXMLElement $_data);
     
     /**
@@ -205,5 +228,7 @@ abstract class ActiveSync_Controller_Abstract
         return $foundEntries;
     }
     
+    abstract protected function _toTineModel(SimpleXMLElement $_data, $_entry = null);
     
+    abstract protected function _toTineFilter(SimpleXMLElement $_data);
 }

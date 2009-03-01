@@ -129,27 +129,6 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * add contact from xml
-     *
-     * @param unknown_type $_collectionId
-     * @param SimpleXMLElement $_data
-     * @return unknown
-     */
-    public function add($_collectionId, SimpleXMLElement $_data)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId");
-        
-        $contact = $this->_toTine20Contact($_data);
-        $contact->creation_time = $this->_syncTimeStamp;
-        
-        $contact = $this->_contentController->create($contact);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added contact id " . $contact->getId());
-
-        return $contact;
-    }
-    
-    /**
      * search for existing contact
      *
      * @param unknown_type $_collectionId
@@ -160,7 +139,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId");
         
-        $filter = $this->_toTine20ContactFilter($_data);
+        $filter = $this->_toTineFilter($_data);
         
         $foundContacts = $this->_contentController->search($filter);
 
@@ -183,7 +162,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         
         $oldContact = $this->_contentController->get($_id); 
         
-        $contact = $this->_toTine20Contact($_data, $oldContact);
+        $contact = $this->_toTineModel($_data, $oldContact);
         $contact->last_modified_time = $this->_syncTimeStamp;
         
         $contact = $this->_contentController->update($contact);
@@ -200,10 +179,10 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_Contact
      */
-    protected function _toTine20Contact(SimpleXMLElement $_data, $_contact = null)
+    protected function _toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
-        if($_contact instanceof Addressbook_Model_Contact) {
-            $contact = $_contact;
+        if($_entry instanceof Addressbook_Model_Contact) {
+            $contact = $_entry;
         } else {
             $contact = new Addressbook_Model_Contact(null, true);
         }
@@ -248,7 +227,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_ContactFilter
      */
-    protected function _toTine20ContactFilter(SimpleXMLElement $_data)
+    protected function _toTineFilter(SimpleXMLElement $_data)
     {
         $xmlData = $_data->children('Contacts');
         
