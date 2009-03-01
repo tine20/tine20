@@ -58,93 +58,9 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_TASK
     ));
     
-    /**
-     * get estimate of add,changed or deleted contacts
-     *
-     * @todo improve filter usage. Filter need to support OR and need to return count only
-     * @param Zend_Date $_startTimeStamp
-     * @param Zend_Date $_endTimeStamp
-     * @return int total count of changed items
-     */
-    public function getItemEstimate($_startTimeStamp = NULL, $_endTimeStamp = NULL)
-    {
-        $count = 0;
-        $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
-
-        if($_startTimeStamp === NULL && $_endTimeStamp === NULL) {
-            $filter = new Tasks_Model_TaskFilter(); 
-            $count = Tasks_Controller_Task::getInstance()->searchCount($filter);
-        } elseif($_endTimeStamp === NULL) {
-            foreach(array('creation_time', 'last_modified_time', 'deleted_time') as $fieldName) {
-                $filter = new Tasks_Model_TaskFilter(array(
-                    array(
-                        'field'     => $fieldName,
-                        'operator'  => 'greater',
-                        'value'     => $startTimeStamp
-                    ),
-                )); 
-                $count += Tasks_Controller_Task::getInstance()->searchCount($filter);
-            }
-        } else {
-            $endTimeStamp = ($_endTimeStamp instanceof Zend_Date) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
-            
-            foreach(array('creation_time', 'last_modified_time', 'deleted_time') as $fieldName) {
-                $filter = new Tasks_Model_TaskFilter(array(
-                    array(
-                        'field'     => $fieldName,
-                        'operator'  => 'after',
-                        'value'     => $startTimeStamp
-                    ),
-                    array(
-                        'field'     => $fieldName,
-                        'operator'  => 'before',
-                        'value'     => $endTimeStamp
-                    ),
-                )); 
-                $count += Tasks_Controller_Task::getInstance()->searchCount($filter);
-            }
-        }
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Count: $count Timestamps: ($startTimeStamp / $endTimeStamp)");
-                    
-        return $count;
-    }
+    protected $_applicationName     = 'Tasks';
     
-    public function getSince($_field, $_startTimeStamp, $_endTimeStamp)
-    {
-        switch($_field) {
-            case 'added':
-                $fieldName = 'creation_time';
-                break;
-            case 'changed':
-                $fieldName = 'last_modified_time';
-                break;
-            case 'deleted':
-                $fieldName = 'deleted_time';
-                break;
-            default:
-                throw new Exception("$_field must be either added, changed or deleted");                
-        }
-        
-        $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
-        $endTimeStamp = ($_endTimeStamp instanceof Zend_Date) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
-        
-        $filter = new Tasks_Model_TaskFilter(array(
-            array(
-                'field'     => $fieldName,
-                'operator'  => 'after',
-                'value'     => $startTimeStamp
-            ),
-            array(
-                'field'     => $fieldName,
-                'operator'  => 'before',
-                'value'     => $endTimeStamp
-            ),
-        ));
-        $result = Tasks_Controller_Task::getInstance()->search($filter);
-        
-        return $result;
-    }    
+    protected $_modelName           = 'Task';    
     
     public function appendXML($_xmlDocument, $_xmlNode, $_data)
     {
@@ -228,22 +144,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
 
         return $task;
     }
-    
-    /**
-     * delete contact
-     *
-     * @param unknown_type $_collectionId
-     * @param unknown_type $_id
-     */
-    public function delete($_collectionId, $_id)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ColectionId: $_collectionId Id: $_id");
         
-        Tasks_Controller_Task::getInstance()->delete($_id);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleted task id " . $_id);
-    }
-    
     /**
      * convert contact from xml to Addressbook_Model_Contact
      *
