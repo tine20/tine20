@@ -160,12 +160,12 @@ class Setup_Core extends Tinebase_Core
         
         Zend_Session::start();
         
-        define('TINE20SETUP_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
         define('TINE20SETUP_CODENAME',      'trunk');
         define('TINE20SETUP_PACKAGESTRING', 'none');
         define('TINE20SETUP_RELEASETIME',   Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG));
 
-        if (TINE20SETUP_BUILDTYPE == 'RELEASE') {
+        if (TINE20_BUILDTYPE == 'RELEASE') {
             // set error mode to suppress notices & warnings in release mode
             error_reporting(E_ERROR);
         }
