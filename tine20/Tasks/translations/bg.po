@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-25 10:19+0100\n"
+"PO-Revision-Date: 2009-03-01 22:15+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,6 @@ msgid "Completed"
 msgstr "Завършен"
 
 #: js/GridPanel.js:31
-#, fuzzy
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
@@ -100,7 +99,6 @@ msgstr[0] "Задачa"
 msgstr[1] "Задачи"
 
 #: js/Tasks.js:74
-#, fuzzy
 msgid "Tasks"
 msgstr "Задачи"
 
@@ -134,6 +132,27 @@ msgstr "ПРЕКЪСНАТИ"
 #~ msgid "Tasks) "
 #~ msgstr "Задачи"
 
+#~ msgid "Loading Task..."
+#~ msgstr "Зарежда задача..."
+
+#~ msgid "Please Wait"
+#~ msgstr "Моля изчакайте"
+
+#~ msgid "Add New Task"
+#~ msgstr "Добави нова задача"
+
+#~ msgid "Edit Task \"{0}\""
+#~ msgstr "Редакция но задача \"{0}\""
+
+#~ msgid "Saved in"
+#~ msgstr "Съхранен в"
+
+#, fuzzy
+#~ msgid "Do you realy want to delte the selected task?"
+#~ msgid_plural "Do you relay want to delete the selected tasks?"
+#~ msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
+#~ msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
+
 #~ msgid "Could not delete task(s)."
 #~ msgstr "Задачата (-ите) не може(могат) да бъде(бъдатат) изтрита(-и)"
 
@@ -163,18 +182,6 @@ msgstr "ПРЕКЪСНАТИ"
 #~ msgid "No Tasks to display"
 #~ msgstr "Няма намерени задачи"
 
-#~ msgid "Loading Task..."
-#~ msgstr "Зарежда задача..."
-
-#~ msgid "Please Wait"
-#~ msgstr "Моля изчакайте"
-
-#~ msgid "Add New Task"
-#~ msgstr "Добави нова задача"
-
-#~ msgid "Edit Task \"{0}\""
-#~ msgstr "Редакция но задача \"{0}\""
-
 #~ msgid "Please wait"
 #~ msgstr "Моля изчакайте"
 
@@ -199,14 +206,5 @@ msgstr "ПРЕКЪСНАТИ"
 #~ msgid "Enter short name..."
 #~ msgstr "Задай съкратено име"
 
-#~ msgid "Saved in"
-#~ msgstr "Съхранен в"
-
 #~ msgid "Folder"
 #~ msgstr "Папка"
-
-#, fuzzy
-#~ msgid "Do you realy want to delte the selected task?"
-#~ msgid_plural "Do you relay want to delete the selected tasks?"
-#~ msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
-#~ msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"

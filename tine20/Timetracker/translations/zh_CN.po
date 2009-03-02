@@ -48,7 +48,7 @@ msgstr "所有"
 msgid "Date"
 msgstr "日期"
 
-#: Export/Ods.php:415 js/TimeaccountEditDialog.js:146
+#: Export/Ods.php:415 js/TimeaccountEditDialog.js:149
 #: js/TimeaccountGridPanel.js:52 js/TimesheetEditDialog.js:167
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
 msgid "Description"
@@ -81,7 +81,7 @@ msgstr "已清除"
 msgid "{0}"
 msgstr "{0}"
 
-#: js/DurationSpinner.js:56 js/DurationSpinner.js:66
+#: js/DurationSpinner.js:61 js/DurationSpinner.js:71
 msgid "Not a valid time"
 msgstr "不是有效时间"
 
@@ -122,78 +122,78 @@ msgstr "头衔"
 msgid "Unit"
 msgstr "单位"
 
-#: js/TimeaccountEditDialog.js:101
+#: js/TimeaccountEditDialog.js:102
 msgid "Unit Price"
 msgstr "单价"
 
-#: js/TimeaccountEditDialog.js:104 js/TimeaccountGridPanel.js:81
+#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:81
 msgid "Budget"
 msgstr "预算"
 
-#: js/TimeaccountEditDialog.js:108
+#: js/TimeaccountEditDialog.js:111
 msgid "Timesheets are billable"
 msgstr "记帐的时间表"
 
-#: js/TimeaccountEditDialog.js:112
+#: js/TimeaccountEditDialog.js:115
 msgid "Status"
 msgstr "状态"
 
-#: js/TimeaccountEditDialog.js:118 js/TimeaccountSelect.js:79
+#: js/TimeaccountEditDialog.js:121 js/TimeaccountSelect.js:79
 msgid "closed"
 msgstr "已结清"
 
-#: js/TimeaccountEditDialog.js:118
+#: js/TimeaccountEditDialog.js:121
 msgid "open"
 msgstr "打开"
 
-#: js/TimeaccountEditDialog.js:120
+#: js/TimeaccountEditDialog.js:123
 msgid "Billed"
 msgstr "已记帐"
 
-#: js/TimeaccountEditDialog.js:128 js/TimeaccountSelect.js:235
+#: js/TimeaccountEditDialog.js:131 js/TimeaccountSelect.js:235
 #: Setup/setup.xml:71
 msgid "not yet billed"
 msgstr "还没记帐"
 
-#: js/TimeaccountEditDialog.js:129 js/TimeaccountSelect.js:236
+#: js/TimeaccountEditDialog.js:132 js/TimeaccountSelect.js:236
 #: Setup/setup.xml:73
 msgid "to bill"
 msgstr "记帐"
 
-#: js/TimeaccountEditDialog.js:130 js/TimeaccountSelect.js:237
+#: js/TimeaccountEditDialog.js:133 js/TimeaccountSelect.js:237
 #: Setup/setup.xml:75
 msgid "billed"
 msgstr "已记帐"
 
-#: js/TimeaccountEditDialog.js:160
+#: js/TimeaccountEditDialog.js:163
 msgid "Enter description"
 msgstr "输入描述"
 
-#: js/TimeaccountEditDialog.js:176
+#: js/TimeaccountEditDialog.js:179
 msgid "Access"
 msgstr "访问"
 
-#: js/TimeaccountEditDialog.js:198
+#: js/TimeaccountEditDialog.js:201
 msgid "Book Own"
 msgstr "预定自己的"
 
-#: js/TimeaccountEditDialog.js:203
+#: js/TimeaccountEditDialog.js:206
 msgid "View All"
 msgstr "浏览所有的"
 
-#: js/TimeaccountEditDialog.js:208
+#: js/TimeaccountEditDialog.js:211
 msgid "Book All"
 msgstr "预定所有的"
 
-#: js/TimeaccountEditDialog.js:213
+#: js/TimeaccountEditDialog.js:216
 msgid "Manage Clearing"
 msgstr "管理清除"
 
-#: js/TimeaccountEditDialog.js:218
+#: js/TimeaccountEditDialog.js:221
 msgid "Manage All"
 msgstr "管理所有的"
 
-#: js/TimeaccountEditDialog.js:226
+#: js/TimeaccountEditDialog.js:229
 msgid "Permissions"
 msgstr "许可"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-25 12:58+0100\n"
+"PO-Revision-Date: 2009-03-01 22:41+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -597,13 +597,12 @@ msgstr ""
 "опции на показване или {1} в които търсите."
 
 #: js/widgets/app/GridPanel.js:491
-#, fuzzy
 msgid "Not Allowed"
-msgstr "Всички"
+msgstr "Непозволено"
 
 #: js/widgets/app/GridPanel.js:492
 msgid "You are not allowed to delete all pages at once"
-msgstr ""
+msgstr "Вие нямате необходите права да изтриете всички страници наведнъж"
 
 #: js/widgets/app/GridPanel.js:504
 msgid "Do you really want to delete the selected record"
@@ -1201,15 +1200,6 @@ msgstr "променена документация"
 #, fuzzy
 #~ msgid "none"
 #~ msgstr "бележка"
-
-#~ msgid "Recent Activities"
-#~ msgstr "Последно изпълнени операции"
-
-#~ msgid "Displaying notes {0} - {1} of {2}"
-#~ msgstr "Покажи записки {0} - {1} от {2}"
-
-#~ msgid "No notes to display"
-#~ msgstr "Няма намерени записи"
 
 #, fuzzy
 #~ msgid "Loading {0}..."
@@ -2027,17 +2017,11 @@ msgstr "променена документация"
 #~ msgid "There Where Errors"
 #~ msgstr "Грешки"
 
-#~ msgid "New"
-#~ msgstr "Нов"
-
 #~ msgid "Save"
 #~ msgstr "Запамети"
 
 #~ msgid "Close"
 #~ msgstr "Затвори"
-
-#~ msgid "My"
-#~ msgstr "Моите"
 
 #~ msgid "Language: "
 #~ msgstr "Език:"
@@ -2046,9 +2030,6 @@ msgstr "променена документация"
 #~ msgid "Manage Permissions for {0} :\"{1}\""
 #~ msgstr "Управление на правата за {0} :\"{0}\""
 
-#~ msgid "Delete all filters"
-#~ msgstr "Изтрий всички филтри"
-
 #, fuzzy
 #~ msgid "No software to display"
 #~ msgstr "Няма намерени записи"
@@ -2056,3 +2037,21 @@ msgstr "променена документация"
 #, fuzzy
 #~ msgid "Allow"
 #~ msgstr "Всички"
+
+#~ msgid "Recent Activities"
+#~ msgstr "Последно изпълнени операции"
+
+#~ msgid "Displaying notes {0} - {1} of {2}"
+#~ msgstr "Покажи записки {0} - {1} от {2}"
+
+#~ msgid "No notes to display"
+#~ msgstr "Няма намерени записи"
+
+#~ msgid "New"
+#~ msgstr "Нов"
+
+#~ msgid "My"
+#~ msgstr "Моите"
+
+#~ msgid "Delete all filters"
+#~ msgstr "Изтрий всички филтри"

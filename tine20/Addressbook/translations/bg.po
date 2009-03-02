@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-25 10:03+0100\n"
+"PO-Revision-Date: 2009-03-01 21:27+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -49,11 +49,11 @@ msgstr "Телефон (кола)"
 
 #: Export/Pdf.php:65
 msgid "Telephone Fax"
-msgstr "Факс"
+msgstr "Телефонен факс"
 
 #: Export/Pdf.php:68
 msgid "Telephone Page"
-msgstr "Пейджер"
+msgstr "Телефонна страница"
 
 #: Export/Pdf.php:71
 msgid "URL"
@@ -181,14 +181,12 @@ msgid "Please fix the errors noted."
 msgstr "Моля коригирайте грешките."
 
 #: js/Addressbook.js:246
-#, fuzzy
 msgid "Deleting contact..."
 msgstr "Изтрива контакт..."
 
 #: js/Addressbook.js:252
-#, fuzzy
 msgid "Some error occured while trying to delete the contact."
-msgstr "Настъпила е грешка при опит за изтриване на контакта."
+msgstr "грешка при опит за изтриване на контакта."
 
 #: js/Addressbook.js:454
 msgid "Contact"
@@ -338,7 +336,7 @@ msgstr "Уеб"
 
 #: js/ContactGrid.js:113
 msgid "URL (private)"
-msgstr "URL (личен адрес)"
+msgstr "URL (личена страница)"
 
 #: js/ContactGrid.js:114
 msgid "Note"
@@ -357,14 +355,12 @@ msgid "Export"
 msgstr "Ехрорт"
 
 #: js/ContactGrid.js:135
-#, fuzzy
 msgid "Export as PDF"
-msgstr "Експортирай като pdf"
+msgstr "Експортира като pdf"
 
 #: js/ContactGrid.js:142
-#, fuzzy
 msgid "Export as CSV"
-msgstr "Експортирай като pdf"
+msgstr "Експортира като pdf"
 
 #: js/ContactGrid.js:166
 msgid "call contact"
@@ -375,9 +371,8 @@ msgid "Work"
 msgstr "Работа"
 
 #: js/ContactGrid.js:213
-#, fuzzy
 msgid "Home"
-msgstr "URL  (приват)"
+msgstr "URL"
 
 #: js/ContactGrid.js:222
 msgid "Cell"
@@ -462,6 +457,10 @@ msgstr "Госпожа"
 #~ msgstr[0] "Наистина ли искате да изтриете селектираният контакт?"
 #~ msgstr[1] "Наистина ли искате да изтриете селектираните контакти?"
 
+#, fuzzy
+#~ msgid "Some error occured while trying to delete the conctact."
+#~ msgstr "Настъпила е грешка при опит за изтриване но контакта."
+
 #~ msgid "add contact"
 #~ msgstr "Прибави контакт"
 
@@ -481,10 +480,6 @@ msgstr "Госпожа"
 
 #~ msgid "Tags"
 #~ msgstr "Тагове"
-
-#, fuzzy
-#~ msgid "Some error occured while trying to delete the conctact."
-#~ msgstr "Настъпила е грешка при опит за изтриване но контакта."
 
 #~ msgid "Saved in"
 #~ msgstr "Запаметен в"

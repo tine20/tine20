@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-25 13:22+0100\n"
+"PO-Revision-Date: 2009-03-01 22:43+0100\n"
 "Last-Translator: Dimitrina Mileva <dimitrina@gmx.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgstr "№ на конференция"
 
 #: js/Asterisk/MeetmeEditDialog.js:49 js/Asterisk/MeetmeGridPanel.js:82
 msgid "pin"
-msgstr "рин"
+msgstr "пин"
 
 #: js/Asterisk/MeetmeEditDialog.js:57 js/Asterisk/MeetmeGridPanel.js:91
 msgid "adminpin"
@@ -89,7 +89,7 @@ msgstr "id на позвънил (Callerid)"
 
 #: js/Asterisk/SipPeerEditDialog.js:97 js/Asterisk/VoicemailEditDialog.js:48
 msgid "Mailbox"
-msgstr "Мейлбокс"
+msgstr "Гласова поща (Мейлбокс)"
 
 #: js/Asterisk/SipPeerEditDialog.js:104
 msgid "Callgroup"
@@ -981,6 +981,12 @@ msgstr "Phones"
 msgid "Templates"
 msgstr "Темплейтс"
 
+#~ msgid "reset phones HTTP authentication"
+#~ msgstr "върни телефонната HTTP-автентичност"
+
+#~ msgid "Open phones web gui"
+#~ msgstr "Open phones web gui"
+
 #~ msgid "add context"
 #~ msgstr "добави контекст"
 
@@ -1145,12 +1151,6 @@ msgstr "Темплейтс"
 
 #~ msgid "delete phone"
 #~ msgstr "изтрий телефон"
-
-#~ msgid "reset phones HTTP authentication"
-#~ msgstr "върни телефонната HTTP-автентичност"
-
-#~ msgid "Open phones web gui"
-#~ msgstr "Open phones web gui"
 
 #~ msgid "Displaying phones {0} - {1} of {2}"
 #~ msgstr "Намерени телефонни номера {0} - {1} of {2}"

@@ -22,7 +22,7 @@ msgstr "Version"
 msgid "Status"
 msgstr "Status"
 
-#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:139
+#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:163
 msgid "Install application"
 msgstr "Install application"
 
@@ -42,7 +42,7 @@ msgstr "Shit"
 msgid "Where are the backup tapes"
 msgstr "Where are the backup tapes"
 
-#: js/EnvCheckGridPanel.js:95
+#: js/EnvCheckGridPanel.js:104
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -50,27 +50,35 @@ msgstr ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 
-#: js/EnvCheckGridPanel.js:125
+#: js/EnvCheckGridPanel.js:134
 msgid "Check"
 msgstr "Check"
 
-#: js/EnvCheckGridPanel.js:126
+#: js/EnvCheckGridPanel.js:135
 msgid "Result"
 msgstr "Result"
 
-#: js/Setup.js:28
+#: js/EnvCheckGridPanel.js:136
+msgid "Error"
+msgstr "Error"
+
+#: js/EnvCheckGridPanel.js:154
+msgid "Check again"
+msgstr "Check again"
+
+#: js/Setup.js:29
 msgid "Setup Checks"
 msgstr "Setup Checks"
 
-#: js/Setup.js:33
+#: js/Setup.js:34
 msgid "Config Manager"
 msgstr "Config Manager"
 
-#: js/Setup.js:39
+#: js/Setup.js:40
 msgid "Application Manager"
 msgstr "Application Manager"
 
-#: js/Setup.js:105
+#: js/Setup.js:126
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Application"
