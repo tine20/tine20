@@ -15,7 +15,7 @@
  * helper class
  *
  */
-class TestServer extends Tinebase_Server_Abstract
+class TestServer extends Setup_Server_Abstract
 {
     /**
      * holdes the instance of the singleton
