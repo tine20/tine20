@@ -94,7 +94,8 @@ Tine.Crm.Product.EditDialog = function() {
               editor: new Ext.form.NumberField({
                   allowBlank: false,
                   allowNegative: false,
-                  decimalSeparator: ','
+                  decimalSeparator: ',',
+                  maxValue: 999999999999.99
                   }),
               renderer: Ext.util.Format.euMoney                    
             }
