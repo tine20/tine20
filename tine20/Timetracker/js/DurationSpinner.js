@@ -49,6 +49,8 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     
     getValue: function() {
         var value = Tine.Timetracker.DurationSpinner.superclass.getValue.call(this);
+        value = value.replace(',', '.');
+        
         if(value && typeof value == 'string') {
         	if (value.search(/:/) != -1) {
                 var parts = value.split(':');
