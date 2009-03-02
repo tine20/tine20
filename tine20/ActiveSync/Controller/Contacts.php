@@ -106,11 +106,10 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      */
     public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_serverId)
     {
-        $data = Addressbook_Controller_Contact::getInstance()->get($_serverId);
+        $data = $this->_contentController->get($_serverId);
         
         foreach($this->_mapping as $key => $value) {
-            // change to !empty after release
-            if(isset($data->$value) && !empty($data->$value)) {
+            if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
                         # 2008-12-18T23:00:00.000Z
@@ -153,6 +152,9 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $contact->$value = base64_decode((string)$xmlData->$fieldName);
                     }
                     break;
+                case 'bday':
+                    // do nothing
+                    break;
                 default:
                     if(isset($xmlData->$fieldName)) {
                         $contact->$value = (string)$xmlData->$fieldName;
@@ -187,7 +189,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     {
         $xmlData = $_data->children('Contacts');
         
-        $contactFilter = new Addressbook_Model_ContactFilter(array(
+        $filter = new Addressbook_Model_ContactFilter(array(
             array(
                 'field'     => 'containerType',
                 'operator'  => 'equals',
@@ -196,15 +198,15 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         )); 
     
         foreach($this->_mapping as $fieldName => $value) {
-            if($contactFilter->has($value)) {
-                $contactFilter->$value = array(
+            if($filter->has($value)) {
+                $filter->$value = array(
                     'operator'  => 'equals',
                     'value'     => (string)$xmlData->$fieldName
                 );
             }
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($contactFilter, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
         
-        return $contactFilter;
+        return $filter;
     }
 }

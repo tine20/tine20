@@ -62,38 +62,41 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     
     protected $_modelName           = 'Task';    
     
-    public function appendXML($_xmlDocument, $_xmlNode, $_data)
+    public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_serverId)
     {
+        $data = $this->_contentController->get($_serverId);
+        
         foreach($this->_mapping as $key => $value) {
-            if(isset($_data->$value)) {
+            if(!empty($data->$value)) {
                 switch($value) {
                     case 'completed':
                         continue 2;
                         break;
                     case 'due':
                         if($_data->$value instanceof Zend_Date) {
-                            $_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, $_data->$value->getIso()));
+                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $data->$value->getIso()));
                             #$_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, '2008-12-30T23:00:00.000Z'));
                             $_data->$value->setTimezone(Tinebase_Core::get('userTimeZone'));
-                            $_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', 'DueDate', $_data->$value->getIso()));
+                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'DueDate', $data->$value->getIso()));
                         }
                         break;
                     case 'priority':
-                        $priority = $_data->$value <= 2 ? $_data->$value : 2;
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, $priority));
+                        $priority = ($data->$value <= 2) ? $data->$value : 2;
+                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $priority));
                         break;
                     default:
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, $_data->$value));
+                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $data->$value));
                         break;
                 }
             }
-        }
-        // Complete is required
-        if($_data->completed instanceof Zend_Date) {
-            $_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', 'Complete', 1));
-            $_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', 'DateCompleted', $_data->completed->getIso()));
+        }        
+        
+        // Completed is required
+        if($data->completed instanceof Zend_Date) {
+            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'Complete', 1));
+            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'DateCompleted', $data->completed->getIso()));
         } else {
-            $_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', 'Complete', 0));
+            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'Complete', 0));
         }
         
     }
@@ -113,36 +116,33 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
             $task = new Tasks_Model_Task(null, true);
         }
         
-        die('fix me');
-        
-        $taskData = array();
-        
+        $xmlData = $_data->children('uri:Tasks');
+
         foreach($this->_mapping as $fieldName => $value) {
-            if(isset($_data->$fieldName)) {
-                switch($value) {
-                    case 'completed':
-                        if((int)$_data->$fieldName === 1) {
-                            $taskData['status_id'] = 2;
-                            $taskData['completed'] = (string)$_data->DateCompleted;
-                        } else {
-                            $taskData['status_id'] = 3; 
-                            $taskData['completed'] = NULL;
-                        }
-                        break;
-                    case 'picture':
-                        #$contactData[$value] = base64_decode((string)$_data->$fieldName);
-                        #$fp = fopen('/tmp/data.txt', 'w');
-                        #fwrite($fp, base64_decode((string)$_data->Picture));
-                        #fclose($fp);
-                        break;
-                    default:
-                        $taskData[$value] = (string)$_data->$fieldName;
-                        break;
-                }
+            switch($value) {
+                case 'completed':
+                    if((int)$_data->$fieldName === 1) {
+                        $task->status_id = 2;
+                        $task->completed = (string)$_data->DateCompleted;
+                    } else {
+                        $task->status_id = 3; 
+                        $task->completed = NULL;
+                    }
+                    break;
+                default:
+                    if(isset($xmlData->$fieldName)) {
+                        $task->$value = (string)$xmlData->$fieldName;
+                    } else {
+                        $task->$value = null;
+                    }
+                    break;
             }
         }
         
-        $task = new Tasks_Model_Task($taskData);
+        // contact should be valid now
+        $task->isValid();
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($task->toArray(), true));
         
         return $task;
     }
@@ -155,23 +155,26 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     protected function _toTineFilter(SimpleXMLElement $_data)
     {
-        $taskFilter = new Tasks_Model_TaskFilter(array(
+        $xmlData = $_data->children('Tasks');
+        
+        $filter = new Tasks_Model_TaskFilter(array(
             array(
                 'field'     => 'containerType',
                 'operator'  => 'equals',
                 'value'     => 'all'
             )
         )); 
-    
+            
         foreach($this->_mapping as $fieldName => $value) {
-            if($taskFilter->has($value)) {
-                $taskFilter->$value = array(
+            if($filter->has($value)) {
+                $filter->$value = array(
                     'operator'  => 'equals',
-                    'value'     => (string)$_data->$fieldName
+                    'value'     => (string)$xmlData->$fieldName
                 );
             }
         }
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
         
-        return $taskFilter;
+        return $filter;
     }
 }

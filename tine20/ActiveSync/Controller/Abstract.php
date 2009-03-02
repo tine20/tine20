@@ -42,22 +42,35 @@ abstract class ActiveSync_Controller_Abstract
      * @var unknown_type
      */
     protected $_contentController;
-    
-    #protected $_contentModel;
-    
+
+    /**
+     * the constructor
+     *
+     * @param Zend_Date $_syncTimeStamp
+     */
     public function __construct(Zend_Date $_syncTimeStamp)
     {
         $this->_syncTimeStamp = $_syncTimeStamp;
         $this->_contentFilterClass = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
-        #$this->_contentModel       = $this->_applicationName . '_Model_' . $this->_modelName;
         $this->_contentController = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
     }
     
+    /**
+     * return list of supported folders for this backend
+     *
+     * @return array
+     */
     public function getFolders()
     {
         return $this->_folders;
     }
     
+    /**
+     * get folder identified by $_folderId
+     *
+     * @param string $_folderId
+     * @return string
+     */
     public function getFolder($_folderId)
     {
         foreach($this->_folders as $folder) {
