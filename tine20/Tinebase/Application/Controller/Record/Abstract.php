@@ -353,7 +353,8 @@ abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_
         
         $records = $this->_backend->getMultiple((array)$_ids);
         if (count((array)$_ids) != count($records)) {
-            throw new Tinebase_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$_ids) . ' records exist');
+            //throw new Tinebase_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$_ids) . ' records exist');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$_ids) . ' records exist.');
         }
                     
         try {        
