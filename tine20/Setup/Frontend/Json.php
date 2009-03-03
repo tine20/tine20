@@ -175,6 +175,20 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
     {
         return Setup_Controller::getInstance()->checkRequirements();
     }
+
+    /**
+     * load config data from config file / default data
+     *
+     * @return array
+     */
+    public function loadConfig()
+    {
+        $result = (!Setup_Core::configFileExists()) 
+                ? Setup_Controller::getInstance()->getConfigDefaults()
+                : Setup_Controller::getInstance()->getConfigData();
+
+        return $result;
+    }
     
     /**
      * save config data in config file
@@ -201,9 +215,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
             'configWritable'   => Setup_Core::configFileWritable(),
             'checkDB'          => Setup_Core::get('checkDB'),
             'setupChecks'      => $this->envCheck(),
-            'configData'       => (!Setup_Core::configFileExists()) 
-                ? Setup_Controller::getInstance()->getConfigDefaults()
-                : Setup_Controller::getInstance()->getConfigData()
+            'configData'       => $this->loadConfig()
         );
         
         if (Setup_Core::isRegistered(Setup_Core::USER)) {
