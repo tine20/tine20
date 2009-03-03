@@ -390,6 +390,55 @@ class Setup_Controller
     }
     
     /**
+     * get config file default values
+     *
+     * @return array
+     */
+    public function getConfigDefaults()
+    {
+        $defaultPath = ini_get('session.save_path');
+        
+        $result = array(
+            'database' => array(
+                'host'  => 'localhost',
+                'dbname' => 'tine20',
+                'username' => 'tine20',
+                'password' => '',
+                'adapter' => 'pdo_mysql',
+                'tableprefix' => 'tine20_'
+            ),
+            'logger' => array(
+                'filename' => $defaultPath . '/tine20.log',
+                'priority' => '7'    
+            ),
+            'setupuser' => array(
+                'username'      => 'tine20admin',
+                'password'      => 'lars' 
+            ),
+            'caching' => array(
+                   'active' => 1,
+                   'lifetime' => 3600,
+                   'backend' => 'File',
+                   'path' => $defaultPath,
+            ),        
+        );
+        
+        return $result;
+    }
+
+    /**
+     * get config file values
+     *
+     * @return array
+     */
+    public function getConfigData()
+    {
+        $config = Setup_Core::getConfig()->toArray();
+        
+        return $config;
+    }
+    
+    /**
      * create new setup user session
      *
      * @param   string $_username

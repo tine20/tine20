@@ -77,6 +77,16 @@ class Setup_Core extends Tinebase_Core
     {
         return file_exists(dirname(__FILE__) . '/../config.inc.php');
     }
+
+    /**
+     * checks if global config file is writable
+     *
+     * @return bool
+     */
+    public static function configFileWritable()
+    {
+        return is_writable(dirname(__FILE__) . '/../config.inc.php');
+    }
     
     /**
      * initializes the database connection

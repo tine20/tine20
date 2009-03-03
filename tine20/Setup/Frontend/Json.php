@@ -177,6 +177,18 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
     }
     
     /**
+     * save config data in config file
+     *
+     * @param string $data
+     * 
+     * @todo implement
+     */
+    public function saveConfig($data)
+    {
+        // not implemented yet
+    }
+    
+    /**
      * Returns registry data of tinebase.
      * @see Tinebase_Application_Json_Abstract
      * 
@@ -186,12 +198,16 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
     {
         $registryData =  array(
             'configExists'     => Setup_Core::configFileExists(),
+            'configWritable'   => Setup_Core::configFileWritable(),
             'checkDB'          => Setup_Core::get('checkDB'),
             'setupChecks'      => $this->envCheck(),
+            'configData'       => (!Setup_Core::configFileExists()) 
+                ? Setup_Controller::getInstance()->getConfigDefaults()
+                : Setup_Controller::getInstance()->getConfigData()
         );
         
         if (Setup_Core::isRegistered(Setup_Core::USER)) {
-            $registryData += array(    
+            $registryData += array(
                 'currentAccount'   => Setup_Core::getUser(),
                 'version'          => array(
                     'codename'      => TINE20SETUP_CODENAME,
