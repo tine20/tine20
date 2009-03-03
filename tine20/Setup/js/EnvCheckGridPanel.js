@@ -150,7 +150,7 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
     	// @todo add re-run checks here
     	
         this.action_reCheck = new Ext.Action({
-            text: this.app.i18n._('Check again'),
+            text: this.app.i18n._('Run setup tests'),
             handler: function() {
                 this.store.load({});
             },

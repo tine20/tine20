@@ -59,6 +59,27 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         }
     },
     
+    onCheckConfig: function() {
+        this.loadMask.show();
+            Ext.Ajax.request({
+                scope: this,
+                params: {
+                    method: 'Setup.checkConfig'
+                },
+                success: function(response) {
+                    var regData = Ext.util.JSON.decode(response.responseText);
+                    // replace some registry data
+                    for (key in regData) {
+                        if (key != 'status') {
+                            Tine.Setup.registry.replace(key, regData[key]);
+                        }
+                    }
+                    this.loadMask.hide();
+                }
+            });
+    },
+    
+    
     initComponent: function() {
         this.initActions();
         this.items = this.getFormItems();
@@ -245,6 +266,13 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
     },
     
     initActions: function() {
+        this.action_reCheck = new Ext.Action({
+            text: this.app.i18n._('Check config'),
+            handler: this.onCheckConfig,
+            iconCls: 'x-tbar-loading',
+            scope: this
+        });
+        
         this.action_saveConfig = new Ext.Action({
             text: this.app.i18n._('Save config'),
             iconCls: 'setup_action_save_config',
@@ -261,6 +289,7 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         
         this.actionToolbar = new Ext.Toolbar({
             items: [
+                this.action_reCheck,
                 this.action_saveConfig,
                 this.action_downloadConfig
             ]
