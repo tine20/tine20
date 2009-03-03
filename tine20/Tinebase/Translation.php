@@ -223,7 +223,7 @@ class Tinebase_Translation
         $d = dir($tine20path);
         while (false !== ($appName = $d->read())) {
             $appPath = "$tine20path/$appName";
-            if (is_dir($appPath) && $appName{0} != '.') {
+            if ($appName{0} != '.' && is_dir($appPath)) {
                 $translationPath = "$appPath/translations";
                 if (is_dir($translationPath)) {
                     $langDirs[$appName] = $translationPath;
