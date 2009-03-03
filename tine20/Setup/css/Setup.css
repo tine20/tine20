@@ -13,6 +13,10 @@
     background-image:url(../../images/oxygen/16x16/apps/package-utilities.png) !important;
 }
 
+.setup_info {
+    background-image:url(../../images/oxygen/16x16/actions/help-about.png) !important;
+}
+
 .setup_action_install {
     background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
 }

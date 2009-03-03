@@ -11,7 +11,22 @@
  
 Ext.ns('Tine', 'Tine.Setup');
  
+/**
+ * Setup Configuration Manager
+ * 
+ * @package Setup
+ * 
+ * @class Tine.Setup.ConfigManagerGridPanel
+ * @extends Ext.FormPanel
+ * 
+ * NOTE: 
+ * - For each section in the config file, a group in the form is added.
+ * - Form names are constructed <section>_<subsection>... and transformed transparently by this component
+ * - Enabling and Disabling of sections is handled automatically if you give the id 'setup-<section>-group' 
+ *   to the checkboxToggle enabled fieldset
+ */
 Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
+    
     border: false,
     bodyStyle:'padding:5px 5px 0',
     labelAlign: 'left',
@@ -24,14 +39,12 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         defaultType: 'textfield'
     },
     
-    
     // fake a store to satisfy grid panel
-    store: {
-        load: function() {
-        
-        }
-    },
+    store: {load: Ext.emptyFn},
     
+    /**
+     * save config and update setup registry
+     */
     onSaveConfig: function() {
         if (this.getForm().isValid()) {
             var configData = this.form2config();
@@ -59,6 +72,9 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         }
     },
     
+    /**
+     * check config from server and update setup registry
+     */
     onCheckConfig: function() {
         this.loadMask.show();
             Ext.Ajax.request({
@@ -79,24 +95,19 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
             });
     },
     
-    
+    /**
+     * @private
+     */
     initComponent: function() {
         this.initActions();
         this.items = this.getFormItems();
-        /*
-        if (Tine.Setup.registry.get('configExists')) {
-            if (Tine.Setup.registry.get('checkDB')) {
-                this.html = 'Config file found! Database is Accessable!';
-            } else {
-                this.html = 'A Config file exists, but the database could not be accessed. Please check the config file!';
-            }
-        } else {
-            this.html = 'No config file found. You need to copy the config.inc.php.dist to config.inc.php and adopt its contents';
-        }
-        */
+
         Tine.Setup.ConfigManagerGridPanel.superclass.initComponent.call(this);
     },
     
+    /**
+     * @private
+     */
     onRender: function(ct, position) {
         Tine.Setup.ConfigManagerGridPanel.superclass.onRender.call(this, ct, position);
         
@@ -107,8 +118,19 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Transfering Configuration...')});
     },
     
+    /**
+     * returns config manager form
+     * 
+     * @private
+     * @return {Array} items
+     */
     getFormItems: function() {
-        return [{
+        return [/*{
+            xtype: 'panel',
+            title: this.app.i18n._('Informations'),
+            iconCls: 'setup_info',
+            html: ''
+        },*/ {
             title: this.app.i18n._('Setup Authentication'),
             items: [{
                 name: 'setupuser_username',
@@ -260,11 +282,17 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         }
     },
     
+    /**
+     * applies registry state to this cmp
+     */
     applyRegistryState: function() {
         this.action_saveConfig.setDisabled(!Tine.Setup.registry.get('configWritable'));
         Ext.getCmp('setup-database-group').setIconClass(Tine.Setup.registry.get('checkDB') ? 'setup_checks_success' : 'setup_checks_fail');
     },
     
+    /**
+     * @private
+     */
     initActions: function() {
         this.action_reCheck = new Ext.Action({
             text: this.app.i18n._('Check config'),
