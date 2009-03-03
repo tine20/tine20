@@ -194,11 +194,13 @@ class Tinebase_Core
      */
     public static function setupConfig()
     {
-        if(file_exists(dirname(__FILE__) . '/../config.inc.php')) {
-            $config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
-        } else {
-            die ('central configuration file ' . dirname(__FILE__) . '/../config.inc.php not found');
+        $configData = include('config.inc.php');
+        if($configData === false) {
+            die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
         }
+        
+        $config = new Zend_Config($configData);
+        
         self::set(self::CONFIG, $config);  
     }
     
@@ -317,10 +319,11 @@ class Tinebase_Core
         
         // set the session save path
         $sessionSavepath = $config->get('session.save_path', ini_get('session.save_path') . '/tine20_sessions');
-        if (!is_dir($sessionSavepath)) { 
-            mkdir($sessionSavepath, 0700); 
+        if(ini_set('session.save_path', $sessionSavepath) !== false) { 
+            if (!is_dir($sessionSavepath)) { 
+                mkdir($sessionSavepath, 0700); 
+            }
         }
-        ini_set('session.save_path', $sessionSavepath);
         
         Zend_Session::start();
         
