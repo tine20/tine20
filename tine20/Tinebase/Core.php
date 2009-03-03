@@ -59,6 +59,12 @@ class Tinebase_Core
      */
     const DB = 'dbAdapter';    
     
+    /**
+     * constant for input filter registry
+     *
+     */
+    const INPUT_FILTER = 'inputFilter';
+    
     /**************** other consts *************************/
     
     /**
@@ -585,6 +591,46 @@ class Tinebase_Core
         return self::get(self::USER);
     }
 
+    /**
+     * get record input filter by model name
+     *
+     * @param string $_modelName
+     * @return Zend_Filter_Input|NULL
+     */
+    public static function getInputFilter($_modelName)
+    {
+        $result = NULL;
+        
+        if (self::isRegistered(self::INPUT_FILTER)) {
+            $filters = self::get(self::INPUT_FILTER);
+            if (isset($filters[$_modelName])) {
+                $result = $filters[$_modelName];
+            }
+        }
+        
+        return $result;
+    }
+
+    /**
+     * get record input filter by model name
+     *
+     * @param Zend_Filter_Input $_filter
+     * @param string $_modelName
+     */
+    public static function setInputFilter($_filter, $_modelName)
+    {
+        if (self::isRegistered(self::INPUT_FILTER)) {
+            $filters = self::get(self::INPUT_FILTER);
+        } else {
+            $filters = array();
+        }
+        
+        $filters[$_modelName] = $_filter;
+        
+        // save in registry
+        self::set(self::INPUT_FILTER, $filters);
+    }
+    
     /**
      * get db adapter
      *

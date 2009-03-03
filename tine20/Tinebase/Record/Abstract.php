@@ -486,13 +486,23 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * returns a Zend_Filter for the $_filters and $_validators of this record class.
      * we just create an instance of Filter if we really need it.
+     * - ask tinebase registry if we already have an input filter for this record class
      * 
-     * @return Zend_Filter
+     * @return Zend_Filter_Input
      */
     protected function _getFilter()
     {
         if ($this->_Zend_Filter == NULL) {
-           $this->_Zend_Filter = new Zend_Filter_Input($this->_filters, $this->_validators);
+            // have a look in the registry
+            $myClassName = get_class($this);
+            $filter = Tinebase_Core::getInputFilter($myClassName);
+            if ($filter === NULL) {
+                // create new filter
+                $this->_Zend_Filter = new Zend_Filter_Input($this->_filters, $this->_validators);
+                Tinebase_Core::setInputFilter($this->_Zend_Filter, $myClassName);
+            } else {
+                $this->_Zend_Filter = $filter;
+            }
         }
         return $this->_Zend_Filter;
     }
