@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        remove that when tinebase import plugin interface is in use
+ * @deprecated
  */
 
 /**

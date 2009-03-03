@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        replace this with import plugin that extends Tinebase_Import_Csv_Abstract
  */
 
 /**
