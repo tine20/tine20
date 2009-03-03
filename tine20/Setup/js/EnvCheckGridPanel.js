@@ -75,7 +75,6 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
                     Tine.Setup.registry.replace('setupChecks', data);
                     
                     this.store.loadData(data.results);
-                    this.app.getMainScreen().getTreePanel().applyRegistryState();
                 }
             })
             

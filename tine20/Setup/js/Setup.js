@@ -79,6 +79,8 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         activeType.select();
         this.app.getMainScreen().activeContentType = activeType.id;
+        
+        Tine.Setup.registry.on('replace', this.applyRegistryState, this);
     },
     
     applyRegistryState: function() {
