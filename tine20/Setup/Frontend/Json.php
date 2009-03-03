@@ -194,11 +194,36 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      * save config data in config file
      *
      * @param string $data
+     * @return array with config data
      */
     public function saveConfig($data)
     {
         $configData = Zend_Json::decode($data);
         Setup_Controller::getInstance()->saveConfigData($configData);
+        
+        return $this->checkConfig();
+    }
+    
+    /**
+     * check config and return status
+     *
+     * @return array
+     * 
+     * @todo add check if db settings have changed?
+     */
+    public function checkConfig()
+    {
+        // check first if db settings have changed?
+        //if (!Setup_Core::get('checkDB'))
+        Setup_Core::setupDatabaseConnection();
+        
+        $result = array(
+            'configExists'     => Setup_Core::configFileExists(),
+            'configWritable'   => Setup_Core::configFileWritable(),
+            'checkDB'          => Setup_Core::get('checkDB'),
+        );
+        
+        return $result;        
     }
     
     /**
