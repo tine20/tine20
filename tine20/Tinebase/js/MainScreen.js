@@ -235,6 +235,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         } else {
             centerPanel.add(_panel);
             centerPanel.layout.setActiveItem(_panel.id);
+            centerPanel.doLayout();
         }
     },
     
@@ -310,6 +311,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         } else {
             northPanel.add(_toolbar);
             northPanel.layout.setActiveItem(_toolbar.id);
+            northPanel.doLayout();
         }
     },
     
