@@ -160,4 +160,25 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($result['database']));
         $this->assertGreaterThan(1, count($result));
     }
+
+    /**
+     * test load config
+     *
+     */
+    public function testSaveConfig()
+    {
+        $configData = $this->_json->loadConfig();
+        
+        // add something to config
+        $configData['test'] = 'value';
+        $this->_json->saveConfig(Zend_Json::encode($configData));
+
+        // load
+        $result = $this->_json->loadConfig();
+        
+        // check
+        $this->assertTrue(isset($result['test']));
+        $this->assertEquals('value', $result['test']);
+        $this->assertEquals($configData['database'], $result['database']);
+    }
 }

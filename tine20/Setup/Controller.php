@@ -433,9 +433,35 @@ class Setup_Controller
      */
     public function getConfigData()
     {
-        $config = Setup_Core::getConfig()->toArray();
+        $configArray = Setup_Core::getConfig()->toArray();
+        return $configArray;
+    }
+    
+    /**
+     * save data to config file
+     *
+     * @param array $_data
+     */
+    public function saveConfigData($_data)
+    {
+        if (Setup_Core::configFileExists() && !Setup_Core::configFileWritable()) {
+            throw new Setup_Exception('Config File is not writeable.');
+        }
+            
+        // merge config data and active config
+        $activeConfig = Setup_Core::getConfig();
+        $config = new Zend_Config($activeConfig->toArray(), true);
+        $config->merge(new Zend_Config($_data));
         
-        return $config;
+        // write to file
+        $writer = new Zend_Config_Writer_Array(array(
+            'config'   => $config,
+            'filename' => dirname(__FILE__) . '/../config.inc.php'
+        ));
+        $writer->write();
+        
+        // set as active config
+        Setup_Core::set(Setup_Core::CONFIG, $config);
     }
     
     /**

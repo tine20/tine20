@@ -194,12 +194,11 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      * save config data in config file
      *
      * @param string $data
-     * 
-     * @todo implement
      */
     public function saveConfig($data)
     {
-        // not implemented yet
+        $configData = Zend_Json::decode($data);
+        Setup_Controller::getInstance()->saveConfigData($configData);
     }
     
     /**
