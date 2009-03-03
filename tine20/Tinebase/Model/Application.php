@@ -62,7 +62,9 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
         $this->_validators = array(
             'id'        => array('allowEmpty' => true),
             'name'      => array('presence' => 'required'),
-            'status'    => array(new Zend_Validate_InArray(array('enabled', 'disabled'))),
+            //'status'    => array(new Zend_Validate_InArray(array('enabled', 'disabled'))),
+            // this is how we do it now
+            'status'    => array('InArray' => array('enabled', 'disabled')),
             'order'     => array('Digits', 'presence' => 'required'),
             'tables'    => array('allowEmpty' => true),
             'version'   => array('presence' => 'required')
