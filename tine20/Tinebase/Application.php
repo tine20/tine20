@@ -5,9 +5,11 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        migrate from Zend_Db_Table to plain Zend_Db
  */
 
 /**
@@ -18,8 +20,16 @@
  */
 class Tinebase_Application
 {
+    /**
+     * application enabled
+     *
+     */
     const ENABLED  = 'enabled';
     
+    /**
+     * application disabled
+     *
+     */
     const DISABLED = 'disabled';
     
     /**
@@ -29,6 +39,13 @@ class Tinebase_Application
      */
     protected $_applicationTable;
 
+    /**
+     * Table name
+     *
+     * @var string
+     */
+    protected $_tableName;
+    
     /**
      * the db adapter
      *
@@ -43,7 +60,8 @@ class Tinebase_Application
      */
     private function __construct() 
     {
-        $this->_applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'applications'));
+        $this->_tableName = SQL_TABLE_PREFIX . 'applications';
+        $this->_applicationTable = new Tinebase_Db_Table(array('name' => $this->_tableName));
         $this->_db = Tinebase_Core::getDb();
     }
     
@@ -76,14 +94,14 @@ class Tinebase_Application
         return self::$instance;
     }
     
-    
     /**
      * returns one application identified by id
      *
      * @param Tinebase_Model_Application|string $_applicationId the id of the application
-     * @todo code still needs some testing
      * @throws Tinebase_Exception_InvalidArgument if $_applicationId is not integer and not greater 0
      * @return Tinebase_Model_Application the information about the application
+     * 
+     * @todo code still needs some testing
      */
     public function getApplicationById($_applicationId)
     {
@@ -99,31 +117,45 @@ class Tinebase_Application
 
     /**
      * returns one application identified by application name
+     * - results are cached
      *
-     * @param string $$_applicationName the name of the application
+     * @param string $_applicationName the name of the application
      * @return Tinebase_Model_Application the information about the application
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
-     * 
-     * @todo code still needs some testing
-     * @todo add caching
      */
     public function getApplicationByName($_applicationName)
     {
         if(empty($_applicationName)) {
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty.');
         }
-        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
-        if(!$rows = $this->_applicationTable->fetchAll($where)->toArray()) {
-            throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
+
+        if (Tinebase_Core::isRegistered(Tinebase_Core::CACHE)) {
+            $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+            $cacheId = 'getApplicationByName' . $_applicationName;
+            $result = $cache->load($cacheId);
+        } else {
+            $result = FALSE;
         }
         
-        if (count($rows) > 1) {
-            throw new Tinebase_Exception_UnexpectedValue("Application $_applicationName not unique.");
+        if (!$result) {
+
+            $select = $this->_db->select();
+            $select->from($this->_tableName)
+                   ->where($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
+    
+            $stmt = $this->_db->query($select);
+            $queryResult = $stmt->fetch();
+                    
+            if (!$queryResult) {
+                throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
+            }
+            $result = new Tinebase_Model_Application($queryResult);
+            
+            if (isset($cache)) {
+                $cache->save($result, $cacheId, array('applications'));
+            }
         }
-        
-        
-        $result = new Tinebase_Model_Application($rows[0]);
         
         return $result;
     }
@@ -212,6 +244,7 @@ class Tinebase_Application
         
         $affectedRows = $this->_applicationTable->update($data, $where);
         
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
         //error_log("AFFECTED:: $affectedRows");
     }
     
@@ -238,98 +271,6 @@ class Tinebase_Application
         return $result;
     }
     
-    /**
-     * get application account rights
-     *
-     * @param   int $_applicationId  app id
-     * @return  array with account rights for the application
-     * @deprecated no longer needed because of the new role management 
-     */
-    public function getApplicationPermissions($_applicationId)
-    {
-        /*
-        $applicationRights = Tinebase_Acl_Rights::getInstance()->getApplicationPermissions($_applicationId);
-
-        $result = array();
-        foreach ( $applicationRights as $tineRight ) {
-
-            $rightArray = $tineRight->toArray();
-            
-            // set display name
-            switch ( $tineRight->account_type ) {
-                case 'anyone':
-                    // @todo translate
-                    $displayName = 'Anyone';
-                    break;
-                case 'group':
-                    // get group name
-                    $group = Tinebase_Group::getInstance()->getGroupById($tineRight->account_id);
-                    $displayName = $group->name;
-                    break;
-                case 'user':
-                    // get account name
-                    $account = Tinebase_User::getInstance()->getUserById($tineRight->account_id);
-                    $displayName = $account->accountDisplayName;
-                    break;
-                default:
-                    throw Exception ('not a valid account type');
-            }
-            $rightArray['accountDisplayName'] = $displayName;
-
-            // @todo it's a bit dirty to fill up the rightArray with the rights, is there a better solution? 
-
-            // set rights array and remove single right value
-            unset($rightArray['right']);
-            $rights = explode(',', $tineRight->right);
-            $allRights = $this->getAllRights($_applicationId); 
-            foreach ( $allRights as $key ) {
-                if ( in_array($key, $rights) ) {
-                    $rightArray[$key] = TRUE;
-                } else {
-                    $rightArray[$key] = FALSE;                    
-                }
-            }
-            
-            $result[] = $rightArray;
-        }
-        
-        return $result;
-        */
-    }
-    
-    /**
-     * set application account rights
-     *
-     * @param   int $_applicationId  app id
-     * @param   array $_applicationRights  application account rights
-     * @return  int number of rights set
-     * @deprecated no longer needed because of the new role management
-     */
-    public function setApplicationPermissions($_applicationId, $_applicationRights)
-    {
-        /*
-        $tineAclRights = Tinebase_Acl_Rights::getInstance();
-        
-        $tineRights = new Tinebase_Record_RecordSet('Tinebase_Model_RoleRight');
-        foreach ( $_applicationRights as $right ) {
-            $right['application_id'] = $_applicationId;
-            
-            $allRights = $this->getAllRights($_applicationId);
-            
-            foreach ( $allRights as $key ) {
-                if ( isset($right[$key]) && $right[$key] === TRUE ) {
-                    unset ( $right['id'] );
-                    $right['right'] = $key;
-                    $tineRight = new Tinebase_Model_RoleRight ( $right );
-                    $tineRights->addRecord( $tineRight );
-                }
-            }
-        }
-        
-        return $tineAclRights->setApplicationPermissions($_applicationId, $tineRights);
-        */
-    }
-
     /**
      * get all possible application rights
      *
@@ -434,7 +375,8 @@ class Tinebase_Application
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . '= ?', $applicationId)
         );
         
-        $this->_db->delete(SQL_TABLE_PREFIX . 'applications', $where);        
+        $this->_db->delete(SQL_TABLE_PREFIX . 'applications', $where);
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
     }
     
     /**
