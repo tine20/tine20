@@ -34,7 +34,7 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
     
     onSaveConfig: function() {
         if (this.getForm().isValid()) {
-            var configData = this.form2config(this.getForm().getValues());
+            var configData = this.form2config();
             
             this.loadMask.show();
             Ext.Ajax.request({
@@ -44,7 +44,13 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
                     data: Ext.util.JSON.encode(configData)
                 },
                 success: function(response) {
-                    var configData = Ext.util.JSON.decode(response.responseText);
+                    var regData = Ext.util.JSON.decode(response.responseText);
+                    // replace some registry data
+                    for (key in regData) {
+                        if (key != 'status') {
+                            Tine.Setup.registry.replace(key, regData[key]);
+                        }
+                    }
                     this.loadMask.hide();
                 }
             });
@@ -76,6 +82,7 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         // always the same shit! when form panel is rendered, the form fields itselv are not yet rendered ;-(
         var formData = this.config2form.defer(250, this, [Tine.Setup.registry.get('configData')]);
         
+        Tine.Setup.registry.on('replace', this.applyRegistryState, this);
         this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Transfering Configuration...')});
     },
     
@@ -95,7 +102,6 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         }, {
             title: this.app.i18n._('Database'),
             id: 'setup-database-group',
-            iconCls: 'setup_checks_fail',
             items: [{
                 name: 'database_adapter',
                 fieldLabel: this.app.i18n._('Adapter'),
@@ -137,9 +143,11 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
                 forceSelection: true,
                 allowEmpty: false,
                 triggerAction: 'all',
+                selectOnFocus:true,
                 store: [[0, 'Emergency'], [1,'Alert'], [2, 'Critical'], [3, 'Error'], [4, 'Warning'], [5, 'Notice'], [6, 'Informational'], [7, 'Debug']],
                 name: 'logger_priority',
                 fieldLabel: this.app.i18n._('Priority')
+
             }]
         }, {
             title: this.app.i18n._('Caching'),
@@ -165,7 +173,14 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
      * @param  {Object} formData
      * @return {Object} configData
      */
-    form2config: function(formData) {
+    form2config: function() {
+        // getValues only returns RAW HTML content... and we don't want to 
+        // define a record here
+        var formData = {};
+        this.getForm().items.each(function(field) {
+            formData[field.name] = field.getValue();
+        });
+        
         var configData = {};
         var keyParts, keyPart, keyGroup, dataPath;
         for (key in formData) {
@@ -220,7 +235,13 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         // skip transform calls
         if (! currKey) {
             this.getForm().setValues(formData);
+            this.applyRegistryState();
         }
+    },
+    
+    applyRegistryState: function() {
+        this.action_saveConfig.setDisabled(!Tine.Setup.registry.get('configWritable'));
+        Ext.getCmp('setup-database-group').setIconClass(Tine.Setup.registry.get('checkDB') ? 'setup_checks_success' : 'setup_checks_fail');
     },
     
     initActions: function() {
@@ -229,7 +250,7 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
             iconCls: 'setup_action_save_config',
             scope: this,
             handler: this.onSaveConfig,
-            disabled: !Tine.Setup.registry.get('configWritable')
+            disabled: true
         });
         
         this.action_downloadConfig = new Ext.Action({
