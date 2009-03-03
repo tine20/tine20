@@ -40,3 +40,11 @@
 .setup_application_manager {
     background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
 }
+
+.setup_action_save_config {
+    background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
+}
+
+.setup_action_download_config {
+    background-image:url(../../images/oxygen/16x16/actions/mail-get.png) !important;
+}
