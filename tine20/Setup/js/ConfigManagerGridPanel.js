@@ -32,6 +32,23 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         }
     },
     
+    onSaveConfig: function(configData) {
+        if (this.getForm().isValid()) {
+            Ext.Ajax.request({
+                scope: this,
+                params: {
+                    method: 'Setup.saveConfig',
+                    configData: configData
+                },
+                success: function() {
+                    var configData = Ext.util.JSON.decode(response.responseText);
+                    console.log(configData);
+                }
+            });
+        } else {
+            Ext.Msg.alert(this.app.i18n._('Invalid configuration'), this.app.i18n._('You need to correct the red marked fields before config could be saved'));
+        }
+    },
     
     initComponent: function() {
         this.initActions();
@@ -56,11 +73,13 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
             title: this.app.i18n._('Setup Authentication'),
             items: [{
                 name: 'setupuser_username',
-                fieldLabel: this.app.i18n._('Username')
+                fieldLabel: this.app.i18n._('Username'),
+                allowBlank: false
             }, {
                 name: 'setupuser_password',
                 fieldLabel: this.app.i18n._('Password'),
-                inputType: 'password'
+                inputType: 'password',
+                allowBlank: false
             }] 
         }, {
             title: this.app.i18n._('Database'),
@@ -72,13 +91,16 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
                 disabled: true
             }, {
                 name: 'database_host',
-                fieldLabel: this.app.i18n._('Hostname')
+                fieldLabel: this.app.i18n._('Hostname'),
+                allowBlank: false
             }, {
                 name: 'database_dbname',
-                fieldLabel: this.app.i18n._('Database')
+                fieldLabel: this.app.i18n._('Database'),
+                allowBlank: false
             }, {
                 name: 'database_username',
-                fieldLabel: this.app.i18n._('User')
+                fieldLabel: this.app.i18n._('User'),
+                allowBlank: false
             }, {
                 name: 'database_password',
                 fieldLabel: this.app.i18n._('Password'),
@@ -127,7 +149,9 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         this.action_saveConfig = new Ext.Action({
             text: this.app.i18n._('Save config'),
             iconCls: 'setup_action_save_config',
-            disabled: true
+            scope: this,
+            handler: this.onSaveConfig,
+            disabled: false // ! Tine.Setup.registry.get('configFileWritable');
         });
         
         this.action_downloadConfig = new Ext.Action({
