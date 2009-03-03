@@ -50,6 +50,9 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
             filterModels: [
                 {label: this.app.i18n._('Time Account'),    field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
+                new Tine.Timetracker.TimeAccountStatusGridFilter({
+                    field: 'status'
+                }),
                 new Tine.widgets.tags.TagFilter({app: this.app})
              ],
              defaultFilter: 'query',
@@ -73,9 +76,15 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
         },{
             id: 'title',
             header: this.app.i18n._("Title"),
-            width: 400,
+            width: 350,
             sortable: true,
             dataIndex: 'title'
+        },{
+            id: 'status',
+            header: this.app.i18n._("Status"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'status'
         },{
             id: 'budget',
             header: this.app.i18n._("Budget"),
