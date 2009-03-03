@@ -143,11 +143,21 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testEnvCheck()
     {
-        /*
         $result = $this->_json->envCheck();
         
         $this->assertTrue(isset($result['success']));
-        $this->assertGreaterThan(16, count($result['result']));
-        */
+        $this->assertGreaterThan(16, count($result['results']));
+    }
+
+    /**
+     * test load config
+     *
+     */
+    public function testLoadConfig()
+    {
+        $result = $this->_json->loadConfig();
+        
+        $this->assertTrue(isset($result['database']));
+        $this->assertGreaterThan(1, count($result));
     }
 }
