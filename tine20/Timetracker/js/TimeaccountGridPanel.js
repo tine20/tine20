@@ -84,7 +84,8 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
             header: this.app.i18n._("Status"),
             width: 150,
             sortable: true,
-            dataIndex: 'status'
+            dataIndex: 'status',
+            renderer: this.statusRenderer.createDelegate(this)
         },{
             id: 'budget',
             header: this.app.i18n._("Budget"),
@@ -92,6 +93,15 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
             sortable: true,
             dataIndex: 'budget'
         }];
+    },
+    
+    /**
+     * status column renderer
+     * @param {string} value
+     * @return {string}
+     */
+    statusRenderer: function(value) {
+        return this.app.i18n._hidden(value);
     },
     
     /**
