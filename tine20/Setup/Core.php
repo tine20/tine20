@@ -115,9 +115,16 @@ class Setup_Core extends Tinebase_Core
      * 
      * NOTE: if no logger is configured, we write to stderr in setup
      *
+     * @param $_defaultWriter Zend_Log_Writer_Abstract default log writer
+     * 
+     * @todo    remove obsolete code
      */
-    public static function setupLogger()
+    public static function setupLogger(Zend_Log_Writer_Abstract $_defaultWriter = NULL)
     {
+        $writer = new Zend_Log_Writer_Stream('php://stderr');
+        parent::setupLogger($writer);
+        
+        /*
         $config = self::getConfig();
         $logger = new Zend_Log();
         
@@ -146,6 +153,7 @@ class Setup_Core extends Tinebase_Core
         self::set(self::LOGGER, $logger);
 
         $logger->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
+        */
     }
     
     /**

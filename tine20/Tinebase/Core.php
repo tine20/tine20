@@ -213,13 +213,14 @@ class Tinebase_Core
     /**
      * initializes the logger
      *
+     * @param $_defaultWriter Zend_Log_Writer_Abstract default log writer
      */
-    public static function setupLogger()
+    public static function setupLogger(Zend_Log_Writer_Abstract $_defaultWriter = NULL)
     {
         $config = self::getConfig();
         $logger = new Zend_Log();
         
-        if (isset($config->logger)) {
+        if (isset($config->logger) && $config->logger->active) {
             try {
                 $loggerConfig = $config->logger;
                 
@@ -233,7 +234,7 @@ class Tinebase_Core
                 $logger->addFilter($filter);
             } catch (Exception $e) {
                 error_log("Tine 2.0 can't setup the configured logger! The Server responded: $e");
-                $writer = new Zend_Log_Writer_Null;
+                $writer = ($_defaultWriter === NULL) ? new Zend_Log_Writer_Null() : $_defaultWriter;
                 $logger->addWriter($writer);
             }
         } else {
