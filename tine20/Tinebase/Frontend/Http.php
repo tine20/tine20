@@ -503,7 +503,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
         	    
         $d = dir($tine20path);
 	    while (false !== ($appName = $d->read())) {
-            if (is_dir("$tine20path/$appName") && !in_array($appName, $_exclude)) {
+            if ($appName{0} != '.' && is_dir("$tine20path/$appName") && !in_array($appName, $_exclude)) {
                 if (file_exists("$tine20path/$appName/Frontend/Http.php")) {
                     
                     $httpClass = $appName . "_Frontend_Http";
