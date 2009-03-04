@@ -144,6 +144,7 @@ class Setup_Controller
      * updates installed applications. does nothing if no applications are installed
      * 
      * @param Tinebase_Record_RecordSet $_applications
+     * @return  array   messages
      */
     public function updateApplications(Tinebase_Record_RecordSet $_applications)
     {
@@ -160,13 +161,16 @@ class Setup_Controller
             }
         }
 
+        $messages = array();
         for($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
             foreach($_applications as $application) {
                 if($application->getMajorVersion() <= $majorVersion) {
-                    $this->updateApplication($application, $majorVersion);
+                    $messages += $this->updateApplication($application, $majorVersion);
                 }
             }
-        }        
+        }
+        
+        return $messages;
     }    
         
     /**
@@ -218,15 +222,17 @@ class Setup_Controller
      *
      * @param   string    $_name application name
      * @param   string    $_updateTo version to update to (example: 1.17)
+     * @return  array   messages
      * @throws  Setup_Exception if current app version is too high
      */
     public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion)
     {
         $setupXml = $this->getSetupXml($_application->name);
+        $messages = array();
         
         switch(version_compare($_application->version, $setupXml->version)) {
             case -1:
-                echo "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")<br>";
+                $messages[] = "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")";
 
                 list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
         
@@ -263,7 +269,7 @@ class Setup_Controller
                     } while(array_search('update_' . $minor, $classMethods) !== false);
                 }
                 
-                echo "<strong> Updated " . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor . "</strong><br>";
+                $messages[] = "<strong> Updated " . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor . "</strong>";
                 
                 break; 
                 
@@ -273,7 +279,9 @@ class Setup_Controller
             case 1:
                 throw new Setup_Exception('Current application version is higher than version from setup.xml');
                 break;
-        }        
+        }
+        
+        return $messages;
     }
 
     /**

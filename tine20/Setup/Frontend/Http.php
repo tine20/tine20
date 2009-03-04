@@ -173,7 +173,8 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
         }
 
         if(count($applications) > 0) {
-            $controller->updateApplications($applications);
+            $messages = $controller->updateApplications($applications);
+            echo implode('<br/>', $messages);
         }
         
         echo "Updated " . count($applications) . " applications.<br>";
