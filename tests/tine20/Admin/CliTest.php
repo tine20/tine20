@@ -103,6 +103,10 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
                             <source>anmeldename</source>
                             <destination>accountLoginName</destination>
                         </field>
+                        <field>
+                            <source>passwort</source>
+                            <destination>password</destination>
+                        </field>
                     </mapping>
                 </config>'
             ))); 

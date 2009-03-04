@@ -33,14 +33,35 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     }
     
     /**
-     * add some more values
+     * import single record (create password if in data)
+     *
+     * @param array $_data
+     * @return Tinebase_Record_Interface
+     */
+    protected function _importRecord($_data)
+    {
+        $record = parent::_importRecord($_data);
+        
+        if ((!isset($this->_options['dryrun']) || !$this->_options['dryrun']) && isset($_data['password'])) {
+            // set password
+            Admin_Controller_User::getInstance()->setAccountPassword($record, $_data['password'], $_data['password']);
+        }
+        
+        return $record;
+    }
+        
+    
+    /**
+     * add some more values (primary group)
      *
      * @return array
      */
     protected function _addData()
     {
         if ($this->_modelName == 'Tinebase_Model_FullUser') {
-            $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(Tinebase_Config::getInstance()->getConfig('Default User Group')->value);
+            $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
+                Tinebase_Config::getInstance()->getConfig('Default User Group')->value
+            );
             $result = array(
                 'accountPrimaryGroup'   => $defaultUserGroup->getId()
             );

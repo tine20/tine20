@@ -100,10 +100,10 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
 
         $result = new Tinebase_Record_RecordSet($this->_modelName);
         foreach($fileArray as $line) {
-            $record = $this->_createRecord(trim($line), $headline);
-            if (!empty($record)) {
+            $data = $this->_parseLine(trim($line), $headline);
+            if (!empty($data)) {
                 try {
-                    $importedRecord = $this->_importRecord($record);
+                    $importedRecord = $this->_importRecord($data);
                     $result->addRecord($importedRecord);
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
@@ -119,33 +119,31 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     /**
      * import single record
      *
-     * @param Tinebase_Record_Interface $_record
+     * @param array $_data
      * @return Tinebase_Record_Interface
      * 
      * @todo check conditions (duplicates, ...)
      */
-    protected function _importRecord($_record)
+    protected function _importRecord($_data)
     {
-        if (isset($this->_options['dryrun']) && $this->_options['dryrun']) {
-            $record = $_record;
-        } else {
-            $record = call_user_func(array($this->_controller, $this->_createMethod), $_record);
-            //$record = $this->_controller->$this->_createMethod($_record);
+        $record = new $this->_modelName($_data);
+        
+        if (!isset($this->_options['dryrun']) || !$this->_options['dryrun']) {
+            $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
         }
         return $record;
     }
         
     /**
-     * parse a csv line and create record
+     * parse a csv line and create record data
      *
      * @param string $_line
      * @param string $_headline
-     * @return Tinebase_Record_Interface
+     * @return array
      * 
-     * @todo check mapping
      * @todo add encoding here
      */
-    protected function _createRecord($_line, $_headline)
+    protected function _parseLine($_line, $_headline)
     {
         $delimiter = (isset($this->_options['delimiter'])) ? $this->_options['delimiter'] : ';';
         
@@ -195,9 +193,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         // add more values
         $data = array_merge($data, $this->_addData());
         
-        // create record and return it
-        $record = new $this->_modelName($data);
-        return $record;
+        return $data;
     }
 
     /**
