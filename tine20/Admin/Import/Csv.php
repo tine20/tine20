@@ -21,6 +21,18 @@
 class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
 {
     /**
+     * the constructor
+     *
+     * @param Tinebase_Model_ImportExportDefinition $_definition
+     * @param mixed $_controller
+     */
+    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL)
+    {
+        $this->_createMethod = 'addUser';
+        parent::__construct($_definition, $_controller);
+    }
+    
+    /**
      * add some more values
      *
      * @return array
@@ -28,8 +40,9 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     protected function _addData()
     {
         if ($this->_modelName == 'Tinebase_Model_FullUser') {
+            $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(Tinebase_Config::getInstance()->getConfig('Default User Group')->value);
             $result = array(
-                'accountPrimaryGroup'   => Tinebase_Config::getInstance()->getConfig('Default User Group')
+                'accountPrimaryGroup'   => $defaultUserGroup->getId()
             );
         } else {
             $result = parent::_addData();

@@ -89,6 +89,7 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
                 'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
                 <config>
                     <headline>1</headline>
+                    <dryrun>1</dryrun>
                     <mapping>
                         <field>
                             <source>vorname</source>

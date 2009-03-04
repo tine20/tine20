@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        make _importRecord work
  * @todo        add charset conversion (with iconv?)
  * @todo        add conditions (what to do when record already exists)
  * @todo        add 'dry run' functionality
@@ -46,6 +45,13 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @var string
      */
     protected $_modelName = '';
+    
+    /**
+     * name of create method for imported records
+     *
+     * @var string
+     */
+    protected $_createMethod = 'create';
     
     /**
      * the constructor
@@ -86,7 +92,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         $fileArray = file($_filename);
         
         // get headline
-        if ($this->_options['headline']) {
+        if (isset($this->_options['headline']) && $this->_options['headline']) {
             $headline = trim(array_shift($fileArray));
         } else {
             $headline = array();
@@ -100,7 +106,9 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                     $importedRecord = $this->_importRecord($record);
                     $result->addRecord($importedRecord);
                 } catch (Exception $e) {
-                    //-- don't add incorrect record (name missing for example)
+                    // don't add incorrect record (name missing for example)
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                 }
             }
         }
@@ -114,12 +122,16 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @param Tinebase_Record_Interface $_record
      * @return Tinebase_Record_Interface
      * 
-     * @todo finish implementation
-     * @todo check conditions (duplicates, dry-run ...)
+     * @todo check conditions (duplicates, ...)
      */
     protected function _importRecord($_record)
     {
-        $record = $_record;
+        if (isset($this->_options['dryrun']) && $this->_options['dryrun']) {
+            $record = $_record;
+        } else {
+            $record = call_user_func(array($this->_controller, $this->_createMethod), $_record);
+            //$record = $this->_controller->$this->_createMethod($_record);
+        }
         return $record;
     }
         

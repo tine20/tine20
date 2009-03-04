@@ -72,7 +72,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountLastLogin'      => array('allowEmpty' => true),
             'accountLastLoginfrom'  => array('allowEmpty' => true),
             'accountLastPasswordChange' => array('allowEmpty' => true),
-            'accountStatus'         => array(new Zend_Validate_InArray(array('enabled', 'disabled'))),
+            'accountStatus'         => array(new Zend_Validate_InArray(array('enabled', 'disabled')), Zend_Filter_Input::DEFAULT_VALUE => 'enabled'),
             'accountExpires'        => array('allowEmpty' => true),
             'accountPrimaryGroup'   => array('presence' => 'required'),
             'accountDisplayName'    => array('presence' => 'required'),
