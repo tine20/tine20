@@ -1949,7 +1949,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     </field>
                 </index>
                 <index>
-                    <name>importexport_definitions::application_id--applications::id</name>
+                    <name>importexport_definitions::app_id--applications::id</name>
                     <field>
                         <name>application_id</name>
                     </field>
