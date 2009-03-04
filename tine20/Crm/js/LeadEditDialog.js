@@ -115,29 +115,18 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels, _lead) {
         anchor: '95%'
     });
     
-    var date_scheduledEnd = new Ext.form.DateField({
+    var date_scheduledEnd = new Ext.ux.form.ClearableDateField({
         fieldLabel: translation._('Estimated end'), 
         id: 'end_scheduled',
         anchor: '95%'
     });
     
-    var date_end = new Ext.form.DateField({
-        xtype:'datefield',
+    var date_end = new Ext.ux.form.ClearableDateField({
         fieldLabel: translation._('End'), 
         id: 'end',
         anchor: '95%'
     });
     
-    /*
-    var folderTrigger = new Tine.widgets.container.selectionComboBox({
-        fieldLabel: translation._('folder'),
-        name: 'container',
-        itemName: 'Leads',
-        appName: 'crm',
-        anchor:'95%'
-    });
-    */
- 
     /*********** OVERVIEW tab panel ************/
 
     var tabPanelOverview = {
