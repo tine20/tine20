@@ -560,8 +560,47 @@ class Setup_Controller
                 $this->_backend->execInsertStatement($record);
             }
         }
+        
+        // look for import definitions and put them into the db
+        $this->_createImportExportDefinitions($application);
     }
 
+    /**
+     * look for import definitions and put them into the db
+     *
+     * @param Tinebase_Model_Application $_application
+     * 
+     * @todo add support for export definitions
+     */
+    protected function _createImportExportDefinitions($_application)
+    {
+        $path = 
+            $this->_baseDir . DIRECTORY_SEPARATOR . $_application->name . 
+            DIRECTORY_SEPARATOR . 'Import' . DIRECTORY_SEPARATOR . 'definitions';
+
+        if (file_exists($path)) {
+            $definitionBackend = new Tinebase_ImportExportDefinition();
+            
+            foreach (new DirectoryIterator($path) as $item) {
+                $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
+                if (preg_match("/\.xml/", $filename)) {
+                    $content = file_get_contents($filename);
+                    $config = new Zend_Config_Xml($filename);
+                    
+                    // create definition
+                    $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
+                        'application_id'    => $_application->getId(),
+                        'name'              => preg_replace("/\.xml/", '', $item->getFileName()),
+                        'type'              => $config->type,
+                        'model'             => $config->model,
+                        'plugin'            => $config->plugin,
+                        'plugin_options'    => $content
+                    )));
+                }
+            }
+        }
+    }
+    
     /**
      * uninstall app
      *

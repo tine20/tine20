@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<model>Tinebase_Model_FullUser</model>
+	<plugin>Admin_Import_Csv</plugin>
+	<type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <mapping>
+        <field>
+            <source>firstname</source>
+            <destination>accountFirstName</destination>
+        </field>
+        <field>
+            <source>lastname</source>
+            <destination>accountLastName</destination>
+        </field>
+        <field>
+            <source>loginname</source>
+            <destination>accountLoginName</destination>
+        </field>
+        <field>
+            <source>password</source>
+            <destination>password</destination>
+        </field>
+    </mapping>
+</config>
