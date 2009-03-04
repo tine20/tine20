@@ -1851,9 +1851,9 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * update to 0.23
      * - add importexport definitions table 
      */
-    public function update_21()
+    public function update_22()
     {
-        $tableDefinition = (    
+        $tableDefinition =    
         '<table>
             <name>importexport_definitions</name>
             <version>1</version>
@@ -1960,8 +1960,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     </reference>
                 </index>
             </declaration>
-        </table>'
-        );
+        </table>';
         
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);        
