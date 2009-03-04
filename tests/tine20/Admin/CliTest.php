@@ -76,39 +76,41 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
     {
         // create definition / check if exists
         $definitionBackend = new Tinebase_ImportExportDefinition();
+        $config = '<?xml version="1.0" encoding="UTF-8"?>
+        <config>
+            <headline>1</headline>
+            <dryrun>1</dryrun>
+            <mapping>
+                <field>
+                    <source>firstname</source>
+                    <destination>accountFirstName</destination>
+                </field>
+                <field>
+                    <source>lastname</source>
+                    <destination>accountLastName</destination>
+                </field>
+                <field>
+                    <source>loginname</source>
+                    <destination>accountLoginName</destination>
+                </field>
+                <field>
+                    <source>password</source>
+                    <destination>password</destination>
+                </field>
+            </mapping>
+        </config>';
         
         try {
             $definition = $definitionBackend->getByProperty('admin_user_import_csv');
-        } catch(Exception $e) {
+            $definition->plugin_options = $config;
+        } catch(Tinebase_Exception_NotFound $e) {
             $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
                 'name'              => 'admin_user_import_csv',
                 'type'              => 'import',
                 'model'             => 'Tinebase_Model_FullUser',
                 'plugin'            => 'Admin_Import_Csv',
-                'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
-                <config>
-                    <headline>1</headline>
-                    <dryrun>1</dryrun>
-                    <mapping>
-                        <field>
-                            <source>vorname</source>
-                            <destination>accountFirstName</destination>
-                        </field>
-                        <field>
-                            <source>nachname</source>
-                            <destination>accountLastName</destination>
-                        </field>
-                        <field>
-                            <source>anmeldename</source>
-                            <destination>accountLoginName</destination>
-                        </field>
-                        <field>
-                            <source>passwort</source>
-                            <destination>password</destination>
-                        </field>
-                    </mapping>
-                </config>'
+                'plugin_options'    => $config
             ))); 
         }
         
