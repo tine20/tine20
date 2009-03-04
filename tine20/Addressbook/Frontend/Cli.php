@@ -6,6 +6,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        create/extend abstract Cli (Tinebase_Application_Frontend_Cli_Abstract
  */
 
 /**
