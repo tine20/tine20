@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  */
-class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap 
+class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth_Interface
 {    
     /**
      * the list of attributes to fetch from ldap
@@ -40,6 +40,39 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap
      * @var array
      */
     protected $_resultRow = null;
+    
+    /**
+     * Constructor
+     *
+     * @param  array  $options  An array of arrays of Zend_Ldap options
+     * @return void
+     */
+    public function __construct(array $options = array(),  $username = null, $password = null)
+    {
+        $this->setOptions($options);
+        if ($username !== null) {
+            $this->setIdentity($username);
+        }
+        if ($password !== null) {
+            $this->setCredential($password);
+        }
+    }
+    
+    /**
+     * Returns the LDAP Object
+     *
+     * @return Tinebase_Ldap The Tinebase_Ldap object used to authenticate the credentials
+     */
+    public function getLdap()
+    {
+        if ($this->_ldap === null) {
+            /**
+             * @see Tinebase_Ldap
+             */
+            $this->_ldap = new Tinebase_Ldap($this->getOptions());
+        }
+        return $this->_ldap;
+    }
     
     /**
      * authenticate() - defined by Zend_Auth_Adapter_Interface.
@@ -155,7 +188,7 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap
      */
     public function setIdentity($_identity)
     {
-        $this->setUsername($_identity);
+        parent::setUsername($_identity);
         return $this;
     }
     
@@ -167,23 +200,7 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap
      */
     public function setCredential($_credential)
     {
-        $this->setPassword($_credential);
+        parent::setPassword($_credential);
         return $this;
     }    
-
-    /**
-     * set the password for given account
-     *
-     * @param   int $_accountId
-     * @param   string $_password
-     * @param   bool $_encrypt encrypt password
-     * @return  void
-     * @throws  Tinebase_Exception_InvalidArgument
-     */
-    public function _setPassword($_loginName, $_password, $_encrypt = TRUE)
-    {
-        if(empty($_loginName)) {
-            throw new Tinebase_Exception_InvalidArgument('$_loginName can not be empty');
-        }
-    }
 }

@@ -58,20 +58,22 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     protected $_backend = NULL;
     
+    /**
+     * direct mapping
+     *
+     * @var array
+     */
     protected $_rowNameMapping = array(
-        'accountId'             => 'uidnumber',
-        'accountDisplayName'    => 'displayname',
-        'accountFullName'       => 'cn',
-        'accountFirstName'      => 'givenname',
-        'accountLastName'       => 'sn',
-        'accountLoginName'      => 'uid',
-        //'accountLastLogin'      => 'last_login',
-        //'accountLastLoginfrom'  => 'last_login_from',
+        'accountId'                 => 'uidnumber',
+        'accountDisplayName'        => 'displayname',
+        'accountFullName'           => 'cn',
+        'accountFirstName'          => 'givenname',
+        'accountLastName'           => 'sn',
+        'accountLoginName'          => 'uid',
         'accountLastPasswordChange' => 'shadowlastchange',
-        'accountStatus'         => 'shadowinactive',
-        'accountExpires'        => 'shadowexpire',
-        'accountPrimaryGroup'   => 'gidnumber',
-        'accountEmailAddress'   => 'mail'
+        'accountExpires'            => 'shadowexpire',
+        'accountPrimaryGroup'       => 'gidnumber',
+        'accountEmailAddress'       => 'mail'
     );
     
     
@@ -163,66 +165,56 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function setLoginTime($_accountId, $_ipAddress) 
     {
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        
-        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-        
-        $accountData['last_login_from'] = $_ipAddress;
-        $accountData['last_login']      = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
-        
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
-        );
-        
-        $result = $accountsTable->update($accountData, $where);
-        
-        return $result;
+        // not supported by standart ldap schemas
+        $user = $this->getFullUserById($_accountId);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  User '{$user->accountLoginName}' loged in from {$_ipAddress}");
     }
     
     /**
-     * get user select
+     * set the password for given account
+     * 
+     * @todo implemnt more crypt methods
      *
-     * @return Zend_Db_Select
+     * @param   int $_accountId
+     * @param   string $_password
+     * @param   bool $_encrypt encrypt password
+     * @return  void
+     * @throws  Tinebase_Exception_InvalidArgument
      */
-    
-    protected function _getUserSelectObject()
+    public function setPassword($_loginName, $_password, $_encrypt = TRUE)
     {
-        $db = Tinebase_Core::getDb();
+        if(empty($_loginName)) {
+            throw new Tinebase_Exception_InvalidArgument('$_loginName can not be empty');
+        }
         
-        $select = $db->select()
-            ->from(SQL_TABLE_PREFIX . 'accounts', 
-                array(
-                    'accountId'             => $this->_rowNameMapping['accountId'],
-                    'accountLoginName'      => $this->_rowNameMapping['accountLoginName'],
-                    'accountLastLogin'      => $this->_rowNameMapping['accountLastLogin'],
-                    'accountLastLoginfrom'  => $this->_rowNameMapping['accountLastLoginfrom'],
-                    'accountLastPasswordChange' => $this->_rowNameMapping['accountLastPasswordChange'],
-                    'accountStatus'         => $this->_rowNameMapping['accountStatus'],
-                    'accountExpires'        => $this->_rowNameMapping['accountExpires'],
-                    'accountPrimaryGroup'   => $this->_rowNameMapping['accountPrimaryGroup']
-            ))
-            ->join(SQL_TABLE_PREFIX . 'addressbook',
-                SQL_TABLE_PREFIX . 'accounts.id = ' . SQL_TABLE_PREFIX . 'addressbook.account_id',
-                array(
-                    'accountDisplayName'    => $this->_rowNameMapping['accountDisplayName'],
-                    'accountFullName'       => $this->_rowNameMapping['accountFullName'],
-                    'accountFirstName'      => $this->_rowNameMapping['accountFirstName'],
-                    'accountLastName'       => $this->_rowNameMapping['accountLastName'],
-                    'accountEmailAddress'   => $this->_rowNameMapping['accountEmailAddress']
-            ));
-                
-        return $select;
+        $user = $this->getFullUserByLoginName($_loginName);
+        $dn = $this->_getDn($user);
+        
+        // NOTE: this std. crypt only compares the first 8 characters
+        //$data = array('userpassword' => '{CRYPT}'. crypt($_password));
+        $data = array('userpassword' => $_password);
+        
+        $this->_backend->update($dn, $data);
     }
     
     /**
      * update user status
-     *
+     * 
+     * NOTE: It would be possible to model this via the expire date, but as all
+     *       acclunt stuff must handle expire seperatly, it seems the best just
+     *       to not support the status with ldap
+     * 
      * @param   int         $_accountId
      * @param   string      $_status
     */
     public function setStatus($_accountId, $_status) 
     {
-        throw new Exception('not yet implemented');
+        // not supported by standart ldap schemas
+        if ($_status == 'disabled') {
+        
+            $user = $this->getFullUserById($_accountId);
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "  With ldap user backend, user '{$user->accountLoginName}' can not be disabled!");
+        }
     }
 
     /**
@@ -233,7 +225,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     */
     public function setExpiryDate($_accountId, $_expiryDate) 
     {
-        throw new Exception('not yet implemented');
+        
+        $dn = $this->_getDn($_accountId);
+        $data = array('shadowexpire' => $_expiryDate->getTimestamp());
+        
+        $this->_backend->update($dn, $data);
     }
 
     /**
@@ -244,7 +240,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     */
     public function setBlockedDate($_accountId, $_blockedUntilDate) 
     {
-        throw new Exception('not yet implemented');
+        // not supported by standart ldap schemas
+        $user = $this->getFullUserById($_accountId);
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "  With ldap user backend, user '{$user->accountLoginName}' could not be blocked until {$_blockedUntilDate}");
     }
         
     /**
@@ -255,7 +253,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function updateUser(Tinebase_Model_FullUser $_account) 
     {
-        throw new Exception('not yet implemented');
+        $dn = $this->_getDn($_account);
+        $ldapData = $this->_user2ldap($_account);
+        
+        $this->_backend->update($dn, $ldapData);
+        
+        return $this->getFullUserByLoginName($_account->accountLoginName);
     }
 
     /**
@@ -266,7 +269,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function addUser(Tinebase_Model_FullUser $_account) 
     {
-        throw new Exception('not yet implemented');
+        $newDn = $this->_generateDn($_account);
+        $ldapData = $this->_user2ldap($_account);
+        
+        $this->_backend->insert($newDn, $ldapData);
+        
+        return $this->getFullUserByLoginName($_account->accountLoginName);
     }
     
     /**
@@ -276,7 +284,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function deleteUser($_accountId) 
     {
-        throw new Exception('not yet implemented');
+        $dn = $this->_getDn($_accountId);
+        $this->_backend->delete($dn);
     }
 
     /**
@@ -286,7 +295,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function deleteUsers(array $_accountIds) 
     {
-        throw new Exception('not yet implemented');
+        foreach ($_accountIds as $accountId) {
+            $this->deleteUser($accountId);
+        }
     }
 
     /**
@@ -307,6 +318,41 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $filter = "(&(objectclass=posixaccount)(|$idFilter))";
         
         return $this->_getUsersFromBackend($filter, 'Tinebase_Model_User');
+    }
+    
+    /**
+     * get an existing dn
+     *
+     * @param  int         $_accountId
+     * @return string 
+     */
+    protected function _getDn($_accountId)
+    {
+        try {
+            $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+            $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
+            $dn = $account['dn'];
+        } catch (Tinebase_Exception_NotFound $enf) {
+            throw new Exception("account with id $accountId not found");
+        }
+        
+        return $dn;
+    }
+    
+    /**
+     * generates a new dn
+     *
+     * @param  Tinebase_Model_FullUser $_account
+     * @return string
+     */
+    protected function _generateDn(Tinebase_Model_FullUser $_account)
+    {
+        $baseDn = Zend_Registry::get('configFile')->accounts->get('ldap')->userDn;
+        
+        $uidProperty = array_search('uid', $this->_rowNameMapping);
+        $newDn = "uid={$_account->$uidProperty},{$baseDn}";
+        
+        return $newDn;
     }
     
     /**
@@ -339,8 +385,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     protected function _ldap2User($_userData, $_accountClass)
     {
+        // accounts found in ldap tree are always enabled, see comment in setStatus
         $accountArray = array(
-            'accountStatus' => 'enabled'
+            'accountStatus'  => 'enabled'
         );
         
         foreach ($_userData as $key => $value) {
@@ -366,6 +413,39 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $accountObject = new $_accountClass($accountArray);
         
         return $accountObject;
+    }
+    
+    /**
+     * returns array of ldap data
+     *
+     * @param  Tinebase_Model_FullUser $_user
+     * @return array
+     */
+    protected function _user2ldap(Tinebase_Model_FullUser $_user)
+    {
+        if ($_user->accountStatus == 'disabled') {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "  With ldap user backend, user '{$user->accountDisplayName}' can not be disabled!");
+        }
+        
+        $ldapData = array();
+        foreach ($_user as $property => $value) {
+            $ldapProperty = array_key_exists($key, $this->_rowNameMapping) ? $this->_rowNameMapping[$key] : false;
+            if ($ldapProperty) {
+                switch ($key) {
+                    case 'accountLastPasswordChange':
+                    case 'accountExpires':
+                        $ldapData[$ldapProperty] = $value instanceof Zend_Date ? $value->getTimestamp() : '';
+                        break;
+                    case 'accountStatus':
+                        break;
+                    default:
+                        $ldapData[$ldapProperty] = $value;
+                        break;
+                }
+            }
+        }
+        
+        return $ldapData;
     }
     
 }

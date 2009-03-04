@@ -61,6 +61,23 @@ class Tinebase_Ldap extends Zend_Ldap
     }
     
     /**
+     * deletes an entry from ldap
+     *
+     * @param  string $_dn
+     * @return void
+     */
+    public function delete($_dn)
+    {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
+        if (! @ldap_delete($this->_resource, $_dn)) {
+            throw new Exception(ldap_error($this->_resource));
+        }
+    }
+    
+    /**
      * search ldap directory
      *
      * @param   string $_dn base dn (where to start searching)
@@ -209,5 +226,59 @@ class Tinebase_Ldap extends Zend_Ldap
         );
         
         return $this->fetchDn($dn, $filter, $attributes);
+    }
+    
+    /**
+     * Add entries to LDAP directory
+     *
+     * @param  string $_dn
+     * @param  array $_data
+     * @return void
+     */
+    public function insert($_dn, array $_data)
+    {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
+        if (! @ldap_add($this->_resource, $_dn, $_data)) {
+            throw new Exception(ldap_error($this->_resource));
+        }
+    }
+    
+    /**
+     * Modify an LDAP entry
+     *
+     * @param  string $_dn
+     * @param  array $_data
+     * @return void
+     */
+    public function update($_dn, array $_data)
+    {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
+        if (! @ldap_modify($this->_resource, $_dn, $_data)) {
+            throw new Exception(ldap_error($this->_resource));
+        }
+    }
+    
+    /**
+     * Removes one or more attributes from the specified dn
+     *
+     * @param  unknown_type $_dn
+     * @param  array $_properties
+     * @return void
+     */
+    public function deleteProperty($_dn, array $_properties)
+    {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
+        if (! @ldap_mod_del($this->_resource, $_dn, $_properties)) {
+            throw new Exception(ldap_error($this->_resource));
+        }
     }
 }
