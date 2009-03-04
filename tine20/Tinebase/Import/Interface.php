@@ -20,7 +20,7 @@
  * @subpackage  Import
  * 
  */
-interface Addressbook_Import_Interface
+interface Tinebase_Import_Interface
 {
     /**
      * read data from import file
@@ -29,14 +29,16 @@ interface Addressbook_Import_Interface
      * @return Tinebase_Record_RecordSet
      */
     // @param array $_options general options for the import(mapping, ...) ?
-    public function read($_from);
+    //public function read($_from);
     
     /**
      * import the data
      *
-     * @param Tinebase_Record_RecordSet $_records Addressbook_Model_Contact records
+     * @param mixed $_from filename|database|... to import from
      * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
      */
     // @param array $_options general options for the import(mapping, ...) ?
-    public function import(Tinebase_Record_RecordSet $_records);
+    // @param Tinebase_Record_RecordSet $_records Addressbook_Model_Contact records ?
+    //public function import(Tinebase_Record_RecordSet $_records);
+    public function import($_from);
 }

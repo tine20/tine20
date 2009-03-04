@@ -83,9 +83,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     public function get($_id, $_getDeleted = FALSE) 
     {
-        
         $id = $this->_convertId($_id);
         
+        return $this->getByProperty($id, $this->_identifier, $_getDeleted);
+        
+        /*
         $select = $this->_getSelect('*', $_getDeleted);
         $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
 
@@ -96,6 +98,39 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
                 
         if (!$queryResult) {
             throw new Tinebase_Exception_NotFound($this->_modelName . ' record with id ' . $id . ' not found!');
+        }
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
+        $result = new $this->_modelName($queryResult);
+               
+        // get custom fields
+        if ($result->has('customfields')) {
+            $this->_getCustomFields($result);
+        }
+        
+        return $result;
+        */
+    }
+
+    /**
+     * Gets one entry (by property)
+     *
+     * @param mixed $_value
+     * @param string $_property
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
+    {
+        $select = $this->_getSelect('*', $_getDeleted);
+        $select->where($this->_db->quoteIdentifier($_property) . ' = ?', $_value)
+               ->limit(1);
+
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+            
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+                
+        if (!$queryResult) {
+            throw new Tinebase_Exception_NotFound($this->_modelName . " record with $_property " . $_value . ' not found!');
         }
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         $result = new $this->_modelName($queryResult);

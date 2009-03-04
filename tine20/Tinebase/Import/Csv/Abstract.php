@@ -8,7 +8,10 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        finish implementation
+ * @todo        make _importRecord work
+ * @todo        add charset conversion (with iconv?)
+ * @todo        add conditions (what to do when record already exists)
+ * @todo        add 'dry run' functionality
  */
 
 /**
@@ -26,156 +29,194 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     protected $_db;
 
     /**
-     * @var Zend_Db_Adapter_Abstract
+     * @var array
      */
     protected $_options;
     
     /**
-     * delimiter for csv file
+     * the record controller
+     *
+     * @var Tinebase_Application_Controller_Record_Interface
+     */
+    protected $_controller = NULL;
+    
+    /**
+     * the record model
      *
      * @var string
      */
-    protected $_delimiter = ';';
+    protected $_modelName = '';
     
     /**
      * the constructor
      *
+     * @param Tinebase_Model_ImportExportDefinition $_definition
+     * @param mixed $_controller
      */
-    public function __construct ($_options = NULL)
+    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL)
     {
+        //print_r($_definition->toArray());
+        
+        if ($_controller === NULL) {
+            list($appName, $ns, $modelName) = explode('_', $_definition->model);
+            $controllerName = "{$appName}_Controller_{$modelName}";
+            $this->_controller = call_user_func($controllerName . '::getInstance');
+        } else {
+            $this->_controller = $_controller;
+        }
+        
+        $this->_modelName = $_definition->model;
+        $this->_options = $this->_getConfig($_definition->plugin_options);
         $this->_db = Tinebase_Core::getDb();
-    }
-    
-    /**
-     * read data from import file
-     *
-     * @param   string $_from
-     * @return  Tinebase_Record_RecordSet
-     * 
-     * @todo implement
-     */
-    public function read($_from)
-    {
-        /*
-        // read file
-        if (!file_exists($_filename)) {
-            throw new Addressbook_Exception_NotFound("File $_filename not found.");
-        }
-        $fileArray = file($_filename);
-        
-        // get headline
-        $headline = trim(array_shift($fileArray));
-        
-        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
-        foreach($fileArray as $line) {
-            $record = $this->_parseLine(trim($line), $headline, $_mapping);
-            if (!empty($record)) {
-                try {
-                    $result->addRecord(new Addressbook_Model_Contact($record));
-                } catch (Exception $e) {
-                    //-- don't add incorrect record (name missing for example)
-                }
-            }
-        }
-        */
-        
-        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
-        return $result;
     }
     
     /**
      * import the data
      *
-     * @param Tinebase_Record_RecordSet $_records
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @todo implement
-     * @todo add 'dry run' functionality
+     * @param string $_filename
+     * @param resource $_resource (if $_filename is a stream)
+     * @return Tinebase_Record_RecordSet the imported records
      */
-    public function import(Tinebase_Record_RecordSet $_records)
+    public function import($_filename, $_resource = NULL)
     {
-        /*
-        if ($_containerId === NULL) {
-            // get personal container
-            $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer( 
-                Tinebase_Core::getUser(),
-                'Addressbook', 
-                Tinebase_Core::getUser(), 
-                Tinebase_Model_Container::GRANT_EDIT
-            );
-            $containerId = $personalContainer[0]->getId();
+        // read file / stream
+        if ($_resource === NULL && !file_exists($_filename)) {
+            throw new Tinebase_Exception_NotFound("File $_filename not found.");
+        }
+        $fileArray = file($_filename);
+        
+        // get headline
+        if ($this->_options['headline']) {
+            $headline = trim(array_shift($fileArray));
         } else {
-            $containerId = $_containerId;
+            $headline = array();
         }
-        
-        $addressbookController = Addressbook_Controller_Contact::getInstance();
-        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
-        foreach ($_records as $contact) {
-            // set container_id/container id only if it isn't set already
-            if (empty($contact->container_id)) {
-                $contact->container_id = $containerId;
+
+        $result = new Tinebase_Record_RecordSet($this->_modelName);
+        foreach($fileArray as $line) {
+            $record = $this->_createRecord(trim($line), $headline);
+            if (!empty($record)) {
+                try {
+                    $importedRecord = $this->_importRecord($record);
+                    $result->addRecord($importedRecord);
+                } catch (Exception $e) {
+                    //-- don't add incorrect record (name missing for example)
+                }
             }
-            $newContact = $addressbookController->create($contact);
-            $result->addRecord($newContact);
         }
         
-        */
         return $result;
     }
     
     /**
-     * parse a csv line
+     * import single record
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return Tinebase_Record_Interface
+     * 
+     * @todo finish implementation
+     * @todo check conditions (duplicates, dry-run ...)
+     */
+    protected function _importRecord($_record)
+    {
+        $record = $_record;
+        return $record;
+    }
+        
+    /**
+     * parse a csv line and create record
      *
      * @param string $_line
      * @param string $_headline
-     * @param array $_line
-     * @return array with values
+     * @return Tinebase_Record_Interface
+     * 
+     * @todo check mapping
+     * @todo add encoding here
      */
-    protected function _parseLine($_line, $_headline, $_mapping)
+    protected function _createRecord($_line, $_headline)
     {
-        $headline = array_flip(explode($this->_delimiter, $_headline));
-        $values = explode($this->_delimiter, $_line);
+        $delimiter = (isset($this->_options['delimiter'])) ? $this->_options['delimiter'] : ';';
         
-        //print_r($_mapping);
-        //print_r($headline);
-        //print_r($values);
+        $headline = array_flip(explode($delimiter, $_headline));
+        $values = explode($delimiter, $_line);
+        $mapping = $this->_options['mapping']['field'];
         
-        $result = array();
-        foreach($_mapping as $destination => $source) {
+        $data = array();
+        foreach($mapping as $field) {
+            
+            // add single value to destination 
+            if (isset($headline[$field['source']]) && isset($values[$headline[$field['source']]])) {
+                $data[$field['destination']] = $values[$headline[$field['source']]];
+            }
+        
+            /*
             if (is_array($source)) {
                 
-                $result[$destination] = '';                
+                $data[$destination] = '';                
                 foreach ($source as $key => $value) {
                     if (is_array($value) || (isset($headline[$value]) && isset($values[$headline[$value]]) && !empty($values[$headline[$value]]))) {
                         if (is_array($value) && !empty($value)) {
                             // match to defined values (i.e. user -> container_id/container id)
                             $keyForValue = $values[$headline[$key]];
                             if (isset($value[$keyForValue])) {
-                                $result[$destination] = $value[$keyForValue];
+                                $data[$destination] = $value[$keyForValue];
                             }
                         } elseif (!is_numeric($key)) {
                             // add multiple values to one destination field with $key added 
-                            if (!empty($result[$destination])) {
-                                $result[$destination] .= "\n";
+                            if (!empty($data[$destination])) {
+                                $data[$destination] .= "\n";
                             }
-                            $result[$destination] .= $key . ': ' . $values[$headline[$value]];
+                            $data[$destination] .= $key . ': ' . $values[$headline[$value]];
                         } else {
                             // add multiple values to one destination field (separated with spaces)
-                            if (!empty($result[$destination])) {
-                                $result[$destination] .= " ";
+                            if (!empty($data[$destination])) {
+                                $data[$destination] .= " ";
                             }
-                            $result[$destination] .= $values[$headline[$value]];
+                            $data[$destination] .= $values[$headline[$value]];
                         }
                     }                    
                 }
-            } elseif (is_string($source) && !empty($source)) {
-                // add single value to destination 
-                if (isset($headline[$source]) && isset($values[$headline[$source]])) {
-                    $result[$destination] = $values[$headline[$source]];
-                }
-            }
+            } 
+            */
         }
-        //print_r($result);
-        return $result;
+
+        // add more values
+        $data = array_merge($data, $this->_addData());
+        
+        // create record and return it
+        $record = new $this->_modelName($data);
+        return $record;
+    }
+
+    /**
+     * add some more values (overwrite that if you need some special/dynamic fields)
+     *
+     * @return array
+     */
+    protected function _addData()
+    {
+        return array();
+    }
+    
+    /**
+     * write to temp file and read with Zend_Config_Xml
+     *
+     * @param string $_configString
+     * @return array 
+     */
+    protected function _getConfig($_configString)
+    {
+        $tmpfname = tempnam(session_save_path(), "tine20");
+        
+        $handle = fopen($tmpfname, "w");
+        fwrite($handle, $_configString);
+        fclose($handle);
+        
+        // read file with Zend_Config_Xml
+        $config = new Zend_Config_Xml($tmpfname);
+        
+        unlink($tmpfname);
+        
+        return $config->toArray();
     }
 }
