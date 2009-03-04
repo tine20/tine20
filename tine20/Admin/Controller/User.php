@@ -125,7 +125,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
             throw new Admin_Exception("Passwords don't match.");
         }
         
-        $result = Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+        $result = Tinebase_User::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         
         return $result;
     }
@@ -151,7 +151,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         Tinebase_Events::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+            Tinebase_User::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         }
         
         return $account;
@@ -177,7 +177,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         Tinebase_Events::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+            Tinebase_User::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         }
         
         return $account;

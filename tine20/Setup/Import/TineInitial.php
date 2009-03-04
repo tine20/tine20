@@ -96,7 +96,7 @@ class Setup_Import_TineInitial
         Tinebase_Core::set('currentAccount', $account);
 
         // set the password for the tine20admin account
-        Tinebase_Auth::getInstance()->setPassword('tine20admin', 'lars', 'lars');
+        Tinebase_User::getInstance()->setPassword('tine20admin', 'lars', 'lars');
 
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);

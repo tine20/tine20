@@ -256,6 +256,38 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
+     * set the password for given account
+     *
+     * @param   int $_accountId
+     * @param   string $_password
+     * @param   bool $_encrypt encrypt password
+     * @return  void
+     * @throws  Tinebase_Exception_InvalidArgument
+     */
+    public function setPassword($_loginName, $_password, $_encrypt = TRUE)
+    {
+        if(empty($_loginName)) {
+            throw new Tinebase_Exception_InvalidArgument('$_loginName can not be empty');
+        }
+        
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        
+        $accountData['password'] = ( $_encrypt ) ? md5($_password) : $_password;
+        $accountData['last_password_change'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('login_name') . ' = ?', $_loginName)
+        );
+        
+        $result = $accountsTable->update($accountData, $where);
+        if ($result != 1) {
+            throw new Tinebase_Exception_NotFound('Unable to update password! account not found in authentication backend.');
+        }
+        
+        return $result;
+    }
+    
+    /**
      * set the status of the user
      *
      * @param int $_accountId

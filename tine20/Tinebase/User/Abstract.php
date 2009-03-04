@@ -114,7 +114,16 @@ abstract class Tinebase_User_Abstract
      * @return  Tinebase_Model_User user
      */
     abstract public function getUserById($_accountId);
-
+    
+    /**
+     * setPassword() - sets / updates the password in the account backend
+     *
+     * @param string $_loginName
+     * @param string $_password
+     * @param bool   $_encrypt encrypt password
+     */
+    //abstract public function setPassword($_loginName, $_password, $_encrypt);
+    
     /**
      * update user status
      *

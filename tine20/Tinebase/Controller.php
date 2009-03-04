@@ -147,7 +147,7 @@ class Tinebase_Controller
             throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
         }
         
-        Tinebase_Auth::getInstance()->setPassword($loginName, $_newPassword1, $_newPassword2);
+        Tinebase_User::getInstance()->setPassword($loginName, $_newPassword1, $_newPassword2);
     }
     
     /**

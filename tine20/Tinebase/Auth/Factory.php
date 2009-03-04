@@ -16,7 +16,6 @@
  * @package     Tinebase
  * @subpackage  Auth
  */
-
 class Tinebase_Auth_Factory
 {
     /**

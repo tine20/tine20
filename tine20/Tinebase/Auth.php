@@ -178,21 +178,4 @@ class Tinebase_Auth
         return false;
     }
     
-    /**
-     * sets the password
-     *
-     * @param   string $_loginName the loginname of the account
-     * @param   string $_password1
-     * @param   string $_password2
-     * @param   bool $_encrypt encrypt password
-     * @throws  Tinebase_Exception_InvalidArgument
-     */
-    public function setPassword($_loginName, $_password1, $_password2, $_encrypt = TRUE)
-    {
-        if($_password1 !== $_password2) {
-            throw new Tinebase_Exception_InvalidArgument('Password 1 and Password 2 do not match!');
-        }
-        
-        $this->_backend->setPassword($_loginName, $_password1, $_encrypt);
-    }
 }
