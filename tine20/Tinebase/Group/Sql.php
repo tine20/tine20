@@ -224,6 +224,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if(empty($data['id'])) {
             unset($data['id']);
         }
+        unset($data['members']);
         
         $groupId = $this->groupsTable->insert($data);
         
