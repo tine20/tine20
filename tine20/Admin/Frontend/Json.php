@@ -455,11 +455,12 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         }
         
         $group = new Tinebase_Model_Group($decodedGroupData);
+        $group->members = $decodedGroupMembers;
         
         if ( empty($group->id) ) {
-            $group = Admin_Controller_Group::getInstance()->create($group, $decodedGroupMembers);
+            $group = Admin_Controller_Group::getInstance()->create($group);
         } else {
-            $group = Admin_Controller_Group::getInstance()->update($group, $decodedGroupMembers);
+            $group = Admin_Controller_Group::getInstance()->update($group);
         }
 
         return $this->getGroup($group->getId());

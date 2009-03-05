@@ -98,14 +98,14 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * 
      * @return Tinebase_Model_Group
      */
-    public function create(Tinebase_Model_Group $_group, array $_groupMembers = array ())
+    public function create(Tinebase_Model_Group $_group)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         $group = Tinebase_Group::getInstance()->addGroup($_group);
         
-        if ( !empty($_groupMembers) ) {
-            Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_groupMembers);
+        if (!empty($_group['members']) ) {
+            Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
         }
 
         return $group;            
@@ -119,13 +119,13 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * 
      * @return Tinebase_Model_Group
      */
-    public function update(Tinebase_Model_Group $_group, array $_groupMembers = array ())
+    public function update(Tinebase_Model_Group $_group,)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         $group = Tinebase_Group::getInstance()->updateGroup($_group);
         
-        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_groupMembers);
+        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
 
         return $group;            
     }  
