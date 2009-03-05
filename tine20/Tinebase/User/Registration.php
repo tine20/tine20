@@ -201,7 +201,7 @@ class Tinebase_User_Registration
             ' saved user ' . $regData['accountLoginName']);
         // generate password and save it
         $regData['password'] = $this->generatePassword();
-        Tinebase_Auth::getInstance()->setPassword($regData['accountLoginName'], 
+        Tinebase_User::getInstance()->setPassword($regData['accountLoginName'], 
             $regData['password'], $regData['password']);
         // create hash from username
         $regData['accountLoginNameHash'] = md5($regData['accountLoginName']);

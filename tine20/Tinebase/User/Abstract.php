@@ -122,7 +122,7 @@ abstract class Tinebase_User_Abstract
      * @param string $_password
      * @param bool   $_encrypt encrypt password
      */
-    //abstract public function setPassword($_loginName, $_password, $_encrypt);
+    abstract public function setPassword($_loginName, $_password, $_encrypt);
     
     /**
      * update user status
