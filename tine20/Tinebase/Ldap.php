@@ -17,6 +17,7 @@
  */
 class Tinebase_Ldap extends Zend_Ldap
 {
+    
     /**
      * options set by object construction
      *
@@ -29,6 +30,13 @@ class Tinebase_Ldap extends Zend_Ldap
     protected $_sizeLimit = 0;
     
     protected $_timeLimit = 0;
+    
+    /**
+     * Infos about the ldap server
+     *
+     * @var array
+     */
+    protected $_serverInfo = NULL;
     
     /**
      * Extend constructor
@@ -57,7 +65,12 @@ class Tinebase_Ldap extends Zend_Ldap
             'useStartTls'               => null,
         ));
         
-        return parent::__construct($options);
+        $returnValue = parent::__construct($options);
+        //if(!is_resource($this->_resource)) {
+        //    throw new Exception('Not connected to ldap server.');
+        //}
+        
+        return $returnValue;
     }
     
     /**
@@ -68,11 +81,21 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function delete($_dn)
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
         if (! @ldap_delete($this->_resource, $_dn)) {
+            throw new Exception(ldap_error($this->_resource));
+        }
+    }
+    
+    /**
+     * Removes one or more attributes from the specified dn
+     *
+     * @param  string $_dn
+     * @param  array $data
+     * @return void
+     */
+    public function deleteProperty($_dn, array $data)
+    {
+        if (! @ldap_mod_del($this->_resource, $_dn, $data)) {
             throw new Exception(ldap_error($this->_resource));
         }
     }
@@ -89,10 +112,6 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetchAll($_dn, $_filter= 'objectclass=*', array $_attributes = array(), $_order = NULL)
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
         $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
         
         if($_order !== NULL) {
@@ -123,10 +142,6 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetch($_dn, $_filter = 'objectclass=*', array $_attributes = array())
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
         $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
         
         if($searchResult === FALSE) {
@@ -155,10 +170,6 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetchDn($_dn, $_filter = 'objectclass=*', array $_attributes = array())
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
         $searchResult = @ldap_read($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
 
         if($searchResult === FALSE) {
@@ -187,10 +198,6 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetchBinaryAttribute($_dn, $_filter, $_attribute)
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
         $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
         
         if($searchResult === FALSE) {
@@ -216,16 +223,11 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function getServerInfo()
     {
-        $dn = '';
-        $filter='(objectclass=*)';
-        $attributes = array(
-            'structuralObjectClass',
-            'namingContexts',
-            'supportedLDAPVersion',
-            'subschemaSubentry'
-        );
+        if (! $this->_serverInfo) {
+            $this->_serverInfo = new Tinebase_LdapInfo($this);
+        }
         
-        return $this->fetchDn($dn, $filter, $attributes);
+        return $this->_serverInfo;
     }
     
     /**
@@ -237,11 +239,21 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function insert($_dn, array $_data)
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
         if (! @ldap_add($this->_resource, $_dn, $_data)) {
+            throw new Exception(ldap_error($this->_resource));
+        }
+    }
+    
+    /**
+     * Add property
+     *
+     * @param  string $_dn
+     * @param  array $_data
+     * @return void
+     */
+    public function insertProperty($_dn, array $_data)
+    {
+        if (! @ldap_mod_add($this->_resource, $_dn, $_data)) {
             throw new Exception(ldap_error($this->_resource));
         }
     }
@@ -255,8 +267,20 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function update($_dn, array $_data)
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
+        $dnParts = explode(',', $_dn);
+        $rdn = $dnParts[0];
+        list ($rdnAttribute, $rdnValue) = explode('=', $rdn);
+        
+        // check if we need to rename entry
+        if (array_key_exists($rdnAttribute, $_data) && $_data[$rdnAttribute] != $rdnValue) {
+            $newRdn = $rdnAttribute . "=" . $_data[$rdnAttribute];
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  About to rename dn '{$_dn}' to new rdn '{$newRdn}'");
+            if (! @ldap_rename($this->_resource, $_dn, $newRdn, NULL, true)) {
+                throw new Exception(ldap_error($this->_resource));
+            }
+            
+            $dnParts[0] = $newRdn;
+            $_dn = implode(',', $dnParts);
         }
         
         if (! @ldap_modify($this->_resource, $_dn, $_data)) {
@@ -265,19 +289,15 @@ class Tinebase_Ldap extends Zend_Ldap
     }
     
     /**
-     * Removes one or more attributes from the specified dn
+     * Modify (Replace) the given properties 
      *
-     * @param  unknown_type $_dn
-     * @param  array $_properties
+     * @param  string $_dn
+     * @param  array $_data
      * @return void
      */
-    public function deleteProperty($_dn, array $_properties)
+    public function updateProperty($_dn, array $_data)
     {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        if (! @ldap_mod_del($this->_resource, $_dn, $_properties)) {
+        if (! @ldap_mod_replace($this->_resource, $_dn, $_data)) {
             throw new Exception(ldap_error($this->_resource));
         }
     }
