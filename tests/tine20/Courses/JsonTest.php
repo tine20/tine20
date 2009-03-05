@@ -113,7 +113,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateCourse()
     {
-        /*
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
         
@@ -128,7 +127,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
-        */
     }
     
     /**
