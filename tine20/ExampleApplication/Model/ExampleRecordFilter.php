@@ -26,9 +26,10 @@ class ExampleApplication_Model_ExampleRecordFilter extends Tinebase_Model_Filter
      */
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array(/*'number', 'title'*/))),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag'),
+        // @todo add filters
         /*
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('number', 'title'))),
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),

@@ -33,7 +33,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
         this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);        
+        //this.plugins.push(this.action_showClosedToggle, this.filterToolbar);        
         
         Tine.ExampleApplication.ExampleRecordGridPanel.superclass.initComponent.call(this);
         
@@ -48,8 +48,9 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('ExampleRecord'),    field: 'query',       operators: ['contains']},
+                // @todo add filtes
                 /*
+                {label: this.app.i18n._('ExampleRecord'),    field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
                 new Tine.ExampleApplication.TimeAccountStatusGridFilter({
                     field: 'status'
@@ -110,15 +111,19 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
      * return additional tb items
      */
     getToolbarItems: function(){
+    	/*
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.app.i18n._('Show closed'),
             iconCls: 'action_showArchived',
             field: 'showClosed'
         });
+        */
         
         return [
+            /*
             new Ext.Toolbar.Separator(),
             this.action_showClosedToggle
+            */
         ];
     }    
 });

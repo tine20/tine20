@@ -17,7 +17,7 @@ Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilte
     //recordClass: Tine.ExampleApplication.Model.ExampleRecord,
     
     initComponent: function() {
-        //this.filterMountId = 'ExampleRecord';
+        this.filterMountId = 'ExampleRecord';
         
         this.root = {
             id: 'root',
