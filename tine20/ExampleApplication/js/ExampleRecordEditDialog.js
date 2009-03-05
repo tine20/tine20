@@ -20,7 +20,7 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
     appName: 'ExampleApplication',
     recordClass: Tine.ExampleApplication.Model.ExampleRecord,
     recordProxy: Tine.ExampleApplication.recordBackend,
-    loadExampleRecord: false,
+    loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     /**
@@ -30,14 +30,14 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
 
     },
     
-    onExampleRecordLoad: function() {
+    onRecordLoad: function() {
     	// you can do something here
 
-    	Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onExampleRecordLoad.call(this);        
+    	Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onRecordLoad.call(this);        
     },
     
-    onExampleRecordUpdate: function() {
-        Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onExampleRecordUpdate.call(this);
+    onRecordUpdate: function() {
+        Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onRecordUpdate.call(this);
         
         // you can do something here    
     },
