@@ -129,7 +129,7 @@ class Setup_Controller
         
         foreach (new DirectoryIterator($this->_baseDir) as $item) {
             $appName = $item->getFileName();
-            if($appName{0} != '.' && $appName != 'Tinebase' && $item->isDir()) {
+            if($appName{0} != '.' && $appName != 'Tinebase' && $item->isDir() && $appName != 'ExampleApplication' ) {
                 $fileName = $this->_baseDir . $item->getFileName() . '/Setup/setup.xml' ;
                 if(file_exists($fileName)) {
                     $applications[$item->getFileName()] = $this->getSetupXml($item->getFileName());
