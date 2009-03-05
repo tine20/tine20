@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Json.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        make search work and add _multipleRecordsToJson
  */
 
 /**
