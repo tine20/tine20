@@ -77,8 +77,6 @@ class Tinebase_Group
         switch($_backendType) {
             case self::LDAP:
                 $options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
-                unset($options['userDn']);
-                unset($options['groupsDn']);
                 
                 $result = Tinebase_Group_Ldap::getInstance($options);
                 break;

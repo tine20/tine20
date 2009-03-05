@@ -18,10 +18,6 @@
  */
 class Tinebase_User_Ldap extends Tinebase_User_Abstract
 {
-	/**
-     * @var Zend_Db_Adapter_Pdo_Mysql
-     */
-    protected $_db;
     
     /**
      * the constructor
@@ -33,7 +29,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
-        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
@@ -52,8 +47,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     private static $_instance = NULL;
     
     /**
-     * Enter description here...
-     *
      * @var Tinebase_Ldap
      */
     protected $_backend = NULL;
@@ -247,6 +240,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
     /**
      * updates an existing user
+     * 
+     * @todo check required objectclasses?
      *
      * @param Tinebase_Model_FullUser $_account
      * @return Tinebase_Model_FullUser
@@ -263,6 +258,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
 
     /**
      * adds a new user
+     * 
+     * @todo add required objectclasses
      *
      * @param Tinebase_Model_FullUser $_account
      * @return Tinebase_Model_FullUser
@@ -424,11 +421,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     protected function _user2ldap(Tinebase_Model_FullUser $_user)
     {
         if ($_user->accountStatus == 'disabled') {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "  With ldap user backend, user '{$user->accountDisplayName}' can not be disabled!");
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "  With ldap user backend, user '{$_user->accountDisplayName}' can not be disabled!");
         }
         
         $ldapData = array();
-        foreach ($_user as $property => $value) {
+        foreach ($_user as $key => $value) {
             $ldapProperty = array_key_exists($key, $this->_rowNameMapping) ? $this->_rowNameMapping[$key] : false;
             if ($ldapProperty) {
                 switch ($key) {
