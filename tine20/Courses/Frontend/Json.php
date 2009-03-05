@@ -25,6 +25,13 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @var Courses_Controller_Course
      */
     protected $_controller = NULL;
+
+    /**
+     * the groups controller
+     *
+     * @var Admin_Controller_Group
+     */
+    protected $_groupController = NULL;
     
     /**
      * the constructor
