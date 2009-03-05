@@ -95,20 +95,16 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCourse()
     {
-        /*
-        $course = $this->_getCourse();
-        $courseData = $this->_json->saveCourse(Zend_Json::encode($course->toArray()));
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
         $courseData = $this->_json->getCourse($courseData['id']);
         
         // checks
-        $this->assertEquals($course->description, $courseData['description']);
+        $this->assertEquals($course['description'], $courseData['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $courseData['created_by']);
-        $this->assertTrue(is_array($courseData['container_id']));
-        $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $courseData['container_id']['type']);
                         
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
-        */
     }
 
     /**
@@ -118,8 +114,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateCourse()
     {
         /*
-        $course = $this->_getCourse();
-        $courseData = $this->_json->saveCourse(Zend_Json::encode($course->toArray()));
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
         
         // update Course
         $courseData['description'] = "blubbblubb";
@@ -143,12 +139,12 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         /*
         // create
-        $course = $this->_getCourse();
-        $courseData = $this->_json->saveCourse(Zend_Json::encode($course->toArray()));
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
         
         // search & check
         $search = $this->_json->searchCourses(Zend_Json::encode($this->_getCourseFilter()), Zend_Json::encode($this->_getPaging()));
-        $this->assertEquals($course->description, $search['results'][0]['description']);
+        $this->assertEquals($course['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
         
         // cleanup

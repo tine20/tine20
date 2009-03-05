@@ -60,6 +60,7 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         // group data
         $groupData = $this->_groupController->get($_record->group_id)->toArray();
         $groupData['members'] = $adminJson->getGroupMembers($_record->group_id);
+        unset($groupData['id']);
 
         return array_merge($recordArray, $groupData);
     }
