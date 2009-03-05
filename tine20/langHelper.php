@@ -8,6 +8,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        add filter for applications
  */
 
 if (isset($_SERVER['HTTP_HOST'])) {
@@ -43,6 +45,7 @@ try {
         'overwrite'       => '  overwrite existing lang files',
         'svn'             => '  add new lang files to svn',
         'help|h'          => 'Display this help Message',
+        //'filter=s'        => 'Filter for applications'
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
