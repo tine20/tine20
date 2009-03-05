@@ -58,6 +58,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      *
      * @param Tinebase_Model_ImportExportDefinition $_definition
      * @param mixed $_controller
+     * 
+     * @todo add additional data (i.e. group id, ...) to constructor
      */
     public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL)
     {
