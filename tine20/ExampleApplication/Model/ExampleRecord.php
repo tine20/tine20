@@ -15,7 +15,7 @@
  * 
  * @package     ExampleApplication
  */
-class ExampleApplication_Model_ExampleRecord extends Tinebase_ExampleRecord_Abstract
+class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 {  
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -90,11 +90,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_ExampleRecord_Abst
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        /*
-        $this->_filters['budget']  = array('Digits', new Zend_Filter_Empty(NULL));
-        $this->_filters['price'] = array(new Zend_Filter_PregReplace('/,/', '.'), new Zend_Filter_Empty(NULL));
-        $this->_filters['is_open'] = new Zend_Filter_Empty(0);
-        */
+        // do something here if you like (add default empty values, ...)
+        
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
 
@@ -107,13 +104,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_ExampleRecord_Abst
     public function setFromJson($_data)
     {
         parent::setFromJson($_data);
-        /*        
-        $_data = Zend_Json::decode($_data);
-        if (isset($_data['grants']) && !empty($_data['grants'])) {
-            $this->grants = new Tinebase_ExampleRecord_ExampleRecordSet('ExampleApplication_Model_ExampleRecordGrants', $_data['grants']);
-        }  else {
-            $this->grants = new Tinebase_ExampleRecord_ExampleRecordSet('ExampleApplication_Model_ExampleRecordGrants');
-        }
-        */
+        
+        // do something here if you like
     }
 }

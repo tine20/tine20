@@ -17,7 +17,7 @@
  * @package     ExampleApplication
  * @subpackage  Controller
  */
-class ExampleApplication_Controller_ExampleRecord extends Tinebase_Application_Controller_ExampleRecord_Abstract
+class ExampleApplication_Controller_ExampleRecord extends Tinebase_Application_Controller_Record_Abstract
 {
     /**
      * the constructor
@@ -29,7 +29,7 @@ class ExampleApplication_Controller_ExampleRecord extends Tinebase_Application_C
         $this->_backend = new ExampleApplication_Backend_ExampleRecord();
         $this->_modelName = 'ExampleApplication_Model_ExampleRecord';
         $this->_currentAccount = Tinebase_Core::getUser();   
-        $this->_purgeExampleRecords = FALSE;
+        $this->_purgeRecords = FALSE;
     }    
     
     /**
