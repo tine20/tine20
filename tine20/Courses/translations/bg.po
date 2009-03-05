@@ -1,0 +1,94 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Courses\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/CourseEditDialog.js:58 js/CourseGridPanel.js:51 js/Models.js:40
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/CourseEditDialog.js:74 js/CourseGridPanel.js:74
+msgid "Number"
+msgstr ""
+
+#: js/CourseEditDialog.js:79 js/CourseGridPanel.js:80
+msgid "Title"
+msgstr ""
+
+#: js/CourseEditDialog.js:88
+msgid "Unit"
+msgstr ""
+
+#: js/CourseEditDialog.js:92
+msgid "Unit Price"
+msgstr ""
+
+#: js/CourseEditDialog.js:97 js/CourseGridPanel.js:93
+msgid "Budget"
+msgstr ""
+
+#: js/CourseEditDialog.js:101
+msgid "Timesheets are billable"
+msgstr ""
+
+#: js/CourseEditDialog.js:105 js/CourseGridPanel.js:86
+msgid "Status"
+msgstr ""
+
+#: js/CourseEditDialog.js:111
+msgid "closed"
+msgstr ""
+
+#: js/CourseEditDialog.js:111
+msgid "open"
+msgstr ""
+
+#: js/CourseEditDialog.js:113
+msgid "Billed"
+msgstr ""
+
+#: js/CourseEditDialog.js:121
+msgid "not yet billed"
+msgstr ""
+
+#: js/CourseEditDialog.js:122
+msgid "to bill"
+msgstr ""
+
+#: js/CourseEditDialog.js:123
+msgid "billed"
+msgstr ""
+
+#: js/CourseGridPanel.js:53
+msgid "Description"
+msgstr ""
+
+#: js/CourseGridPanel.js:114
+msgid "Show closed"
+msgstr ""
+
+#: js/ExampleApplication.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: js/ExampleApplication.js:32
+msgid "All Courses"
+msgstr ""
+
+#: js/Models.js:44
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""

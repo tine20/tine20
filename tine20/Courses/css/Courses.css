@@ -1,0 +1,14 @@
+/**
+ * Tine 2.0
+ * 
+ * @package     Courses
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Tasks.css 3797 2008-08-11 08:33:21Z c.weiss@metaways.de $
+ *
+ */
+ 
+.CoursesIconCls {
+    background-image:url(../../images/oxygen/16x16/apps/kbruch.png) !important;
+}

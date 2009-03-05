@@ -1,0 +1,79 @@
+#: js/CourseEditDialog.js:58 js/CourseGridPanel.js:51 js/Models.js:40
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Course"
+msgstr[1] "Courses"
+
+#: js/CourseEditDialog.js:74 js/CourseGridPanel.js:74
+msgid "Number"
+msgstr "Number"
+
+#: js/CourseEditDialog.js:79 js/CourseGridPanel.js:80
+msgid "Title"
+msgstr "Title"
+
+#: js/CourseEditDialog.js:88
+msgid "Unit"
+msgstr "Unit"
+
+#: js/CourseEditDialog.js:92
+msgid "Unit Price"
+msgstr "Unit Price"
+
+#: js/CourseEditDialog.js:97 js/CourseGridPanel.js:93
+msgid "Budget"
+msgstr "Budget"
+
+#: js/CourseEditDialog.js:101
+msgid "Timesheets are billable"
+msgstr "Timesheets are billable"
+
+#: js/CourseEditDialog.js:105 js/CourseGridPanel.js:86
+msgid "Status"
+msgstr "Status"
+
+#: js/CourseEditDialog.js:111
+msgid "closed"
+msgstr "closed"
+
+#: js/CourseEditDialog.js:111
+msgid "open"
+msgstr "open"
+
+#: js/CourseEditDialog.js:113
+msgid "Billed"
+msgstr "Billed"
+
+#: js/CourseEditDialog.js:121
+msgid "not yet billed"
+msgstr "not yet billed"
+
+#: js/CourseEditDialog.js:122
+msgid "to bill"
+msgstr "to bill"
+
+#: js/CourseEditDialog.js:123
+msgid "billed"
+msgstr "billed"
+
+#: js/CourseGridPanel.js:53
+msgid "Description"
+msgstr "Description"
+
+#: js/CourseGridPanel.js:114
+msgid "Show closed"
+msgstr "Show closed"
+
+#: js/ExampleApplication.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Courses"
+
+#: js/ExampleApplication.js:32
+msgid "All Courses"
+msgstr "All Courses"
+
+#: js/Models.js:44
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "record list"
+msgstr[1] "record lists"
