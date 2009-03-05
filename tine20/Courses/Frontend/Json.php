@@ -41,9 +41,28 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $this->_applicationName = 'Courses';
         $this->_controller = Courses_Controller_Course::getInstance();
+        $this->_groupController = Admin_Controller_Group::getInstance();
     }
     
-    /************************************** protected helper functions **************************************/
+    /************************************** protected helper functions **********************/
+    
+    /**
+     * returns task prepared for json transport
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     */
+    protected function _recordToJson($_record)
+    {
+        $recordArray = parent::_recordToJson($_record);
+        $adminJson = new Admin_Frontend_Json();
+        
+        // group data
+        $groupData = $this->_groupController->get($_record->group_id)->toArray();
+        $groupData['members'] = $adminJson->getGroupMembers($_record->group_id);
+
+        return array_merge($recordArray, $groupData);
+    }
     
     /************************************** public API **************************************/
     
@@ -78,7 +97,27 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function saveCourse($recordData)
     {
-        return $this->_save($recordData, $this->_controller, 'Course');        
+        // create course and group from json data
+        $course = new Courses_Model_Course(array(), TRUE);
+        $course->setFromJsonInUsersTimezone($recordData);
+        $group = new Tinebase_Model_Group(array(), TRUE);
+        $group->setFromJsonInUsersTimezone($recordData);
+        
+        //if (!isset($group->members)) {
+        //    $group->members = array();
+        //}
+        
+        if (empty($group->id)) {
+            $savedGroup = $this->_groupController->create($group, $group->members);
+            $course->group_id = $savedGroup->getId();
+            $savedRecord = $this->_controller->create($course);
+        } else {
+            $savedRecord = $this->_controller->update($course);
+            $group->setId($course->group_id);
+            $this->_groupController->update($group, $group->members);
+        }
+
+        return $this->_recordToJson($savedRecord);
     }
     
     /**
