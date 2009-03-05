@@ -13,9 +13,9 @@ Ext.ns('Tine.ExampleApplication', 'Tine.ExampleApplication.Model');
 
 /**
  * @type {Array}
- * Record model fields
+ * ExampleRecord model fields
  */
-Tine.ExampleApplication.Model.RecordArray = Tine.Tinebase.Model.genericFields.concat([
+Tine.ExampleApplication.Model.ExampleRecordArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     /*
     // add record fields here
@@ -39,17 +39,17 @@ Tine.ExampleApplication.Model.RecordArray = Tine.Tinebase.Model.genericFields.co
 ]);
 
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.ExampleRecord}
  * record definition
  */
-Tine.ExampleApplication.Model.Record = Tine.Tinebase.Record.create(Tine.ExampleApplication.Model.RecordArray, {
+Tine.ExampleApplication.Model.ExampleRecord = Tine.Tinebase.Record.create(Tine.ExampleApplication.Model.ExampleRecordArray, {
     appName: 'ExampleApplication',
-    modelName: 'Record',
+    modelName: 'ExampleRecord',
     idProperty: 'id',
     titleProperty: 'title',
-    // ngettext('Record', 'Records', n);
-    recordName: 'Record',
-    recordsName: 'Records',
+    // ngettext('ExampleRecord', 'ExampleRecords', n);
+    recordName: 'ExampleRecord',
+    recordsName: 'ExampleRecords',
     containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'record list',
@@ -59,7 +59,7 @@ Tine.ExampleApplication.Model.Record = Tine.Tinebase.Record.create(Tine.ExampleA
     }
 });
 
-Tine.ExampleApplication.Model.Record.getDefaultData = function() { 
+Tine.ExampleApplication.Model.ExampleRecord.getDefaultData = function() { 
     return {
     	/*
         is_open: 1,

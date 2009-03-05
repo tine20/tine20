@@ -5,22 +5,22 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:ExampleRecordEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  */
  
 Ext.namespace('Tine.ExampleApplication');
 
-Tine.ExampleApplication.RecordEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * @private
      */
-    windowNamePrefix: 'RecordEditWindow_',
+    windowNamePrefix: 'ExampleRecordEditWindow_',
     appName: 'ExampleApplication',
-    recordClass: Tine.ExampleApplication.Model.Record,
+    recordClass: Tine.ExampleApplication.Model.ExampleRecord,
     recordProxy: Tine.ExampleApplication.recordBackend,
-    loadRecord: false,
+    loadExampleRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     /**
@@ -30,14 +30,14 @@ Tine.ExampleApplication.RecordEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
 
     },
     
-    onRecordLoad: function() {
+    onExampleRecordLoad: function() {
     	// you can do something here
 
-    	Tine.ExampleApplication.RecordEditDialog.superclass.onRecordLoad.call(this);        
+    	Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onExampleRecordLoad.call(this);        
     },
     
-    onRecordUpdate: function() {
-        Tine.ExampleApplication.RecordEditDialog.superclass.onRecordUpdate.call(this);
+    onExampleRecordUpdate: function() {
+        Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onExampleRecordUpdate.call(this);
         
         // you can do something here    
     },
@@ -55,7 +55,7 @@ Tine.ExampleApplication.RecordEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
             activeTab: 0,
             border: false,
             items:[{               
-                title: this.app.i18n._('Record'),
+                title: this.app.i18n._('ExampleRecord'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -159,13 +159,13 @@ Tine.ExampleApplication.RecordEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
 /**
  * ExampleApplication Edit Popup
  */
-Tine.ExampleApplication.RecordEditDialog.openWindow = function (config) {
+Tine.ExampleApplication.ExampleRecordEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 470,
-        name: Tine.ExampleApplication.RecordEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.ExampleApplication.RecordEditDialog',
+        name: Tine.ExampleApplication.ExampleRecordEditDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.ExampleApplication.ExampleRecordEditDialog',
         contentPanelConstructorConfig: config
     });
     return window;

@@ -14,7 +14,7 @@ Ext.ns('Tine.ExampleApplication');
 // default mainscreen
 Tine.ExampleApplication.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
-    activeContentType: 'Record',
+    activeContentType: 'ExampleRecord',
     
     /*
     show: function() {
@@ -51,7 +51,7 @@ Tine.ExampleApplication.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainSc
         //var type = this.activeContentType;
         
         // we always return record grid panel as a quick hack for saving filters
-        return this['Record' + 'GridPanel'];
+        return this['ExampleRecord' + 'GridPanel'];
     },
     
     /**

@@ -6,15 +6,15 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:RecordFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id:ExampleRecordFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
  */
 
 /**
- * Record filter Class
+ * ExampleRecord filter Class
  * @package     ExampleApplication
  */
-class ExampleApplication_Model_RecordFilter extends Tinebase_Model_Filter_FilterGroup 
+class ExampleApplication_Model_ExampleRecordFilter extends Tinebase_Model_Filter_FilterGroup 
 {
     /**
      * @var string application of this filter group

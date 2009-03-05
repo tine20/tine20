@@ -22,7 +22,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Application_Frontend_Jso
     /**
      * the controller
      *
-     * @var ExampleApplication_Controller_Record
+     * @var ExampleApplication_Controller_ExampleRecord
      */
     protected $_controller = NULL;
     
@@ -33,7 +33,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Application_Frontend_Jso
     public function __construct()
     {
         $this->_applicationName = 'ExampleApplication';
-        $this->_controller = ExampleApplication_Controller_Record::getInstance();
+        $this->_controller = ExampleApplication_Controller_ExampleRecord::getInstance();
     }
     
     /************************************** protected helper functions **************************************/
@@ -47,9 +47,9 @@ class ExampleApplication_Frontend_Json extends Tinebase_Application_Frontend_Jso
      * @param string $paging json encoded
      * @return array
      */
-    public function searchRecords($filter, $paging)
+    public function searchExampleRecords($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_controller, 'ExampleApplication_Model_RecordFilter');
+        return $this->_search($filter, $paging, $this->_controller, 'ExampleApplication_Model_ExampleRecordFilter');
     }     
     
     /**
@@ -58,7 +58,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Application_Frontend_Jso
      * @param   string $id
      * @return  array record data
      */
-    public function getRecord($id)
+    public function getExampleRecord($id)
     {
         return $this->_get($id, $this->_controller);
     }
@@ -69,9 +69,9 @@ class ExampleApplication_Frontend_Json extends Tinebase_Application_Frontend_Jso
      * @param  string $recordData
      * @return array created/updated record
      */
-    public function saveRecord($recordData)
+    public function saveExampleRecord($recordData)
     {
-        return $this->_save($recordData, $this->_controller, 'Record');        
+        return $this->_save($recordData, $this->_controller, 'ExampleRecord');        
     }
     
     /**
@@ -80,7 +80,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Application_Frontend_Jso
      * @param string $ids 
      * @return string
      */
-    public function deleteRecords($ids)
+    public function deleteExampleRecords($ids)
     {
         $this->_delete($ids, $this->_controller);
     }    

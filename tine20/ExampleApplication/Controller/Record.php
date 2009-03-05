@@ -1,6 +1,6 @@
 <?php
 /**
- * Record controller for ExampleApplication application
+ * ExampleRecord controller for ExampleApplication application
  * 
  * @package     ExampleApplication
  * @subpackage  Controller
@@ -12,12 +12,12 @@
  */
 
 /**
- * Record controller class for ExampleApplication application
+ * ExampleRecord controller class for ExampleApplication application
  * 
  * @package     ExampleApplication
  * @subpackage  Controller
  */
-class ExampleApplication_Controller_Record extends Tinebase_Application_Controller_Record_Abstract
+class ExampleApplication_Controller_ExampleRecord extends Tinebase_Application_Controller_ExampleRecord_Abstract
 {
     /**
      * the constructor
@@ -26,28 +26,28 @@ class ExampleApplication_Controller_Record extends Tinebase_Application_Controll
      */
     private function __construct() {        
         $this->_applicationName = 'ExampleApplication';
-        $this->_backend = new ExampleApplication_Backend_Record();
-        $this->_modelName = 'ExampleApplication_Model_Record';
+        $this->_backend = new ExampleApplication_Backend_ExampleRecord();
+        $this->_modelName = 'ExampleApplication_Model_ExampleRecord';
         $this->_currentAccount = Tinebase_Core::getUser();   
-        $this->_purgeRecords = FALSE;
+        $this->_purgeExampleRecords = FALSE;
     }    
     
     /**
      * holdes the instance of the singleton
      *
-     * @var ExampleApplication_Controller_Record
+     * @var ExampleApplication_Controller_ExampleRecord
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return ExampleApplication_Controller_Record
+     * @return ExampleApplication_Controller_ExampleRecord
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new ExampleApplication_Controller_Record();
+            self::$_instance = new ExampleApplication_Controller_ExampleRecord();
         }
         
         return self::$_instance;

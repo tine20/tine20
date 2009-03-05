@@ -5,18 +5,18 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:ExampleRecordGridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  */
  
 Ext.namespace('Tine.ExampleApplication');
 
 /**
- * Record grid panel
+ * ExampleRecord grid panel
  */
-Tine.ExampleApplication.RecordGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
-    recordClass: Tine.ExampleApplication.Model.Record,
+    recordClass: Tine.ExampleApplication.Model.ExampleRecord,
     
     // grid specific
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
@@ -35,7 +35,7 @@ Tine.ExampleApplication.RecordGridPanel = Ext.extend(Tine.Tinebase.widgets.app.G
         this.plugins = this.plugins || [];
         this.plugins.push(this.action_showClosedToggle, this.filterToolbar);        
         
-        Tine.ExampleApplication.RecordGridPanel.superclass.initComponent.call(this);
+        Tine.ExampleApplication.ExampleRecordGridPanel.superclass.initComponent.call(this);
         
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'ExampleApplication', 'records'));
         this.action_editInNewWindow.requiredGrant = 'editGrant';
@@ -48,7 +48,7 @@ Tine.ExampleApplication.RecordGridPanel = Ext.extend(Tine.Tinebase.widgets.app.G
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Record'),    field: 'query',       operators: ['contains']},
+                {label: this.app.i18n._('ExampleRecord'),    field: 'query',       operators: ['contains']},
                 /*
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
                 new Tine.ExampleApplication.TimeAccountStatusGridFilter({

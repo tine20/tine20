@@ -14,22 +14,22 @@ Ext.namespace('Tine.ExampleApplication');
 Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
     
     // quick hack to get filter saving grid working
-    //recordClass: Tine.ExampleApplication.Model.Record,
+    //recordClass: Tine.ExampleApplication.Model.ExampleRecord,
     
     initComponent: function() {
-        //this.filterMountId = 'Record';
+        //this.filterMountId = 'ExampleRecord';
         
         this.root = {
             id: 'root',
             leaf: false,
             expanded: true,
             children: [{
-                text: this.app.i18n._('Records'),
-                id: 'Record',
-                iconCls: 'ExampleApplicationRecord',
+                text: this.app.i18n._('ExampleRecords'),
+                id: 'ExampleRecord',
+                iconCls: 'ExampleApplicationExampleRecord',
                 expanded: true,
                 children: [{
-                    text: this.app.i18n._('All Records'),
+                    text: this.app.i18n._('All ExampleRecords'),
                     id: 'allrecords',
                     leaf: true
                 }]
@@ -92,6 +92,6 @@ Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilte
  */
 Tine.ExampleApplication.recordBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'ExampleApplication',
-    modelName: 'Record',
-    recordClass: Tine.ExampleApplication.Model.Record
+    modelName: 'ExampleRecord',
+    recordClass: Tine.ExampleApplication.Model.ExampleRecord
 });

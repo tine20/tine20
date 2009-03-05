@@ -31,8 +31,8 @@ class ExampleApplication_Frontend_Http extends Tinebase_Application_Frontend_Htt
             'ExampleApplication/js/Models.js',
             'ExampleApplication/js/ExampleApplication.js',
             'ExampleApplication/js/MainScreen.js',
-            'ExampleApplication/js/RecordGridPanel.js',
-            'ExampleApplication/js/RecordEditDialog.js',
+            'ExampleApplication/js/ExampleRecordGridPanel.js',
+            'ExampleApplication/js/ExampleRecordEditDialog.js',
         );
     }
 }

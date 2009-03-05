@@ -12,12 +12,12 @@
 
 
 /**
- * backend for Records
+ * backend for ExampleRecords
  *
  * @package     ExampleApplication
  * @subpackage  Backend
  */
-class ExampleApplication_Backend_Record extends Tinebase_Application_Backend_Sql_Abstract
+class ExampleApplication_Backend_ExampleRecord extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
      * the constructor
@@ -25,7 +25,7 @@ class ExampleApplication_Backend_Record extends Tinebase_Application_Backend_Sql
     public function __construct ()
     {
         $this->_modlogActive = TRUE;
-        parent::__construct(SQL_TABLE_PREFIX . 'application_record', 'ExampleApplication_Model_Record');
+        parent::__construct(SQL_TABLE_PREFIX . 'application_record', 'ExampleApplication_Model_ExampleRecord');
     }
     
     /************************ overwritten functions *******************/  

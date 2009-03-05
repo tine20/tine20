@@ -1,6 +1,6 @@
 <?php
 /**
- * class to hold Record data
+ * class to hold ExampleRecord data
  * 
  * @package     ExampleApplication
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -11,11 +11,11 @@
  */
 
 /**
- * class to hold Record data
+ * class to hold ExampleRecord data
  * 
  * @package     ExampleApplication
  */
-class ExampleApplication_Model_Record extends Tinebase_Record_Abstract
+class ExampleApplication_Model_ExampleRecord extends Tinebase_ExampleRecord_Abstract
 {  
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -110,9 +110,9 @@ class ExampleApplication_Model_Record extends Tinebase_Record_Abstract
         /*        
         $_data = Zend_Json::decode($_data);
         if (isset($_data['grants']) && !empty($_data['grants'])) {
-            $this->grants = new Tinebase_Record_RecordSet('ExampleApplication_Model_RecordGrants', $_data['grants']);
+            $this->grants = new Tinebase_ExampleRecord_ExampleRecordSet('ExampleApplication_Model_ExampleRecordGrants', $_data['grants']);
         }  else {
-            $this->grants = new Tinebase_Record_RecordSet('ExampleApplication_Model_RecordGrants');
+            $this->grants = new Tinebase_ExampleRecord_ExampleRecordSet('ExampleApplication_Model_ExampleRecordGrants');
         }
         */
     }
