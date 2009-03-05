@@ -119,7 +119,7 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * 
      * @return Tinebase_Model_Group
      */
-    public function update(Tinebase_Model_Group $_group,)
+    public function update(Tinebase_Model_Group $_group)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
