@@ -117,7 +117,17 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Birthday " . $_data->bday->getIso());
                         break;
                     case 'jpegphoto':
-                        // do nothing currently
+                        if(! empty($data->$value)) {
+                            try {
+                                $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $data->getId());
+                                $image->resize(120, 160, Tinebase_Model_Image::RATIOMODE_PRESERVANDCROP);
+                                $jpegData = $image->getBlob('image/jpeg');
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to convert image " . $e);
+                            }
+
+                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, base64_encode($jpegData)));
+                        }
                         break;
                     default:
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $data->$value));
