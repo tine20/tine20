@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        add testSearchCourses
  */
 
 /**
@@ -116,15 +115,21 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
+
+        //print_r($courseData);
         
         // update Course
         $courseData['description'] = "blubbblubb";
+        $courseData['members'] = array();
         $courseUpdated = $this->_json->saveCourse(Zend_Json::encode($courseData));
+        
+        //print_r($courseUpdated);
         
         // check
         $this->assertEquals($courseData['id'], $courseUpdated['id']);
         $this->assertEquals($courseData['description'], $courseUpdated['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $courseUpdated['last_modified_by']);
+        $this->assertEquals($courseData['members'], $courseUpdated['members']);
         
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
@@ -155,8 +160,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      * get Course
      *
      * @return array
-     * 
-     * @todo add members
      */
     protected function _getCourseData()
     {
@@ -164,7 +167,9 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             'name'          => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
             'type'          => Tinebase_Record_Abstract::generateUID(),
-            'members'       => array()
+            'members'       => array(
+                'id'    => Tinebase_Core::getUser()->getId(),
+            )
         );
     }
         
