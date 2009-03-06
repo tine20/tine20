@@ -547,6 +547,8 @@ class Setup_Controller
             'version'   => $_xml->version
         ));
         
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
+        
         $application = Tinebase_Application::getInstance()->addApplication($application);
         
         // keep track of tables belonging to this application
