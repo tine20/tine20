@@ -136,19 +136,17 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchCourses()
     {
-        /*
         // create
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
         
         // search & check
-        $search = $this->_json->searchCourses(Zend_Json::encode($this->_getCourseFilter()), Zend_Json::encode($this->_getPaging()));
+        $search = $this->_json->searchCourses(Zend_Json::encode($this->_getCourseFilter($courseData['name'])), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals($course['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
         
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
-        */
     }
        
     /************ protected helper funcs *************/
@@ -190,21 +188,14 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getCourseFilter()
+    protected function _getCourseFilter($_courseName)
     {
-        /*
         return array(
             array(
-                'field' => 'description', 
+                'field' => 'name', 
                 'operator' => 'contains', 
-                'value' => 'blabla'
-            ),     
-            array(
-                'field' => 'containerType', 
-                'operator' => 'equals', 
-                'value' => Tinebase_Model_Container::TYPE_SHARED
+                'value' => $_courseName
             ),     
         );
-        */        
     }
 }

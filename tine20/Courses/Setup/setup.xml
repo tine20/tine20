@@ -22,6 +22,11 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
                     <name>type</name>
                     <type>text</type>
                     <length>256</length>

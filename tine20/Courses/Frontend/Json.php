@@ -67,6 +67,39 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         return array_merge($recordArray, $groupData);
     }
     
+    /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @return array data
+     * 
+     * @todo add getMultiple to Group backends
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    {
+        $result = parent::_multipleRecordsToJson($_records);
+        
+        // get groups and merge data
+        foreach ($result as &$course) {
+            $group = Tinebase_Group::getInstance()->getGroupById($course['group_id'])->toArray();
+            unset($group['id']);
+            $course = array_merge($group, $course);
+        }
+        
+        // use this when get multiple is implemented
+        /*
+        $groupIds = $_records->group_id;
+        $groups = Tinebase_Group::getInstance()->getMultiple(array_unique(array_values($groupIds)));
+        foreach ($result as &$course) {
+            $group = $groups[$groups->getIndexById($course['group_id'])]->toArray();
+            unset($group['id']);
+            $course = array_merge($group, $course);
+        }
+        */
+        
+        return $result;
+    }
+    
     /************************************** public API **************************************/
     
     /**

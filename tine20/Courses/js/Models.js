@@ -18,10 +18,10 @@ Ext.ns('Tine.Courses', 'Tine.Courses.Model');
 Tine.Courses.Model.CourseArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'group_id' },
+    { name: 'name' },
     { name: 'type' },
     { name: 'internet' },
     // group fields
-    { name: 'name' },
     { name: 'description' },
     { name: 'groupMembers' },
     // tine 2.0 notes + tags
