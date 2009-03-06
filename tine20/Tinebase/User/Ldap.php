@@ -192,7 +192,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
         
         $user = $this->getFullUserByLoginName($_loginName);
-        $dn = $this->_getDn($user);
+        $metaData = $this->_getMetaData($user);
         
         //$ldapData = array('userpassword' => $_password);
         // NOTE: this std. crypt only compares the first 8 characters
@@ -200,10 +200,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         //$ldapData = array('userpassword' =>'{md5}' . base64_encode(pack("H*",md5($_password))));
         $ldapData = array('userpassword' =>'{SHA}' . base64_encode(mhash(MHASH_SHA1, $_password)));
                 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_backend->update($dn, $ldapData);
+        $this->_backend->update($metaData['dn'], $ldapData);
     }
     
     /**
@@ -235,10 +235,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     public function setExpiryDate($_accountId, $_expiryDate) 
     {
         
-        $dn = $this->_getDn($_accountId);
+        $metaData = $this->_getMetaData($_accountId);
         $data = array('shadowexpire' => $_expiryDate->getTimestamp());
         
-        $this->_backend->update($dn, $data);
+        $this->_backend->update($metaData['dn'], $data);
     }
 
     /**
@@ -264,13 +264,22 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function updateUser(Tinebase_Model_FullUser $_account) 
     {
-        $dn = $this->_getDn($_account);
+        $metaData = $this->_getMetaData($_account);
         $ldapData = $this->_user2ldap($_account);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        // check if user has all required object classes. This is needed 
+        // when updating users which where created using different requirements
+        foreach ($this->_requiredObjectClass as $className) {
+            if (! in_array($className, $metaData['objectClass'])) {
+                $ldapData['objectclass'] = array_unique(array_merge($this->_requiredObjectClass, $metaData['objectClass']));
+                break;
+            }
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_backend->update($dn, $ldapData);
+        $this->_backend->update($metaData['dn'], $ldapData);
         
         return $this->getFullUserByLoginName($_account->accountLoginName);
     }
@@ -311,11 +320,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function deleteUser($_accountId) 
     {
-        $dn = $this->_getDn($_accountId);
+        $metaData = $this->_getMetaData($_accountId);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         
-        $this->_backend->delete($dn);
+        $this->_backend->delete($metaData['dn']);
     }
 
     /**
@@ -351,22 +360,28 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
-     * get an existing dn
+     * get metatada of existing account
      *
      * @param  int         $_accountId
      * @return string 
      */
-    protected function _getDn($_accountId)
+    protected function _getMetaData($_accountId)
     {
+        $metaData = array();
+        
         try {
             $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-            $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
-            $dn = $account['dn'];
+            $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId, array('objectclass'));
+            $metaData['dn'] = $account['dn'];
+            
+            $metaData['objectClass'] = $account['objectclass'];
+            unset($metaData['objectClass']['count']);
+            
         } catch (Tinebase_Exception_NotFound $enf) {
             throw new Exception("account with id $accountId not found");
         }
         
-        return $dn;
+        return $metaData;
     }
     
     /**
