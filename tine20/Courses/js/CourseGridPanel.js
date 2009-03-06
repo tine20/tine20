@@ -33,7 +33,8 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         
-        //this.plugins = this.plugins || [];
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
         
         Tine.Courses.CourseGridPanel.superclass.initComponent.call(this);
     },
@@ -50,7 +51,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
              defaultFilter: 'query',
              filters: []
         });
-    },    
+    },
     
     /**
      * returns cm
