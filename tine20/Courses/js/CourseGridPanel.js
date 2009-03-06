@@ -17,6 +17,7 @@ Ext.namespace('Tine.Courses');
 Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
     recordClass: Tine.Courses.Model.Course,
+    evalGrants: false,
     
     // grid specific
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
@@ -48,12 +49,6 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Course'),    field: 'query',       operators: ['contains']},
-                /*
-                {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
-                new Tine.Courses.TimeAccountStatusGridFilter({
-                    field: 'status'
-                }),
-                */
                 new Tine.widgets.tags.TagFilter({app: this.app})
              ],
              defaultFilter: 'query',
@@ -68,19 +63,19 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @todo    add more columns
      */
     getColumns: function(){
-        return [/*{
-            id: 'number',
-            header: this.app.i18n._("Number"),
+        return [{
+            id: 'name',
+            header: this.app.i18n._("Name"),
+            width: 200,
+            sortable: true,
+            dataIndex: 'name'
+        },{
+            id: 'type',
+            header: this.app.i18n._("Type"),
             width: 100,
             sortable: true,
-            dataIndex: 'number'
-        },{
-            id: 'title',
-            header: this.app.i18n._("Title"),
-            width: 350,
-            sortable: true,
-            dataIndex: 'title'
-        },{
+            dataIndex: 'type'
+        }/*,{
             id: 'status',
             header: this.app.i18n._("Status"),
             width: 150,

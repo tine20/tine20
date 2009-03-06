@@ -22,6 +22,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Courses.recordBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * var handlers
@@ -103,10 +104,10 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     formDefaults: {
                         xtype:'textfield',
                         anchor: '100%',
-                        labelSeparator: ''
-                        //columnWidth: .333
+                        labelSeparator: '',
+                        columnWidth: 1
                     },
-                    items: [{
+                    items: [[{
                         fieldLabel: this.app.i18n._('Course Name'), 
                         name:'name',
                         allowBlank: false
@@ -120,7 +121,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         grow: false,
                         preventScrollbars:false,
                         height: 60
-                    }]
+                    }]]
                 }, {
                     // activities and tags
                     layout: 'accordion',
