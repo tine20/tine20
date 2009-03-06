@@ -25,11 +25,12 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      *
      * @param Tinebase_Model_ImportExportDefinition $_definition
      * @param mixed $_controller
+     * @param array $_options additional options
      */
-    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL)
+    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL, $_options = array())
     {
         $this->_createMethod = 'addUser';
-        parent::__construct($_definition, $_controller);
+        parent::__construct($_definition, $_controller, $_options);
     }
     
     /**
@@ -40,6 +41,11 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _importRecord($_data)
     {
+        // add prefix to login name if given
+        if (isset($this->_options['accountLoginNamePrefix'])) {
+            $_data['accountLoginName'] = $this->_options['accountLoginNamePrefix'] . $_data['accountLoginName'];
+        }
+        
         $record = parent::_importRecord($_data);
         
         if ((!isset($this->_options['dryrun']) || !$this->_options['dryrun']) && isset($_data['password'])) {
@@ -59,11 +65,17 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     protected function _addData()
     {
         if ($this->_modelName == 'Tinebase_Model_FullUser') {
-            $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
-                Tinebase_Config::getInstance()->getConfig('Default User Group')->value
-            );
+            if (isset($this->_options['group_id'])) {
+                $groupId = $this->_options['group_id'];
+            } else {
+                // add default user group
+                $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
+                    Tinebase_Config::getInstance()->getConfig('Default User Group')->value
+                );
+                $groupId = $defaultUserGroup->getId();
+            }
             $result = array(
-                'accountPrimaryGroup'   => $defaultUserGroup->getId()
+                'accountPrimaryGroup'   => $groupId
             );
         } else {
             $result = parent::_addData();

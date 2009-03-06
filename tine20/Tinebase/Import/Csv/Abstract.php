@@ -10,7 +10,7 @@
  *
  * @todo        add charset conversion (with iconv?)
  * @todo        add conditions (what to do when record already exists)
- * @todo        add 'dry run' functionality
+ * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
  */
 
 /**
@@ -58,10 +58,9 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      *
      * @param Tinebase_Model_ImportExportDefinition $_definition
      * @param mixed $_controller
-     * 
-     * @todo add additional data (i.e. group id, ...) to constructor
+     * @param array $_options additional options
      */
-    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL)
+    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL, $_options = array())
     {
         //print_r($_definition->toArray());
         
@@ -74,7 +73,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         }
         
         $this->_modelName = $_definition->model;
-        $this->_options = $this->_getConfig($_definition->plugin_options);
+        $this->_options = $this->_getConfig($_definition->plugin_options, $_options);
         $this->_db = Tinebase_Core::getDb();
     }
     
@@ -212,9 +211,10 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * write to temp file and read with Zend_Config_Xml
      *
      * @param string $_configString
+     * @param array $_options additional options
      * @return array 
      */
-    protected function _getConfig($_configString)
+    protected function _getConfig($_configString, $_options = array())
     {
         $tmpfname = tempnam(session_save_path(), "tine20");
         
@@ -223,7 +223,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         fclose($handle);
         
         // read file with Zend_Config_Xml
-        $config = new Zend_Config_Xml($tmpfname);
+        $config = new Zend_Config_Xml($tmpfname, null, TRUE);
+        $config->merge(new Zend_Config($_options));
         
         unlink($tmpfname);
         

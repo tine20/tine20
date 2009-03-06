@@ -79,7 +79,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($course['type'], $courseData['type']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $courseData['created_by']);
         $this->assertGreaterThan(0, $courseData['group_id']);
-        //$this->assertGreaterThan(0, count($courseData['members']));
+        $this->assertGreaterThan(0, count($courseData['members']));
         
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
@@ -154,6 +154,39 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteCourses($courseData['id']);
     }
        
+    /**
+     * test for import of members
+     *
+     * @todo create json function for import and add that here
+     */
+    public function testImportMembersIntoCourse()
+    {
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse(Zend_Json::encode($course));
+        
+        // import data
+        $definitionBackend = new Tinebase_ImportExportDefinition();
+        $definition = $definitionBackend->getByProperty('admin_user_import_csv');
+        $importer = new $definition->plugin(
+            $definition, 
+            Tinebase_User::factory(Tinebase_User::getConfiguredBackend()),
+            array(
+                'group_id'                  => $courseData['group_id'],
+                'accountLoginNamePrefix'    => $courseData['name'] . '_'
+            )
+        );
+        $importer->import(dirname(dirname(__FILE__)) . '/Admin/files/test.csv');
+        $courseData = $this->_json->getCourse($courseData['id']);
+        
+        //print_r($courseData);
+        
+        // checks
+        $this->assertEquals(4, count($courseData['members']));
+        
+        // cleanup
+        $this->_json->deleteCourses($courseData['id']);
+    }
+    
     /************ protected helper funcs *************/
     
     /**
