@@ -17,6 +17,7 @@ Ext.namespace('Tine.ExampleApplication');
 Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
     recordClass: Tine.ExampleApplication.Model.ExampleRecord,
+    evalGrants: false,
     
     // grid specific
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
