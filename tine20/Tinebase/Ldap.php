@@ -355,7 +355,7 @@ class Tinebase_Ldap extends Zend_Ldap
                 if (is_null($_to)) {
                     unset($_data[$attribute]);
                 } else {
-                    $_data[$attribute] = $to;
+                    $_data[$attribute] = $_to;
                 }
             }
         }
