@@ -12,6 +12,11 @@
  */
 
 /**
+ * php helpers
+ */
+require_once 'Helper.php';
+
+/**
  * dispatcher and initialisation class (functions are static)
  * - dispatchRequest() function
  * - initXYZ() functions 

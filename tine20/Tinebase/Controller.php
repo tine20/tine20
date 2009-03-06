@@ -12,11 +12,6 @@
  */
 
 /**
- * php helpers
- */
-require_once 'Helper.php';
-
-/**
  * the class provides functions to handle applications
  * 
  * @package     Tinebase
