@@ -207,8 +207,6 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @param Tinebase_Model_Pagination $_pagination
      * @param boolean $_onlyIds
      * @return Tinebase_Record_RecordSet|array
-     * 
-     * @todo add typehint again when voipmanager refactoring is finished
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
     {
@@ -247,7 +245,6 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
-     * @todo add typehint again when voipmanager refactoring is finished
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {        
