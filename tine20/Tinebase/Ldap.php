@@ -66,9 +66,6 @@ class Tinebase_Ldap extends Zend_Ldap
         ));
         
         $returnValue = parent::__construct($options);
-        //if(!is_resource($this->_resource)) {
-        //    throw new Exception('Not connected to ldap server.');
-        //}
         
         return $returnValue;
     }
@@ -81,6 +78,10 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function delete($_dn)
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
         if (! @ldap_delete($this->_resource, $_dn)) {
             throw new Exception(ldap_error($this->_resource));
         }
@@ -95,6 +96,10 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function deleteProperty($_dn, array $data)
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
         if (! @ldap_mod_del($this->_resource, $_dn, $data)) {
             throw new Exception(ldap_error($this->_resource));
         }
@@ -112,6 +117,10 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetchAll($_dn, $_filter= 'objectclass=*', array $_attributes = array(), $_order = NULL)
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
         $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
         
         if($_order !== NULL) {
@@ -142,6 +151,10 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetch($_dn, $_filter = 'objectclass=*', array $_attributes = array())
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
         $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
         
         if($searchResult === FALSE) {
@@ -170,6 +183,10 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetchDn($_dn, $_filter = 'objectclass=*', array $_attributes = array())
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
         $searchResult = @ldap_read($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
 
         if($searchResult === FALSE) {
@@ -198,6 +215,10 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetchBinaryAttribute($_dn, $_filter, $_attribute)
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
         $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
         
         if($searchResult === FALSE) {
@@ -239,6 +260,11 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function insert($_dn, array $_data)
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
+        self::convertEmpty($_data, NULL);
         if (! @ldap_add($this->_resource, $_dn, $_data)) {
             throw new Exception(ldap_error($this->_resource));
         }
@@ -253,6 +279,11 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function insertProperty($_dn, array $_data)
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
+        self::convertEmpty($_data, NULL);
         if (! @ldap_mod_add($this->_resource, $_dn, $_data)) {
             throw new Exception(ldap_error($this->_resource));
         }
@@ -267,6 +298,10 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function update($_dn, array $_data)
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
         $dnParts = explode(',', $_dn);
         $rdn = $dnParts[0];
         list ($rdnAttribute, $rdnValue) = explode('=', $rdn);
@@ -283,6 +318,7 @@ class Tinebase_Ldap extends Zend_Ldap
             $_dn = implode(',', $dnParts);
         }
         
+        self::convertEmpty($_data);
         if (! @ldap_modify($this->_resource, $_dn, $_data)) {
             throw new Exception(ldap_error($this->_resource));
         }
@@ -297,8 +333,31 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function updateProperty($_dn, array $_data)
     {
+        if(!is_resource($this->_resource)) {
+            throw new Exception('Not connected to ldap server.');
+        }
+        
+        self::convertEmpty($_data);
         if (! @ldap_mod_replace($this->_resource, $_dn, $_data)) {
             throw new Exception(ldap_error($this->_resource));
+        }
+    }
+    
+    /**
+     * converts empty values into empty arrays
+     *
+     * @param array &$_data
+     * @param mixed $_to  if set to NULL, attribute will be removed
+     */
+    public static function convertEmpty(&$_data, $_to = array()) {
+        foreach ($_data as $attribute => $value) {
+            if (empty($value)) {
+                if (is_null($_to)) {
+                    unset($_data[$attribute]);
+                } else {
+                    $_data[$attribute] = $to;
+                }
+            }
         }
     }
 }

@@ -334,11 +334,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $data['member']      = $membersDns;
         }
         
-        // empty description is not allowed
-        if (empty($data['description'])) {
-            unset($data['description']);
-        }
-        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $metaData: ' . print_r($metaData, true));
@@ -389,11 +384,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             'description' => $_group->description,
         );
         
-        // empty description is not allowed
-        if (empty($data['description'])) {
-            unset($data['description']);
-        }
-        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         $this->_ldap->insert($dn, $data);
@@ -415,11 +405,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             'cn'          => $_group->name,
             'description' => $_group->description,
         );
-        
-        // empty description is not allowed
-        if (empty($data['description'])) {
-            unset($data['description']);
-        }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
