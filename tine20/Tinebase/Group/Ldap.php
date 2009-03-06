@@ -254,12 +254,19 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     public function setGroupMembers($_groupId, $_groupMembers) 
     {
         $metaData = $this->_getMetaData($_groupId);
+        $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers);
         
-        $data = array('memberuid' => $_groupMembers);
+        $memberDn = $memberUid = array();
+        foreach ($membersMetaDatas as $memberMetadata) {
+            $memberDn[]  = $memberMetadata['dn'];
+            $memberUid[] = $memberMetadata['uid'];
+        }
         
         if ($this->_options['useRfc2307bis']) {
             $this->_saveRfc2307GroupMembers($_groupId, $_groupMembers);
         } else {
+            $data = array('memberuid' => $memberUid);
+            
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
             
@@ -277,19 +284,21 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     public function addGroupMember($_groupId, $_accountId) 
     {
         $dn = $this->_getDn($_groupId);
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupMembers = $this->getGroupMembers($_groupId);
-        if (in_array($accountId, $groupMembers)) {
-             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp adding group member, as $accountId is already in group $dn");
+        
+        $memberUidNumbers = $this->getGroupMembers($_groupId);
+        $accountMetaData = $this->_getAccountMetaData($_accountId);
+        
+        if (in_array($accountMetaData['uidNumber'], $memberUidNumbers)) {
+             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp adding group member, as {$accountMetaData['uid']} is already in group $dn");
              return;
         }
         
         if ($this->_options['useRfc2307bis']) {
-            $groupMembers[] = $accountId;
+            $memberUidNumbers[] = $accountMetaData['uidNumber'];
             
-            $this->_saveRfc2307GroupMembers($_groupId, $groupMembers);
+            $this->_saveRfc2307GroupMembers($_groupId, $memberUidNumbers);
         } else {
-            $data = array('memberuid' => $accountId);
+            $data = array('memberuid' => $accountMetaData['uid']);
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
@@ -308,19 +317,21 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     public function removeGroupMember($_groupId, $_accountId) 
     {
         $dn = $this->_getDn($_groupId);
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupMembers = $this->getGroupMembers($_groupId);
-        if (! in_array($accountId, $groupMembers)) {
-             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp removing group member, as $accountId is not in group $dn");
+        
+        $memberUidNumbers = $this->getGroupMembers($_groupId);
+        $accountMetaData = $this->_getAccountMetaData($_accountId);
+        
+        if (! in_array($accountMetaData['uidNumber'], $memberUidNumbers)) {
+             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp removing group member, as {$accountMetaData['uid']} is not in group $dn");
              return;
         }
         
         if ($this->_options['useRfc2307bis']) {
-            unset($groupMembers[$accountId]);
+            unset($memberUidNumbers[$accountMetaData['uidNumber']]);
             
-            $this->_saveRfc2307GroupMembers($_groupId, $_groupMembers);
+            $this->_saveRfc2307GroupMembers($_groupId, $memberUidNumbers);
         } else {
-            $data = array('memberuid' => $accountId);
+            $data = array('memberuid' => $accountMetaData['uid']);
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
@@ -338,7 +349,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected function _saveRfc2307GroupMembers($_groupId, $_groupMembers)
     {
         $group = $this->getGroupById($_groupId);
-        $membersDns = $this->_getAccountDns((array)$_groupMembers);
+        $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers);
+        
+        $memberDn = $memberUid = array();
+        foreach ($membersMetaDatas as $memberMetadata) {
+            $memberDn[]  = $memberMetadata['dn'];
+            $memberUid[] = $memberMetadata['uid'];
+        }
         
         $metaData = $this->_getMetaData($_groupId);
         
@@ -351,8 +368,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         if (count($_groupMembers) > 0) {
             $data['objectclass'] = 'groupOfNames';
-            $data['memberuid']   = $_groupMembers;
-            $data['member']      = $membersDns;
+            $data['memberuid']   = $memberUid;
+            $data['member']      = $memberDn;
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
@@ -496,12 +513,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     }
     
     /**
-     * returns arrays of dns from given accountIds
+     * returns arrays of metainfo from given accountIds
      *
      * @param array $_accountIds
      * @return array of strings
      */
-    protected function _getAccountDns(array $_accountIds)
+    protected function _getAccountsMetaData(array $_accountIds)
     {
         $filterArray = array();
         foreach ($_accountIds as $accountId) {
@@ -511,14 +528,22 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         // fetch all dns at once
         $filter = '(|' . implode('', $filterArray) . ')';
-        $accounts = $this->_ldap->fetchAll($this->_options['userDn'], $filter);
+        $accounts = $this->_ldap->fetchAll($this->_options['userDn'], $filter, array('uid', 'uidnumber', 'objectclass'));
         if (count($accounts) != count($_accountIds)) {
             throw new Exception("Some dn's are missing");
         }
         
         $result = array();
         foreach ($accounts as $account) {
-            $result[] = $account['dn'];
+            unset($account['objectclass']['count']);
+            
+            $result[] = array(
+                'dn'          => $account['dn'],
+                'uid'         => $account['uid'][0],
+                'uidNumber'   => $account['uidnumber'][0],
+                'objectClass' => $account['objectclass'],
+            );
+            
         }
         
         return $result;
@@ -530,9 +555,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * @param int $_accountId
      * @return string
      */
-    protected function _getAccountDn($_accountId)
+    protected function _getAccountMetaData($_accountId)
     {
-        return array_value(0, $this->_getAccountDns(array($_accountId)));
+        return array_value(0, $this->_getAccountsMetaData(array($_accountId)));
     }
     
     /**
