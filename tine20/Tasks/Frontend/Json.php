@@ -146,6 +146,16 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $_tasks->setTimezone($this->_userTimezone);
         $_tasks->convertDates = true;
         
+        // resolve accounts
+        $accountIds = $_tasks->organizer;
+        $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+        foreach ($_tasks as &$task) {
+            $index = $accounts->getIndexById($task->organizer);
+            $task->organizer = ($index !== FALSE) ? $accounts[$index] : Tinebase_User::getInstance()->getUserById(0)->toArray();
+        }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_tasks->organizer, true));
+        
         $result = $_tasks->toArray();
         
         return $result;

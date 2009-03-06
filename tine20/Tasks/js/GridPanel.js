@@ -183,7 +183,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             sortable: true,
             dataIndex: 'creation_time',
             renderer: Tine.Tinebase.common.dateTimeRenderer
-        }/* we don't resolve accounts yet (same with creator), {
+        }, {
             id: 'organizer',
             header: this.app.i18n._('Responsible'),
             width: 150,
@@ -197,7 +197,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             quickaddField: new Tine.widgets.AccountpickerField({
                 autoExpand: true
             })
-        }*/];
+        }];
     },
     
     /**
