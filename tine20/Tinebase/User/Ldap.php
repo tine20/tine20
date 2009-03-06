@@ -69,6 +69,17 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         'accountEmailAddress'       => 'mail'
     );
     
+    /**
+     * objectclasses required by this backend
+     *
+     * @var unknown_type
+     */
+    protected $_requiredObjectClass = array(
+        'top',
+        'posixAccount',
+        'shadowAccount',
+        'inetOrgPerson',
+    );
     
     /**
      * the singleton pattern
@@ -277,6 +288,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $newDn = $this->_generateDn($_account);
         $ldapData = $this->_user2ldap($_account);
         
+        $ldapData['uidnumber'] = $this->_generateUidNumber();
+        $ldapData['objectclass'] = $this->_requiredObjectClass;
+        
+        // homedir is an required attribute
+        if (empty($ldapData['homedirectory'])) {
+            $ldapData['homedirectory'] = '/dev/null';
+        }
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
@@ -364,6 +383,35 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $newDn = "uid={$_account->$uidProperty},{$baseDn}";
         
         return $newDn;
+    }
+    
+    /**
+     * generates a uidnumber
+     *
+     * @todo add a persistent registry which id has been generated lastly to
+     *       reduce amount of userid to be transfered
+     * 
+     * @return int
+     */
+    protected function _generateUidNumber()
+    {
+        $allUidNumbers = array();
+        foreach ($this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'objectclass=posixAccount', array('uidnumber')) as $userData) {
+            $allUidNumbers[] = $userData['uidnumber'][0];
+        }
+        asort($allUidNumbers);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
+        
+        $numUsers = count($allUidNumbers);
+        if ($numUsers == 0) {
+            $uidNumber = Zend_Registry::get('configFile')->accounts->get('ldap')->minUserId;
+        } elseif ($allUidNumbers[$numUsers-1] < Zend_Registry::get('configFile')->accounts->get('ldap')->maxUserId) {
+            $uidNumber = ++$allUidNumbers[$numUsers-1];
+        } else {
+            throw new Tinebase_Exception_NotImplemented('Max User Id is reached');
+        }
+        
+        return $uidNumber;
     }
     
     /**
