@@ -136,6 +136,6 @@ while (! feof($fp)) {
 // as the demon normally gets killed, we have an exceptional state if we come here
 $info = stream_get_meta_data($fp);
 fclose($fp);
-fwrite(STDERR, "Some error occoured\n");
+fwrite(STDERR, "Some error occurred\n");
 fwrite(STDERR, print_r($info, true));
 exit(1);

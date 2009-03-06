@@ -50,7 +50,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                     html: '<div class="tb-exceptiondialog-text">' + 
                               '<p>' + _('An error occurred, the program ended abnormal.') + '</p>' +
                               '<p>' + _('The last action you made was potentially not performed correctly.') + '</p>' +
-                              '<p>' + _('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occoured.') + '</p>' + 
+                              '<p>' + _('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' + 
                           '</div>'
                 }, {
                     id: 'tb-exceptiondialog-description',

@@ -279,7 +279,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     }
     
     /**
-     * generic http exception occoured
+     * generic http exception occurred
      *
      */
     public function exception()
