@@ -23,23 +23,19 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
-        autoExpandColumn: 'title'
+        autoExpandColumn: 'name'
     },
     
     initComponent: function() {
-        this.recordProxy = Tine.Courses.recordBackend;
+        this.recordProxy = Tine.Courses.coursesBackend;
         
-        this.actionToolbarItems = this.getToolbarItems();
+        //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         
-        this.plugins = this.plugins || [];
+        //this.plugins = this.plugins || [];
         
         Tine.Courses.CourseGridPanel.superclass.initComponent.call(this);
-        
-        this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Courses', 'records'));
-        this.action_editInNewWindow.requiredGrant = 'editGrant';
-        
     },
     
     /**
@@ -48,8 +44,8 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Course'),    field: 'query',       operators: ['contains']},
-                new Tine.widgets.tags.TagFilter({app: this.app})
+                {label: this.app.i18n._('Course'),    field: 'query',       operators: ['contains']}
+                //new Tine.widgets.tags.TagFilter({app: this.app})
              ],
              defaultFilter: 'query',
              filters: []
@@ -58,9 +54,6 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * returns cm
-     * @private
-     * 
-     * @todo    add more columns
      */
     getColumns: function(){
         return [{
@@ -72,39 +65,16 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         },{
             id: 'type',
             header: this.app.i18n._("Type"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'type'
-        }/*,{
-            id: 'status',
-            header: this.app.i18n._("Status"),
             width: 150,
             sortable: true,
-            dataIndex: 'status',
-            renderer: this.statusRenderer.createDelegate(this)
+            dataIndex: 'type'
         },{
-            id: 'budget',
-            header: this.app.i18n._("Budget"),
-            width: 100,
+            id: 'internet',
+            header: this.app.i18n._("Internet"),
+            width: 150,
             sortable: true,
-            dataIndex: 'budget'
-        }*/];
-    },
-    
-    /**
-     * status column renderer
-     * @param {string} value
-     * @return {string}
-     */
-    statusRenderer: function(value) {
-        return this.app.i18n._hidden(value);
-    },
-    
-    /**
-     * return additional tb items
-     */
-    getToolbarItems: function(){        
-        return [
-        ];
-    }    
+            dataIndex: 'internet',
+            renderer: Tine.Tinebase.common.booleanRenderer
+        }];
+    }   
 });

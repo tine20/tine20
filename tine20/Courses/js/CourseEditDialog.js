@@ -25,24 +25,16 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     /**
-     * members grid panel
-     * @type 
-     */
-    membersGrid: null,
-        
-    /**
      * overwrite update toolbars function (we don't have record members yet)
      */
     updateToolbars: function() {
-
     },
     
     onRecordLoad: function() {
-    	// you can do something here
         var members = this.record.get('members') || [];
-        this.membersStore.loadData({results: members});
-        
-        console.log(this.record);
+        if (members.length > 0) {
+            this.membersStore.loadData({results: members});
+        }
         
        	Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);        
     },
