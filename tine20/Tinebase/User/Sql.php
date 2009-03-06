@@ -62,7 +62,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountStatus'         => 'status',
         'accountExpires'        => 'expires_at',
         'accountPrimaryGroup'   => 'primary_group_id',
-        'accountEmailAddress'   => 'email'
+        'accountEmailAddress'   => 'email',
+        'accountHomeDirectory'  => 'home_dir',
+        'accountLoginShell'     => 'login_shell',
     );
     
     
@@ -236,7 +238,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
                     'accountStatus'         => $this->rowNameMapping['accountStatus'],
                     'accountExpires'        => $this->rowNameMapping['accountExpires'],
-                    'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup']
+                    'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
+                    'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
+                    'accountLoginShell'     => $this->rowNameMapping['accountLoginShell']
                 )
             )
             ->join(
@@ -424,7 +428,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'login_name'        => $_account->accountLoginName,
             'status'            => $_account->accountStatus,
             'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getTimestamp() : NULL),
-            'primary_group_id'  => $_account->accountPrimaryGroup
+            'primary_group_id'  => $_account->accountPrimaryGroup,
+            'home_dir'          => $_account->accountHomeDirectory,
+            'login_shell'       => $_account->accountLoginShell,
         );
         
         $contactData = array(
@@ -484,6 +490,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'status'            => $_account->accountStatus,
             'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
             'primary_group_id'  => $_account->accountPrimaryGroup,
+            'home_dir'          => $_account->accountHomeDirectory,
+            'login_shell'       => $_account->accountLoginShell,
         );
         
         if(!empty($_account->accountId)) {

@@ -1967,4 +1967,31 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.23');
     }
+    
+    /**
+     * update to 0.24
+     * - add importexport definitions table 
+     */
+    public function update_23()
+    {
+        $field = '<field>
+                    <name>login_shell</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>false</notnull>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $field = '<field>
+                    <name>home_dir</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '0.24');
+    }
 }

@@ -547,30 +547,26 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             border:false,
             layout: 'form',
             defaults: {
+            	xtype: 'textfield',
                 anchor: '95%'
             },
             items: [{
-                    xtype: 'textfield',
                     fieldLabel: this.translation.gettext('First Name'),
                     name: 'accountFirstName'
                 }, {
-                    xtype: 'textfield',
                     fieldLabel: this.translation.gettext('Last Name'),
                     name: 'accountLastName',
                     allowBlank: false
                 }, {
-                    xtype: 'textfield',
                     fieldLabel: this.translation.gettext('Login Name'),
                     name: 'accountLoginName',
                     allowBlank: false
                 }, {
-                    xtype: 'textfield',
                     fieldLabel: this.translation.gettext('Password'),
                     name: 'accountPassword',
                     inputType: 'password',
                     emptyText: this.translation.gettext('no password set')
                 }, {
-                    xtype: 'textfield',
                     fieldLabel: this.translation.gettext('Password again'),
                     name: 'accountPassword2',
                     inputType: 'password',
@@ -580,12 +576,16 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     name: 'accountPrimaryGroup',
                     displayField:'name',
                     valueField:'id'
-                }), 
-                {
-                    xtype: 'textfield',
+                }), {
                     vtype: 'email',
                     fieldLabel: this.translation.gettext('Emailaddress'),
                     name: 'accountEmailAddress'
+                }, {
+                    fieldLabel: this.translation.gettext('Home Directory'),
+                    name: 'accountHomeDirectory'
+                }, {
+                    fieldLabel: this.translation.gettext('Login Shell'),
+                    name: 'accountLoginShell'
                 }
             ]
         },{
@@ -724,5 +724,7 @@ Tine.Admin.Users.Account = Ext.data.Record.create([
     { name: 'accountLastLogin', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'accountLastPasswordChange', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'accountLastLoginfrom' },
-    { name: 'accountEmailAddress' }
+    { name: 'accountEmailAddress' },
+    { name: 'accountHomeDirectory' },
+    { name: 'accountLoginShell' }
 ]);

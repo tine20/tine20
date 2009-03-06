@@ -79,7 +79,9 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountLastName'       => array('presence' => 'required'),
             'accountFirstName'      => array('allowEmpty' => true),
             'accountFullName'       => array('presence' => 'required'),
-            'accountEmailAddress'   => array('allowEmpty' => true)
+            'accountEmailAddress'   => array('allowEmpty' => true),
+            'accountHomeDirectory'  => array('allowEmpty' => true),
+            'accountLoginShell'     => array('allowEmpty' => true),
         );
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
