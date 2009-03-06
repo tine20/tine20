@@ -151,7 +151,7 @@ class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
         foreach ($_tasks as &$task) {
             $index = $accounts->getIndexById($task->organizer);
-            $task->organizer = ($index !== FALSE) ? $accounts[$index] : Tinebase_User::getInstance()->getUserById(0)->toArray();
+            $task->organizer = ($index !== FALSE) ? $accounts[$index] : Tinebase_User::getInstance()->getNonExistentUser()->toArray();
         }
         
         $result = $_tasks->toArray();
