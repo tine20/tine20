@@ -145,20 +145,20 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param int $_groupId
      * @param array $_groupMembers
-     * @return unknown
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
         // remove old members
-        
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' = ?', $_groupId);
         $this->groupMembersTable->delete($where);
         
         // add new members
-        foreach ( $_groupMembers as $accountId ) {
+        foreach ($_groupMembers as $accountId) {
             $this->addGroupMember($_groupId, $accountId);
         }
         
+        // invalidate cache (no memcached support yet)
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
     }
 
     /**
