@@ -18,6 +18,50 @@
  */
 class Tinebase_User_Ldap extends Tinebase_User_Abstract
 {
+    /**
+     * des encryption
+     */
+    const ENCRYPT_DES = 'des';
+    
+    /**
+     * blowfish crypt encryption
+     */
+    const ENCRYPT_BLOWFISH_CRYPT = 'blowfish_crypt';
+    
+    /**
+     * md5 crypt encryption
+     */
+    const ENCRYPT_MD5_CRYPT = 'md5_crypt';
+    
+    /**
+     * ext crypt encryption
+     */
+    const ENCRYPT_EXT_CRYPT = 'ext_crypt';
+    
+    /**
+     * md5 encryption
+     */
+    const ENCRYPT_MD5 = 'md5';
+    
+    /**
+     * smd5 encryption
+     */
+    const ENCRYPT_SMD5 = 'smd5';
+
+    /**
+     * sha encryption
+     */
+    const ENCRYPT_SHA = 'sha';
+    
+    /**
+     * ssha encryption
+     */
+    const ENCRYPT_SSHA = 'ssha';
+    
+    /**
+     * no encryption
+     */
+    const ENCRYPT_PLAIN = 'plain';
     
     /**
      * the constructor
@@ -96,6 +140,25 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         return self::$_instance;
     }
     
+    /**
+     * returns all supported password encryptions types
+     *
+     * @return array
+     */
+    public static function getSupportedEncryptionTypes()
+    {
+        return array(
+            self::ENCRYPT_BLOWFISH_CRYPT,
+            self::ENCRYPT_EXT_CRYPT,
+            self::ENCRYPT_DES,
+            self::ENCRYPT_MD5,
+            self::ENCRYPT_MD5_CRYPT,
+            self::ENCRYPT_PLAIN,
+            self::ENCRYPT_SHA,
+            self::ENCRYPT_SMD5,
+            self::ENCRYPT_SSHA
+        );
+    }
     /**
      * get list of users
      *
@@ -177,8 +240,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * set the password for given account
      * 
-     * @todo implemnt more crypt methods
-     *
      * @param   int $_accountId
      * @param   string $_password
      * @param   bool $_encrypt encrypt password
@@ -194,16 +255,104 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $user = $this->getFullUserByLoginName($_loginName);
         $metaData = $this->_getMetaData($user);
         
-        //$ldapData = array('userpassword' => $_password);
-        // NOTE: this std. crypt only compares the first 8 characters
-        //$ldapData = array('userpassword' => '{crypt}'. crypt($_password, 'xy')); // not working on a mac ldap ;-(
-        //$ldapData = array('userpassword' =>'{md5}' . base64_encode(pack("H*",md5($_password))));
-        $ldapData = array('userpassword' =>'{SHA}' . base64_encode(mhash(MHASH_SHA1, $_password)));
+        $encryptionType = Zend_Registry::get('configFile')->accounts->get('ldap')->pwEncType;
+        $userpassword = $_encrypt ? self::encryptPassword($_password, $encryptionType) : $_password;
+        $ldapData = array('userpassword' => $userpassword);
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_backend->update($metaData['dn'], $ldapData);
+    }
+    
+    /**
+     * encryptes password
+     *
+     * @param string $_password
+     * @param string $_method
+     */
+    public static function encryptPassword($_password, $_method)
+    {
+        switch (strtolower($_method)) {
+            case self::ENCRYPT_BLOWFISH_CRYPT:
+                if(@defined('CRYPT_BLOWFISH') && CRYPT_BLOWFISH == 1) {
+                    $salt = '$2$' . self::getRandomString(13);
+                    $password = '{CRYPT}' . crypt($_password, $salt);
+                }
+                break;
+                
+            case self::ENCRYPT_EXT_CRYPT:
+                if(@defined('CRYPT_EXT_DES') && CRYPT_EXT_DES == 1) {
+                    $salt = self::getRandomString(9);
+                    $password = '{CRYPT}' . crypt($_password, $salt);
+                }
+                break;
+                
+            case self::ENCRYPT_MD5:
+                $password = '{MD5}' . base64_encode(pack("H*", md5($_password)));
+                break;
+                
+            case self::ENCRYPT_MD5_CRYPT:
+                if(@defined('CRYPT_MD5') && CRYPT_MD5 == 1) {
+                    $salt = '$1$' . self::getRandomString(9);
+                    $password = '{CRYPT}' . crypt($_password, $salt);
+                }
+                break;
+                
+            case self::ENCRYPT_PLAIN:
+                $password = $_password;
+                break;
+            case self::ENCRYPT_SHA:
+                if(function_exists('mhash')) {
+                    $password = '{SHA}' . base64_encode(mhash(MHASH_SHA1, $_password));
+                }
+                break;
+                
+            case self::ENCRYPT_SMD5:
+                if(function_exists('mhash')) {
+                    $salt = self::getRandomString(8);
+                    $hash = mhash(MHASH_MD5, $_password . $salt);
+                    $password = '{SMD5}' . base64_encode($hash . $salt);
+                }
+                break;
+            case self::ENCRYPT_SSHA:
+                if(function_exists('mhash')) {
+                    $salt = self::getRandomString(8);
+                    $hash = mhash(MHASH_SHA1, $_password . $salt);
+                    $password = '{SSHA}' . base64_encode($hash . $salt);
+                }
+                break;
+            default:
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " using default password encryption method " . self::ENCRYPT_DES);
+            case self::ENCRYPT_DES:
+                $salt = self::getRandomString(2);
+                $password  = '{CRYPT}'. crypt($_password, $salt);
+                break;
+            
+        }
+        
+        if (! $password) {
+            throw new Tinebase_Exception_NotImplemented("$_method is not supported by your php version");
+        }
+        
+        return $password;
+    }
+    
+    /**
+     * generates a randomstrings of given length
+     *
+     * @param int $_length
+     */
+    public static function getRandomString($_length)
+    {
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        
+        $randomString = '';
+        for ($i=0; $i<(int)$_length; $i++) {
+            $randomString .= $chars[mt_rand(1, strlen($chars)) -1];
+        }
+        
+        return $randomString;
     }
     
     /**
