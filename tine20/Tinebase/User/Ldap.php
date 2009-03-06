@@ -183,11 +183,16 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $user = $this->getFullUserByLoginName($_loginName);
         $dn = $this->_getDn($user);
         
+        //$ldapData = array('userpassword' => $_password);
         // NOTE: this std. crypt only compares the first 8 characters
-        //$data = array('userpassword' => '{CRYPT}'. crypt($_password));
-        $data = array('userpassword' => $_password);
+        //$ldapData = array('userpassword' => '{crypt}'. crypt($_password, 'xy')); // not working on a mac ldap ;-(
+        //$ldapData = array('userpassword' =>'{md5}' . base64_encode(pack("H*",md5($_password))));
+        $ldapData = array('userpassword' =>'{SHA}' . base64_encode(mhash(MHASH_SHA1, $_password)));
+                
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_backend->update($dn, $data);
+        $this->_backend->update($dn, $ldapData);
     }
     
     /**
@@ -251,6 +256,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $dn = $this->_getDn($_account);
         $ldapData = $this->_user2ldap($_account);
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
         $this->_backend->update($dn, $ldapData);
         
         return $this->getFullUserByLoginName($_account->accountLoginName);
@@ -269,6 +277,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $newDn = $this->_generateDn($_account);
         $ldapData = $this->_user2ldap($_account);
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
         $this->_backend->insert($newDn, $ldapData);
         
         return $this->getFullUserByLoginName($_account->accountLoginName);
@@ -282,6 +293,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     public function deleteUser($_accountId) 
     {
         $dn = $this->_getDn($_accountId);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        
         $this->_backend->delete($dn);
     }
 
