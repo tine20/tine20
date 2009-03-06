@@ -62,12 +62,13 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $groupData = $this->_groupController->get($_record->group_id)->toArray();
         unset($groupData['id']);
         $members = $adminJson->getGroupMembers($_record->group_id);
+        $groupData['members'] = array();
         foreach ($members['results'] as $member) {
             $groupData['members'][] = array(
                 'id'    => $member['accountId'],
                 'name'  => $member['accountDisplayName'],
                 'type'  => 'user',
-            );    
+            );
         }
         
         return array_merge($recordArray, $groupData);
@@ -145,11 +146,7 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $group = new Tinebase_Model_Group(array(), TRUE);
         $group->setFromJsonInUsersTimezone($recordData);
         
-        //if (!isset($group->members)) {
-        //    $group->members = array();
-        //}
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
         
         if (empty($group->id)) {
             $savedGroup = $this->_groupController->create($group);
