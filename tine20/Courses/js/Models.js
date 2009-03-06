@@ -23,7 +23,7 @@ Tine.Courses.Model.CourseArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'internet' },
     // group fields
     { name: 'description' },
-    { name: 'groupMembers' },
+    { name: 'members' },
     // tine 2.0 notes + tags
     { name: 'notes' },
     { name: 'tags' }

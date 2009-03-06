@@ -25,43 +25,13 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     /**
-     * var handlers
-     * 
-     * @todo do we need those?
+     * members grid panel
+     * @type 
      */
-    /*
-     handlers: {
-        removeAccount: function(_button, _event) { 
-            var groupGrid = Ext.getCmp('groupMembersGrid');
-            var selectedRows = groupGrid.getSelectionModel().getSelections();
-            
-            var groupMembersStore = this.dataStore;
-            for (var i = 0; i < selectedRows.length; ++i) {
-                groupMembersStore.remove(selectedRows[i]);
-            }
-                
-        },
+    membersGrid: null,
         
-        addAccount: function(account) {
-            var groupGrid = Ext.getCmp('groupMembersGrid');
-            
-            var dataStore = groupGrid.getStore();
-            var selectionModel = groupGrid.getSelectionModel();
-            
-            if (dataStore.getById(account.data.data.accountId) === undefined) {
-                var record = new Tine.Tinebase.Model.User({
-                    accountId: account.data.data.accountId,
-                    accountDisplayName: account.data.data.accountDisplayName
-                }, account.data.data.accountId);
-                dataStore.addSorted(record);
-            }
-            selectionModel.selectRow(dataStore.indexOfId(account.data.data.accountId));            
-        }
-     },
-     */
-    
     /**
-     * overwrite update toolbars function (we don't have record grants yet)
+     * overwrite update toolbars function (we don't have record members yet)
      */
     updateToolbars: function() {
 
@@ -69,14 +39,25 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     onRecordLoad: function() {
     	// you can do something here
-
-    	Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);        
+        var members = this.record.get('members') || [];
+        this.membersStore.loadData({results: members});
+        
+        console.log(this.record);
+        
+       	Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);        
     },
     
     onRecordUpdate: function() {
         Tine.Courses.CourseEditDialog.superclass.onRecordUpdate.call(this);
         
-        // you can do something here    
+        this.record.set('members', '');
+        
+        var members = [];
+        this.membersStore.each(function(_record){
+            members.push(_record.data);
+        });
+        
+        this.record.set('members', members);
     },
     
     /**
@@ -121,6 +102,12 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         grow: false,
                         preventScrollbars:false,
                         height: 60
+                    }, {
+                        hideLabel: true,
+                        boxLabel: this.app.i18n._('Internet'),
+                        name: 'internet',
+                        xtype: 'checkbox',
+                        columnWidth: 0.33
                     }]]
                 }, {
                     // activities and tags
@@ -146,6 +133,10 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     })]
                 }]
+            }, {
+                title: this.app.i18n._('Members'),
+                layout: 'fit',
+                items: [this.getMembersGrid()]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
@@ -155,124 +146,28 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * function getFormContents
-     * 
-     * @todo add that later / use generic account picker grid
+     * get the members grid panel
+     * @return {}
      */
-    getMembersPickerGrid: function() {
-
-        this.actions = {
-            addAccount: new Ext.Action({
-                text: this.app.i18n._('add account'),
-                disabled: true,
-                scope: this,
-                handler: this.handlers.addAccount,
-                iconCls: 'action_addContact'
-            }),
-            removeAccount: new Ext.Action({
-                text: this.app.i18n._('remove account'),
-                disabled: true,
-                scope: this,
-                handler: this.handlers.removeAccount,
-                iconCls: 'action_deleteContact'
-            })
-        };
-        
-        /******* account picker panel ********/
-        
-        var accountPicker =  new Tine.widgets.account.PickerPanel ({            
-            enableBbar: true,
-            region: 'west',
-            height: 200,
-            //bbar: this.userSelectionBottomToolBar,
-            selectAction: function() {              
-                this.account = account;
-                this.handlers.addAccount(account);
-            }  
-        });
-                
-        accountPicker.on('accountdblclick', function(account){
-            this.account = account;
-            this.handlers.addAccount(account);
-        }, this);
-        
-
-        /******* load data store ********/
-
-        this.dataStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'accountId',
-            fields: Tine.Tinebase.Model.User
-        });
-
-        Ext.StoreMgr.add('GroupMembersStore', this.dataStore);
-        
-        this.dataStore.setDefaultSort('accountDisplayName', 'asc');        
-        
-        var groupMembers = this.record.get('groupMembers');
-        if (!groupMembers || groupMembers.length === 0) {
-            this.dataStore.removeAll();
-        } else {
-            this.dataStore.loadData(groupMembers);
+    getMembersGrid: function() {
+        if (! this.membersGrid) {
+            this.membersStore =  new Ext.data.JsonStore({
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'id',
+                fields: Tine.Tinebase.Model.Account
+            });
+            
+            var columns = [];
+            
+            this.membersGrid = new Tine.widgets.account.ConfigGrid({
+                accountPickerType: 'user',
+                accountListTitle: this.app.i18n._('Members'),
+                configStore: this.membersStore,
+                configColumns: columns
+            });
         }
-
-        /******* column model ********/
-
-        var columnModel = new Ext.grid.ColumnModel([{ 
-            resizable: true, id: 'accountDisplayName', header: this.app.i18n._('Name'), dataIndex: 'accountDisplayName', width: 30 
-        }]);
-
-        /******* row selection model ********/
-
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.removeAccount.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.removeAccount.setDisabled(false);
-            }
-        }, this);
-       
-        /******* bottom toolbar ********/
-
-        var membersBottomToolbar = new Ext.Toolbar({
-            items: [
-                this.actions.removeAccount
-            ]
-        });
-
-        /******* group members grid ********/
-        
-        var groupMembersGridPanel = new Ext.grid.EditorGridPanel({
-            id: 'groupMembersGrid',
-            region: 'center',
-            title: this.app.i18n._('Group Members'),
-            store: this.dataStore,
-            cm: columnModel,
-            autoSizeColumns: false,
-            selModel: rowSelectionModel,
-            enableColLock:false,
-            loadMask: true,
-            //autoExpandColumn: 'accountLoginName',
-            autoExpandColumn: 'accountDisplayName',
-            bbar: membersBottomToolbar,
-            border: true
-        }); 
-        
-        /******* THE edit dialog ********/
-        
-        var editGroupDialog = [
-            accountPicker, 
-            groupMembersGridPanel
-        ];
-        
-        return editGroupDialog;
+        return this.membersGrid;
     }
 });
 

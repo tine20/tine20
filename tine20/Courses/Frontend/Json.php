@@ -60,10 +60,16 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         // group data
         $groupData = $this->_groupController->get($_record->group_id)->toArray();
-        $groupData['members'] = $adminJson->getGroupMembers($_record->group_id);
-        $groupData['members'] = $groupData['members']['results'];
         unset($groupData['id']);
-
+        $members = $adminJson->getGroupMembers($_record->group_id);
+        foreach ($members['results'] as $member) {
+            $groupData['members'][] = array(
+                'id'    => $member['accountId'],
+                'name'  => $member['accountDisplayName'],
+                'type'  => 'user',
+            );    
+        }
+        
         return array_merge($recordArray, $groupData);
     }
     
@@ -143,14 +149,16 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         //    $group->members = array();
         //}
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
+        
         if (empty($group->id)) {
-            $savedGroup = $this->_groupController->create($group, $group->members);
+            $savedGroup = $this->_groupController->create($group);
             $course->group_id = $savedGroup->getId();
             $savedRecord = $this->_controller->create($course);
         } else {
             $savedRecord = $this->_controller->update($course);
             $group->setId($course->group_id);
-            $this->_groupController->update($group, $group->members);
+            $this->_groupController->update($group);
         }
 
         return $this->_recordToJson($savedRecord);
