@@ -260,6 +260,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         if ($this->_options['useRfc2307bis']) {
             $this->_saveRfc2307GroupMembers($_groupId, $_groupMembers);
         } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+            
             $this->_ldap->updateProperty($metaData['dn'], $data);
         }
     }
@@ -274,14 +277,23 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     public function addGroupMember($_groupId, $_accountId) 
     {
         $dn = $this->_getDn($_groupId);
-        $data = array('memberuid' => $_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $groupMembers = $this->getGroupMembers($_groupId);
+        if (in_array($accountId, $groupMembers)) {
+             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp adding group member, as $accountId is already in group $dn");
+             return;
+        }
         
         if ($this->_options['useRfc2307bis']) {
-            $groupMembers = $this->getGroupMembers($_groupId);
-            $groupMembers[] = $_accountId;
+            $groupMembers[] = $accountId;
             
-            $this->_saveRfc2307GroupMembers($_groupId, $_groupMembers);
+            $this->_saveRfc2307GroupMembers($_groupId, $groupMembers);
         } else {
+            $data = array('memberuid' => $accountId);
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+            
             $this->_ldap->insertProperty($dn, $data);
         }
     }
@@ -296,14 +308,23 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     public function removeGroupMember($_groupId, $_accountId) 
     {
         $dn = $this->_getDn($_groupId);
-        $data = array('memberuid' => $_accountId);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $groupMembers = $this->getGroupMembers($_groupId);
+        if (! in_array($accountId, $groupMembers)) {
+             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipp removing group member, as $accountId is not in group $dn");
+             return;
+        }
         
         if ($this->_options['useRfc2307bis']) {
-            $groupMembers = $this->getGroupMembers($_groupId);
-            unset($groupMembers[$_accountId]);
+            unset($groupMembers[$accountId]);
             
             $this->_saveRfc2307GroupMembers($_groupId, $_groupMembers);
         } else {
+            $data = array('memberuid' => $accountId);
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+            
             $this->_ldap->deleteProperty($dn, $data);
         }
     }
@@ -317,7 +338,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected function _saveRfc2307GroupMembers($_groupId, $_groupMembers)
     {
         $group = $this->getGroupById($_groupId);
-        $membersDns = $this->_getAccountDns($_groupMembers);
+        $membersDns = $this->_getAccountDns((array)$_groupMembers);
         
         $metaData = $this->_getMetaData($_groupId);
         
@@ -336,7 +357,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $metaData: ' . print_r($metaData, true));
         
         if (array_search($data['objectclass'], $metaData['objectClass']) === false) {
             // NOTE: structual object classes can't be changed
