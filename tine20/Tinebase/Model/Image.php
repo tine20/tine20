@@ -197,20 +197,26 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     {
         $img = @imagecreatefromstring($this->blob);
         
+        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
         switch ($_mime) {
             case ('image/png'):
-                return imagepng($img);
+                imagepng($img, $tmpPath);
                 break;
             case ('image/jpeg'):
-                return imagejpeg($img);
+                imagejpeg($img, $tmpPath);
                 break;
             case ('image/gif'):
-                return imagegif($img);
+                imagegif($img, $tmpPath);
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_mime);
                 break;
         }
+        
+        $blob = file_get_contents($tmpPath);
+        unlink($tmpPath);
+        
+        return $blob;
     }
     
     /**
