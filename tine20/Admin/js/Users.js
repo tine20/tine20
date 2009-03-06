@@ -266,16 +266,19 @@ Tine.Admin.Users.Main = function() {
                 emptyMsg: this.translation.gettext("No accounts to display")
             }); 
             
+            var accountBackend = Tine.Tinebase.registry.get('accountBackend');
+            var ldapBackend = (accountBackend == 'Ldap');
+            
             var columnModel = new Ext.grid.ColumnModel([
                 {resizable: true, header: this.translation.gettext('ID'), id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
-                {resizable: true, header: this.translation.gettext('Status'), id: 'accountStatus', dataIndex: 'accountStatus', width: 50, renderer: _renderStatus},
+                {resizable: true, header: this.translation.gettext('Status'), id: 'accountStatus', dataIndex: 'accountStatus', hidden: ldapBackend, width: 50, renderer: _renderStatus},
                 {resizable: true, header: this.translation.gettext('Displayname'), id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
                 {resizable: true, header: this.translation.gettext('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName'},
                 {resizable: true, header: this.translation.gettext('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
                 {resizable: true, header: this.translation.gettext('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
                 {resizable: true, header: this.translation.gettext('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
-                {resizable: true, header: this.translation.gettext('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
-                {resizable: true, header: this.translation.gettext('Last login from'), id: 'accountLastLoginfrom', dataIndex: 'accountLastLoginfrom'},
+                {resizable: true, header: this.translation.gettext('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: ldapBackend, width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+                {resizable: true, header: this.translation.gettext('Last login from'), id: 'accountLastLoginfrom', hidden: ldapBackend, dataIndex: 'accountLastLoginfrom'},
                 {resizable: true, header: this.translation.gettext('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
                 {resizable: true, header: this.translation.gettext('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer}
             ]);
@@ -528,7 +531,12 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
     },
     
-    GetEditAccountDialog: function() { return [{
+    GetEditAccountDialog: function() { 
+    
+        var accountBackend = Tine.Tinebase.registry.get('accountBackend');
+        var ldapBackend = (accountBackend == 'Ldap');
+
+        return [{
         layout:'column',
         //frame: true,
         border:false,
@@ -606,7 +614,8 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                                 ['disabled','disabled']
                             ]
                         }
-                    )
+                    ),
+                    hidden: ldapBackend
                 }, 
                 new Ext.ux.form.ClearableDateField({ 
                     fieldLabel: this.translation.gettext('Expires'),
@@ -618,13 +627,15 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     name: 'accountLastLogin',
                     emptyText: this.translation.gettext('never logged in'),
                     hideTrigger: true,
-                    readOnly: true
+                    readOnly: true,
+                    hidden: ldapBackend
                 }, {
                     xtype: 'textfield',
                     fieldLabel: this.translation.gettext('Last login from'),
                     name: 'accountLastLoginfrom',
                     emptyText: this.translation.gettext('never logged in'),
-                    readOnly: true
+                    readOnly: true,
+                    hidden: ldapBackend
                 }, {
                     xtype: 'datetimefield',
                     fieldLabel: this.translation.gettext('Password set'),
