@@ -32,7 +32,7 @@ class ActiveSync_Command_Settings extends ActiveSync_Command_Wbxml
     protected $_dataBackend;
 
     protected $_defaultNameSpace = 'uri:Settings';
-    protected $_documentElement = 'Settings';
+    protected $_documentElement  = 'Settings';
     
     
     /**
