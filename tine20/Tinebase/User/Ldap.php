@@ -110,7 +110,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         'accountLastPasswordChange' => 'shadowlastchange',
         'accountExpires'            => 'shadowexpire',
         'accountPrimaryGroup'       => 'gidnumber',
-        'accountEmailAddress'       => 'mail'
+        'accountEmailAddress'       => 'mail',
+        'accountHomeDirectory'      => 'homedirectory',
+        'accountLoginShell'         => 'loginshell',
     );
     
     /**
@@ -449,11 +451,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $ldapData['uidnumber'] = $this->_generateUidNumber();
         $ldapData['objectclass'] = $this->_requiredObjectClass;
         
-        // homedir is an required attribute
-        if (empty($ldapData['homedirectory'])) {
-            $ldapData['homedirectory'] = '/dev/null';
-        }
-        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
@@ -666,6 +663,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
                         break;
                 }
             }
+        }
+        
+        // homedir is an required attribute
+        if (empty($ldapData['homedirectory'])) {
+            $ldapData['homedirectory'] = '/dev/null';
         }
         
         return $ldapData;
