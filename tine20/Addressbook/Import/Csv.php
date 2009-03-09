@@ -13,8 +13,6 @@
 /**
  * csv import class for the addressbook
  * 
- * for the use of the mapping parameter => see tests/tine20/Addressbook/Import/CsvTest 
- *
  * @package     Addressbook
  * @subpackage  Import
  * 
