@@ -24,16 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var bool allow the use of GLOBALS to exchange data between tests
-     */
-    protected $backupGlobals = false;
-    
-    /**
-     * @var array test objects
-     */
-    protected $_objects = array();
-
-    /**
      * @var Addressbook_Import_Csv instance
      */
     protected $_instance = NULL;
@@ -58,31 +48,10 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // initialise global for this test suite
-        $GLOBALS['Addressbook_Import_CsvTest'] = array_key_exists('Addressbook_Import_CsvTest', $GLOBALS) 
-            ? $GLOBALS['Addressbook_Import_CsvTest'] 
-            : array();
+        $definitionBackend = new Tinebase_ImportExportDefinition();
+        $definition = $definitionBackend->getByProperty('adb_tine_import_csv');
         
-        $this->_instance = Addressbook_Import_Factory::factory('Csv');
-        
-        $this->_objects['filename'] = dirname(__FILE__) . '/files/test.csv';
-        $this->_objects['mapping'] = array(
-            'adr_one_locality'      => 'Ort',
-            'adr_one_postalcode'    => 'Plz',
-            'adr_one_street'        => 'Straße',
-            'org_name'              => 'Name1',
-            'org_unit'              => 'Name2',
-            'note'                  => array(
-                'Mitarbeiter'       => 'inLab Spezi',
-                'Anzahl Mitarbeiter' => 'ANZMitarbeiter',
-                'Bemerkung'         => 'Bemerkung',
-            ),
-            'tel_work'              => 'TelefonZentrale',
-            'tel_cell'              => 'TelefonDurchwahl',
-            'n_family'              => 'Nachname',
-            'n_given'               => 'Vorname',
-            'n_prefix'              => array('Anrede', 'Titel'),
-        );        
+        $this->_instance = new Addressbook_Import_Csv($definition, Addressbook_Controller_Contact::getInstance(), array('dryrun' => 1));
     }
 
     /**
@@ -93,25 +62,6 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
-    }
-    
-    /**
-     * read csv test
-     *
-     */
-    public function testRead()
-    {
-        $contactRecords = $this->_instance->read($this->_objects['filename'], $this->_objects['mapping']);
-        $GLOBALS['Addressbook_Import_CsvTest']['records'] = $contactRecords;
-        
-        $this->assertEquals(3, count($contactRecords));
-        $this->assertEquals('Krehl, Albert', $contactRecords[0]->n_fileas);
-        $this->assertEquals('Herr Dr.', $contactRecords[0]->n_prefix);
-        
-        $note = $contactRecords[0]->note;
-        $this->assertEquals(1, preg_match("/Mitarbeiter: Meister/", $note));
-        $this->assertEquals(1, preg_match("/Anzahl Mitarbeiter: 20/", $note));
     }
     
     /**
@@ -120,23 +70,16 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImport()
     {
-        $contactRecords = $GLOBALS['Addressbook_Import_CsvTest']['records'];
+        // export first
+        $exporter = new Addressbook_Export_Csv();
+        $filename = $exporter->exportContacts(new Addressbook_Model_ContactFilter(array()));
         
-        $importedContacts = $this->_instance->import($contactRecords);
-
-        $this->assertEquals(3, count($importedContacts));
+        // then import
+        $result = $this->_instance->import($filename);
         
-        $firstImportedContact = Addressbook_Controller_Contact::getInstance()->get($importedContacts[0]->getId());
-        $this->assertEquals('Krehl, Albert', $firstImportedContact->n_fileas);
-        $this->assertEquals('Herr Dr.', $firstImportedContact->n_prefix);
-        $note = $firstImportedContact->note;
-        $this->assertEquals(1, preg_match("/Mitarbeiter: Meister/", $note));
-        $this->assertEquals(1, preg_match("/Anzahl Mitarbeiter: 20/", $note));
-        
-        // delete imported contacts
-        foreach ($importedContacts as $contact) {
-            Addressbook_Controller_Contact::getInstance()->delete($contact->getId());
-        }
+        // check
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_id']);
     }
 }		
 	
