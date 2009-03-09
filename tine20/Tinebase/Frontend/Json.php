@@ -400,6 +400,11 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
                                             : true
             );
         }
+        
+        if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
+            $registryData['build'] = getDevelopmentRevision();
+        }
+        
         return $registryData;
     }
     
