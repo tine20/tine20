@@ -19,7 +19,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowNamePrefix: 'CourseEditWindow_',
     appName: 'Courses',
     recordClass: Tine.Courses.Model.Course,
-    recordProxy: Tine.Courses.recordBackend,
+    recordProxy: Tine.Courses.coursesBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
