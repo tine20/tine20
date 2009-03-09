@@ -56,6 +56,36 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_cli = new Admin_Frontend_Cli();
+        
+        $this->objects['config'] = '<?xml version="1.0" encoding="UTF-8"?>
+        <config>
+            <headline>1</headline>
+            <dryrun>1</dryrun>
+            <encoding>ISO-8859-1</encoding>
+            <delimiter>;</delimiter>
+            <mapping>
+                <field>
+                    <index>0</index>
+                    <source>firstname</source>
+                    <destination>accountFirstName</destination>
+                </field>
+                <field>
+                    <index>1</index>
+                    <source>lastname</source>
+                    <destination>accountLastName</destination>
+                </field>
+                <field>
+                    <index>2</index>
+                    <source>loginname</source>
+                    <destination>accountLoginName</destination>
+                </field>
+                <field>
+                    <index>3</index>
+                    <source>password</source>
+                    <destination>password</destination>
+                </field>
+            </mapping>
+        </config>';
     }
 
     /**
@@ -76,46 +106,23 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
     {
         // create definition / check if exists
         $definitionBackend = new Tinebase_ImportExportDefinition();
-        $config = '<?xml version="1.0" encoding="UTF-8"?>
-        <config>
-            <headline>1</headline>
-            <dryrun>1</dryrun>
-            <mapping>
-                <field>
-                    <source>firstname</source>
-                    <destination>accountFirstName</destination>
-                </field>
-                <field>
-                    <source>lastname</source>
-                    <destination>accountLastName</destination>
-                </field>
-                <field>
-                    <source>loginname</source>
-                    <destination>accountLoginName</destination>
-                </field>
-                <field>
-                    <source>password</source>
-                    <destination>password</destination>
-                </field>
-            </mapping>
-        </config>';
         
         try {
-            $definition = $definitionBackend->getByProperty('admin_user_import_csv');
-            $definition->plugin_options = $config;
+            $definition = $definitionBackend->getByProperty('admin_user_import_csv_test');
+            $definition->plugin_options = $this->objects['config'];
         } catch(Tinebase_Exception_NotFound $e) {
             $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
-                'name'              => 'admin_user_import_csv',
+                'name'              => 'admin_user_import_csv_test',
                 'type'              => 'import',
                 'model'             => 'Tinebase_Model_FullUser',
                 'plugin'            => 'Admin_Import_Csv',
-                'plugin_options'    => $config
+                'plugin_options'    => $this->objects['config']
             ))); 
         }
         
         $opts = new Zend_Console_Getopt('abp:');
-        $opts->setArguments(array(dirname(__FILE__) . '/files/test.csv'));
+        $opts->setArguments(array(dirname(__FILE__) . '/files/test.csv', 'admin_user_import_csv_test'));
         
         ob_start();
         $this->_cli->importUser($opts);

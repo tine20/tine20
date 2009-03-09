@@ -36,6 +36,7 @@ class Admin_Frontend_Cli
             'description'   => 'Import new users into the Admin.',
             'params'        => array(
                 'filenames'   => 'Filename(s) of import file(s) [required]',
+                'definition'  => 'Name of the import definition [required]: for example admin_user_import_csv',
             )
         ),
     );
@@ -66,7 +67,8 @@ class Admin_Frontend_Cli
             
         // get csv importer
         $definitionBackend = new Tinebase_ImportExportDefinition();
-        $definition = $definitionBackend->getByProperty('admin_user_import_csv');
+        $definitionName = array_pop($args);
+        $definition = $definitionBackend->getByProperty($definitionName);
         $importer = new $definition->plugin($definition, Tinebase_User::factory(Tinebase_User::getConfiguredBackend()));
         
         // get mapping and container (from config file)
@@ -85,7 +87,7 @@ class Admin_Frontend_Cli
                 echo "reading file $filename ...";
             }
             try {
-                $records = $importer->import($filename);
+                $result = $importer->import($filename);
                 if ($_opts->v) {
                     echo "done.\n";
                 }
@@ -100,7 +102,7 @@ class Admin_Frontend_Cli
                 continue;
             }
             
-            echo "Imported " . count($records) . " records.\n";
+            echo "Imported " . $result['totalcount'] . " records.\n";
             
             // import (check if dry run)
             /*

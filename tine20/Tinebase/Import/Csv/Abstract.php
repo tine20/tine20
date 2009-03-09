@@ -8,16 +8,9 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add charset conversion (with iconv?)
  * @todo        add conditions (what to do when record already exists)
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
- * 
- * @todo use fgetcsv!!!
- * 
- * @todo problmatic mapping
- * @todo add converstions e.g. date/accounts
- * @todo improve options handing
- * @todo $this->_db???
+ * @todo        add more converstions e.g. date/accounts
  * 
  */
 
@@ -31,15 +24,9 @@
 abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
 {
     /**
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
-
-    /**
      * @var array
      */
     protected $_options;
-    
     
     /**
      * @var int max line length
@@ -60,6 +47,16 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @var char escape
      */
     protected $_escape = '\\';
+
+    /**
+     * @var default input encoding
+     */
+    protected $_encoding = 'UTF-8';
+    
+    /**
+     * @var int dryrun record count
+     */
+    protected $_dryrunCount = 20;
     
     /**
      * the record controller
@@ -91,8 +88,6 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      */
     public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL, $_options = array())
     {
-        //print_r($_definition->toArray());
-        
         if ($_controller === NULL) {
             list($appName, $ns, $modelName) = explode('_', $_definition->model);
             $controllerName = "{$appName}_Controller_{$modelName}";
@@ -103,7 +98,6 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         
         $this->_modelName = $_definition->model;
         $this->_options = $this->_getConfig($_definition->plugin_options, $_options);
-        $this->_db = Tinebase_Core::getDb();
     }
     
     /**
@@ -111,32 +105,52 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      *
      * @param  string $_filename
      * @param  resource $_resource (if $_filename is a stream)
-     * @return Tinebase_Record_RecordSet the imported records // why?? this may become far to large!
+     * @return array with Tinebase_Record_RecordSet the imported records (if dryrun) and totalcount 
      */
     public function import($_filename, $_resource = NULL)
     {
         // read file / stream
         if ($_resource === NULL) {
-          if (! file_exists($_filename)) {
+            if (! file_exists($_filename)) {
                 throw new Tinebase_Exception_NotFound("File $_filename not found.");
-          }
+            }
           
-          $_resource = fopen($_filename, 'r');
+            $_resource = fopen($_filename, 'r');
         }
         
         // get headline
         if (isset($this->_options['headline']) && $this->_options['headline']) {
-            $headline = $this->_getLine($_resource);
+            $headline = $this->_getRawData($_resource);
         } else {
             $headline = array();
         }
 
-        $result = new Tinebase_Record_RecordSet($this->_modelName);
-        while ($recordData = $this->_getLine($_resource)) {
-            if (! empty($recordData)) {
+        $result = array(
+            'results'       => new Tinebase_Record_RecordSet($this->_modelName),
+            'totalcount'    => 0
+        );
+
+        while (
+            ($recordData = $this->_getRawData($_resource)) !== FALSE && 
+            (!$this->_options['dryrun'] || $result['totalcount'] < $this->_dryrunCount)
+        ) {
+            if (is_array($recordData)) {
                 try {
+                    $recordData = $this->_doMapping($recordData, $headline);
+                    $recordData = $this->_doConversions($recordData);
+                    // merge additional values (like group id, container id ...)
+                    $recordData = array_merge($recordData, $this->_addData());
+                    
+                    //print_r($recordData);
+                    
+                    // import record into tine!
                     $importedRecord = $this->_importRecord($recordData);
-                    $result->addRecord($importedRecord);
+                    
+                    if ($this->_options['dryrun']) {
+                        $result['results']->addRecord($importedRecord);
+                    }
+                    $result['totalcount']++;
+                    
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
@@ -156,10 +170,59 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @param  resource $_resource
      * @return array
      */
-    protected function _getLine($_resource) {
-        $lineData = fgetcsv($_resource, $this->_maxLineLength, $this->_delimiter, $this->_enclosure, $this->_escape);
+    protected function _getRawData($_resource) 
+    {
+        $lineData = fgetcsv(
+            $_resource, 
+            $this->_options['maxLineLength'], 
+            $this->_options['delimiter'], 
+            $this->_options['enclosure'] 
+            // escape param is only available in PHP >= 5.3.0
+            // $this->_options['escape']
+        );
         
         return $lineData;
+    }
+    
+    /**
+     * do the mapping
+     *
+     * @param array $_data
+     * @param array $_headline [optional]
+     * @return array
+     * 
+     * @todo add headline parsing again?
+     */
+    protected function _doMapping($_data, $_headline = array())
+    {
+        $data = array();
+        foreach ($this->_options['mapping']['field'] as $field) {
+            if ($field['destination'] == '') {
+                continue;
+            }
+            //$data[$field['destination']] = $_data[$headline[$field['source']]];
+            $data[$field['destination']] = $_data[$field['index']];
+        }
+        
+        return $data;
+    }
+    
+    /**
+     * do conversions (transformations, charset, ...)
+     *
+     * @param array $_data
+     * @return array
+     * 
+     * @todo add date and other conversions
+     */
+    protected function _doConversions($_data)
+    {
+        $data = array();
+        foreach ($_data as $key => $value) {
+            $data[$key] = iconv($this->_options['encoding'], $this->_encoding, $value);
+        }
+        
+        return $data;
     }
     
     /**
@@ -174,70 +237,12 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     {
         $record = new $this->_modelName($_data);
         
-        if (!isset($this->_options['dryrun']) || !$this->_options['dryrun']) {
+        if (!$this->_options['dryrun']) {
             $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
         }
         return $record;
     }
         
-    /**
-     * parse a csv line and create record data
-     *
-     * @param string $_line
-     * @param string $_headline
-     * @return array
-     * 
-     * @todo add encoding here
-     */
-    protected function _parseLine($_line, $_headline)
-    {
-        $mapping = $this->_options['mapping']['field'];
-        
-        $data = array();
-        foreach($mapping as $field) {
-            
-            // add single value to destination 
-            if (isset($headline[$field['source']]) && isset($values[$headline[$field['source']]])) {
-                $data[$field['destination']] = $values[$headline[$field['source']]];
-            }
-        
-            /*
-            if (is_array($source)) {
-                
-                $data[$destination] = '';                
-                foreach ($source as $key => $value) {
-                    if (is_array($value) || (isset($headline[$value]) && isset($values[$headline[$value]]) && !empty($values[$headline[$value]]))) {
-                        if (is_array($value) && !empty($value)) {
-                            // match to defined values (i.e. user -> container_id/container id)
-                            $keyForValue = $values[$headline[$key]];
-                            if (isset($value[$keyForValue])) {
-                                $data[$destination] = $value[$keyForValue];
-                            }
-                        } elseif (!is_numeric($key)) {
-                            // add multiple values to one destination field with $key added 
-                            if (!empty($data[$destination])) {
-                                $data[$destination] .= "\n";
-                            }
-                            $data[$destination] .= $key . ': ' . $values[$headline[$value]];
-                        } else {
-                            // add multiple values to one destination field (separated with spaces)
-                            if (!empty($data[$destination])) {
-                                $data[$destination] .= " ";
-                            }
-                            $data[$destination] .= $values[$headline[$value]];
-                        }
-                    }                    
-                }
-            } 
-            */
-        }
-
-        // add more values
-        $data = array_merge($data, $this->_addData());
-        
-        return $data;
-    }
-
     /**
      * add some more values (overwrite that if you need some special/dynamic fields)
      *
@@ -269,10 +274,12 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         
         unlink($tmpfname);
         
-        $this->_maxLineLength = $config->maxLineLength ? $config->maxLineLength : $this->_maxLineLength;
-        $this->_delimiter = $config->delimiter ? $config->delimiter : $this->_delimiter;
-        $this->_enclosure = $config->enclosure ? $config->enclosure : $this->_enclosure;
-        $this->_escape = $config->escape ? $config->escape : $this->_escape;
+        $config->maxLineLength = $config->maxLineLength ? $config->maxLineLength : $this->_maxLineLength;
+        $config->delimiter = $config->delimiter ? $config->delimiter : $this->_delimiter;
+        $config->enclosure = $config->enclosure ? $config->enclosure : $this->_enclosure;
+        $config->escape = $config->escape ? $config->escape : $this->_escape;
+        $config->dryrun = $config->dryrun ? $config->dryrun : 0;
+        $config->encoding = $config->encoding ? $config->encoding : $this->_encoding;
         
         return $config->toArray();
     }
