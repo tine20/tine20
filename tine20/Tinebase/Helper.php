@@ -52,3 +52,38 @@ function convertToBytes($_value)
     
     return $bytes;
 }
+
+/**
+ * get svn revision info
+ *
+ * @return string
+ */
+function getDevelopmentRevision()
+{
+    try {
+        $file = fopen(dirname(dirname(__FILE__)) . '/.svn/entries', 'r');
+        while ($line = fgets($file)) {
+            if ((int)$line > 5000) {
+                $rev = (int)$line;
+            }
+            if (preg_match('/^\d{4}-\d{2}-\d{2}[T ]+\d{2}:\d{2}:\d{2}/', $line)) {
+                $date = trim($line);
+            }
+            
+            if (preg_match('/svn\.tine20\.org\/svn/', $line)) {
+                $parts = explode('/', $line);
+                $branch = $parts[count($parts)-2];
+            }
+            if ($branch && $date && $line) {
+                break;
+            }
+        }
+        
+        $revision = "$branch: $rev ($date)";
+    } catch (Exception $e) {
+        $revision = 'not resolvable';
+    }
+    
+    return $revision;
+}
+    
