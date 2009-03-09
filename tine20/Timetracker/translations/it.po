@@ -81,7 +81,7 @@ msgstr ""
 msgid "{0}"
 msgstr ""
 
-#: js/DurationSpinner.js:61 js/DurationSpinner.js:71
+#: js/DurationSpinner.js:63 js/DurationSpinner.js:73
 msgid "Not a valid time"
 msgstr ""
 
@@ -112,12 +112,12 @@ msgid_plural "timeaccount lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:69
+#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:72
 #: js/TimesheetGridPanel.js:182
 msgid "Number"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:75
+#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:78
 #: js/TimesheetGridPanel.js:183
 msgid "Title"
 msgstr ""
@@ -130,7 +130,7 @@ msgstr ""
 msgid "Unit Price"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:81
+#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:91
 msgid "Budget"
 msgstr ""
 
@@ -138,7 +138,7 @@ msgstr ""
 msgid "Timesheets are billable"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:115
+#: js/TimeaccountEditDialog.js:115 js/TimeaccountGridPanel.js:84
 msgid "Status"
 msgstr ""
 
@@ -201,7 +201,7 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:93
+#: js/TimeaccountGridPanel.js:112
 msgid "Show closed"
 msgstr ""
 

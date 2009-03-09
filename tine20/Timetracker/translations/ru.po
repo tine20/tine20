@@ -81,7 +81,7 @@ msgstr "Просчитано"
 msgid "{0}"
 msgstr "{0}"
 
-#: js/DurationSpinner.js:61 js/DurationSpinner.js:71
+#: js/DurationSpinner.js:63 js/DurationSpinner.js:73
 msgid "Not a valid time"
 msgstr "Не действительное время"
 
@@ -116,12 +116,12 @@ msgstr[0] "Список временного счета"
 msgstr[1] "Списка временного счета"
 msgstr[2] "Списков временного счета "
 
-#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:69
+#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:72
 #: js/TimesheetGridPanel.js:182
 msgid "Number"
 msgstr "Номер"
 
-#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:75
+#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:78
 #: js/TimesheetGridPanel.js:183
 msgid "Title"
 msgstr "Заголовок"
@@ -134,7 +134,7 @@ msgstr "Часть"
 msgid "Unit Price"
 msgstr "Цена на части"
 
-#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:81
+#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:91
 msgid "Budget"
 msgstr "Budget"
 
@@ -142,7 +142,7 @@ msgstr "Budget"
 msgid "Timesheets are billable"
 msgstr "Часовые записи рассчитываемы"
 
-#: js/TimeaccountEditDialog.js:115
+#: js/TimeaccountEditDialog.js:115 js/TimeaccountGridPanel.js:84
 msgid "Status"
 msgstr "Статус"
 
@@ -205,7 +205,7 @@ msgstr "Позволяется все"
 msgid "Permissions"
 msgstr "Права доступа"
 
-#: js/TimeaccountGridPanel.js:93
+#: js/TimeaccountGridPanel.js:112
 msgid "Show closed"
 msgstr "Показать закрытые"
 

@@ -14,82 +14,50 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/CourseEditDialog.js:58 js/CourseGridPanel.js:51 js/Models.js:40
+#: js/CourseEditDialog.js:68 js/CourseGridPanel.js:48 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/CourseEditDialog.js:74 js/CourseGridPanel.js:74
-msgid "Number"
-msgstr ""
-
-#: js/CourseEditDialog.js:79 js/CourseGridPanel.js:80
-msgid "Title"
+#: js/CourseEditDialog.js:84
+msgid "Course Name"
 msgstr ""
 
 #: js/CourseEditDialog.js:88
-msgid "Unit"
+msgid "Course / School Type"
 msgstr ""
 
-#: js/CourseEditDialog.js:92
-msgid "Unit Price"
-msgstr ""
-
-#: js/CourseEditDialog.js:97 js/CourseGridPanel.js:93
-msgid "Budget"
-msgstr ""
-
-#: js/CourseEditDialog.js:101
-msgid "Timesheets are billable"
-msgstr ""
-
-#: js/CourseEditDialog.js:105 js/CourseGridPanel.js:86
-msgid "Status"
-msgstr ""
-
-#: js/CourseEditDialog.js:111
-msgid "closed"
-msgstr ""
-
-#: js/CourseEditDialog.js:111
-msgid "open"
-msgstr ""
-
-#: js/CourseEditDialog.js:113
-msgid "Billed"
-msgstr ""
-
-#: js/CourseEditDialog.js:121
-msgid "not yet billed"
-msgstr ""
-
-#: js/CourseEditDialog.js:122
-msgid "to bill"
-msgstr ""
-
-#: js/CourseEditDialog.js:123
-msgid "billed"
-msgstr ""
-
-#: js/CourseGridPanel.js:53
+#: js/CourseEditDialog.js:93
 msgid "Description"
 msgstr ""
 
-#: js/CourseGridPanel.js:114
-msgid "Show closed"
+#: js/CourseEditDialog.js:99 js/CourseGridPanel.js:74
+msgid "Internet"
 msgstr ""
 
-#: js/ExampleApplication.js:27 Setup/setup.xml:4
+#: js/CourseEditDialog.js:129 js/CourseEditDialog.js:157
+msgid "Members"
+msgstr ""
+
+#: js/CourseGridPanel.js:62
+msgid "Name"
+msgstr ""
+
+#: js/CourseGridPanel.js:68
+msgid "Type"
+msgstr ""
+
+#: js/Courses.js:27 Setup/setup.xml:4
 msgid "Courses"
 msgstr ""
 
-#: js/ExampleApplication.js:32
+#: js/Courses.js:32
 msgid "All Courses"
 msgstr ""
 
-#: js/Models.js:44
+#: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""

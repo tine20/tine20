@@ -80,7 +80,7 @@ msgstr "Zaplaceno"
 msgid "{0}"
 msgstr "{0}"
 
-#: js/DurationSpinner.js:61 js/DurationSpinner.js:71
+#: js/DurationSpinner.js:63 js/DurationSpinner.js:73
 msgid "Not a valid time"
 msgstr "Neplatný čas"
 
@@ -115,12 +115,12 @@ msgstr[0] "seznam časových fondů"
 msgstr[1] "seznamy časových fondů"
 msgstr[2] "seznamů časových fondů"
 
-#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:69
+#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:72
 #: js/TimesheetGridPanel.js:182
 msgid "Number"
 msgstr "Číslo"
 
-#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:75
+#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:78
 #: js/TimesheetGridPanel.js:183
 msgid "Title"
 msgstr "Název"
@@ -133,7 +133,7 @@ msgstr "Jednotka"
 msgid "Unit Price"
 msgstr "Jednotková cena"
 
-#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:81
+#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:91
 msgid "Budget"
 msgstr "Rozpočet"
 
@@ -141,7 +141,7 @@ msgstr "Rozpočet"
 msgid "Timesheets are billable"
 msgstr "Pracovní výkazy lze účtovat"
 
-#: js/TimeaccountEditDialog.js:115
+#: js/TimeaccountEditDialog.js:115 js/TimeaccountGridPanel.js:84
 msgid "Status"
 msgstr "Stav"
 
@@ -204,7 +204,7 @@ msgstr "Spravovat vše"
 msgid "Permissions"
 msgstr "Oprávnění"
 
-#: js/TimeaccountGridPanel.js:93
+#: js/TimeaccountGridPanel.js:112
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
 

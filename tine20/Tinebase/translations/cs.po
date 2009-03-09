@@ -101,7 +101,7 @@ msgstr[0] "{0} pracovní den"
 msgstr[1] "{0} pracovní dny"
 msgstr[2] "{0} pracovních dní"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:358
+#: js/ExceptionDialog.js:34 js/MainScreen.js:360
 #: js/widgets/AccountpickerPanel.js:149
 #: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:161
 #: js/widgets/EditRecord.js:136
@@ -118,9 +118,10 @@ msgstr ""
 "Je možné, že poslední akce, kterou jste provedl(a), neproběhla korektně."
 
 #: js/ExceptionDialog.js:53
+#, fuzzy
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occoured."
+"description of what you where doing when the error occurred."
 msgstr ""
 "Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
 "uveďte stručný popis to co jste dělal(a), když došlo k chybě."
@@ -185,7 +186,7 @@ msgstr "Čekejte prosím"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Přihlášení bylo úspěšné. Načítám Tine 2.0..."
 
-#: js/Login.js:135 js/MainScreen.js:436
+#: js/Login.js:135 js/MainScreen.js:438
 msgid "Please wait!"
 msgstr "Čekejte prosím!"
 
@@ -237,53 +238,53 @@ msgstr "Odhlásit"
 msgid "Logout from Tine 2.0"
 msgstr "Odhlásit z Tine 2.0"
 
-#: js/MainScreen.js:322
+#: js/MainScreen.js:324
 msgid "Change Password For \"{0}\""
 msgstr "Změnit heslo pro \"{0}\""
 
-#: js/MainScreen.js:346
+#: js/MainScreen.js:348
 msgid "Old Password"
 msgstr "Staré heslo"
 
-#: js/MainScreen.js:350
+#: js/MainScreen.js:352
 msgid "New Password"
 msgstr "Nové heslo"
 
-#: js/MainScreen.js:354
+#: js/MainScreen.js:356
 msgid "Repeat new Password"
 msgstr "Zopakujte nové heslo"
 
-#: js/MainScreen.js:364 js/widgets/AccountpickerPanel.js:141
+#: js/MainScreen.js:366 js/widgets/AccountpickerPanel.js:141
 #: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:144
 #: js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "OK"
 
-#: js/MainScreen.js:373
+#: js/MainScreen.js:375
 msgid "Please Wait!"
 msgstr "Čekejte prosím!"
 
-#: js/MainScreen.js:374
+#: js/MainScreen.js:376
 msgid "changing password..."
 msgstr "měním heslo..."
 
-#: js/MainScreen.js:385
+#: js/MainScreen.js:387
 msgid "Success"
 msgstr "Podařilo se"
 
-#: js/MainScreen.js:386
+#: js/MainScreen.js:388
 msgid "Your password has been changed."
 msgstr "Vaše heslo bylo změněno."
 
-#: js/MainScreen.js:392 js/MainScreen.js:402
+#: js/MainScreen.js:394 js/MainScreen.js:404
 msgid "Failure"
 msgstr "Došlo k chybě"
 
-#: js/MainScreen.js:403
+#: js/MainScreen.js:405
 msgid "The new passwords mismatch, please correct them."
 msgstr "Nová hesla se neshodují, opravte je prosím."
 
-#: js/MainScreen.js:421
+#: js/MainScreen.js:423
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -291,17 +292,17 @@ msgstr ""
 "Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech "
 "potřebných souborů na tomto počítači."
 
-#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:506
+#: js/MainScreen.js:436 js/widgets/app/GridPanel.js:506
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
 msgstr "Potvrdit"
 
-#: js/MainScreen.js:434
+#: js/MainScreen.js:436
 msgid "Are you sure you want to logout?"
 msgstr "Určitě se chcete odhlásit?"
 
-#: js/MainScreen.js:436
+#: js/MainScreen.js:438
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
@@ -1163,43 +1164,43 @@ msgstr "(kým)"
 msgid "Changed fields:"
 msgstr "Změněné položky"
 
-#: Setup/setup.xml:1941
+#: Setup/setup.xml:2060
 msgid "note"
 msgstr "poznámka"
 
-#: Setup/setup.xml:1946
+#: Setup/setup.xml:2065
 msgid "default note type"
 msgstr "výchozí typ poznámky"
 
-#: Setup/setup.xml:1972
+#: Setup/setup.xml:2091
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:1977
+#: Setup/setup.xml:2096
 msgid "telephone call"
 msgstr "telefonní hovor"
 
-#: Setup/setup.xml:2003
+#: Setup/setup.xml:2122
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2008
+#: Setup/setup.xml:2127
 msgid "email contact"
 msgstr "emailový kontakt"
 
-#: Setup/setup.xml:2034
+#: Setup/setup.xml:2153
 msgid "created"
 msgstr "vytvořeno"
 
-#: Setup/setup.xml:2039
+#: Setup/setup.xml:2158
 msgid "record created"
 msgstr "záznam byl vytvořen"
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2184
 msgid "changed"
 msgstr "změněno"
 
-#: Setup/setup.xml:2070
+#: Setup/setup.xml:2189
 msgid "record changed"
 msgstr "záznam byl změněn"
 

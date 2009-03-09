@@ -1,0 +1,125 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Tasks\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Controller.php:97
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
+#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
+msgid "Summary"
+msgstr ""
+
+#: js/EditDialog.js:118
+msgid "Due date"
+msgstr ""
+
+#: js/EditDialog.js:121 js/GridPanel.js:136
+msgid "Priority"
+msgstr ""
+
+#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
+msgid "Responsible"
+msgstr ""
+
+#: js/EditDialog.js:128
+msgid "Notes"
+msgstr ""
+
+#: js/EditDialog.js:129
+msgid "Enter description..."
+msgstr ""
+
+#: js/EditDialog.js:134
+msgid "Percentage"
+msgstr ""
+
+#: js/EditDialog.js:138 js/GridPanel.js:165
+msgid "Status"
+msgstr ""
+
+#: js/EditDialog.js:142
+msgid "Completed"
+msgstr ""
+
+#: js/GridPanel.js:31
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/GridPanel.js:57 js/GridPanel.js:127
+msgid "Due Date"
+msgstr ""
+
+#: js/GridPanel.js:79
+msgid "Failed"
+msgstr ""
+
+#: js/GridPanel.js:79
+msgid "Could not save task."
+msgstr ""
+
+#: js/GridPanel.js:123
+msgid "Add a task..."
+msgstr ""
+
+#: js/GridPanel.js:151
+msgid "Percent"
+msgstr ""
+
+#: js/GridPanel.js:180
+msgid "Creation Time"
+msgstr ""
+
+#: js/GridPanel.js:208
+msgid "Show closed"
+msgstr ""
+
+#: js/Status.js:45 Setup/setup.xml:434
+msgid "IN-PROCESS"
+msgstr ""
+
+#: js/Tasks.js:74
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Tasks.js:74
+msgid "Tasks"
+msgstr ""
+
+#: js/Tasks.js:78
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Tasks.js:78
+msgid "to do lists"
+msgstr ""
+
+#: Setup/setup.xml:390
+msgid "NEEDS-ACTION"
+msgstr ""
+
+#: Setup/setup.xml:412
+msgid "COMPLETED"
+msgstr ""
+
+#: Setup/setup.xml:456
+msgid "CANCELLED"
+msgstr ""

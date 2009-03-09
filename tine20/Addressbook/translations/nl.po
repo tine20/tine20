@@ -1,0 +1,449 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Addressbook\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal addressbook"
+msgstr ""
+
+#: Export/Pdf.php:38
+msgid "Business Contact Data"
+msgstr ""
+
+#: Export/Pdf.php:40
+msgid "Organisation / Unit"
+msgstr ""
+
+#: Export/Pdf.php:45
+msgid "Business Address"
+msgstr ""
+
+#: Export/Pdf.php:53 js/ContactGrid.js:102
+msgid "Email"
+msgstr ""
+
+#: Export/Pdf.php:56
+msgid "Telephone Work"
+msgstr ""
+
+#: Export/Pdf.php:59
+msgid "Telephone Cellphone"
+msgstr ""
+
+#: Export/Pdf.php:62
+msgid "Telephone Car"
+msgstr ""
+
+#: Export/Pdf.php:65
+msgid "Telephone Fax"
+msgstr ""
+
+#: Export/Pdf.php:68
+msgid "Telephone Page"
+msgstr ""
+
+#: Export/Pdf.php:71
+msgid "URL"
+msgstr ""
+
+#: Export/Pdf.php:74
+msgid "Role"
+msgstr ""
+
+#: Export/Pdf.php:77 js/ContactGrid.js:91 js/EditDialog.js:40
+msgid "Room"
+msgstr ""
+
+#: Export/Pdf.php:80
+msgid "Assistant"
+msgstr ""
+
+#: Export/Pdf.php:83
+msgid "Assistant Telephone"
+msgstr ""
+
+#: Export/Pdf.php:87
+msgid "Private Contact Data"
+msgstr ""
+
+#: Export/Pdf.php:89 js/ContactGrid.js:67 js/ContactGrid.js:68
+#: js/ContactGrid.js:69 js/EditDialog.js:373
+msgid "Private Address"
+msgstr ""
+
+#: Export/Pdf.php:97
+msgid "Email Home"
+msgstr ""
+
+#: Export/Pdf.php:100
+msgid "Telephone Home"
+msgstr ""
+
+#: Export/Pdf.php:103
+msgid "Telephone Cellphone Private"
+msgstr ""
+
+#: Export/Pdf.php:106
+msgid "Telephone Fax Home"
+msgstr ""
+
+#: Export/Pdf.php:109
+msgid "URL Home"
+msgstr ""
+
+#: Export/Pdf.php:113
+msgid "Other Data"
+msgstr ""
+
+#: Export/Pdf.php:115 js/ContactGrid.js:63 js/ContactGrid.js:117
+#: js/EditDialog.js:153 js/EditDialog.js:204
+msgid "Birthday"
+msgstr ""
+
+#: Export/Pdf.php:118 js/ContactGrid.js:60 js/ContactGrid.js:89
+#: js/EditDialog.js:148 js/EditDialog.js:187
+msgid "Job Title"
+msgstr ""
+
+#: js/Addressbook.js:12
+msgid "Addressbook"
+msgstr ""
+
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:486
+msgid "Internal Contacts"
+msgstr ""
+
+#: js/Addressbook.js:139 js/Addressbook.js:141
+msgid "contacts"
+msgstr ""
+
+#: js/Addressbook.js:140 js/Addressbook.js:458
+msgid "addressbook"
+msgid_plural "addressbooks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Addressbook.js:146 js/ContactGrid.js:155
+msgid "export as pdf"
+msgstr ""
+
+#: js/Addressbook.js:163
+msgid "Loading Contact..."
+msgstr ""
+
+#: js/Addressbook.js:163
+msgid "Please Wait"
+msgstr ""
+
+#: js/Addressbook.js:177
+msgid "Add new contact"
+msgstr ""
+
+#: js/Addressbook.js:179
+msgid "Edit Contact \"{0}\""
+msgstr ""
+
+#: js/Addressbook.js:202
+msgid "Please wait a moment..."
+msgstr ""
+
+#: js/Addressbook.js:202
+msgid "Saving Contact"
+msgstr ""
+
+#: js/Addressbook.js:227 js/Addressbook.js:252
+msgid "Failed"
+msgstr ""
+
+#: js/Addressbook.js:227
+msgid "Could not save contact."
+msgstr ""
+
+#: js/Addressbook.js:233
+msgid "Errors"
+msgstr ""
+
+#: js/Addressbook.js:233
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/Addressbook.js:246
+msgid "Deleting contact..."
+msgstr ""
+
+#: js/Addressbook.js:252
+msgid "Some error occured while trying to delete the contact."
+msgstr ""
+
+#: js/Addressbook.js:454
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Addressbook.js:454
+msgid "Contacts"
+msgstr ""
+
+#: js/Addressbook.js:458
+msgid "addressbooks"
+msgstr ""
+
+#: js/ContactGrid.js:56 js/ContactGrid.js:84 js/EditDialog.js:106
+#: js/EditDialog.js:165
+msgid "First Name"
+msgstr ""
+
+#: js/ContactGrid.js:57 js/ContactGrid.js:83 js/EditDialog.js:114
+#: js/EditDialog.js:169
+msgid "Last Name"
+msgstr ""
+
+#: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
+#: js/EditDialog.js:195 Setup/setup.xml:548
+msgid "Company"
+msgstr ""
+
+#: js/ContactGrid.js:59 js/ContactGrid.js:103 js/ContactGrid.js:382
+#: js/ContactGrid.js:412 js/EditDialog.js:225
+msgid "Phone"
+msgstr ""
+
+#: js/ContactGrid.js:61 js/ContactGrid.js:90 js/EditDialog.js:35
+msgid "Job Role"
+msgstr ""
+
+#: js/ContactGrid.js:64 js/ContactGrid.js:67 js/ContactGrid.js:92
+#: js/EditDialog.js:342 js/EditDialog.js:385
+msgid "Street"
+msgstr ""
+
+#: js/ContactGrid.js:64 js/ContactGrid.js:65 js/ContactGrid.js:66
+#: js/EditDialog.js:326
+msgid "Company Address"
+msgstr ""
+
+#: js/ContactGrid.js:65 js/ContactGrid.js:68 js/EditDialog.js:356
+#: js/EditDialog.js:399
+msgid "Postal Code"
+msgstr ""
+
+#: js/ContactGrid.js:66 js/ContactGrid.js:69 js/ContactGrid.js:93
+#: js/EditDialog.js:360 js/EditDialog.js:403
+msgid "City"
+msgstr ""
+
+#: js/ContactGrid.js:82
+msgid "Type"
+msgstr ""
+
+#: js/ContactGrid.js:85
+msgid "Full Name"
+msgstr ""
+
+#: js/ContactGrid.js:86 js/EditDialog.js:17 js/EditDialog.js:142
+#: js/EditDialog.js:181
+msgid "Display Name"
+msgstr ""
+
+#: js/ContactGrid.js:88 js/EditDialog.js:132 js/EditDialog.js:199
+msgid "Unit"
+msgstr ""
+
+#: js/ContactGrid.js:94 js/EditDialog.js:350 js/EditDialog.js:393
+msgid "Region"
+msgstr ""
+
+#: js/ContactGrid.js:95
+msgid "Postalcode"
+msgstr ""
+
+#: js/ContactGrid.js:96 js/EditDialog.js:365 js/EditDialog.js:408
+msgid "Country"
+msgstr ""
+
+#: js/ContactGrid.js:97
+msgid "Street (private)"
+msgstr ""
+
+#: js/ContactGrid.js:98
+msgid "City (private)"
+msgstr ""
+
+#: js/ContactGrid.js:99
+msgid "Region (private)"
+msgstr ""
+
+#: js/ContactGrid.js:100
+msgid "Postalcode (private)"
+msgstr ""
+
+#: js/ContactGrid.js:101
+msgid "Country (private)"
+msgstr ""
+
+#: js/ContactGrid.js:104 js/ContactGrid.js:383 js/ContactGrid.js:413
+#: js/EditDialog.js:230
+msgid "Mobile"
+msgstr ""
+
+#: js/ContactGrid.js:105 js/ContactGrid.js:384 js/ContactGrid.js:414
+#: js/EditDialog.js:235
+msgid "Fax"
+msgstr ""
+
+#: js/ContactGrid.js:106
+msgid "Car phone"
+msgstr ""
+
+#: js/ContactGrid.js:107
+msgid "Pager"
+msgstr ""
+
+#: js/ContactGrid.js:108 js/EditDialog.js:242
+msgid "Phone (private)"
+msgstr ""
+
+#: js/ContactGrid.js:109 js/EditDialog.js:252
+msgid "Fax (private)"
+msgstr ""
+
+#: js/ContactGrid.js:110 js/EditDialog.js:247
+msgid "Mobile (private)"
+msgstr ""
+
+#: js/ContactGrid.js:111
+msgid "Email (private)"
+msgstr ""
+
+#: js/ContactGrid.js:112 js/ContactGrid.js:386 js/ContactGrid.js:416
+#: js/EditDialog.js:272
+msgid "Web"
+msgstr ""
+
+#: js/ContactGrid.js:113
+msgid "URL (private)"
+msgstr ""
+
+#: js/ContactGrid.js:114
+msgid "Note"
+msgstr ""
+
+#: js/ContactGrid.js:115
+msgid "Timezone"
+msgstr ""
+
+#: js/ContactGrid.js:116
+msgid "Geo"
+msgstr ""
+
+#: js/ContactGrid.js:126
+msgid "Export"
+msgstr ""
+
+#: js/ContactGrid.js:135
+msgid "Export as PDF"
+msgstr ""
+
+#: js/ContactGrid.js:142
+msgid "Export as CSV"
+msgstr ""
+
+#: js/ContactGrid.js:166
+msgid "call contact"
+msgstr ""
+
+#: js/ContactGrid.js:204
+msgid "Work"
+msgstr ""
+
+#: js/ContactGrid.js:213
+msgid "Home"
+msgstr ""
+
+#: js/ContactGrid.js:222
+msgid "Cell"
+msgstr ""
+
+#: js/ContactGrid.js:231
+msgid "Cell private"
+msgstr ""
+
+#: js/ContactGrid.js:313
+msgid "Select contact"
+msgstr ""
+
+#: js/ContactGrid.js:385 js/ContactGrid.js:415 js/EditDialog.js:259
+msgid "E-Mail"
+msgstr ""
+
+#: js/EditDialog.js:30
+msgid "Suffix"
+msgstr ""
+
+#: js/EditDialog.js:48
+msgid "Personal Information"
+msgstr ""
+
+#: js/EditDialog.js:85
+msgid "Salutation"
+msgstr ""
+
+#: js/EditDialog.js:96 js/EditDialog.js:160
+msgid "Title"
+msgstr ""
+
+#: js/EditDialog.js:110
+msgid "Middle Name"
+msgstr ""
+
+#: js/EditDialog.js:265
+msgid "E-Mail (private)"
+msgstr ""
+
+#: js/EditDialog.js:296
+msgid "Contact Information"
+msgstr ""
+
+#: js/EditDialog.js:346 js/EditDialog.js:389
+msgid "Street 2"
+msgstr ""
+
+#: js/EditDialog.js:415
+msgid "Custom Fields"
+msgstr ""
+
+#: js/EditDialog.js:455
+msgid "Description"
+msgstr ""
+
+#: js/EditDialog.js:469
+msgid "Enter description"
+msgstr ""
+
+#: js/EditDialog.js:506
+#, python-format
+msgid "Link"
+msgid_plural "Links [%d]"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Setup/setup.xml:512
+msgid "Mr"
+msgstr ""
+
+#: Setup/setup.xml:530
+msgid "Ms"
+msgstr ""

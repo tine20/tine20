@@ -43,7 +43,7 @@ msgstr "Začátek"
 msgid "Scheduled end"
 msgstr "Plánovaný konec"
 
-#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:126
+#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:125
 msgid "End"
 msgstr "Konec"
 
@@ -196,13 +196,13 @@ msgstr "Žádné leady nebyly nalezeny."
 msgid "Lead id"
 msgstr "ID Leadu"
 
-#: js/Crm.js:343 js/Crm.js:1652 js/LeadEditDialog.js:333
-#: js/LeadEditDialog.js:376
+#: js/Crm.js:343 js/Crm.js:1652 js/LeadEditDialog.js:322
+#: js/LeadEditDialog.js:365
 msgid "Partner"
 msgstr "Partner"
 
-#: js/Crm.js:344 js/Crm.js:1632 js/LeadEditDialog.js:332
-#: js/LeadEditDialog.js:372
+#: js/Crm.js:344 js/Crm.js:1632 js/LeadEditDialog.js:321
+#: js/LeadEditDialog.js:361
 msgid "Customer"
 msgstr "Zákazník"
 
@@ -329,7 +329,7 @@ msgstr "Produkt"
 msgid "Add a product..."
 msgstr "Přidat produkt..."
 
-#: js/Crm.js:1296 js/LeadEditDialog.js:163
+#: js/Crm.js:1296 js/LeadEditDialog.js:152
 msgid "Description"
 msgstr "Popis"
 
@@ -353,7 +353,7 @@ msgstr "Přidat nový kontakt na zákazníka"
 msgid "Change type to Customer"
 msgstr "Změnit typ na Zákazník"
 
-#: js/Crm.js:1642 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
+#: js/Crm.js:1642 js/LeadEditDialog.js:320 js/LeadEditDialog.js:357
 msgid "Responsible"
 msgstr "Odpovědná osoba"
 
@@ -442,18 +442,14 @@ msgid "Estimated end"
 msgstr "Odhadovaný konec"
 
 #: js/LeadEditDialog.js:133
-msgid "folder"
-msgstr "složka"
-
-#: js/LeadEditDialog.js:144
 msgid "Overview"
 msgstr "Přehled"
 
-#: js/LeadEditDialog.js:177
+#: js/LeadEditDialog.js:166
 msgid "Enter description"
 msgstr "Zadejte popis"
 
-#: js/LeadEditDialog.js:228
+#: js/LeadEditDialog.js:217
 msgid "Expected turnover"
 msgstr "Očekávaný obrat"
 
@@ -508,6 +504,9 @@ msgstr "přijatý"
 #: Setup/setup.xml:557
 msgid "lost"
 msgstr "ztracený"
+
+#~ msgid "folder"
+#~ msgstr "složka"
 
 #~ msgid "Enter searchfilter"
 #~ msgstr "Zadejte hledaný výraz"

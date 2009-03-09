@@ -96,7 +96,7 @@ msgid_plural "{0} workdays"
 msgstr[0] "{0} работен ден"
 msgstr[1] "{0} работни дни"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:358
+#: js/ExceptionDialog.js:34 js/MainScreen.js:360
 #: js/widgets/AccountpickerPanel.js:149
 #: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:161
 #: js/widgets/EditRecord.js:136
@@ -112,9 +112,10 @@ msgid "The last action you made was potentially not performed correctly."
 msgstr "Възможно е вашата последна операция до не е изпълнена коректно."
 
 #: js/ExceptionDialog.js:53
+#, fuzzy
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occoured."
+"description of what you where doing when the error occurred."
 msgstr ""
 "Изпращайки протокол Вие бихте подпомогнали усавършенстването на програмата. "
 "Моля опишете вашите стъпки преди настъпването на грешката."
@@ -179,7 +180,7 @@ msgstr "Моля изчакайте"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Влизането е успешно. Tine 2.0 ще бъде заредена..."
 
-#: js/Login.js:135 js/MainScreen.js:436
+#: js/Login.js:135 js/MainScreen.js:438
 msgid "Please wait!"
 msgstr "Моля изчакайте!"
 
@@ -232,53 +233,53 @@ msgstr "Изход"
 msgid "Logout from Tine 2.0"
 msgstr "Излизане от Tine 2.0"
 
-#: js/MainScreen.js:322
+#: js/MainScreen.js:324
 msgid "Change Password For \"{0}\""
 msgstr "Сменя парола за \"{0}\""
 
-#: js/MainScreen.js:346
+#: js/MainScreen.js:348
 msgid "Old Password"
 msgstr "Стара парола"
 
-#: js/MainScreen.js:350
+#: js/MainScreen.js:352
 msgid "New Password"
 msgstr "Нова парола"
 
-#: js/MainScreen.js:354
+#: js/MainScreen.js:356
 msgid "Repeat new Password"
 msgstr "Повтори новата парола"
 
-#: js/MainScreen.js:364 js/widgets/AccountpickerPanel.js:141
+#: js/MainScreen.js:366 js/widgets/AccountpickerPanel.js:141
 #: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:144
 #: js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:373
+#: js/MainScreen.js:375
 msgid "Please Wait!"
 msgstr "Моля изчакайте"
 
-#: js/MainScreen.js:374
+#: js/MainScreen.js:376
 msgid "changing password..."
 msgstr "сменя парола..."
 
-#: js/MainScreen.js:385
+#: js/MainScreen.js:387
 msgid "Success"
 msgstr "Успех"
 
-#: js/MainScreen.js:386
+#: js/MainScreen.js:388
 msgid "Your password has been changed."
 msgstr "Вашата парола е сменена."
 
-#: js/MainScreen.js:392 js/MainScreen.js:402
+#: js/MainScreen.js:394 js/MainScreen.js:404
 msgid "Failure"
 msgstr "Грешка"
 
-#: js/MainScreen.js:403
+#: js/MainScreen.js:405
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новито пароли не съвпадат. Моля задай повторно"
 
-#: js/MainScreen.js:421
+#: js/MainScreen.js:423
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -286,17 +287,17 @@ msgstr ""
 "Инсталирането на Гиерс (Gears) ще провери актуалното състояние на Tine 2.0 и "
 "ще кочи всички необходими полета  на вашия компютър."
 
-#: js/MainScreen.js:434 js/widgets/app/GridPanel.js:506
+#: js/MainScreen.js:436 js/widgets/app/GridPanel.js:506
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
 msgstr "Потвърди"
 
-#: js/MainScreen.js:434
+#: js/MainScreen.js:436
 msgid "Are you sure you want to logout?"
 msgstr "Наистина ли желаете да излезете?"
 
-#: js/MainScreen.js:436
+#: js/MainScreen.js:438
 msgid "Logging you out..."
 msgstr "Подготвя излизане..."
 
@@ -1157,43 +1158,43 @@ msgstr "от"
 msgid "Changed fields:"
 msgstr "Променени полета:"
 
-#: Setup/setup.xml:1941
+#: Setup/setup.xml:2060
 msgid "note"
 msgstr "бележка"
 
-#: Setup/setup.xml:1946
+#: Setup/setup.xml:2065
 msgid "default note type"
 msgstr "отсъстващ тип на бележка"
 
-#: Setup/setup.xml:1972
+#: Setup/setup.xml:2091
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:1977
+#: Setup/setup.xml:2096
 msgid "telephone call"
 msgstr "телефонно позвъняване"
 
-#: Setup/setup.xml:2003
+#: Setup/setup.xml:2122
 msgid "email"
 msgstr "Имейл"
 
-#: Setup/setup.xml:2008
+#: Setup/setup.xml:2127
 msgid "email contact"
 msgstr "Имейл контакт"
 
-#: Setup/setup.xml:2034
+#: Setup/setup.xml:2153
 msgid "created"
 msgstr "създаден"
 
-#: Setup/setup.xml:2039
+#: Setup/setup.xml:2158
 msgid "record created"
 msgstr "създадена документация"
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2184
 msgid "changed"
 msgstr "променен"
 
-#: Setup/setup.xml:2070
+#: Setup/setup.xml:2189
 msgid "record changed"
 msgstr "променена документация"
 

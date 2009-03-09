@@ -45,7 +45,7 @@ msgstr "Начать"
 msgid "Scheduled end"
 msgstr "Запланированный конец"
 
-#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:126
+#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:125
 msgid "End"
 msgstr "Конец"
 
@@ -199,13 +199,13 @@ msgstr "Никаких указаний не бло найдено."
 msgid "Lead id"
 msgstr "Идентификацыя указания продажи"
 
-#: js/Crm.js:343 js/Crm.js:1652 js/LeadEditDialog.js:333
-#: js/LeadEditDialog.js:376
+#: js/Crm.js:343 js/Crm.js:1652 js/LeadEditDialog.js:322
+#: js/LeadEditDialog.js:365
 msgid "Partner"
 msgstr "Партнёр"
 
-#: js/Crm.js:344 js/Crm.js:1632 js/LeadEditDialog.js:332
-#: js/LeadEditDialog.js:372
+#: js/Crm.js:344 js/Crm.js:1632 js/LeadEditDialog.js:321
+#: js/LeadEditDialog.js:361
 msgid "Customer"
 msgstr "Клиент"
 
@@ -333,7 +333,7 @@ msgstr "Продукт"
 msgid "Add a product..."
 msgstr "Добавить продукты..."
 
-#: js/Crm.js:1296 js/LeadEditDialog.js:163
+#: js/Crm.js:1296 js/LeadEditDialog.js:152
 msgid "Description"
 msgstr "Описание"
 
@@ -357,7 +357,7 @@ msgstr "Добавьте нового клиента"
 msgid "Change type to Customer"
 msgstr "Поменять тип клиента"
 
-#: js/Crm.js:1642 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
+#: js/Crm.js:1642 js/LeadEditDialog.js:320 js/LeadEditDialog.js:357
 msgid "Responsible"
 msgstr "Ответственный"
 
@@ -447,18 +447,14 @@ msgid "Estimated end"
 msgstr "Предполагаемый конец"
 
 #: js/LeadEditDialog.js:133
-msgid "folder"
-msgstr "Папка"
-
-#: js/LeadEditDialog.js:144
 msgid "Overview"
 msgstr "Краткий обзор"
 
-#: js/LeadEditDialog.js:177
+#: js/LeadEditDialog.js:166
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/LeadEditDialog.js:228
+#: js/LeadEditDialog.js:217
 msgid "Expected turnover"
 msgstr "Ожидаемый оборот"
 
@@ -513,6 +509,9 @@ msgstr "Принятый"
 #: Setup/setup.xml:557
 msgid "lost"
 msgstr "Потерянный"
+
+#~ msgid "folder"
+#~ msgstr "Папка"
 
 #~ msgid "Enter searchfilter"
 #~ msgstr "Введите поисковой фильтр"

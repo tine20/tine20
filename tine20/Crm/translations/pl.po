@@ -45,7 +45,7 @@ msgstr "Start"
 msgid "Scheduled end"
 msgstr "Planowane zakończenie"
 
-#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:126
+#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:125
 msgid "End"
 msgstr "Koniec"
 
@@ -199,13 +199,13 @@ msgstr "Wprowadzeń nie znaleziono"
 msgid "Lead id"
 msgstr "ID wporwadzenia"
 
-#: js/Crm.js:343 js/Crm.js:1652 js/LeadEditDialog.js:333
-#: js/LeadEditDialog.js:376
+#: js/Crm.js:343 js/Crm.js:1652 js/LeadEditDialog.js:322
+#: js/LeadEditDialog.js:365
 msgid "Partner"
 msgstr "Partner"
 
-#: js/Crm.js:344 js/Crm.js:1632 js/LeadEditDialog.js:332
-#: js/LeadEditDialog.js:372
+#: js/Crm.js:344 js/Crm.js:1632 js/LeadEditDialog.js:321
+#: js/LeadEditDialog.js:361
 msgid "Customer"
 msgstr "Klient"
 
@@ -334,7 +334,7 @@ msgstr "Produkt"
 msgid "Add a product..."
 msgstr "Utwórz produkt"
 
-#: js/Crm.js:1296 js/LeadEditDialog.js:163
+#: js/Crm.js:1296 js/LeadEditDialog.js:152
 msgid "Description"
 msgstr "Opis"
 
@@ -358,7 +358,7 @@ msgstr "Utwórz nowy kontakt klienta"
 msgid "Change type to Customer"
 msgstr ""
 
-#: js/Crm.js:1642 js/LeadEditDialog.js:331 js/LeadEditDialog.js:368
+#: js/Crm.js:1642 js/LeadEditDialog.js:320 js/LeadEditDialog.js:357
 msgid "Responsible"
 msgstr "Odpowiedzialny"
 
@@ -448,18 +448,14 @@ msgid "Estimated end"
 msgstr "Szacowany koniec"
 
 #: js/LeadEditDialog.js:133
-msgid "folder"
-msgstr "folder"
-
-#: js/LeadEditDialog.js:144
 msgid "Overview"
 msgstr "Przegląd"
 
-#: js/LeadEditDialog.js:177
+#: js/LeadEditDialog.js:166
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/LeadEditDialog.js:228
+#: js/LeadEditDialog.js:217
 msgid "Expected turnover"
 msgstr "Oczekiwany obrót"
 
@@ -516,6 +512,9 @@ msgstr "zaakceptowany"
 #: Setup/setup.xml:557
 msgid "lost"
 msgstr "stracony"
+
+#~ msgid "folder"
+#~ msgstr "folder"
 
 #~ msgid "Enter searchfilter"
 #~ msgstr "Wprowadzenie filtra szukania"

@@ -25,18 +25,19 @@ msgid "Order"
 msgstr "Reihenfolge"
 
 #: js/ApplicationGridPanel.js:40
-msgid "Current Version"
+#, fuzzy
+msgid "Installed Version"
 msgstr "Installierte Version"
 
 #: js/ApplicationGridPanel.js:41
-msgid "Version"
-msgstr "Version"
+msgid "Available Version"
+msgstr ""
 
 #: js/ApplicationGridPanel.js:42
 msgid "Status"
 msgstr "Status"
 
-#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:163
+#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:162
 msgid "Install application"
 msgstr "Anwendung installieren"
 
@@ -56,28 +57,112 @@ msgstr "Scheiße"
 msgid "Where are the backup tapes"
 msgstr "Wo sind nur die Backup Bänder"
 
-#: js/EnvCheckGridPanel.js:104
+#: js/ConfigManagerGridPanel.js:71
+msgid "Invalid configuration"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:71
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:118
+msgid "Transfering Configuration..."
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:130
+msgid "Informations"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:134
+msgid "Setup Authentication"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:137
+msgid "Username"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:141 js/ConfigManagerGridPanel.js:167
+msgid "Password"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:146 js/ConfigManagerGridPanel.js:159
+msgid "Database"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:150
+msgid "Adapter"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:155
+msgid "Hostname"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:163
+msgid "User"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:171
+msgid "Prefix"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:174
+msgid "Logging"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:180
+msgid "Filename"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:192
+msgid "Priority"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:196
+msgid "Caching"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:202
+msgid "Path"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:205
+msgid "Lifetime (seconds)"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:298
+#, fuzzy
+msgid "Check config"
+msgstr "Teste"
+
+#: js/ConfigManagerGridPanel.js:305
+msgid "Save config"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:313
+msgid "Download config file"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:103
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:134
+#: js/EnvCheckGridPanel.js:133
 msgid "Check"
 msgstr "Teste"
 
-#: js/EnvCheckGridPanel.js:135
+#: js/EnvCheckGridPanel.js:134
 msgid "Result"
 msgstr "Ergebnis"
 
-#: js/EnvCheckGridPanel.js:136
+#: js/EnvCheckGridPanel.js:135
 msgid "Error"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:154
-#, fuzzy
-msgid "Check again"
-msgstr "Teste"
+#: js/EnvCheckGridPanel.js:153
+msgid "Run setup tests"
+msgstr ""
 
 #: js/Setup.js:29
 msgid "Setup Checks"
@@ -91,8 +176,11 @@ msgstr "Konfigurations-Verwaltung"
 msgid "Application Manager"
 msgstr "Anwendungs-Verwaltung"
 
-#: js/Setup.js:126
+#: js/Setup.js:128
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Anwendung"
 msgstr[1] "Anwendungen"
+
+#~ msgid "Version"
+#~ msgstr "Version"

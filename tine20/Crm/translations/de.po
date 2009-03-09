@@ -26,8 +26,7 @@ msgstr "Leads hinzufügen, bearbeiten und löschen"
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:231
-#: js/Crm.js:1044
+#: Controller/Lead.php:231 js/Crm.js:1044
 msgid "Type"
 msgstr "Typ"
 
@@ -35,9 +34,7 @@ msgstr "Typ"
 msgid "Source"
 msgstr "Quelle"
 
-#: Controller/Lead.php:233
-#: Export/Pdf.php:92
-#: js/LeadEditDialog.js:112
+#: Controller/Lead.php:233 Export/Pdf.php:92 js/LeadEditDialog.js:112
 msgid "Start"
 msgstr "Start"
 
@@ -45,23 +42,15 @@ msgstr "Start"
 msgid "Scheduled end"
 msgstr "geplantes Ende"
 
-#: Controller/Lead.php:235
-#: Export/Pdf.php:95
-#: js/LeadEditDialog.js:126
+#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:125
 msgid "End"
 msgstr "Ende"
 
-#: Controller/Lead.php:236
-#: Export/Pdf.php:86
-#: js/Crm.js:299
-#: js/Crm.js:347
+#: Controller/Lead.php:236 Export/Pdf.php:86 js/Crm.js:299 js/Crm.js:347
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Controller/Lead.php:237
-#: Export/Pdf.php:89
-#: js/Crm.js:298
-#: js/Crm.js:346
+#: Controller/Lead.php:237 Export/Pdf.php:89 js/Crm.js:298 js/Crm.js:346
 #: js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
@@ -102,20 +91,15 @@ msgstr "%ss persönliche Leads"
 msgid "Lead Data"
 msgstr "Lead-Daten"
 
-#: Export/Pdf.php:77
-#: js/Crm.js:345
-#: js/LeadEditDialog.js:41
-#: js/LeadState.js:220
+#: Export/Pdf.php:77 js/Crm.js:345 js/LeadEditDialog.js:41 js/LeadState.js:220
 msgid "Leadstate"
 msgstr "Status"
 
-#: Export/Pdf.php:80
-#: js/LeadEditDialog.js:70
+#: Export/Pdf.php:80 js/LeadEditDialog.js:70
 msgid "Leadtype"
 msgstr "Typ"
 
-#: Export/Pdf.php:83
-#: js/LeadEditDialog.js:87
+#: Export/Pdf.php:83 js/LeadEditDialog.js:87
 msgid "Leadsource"
 msgstr "Quelle"
 
@@ -123,13 +107,11 @@ msgstr "Quelle"
 msgid "End Scheduled"
 msgstr "geplantes Ende"
 
-#: Export/Pdf.php:176
-#: js/Crm.js:1075
+#: Export/Pdf.php:176 js/Crm.js:1075
 msgid "Contacts"
 msgstr "Kontakte"
 
-#: Export/Pdf.php:203
-#: js/Crm.js:1022
+#: Export/Pdf.php:203 js/Crm.js:1022
 msgid "Address"
 msgstr "Anschrift"
 
@@ -141,24 +123,19 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "Email"
 
-#: Export/Pdf.php:224
-#: js/Crm.js:1209
+#: Export/Pdf.php:224 js/Crm.js:1209
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: Export/Pdf.php:243
-#: js/Crm.js:1133
+#: Export/Pdf.php:243 js/Crm.js:1133
 msgid "Due Date"
 msgstr "Fälligkeitsdatum"
 
-#: Export/Pdf.php:248
-#: js/Crm.js:1147
+#: Export/Pdf.php:248 js/Crm.js:1147
 msgid "Priority"
 msgstr "Priorität"
 
-#: Export/Pdf.php:262
-#: js/Crm.js:618
-#: js/Crm.js:1349
+#: Export/Pdf.php:262 js/Crm.js:618 js/Crm.js:1349
 msgid "Products"
 msgstr "Produkte"
 
@@ -202,8 +179,7 @@ msgstr "Abgeschlossene Leads anzeigen"
 msgid "Lead"
 msgstr "Lead"
 
-#: js/Crm.js:296
-#: js/Crm.js:342
+#: js/Crm.js:296 js/Crm.js:342
 msgid "Lead name"
 msgstr "Lead-Name"
 
@@ -211,8 +187,7 @@ msgstr "Lead-Name"
 msgid "Displaying leads {0} - {1} of {2}"
 msgstr "Zeige Lead {0} - {1} von {2}"
 
-#: js/Crm.js:315
-#: js/Crm.js:379
+#: js/Crm.js:315 js/Crm.js:379
 msgid "No leads found."
 msgstr "Keine Leads gefunden."
 
@@ -220,17 +195,13 @@ msgstr "Keine Leads gefunden."
 msgid "Lead id"
 msgstr "Lead-Bezeichner"
 
-#: js/Crm.js:343
-#: js/Crm.js:1652
-#: js/LeadEditDialog.js:333
-#: js/LeadEditDialog.js:376
+#: js/Crm.js:343 js/Crm.js:1652 js/LeadEditDialog.js:322
+#: js/LeadEditDialog.js:365
 msgid "Partner"
 msgstr "Partner"
 
-#: js/Crm.js:344
-#: js/Crm.js:1632
-#: js/LeadEditDialog.js:332
-#: js/LeadEditDialog.js:372
+#: js/Crm.js:344 js/Crm.js:1632 js/LeadEditDialog.js:321
+#: js/LeadEditDialog.js:361
 msgid "Customer"
 msgstr "Kunde"
 
@@ -260,9 +231,7 @@ msgstr[1] "Leads löschen"
 msgid "Delete selected leads"
 msgstr "Ausgewählte Leads löschen"
 
-#: js/Crm.js:485
-#: js/Crm.js:1739
-#: js/Crm.js:1740
+#: js/Crm.js:485 js/Crm.js:1739 js/Crm.js:1740
 msgid "Export as PDF"
 msgstr "Als PDF exportieren"
 
@@ -270,9 +239,7 @@ msgstr "Als PDF exportieren"
 msgid "Export selected lead as PDF"
 msgstr "Als PDF exportieren"
 
-#: js/Crm.js:495
-#: js/Crm.js:1684
-#: js/Crm.js:1703
+#: js/Crm.js:495 js/Crm.js:1684 js/Crm.js:1703
 msgid "Add task"
 msgstr "Aufgabe hinzufügen"
 
@@ -292,13 +259,11 @@ msgstr "Lead-Quellen"
 msgid "Lead types"
 msgstr "Lead-Typen"
 
-#: js/Crm.js:677
-#: js/Crm.js:1036
+#: js/Crm.js:677 js/Crm.js:1036
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Crm.js:678
-#: js/Crm.js:1037
+#: js/Crm.js:678 js/Crm.js:1037
 msgid "Cellphone"
 msgstr "Telefon (Mobil)"
 
@@ -362,8 +327,7 @@ msgstr "Produkt"
 msgid "Add a product..."
 msgstr "Produkt hinzufügen..."
 
-#: js/Crm.js:1296
-#: js/LeadEditDialog.js:163
+#: js/Crm.js:1296 js/LeadEditDialog.js:152
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -387,9 +351,7 @@ msgstr "Neuen Kunden hinzufügen"
 msgid "Change type to Customer"
 msgstr "Kontakttyp auf Kunde setzen"
 
-#: js/Crm.js:1642
-#: js/LeadEditDialog.js:331
-#: js/LeadEditDialog.js:368
+#: js/Crm.js:1642 js/LeadEditDialog.js:320 js/LeadEditDialog.js:357
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
@@ -449,8 +411,7 @@ msgstr "Produkt entfernen"
 msgid "Remove selected products"
 msgstr "Ausgewählte Einträge entfernen"
 
-#: js/Crm.js:1768
-#: js/Crm.js:1769
+#: js/Crm.js:1768 js/Crm.js:1769
 msgid "Leads"
 msgstr "Leads"
 
@@ -479,18 +440,14 @@ msgid "Estimated end"
 msgstr "Geplantes Ende"
 
 #: js/LeadEditDialog.js:133
-msgid "folder"
-msgstr "Ordner"
-
-#: js/LeadEditDialog.js:144
 msgid "Overview"
 msgstr "Übersicht"
 
-#: js/LeadEditDialog.js:177
+#: js/LeadEditDialog.js:166
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
-#: js/LeadEditDialog.js:228
+#: js/LeadEditDialog.js:217
 msgid "Expected turnover"
 msgstr "Erwarteter Umsatz"
 
@@ -546,36 +503,53 @@ msgstr "akzeptiert"
 msgid "lost"
 msgstr "verloren"
 
+#~ msgid "folder"
+#~ msgstr "Ordner"
+
 #~ msgid "Enter searchfilter"
 #~ msgstr "Suchfilter eingeben"
+
 #~ msgid "leadstate"
 #~ msgstr "Status"
+
 #~ msgid "Search Contacts"
 #~ msgstr "Kontakte suchen"
+
 #~ msgid "Add existing contact"
 #~ msgstr "Existierenden Kontakt hinzufügen"
+
 #~ msgid "Add existing contact to lead"
 #~ msgstr "Existierenden Kontakt hinzufügen"
+
 #~ msgid "Add contact"
 #~ msgstr "Kontakt hinzufügen"
+
 #~ msgid "Organisation"
 #~ msgstr "Organisation"
+
 #~ msgid "Lead updated"
 #~ msgstr "Hinweis aktualisiert"
+
 #~ msgid "Lead added"
 #~ msgstr "Hinweis hinzugefügt"
+
 #~ msgid "Add responsible"
 #~ msgstr "Verantwortlichen hinzufügen"
+
 #~ msgid "Add new responsible contact"
 #~ msgstr "Neuen Verantwortlichen hinzufügen"
+
 #~ msgid "Add customer"
 #~ msgstr "Kunden hinzufügen"
+
 #~ msgid "Add partner"
 #~ msgstr "Partner hinzufügen"
+
 #~ msgid "Add new partner contact"
 #~ msgstr "Neuen Partner hinzufügen"
+
 #~ msgid "History"
 #~ msgstr "Aktivitäten"
+
 #~ msgid "Could not save task."
 #~ msgstr "Aufgabe konnte nicht gespeichert werden."
-

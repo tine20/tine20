@@ -81,7 +81,7 @@ msgstr "已清除"
 msgid "{0}"
 msgstr "{0}"
 
-#: js/DurationSpinner.js:61 js/DurationSpinner.js:71
+#: js/DurationSpinner.js:63 js/DurationSpinner.js:73
 msgid "Not a valid time"
 msgstr "不是有效时间"
 
@@ -108,12 +108,12 @@ msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "时间帐户列表"
 
-#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:69
+#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:72
 #: js/TimesheetGridPanel.js:182
 msgid "Number"
 msgstr "号码"
 
-#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:75
+#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:78
 #: js/TimesheetGridPanel.js:183
 msgid "Title"
 msgstr "头衔"
@@ -126,7 +126,7 @@ msgstr "单位"
 msgid "Unit Price"
 msgstr "单价"
 
-#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:81
+#: js/TimeaccountEditDialog.js:107 js/TimeaccountGridPanel.js:91
 msgid "Budget"
 msgstr "预算"
 
@@ -134,7 +134,7 @@ msgstr "预算"
 msgid "Timesheets are billable"
 msgstr "记帐的时间表"
 
-#: js/TimeaccountEditDialog.js:115
+#: js/TimeaccountEditDialog.js:115 js/TimeaccountGridPanel.js:84
 msgid "Status"
 msgstr "状态"
 
@@ -197,7 +197,7 @@ msgstr "管理所有的"
 msgid "Permissions"
 msgstr "许可"
 
-#: js/TimeaccountGridPanel.js:93
+#: js/TimeaccountGridPanel.js:112
 msgid "Show closed"
 msgstr "关闭展示"
 
