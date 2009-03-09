@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <plugin>Addressbook_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>TAB</delimiter>
+    <description> mac addressbook german exported by 
+http://www.macupdate.com/info.php/id/9312
+with all fields enabled</description>
+    <encoding>MAC-CENTRALEUROPE</encoding>
+    <mapping>
+        <field>
+            <index>0</index>
+            <source>Vorname</source>
+            <destination>n_given</destination>
+        </field>
+        <field>
+            <index>1</index>
+            <source>Ausspracheform Vorname</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>2</index>
+            <source>Nachname</source>
+            <destination>n_family</destination>
+        </field>
+        <field>
+            <index>3</index>
+            <source>Ausspracheform Nachname</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>4</index>
+            <source>Firma</source>
+            <destination>org_name</destination>
+        </field>
+        <field>
+            <index>5</index>
+            <source>Berufsbezeichnung</source>
+            <destination>role</destination>
+        </field>
+        <field>
+            <index>6</index>
+            <source>Arbeitsadresse Strasse</source>
+            <destination>adr_one_street</destination>
+        </field>
+        <field>
+            <index>7</index>
+            <source>Arbeitsadresse Stadt</source>
+            <destination>adr_one_locality</destination>
+        </field>
+        <field>
+            <index>8</index>
+            <source>Arbeitsadresse Bundesland</source>
+            <destination>adr_one_region</destination>
+        </field>
+        <field>
+            <index>9</index>
+            <source>Arbeitsadresse PLZ</source>
+            <destination>adr_one_postalcode</destination>
+        </field>
+        <field>
+            <index>10</index>
+            <source>Arbeitsadresse Land</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>11</index>
+            <source>Privatadresse Strasse</source>
+            <destination>adr_two_street</destination>
+        </field>
+        <field>
+            <index>12</index>
+            <source>Privatadresse Stadt</source>
+            <destination>adr_two_locality</destination>
+        </field>
+        <field>
+            <index>13</index>
+            <source>Privatadresse Bundesland</source>
+            <destination>adr_two_region</destination>
+        </field>
+        <field>
+            <index>14</index>
+            <source>Privatadresse PLZ</source>
+            <destination>adr_two_postalcode</destination>
+        </field>
+        <field>
+            <index>15</index>
+            <source>Privatadresse Land</source>
+            <destination>adr_two_postalcode</destination>
+        </field>
+        <field>
+            <index>16</index>
+            <source>Andere Adr. Strasse</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>17</index>
+            <source>Andere Adr. Stadt</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>18</index>
+            <source>Andere Adr. Bundesland</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>19</index>
+            <source>Andere Adr. PLZ</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>20</index>
+            <source>Andere Adr. Land</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>21</index>
+            <source>Arbeit E-Mail</source>
+            <destination>email</destination>
+        </field>
+        <field>
+            <index>22</index>
+            <source>Privat E-Mail</source>
+            <destination>email_home</destination>
+        </field>
+        <field>
+            <index>23</index>
+            <source>Andere E-Mail</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>24</index>
+            <source>Arbeit Telefon</source>
+            <destination>tel_work</destination>
+        </field>
+        <field>
+            <index>25</index>
+            <source>Privat Telefon</source>
+            <destination>tel_home</destination>
+        </field>
+        <field>
+            <index>26</index>
+            <source>Hauptnummer</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>27</index>
+            <source>Mobiltelefon</source>
+            <destination>tel_cell</destination>
+        </field>
+        <field>
+            <index>28</index>
+            <source>Pager Nummer</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>29</index>
+            <source>Andere Telefonnummer</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>30</index>
+            <source>Arbeit Fax</source>
+            <destination>tel_fax</destination>
+        </field>
+        <field>
+            <index>31</index>
+            <source>Privat Fax</source>
+            <destination>tel_fax_home</destination>
+        </field>
+        <field>
+            <index>32</index>
+            <source>Arbeit AIM</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>33</index>
+            <source>Privat AIM</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>34</index>
+            <source>Arbeit Jabber</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>35</index>
+            <source>Privat Jabber</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>36</index>
+            <source>Arbeit MSNr</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>37</index>
+            <source>Privat MSN</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>38</index>
+            <source>Arbeit Yahoo</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>39</index>
+            <source>Privat Yahoo</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>40</index>
+            <source>Arbeit ICQ</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>41</index>
+            <source>Privat ICQ</source>
+            <destination></destination>
+        </field>
+        <field>
+            <index>42</index>
+            <source>Homepage</source>
+            <destination>url</destination>
+        </field>
+        <field>
+            <index>43</index>
+            <source>Notizen</source>
+            <destination>note</destination>
+        </field>
+        <field>
+            <index>44</index>
+            <source>Geburtstag</source>
+            <destination>bday</destination>
+        </field>
+    </mapping>
+</config>
