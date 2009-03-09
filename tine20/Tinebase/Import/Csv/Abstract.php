@@ -203,12 +203,12 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     protected function _doMapping($_data, $_headline = array())
     {
         $data = array();
-        foreach ($this->_options['mapping']['field'] as $field) {
-            if ($field['destination'] == '' || !isset($_data[$field['index']])) {
+        foreach ($this->_options['mapping']['field'] as $index => $field) {
+            if ($field['destination'] == '' || !isset($_data[$index])) {
                 continue;
             }
             //$data[$field['destination']] = $_data[$headline[$field['source']]];
-            $data[$field['destination']] = $_data[$field['index']];
+            $data[$field['destination']] = $_data[$index];
         }
         
         return $data;
