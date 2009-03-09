@@ -1883,6 +1883,11 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>type</name>
                     <type>enum</type>
                     <value>import</value>
@@ -1970,7 +1975,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     
     /**
      * update to 0.24
-     * - add importexport definitions table 
+     * - add new fields to user table: login_shell + home_dir
      */
     public function update_23()
     {
