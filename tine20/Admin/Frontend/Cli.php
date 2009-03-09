@@ -50,59 +50,5 @@ class Admin_Frontend_Cli extends Tinebase_Application_Frontend_Cli_Abstract
     public function importUser($_opts)
     {
         parent::_import($_opts, Tinebase_User::factory(Tinebase_User::getConfiguredBackend()));
-        
-        /*
-        $args = $_opts->getRemainingArgs();
-            
-        // get csv importer
-        $definitionBackend = new Tinebase_ImportExportDefinition();
-        $definitionName = array_pop($args);
-        $definition = $definitionBackend->getByProperty($definitionName);
-        $importer = new $definition->plugin($definition, Tinebase_User::factory(Tinebase_User::getConfiguredBackend()));
-        
-        // loop files in argv
-        foreach ($args as $filename) {
-            // read file
-            if ($_opts->v) {
-                echo "reading file $filename ...";
-            }
-            try {
-                $result = $importer->import($filename);
-                if ($_opts->v) {
-                    echo "done.\n";
-                }
-            } catch (Exception $e) {
-                if ($_opts->v) {
-                    echo "failed (". $e->getMessage() . ").\n";
-                } else {
-                    echo $e->getMessage() . "\n";
-                }
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                continue;
-            }
-            
-            echo "Imported " . $result['totalcount'] . " records.\n";
-            */          
-  
-            // import (check if dry run)
-            /*
-            if (!$_opts->d) {
-                if ($_opts->v) {
-                    echo "importing ". count($records) ." records...";
-                }
-                $importedRecords = $importer->import($records, $config->containerId);
-                if ($_opts->v) {
-                    echo "done.\n";
-                }
-                if ($_opts->v) {
-                    foreach ($importedRecords as $contact) {
-                        echo "Imported contact: " . $contact->n_fn ."\n";
-                    }   
-                }
-            } else {
-                print_r($records->toArray());
-            } 
-            */       
     }
 }
