@@ -594,6 +594,7 @@ class Setup_Controller
                         $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
                             'application_id'    => $_application->getId(),
                             'name'              => preg_replace("/\.xml/", '', $item->getFileName()),
+                            'description'       => $config->description,
                             'type'              => $config->type,
                             'model'             => $config->model,
                             'plugin'            => $config->plugin,
