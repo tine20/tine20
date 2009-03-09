@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        create/extend abstract Cli (Tinebase_Application_Frontend_Cli_Abstract
  */
 
 /**
@@ -17,7 +16,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Frontend_Cli
+class Addressbook_Frontend_Cli extends Tinebase_Application_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application
@@ -41,8 +40,7 @@ class Addressbook_Frontend_Cli
             'description'   => 'Import new contacts into the addressbook.',
             'params'        => array(
                 'filenames'   => 'Filename(s) of import file(s) [required]',
-                //'format'     => 'Import file format (default: csv) [optional]',
-                //'config'     => 'Mapping config file (default: importconfig.inc.php) [optional]',
+                'definition'  => 'Name of the import definition [required]: for example admin_user_import_csv',
             )
         ),
         'export' => array(
@@ -55,77 +53,15 @@ class Addressbook_Frontend_Cli
     );
     
     /**
-     * echos usage information
-     *
-     */
-    public function getHelp()
-    {
-        foreach ($this->_help as $functionHelp) {
-            echo $functionHelp['description']."\n";
-            echo "parameters:\n";
-            foreach ($functionHelp['params'] as $param => $description) {
-                echo "$param \t $description \n";
-            }
-        }
-    }
-    
-    /**
      * import contacts
      *
      * @param Zend_Console_Getopt $_opts
+     * 
+     * @todo remove obsolete code
      */
     public function import($_opts)
     {
-        $args = $_opts->getRemainingArgs();
-            
-        // get csv importer
-        $importer = Addressbook_Import_Factory::factory('Csv');
-        
-        // get mapping and container (from config file)
-        if(file_exists($this->_configFilename)) {
-            $config = new Zend_Config(require $this->_configFilename);
-        } else {
-            echo "Import config file not found.\n";
-        }
-        
-        // loop files in argv
-        foreach ($args as $filename) {
-            // read file
-            if ($_opts->v) {
-                echo "reading file $filename ...";
-            }
-            try {
-                $records = $importer->read($filename, $config->mapping->toArray());
-                if ($_opts->v) {
-                    echo "done.\n";
-                }
-            } catch (Exception $e) {
-                if ($_opts->v) {
-                    echo "failed (". $e->getMessage() . ").\n";
-                } else {
-                    echo $e->getMessage() . "\n";
-                }
-                continue;
-            }
-            
-            // import (check if dry run)
-            if (!$_opts->d) {
-                if ($_opts->v) {
-                    echo "importing ". count($records) ." records...";
-                }
-                $importedRecords = $importer->import($records, $config->containerId);
-                if ($_opts->v) {
-                    echo "done.\n";
-                }
-                if ($_opts->v) {
-                    foreach ($importedRecords as $contact) {
-                        echo "Imported contact: " . $contact->n_fn ."\n";
-                    }   
-                }
-            } else {
-                print_r($records->toArray());
-            }        
-        }
+        parent::_import($_opts, Addressbook_Controller_Contact::getInstance());        
     }
     
     /**
