@@ -39,7 +39,7 @@ class Tinebase_Translation
         'cs',      // Czech                Michael Sladek <msladek@brotel.cz>
         'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
-        //'fr',      // Frensch              Wilfried Maurin <aiouto2@gmail.com>
+        'fr',      // Frensch              Rémi Peltier <rpeltier@agglo-clermont.fr>
         //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
         //'pl',      // Polish               Chrisopf Gacki <c.gacki@metaways.de>
         'ru',      // Russian              Ilia Yurkovetskiy <i.yurkovetskiy@metaways.de>
