@@ -590,14 +590,18 @@ class Setup_Controller
                     $config = new Zend_Config_Xml($filename);
                     
                     // create definition
-                    $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
-                        'application_id'    => $_application->getId(),
-                        'name'              => preg_replace("/\.xml/", '', $item->getFileName()),
-                        'type'              => $config->type,
-                        'model'             => $config->model,
-                        'plugin'            => $config->plugin,
-                        'plugin_options'    => $content
-                    )));
+                    try {
+                        $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
+                            'application_id'    => $_application->getId(),
+                            'name'              => preg_replace("/\.xml/", '', $item->getFileName()),
+                            'type'              => $config->type,
+                            'model'             => $config->model,
+                            'plugin'            => $config->plugin,
+                            'plugin_options'    => $content
+                        )));
+                    } catch (Tinebase_Exception_Record_Validation $erv) {
+                        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' not installing import/export definion: ' . $erv->getMessage());
+                    }
                 }
             }
         }
