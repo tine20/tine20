@@ -10,7 +10,7 @@
  *
  * @todo        add conditions (what to do when record already exists)
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
- * @todo        add more converstions e.g. date/accounts
+ * @todo        add more conversions e.g. date/accounts
  * 
  */
 
@@ -163,10 +163,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     }
     
     /**
-     * get a line from csv
+     * get raw data of a single record
      * 
-     * @todo convert charset
-     *
      * @param  resource $_resource
      * @return array
      */

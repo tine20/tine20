@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add more functions or change some?
- * @todo        remove obsolete code when finished
  */
 
 /**
@@ -23,22 +21,11 @@
 interface Tinebase_Import_Interface
 {
     /**
-     * read data from import file
-     *
-     * @param mixed $_from filename|database|... to import from
-     * @return Tinebase_Record_RecordSet
-     */
-    // @param array $_options general options for the import(mapping, ...) ?
-    //public function read($_from);
-    
-    /**
      * import the data
      *
-     * @param mixed $_from filename|database|... to import from
-     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
+     * @param  string $_filename
+     * @param  resource $_resource (if $_filename is a stream)
+     * @return array with Tinebase_Record_RecordSet the imported records (if dryrun) and totalcount 
      */
-    // @param array $_options general options for the import(mapping, ...) ?
-    // @param Tinebase_Record_RecordSet $_records Addressbook_Model_Contact records ?
-    //public function import(Tinebase_Record_RecordSet $_records);
-    public function import($_from);
+    public function import($_filename, $_resource = NULL);
 }
