@@ -586,20 +586,15 @@ class Setup_Controller
             foreach (new DirectoryIterator($path) as $item) {
                 $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
                 if (preg_match("/\.xml/", $filename)) {
-                    $content = file_get_contents($filename);
-                    $config = new Zend_Config_Xml($filename);
                     
                     // create definition
                     try {
-                        $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
-                            'application_id'    => $_application->getId(),
-                            'name'              => preg_replace("/\.xml/", '', $item->getFileName()),
-                            'description'       => $config->description,
-                            'type'              => $config->type,
-                            'model'             => $config->model,
-                            'plugin'            => $config->plugin,
-                            'plugin_options'    => $content
-                        )));
+                        $definition = $definitionBackend->getFromFile(
+                            $filename, 
+                            $_application->getId(), 
+                            preg_replace("/\.xml/", '', $item->getFileName())
+                        );
+                        $definitionBackend->create($definition);
                     } catch (Tinebase_Exception_Record_Validation $erv) {
                         Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' not installing import/export definion: ' . $erv->getMessage());
                     }

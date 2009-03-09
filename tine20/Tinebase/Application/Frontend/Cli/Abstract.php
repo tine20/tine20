@@ -59,7 +59,14 @@ class Tinebase_Application_Frontend_Cli_Abstract
         // get csv importer
         $definitionBackend = new Tinebase_ImportExportDefinition();
         $definitionName = array_pop($args);
-        $definition = $definitionBackend->getByProperty($definitionName);
+        if (preg_match("/\.xml/", $definitionName)) {
+            $definition = $definitionBackend->getFromFile(
+                $definitionName,
+                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
+            ); 
+        } else {
+            $definition = $definitionBackend->getByProperty($definitionName);
+        }
         
         $importer = new $definition->plugin($definition, $_controller, ($_opts->d) ? array('dryrun' => 1) : array());
         

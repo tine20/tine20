@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:ImportExportDefinition.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
  */
 
@@ -28,5 +28,37 @@ class Tinebase_ImportExportDefinition extends Tinebase_Application_Backend_Sql_A
         $this->_modlogActive = TRUE;
         
         parent::__construct(SQL_TABLE_PREFIX . 'importexport_definitions', 'Tinebase_Model_ImportExportDefinition');
+    }
+
+    /**
+     * get definition from file
+     *
+     * @param string $_filename
+     * @param string $_applicationId
+     * @param string $_name [optional]
+     * @return Tinebase_Model_ImportExportDefinition
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getFromFile($_filename, $_applicationId, $_name = 'import_definition')
+    {
+        if (file_exists($_filename)) {
+            
+            $content = file_get_contents($_filename);
+            $config = new Zend_Config_Xml($_filename);
+                    
+            $definition = new Tinebase_Model_ImportExportDefinition(array(
+                'application_id'    => $_applicationId,
+                'name'              => $_name,
+                'description'       => $config->description,
+                'type'              => $config->type,
+                'model'             => $config->model,
+                'plugin'            => $config->plugin,
+                'plugin_options'    => $content
+            ));
+            
+            return $definition;
+        } else {
+            throw Tinebase_Exception_NotFound('Definition file not found.');
+        }
     }
 }

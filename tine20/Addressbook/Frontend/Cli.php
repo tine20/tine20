@@ -40,7 +40,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Application_Frontend_Cli_Abstrac
             'description'   => 'Import new contacts into the addressbook.',
             'params'        => array(
                 'filenames'   => 'Filename(s) of import file(s) [required]',
-                'definition'  => 'Name of the import definition [required]: for example admin_user_import_csv',
+                'definition'  => 'Name of the import definition or filename [required] -> for example admin_user_import_csv(.xml)',
             )
         ),
         'export' => array(
