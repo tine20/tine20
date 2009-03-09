@@ -34,9 +34,18 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     protected $_maxLineLength = 8000;
     
     /**
-     * @var char delimeter
+     * @var char delimiter
      */
     protected $_delimiter = ',';
+    
+    /**
+     * special delimiter
+     *
+     * @var array
+     */
+    protected $_specialDelimiter = array(
+        'TAB'   => "\t"
+    );
     
     /**
      * @var char enclosure
@@ -195,7 +204,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     {
         $data = array();
         foreach ($this->_options['mapping']['field'] as $field) {
-            if ($field['destination'] == '') {
+            if ($field['destination'] == '' || !isset($_data[$field['index']])) {
                 continue;
             }
             //$data[$field['destination']] = $_data[$headline[$field['source']]];
@@ -217,7 +226,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     {
         $data = array();
         foreach ($_data as $key => $value) {
-            $data[$key] = iconv($this->_options['encoding'], $this->_encoding, $value);
+            $data[$key] = @iconv($this->_options['encoding'], $this->_encoding, $value);
         }
         
         return $data;
@@ -273,11 +282,18 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         unlink($tmpfname);
         
         $config->maxLineLength = $config->maxLineLength ? $config->maxLineLength : $this->_maxLineLength;
-        $config->delimiter = $config->delimiter ? $config->delimiter : $this->_delimiter;
         $config->enclosure = $config->enclosure ? $config->enclosure : $this->_enclosure;
         $config->escape = $config->escape ? $config->escape : $this->_escape;
         $config->dryrun = $config->dryrun ? $config->dryrun : 0;
         $config->encoding = $config->encoding ? $config->encoding : $this->_encoding;
+
+        if ($config->delimiter) {
+            $config->delimiter = (isset($this->_specialDelimiter[$config->delimiter])) 
+                ? $this->_specialDelimiter[$config->delimiter] 
+                : $config->delimiter;
+        } else {
+            $config->delimiter = $this->_delimiter;      
+        }
         
         return $config->toArray();
     }
