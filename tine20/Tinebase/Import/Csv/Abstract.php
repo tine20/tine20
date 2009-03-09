@@ -11,6 +11,14 @@
  * @todo        add charset conversion (with iconv?)
  * @todo        add conditions (what to do when record already exists)
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
+ * 
+ * @todo use fgetcsv!!!
+ * 
+ * @todo problmatic mapping
+ * @todo add converstions e.g. date/accounts
+ * @todo improve options handing
+ * @todo $this->_db???
+ * 
  */
 
 /**
@@ -31,6 +39,27 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @var array
      */
     protected $_options;
+    
+    
+    /**
+     * @var int max line length
+     */
+    protected $_maxLineLength = 8000;
+    
+    /**
+     * @var char delimeter
+     */
+    protected $_delimiter = ',';
+    
+    /**
+     * @var char enclosure
+     */
+    protected $_enclosure = '"';
+    
+    /**
+     * @var char escape
+     */
+    protected $_escape = '\\';
     
     /**
      * the record controller
@@ -80,31 +109,33 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     /**
      * import the data
      *
-     * @param string $_filename
-     * @param resource $_resource (if $_filename is a stream)
-     * @return Tinebase_Record_RecordSet the imported records
+     * @param  string $_filename
+     * @param  resource $_resource (if $_filename is a stream)
+     * @return Tinebase_Record_RecordSet the imported records // why?? this may become far to large!
      */
     public function import($_filename, $_resource = NULL)
     {
         // read file / stream
-        if ($_resource === NULL && !file_exists($_filename)) {
-            throw new Tinebase_Exception_NotFound("File $_filename not found.");
+        if ($_resource === NULL) {
+          if (! file_exists($_filename)) {
+                throw new Tinebase_Exception_NotFound("File $_filename not found.");
+          }
+          
+          $_resource = fopen($_filename, 'r');
         }
-        $fileArray = file($_filename);
         
         // get headline
         if (isset($this->_options['headline']) && $this->_options['headline']) {
-            $headline = trim(array_shift($fileArray));
+            $headline = $this->_getLine($_resource);
         } else {
             $headline = array();
         }
 
         $result = new Tinebase_Record_RecordSet($this->_modelName);
-        foreach($fileArray as $line) {
-            $data = $this->_parseLine(trim($line), $headline);
-            if (!empty($data)) {
+        while ($recordData = $this->_getLine($_resource)) {
+            if (! empty($recordData)) {
                 try {
-                    $importedRecord = $this->_importRecord($data);
+                    $importedRecord = $this->_importRecord($recordData);
                     $result->addRecord($importedRecord);
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
@@ -115,6 +146,20 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         }
         
         return $result;
+    }
+    
+    /**
+     * get a line from csv
+     * 
+     * @todo convert charset
+     *
+     * @param  resource $_resource
+     * @return array
+     */
+    protected function _getLine($_resource) {
+        $lineData = fgetcsv($_resource, $this->_maxLineLength, $this->_delimiter, $this->_enclosure, $this->_escape);
+        
+        return $lineData;
     }
     
     /**
@@ -146,10 +191,6 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      */
     protected function _parseLine($_line, $_headline)
     {
-        $delimiter = (isset($this->_options['delimiter'])) ? $this->_options['delimiter'] : ';';
-        
-        $headline = array_flip(explode($delimiter, $_headline));
-        $values = explode($delimiter, $_line);
         $mapping = $this->_options['mapping']['field'];
         
         $data = array();
@@ -227,6 +268,11 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         $config->merge(new Zend_Config($_options));
         
         unlink($tmpfname);
+        
+        $this->_maxLineLength = $config->maxLineLength ? $config->maxLineLength : $this->_maxLineLength;
+        $this->_delimiter = $config->delimiter ? $config->delimiter : $this->_delimiter;
+        $this->_enclosure = $config->enclosure ? $config->enclosure : $this->_enclosure;
+        $this->_escape = $config->escape ? $config->escape : $this->_escape;
         
         return $config->toArray();
     }
