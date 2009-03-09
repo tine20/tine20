@@ -1,7 +1,7 @@
  <?php
 /**
  * Tine 2.0
- * @package     Admin
+ * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -11,54 +11,56 @@
  */
 
 /**
- * cli server for Admin
+ * abstract cli server
  *
- * This class handles cli requests for the Admin
+ * This class handles cli requests
  *
- * @package     Admin
+ * @package     Tinebase
  * @subpackage  Frontend
  */
-class Admin_Frontend_Cli extends Tinebase_Application_Frontend_Cli_Abstract
+class Tinebase_Application_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application
      *
      * @var string
      */
-    protected $_applicationName = 'Admin';
+    protected $_applicationName = 'Tinebase';
     
     /**
      * help array with function names and param descriptions
      */
-    protected $_help = array(
-        'importUser' => array(
-            'description'   => 'Import new users into the Admin.',
-            'params'        => array(
-                'filenames'   => 'Filename(s) of import file(s) [required]',
-                'definition'  => 'Name of the import definition [required]: for example admin_user_import_csv',
-            )
-        ),
-    );
+    protected $_help = array();
     
     /**
-     * import users
+     * echos usage information
+     *
+     */
+    public function getHelp()
+    {
+        foreach ($this->_help as $functionHelp) {
+            echo $functionHelp['description']."\n";
+            echo "parameters:\n";
+            foreach ($functionHelp['params'] as $param => $description) {
+                echo "$param \t $description \n";
+            }
+        }
+    }
+    
+    /**
+     * import records
      *
      * @param Zend_Console_Getopt $_opts
-     * 
-     * @todo remove obsolete code
      */
-    public function importUser($_opts)
+    public function _import($_opts, $_controller)
     {
-        parent::_import($_opts, Tinebase_User::factory(Tinebase_User::getConfiguredBackend()));
-        
-        /*
         $args = $_opts->getRemainingArgs();
             
         // get csv importer
         $definitionBackend = new Tinebase_ImportExportDefinition();
         $definitionName = array_pop($args);
         $definition = $definitionBackend->getByProperty($definitionName);
-        $importer = new $definition->plugin($definition, Tinebase_User::factory(Tinebase_User::getConfiguredBackend()));
+        $importer = new $definition->plugin($definition, $_controller);
         
         // loop files in argv
         foreach ($args as $filename) {
@@ -83,26 +85,11 @@ class Admin_Frontend_Cli extends Tinebase_Application_Frontend_Cli_Abstract
             }
             
             echo "Imported " . $result['totalcount'] . " records.\n";
-            */          
-  
+                        
             // import (check if dry run)
-            /*
-            if (!$_opts->d) {
-                if ($_opts->v) {
-                    echo "importing ". count($records) ." records...";
-                }
-                $importedRecords = $importer->import($records, $config->containerId);
-                if ($_opts->v) {
-                    echo "done.\n";
-                }
-                if ($_opts->v) {
-                    foreach ($importedRecords as $contact) {
-                        echo "Imported contact: " . $contact->n_fn ."\n";
-                    }   
-                }
-            } else {
-                print_r($records->toArray());
+            if ($_opts->d) {
+                print_r($result['results']->toArray());
             } 
-            */       
+        }
     }
 }
