@@ -239,7 +239,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
                 ),
                 'title' => array(
                     'header'    => $this->_translate->_('Title'),
-                    'type'      => 'date', 
+                    'type'      => 'string', 
                     'width'     => '2,5cm'
                 ),
                 'description' => array(
@@ -255,12 +255,13 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
                 ),
                 'creation_time' => array(
                     'header'    => $this->_translate->_('Creation Date'),
-                    'type'      => 'date', 
+                    'type'      => 'datetime', 
                     'width'     => '2,5cm'
                 ),
                 'status' => array(
                     'header'    => $this->_translate->_('Status'),
-                    'type'      => 'float', 
+                    'type'      => 'string',
+                    'translate' => TRUE, 
                     'width'     => '3cm'
                 ),
                 'is_billable' => array(

@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -108,6 +108,33 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
      * return additional tb items
      */
     getToolbarItems: function(){
+        this.exportButton = new Ext.Action({
+            text: _('Export'),
+            iconCls: 'action_export',
+            scope: this,
+            requiredGrant: 'readGrant',
+            disabled: true,
+            allowMultiple: true,
+            menu: {
+                items: [
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ODS'),
+                        format: 'ods',
+                        exportFunction: 'Timetracker.exportTimeaccounts',
+                        gridPanel: this
+                    })
+                    /*,
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as CSV'),
+                        format: 'csv',
+                        exportFunction: 'Timetracker.exportTimesheets',
+                        gridPanel: this
+                    })
+                    */
+                ]
+            }
+        });
+    	
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.app.i18n._('Show closed'),
             iconCls: 'action_showArchived',
@@ -116,7 +143,8 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
         
         return [
             new Ext.Toolbar.Separator(),
-            this.action_showClosedToggle
+            this.action_showClosedToggle,
+            this.exportButton
         ];
     }    
 });

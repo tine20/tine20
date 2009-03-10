@@ -47,6 +47,7 @@ class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
      * @param string $_format only csv implemented
      * 
      * @todo use stream here instead of temp file
+     * @todo generalize this
      */
     public function exportTimesheets($_filter, $_format)
     {
@@ -78,6 +79,50 @@ class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstr
         header("Pragma: public");
         header("Cache-Control: max-age=0");
         header("Content-Disposition: attachment; filename=timesheet_export." . $_format);
+        header("Content-Description: $_format File");  
+        header("Content-type: $contentType"); 
+        readfile($result);
+        
+        unlink($result);
+        exit;
+    }
+
+    /**
+     * export records matching given arguments
+     *
+     * @param string $_filter json encoded
+     * @param string $_format only csv implemented
+     * 
+     * @todo use stream here instead of temp file
+     * @todo generalize this
+     */
+    public function exportTimeaccounts($_filter, $_format)
+    {
+        $decodedFilter = Zend_Json::decode($_filter);
+        $filter = new Timetracker_Model_TimeaccountFilter($decodedFilter);
+        
+        switch($_format) {
+            /*
+            case 'csv':
+                $csvExportClass = new Timetracker_Export_Csv();        
+                $result = $csvExportClass->exportTimeaccounts($filter);
+                $contentType = 'text/csv';
+                break;
+            */
+            case 'ods':
+                $odsExportClass = new Timetracker_Export_Ods();
+                $result = $odsExportClass->exportTimeaccounts($filter);
+                $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
+                break;
+            default:
+                throw new Timetracker_Exception_UnexpectedValue('Format ' . $_format . ' not supported yet.');
+        }
+        
+        $filename = 'timeaccount_export.' . $_format;
+        
+        header("Pragma: public");
+        header("Cache-Control: max-age=0");
+        header("Content-Disposition: attachment; filename=$filename");
         header("Content-Description: $_format File");  
         header("Content-type: $contentType"); 
         readfile($result);
