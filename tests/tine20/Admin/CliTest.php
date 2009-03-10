@@ -62,25 +62,20 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
             <headline>1</headline>
             <dryrun>1</dryrun>
             <encoding>ISO-8859-1</encoding>
-            <delimiter>;</delimiter>
             <mapping>
                 <field>
-                    <index>0</index>
                     <source>firstname</source>
                     <destination>accountFirstName</destination>
                 </field>
                 <field>
-                    <index>1</index>
                     <source>lastname</source>
                     <destination>accountLastName</destination>
                 </field>
                 <field>
-                    <index>2</index>
                     <source>loginname</source>
                     <destination>accountLoginName</destination>
                 </field>
                 <field>
-                    <index>3</index>
                     <source>password</source>
                     <destination>password</destination>
                 </field>

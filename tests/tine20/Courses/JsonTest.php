@@ -172,13 +172,12 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             Tinebase_User::factory(Tinebase_User::getConfiguredBackend()),
             array(
                 'group_id'                  => $courseData['group_id'],
-                'accountLoginNamePrefix'    => $courseData['name'] . '_'
+                'accountLoginNamePrefix'    => $courseData['name'] . '_',
+                'encoding'                  => 'ISO8859-1'            
             )
         );
         $importer->import(dirname(dirname(__FILE__)) . '/Admin/files/test.csv');
         $courseData = $this->_json->getCourse($courseData['id']);
-        
-        //print_r($courseData);
         
         // checks
         $this->assertEquals(4, count($courseData['members']));
