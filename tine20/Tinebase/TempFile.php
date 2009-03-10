@@ -32,7 +32,7 @@ class Tinebase_TempFile extends Tinebase_Application_Backend_Sql_Abstract
     /**
      * get temp file description from db
      *
-     * @param unknown_type $_fileId
+     * @param string $_fileId
      * @return Tinebase_Model_TempFile
      */
     public function getTempFile($_fileId)
