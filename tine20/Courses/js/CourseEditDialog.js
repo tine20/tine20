@@ -21,8 +21,40 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Courses.Model.Course,
     recordProxy: Tine.Courses.coursesBackend,
     loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
+    
+    initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Courses');
+        this.tbarItems =  [
+            {xtype: 'widget-activitiesaddbutton'},
+            new Ext.ux.form.BrowseButton({
+                text: this.app.i18n._('Import course members'),
+                scope: this,
+                handler: this.onFileSelect
+            })
+        ],
+        Tine.Courses.CourseEditDialog.superclass.initComponent.call(this);
+    },
+    
+    // todo: wrap this into a uploadAction widget
+    onFileSelect: function(BrowseButton) {
+        var input = BrowseButton.detachInputFile();
+        var uploader = new Ext.ux.file.Uploader({
+            input: input
+        });
+        
+        uploader.on('uploadcomplete', function(uploader, record){
+            this.loadMask.hide();
+            console.log(record.get('tempFile'));
+        }, this);
+        
+        uploader.on('uploadfailure', function(uploader, record){
+            
+        }, this);
+        
+        this.loadMask.show();
+        uploader.upload();
+    },
     
     /**
      * overwrite update toolbars function (we don't have record members yet)
