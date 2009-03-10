@@ -78,7 +78,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->import($filename);
         
         // check
-        $this->assertEquals(1, $result['totalcount']);
+        $this->assertGreaterThan(0, $result['totalcount']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_id']);
     }
 }		
