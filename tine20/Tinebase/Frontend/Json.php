@@ -18,6 +18,16 @@
  */
 class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
 {
+    /**
+     * wait for changes
+     *
+     */
+	public function ping()
+	{
+	    Zend_Session::writeClose(true);
+	    sleep(10);
+	    return array('changes' => 'contacts');
+	}
 	
     /**
      * get list of translated country names
