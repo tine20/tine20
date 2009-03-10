@@ -64,8 +64,6 @@ abstract class Tinebase_User_Abstract
      * @param string $_accountClass Tinebase_Model_User|Tinebase_Model_FullUser
      * @param integer $_id [optional]
      * @return Tinebase_Model_User|Tinebase_Model_FullUser
-     * 
-     * @todo add primary group for full users?
      */
     public function getNonExistentUser($_accountClass = 'Tinebase_Model_User', $_id = 0) 
     {
@@ -78,8 +76,15 @@ abstract class Tinebase_User_Abstract
             'accountLastName'       => $translate->_('unknown'),
             'accountFirstName'      => $translate->_('unknown'),
             'accountFullName'       => $translate->_('unknown'),
-            //'accountPrimaryGroup' => 0,         
         );
+        
+        if ($_accountClass === 'Tinebase_Model_FullUser') {
+            $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
+                Tinebase_Config::getInstance()->getConfig('Default User Group')->value
+            );
+            $data['accountPrimaryGroup'] = $defaultUserGroup->getId();
+        }
+        
         $result = new $_accountClass($data);
         
         return $result;
