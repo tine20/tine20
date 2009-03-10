@@ -126,11 +126,13 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                             columnWidth: .65,
                             xtype: 'mirrortextfield',
                             fieldLabel: translation._('Company'), 
-                            name:'org_name'
+                            name:'org_name',
+                            maxLength: 64
                         }, {
                             columnWidth: .35,
                             fieldLabel: translation._('Unit'), 
-                            name:'org_unit'
+                            name:'org_unit',
+                            maxLength: 64
                         }, {
                             width: 100,
                             hidden: true
