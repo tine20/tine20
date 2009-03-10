@@ -72,10 +72,12 @@ html, body {
 .action_cropImage {
 	background-image:url(../../images/oxygen/16x16/actions/select-rectangular.png) !important;
 }
-
 .action_export {
-    background-image:url(../../images/oxygen/16x16/actions/mail-get.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/view-sort-descending.png) !important;
 }	
+.action_import {
+    background-image:url(../../images/oxygen/16x16/actions/view-sort-ascending.png) !important;
+}   
 
 /* ----- renderer ------------------------------------------------------------*/
 .renderer {
