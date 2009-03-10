@@ -28,6 +28,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.tbarItems =  [
             {xtype: 'widget-activitiesaddbutton'},
             new Ext.ux.form.BrowseButton({
+            	iconCls: 'action_import',
                 text: this.app.i18n._('Import course members'),
                 scope: this,
                 handler: this.onFileSelect
@@ -44,8 +45,24 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         uploader.on('uploadcomplete', function(uploader, record){
+        	var tempFile = record.get('tempFile');
+            Ext.Ajax.request({
+                params: {
+                    method: 'Courses.importMembers',
+                    tempFileId: tempFile.id,
+                    groupId: this.record.data.group_id,
+                    courseName: this.record.data.name
+                },
+                success: function() {
+                	// @todo update members grid
+                },
+                failure: function() {
+                }
+            });
+        	
             this.loadMask.hide();
-            console.log(record.get('tempFile'));
+        	//console.log(record.get('tempFile'));
+            
         }, this);
         
         uploader.on('uploadfailure', function(uploader, record){

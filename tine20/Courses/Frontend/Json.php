@@ -172,4 +172,31 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $this->_delete($ids, $this->_controller);
     }    
 
+    /**
+     * import course members
+     *
+     * @param string $tempFileId
+     * @param string $groupId
+     * @param string $courseName
+     */
+    public function importMembers($tempFileId, $groupId, $courseName)
+    {
+        $tempFileBackend = new Tinebase_TempFile();
+        $tempFile = $tempFileBackend->getTempFile($tempFileId);
+        
+        $definitionBackend = new Tinebase_ImportExportDefinition();
+        $definition = $definitionBackend->getByProperty('admin_user_import_csv');
+        $importer = new $definition->plugin(
+            $definition, 
+            Tinebase_User::factory(Tinebase_User::getConfiguredBackend()),
+            array(
+                'group_id'                  => $groupId,
+                'accountLoginNamePrefix'    => $courseName . '_',
+                //'encoding'                  => 'ISO8859-1'            
+            )
+        );
+        $importer->import($tempFile->path);
+        
+        // @todo return members to update members grid
+    }
 }

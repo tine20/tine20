@@ -46,6 +46,8 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             $_data['accountLoginName'] = $this->_options['accountLoginNamePrefix'] . $_data['accountLoginName'];
         }
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        
         $record = parent::_importRecord($_data);
         
         if ((!isset($this->_options['dryrun']) || !$this->_options['dryrun']) && isset($_data['password'])) {
