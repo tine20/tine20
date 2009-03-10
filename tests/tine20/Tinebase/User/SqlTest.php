@@ -198,11 +198,11 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteAccount()
     {
-        $this->setExpectedException('Exception');
-
         Tinebase_User_Sql::getInstance()->deleteUser($this->objects['initialAccount']);
-
         $account = Tinebase_User_Sql::getInstance()->getUserById($this->objects['initialAccount'], 'Tinebase_Model_FullUser');
+        
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        $this->assertEquals($translate->_('unknown'), $account->accountDisplayName);
     }
 }		
 	
