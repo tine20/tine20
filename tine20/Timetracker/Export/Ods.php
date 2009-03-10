@@ -45,7 +45,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      * @param Timetracker_Model_TimesheetFilter $_filter
      * @return string filename
      */
-    public function exportTimesheets($_filter) {
+    public function exportTimesheets(Timetracker_Model_TimesheetFilter $_filter) {
         
         // get timesheets by filter
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
@@ -72,6 +72,34 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         $filename = $this->getDocument();        
         return $filename;
     }
+    
+    /**
+     * export timeaccounts to Ods file
+     *
+     * @param Timetracker_Model_TimeaccountFilter $_filter
+     * @return string filename
+     */
+    public function exportTimeaccounts(Timetracker_Model_TimeaccountFilter $_filter) {
+        
+        // get $timeaccounts by filter
+        $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->search($_filter);
+        $lastCell = count($timeaccounts) + $this->_firstRow - 1;
+        
+        // resolve accounts
+        $accountIds = $timeaccounts->created_by;
+        $this->_resolvedRecords['accounts'] = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+        
+        // build export table
+        $table = $this->getBody()->appendTable($this->_translate->_('Timesheets'));        
+        $this->_addHead($table, $this->_config['timeaccounts']);
+        $this->_addBody($table, $timeaccounts, $this->_config['timeaccounts']);
+        //$this->_addFooter($table, $lastCell);
+        
+        // create file
+        $filename = $this->getDocument();        
+        return $filename;
+    }
+    
     
     /**
      * add table footer (formulas, ...)
@@ -197,6 +225,57 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
             )
         );
         
+        // timeaccounts export config
+        $exportConfig['timeaccounts'] = array(
+            'header' => array(
+                '{date}', 
+                '{user}',
+            ),
+            'fields' => array(
+                'number' => array(
+                    'header'    => $this->_translate->_('Number'),
+                    'type'      => 'string', 
+                    'width'     => '2,5cm'
+                ),
+                'title' => array(
+                    'header'    => $this->_translate->_('Title'),
+                    'type'      => 'date', 
+                    'width'     => '2,5cm'
+                ),
+                'description' => array(
+                    'header'    => $this->_translate->_('Description'),
+                    'type'      => 'string', 
+                    'width'     => '10cm'
+                ),
+                'created_by' => array(
+                    'header'    => $this->_translate->_('Created By'),
+                    'type'      => 'account', 
+                    'field'     => 'accountDisplayName', 
+                    'width'     => '4cm'
+                ),
+                'creation_time' => array(
+                    'header'    => $this->_translate->_('Creation Date'),
+                    'type'      => 'date', 
+                    'width'     => '2,5cm'
+                ),
+                'status' => array(
+                    'header'    => $this->_translate->_('Status'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
+                'is_billable' => array(
+                    'header'    => $this->_translate->_('Billable'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
+                'is_open' => array(
+                    'header'    => $this->_translate->_('Open'),
+                    'type'      => 'float', 
+                    'width'     => '3cm'
+                ),
+            )
+        );        
+        
         return $exportConfig;
     }    
     
@@ -207,7 +286,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      * @param array $_param
      * @return string
      */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param)
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key)
     {
         $value = '';
         
@@ -216,7 +295,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
                 $value = $this->_resolvedRecords['timeaccounts'][$this->_resolvedRecords['timeaccounts']->getIndexById($_record->timeaccount_id)]->$_param['field'];
                 break;
             case 'account':
-                $value = $this->_resolvedRecords['accounts'][$this->_resolvedRecords['accounts']->getIndexById($_record->account_id)]->$_param['field'];
+                $value = $this->_resolvedRecords['accounts'][$this->_resolvedRecords['accounts']->getIndexById($_record->$key)]->$_param['field'];
                 break;
         }        
         return $value;

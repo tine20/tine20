@@ -223,7 +223,7 @@ class Tinebase_Export_Ods extends OpenDocument_Document
      */
     protected function _addBody($table, $_records, $_config)
     {
-        if ($_config['customFields']) {
+        if (isset($_config['customFields']) && $_config['customFields']) {
             // we need the sql backend if the export contains custom fields
             // @todo remove that when getMultiple() fetches the custom fields as well
             $recordBackend = new Timetracker_Backend_Timesheet();
@@ -235,7 +235,7 @@ class Tinebase_Export_Ods extends OpenDocument_Document
             
             // check if we need to get the complete timesheet with custom fields
             // @todo remove that when getMultiple() fetches the custom fields as well
-            if ($_config['customFields']) {
+            if (isset($_config['customFields']) && $_config['customFields']) {
                 $record = $recordBackend->get($record->getId());
             }
             
@@ -273,7 +273,7 @@ class Tinebase_Export_Ods extends OpenDocument_Document
 
                         } elseif (in_array($params['type'], $this->_specialFields)) {
                             // special fields
-                            $value = $this->_getSpecialFieldValue($record, $params);
+                            $value = $this->_getSpecialFieldValue($record, $params, $key);
                             $type = 'string';
                         
                         } else {

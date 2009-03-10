@@ -457,6 +457,37 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
 
+    /**
+     * try to export Timeaccounts (as ods)
+     * - this is no real json test
+     * 
+     * @todo move that to separate export test
+     */
+    public function testExportTimeaccountsOds()
+    {
+        // create
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_json->saveTimeaccount(Zend_Json::encode($timeaccount->toArray()));
+        
+        // export & check
+        $odsExportClass = new Timetracker_Export_Ods();
+        $result = $odsExportClass->exportTimeaccounts(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter()));
+        
+        $this->assertTrue(file_exists($result));
+        
+        $xmlBody = $odsExportClass->getBody()->generateXML();
+        //echo  $xmlBody;
+        //$this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration'); 
+        $this->assertEquals(1, preg_match("/". $timeaccountData['description'] ."/", $xmlBody), 'no description'); 
+        $translate = Tinebase_Translation::getTranslation('Timetracker'); 
+        $this->assertEquals(1, preg_match("/". $translate->_('Description') ."/", $xmlBody), 'no headline'); 
+        
+        // cleanup / delete file
+        unlink($result);
+        $this->_json->deleteTimeaccounts($timeaccountData['id']);
+    }
+
+    
     /******* persistent filter tests *****************/
     
     /**
