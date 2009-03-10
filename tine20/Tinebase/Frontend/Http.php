@@ -368,7 +368,6 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	/**
 	 * receives file uploads and stores it in the file_uploads db
 	 * 
-	 * @todo: move db storage into seperate tmp_file class
 	 * @throws Tinebase_Exception_UnexpectedValue
 	 * @throws Tinebase_Exception_NotFound
 	 */
@@ -377,30 +376,8 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	    try {
     	    $this->checkAuth();
     	    
-    	    $uploadedFile = $_FILES['file'];
-    	    
-    	    $path = tempnam(session_save_path(), 'tine_tempfile_');
-    	    if (!$path) {
-    	        throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam could not return a valid filename!');
-    	    }
-    	    if (! move_uploaded_file($uploadedFile['tmp_name'], $path)) {
-    	        throw new Tinebase_Exception_NotFound('No valid upload file found!');
-    	    }
-    	    
-    	    $id = Tinebase_Model_TempFile::generateUID();
-    	    $tempFile = new Tinebase_Model_TempFile(array(
-    	       'id'          => $id,
-               'session_id'  => session_id(),
-               'time'        => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-               'path'        => $path,
-               'name'        => $uploadedFile['name'],
-               'type'        => $uploadedFile['type'],
-               'error'       => $uploadedFile['error'],
-               'size'        => $uploadedFile['size'],
-    	    ));
-    	    
-    	    $db = Tinebase_Core::getDb();
-    	    $db->insert(SQL_TABLE_PREFIX . 'temp_files', $tempFile->toArray());
+    	    $tempfileBackend = new Tinebase_TempFile();
+    	    $tempFile = $tempfileBackend->uploadTempFile();
     	    
     	    die(Zend_Json::encode(array(
     	       'status'   => 'success',
@@ -421,7 +398,6 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	/**
 	 * downloads an image/thumbnail at a given size
 	 *
-	 * @todo move db stuff into seperate class
 	 * @param unknown_type $application
 	 * @param string $id
 	 * @param string $location
@@ -433,15 +409,12 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
 	{
 	    $this->checkAuth();
 	    
-	    if ($application == 'Tinebase' && $location=='tempFile') {
-	        $db = Tinebase_Core::getDb();
-            $select = $db->select()
-               ->from(SQL_TABLE_PREFIX . 'temp_files')
-               ->where($db->quoteInto($db->quoteIdentifier('id') . ' = ?', $id))
-               ->where($db->quoteInto($db->quoteIdentifier('session_id') . ' = ?', session_id()));
-            $tempFile = $db->fetchRow($select);
+	    if ($application == 'Tinebase' && $location == 'tempFile') {
+	        
+	        $tempfileBackend = new Tinebase_TempFile();
+	        $tempFile = $tempfileBackend->getTempFile($id);
 
-            $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile['path']));
+            $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile->path));
             $image = new Tinebase_Model_Image($imgInfo + array(
                 'application' => $application,
                 'id'          => $id,
@@ -455,7 +428,6 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     	
     	header('Content-Type: '. $image->mime);
     	die($image->blob);
-    	
 	}
 	
 	/**
