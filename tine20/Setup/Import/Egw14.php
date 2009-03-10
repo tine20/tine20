@@ -24,7 +24,14 @@ class Setup_Import_Egw14
      * @var string
      */
     protected $oldTablePrefix = "egw_";
-            
+
+    /**
+     * group id mapping
+     *
+     * @var array
+     */
+    protected $_groupIdMapping = array();
+    
     /**
      * country mapping
      * 
@@ -50,13 +57,12 @@ class Setup_Import_Egw14
      *
      * @param   string $_importAccountName [OPTIONAL]
      */
-    public function __construct( $_importAccountName = 'tine20admin' )
+    public function __construct($_importAccountName = 'tine20admin')
     {
         // set import user current account
         echo "adding import user<br/>";
         $account = Tinebase_User::getInstance()->getFullUserByLoginName($_importAccountName);
-        Tinebase_Core::set('currentAccount', $account);
-        
+        Setup_Core::set('currentAccount', $account);
     }
     
     /**
@@ -78,9 +84,10 @@ class Setup_Import_Egw14
     protected function importAccounts()
     {
         $accountsTable = new Tinebase_Db_Table(array('name' => 'egw_accounts'));
+        $db = Setup_Core::getDb();
         
         $where = array(
-            Tinebase_Core::getDb()->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'u')
+            $db->quoteInto($db->quoteIdentifier('account_type') . ' = ?', 'u')
         );
         
         $accounts = $accountsTable->fetchAll($where);
@@ -114,9 +121,10 @@ class Setup_Import_Egw14
     protected function importGroups()
     {
         $groupsTable = new Tinebase_Db_Table(array('name' => 'egw_accounts'));
+        $db = Setup_Core::getDb();
         
         $where = array(
-            Tinebase_Core::getDb()->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'g')
+            $db->quoteInto($db->quoteIdentifier('account_type') . ' = ?', 'g')
         );
         
         $groups = $groupsTable->fetchAll($where);
@@ -128,7 +136,14 @@ class Setup_Import_Egw14
                 'description'   => 'imported from eGroupWare 1.4'
             ));
             
-            Tinebase_Group_Sql::getInstance()->addGroup($tineGroup);
+            try {
+                Tinebase_Group_Sql::getInstance()->addGroup($tineGroup);
+            } catch (Zend_Db_Statement_Exception $zse) {
+                // remove id and save id in mapping table
+                $tineGroup->id = NULL;
+                $newGroup = Tinebase_Group_Sql::getInstance()->addGroup($tineGroup);
+                $this->_groupIdMapping[$group->account_id] = $newGroup->getId();
+            }
         }
         
     }
@@ -140,15 +155,21 @@ class Setup_Import_Egw14
     protected function importGroupMembers()
     {
         $aclTable = new Tinebase_Db_Table(array('name' => 'egw_acl'));
+        $db = Setup_Core::getDb();
         
         $where = array(
-            Tinebase_Core::getDb()->quoteInto($this->_db->quoteIdentifier('acl_applicationName') . ' = ?', 'phpgw_group')
+            //$db->quoteInto($db->quoteIdentifier('acl_applicationName') . ' = ?', 'phpgw_group')
+            $db->quoteInto($db->quoteIdentifier('acl_appname') . ' = ?', 'phpgw_group')
         );
         
         $groupMembers = $aclTable->fetchAll($where);
         
         foreach($groupMembers as $member) {
-            Tinebase_Group_Sql::getInstance()->addGroupMember(abs($member->acl_location), $member->acl_account);
+            $groupId = abs($member->acl_location);
+            if (isset($this->_groupIdMapping[$groupId])) {
+                $groupId = $this->_groupIdMapping[$groupId];
+            }
+            Tinebase_Group_Sql::getInstance()->addGroupMember($groupId, $member->acl_account);
         }
         
     }
@@ -342,11 +363,12 @@ class Setup_Import_Egw14
                 ) 
             );
            
-            $tineContact = Addressbook_Backend_Sql::getInstance()->create($tineContact);
+            //$tineContact = Addressbook_Backend_Sql::getInstance()->create($tineContact);
+            $tineContact = Addressbook_Controller_Contact::getInstance()->create($tineContact);
             echo " ok.<br/>";
             
             // get categories -> tags
-            if ( !empty($contact->cat_id) ) {
+            if (!empty($contact->cat_id)) {
                 $catIds = explode ( ',', $contact->cat_id );
                 $filter = new Tinebase_Model_TagFilter(array(
                     'name'        => '%',

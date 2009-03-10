@@ -24,7 +24,6 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     protected $_applicationName = 'Setup';
     
-    
     /**
      * Returns all JS files which must be included for Setup
      *
@@ -137,8 +136,9 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             
             if(array_key_exists('Tinebase', $applications)) {
                 $import = new Setup_Import_TineInitial();
-                //$import = new Setup_Import_Egw14();
                 $import->import();
+                //$import = new Setup_Import_Egw14();
+                //$import->import();
             }
             
             echo "Successfully installed " . count($applications) . " applications.<br/>";   
