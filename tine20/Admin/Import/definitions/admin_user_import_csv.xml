@@ -7,22 +7,18 @@
     <dryrun>0</dryrun>
     <mapping>
         <field>
-            <index>0</index>
             <source>firstname</source>
             <destination>accountFirstName</destination>
         </field>
         <field>
-            <index>1</index>
             <source>lastname</source>
             <destination>accountLastName</destination>
         </field>
         <field>
-            <index>2</index>
             <source>loginname</source>
             <destination>accountLoginName</destination>
         </field>
         <field>
-            <index>3</index>
             <source>password</source>
             <destination>password</destination>
         </field>

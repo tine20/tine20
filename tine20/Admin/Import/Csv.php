@@ -42,7 +42,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     protected function _importRecord($_data)
     {
         // add prefix to login name if given
-        if (isset($this->_options['accountLoginNamePrefix'])) {
+        if (isset($this->_options['accountLoginNamePrefix']) && isset($_data['accountLoginName'])) {
             $_data['accountLoginName'] = $this->_options['accountLoginNamePrefix'] . $_data['accountLoginName'];
         }
         
