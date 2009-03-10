@@ -37,6 +37,13 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     defaultAutoCreate : {tag:'input', type:'hidden'},
     
     initComponent: function() {
+        this.plugins = this.plugins || [];
+        this.scope = this;
+        this.handler = this.onFileSelect;
+        
+        this.browsePlugin = new Ext.ux.file.BrowsePlugin({});
+        this.plugins.push(this.browsePlugin);
+        
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
         this.imageSrc = this.defaultImage;
         if(this.border === true) {
@@ -72,6 +79,12 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             top: '18px'
         });
         
+        Ext.apply(this.browsePlugin, {
+            buttonCt: this.buttonCt,
+            renderTo: this.buttonCt
+        });
+        
+        /*
         this.bb = new Ext.ux.form.BrowseButton({
             //debug: true,
             buttonCt: this.buttonCt,
@@ -79,6 +92,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             scope: this,
             handler: this.onFileSelect
         });
+        */
     },
     getValue: function() {
         var value = Ext.ux.form.ImageField.superclass.getValue.call(this);

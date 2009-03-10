@@ -68,6 +68,7 @@ class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Tinebase/js/ux/grid/PagingToolbar.js',
             'Tinebase/js/ux/grid/GridViewMenuPlugin.js',
             'Tinebase/js/ux/file/Uploader.js',
+            'Tinebase/js/ux/file/BrowsePlugin.js',
             'Tinebase/js/ux/form/IconTextField.js',
             'Tinebase/js/ux/form/MirrorTextField.js',
             'Tinebase/js/ux/form/ColumnFormPanel.js',
