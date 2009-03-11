@@ -79,24 +79,17 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
             'accountEmailAddress'   => NULL,
         ));
         
-        Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->addUser($account);
+        $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->addUser($account);
         Tinebase_User::getInstance()->setPassword($loginname, $record->name, $record->name);
         
-        // @todo add to teacher group if available
+        // add to teacher group if available
+        if (isset(Tinebase_Core::getConfig()->courses)) {
+            if (isset(Tinebase_Core::getConfig()->courses->teacher_group) && !empty(Tinebase_Core::getConfig()->courses->teacher_group)) {
+                $groupBackend = Tinebase_Group::factory(Tinebase_User::getConfiguredBackend()); 
+                $groupBackend->addGroupMember(Tinebase_Core::getConfig()->courses->teacher_group, $account->getId());
+            }
+        }
         
         return $record;
     }
-    
-    /**
-     * update one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     */
-    public function update(Tinebase_Record_Interface $_record)
-    {
-        return parent::update($_record);
-        
-        // @todo add members to students group if available
-    }    
 }

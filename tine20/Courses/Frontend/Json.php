@@ -196,7 +196,7 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->getTempFile($tempFileId);
-        
+                
         $definitionBackend = new Tinebase_ImportExportDefinition();
         $definition = $definitionBackend->getByProperty('admin_user_import_csv');
         $importer = new $definition->plugin(
@@ -211,8 +211,19 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         );
         $importer->import($tempFile->path);
         
-        // return members to update members grid
+        // return members to update members grid and add to student group
         $members = $this->_getCourseMembers($groupId);
+        
+        // add to student group if available
+        if (isset(Tinebase_Core::getConfig()->courses)) {
+            if (isset(Tinebase_Core::getConfig()->courses->students_group) && !empty(Tinebase_Core::getConfig()->courses->students_group)) {
+                $groupBackend = Tinebase_Group::factory(Tinebase_User::getConfiguredBackend()); 
+                foreach ($members as $member) {
+                    $groupBackend->addGroupMember(Tinebase_Core::getConfig()->courses->students_group, $member['id']);
+                }
+            }
+        }
+        
         return array(
             'results'   => $members,
             'status'    => 'success'
