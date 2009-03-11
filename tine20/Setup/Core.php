@@ -51,7 +51,7 @@ class Setup_Core extends Tinebase_Core
     }
     
     /**
-     * setups golbal config
+     * setups global config
      * 
      * NOTE a config object will be intanciated regardless of the existance of 
      *      the conffile!
@@ -116,44 +116,11 @@ class Setup_Core extends Tinebase_Core
      * NOTE: if no logger is configured, we write to stderr in setup
      *
      * @param $_defaultWriter Zend_Log_Writer_Abstract default log writer
-     * 
-     * @todo    remove obsolete code
      */
     public static function setupLogger(Zend_Log_Writer_Abstract $_defaultWriter = NULL)
     {
         $writer = new Zend_Log_Writer_Stream('php://stderr');
         parent::setupLogger($writer);
-        
-        /*
-        $config = self::getConfig();
-        $logger = new Zend_Log();
-        
-        if (isset($config->logger)) {
-            try {
-                $loggerConfig = $config->logger;
-                
-                $filename = $loggerConfig->filename;
-                $priority = (int)$loggerConfig->priority;
-    
-                $writer = new Zend_Log_Writer_Stream($filename);
-                $logger->addWriter($writer);
-    
-                $filter = new Zend_Log_Filter_Priority($priority);
-                $logger->addFilter($filter);
-            } catch (Exception $e) {
-                error_log("Tine 2.0 can't setup the configured logger! The Server responded: $e");
-                $writer = new Zend_Log_Writer_Null;
-                $logger->addWriter($writer);
-            }
-        } else {
-            $writer = new Zend_Log_Writer_Stream('php://stderr');;
-            $logger->addWriter($writer);
-        }
-
-        self::set(self::LOGGER, $logger);
-
-        $logger->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
-        */
     }
     
     /**
