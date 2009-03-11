@@ -120,6 +120,32 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         return $result;
     }
     
+    /**
+     * add or remove members from internet group
+     *
+     * @param array $_members array of member ids
+     * @param boolean $_internet yes/no
+     * @param integer $_groupId
+     */
+    protected function _manageInternetGroup($_members, $_internet, $_groupId)
+    {
+        if (!isset(Tinebase_Core::getConfig()->courses) || !isset(Tinebase_Core::getConfig()->courses->internet_group)) {
+            return;
+        }
+
+        $inetGroupId = Tinebase_Core::getConfig()->courses->internet_group;
+        $groupBackend = Tinebase_Group::factory(Tinebase_User::getConfiguredBackend());
+        
+        // add or remove members to or from internet group (defined in config.inc.php)
+        foreach ($_members as $memberId) {
+            if ($_internet) {
+                $groupBackend->addGroupMember($inetGroupId, $memberId);
+            } else {
+                $groupBackend->removeGroupMember($inetGroupId, $memberId);
+            }
+        }
+    }
+    
     /************************************** public API **************************************/
     
     /**
@@ -150,6 +176,8 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      *
      * @param  string $recordData
      * @return array created/updated record
+     * 
+     * @todo activate manage internet function / needs testing
      */
     public function saveCourse($recordData)
     {
@@ -171,8 +199,8 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             $this->_groupController->update($group);
         }
         
-        // @todo add/remove members to/from internet group
-        // $this->_manageInternetGroup($group->members, $savedRecord->internet);
+        // add/remove members to/from internet group
+        //$this->_manageInternetGroup($group->members, $savedRecord->internet);
 
         return $this->_recordToJson($savedRecord);
     }
@@ -199,7 +227,8 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->getTempFile($tempFileId);
-                
+        
+        // get definition and start import with admin user import csv plugin
         $definitionBackend = new Tinebase_ImportExportDefinition();
         $definition = $definitionBackend->getByProperty('admin_user_import_csv');
         $importer = new $definition->plugin(
