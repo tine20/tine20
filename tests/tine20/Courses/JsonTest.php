@@ -65,7 +65,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to add a Course
      *
-     * @todo add members adn delete check
      */
     public function testAddCourse()
     {
@@ -200,7 +199,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             'description'   => 'blabla',
             'type'          => Tinebase_Record_Abstract::generateUID(),
             'members'       => array(
-                'id'    => Tinebase_Core::getUser()->getId(),
+                Tinebase_Core::getUser()->getId(),
             )
         );
     }

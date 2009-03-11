@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Json.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        make search work and add _multipleRecordsToJson
  */
 
 /**
@@ -56,20 +55,11 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     protected function _recordToJson($_record)
     {
         $recordArray = parent::_recordToJson($_record);
-        $adminJson = new Admin_Frontend_Json();
         
         // group data
         $groupData = $this->_groupController->get($_record->group_id)->toArray();
         unset($groupData['id']);
-        $members = $adminJson->getGroupMembers($_record->group_id);
-        $groupData['members'] = array();
-        foreach ($members['results'] as $member) {
-            $groupData['members'][] = array(
-                'id'    => $member['accountId'],
-                'name'  => $member['accountDisplayName'],
-                'type'  => 'user',
-            );
-        }
+        $groupData['members'] = $this->_getCourseMembers($_record->group_id);
         
         return array_merge($recordArray, $groupData);
     }
@@ -103,6 +93,29 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             $course = array_merge($group, $course);
         }
         */
+        
+        return $result;
+    }
+    
+    /**
+     * get course members
+     *
+     * @param int $_groupId
+     * @return array
+     */
+    protected function _getCourseMembers($_groupId)
+    {
+        $adminJson = new Admin_Frontend_Json();
+        $members = $adminJson->getGroupMembers($_groupId);
+        
+        $result = array();
+        foreach ($members['results'] as $member) {
+            $result[] = array(
+                'id'    => $member['accountId'],
+                'name'  => $member['accountDisplayName'],
+                'type'  => 'user',
+            );
+        }
         
         return $result;
     }
@@ -197,6 +210,11 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         );
         $importer->import($tempFile->path);
         
-        // @todo return members to update members grid
+        // return members to update members grid
+        $members = $this->_getCourseMembers($groupId);
+        return array(
+            'results'   => $members,
+            'status'    => 'success'
+        );
     }
 }

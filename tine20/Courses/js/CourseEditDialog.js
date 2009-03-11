@@ -47,17 +47,15 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         uploader.on('uploadcomplete', function(uploader, record){
         	var tempFile = record.get('tempFile');
             Ext.Ajax.request({
+            	scope: this,
                 params: {
                     method: 'Courses.importMembers',
                     tempFileId: tempFile.id,
                     groupId: this.record.data.group_id,
                     courseName: this.record.data.name
                 },
-                success: function() {
-                	// @todo update members grid
-                },
-                failure: function() {
-                }
+                success: this.onMembersImport,
+                failure: function() {}
             });
         	
             this.loadMask.hide();
@@ -71,6 +69,16 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.loadMask.show();
         uploader.upload();
+    },
+    
+    /**
+     * update members grid
+     */
+    onMembersImport: function(response) {
+        var members = Ext.util.JSON.decode(response.responseText);
+        if (members.results.length > 0) {
+            this.membersStore.loadData({results: members.results});
+        }
     },
     
     /**
@@ -95,7 +103,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var members = [];
         this.membersStore.each(function(_record){
-            members.push(_record.data);
+            members.push(_record.data.id);
         });
         
         this.record.set('members', members);
