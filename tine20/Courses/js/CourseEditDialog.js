@@ -28,7 +28,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.tbarItems =  [
             {xtype: 'widget-activitiesaddbutton'},
             new Ext.ux.form.BrowseButton({
+            	id: 'ImportButton',
             	iconCls: 'action_import',
+            	disabled: true,
                 text: this.app.i18n._('Import course members'),
                 scope: this,
                 handler: this.onFileSelect
@@ -92,6 +94,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (members.length > 0) {
             this.membersStore.loadData({results: members});
         }
+        
+        // only activate import button if editing existing course
+        Ext.getCmp('ImportButton').setDisabled(!this.record.get('id'));
         
        	Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);        
     },
