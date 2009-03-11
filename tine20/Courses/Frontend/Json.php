@@ -170,6 +170,9 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             $group->setId($course->group_id);
             $this->_groupController->update($group);
         }
+        
+        // @todo add/remove members to/from internet group
+        // $this->_manageInternetGroup($group->members, $savedRecord->internet);
 
         return $this->_recordToJson($savedRecord);
     }
