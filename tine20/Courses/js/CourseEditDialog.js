@@ -209,11 +209,35 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             var columns = [];
             
+            var action_resetPwd = new Ext.Action({
+                text: _('Reset Password'),
+                //disabled: true,
+                scope: this,
+                handler: function(_button, _event) {
+                    Ext.MessageBox.prompt(this.app.i18n._('Set new password'), this.app.i18n._('Please enter the new password:'), function(_button, _text) {
+                        if(_button == 'ok') {
+                            var accountObject = Ext.getCmp('CoursesMembersGrid').configGridPanel.getSelectionModel().getSelected().data;
+                            
+                            Ext.Ajax.request( {
+                                params : {
+                                    method    : 'Admin.resetPassword',
+                                    account   : accountObject.id,
+                                    password  : _text
+                                }
+                            });
+                        }
+                    });
+                },
+                iconCls: 'action_password'
+            });
+            
             this.membersGrid = new Tine.widgets.account.ConfigGrid({
+            	id: 'CoursesMembersGrid',
                 accountPickerType: 'user',
                 accountListTitle: this.app.i18n._('Members'),
                 configStore: this.membersStore,
-                configColumns: columns
+                configColumns: columns,
+                contextMenuItems: [action_resetPwd]
             });
         }
         return this.membersGrid;
