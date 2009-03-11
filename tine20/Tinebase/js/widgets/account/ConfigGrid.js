@@ -38,6 +38,11 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
      * @cfg {Array} Array of column's config objects where the config options are in
      */
     configColumns: [],
+    /**
+     * @cfg {Array} contextMenuItems
+     * additional items for contextMenu
+     */
+    contextMenuItems: [],
     
     accountPicker: null,
     configGridPanel: null,
@@ -52,7 +57,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
         this.recordPrefix = this.hasAccountPrefix ? 'account_' : '';
         
         this.action_removeAccount = new Ext.Action({
-            text: _('remove account'),
+            text: _('Remove account'),
             disabled: true,
             scope: this,
             handler: this.removeAccount,
@@ -112,8 +117,9 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
+            var contextItems = [this.action_removeAccount]; 
             var menu = new Ext.menu.Menu({
-                items: [this.action_removeAccount]
+                items: contextItems.concat(this.contextMenuItems)
             }).showAt(_eventObject.getXY());
         }, this);
         
