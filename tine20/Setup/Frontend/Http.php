@@ -156,6 +156,14 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     protected function _update()
     {
+        if (!Setup_Core::configFileExists()) {
+            echo "config.inc.php not found.<br/>";
+            return FALSE;
+        }
+        if (!Setup_Core::get('checkDB')) {
+            echo "No connection to the database. See logfile for more information.<br/>";
+        }
+        
         $controller = Setup_Controller::getInstance();
         
         try {
