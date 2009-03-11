@@ -406,7 +406,7 @@ Tine.Admin.Users.Main = function() {
                 text: this.translation.gettext('reset password'),
                 disabled: true,
                 handler: this.resetPasswordHandler,
-                /*iconCls: 'action_disable',*/
+                iconCls: 'action_password',
                 id: 'Admin_User_Action_resetPassword',
                 scope: this
             });

@@ -20,6 +20,10 @@
     background-image:url(../../images/oxygen/16x16/actions/add-users.png) !important;
 }
 
+.action_password {
+    background-image:url(../../images/oxygen/16x16/actions/password.png) !important;
+}
+
 .AdminIconCls {
     background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
 }
