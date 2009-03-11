@@ -156,7 +156,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test for import of members
      *
-     * @todo create json function for import and add that here
      */
     public function testImportMembersIntoCourse()
     {
@@ -179,7 +178,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $courseData = $this->_json->getCourse($courseData['id']);
         
         // checks
-        $this->assertEquals(4, count($courseData['members']));
+        $this->assertEquals(5, count($courseData['members']));
         
         // cleanup
         $this->_json->deleteCourses($courseData['id']);

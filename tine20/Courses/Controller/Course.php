@@ -56,4 +56,47 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
 
     /****************************** overwritten functions ************************/    
     
+    /**
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        $record = parent::create($_record);
+        
+        // add teacher account
+        $loginname = 'teacher-' . $record->name;
+        $account = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => $loginname,
+            'accountStatus'         => 'enabled',
+            'accountPrimaryGroup'   => $record->group_id,
+            'accountLastName'       => 'Teacher',
+            'accountDisplayName'    => $record->name . ' Teacher Account',
+            'accountFirstName'      => $record->name,
+            'accountExpires'        => NULL,
+            'accountEmailAddress'   => NULL,
+        ));
+        
+        Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->addUser($account);
+        Tinebase_User::getInstance()->setPassword($loginname, $record->name, $record->name);
+        
+        // @todo add to teacher group if available
+        
+        return $record;
+    }
+    
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        return parent::update($_record);
+        
+        // @todo add members to students group if available
+    }    
 }

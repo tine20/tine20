@@ -50,9 +50,16 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         
         $record = parent::_importRecord($_data);
         
-        if ((!isset($this->_options['dryrun']) || !$this->_options['dryrun']) && isset($_data['password'])) {
+        if ((!isset($this->_options['dryrun']) || !$this->_options['dryrun']) ) {
             // set password
-            Admin_Controller_User::getInstance()->setAccountPassword($record, $_data['password'], $_data['password']);
+            $password = $_data['accountLoginName'];
+            if (isset($this->_options['password'])) {
+                $password = $this->_options['password'];
+            }
+            if (isset($_data['password']) && !empty($_data['password'])) {
+                $password = $_data['password'];
+            }
+            Admin_Controller_User::getInstance()->setAccountPassword($record, $password, $password);
         }
         
         return $record;

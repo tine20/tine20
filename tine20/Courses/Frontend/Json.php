@@ -205,6 +205,7 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             array(
                 'group_id'                  => $groupId,
                 'accountLoginNamePrefix'    => $courseName . '_',
+                'password'                  => $courseName
                 //'encoding'                  => 'ISO8859-1'            
             )
         );
