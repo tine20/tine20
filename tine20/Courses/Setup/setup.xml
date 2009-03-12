@@ -5,6 +5,10 @@
     <version>0.1</version>
     <order>50</order>
     <status>disabled</status>
+    <depends>
+        <application>Admin</application>
+        <application>Addressbook</application>
+    </depends>
     <tables>
         <table>
             <name>courses</name>

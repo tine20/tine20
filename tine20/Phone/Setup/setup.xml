@@ -5,6 +5,7 @@
     <order>11</order>
     <depends>
         <application>Admin</application>
+        <application>Voipmanager</application>
     </depends>
     <tables>
         <table>

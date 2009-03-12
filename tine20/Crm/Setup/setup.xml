@@ -5,6 +5,8 @@
     <order>20</order>
     <depends>
         <application>Admin</application>
+        <application>Addressbook</application>
+        <application>Tasks</application>
     </depends>
     <tables>
         <table>

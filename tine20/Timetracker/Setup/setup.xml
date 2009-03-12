@@ -5,6 +5,9 @@
     <version>0.3</version>
     <order>60</order>
     <status>enabled</status>
+    <depends>
+        <application>Tinebase</application>
+    </depends>
     <tables>
         <table>
             <name>timetracker_timeaccount</name>

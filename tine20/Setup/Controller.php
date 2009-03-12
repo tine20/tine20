@@ -124,7 +124,6 @@ class Setup_Controller
     public function getInstallableApplications()
     {
         // create Tinebase tables first
-        // @todo add dependencies to xml files
         $applications = array('Tinebase' => $this->getSetupXml('Tinebase'));
         
         foreach (new DirectoryIterator($this->_baseDir) as $item) {
@@ -136,6 +135,9 @@ class Setup_Controller
                 }
             }
         }
+        
+        // sort applications (depending on dependencies)
+        $applications = $this->_sortApplications($applications);
         
         return $applications;
     }
@@ -649,5 +651,19 @@ class Setup_Controller
                     
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
+    }
+
+    /**
+     * sort applications by checking dependencies
+     *
+     * @param array $_applications
+     * @return array
+     * 
+     * @todo make it work
+     */
+    protected function _sortApplications($_applications)
+    {
+        $result = $_applications;
+        return $result;
     }
 }
