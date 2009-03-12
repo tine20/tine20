@@ -5,7 +5,8 @@
     <order>90</order>
     <status>disabled</status>    
     <depends>
-        <application>Tinebase</application>
+        <application>Addressbook</application>
+        <application>Tasks</application>
     </depends>
     <tables>
         <table>
