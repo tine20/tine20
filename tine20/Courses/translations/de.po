@@ -2,61 +2,82 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-03-12 13:27+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/CourseEditDialog.js:68 js/CourseGridPanel.js:48 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/CourseEditDialog.js:84
-msgid "Course Name"
-msgstr ""
-
-#: js/CourseEditDialog.js:88
-msgid "Course / School Type"
-msgstr ""
-
-#: js/CourseEditDialog.js:93
-msgid "Description"
-msgstr ""
-
-#: js/CourseEditDialog.js:99 js/CourseGridPanel.js:74
-msgid "Internet"
-msgstr ""
-
-#: js/CourseEditDialog.js:129 js/CourseEditDialog.js:157
-msgid "Members"
-msgstr ""
-
-#: js/CourseGridPanel.js:62
-msgid "Name"
-msgstr ""
-
-#: js/CourseGridPanel.js:68
-msgid "Type"
-msgstr ""
-
-#: js/Courses.js:27 Setup/setup.xml:4
+#: js/Courses.js:27
+#: Setup/setup.xml:4
 msgid "Courses"
-msgstr ""
+msgstr "Klassen"
 
 #: js/Courses.js:32
 msgid "All Courses"
-msgstr ""
+msgstr "Alle Klassen"
+
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr "Klassenmitglieder importieren"
+
+#: js/CourseEditDialog.js:130
+#: js/CourseGridPanel.js:48
+#: js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Klasse"
+msgstr[1] "Klassen"
+
+#: js/CourseEditDialog.js:146
+msgid "Course Name"
+msgstr "Klassenname"
+
+#: js/CourseEditDialog.js:150
+msgid "Course / School Type"
+msgstr "Schultyp"
+
+#: js/CourseEditDialog.js:155
+msgid "Description"
+msgstr "Beschreibung"
+
+#: js/CourseEditDialog.js:161
+#: js/CourseGridPanel.js:74
+msgid "Internet"
+msgstr "Internetzugang"
+
+#: js/CourseEditDialog.js:191
+#: js/CourseEditDialog.js:242
+msgid "Members"
+msgstr "Mitglieder"
+
+#: js/CourseEditDialog.js:218
+msgid "Reset Password"
+msgstr "Passwort zurücksetzen"
+
+#: js/CourseEditDialog.js:222
+msgid "Set new password"
+msgstr "Neues Passwort setzen"
+
+#: js/CourseEditDialog.js:222
+msgid "Please enter the new password:"
+msgstr "Bitte das neue Passwort eingeben:"
+
+#: js/CourseGridPanel.js:62
+msgid "Name"
+msgstr "Name"
+
+#: js/CourseGridPanel.js:68
+msgid "Type"
+msgstr "Typ"
 
 #: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Liste"
+msgstr[1] "Listen"
+

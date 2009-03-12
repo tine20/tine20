@@ -14,31 +14,55 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/CourseEditDialog.js:68 js/CourseGridPanel.js:48 js/Models.js:41
+#: js/Courses.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: js/Courses.js:32
+msgid "All Courses"
+msgstr ""
+
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr ""
+
+#: js/CourseEditDialog.js:130 js/CourseGridPanel.js:48 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/CourseEditDialog.js:84
+#: js/CourseEditDialog.js:146
 msgid "Course Name"
 msgstr ""
 
-#: js/CourseEditDialog.js:88
+#: js/CourseEditDialog.js:150
 msgid "Course / School Type"
 msgstr ""
 
-#: js/CourseEditDialog.js:93
+#: js/CourseEditDialog.js:155
 msgid "Description"
 msgstr ""
 
-#: js/CourseEditDialog.js:99 js/CourseGridPanel.js:74
+#: js/CourseEditDialog.js:161 js/CourseGridPanel.js:74
 msgid "Internet"
 msgstr ""
 
-#: js/CourseEditDialog.js:129 js/CourseEditDialog.js:157
+#: js/CourseEditDialog.js:191 js/CourseEditDialog.js:242
 msgid "Members"
+msgstr ""
+
+#: js/CourseEditDialog.js:218
+msgid "Reset Password"
+msgstr ""
+
+#: js/CourseEditDialog.js:222
+msgid "Set new password"
+msgstr ""
+
+#: js/CourseEditDialog.js:222
+msgid "Please enter the new password:"
 msgstr ""
 
 #: js/CourseGridPanel.js:62
@@ -47,14 +71,6 @@ msgstr ""
 
 #: js/CourseGridPanel.js:68
 msgid "Type"
-msgstr ""
-
-#: js/Courses.js:27 Setup/setup.xml:4
-msgid "Courses"
-msgstr ""
-
-#: js/Courses.js:32
-msgid "All Courses"
 msgstr ""
 
 #: js/Models.js:45
