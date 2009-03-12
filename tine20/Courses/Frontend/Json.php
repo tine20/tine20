@@ -234,8 +234,8 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             Tinebase_User::factory(Tinebase_User::getConfiguredBackend()),
             array(
                 'group_id'                  => $groupId,
-                'accountLoginNamePrefix'    => $courseName . '_',
-                'password'                  => $courseName
+                'accountLoginNamePrefix'    => $courseName . '-',
+                'password'                  => $courseName,
                 //'encoding'                  => 'ISO8859-1'            
             )
         );
