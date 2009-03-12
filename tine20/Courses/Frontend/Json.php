@@ -125,9 +125,8 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      *
      * @param array $_members array of member ids
      * @param boolean $_internet yes/no
-     * @param integer $_groupId
      */
-    protected function _manageInternetGroup($_members, $_internet, $_groupId)
+    protected function _manageInternetGroup($_members, $_internet)
     {
         if (!isset(Tinebase_Core::getConfig()->courses) || !isset(Tinebase_Core::getConfig()->courses->internet_group)) {
             return;
