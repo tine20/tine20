@@ -136,9 +136,6 @@ class Setup_Controller
             }
         }
         
-        // sort applications (depending on dependencies)
-        $applications = $this->_sortApplications($applications);
-        
         return $applications;
     }
                  
@@ -253,7 +250,7 @@ class Setup_Controller
                         //echo "FUNCTIONNAME: $functionName<br>";
                         
                         try {
-                            $db = Tinebase_Core::getDb();
+                            $db = Setup_Core::getDb();
                             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
                         
                             $update->$functionName();
@@ -262,8 +259,8 @@ class Setup_Controller
                 
                         } catch (Exception $e) {
                             Tinebase_TransactionManager::getInstance()->rollBack();
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                             throw $e;
                         }
                             
@@ -316,7 +313,7 @@ class Setup_Controller
         // check if applications table exists
         try {
             // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
-            $applicationTable = Tinebase_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
+            $applicationTable = Setup_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
         } catch (Zend_Db_Statement_Exception $e) {
             $result = TRUE;
         }            
@@ -327,12 +324,24 @@ class Setup_Controller
      * delete list of applications
      *
      * @param array $_applications list of application names
-     * @todo resolve order of applications
+     * 
+     * @todo check dependencies here as well
      */
     public function uninstallApplications($_applications)
     {
+        // get xml and sort apps first
+        $applications = array();
         foreach($_applications as $application) {
-            $this->_uninstallApplication($application);
+            $applications[$application->name] = $this->getSetupXml($application->name);
+        }
+        //$applications = array_reverse($this->_sortUninstallableApplications($applications));
+        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($applications), true));
+        
+        foreach ($applications as $name => $xml) {
+            $apps = $_applications->filter('name', $name);
+            if (isset($apps[0])) {
+                $this->_uninstallApplication($apps[0]);
+            }
         }
     }
 
@@ -490,8 +499,8 @@ class Setup_Controller
             //Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
             Zend_Session::regenerateId();
             
-            Tinebase_Core::set(Setup_Core::USER, $_username);
-            Tinebase_Core::getSession()->setupuser = $_username;            
+            Setup_Core::set(Setup_Core::USER, $_username);
+            Setup_Core::getSession()->setupuser = $_username;            
             return true;
             
         } else {
@@ -515,12 +524,18 @@ class Setup_Controller
      * install list of applications
      *
      * @param array $_applications list of application names
-     * @todo resolve order of applications
      */
     public function installApplications($_applications)
     {
-        foreach($_applications as $application) {
-            $xml = $this->getSetupXml($application);
+        // get xml and sort apps first
+        $applications = array();
+        
+        foreach($_applications as $applicationName) {
+            $applications[$applicationName] = $this->getSetupXml($applicationName);
+        }
+        $applications = $this->_sortInstallableApplications($applications);
+        
+        foreach ($applications as $name => $xml) {
             $this->_installApplication($xml);
         }
     }
@@ -648,6 +663,7 @@ class Setup_Controller
             
             $this->_db->delete(SQL_TABLE_PREFIX . 'role_rights', $where);        
             $this->_db->delete(SQL_TABLE_PREFIX . 'container', $where);
+            $this->_db->delete(SQL_TABLE_PREFIX . 'importexport_definitions', $where);
                     
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
@@ -658,12 +674,72 @@ class Setup_Controller
      *
      * @param array $_applications
      * @return array
-     * 
-     * @todo make it work
      */
-    protected function _sortApplications($_applications)
+    protected function _sortInstallableApplications($_applications)
     {
-        $result = $_applications;
+        // begin with Tinebase
+        if (isset($_applications['Tinebase'])) {
+            $result['Tinebase'] = $_applications['Tinebase'];
+            unset($_applications['Tinebase']);
+        } else {
+            $result = array();
+        }
+        
+        // get all apps to install ($name => $dependencies)
+        $appsToSort = array();
+        foreach($_applications as $name => $xml) {
+            $depends = (array) $xml->depends; 
+            if (isset($depends['application'])) {
+                if ($depends['application'] == 'Tinebase') {
+                    $appsToSort[$name] = array();
+                    
+                } else {
+                    $depends['application'] = (array) $depends['application'];
+                    
+                    foreach ($depends['application'] as $app) {
+                        // don't add tinebase (all apps depend on tinebase)
+                        if ($app != 'Tinebase') {
+                            $appsToSort[$name][] = $app;
+                        }
+                    }
+                }
+            } else {
+                $appsToSort[$name] = array();
+            }
+        }
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($appsToSort, true));
+        
+        // re-sort apps
+        define('MAXLOOPCOUNT', 50);
+        $count = 0;
+        while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
+            
+            foreach($appsToSort as $name => $depends) {
+                //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " - $count $name - " . print_r($depends, true));
+                
+                if (empty($depends)) {
+                    // no dependencies left -> copy app to result set
+                    $result[$name] = $_applications[$name];
+                    unset($appsToSort[$name]);
+                } else {
+                    foreach ($depends as $key => $dependingAppName) {
+                        if (in_array($dependingAppName, array_keys($result))) {
+                            // remove from depending apps because it is already in result set
+                            unset($appsToSort[$name][$key]);
+
+                            //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " - unset $name $key");
+                        }
+                    }
+                }
+            }
+            $count++;
+        }
+        
+        if ($count == MAXLOOPCOUNT) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                " Some Applications could not be installed because of (cyclic?) dependencies: " . print_r(array_keys($appsToSort), TRUE));
+        }
+        
         return $result;
     }
 }

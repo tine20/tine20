@@ -114,7 +114,8 @@ Tine.Setup.Model.ApplicationArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'order'           },
     { name: 'version'         },
     { name: 'current_version' },
-    { name: 'install_status'  }
+    { name: 'install_status'  },
+    { name: 'depends'         }
 ]);
 
 /**
