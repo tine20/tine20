@@ -34,10 +34,8 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
         
         if ($this->_operator != 'within' && $_valueToJson == true) {
             $date = new Zend_Date($result['value'], Tinebase_Record_Abstract::ISO8601LONG);
-            $date->setTimezone(Tinebase_Core::get('userTimeZone'));
+            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Tinebase_Core::get('userTimeZone'), true));
         }
         
         return $result;
@@ -109,8 +107,6 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
         } else {
             $result = $_string;
         }
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
     }

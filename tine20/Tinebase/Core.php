@@ -65,6 +65,12 @@ class Tinebase_Core
     const DB = 'dbAdapter';    
     
     /**
+     * constant for database adapter
+     *
+     */
+    const USERTIMEZONE = 'userTimeZone';    
+    
+    /**
      * constant for input filter registry
      *
      */
