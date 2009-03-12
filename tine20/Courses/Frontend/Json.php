@@ -176,8 +176,6 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      *
      * @param  string $recordData
      * @return array created/updated record
-     * 
-     * @todo activate manage internet function / needs testing
      */
     public function saveCourse($recordData)
     {
@@ -200,7 +198,7 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         }
         
         // add/remove members to/from internet group
-        //$this->_manageInternetGroup($group->members, $savedRecord->internet);
+        $this->_manageInternetGroup($group->members, $savedRecord->internet);
 
         return $this->_recordToJson($savedRecord);
     }
