@@ -13,14 +13,14 @@ Ext.namespace('Ext.ux.form');
  * @class Ext.ux.form.BrowseButton
  * @extends Ext.Button
  */
-Ext.ux.form.BrowseButton = Ext.extend(Ext.Button, {
+Ext.ux.BrowseButton = Ext.extend(Ext.Button, {
 
     initComponent: function() {
         this.plugins = this.plugins || [];
         this.plugins.push( new Ext.ux.file.BrowsePlugin({}));
         
-        Ext.ux.form.BrowseButton.superclass.initComponent.call(this);
+        Ext.ux.BrowseButton.superclass.initComponent.call(this);
     }
 });
 
-Ext.reg('browsebutton', Ext.ux.form.BrowseButton);
+Ext.reg('browsebutton', Ext.ux.BrowseButton);

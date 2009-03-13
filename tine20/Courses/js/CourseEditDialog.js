@@ -27,7 +27,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.app = Tine.Tinebase.appMgr.get('Courses');
         this.tbarItems =  [
             {xtype: 'widget-activitiesaddbutton'},
-            new Ext.ux.form.BrowseButton({
+            new Ext.ux.BrowseButton({
             	id: 'ImportButton',
             	iconCls: 'action_import',
             	disabled: true,
