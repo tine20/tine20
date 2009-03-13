@@ -128,14 +128,17 @@ class Tinebase_Acl_Roles
      * returns list of applications the user is able to use
      *
      * this function takes group memberships into account. Applications the accounts is able to use
-     * must have the 'run' right set and the application must be enabled
+     * must have any (was: the 'run') right set and the application must be enabled
      * 
      * @param   int $_accountId the numeric account id
+     * @param   boolean $_anyRight is any right enough to geht app?
      * @return  array list of enabled applications for this account
      * @throws  Tinebase_Exception_AccessDenied if user has no role memberships
      */
-    public function getApplications($_accountId)
+    public function getApplications($_accountId, $_anyRight = FALSE)
     {  
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_anyRight);
+        
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
@@ -152,10 +155,17 @@ class Tinebase_Acl_Roles
                 $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.application_id') . 
                 ' = ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'applications.id'))            
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right') . ' = ?', Tinebase_Acl_Rights::RUN))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'applications.status') . ' = ?', Tinebase_Application::ENABLED))
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id')
             ->order('order', 'ASC');
+        
+        if ($_anyRight) {
+            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right') . " != ''"));
+        } else {
+            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right') . ' = ?', Tinebase_Acl_Rights::RUN));
+        }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $stmt = $this->_db->query($select);
         

@@ -429,9 +429,10 @@ class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $registryData = array();
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) { 
-            $userApplications = Tinebase_Core::getUser()->getApplications();
+            $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             
             foreach($userApplications as $application) {
+                
                 $jsonAppName = $application->name . '_Frontend_Json';
                 
                 if(class_exists($jsonAppName)) {

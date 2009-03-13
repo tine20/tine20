@@ -173,13 +173,14 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * this function takes group memberships into user. Applications the user is able to use
      * must have the 'run' right set 
      * 
+     * @param boolean $_anyRight is any right enough to geht app?
      * @return array list of enabled applications for this user
      */
-    public function getApplications()
+    public function getApplications($_anyRight = FALSE)
     {
         $roles = Tinebase_Acl_Roles::getInstance();
         
-        $result = $roles->getApplications($this->accountId);
+        $result = $roles->getApplications($this->accountId, $_anyRight);
         
         return $result;
     }
