@@ -95,8 +95,10 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.membersStore.loadData({results: members});
         }
         
-        // only activate import button if editing existing course
-        Ext.getCmp('ImportButton').setDisabled(!this.record.get('id'));
+        // only activate import and ok buttons if editing existing course / user has the appropriate right
+        var disabled = !this.record.get('id') || !Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts');
+        Ext.getCmp('ImportButton').setDisabled(disabled);
+        this.action_saveAndClose.setDisabled(!Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts'));
         
        	Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);        
     },
@@ -127,7 +129,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             activeTab: 0,
             border: false,
             items:[{               
-                title: this.app.i18n._('Course'),
+                title: this.app.i18n.ngettext('Course', 'Courses', 1),
                 autoScroll: true,
                 border: false,
                 frame: true,
