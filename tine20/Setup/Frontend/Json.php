@@ -136,7 +136,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
         $installable = $this->_controller->getInstallableApplications();
         
         // get installed apps
-        if (Setup_Core::get('checkDB')) {
+        if (Setup_Core::get(Setup_Core::CHECKDB)) {
             try {
                 $installed = Tinebase_Application::getInstance()->getApplications(NULL, 'id')->toArray();
                 
@@ -227,13 +227,13 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
     public function checkConfig()
     {
         // check first if db settings have changed?
-        //if (!Setup_Core::get('checkDB'))
+        //if (!Setup_Core::get(Setup_Core::CHECKDB))
         Setup_Core::setupDatabaseConnection();
         
         $result = array(
             'configExists'     => Setup_Core::configFileExists(),
             'configWritable'   => Setup_Core::configFileWritable(),
-            'checkDB'          => Setup_Core::get('checkDB'),
+            'checkDB'          => Setup_Core::get(Setup_Core::CHECKDB),
         );
         
         return $result;        
@@ -250,7 +250,7 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
         $registryData =  array(
             'configExists'     => Setup_Core::configFileExists(),
             'configWritable'   => Setup_Core::configFileWritable(),
-            'checkDB'          => Setup_Core::get('checkDB'),
+            'checkDB'          => Setup_Core::get(Setup_Core::CHECKDB),
             'setupChecks'      => $this->envCheck(),
             'configData'       => $this->loadConfig()
         );

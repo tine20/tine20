@@ -22,6 +22,12 @@
 class Setup_Core extends Tinebase_Core
 {
     /**
+     * constant for config registry index
+     *
+     */
+    const CHECKDB = 'checkDB';    
+
+    /**
      * dispatch request
      *
      */
@@ -79,13 +85,26 @@ class Setup_Core extends Tinebase_Core
     }
 
     /**
-     * checks if global config file is writable
+     * checks if global config file or tine root is writable
      *
      * @return bool
      */
     public static function configFileWritable()
     {
-        return is_writable(dirname(__FILE__) . '/../config.inc.php');
+        $path = dirname(dirname(__FILE__));
+        
+        if (self::configFileExists()) {
+            return is_writable($path . 'config.inc.php');
+        } else {
+            $testfilename = $path . uniqid(mt_rand()).'.tmp';
+            if (!($f = @fopen($testfilename, 'w'))) {
+                error_log(__METHOD__ . '::' . __LINE__ . ' Your tine root dir ' . $path . ' is not writable for the webserver! Config file can\'t be created.');
+                return false;
+            }
+            fclose($f);
+            unlink($testfilename);
+            return true;
+        }
     }
     
     /**
@@ -95,19 +114,21 @@ class Setup_Core extends Tinebase_Core
      */
     public static function setupDatabaseConnection()
     {
-        self::set('checkDB', FALSE);
+        self::set(Setup_Core::CHECKDB, FALSE);
         
         // check database first
         if (self::configFileExists()) {
             try {
                 parent::setupDatabaseConnection();
-                self::set('checkDB', TRUE);
+                self::set(Setup_Core::CHECKDB, TRUE);
             } catch (Zend_Db_Adapter_Exception $zae) {
                 Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zae->getMessage());
             }
         }
         
-        // @todo try to write to db, if it fails: self::set('checkDB', FALSE);
+        // @todo try to write to db, if it fails: self::set(Setup_Core::CHECKDB, FALSE);
+        //$dbConfig = Tinebase_Core::getConfig()->database;
+        //$link = @mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);        
     }
     
     /**

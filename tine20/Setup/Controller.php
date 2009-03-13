@@ -71,7 +71,7 @@ class Setup_Controller
     {
         $this->_baseDir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
         
-        if (Setup_Core::get('checkDB')) {
+        if (Setup_Core::get(Setup_Core::CHECKDB)) {
             $this->_db = Setup_Core::getDb();
             
             switch(get_class($this->_db)) {
@@ -830,7 +830,7 @@ class Setup_Controller
         $result = TRUE;
         try {
             $app = Tinebase_Application::getInstance()->getApplicationByName($appname);
-        } catch (Tinebase_Exception_NotFound $enf) {
+        } catch (Exception $e) {
             $result = FALSE;
         }
         

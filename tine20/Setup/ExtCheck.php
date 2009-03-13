@@ -384,12 +384,14 @@ class Setup_ExtCheck
                 case 'MySQL':
                     // get setup controller for database connection
                     $dbConfig = Tinebase_Core::getConfig()->database;
-                    $link = mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
+                    $link = @mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
                     if (!$link) {
-                        die('Could not connect to mysql database: ' . mysql_error());
+                        //die('Could not connect to mysql database: ' . mysql_error());
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Could not connect to mysql database: ' . mysql_error());
+                        Setup_Core::set(Setup_Core::CHECKDB, FALSE);
                     }                    
                     //echo "mysql version: " . mysql_get_server_info();
-                    if (version_compare($value['attributes']['VERSION'], mysql_get_server_info(), '<')) {
+                    if (version_compare($value['attributes']['VERSION'], @mysql_get_server_info(), '<')) {
                         $data[] = array($value['attributes']['NAME'], 'SUCCESS');
                     } else {
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
@@ -493,11 +495,19 @@ class Setup_ExtCheck
         foreach ($data as $check) {
             list($key, $value) = $check;
             if ($value != 'SUCCESS') {
-                $result['success'] = FALSE;
+                
+                if ($key === 'MySQL') {
+                    $message = 'Could not connect to MySql DB (check your connection settings) or ';
+                } else {
+                    $message = '';
+                    $result['success'] = FALSE;
+                }
+                $message .= 'Extension ' . $key . ' not found.' . $helperLink;
+                
                 $result['result'][] = array(
                     'key'       => $key,
                     'value'     => FALSE,
-                    'message'   => 'Extension ' . $key . ' not found.' . $helperLink
+                    'message'   => $message
                 );
             } else {
                 $result['result'][] = array(
