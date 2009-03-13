@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Dialer.js 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  *
+ * @todo        enable myphone edit dialog again
  */
  
 Ext.namespace('Tine.Phone');
@@ -27,7 +28,20 @@ Tine.Phone.getPanel = function(){
         text: translation._('Edit phone settings'),
         iconCls: 'PhoneIconCls',
         handler: function() {
-        	Tine.Tinebase.common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + this.ctxNode.id, 700, 300);
+        	Ext.Msg.alert('Sorry, this function is disabled at the moment');
+        	/*
+            var popupWindow = Tine.Phone.MyPhoneEditDialog.openWindow({
+                record: this.ctxNode.record,
+                listeners: {
+                    scope: this,
+                    'update': function(record) {
+                        this.store.load({});
+                    }
+                }
+            });
+            */
+        	
+        	//Tine.Tinebase.common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + this.ctxNode.id, 700, 300);
         },
         scope: this
     });
@@ -130,6 +144,7 @@ Tine.Phone.updatePhoneTree = function(store){
            : Ext.util.Format.ellipsis(record.data.description, 30);
         var node = new Ext.tree.TreeNode({
             id: record.id,
+            record: record,
             text: label,
             qtip: record.data.description,
             leaf: true

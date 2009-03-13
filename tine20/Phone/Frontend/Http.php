@@ -28,7 +28,8 @@ class Phone_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'Phone/js/Phone.js'
+            'Phone/js/Phone.js',
+            'Phone/js/MyPhoneEditDialog.js',
         );
     }
     
@@ -37,8 +38,8 @@ class Phone_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      *
      * @param int $phoneId
      * 
-     * @todo catch permission denied exceptions only
-     * @todo should be obsolete when new window handling is introduced in Phone & Voipmanager
+     * @todo remove that when new myphone edit dialog is working
+     * @deprecated
      */
     public function editMyPhone($phoneId = NULL)
     {
@@ -75,6 +76,8 @@ class Phone_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             $encodedWritable = Zend_Json::encode($_notWritable);
                 
             $_phoneData = array_merge($_phoneSettingsData,$_phoneData);
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phoneData, true));
             
             // encode the data arrays
             $encodedSnomPhone = Zend_Json::encode($_phoneData);
