@@ -61,7 +61,7 @@ function convertToBytes($_value)
 function getDevelopmentRevision()
 {
     try {
-        $file = fopen(dirname(dirname(__FILE__)) . '/.svn/entries', 'r');
+        $file = @fopen(dirname(dirname(__FILE__)) . '/.svn/entries', 'r');
         while ($line = fgets($file)) {
             if ((int)$line > 5000) {
                 $rev = (int)$line;
@@ -80,6 +80,7 @@ function getDevelopmentRevision()
         }
         
         $revision = "$branch: $rev ($date)";
+        @fclose($file);
     } catch (Exception $e) {
         $revision = 'not resolvable';
     }
