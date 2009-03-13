@@ -6,6 +6,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Cli.php 5147 2008-10-28 17:03:33Z p.schuele@metaways.de $
+ * 
+ * @todo        remove deprecated functions from old http setup?
  */
 
 /**
@@ -93,10 +95,6 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
      */
     public function handle()
     {
-        if ($_GET['mode'] == 'beta') {
-            return $this->mainScreen();
-        }
-        
         if ($_REQUEST['method'] == 'Tinebase.getJsTranslations') {
             $locale = Setup_Core::get('locale');
             $translations = Tinebase_Translation::getJsTranslations($locale);
@@ -104,8 +102,15 @@ class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             die($translations);
         }
         
+        //if ($_GET['mode'] == 'beta') {
+            return $this->mainScreen();
+        //}
+        
+        // old http setup    
+        /*
         $updateDone = $this->_update();
         $this->_install($updateDone);
+        */
     }
     
     /**

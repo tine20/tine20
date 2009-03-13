@@ -1,15 +1,19 @@
 <?php
-// @todo move that to /config dir
-// rename to config.inc.php (and add update script for that)
+// TODO: rename to config.inc.php and add your database settings
+
 // minimal configuration
 return array(
 	'database' => array(
-      		'host'		=> 'ENTER DATABASE HOSTNAME',
-		'dbname'	=> 'ENTER DATABASE NAME',
-       		'username'	=> 'ENTER DATABASE USERNAME',
-       		'password'	=> 'ENTER DATABASE PASSWORD',
-		'adapter'	=> 'pdo_mysql',
-		'tableprefix'	=> 'tine20_'
-	)
+        'host'		=> 'ENTER DATABASE HOSTNAME',
+        'dbname'	=> 'ENTER DATABASE NAME',
+        'username'	=> 'ENTER DATABASE USERNAME',
+        'password'	=> 'ENTER DATABASE PASSWORD',
+        'adapter'	=> 'pdo_mysql',
+        'tableprefix'	=> 'tine20_'
+	),
+    'setupuser' => array(
+        'username'      => 'tine20setup',
+        'password'      => 'setup' 
+    ),
 );
 
