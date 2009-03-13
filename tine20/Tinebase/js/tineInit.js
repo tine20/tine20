@@ -182,6 +182,8 @@ Tine.Tinebase.tineInit = {
         mainCardPanel.layout.container.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
         card.doLayout();
+        
+        //var ping = new Tine.Tinebase.sync.Ping({});
     },
 
     initAjax: function() {
@@ -397,6 +399,13 @@ Tine.Tinebase.tineInit = {
             });
         } else {
             var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow();
+            
+            for (p in mainWindow.Tine) {
+                if (mainWindow.Tine[p].hasOwnProperty('registry') && Tine.hasOwnProperty(p)) {
+                    Tine[p].registry = mainWindow.Tine[p].registry;
+                }
+            }
+            /*
             Tine.Tinebase.registry = mainWindow.Tine.Tinebase.registry;
             
             if (Tine.Tinebase.registry.get('userApplications')) {
@@ -412,6 +421,7 @@ Tine.Tinebase.tineInit = {
                     }
                 }
             }
+            */
             Tine.Tinebase.tineInit.initList.initRegistry = true;
         }
     },
