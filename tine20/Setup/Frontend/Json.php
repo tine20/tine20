@@ -121,14 +121,8 @@ class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
      */
     public function uninstallApplications($applicationNames)
     {
-        $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
-        foreach (Zend_Json::decode($applicationNames) as $applicationName) {
-            $applications->addRecord(Tinebase_Application::getInstance()->getApplicationByName($applicationName));
-        }
-        
-        if(count($applications) > 0) {
-            $this->_controller->uninstallApplications($applications);
-        }
+        $decodedNames = Zend_Json::decode($applicationNames);
+        $this->_controller->uninstallApplications($decodedNames);
     }
     
     /**

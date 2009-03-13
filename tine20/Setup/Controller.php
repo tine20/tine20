@@ -321,31 +321,6 @@ class Setup_Controller
     }
     
     /**
-     * delete list of applications
-     *
-     * @param array $_applications list of application names
-     * 
-     * @todo check dependencies here as well
-     */
-    public function uninstallApplications($_applications)
-    {
-        // get xml and sort apps first
-        $applications = array();
-        foreach($_applications as $application) {
-            $applications[$application->name] = $this->getSetupXml($application->name);
-        }
-        //$applications = array_reverse($this->_sortUninstallableApplications($applications));
-        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(array_keys($applications), true));
-        
-        foreach ($applications as $name => $xml) {
-            $apps = $_applications->filter('name', $name);
-            if (isset($apps[0])) {
-                $this->_uninstallApplication($apps[0]);
-            }
-        }
-    }
-
-    /**
      * do php.ini environment check
      *
      * @return array
@@ -529,14 +504,41 @@ class Setup_Controller
     {
         // get xml and sort apps first
         $applications = array();
-        
         foreach($_applications as $applicationName) {
             $applications[$applicationName] = $this->getSetupXml($applicationName);
         }
         $applications = $this->_sortInstallableApplications($applications);
         
+        if (!in_array('Tinebase', array_keys($applications)) && !$this->_isInstalled('Tinebase')) {
+            // Tinebase has to be installed
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Tinebase has to be installed first.'); 
+            return FALSE;
+        }
+        
+        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' installing applications: ' . print_r(array_keys($applications), true));
+        
         foreach ($applications as $name => $xml) {
             $this->_installApplication($xml);
+        }
+    }
+
+    /**
+     * delete list of applications
+     *
+     * @param array $_applications list of application names
+     */
+    public function uninstallApplications($_applications)
+    {
+        // get xml and sort apps first
+        $applications = array();
+        foreach($_applications as $applicationName) {
+            $applications[$applicationName] = $this->getSetupXml($applicationName);
+        }
+        $applications = $this->_sortUninstallableApplications($applications);
+        
+        foreach ($applications as $name => $xml) {
+            $app = Tinebase_Application::getInstance()->getApplicationByName($name);
+            $this->_uninstallApplication($app);
         }
     }
     
@@ -627,14 +629,14 @@ class Setup_Controller
      */
     protected function _uninstallApplication(Tinebase_Model_Application $_application)
     {
-        #echo "Uninstall $_application\n";
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "Uninstall $_application");
         $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
         
         do {
             $oldCount = count($applicationTables);
             
-            foreach($applicationTables as $key => $table) {
-                #echo "Remove table: $table\n";
+            foreach ($applicationTables as $key => $table) {
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "Remove table: $table");
                 try {
                     $this->_backend->dropTable($table);
                     if($_application != 'Tinebase') {
@@ -643,18 +645,18 @@ class Setup_Controller
                     unset($applicationTables[$key]);
                 } catch(Zend_Db_Statement_Exception $e) {
                     // we need to catch exceptions here, as we don't want to break here, as a table
-                    // migth still have some foreign keys
-                    #echo $e->getMessage() . "\n";
+                    // might still have some foreign keys
+                    Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "could not drop table $table - " . $e->getMessage());
                 }
                 
             }
             
-            if($oldCount > 0 && count($applicationTables) == $oldCount) {
+            if ($oldCount > 0 && count($applicationTables) == $oldCount) {
                 throw new Setup_Exception('dead lock detected oldCount: ' . $oldCount);
             }
-        } while(count($applicationTables) > 0);
+        } while (count($applicationTables) > 0);
                 
-        if($_application != 'Tinebase') {
+        if ($_application != 'Tinebase') {
             // remove application from table of installed applications
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
             $where = array(
@@ -667,6 +669,7 @@ class Setup_Controller
                     
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "Removed app: " . $_application->name);
     }
 
     /**
@@ -707,7 +710,8 @@ class Setup_Controller
                 $appsToSort[$name] = array();
             }
         }
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($appsToSort, true));
+        
+        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($appsToSort, true));
         
         // re-sort apps
         define('MAXLOOPCOUNT', 50);
@@ -715,19 +719,16 @@ class Setup_Controller
         while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
             
             foreach($appsToSort as $name => $depends) {
-                //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " - $count $name - " . print_r($depends, true));
-                
+
                 if (empty($depends)) {
                     // no dependencies left -> copy app to result set
                     $result[$name] = $_applications[$name];
                     unset($appsToSort[$name]);
                 } else {
                     foreach ($depends as $key => $dependingAppName) {
-                        if (in_array($dependingAppName, array_keys($result))) {
+                        if (in_array($dependingAppName, array_keys($result)) || $this->_isInstalled($dependingAppName)) {
                             // remove from depending apps because it is already in result set
                             unset($appsToSort[$name][$key]);
-
-                            //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " - unset $name $key");
                         }
                     }
                 }
@@ -738,6 +739,99 @@ class Setup_Controller
         if ($count == MAXLOOPCOUNT) {
             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
                 " Some Applications could not be installed because of (cyclic?) dependencies: " . print_r(array_keys($appsToSort), TRUE));
+        }
+        
+        return $result;
+    }
+
+    /**
+     * sort applications by checking dependencies
+     *
+     * @param array $_applications
+     * @return array
+     */
+    protected function _sortUninstallableApplications($_applications)
+    {
+        $result = array();
+        
+        // get all apps to uninstall ($name => $dependencies)
+        $appsToSort = array();
+        foreach($_applications as $name => $xml) {
+            if ($name !== 'Tinebase') {
+                $depends = (array) $xml->depends; 
+                if (isset($depends['application'])) {
+                    if ($depends['application'] == 'Tinebase') {
+                        $appsToSort[$name] = array();
+                        
+                    } else {
+                        $depends['application'] = (array) $depends['application'];
+                        
+                        foreach ($depends['application'] as $app) {
+                            // don't add tinebase (all apps depend on tinebase)
+                            if ($app != 'Tinebase') {
+                                $appsToSort[$name][] = $app;
+                            }
+                        }
+                    }
+                } else {
+                    $appsToSort[$name] = array();
+                }
+            }
+        }
+        
+        // re-sort apps
+        define('MAXLOOPCOUNT', 50);
+        $count = 0;
+        while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
+
+            foreach($appsToSort as $name => $depends) {
+                //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " - $count $name - " . print_r($depends, true));
+                
+                // don't uninstall if another app depends on this one
+                $otherAppDepends = FALSE;
+                foreach($appsToSort as $innerName => $innerDepends) {
+                    if(in_array($name, $innerDepends)) {
+                        $otherAppDepends = TRUE;
+                        break;
+                    }
+                }
+                
+                // add it to results
+                if (!$otherAppDepends) {
+                    $result[$name] = $_applications[$name];
+                    unset($appsToSort[$name]);
+                }
+            }
+            $count++;
+        }
+        
+        if ($count == MAXLOOPCOUNT) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                " Some Applications could not be uninstalled because of (cyclic?) dependencies: " . print_r(array_keys($appsToSort), TRUE));
+        }
+
+        // Tinebase is uninstalled last
+        if (isset($_applications['Tinebase'])) {
+            $result['Tinebase'] = $_applications['Tinebase'];
+            unset($_applications['Tinebase']);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * check if an application is installed
+     *
+     * @param string $appname
+     * @return boolean
+     */
+    protected function _isInstalled($appname)
+    {
+        $result = TRUE;
+        try {
+            $app = Tinebase_Application::getInstance()->getApplicationByName($appname);
+        } catch (Tinebase_Exception_NotFound $enf) {
+            $result = FALSE;
         }
         
         return $result;

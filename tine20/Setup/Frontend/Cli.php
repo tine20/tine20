@@ -157,11 +157,15 @@ class Setup_Frontend_Cli
             }
         }
         
-        $controller->uninstallApplications($applications);
+        $controller->uninstallApplications($applications->name);
 
         echo "Successfully uninstalled " . count($applications) . " applications.\n";        
     }
 
+    /**
+     * list installed apps
+     *
+     */
     protected function _listInstalled()
     {
         try {
