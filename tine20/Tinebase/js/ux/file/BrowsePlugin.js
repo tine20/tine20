@@ -148,6 +148,32 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.component = cmp;
         
         cmp.on('render', this.onRender, this);
+        
+        // chain enable/disable fns
+        if (typeof cmp.setDisabled == 'function') {
+            cmp.setDisabled = cmp.setDisabled.createSequence(function(disabled) {
+                if (this.inputFileEl) {
+                    this.inputFileEl.dom.disabled = disabled;
+                }
+            }, this);
+        }
+        
+        if (typeof cmp.enable == 'function') {
+            cmp.enable = cmp.enable.createSequence(function() {
+                if (this.inputFileEl) {
+                    this.inputFileEl.dom.disabled = false;
+                }
+            }, this);
+        }
+        
+        if (typeof cmp.disable == 'function') {
+            cmp.disable = cmp.disable.createSequence(function() {
+                if (this.inputFileEl) {
+                    this.inputFileEl.dom.disabled = true;
+                }
+            }, this);
+        }
+        
     },
     
     /**
