@@ -216,7 +216,7 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
         
         $select = $this->_db->select()
             ->from(Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones', array())
-            ->where(Tinebase_Core::get('voipdbTablePrefix') . $this->_db->quoteIdentifier('snom_phones.macaddress') . ' = ?', $_phone->macaddress)
+            ->where($this->_db->quoteIdentifier(Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones.macaddress') . ' = ?', $_phone->macaddress)
             ->join(Tinebase_Core::get('voipdbTablePrefix') . 'snom_templates', Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones.template_id = ' . Tinebase_Core::get('voipdbTablePrefix') . 'snom_templates.id', array())
             ->join(Tinebase_Core::get('voipdbTablePrefix') . 'snom_software', Tinebase_Core::get('voipdbTablePrefix') . 'snom_templates.software_id = ' . Tinebase_Core::get('voipdbTablePrefix') . 'snom_software.id', array('softwareimage_' . $_phone->current_model));
             
