@@ -43,6 +43,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         'name'          => array('presence' => 'required'),
         'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'members'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'sambaSAM'      => array('allowEmpty' => true),
     );
     
    /**

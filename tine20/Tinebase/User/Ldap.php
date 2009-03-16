@@ -438,8 +438,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * adds a new user
      * 
-     * @todo add required objectclasses
-     *
      * @param Tinebase_Model_FullUser $_account
      * @return Tinebase_Model_FullUser
      */
