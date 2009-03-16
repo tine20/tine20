@@ -23,8 +23,6 @@ Tine.Phone.MyPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'SnomPhoneEditWindow_',
     appName: 'Phone',
-    recordClass: Tine.Voipmanager.Model.SnomPhone,
-    recordProxy: Tine.Voipmanager.SnomPhoneBackend,
     evalGrants: false,
     
     /**
@@ -73,7 +71,8 @@ Tine.Phone.MyPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fields: Tine.Voipmanager.Model.SnomLine
         });
         */
-        
+        this.recordClass = Tine.Voipmanager.Model.SnomPhone;
+        this.recordProxy = Tine.Voipmanager.SnomPhoneBackend;
         Tine.Phone.MyPhoneEditDialog.superclass.initComponent.call(this);
     },
     
