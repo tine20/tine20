@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        extend Tinebase_Application_Controller_Record_Abstract
@@ -19,6 +19,21 @@
  */
 class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
 {
+	/**
+	 * @var Tinebase_User_Ldap
+	 */
+	protected $_userBackend = NULL;
+	
+	/**
+	 * @var bool
+	 */
+	protected $_manageSAM = false;
+	
+	/**
+	 * @var Tinebase_SambaSAM_Ldap
+	 */
+	protected $_samBackend = NULL;
+
     /**
      * the constructor
      *
@@ -28,6 +43,16 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
+		
+		$this->_userBackend = $this->_userBackend;
+		
+		// manage samba sam?
+		if(isset(Tinebase_Core::getConfig()->samba)) {
+			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
+			if ($this->_manageSAM) {
+				$this->_samBackend = Tinebase_SambaSAM::getInstance();
+			}
+		}
     }
 
     /**
@@ -73,9 +98,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
-        $backend = Tinebase_User::getInstance();
-
-        $result = $backend->getFullUsers($_filter, $_sort, $_dir, $_start, $_limit);
+        $result = $this->_userBackend($_filter, $_sort, $_dir, $_start, $_limit);
         
         return $result;
     }
@@ -90,7 +113,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {        
         $this->checkRight('VIEW_ACCOUNTS');
         
-        return Tinebase_User::getInstance()->getUserById($_accountId);
+        return $this->_userBackend->getUserById($_accountId);
     }
     
     /**
@@ -104,7 +127,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $result = Tinebase_User::getInstance()->setStatus($_accountId, $_status);
+        $result = $this->_userBackend->setStatus($_accountId, $_status);
         
         return $result;
     }
@@ -125,7 +148,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
             throw new Admin_Exception("Passwords don't match.");
         }
         
-        $result = Tinebase_User::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+        $result = $this->_userBackend->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         
         return $result;
     }
@@ -142,7 +165,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $account = Tinebase_User::getInstance()->updateUser($_account);
+        $account = $this->_userBackend->updateUser($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
         // fire needed events
@@ -151,7 +174,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         Tinebase_Events::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            Tinebase_User::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+            $this->_userBackend->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         }
         
         return $account;
@@ -169,7 +192,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $account = Tinebase_User::getInstance()->addUser($_account);
+        $account = $this->_userBackend->addUser($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
         $event = new Admin_Event_AddAccount;
@@ -177,7 +200,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         Tinebase_Events::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            Tinebase_User::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+            $this->_userBackend->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         }
         
         return $account;
@@ -193,6 +216,6 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        return Tinebase_User::getInstance()->deleteUsers($_accountIds);
+        return $this->_userBackend->deleteUsers($_accountIds);
     }
 }
