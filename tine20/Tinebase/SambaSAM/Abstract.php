@@ -69,12 +69,32 @@ abstract class SambaSAM_Abstract
      * @param   Zend_Date   $_expiryDate
      */
     abstract public function setExpiryDate($_userId, $_expiryDate);
-
+	
+	/**
+     * adds sam properties to a new group
+     *
+	 * @param  int                     $_groupId
+     * @param  Tinebase_Model_SAMGroup $_samGroup
+     * @return Tinebase_Model_SAMGroup
+     */
 	abstract public function addGroup($_groupId, Tinebase_Model_SAMGroup $_samGroup);
 
+	/**
+	 * updates sam properties on an updated group
+	 *
+	 * @param  int                     $_groupId
+     * @param  Tinebase_Model_SAMGroup $_samGroup
+	 * @return Tinebase_Model_SAMGroup
+	 */
 	abstract public function updateGroup($_groupId, Tinebase_Model_SAMGroup $_samGroup);
 
-	abstract public function deleteGroup($_groupId);
+	/**
+	 * deletes sam groups
+	 * 
+	 * @param  array $_groupIds
+	 * @return void
+	 */
+	abstract public function deleteGroups(array $_groupIds);
 	
 	/**
      * returns crypt engine for NT/LMPasswords
