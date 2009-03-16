@@ -160,7 +160,7 @@ class Tinebase_Acl_Roles
             ->order('order', 'ASC');
         
         if ($_anyRight) {
-            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right') . " != ''"));
+            $select->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right') . " != ''");
         } else {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right') . ' = ?', Tinebase_Acl_Rights::RUN));
         }
