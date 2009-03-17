@@ -15,6 +15,8 @@
  * 
  * Samba Account Managing
  * 
+ * todo: what about primaryGroupSID?
+ *
  * @package Tinebase
  * @subpackage Samba
  */
@@ -34,11 +36,11 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     private static $_instance = NULL;
     
     /**
-     * direct mapping
+     * user properties mapping
      *
      * @var array
      */
-    protected $_rowNameMapping = array(
+    protected $_userPropertyNameMapping = array(
         'sid'              => 'sambasid', 
         'primaryGroupSID'  => 'sambaprimarygroupsid', 
         'acctFlags'        => 'sambaacctflags',
@@ -57,14 +59,23 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     );
     
     /**
-     * objectclasses required by this backend
+     * objectclasses required for users
      *
      * @var array
      */
-    protected $_requiredObjectClass = array(
+    protected $_requiredUserObjectClass = array(
         'sambaSamAccount',
     );
     
+    /**
+     * objectclasses required for groups
+     *
+     * @var array
+     */
+    protected $_requiredGroupObjectClass = array(
+        'sambaGroupMapping',
+    );
+        
     /**
      * the constructor
      *
@@ -131,10 +142,10 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
 	public function addUser($_user, Tinebase_Model_SAMUser $_samUser)
 	{
-        $metaData = $this->_getMetaData($_user);
+        $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_samUser);
         
-        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredObjectClass));
+        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredUserObjectClass));
         
         // defaults
         $ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
@@ -159,16 +170,15 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
 	public function updateUser($_user, Tinebase_Model_SAMUser $_samUser)
 	{
-        $metaData = $this->_getMetaData($_user);
+        $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_samUser);
         
         // check if user has all required object classes.
-        foreach ($this->_requiredObjectClass as $className) {
+        foreach ($this->_requiredUserObjectClass as $className) {
             if (! in_array($className, $metaData['objectClass'])) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' has no samba account yet, we create it on the fly. Make shure to reset the users password!');
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no samba account. Make shure to reset the users password!');
 
                 return $this->addUser($_user, $_samUser);
-                break;
             }
         }
         
@@ -206,7 +216,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         if (! $_encrypt) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make shure to reset the users password!');
         } else {
-            $metaData = $this->_getMetaData($_user);
+            $metaData = $this->_getUserMetaData($_user);
             $ldapData = array(
                 'sambantpassword' => $this->_generateNTPassword($_password),
                 'sambalmpassword' => $this->_generateLMPassword($_password),
@@ -228,16 +238,14 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
     public function setStatus($_userId, $_status)
     {
-        $metaData = $this->_getMetaData($_userId);
+        $metaData = $this->_getUserMetaData($_userId);
         
         $acctFlags = $this->getUserById($_userId)->acctFlags;
         if (empty($currentFlags)) {
             $acctFlags = '[U          ]';
         }
         $acctFlags[2] = $_status == 'disabled' ? 'D' : ' ';
-        $ldapData = array(
-            'sambaacctflags' => $acctFlags,
-        );
+        $ldapData = array('sambaacctflags' => $acctFlags);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
@@ -248,26 +256,50 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
 	/**
      * adds sam properties to a new group
      *
-	 * @param  int                     $_groupId
-     * @param  Tinebase_Model_SAMGroup $_samGroup
+	 * @param  Tinebase_Model_Group    $_group
      * @return Tinebase_Model_SAMGroup
      */
-	public function addGroup($_groupId, Tinebase_Model_SAMGroup $_samGroup)
+	public function addGroup($_group)
 	{
+        $metaData = $this->_getGroupMetaData($group);
 
+        $ldapData = array(
+            'objectclass'    => array_unique(array_merge($metaData['objectClass'], $this->_requiredGroupObjectClass)),
+            'sambasid'       => $this->_options['sid'] . '-' . (2 * $group->getId() + 1001),
+            'sambagrouptype' => 2,
+            'displayname'    => $group->name
+        );
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        $this->_ldap->update($metaData['dn'], $ldapData);
 	}
 
 
 	/**
 	 * updates sam properties on an updated group
 	 *
-	 * @param  int                     $_groupId
-     * @param  Tinebase_Model_SAMGroup $_samGroup
+	 * @param  Tinebase_Model_Group    $_group
 	 * @return Tinebase_Model_SAMGroup
 	 */
-	public function updateGroup($_groupId, Tinebase_Model_SAMGroup $_samGroup)
+	public function updateGroup($_group)
 	{
+        $metaData = $this->_getGroupMetaData($group);
 
+        // check if group has all required object classes.
+        foreach ($this->_requiredGroupObjectClass as $className) {
+            if (! in_array($className, $metaData['objectClass'])) {
+                return $this->addUser($_group);
+            }
+        }
+        
+        $ldapData = array('displayname' => $group->name);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        $this->_ldap->update($metaData['dn'], $ldapData);
 	}
 
 
@@ -279,7 +311,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
 	 */
 	public function deleteGroups(array $_groupIds)
 	{
-
+        // nothing to do in ldap backend
 	}
     
     /**
@@ -288,7 +320,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * @param  int         $_userId
      * @return string 
      */
-    protected function _getMetaData($_userId)
+    protected function _getUserMetaData($_userId)
     {
         $metaData = array();
         
@@ -306,7 +338,32 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         
         return $metaData;
     }
-
+    
+    /**
+     * returns ldap metadata of given group
+     *
+     * @param  int         $_groupId
+     */
+    protected function _getGroupMetaData($_groupId)
+    {
+        $metaData = array();
+        
+        try {
+            $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
+            $group = $this->_ldap->fetch($this->_options['groupsDn'], 'gidnumber=' . $groupId, array('objectclass'));
+            $metaData['dn'] = $group['dn'];
+            
+            $metaData['objectClass'] = $group['objectclass'];
+            unset($metaData['objectClass']['count']);
+                
+        } catch (Tinebase_Exception_NotFound $e) {
+            throw new Exception("group with id $groupId not found");
+        }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($metaData, true));
+        return $metaData;
+    }
+    
     /**
      * Fetches all accounts from backend matching the given filter
      *
@@ -317,7 +374,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     protected function _getUsersFromBackend($_filter, $_accountClass = 'Tinebase_Model_SAMUser')
     {
         $result = new Tinebase_Record_RecordSet($_accountClass);
-        $accounts = $this->_ldap->fetchAll($this->_options['userDn'], $_filter, array_values($this->_rowNameMapping));
+        $accounts = $this->_ldap->fetchAll($this->_options['userDn'], $_filter, array_values($this->_userPropertyNameMapping));
         
         foreach ($accounts as $account) {
             $accountObject = $this->_ldap2User($account, $_accountClass);
@@ -343,7 +400,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
             if (is_int($key)) {
                 continue;
             }
-            $keyMapping = array_search($key, $this->_rowNameMapping);
+            $keyMapping = array_search($key, $this->_userPropertyNameMapping);
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
                     case 'pwdLastSet':
@@ -376,7 +433,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     {
         $ldapData = array();
         foreach ($_user as $key => $value) {
-            $ldapProperty = array_key_exists($key, $this->_rowNameMapping) ? $this->_rowNameMapping[$key] : false;
+            $ldapProperty = array_key_exists($key, $this->_userPropertyNameMapping) ? $this->_userPropertyNameMapping[$key] : false;
             if ($ldapProperty) {
                 switch ($key) {
                     case 'pwdLastSet':

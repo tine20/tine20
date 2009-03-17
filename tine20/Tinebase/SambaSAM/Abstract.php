@@ -83,20 +83,18 @@ abstract class Tinebase_SambaSAM_Abstract
 	/**
      * adds sam properties to a new group
      *
-	 * @param  int                     $_groupId
-     * @param  Tinebase_Model_SAMGroup $_samGroup
+	 * @param  Tinebase_Model_Group    $_group
      * @return Tinebase_Model_SAMGroup
      */
-	abstract public function addGroup($_groupId, Tinebase_Model_SAMGroup $_samGroup);
+	abstract public function addGroup($_group);
 
 	/**
 	 * updates sam properties on an updated group
 	 *
-	 * @param  int                     $_groupId
-     * @param  Tinebase_Model_SAMGroup $_samGroup
+	 * @param  Tinebase_Model_Group    $_group
 	 * @return Tinebase_Model_SAMGroup
 	 */
-	abstract public function updateGroup($_groupId, Tinebase_Model_SAMGroup $_samGroup);
+	abstract public function updateGroup($_group);
 
 	/**
 	 * deletes sam groups
