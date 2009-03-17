@@ -261,13 +261,13 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
 	public function addGroup($_group)
 	{
-        $metaData = $this->_getGroupMetaData($group);
+        $metaData = $this->_getGroupMetaData($_group);
 
         $ldapData = array(
             'objectclass'    => array_unique(array_merge($metaData['objectClass'], $this->_requiredGroupObjectClass)),
-            'sambasid'       => $this->_options['sid'] . '-' . (2 * $group->getId() + 1001),
+            'sambasid'       => $this->_options['sid'] . '-' . (2 * $_group->getId() + 1001),
             'sambagrouptype' => 2,
-            'displayname'    => $group->name
+            'displayname'    => $_group->name
         );
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
@@ -285,16 +285,16 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
 	 */
 	public function updateGroup($_group)
 	{
-        $metaData = $this->_getGroupMetaData($group);
+        $metaData = $this->_getGroupMetaData($_group);
 
         // check if group has all required object classes.
         foreach ($this->_requiredGroupObjectClass as $className) {
             if (! in_array($className, $metaData['objectClass'])) {
-                return $this->addUser($_group);
+                return $this->addGroup($_group);
             }
         }
         
-        $ldapData = array('displayname' => $group->name);
+        $ldapData = array('displayname' => $_group->name);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));

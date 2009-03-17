@@ -31,8 +31,8 @@ abstract class Tinebase_SambaSAM_Abstract
     /**
      * get user by id
      *
-     * @param   int         $_userId
-     * @return  Tinebase_Model_SAMUser user
+     * @param   int $_userId
+     * @return  Tinebase_Model_SAMUser
      */
     abstract public function getUserById($_userId);
  
@@ -79,7 +79,7 @@ abstract class Tinebase_SambaSAM_Abstract
      * @param   string      $_status
      */
     abstract public function setStatus($_userId, $_status);
-    
+
 	/**
      * adds sam properties to a new group
      *
