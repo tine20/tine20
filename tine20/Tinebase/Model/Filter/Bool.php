@@ -45,12 +45,13 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
          
          // prepare value
          $value = $this->_value ? 1 : 0;
-         
-         // quote field identifier
-         // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
-         $field = $db = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
-         
-         // append query to select object
-         $_select->where($field . $action['sqlop'], $value);
+		
+         if (! empty($this->_options['fields'])) {
+             foreach ((array) $this->_options['fields'] as $fieldName) {
+                 $_select->where(Tinebase_Core::getDb()->quoteIdentifier($fieldName) . $action['sqlop'], $value); 
+             }
+         } else {  
+             $_select->where(Tinebase_Core::getDb()->quoteIdentifier($fieldName) . $action['sqlop'], $value);
+         }
      }
 }
