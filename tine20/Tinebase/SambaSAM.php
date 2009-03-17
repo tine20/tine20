@@ -11,14 +11,14 @@
  */
 
 /**
- * class SambaSAM
+ * class Tinebase_SambaSAM
  * 
  * Samba Account Managing
  * 
  * @package Tinebase
  * @subpackage Samba
  */
-class SambaSAM
+class Tinebase_SambaSAM
 {
     // const SQL = 'Sql';
     
@@ -28,7 +28,7 @@ class SambaSAM
     /**
      * holds the instance of the singleton
      *
-     * @var SambaSAM
+     * @var Tinebase_SambaSAM
      */
     private static $_instance = NULL;
     
@@ -54,7 +54,7 @@ class SambaSAM
     /**
      * the singleton pattern
      *
-     * @return SambaSAM
+     * @return Tinebase_SambaSAM
      */
     public static function getInstance() 
     {
@@ -64,6 +64,8 @@ class SambaSAM
             
             self::$_instance = self::factory($backendType);
         }
+        
+        return self::$_instance;
     }
     
     /**
@@ -77,7 +79,9 @@ class SambaSAM
     {
         switch($_backendType) {
             case self::LDAP:
-                $options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
+                $ldapOptions = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
+                $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
+                $options = array_merge($ldapOptions, $sambaOptions);
                 
                 $result = Tinebase_SambaSAM_Ldap::getInstance($options);
                 break;
