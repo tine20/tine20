@@ -18,7 +18,7 @@
  * @package Tinebase
  * @subpackage Samba
  */
-abstract class SambaSAM_Abstract
+abstract class Tinebase_SambaSAM_Abstract
 {
 
 	/**

@@ -11,14 +11,14 @@
  */
 
 /**
- * class SambaSAM_Ldap
+ * class Tinebase_SambaSAM_Ldap
  * 
  * Samba Account Managing
  * 
  * @package Tinebase
  * @subpackage Samba
  */
-class SambaSAM_Ldap
+class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
 {
 
     /**
