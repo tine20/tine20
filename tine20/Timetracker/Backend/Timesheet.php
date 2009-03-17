@@ -64,10 +64,10 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
         
         if (is_array($_cols) && isset($_cols['count'])) {
             $cols = array(
-                'count'         => 'COUNT(*)', 
-                'countBillable' => 'SUM(ts.is_billable*ta.is_billable)',
-                'sum'           => 'SUM(duration)',
-                'sumBillable'   => 'SUM(duration*ts.is_billable*ta.is_billable)'
+                'count'                => 'COUNT(*)', 
+                'countBillable'        => 'SUM(ts.is_billable*ta.is_billable)',
+                'sum'                  => 'SUM(duration)',
+                'sumBillable'          => 'SUM(duration*ts.is_billable*ta.is_billable)',
             );
             
         } else {
