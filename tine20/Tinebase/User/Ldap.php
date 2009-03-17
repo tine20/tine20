@@ -486,9 +486,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * Get multiple users
      *
-     * @param string|array $_ids Ids
+     * @param  string|array $_ids Ids
      * @return Tinebase_Record_RecordSet
-     * @todo implement
      */
     public function getMultiple($_ids) 
     {
@@ -500,7 +499,16 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
         $filter = "(&(objectclass=posixaccount)(|$idFilter))";
         
-        return $this->_getUsersFromBackend($filter, 'Tinebase_Model_User');
+        $result = $this->_getUsersFromBackend($filter, 'Tinebase_Model_User');
+		
+        // add unknown users if not found in database
+        foreach($ids as $id) {
+            if (!isset($result[$result->getIndexById($id)])) {
+                $result->addRecord($this->getNonExistentUser('Tinebase_Model_User', $id));
+            }
+        }
+		
+		return $result;
     }
     
     /**
