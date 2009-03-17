@@ -228,7 +228,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
     public function setStatus($_userId, $_status)
     {
-        $metaData - $this->_getMetaData($_userId);
+        $metaData = $this->_getMetaData($_userId);
         
         $acctFlags = $this->getUserById($_userId)->acctFlags;
         if (empty($currentFlags)) {
