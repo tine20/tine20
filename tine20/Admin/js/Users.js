@@ -535,119 +535,143 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     
         var accountBackend = Tine.Tinebase.registry.get('accountBackend');
         var ldapBackend = (accountBackend == 'Ldap');
+        this.tpheight = 370; // hack till we refactor this
 
         return [{
-        layout:'column',
-        //frame: true,
-        border:false,
-        autoHeight: true,
-        items:[{
-            //frame: true,
-            columnWidth:.6,
-            border:false,
-            layout: 'form',
-            defaults: {
-            	xtype: 'textfield',
-                anchor: '95%'
-            },
+            xtype: 'tabpanel',
+            plain: true,
+            deferredRender: false,
+            border: false,
+            activeItem: 0,
             items: [{
-                    fieldLabel: this.translation.gettext('First Name'),
-                    name: 'accountFirstName'
-                }, {
-                    fieldLabel: this.translation.gettext('Last Name'),
-                    name: 'accountLastName',
-                    allowBlank: false
-                }, {
-                    fieldLabel: this.translation.gettext('Login Name'),
-                    name: 'accountLoginName',
-                    allowBlank: false
-                }, {
-                    fieldLabel: this.translation.gettext('Password'),
-                    name: 'accountPassword',
-                    inputType: 'password',
-                    emptyText: this.translation.gettext('no password set')
-                }, {
-                    fieldLabel: this.translation.gettext('Password again'),
-                    name: 'accountPassword2',
-                    inputType: 'password',
-                    emptyText: this.translation.gettext('no password set')
-                },  new Tine.widgets.group.selectionComboBox({
-                    fieldLabel: this.translation.gettext('Primary group'),
-                    name: 'accountPrimaryGroup',
-                    displayField:'name',
-                    valueField:'id'
-                }), {
-                    vtype: 'email',
-                    fieldLabel: this.translation.gettext('Emailaddress'),
-                    name: 'accountEmailAddress'
-                }, {
-                    fieldLabel: this.translation.gettext('Home Directory'),
-                    name: 'accountHomeDirectory'
-                }, {
-                    fieldLabel: this.translation.gettext('Login Shell'),
-                    name: 'accountLoginShell'
-                }
-            ]
-        },{
-            columnWidth:.4,
-            border:false,
-            layout: 'form',
-            defaults: {
-                anchor: '95%'
-            },
-            items: [
-                {
-                    xtype: 'combo',
-                    fieldLabel: this.translation.gettext('Status'),
-                    name: 'accountStatus',
-                    mode: 'local',
-                    displayField:'status',
-                    valueField:'key',
-                    triggerAction: 'all',
-                    allowBlank: false,
-                    editable: false,
-                    store: new Ext.data.SimpleStore(
-                        {
-                            fields: ['key','status'],
-                            data: [
-                                ['enabled','enabled'],
-                                ['disabled','disabled']
-                            ]
+                title: this.translation.ngettext('Account', 'Accounts', 1),
+                layout:'column',
+                frame: true,
+                border:false,
+                //autoHeight: true,
+                height: this.tpheight,
+                items:[{
+                    //frame: true,
+                    columnWidth:.6,
+                    border:false,
+                    layout: 'form',
+                    defaults: {
+                        xtype: 'textfield',
+                        anchor: '95%'
+                    },
+                    items: [{
+                            fieldLabel: this.translation.gettext('First Name'),
+                            name: 'accountFirstName'
+                        }, {
+                            fieldLabel: this.translation.gettext('Last Name'),
+                            name: 'accountLastName',
+                            allowBlank: false
+                        }, {
+                            fieldLabel: this.translation.gettext('Login Name'),
+                            name: 'accountLoginName',
+                            allowBlank: false
+                        }, {
+                            fieldLabel: this.translation.gettext('Password'),
+                            name: 'accountPassword',
+                            inputType: 'password',
+                            emptyText: this.translation.gettext('no password set')
+                        }, {
+                            fieldLabel: this.translation.gettext('Password again'),
+                            name: 'accountPassword2',
+                            inputType: 'password',
+                            emptyText: this.translation.gettext('no password set')
+                        },  new Tine.widgets.group.selectionComboBox({
+                            fieldLabel: this.translation.gettext('Primary group'),
+                            name: 'accountPrimaryGroup',
+                            displayField:'name',
+                            valueField:'id'
+                        }), {
+                            vtype: 'email',
+                            fieldLabel: this.translation.gettext('Emailaddress'),
+                            name: 'accountEmailAddress'
+                        }, {
+                            fieldLabel: this.translation.gettext('Home Directory'),
+                            name: 'accountHomeDirectory'
+                        }, {
+                            fieldLabel: this.translation.gettext('Login Shell'),
+                            name: 'accountLoginShell'
                         }
-                    ),
-                    hidden: ldapBackend
-                }, 
-                new Ext.ux.form.ClearableDateField({ 
-                    fieldLabel: this.translation.gettext('Expires'),
-                    name: 'accountExpires',
-                    emptyText: this.translation.gettext('never')
-                }), {
-                    xtype: 'datetimefield',
-                    fieldLabel: this.translation.gettext('Last login at'),
-                    name: 'accountLastLogin',
-                    emptyText: this.translation.gettext('never logged in'),
-                    hideTrigger: true,
-                    readOnly: true,
-                    hidden: ldapBackend
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: this.translation.gettext('Last login from'),
-                    name: 'accountLastLoginfrom',
-                    emptyText: this.translation.gettext('never logged in'),
-                    readOnly: true,
-                    hidden: ldapBackend
-                }, {
-                    xtype: 'datetimefield',
-                    fieldLabel: this.translation.gettext('Password set'),
-                    name: 'accountLastPasswordChange',
-                    emptyText: this.translation.gettext('never'),
-                    hideTrigger: true,
-                    readOnly: true
-                }
-            ]
-        }]
-    }];},
+                    ]
+                },{
+                    columnWidth:.4,
+                    border:false,
+                    layout: 'form',
+                    defaults: {
+                        anchor: '95%'
+                    },
+                    items: [
+                        {
+                            xtype: 'combo',
+                            fieldLabel: this.translation.gettext('Status'),
+                            name: 'accountStatus',
+                            mode: 'local',
+                            displayField:'status',
+                            valueField:'key',
+                            triggerAction: 'all',
+                            allowBlank: false,
+                            editable: false,
+                            store: new Ext.data.SimpleStore(
+                                {
+                                    fields: ['key','status'],
+                                    data: [
+                                        ['enabled','enabled'],
+                                        ['disabled','disabled']
+                                    ]
+                                }
+                            ),
+                            hidden: ldapBackend
+                        }, 
+                        new Ext.ux.form.ClearableDateField({ 
+                            fieldLabel: this.translation.gettext('Expires'),
+                            name: 'accountExpires',
+                            emptyText: this.translation.gettext('never')
+                        }), {
+                            xtype: 'datetimefield',
+                            fieldLabel: this.translation.gettext('Last login at'),
+                            name: 'accountLastLogin',
+                            emptyText: this.translation.gettext('never logged in'),
+                            hideTrigger: true,
+                            readOnly: true,
+                            hidden: ldapBackend
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: this.translation.gettext('Last login from'),
+                            name: 'accountLastLoginfrom',
+                            emptyText: this.translation.gettext('never logged in'),
+                            readOnly: true,
+                            hidden: ldapBackend
+                        }, {
+                            xtype: 'datetimefield',
+                            fieldLabel: this.translation.gettext('Password set'),
+                            name: 'accountLastPasswordChange',
+                            emptyText: this.translation.gettext('never'),
+                            hideTrigger: true,
+                            readOnly: true
+                        }
+                    ]
+                }]
+            }]
+        }];
+    },
     
+    getSambaPanel: function() {
+        return {
+            title: 'Samba',
+            border: false,
+            height: this.tpheight,
+            frame: true,
+            items: [{
+                xtype: 'textfield',
+                name: 'hallo'
+            }]
+        }
+    },
+
     updateToolbarButtons: function() {
         if(this.accountRecord.get('accountId') > 0) {
             Ext.getCmp('admin_editAccountForm').action_delete.enable();
@@ -670,6 +694,10 @@ Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.translation.textdomain('Admin');
         
         this.items = this.GetEditAccountDialog();
+        
+        if (Tine.Admin.registry.get('manageSAM')) {
+            this.items[0].items.push(this.getSambaPanel());
+        }
         
         Tine.Admin.Users.EditDialog.superclass.initComponent.call(this);
     },
@@ -727,4 +755,20 @@ Tine.Admin.Users.Account = Ext.data.Record.create([
     { name: 'accountEmailAddress' },
     { name: 'accountHomeDirectory' },
     { name: 'accountLoginShell' }
+]);
+
+Tine.Admin.Users.SAMUser = Ext.data.Record.create([
+    { name: 'sid'              },
+    { name: 'primaryGroupSID'  },
+    { name: 'acctFlags'        },
+    { name: 'homeDrive'        },
+    { name: 'homePath'         },
+    { name: 'profilePath'      },
+    { name: 'logonScript'      },
+    { name: 'logonTime',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'logoffTime',    type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'kickoffTime',   type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'pwdLastSet',    type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'pwdCanChange',  type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'pwdMustChange', type: 'date', dateFormat: Date.patterns.ISO8601Long }
 ]);
