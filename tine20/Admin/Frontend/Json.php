@@ -27,6 +27,36 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     protected $_applicationName = 'Admin';
     
+    /**
+	 * @var bool
+	 */
+	protected $_manageSAM = false;
+    
+    /**
+     * constructs Admin_Frontend_Json
+     */
+    public function __construct()
+    {
+        // manage samba sam?
+		if(isset(Tinebase_Core::getConfig()->samba)) {
+			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
+		}
+    }
+    
+    /**
+     * Returns registry data of admin.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {   
+        $registryData = array(
+            'manageSAM' => $this->_manageSAM,
+        );        
+        return $registryData;    
+    }
+    
     /******************************* Access Log *******************************/
     
     /**
@@ -237,6 +267,8 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         try {
             $account->setFromArray($decodedAccountData);
+            $account->sambaSAM = new Tinebase_Model_SAMUser($decodedAccountData['sambaSAM']);
+            
         } catch (Tinebase_Exception_Record_Validation $e) {
             // invalid data in some fields sent from client
             $result = array(
