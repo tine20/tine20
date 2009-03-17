@@ -51,8 +51,6 @@ class Tinebase_Model_SAMUser extends Tinebase_Record_Abstract
         'homePath'         => array('allowEmpty' => true),
         'profilePath'      => array('allowEmpty' => true),
         'logonScript'      => array('allowEmpty' => true),    
-        'lmPassword'       => array('allowEmpty' => true),
-        'ntPassword'       => array('allowEmpty' => true),
         'logonTime'        => array('allowEmpty' => true),
         'logoffTime'       => array('allowEmpty' => true),
         'kickoffTime'      => array('allowEmpty' => true),

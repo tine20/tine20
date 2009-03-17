@@ -48,8 +48,6 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         'homePath'         => 'sambahomepath',
         'profilePath'      => 'sambaprofilepath',
         'logonScript'      => 'sambalogonscript',    
-        'lmPassword'       => 'sambalmpassword',
-        'ntPassword'       => 'sambantpassword',
         'logonTime'        => 'sambalogontime',
         'logoffTime'       => 'sambalogofftime',
         'kickoffTime'      => 'sambakickofftime',
