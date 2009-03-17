@@ -165,7 +165,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     public function getUser($userId)
     {
         if (!empty($userId)) {
-            $user = Tinebase_User::getInstance()->getFullUserById($userId);
+            $user = Admin_Controller_User::getInstance()->get($userId);
             $user->setTimezone(Tinebase_Core::get('userTimeZone'));
             $userArray = $user->toArray();
             

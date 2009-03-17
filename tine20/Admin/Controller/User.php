@@ -44,7 +44,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
 		
-		$this->_userBackend = $this->_userBackend;
+		$this->_userBackend = Tinebase_User::getInstance();
 		
 		// manage samba sam?
 		if(isset(Tinebase_Core::getConfig()->samba)) {
@@ -98,7 +98,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
-        $result = $this->_userBackend($_filter, $_sort, $_dir, $_start, $_limit);
+        $result = $this->_userBackend->getUsers($_filter, $_sort, $_dir, $_start, $_limit);
         
         return $result;
     }
@@ -107,13 +107,20 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
      * get account -> renamed to get user
      *
      * @param   int $_accountId account id to get
-     * @return  Tinebase_Model_User
+     * @return  Tinebase_Model_FullUser
      */
     public function get($_accountId)
     {        
         $this->checkRight('VIEW_ACCOUNTS');
         
-        return $this->_userBackend->getUserById($_accountId);
+        $user = $this->_userBackend->getUserById($_accountId, 'Tinebase_Model_FullUser');
+        
+        if ($this->_manageSAM) {
+            $samUser = $this->_samBackend->getUserById($_accountId);
+            $user->sambaSAM = $samUser;
+        }
+        
+        return $user;
     }
     
     /**
@@ -129,6 +136,10 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         
         $result = $this->_userBackend->setStatus($_accountId, $_status);
         
+        if ($this->_manageSAM) {
+            $samResult = $this->_samBackend->setStatus($_accountId, $_status);
+        }
+
         return $result;
     }
     
@@ -148,8 +159,12 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
             throw new Admin_Exception("Passwords don't match.");
         }
         
-        $result = $this->_userBackend->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+        $result = $this->_userBackend->setPassword($_account->accountLoginName, $_password);
         
+        if ($this->_manageSAM) {
+            $samResult = $this->_samBackend->setPassword($_account->accountLoginName, $_password);
+        }
+                
         return $result;
     }
     
@@ -174,9 +189,13 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         Tinebase_Events::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->_userBackend->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+            $this->setAccountPassword($_account, $_password, $_passwordRepeat);
         }
         
+        if ($this->_manageSAM) {
+            $samResult = $this->_samBackend->updateUser($_account, $_account->sambaSAM);
+        }
+           
         return $account;
     }
     
@@ -200,9 +219,13 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         Tinebase_Events::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->_userBackend->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
+            $this->setAccountPassword($_account, $_password, $_passwordRepeat);
         }
-        
+
+        if ($this->_manageSAM) {
+            $samResult = $this->_samBackend->addUser($_account, $_account->sambaSAM);
+        }
+ 
         return $account;
     }
     
@@ -216,6 +239,10 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        return $this->_userBackend->deleteUsers($_accountIds);
+        $this->_userBackend->deleteUsers($_accountIds);
+        
+        if ($this->_manageSAM) {
+            $samResult = $this->_samBackend->deleteUsers($_accountIds);
+        }
     }
 }
