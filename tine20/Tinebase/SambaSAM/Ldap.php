@@ -138,8 +138,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         
         // defaults
         $ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
-        // we don't have deactivated accounts in ldap...
-        $ldapData['sambaacctflags'] = '[U' . ' ' /* D for deactivated */ . '         ]';
+        $ldapData['sambaacctflags'] = '[U          ]';
         $ldapData['sambapwdcanchange']	= isset($ldapData['sambapwdcanchange'])  ? $ldapData['sambapwdcanchange']  : 0;
         $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] : 2147483647; 
         
@@ -221,18 +220,30 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         }
 	}
 
-
-	/**
-     * sets/unsets expiry date 
+    /**
+     * update user status
      *
      * @param   int         $_userId
-     * @param   Zend_Date   $_expiryDate
+     * @param   string      $_status
      */
-    public function setExpiryDate($_userId, $_expiryDate)
-	{
+    public function setStatus($_userId, $_status)
+    {
+        $metaData - $this->_getMetaData($_userId);
         
-	}
-
+        $acctFlags = $this->getUserById($_userId)->acctFlags;
+        if (empty($currentFlags)) {
+            $acctFlags = '[U          ]';
+        }
+        $acctFlags[2] = $_status == 'disabled' ? 'D' : ' ';
+        $ldapData = array(
+            'sambaacctflags' => $acctFlags,
+        );
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        $this->_ldap->update($metaData['dn'], $ldapData);
+    }
 	
 	/**
      * adds sam properties to a new group

@@ -73,13 +73,13 @@ abstract class Tinebase_SambaSAM_Abstract
     abstract public function setPassword($_user, $_password, $_encrypt = TRUE);
 
 	/**
-     * sets/unsets expiry date 
+     * update user status
      *
      * @param   int         $_userId
-     * @param   Zend_Date   $_expiryDate
+     * @param   string      $_status
      */
-    abstract public function setExpiryDate($_userId, $_expiryDate);
-	
+    abstract public function setStatus($_userId, $_status);
+    
 	/**
      * adds sam properties to a new group
      *
