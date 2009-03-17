@@ -51,7 +51,7 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
                  $_select->where(Tinebase_Core::getDb()->quoteIdentifier($fieldName) . $action['sqlop'], $value); 
              }
          } else {  
-             $_select->where(Tinebase_Core::getDb()->quoteIdentifier($fieldName) . $action['sqlop'], $value);
+             $_select->where(Tinebase_Core::getDb()->quoteIdentifier($this->_field) . $action['sqlop'], $value);
          }
      }
 }
