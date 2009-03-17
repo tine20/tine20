@@ -27,22 +27,32 @@ abstract class Tinebase_SambaSAM_Abstract
      * @var Crypt_CHAP_MSv1
      */
     protected $_cryptEngine = NULL;
+    
+    /**
+     * get user by id
+     *
+     * @param   int         $_userId
+     * @return  Tinebase_Model_SAMUser user
+     */
+    abstract public function getUserById($_userId);
  
     /**
      * adds sam properties for a new user
-     * 
-     * @param Tinebase_Model_SAMUser $_user
+     *
+     * @param  Tinebase_Model_FullUser $_user 
+     * @param  Tinebase_Model_SAMUser  $_samUser
      * @return Tinebase_Model_SAMUser
      */
-	abstract public function addUser($_userId, Tinebase_Model_SAMUser $_samUser);
+	abstract public function addUser($_user, Tinebase_Model_SAMUser $_samUser);
 	
 	/**
      * updates sam properties for an existing user
-     * 
-     * @param Tinebase_Model_SAMUser $_user
+     *
+     * @param  Tinebase_Model_FullUser $_user 
+     * @param  Tinebase_Model_SAMUser  $_samUser
      * @return Tinebase_Model_SAMUser
      */
-	abstract public function updateUser($_userId, Tinebase_Model_SAMUser $_samUser);
+	abstract public function updateUser($_user, Tinebase_Model_SAMUser $_samUser);
 	
 	/**
      * delete sam user
@@ -60,7 +70,7 @@ abstract class Tinebase_SambaSAM_Abstract
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_loginName, $_password, $_encrypt = TRUE);
+    abstract public function setPassword($_loginName, $_password, $_encrypt = TRUE);
 
 	/**
      * sets/unsets expiry date 

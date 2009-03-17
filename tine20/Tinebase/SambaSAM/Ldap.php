@@ -32,7 +32,39 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * @var Tinebase_SambaSAM_Ldap
      */
     private static $_instance = NULL;
-
+    
+    /**
+     * direct mapping
+     *
+     * @var array
+     */
+    protected $_rowNameMapping = array(
+        'sid'              => 'sambasid', 
+        'primaryGroupSID'  => 'sambaprimarygroupsid', 
+        'acctFlags'        => 'sambaacctflags',
+        'homeDrive'        => 'sambahomedrive',
+        'homePath'         => 'sambahomepath',
+        'profilePath'      => 'sambaprofilepath',
+        'logonScript'      => 'sambalogonscript',    
+        'lmPassword'       => 'sambalmpassword',
+        'ntPassword'       => 'sambantpassword',
+        'logonTime'        => 'sambalogontime',
+        'logoffTime'       => 'sambalogofftime',
+        'kickoffTime'      => 'sambakickofftime',
+        'pwdLastSet'       => 'sambapwdlastset',
+        'pwdCanChange'     => 'sambapwdcanchange',
+        'pwdMustChange'    => 'sambapwdmustchange',
+    );
+    
+    /**
+     * objectclasses required by this backend
+     *
+     * @var array
+     */
+    protected $_requiredObjectClass = array(
+        'sambasamaccount',
+    );
+    
     /**
      * the constructor
      *
@@ -41,6 +73,11 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
     private function __construct(array $_options) 
     {
+        $this->_options = $_options;
+        if (empty($this->_options['sid'])) {
+            throw new Exception('you need to configure the sid of the samba installation');
+        }
+        
         $this->_ldap = new Tinebase_Ldap($_options);
         $this->_ldap->bind();
     }
@@ -65,27 +102,74 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         
         return self::$_instance;
     }
+    
+    /**
+     * get user by id
+     *
+     * @param   int         $_userId
+     * @return  Tinebase_Model_SAMUser user
+     */
+    public function getUserById($_userId) 
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  here wo go");
+
+    }
 
     /**
      * adds sam properties for a new user
      * 
-     * @param Tinebase_Model_SAMUser $_user
+     * @param  Tinebase_Model_FullUser $_user
+     * @param  Tinebase_Model_SAMUser  $_samUser
      * @return Tinebase_Model_SAMUser
      */
-	public function addUser($_userId, Tinebase_Model_SAMUser $_samUser)
+	public function addUser($_user, Tinebase_Model_SAMUser $_samUser)
 	{
-
+        $metaData = $this->_getMetaData($_user);
+        $ldapData = $this->_user2ldap($_samUser);
+        
+        $ldapData['objectclass'] = array_unique(array_merge($this->_requiredObjectClass, $metaData['objectClass']));
+        
+        // defaults
+        $ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
+        $ldapData['sambapwdcanchange']	= isset($ldapData['sambapwdcanchange'])  ? $ldapData['sambapwdcanchange']  : 0;
+        $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] :2147483647; 
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        $this->_ldap->update($metaData['dn'], $ldapData);
+        
+        return $this->getUserById($_user->getId());
 	}
 	
 	/**
      * updates sam properties for an existing user
      * 
-     * @param Tinebase_Model_SAMUser $_user
+     * @param  Tinebase_Model_FullUser $_user
+     * @param  Tinebase_Model_SAMUser  $_samUser
      * @return Tinebase_Model_SAMUser
      */
-	public function updateUser($_userId, Tinebase_Model_SAMUser $_samUser)
+	public function updateUser($_user, Tinebase_Model_SAMUser $_samUser)
 	{
+        $metaData = $this->_getMetaData($_user);
+        $ldapData = $this->_user2ldap($_samUser);
+        
+        // check if user has all required object classes.
+        foreach ($this->_requiredObjectClass as $className) {
+            if (! in_array($className, $metaData['objectClass'])) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' has no samba account yet, we create it on the fly. Make shure to reset the users password!');
 
+                return $this->addUser($_user, $_samUser);
+                break;
+            }
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        $this->_ldap->update($metaData['dn'], $ldapData);
+        
+        return $this->getUserById($_user->getId());
 	}
 
 	
@@ -163,6 +247,120 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
 	{
 
 	}
+    
+    /**
+     * get metatada of existing account
+     *
+     * @param  int         $_userId
+     * @return string 
+     */
+    protected function _getMetaData($_userId)
+    {
+        $metaData = array();
+        
+        try {
+            $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+            $account = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId, array('objectclass'));
+            $metaData['dn'] = $account['dn'];
+            
+            $metaData['objectClass'] = $account['objectclass'];
+            unset($metaData['objectClass']['count']);
+            
+        } catch (Tinebase_Exception_NotFound $enf) {
+            throw new Exception("account with id $userId not found");
+        }
+        
+        return $metaData;
+    }
 
-	
+    /**
+     * Fetches all accounts from backend matching the given filter
+     *
+     * @param string $_filter
+     * @param string $_accountClass
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getUsersFromBackend($_filter, $_accountClass = 'Tinebase_Model_SAMUser')
+    {
+        $result = new Tinebase_Record_RecordSet($_accountClass);
+        $accounts = $this->_ldap->fetchAll($this->_options['userDn'], $_filter, array_values($this->_rowNameMapping));
+        
+        foreach ($accounts as $account) {
+            $accountObject = $this->_ldap2User($account, $_accountClass);
+            
+            $result->addRecord($accountObject);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Returns a user obj with raw data from ldap
+     *
+     * @param array $_userData
+     * @param string $_accountClass
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _ldap2User($_userData, $_accountClass)
+    {
+        $accountArray = array();
+        
+        foreach ($_userData as $key => $value) {
+            if (is_int($key)) {
+                continue;
+            }
+            $keyMapping = array_search($key, $this->_rowNameMapping);
+            if ($keyMapping !== FALSE) {
+                switch($keyMapping) {
+                    case 'pwdLastSet':
+                    case 'logonTime':
+                    case 'logoffTime':
+                    case 'kickoffTime':
+                    case 'pwdCanChange':
+                    case 'pwdMustChange':
+                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                        break;
+                    default: 
+                        $accountArray[$keyMapping] = $value[0];
+                        break;
+                }
+            }
+        }
+        
+        $accountObject = new $_accountClass($accountArray);
+        
+        return $accountObject;
+    }
+    
+    /**
+     * returns array of ldap data
+     *
+     * @param  Tinebase_Model_FullUser $_user
+     * @return array
+     */
+    protected function _user2ldap(Tinebase_Model_FullUser $_user)
+    {
+        $ldapData = array();
+        foreach ($_user as $key => $value) {
+            $ldapProperty = array_key_exists($key, $this->_rowNameMapping) ? $this->_rowNameMapping[$key] : false;
+            if ($ldapProperty) {
+                switch ($key) {
+                    case 'pwdLastSet':
+                    case 'logonTime':
+                    case 'logoffTime':
+                    case 'kickoffTime':
+                    case 'pwdCanChange':
+                    case 'pwdMustChange':
+                        $ldapData[$ldapProperty] = $value instanceof Zend_Date ? $value->getTimestamp() : '';
+                        break;
+                    default:
+                        $ldapData[$ldapProperty] = $value;
+                        break;
+                }
+            }
+        }
+        
+        return $ldapData;
+    }
+
 }  
