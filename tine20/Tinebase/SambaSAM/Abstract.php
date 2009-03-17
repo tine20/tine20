@@ -62,15 +62,15 @@ abstract class Tinebase_SambaSAM_Abstract
 	abstract public function deleteUser($_userId);
 
     /**
-     * set the password for given account
+     * set the password for given user 
      * 
-     * @param   int $_userId
-     * @param   string $_password
-     * @param   bool $_encrypt encrypt password
+     * @param   Tinebase_Model_FullUser $_user
+     * @param   string                  $_password
+     * @param   bool                    $_encrypt encrypt password
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    abstract public function setPassword($_loginName, $_password, $_encrypt = TRUE);
+    abstract public function setPassword($_user, $_password, $_encrypt = TRUE);
 
 	/**
      * sets/unsets expiry date 
@@ -126,7 +126,7 @@ abstract class Tinebase_SambaSAM_Abstract
      * @param  string $_password uncrypted original password
      * @return string LM password
      */        
-    protected function _generateLMPasswords($_password)
+    protected function _generateLMPassword($_password)
     {
         $lmPassword = strtoupper(bin2hex($this->_getCryptEngine()->lmPasswordHash($_password)));
         
@@ -141,7 +141,7 @@ abstract class Tinebase_SambaSAM_Abstract
      * @param  string $_password uncrypted original password
      * @return string NT password
      */ 
-    protected function _generateLNTPasswords($_password)
+    protected function _generateNTPassword($_password)
     {
         $ntPassword = strtoupper(bin2hex($this->_getCryptEngine()->ntPasswordHash($_password)));
         

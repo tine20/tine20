@@ -62,7 +62,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * @var array
      */
     protected $_requiredObjectClass = array(
-        'sambasamaccount',
+        'sambaSamAccount',
     );
     
     /**
@@ -111,8 +111,15 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
     public function getUserById($_userId) 
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  here wo go");
-
+        try {
+            $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+            $ldapData = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId);
+            $user = $this->_ldap2User($ldapData);
+        } catch (Exception $e) {
+            throw new Exception('User not found');
+        }
+        
+        return $user;
     }
 
     /**
@@ -127,12 +134,14 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         $metaData = $this->_getMetaData($_user);
         $ldapData = $this->_user2ldap($_samUser);
         
-        $ldapData['objectclass'] = array_unique(array_merge($this->_requiredObjectClass, $metaData['objectClass']));
+        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredObjectClass));
         
         // defaults
         $ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
+        // we don't have deactivated accounts in ldap...
+        $ldapData['sambaacctflags'] = '[U' . ' ' /* D for deactivated */ . '         ]';
         $ldapData['sambapwdcanchange']	= isset($ldapData['sambapwdcanchange'])  ? $ldapData['sambapwdcanchange']  : 0;
-        $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] :2147483647; 
+        $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] : 2147483647; 
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
@@ -180,22 +189,36 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
 	public function deleteUser($_userId)
 	{
-
+        // nothing do do in ldap backend
 	}
 
 
     /**
-     * set the password for given account
+     * set the password for given user 
      * 
-     * @param   int $_userId
-     * @param   string $_password
-     * @param   bool $_encrypt encrypt password
+     * @param   Tinebase_Model_FullUser $_user
+     * @param   string                  $_password
+     * @param   bool                    $_encrypt encrypt password
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_loginName, $_password, $_encrypt = TRUE)
+    public function setPassword($_user, $_password, $_encrypt = TRUE)
 	{
-
+        if (! $_encrypt) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make shure to reset the users password!');
+        } else {
+            $metaData = $this->_getMetaData($_user);
+            $ldapData = array(
+                'sambantpassword' => $this->_generateNTPassword($_password),
+                'sambalmpassword' => $this->_generateLMPassword($_password),
+                'sambapwdlastset' => Zend_Date::now()->getTimestamp()
+            ); 
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+            
+            $this->_ldap->update($metaData['dn'], $ldapData);
+        }
 	}
 
 
@@ -207,7 +230,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
     public function setExpiryDate($_userId, $_expiryDate)
 	{
-
+        
 	}
 
 	
@@ -301,7 +324,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * @param string $_accountClass
      * @return Tinebase_Record_Abstract
      */
-    protected function _ldap2User($_userData, $_accountClass)
+    protected function _ldap2User($_userData, $_accountClass='Tinebase_Model_SAMUser')
     {
         $accountArray = array();
         

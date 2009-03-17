@@ -422,7 +422,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         // when updating users which where created using different requirements
         foreach ($this->_requiredObjectClass as $className) {
             if (! in_array($className, $metaData['objectClass'])) {
-                $ldapData['objectclass'] = array_unique(array_merge($this->_requiredObjectClass, $metaData['objectClass']));
+                $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredObjectClass));
                 break;
             }
         }
