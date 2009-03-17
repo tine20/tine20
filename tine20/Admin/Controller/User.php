@@ -162,7 +162,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         $result = $this->_userBackend->setPassword($_account->accountLoginName, $_password);
         
         if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->setPassword($_account->accountLoginName, $_password);
+            $samResult = $this->_samBackend->setPassword($_account, $_password);
         }
                 
         return $result;
