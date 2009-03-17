@@ -424,10 +424,10 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     /**
      * returns array of ldap data
      *
-     * @param  Tinebase_Model_FullUser $_user
+     * @param  Tinebase_Model_SAMUser $_user
      * @return array
      */
-    protected function _user2ldap(Tinebase_Model_FullUser $_user)
+    protected function _user2ldap(Tinebase_Model_SAMUser $_user)
     {
         $ldapData = array();
         foreach ($_user as $key => $value) {
