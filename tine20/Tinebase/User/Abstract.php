@@ -134,7 +134,7 @@ abstract class Tinebase_User_Abstract
      *
      * @param   int         $_accountId
      * @param   string      $_status
-    */
+     */
     abstract public function setStatus($_accountId, $_status);
 
     /**

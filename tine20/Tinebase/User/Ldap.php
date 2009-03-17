@@ -366,7 +366,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * 
      * @param   int         $_accountId
      * @param   string      $_status
-    */
+     */
     public function setStatus($_accountId, $_status) 
     {
         // not supported by standart ldap schemas
