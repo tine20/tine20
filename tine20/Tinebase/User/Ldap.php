@@ -118,7 +118,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * objectclasses required by this backend
      *
-     * @var unknown_type
+     * @var array
      */
     protected $_requiredObjectClass = array(
         'top',
