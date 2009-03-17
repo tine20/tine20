@@ -24,6 +24,16 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * @var Admin_Controller_Group
      */
     private static $_instance = NULL;
+	
+	/**
+	 * @var bool
+	 */
+	protected $_manageSAM = false;
+	
+	/**
+	 * @var Tinebase_SambaSAM_Ldap
+	 */
+	protected $_samBackend = NULL;
 
     /**
      * the constructor
@@ -34,6 +44,14 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
     {
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
+        
+        // manage samba sam?
+		if(isset(Tinebase_Core::getConfig()->samba)) {
+			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
+			if ($this->_manageSAM) {
+				$this->_samBackend = Tinebase_SambaSAM::getInstance();
+			}
+		}
     }
 
     /**
@@ -107,7 +125,11 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
         if (!empty($_group['members']) ) {
             Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
         }
-
+        
+        if ($this->_manageSAM) {
+            $samResult = $this->_samBackend->addGroup($group);
+        }
+        
         return $group;            
     }  
 
@@ -126,7 +148,11 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
         $group = Tinebase_Group::getInstance()->updateGroup($_group);
         
         Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
-
+        
+        if ($this->_manageSAM) {
+            $samResult = $this->_samBackend->updateGroup($group);
+        }
+        
         return $group;            
     }  
     
@@ -134,13 +160,17 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
      * delete multiple groups
      *
      * @param   array $_groupIds
-     * @return  array with success flag
+     * @return  void
      */
     public function delete($_groupIds)
     {        
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        return Tinebase_Group::getInstance()->deleteGroups($_groupIds);
+        Tinebase_Group::getInstance()->deleteGroups($_groupIds);
+        
+        if ($this->_manageSAM) {
+            $this->_samBackend->deleteGroups($_groupIds);
+        }
     }    
     
     /**
