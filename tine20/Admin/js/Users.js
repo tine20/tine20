@@ -95,13 +95,29 @@ Tine.Admin.Users.Main = function() {
         },
 
         addButtonHandler: function(_button, _event) {
-            Tine.Admin.Users.EditDialog.openWindow({ record: new Tine.Admin.Model.User({})});
+            Tine.Admin.Users.EditDialog.openWindow({
+                record: new Tine.Admin.Model.User({}),
+                listeners: {
+                    scope: this,
+                    'update' : function(record) {
+                        Ext.getCmp('AdminUserGrid').getStore().reload();
+                    }
+                }
+            });
         },
 
         editButtonHandler: function(_button, _event) {
             var selectedRows = Ext.getCmp('AdminUserGrid').getSelectionModel().getSelections();
             var account = selectedRows[0];
-            Tine.Admin.Users.EditDialog.openWindow({record: account});
+            Tine.Admin.Users.EditDialog.openWindow({
+                record: account,
+                listeners: {
+                    scope: this,
+                    'update' : function(record) {
+                        Ext.getCmp('AdminUserGrid').getStore().reload();
+                    }
+                }
+            });
         },
     
         enableDisableButtonHandler: function(_button, _event) {
@@ -345,7 +361,15 @@ Tine.Admin.Users.Main = function() {
             
             grid_accounts.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
-                Tine.Admin.Users.EditDialog.openWindow({record: record});
+                Tine.Admin.Users.EditDialog.openWindow({
+                    record: record,
+                    listeners: {
+                        scope: this,
+                        'update' : function(record) {
+                            Ext.getCmp('AdminUserGrid').getStore().reload();
+                        }
+                    } 
+                });
             });
             
             grid_accounts.on('keydown', function(e){
