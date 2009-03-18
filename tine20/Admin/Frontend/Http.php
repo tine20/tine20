@@ -35,6 +35,9 @@ class Admin_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
             'Admin/js/Users.js',
             'Admin/js/UserEditDialog.js',
             'Admin/js/Groups.js',
+            'Admin/js/SambaMachineModel.js',
+            'Admin/js/SambaMachineGrid.js',
+            'Admin/js/SambaMachineEditDialog.js',
             'Admin/js/Tags.js',
             'Admin/js/Roles.js'
         );
