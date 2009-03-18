@@ -240,7 +240,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $encryptionType = Zend_Registry::get('configFile')->accounts->get('ldap')->pwEncType;
         $userpassword = $_encrypt ? self::encryptPassword($_password, $encryptionType) : $_password;
-        $ldapData = array('userpassword' => $userpassword);
+        $ldapData = array(
+            'userpassword'     => $userpassword,
+            'shadowlastchange' => Zend_Date::now()->getTimestamp()
+        );
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
