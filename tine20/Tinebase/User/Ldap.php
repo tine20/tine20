@@ -64,12 +64,19 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     const ENCRYPT_PLAIN = 'plain';
     
     /**
+     * @var array
+     */
+    protected $_options = array();
+
+    /**
      * the constructor
      *
      * @param  array $options Options used in connecting, binding, etc.
      */
     public function __construct(array $_options) 
     {
+        $this->_options = $_options;
+
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
     }
@@ -167,7 +174,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $loginName = Zend_Ldap::filterEscape($_loginName);
         
         try {
-            $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uid=' . $loginName);
+            $account = $this->_backend->fetch($this->_options['userDn'], 'uid=' . $loginName);
             $result = $this->_ldap2User($account, $_accountClass);
         } catch (Tinebase_Exception_NotFound $enf) {
             $result = $this->getNonExistentUser($_accountClass);
@@ -186,7 +193,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         try {
             $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-            $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
+            $account = $this->_backend->fetch($this->_options['userDn'], 'uidnumber=' . $accountId);
             $result = $this->_ldap2User($account, $_accountClass);
         } catch (Tinebase_Exception_NotFound $enf) {
             $result = $this->getNonExistentUser($_accountClass, $accountId);
@@ -493,7 +500,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         try {
             $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-            $account = $this->_backend->fetch(Tinebase_Core::getConfig()->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId, array('objectclass'));
+            $account = $this->_backend->fetch($this->_options['userDn'], 'uidnumber=' . $accountId, array('objectclass'));
             $metaData['dn'] = $account['dn'];
             
             $metaData['objectClass'] = $account['objectclass'];
