@@ -196,9 +196,18 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
 	public function deleteUser($_userId)
 	{
-        // nothing do do in ldap backend
+        // nothing to do in ldap backend
 	}
-
+    
+    /**
+     * delete multiple users
+     *
+     * @param array $_accountIds
+     */
+    abstract public function deleteUsers(array $_accountIds)
+    {
+        // nothing to do in ldap backend
+    }
 
     /**
      * set the password for given user 
