@@ -39,43 +39,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     
     /**
      * the constructor
-     *
-     * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    public function __construct() {
     	$this->_db = Tinebase_Core::getDb();
         $this->groupsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'groups'));
         $this->groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
-    
     }
     
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Tinebase_User_Sql
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_Group_Sql
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Group_Sql;
-        }
-        
-        return self::$_instance;
-    }    
-
     /**
      * return all groups an account is member of
      *
@@ -85,7 +55,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function getGroupMemberships($_accountId)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-
+        
         $cache = Tinebase_Core::get('cache');
         $cacheId = 'getGroupMemberships' . $accountId;
         $memberships = $cache->load($cacheId);
@@ -117,7 +87,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function getGroupMembers($_groupId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-
+        
         $cache = Tinebase_Core::get('cache');
         $cacheId = 'getGroupMembers' . $groupId;
         $members = $cache->load($cacheId);

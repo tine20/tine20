@@ -36,42 +36,14 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * the constructor
      *
      * @param  array $options Options used in connecting, binding, etc.
-     * don't use the constructor. use the singleton 
      */
-    private function __construct(array $_options) {
+    public function __construct(array $_options) {
         $this->_options = $_options;
         
         $this->_ldap = new Tinebase_Ldap($_options);
         $this->_ldap->bind();
     }
         
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Tinebase_Group_Ldap
-     */
-    private static $instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_Group_Ldap
-     */
-    public static function getInstance(array $_options = array())
-    {
-        if (self::$instance === NULL) {
-            self::$instance = new Tinebase_Group_Ldap($_options);
-        }
-        
-        return self::$instance;
-    }
-    
     /**
      * return all groups an account is member of
      * - this function caches its result (with cache tag 'ldap')

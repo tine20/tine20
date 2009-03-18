@@ -78,11 +78,11 @@ class Tinebase_Group
             case self::LDAP:
                 $options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
                 
-                $result = Tinebase_Group_Ldap::getInstance($options);
+                $result = new Tinebase_Group_Ldap($options);
                 break;
                 
             case self::SQL:
-                $result = Tinebase_Group_Sql::getInstance();
+                $result = new Tinebase_Group_Sql();
                 break;
             
             default:
