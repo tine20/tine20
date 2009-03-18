@@ -459,57 +459,57 @@ msgstr "Wprowadź opis"
 msgid "Expected turnover"
 msgstr "Oczekiwany obrót"
 
-#: Setup/setup.xml:365
+#: Setup/setup.xml:367
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:379
+#: Setup/setup.xml:381
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:393
+#: Setup/setup.xml:395
 msgid "website"
 msgstr "strona internetowa"
 
-#: Setup/setup.xml:407
+#: Setup/setup.xml:409
 #, fuzzy
 msgid "fair"
 msgstr "targi"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:423
 msgid "customer"
 msgstr "klient"
 
-#: Setup/setup.xml:435
+#: Setup/setup.xml:437
 msgid "partner"
 msgstr "partner"
 
-#: Setup/setup.xml:449
+#: Setup/setup.xml:451
 msgid "reseller"
 msgstr "dealer"
 
-#: Setup/setup.xml:463
+#: Setup/setup.xml:465
 msgid "open"
 msgstr "otwarte"
 
-#: Setup/setup.xml:481
+#: Setup/setup.xml:483
 msgid "contacted"
 msgstr "skontaktowany"
 
-#: Setup/setup.xml:499
+#: Setup/setup.xml:501
 msgid "waiting for feedback"
 msgstr "oczekujący na reakcja"
 
-#: Setup/setup.xml:517
+#: Setup/setup.xml:519
 #, fuzzy
 msgid "quote sent"
 msgstr "oferta wasłana"
 
-#: Setup/setup.xml:535
+#: Setup/setup.xml:537
 msgid "accepted"
 msgstr "zaakceptowany"
 
-#: Setup/setup.xml:557
+#: Setup/setup.xml:559
 msgid "lost"
 msgstr "stracony"
 

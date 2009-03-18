@@ -453,55 +453,55 @@ msgstr "Zadejte popis"
 msgid "Expected turnover"
 msgstr "Očekávaný obrat"
 
-#: Setup/setup.xml:365
+#: Setup/setup.xml:367
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:379
+#: Setup/setup.xml:381
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:393
+#: Setup/setup.xml:395
 msgid "website"
 msgstr "web"
 
-#: Setup/setup.xml:407
+#: Setup/setup.xml:409
 msgid "fair"
 msgstr "veletrh"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:423
 msgid "customer"
 msgstr "zákazník"
 
-#: Setup/setup.xml:435
+#: Setup/setup.xml:437
 msgid "partner"
 msgstr "partner"
 
-#: Setup/setup.xml:449
+#: Setup/setup.xml:451
 msgid "reseller"
 msgstr "dealer"
 
-#: Setup/setup.xml:463
+#: Setup/setup.xml:465
 msgid "open"
 msgstr "otevřený"
 
-#: Setup/setup.xml:481
+#: Setup/setup.xml:483
 msgid "contacted"
 msgstr "kontaktovaný"
 
-#: Setup/setup.xml:499
+#: Setup/setup.xml:501
 msgid "waiting for feedback"
 msgstr "čeká se na odezvu"
 
-#: Setup/setup.xml:517
+#: Setup/setup.xml:519
 msgid "quote sent"
 msgstr "odeslána nabídka"
 
-#: Setup/setup.xml:535
+#: Setup/setup.xml:537
 msgid "accepted"
 msgstr "přijatý"
 
-#: Setup/setup.xml:557
+#: Setup/setup.xml:559
 msgid "lost"
 msgstr "ztracený"
 

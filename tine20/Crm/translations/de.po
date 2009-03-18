@@ -451,55 +451,55 @@ msgstr "Beschreibung eingeben"
 msgid "Expected turnover"
 msgstr "Erwarteter Umsatz"
 
-#: Setup/setup.xml:365
+#: Setup/setup.xml:367
 msgid "telephone"
 msgstr "Telefon"
 
-#: Setup/setup.xml:379
+#: Setup/setup.xml:381
 msgid "email"
 msgstr "Email"
 
-#: Setup/setup.xml:393
+#: Setup/setup.xml:395
 msgid "website"
 msgstr "Website"
 
-#: Setup/setup.xml:407
+#: Setup/setup.xml:409
 msgid "fair"
 msgstr "Markt"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:423
 msgid "customer"
 msgstr "Kunde"
 
-#: Setup/setup.xml:435
+#: Setup/setup.xml:437
 msgid "partner"
 msgstr "Partner"
 
-#: Setup/setup.xml:449
+#: Setup/setup.xml:451
 msgid "reseller"
 msgstr "Reseller"
 
-#: Setup/setup.xml:463
+#: Setup/setup.xml:465
 msgid "open"
 msgstr "offen"
 
-#: Setup/setup.xml:481
+#: Setup/setup.xml:483
 msgid "contacted"
 msgstr "kontaktiert"
 
-#: Setup/setup.xml:499
+#: Setup/setup.xml:501
 msgid "waiting for feedback"
 msgstr "Wartet auf Feedback"
 
-#: Setup/setup.xml:517
+#: Setup/setup.xml:519
 msgid "quote sent"
 msgstr "Quote gesendet"
 
-#: Setup/setup.xml:535
+#: Setup/setup.xml:537
 msgid "accepted"
 msgstr "akzeptiert"
 
-#: Setup/setup.xml:557
+#: Setup/setup.xml:559
 msgid "lost"
 msgstr "verloren"
 
