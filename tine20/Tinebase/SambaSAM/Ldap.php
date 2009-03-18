@@ -204,7 +204,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      *
      * @param array $_accountIds
      */
-    abstract public function deleteUsers(array $_accountIds)
+    public function deleteUsers(array $_accountIds)
     {
         // nothing to do in ldap backend
     }
