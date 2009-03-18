@@ -22,6 +22,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Admin.Model.User,
     recordProxy: Tine.Admin.userBackend,
     loadRecord: false,
+    evalGrants: false,
     
     initComponent: function() {
         var accountBackend = Tine.Tinebase.registry.get('accountBackend');
@@ -30,39 +31,30 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Admin.Users.EditDialog.superclass.initComponent.call(this);
     },
 
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     */
-    updateToolbars: function() {
-
-    },
-/*
     onRecordLoad: function() {
-        // make shure grants grid is initialised
-        this.getGrantsGrid();
+        var response = {
+            responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
+        };
         
-        var grants = this.record.get('grants') || [];
-        this.grantsStore.loadData({results: grants});
+        this.samRecord = Tine.Admin.samUserBackend.recordReader(response);
+        this.getForm().loadRecord(this.samRecord);
+        
         Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordLoad.call(this);
-        
     },
     
     onRecordUpdate: function() {
         Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordUpdate.call(this);
-        this.record.set('grants', '');
         
-        var grants = [];
-        this.grantsStore.each(function(_record){
-            grants.push(_record.data);
-        });
-        
-        this.record.set('grants', grants);
+        var form = this.getForm();
+        form.updateRecord(this.samRecord);
+        this.record.set('sambaSAM', '');
+        this.record.set('sambaSAM', this.samRecord.data);
     },
-*/
 
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
+            deferredRender: false,
             border: false,
             plain:true,
             activeTab: 0,
@@ -162,12 +154,76 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Login Shell'),
                             name: 'accountLoginShell',
                             columnWidth: .666
-                        }] ] 
+                        }]
+                    ] 
                 }]
+            }, {
+                title: this.app.i18n._('Fileserver'),
+                disabled: !this.ldapBackend,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                labelAlign: 'top',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '100%',
+                    labelSeparator: '',
+                    columnWidth: .333
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n._('Home Drive'),
+                    name: 'homeDrive',
+                    columnWidth: .666
+                }, {
+                    xtype: 'datetimefield',
+                    fieldLabel: this.app.i18n._('Logon Time'),
+                    name: 'logonTime',
+                    emptyText: this.app.i18n._('never logged in'),
+                    hideTrigger: true,
+                    readOnly: true,
+                }], [{
+                    fieldLabel: this.app.i18n._('Home Path'),
+                    name: 'homePath',
+                    columnWidth: .666
+                }, {
+                    xtype: 'datetimefield',
+                    fieldLabel: this.app.i18n._('Logoff Time'),
+                    name: 'logoffTime',
+                    emptyText: this.app.i18n._('never logged off'),
+                    hideTrigger: true,
+                    readOnly: true,
+                }], [{
+                    fieldLabel: this.app.i18n._('Profile Path'),
+                    name: 'profilePath',
+                    columnWidth: .666
+                }, {
+                    xtype: 'datetimefield',
+                    fieldLabel: this.app.i18n._('Password Last Set'),
+                    name: 'pwdLastSet',
+                    emptyText: this.app.i18n._('never'),
+                    hideTrigger: true,
+                    readOnly: true,
+                }], [{
+                    fieldLabel: this.app.i18n._('Logon Script'),
+                    name: 'logonScript',
+                    columnWidth: .666
+                }], [new Ext.ux.form.ClearableDateField({ 
+                    fieldLabel: this.app.i18n._('Password Can Change'),
+                    name: 'pwdCanChange',
+                    emptyText: this.app.i18n._('not set')
+                }), new Ext.ux.form.ClearableDateField({ 
+                    fieldLabel: this.app.i18n._('Password Must Change'),
+                    name: 'pwdMustChange',
+                    emptyText: this.app.i18n._('not set')
+                }), new Ext.ux.form.ClearableDateField({ 
+                    fieldLabel: this.app.i18n._('Kick Off Time'),
+                    name: 'kickoffTime',
+                    emptyText: this.app.i18n._('not set')
+                })]]
             }]
         };
-    },
- });
+    }
+});
 
 /**
  * User edit popup

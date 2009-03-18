@@ -194,6 +194,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         
         if ($this->_manageSAM) {
             $samResult = $this->_samBackend->updateUser($_account, $_account->sambaSAM);
+            $account->sambaSAM = $samResult;
         }
            
         return $account;
@@ -224,6 +225,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
 
         if ($this->_manageSAM) {
             $samResult = $this->_samBackend->addUser($_account, $_account->sambaSAM);
+            $account->sambaSAM = $samResult;
         }
  
         return $account;

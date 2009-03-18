@@ -446,7 +446,8 @@ Tine.Admin.Model.UserArray = [
     { name: 'accountLastLoginfrom' },
     { name: 'accountEmailAddress' },
     { name: 'accountHomeDirectory' },
-    { name: 'accountLoginShell' }
+    { name: 'accountLoginShell' },
+    { name: 'sambaSAM' }
 ];
 
 Tine.Admin.Model.User = Tine.Tinebase.Record.create(Tine.Admin.Model.UserArray, {
@@ -490,5 +491,12 @@ Tine.Admin.userBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     modelName: 'User',
     recordClass: Tine.Admin.Model.User,
     idProperty: 'accountId'
+});
+
+Tine.Admin.samUserBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Admin',
+    modelName: 'SAMUser',
+    recordClass: Tine.Admin.Model.SAMUser,
+    idProperty: 'sid'
 });
 
