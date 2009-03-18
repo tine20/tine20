@@ -69,13 +69,13 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     public function setFromArray(array $_data)
     {
         if (empty($_data['accountDisplayName'])) {
-            $_data['accountDisplayName'] = !empty($_data['accountDisplayName']) ? 
+            $_data['accountDisplayName'] = !empty($_data['accountFirstName']) ? 
                 $_data['accountLastName'] . ', ' . $_data['accountFirstName'] : 
                 $_data['accountLastName'];
         }
 
         if (empty($_data['accountFullName'])) {
-            $_data['accountFullName'] = !empty($_data['accountDisplayName']) ? 
+            $_data['accountFullName'] = !empty($_data['accountFirstName']) ? 
                 $_data['accountFirstName'] . ' ' . $_data['accountLastName'] : 
                 $_data['accountLastName'];
         }
