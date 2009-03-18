@@ -22,25 +22,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 {
     /**
      * the constructor
-     *
-     * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    public function __construct() {
         $this->_db = Tinebase_Core::getDb();
     }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Tinebase_User_Sql
-     */
-    private static $_instance = NULL;
     
     /**
      * copy of Tinebase_Core::get('dbAdapter')
@@ -66,21 +51,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountHomeDirectory'  => 'home_dir',
         'accountLoginShell'     => 'login_shell',
     );
-    
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_User_Sql
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_User_Sql;
-        }
-        
-        return self::$_instance;
-    }
     
     /**
      * get list of users

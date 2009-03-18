@@ -71,14 +71,12 @@ class Tinebase_User
         switch($_backendType) {
             case self::LDAP:
                 $options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
-                unset($options['userDn']);
-                unset($options['groupsDn']);
                 
-                $result = Tinebase_User_Ldap::getInstance($options);
+                $result = new Tinebase_User_Ldap($options);
                 break;
                 
             case self::SQL:
-                $result = Tinebase_User_Sql::getInstance();
+                $result = new Tinebase_User_Sql();
                 break;
             
             default:

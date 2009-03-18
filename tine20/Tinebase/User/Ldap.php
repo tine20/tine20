@@ -67,29 +67,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * the constructor
      *
      * @param  array $options Options used in connecting, binding, etc.
-     * don't use the constructor. use the singleton 
      */
-    private function __construct(array $_options) 
+    public function __construct(array $_options) 
     {
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
     }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {
-    }
-
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Tinebase_User_Ldap
-     */
-    private static $_instance = NULL;
-    
+   
     /**
      * @var Tinebase_Ldap
      */
@@ -126,21 +110,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         'shadowAccount',
         'inetOrgPerson',
     );
-    
-    /**
-     * the singleton pattern
-     *
-     * @param  array $options Options used in connecting, binding, etc.
-     * @return Tinebase_User_Ldap
-     */
-    public static function getInstance(array $_options = array()) 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_User_Ldap($_options);
-        }
-        
-        return self::$_instance;
-    }
     
     /**
      * returns all supported password encryptions types
