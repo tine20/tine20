@@ -1,50 +1,42 @@
-#: js/Courses.js:27 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Courses"
-
-#: js/Courses.js:32
-msgid "All Courses"
-msgstr "All Courses"
-
 #: js/CourseEditDialog.js:34
 msgid "Import course members"
 msgstr "Import course members"
 
-#: js/CourseEditDialog.js:130 js/CourseGridPanel.js:48 js/Models.js:41
+#: js/CourseEditDialog.js:132 js/CourseGridPanel.js:48 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Course"
 msgstr[1] "Courses"
 
-#: js/CourseEditDialog.js:146
+#: js/CourseEditDialog.js:148
 msgid "Course Name"
 msgstr "Course Name"
 
-#: js/CourseEditDialog.js:150
+#: js/CourseEditDialog.js:152
 msgid "Course / School Type"
 msgstr "Course / School Type"
 
-#: js/CourseEditDialog.js:155
+#: js/CourseEditDialog.js:157
 msgid "Description"
 msgstr "Description"
 
-#: js/CourseEditDialog.js:161 js/CourseGridPanel.js:74
+#: js/CourseEditDialog.js:163 js/CourseGridPanel.js:74
 msgid "Internet"
 msgstr "Internet"
 
-#: js/CourseEditDialog.js:191 js/CourseEditDialog.js:242
+#: js/CourseEditDialog.js:193 js/CourseEditDialog.js:244
 msgid "Members"
 msgstr "Members"
 
-#: js/CourseEditDialog.js:218
+#: js/CourseEditDialog.js:220
 msgid "Reset Password"
 msgstr "Reset Password"
 
-#: js/CourseEditDialog.js:222
+#: js/CourseEditDialog.js:224
 msgid "Set new password"
 msgstr "Set new password"
 
-#: js/CourseEditDialog.js:222
+#: js/CourseEditDialog.js:224
 msgid "Please enter the new password:"
 msgstr "Please enter the new password:"
 
@@ -55,6 +47,14 @@ msgstr "Name"
 #: js/CourseGridPanel.js:68
 msgid "Type"
 msgstr "Type"
+
+#: js/Courses.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Courses"
+
+#: js/Courses.js:32
+msgid "All Courses"
+msgstr "All Courses"
 
 #: js/Models.js:45
 msgid "record list"
