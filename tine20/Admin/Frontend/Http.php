@@ -33,6 +33,7 @@ class Admin_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
         return array(
             'Admin/js/Admin.js',
             'Admin/js/Users.js',
+            'Admin/js/UserEditDialog.js',
             'Admin/js/Groups.js',
             'Admin/js/Tags.js',
             'Admin/js/Roles.js'

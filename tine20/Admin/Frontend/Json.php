@@ -190,12 +190,12 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     /**
      * returns a fullUser
      *
-     * @param int $userId
+     * @param int $id
      */
-    public function getUser($userId)
+    public function getUser($id)
     {
-        if (!empty($userId)) {
-            $user = Admin_Controller_User::getInstance()->get($userId);
+        if (!empty($id)) {
+            $user = Admin_Controller_User::getInstance()->get($id);
             $user->setTimezone(Tinebase_Core::get('userTimeZone'));
             $userArray = $user->toArray();
             
@@ -254,14 +254,14 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     /**
      * save user
      *
-     * @param string $accountData JSON encoded Tinebase_Model_FullUser
-     * @param string $password the new password
-     * @param string $passwordRepeat the new password repeated
-     * @return array with 
+     * @param string $recordData JSON encoded Tinebase_Model_FullUser
+     * @return array  
      */
-    public function saveUser($accountData, $password, $passwordRepeat)
+    public function saveUser($recordData)
     {
-        $decodedAccountData = Zend_Json::decode($accountData);
+        $decodedAccountData = Zend_Json::decode($recordData);
+        $password = $decodedAccountData['accountPassword'];
+        $passwordRepeat = $decodedAccountData['accountPassword2'];
         
         $account = new Tinebase_Model_FullUser();
         

@@ -23,7 +23,7 @@ Tine.Admin.Users.Main = function() {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: Tine.Admin.Users.Account,
+            fields: Tine.Admin.Model.User,
             // turn on remote sorting
             remoteSort: true
         });
@@ -101,7 +101,7 @@ Tine.Admin.Users.Main = function() {
         editButtonHandler: function(_button, _event) {
             var selectedRows = Ext.getCmp('AdminUserGrid').getSelectionModel().getSelections();
             var account = selectedRows[0];
-            Tine.Admin.Users.EditDialog.openWindow({accountRecord: account});
+            Tine.Admin.Users.EditDialog.openWindow({record: account});
         },
     
         enableDisableButtonHandler: function(_button, _event) {
@@ -345,7 +345,7 @@ Tine.Admin.Users.Main = function() {
             
             grid_accounts.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
-                Tine.Admin.Users.EditDialog.openWindow({accountRecord: record});
+                Tine.Admin.Users.EditDialog.openWindow({record: record});
             });
             
             grid_accounts.on('keydown', function(e){
@@ -423,327 +423,19 @@ Tine.Admin.Users.Main = function() {
     
 }();
 
-Tine.Admin.Users.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
-
-    /**
-     * @cfg {Tine.Admin.Users.Account}
-     */
-    accountRecord: null,
-    
-    windowNamePrefix: 'userEditWindow_',
-    
-    id : 'admin_editAccountForm',
-    labelWidth: 120,
-    labelAlign: 'side',
-    
-    updateRecord: function(_accountData) {
-        if(_accountData.accountExpires && _accountData.accountExpires !== null) {
-            _accountData.accountExpires = Date.parseDate(_accountData.accountExpires, Date.patterns.ISO8601Long);
-        }
-        if(_accountData.accountLastLogin && _accountData.accountLastLogin !== null) {
-            _accountData.accountLastLogin = Date.parseDate(_accountData.accountLastLogin, Date.patterns.ISO8601Long);
-        }
-        if(_accountData.accountLastPasswordChange && _accountData.accountLastPasswordChange !== null) {
-            _accountData.accountLastPasswordChange = Date.parseDate(_accountData.accountLastPasswordChange, Date.patterns.ISO8601Long);
-        }
-        if(!_accountData.accountPassword) {
-            _accountData.accountPassword = null;
-        }
-
-        this.accountRecord = new Tine.Admin.Users.Account(_accountData, _accountData.accountId ? _accountData.accountId : 0);
-    },
-    
-    handlerDelete: function(_button, _event) {
-        var accountIds = Ext.util.JSON.encode([this.accountRecord.get('accountId')]);
-            
-        Ext.Ajax.request({
-            url: 'index.php',
-            params: {
-                method: 'Admin.deleteUsers', 
-                accountIds: accountIds
-            },
-            text: this.translation.gettext('Deleting account...'),
-            success: function(_result, _request) {
-                window.opener.Tine.Admin.Users.Main.reload();
-                window.close();
-            },
-            failure: function ( result, request) { 
-                Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the account.')); 
-            } 
-        });         
-    },
-    
-    handlerApplyChanges: function(_button, _event, _closeWindow) {
-        var form = this.getForm();
-
-        if(form.isValid()) {
-        	
-        	if (form.findField('accountPassword').getValue() != form.findField('accountPassword2').getValue()) {
-        		Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Passwords do not match!'));
-        		form.findField('accountPassword').markInvalid(this.translation.gettext('Passwords do not match!'));
-        		form.findField('accountPassword2').markInvalid(this.translation.gettext('Passwords do not match!'));
-        	} else {
-        	
-                Ext.MessageBox.wait(this.translation._('Please Wait'), this.translation._('Saving User Account'));
-                form.updateRecord(this.accountRecord);
-                if(this.accountRecord.data.accountFirstName) {
-                    this.accountRecord.data.accountFullName = this.accountRecord.data.accountFirstName + ' ' + this.accountRecord.data.accountLastName;
-                    this.accountRecord.data.accountDisplayName = this.accountRecord.data.accountLastName + ', ' + this.accountRecord.data.accountFirstName;
-                } else {
-                    this.accountRecord.data.accountFullName = this.accountRecord.data.accountLastName;
-                    this.accountRecord.data.accountDisplayName = this.accountRecord.data.accountLastName;
-                }
-        
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Admin.saveUser', 
-                        accountData: Ext.util.JSON.encode(this.accountRecord.data),
-                        password: form.findField('accountPassword').getValue(),
-                        passwordRepeat: form.findField('accountPassword2').getValue()                        
-                    },
-                    success: function(response) {
-                    	var responseData = Ext.util.JSON.decode(response.responseText);
-                    	if (responseData.status == 'failure') {
-                    		Ext.MessageBox.alert(this.translation.gettext('Failed'), responseData.errorMessage);
-                    		if (responseData.errors == 'invalid username') {
-                    			form.findField('accountLoginName').markInvalid();
-                    		}
-                    	} else {
-                            if(window.opener.Tine.Admin.Users) {
-                                window.opener.Tine.Admin.Users.Main.reload();
-                            }
-                            if(_closeWindow === true) {
-                                window.close();
-                            } else {
-                                this.onRecordLoad(response);
-                            }
-                            Ext.MessageBox.hide();
-                    	}
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save user account.')); 
-                    },
-                    scope: this 
-                });
-        	}
-        } else {
-            Ext.MessageBox.alert(this.translation.gettext('Errors'), this.translation.gettext('Please fix the errors noted.'));
-        }
-    },
-    
-    GetEditAccountDialog: function() { 
-    
-        var accountBackend = Tine.Tinebase.registry.get('accountBackend');
-        var ldapBackend = (accountBackend == 'Ldap');
-        this.tpheight = 370; // hack till we refactor this
-
-        return [{
-            xtype: 'tabpanel',
-            plain: true,
-            deferredRender: false,
-            border: false,
-            activeItem: 0,
-            items: [{
-                title: this.translation.ngettext('Account', 'Accounts', 1),
-                layout:'column',
-                frame: true,
-                border:false,
-                //autoHeight: true,
-                height: this.tpheight,
-                items:[{
-                    //frame: true,
-                    columnWidth:.6,
-                    border:false,
-                    layout: 'form',
-                    defaults: {
-                        xtype: 'textfield',
-                        anchor: '95%'
-                    },
-                    items: [{
-                            fieldLabel: this.translation.gettext('First Name'),
-                            name: 'accountFirstName'
-                        }, {
-                            fieldLabel: this.translation.gettext('Last Name'),
-                            name: 'accountLastName',
-                            allowBlank: false
-                        }, {
-                            fieldLabel: this.translation.gettext('Login Name'),
-                            name: 'accountLoginName',
-                            allowBlank: false
-                        }, {
-                            fieldLabel: this.translation.gettext('Password'),
-                            name: 'accountPassword',
-                            inputType: 'password',
-                            emptyText: this.translation.gettext('no password set')
-                        }, {
-                            fieldLabel: this.translation.gettext('Password again'),
-                            name: 'accountPassword2',
-                            inputType: 'password',
-                            emptyText: this.translation.gettext('no password set')
-                        },  new Tine.widgets.group.selectionComboBox({
-                            fieldLabel: this.translation.gettext('Primary group'),
-                            name: 'accountPrimaryGroup',
-                            displayField:'name',
-                            valueField:'id'
-                        }), {
-                            vtype: 'email',
-                            fieldLabel: this.translation.gettext('Emailaddress'),
-                            name: 'accountEmailAddress'
-                        }, {
-                            fieldLabel: this.translation.gettext('Home Directory'),
-                            name: 'accountHomeDirectory'
-                        }, {
-                            fieldLabel: this.translation.gettext('Login Shell'),
-                            name: 'accountLoginShell'
-                        }
-                    ]
-                },{
-                    columnWidth:.4,
-                    border:false,
-                    layout: 'form',
-                    defaults: {
-                        anchor: '95%'
-                    },
-                    items: [
-                        {
-                            xtype: 'combo',
-                            fieldLabel: this.translation.gettext('Status'),
-                            name: 'accountStatus',
-                            mode: 'local',
-                            displayField:'status',
-                            valueField:'key',
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.SimpleStore(
-                                {
-                                    fields: ['key','status'],
-                                    data: [
-                                        ['enabled','enabled'],
-                                        ['disabled','disabled']
-                                    ]
-                                }
-                            ),
-                            hidden: ldapBackend
-                        }, 
-                        new Ext.ux.form.ClearableDateField({ 
-                            fieldLabel: this.translation.gettext('Expires'),
-                            name: 'accountExpires',
-                            emptyText: this.translation.gettext('never')
-                        }), {
-                            xtype: 'datetimefield',
-                            fieldLabel: this.translation.gettext('Last login at'),
-                            name: 'accountLastLogin',
-                            emptyText: this.translation.gettext('never logged in'),
-                            hideTrigger: true,
-                            readOnly: true,
-                            hidden: ldapBackend
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: this.translation.gettext('Last login from'),
-                            name: 'accountLastLoginfrom',
-                            emptyText: this.translation.gettext('never logged in'),
-                            readOnly: true,
-                            hidden: ldapBackend
-                        }, {
-                            xtype: 'datetimefield',
-                            fieldLabel: this.translation.gettext('Password set'),
-                            name: 'accountLastPasswordChange',
-                            emptyText: this.translation.gettext('never'),
-                            hideTrigger: true,
-                            readOnly: true
-                        }
-                    ]
-                }]
-            }]
-        }];
-    },
-    
-    getSambaPanel: function() {
-        return {
-            title: 'Samba',
-            border: false,
-            height: this.tpheight,
-            frame: true,
-            items: [{
-                xtype: 'textfield',
-                name: 'hallo'
-            }]
-        }
-    },
-
-    updateToolbarButtons: function() {
-        if(this.accountRecord.get('accountId') > 0) {
-            Ext.getCmp('admin_editAccountForm').action_delete.enable();
-        }
-    },
-    
-    initComponent: function() {
-        this.accountRecord = this.accountRecord ? this.accountRecord : new Tine.Admin.Users.Account({}, 0);
-        
-        Ext.Ajax.request({
-            scope: this,
-            success: this.onRecordLoad,
-            params: {
-                method: 'Admin.getUser',
-                userId: this.accountRecord.id
-            }
-        });
-        
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Admin');
-        
-        this.items = this.GetEditAccountDialog();
-        
-        if (Tine.Admin.registry.get('manageSAM')) {
-            this.items[0].items.push(this.getSambaPanel());
-        }
-        
-        Tine.Admin.Users.EditDialog.superclass.initComponent.call(this);
-    },
-    
-    onRecordLoad: function(response) {
-        this.getForm().findField('accountFirstName').focus(false, 250);
-        var recordData = Ext.util.JSON.decode(response.responseText);
-        this.updateRecord(recordData);
-        
-        if (! this.accountRecord.id) {
-            window.document.title = this.translation.gettext('Add New User Account');
-        } else {
-            window.document.title = String.format(this.translation._('Edit User Account "{0}"'), this.accountRecord.get('accountDisplayName'));
-        }
-        
-        this.getForm().loadRecord(this.accountRecord);
-        //this.updateToolbarButtons();
-    }
-});
-
-/**
- * Users Edit Popup
- */
-Tine.Admin.Users.EditDialog.openWindow = function (config) {
-    config.accountRecord = config.accountRecord ? config.accountRecord : new Tine.Admin.Users.Account({}, 0);
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 450,
-        name: Tine.Admin.Users.EditDialog.prototype.windowNamePrefix + config.accountRecord.id,
-        layout: Tine.Admin.Users.EditDialog.prototype.windowLayout,
-        contentPanelConstructor: 'Tine.Admin.Users.EditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};
+Ext.ns('Tine.Admin.Model');
 
 /**
  * Model of an account
  */
-Tine.Admin.Users.Account = Ext.data.Record.create([
+Tine.Admin.Model.UserArray = [
     // tine record fields
     { name: 'accountId' },
     { name: 'accountFirstName' },
     { name: 'accountLastName' },
     { name: 'accountLoginName' },
     { name: 'accountPassword' },
+    { name: 'accountPassword2' },
     { name: 'accountDisplayName' },
     { name: 'accountFullName' },
     { name: 'accountStatus' },
@@ -755,9 +447,19 @@ Tine.Admin.Users.Account = Ext.data.Record.create([
     { name: 'accountEmailAddress' },
     { name: 'accountHomeDirectory' },
     { name: 'accountLoginShell' }
-]);
+];
 
-Tine.Admin.Users.SAMUser = Ext.data.Record.create([
+Tine.Admin.Model.User = Tine.Tinebase.Record.create(Tine.Admin.Model.UserArray, {
+    appName: 'Admin',
+    modelName: 'User',
+    idProperty: 'accountId',
+    titleProperty: 'accountDisplayName',
+    // ngettext('User', 'Users', n);
+    recordName: 'User',
+    recordsName: 'Users'
+});
+
+Tine.Admin.Model.SAMUserArray = [
     { name: 'sid'              },
     { name: 'primaryGroupSID'  },
     { name: 'acctFlags'        },
@@ -771,4 +473,22 @@ Tine.Admin.Users.SAMUser = Ext.data.Record.create([
     { name: 'pwdLastSet',    type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'pwdCanChange',  type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'pwdMustChange', type: 'date', dateFormat: Date.patterns.ISO8601Long }
-]);
+];
+
+Tine.Admin.Model.SAMUser = Tine.Tinebase.Record.create(Tine.Admin.Model.SAMUserArray, {
+    appName: 'Admin',
+    modelName: 'SAMUser',
+    idProperty: 'sid',
+    titleProperty: null,
+    // ngettext('Samba User', 'Samba Users', n);
+    recordName: 'Samba User',
+    recordsName: 'Samba Users'
+});
+
+Tine.Admin.userBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Admin',
+    modelName: 'User',
+    recordClass: Tine.Admin.Model.User,
+    idProperty: 'accountId'
+});
+
