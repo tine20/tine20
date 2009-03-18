@@ -2,28 +2,27 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-03-16 15:51+0100\n"
+"Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: French\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
 #: js/ApplicationGridPanel.js:37
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: js/ApplicationGridPanel.js:38
 msgid "Enabled"
-msgstr ""
+msgstr "Activé"
 
 #: js/ApplicationGridPanel.js:39
 msgid "Order"
-msgstr ""
+msgstr "Ordre"
 
 #: js/ApplicationGridPanel.js:40
 msgid "Installed Version"
@@ -35,27 +34,32 @@ msgstr ""
 
 #: js/ApplicationGridPanel.js:42
 msgid "Status"
+msgstr "Statut"
+
+#: js/ApplicationGridPanel.js:43
+msgid "Depends on"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:162
+#: js/ApplicationGridPanel.js:49 js/EnvCheckGridPanel.js:162
 msgid "Install application"
-msgstr ""
+msgstr "Installer une application"
 
-#: js/ApplicationGridPanel.js:57
+#: js/ApplicationGridPanel.js:58
 msgid "Uninstall application"
-msgstr ""
+msgstr "désinstaller une application"
 
-#: js/ApplicationGridPanel.js:66
+#: js/ApplicationGridPanel.js:67
 msgid "Update application"
-msgstr ""
+msgstr "Mettre à jour une application"
 
-#: js/ApplicationGridPanel.js:136
+#: js/ApplicationGridPanel.js:137
+#, fuzzy
 msgid "Shit"
-msgstr ""
+msgstr "Oups"
 
-#: js/ApplicationGridPanel.js:136
+#: js/ApplicationGridPanel.js:137
 msgid "Where are the backup tapes"
-msgstr ""
+msgstr "Où sont les bandes de sauvegarde?"
 
 #: js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
@@ -146,18 +150,20 @@ msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
+"Pas de {0} trouve(e). Essayez de changer vos critères de recherche, les "
+"options d'affichage ou votre {1} de recherche."
 
 #: js/EnvCheckGridPanel.js:133
 msgid "Check"
-msgstr ""
+msgstr "Vérification"
 
 #: js/EnvCheckGridPanel.js:134
 msgid "Result"
-msgstr ""
+msgstr "Résultat"
 
 #: js/EnvCheckGridPanel.js:135
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 #: js/EnvCheckGridPanel.js:153
 msgid "Run setup tests"
@@ -165,18 +171,27 @@ msgstr ""
 
 #: js/Setup.js:29
 msgid "Setup Checks"
-msgstr ""
+msgstr "Paramétrer les vérifications "
 
 #: js/Setup.js:34
 msgid "Config Manager"
-msgstr ""
+msgstr "Gestionnaire de configuration"
 
 #: js/Setup.js:40
 msgid "Application Manager"
-msgstr ""
+msgstr "Gestionnaire d'application"
 
-#: js/Setup.js:128
+#: js/Setup.js:129
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Application"
+msgstr[1] "Applications"
+
+#~ msgid "Current Version"
+#~ msgstr "Version actuelle"
+
+#~ msgid "Version"
+#~ msgstr "Version"
+
+#~ msgid "Check again"
+#~ msgstr "Nouvelle vérification"

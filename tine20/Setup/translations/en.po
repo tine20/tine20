@@ -22,23 +22,27 @@ msgstr "Available Version"
 msgid "Status"
 msgstr "Status"
 
-#: js/ApplicationGridPanel.js:48 js/EnvCheckGridPanel.js:162
+#: js/ApplicationGridPanel.js:43
+msgid "Depends on"
+msgstr "Depends on"
+
+#: js/ApplicationGridPanel.js:49 js/EnvCheckGridPanel.js:162
 msgid "Install application"
 msgstr "Install application"
 
-#: js/ApplicationGridPanel.js:57
+#: js/ApplicationGridPanel.js:58
 msgid "Uninstall application"
 msgstr "Uninstall application"
 
-#: js/ApplicationGridPanel.js:66
+#: js/ApplicationGridPanel.js:67
 msgid "Update application"
 msgstr "Update application"
 
-#: js/ApplicationGridPanel.js:136
+#: js/ApplicationGridPanel.js:137
 msgid "Shit"
 msgstr "Shit"
 
-#: js/ApplicationGridPanel.js:136
+#: js/ApplicationGridPanel.js:137
 msgid "Where are the backup tapes"
 msgstr "Where are the backup tapes"
 
@@ -162,7 +166,7 @@ msgstr "Config Manager"
 msgid "Application Manager"
 msgstr "Application Manager"
 
-#: js/Setup.js:128
+#: js/Setup.js:129
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Application"
