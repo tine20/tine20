@@ -130,6 +130,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             self::ENCRYPT_SSHA
         );
     }
+
     /**
      * get list of users
      *
