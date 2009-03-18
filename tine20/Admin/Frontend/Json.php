@@ -524,6 +524,54 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         return $result;
     }
     
+    /********************************** Samba Machines **********************************/
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param string $filter json encoded
+     * @param string $paging json encoded
+     * @return array
+     */
+    public function searchTimesheets($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Admin_Controller_SambaMachine::getInstance(), 'Admin_Model_SambaMachineFilter'); 
+    }
+
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getSambaMachine($id)
+    {
+        return $this->_get($id, Admin_Controller_SambaMachine::getInstance());
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  string $recordData
+     * @return array created/updated record
+     */
+    public function saveSambaMachine($recordData)
+    {
+        return $this->_save($recordData, Admin_Controller_SambaMachine::getInstance(), 'SambaMachine');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param string $ids 
+     * @return string
+     */
+    public function deleteSambaMachines($ids)
+    {
+        return $this->_delete($ids, Admin_Controller_SambaMachine::getInstance());
+    }
+    
+
     /********************************** Tags **********************************/
     
     /**
