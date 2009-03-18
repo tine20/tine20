@@ -20,7 +20,7 @@
 class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
 {
 	/**
-	 * @var Tinebase_User_Ldap
+	 * @var Tinebase_User_Abstract
 	 */
 	protected $_userBackend = NULL;
 	
@@ -98,7 +98,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
-        $result = $this->_userBackend->getUsers($_filter, $_sort, $_dir, $_start, $_limit);
+        $result = $this->_userBackend->getUsers($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_Model_FullUser');
         
         return $result;
     }
@@ -188,15 +188,15 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         $event->account = $account;
         Tinebase_Events::fireEvent($event);
         
-        if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($_account, $_password, $_passwordRepeat);
-        }
-        
         if ($this->_manageSAM) {
             $samResult = $this->_samBackend->updateUser($_account, $_account->sambaSAM);
             $account->sambaSAM = $samResult;
         }
-           
+        
+        if (!empty($_password) && !empty($_passwordRepeat)) {
+            $this->setAccountPassword($_account, $_password, $_passwordRepeat);
+        }
+
         return $account;
     }
     
@@ -219,15 +219,15 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         $event->account = $account;
         Tinebase_Events::fireEvent($event);
         
-        if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($_account, $_password, $_passwordRepeat);
-        }
-
         if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->addUser($_account, $_account->sambaSAM);
+            $samResult = $this->_samBackend->addUser($account, $_account->sambaSAM);
             $account->sambaSAM = $samResult;
         }
- 
+        
+        if (!empty($_password) && !empty($_passwordRepeat)) {
+            $this->setAccountPassword($account, $_password, $_passwordRepeat);
+        }
+
         return $account;
     }
     
