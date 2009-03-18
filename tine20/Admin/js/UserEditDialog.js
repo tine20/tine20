@@ -21,7 +21,6 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Admin',
     recordClass: Tine.Admin.Model.User,
     recordProxy: Tine.Admin.userBackend,
-    loadRecord: false,
     evalGrants: false,
     
     initComponent: function() {

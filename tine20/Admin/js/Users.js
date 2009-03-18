@@ -95,7 +95,7 @@ Tine.Admin.Users.Main = function() {
         },
 
         addButtonHandler: function(_button, _event) {
-            Tine.Admin.Users.EditDialog.openWindow({});
+            Tine.Admin.Users.EditDialog.openWindow({ record: new Tine.Admin.Model.User({})});
         },
 
         editButtonHandler: function(_button, _event) {
