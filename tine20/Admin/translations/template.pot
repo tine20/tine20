@@ -71,9 +71,11 @@ msgstr ""
 msgid "view roles list and details"
 msgstr ""
 
-#: js/Admin.js:19
+#: js/Admin.js:19 js/Users.js:457
 msgid "User"
-msgstr ""
+msgid_plural "Users"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Admin.js:31
 msgid "Groups"
@@ -166,7 +168,7 @@ msgstr ""
 msgid "Session ID"
 msgstr ""
 
-#: js/Admin.js:527 js/Users.js:561
+#: js/Admin.js:527 js/UserEditDialog-old.js:145 js/UserEditDialog.js:110
 msgid "Login Name"
 msgstr ""
 
@@ -207,11 +209,11 @@ msgstr ""
 msgid "settings"
 msgstr ""
 
-#: js/Admin.js:816
+#: js/Admin.js:816 js/UserEditDialog.js:98
 msgid "disabled"
 msgstr ""
 
-#: js/Admin.js:819
+#: js/Admin.js:819 js/UserEditDialog.js:98
 msgid "enabled"
 msgstr ""
 
@@ -252,8 +254,9 @@ msgid "Deleting group(s)..."
 msgstr ""
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
-#: js/Users.js:471 js/Users.js:482 js/Users.js:507 js/Users.js:524
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/UserEditDialog-old.js:46
+#: js/UserEditDialog-old.js:57 js/UserEditDialog-old.js:82
+#: js/UserEditDialog-old.js:99 js/Users.js:186
 msgid "Failed"
 msgstr ""
 
@@ -302,11 +305,13 @@ msgstr ""
 msgid "Could not save group."
 msgstr ""
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:530
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346
+#: js/UserEditDialog-old.js:105
 msgid "Errors"
 msgstr ""
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:530
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346
+#: js/UserEditDialog-old.js:105
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -398,7 +403,7 @@ msgstr ""
 msgid "Loading Role..."
 msgstr ""
 
-#: js/Roles.js:686 js/Tags.js:584 js/Users.js:487
+#: js/Roles.js:686 js/Tags.js:584 js/UserEditDialog-old.js:62
 msgid "Please Wait"
 msgstr ""
 
@@ -486,6 +491,112 @@ msgstr ""
 msgid "Edit Tag \"{0}\""
 msgstr ""
 
+#: js/UserEditDialog-old.js:40
+msgid "Deleting account..."
+msgstr ""
+
+#: js/UserEditDialog-old.js:46
+msgid "Some error occurred while trying to delete the account."
+msgstr ""
+
+#: js/UserEditDialog-old.js:57 js/UserEditDialog-old.js:58
+#: js/UserEditDialog-old.js:59
+msgid "Passwords do not match!"
+msgstr ""
+
+#: js/UserEditDialog-old.js:62
+msgid "Saving User Account"
+msgstr ""
+
+#: js/UserEditDialog-old.js:99
+msgid "Could not save user account."
+msgstr ""
+
+#: js/UserEditDialog-old.js:122 js/UserEditDialog.js:71
+msgid "Account"
+msgid_plural "Accounts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/UserEditDialog-old.js:138 js/UserEditDialog.js:87
+msgid "First Name"
+msgstr ""
+
+#: js/UserEditDialog-old.js:141 js/UserEditDialog.js:101
+msgid "Last Name"
+msgstr ""
+
+#: js/UserEditDialog-old.js:149 js/UserEditDialog.js:122
+msgid "Password"
+msgstr ""
+
+#: js/UserEditDialog-old.js:152 js/UserEditDialog-old.js:157
+#: js/UserEditDialog.js:125 js/UserEditDialog.js:137
+msgid "no password set"
+msgstr ""
+
+#: js/UserEditDialog-old.js:154 js/UserEditDialog.js:134
+msgid "Password again"
+msgstr ""
+
+#: js/UserEditDialog-old.js:159 js/UserEditDialog.js:147
+msgid "Primary group"
+msgstr ""
+
+#: js/UserEditDialog-old.js:165 js/UserEditDialog.js:154
+msgid "Emailaddress"
+msgstr ""
+
+#: js/UserEditDialog-old.js:168 js/UserEditDialog.js:158
+msgid "Home Directory"
+msgstr ""
+
+#: js/UserEditDialog-old.js:171 js/UserEditDialog.js:162
+msgid "Login Shell"
+msgstr ""
+
+#: js/UserEditDialog-old.js:185 js/UserEditDialog.js:92 js/Users.js:274
+msgid "Status"
+msgstr ""
+
+#: js/UserEditDialog-old.js:205 js/UserEditDialog.js:106 js/Users.js:283
+msgid "Expires"
+msgstr ""
+
+#: js/UserEditDialog-old.js:207 js/UserEditDialog-old.js:227
+#: js/UserEditDialog.js:108 js/UserEditDialog.js:143
+msgid "never"
+msgstr ""
+
+#: js/UserEditDialog-old.js:210 js/UserEditDialog.js:116 js/Users.js:280
+msgid "Last login at"
+msgstr ""
+
+#: js/UserEditDialog-old.js:212 js/UserEditDialog-old.js:220
+#: js/UserEditDialog.js:118 js/UserEditDialog.js:131
+msgid "never logged in"
+msgstr ""
+
+#: js/UserEditDialog-old.js:218 js/UserEditDialog.js:129 js/Users.js:281
+msgid "Last login from"
+msgstr ""
+
+#: js/UserEditDialog-old.js:225 js/UserEditDialog.js:141
+msgid "Password set"
+msgstr ""
+
+#: js/UserEditDialog-old.js:286
+msgid "Add New User Account"
+msgstr ""
+
+#: js/UserEditDialog-old.js:288
+msgid "Edit User Account \"{0}\""
+msgstr ""
+
+#: js/UserEditDialog.js:118 js/UserEditDialog.js:131
+msgid "don't know"
+msgstr ""
+
 #: js/Users.js:141
 msgid "Set new password"
 msgstr ""
@@ -514,10 +625,6 @@ msgstr ""
 msgid "No accounts to display"
 msgstr ""
 
-#: js/Users.js:274 js/Users.js:601
-msgid "Status"
-msgstr ""
-
 #: js/Users.js:275
 msgid "Displayname"
 msgstr ""
@@ -538,20 +645,8 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: js/Users.js:280 js/Users.js:626
-msgid "Last login at"
-msgstr ""
-
-#: js/Users.js:281 js/Users.js:634
-msgid "Last login from"
-msgstr ""
-
 #: js/Users.js:282
 msgid "Password changed"
-msgstr ""
-
-#: js/Users.js:283 js/Users.js:621
-msgid "Expires"
 msgstr ""
 
 #: js/Users.js:372
@@ -574,78 +669,8 @@ msgstr ""
 msgid "reset password"
 msgstr ""
 
-#: js/Users.js:465
-msgid "Deleting account..."
-msgstr ""
-
-#: js/Users.js:471
-msgid "Some error occurred while trying to delete the account."
-msgstr ""
-
-#: js/Users.js:482 js/Users.js:483 js/Users.js:484
-msgid "Passwords do not match!"
-msgstr ""
-
-#: js/Users.js:487
-msgid "Saving User Account"
-msgstr ""
-
-#: js/Users.js:524
-msgid "Could not save user account."
-msgstr ""
-
-#: js/Users.js:554
-msgid "First Name"
-msgstr ""
-
-#: js/Users.js:557
-msgid "Last Name"
-msgstr ""
-
-#: js/Users.js:565
-msgid "Password"
-msgstr ""
-
-#: js/Users.js:568 js/Users.js:573
-msgid "no password set"
-msgstr ""
-
-#: js/Users.js:570
-msgid "Password again"
-msgstr ""
-
-#: js/Users.js:575
-msgid "Primary group"
-msgstr ""
-
-#: js/Users.js:581
-msgid "Emailaddress"
-msgstr ""
-
-#: js/Users.js:584
-msgid "Home Directory"
-msgstr ""
-
-#: js/Users.js:587
-msgid "Login Shell"
-msgstr ""
-
-#: js/Users.js:623 js/Users.js:643
-msgid "never"
-msgstr ""
-
-#: js/Users.js:628 js/Users.js:636
-msgid "never logged in"
-msgstr ""
-
-#: js/Users.js:641
-msgid "Password set"
-msgstr ""
-
-#: js/Users.js:683
-msgid "Add New User Account"
-msgstr ""
-
-#: js/Users.js:685
-msgid "Edit User Account \"{0}\""
-msgstr ""
+#: js/Users.js:483
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] ""
+msgstr[1] ""

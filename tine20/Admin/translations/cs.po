@@ -93,9 +93,13 @@ msgstr "zobrazit role"
 msgid "view roles list and details"
 msgstr "zobrazit podrobný seznam rolí"
 
-#: js/Admin.js:19
+#: js/Admin.js:19 js/Users.js:457
+#, fuzzy
 msgid "User"
-msgstr "Uživatel"
+msgid_plural "Users"
+msgstr[0] "Uživatel"
+msgstr[1] "Uživatel"
+msgstr[2] "Uživatel"
 
 #: js/Admin.js:31
 msgid "Groups"
@@ -188,7 +192,7 @@ msgstr "Žádné záznamy přístupového logu ke zobrazení"
 msgid "Session ID"
 msgstr "ID relace"
 
-#: js/Admin.js:527 js/Users.js:561
+#: js/Admin.js:527 js/UserEditDialog-old.js:145 js/UserEditDialog.js:110
 msgid "Login Name"
 msgstr "Přihlašovací jméno"
 
@@ -229,11 +233,11 @@ msgstr "zakázat aplikaci"
 msgid "settings"
 msgstr "nastavení"
 
-#: js/Admin.js:816
+#: js/Admin.js:816 js/UserEditDialog.js:98
 msgid "disabled"
 msgstr "zakázáno"
 
-#: js/Admin.js:819
+#: js/Admin.js:819 js/UserEditDialog.js:98
 msgid "enabled"
 msgstr "povoleno"
 
@@ -274,8 +278,9 @@ msgid "Deleting group(s)..."
 msgstr "Mažu skupinu(y)..."
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:186
-#: js/Users.js:471 js/Users.js:482 js/Users.js:507 js/Users.js:524
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/UserEditDialog-old.js:46
+#: js/UserEditDialog-old.js:57 js/UserEditDialog-old.js:82
+#: js/UserEditDialog-old.js:99 js/Users.js:186
 msgid "Failed"
 msgstr "Nepodařilo se"
 
@@ -324,11 +329,13 @@ msgstr "Aktualizuji členství"
 msgid "Could not save group."
 msgstr "Nepodařilo se uložit skupinu."
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:530
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346
+#: js/UserEditDialog-old.js:105
 msgid "Errors"
 msgstr "Chyby"
 
-#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346 js/Users.js:530
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346
+#: js/UserEditDialog-old.js:105
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím vyznačené chyby."
 
@@ -420,7 +427,7 @@ msgstr "Název role"
 msgid "Loading Role..."
 msgstr "Načítám roli..."
 
-#: js/Roles.js:686 js/Tags.js:584 js/Users.js:487
+#: js/Roles.js:686 js/Tags.js:584 js/UserEditDialog-old.js:62
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
@@ -508,6 +515,115 @@ msgstr "Přidat nový štítek"
 msgid "Edit Tag \"{0}\""
 msgstr "Editovat štítek \"{0}\""
 
+#: js/UserEditDialog-old.js:40
+msgid "Deleting account..."
+msgstr "Mažu účet..."
+
+#: js/UserEditDialog-old.js:46
+msgid "Some error occurred while trying to delete the account."
+msgstr "Během mazání účtu došlo k chybě."
+
+#: js/UserEditDialog-old.js:57 js/UserEditDialog-old.js:58
+#: js/UserEditDialog-old.js:59
+msgid "Passwords do not match!"
+msgstr "Hesla se neshodují!"
+
+#: js/UserEditDialog-old.js:62
+msgid "Saving User Account"
+msgstr "Ukládám uživatelský účet"
+
+#: js/UserEditDialog-old.js:99
+msgid "Could not save user account."
+msgstr "Nepodařilo se uložit uživatelský účet."
+
+#: js/UserEditDialog-old.js:122 js/UserEditDialog.js:71
+#, fuzzy
+msgid "Account"
+msgid_plural "Accounts"
+msgstr[0] "ID účtu"
+msgstr[1] "ID účtu"
+msgstr[2] "ID účtu"
+
+#: js/UserEditDialog-old.js:138 js/UserEditDialog.js:87
+msgid "First Name"
+msgstr "Křestní jméno"
+
+#: js/UserEditDialog-old.js:141 js/UserEditDialog.js:101
+msgid "Last Name"
+msgstr "Příjmení"
+
+#: js/UserEditDialog-old.js:149 js/UserEditDialog.js:122
+msgid "Password"
+msgstr "Heslo"
+
+#: js/UserEditDialog-old.js:152 js/UserEditDialog-old.js:157
+#: js/UserEditDialog.js:125 js/UserEditDialog.js:137
+msgid "no password set"
+msgstr "heslo nebylo nastaveno"
+
+#: js/UserEditDialog-old.js:154 js/UserEditDialog.js:134
+msgid "Password again"
+msgstr "Zopakovat heslo"
+
+#: js/UserEditDialog-old.js:159 js/UserEditDialog.js:147
+msgid "Primary group"
+msgstr "Primární skupina"
+
+#: js/UserEditDialog-old.js:165 js/UserEditDialog.js:154
+msgid "Emailaddress"
+msgstr "Emailová adresa"
+
+#: js/UserEditDialog-old.js:168 js/UserEditDialog.js:158
+msgid "Home Directory"
+msgstr ""
+
+#: js/UserEditDialog-old.js:171 js/UserEditDialog.js:162
+#, fuzzy
+msgid "Login Shell"
+msgstr "Přihlašovací jméno"
+
+#: js/UserEditDialog-old.js:185 js/UserEditDialog.js:92 js/Users.js:274
+msgid "Status"
+msgstr "Stav"
+
+#: js/UserEditDialog-old.js:205 js/UserEditDialog.js:106 js/Users.js:283
+msgid "Expires"
+msgstr "Vyprší"
+
+#: js/UserEditDialog-old.js:207 js/UserEditDialog-old.js:227
+#: js/UserEditDialog.js:108 js/UserEditDialog.js:143
+msgid "never"
+msgstr "nikdy"
+
+#: js/UserEditDialog-old.js:210 js/UserEditDialog.js:116 js/Users.js:280
+msgid "Last login at"
+msgstr "Poslední přihlášení v"
+
+#: js/UserEditDialog-old.js:212 js/UserEditDialog-old.js:220
+#: js/UserEditDialog.js:118 js/UserEditDialog.js:131
+msgid "never logged in"
+msgstr "nikdy nepřihlášen"
+
+#: js/UserEditDialog-old.js:218 js/UserEditDialog.js:129 js/Users.js:281
+msgid "Last login from"
+msgstr "Poslední přihlášení z"
+
+#: js/UserEditDialog-old.js:225 js/UserEditDialog.js:141
+msgid "Password set"
+msgstr "Heslo nastaveno"
+
+#: js/UserEditDialog-old.js:286
+msgid "Add New User Account"
+msgstr "Přidat nový uživatelský účet"
+
+#: js/UserEditDialog-old.js:288
+msgid "Edit User Account \"{0}\""
+msgstr "Editovat uživatelský účet \"{0}\""
+
+#: js/UserEditDialog.js:118 js/UserEditDialog.js:131
+msgid "don't know"
+msgstr ""
+
 #: js/Users.js:141
 msgid "Set new password"
 msgstr "Nastavit nové heslo"
@@ -536,10 +652,6 @@ msgstr "Zobrazuji účty {0} - {1} z {2}"
 msgid "No accounts to display"
 msgstr "Žádné účty ke zobrazení"
 
-#: js/Users.js:274 js/Users.js:601
-msgid "Status"
-msgstr "Stav"
-
 #: js/Users.js:275
 msgid "Displayname"
 msgstr "Zobrazované jméno"
@@ -560,21 +672,9 @@ msgstr "Křestní jméno"
 msgid "Email"
 msgstr "Email"
 
-#: js/Users.js:280 js/Users.js:626
-msgid "Last login at"
-msgstr "Poslední přihlášení v"
-
-#: js/Users.js:281 js/Users.js:634
-msgid "Last login from"
-msgstr "Poslední přihlášení z"
-
 #: js/Users.js:282
 msgid "Password changed"
 msgstr "Heslo změněno"
-
-#: js/Users.js:283 js/Users.js:621
-msgid "Expires"
-msgstr "Vyprší"
 
 #: js/Users.js:372
 msgid "edit account"
@@ -596,79 +696,9 @@ msgstr "zakázat účet"
 msgid "reset password"
 msgstr "resetovat heslo"
 
-#: js/Users.js:465
-msgid "Deleting account..."
-msgstr "Mažu účet..."
-
-#: js/Users.js:471
-msgid "Some error occurred while trying to delete the account."
-msgstr "Během mazání účtu došlo k chybě."
-
-#: js/Users.js:482 js/Users.js:483 js/Users.js:484
-msgid "Passwords do not match!"
-msgstr "Hesla se neshodují!"
-
-#: js/Users.js:487
-msgid "Saving User Account"
-msgstr "Ukládám uživatelský účet"
-
-#: js/Users.js:524
-msgid "Could not save user account."
-msgstr "Nepodařilo se uložit uživatelský účet."
-
-#: js/Users.js:554
-msgid "First Name"
-msgstr "Křestní jméno"
-
-#: js/Users.js:557
-msgid "Last Name"
-msgstr "Příjmení"
-
-#: js/Users.js:565
-msgid "Password"
-msgstr "Heslo"
-
-#: js/Users.js:568 js/Users.js:573
-msgid "no password set"
-msgstr "heslo nebylo nastaveno"
-
-#: js/Users.js:570
-msgid "Password again"
-msgstr "Zopakovat heslo"
-
-#: js/Users.js:575
-msgid "Primary group"
-msgstr "Primární skupina"
-
-#: js/Users.js:581
-msgid "Emailaddress"
-msgstr "Emailová adresa"
-
-#: js/Users.js:584
-msgid "Home Directory"
-msgstr ""
-
-#: js/Users.js:587
-#, fuzzy
-msgid "Login Shell"
-msgstr "Přihlašovací jméno"
-
-#: js/Users.js:623 js/Users.js:643
-msgid "never"
-msgstr "nikdy"
-
-#: js/Users.js:628 js/Users.js:636
-msgid "never logged in"
-msgstr "nikdy nepřihlášen"
-
-#: js/Users.js:641
-msgid "Password set"
-msgstr "Heslo nastaveno"
-
-#: js/Users.js:683
-msgid "Add New User Account"
-msgstr "Přidat nový uživatelský účet"
-
-#: js/Users.js:685
-msgid "Edit User Account \"{0}\""
-msgstr "Editovat uživatelský účet \"{0}\""
+#: js/Users.js:483
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
