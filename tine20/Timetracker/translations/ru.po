@@ -21,61 +21,90 @@ msgstr "Управлять счетами времени"
 msgid "Add, edit and delete timeaccounts"
 msgstr "Добавить, отредактировать и удалить счета времени"
 
-#: Export/Ods.php:209
-msgid "Filter"
-msgstr "Фильтр"
+#: Export/Ods.php:93 js/Timetracker.js:28
+msgid "Timesheets"
+msgstr "Записи времени"
 
-#: Export/Ods.php:352
+#: Export/Ods.php:120
 msgid "Total Sum"
 msgstr "Итоговая сумма"
 
-#: Export/Ods.php:369
+#: Export/Ods.php:137
 msgid "Not billable"
 msgstr "Не рассчитываемо"
 
-#: Export/Ods.php:377 Export/Ods.php:446 js/TimesheetEditDialog.js:183
-#: js/TimesheetGridPanel.js:48 js/TimesheetGridPanel.js:188
-#: js/TimesheetGridPanel.js:254
+#: Export/Ods.php:145 Export/Ods.php:216 Export/Ods.php:268
+#: js/TimesheetEditDialog.js:183 js/TimesheetGridPanel.js:48
+#: js/TimesheetGridPanel.js:188 js/TimesheetGridPanel.js:254
 msgid "Billable"
 msgstr "Рассчитываемо"
 
-#: Export/Ods.php:385
+#: Export/Ods.php:153
 msgid "Total"
 msgstr "Полностью"
 
-#: Export/Ods.php:410 js/TimesheetEditDialog.js:145
+#: Export/Ods.php:180 js/TimesheetEditDialog.js:145
 #: js/TimesheetGridPanel.js:186 js/TimesheetGridPanel.js:208
 msgid "Date"
 msgstr "Дата"
 
-#: Export/Ods.php:415 js/TimeaccountEditDialog.js:149
+#: Export/Ods.php:185 Export/Ods.php:246 js/TimeaccountEditDialog.js:149
 #: js/TimeaccountGridPanel.js:52 js/TimesheetEditDialog.js:167
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
 msgid "Description"
 msgstr "Описание"
 
-#: Export/Ods.php:420
+#: Export/Ods.php:190
 msgid "Timeaccount Number"
 msgstr "Номер временного счета"
 
-#: Export/Ods.php:426
+#: Export/Ods.php:196
 msgid "Timeaccount"
 msgstr "счет времени"
 
-#: Export/Ods.php:433
+#: Export/Ods.php:203
 msgid "Staff Member"
 msgstr "Сотрудник"
 
-#: Export/Ods.php:439 js/TimesheetEditDialog.js:140
+#: Export/Ods.php:209 js/TimesheetEditDialog.js:140
 #: js/TimesheetGridPanel.js:283
 msgid "Duration"
 msgstr "Продолжительность"
 
-#: Export/Ods.php:451 js/TimesheetEditDialog.js:190
+#: Export/Ods.php:221 js/TimesheetEditDialog.js:190
 #: js/TimesheetGridPanel.js:53 js/TimesheetGridPanel.js:189
 #: js/TimesheetGridPanel.js:262
 msgid "Cleared"
 msgstr "Просчитано"
+
+#: Export/Ods.php:236 js/TimeaccountEditDialog.js:84
+#: js/TimeaccountGridPanel.js:72 js/TimesheetGridPanel.js:182
+msgid "Number"
+msgstr "Номер"
+
+#: Export/Ods.php:241 js/TimeaccountEditDialog.js:89
+#: js/TimeaccountGridPanel.js:78 js/TimesheetGridPanel.js:183
+msgid "Title"
+msgstr "Заголовок"
+
+#: Export/Ods.php:251
+#, fuzzy
+msgid "Created By"
+msgstr "Рассчитан в"
+
+#: Export/Ods.php:257
+msgid "Creation Date"
+msgstr ""
+
+#: Export/Ods.php:262 js/TimeaccountEditDialog.js:115
+#: js/TimeaccountGridPanel.js:84
+msgid "Status"
+msgstr "Статус"
+
+#: Export/Ods.php:273
+#, fuzzy
+msgid "Open"
+msgstr "Открыто"
 
 #: js/DurationSlider.js:95
 msgid "{0}"
@@ -116,16 +145,6 @@ msgstr[0] "Список временного счета"
 msgstr[1] "Списка временного счета"
 msgstr[2] "Списков временного счета "
 
-#: js/TimeaccountEditDialog.js:84 js/TimeaccountGridPanel.js:72
-#: js/TimesheetGridPanel.js:182
-msgid "Number"
-msgstr "Номер"
-
-#: js/TimeaccountEditDialog.js:89 js/TimeaccountGridPanel.js:78
-#: js/TimesheetGridPanel.js:183
-msgid "Title"
-msgstr "Заголовок"
-
 #: js/TimeaccountEditDialog.js:98
 msgid "Unit"
 msgstr "Часть"
@@ -142,10 +161,6 @@ msgstr "Budget"
 msgid "Timesheets are billable"
 msgstr "Часовые записи рассчитываемы"
 
-#: js/TimeaccountEditDialog.js:115 js/TimeaccountGridPanel.js:84
-msgid "Status"
-msgstr "Статус"
-
 #: js/TimeaccountEditDialog.js:121 js/TimeaccountSelect.js:79
 msgid "closed"
 msgstr "Закрыто"
@@ -159,17 +174,17 @@ msgid "Billed"
 msgstr "Просчитано"
 
 #: js/TimeaccountEditDialog.js:131 js/TimeaccountSelect.js:235
-#: Setup/setup.xml:71
+#: Setup/setup.xml:74
 msgid "not yet billed"
 msgstr "еще не просчитано"
 
 #: js/TimeaccountEditDialog.js:132 js/TimeaccountSelect.js:236
-#: Setup/setup.xml:73
+#: Setup/setup.xml:76
 msgid "to bill"
 msgstr "просчитать"
 
 #: js/TimeaccountEditDialog.js:133 js/TimeaccountSelect.js:237
-#: Setup/setup.xml:75
+#: Setup/setup.xml:78
 msgid "billed"
 msgstr "просчитано"
 
@@ -205,7 +220,19 @@ msgstr "Позволяется все"
 msgid "Permissions"
 msgstr "Права доступа"
 
-#: js/TimeaccountGridPanel.js:112
+#: js/TimeaccountGridPanel.js:112 js/TimesheetGridPanel.js:462
+msgid "Export"
+msgstr "Экспорт"
+
+#: js/TimeaccountGridPanel.js:121 js/TimesheetGridPanel.js:471
+msgid "Export as ODS"
+msgstr "Экспорт как ODS"
+
+#: js/TimeaccountGridPanel.js:128 js/TimesheetGridPanel.js:477
+msgid "Export as CSV"
+msgstr "Экспорт как CSV"
+
+#: js/TimeaccountGridPanel.js:139
 msgid "Show closed"
 msgstr "Показать закрытые"
 
@@ -314,22 +341,6 @@ msgstr "Все время"
 msgid "Time of Billable Timesheets"
 msgstr "Время рассчитываемых записей времени"
 
-#: js/TimesheetGridPanel.js:462
-msgid "Export"
-msgstr "Экспорт"
-
-#: js/TimesheetGridPanel.js:471
-msgid "Export as ODS"
-msgstr "Экспорт как ODS"
-
-#: js/TimesheetGridPanel.js:477
-msgid "Export as CSV"
-msgstr "Экспорт как CSV"
-
-#: js/Timetracker.js:28
-msgid "Timesheets"
-msgstr "Записи времени"
-
 #: js/Timetracker.js:33
 msgid "All Timesheets"
 msgstr "Все записи времени"
@@ -345,3 +356,6 @@ msgstr "Все счета времени"
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Хронометраж"
+
+#~ msgid "Filter"
+#~ msgstr "Фильтр"
