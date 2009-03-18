@@ -49,6 +49,11 @@ msgstr "Исполнить"
 msgid "run right description"
 msgstr "Исполнимое право необходимо, чтобы иметь доступ к программе."
 
+#: Export/Ods.php:197
+#, fuzzy
+msgid "Filter"
+msgstr "Неудалось"
+
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "Тэги"
@@ -65,20 +70,20 @@ msgstr "Установлено"
 msgid "Activities"
 msgstr "Действия"
 
-#: Frontend/Http.php:269 js/tineInit.js:244
+#: Frontend/Http.php:271 js/tineInit.js:246
 msgid "Authorisation Required"
 msgstr "Регистрация необходима"
 
-#: Frontend/Http.php:270
+#: Frontend/Http.php:272
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: Frontend/Http.php:296 js/ExceptionDialog.js:26
+#: Frontend/Http.php:298 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Frontend/Http.php:297 js/ExceptionDialog.js:51
+#: Frontend/Http.php:299 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла Ошибка, программа закончилась неправильно."
 
@@ -327,11 +332,11 @@ msgstr[0] "Список заданий"
 msgstr[1] "Списока заданий"
 msgstr[2] "Списоков заданий"
 
-#: js/tineInit.js:227
+#: js/tineInit.js:229
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/tineInit.js:235
+#: js/tineInit.js:237
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -339,23 +344,23 @@ msgstr ""
 "Сервер не ответил на Ваш запрос. Пожалуйста проверьте свою сеть или "
 "свяжитесь с Вашим администратором."
 
-#: js/tineInit.js:245
+#: js/tineInit.js:247
 msgid "Your session timed out. You need to login again."
 msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: js/tineInit.js:258
+#: js/tineInit.js:260
 msgid "Insufficient Rights"
 msgstr "Недостаточно права"
 
-#: js/tineInit.js:259
+#: js/tineInit.js:261
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "К сожалению Вам не позволяется выполнить это действие"
 
-#: js/tineInit.js:268
+#: js/tineInit.js:270
 msgid "Concurrent Updates"
 msgstr "Параллельные Обновления"
 
-#: js/tineInit.js:269
+#: js/tineInit.js:271
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -403,53 +408,53 @@ msgstr "Онлайн"
 msgid "offline"
 msgstr "Офлайн"
 
-#: js/ux/ConnectionStatus.js:54 User/Abstract.php:76 User/Abstract.php:77
-#: User/Abstract.php:78 User/Abstract.php:79 User/Abstract.php:80
+#: js/ux/ConnectionStatus.js:54 User/Abstract.php:74 User/Abstract.php:75
+#: User/Abstract.php:76 User/Abstract.php:77 User/Abstract.php:78
 msgid "unknown"
 msgstr "Неизвестно"
 
-#: js/ux/form/ImageField.js:59
+#: js/ux/form/ImageField.js:66
 msgid "click to edit"
 msgstr "нажмите, чтобы отредактировать"
 
-#: js/ux/form/ImageField.js:108
+#: js/ux/form/ImageField.js:122
 msgid "Not An Image"
 msgstr "Никакого файла рисунка"
 
-#: js/ux/form/ImageField.js:108
+#: js/ux/form/ImageField.js:122
 msgid "Plase select an image file (gif/png/jpeg)"
 msgstr "Пожалуйста, выберите действительный файл рисунка (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:125
+#: js/ux/form/ImageField.js:139
 msgid "Loading"
 msgstr "загрузка"
 
-#: js/ux/form/ImageField.js:133
+#: js/ux/form/ImageField.js:147
 msgid "Upload Failed"
 msgstr "Загрузка не удалась"
 
-#: js/ux/form/ImageField.js:133
+#: js/ux/form/ImageField.js:147
 msgid "Could not upload image. Please notify your Administrator"
 msgstr ""
 "Картинка не смогла загрузиться. Пожалуйста информируйте администратора."
 
-#: js/ux/form/ImageField.js:145
+#: js/ux/form/ImageField.js:159
 msgid "Change Image"
 msgstr "Поменять картинку"
 
-#: js/ux/form/ImageField.js:166 js/ux/form/ImageField.js:184
+#: js/ux/form/ImageField.js:180 js/ux/form/ImageField.js:198
 msgid "Crop Image"
 msgstr "Обрезать картинку"
 
-#: js/ux/form/ImageField.js:192
+#: js/ux/form/ImageField.js:206
 msgid "Delete Image"
 msgstr "Удалить картинку"
 
-#: js/ux/form/ImageField.js:218
+#: js/ux/form/ImageField.js:232
 msgid "Image Failed"
 msgstr "Ошибка при обработке картины"
 
-#: js/ux/form/ImageField.js:218
+#: js/ux/form/ImageField.js:232
 msgid "Could not load image. Please notify your Administrator"
 msgstr ""
 "Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
@@ -479,11 +484,12 @@ msgstr "Выберите все видимые страницы ({0} запис�
 msgid "Toggle selection"
 msgstr "Перевернуть выбор"
 
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
+#: js/widgets/account/ConfigGrid.js:60
+#, fuzzy
+msgid "Remove account"
 msgstr "Уберите счет"
 
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
+#: js/widgets/account/ConfigGrid.js:84 js/widgets/account/PickerPanel.js:166
 msgid "Name"
 msgstr "Имя"
 
@@ -1219,43 +1225,43 @@ msgstr "у"
 msgid "Changed fields:"
 msgstr "Измененые поля:"
 
-#: Setup/setup.xml:2060
+#: Setup/setup.xml:2065
 msgid "note"
 msgstr "Заметка"
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2070
 msgid "default note type"
 msgstr "Не удалось написать заметку"
 
-#: Setup/setup.xml:2091
+#: Setup/setup.xml:2096
 msgid "telephone"
 msgstr "Телефон"
 
-#: Setup/setup.xml:2096
+#: Setup/setup.xml:2101
 msgid "telephone call"
 msgstr "Телефонный звонок"
 
-#: Setup/setup.xml:2122
+#: Setup/setup.xml:2127
 msgid "email"
 msgstr "Электронная почта"
 
-#: Setup/setup.xml:2127
+#: Setup/setup.xml:2132
 msgid "email contact"
 msgstr "Контакт электронной почты"
 
-#: Setup/setup.xml:2153
+#: Setup/setup.xml:2158
 msgid "created"
 msgstr "Произведено"
 
-#: Setup/setup.xml:2158
+#: Setup/setup.xml:2163
 msgid "record created"
 msgstr "Запись произведена"
 
-#: Setup/setup.xml:2184
+#: Setup/setup.xml:2189
 msgid "changed"
 msgstr "Изменено"
 
-#: Setup/setup.xml:2189
+#: Setup/setup.xml:2194
 msgid "record changed"
 msgstr "Запись изменена"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-03-06 11:50+0100\n"
+"PO-Revision-Date: 2009-03-09 17:00+0100\n"
 "Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -30,9 +30,8 @@ msgid "Check tine20.org for new versions"
 msgstr "Vérifier les mises à jour de tine20.org"
 
 #: Application/Rights/Abstract.php:56
-#, fuzzy
 msgid "admin"
-msgstr "admin"
+msgstr "administrer"
 
 #: Application/Rights/Abstract.php:57
 msgid "admin right description"
@@ -45,6 +44,11 @@ msgstr "exécuter"
 #: Application/Rights/Abstract.php:61
 msgid "run right description"
 msgstr "description des droits d'éxecution"
+
+#: Export/Ods.php:197
+#, fuzzy
+msgid "Filter"
+msgstr "Échoué"
 
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
@@ -59,23 +63,22 @@ msgid "Created by"
 msgstr "Auteur"
 
 #: Export/Pdf.php:462
-#, fuzzy
 msgid "Activities"
 msgstr "Activités"
 
-#: Frontend/Http.php:269 js/tineInit.js:244
+#: Frontend/Http.php:271 js/tineInit.js:246
 msgid "Authorisation Required"
 msgstr "Authentification requise"
 
-#: Frontend/Http.php:270
+#: Frontend/Http.php:272
 msgid "Your session is not valid. You need to login again."
 msgstr "Votre session n'est pas valide, veuillez vous reconnecter."
 
-#: Frontend/Http.php:296 js/ExceptionDialog.js:26
+#: Frontend/Http.php:298 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Fin anormale"
 
-#: Frontend/Http.php:297 js/ExceptionDialog.js:51
+#: Frontend/Http.php:299 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 "Une erreur s'est produite, le programme s'est terminé de façon inattendue"
@@ -313,11 +316,11 @@ msgid_plural "to do lists"
 msgstr[0] "liste \"à faire\""
 msgstr[1] "listes \"à faire\""
 
-#: js/tineInit.js:227
+#: js/tineInit.js:229
 msgid "Connection lost, please check your network!"
 msgstr "Connexion perdue, vérifiez la connexion réseau!"
 
-#: js/tineInit.js:235
+#: js/tineInit.js:237
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -325,23 +328,23 @@ msgstr ""
 "Le serveur n'a pas répondu à votre requête. Vérifiez la connexion réseau ou "
 "contactez votre administrateur."
 
-#: js/tineInit.js:245
+#: js/tineInit.js:247
 msgid "Your session timed out. You need to login again."
 msgstr "Votre session a expiré, veuillez vous reconnecter."
 
-#: js/tineInit.js:258
+#: js/tineInit.js:260
 msgid "Insufficient Rights"
 msgstr "Droits inssufisants"
 
-#: js/tineInit.js:259
+#: js/tineInit.js:261
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Désolé, vous n'êtes pas autorisé à effectuer cette action"
 
-#: js/tineInit.js:268
+#: js/tineInit.js:270
 msgid "Concurrent Updates"
 msgstr "Mises à jour simultanées"
 
-#: js/tineInit.js:269
+#: js/tineInit.js:271
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -389,53 +392,53 @@ msgstr "en ligne"
 msgid "offline"
 msgstr "hors ligne"
 
-#: js/ux/ConnectionStatus.js:54 User/Abstract.php:76 User/Abstract.php:77
-#: User/Abstract.php:78 User/Abstract.php:79 User/Abstract.php:80
+#: js/ux/ConnectionStatus.js:54 User/Abstract.php:74 User/Abstract.php:75
+#: User/Abstract.php:76 User/Abstract.php:77 User/Abstract.php:78
 msgid "unknown"
 msgstr "inconnu"
 
-#: js/ux/form/ImageField.js:59
+#: js/ux/form/ImageField.js:66
 msgid "click to edit"
 msgstr "cliquez pour éditer"
 
-#: js/ux/form/ImageField.js:108
+#: js/ux/form/ImageField.js:122
 msgid "Not An Image"
 msgstr "pas une image"
 
-#: js/ux/form/ImageField.js:108
+#: js/ux/form/ImageField.js:122
 msgid "Plase select an image file (gif/png/jpeg)"
 msgstr "veuillez choisir une image (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:125
+#: js/ux/form/ImageField.js:139
 msgid "Loading"
 msgstr "Chargement"
 
-#: js/ux/form/ImageField.js:133
+#: js/ux/form/ImageField.js:147
 msgid "Upload Failed"
 msgstr "Echec de l'envoi"
 
-#: js/ux/form/ImageField.js:133
+#: js/ux/form/ImageField.js:147
 msgid "Could not upload image. Please notify your Administrator"
 msgstr "Envoi de l'image impossible. Veuillez contacter l'administrateur"
 
-#: js/ux/form/ImageField.js:145
+#: js/ux/form/ImageField.js:159
 msgid "Change Image"
 msgstr "Changer l'image"
 
-#: js/ux/form/ImageField.js:166 js/ux/form/ImageField.js:184
+#: js/ux/form/ImageField.js:180 js/ux/form/ImageField.js:198
 msgid "Crop Image"
 msgstr "Couper l'image"
 
-#: js/ux/form/ImageField.js:192
+#: js/ux/form/ImageField.js:206
 msgid "Delete Image"
 msgstr "Effacer l'image"
 
-#: js/ux/form/ImageField.js:218
+#: js/ux/form/ImageField.js:232
 #, fuzzy
 msgid "Image Failed"
 msgstr "Erreur d'image"
 
-#: js/ux/form/ImageField.js:218
+#: js/ux/form/ImageField.js:232
 msgid "Could not load image. Please notify your Administrator"
 msgstr "Chargement de l'image impossible. Veuillez contacter l'administrateur"
 
@@ -463,11 +466,12 @@ msgstr "Sélectionner toutes les pages ({0} sélectionnés)"
 msgid "Toggle selection"
 msgstr "Inverser la sélection"
 
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
+#: js/widgets/account/ConfigGrid.js:60
+#, fuzzy
+msgid "Remove account"
 msgstr "supprimer le compte"
 
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
+#: js/widgets/account/ConfigGrid.js:84 js/widgets/account/PickerPanel.js:166
 msgid "Name"
 msgstr "Nom"
 
@@ -1163,44 +1167,44 @@ msgstr "de"
 msgid "Changed fields:"
 msgstr "Champs modifiés:"
 
-#: Setup/setup.xml:2060
+#: Setup/setup.xml:2065
 msgid "note"
 msgstr "Information"
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2070
 #, fuzzy
 msgid "default note type"
 msgstr "Information par défaut"
 
-#: Setup/setup.xml:2091
+#: Setup/setup.xml:2096
 msgid "telephone"
 msgstr "téléphone"
 
-#: Setup/setup.xml:2096
+#: Setup/setup.xml:2101
 msgid "telephone call"
 msgstr "appel téléphonique"
 
-#: Setup/setup.xml:2122
+#: Setup/setup.xml:2127
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2127
+#: Setup/setup.xml:2132
 msgid "email contact"
 msgstr "contact email"
 
-#: Setup/setup.xml:2153
+#: Setup/setup.xml:2158
 msgid "created"
 msgstr "créé"
 
-#: Setup/setup.xml:2158
+#: Setup/setup.xml:2163
 msgid "record created"
 msgstr "enregistrement créé"
 
-#: Setup/setup.xml:2184
+#: Setup/setup.xml:2189
 msgid "changed"
 msgstr "mis à jour"
 
-#: Setup/setup.xml:2189
+#: Setup/setup.xml:2194
 msgid "record changed"
 msgstr "enregistrement mis à jour"
 
@@ -1211,3 +1215,6 @@ msgstr "enregistrement mis à jour"
 #~ "S'il vous plait, aidez-nous à améliorer ce programme et informez les "
 #~ "créateurs. Décrivez brièvement ce qui vous faisiez quand l'erreur s'est "
 #~ "produite."
+
+#~ msgid "remove account"
+#~ msgstr "supprimer le compte"

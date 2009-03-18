@@ -45,6 +45,11 @@ msgstr "运行"
 msgid "run right description"
 msgstr "运行权限描述"
 
+#: Export/Ods.php:197
+#, fuzzy
+msgid "Filter"
+msgstr "失败"
+
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "标签"
@@ -61,19 +66,19 @@ msgstr "创建者"
 msgid "Activities"
 msgstr "活动"
 
-#: Frontend/Http.php:269 js/tineInit.js:244
+#: Frontend/Http.php:271 js/tineInit.js:246
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Frontend/Http.php:270
+#: Frontend/Http.php:272
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Frontend/Http.php:296 js/ExceptionDialog.js:26
+#: Frontend/Http.php:298 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Frontend/Http.php:297 js/ExceptionDialog.js:51
+#: Frontend/Http.php:299 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -304,33 +309,33 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
 
-#: js/tineInit.js:227
+#: js/tineInit.js:229
 msgid "Connection lost, please check your network!"
 msgstr "失去连接，请检查网络"
 
-#: js/tineInit.js:235
+#: js/tineInit.js:237
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
 msgstr "服务器没有响应你的请求，请检查网络或联系管理员。"
 
-#: js/tineInit.js:245
+#: js/tineInit.js:247
 msgid "Your session timed out. You need to login again."
 msgstr "会话超时，需要重新登录"
 
-#: js/tineInit.js:258
+#: js/tineInit.js:260
 msgid "Insufficient Rights"
 msgstr "权限不够"
 
-#: js/tineInit.js:259
+#: js/tineInit.js:261
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "对不起，你不允许执行该动作"
 
-#: js/tineInit.js:268
+#: js/tineInit.js:270
 msgid "Concurrent Updates"
 msgstr "同时更新"
 
-#: js/tineInit.js:269
+#: js/tineInit.js:271
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -374,52 +379,52 @@ msgstr "在线"
 msgid "offline"
 msgstr "离线"
 
-#: js/ux/ConnectionStatus.js:54 User/Abstract.php:76 User/Abstract.php:77
-#: User/Abstract.php:78 User/Abstract.php:79 User/Abstract.php:80
+#: js/ux/ConnectionStatus.js:54 User/Abstract.php:74 User/Abstract.php:75
+#: User/Abstract.php:76 User/Abstract.php:77 User/Abstract.php:78
 msgid "unknown"
 msgstr "未知"
 
-#: js/ux/form/ImageField.js:59
+#: js/ux/form/ImageField.js:66
 msgid "click to edit"
 msgstr "点击来编辑"
 
-#: js/ux/form/ImageField.js:108
+#: js/ux/form/ImageField.js:122
 msgid "Not An Image"
 msgstr "不是图像"
 
-#: js/ux/form/ImageField.js:108
+#: js/ux/form/ImageField.js:122
 msgid "Plase select an image file (gif/png/jpeg)"
 msgstr "请选择图像文件（gif/png/jpeg）"
 
-#: js/ux/form/ImageField.js:125
+#: js/ux/form/ImageField.js:139
 msgid "Loading"
 msgstr "正加载"
 
-#: js/ux/form/ImageField.js:133
+#: js/ux/form/ImageField.js:147
 msgid "Upload Failed"
 msgstr "上载失败"
 
-#: js/ux/form/ImageField.js:133
+#: js/ux/form/ImageField.js:147
 msgid "Could not upload image. Please notify your Administrator"
 msgstr "不能上载图像，请通知你的管理员"
 
-#: js/ux/form/ImageField.js:145
+#: js/ux/form/ImageField.js:159
 msgid "Change Image"
 msgstr "修改图像"
 
-#: js/ux/form/ImageField.js:166 js/ux/form/ImageField.js:184
+#: js/ux/form/ImageField.js:180 js/ux/form/ImageField.js:198
 msgid "Crop Image"
 msgstr "修剪图像"
 
-#: js/ux/form/ImageField.js:192
+#: js/ux/form/ImageField.js:206
 msgid "Delete Image"
 msgstr "删除图像"
 
-#: js/ux/form/ImageField.js:218
+#: js/ux/form/ImageField.js:232
 msgid "Image Failed"
 msgstr "图像失败"
 
-#: js/ux/form/ImageField.js:218
+#: js/ux/form/ImageField.js:232
 msgid "Could not load image. Please notify your Administrator"
 msgstr "不能加载图像，请通知你的管理员"
 
@@ -447,11 +452,12 @@ msgstr "选择所有页面({0} 记录)"
 msgid "Toggle selection"
 msgstr "切换选择"
 
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
+#: js/widgets/account/ConfigGrid.js:60
+#, fuzzy
+msgid "Remove account"
 msgstr "删除帐户"
 
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
+#: js/widgets/account/ConfigGrid.js:84 js/widgets/account/PickerPanel.js:166
 msgid "Name"
 msgstr "名子"
 
@@ -1126,43 +1132,43 @@ msgstr "由"
 msgid "Changed fields:"
 msgstr "已修改的字段："
 
-#: Setup/setup.xml:2060
+#: Setup/setup.xml:2065
 msgid "note"
 msgstr "注释"
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2070
 msgid "default note type"
 msgstr "缺省注释类型"
 
-#: Setup/setup.xml:2091
+#: Setup/setup.xml:2096
 msgid "telephone"
 msgstr "电话"
 
-#: Setup/setup.xml:2096
+#: Setup/setup.xml:2101
 msgid "telephone call"
 msgstr "电话呼叫"
 
-#: Setup/setup.xml:2122
+#: Setup/setup.xml:2127
 msgid "email"
 msgstr "电子邮件"
 
-#: Setup/setup.xml:2127
+#: Setup/setup.xml:2132
 msgid "email contact"
 msgstr "电子邮件联系"
 
-#: Setup/setup.xml:2153
+#: Setup/setup.xml:2158
 msgid "created"
 msgstr "生成的"
 
-#: Setup/setup.xml:2158
+#: Setup/setup.xml:2163
 msgid "record created"
 msgstr "记录已生成"
 
-#: Setup/setup.xml:2184
+#: Setup/setup.xml:2189
 msgid "changed"
 msgstr "已修改"
 
-#: Setup/setup.xml:2189
+#: Setup/setup.xml:2194
 msgid "record changed"
 msgstr "记录已修改"
 

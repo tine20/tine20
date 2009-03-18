@@ -47,6 +47,11 @@ msgid "run right description"
 msgstr ""
 "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
 
+#: Export/Ods.php:197
+#, fuzzy
+msgid "Filter"
+msgstr "Fehlgeschlagen"
+
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "Tags"
@@ -63,19 +68,19 @@ msgstr "Angelegt von"
 msgid "Activities"
 msgstr "Aktivitäten"
 
-#: Frontend/Http.php:269 js/tineInit.js:244
+#: Frontend/Http.php:271 js/tineInit.js:246
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
-#: Frontend/Http.php:270
+#: Frontend/Http.php:272
 msgid "Your session is not valid. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: Frontend/Http.php:296 js/ExceptionDialog.js:26
+#: Frontend/Http.php:298 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: Frontend/Http.php:297 js/ExceptionDialog.js:51
+#: Frontend/Http.php:299 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
 
@@ -316,11 +321,11 @@ msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
 msgstr[1] "Aufgabenlisten"
 
-#: js/tineInit.js:227
+#: js/tineInit.js:229
 msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
 
-#: js/tineInit.js:235
+#: js/tineInit.js:237
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -328,23 +333,23 @@ msgstr ""
 "Der Server konnte leider auf Ihre Anfrage nicht antworten. Bitte überprüfen "
 "Sie Ihr Netzwerk oder kontaktieren Sie Ihren Administrator."
 
-#: js/tineInit.js:245
+#: js/tineInit.js:247
 msgid "Your session timed out. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: js/tineInit.js:258
+#: js/tineInit.js:260
 msgid "Insufficient Rights"
 msgstr "Fehlende Berechtigungen"
 
-#: js/tineInit.js:259
+#: js/tineInit.js:261
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sie sind nicht berechtigt diese Aktion auszuführen"
 
-#: js/tineInit.js:268
+#: js/tineInit.js:270
 msgid "Concurrent Updates"
 msgstr "Passende Updates"
 
-#: js/tineInit.js:269
+#: js/tineInit.js:271
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -392,54 +397,54 @@ msgstr "online"
 msgid "offline"
 msgstr "offline"
 
-#: js/ux/ConnectionStatus.js:54 User/Abstract.php:76 User/Abstract.php:77
-#: User/Abstract.php:78 User/Abstract.php:79 User/Abstract.php:80
+#: js/ux/ConnectionStatus.js:54 User/Abstract.php:74 User/Abstract.php:75
+#: User/Abstract.php:76 User/Abstract.php:77 User/Abstract.php:78
 msgid "unknown"
 msgstr "unbekannt"
 
-#: js/ux/form/ImageField.js:59
+#: js/ux/form/ImageField.js:66
 msgid "click to edit"
 msgstr "Zum Ändern hier Klicken"
 
-#: js/ux/form/ImageField.js:108
+#: js/ux/form/ImageField.js:122
 msgid "Not An Image"
 msgstr "Keine Bild-Datei"
 
-#: js/ux/form/ImageField.js:108
+#: js/ux/form/ImageField.js:122
 msgid "Plase select an image file (gif/png/jpeg)"
 msgstr "Bitte wählen sie eine gültige Bild-Datei (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:125
+#: js/ux/form/ImageField.js:139
 msgid "Loading"
 msgstr "Laden"
 
-#: js/ux/form/ImageField.js:133
+#: js/ux/form/ImageField.js:147
 msgid "Upload Failed"
 msgstr "Fehler beim Hochladen"
 
-#: js/ux/form/ImageField.js:133
+#: js/ux/form/ImageField.js:147
 msgid "Could not upload image. Please notify your Administrator"
 msgstr ""
 "Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren "
 "Administrator"
 
-#: js/ux/form/ImageField.js:145
+#: js/ux/form/ImageField.js:159
 msgid "Change Image"
 msgstr "Bild ändern"
 
-#: js/ux/form/ImageField.js:166 js/ux/form/ImageField.js:184
+#: js/ux/form/ImageField.js:180 js/ux/form/ImageField.js:198
 msgid "Crop Image"
 msgstr "Bild zuschneiden"
 
-#: js/ux/form/ImageField.js:192
+#: js/ux/form/ImageField.js:206
 msgid "Delete Image"
 msgstr "Bild löschen"
 
-#: js/ux/form/ImageField.js:218
+#: js/ux/form/ImageField.js:232
 msgid "Image Failed"
 msgstr "Fehler bei Bildverarbeitung"
 
-#: js/ux/form/ImageField.js:218
+#: js/ux/form/ImageField.js:232
 msgid "Could not load image. Please notify your Administrator"
 msgstr ""
 "Das Bild konnte nicht geladen werden. Bitte informieren sie ihren "
@@ -469,11 +474,12 @@ msgstr "Alle Seiten auswählen ({0} Einträge)"
 msgid "Toggle selection"
 msgstr "Auswahl umkehren"
 
-#: js/widgets/account/ConfigGrid.js:55
-msgid "remove account"
+#: js/widgets/account/ConfigGrid.js:60
+#, fuzzy
+msgid "Remove account"
 msgstr "Zugang löschen"
 
-#: js/widgets/account/ConfigGrid.js:79 js/widgets/account/PickerPanel.js:166
+#: js/widgets/account/ConfigGrid.js:84 js/widgets/account/PickerPanel.js:166
 msgid "Name"
 msgstr "Name"
 
@@ -1159,43 +1165,43 @@ msgstr "von"
 msgid "Changed fields:"
 msgstr "Geänderte Felder:"
 
-#: Setup/setup.xml:2060
+#: Setup/setup.xml:2065
 msgid "note"
 msgstr "Notiz"
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2070
 msgid "default note type"
 msgstr "default note type"
 
-#: Setup/setup.xml:2091
+#: Setup/setup.xml:2096
 msgid "telephone"
 msgstr "Telefon"
 
-#: Setup/setup.xml:2096
+#: Setup/setup.xml:2101
 msgid "telephone call"
 msgstr "Telefonanruf"
 
-#: Setup/setup.xml:2122
+#: Setup/setup.xml:2127
 msgid "email"
 msgstr "Email"
 
-#: Setup/setup.xml:2127
+#: Setup/setup.xml:2132
 msgid "email contact"
 msgstr "Email Kontakt"
 
-#: Setup/setup.xml:2153
+#: Setup/setup.xml:2158
 msgid "created"
 msgstr "erstellt"
 
-#: Setup/setup.xml:2158
+#: Setup/setup.xml:2163
 msgid "record created"
 msgstr "Eintrag erstellt"
 
-#: Setup/setup.xml:2184
+#: Setup/setup.xml:2189
 msgid "changed"
 msgstr "geändert"
 
-#: Setup/setup.xml:2189
+#: Setup/setup.xml:2194
 msgid "record changed"
 msgstr "Eintrag geändert"
 
