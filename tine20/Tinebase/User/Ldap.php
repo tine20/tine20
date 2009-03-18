@@ -77,6 +77,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $this->_options = $_options;
 
+        if (isset($this->_options['requiredObjectClass'])) {
+            $this->_requiredObjectClass = (array)$this->_options['requiredObjectClass'];
+        }
+
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
     }
@@ -137,7 +141,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             self::ENCRYPT_SSHA
         );
     }
-
+    
     /**
      * get list of users
      *
