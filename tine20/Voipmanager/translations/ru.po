@@ -119,9 +119,7 @@ msgid "NAT"
 msgstr "Нэт"
 
 #: js/Asterisk/SipPeerEditDialog.js:140 js/Asterisk/SipPeerEditDialog.js:151
-#: js/Asterisk/VoicemailEditDialog.js:116 js/MyPhones.js:668
-#: js/MyPhones.js:786 js/MyPhones.js:814 js/MyPhones.js:847 js/MyPhones.js:875
-#: js/MyPhones.js:903 js/Snom/LocationEditDialog.js:164
+#: js/Asterisk/VoicemailEditDialog.js:116 js/Snom/LocationEditDialog.js:164
 #: js/Snom/LocationEditDialog.js:185 js/Snom/PhoneEditDialog.js:528
 #: js/Snom/PhoneEditDialog.js:565 js/Snom/PhoneEditDialog.js:574
 #: js/Snom/PhoneEditDialog.js:583 js/Snom/PhoneEditDialog.js:592
@@ -133,9 +131,7 @@ msgid "off"
 msgstr "Выключено"
 
 #: js/Asterisk/SipPeerEditDialog.js:140 js/Asterisk/SipPeerEditDialog.js:151
-#: js/Asterisk/VoicemailEditDialog.js:115 js/MyPhones.js:665
-#: js/MyPhones.js:785 js/MyPhones.js:813 js/MyPhones.js:846 js/MyPhones.js:874
-#: js/MyPhones.js:902 js/Snom/LocationEditDialog.js:163
+#: js/Asterisk/VoicemailEditDialog.js:115 js/Snom/LocationEditDialog.js:163
 #: js/Snom/LocationEditDialog.js:184 js/Snom/PhoneEditDialog.js:525
 #: js/Snom/PhoneEditDialog.js:564 js/Snom/PhoneEditDialog.js:573
 #: js/Snom/PhoneEditDialog.js:582 js/Snom/PhoneEditDialog.js:591
@@ -154,16 +150,15 @@ msgstr ""
 msgid "Sip Peer"
 msgstr ""
 
-#: js/Asterisk/SipPeerGridPanel.js:66 js/MyPhones.js:146
-#: js/Snom/PhoneGridPanel.js:66 js/Snom/SettingGridPanel.js:66
+#: js/Asterisk/SipPeerGridPanel.js:66 js/Snom/PhoneGridPanel.js:66
+#: js/Snom/SettingGridPanel.js:66
 msgid "Id"
 msgstr ""
 
-#: js/Asterisk/SipPeerGridPanel.js:72 js/MyPhones.js:630
-#: js/Snom/PhoneEditDialog.js:514 js/Snom/SettingEditDialog.js:112
-#: js/Snom/SettingEditDialog.js:184 js/Snom/SettingGridPanel.js:72
-#: js/Snom/SoftwareEditDialog.js:61 js/Snom/SoftwareGridPanel.js:72
-#: js/Snom/TemplateGridPanel.js:72
+#: js/Asterisk/SipPeerGridPanel.js:72 js/Snom/PhoneEditDialog.js:514
+#: js/Snom/SettingEditDialog.js:112 js/Snom/SettingEditDialog.js:184
+#: js/Snom/SettingGridPanel.js:72 js/Snom/SoftwareEditDialog.js:61
+#: js/Snom/SoftwareGridPanel.js:72 js/Snom/TemplateGridPanel.js:72
 msgid "name"
 msgstr "Имя"
 
@@ -219,9 +214,8 @@ msgstr ""
 msgid "insecure"
 msgstr ""
 
-#: js/Asterisk/SipPeerGridPanel.js:153 js/MyPhones.js:570
-#: js/Snom/PhoneEditDialog.js:484 js/Snom/SettingEditDialog.js:147
-#: js/Snom/SettingGridPanel.js:88
+#: js/Asterisk/SipPeerGridPanel.js:153 js/Snom/PhoneEditDialog.js:484
+#: js/Snom/SettingEditDialog.js:147 js/Snom/SettingGridPanel.js:88
 msgid "language"
 msgstr ""
 
@@ -461,7 +455,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:133 js/MyPhones.js:152 js/Snom/LocationGridPanel.js:50
+#: js/Models.js:133 js/Snom/LocationGridPanel.js:50
 #: js/Snom/PhoneGridPanel.js:81 js/Voipmanager.js:116
 #, fuzzy
 msgid "Location"
@@ -478,7 +472,7 @@ msgstr[0] "Местоположение"
 msgstr[1] "Местоположение"
 msgstr[2] "Местоположение"
 
-#: js/Models.js:170 js/MyPhones.js:162 js/Snom/PhoneGridPanel.js:89
+#: js/Models.js:170 js/Snom/PhoneGridPanel.js:89
 #: js/Snom/TemplateGridPanel.js:51
 msgid "Template"
 msgid_plural "Templates"
@@ -494,7 +488,7 @@ msgstr[0] "Добавить темплейт (template)"
 msgstr[1] "Добавить темплейт (template)"
 msgstr[2] "Добавить темплейт (template)"
 
-#: js/Models.js:208 js/MyPhones.js:170 js/Snom/PhoneGridPanel.js:102
+#: js/Models.js:208 js/Snom/PhoneGridPanel.js:102
 #: js/Snom/SoftwareGridPanel.js:51 js/Voipmanager.js:157
 #, fuzzy
 msgid "Software"
@@ -608,230 +602,6 @@ msgid_plural "meetmes lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-#: js/MyPhones.js:50
-msgid "edit myphone"
-msgstr "Обработать телефон "
-
-#: js/MyPhones.js:108
-msgid "Search: "
-msgstr "Поиск:"
-
-#: js/MyPhones.js:140
-msgid "Displaying myphones {0} - {1} of {2}"
-msgstr "Показываю телефоны {0} - {1} of {2}"
-
-#: js/MyPhones.js:141
-msgid "No myphones to display"
-msgstr "Никаких телефонов в наличии"
-
-#: js/MyPhones.js:147 js/Snom/PhoneGridPanel.js:72
-msgid "MAC address"
-msgstr ""
-
-#: js/MyPhones.js:148 js/Snom/PhoneGridPanel.js:77
-#: js/Snom/SettingGridPanel.js:77
-msgid "description"
-msgstr "Описание"
-
-#: js/MyPhones.js:169 js/Snom/PhoneGridPanel.js:97
-msgid "IP Address"
-msgstr ""
-
-#: js/MyPhones.js:171 js/Snom/PhoneGridPanel.js:107
-msgid "current model"
-msgstr "Используемая модель"
-
-#: js/MyPhones.js:172 js/Snom/PhoneGridPanel.js:113
-msgid "redirect event"
-msgstr ""
-
-#: js/MyPhones.js:173 js/Snom/PhoneGridPanel.js:119
-msgid "redirect number"
-msgstr ""
-
-#: js/MyPhones.js:174 js/Snom/PhoneGridPanel.js:125
-msgid "redirect time"
-msgstr ""
-
-#: js/MyPhones.js:175 js/Snom/PhoneGridPanel.js:131
-msgid "settings loaded at"
-msgstr "Установки выли последний раз загруженные"
-
-#: js/MyPhones.js:176 js/Snom/PhoneGridPanel.js:137
-msgid "last modified"
-msgstr "Последний раз измененны"
-
-#: js/MyPhones.js:409 js/Snom/PhoneEditDialog.js:385
-msgid "redirection"
-msgstr ""
-
-#: js/MyPhones.js:426 js/Snom/PhoneEditDialog.js:400
-msgid "redirect_event"
-msgstr ""
-
-#: js/MyPhones.js:451 js/Snom/PhoneEditDialog.js:419
-msgid "all"
-msgstr "Все"
-
-#: js/MyPhones.js:452 js/Snom/PhoneEditDialog.js:420
-msgid "busy"
-msgstr "Занято"
-
-#: js/MyPhones.js:453 js/MyPhones.js:757 js/Snom/PhoneEditDialog.js:421
-#: js/Snom/PhoneEditDialog.js:555 js/Snom/SettingEditDialog.js:241
-msgid "none"
-msgstr "ни один"
-
-#: js/MyPhones.js:454 js/Snom/PhoneEditDialog.js:422
-msgid "time"
-msgstr "Время"
-
-#: js/MyPhones.js:465 js/Snom/PhoneEditDialog.js:426
-msgid "redirect_number"
-msgstr ""
-
-#: js/MyPhones.js:477 js/Snom/PhoneEditDialog.js:430
-msgid "redirect_time"
-msgstr ""
-
-#: js/MyPhones.js:501 js/Snom/PhoneEditDialog.js:448
-#: js/Snom/SettingEditDialog.js:92 js/Snom/TemplateEditDialog.js:68
-msgid "Settings"
-msgstr "Настройки"
-
-#: js/MyPhones.js:533 js/Snom/PhoneEditDialog.js:466
-#: js/Snom/SettingEditDialog.js:125 js/Snom/SettingGridPanel.js:82
-msgid "web_language"
-msgstr "Язык Веб-сайтов"
-
-#: js/MyPhones.js:548 js/MyPhones.js:585 js/MyPhones.js:628 js/MyPhones.js:664
-#: js/MyPhones.js:694 js/MyPhones.js:723 js/MyPhones.js:756 js/MyPhones.js:784
-#: js/MyPhones.js:812 js/MyPhones.js:845 js/MyPhones.js:873 js/MyPhones.js:901
-#: js/Snom/PhoneEditDialog.js:470 js/Snom/PhoneEditDialog.js:488
-#: js/Snom/PhoneEditDialog.js:512 js/Snom/PhoneEditDialog.js:524
-#: js/Snom/PhoneEditDialog.js:535 js/Snom/PhoneEditDialog.js:545
-#: js/Snom/PhoneEditDialog.js:554 js/Snom/PhoneEditDialog.js:563
-#: js/Snom/PhoneEditDialog.js:572 js/Snom/PhoneEditDialog.js:581
-#: js/Snom/PhoneEditDialog.js:590 js/Snom/PhoneEditDialog.js:599
-#: js/Snom/SettingEditDialog.js:132 js/Snom/SettingEditDialog.js:154
-#: js/Snom/SettingEditDialog.js:182 js/Snom/SettingEditDialog.js:198
-#: js/Snom/SettingEditDialog.js:213 js/Snom/SettingEditDialog.js:227
-#: js/Snom/SettingEditDialog.js:240 js/Snom/SettingEditDialog.js:253
-#: js/Snom/SettingEditDialog.js:266 js/Snom/SettingEditDialog.js:279
-#: js/Snom/SettingEditDialog.js:292 js/Snom/SettingEditDialog.js:305
-msgid "- factory default -"
-msgstr "- Заводская установка -"
-
-#: js/MyPhones.js:613 js/Snom/PhoneEditDialog.js:508
-#: js/Snom/SettingEditDialog.js:175 js/Snom/SettingGridPanel.js:94
-msgid "display_method"
-msgstr "Стиль изображения номеров "
-
-#: js/MyPhones.js:629 js/Snom/PhoneEditDialog.js:513
-#: js/Snom/SettingEditDialog.js:183
-msgid "whole url"
-msgstr ""
-
-#: js/MyPhones.js:631 js/Snom/PhoneEditDialog.js:515
-#: js/Snom/SettingEditDialog.js:185
-msgid "number"
-msgstr "Номер"
-
-#: js/MyPhones.js:632 js/Snom/PhoneEditDialog.js:516
-#: js/Snom/SettingEditDialog.js:186
-msgid "name + number"
-msgstr "Имя + номер"
-
-#: js/MyPhones.js:633 js/Snom/PhoneEditDialog.js:517
-#: js/Snom/SettingEditDialog.js:187
-msgid "number + name"
-msgstr "Номер + имя"
-
-#: js/MyPhones.js:649 js/Snom/PhoneEditDialog.js:520
-#: js/Snom/SettingEditDialog.js:191 js/Snom/SettingGridPanel.js:148
-msgid "call_waiting"
-msgstr ""
-
-#: js/MyPhones.js:666 js/Snom/PhoneEditDialog.js:526
-#: js/Snom/SettingEditDialog.js:200
-msgid "visual"
-msgstr "оптически"
-
-#: js/MyPhones.js:667 js/Snom/PhoneEditDialog.js:527
-#: js/Snom/SettingEditDialog.js:201
-msgid "ringer"
-msgstr "Тон"
-
-#: js/MyPhones.js:679 js/Snom/PhoneEditDialog.js:531
-#: js/Snom/SettingEditDialog.js:206 js/Snom/SettingGridPanel.js:100
-msgid "mwi_notification"
-msgstr ""
-
-#: js/MyPhones.js:695 js/Snom/PhoneEditDialog.js:536
-#: js/Snom/SettingEditDialog.js:214
-msgid "silent"
-msgstr "Бесшумный"
-
-#: js/MyPhones.js:696 js/Snom/PhoneEditDialog.js:537
-#: js/Snom/SettingEditDialog.js:215
-msgid "beep"
-msgstr "Пип тон"
-
-#: js/MyPhones.js:697 js/Snom/PhoneEditDialog.js:538
-#: js/Snom/SettingEditDialog.js:216
-msgid "reminder"
-msgstr "Напоминание"
-
-#: js/MyPhones.js:708 js/Snom/PhoneEditDialog.js:541
-#: js/Snom/SettingEditDialog.js:220 js/Snom/SettingGridPanel.js:106
-msgid "mwi_dialtone"
-msgstr ""
-
-#: js/MyPhones.js:724 js/Snom/PhoneEditDialog.js:546
-#: js/Snom/SettingEditDialog.js:228
-msgid "normal"
-msgstr "Нормально"
-
-#: js/MyPhones.js:725 js/Snom/PhoneEditDialog.js:547
-#: js/Snom/SettingEditDialog.js:229
-msgid "stutter"
-msgstr "заикаясь"
-
-#: js/MyPhones.js:741 js/Snom/PhoneEditDialog.js:550
-#: js/Snom/SettingEditDialog.js:233 js/Snom/SettingGridPanel.js:112
-msgid "headset_device"
-msgstr "Использование наушников"
-
-#: js/MyPhones.js:758 js/Snom/PhoneEditDialog.js:556
-#: js/Snom/SettingEditDialog.js:242
-msgid "headset_rj"
-msgstr "Вход наушников"
-
-#: js/MyPhones.js:769 js/Snom/PhoneEditDialog.js:559
-#: js/Snom/SettingEditDialog.js:246 js/Snom/SettingGridPanel.js:118
-msgid "message_led_other"
-msgstr ""
-
-#: js/MyPhones.js:797 js/Snom/PhoneEditDialog.js:568
-#: js/Snom/SettingEditDialog.js:259 js/Snom/SettingGridPanel.js:124
-msgid "global_missed_counter"
-msgstr ""
-
-#: js/MyPhones.js:830 js/Snom/PhoneEditDialog.js:577
-#: js/Snom/SettingEditDialog.js:272 js/Snom/SettingGridPanel.js:130
-msgid "scroll_outgoing"
-msgstr ""
-
-#: js/MyPhones.js:858 js/Snom/PhoneEditDialog.js:586
-#: js/Snom/SettingEditDialog.js:285 js/Snom/SettingGridPanel.js:136
-msgid "show_local_line"
-msgstr ""
-
-#: js/MyPhones.js:886 js/Snom/PhoneEditDialog.js:595
-#: js/Snom/SettingEditDialog.js:298 js/Snom/SettingGridPanel.js:142
-msgid "show_call_status"
-msgstr ""
 
 #: js/Snom/LocationEditDialog.js:55 js/Snom/LocationGridPanel.js:77
 #, fuzzy
@@ -958,6 +728,162 @@ msgstr "Актуальная версия программного обеспе�
 msgid "Settings Loaded at"
 msgstr "Установки выли загружены"
 
+#: js/Snom/PhoneEditDialog.js:385
+msgid "redirection"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:400
+msgid "redirect_event"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:419
+msgid "all"
+msgstr "Все"
+
+#: js/Snom/PhoneEditDialog.js:420
+msgid "busy"
+msgstr "Занято"
+
+#: js/Snom/PhoneEditDialog.js:421 js/Snom/PhoneEditDialog.js:555
+#: js/Snom/SettingEditDialog.js:241
+msgid "none"
+msgstr "ни один"
+
+#: js/Snom/PhoneEditDialog.js:422
+msgid "time"
+msgstr "Время"
+
+#: js/Snom/PhoneEditDialog.js:426
+msgid "redirect_number"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:430
+msgid "redirect_time"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:448 js/Snom/SettingEditDialog.js:92
+#: js/Snom/TemplateEditDialog.js:68
+msgid "Settings"
+msgstr "Настройки"
+
+#: js/Snom/PhoneEditDialog.js:466 js/Snom/SettingEditDialog.js:125
+#: js/Snom/SettingGridPanel.js:82
+msgid "web_language"
+msgstr "Язык Веб-сайтов"
+
+#: js/Snom/PhoneEditDialog.js:470 js/Snom/PhoneEditDialog.js:488
+#: js/Snom/PhoneEditDialog.js:512 js/Snom/PhoneEditDialog.js:524
+#: js/Snom/PhoneEditDialog.js:535 js/Snom/PhoneEditDialog.js:545
+#: js/Snom/PhoneEditDialog.js:554 js/Snom/PhoneEditDialog.js:563
+#: js/Snom/PhoneEditDialog.js:572 js/Snom/PhoneEditDialog.js:581
+#: js/Snom/PhoneEditDialog.js:590 js/Snom/PhoneEditDialog.js:599
+#: js/Snom/SettingEditDialog.js:132 js/Snom/SettingEditDialog.js:154
+#: js/Snom/SettingEditDialog.js:182 js/Snom/SettingEditDialog.js:198
+#: js/Snom/SettingEditDialog.js:213 js/Snom/SettingEditDialog.js:227
+#: js/Snom/SettingEditDialog.js:240 js/Snom/SettingEditDialog.js:253
+#: js/Snom/SettingEditDialog.js:266 js/Snom/SettingEditDialog.js:279
+#: js/Snom/SettingEditDialog.js:292 js/Snom/SettingEditDialog.js:305
+msgid "- factory default -"
+msgstr "- Заводская установка -"
+
+#: js/Snom/PhoneEditDialog.js:508 js/Snom/SettingEditDialog.js:175
+#: js/Snom/SettingGridPanel.js:94
+msgid "display_method"
+msgstr "Стиль изображения номеров "
+
+#: js/Snom/PhoneEditDialog.js:513 js/Snom/SettingEditDialog.js:183
+msgid "whole url"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:515 js/Snom/SettingEditDialog.js:185
+msgid "number"
+msgstr "Номер"
+
+#: js/Snom/PhoneEditDialog.js:516 js/Snom/SettingEditDialog.js:186
+msgid "name + number"
+msgstr "Имя + номер"
+
+#: js/Snom/PhoneEditDialog.js:517 js/Snom/SettingEditDialog.js:187
+msgid "number + name"
+msgstr "Номер + имя"
+
+#: js/Snom/PhoneEditDialog.js:520 js/Snom/SettingEditDialog.js:191
+#: js/Snom/SettingGridPanel.js:148
+msgid "call_waiting"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:526 js/Snom/SettingEditDialog.js:200
+msgid "visual"
+msgstr "оптически"
+
+#: js/Snom/PhoneEditDialog.js:527 js/Snom/SettingEditDialog.js:201
+msgid "ringer"
+msgstr "Тон"
+
+#: js/Snom/PhoneEditDialog.js:531 js/Snom/SettingEditDialog.js:206
+#: js/Snom/SettingGridPanel.js:100
+msgid "mwi_notification"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:536 js/Snom/SettingEditDialog.js:214
+msgid "silent"
+msgstr "Бесшумный"
+
+#: js/Snom/PhoneEditDialog.js:537 js/Snom/SettingEditDialog.js:215
+msgid "beep"
+msgstr "Пип тон"
+
+#: js/Snom/PhoneEditDialog.js:538 js/Snom/SettingEditDialog.js:216
+msgid "reminder"
+msgstr "Напоминание"
+
+#: js/Snom/PhoneEditDialog.js:541 js/Snom/SettingEditDialog.js:220
+#: js/Snom/SettingGridPanel.js:106
+msgid "mwi_dialtone"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:546 js/Snom/SettingEditDialog.js:228
+msgid "normal"
+msgstr "Нормально"
+
+#: js/Snom/PhoneEditDialog.js:547 js/Snom/SettingEditDialog.js:229
+msgid "stutter"
+msgstr "заикаясь"
+
+#: js/Snom/PhoneEditDialog.js:550 js/Snom/SettingEditDialog.js:233
+#: js/Snom/SettingGridPanel.js:112
+msgid "headset_device"
+msgstr "Использование наушников"
+
+#: js/Snom/PhoneEditDialog.js:556 js/Snom/SettingEditDialog.js:242
+msgid "headset_rj"
+msgstr "Вход наушников"
+
+#: js/Snom/PhoneEditDialog.js:559 js/Snom/SettingEditDialog.js:246
+#: js/Snom/SettingGridPanel.js:118
+msgid "message_led_other"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:568 js/Snom/SettingEditDialog.js:259
+#: js/Snom/SettingGridPanel.js:124
+msgid "global_missed_counter"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:577 js/Snom/SettingEditDialog.js:272
+#: js/Snom/SettingGridPanel.js:130
+msgid "scroll_outgoing"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:586 js/Snom/SettingEditDialog.js:285
+#: js/Snom/SettingGridPanel.js:136
+msgid "show_local_line"
+msgstr ""
+
+#: js/Snom/PhoneEditDialog.js:595 js/Snom/SettingEditDialog.js:298
+#: js/Snom/SettingGridPanel.js:142
+msgid "show_call_status"
+msgstr ""
+
 #: js/Snom/PhoneEditDialog.js:620
 msgid "lineactive"
 msgstr "lineactive"
@@ -982,6 +908,42 @@ msgstr "Пользователи"
 #: js/Snom/PhoneEditDialog.js:719
 msgid "Rights"
 msgstr ""
+
+#: js/Snom/PhoneGridPanel.js:72
+msgid "MAC address"
+msgstr ""
+
+#: js/Snom/PhoneGridPanel.js:77 js/Snom/SettingGridPanel.js:77
+msgid "description"
+msgstr "Описание"
+
+#: js/Snom/PhoneGridPanel.js:97
+msgid "IP Address"
+msgstr ""
+
+#: js/Snom/PhoneGridPanel.js:107
+msgid "current model"
+msgstr "Используемая модель"
+
+#: js/Snom/PhoneGridPanel.js:113
+msgid "redirect event"
+msgstr ""
+
+#: js/Snom/PhoneGridPanel.js:119
+msgid "redirect number"
+msgstr ""
+
+#: js/Snom/PhoneGridPanel.js:125
+msgid "redirect time"
+msgstr ""
+
+#: js/Snom/PhoneGridPanel.js:131
+msgid "settings loaded at"
+msgstr "Установки выли последний раз загруженные"
+
+#: js/Snom/PhoneGridPanel.js:137
+msgid "last modified"
+msgstr "Последний раз измененны"
 
 #: js/Snom/TemplateEditDialog.js:56
 msgid "Software Version"
@@ -1030,6 +992,18 @@ msgstr "ни один"
 #, fuzzy
 msgid "Templates"
 msgstr "Добавить темплейт (template)"
+
+#~ msgid "edit myphone"
+#~ msgstr "Обработать телефон "
+
+#~ msgid "Search: "
+#~ msgstr "Поиск:"
+
+#~ msgid "Displaying myphones {0} - {1} of {2}"
+#~ msgstr "Показываю телефоны {0} - {1} of {2}"
+
+#~ msgid "No myphones to display"
+#~ msgstr "Никаких телефонов в наличии"
 
 #~ msgid "add context"
 #~ msgstr "Добавьте контекст"
