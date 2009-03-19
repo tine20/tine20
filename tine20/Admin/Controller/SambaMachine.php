@@ -88,7 +88,10 @@ class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abst
     {
         //$this->checkRight('VIEW_SAMBAMACHINES');
         
-        return $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds);
+        $machines = $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds);
+        $this->_stripDollars($machines);
+
+        return $machines;
     }
 
     /**
@@ -115,7 +118,10 @@ class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abst
     {
         //$this->checkRight('VIEW_SAMBAMACHINES');
         
-        return $this->_backend->get($_id);
+        $machine = $this->_backend->get($_id);
+        $this->_stripDollar($machine);
+
+        return $machine;
     }
 
     /**
@@ -128,7 +134,10 @@ class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abst
     {
         //$this->checkRight('VIEW_SAMBAMACHINES');
         
-        return $this->_backend->getMultiple($_ids);
+        $machines = $this->_backend->getMultiple($_ids);
+        $this->_stripDollars($machines);
+
+        return $machines;
     }
 
     /**
@@ -143,7 +152,32 @@ class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abst
     {
         //$this->checkRight('VIEW_SAMBAMACHINES');
 
-        return $this->_backend->getAll($_orderBy, $_orderDirection);
+        $machines = $this->_backend->getAll($_orderBy, $_orderDirection);
+        $this->_stripDollars($machines);
+
+        return $machines;
+    }
+    
+    /**
+     * strips dollar sign from the end of the computername
+     *
+     * @param Admin_Model_SambaMachine
+     */
+    protected function _stripDollar($_record)
+    {
+        $_record->accountLoginName = preg_replace('/\$$/', '', $_record->accountLoginName);
+    }
+    
+    /**
+     * strips dollar sign from the end of the computername
+     *
+     * @param Tinebase_Record_RecordSet
+     */
+    protected function _stripDollars($_recordSet)
+    {
+        foreach ($_recordSet as $record) {
+            $this->_stripDollar($record);
+        }
     }
 
     /*************** add / update / delete *****************/    
