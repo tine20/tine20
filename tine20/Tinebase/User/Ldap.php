@@ -238,7 +238,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $user = $this->getFullUserByLoginName($_loginName);
         $metaData = $this->_getMetaData($user);
         
-        $encryptionType = Zend_Registry::get('configFile')->accounts->get('ldap')->pwEncType;
+        $encryptionType = $this->_options['pwEncType'];
         $userpassword = $_encrypt ? self::encryptPassword($_password, $encryptionType) : $_password;
         $ldapData = array(
             'userpassword'     => $userpassword,
@@ -528,7 +528,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     protected function _generateDn(Tinebase_Model_FullUser $_account)
     {
-        $baseDn = Zend_Registry::get('configFile')->accounts->get('ldap')->userDn;
+        $baseDn = $this->_options['userDn'];
         
         $uidProperty = array_search('uid', $this->_rowNameMapping);
         $newDn = "uid={$_account->$uidProperty},{$baseDn}";
@@ -547,7 +547,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     protected function _generateUidNumber()
     {
         $allUidNumbers = array();
-        foreach ($this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'objectclass=posixAccount', array('uidnumber')) as $userData) {
+        foreach ($this->_backend->fetchAll($this->_options['userDn'], 'objectclass=posixAccount', array('uidnumber')) as $userData) {
             $allUidNumbers[] = $userData['uidnumber'][0];
         }
         asort($allUidNumbers);
@@ -555,8 +555,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $numUsers = count($allUidNumbers);
         if ($numUsers == 0) {
-            $uidNumber = Zend_Registry::get('configFile')->accounts->get('ldap')->minUserId;
-        } elseif ($allUidNumbers[$numUsers-1] < Zend_Registry::get('configFile')->accounts->get('ldap')->maxUserId) {
+            $uidNumber = $this->_options['minUserId'];
+        } elseif ($allUidNumbers[$numUsers-1] < $this->_options['maxUserId']) {
             $uidNumber = ++$allUidNumbers[$numUsers-1];
         } else {
             throw new Tinebase_Exception_NotImplemented('Max User Id is reached');
@@ -575,7 +575,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     protected function _getUsersFromBackend($_filter, $_accountClass = 'Tinebase_Model_User')
     {
         $result = new Tinebase_Record_RecordSet($_accountClass);
-        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, $_filter, array_values($this->_rowNameMapping));
+        $accounts = $this->_backend->fetchAll($this->_options['userDn'], $_filter, array_values($this->_rowNameMapping));
         
         foreach ($accounts as $account) {
             $accountObject = $this->_ldap2User($account, $_accountClass);
