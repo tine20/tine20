@@ -38,8 +38,12 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_In
      */
     public function __construct()
     {
-            $options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
+            $ldapOptions = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
             $machineOptions = Tinebase_Core::getConfig()->samba->toArray();
+            $options = array_merge($ldapOptions, $machineOptions);
+
+            //$options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
+            //$machineOptions = Tinebase_Core::getConfig()->samba->toArray();
             
             $options['userDn']    = $machineOptions['ldap']['machineDn'];
             $options['minUserId'] = $machineOptions['minMachineId'];
@@ -54,7 +58,7 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_In
             $this->_options = $options;
 
             $this->_posixBackend = new Tinebase_User_Ldap($options);
-            $this->_samBackend = Tinebase_SambaSAM::getInstance();
+            $this->_samBackend = new Tinebase_SambaSAM_Ldap($options);
     }
     
     /**
@@ -141,15 +145,20 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_In
     public function create(Tinebase_Record_Interface $_record)
     {
         $allData = $_record->toArray();
+
+        // we need some handling for the displayname, as this attribute is only in the samba object class or inetOrgPerson ;-(
+        $displayName = $allData['accountDisplayName'];
         $posixAccount = new Tinebase_Model_FullUser($allData, true);
+        $posixAccount->accountDisplayName = NULL;
+
         $posixAccount = $this->_posixBackend->addUser($posixAccount);
+        
 
         $samAccount = new Tinebase_Model_SAMUser($allData, true);
-        
         $samAccount->acctFlags       = '[W          ]';
         //$samAccount->primaryGroupSID = '';
 
-        $samAccount = $this->_samBackend->addUser($posixAccount->getId(), $samAccount);
+        $samAccount = $this->_samBackend->addUser($posixAccount, $samAccount);
 
         return $this->get($posixAccount->getId());
     }
