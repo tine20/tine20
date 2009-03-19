@@ -18,7 +18,7 @@
  * @package    Admin
  * @subpackage Samba
  */
-class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abstract
+class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abstract implements Tinebase_Application_Controller_Record_Interface
 {
 	/**
 	 * @var Admin_Backend_SambaMachine_Ldap
