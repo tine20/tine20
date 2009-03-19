@@ -10,4 +10,4 @@
  *
  */
 
-Ext.namespace('Tine.Admin.SambaMachine');
+Ext.namespace('Tine.Admin.sambaMachine');

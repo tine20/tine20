@@ -453,7 +453,6 @@ Ext.ns('Tine.Admin.Model');
  * Model of an account
  */
 Tine.Admin.Model.UserArray = [
-    // tine record fields
     { name: 'accountId' },
     { name: 'accountFirstName' },
     { name: 'accountLastName' },
