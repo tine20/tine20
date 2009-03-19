@@ -11,3 +11,48 @@
  */
 
 Ext.namespace('Tine.Admin.sambaMachine');
+
+Tine.Admin.SambaMachineEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
+    
+    /**
+     * @private
+     */
+    windowNamePrefix: 'sambaMachineEditWindow_',
+    appName: 'Admin',
+    recordClass: Tine.Admin.Model.SambaMachine,
+    recordProxy: Tine.Admin.sambaMachineBackend,
+    evalGrants: false,
+    
+    getFormItems: function() {
+        return {
+            xtype: 'columnform',
+            labelAlign: 'top',
+            border: false,
+            formDefaults: {
+                xtype:'textfield',
+                anchor: '100%',
+                labelSeparator: '',
+                columnWidth: 1
+            },
+            items: [[{
+                fieldLabel: this.app.i18n._('Computer Name'),
+                name: 'accountLoginName'
+            }]]
+        };
+    }
+});
+
+/**
+ * User edit popup
+ */
+Tine.Admin.SambaMachineEditDialog.openWindow = function (config) {
+    var id = (config.record && config.record.id) ? config.record.id : 0;
+    var window = Tine.WindowFactory.getWindow({
+        width: 300,
+        height: 70,
+        name: Tine.Admin.SambaMachineEditDialog.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.Admin.SambaMachineEditDialog',
+        contentPanelConstructorConfig: config
+    });
+    return window;
+};
