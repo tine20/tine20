@@ -50,6 +50,16 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     );
     
     /**
+     * group properties mapping
+     *
+     * @var array
+     */
+    protected $_groupPropertyNameMapping = array(
+        'sid'              => 'sambasid', 
+        'groupType'        => 'sambagrouptype',
+    );
+
+    /**
      * objectclasses required for users
      *
      * @var array
@@ -120,7 +130,9 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         $ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
         $ldapData['sambaacctflags'] = isset($ldapData['sambaacctflags']) ? $ldapData['sambaacctflags'] : '[U          ]';
         $ldapData['sambapwdcanchange']	= isset($ldapData['sambapwdcanchange'])  ? $ldapData['sambapwdcanchange']  : 0;
-        $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] : 2147483647; 
+        $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] : 2147483647;
+
+        $ldapData['sambaprimarygroupsid'] = $this->getGroupById($_user->accountPrimaryGroup)->sid;
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
@@ -150,7 +162,9 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
                 return $this->addUser($_user, $_samUser);
             }
         }
-        
+
+        $ldapData['sambaprimarygroupsid'] = $this->getGroupById($_user->accountPrimaryGroup)->sid;
+
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
@@ -231,6 +245,25 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         $this->_ldap->update($metaData['dn'], $ldapData);
     }
 	
+    /**
+     * get group by id
+     *
+     * @param   int         $_groupId
+     * @return  Tinebase_Model_SAMGroup group
+     */
+    public function getGroupById($_groupId)
+    {
+        try {
+            $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
+            $ldapData = $this->_ldap->fetch($this->_options['groupsDn'], 'gidnumber=' . $groupId);
+            $group = $this->_ldap2Group($ldapData);
+        } catch (Exception $e) {
+            throw new Exception('Group not found');
+        }
+        
+        return $group;
+    }
+
 	/**
      * adds sam properties to a new group
      *
@@ -431,5 +464,33 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         
         return $ldapData;
     }
+    
+    /**
+     * Returns a group obj with raw data from ldap
+     *
+     * @param array $_ldapData
+     * @return Tinebase_Model_SAMGroup
+     */
+    protected function _ldap2Group($_ldapData)
+    {
+        $groupArray = array();
+        
+        foreach ($_ldapData as $key => $value) {
+            if (is_int($key)) {
+                continue;
+            }
+            $keyMapping = array_search($key, $this->_groupPropertyNameMapping);
+            if ($keyMapping !== FALSE) {
+                switch($keyMapping) {
+                   default: 
+                        $groupArray[$keyMapping] = $value[0];
+                        break;
+                }
+            }
+        }
 
+        $group = new Tinebase_Model_SAMGroup($groupArray);
+        
+        return $group;
+    }
 }  
