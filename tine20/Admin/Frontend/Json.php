@@ -557,7 +557,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      */
     public function saveSambaMachine($recordData)
     {
-        return $this->_save($recordData, Admin_Controller_SambaMachine::getInstance(), 'SambaMachine');
+        return $this->_save($recordData, Admin_Controller_SambaMachine::getInstance(), 'SambaMachine', 'accountId');
     }
     
     /**

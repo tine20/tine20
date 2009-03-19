@@ -161,13 +161,9 @@ class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abst
         //$this->checkRight('MANAGE_SAMBAMACHINES');
 
         $machineGroup = Tinebase_Group::getInstance()->getGroupByName($this->_options['machineGroup']);
-        $computerName = preg_replace('/\$$/', '', $_record->accountLoginName);
-        $_record->accountLoginName = $computerName . '$';
-
         $_record->accountPrimaryGroup = $machineGroup->getId();
-        $_record->accountLastName     = $computerName;
-        $_record->accountFullName     = 'Computer ' . $computerName;
-        $_record->accountDisplayName  = 'Computer ' . $computerName;
+
+        $this->_setMachineNames($_record);
         
         return $this->_backend->create($_record);
     }
@@ -184,7 +180,23 @@ class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abst
     {
         //$this->checkRight('MANAGE_SAMBAMACHINES');
         
+        $this->_setMachineNames($_record);
+        
         return $this->_backend->update($_record); 
+    }
+    
+    /**
+     * sets the various names in the machine model
+     *
+     * @param Admin_Model_SambaMachine
+     */
+    protected function _setMachineNames($_record)
+    {
+        $computerName = preg_replace('/\$$/', '', $_record->accountLoginName);
+        $_record->accountLoginName = $computerName . '$';
+        $_record->accountLastName     = $computerName;
+        $_record->accountFullName     = 'Computer ' . $computerName;
+        $_record->accountDisplayName  = 'Computer ' . $computerName;
     }
 
     /**

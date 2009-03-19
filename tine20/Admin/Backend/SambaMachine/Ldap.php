@@ -180,7 +180,7 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_In
         $samAccount = new Tinebase_Model_SAMUser($allData, true);
 
         $posixAccount = $this->_posixBackend->updateUser($posixAccount);
-        $samAccount = $this->_samBackend->updateUser($posixAccount->getId(), $samAccount);
+        $samAccount = $this->_samBackend->updateUser($posixAccount, $samAccount);
 
         return $this->get($posixAccount->getId());
     }
