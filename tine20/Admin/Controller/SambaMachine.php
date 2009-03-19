@@ -20,6 +20,11 @@
  */
 class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abstract implements Tinebase_Application_Controller_Record_Interface
 {
+    /**
+     * @var array
+     */ 
+    protected $_options = array();
+
 	/**
 	 * @var Admin_Backend_SambaMachine_Ldap
 	 */
@@ -53,6 +58,9 @@ class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abst
      */
     private function __construct() 
     {
+        $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
+        $this->_options = $sambaOptions;
+
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
 		
@@ -153,10 +161,13 @@ class Admin_Controller_SambaMachine extends Tinebase_Application_Controller_Abst
         //$this->checkRight('MANAGE_SAMBAMACHINES');
 
         $machineGroup = Tinebase_Group::getInstance()->getGroupByName($this->_options['machineGroup']);
+        $computerName = preg_replace('/\$$/', '', $_record->accountLoginName);
+        $_record->accountLoginName = $computerName . '$';
+
         $_record->accountPrimaryGroup = $machineGroup->getId();
-        $_record->accountLastName     = $_record->accountLoginName;
-        $_record->accountFullName     = 'Workstation' . $_record->accountLoginName;
-        $_record->accountDisplayName  = 'Workstation' . $_record->accountLoginName;
+        $_record->accountLastName     = $computerName;
+        $_record->accountFullName     = 'Computer ' . $computerName;
+        $_record->accountDisplayName  = 'Computer ' . $computerName;
         
         return $this->_backend->create($_record);
     }
