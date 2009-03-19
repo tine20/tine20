@@ -533,7 +533,7 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @param string $paging json encoded
      * @return array
      */
-    public function searchTimesheets($filter, $paging)
+    public function searchSambaMachines($filter, $paging)
     {
         return $this->_search($filter, $paging, Admin_Controller_SambaMachine::getInstance(), 'Admin_Model_SambaMachineFilter'); 
     }
