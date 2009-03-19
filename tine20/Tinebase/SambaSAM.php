@@ -83,7 +83,7 @@ class Tinebase_SambaSAM
                 $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
                 $options = array_merge($ldapOptions, $sambaOptions);
                 
-                $result = Tinebase_SambaSAM_Ldap::getInstance($options);
+                $result = new Tinebase_SambaSAM_Ldap($options);
                 break;
                 
             // case self::SQL:

@@ -28,13 +28,6 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      */
     protected $_ldap = NULL;
 
-   /**
-     * holdes the instance of the singleton
-     *
-     * @var Tinebase_SambaSAM_Ldap
-     */
-    private static $_instance = NULL;
-    
     /**
      * user properties mapping
      *
@@ -78,9 +71,8 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * the constructor
      *
      * @param  array $options Options used in connecting, binding, etc.
-     * don't use the constructor. use the singleton 
      */
-    private function __construct(array $_options) 
+    public function __construct(array $_options) 
     {
         $this->_options = $_options;
         if (empty($this->_options['sid'])) {
@@ -89,27 +81,6 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         
         $this->_ldap = new Tinebase_Ldap($_options);
         $this->_ldap->bind();
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
-   /**
-     * the singleton pattern
-     *
-     * @param  array $options Options used in connecting, binding, etc.
-     * @return Tinebase_SambaSAM_Ldap
-     */
-    public static function getInstance(array $_options = array()) 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_SambaSAM_Ldap($_options);
-        }
-        
-        return self::$_instance;
     }
     
     /**
