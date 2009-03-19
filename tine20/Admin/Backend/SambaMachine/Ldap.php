@@ -157,8 +157,12 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_In
         $samAccount = new Tinebase_Model_SAMUser($allData, true);
         $samAccount->acctFlags       = '[W          ]';
         //$samAccount->primaryGroupSID = '';
-
+        
         $samAccount = $this->_samBackend->addUser($posixAccount, $samAccount);
+
+        // after we saved the samAccount we can also save the displayName
+        $posixAccount->accountDisplayName = $displayName;
+        $this->_posixBackend->updateUser($posixAccount);
 
         return $this->get($posixAccount->getId());
     }
