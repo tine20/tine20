@@ -156,7 +156,7 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_In
 
         $samAccount = new Tinebase_Model_SAMUser($allData, true);
         $samAccount->acctFlags       = '[W          ]';
-        //$samAccount->primaryGroupSID = '';
+        $samAccount->primaryGroupSID = $this->_samBackend->getGroupById($posixAccount->accountPrimaryGroup)->sid;
         
         $samAccount = $this->_samBackend->addUser($posixAccount, $samAccount);
 
@@ -205,8 +205,8 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_In
      */
     public function delete($_identifier)
     {
-        $posixAccount = $this->_posixBackend->deleteUser($posixAccount);
-        $samAccount = $this->_samBackend->deleteUser($posixAccount->getId(), $samAccount);
+        $posixAccount = $this->_posixBackend->deleteUsers((array)$_identifier);
+        $samAccount = $this->_samBackend->deleteUsers((array)$_identifier);
     }
     
     /**
