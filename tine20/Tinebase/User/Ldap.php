@@ -550,11 +550,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         foreach ($this->_backend->fetchAll($this->_options['userDn'], 'objectclass=posixAccount', array('uidnumber')) as $userData) {
             $allUidNumbers[] = $userData['uidnumber'][0];
         }
-        asort($allUidNumbers);
+        sort($allUidNumbers);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
         
         $numUsers = count($allUidNumbers);
-        if ($numUsers == 0) {
+        if ($numUsers == 0 || $allUidNumbers[$numUsers-1] < $this->_options['minUserId']) {
             $uidNumber = $this->_options['minUserId'];
         } elseif ($allUidNumbers[$numUsers-1] < $this->_options['maxUserId']) {
             $uidNumber = ++$allUidNumbers[$numUsers-1];

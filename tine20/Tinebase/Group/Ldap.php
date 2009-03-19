@@ -559,11 +559,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         foreach ($this->_ldap->fetchAll($this->_options['groupsDn'], 'objectclass=posixgroup', array('gidnumber')) as $groupData) {
             $allGidNumbers[] = $groupData['gidnumber'][0];
         }
-        asort($allGidNumbers);
+        sort($allGidNumbers);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing gidnumbers " . print_r($allGidNumbers, true));
         
         $numGroups = count($allGidNumbers);
-        if ($numGroups == 0) {
+        if ($numGroups == 0 || $allGidNumbers[$numGroups-1] < $this->_options['minGroupId']) {
             $gidNumber =  $this->_options['minGroupId'];
         } elseif ($allGidNumbers[$numGroups-1] < $this->_options['maxGroupId']) {
             $gidNumber = ++$allGidNumbers[$numGroups-1];
