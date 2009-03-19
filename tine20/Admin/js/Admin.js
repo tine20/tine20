@@ -40,6 +40,18 @@ Tine.Admin = function() {
         dataPanelType: 'groups', 
         viewRight: 'accounts'
     },{
+        text: translation.gettext('Computers'),
+        cls: 'treemain',
+        allowDrag: false,
+        allowDrop: true,
+        id: 'computers',
+        icon: false,
+        children: [],
+        leaf: null,
+        expanded: true,
+        dataPanelType: 'computers', 
+        viewRight: 'computers'
+    },{
         text: translation.gettext('Applications'),
 		cls: "treemain",
 		allowDrag: false,
@@ -177,6 +189,10 @@ Tine.Admin = function() {
                     }
                     
                     break;
+                    
+                case 'computers':
+                    Tine.Admin.sambaMachine.show();
+                    break;;
                     
                 case 'applications':
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminApplications') {
