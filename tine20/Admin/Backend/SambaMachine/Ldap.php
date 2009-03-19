@@ -48,13 +48,13 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_In
                 'top',
                 'person',
                 'posixAccount',
-                'sambaSamAccount'
+                //'sambaSamAccount'
             );
             
             $this->_options = $options;
 
             $this->_posixBackend = new Tinebase_User_Ldap($options);
-            $this->_samBackend = new Tinebase_SambaSAM_Ldap($options);
+            $this->_samBackend = Tinebase_SambaSAM::getInstance();
     }
     
     /**
