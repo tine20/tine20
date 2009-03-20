@@ -97,6 +97,7 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
                 
         $this->setApplicationVersion('ActiveSync', '0.2');
     }    
+    
     /**
      * add default policy
      * 
@@ -115,5 +116,74 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
             // do nothing! The default policy is already there
         }
         $this->setApplicationVersion('ActiveSync', '0.3');
+    }
+    
+    /**
+     * add fields to store device informations
+     * 
+     */    
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>model</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>imei</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>friendlyname</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>os</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>oslanguage</name>
+                <type>text</type>
+                <length>128</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>phonenumber</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+        
+        $this->setApplicationVersion('ActiveSync', '0.4');
     }
 }

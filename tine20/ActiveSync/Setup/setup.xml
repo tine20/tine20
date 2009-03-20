@@ -113,6 +113,42 @@
                     <length>255</length>
                     <notnull>false</notnull>
                 </field>
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>imei</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>friendlyname</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>os</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>oslanguage</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>phonenumber</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
