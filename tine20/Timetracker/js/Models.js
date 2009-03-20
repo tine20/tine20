@@ -66,7 +66,7 @@ Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
         start_date: new Date(),
         is_billable: true,
         timeaccount_id: {account_grants: {editGrant: true}}
-    }
+    };
 };
 
 /**
@@ -117,7 +117,7 @@ Tine.Timetracker.Model.Timeaccount.getDefaultData = function() {
     return {
         is_open: 1,
         is_billable: true
-    }
+    };
 };
 /**
  * Model of a grant

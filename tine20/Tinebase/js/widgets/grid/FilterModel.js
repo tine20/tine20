@@ -403,7 +403,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         });
         
         // upps, how to get a var i only know the name of???
-        return filter[valueType]
+        return filter[valueType];
     },
     
     /**

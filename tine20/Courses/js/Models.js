@@ -56,5 +56,5 @@ Tine.Courses.Model.Course.getDefaultData = function() {
         is_open: 1,
         is_billable: true
         */
-    }
+    };
 };

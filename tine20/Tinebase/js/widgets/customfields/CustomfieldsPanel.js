@@ -101,7 +101,7 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         // check if all cfs are already rendered
         var allRendered = false;
         this.items.each(function(item) {
-            allRendered |= item.rendered
+            allRendered |= item.rendered;
         }, this);
         
         if (! allRendered) {

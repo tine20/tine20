@@ -92,7 +92,7 @@ Tine.Erp.Contract = Tine.Tinebase.Record.create(Tine.Erp.ContractArray, {
 Tine.Erp.Contract.getDefaultData = function() { 
     return {
         container_id: Tine.Erp.registry.get('DefaultContainer')
-    }
+    };
 };
 
 /**

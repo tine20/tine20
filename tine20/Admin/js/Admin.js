@@ -192,7 +192,7 @@ Tine.Admin = function() {
                     
                 case 'computers':
                     Tine.Admin.sambaMachine.show();
-                    break;;
+                    break;
                     
                 case 'applications':
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminApplications') {

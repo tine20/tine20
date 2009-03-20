@@ -29,7 +29,7 @@ Tine.widgets.Priority.getStore = function() {
     }
     
     return Tine.widgets.Priority.store;
-}
+};
 
 Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
     /**

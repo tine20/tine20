@@ -30,7 +30,7 @@ Ext.ux.form.Spinner = function(config){
 		'spinup' : true,
 		'spindown' : true
 	});
-}
+};
 
 Ext.extend(Ext.ux.form.Spinner, Ext.form.TriggerField, {
 	triggerClass : 'x-form-spinner-trigger',
@@ -98,7 +98,7 @@ Ext.extend(Ext.ux.form.Spinner, Ext.form.TriggerField, {
 		this.trigger.on("mouseup",   this.onMouseUp,   this, {preventDefault:true});
 		this.wrap.on("mousewheel",   this.handleMouseWheel, this);
 
-		this.dd.setXConstraint(0, 0, 10)
+		this.dd.setXConstraint(0, 0, 10);
 		this.dd.setYConstraint(1500, 1500, 10);
 		this.dd.endDrag = this.endDrag.createDelegate(this);
 		this.dd.startDrag = this.startDrag.createDelegate(this);

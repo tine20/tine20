@@ -93,7 +93,7 @@ Tine.Voipmanager.Model.SnomPhone = Tine.Tinebase.Record.create(Tine.Voipmanager.
 Tine.Voipmanager.Model.SnomPhone.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -144,7 +144,7 @@ Tine.Voipmanager.Model.SnomLocation = Tine.Tinebase.Record.create(Tine.Voipmanag
 Tine.Voipmanager.Model.SnomLocation.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -181,7 +181,7 @@ Tine.Voipmanager.Model.SnomTemplate = Tine.Tinebase.Record.create(Tine.Voipmanag
 Tine.Voipmanager.Model.SnomTemplate.getDefaultData = function() { 
     return {
      
-    }
+    };
 };
 
 
@@ -219,7 +219,7 @@ Tine.Voipmanager.Model.SnomSoftware = Tine.Tinebase.Record.create(Tine.Voipmanag
 Tine.Voipmanager.Model.SnomSoftware.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -252,7 +252,7 @@ Tine.Voipmanager.Model.SnomSoftwareImage = Tine.Tinebase.Record.create(Tine.Voip
 Tine.Voipmanager.Model.SnomSoftwareImage.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -290,7 +290,7 @@ Tine.Voipmanager.Model.SnomLine = Tine.Tinebase.Record.create(Tine.Voipmanager.M
 Tine.Voipmanager.Model.SnomLine.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -347,7 +347,7 @@ Tine.Voipmanager.Model.SnomSetting = Tine.Tinebase.Record.create(Tine.Voipmanage
 Tine.Voipmanager.Model.SnomSetting.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -473,7 +473,7 @@ Tine.Voipmanager.Model.AsteriskSipPeer = Tine.Tinebase.Record.create(Tine.Voipma
 Tine.Voipmanager.Model.AsteriskSipPeer.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -507,7 +507,7 @@ Tine.Voipmanager.Model.AsteriskContext = Tine.Tinebase.Record.create(Tine.Voipma
 Tine.Voipmanager.Model.AsteriskContext.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -562,7 +562,7 @@ Tine.Voipmanager.Model.AsteriskVoicemail = Tine.Tinebase.Record.create(Tine.Voip
 Tine.Voipmanager.Model.AsteriskVoicemail.getDefaultData = function() { 
     return {
         
-    }
+    };
 };
 
 
@@ -597,5 +597,5 @@ Tine.Voipmanager.Model.AsteriskMeetme = Tine.Tinebase.Record.create(Tine.Voipman
 Tine.Voipmanager.Model.AsteriskMeetme.getDefaultData = function() { 
     return {
         
-    }
+    };
 };

@@ -259,7 +259,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         // init sel model
         this.selectionModel = new Tine.Tinebase.widgets.grid.FilterSelectionModel({
             store: this.store
-        }),
+        });
         this.selectionModel.on('selectionchange', function(sm) {
             Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
             

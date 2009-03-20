@@ -108,7 +108,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'accountLastLogin',
                             emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in'),
                             hideTrigger: true,
-                            readOnly: true,
+                            readOnly: true
                         }], [{
                             fieldLabel: this.app.i18n._('Password'),
                             name: 'accountPassword',
@@ -120,7 +120,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Last login from'),
                             name: 'accountLastLoginfrom',
                             emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in'),
-                            readOnly: true,
+                            readOnly: true
                         }], [{
                             fieldLabel: this.app.i18n._('Password again'),
                             name: 'accountPassword2',
@@ -179,7 +179,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'logonTime',
                     emptyText: this.app.i18n._('never logged in'),
                     hideTrigger: true,
-                    readOnly: true,
+                    readOnly: true
                 }], [{
                     fieldLabel: this.app.i18n._('Home Path'),
                     name: 'homePath',
@@ -190,7 +190,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'logoffTime',
                     emptyText: this.app.i18n._('never logged off'),
                     hideTrigger: true,
-                    readOnly: true,
+                    readOnly: true
                 }], [{
                     fieldLabel: this.app.i18n._('Profile Path'),
                     name: 'profilePath',
@@ -201,7 +201,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'pwdLastSet',
                     emptyText: this.app.i18n._('never'),
                     hideTrigger: true,
-                    readOnly: true,
+                    readOnly: true
                 }], [{
                     fieldLabel: this.app.i18n._('Logon Script'),
                     name: 'logonScript',

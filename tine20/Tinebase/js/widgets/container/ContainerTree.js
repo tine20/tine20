@@ -276,7 +276,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                                 case 'specialNode':
                                     switch (filters[i].value) {
                                         case 'all':
-                                            scope.selectPath('/root/all')
+                                            scope.selectPath('/root/all');
                                             break;
                                         case 'shared':
                                         case 'otherUsers':

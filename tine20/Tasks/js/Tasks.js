@@ -17,10 +17,11 @@ Tine.Tasks.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
 Tine.Tasks.TreePanel = function(config) {
     Ext.apply(this, config);
     
-    this.id = 'TasksTreePanel',
+    this.id = 'TasksTreePanel';
     this.recordClass = Tine.Tasks.Task;
     Tine.Tasks.TreePanel.superclass.constructor.call(this);
-}
+};
+
 Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel);
 
 Tine.Tasks.FilterPanel = Tine.widgets.grid.PersistentFilterPicker;

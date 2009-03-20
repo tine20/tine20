@@ -114,9 +114,9 @@ Ext.ux.WindowFactory.prototype = {
                     if (ls.hasOwnProperty(p)) {
                         // NOTE apply dosn't work here for some strange reason, so we hope that there are not more than 5 params
                         if (ls[p].fn) {
-                            lsProxy[p] = function() {ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);}
+                            lsProxy[p] = function() {ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);};
                         } else {
-                            lsProxy[p] = function() {ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);}
+                            lsProxy[p] = function() {ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);};
                         }
                     }
                 }

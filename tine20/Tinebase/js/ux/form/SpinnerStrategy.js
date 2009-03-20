@@ -43,7 +43,7 @@ Ext.extend(Ext.ux.form.Spinner.Strategy, Ext.util.Observable, {
 	},
 
 	spin : function(field, down, alternate){
-		this.validationTask.delay(500, function(){field.validate()});
+		this.validationTask.delay(500, function(){field.validate();});
 		//extend
 	},
 

@@ -147,7 +147,7 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
             scope: this,
             handler: function() {this.window.close();},
             text: _('Cancel')
-        })
+        });
 			
 		this.window = new Ext.Window({
             title: this.title,

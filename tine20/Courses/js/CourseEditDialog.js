@@ -25,7 +25,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Courses');
-        this.tbarItems =  [
+        this.tbarItems = [
             {xtype: 'widget-activitiesaddbutton'},
             new Ext.ux.BrowseButton({
             	id: 'ImportButton',
@@ -35,7 +35,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 handler: this.onFileSelect
             })
-        ],
+        ];
         Tine.Courses.CourseEditDialog.superclass.initComponent.call(this);
     },
     

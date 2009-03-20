@@ -209,7 +209,7 @@ Tine.Phone.MyPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onTemplateChange: function(_combo, _record, _index) {
 
-    	var setting_id = false
+    	var setting_id = false;
     	if (_record.data && _record.data.setting_id) {
     		setting_id = _record.data.setting_id;
     	}
