@@ -49,7 +49,7 @@ class Wbxml_Dtd_ActiveSync_CodePage18 extends Wbxml_Dtd_ActiveSync_Abstract
         'OSLanguage'                => 0x1b,
         'PhoneNumber'               => 0x1c,
         'UserInformation'           => 0x1d,
-        'EmailAddress'              => 0x1e,
+        'EmailAddresses'            => 0x1e,
         'SmtpAddress'               => 0x1f
     );
 }
