@@ -50,11 +50,11 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
                     header('HTTP/1.1 401 Unauthorized');
                     return;                            
                 }
-                #if(Tinebase_Core::getUser()->hasRight('ActiveSync', Tinebase_Acl_Rights::RUN) !== true) {
-                #    header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-                #    header('HTTP/1.1 403 ActiveSync not enabled for account');
-                #    return;                            
-                #}
+                if(Tinebase_Core::getUser()->hasRight('ActiveSync', Tinebase_Acl_Rights::RUN) !== true) {
+                    header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
+                    header('HTTP/1.1 403 ActiveSync not enabled for account');
+                    return;                            
+                }
                 $syncFrontend->handlePost($_GET['User'], $_GET['DeviceId'], $_GET['DeviceType'], $_GET['Cmd']);
                 break;
                 
