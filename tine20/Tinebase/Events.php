@@ -41,5 +41,18 @@ class Tinebase_Events
                 }
             }
         }
+        
+        // try custom user defined listeners
+        try{ 
+            if (class_exists('CustomEventHooks')) {
+                $methods = get_class_methods('CustomEventHooks');
+                if (in_array('handleEvents', (array)$methods)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . ' (' . __LINE__ . ') ' . ' about to process user defined event hook for '. get_class($_eventObject));
+                    CustomEventHooks::handleEvents($_eventObject);
+                }
+            }
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . ' (' . __LINE__ . ') ' . ' failed to process user defined event hook with message: ' . $e);
+        }
     }
 }
