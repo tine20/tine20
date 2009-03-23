@@ -21,48 +21,38 @@
 class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
 {
     /**
-     * the constructor
-     *
-     * @param Tinebase_Model_ImportExportDefinition $_definition
-     * @param mixed $_controller
-     * @param array $_options additional options
-     */
-    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL, $_options = array())
-    {
-        $this->_createMethod = 'addUser';
-        parent::__construct($_definition, $_controller, $_options);
-    }
-    
-    /**
      * import single record (create password if in data)
      *
-     * @param array $_data
+     * @param Tinebase_Record_Abstract $_record
      * @return Tinebase_Record_Interface
      */
-    protected function _importRecord($_data)
+    protected function _importRecord($_record)
     {
         // add prefix to login name if given
-        if (isset($this->_options['accountLoginNamePrefix']) && isset($_data['accountLoginName'])) {
-            $_data['accountLoginName'] = $this->_options['accountLoginNamePrefix'] . $_data['accountLoginName'];
+        if (isset($this->_options['accountLoginNamePrefix']) && isset($_record['accountLoginName'])) {
+            $_record['accountLoginName'] = $this->_options['accountLoginNamePrefix'] . $_record['accountLoginName'];
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
+        Tinebase_Events::fireEvent(new Admin_Event_BeforeImportUser($_record, $this->_options));
         
-        $record = new $this->_modelName($_data);
-        Tinebase_Events::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), true));
         
-        $record = parent::_importRecord($record);
-        
-        if ((!isset($this->_options['dryrun']) || !$this->_options['dryrun']) ) {
-            // set password
-            $password = $_data['accountLoginName'];
-            if (isset($this->_options['password'])) {
-                $password = $this->_options['password'];
+        // generate passwd
+        $password = $_record['accountLoginName'];
+        if (isset($this->_options['password'])) {
+            $password = $this->_options['password'];
+        }
+        if (isset($_record['password']) && !empty($_record['password'])) {
+            $password = $_record['password'];
+        }
+            
+        if ($_record->isValid()) {   
+            if (!$this->_options['dryrun']) {
+                $record = $this->_controller->create($_record, $password, $password);
             }
-            if (isset($_data['password']) && !empty($_data['password'])) {
-                $password = $_data['password'];
-            }
-            Admin_Controller_User::getInstance()->setAccountPassword($record, $password, $password);
+            return $record;
+        } else {
+            // log it
         }
         
         return $record;
