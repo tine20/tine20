@@ -59,7 +59,7 @@ class Setup_Auth implements Zend_Auth_Adapter_Interface
                 $code = Zend_Auth_Result::SUCCESS;
                 $messages = array('Login successful');
             } else {
-                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . " $setupConfig->username == $this->_username && $setupConfig->password == $this->_password ");
+                #Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . " $setupConfig->username == $this->_username && $setupConfig->password == $this->_password ");
                 
                 $code = Zend_Auth_Result::FAILURE;
                 $messages = array('Login failed');
