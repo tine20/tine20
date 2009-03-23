@@ -21,14 +21,14 @@ class Admin_Event_BeforeImportUser extends Tinebase_Events_Abstract
      */
     public $account;
     
-    
+    /**
+     * @var array options of the import plugin
+     */
+    public $options;
     
     public function __construct($_account, $_options)
     {
         $this->account = $_account;
-        
-        foreach ($_options as $name => $data) {
-            $this->name = $data;
-        }
+        $this->options = $_options;
     }
 }
