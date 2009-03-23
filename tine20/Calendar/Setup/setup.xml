@@ -6,6 +6,7 @@
     <order>15</order>
     <status>enabled</status>
     <tables>
+        <!-- events -->
         <table>
             <name>cal_events</name>
             <version>1</version>
@@ -151,13 +152,181 @@
                     </field>
                 </index>
                 <index>
-                    <name>group_id</name>
-                    <unique>true</unique>
+                    <name>container_id</name>
                     <field>
-                        <name>id</name>
+                        <name>container_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>dtstart</name>
+                    <field>
+                        <name>dtstart</name>
+                    </field>
+                </index>
+                <index>
+                    <name>dtend</name>
+                    <field>
+                        <name>dtend</name>
+                    </field>
+                </index>
+                <index>
+                    <name>organizer</name>
+                    <field>
+                        <name>organizer</name>
+                    </field>
+                </index>
+                <index>
+                    <name>uid</name>
+                    <field>
+                        <name>uid</name>
                     </field>
                 </index>
             </declaration>
         </table>
+        
+        <!-- exceptions (dates when recuring event does not take palce) -->
+        <table>
+            <name>cal_exdate</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cal_event_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>exdate</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>cal_exdate::cal_event_id-cal_events::id</name>
+                    <field>
+                        <name>cal_event_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>cal_events</table>
+                        <field>id</field>
+                    </reference>
+                    <ondelete>cascade</ondelete>
+                </index>
+                <index>
+                    <name>exdate</name>
+                    <field>
+                        <name>exdate</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        
+        <!-- attendee -->
+        <table>
+            <name>cal_attendee</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cal_event_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>user_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                    <default>user</default>
+                </field>
+                <field>
+                    <name>quantity</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>1</default>
+                </field>
+                <field>
+                    <name>status</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <field>
+                    <name>status_authkey</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>cal_attendee::cal_event_id-cal_events::id</name>
+                    <field>
+                        <name>cal_event_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>cal_events</table>
+                        <field>id</field>
+                    </reference>
+                    <ondelete>cascade</ondelete>
+                </index>
+                <index>
+                    <name>user_id</name>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>type</name>
+                    <field>
+                        <name>type</name>
+                    </field>
+                </index>
+                <index>
+                    <name>status</name>
+                    <field>
+                        <name>status</name>
+                    </field>
+                </index>
+                <index>
+                    <name>status_authkey</name>
+                    <field>
+                        <name>status_authkey</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        
+        
     </tables>
 </application>
