@@ -126,21 +126,21 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @param array $_members array of member ids
      * @param boolean $_internet yes/no
      */
-    protected function _manageInternetGroup($_members, $_internet)
+    protected function _manageInternetGroup(array $_members, $_internet)
     {
         if (!isset(Tinebase_Core::getConfig()->courses) || !isset(Tinebase_Core::getConfig()->courses->internet_group)) {
             return;
         }
 
         $inetGroupId = Tinebase_Core::getConfig()->courses->internet_group;
-        $groupBackend = Tinebase_Group::factory(Tinebase_User::getConfiguredBackend());
+        $groupController = Admin_Controller_Group::getInstance();
         
         // add or remove members to or from internet group (defined in config.inc.php)
         foreach ($_members as $memberId) {
             if ($_internet) {
-                $groupBackend->addGroupMember($inetGroupId, $memberId);
+                $groupController->addGroupMember($inetGroupId, $memberId);
             } else {
-                $groupBackend->removeGroupMember($inetGroupId, $memberId);
+                $groupController->removeGroupMember($inetGroupId, $memberId);
             }
         }
     }
@@ -197,7 +197,9 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         }
         
         // add/remove members to/from internet group
-        $this->_manageInternetGroup($group->members, $savedRecord->internet);
+        if (! empty($group->members)) {
+            $this->_manageInternetGroup($group->members, $savedRecord->internet);
+        }
 
         return $this->_recordToJson($savedRecord);
     }
@@ -238,7 +240,6 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
                 'accountLoginNamePrefix'    => $course->name . '-',
                 'password'                  => $course->name,
                 'course'                    => $course,
-                //'encoding'                  => 'ISO8859-1'            
             )
         );
         $importer->import($tempFile->path);
@@ -249,9 +250,9 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         // add to student group if available
         if (isset(Tinebase_Core::getConfig()->courses)) {
             if (isset(Tinebase_Core::getConfig()->courses->students_group) && !empty(Tinebase_Core::getConfig()->courses->students_group)) {
-                $groupBackend = Tinebase_Group::factory(Tinebase_User::getConfiguredBackend()); 
+                $groupController = Admin_Controller_Group::getInstance(); 
                 foreach ($members as $member) {
-                    $groupBackend->addGroupMember(Tinebase_Core::getConfig()->courses->students_group, $member['id']);
+                    $groupController->addGroupMember(Tinebase_Core::getConfig()->courses->students_group, $member['id']);
                 }
             }
         }
