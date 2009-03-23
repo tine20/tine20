@@ -48,7 +48,10 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         
-        $record = parent::_importRecord($_data);
+        $record = new $this->_modelName($_data);
+        Tinebase_Events::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
+        
+        $record = parent::_importRecord($record);
         
         if ((!isset($this->_options['dryrun']) || !$this->_options['dryrun']) ) {
             // set password
