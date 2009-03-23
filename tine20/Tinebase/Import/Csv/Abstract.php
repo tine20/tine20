@@ -153,7 +153,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                     //print_r($recordData);
                     
                     // import record into tine!
-                    $record = new $this->_modelName($recordData);
+                    $record = new $this->_modelName($recordData, true);
                     $importedRecord = $this->_importRecord($record);
                     
                     if ($this->_options['dryrun']) {
@@ -236,17 +236,21 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     /**
      * import single record
      *
-     * @param array $_data
+     * @param Tinebase_Record_Abstract $_record
      * @return Tinebase_Record_Interface
      * 
      * @todo check conditions (duplicates, ...)
      */
-    protected function _importRecord($_data)
+    protected function _importRecord($_record)
     {
-        if (!$this->_options['dryrun']) {
-            $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
+        if ($_record->isValid()) {   
+            if (!$this->_options['dryrun']) {
+                $record = call_user_func(array($this->_controller, $this->_createMethod), $_record);
+            }
+            return $record;
+        } else {
+            // log it
         }
-        return $record;
     }
         
     /**
