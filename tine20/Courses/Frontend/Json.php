@@ -42,6 +42,11 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $this->_applicationName = 'Courses';
         $this->_controller = Courses_Controller_Course::getInstance();
         $this->_groupController = Admin_Controller_Group::getInstance();
+        
+        if (! isset(Tinebase_Core::getConfig()->courses)) {
+            Tinebase_Core::getConfig()->courses = new Zend_Config(array());
+        }
+        
     }
     
     /************************************** protected helper functions **********************/
@@ -231,10 +236,11 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         // get definition and start import with admin user import csv plugin
         $definitionBackend = new Tinebase_ImportExportDefinition();
-        $definition = $definitionBackend->getByProperty('admin_user_import_csv');
+        
+        $definition = $definitionBackend->getByProperty(Tinebase_Core::getConfig()->courses->get('import_definition', 'admin_user_import_csv'));
         $importer = new $definition->plugin(
             $definition, 
-            Tinebase_User::factory(Tinebase_User::getConfiguredBackend()),
+            Admin_Controller_User::getInstance(),
             array(
                 'group_id'                  => $groupId,
                 'accountLoginNamePrefix'    => $course->name . '-',
@@ -248,12 +254,10 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $members = $this->_getCourseMembers($groupId);
         
         // add to student group if available
-        if (isset(Tinebase_Core::getConfig()->courses)) {
-            if (isset(Tinebase_Core::getConfig()->courses->students_group) && !empty(Tinebase_Core::getConfig()->courses->students_group)) {
-                $groupController = Admin_Controller_Group::getInstance(); 
-                foreach ($members as $member) {
-                    $groupController->addGroupMember(Tinebase_Core::getConfig()->courses->students_group, $member['id']);
-                }
+        if (isset(Tinebase_Core::getConfig()->courses->students_group) && !empty(Tinebase_Core::getConfig()->courses->students_group)) {
+            $groupController = Admin_Controller_Group::getInstance(); 
+            foreach ($members as $member) {
+                $groupController->addGroupMember(Tinebase_Core::getConfig()->courses->students_group, $member['id']);
             }
         }
         
