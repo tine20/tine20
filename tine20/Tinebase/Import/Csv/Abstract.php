@@ -148,12 +148,13 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                     $recordData = $this->_doMapping($recordData, $headline);
                     $recordData = $this->_doConversions($recordData);
                     // merge additional values (like group id, container id ...)
-                    $recordData = array_merge($recordData, $this->_addData());
+                    $recordData = array_merge($recordData, $this->_addData($recordData));
                     
                     //print_r($recordData);
                     
                     // import record into tine!
-                    $importedRecord = $this->_importRecord($recordData);
+                    $record = new $this->_modelName($recordData);
+                    $importedRecord = $this->_importRecord($record);
                     
                     if ($this->_options['dryrun']) {
                         $result['results']->addRecord($importedRecord);
@@ -242,8 +243,6 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      */
     protected function _importRecord($_data)
     {
-        $record = new $this->_modelName($_data);
-        
         if (!$this->_options['dryrun']) {
             $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
         }
@@ -253,9 +252,10 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     /**
      * add some more values (overwrite that if you need some special/dynamic fields)
      *
-     * @return array
+     * @param  array recordData
+     * @return array additional recordData
      */
-    protected function _addData()
+    protected function _addData($recordData)
     {
         return array();
     }
