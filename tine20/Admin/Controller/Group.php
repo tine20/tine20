@@ -154,7 +154,33 @@ class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
         }
         
         return $group;            
-    }  
+    }
+    
+    /**
+     * add a new groupmember to a group
+     *
+     * @param int $_groupId
+     * @param int $_accountId
+     * @return void
+     */
+    public function addGroupMember($_groupId, $_userId)
+    {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        Tinebase_Group::getInstance()->addGroupMember($_groupId, $_userId);
+    }
+    
+    /**
+     * remove one groupmember from the group
+     *
+     * @param int $_groupId
+     * @param int $_accountId
+     * @return void
+     */
+    public function removeGroupMember($_groupId, $_userId)
+    {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        Tinebase_Group::getInstance()->removeGroupMember($_groupId, $_userId);
+    }
     
     /**
      * delete multiple groups
