@@ -88,6 +88,10 @@ if ($opts->clean) {
         'Tinebase/js/tine-all.js',
         'Tinebase/css/tine-all-debug.css',
         'Tinebase/css/tine-all.css',
+        'Setup/js/setup-all-debug.js',
+        'Setup/js/setup-all.js',
+        'Setup/css/setup-all-debug.css',
+        'Setup/css/setup-all.css',
     );
     foreach ($files as $file) {
         if (file_exists("$tine20path/$file")) {
@@ -115,14 +119,44 @@ if ($opts->clean) {
 }
 
 $includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles(array(
-    'Asterisk',
     'Felamimail',
     'Calendar'
 ));
 
+$setupIncludeFiles = Setup_Frontend_Http::getAllIncludeFiles();
+
 if ($opts->a || $opts->s) {
-    $cssDebug = fopen($tine20path . '/Tinebase/css/tine-all-debug.css', 'w+');
-    foreach ($includeFiles['css'] as $file) {
+    // tine 2.0 main css files
+    concatCss($includeFiles['css'], 'Tinebase/css/tine-all-debug.css');
+    compress('Tinebase/css/tine-all-debug.css', 'Tinebase/css/tine-all.css');
+    // setup css files
+    concatCss($setupIncludeFiles['css'], 'Setup/css/setup-all-debug.css');
+    compress('Setup/css/setup-all-debug.css', 'Setup/css/setup-all.css');
+}
+
+if ($opts->a || $opts->j) {
+    // tine 2.0 main css files
+    concatJs($includeFiles['js'], 'Tinebase/js/tine-all-debug.js');
+    compress('Tinebase/js/tine-all-debug.js', 'Tinebase/js/tine-all.js');
+    // setup css files
+    concatJs($setupIncludeFiles['js'], 'Setup/js/setup-all-debug.js');
+    compress('Setup/js/setup-all-debug.js', 'Setup/js/setup-all.js');
+}
+
+/**
+ * concat css files into one big css file
+ *
+ * @param  array    $_files
+ * @param  string   $_filename
+ * @return void
+ */
+function concatCss(array $_files, $_filename)
+{
+    global $tine20path;
+    
+    $cssDebug = fopen("$tine20path/$_filename", 'w+');
+    
+    foreach ($_files as $file) {
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
             $cssContent = file_get_contents("$tine20path/$filename");
@@ -130,19 +164,25 @@ if ($opts->a || $opts->s) {
             fwrite($cssDebug, $cssContent . "\n");
         }
     }
+    
     fclose($cssDebug);
-
-    if (file_exists($yuiCompressorPath)) {
-        $verbose = $opts->v ? ' --verbose ' : '';
-        system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
-    } else {
-        copy("$tine20path/Tinebase/css/tine-all-debug.css","$tine20path/Tinebase/css/tine-all.css");
-    }
+    
 }
 
-if ($opts->a || $opts->j) {
-    $jsDebug = fopen($tine20path . '/Tinebase/js/tine-all-debug.js', 'w+');
-    foreach ($includeFiles['js'] as $file) {
+/**
+ * concat js files into one big css file
+ *
+ * @param  array    $_files
+ * @param  string   $_filename
+ * @return void
+ */
+function concatJs(array $_files, $_filename)
+{
+    global $tine20path, $build;
+    
+    $jsDebug = fopen("$tine20path/$_filename", 'w+');
+    
+    foreach ($_files as $file) {
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
             fwrite($jsDebug, '// file: ' . "$tine20path/$filename" . "\n");
@@ -151,16 +191,28 @@ if ($opts->a || $opts->j) {
             fwrite($jsDebug, $jsContent . "\n");
         }
     }
-    fclose($jsDebug);
-
-    if (file_exists($yuiCompressorPath)) {
-        $verbose = $opts->v ? ' --verbose ' : '';
     
-        system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
-    } else {
-        copy("$tine20path/Tinebase/js/tine-all-debug.js","$tine20path/Tinebase/js/tine-all.js");
-    }
+    fclose($jsDebug);
+    
+}
 
+/**
+ * compress file using js/css compressor
+ * 
+ * @param  string $_infile
+ * @param  string $_outfile
+ * @return void
+ */
+function compress($_infile, $_outfile)
+{
+    global $tine20path, $yuiCompressorPath;
+    
+if (file_exists($yuiCompressorPath)) {
+        $verbose = $opts->v ? ' --verbose ' : '';
+        system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/$_outfile $tine20path/$_infile");
+    } else {
+        copy("$tine20path/$_infile","$tine20path/$_outfile");
+    }
 }
 
 /*
@@ -316,7 +368,6 @@ if ( $opts->z ) {
 
     }
 }
-
 
 /**
  * creates translation lists js files for locale with js object
