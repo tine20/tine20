@@ -247,4 +247,23 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
             $samResult = $this->_samBackend->deleteUsers($_accountIds);
         }
     }
+    
+    /**
+     * very simplistic account name generation
+     *
+     * @param Tinebase_Model_FullUser $_account
+     * @return string
+     */
+    public static function generateUserName($_account)
+    {
+        $uname = strtolower(substr($_account->accountFirstName, 0, 2) . '.' . $_account->accountLastName);
+        
+        
+        $search  = array('ä',  'ü',  'ö',  'ß',  'é', 'è', 'ê', 'ó' ,'ô', 'á', 'ź'); 
+        $replace = array('ae', 'ue', 'oe', 'ss', 'e', 'e', 'e', 'o', 'o', 'a', 'z');
+                    
+        $uname = str_replace($search, $replace, $uname);
+        
+        return preg_replace('/[^a-zA-Z0-9._\-]/', '', $uname);
+    }
 }
