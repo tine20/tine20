@@ -79,8 +79,11 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
             'accountEmailAddress'   => NULL,
         ));
         
-        $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->addUser($account);
+        $account = Tinebase_User::getInstance()->addUser($account);
+        // for some reason we also need to add user manually to primary group
+        Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account->getId());
         Tinebase_User::getInstance()->setPassword($loginname, $record->name, $record->name);
+        
         
         // add to teacher group if available
         if (isset(Tinebase_Core::getConfig()->courses)) {
