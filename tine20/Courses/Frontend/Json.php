@@ -220,10 +220,12 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
      * @param string $groupId
      * @param string $courseName
      */
-    public function importMembers($tempFileId, $groupId, $courseName)
+    public function importMembers($tempFileId, $groupId, $courseId)
     {
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->getTempFile($tempFileId);
+        
+        $course = $this->_controller->get($courseId);
         
         // get definition and start import with admin user import csv plugin
         $definitionBackend = new Tinebase_ImportExportDefinition();
@@ -233,8 +235,9 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             Tinebase_User::factory(Tinebase_User::getConfiguredBackend()),
             array(
                 'group_id'                  => $groupId,
-                'accountLoginNamePrefix'    => $courseName . '-',
-                'password'                  => $courseName,
+                'accountLoginNamePrefix'    => $course->name . '-',
+                'password'                  => $course->name,
+                'course'                    => $course,
                 //'encoding'                  => 'ISO8859-1'            
             )
         );

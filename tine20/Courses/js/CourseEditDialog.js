@@ -54,7 +54,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     method: 'Courses.importMembers',
                     tempFileId: tempFile.id,
                     groupId: this.record.data.group_id,
-                    courseName: this.record.data.name
+                    courseId: this.record.data.id
                 },
                 success: this.onMembersImport,
                 failure: function() {}
