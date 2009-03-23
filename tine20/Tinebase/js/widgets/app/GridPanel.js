@@ -183,7 +183,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             scope: this
         });
         
-        this.action_addInNewWindow= new Ext.Action({
+        this.action_addInNewWindow = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
@@ -407,21 +407,33 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     onKeyDown: function(e){
         if (e.ctrlKey) {
             switch (e.getKey()) {
-                case e.E:
-                    this.onEditInNewWindow.call(this, {
-                        actionType: 'edit'
-                    });
-                    break;
                 case e.A:
                     // select only current page
                     this.grid.getSelectionModel().selectAll(true);
                     e.preventDefault();
                     break;
+                case e.E:
+                    if (!this.action_editInNewWindow.isDisabled()) {
+                        this.onEditInNewWindow.call(this, {
+                            actionType: 'edit'
+                        });
+                        e.preventDefault();
+                    }
+                    break;
+                case e.N:
+                    if (!this.action_addInNewWindow.isDisabled()) {
+                        this.onEditInNewWindow.call(this, {
+                            actionType: 'add'
+                        });
+                        e.preventDefault();
+                    }
+                    break;
+                
             }
         } else {
             switch (e.getKey()) {
                 case e.DELETE:
-                    if (!this.grid.editing && !this.grid.adding) {
+                    if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
                         this.onDeleteRecords.call(this);
                     }
                     break;
