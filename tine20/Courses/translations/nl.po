@@ -13,6 +13,18 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller/Course.php:71
+msgid "teacher-"
+msgstr ""
+
+#: Controller/Course.php:76
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:77
+msgid "Teacher Account"
+msgstr ""
+
 #: js/CourseEditDialog.js:34
 msgid "Import course members"
 msgstr ""

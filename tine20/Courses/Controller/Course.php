@@ -67,13 +67,14 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
         $record = parent::create($_record);
         
         // add teacher account
-        $loginname = 'teacher-' . $record->name;
+        $i18n = Tinebase_Translation::getTranslation('Courses');
+        $loginname = $i18n->_('teacher-') . $record->name;
         $account = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $loginname,
             'accountStatus'         => 'enabled',
             'accountPrimaryGroup'   => $record->group_id,
-            'accountLastName'       => 'Teacher',
-            'accountDisplayName'    => $record->name . ' Teacher Account',
+            'accountLastName'       => $i18n->_('Teacher'),
+            'accountDisplayName'    => $record->name . ' ' .  $i18n->_('Teacher Account'),
             'accountFirstName'      => $record->name,
             'accountExpires'        => NULL,
             'accountEmailAddress'   => NULL,

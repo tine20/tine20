@@ -1,3 +1,15 @@
+#: Controller/Course.php:71
+msgid "teacher-"
+msgstr "teacher-"
+
+#: Controller/Course.php:76
+msgid "Teacher"
+msgstr "Teacher"
+
+#: Controller/Course.php:77
+msgid "Teacher Account"
+msgstr "Teacher Account"
+
 #: js/CourseEditDialog.js:34
 msgid "Import course members"
 msgstr "Import course members"
