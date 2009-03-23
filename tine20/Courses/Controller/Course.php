@@ -64,11 +64,16 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
      */
     public function create(Tinebase_Record_Interface $_record)
     {
+        if (! isset(Tinebase_Core::getConfig()->courses)) {
+            Tinebase_Core::getConfig()->courses = new Zend_Config(array());
+        }
+        
         $record = parent::create($_record);
         
         // add teacher account
         $i18n = Tinebase_Translation::getTranslation('Courses');
         $loginname = $i18n->_('teacher-') . $record->name;
+        
         $account = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $loginname,
             'accountStatus'         => 'enabled',
@@ -80,18 +85,15 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
             'accountEmailAddress'   => NULL,
         ));
         
-        $account = Tinebase_User::getInstance()->addUser($account);
-        // for some reason we also need to add user manually to primary group
-        Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account->getId());
-        Tinebase_User::getInstance()->setPassword($loginname, $record->name, $record->name);
+        $event = new Courses_Event_BeforeAddTeacher($account, $record);
+        Tinebase_Events::fireEvent($event);
         
+        $password = Tinebase_Core::getConfig()->courses->get('teacher_password', $account->accountLoginName);
+        $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
         
         // add to teacher group if available
-        if (isset(Tinebase_Core::getConfig()->courses)) {
-            if (isset(Tinebase_Core::getConfig()->courses->teacher_group) && !empty(Tinebase_Core::getConfig()->courses->teacher_group)) {
-                $groupBackend = Tinebase_Group::factory(Tinebase_User::getConfiguredBackend()); 
-                $groupBackend->addGroupMember(Tinebase_Core::getConfig()->courses->teacher_group, $account->getId());
-            }
+        if (isset(Tinebase_Core::getConfig()->courses->teacher_group) && !empty(Tinebase_Core::getConfig()->courses->teacher_group)) {
+            Admin_Controller_Group::getInstance()->addGroupMember(Tinebase_Core::getConfig()->courses->teacher_group, $account->getId());
         }
         
         return $record;
