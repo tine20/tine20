@@ -241,10 +241,17 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $this->_userBackend->deleteUsers($_accountIds);
-        
-        if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->deleteUsers($_accountIds);
+        $groupsBackend = Tinebase_Group::getInstance();
+        foreach ((array)$_accountIds as $accountId) {
+            $memberships = $groupsBackend->getGroupMemberships($accountId);
+            foreach ((array)$memberships as $groupId) {
+                $groupsBackend->removeGroupMember($groupId, $accountId);
+            }
+            
+            $this->_userBackend->deleteUser($accountId);
+            if ($this->_manageSAM) {
+                $this->_samBackend->deleteUser($accountId);
+            }
         }
     }
     
