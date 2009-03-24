@@ -37,17 +37,14 @@ Tine.Courses.Model.Course = Tine.Tinebase.Record.create(Tine.Courses.Model.Cours
     appName: 'Courses',
     modelName: 'Course',
     idProperty: 'id',
-    titleProperty: 'title',
+    titleProperty: 'name',
     // ngettext('Course', 'Courses', n);
     recordName: 'Course',
     recordsName: 'Courses',
     containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'record list',
-    containersName: 'record lists',
-    getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
-    }
+    containersName: 'record lists'
 });
 
 Tine.Courses.Model.Course.getDefaultData = function() { 
