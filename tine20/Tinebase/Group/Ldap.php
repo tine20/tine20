@@ -265,18 +265,23 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
              return;
         }
         
+        $data = array('memberuid' => $accountMetaData['uid']);
+        
         if ($this->_options['useRfc2307bis']) {
-            $memberUidNumbers[] = $accountMetaData['uidNumber'];
-            
-            $this->_saveRfc2307GroupMembers($_groupId, $memberUidNumbers);
-        } else {
-            $data = array('memberuid' => $accountMetaData['uid']);
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
-            
-            $this->_ldap->insertProperty($dn, $data);
+            if (count($memberUidNumbers) > 0) {
+                $data['member'] = $accountMetaData['dn'];
+            } else {
+                // adding first member is handled by $this->_saveRfc2307GroupMembers
+                $memberUidNumbers[] = $accountMetaData['uidNumber'];
+                $this->_saveRfc2307GroupMembers($_groupId, $memberUidNumbers);
+                return;
+            }
         }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        
+        $this->_ldap->insertProperty($dn, $data);
     }
 
     /**
@@ -298,18 +303,24 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
              return;
         }
         
+        $data = array('memberuid' => $accountMetaData['uid']);
+        
         if ($this->_options['useRfc2307bis']) {
-            unset($memberUidNumbers[$accountMetaData['uidNumber']]);
             
-            $this->_saveRfc2307GroupMembers($_groupId, $memberUidNumbers);
-        } else {
-            $data = array('memberuid' => $accountMetaData['uid']);
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
-            
-            $this->_ldap->deleteProperty($dn, $data);
+            if (count($memberUidNumbers) > 1) { 
+                $data['member'] = $accountMetaData['dn'];
+            } else {
+                // deleting last member is handled by $this->_saveRfc2307GroupMembers
+                unset($memberUidNumbers[$accountMetaData['uidNumber']]);
+                $this->_saveRfc2307GroupMembers($_groupId, $memberUidNumbers);
+                return;
+            }
         }
+            
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
+        
+        $this->_ldap->deleteProperty($dn, $data);
     }
     
     /**
