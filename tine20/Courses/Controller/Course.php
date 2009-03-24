@@ -72,7 +72,7 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
         
         // add teacher account
         $i18n = Tinebase_Translation::getTranslation('Courses');
-        $loginname = $i18n->_('teacher-') . $record->name;
+        $loginname = $record->name . '-' . $i18n->_('teacher');
         
         $account = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $loginname,
