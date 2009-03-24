@@ -81,7 +81,7 @@ class Tinebase_TempFile extends Tinebase_Application_Backend_Sql_Abstract
            'time'        => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
            'path'        => $path,
            'name'        => $uploadedFile['name'],
-           'type'        => $uploadedFile['type'],
+           'type'        => ! empty($uploadedFile['type']) ? $uploadedFile['type'] : 'unknown',
            'error'       => $uploadedFile['error'],
            'size'        => $uploadedFile['size'],
         ));
