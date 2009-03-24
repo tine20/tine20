@@ -178,6 +178,8 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     /**
      * creates/updates a record
      *
+     * @todo move non api specific stuff to controller!
+     * 
      * @param  string $recordData
      * @return array created/updated record
      */
@@ -189,6 +191,10 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         $group = new Tinebase_Model_Group(array(), TRUE);
         $group->setFromJsonInUsersTimezone($recordData);
         
+        $i18n = Tinebase_Translation::getTranslation('Courses');
+        $groupNamePrefix = $i18n->_('Course') . '-';
+        $group->name = $groupNamePrefix . $group->name;
+        
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
         
         if (empty($group->id)) {
@@ -196,9 +202,23 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             $course->group_id = $savedGroup->getId();
             $savedRecord = $this->_controller->create($course);
         } else {
+            $currentMembers = $this->_groupController->getGroupMembers($course->group_id);
+            $addedMembers = array_diff((array)$group->members, $currentMembers);
+            $removedMembers = array_diff($currentMembers, (array)$group->members);
+            
             $savedRecord = $this->_controller->update($course);
             $group->setId($course->group_id);
             $this->_groupController->update($group);
+            
+            // add new members to students group
+            if (isset(Tinebase_Core::getConfig()->courses->students_group) && !empty(Tinebase_Core::getConfig()->courses->students_group)) {
+                foreach ($addedMembers as $member) {
+                    $this->_groupController->addGroupMember(Tinebase_Core::getConfig()->courses->students_group, $member['id']);
+                }
+            }
+            
+            // delte members wich got removed from course
+            Admin_Controller_User::getInstance()->delete($removedMembers);
         }
         
         // add/remove members to/from internet group
