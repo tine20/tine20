@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-class Felamimail_Controller
+class Felamimail_Controller extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface
 {
     protected $accounts = NULL;
     
@@ -20,6 +20,63 @@ class Felamimail_Controller
      */
     private $connections = array();
     
+    /**
+     * holdes the instance of the singleton
+     *
+     * @var Addressbook_Controller
+     */
+    private static $_instance = NULL;
+
+    /**
+     * constructor (get current user)
+     */
+    private function __construct() {
+        $this->_currentAccount = Tinebase_Core::getUser();
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Felamimail_Controller
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Felamimail_Controller;
+        }
+        
+        return self::$_instance;
+    }
+
+    /**
+     * event handler function
+     * 
+     * all events get routed through this function
+     *
+     * @param Tinebase_Events_Abstract $_eventObject the eventObject
+     * 
+     * @todo    write test
+     */
+    public function handleEvents(Tinebase_Events_Abstract $_eventObject)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        
+        switch(get_class($_eventObject)) {
+            case 'Admin_Event_AddAccount':
+                break;
+            case 'Admin_Event_DeleteAccount':
+                break;
+        }
+    }
+        
 	/**
 	 * returns list of all configured accounts
 	 *
