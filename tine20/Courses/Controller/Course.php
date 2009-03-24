@@ -98,4 +98,33 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
         
         return $record;
     }
+    
+    /**
+     * Deletes a set of records.
+     * 
+     * If one of the records could not be deleted, no record is deleted
+     * 
+     * @param   array array of record identifiers
+     * @return  void
+     * @throws Tinebase_Exception_NotFound|Tinebase_Exception
+     */
+    public function delete($_ids)
+    {
+        $courses = $this->getMultiple($_ids);
+        parent::delete($_ids);
+        
+        $groupController = Admin_Controller_Group::getInstance();
+        $userController = Admin_Controller_User::getInstance();
+        
+        $groupsToDelete = array();
+        $usersToDelete = array();
+        
+        foreach ($courses as $course) {
+            $groupsToDelete[] = $course->group_id;
+            $usersToDelete = array_merge($usersToDelete, $groupController->getGroupMembers($course->group_id));
+        }
+        
+        $groupController->delete(array_unique($groupsToDelete));
+        $userController->delete(array_unique($usersToDelete));
+    }
 }
