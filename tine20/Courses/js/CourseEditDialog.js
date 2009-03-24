@@ -42,6 +42,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     // todo: wrap this into a uploadAction widget
     onFileSelect: function(BrowseButton) {
         var input = BrowseButton.detachInputFile();
+        this.loadMask.show();
         var uploader = new Ext.ux.file.Uploader({
             input: input
         });
@@ -50,6 +51,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         	var tempFile = record.get('tempFile');
             Ext.Ajax.request({
             	scope: this,
+                timeout: 120000, 
                 params: {
                     method: 'Courses.importMembers',
                     tempFileId: tempFile.id,
@@ -60,7 +62,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 failure: function() {}
             });
         	
-            this.loadMask.hide();
+            //this.loadMask.hide();
         	//console.log(record.get('tempFile'));
             
         }, this);
@@ -81,6 +83,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (members.results.length > 0) {
             this.membersStore.loadData({results: members.results});
         }
+        this.loadMask.hide();
     },
     
     /**
