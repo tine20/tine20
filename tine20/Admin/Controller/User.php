@@ -243,7 +243,11 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
         
         $groupsBackend = Tinebase_Group::getInstance();
         foreach ((array)$_accountIds as $accountId) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
+            
             $memberships = $groupsBackend->getGroupMemberships($accountId);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removeing user from groups: " . print_r($memberships, true));
+            
             foreach ((array)$memberships as $groupId) {
                 $groupsBackend->removeGroupMember($groupId, $accountId);
             }
