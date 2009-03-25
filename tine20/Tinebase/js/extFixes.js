@@ -1,4 +1,15 @@
 /**
+ * fix twin trigger field layout in IE8
+ */
+Ext.form.TwinTriggerField.prototype.onRender = function(ct, position) {
+    Ext.form.TwinTriggerField.superclass.onRender.call(this, ct, position);
+    if (Ext.isIE8) {
+        this.el.setTop.defer(10, this.el, ['1px']);
+    }
+}
+
+
+/**
  * fix timezone handling for date picker
  * 
  * The getValue function always returns 00:00:00 as time. So if a form got filled
