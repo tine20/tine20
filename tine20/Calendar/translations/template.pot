@@ -1,0 +1,8 @@
+#: Controller.php:82
+#, python-format
+msgid "%s's personal calendar"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Calendar"
+msgstr ""
