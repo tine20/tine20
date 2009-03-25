@@ -45,9 +45,9 @@
  * 
  * $filterData = array(
  *     array('field' => 'name','operator' => 'beginswith', 'value' => 'Hugo'),
- *     array('condition' => 'OR' => 'filters' => array(
- *         'field' => 'created_by'  => 'operator' => 'equals', 'value' => 2,
- *         'field' => 'modified_by' => 'operator' => 'equals', 'value' => 2
+ *     array('condition' => 'OR', 'filters' => array(
+ *         'field' => 'created_by',  'operator' => 'equals', 'value' => 2,
+ *         'field' => 'modified_by', 'operator' => 'equals', 'value' => 2
  *     ),
  *     array('field' => 'container_id', 'operator' => 'in', 'value' => array(2,4,6,7)
  *     array('field' => 'foreign_id',  'operator' => 'AND', value => array(
@@ -301,9 +301,9 @@ class Tinebase_Model_Filter_FilterGroup
     {
         foreach ($this->_filterObjects as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
-                //$groupSelect = new Tinebase_Model_Filter_DbGroupSelect($_select, $this->_concatenationCondition);
-                //$filter->appendFilterSql($groupSelect);
-                //$groupSelect->assemble();
+                $groupSelect = new Tinebase_Model_Filter_DbGroupSelect($_select, $this->_concatenationCondition);
+                $filter->appendFilterSql($groupSelect);
+                $groupSelect->appendWhere();
             } else {
                 $filter->appendFilterSql($_select);
             }
