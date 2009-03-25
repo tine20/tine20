@@ -1,13 +1,24 @@
 /**
- * fix twin trigger field layout in IE8
+ * IE8 fixes
  */
-Ext.form.TwinTriggerField.prototype.onRender = function(ct, position) {
-    Ext.form.TwinTriggerField.superclass.onRender.call(this, ct, position);
-    if (Ext.isIE8) {
+if (Ext.isIE8) {
+    /**
+     * fix twin trigger field layout
+     */
+    Ext.form.TwinTriggerField.prototype.onRender = function(ct, position) {
+        Ext.form.TwinTriggerField.superclass.onRender.call(this, ct, position);
         this.el.setTop.defer(10, this.el, ['1px']);
     }
+    
+    /**
+     * fix datepicker width
+     */
+    Ext.DatePicker.prototype.onRender = Ext.DatePicker.prototype.onRender.createSequence(function(ct, position) {
+        var wrap = ct.up('div[class="x-layer x-menu x-menu-plain x-date-menu"]');
+        var orgWidth = this.el.getWidth();
+        wrap.setWidth.defer(10, wrap, [orgWidth]);
+    });
 }
-
 
 /**
  * fix timezone handling for date picker
