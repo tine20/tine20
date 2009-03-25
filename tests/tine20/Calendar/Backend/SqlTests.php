@@ -43,7 +43,86 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
     
     public function testCreateSimpleEvent()
     {
-        $event = new Calendar_Model_Event(array(
+        $event = $this->_getEvent();
+        $persistentEvent = $this->_backend->create($event);
+                
+        $this->assertEquals($persistentEvent->summary, $event->summary);
+        
+        $this->_backend->delete($persistentEvent->getId());
+    }
+    
+    public function testGetSimpleEvent()
+    {
+        $event = $this->_getEvent();
+        $persistentEvent = $this->_backend->create($event);
+        
+        $loadedEvent = $this->_backend->get($persistentEvent->getId());
+        
+        $this->assertEquals($loadedEvent->summary, $event->summary);
+        
+        $this->_backend->delete($persistentEvent->getId());
+    }
+    
+    public function testDeleteSimpleEvent()
+    {
+        $event = $this->_getEvent();
+        $persistentEvent = $this->_backend->create($event);
+        
+        $this->_backend->delete($persistentEvent->getId());
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $loadedEvent = $this->_backend->get($persistentEvent->getId());
+    }
+    
+    public function testSearchSimpleEvents()
+    {
+        $persistentEventIds = array();
+        
+        $event1 = $this->_getEvent();
+        $persistentEventIds[] = $this->_backend->create($event1)->getId();
+        
+        $event2 = $this->_getEvent();
+        $event2->dtstart->addDay(1);
+        $persistentEventIds[] = $this->_backend->create($event2)->getId();
+        
+        $event3 = $this->_getEvent();
+        $event3->dtstart->addDay(2);
+        $persistentEventIds[] = $this->_backend->create($event3)->getId();
+        
+        $from = $event1->dtstart->addMinute(7)->get(Calendar_Model_Event::ISO8601LONG);
+        $until = $event3->dtstart->addMinute(-7)->get(Calendar_Model_Event::ISO8601LONG);
+        
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $event1->container_id),
+            array('condition' => 'OR', 'filters' => array(
+               array('condition' => 'AND', 'filters' => array(
+                   array('field' => 'dtstart', 'operator' => 'after',  'value' => $from),
+                   array('field' => 'dtstart', 'operator' => 'before', 'value' => $until),
+               )),
+               array('condition' => 'AND', 'filters' => array(
+                   array('field' => 'dtend', 'operator' => 'after',  'value' => $from),
+                   array('field' => 'dtend', 'operator' => 'before', 'value' => $until),
+               )),
+           )),
+        ));
+        
+        $events = $this->_backend->search($filter, new Tinebase_Model_Pagination());
+        
+        $this->assertEquals(3, count($events));
+        
+        foreach ($persistentEventIds as $id) {
+            $this->_backend->delete($id);
+        }
+    }
+    
+    /**
+     * returns a simple event
+     *
+     * @return Calendar_Model_Event
+     */
+    protected function _getEvent()
+    {
+        return new Calendar_Model_Event(array(
             'summary'     => 'Wakeup',
             'dtstart'     => '2009-03-25 06:00:00',
             'dtend'       => '2009-03-25 06:15:00',
@@ -53,12 +132,6 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
             'organizer'    => Tinebase_Core::getUser()->getId(),
             'uid'          => Calendar_Model_Event::generateUID(),
         ));
-        
-        $persistentEvent = $this->_backend->create($event);
-                
-        $this->assertEquals($persistentEvent->summary, $event->summary);
-        
-        $this->_backend->delete($persistentEvent->getId());
     }
 }
     
