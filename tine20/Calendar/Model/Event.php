@@ -15,7 +15,7 @@
  * 
  * Recuring Notes: 
  *  - deleted recuring exceptions are stored in exdate (array of datetimes)
- *  - modified recuring exceptions have their own event with recurid set the dtstart
+ *  - modified recuring exceptions have their own event with recurid set the uid-dtstart
  *    of the originators event (@see RFC2445)
  *  - as id is unique, each modified recuring event has its own id
  *  - rrule is stored in RCF2445 format
@@ -27,7 +27,7 @@
  * 
  * @package Calendar
  */
-class Calendars_Model_Calendar extends Tinebase_Record_Abstract
+class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -77,9 +77,9 @@ class Calendars_Model_Calendar extends Tinebase_Record_Abstract
         'uid'                  => array('allowEmpty' => true          ),
         // ical common fields with multiple appearance
         //'attach'                => array('allowEmpty' => true         ),
-        'attendee'              => array('allowEmpty' => true         ),
-        'tags'                  => array('allowEmpty' => true         ), //originally categories
-        'notes'                 => array('allowEmpty' => true         ), //originally comment
+        'attendee'              => array('allowEmpty' => true         ), // RecordSet of Calendar_Model_Attendee
+        'tags'                  => array('allowEmpty' => true         ), // originally categories handled by Tinebase_Tags
+        'notes'                 => array('allowEmpty' => true         ), // originally comment handled by Tinebase_Notes
         //'contact'               => array('allowEmpty' => true         ),
         //'related'               => array('allowEmpty' => true         ),
         //'resources'             => array('allowEmpty' => true         ),
@@ -88,7 +88,7 @@ class Calendars_Model_Calendar extends Tinebase_Record_Abstract
         'dtstart'               => array('allowEmpty' => true         ),
         'recurid'               => array('allowEmpty' => true         ),
         // ical scheduleable interface fields with multiple appearance
-        'exdate'                => array('allowEmpty' => true         ),
+        'exdate'                => array('allowEmpty' => true         ), //  array of Zend_Date's
         //'exrule'                => array('allowEmpty' => true         ),
         //'rdate'                 => array('allowEmpty' => true         ),
         'rrule'                 => array('allowEmpty' => true         ),
