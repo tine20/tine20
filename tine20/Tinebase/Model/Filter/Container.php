@@ -258,7 +258,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     public static function _transformLegacyData(array &$_data, $_containerProperty='container_id') {
         $legacyData = array();
         foreach ($_data as $key => $filterData) {
-            if (in_array($filterData['field'], array('containerType', 'container', 'owner'))) {
+            if (array_key_exists('field', $filterData) && in_array($filterData['field'], array('containerType', 'container', 'owner'))) {
                 $legacyData[$filterData['field']] = $filterData['value'];
                 unset($_data[$key]);
             }
