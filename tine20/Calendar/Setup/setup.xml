@@ -137,7 +137,6 @@
                 <field>
                     <name>rrule_until</name>
                     <type>datetime</type>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>organizer_tz</name>
@@ -179,6 +178,12 @@
                     <name>uid</name>
                     <field>
                         <name>uid</name>
+                    </field>
+                </index>
+                <index>
+                    <name>rrule_until</name>
+                    <field>
+                        <name>rrule_until</name>
                     </field>
                 </index>
             </declaration>
