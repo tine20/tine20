@@ -63,6 +63,16 @@ class Tinebase_Model_Filter_FilterGroup
     /*************** config options for inheriting filter groups ***************/
     
     /**
+     * const for OR condition
+     */
+    const CONDITION_OR = 'OR';
+    
+    /**
+     * const for AND condition
+     */
+    const CONDITION_AND = 'AND';
+    
+    /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
@@ -121,12 +131,12 @@ class Tinebase_Model_Filter_FilterGroup
      * @param  string $_condition {AND|OR}
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct(array $_data, $_condition='AND', $_options = array())
+    public function __construct(array $_data, $_condition='', $_options = array())
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         $this->_setOptions($_options);
         
-        $this->_concatenationCondition = $_condition == 'OR' ? 'OR' : 'AND';
+        $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
         
         $this->setFromArray($_data);
     }
