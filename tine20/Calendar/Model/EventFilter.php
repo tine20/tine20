@@ -31,10 +31,15 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Calendar')),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
-        'dtstart'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'dtend'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'period'         => array('filter' => 'Calendar_Model_PeriodFilter'),
         //'class_id'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         //'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag'),
+    
+        // NOTE using dtdstart and dtend filters may not lead to the desired result. 
+        //      you need to use the period filter to filter for events in a given period
+        'dtstart'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'dtend'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'rrule'          => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }
