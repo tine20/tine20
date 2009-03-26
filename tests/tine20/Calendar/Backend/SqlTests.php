@@ -41,7 +41,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         
     }
     
-    public function testCreateSimpleEvent()
+    public function testCreateEvent()
     {
         $event = $this->_getEvent();
         $persistentEvent = $this->_backend->create($event);
@@ -51,7 +51,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         $this->_backend->delete($persistentEvent->getId());
     }
     
-    public function testGetSimpleEvent()
+    public function testGetEvent()
     {
         $event = $this->_getEvent();
         $persistentEvent = $this->_backend->create($event);
@@ -63,7 +63,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         $this->_backend->delete($persistentEvent->getId());
     }
     
-    public function testDeleteSimpleEvent()
+    public function testDeleteEvent()
     {
         $event = $this->_getEvent();
         $persistentEvent = $this->_backend->create($event);
@@ -74,7 +74,13 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         $loadedEvent = $this->_backend->get($persistentEvent->getId());
     }
     
-    public function testSearchSimpleEvents()
+    /**
+     * test searching of direct events
+     * 
+     * Direct events are those, which duration (events dtstart -> dtend)
+     *   reaches in the seached period.
+     */
+    public function testSearchDirectEvents()
     {
         $persistentEventIds = array();
         
@@ -94,25 +100,42 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $event1->container_id),
-            array('condition' => 'OR', 'filters' => array(
-               array('condition' => 'AND', 'filters' => array(
-                   array('field' => 'dtstart', 'operator' => 'after',  'value' => $from),
-                   array('field' => 'dtstart', 'operator' => 'before', 'value' => $until),
-               )),
-               array('condition' => 'AND', 'filters' => array(
-                   array('field' => 'dtend', 'operator' => 'after',  'value' => $from),
-                   array('field' => 'dtend', 'operator' => 'before', 'value' => $until),
-               )),
-           )),
+            array('field' => 'period'      , 'operator' => 'within', 'value' => array(
+                'from'  => $from,
+                'until' => $until
+            )),
         ));
         
-        $events = $this->_backend->search($filter, new Tinebase_Model_Pagination());
+        $events = $this->_backend->searchDirectEvents($filter, new Tinebase_Model_Pagination());
         
         $this->assertEquals(3, count($events));
         
         foreach ($persistentEventIds as $id) {
             $this->_backend->delete($id);
         }
+    }
+    
+    /**
+     * test search of recuring base envets
+     * 
+     * Recur Base events are those recuring events which potentially could have
+     *   recurances in the searched period
+     *
+     */
+    public function testSearchRecurBaseEvnets()
+    {
+        /*
+        $from = $event1->dtstart->addMinute(7)->get(Calendar_Model_Event::ISO8601LONG);
+        $until = $event3->dtstart->addMinute(-7)->get(Calendar_Model_Event::ISO8601LONG);
+        
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $event1->container_id),
+            array('field' => 'period'      , 'operator' => 'within', 'value' => array(
+                'from'  => $from,
+                'until' => $until
+            )),
+        ));
+        */
     }
     
     /**
