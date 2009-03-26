@@ -150,5 +150,29 @@ abstract class Tinebase_Model_Filter_Abstract
         );
         
         return $result;
-    }    
+    }
+
+    /**
+     * convert string in user time to UTC
+     *
+     * @param string $_string
+     * @return string
+     */
+    protected function _convertStringToUTC($_string)
+    {
+        if (empty($_string)) {
+            $date = new Zend_Date();
+            $result = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
+        } elseif (isset($this->_options['timezone']) && $this->_options['timezone'] !== 'UTC') {
+            date_default_timezone_set($this->_options['timezone']);
+            $date = new Zend_Date($_string, Tinebase_Record_Abstract::ISO8601LONG);
+            $date->setTimezone('UTC');
+            $result = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            date_default_timezone_set('UTC');
+        } else {
+            $result = $_string;
+        }
+        
+        return $result;
+    }
 }
