@@ -66,7 +66,7 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         unset($groupData['id']);
         $groupData['members'] = $this->_getCourseMembers($_record->group_id);
         
-        return array_merge($recordArray, $groupData);
+        return array_merge($groupData, $recordArray);
     }
     
     /**
@@ -193,7 +193,7 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         $i18n = Tinebase_Translation::getTranslation('Courses');
         $groupNamePrefix = $i18n->_('Course') . '-';
-        $group->name = $groupNamePrefix . $group->name;
+        $group->name = $groupNamePrefix . $course->name;
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
         
