@@ -205,7 +205,7 @@ function concatJs(array $_files, $_filename)
  */
 function compress($_infile, $_outfile)
 {
-    global $tine20path, $yuiCompressorPath;
+    global $opts, $tine20path, $yuiCompressorPath;
     
 if (file_exists($yuiCompressorPath)) {
         $verbose = $opts->v ? ' --verbose ' : '';
