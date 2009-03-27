@@ -55,3 +55,26 @@ Tine.Courses.Model.Course.getDefaultData = function() {
         */
     };
 };
+
+/**
+ * @type {Array}
+ * Coursetype model fields
+ */
+Tine.Courses.Model.CourseTypeArray = [
+    { name: 'id' },
+    { name: 'name' }
+];
+
+/**
+ * @type {Tine.Tinebase.CourseType}
+ * record definition
+ */
+Tine.Courses.Model.CourseType = Tine.Tinebase.Record.create(Tine.Courses.Model.CourseTypeArray, {
+    appName: 'Courses',
+    modelName: 'CourseType',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Course Type', 'Course Types', n);
+    recordName: 'Course Type',
+    recordsName: 'Courses Types'
+});

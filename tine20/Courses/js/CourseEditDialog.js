@@ -151,10 +151,23 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Course Name'), 
                         name:'name',
                         allowBlank: false
-                    }, {
+                    }, /*{
                         fieldLabel: this.app.i18n._('Course / School Type'), 
                         name:'type',
                         allowBlank: false
+                    }*/ {
+                        xtype:'reccombo',
+                        name: 'type',
+                        allowBlank: false,
+                        fieldLabel: this.app.i18n._('Course / School Type'),
+                        displayField: 'name',
+                        store: new Ext.data.Store({
+                           fields: Tine.Courses.Model.CourseType,
+                           proxy:  Tine.Courses.courseTypeBackend,
+                           reader: Tine.Courses.courseTypeBackend.getReader(),
+                           remoteSort: true,
+                           sortInfo: {field: 'name', dir: 'ASC'}
+                        })
                     }, {
                         name: 'description',
                         fieldLabel: this.app.i18n._('Description'),

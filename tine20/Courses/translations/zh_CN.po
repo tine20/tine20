@@ -25,14 +25,15 @@ msgstr ""
 msgid "Teacher Account"
 msgstr ""
 
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
-msgstr ""
-
-#: js/CourseEditDialog.js:135 js/CourseGridPanel.js:48 js/Models.js:41
+#: Frontend/Json.php:195 js/CourseEditDialog.js:135 js/CourseGridPanel.js:48
+#: js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
+
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr ""
 
 #: js/CourseEditDialog.js:151
 msgid "Course Name"

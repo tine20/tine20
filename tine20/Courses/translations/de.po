@@ -24,17 +24,16 @@ msgstr "Lehrer"
 msgid "Teacher Account"
 msgstr "Lehrer Zugang"
 
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
-msgstr "Klassenmitglieder importieren"
-
-#: js/CourseEditDialog.js:135
-#: js/CourseGridPanel.js:48
+#: Frontend/Json.php:195 js/CourseEditDialog.js:135 js/CourseGridPanel.js:48
 #: js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Klasse"
 msgstr[1] "Klassen"
+
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr "Klassenmitglieder importieren"
 
 #: js/CourseEditDialog.js:151
 msgid "Course Name"
@@ -48,13 +47,11 @@ msgstr "Schultyp"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/CourseEditDialog.js:166
-#: js/CourseGridPanel.js:74
+#: js/CourseEditDialog.js:166 js/CourseGridPanel.js:74
 msgid "Internet"
 msgstr "Internetzugang"
 
-#: js/CourseEditDialog.js:196
-#: js/CourseEditDialog.js:247
+#: js/CourseEditDialog.js:196 js/CourseEditDialog.js:247
 msgid "Members"
 msgstr "Mitglieder"
 
@@ -78,8 +75,7 @@ msgstr "Name"
 msgid "Type"
 msgstr "Typ"
 
-#: js/Courses.js:27
-#: Setup/setup.xml:4
+#: js/Courses.js:27 Setup/setup.xml:4
 msgid "Courses"
 msgstr "Klassen"
 
@@ -92,4 +88,3 @@ msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Liste"
 msgstr[1] "Listen"
-

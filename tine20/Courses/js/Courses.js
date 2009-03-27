@@ -95,3 +95,12 @@ Tine.Courses.coursesBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     modelName: 'Course',
     recordClass: Tine.Courses.Model.Course
 });
+
+/**
+ * default backend
+ */
+Tine.Courses.courseTypeBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Courses',
+    modelName: 'CourseType',
+    recordClass: Tine.Courses.Model.CourseType
+});

@@ -20,7 +20,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     evalGrants: false,
     
     // grid specific
-    defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
+    defaultSortInfo: {field: 'name', direction: 'ASC'},
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'name'
@@ -68,7 +68,8 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             header: this.app.i18n._("Type"),
             width: 150,
             sortable: true,
-            dataIndex: 'type'
+            dataIndex: 'type',
+            renderer: this.courseTypeRenderer
         },{
             id: 'internet',
             header: this.app.i18n._("Internet"),
@@ -77,5 +78,9 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             dataIndex: 'internet',
             renderer: Tine.Tinebase.common.booleanRenderer
         }];
-    }   
+    },
+    
+    courseTypeRenderer: function(value) {
+        return (value.name);
+    }
 });

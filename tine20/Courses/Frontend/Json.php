@@ -66,6 +66,11 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         unset($groupData['id']);
         $groupData['members'] = $this->_getCourseMembers($_record->group_id);
         
+        // course type
+        $recordArray['type'] = array(
+            'value' => $recordArray['type'],
+            'records' => $this->searchCourseTypes(NULL, NULL)
+        );
         return array_merge($groupData, $recordArray);
     }
     
@@ -81,11 +86,18 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $result = parent::_multipleRecordsToJson($_records);
         
+        $knownTypes = Tinebase_Core::getConfig()->courses->get('course_types', array())->toArray();
+        
         // get groups and merge data
         foreach ($result as &$course) {
             $group = Tinebase_Group::getInstance()->getGroupById($course['group_id'])->toArray();
             unset($group['id']);
             $course = array_merge($group, $course);
+            
+            Tinebase_Core::getLogger()->debug(print_r($knownTypes, true));
+            $course['type'] = array_key_exists($course['type'], $knownTypes) ? 
+                array('id' => $course['type'], 'name' => $knownTypes[$course['type']]) : 
+                array('id' => $course['type'], 'name' => $course['type']);
         }
         
         // use this when get multiple is implemented
@@ -284,6 +296,30 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         return array(
             'results'   => $members,
             'status'    => 'success'
+        );
+    }
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param string $filter json encoded
+     * @param string $paging json encoded
+     * @return array
+     */
+    public function searchCourseTypes($filter, $paging)
+    {
+        $result = array();
+        foreach (Tinebase_Core::getConfig()->courses->get('course_types', array()) as $id => $name) {
+            array_push($result, array(
+                'id'   => $id,
+                'name' => $name
+            ));
+        }
+        
+        return array(
+            'results'       => $result,
+            'totalcount'    => count($result),
+            'filter'        => $filter,
         );
     }
 }
