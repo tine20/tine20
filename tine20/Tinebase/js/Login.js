@@ -78,6 +78,7 @@ Tine.Login = {
                     fieldLabel: _('Username'),
                     id: 'username',
                     name: 'username',
+                    selectOnFocus: true,
                     value: this.defaultUsername
                 }, {
                     inputType: 'password',
@@ -85,6 +86,7 @@ Tine.Login = {
                     id: 'password',
                     name: 'password',
                     //allowBlank: false,
+                    selectOnFocus: true,
                     value: this.defaultPassword
                 }]
             }),
