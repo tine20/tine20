@@ -90,6 +90,54 @@ abstract class Tinebase_User_Abstract
         return $result;
     }
     
+    /**
+     * account name generation
+     *
+     * @param Tinebase_Model_FullUser $_account
+     * @return string
+     */
+    public function generateUserName($_account)
+    {
+        if (! empty($_account->accountFirstName)) {
+            
+            for ($i=0; $i<strlen($_account->accountFirstName); $i++) {
+                
+                $userName = strtolower(self::replaceSpechialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
+                $existingUserId = $this->getUserByLoginName($userName)->getId();
+                if (! $existingUserId) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
+                    return $userName;
+                }
+            }
+        }
+        
+        $numSuffix = 1;
+        while(true) {
+            $existingUserId = $this->getUserByLoginName($userName . $numSuffix)->getId();
+            if (! $existingUserId) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName . $numSuffix);
+                return $userName . $numSuffix;
+            }
+            $numSuffix++;
+        }
+    }
+    
+    /**
+     * replaces and/or strips spechialchars from given string
+     *
+     * @param string $_input
+     * @return string
+     */
+    public static function replaceSpechialChars($_input)
+    {
+        $search  = array('ä',  'ü',  'ö',  'ß',  'é', 'è', 'ê', 'ó' ,'ô', 'á', 'ź'); 
+        $replace = array('ae', 'ue', 'oe', 'ss', 'e', 'e', 'e', 'o', 'o', 'a', 'z');
+                    
+        $output = str_replace($search, $replace, $_input);
+        
+        return preg_replace('/[^a-zA-Z0-9._\-]/', '', $output);
+    }
+    
     /******************* abstract functions *********************/
     
     /**
