@@ -94,7 +94,6 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
             unset($group['id']);
             $course = array_merge($group, $course);
             
-            Tinebase_Core::getLogger()->debug(print_r($knownTypes, true));
             $course['type'] = array_key_exists($course['type'], $knownTypes) ? 
                 array('id' => $course['type'], 'name' => $knownTypes[$course['type']]) : 
                 array('id' => $course['type'], 'name' => $course['type']);
