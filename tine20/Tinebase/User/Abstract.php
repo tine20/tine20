@@ -103,8 +103,7 @@ abstract class Tinebase_User_Abstract
             for ($i=0; $i<strlen($_account->accountFirstName); $i++) {
                 
                 $userName = strtolower(self::replaceSpechialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
-                $existingUserId = $this->getUserByLoginName($userName)->getId();
-                if (! $existingUserId) {
+                if (! ! $this->userNameExists($userName)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
                     return $userName;
                 }
@@ -113,8 +112,7 @@ abstract class Tinebase_User_Abstract
         
         $numSuffix = 1;
         while(true) {
-            $existingUserId = $this->getUserByLoginName($userName . $numSuffix)->getId();
-            if (! $existingUserId) {
+            if (! $this->userNameExists($userName . $numSuffix)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName . $numSuffix);
                 return $userName . $numSuffix;
             }
@@ -136,6 +134,18 @@ abstract class Tinebase_User_Abstract
         $output = str_replace($search, $replace, $_input);
         
         return preg_replace('/[^a-zA-Z0-9._\-]/', '', $output);
+    }
+    
+    /**
+     * checks if username already exists
+     *
+     * @param   string  $_username
+     * @return  bool    
+     * 
+     */
+    public function userNameExists($_username)
+    {
+        return (bool)$this->getUserByLoginName($_username)->getId();
     }
     
     /******************* abstract functions *********************/
