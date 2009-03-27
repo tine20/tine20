@@ -40,7 +40,7 @@ class Tinebase_Translation
         'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
         //'es',      // Spanish              Holger Rothemund <holger@rothemund.org>
-        'fr',      // Frensh               Rémi Peltier <rpeltier@agglo-clermont.fr>
+        'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
         //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
         //'nl',      // Dutch                Joost Venema <post@joostvenema.nl>
         //'pl',      // Polish               Chrisopf Gacki <c.gacki@metaways.de>
