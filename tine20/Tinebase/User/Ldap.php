@@ -433,7 +433,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $ldapData['uidnumber'] = $this->_generateUidNumber();
         $ldapData['objectclass'] = $this->_requiredObjectClass;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $newDn);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_backend->insert($newDn, $ldapData);
