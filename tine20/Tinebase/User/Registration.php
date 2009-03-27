@@ -100,10 +100,7 @@ class Tinebase_User_Registration
     public function checkUniqueUsername ($_username)
     {
         // if exists -> return false
-        $account = Tinebase_User::getInstance()->getUserByLoginName($_username);        
-        $result = (empty($account->accountId));
-        
-        return $result;
+        return !Tinebase_User::getInstance()->userNameExists($_username);
     }
     
     /**
