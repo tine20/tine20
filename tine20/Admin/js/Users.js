@@ -289,7 +289,7 @@ Tine.Admin.Users.Main = function() {
                 {resizable: true, header: this.translation.gettext('ID'), id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
                 {resizable: true, header: this.translation.gettext('Status'), id: 'accountStatus', dataIndex: 'accountStatus', hidden: ldapBackend, width: 50, renderer: _renderStatus},
                 {resizable: true, header: this.translation.gettext('Displayname'), id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
-                {resizable: true, header: this.translation.gettext('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName'},
+                {resizable: true, header: this.translation.gettext('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 200},
                 {resizable: true, header: this.translation.gettext('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
                 {resizable: true, header: this.translation.gettext('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
                 {resizable: true, header: this.translation.gettext('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
