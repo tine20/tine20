@@ -39,11 +39,15 @@ class Tinebase_Translation
         'cs',      // Czech                Michael Sladek <msladek@brotel.cz>
         'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
-        'fr',      // Frensch              Rémi Peltier <rpeltier@agglo-clermont.fr>
+        //'es',      // Spanish              Holger Rothemund <holger@rothemund.org>
+        'fr',      // Frensh               Rémi Peltier <rpeltier@agglo-clermont.fr>
         //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
+        //'nl',      // Dutch                Joost Venema <post@joostvenema.nl>
         //'pl',      // Polish               Chrisopf Gacki <c.gacki@metaways.de>
+        //'pt',      // Portuguese           Holger Rothemund <holger@rothemund.org>
         'ru',      // Russian              Ilia Yurkovetskiy <i.yurkovetskiy@metaways.de>
         'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
+        //'zh_TW',   // Chinese Traditional  Frank Huang <frank.cchuang@gmail.com>
     );
     
     /**
