@@ -34,7 +34,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
         this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);        
+        this.plugins.push(this.filterToolbar);        
         
         Tine.ExampleApplication.ExampleRecordGridPanel.superclass.initComponent.call(this);
         
