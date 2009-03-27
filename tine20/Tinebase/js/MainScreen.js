@@ -12,7 +12,7 @@
 Ext.namespace('Tine', 'Tine.Tinebase');
 
 /**
- * Tine 2.0 ExtJS client Mainscreen.
+ * Tine 2.0 library/ExtJS client Mainscreen.
  */
 Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     

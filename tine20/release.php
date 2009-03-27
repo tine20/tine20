@@ -225,10 +225,10 @@ CACHE:
 Tinebase/css/tine-all.css                               
 Tinebase/js/tine-all.js                                 
 
-ExtJS/ext-all.js
-ExtJS/adapter/ext/ext-base.js       
-ExtJS/resources/css/ext-all.css
-ExtJS/resources/css/xtheme-gray.css 
+library/ExtJS/ext-all.js
+library/ExtJS/adapter/ext/ext-base.js       
+library/ExtJS/resources/css/ext-all.css
+library/ExtJS/resources/css/xtheme-gray.css 
     ";
     
     $manifest = fopen($tine20path . '/tine20.manifest', 'w+');
@@ -241,7 +241,7 @@ ExtJS/resources/css/xtheme-gray.css
         fwrite($manifest, $oxygenImage . "\n");
     }
     
-    exec("cd $tine20path; find ExtJS/resources/images/ -type f", $extImages);
+    exec("cd $tine20path; find library/ExtJS/resources/images/ -type f", $extImages);
     foreach($extImages as $extImage) {
         fwrite($manifest, $extImage . "\n");
     }
@@ -252,10 +252,10 @@ if ($opts->a || $opts->m) {
     $files = array(
         'Tinebase/css/tine-all.css',                               
         'Tinebase/js/tine-all.js',                                 
-        'ExtJS/ext-all.js',
-        'ExtJS/adapter/ext/ext-base.js',   
-        'ExtJS/resources/css/ext-all.css',
-        'ExtJS/resources/css/xtheme-gray.css',
+        'library/ExtJS/ext-all.js',
+        'library/ExtJS/adapter/ext/ext-base.js',   
+        'library/ExtJS/resources/css/ext-all.css',
+        'library/ExtJS/resources/css/xtheme-gray.css',
         'images/empty_photo.png',
         'images/oxygen/16x16/actions/knewstuff.png'
     );
@@ -280,9 +280,9 @@ if ($opts->a || $opts->m) {
     preg_match_all('/src=[\'|"](.*gif)/U', $tineJs, $matches);
     $files = array_merge($files, $matches[1]);
     
-    exec("cd $tine20path; find ExtJS/resources/images/ -type f -name *.gif", $extImages);
+    exec("cd $tine20path; find library/ExtJS/resources/images/ -type f -name *.gif", $extImages);
     $files = array_merge($files, $extImages);
-    exec("cd $tine20path; find ExtJS/resources/images/ -type f -name *.png", $extImages);
+    exec("cd $tine20path; find library/ExtJS/resources/images/ -type f -name *.png", $extImages);
     $files = array_merge($files, $extImages);
     
     $manifest = array(

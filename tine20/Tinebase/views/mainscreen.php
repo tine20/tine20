@@ -20,13 +20,13 @@
     <title><?php echo $this->escape($this->title) ?></title>
 
     <!-- EXT JS -->
-    <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/ext-all.css" />
-    <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/xtheme-gray.css" /><?php /*
-    <!-- <script type="text/javascript" src="ExtJS/adapter/yui/yui-utilities.js"></script> -->
-    <!-- <script type="text/javascript" src="ExtJS/adapter/yui/ext-yui-adapter.js"></script> --> */?>
+    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /><?php /*
+    <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/yui-utilities.js"></script> -->
+    <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/ext-yui-adapter.js"></script> --> */?>
     
-    <script type="text/javascript" src="ExtJS/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="ExtJS/ext-all<?php echo TINE20_BUILDTYPE != RELEASE ? '-debug' : '' ?>.js"></script>
+    <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != RELEASE ? '-debug' : '' ?>.js"></script>
 
     <!-- Tine 2.0 static files --><?php
         /**

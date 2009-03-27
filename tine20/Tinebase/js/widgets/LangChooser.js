@@ -113,7 +113,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
             this.locationLoaded.generic = true;
         } else if (path.match(/\/Tinebase\/js\/Locale\/build\//)) {
             this.locationLoaded.tine = true;
-        } else if (path.match(/\/ExtJS\/build\/locale\/ext-lang/)) {
+        } else if (path.match(/\/library\/ExtJS\/build\/locale\/ext-lang/)) {
             this.locationLoaded.ext = true;
         }
         

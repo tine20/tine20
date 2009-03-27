@@ -45,7 +45,7 @@ if (window.google && google.gears) {
 /**
  * don't fill the ext stats
  */
-Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
+Ext.BLANK_IMAGE_URL = "library/ExtJS/resources/images/default/s.gif";
 
 /**
  * init ext quick tips

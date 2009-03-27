@@ -537,7 +537,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 
                 	var childData = _allRights[i].children[j];
                 	childData.leaf = true;
-                    childData.icon = "ExtJS/resources/images/default/s.gif";                    
+                    childData.icon = "library/ExtJS/resources/images/default/s.gif";                    
                 	
                 	// check if right is set
                 	var rightIsSet = ( this.getRightId(_allRights[i].application_id,childData.right) > 0 );

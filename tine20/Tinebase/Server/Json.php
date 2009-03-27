@@ -30,7 +30,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         try {
             $this->_initFramework();
             
-            // 2008-09-12 temporary bug hunting for FF or ExtJS bug. 
+            // 2008-09-12 temporary bug hunting for FF or library/ExtJS bug. 
             if ($_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] !== $_POST['requestType']) {
                 Tinebase_Core::getLogger()->debug('HEADER - POST API REQUEST MISMATCH! Header is:"' . $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] .
                     '" whereas POST is "' . $_POST['requestType'] . '"' . ' HTTP_USER_AGENT: "' . $_SERVER['HTTP_USER_AGENT'] . '"');

@@ -519,7 +519,7 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
      */
  	createNode: function(attr) {
         
-		// map attributes from Tinebase_Container to attrs from ExtJS
+		// map attributes from Tinebase_Container to attrs from library/ExtJS
 		if (attr.name) {
             if (!attr.account_grants.account_id){
                 // temporary workaround, for a Zend_Json::encode problem

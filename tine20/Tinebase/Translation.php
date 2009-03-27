@@ -191,8 +191,8 @@ class Tinebase_Translation
         $jsTranslations .= file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
         
         $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
-        if (file_exists("$baseDir/ExtJS/source/locale/ext-lang-$localeString.js")) {
-            $jsTranslations  .= file_get_contents("$baseDir/ExtJS/source/locale/ext-lang-$localeString.js");
+        if (file_exists("$baseDir/library/ExtJS/source/locale/ext-lang-$localeString.js")) {
+            $jsTranslations  .= file_get_contents("$baseDir/library/ExtJS/source/locale/ext-lang-$localeString.js");
         } else {
             $jsTranslations  .= "console.error('Translation Error: extjs chaged their lang file name again ;-(');";
         }
