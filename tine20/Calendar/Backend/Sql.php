@@ -27,6 +27,37 @@ class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     protected $_modlogActive = TRUE;
     
     /**
+     * Creates new entry
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_InvalidArgument
+     * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo    remove autoincremental ids later
+     */
+    public function create(Tinebase_Record_Interface $_record) 
+    {
+        $this->_setRruleUntil($_record);
+        
+        return parent::create($_record);
+    }
+    
+    /**
+     * Updates existing entry
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Interface Record|NULL
+     */
+    public function update(Tinebase_Record_Interface $_record) 
+    {
+        $this->_setRruleUntil($_record);
+        
+        return parent::create($_record);
+    }
+    
+    /**
      * Search for direct events matching given filter
      * 
      * Direct events are those, which duration (events dtstart -> dtend)
@@ -60,4 +91,24 @@ class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         return parent::search($_filter, $_pagination, $_onlyIds);
     }
     
+    /**
+     * sets rrule until field in event model
+     *
+     * @param  Calendar_Model_Event $_event
+     * @return void
+     */
+    protected function _setRruleUntil(Calendar_Model_Event $_event)
+    {
+        if (empty($_event->rrule)) {
+            $_event->rrule_until = NULL;
+        } else {
+            $rrule = $_event->rrule;
+            if (! $_event->rrule instanceof Calendar_Model_Rrule) {
+                $rrule = new Calendar_Model_Rrule(array());
+                $rrule->setFromString($_event->rrule);
+            }
+            
+            $_event->rrule_until = $rrule->until;
+        }
+    }
 }

@@ -26,7 +26,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Tasks_Backend_Sql SQL Backend in test
+     * @var Calendar_Backend_Sql SQL Backend in test
      */
     protected $_backend;
     
@@ -81,6 +81,9 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
      * 
      * Direct events are those, which duration (events dtstart -> dtend)
      *   reaches in the seached period.
+     * 
+     * We add tree events and search from the middle for the first to the middle 
+     * of the last. All tree events should be found
      */
     public function testSearchDirectEvents()
     {
@@ -126,28 +129,30 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
      */
     public function testSearchRecurBaseEvnets()
     {
-        /*
+        
         $persistentEventIds = array();
         
         $event1 = $this->_getEvent();
-        $event1->rrule_until = clone $event1->dtstart;
-        $event1->rrule_until->addWeek(1);
+        // two weeks / 14 recurences. NOTE This is a hot candidate and should be found
+        $event1->rrule = "FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-08 00:00:00";
         $persistentEventIds[] = $this->_backend->create($event1)->getId();
         
         $event2 = $this->_getEvent();
-        $event2->dtstart->addDay(1);
+        $event2->dtstart->addWeek(1);
+        // one week / 7 recurences. NOTE this event should not be found, as it 
+        //   would be found as direct event in the searched period
+        $event1->rrule = "FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-01 00:00:00";
         $persistentEventIds[] = $this->_backend->create($event2)->getId();
         
         $event3 = $this->_getEvent();
-        $event3->dtstart->addDay(2);
+        $event3->dtstart->addWeek(2);
+        // one week / 7 recurences. NOTE this event should not be found at all
+        $event1->rrule = "FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-15 00:00:00";
+        
         $persistentEventIds[] = $this->_backend->create($event3)->getId();
         
-        $from = $event1->dtstart->addMinute(7)->get(Calendar_Model_Event::ISO8601LONG);
-        $until = $event3->dtstart->addMinute(-7)->get(Calendar_Model_Event::ISO8601LONG);
-        
-        
-        $from = $event1->dtstart->addMinute(7)->get(Calendar_Model_Event::ISO8601LONG);
-        $until = $event3->dtstart->addMinute(-7)->get(Calendar_Model_Event::ISO8601LONG);
+        $from = $event1->dtstart->addWeek(1)->get(Calendar_Model_Event::ISO8601LONG);
+        $until = $event3->dtstart->addWeek(2)->get(Calendar_Model_Event::ISO8601LONG);
         
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $event1->container_id),
@@ -156,7 +161,16 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'until' => $until
             )),
         ));
-        */
+        
+        $events = $this->_backend->searchRecurBaseEvents($filter, new Tinebase_Model_Pagination());
+        
+        $this->assertEquals(1, count($events));
+        $this->assertTrue($events[0]->rrule_until->equals(new Zend_Date('2009-04-08 00:00:00', Calendar_Model_Rrule::ISO8601LONG)));
+                
+        foreach ($persistentEventIds as $id) {
+            $this->_backend->delete($id);
+        }
+        
     }
     
     /**
