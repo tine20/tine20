@@ -2,7 +2,7 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     Tasks
+ * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -20,6 +20,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 /**
  * Test class for Calendar_Backend_Sql
+ * 
+ * @package     Calendar
  */
 class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
 {
@@ -125,6 +127,25 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
     public function testSearchRecurBaseEvnets()
     {
         /*
+        $persistentEventIds = array();
+        
+        $event1 = $this->_getEvent();
+        $event1->rrule_until = clone $event1->dtstart;
+        $event1->rrule_until->addWeek(1);
+        $persistentEventIds[] = $this->_backend->create($event1)->getId();
+        
+        $event2 = $this->_getEvent();
+        $event2->dtstart->addDay(1);
+        $persistentEventIds[] = $this->_backend->create($event2)->getId();
+        
+        $event3 = $this->_getEvent();
+        $event3->dtstart->addDay(2);
+        $persistentEventIds[] = $this->_backend->create($event3)->getId();
+        
+        $from = $event1->dtstart->addMinute(7)->get(Calendar_Model_Event::ISO8601LONG);
+        $until = $event3->dtstart->addMinute(-7)->get(Calendar_Model_Event::ISO8601LONG);
+        
+        
         $from = $event1->dtstart->addMinute(7)->get(Calendar_Model_Event::ISO8601LONG);
         $until = $event3->dtstart->addMinute(-7)->get(Calendar_Model_Event::ISO8601LONG);
         
