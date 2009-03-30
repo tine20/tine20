@@ -94,7 +94,7 @@ class Setup_Core extends Tinebase_Core
         $path = dirname(dirname(__FILE__));
         
         if (self::configFileExists()) {
-            return is_writable($path . 'config.inc.php');
+            return is_writable($path . DIRECTORY_SEPARATOR . 'config.inc.php');
         } else {
             $testfilename = $path . uniqid(mt_rand()).'.tmp';
             if (!($f = @fopen($testfilename, 'w'))) {
