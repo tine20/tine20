@@ -310,13 +310,9 @@ class Tinebase_Model_Filter_FilterGroup
     public function appendFilterSql($_select)
     {
         foreach ($this->_filterObjects as $filter) {
-            if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
-                $groupSelect = new Tinebase_Model_Filter_DbGroupSelect($_select, $this->_concatenationCondition);
-                $filter->appendFilterSql($groupSelect);
-                $groupSelect->appendWhere();
-            } else {
-                $filter->appendFilterSql($_select);
-            }
+            $groupSelect = new Tinebase_Model_Filter_DbGroupSelect($_select);
+            $filter->appendFilterSql($groupSelect);
+            $groupSelect->appendWhere($this->_concatenationCondition);
         }
     }
 

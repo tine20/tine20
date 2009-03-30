@@ -25,11 +25,6 @@ class Tinebase_Model_Filter_DbGroupSelect
     protected $_select = NULL;
     
     /**
-     * @var string
-     */
-    protected $_condition = NULL;
-    
-    /**
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_adapter = NULL;
@@ -45,9 +40,8 @@ class Tinebase_Model_Filter_DbGroupSelect
      * @param  Zend_Db_Select|Tinebase_Model_Filter_DbGroupSelect $_select
      * @return void
      */
-    public function __construct($_select, $_condition)
+    public function __construct($_select)
     {
-        $this->_condition = $_condition;
         $this->_select = $_select;
         $this->_adapter = Tinebase_Core::getDb();
     }
@@ -123,12 +117,12 @@ class Tinebase_Model_Filter_DbGroupSelect
     }
     
     /**
-     * appends where buffer at once to original selct obj.
+     * appends where buffer at once to original select obj.
      */
-    public function appendWhere()
+    public function appendWhere($_concatenationCondition)
     {
         if (! empty($this->_parts[Zend_Db_Select::WHERE])) {
-            $method = $this->_condition == Zend_Db_Select::SQL_OR ? 'orWhere' : 'where';
+            $method = $_concatenationCondition == Zend_Db_Select::SQL_OR ? 'orWhere' : 'where';
             
             $this->_select->$method(implode(' ', $this->_parts[Zend_Db_Select::WHERE]));
         }
