@@ -42,12 +42,11 @@ class Setup_Server_Json extends Setup_Server_Abstract
                 'Tinebase.setLocale',
             );
             // check json key for all methods but some exceptoins
-            if (! in_array($_POST['method'], $anonymnousMethods) 
+            if (! in_array($_POST['method'], $anonymnousMethods) && Setup_Core::configFileExists()
                      && ( empty($_POST['jsonKey']) || $_POST['jsonKey'] != Setup_Core::get('jsonKey')
                             || !Setup_Core::isRegistered(Setup_Core::USER)
                         )
                ) {
-    
                 if (! Setup_Core::isRegistered(Setup_Core::USER)) {
                     Setup_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without authorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
                     
