@@ -39,6 +39,16 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(Calendar_Model_Rrule::FREQ_WEEKLY, $rrule->freq);
         $this->assertTrue($rrule->until->equals(new Zend_Date('2009-06-05 00:00:00', Calendar_Model_Rrule::ISO8601LONG)));
     }
+    
+    public function testToString()
+    {
+        $rruleString = "FREQ=WEEKLY;INTERVAL=3;UNTIL=2009-06-05 00:00:00;WKST=SU;BYDAY=TU,TH";
+        $rrule = new Calendar_Model_Rrule(array());
+        $rrule->setFromString($rruleString);
+        
+        $this->assertEquals($rruleString, (string)$rrule);
+    }
+    
 }
     
 

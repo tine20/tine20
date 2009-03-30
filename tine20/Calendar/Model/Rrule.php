@@ -126,7 +126,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             }
         }
         
-        return implode(';');
+        return implode(';', $stringParts);
     }
     
     /**
