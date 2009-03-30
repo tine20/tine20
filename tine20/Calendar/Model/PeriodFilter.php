@@ -45,8 +45,9 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
      * Event type to filter for. 
      *
      * @var string
-     */
+     *
     private static $_type = NULL;
+    */
     
     /**
      * @var string
@@ -62,7 +63,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
      * Sets the event type to filter for
      *
      * @param string $_type
-     */
+     *
     public static function setType($_type)
     {
         if (! in_array($_type, array(self::TYPE_DIRECT, self::TYPE_RECURBASE))) {
@@ -71,6 +72,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
         
         self::$_type = $_type;
     }
+    */
     
     /**
      * sets value
@@ -87,6 +89,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
         }
     }
     
+    /*
     public function appendDirectEventFilterSql($_select)
     {
         $filter = new Calendar_Model_EventFilter(array(
@@ -107,7 +110,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     {
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'rrule',        'operator' => 'not',    'value' => NULL),
-            array('field' => 'dtstart',      'operator' => 'before', 'value' => $this->_from),
+            array('field' => 'dtstart',      'operator' => 'before', 'value' => $this->_until),
             array('condition' => 'OR', 'filters' => array(
                 array('field' => 'rrule_until',  'operator' => 'after',   'value' => $this->_from),
                 array('field' => 'rrule_until',  'operator' => 'equals',  'value' => NULL),
@@ -116,6 +119,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
         
         return $filter->appendFilterSql($_select);
     }
+    */
     
     /**
      * appeds sql to given select statement
@@ -124,7 +128,25 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select)
     {
-        $appendMethod = 'append' . self::$_type . 'EventFilterSql';
-        return $this->$appendMethod($_select);
+        $filter = new Calendar_Model_EventFilter(array(
+            array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
+               array('field' => 'rrule', 'operator' => 'isnull',  'value' => NULL),
+               array('field' => 'dtstart', 'operator' => 'before',  'value' => $this->_until),
+               array('field' => 'dtend',   'operator' => 'after',   'value' => $this->_from),
+            )),
+            array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
+                array('field' => 'rrule',        'operator' => 'notnull', 'value' => NULL),
+                array('field' => 'dtstart',      'operator' => 'before',  'value' => $this->_until),
+                array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR, 'filters' => array(
+                    array('field' => 'rrule_until',  'operator' => 'after',   'value' => $this->_from),
+                    array('field' => 'rrule_until',  'operator' => 'isnull',  'value' => NULL),
+                )),
+            ))
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+        
+        return $filter->appendFilterSql($_select);
+        //$appendMethod = 'append' . self::$_type . 'EventFilterSql';
+        //return $this->$appendMethod($_select);
+        
     }
 }

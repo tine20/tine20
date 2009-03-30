@@ -109,7 +109,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'deleted_time', 
         'completed', 
         'dtstart', 
-        'due', 
+        'dtend', 
         'exdate',
         //'rdate',
         'rrule_until',
