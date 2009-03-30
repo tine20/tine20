@@ -80,6 +80,8 @@ class Setup_Import_Egw14
     /**
      * import the accounts from eGroupWare 1.4
      *
+     * @todo add primary group or use Admin_Controller_User::getInstance()->create
+     * @todo import user password
      */
     protected function importAccounts()
     {

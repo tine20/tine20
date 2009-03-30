@@ -194,6 +194,8 @@ class Tinebase_User_Registration
         // get model & save user data (account & contact) via the User and Addressbook controllers
         $account = new Tinebase_Model_FullUser($regData);
         Tinebase_User::getInstance()->addUser($account);
+        Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' saved user ' . $regData['accountLoginName']);
         // generate password and save it

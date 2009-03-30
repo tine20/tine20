@@ -512,9 +512,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw($e);
         }
         
-        // add group membership (primary group)
-        Tinebase_Group::getInstance()->addGroupMember($_account->accountPrimaryGroup,$accountId);
-        
         return $this->getUserById($accountId, 'Tinebase_Model_FullUser');
     }
     
