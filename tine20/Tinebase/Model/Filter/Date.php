@@ -29,6 +29,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         1 => 'within',
         2 => 'before',
         3 => 'after',
+        4 => 'isnull',
+        5 => 'notnull'
     );
     
     /**
@@ -38,7 +40,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         'equals'     => array('sqlop' => ' LIKE ?'),
         'within'     => array('sqlop' => array(' >= ? ', ' <= ?')),
         'before'     => array('sqlop' => ' < ?'),
-        'after'      => array('sqlop' => ' > ?')
+        'after'      => array('sqlop' => ' > ?'),
+        'isnull'     => array('sqlop' => ' IS NULL'),
+        'notnull'    => array('sqlop' => ' IS NOT NULL'),
     );
     
     /**

@@ -30,18 +30,22 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         3 => 'endswith',
         4 => 'not',
         5 => 'in',
+        6 => 'isnull',
+        7 => 'notnull'
     );
     
     /**
      * @var array maps abstract operators to sql operators
      */
     protected $_opSqlMap = array(
-        'equals'     => array('sqlop' => ' LIKE ?',     'wildcards' => '?'  ),
-        'contains'   => array('sqlop' => ' LIKE ?',     'wildcards' => '%?%'),
-        'startswith' => array('sqlop' => ' LIKE ?',     'wildcards' => '?%' ),
-        'endswith'   => array('sqlop' => ' LIKE ?',     'wildcards' => '%?' ),
-        'not'        => array('sqlop' => ' NOT LIKE ?', 'wildcards' => '?'  ),
-        'in'         => array('sqlop' => ' IN (?)',     'wildcards' => '?'  ),
+        'equals'     => array('sqlop' => ' LIKE ?',      'wildcards' => '?'  ),
+        'contains'   => array('sqlop' => ' LIKE ?',      'wildcards' => '%?%'),
+        'startswith' => array('sqlop' => ' LIKE ?',      'wildcards' => '?%' ),
+        'endswith'   => array('sqlop' => ' LIKE ?',      'wildcards' => '%?' ),
+        'not'        => array('sqlop' => ' NOT LIKE ?',  'wildcards' => '?'  ),
+        'in'         => array('sqlop' => ' IN (?)',      'wildcards' => '?'  ),
+        'isnull'     => array('sqlop' => ' IS NULL',     'wildcards' => '?'  ),
+        'notnull'    => array('sqlop' => ' IS NOT NULL', 'wildcards' => '?'  ),
     );
     
     /**
@@ -71,7 +75,5 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
          
          // finally append query to select object
          $_select->where($where);
-         
-         
      }
 }
