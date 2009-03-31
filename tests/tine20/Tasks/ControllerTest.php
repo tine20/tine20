@@ -92,6 +92,8 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
             'summary'              => 'our fist test task',
             'url'                  => 'http://www.testtask.com',
         ),true, false);
+        $this->_testTask1->convertDates = true;
+        
         $this->_persistantTestTask1 = $this->_controller->create($this->_testTask1);
         
         //parent::setUp();

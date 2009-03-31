@@ -57,14 +57,14 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
             // tine record fields
 	        'container_id'         => $this->container_id,
 	        'created_by'           => 6,
-	        'creation_time'        => Zend_Date::now(),
+	        'creation_time'        => '2009-03-31 17:35:00',
 	        'is_deleted'           => 0,
 	        'deleted_time'         => NULL,
 	        'deleted_by'           => NULL,
 	        // task only fields
 	        'percent'              => 70,
 	        'completed'            => NULL,
-	        'due'                  => Zend_Date::now()->addMonth(1),
+	        'due'                  => '2009-04-30 17:35:00',
 	        // ical common fields
 	        //'class_id'             => 2,
 	        'description'          => str_pad('',1000,'.'),
@@ -75,7 +75,8 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	        //'status_id'            => 2,
 	        'summary'              => 'our fist test task',
 	        'url'                  => 'http://www.testtask.com',
-        ),true, false);
+        ));
+        
         $this->_persistantTestTask1 = $this->_backend->create($this->_testTask1);
 	}
 	
