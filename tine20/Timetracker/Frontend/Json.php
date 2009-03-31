@@ -245,7 +245,7 @@ class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
         $decodedFilter = Zend_Json::decode($filter);
         foreach ($decodedFilter as &$f) {
             if ($f['field'] == 'id') {
-                $f['field'] = 'ts.id';
+                $f['field'] = 'timetracker_timesheet.id';
             }
         }
         $filter = Zend_Json::encode($decodedFilter);

@@ -41,23 +41,6 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
     protected $_modlogActive = TRUE;
     
     /**
-     * the constructor
-     * 
-     * @todo remove that
-     */
-    /*
-    public function __construct ()
-    {
-        $this->_modlogActive = TRUE;
-        
-        // set identifier with table name because we join tables in _getSelect()
-        $this->_identifier = 'ts.id';
-        
-        parent::__construct(SQL_TABLE_PREFIX . 'timetracker_timesheet', 'Timetracker_Model_Timesheet');
-    }
-    */
-
-    /**
      * Gets total count and sum of duration of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -99,10 +82,10 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
             $cols = array_merge((array)$_cols, array('is_billable_combined' => '(' . $this->_tableName . '.is_billable*ta.is_billable)'));            
         }
 
-        $select->from(array('ts' => $this->_tableName), $cols);
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $cols);
         
         // join with timeaccounts to get combined is_billable
-        $select->joinLeft(array('ta' => SQL_TABLE_PREFIX . 'timetracker_timeaccount'),
+        $select->joinLeft(array('ta' => $this->_tablePrefix . 'timetracker_timeaccount'),
                     $this->_db->quoteIdentifier($this->_tableName . '.timeaccount_id') . ' = ' . $this->_db->quoteIdentifier('ta.id'),
                     array());        
         

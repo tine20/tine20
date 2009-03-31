@@ -28,15 +28,15 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'ts.id'          => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('ts.description'))),
-        'ts.description' => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'timetracker_timesheet.id'          => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('timetracker_timesheet.description'))),
+        'timetracker_timesheet.description' => array('filter' => 'Tinebase_Model_Filter_Text'),
         'timeaccount_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Timetracker_Model_TimeaccountFilter', 'controller' => 'Timetracker_Controller_Timeaccount', 'useTimesheetAcl' => TRUE)),
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'ts.is_billable' => array('filter' => 'Tinebase_Model_Filter_Bool', 'options' => array('fields' => array('ts.is_billable','ta.is_billable'))),
+        'timetracker_timesheet.is_billable' => array('filter' => 'Tinebase_Model_Filter_Bool', 'options' => array('fields' => array('timetracker_timesheet.is_billable','ta.is_billable'))),
         'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'ts.id'))
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'timetracker_timesheet.id'))
     );
     
     /**

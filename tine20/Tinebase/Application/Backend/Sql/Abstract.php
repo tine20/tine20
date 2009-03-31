@@ -110,29 +110,6 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $id = $this->_convertId($_id);
         
         return $this->getByProperty($id, $this->_identifier, $_getDeleted);
-        
-        /*
-        $select = $this->_getSelect('*', $_getDeleted);
-        $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
-
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-            
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-                
-        if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound($this->_modelName . ' record with id ' . $id . ' not found!');
-        }
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
-        $result = new $this->_modelName($queryResult);
-               
-        // get custom fields
-        if ($result->has('customfields')) {
-            $this->_getCustomFields($result);
-        }
-        
-        return $result;
-        */
     }
 
     /**
@@ -215,7 +192,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $select = $this->_getSelect();
         $select->order($orderBy . ' ' . $_orderDirection);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
