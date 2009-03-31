@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Sebastian Lenk <s.lenk@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
  */
@@ -26,18 +26,18 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     const TYPE = 'Sql';
     
     /**
-     * Table name
+     * Table name without prefix
      *
      * @var string
      */
-    protected $_tableName;
+    protected $_tableName = NULL;
     
     /**
      * Model name
      *
      * @var string
      */
-    protected $_modelName;
+    protected $_modelName = NULL;
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
@@ -59,18 +59,33 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     protected $_db;
     
     /**
+     * schema of the table
+     *
+     * @var array
+     */
+    protected $_schema = NULL;
+    
+    /**
      * the constructor
      *
-     * @param string $_tableName
-     * @param string $_modelName
      * @param Zend_Db_Adapter_Abstract $_db optional
+     * @param string $_modelName
+     * @param string $_tableName
+     *
      */
-    public function __construct ($_tableName, $_modelName, $_dbAdapter = NULL)
+    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL)
     {
         $this->_db = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
-        $this->_tableName = $_tableName;
-        $this->_modelName = $_modelName;
+        $this->_modelName = $_modelName ? $_modelName : $this->_modelName;
+        $this->_tableName = $_tableName ? $_tableName : $this->_tableName;
+        
+        if (! ($this->_tableName && $this->_modelName)) {
+            throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given');
+        }
+        
+        $this->_schema = $this->_db->describeTable(SQL_TABLE_PREFIX . $this->_tableName);
     }
+    
     
     /*************************** get/search funcs ************************************/
 
@@ -121,17 +136,18 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
     {
         $select = $this->_getSelect('*', $_getDeleted);
-        $select->where($this->_db->quoteIdentifier($_property) . ' = ?', $_value)
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $_property) . ' = ?', $_value)
                ->limit(1);
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-            
+
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
                 
         if (!$queryResult) {
             throw new Tinebase_Exception_NotFound($this->_modelName . " record with $_property " . $_value . ' not found!');
         }
+        
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         $result = new $this->_modelName($queryResult);
                
@@ -159,7 +175,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
 
         $select = $this->_getSelect();
-        $select->where($this->_db->quoteIdentifier($this->_identifier) . ' in (?)', (array) $_id);
+        $select->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_identifier) . ' in (?)', (array) $_id);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
@@ -179,14 +195,16 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Record_RecordSet
      */
-    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') 
+    public function getAll($_orderBy = NULL, $_orderDirection = 'ASC') 
     {
+        $orderBy = $_orderBy ? $_orderBy : $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_identifier);
+        
         if(!in_array($_orderDirection, array('ASC', 'DESC'))) {
             throw new Tinebase_Exception_InvalidArgument('$_orderDirection is invalid');
         }
         
         $select = $this->_getSelect();
-        $select->order($_orderBy . ' ' . $_orderDirection);
+        $select->order($orderBy . ' ' . $_orderDirection);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
@@ -217,7 +235,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
         
         // build query
-        $selectCols = ($_onlyIds) ? 'id' : '*';
+        $selectCols = ($_onlyIds) ? $this->_tableName . '.id' : '*';
         $select = $this->_getSelect($selectCols);
         
         $this->_addFilter($select, $_filter);
@@ -270,7 +288,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     public function create(Tinebase_Record_Interface $_record) 
     {
     	
-    	$identifier = $this->_getRecordIdentifier();
+    	$identifier = $_record->getIdProperty();
     	
     	if (!$_record instanceof $this->_modelName) {
     		throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type. Should be instance of ' . $this->_modelName);
@@ -289,12 +307,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             unset($recordArray['id']);
         }
         
-        $tableKeys = $this->_db->describeTable($this->_tableName);
-        $recordArray = array_intersect_key($recordArray, $tableKeys);
+        $recordArray = array_intersect_key($recordArray, $this->_schema);
 
         $this->_prepareData($recordArray);
         
-        $this->_db->insert($this->_tableName, $recordArray);
+        $this->_db->insert(SQL_TABLE_PREFIX . $this->_tableName, $recordArray);
         
         if (!$this->_hasHashId()) {
             $newId = $this->_db->lastInsertId();
@@ -328,7 +345,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     public function update(Tinebase_Record_Interface $_record) 
     {
         
-        $identifier = $this->_getRecordIdentifier();
+        $identifier = $_record->getIdProperty();
         
         if (!$_record instanceof $this->_modelName) {
             throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
@@ -341,8 +358,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $id = $_record->getId();
 
         $recordArray = $_record->toArray();
-        $tableKeys = $this->_db->describeTable($this->_tableName);
-        $recordArray = array_intersect_key($recordArray, $tableKeys);
+        $recordArray = array_intersect_key($recordArray, $this->_schema);
         
         $this->_prepareData($recordArray);
                 
@@ -350,7 +366,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id),
         );
         
-        $this->_db->update($this->_tableName, $recordArray, $where);
+        $this->_db->update(SQL_TABLE_PREFIX . $this->_tableName, $recordArray, $where);
         
         // update custom fields
         if ($_record->has('customfields')) {
@@ -373,14 +389,12 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
 
         if (empty($_ids)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records updated.');
-            return;
+            return 0;
         }
         $identifier = $this->_getRecordIdentifier();
         
         $recordArray = $_data;
-        
-        $tableKeys = $this->_db->describeTable($this->_tableName);
-        $recordArray = array_intersect_key($recordArray, $tableKeys);
+        $recordArray = array_intersect_key($recordArray, $this->_schema);
         
         $this->_prepareData($recordArray);
                 
@@ -390,7 +404,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
-        return $this->_db->update($this->_tableName, $recordArray, $where);        
+        return $this->_db->update(SQL_TABLE_PREFIX . $this->_tableName, $recordArray, $where);        
     }
     
     /**
@@ -410,7 +424,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id)
         );
         
-        $this->_db->delete($this->_tableName, $where);
+        $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $where);
         
         // delete custom fields
         /*
@@ -442,6 +456,26 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         return self::TYPE;
     }
     
+    /**
+     * get table name
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return $this->_tableName;
+    }
+    
+    /**
+     * get model name
+     *
+     * @return string
+     */
+    public function getModelName()
+    {
+        return $this->_modelName;
+    }
+    
     /*************************** protected helper funcs ************************************/
     
     /**
@@ -450,18 +484,16 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
-     * 
-     * @todo    perhaps we need to add the tablename here for filtering with more than 1 table (like that: ->from(array('blabla' => $this->_tableName))
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
         $select = $this->_db->select();
 
-        $select->from($this->_tableName, $_cols);
+        $select->from(array($this->_tableName => SQL_TABLE_PREFIX . $this->_tableName), $_cols);
         
         if (!$_getDeleted && $this->_modlogActive) {
             // don't fetch deleted objects
-            $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');                        
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
         }
         
         return $select;
@@ -515,11 +547,8 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected function _hasHashId()
     {
-        $fields = $this->_db->describeTable($this->_tableName);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($fields, true));
-
         $identifier = $this->_getRecordIdentifier();
-        $result = ($fields[$identifier]['DATA_TYPE'] === 'varchar' && $fields[$identifier]['LENGTH'] == 40);
+        $result = ($this->_schema[$identifier]['DATA_TYPE'] === 'varchar' && $this->_schema[$identifier]['LENGTH'] == 40);
         
         return $result;
     }
@@ -547,7 +576,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected function _saveCustomFields(Tinebase_Record_Interface $_record)
     {
-        $customFieldsTableName = $this->_tableName . '_' . 'custom';
+        $customFieldsTableName = SQL_TABLE_PREFIX . $this->_tableName . '_' . 'custom';
         
         // delete all custom fields for this record first
         $this->_deleteCustomFields($_record->getId());
@@ -574,11 +603,11 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected function _getCustomFields(Tinebase_Record_Interface &$_record)
     {
-        $customFieldsTableName = $this->_tableName . '_' . 'custom';
+        $customFieldsTableName = SQL_TABLE_PREFIX . $this->_tableName . '_' . 'custom';
 
         $select = $this->_db->select()
-            ->from($customFieldsTableName)
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('record_id') . ' = ?', $_record->getId()));
+            ->from(array('cftable' => $customFieldsTableName))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('cftable.record_id') . ' = ?', $_record->getId()));
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -596,7 +625,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected function _deleteCustomFields($_recordId)
     {
-        $customFieldsTableName = $this->_tableName . '_' . 'custom';
+        $customFieldsTableName = SQL_TABLE_PREFIX . $this->_tableName . '_' . 'custom';
 
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('record_id') . ' = ?', $_recordId)
