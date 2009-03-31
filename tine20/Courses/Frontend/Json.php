@@ -86,7 +86,10 @@ class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
     {
         $result = parent::_multipleRecordsToJson($_records);
         
-        $knownTypes = Tinebase_Core::getConfig()->courses->get('course_types', array())->toArray();
+        $knownTypes = Tinebase_Core::getConfig()->courses->get('course_types', array());
+        if (!is_array($knownTypes)) {
+            $knownTypes = $knownTypes->toArray();
+        }
         
         // get groups and merge data
         foreach ($result as &$course) {
