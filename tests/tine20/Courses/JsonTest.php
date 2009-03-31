@@ -168,7 +168,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $definition = $definitionBackend->getByProperty('admin_user_import_csv');
         $importer = new $definition->plugin(
             $definition, 
-            //Tinebase_User::factory(Tinebase_User::getConfiguredBackend()),
             Admin_Controller_User::getInstance(),
             array(
                 'group_id'                  => $courseData['group_id'],
