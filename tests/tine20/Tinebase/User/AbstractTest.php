@@ -79,6 +79,7 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
         for ($i=0; $i<10; $i++) {
             $user->accountLoginName = $this->_uit->generateUserName($user);
             $createdUserIds[] = $this->_uit->addUser($user)->getId();
+            $user->setId(NULL);
         }
         
         $this->_uit->deleteUsers($createdUserIds);
