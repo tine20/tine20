@@ -20,40 +20,6 @@
 abstract class Tinebase_Group_Abstract
 {
     /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton 
-     */
-    private function __construct() {}
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Tinebase_Group
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_Group
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new self;
-        }
-        
-        return self::$_instance;
-    }    
-
-    /**
      * return all groups an account is member of
      *
      * @param mixed $_accountId the account as integer or Tinebase_Model_User
