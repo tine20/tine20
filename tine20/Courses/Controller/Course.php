@@ -124,7 +124,7 @@ class Courses_Controller_Course extends Tinebase_Application_Controller_Record_A
             $usersToDelete = array_merge($usersToDelete, $groupController->getGroupMembers($course->group_id));
         }
         
-        $groupController->delete(array_unique($groupsToDelete));
         $userController->delete(array_unique($usersToDelete));
+        $groupController->delete(array_unique($groupsToDelete));
     }
 }
