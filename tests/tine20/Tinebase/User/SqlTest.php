@@ -57,14 +57,13 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_backend = new Tinebase_User_Sql();
-        $groupBackend = new Tinebase_Group_Sql();
         
         $this->objects['initialAccount'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 100,
             'accountLoginName'      => 'tine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => $groupBackend->getGroupByName('Users')->id,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
@@ -75,7 +74,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
             'accountLoginName'      => 'tine20phpunit-updated',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => $groupBackend->getGroupByName('Users')->id,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0 Updated',
             'accountFirstName'      => 'PHPUnit Updated',
             'accountEmailAddress'   => 'phpunit@tine20.org'

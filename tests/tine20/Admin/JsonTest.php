@@ -75,7 +75,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->getId(),
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
@@ -87,7 +87,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->getId(),
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnitup',
             'accountEmailAddress'   => 'phpunit@metaways.de'
@@ -203,7 +203,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testSaveAccount()
     {
         $accountData = $this->objects['accountUpdate']->toArray();
-        $accountData['accountPrimaryGroup'] = Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit')->getId();
+        $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId();
         
         $encodedData = Zend_Json::encode($accountData);
         
@@ -211,7 +211,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(is_array($account));
         $this->assertEquals('tine20phpunitup', $account['accountLoginName']);
-        $this->assertEquals(Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit')->getId(), $account['accountPrimaryGroup']['id']);
+        $this->assertEquals(Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId(), $account['accountPrimaryGroup']['id']);
         // check password
         $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], 'test');
         $this->assertTrue($authResult->isValid());
