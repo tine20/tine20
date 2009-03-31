@@ -206,7 +206,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     public function getAll($_orderBy = NULL, $_orderDirection = 'ASC') 
     {
-        $orderBy = $_orderBy ? $_orderBy : $this->_db->quoteIdentifier($this->_tablePrefix . $this->_identifier);
+        $orderBy = $_orderBy ? $_orderBy : $this->_tableName . '.' . $this->_identifier;
         
         if(!in_array($_orderDirection, array('ASC', 'DESC'))) {
             throw new Tinebase_Exception_InvalidArgument('$_orderDirection is invalid');
@@ -215,7 +215,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         $select = $this->_getSelect();
         $select->order($orderBy . ' ' . $_orderDirection);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
