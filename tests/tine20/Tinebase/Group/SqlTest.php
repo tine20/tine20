@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -24,6 +24,13 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * sql user backend
+     *
+     * @var Tinebase_Group_Sql
+     */
+    protected $_backend = NULL;
+    
     /**
      * @var array test objects
      */
@@ -49,6 +56,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_backend = new Tinebase_Group_Sql();
+        
         $this->objects['initialGroup'] = new Tinebase_Model_Group(array(
             'id'            => 10,
             'name'          => 'tine20phpunit',
@@ -79,7 +88,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testAddGroup()
     {
-        $group = Tinebase_Group_Sql::getInstance()->addGroup($this->objects['initialGroup']);
+        $group = $this->_backend->addGroup($this->objects['initialGroup']);
         
         $this->assertEquals($this->objects['initialGroup']->id, $group->id);
     }
@@ -90,7 +99,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroups()
     {
-        $groups = Tinebase_Group_Sql::getInstance()->getGroups('phpunit');
+        $groups = $this->_backend->getGroups('phpunit');
         
         $this->assertEquals(1, count($groups));
     }
@@ -101,7 +110,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroupByName()
     {
-        $group = Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit');
+        $group = $this->_backend->getGroupByName('tine20phpunit');
         
         $this->assertEquals($this->objects['initialGroup']->name, $group->name);
     }
@@ -112,7 +121,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroupById()
     {
-        $group = Tinebase_Group_Sql::getInstance()->getGroupById($this->objects['initialGroup']->id);
+        $group = $this->_backend->getGroupById($this->objects['initialGroup']->id);
         
         $this->assertEquals($this->objects['initialGroup']->id, $group->id);
     }
@@ -123,7 +132,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateGroup()
     {
-        $group = Tinebase_Group_Sql::getInstance()->updateGroup($this->objects['updatedGroup']);
+        $group = $this->_backend->updateGroup($this->objects['updatedGroup']);
         
         $this->assertEquals($this->objects['updatedGroup']->name, $group->name);
         $this->assertEquals($this->objects['updatedGroup']->description, $group->description);
@@ -135,11 +144,11 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteGroups()
     {
-        Tinebase_Group_Sql::getInstance()->deleteGroups($this->objects['initialGroup']);
+        $this->_backend->deleteGroups($this->objects['initialGroup']);
 
         $this->setExpectedException('Exception');
 
-        $group = Tinebase_Group_Sql::getInstance()->getGroupById($this->objects['initialGroup']);
+        $group = $this->_backend->getGroupById($this->objects['initialGroup']);
     }
 }		
 	
