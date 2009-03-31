@@ -267,7 +267,9 @@ class Admin_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
         
         try {
             $account->setFromArray($decodedAccountData);
-            $account->sambaSAM = new Tinebase_Model_SAMUser($decodedAccountData['sambaSAM']);
+            if (isset($decodedAccountData['sambaSAM'])) {
+                $account->sambaSAM = new Tinebase_Model_SAMUser($decodedAccountData['sambaSAM']);
+            }
             
         } catch (Tinebase_Exception_Record_Validation $e) {
             // invalid data in some fields sent from client
