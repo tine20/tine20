@@ -18,12 +18,16 @@
 class Voipmanager_Backend_Snom_Software extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
-     * 
-     * @param Zend_Db_Adapter_Abstract $_db
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct($_db = NULL)
-    {
-        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'snom_software', 'Voipmanager_Model_Snom_Software', $_db);
-    }                  
+    protected $_tableName = 'snom_software';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Voipmanager_Model_Snom_Software';
 }

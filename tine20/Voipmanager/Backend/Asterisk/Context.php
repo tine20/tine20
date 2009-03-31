@@ -18,13 +18,17 @@
  */
 class Voipmanager_Backend_Asterisk_Context extends Tinebase_Application_Backend_Sql_Abstract
 {
-	/**
-	 * the constructor
-	 * 
-	 * @param Zend_Db_Adapter_Abstract $_db
-	 */
-    public function __construct($_db = NULL)
-    {
-        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'asterisk_context', 'Voipmanager_Model_Asterisk_Context', $_db);
-    }
+    /**
+     * Table name without prefix
+     *
+     * @var string
+     */
+    protected $_tableName = 'asterisk_context';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Voipmanager_Model_Asterisk_Context';
 }

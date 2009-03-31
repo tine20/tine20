@@ -5,9 +5,9 @@
  *
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:  $
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  */
 
@@ -19,12 +19,16 @@
 class Voipmanager_Backend_Snom_Location extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
-     * 
-     * @param Zend_Db_Adapter_Abstract $_db
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct($_db = NULL)
-    {
-        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'snom_location', 'Voipmanager_Model_Snom_Location', $_db);
-    }
+    protected $_tableName = 'snom_location';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Voipmanager_Model_Snom_Location';
 }

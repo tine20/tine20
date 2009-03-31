@@ -5,7 +5,7 @@
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        add save rights function
@@ -20,75 +20,19 @@
 class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
-     * 
-     * @param Zend_Db_Adapter_Abstract $_db
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct($_db = NULL)
-    {
-        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones', 'Voipmanager_Model_Snom_Phone', $_db);
-    }              
+    protected $_tableName = 'snom_phones';
     
-	/**
-	 * search phones
-	 * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Snom_Phone
-	 * @deprecated
-	 * 
-	 * @todo   replace this
-	 */
-    /*
-    public function search($_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
-    {	
-        $where = array();
-        
-        $select = $this->_db->select()
-            ->from(array('phones' => Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones'));
-            
-        if($_pagination instanceof Tinebase_Model_Pagination) {
-            $_sort = $_pagination->toArray();
-            
-            if($_sort['sort'] == 'location_id') {
-                $select->join(array('loc' => Tinebase_Core::get('voipdbTablePrefix') . 'snom_location'), 'phones.location_id = loc.id', array('location' => 'name'));    
-                $_sort['sort'] = 'location';
-                $_pagination->setFromArray($_sort);
-            }
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Voipmanager_Model_Snom_Phone';
     
-            if($_sort['sort'] == 'template_id') {
-                $select->join(array('temp' => Tinebase_Core::get('voipdbTablePrefix') . 'snom_templates'), 'phones.template_id = temp.id', array('template' => 'name'));        
-                $_sort['sort'] = 'template';
-                $_pagination->setFromArray($_sort);
-            }
-            
-            $_pagination->appendPaginationSql($select);
-        }
-
-        if(!empty($_filter->query)) {
-            $select->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('macaddress') . ' LIKE ? OR ' .
-                            $this->_db->quoteIdentifier('ipaddress') . ' LIKE ? OR ' .
-                            $this->_db->quoteIdentifier('description') . ' LIKE ?)', '%' . $_filter->query . '%'));
-        } else {
-            // handle the other fields separately
-        }
-
-        if(!empty($_filter->accountId)) {
-            $_validPhoneIds = $this->getValidPhoneIds($_filter->accountId);   
-            if(empty($_validPhoneIds)) {
-                return new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Phone', array());    
-            }         
-            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_validPhoneIds));
-        }
-
-        $stmt = $select->query();
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Phone', $rows);
-		
-        return $result;
-	}
-    */
 	/**
 	 * write phone ACL
 	 * 

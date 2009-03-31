@@ -18,15 +18,19 @@
 class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
-     * 
-     * @param Zend_Db_Adapter_Abstract $_db
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct($_db = NULL)
-    {
-        parent::__construct(Tinebase_Core::get('voipdbTablePrefix') . 'snom_lines', 'Voipmanager_Model_Snom_Line', $_db);
-    }
+    protected $_tableName = 'snom_lines';
     
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Voipmanager_Model_Snom_Line';
+
     /**
      * delete lines(s) identified by phone id
      *
@@ -35,8 +39,8 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
     public function deletePhoneLines($_id)
     {
         $phoneId = Voipmanager_Model_Snom_Phone::convertSnomPhoneIdToInt($_id);
-        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('snomphone_id') . ' = ?', $phoneId);
+        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName . '.snomphone_id') . ' = ?', $phoneId);
 
-        $this->_db->delete(Tinebase_Core::get('voipdbTablePrefix') . 'snom_lines', $where);
+        $this->_db->delete($this->_tablePrefix . 'snom_lines', $where);
     }    
 }
