@@ -20,6 +20,20 @@
 class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
+     * Table name without prefix
+     *
+     * @var string
+     */
+    protected $_tableName = 'cal_events';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Calendar_Model_Event';
+    
+    /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
      *
      * @var boolean
@@ -40,7 +54,10 @@ class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     {
         $this->_setRruleUntil($_record);
         
-        return parent::create($_record);
+        $event = parent::create($_record);
+        $this->_saveExdates($_record);
+        
+        return $this->get($event->getId());
     }
     
     /**
@@ -54,7 +71,10 @@ class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     {
         $this->_setRruleUntil($_record);
         
-        return parent::create($_record);
+        $event = parent::update($_record);
+        $this->_saveExdates($_record);
+        
+        return $this->get($event->getId());
     }
     
     /**
@@ -94,6 +114,48 @@ class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     */
     
     /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {
+        $select = parent::_getSelect($_cols, $_getDeleted);
+        
+        $select->joinLeft(
+            /* what */   array('exdate' => SQL_TABLE_PREFIX . 'cal_exdate'), 
+            /* on   */   $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
+            /* select */ array('exdate' => 'GROUP_CONCAT(' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
+        
+        //$select->joinLeft(
+        //    /* what */   array('attendee' => SQL_TABLE_PREFIX . 'cal_attendee'), 
+        //    /* on   */   $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'));
+        
+        $select->group(array_keys($this->_schema));
+        
+        return $select;
+    }
+    
+    /**
+     * saves exdates of an event
+     *
+     * @param Calendar_Model_Event $_event
+     */
+    protected function _saveExdates($_event)
+    {
+        $this->_db->delete(SQL_TABLE_PREFIX . 'cal_exdate', $this->_db->quoteInto($this->_db->quoteIdentifier('cal_event_id') . '= ?', $_event->getId()));
+        foreach ((array)$_event->exdate as $exdate) {
+            $this->_db->insert(SQL_TABLE_PREFIX . 'cal_exdate', array(
+                'id'           => $_event->generateUID(),
+                'cal_event_id' => $_event->getId(),
+                'exdate'       => $exdate->get(Tinebase_Record_Abstract::ISO8601LONG)
+            ));
+        }
+    }
+    
+    /**
      * sets rrule until field in event model
      *
      * @param  Calendar_Model_Event $_event
@@ -113,4 +175,5 @@ class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             $_event->rrule_until = $rrule->until;
         }
     }
+    
 }
