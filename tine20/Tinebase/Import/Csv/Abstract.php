@@ -246,8 +246,10 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         if ($_record->isValid()) {   
             if (!$this->_options['dryrun']) {
                 $record = call_user_func(array($this->_controller, $this->_createMethod), $_record);
+                return $record;
+            } else {
+                return $_record;
             }
-            return $record;
         } else {
             // log it
         }
