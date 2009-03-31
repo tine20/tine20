@@ -20,8 +20,32 @@
 class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
+     *
+     * @var string
      */
+    protected $_tableName = 'timetracker_timesheet';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Timetracker_Model_Timesheet';
+
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
+    
+    /**
+     * the constructor
+     * 
+     * @todo remove that
+     */
+    /*
     public function __construct ()
     {
         $this->_modlogActive = TRUE;
@@ -31,6 +55,7 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
         
         parent::__construct(SQL_TABLE_PREFIX . 'timetracker_timesheet', 'Timetracker_Model_Timesheet');
     }
+    */
 
     /**
      * Gets total count and sum of duration of search with $_filter
@@ -65,25 +90,25 @@ class Timetracker_Backend_Timesheet extends Tinebase_Application_Backend_Sql_Abs
         if (is_array($_cols) && isset($_cols['count'])) {
             $cols = array(
                 'count'                => 'COUNT(*)', 
-                'countBillable'        => 'SUM(ts.is_billable*ta.is_billable)',
+                'countBillable'        => 'SUM(' . $this->_tableName . '.is_billable*ta.is_billable)',
                 'sum'                  => 'SUM(duration)',
-                'sumBillable'          => 'SUM(duration*ts.is_billable*ta.is_billable)',
+                'sumBillable'          => 'SUM(duration*' . $this->_tableName . '.is_billable*ta.is_billable)',
             );
             
         } else {
-            $cols = array_merge((array)$_cols, array('is_billable_combined' => '(ts.is_billable*ta.is_billable)'));            
+            $cols = array_merge((array)$_cols, array('is_billable_combined' => '(' . $this->_tableName . '.is_billable*ta.is_billable)'));            
         }
 
         $select->from(array('ts' => $this->_tableName), $cols);
         
         // join with timeaccounts to get combined is_billable
         $select->joinLeft(array('ta' => SQL_TABLE_PREFIX . 'timetracker_timeaccount'),
-                    $this->_db->quoteIdentifier('ts.timeaccount_id') . ' = ' . $this->_db->quoteIdentifier('ta.id'),
+                    $this->_db->quoteIdentifier($this->_tableName . '.timeaccount_id') . ' = ' . $this->_db->quoteIdentifier('ta.id'),
                     array());        
         
         if (!$_getDeleted && $this->_modlogActive) {
             // don't fetch deleted objects
-            $select->where($this->_db->quoteIdentifier('ts.is_deleted') . ' = 0');                        
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
         }        
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());

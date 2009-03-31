@@ -20,11 +20,16 @@
 class ActiveSync_Backend_Device extends Tinebase_Application_Backend_Sql_Abstract 
 {
     /**
-     * the constructor
+     * Table name without prefix
      *
+     * @var string
      */
-    public function __construct ()
-    {
-        parent::__construct(SQL_TABLE_PREFIX . 'acsync_device', 'ActiveSync_Model_Device');
-    }
+    protected $_tableName = 'acsync_device';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'ActiveSync_Model_Device';
 }

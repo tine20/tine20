@@ -4,8 +4,8 @@
  *
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        move that to Crm_Backend_Products?
@@ -20,15 +20,26 @@
 class Crm_Backend_LeadProducts extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct ()
-    {
-    	$this->_identifier = 'lead_id';
-    	
-    	parent::__construct(SQL_TABLE_PREFIX . 'metacrm_products', 'Crm_Model_Product');
-    }
-        
+    protected $_tableName = 'metacrm_products';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'metacrm_products';
+
+    /**
+     * Identifier
+     *
+     * @var string
+     */
+    protected $_identifier = 'lead_id';
+    
     /**
      * get products by lead id
      *

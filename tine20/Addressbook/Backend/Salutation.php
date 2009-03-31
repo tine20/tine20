@@ -19,10 +19,16 @@
 class Addressbook_Backend_Salutation extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct ()
-    {
-        parent::__construct(SQL_TABLE_PREFIX . 'addressbook_salutations', 'Addressbook_Model_Salutation');
-    }    
+    protected $_tableName = 'addressbook_salutations';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Addressbook_Model_Salutation';
 }

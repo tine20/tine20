@@ -21,14 +21,19 @@
 class ActiveSync_Backend_ContentState extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
      *
+     * @var string
      */
-    public function __construct ()
-    {
-        parent::__construct(SQL_TABLE_PREFIX . 'acsync_content', 'ActiveSync_Model_ContentState');
-    }    
+    protected $_tableName = 'acsync_content';
     
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'ActiveSync_Model_ContentState';
+
     /**
      * delete all stored contentId's for given device and class
      *
@@ -42,7 +47,7 @@ class ActiveSync_Backend_ContentState extends Tinebase_Application_Backend_Sql_A
             $this->_db->quoteInto($this->_db->quoteIdentifier('class') . ' = ?', $_class)
         );
         
-        $this->_db->delete($this->_tableName, $where);
+        $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $where);
     }
     
     /**

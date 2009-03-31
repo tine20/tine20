@@ -21,13 +21,18 @@
 class Tinebase_TempFile extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct ()
-    {
-        $this->_modlogActive = FALSE;
-        parent::__construct(SQL_TABLE_PREFIX . 'temp_files', 'Tinebase_Model_TempFile');
-    }
+    protected $_tableName = 'temp_files';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Tinebase_Model_TempFile';
     
     /**
      * get temp file description from db

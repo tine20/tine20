@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -26,6 +26,20 @@
  */
 class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
 {
+    /**
+     * Table name without prefix
+     *
+     * @var string
+     */
+    protected $_tableName = 'tasks';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Tasks_Model_Task';
+
     /**
      * For some said reason, Zend_Db doesn't support table prefixes. Thus each 
      * table calss needs to implement it its own.
@@ -68,13 +82,13 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         try {
             $this->_currentAccount = Tinebase_Core::getUser();
         } catch (Zend_Exception $e) {
-            Tinebase_Core::getLogger();
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No user account active.');
         }
         
         // set identifier with table name because we join tables in _getSelect()
         $this->_identifier = 'tasks.id';
         
-        parent::__construct($this->_tableNames['tasks'], 'Tasks_Model_Task');
+        parent::__construct();
     }
     
     /**

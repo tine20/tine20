@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  */
 
@@ -20,15 +20,23 @@
 class Timetracker_Backend_Timeaccount extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct ()
-    {
-        $this->_modlogActive = TRUE;
-        parent::__construct(SQL_TABLE_PREFIX . 'timetracker_timeaccount', 'Timetracker_Model_Timeaccount');
-    }
+    protected $_tableName = 'timetracker_timeaccount';
     
-    /************************ overwritten functions *******************/  
-    
-    /************************ helper functions ************************/
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Timetracker_Model_Timeaccount';
+
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
 }

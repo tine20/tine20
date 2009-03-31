@@ -20,15 +20,23 @@
 class Courses_Backend_Course extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
+     *
+     * @var string
      */
-    public function __construct ()
-    {
-        $this->_modlogActive = TRUE;
-        parent::__construct(SQL_TABLE_PREFIX . 'courses', 'Courses_Model_Course');
-    }
+    protected $_tableName = 'courses';
     
-    /************************ overwritten functions *******************/  
-    
-    /************************ helper functions ************************/
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Courses_Model_Course';
+
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
 }

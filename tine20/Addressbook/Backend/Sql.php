@@ -18,15 +18,26 @@
 class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
      *
+     * @var string
      */
-    public function __construct ()
-    {
-        $this->_modlogActive = TRUE;
-        parent::__construct(SQL_TABLE_PREFIX . 'addressbook', 'Addressbook_Model_Contact');
-    }
+    protected $_tableName = 'addressbook';
     
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Addressbook_Model_Contact';
+
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
+
     /**
      * fetch one contact of a user identified by his user_id
      *
@@ -36,7 +47,7 @@ class Addressbook_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      */
     public function getByUserId($_userId)
     {
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . $this->_tableName)
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_userId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
