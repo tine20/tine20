@@ -72,16 +72,15 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
     /****************************** overwritten functions ************************/
 
     /**
-     * Create a new Task
+     * add one record
      *
-     * @param   Tinebase_Record_Interface $_task
-     * @return  Tasks_Model_Task
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_Record_Validation
      */
     public function create(Tinebase_Record_Interface $_task)
     {
-        if (empty($_task->container_id) || (int)$_task->container_id < 0) {
-            $_task->container_id = Tasks_Controller::getInstance()->getDefaultContainer()->getId();
-        }
         if(empty($_task->class_id)) {
             $_task->class_id = NULL;
         }
@@ -89,6 +88,14 @@ class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstr
         return parent::create($_task);
     }
     
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_Record_Validation
+     */
     public function update(Tinebase_Record_Interface $_task)
     {
         $this->_handleCompletedDate($_task);

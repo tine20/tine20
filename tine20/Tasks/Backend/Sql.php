@@ -39,6 +39,13 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Tasks_Model_Task';
+    
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
 
     /**
      * For some said reason, Zend_Db doesn't support table prefixes. Thus each 
@@ -62,165 +69,41 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     protected $_tables = array();
     
     /**
-     * Holds instance of current account
+     * Creates new entry
      *
-     * @var Tinebase_Model_User
-     */
-    protected $_currentAccount;
-
-    /**
-     * Constructor
-     *
-     */
-    public function __construct()
-    {
-        // fix table prefixes
-        foreach ($this->_tableNames as $basename => $name) {
-            $this->_tableNames[$basename] = SQL_TABLE_PREFIX . $name;
-        }
-        
-        try {
-            $this->_currentAccount = Tinebase_Core::getUser();
-        } catch (Zend_Exception $e) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No user account active.');
-        }
-        
-        // set identifier with table name because we join tables in _getSelect()
-        $this->_identifier = 'tasks.id';
-        
-        parent::__construct();
-    }
-    
-    /**
-     * Create a new Task
-     *
-     * @param   Tasks_Model_Task $_task
-     * @return  Tasks_Model_Task
-     * @throws  Tasks_Exception_Backend
-     */
-    public function create(Tinebase_Record_Interface $_task)
-    {
-        if ( empty($_task->id) ) {
-        	$newId = $_task->generateUID();
-        	$_task->setId($newId);
-        }
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_task, 'create');
-        $taskParts = $this->seperateTaskData($_task);
-        
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            $tasksTable = $this->getTableInstance('tasks');
-            $tasksTable->insert($taskParts['tasks']);
-            $this->insertDependentRows($taskParts);
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-            return $this->get($_task->getId());
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Tasks_Exception_Backend($e->getMessage());
-        }
-    }
-    
-    
-    /**
-     * Upate an existing Task
-     *
-     * @param   Tasks_Model_Task $_task
-     * @return  Tasks_Model_Task
-     * @throws  Exception
-     */ 
-    public function update(Tinebase_Record_Interface $_task)
-    {
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-
-            // database update
-            $taskParts = $this->seperateTaskData($_task);
-            $tasksTable = $this->getTableInstance('tasks');
-            $numAffectedRows = $tasksTable->update($taskParts['tasks'], array(
-                $this->_db->quoteInto('id = ?', $_task->id),
-            ));
-            $this->deleteDependentRows($_task->id);
-            $this->insertDependentRows($taskParts);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-            return $this->get($_task->id);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            //throw new Tasks_Exception_Backend($e->getMessage());
-            throw $e;            
-        }
-    }
-    
-    /**
-     * Deletes a Task
-     *
-     * @param   string|array $_id
-     * @return  void
-     * @throws  Tasks_Exception_Backend
-     */
-    public function delete($_id)
-    {
-        $id = $this->_convertId($_id);
-        
-        $tasksTable = $this->getTableInstance('tasks');
-        $data = array(
-            'is_deleted'   => true, 
-            'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'deleted_by'   => $this->_currentAccount->getId()
-        );
-        
-        //$tasksTable->delete($tasksTable->getAdapter()->quoteInto('id = ?', $_uid));
-        $tasksTable->update($data, array(
-            $this->_db->quoteInto('id = ?', $id)
-        ));
-    }
-    
-    /**
-     * Returns a record as it was at a given point in history
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_InvalidArgument
+     * @throws  Tinebase_Exception_UnexpectedValue
      * 
-     * @param string _id 
-     * @param Zend_Date _at 
-     * @return Tinebase_Record
-     * @access public
+     * @todo    remove autoincremental ids later
      */
-    public function getRecord($_id,  Zend_Date $_at)
+    public function create(Tinebase_Record_Interface $_record) 
     {
+        parent::create($_record);
         
+        $taskParts = $this->seperateTaskData($_record);
+        $this->insertDependentRows($taskParts);
+        
+        return $this->get($_record->getId());
     }
     
     /**
-     * Returns a set of records as they where at a given point in history
-     * 
-     * @param array _ids array of strings
-     * @param Zend_Date _at 
-     * @return Tinebase_Record_RecordSet
-     * @access public
-     */
-    public function getRecords(array $_ids,  Zend_Date $_at)
-    {
-        
-    }
-    
-    /**
-     * Deletes all depended rows from a given parent task
+     * Updates existing entry
      *
-     * @param string $_parentTaskId
-     * @return int number of deleted rows
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Interface Record|NULL
      */
-    protected function deleteDependentRows($_parentTaskId)
+    public function update(Tinebase_Record_Interface $_record) 
     {
-        $deletedRows = 0;
-        foreach (array('contact') as $table) {
-            $TableObject = $this->getTableInstance($table);
-            $deletedRows += $TableObject->delete(
-                $this->_db->quoteInto('task_id = ?', $_parentTaskId)
-            );
-        }
-        return $deletedRows;
+        parent::update($_record);
+        
+        $taskParts = $this->seperateTaskData($_record);
+        $this->deleteDependentRows($_record->getId());
+        $this->insertDependentRows($taskParts);
+        
+        return $this->get($_record->getId());
     }
     
     /**
@@ -242,6 +125,24 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
                 }
             }
         }
+    }
+    
+    /**
+     * Deletes all depended rows from a given parent task
+     *
+     * @param string $_parentTaskId
+     * @return int number of deleted rows
+     */
+    protected function deleteDependentRows($_parentTaskId)
+    {
+        $deletedRows = 0;
+        foreach (array('contact') as $table) {
+            $TableObject = $this->getTableInstance($table);
+            $deletedRows += $TableObject->delete(
+                $this->_db->quoteInto('task_id = ?', $_parentTaskId)
+            );
+        }
+        return $deletedRows;
     }
     
     /**
@@ -276,7 +177,7 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
     protected function getTableInstance($_tablename)
     {
         if (!isset($this->_tables[$_tablename])) {
-            $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tableNames[$_tablename]));
+            $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tablePrefix . $this->_tableNames[$_tablename]));
         }
         return $this->_tables[$_tablename];
     }
@@ -298,38 +199,14 @@ class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
             $cols['is_due'] = "LENGTH({$this->_db->quoteIdentifier('tasks.due')})";
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cols, true));
-        
         $select = $this->_db->select()
-            ->from(array('tasks' => $this->_tableNames['tasks']), $cols)
-            ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array());
+            ->from(array('tasks' => $this->_tablePrefix . $this->_tableNames['tasks']), $cols)
+            ->joinLeft(array('status'  => $this->_tablePrefix . $this->_tableNames['status']), 'tasks.status_id = status.id', array());
             
         if ($_getDeleted !== TRUE) {
             $select->where($this->_db->quoteIdentifier('tasks.is_deleted') . ' = FALSE');
         }
         
-        /*
-        
-        $tablename = array('tasks' => $this->_tableNames['tasks']);
-        
-        if ($_cols != '*') {
-            $fields = array('count' => 'COUNT(tasks.id)');
-            $select->from($tablename, $fields) 
-                ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array());
-        } else {
-            $fields = array(
-                'tasks.*', 
-                'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_id)',
-                'is_due'  => 'LENGTH(tasks.due)',
-                //'is_open' => 'status.status_is_open',
-            );
-            $select->from($tablename, $fields)
-                ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.id = contact.task_id', array())
-                ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array())
-                ->group('tasks.id');
-        }
-*/
-
         return $select;
     }
    
