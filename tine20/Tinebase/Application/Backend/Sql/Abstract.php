@@ -33,6 +33,13 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     protected $_tableName = NULL;
     
     /**
+     * Table prefix
+     *
+     * @var string
+     */
+    protected $_tablePrefix = NULL;
+    
+    /**
      * Model name
      *
      * @var string
@@ -73,17 +80,18 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @param string $_tableName
      *
      */
-    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL)
+    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL)
     {
         $this->_db = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
         $this->_modelName = $_modelName ? $_modelName : $this->_modelName;
         $this->_tableName = $_tableName ? $_tableName : $this->_tableName;
+        $this->_tablePrefix = $_tablePrefix ? $_tablePrefix : $this->_db->table_prefix;
         
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given');
         }
         
-        $this->_schema = $this->_db->describeTable(SQL_TABLE_PREFIX . $this->_tableName);
+        $this->_schema = $this->_db->describeTable($this->_tablePrefix . $this->_tableName);
     }
     
     
@@ -175,7 +183,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
 
         $select = $this->_getSelect();
-        $select->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_identifier) . ' in (?)', (array) $_id);
+        $select->where($this->_db->quoteIdentifier($this->_tablePrefix . $this->_identifier) . ' in (?)', (array) $_id);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
@@ -197,7 +205,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     public function getAll($_orderBy = NULL, $_orderDirection = 'ASC') 
     {
-        $orderBy = $_orderBy ? $_orderBy : $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_identifier);
+        $orderBy = $_orderBy ? $_orderBy : $this->_db->quoteIdentifier($this->_tablePrefix . $this->_identifier);
         
         if(!in_array($_orderDirection, array('ASC', 'DESC'))) {
             throw new Tinebase_Exception_InvalidArgument('$_orderDirection is invalid');
@@ -311,7 +319,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
 
         $this->_prepareData($recordArray);
         
-        $this->_db->insert(SQL_TABLE_PREFIX . $this->_tableName, $recordArray);
+        $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
         
         if (!$this->_hasHashId()) {
             $newId = $this->_db->lastInsertId();
@@ -366,7 +374,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id),
         );
         
-        $this->_db->update(SQL_TABLE_PREFIX . $this->_tableName, $recordArray, $where);
+        $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
         
         // update custom fields
         if ($_record->has('customfields')) {
@@ -404,7 +412,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
-        return $this->_db->update(SQL_TABLE_PREFIX . $this->_tableName, $recordArray, $where);        
+        return $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);        
     }
     
     /**
@@ -424,7 +432,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id)
         );
         
-        $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $where);
+        $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
         
         // delete custom fields
         /*
@@ -489,7 +497,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
     {        
         $select = $this->_db->select();
 
-        $select->from(array($this->_tableName => SQL_TABLE_PREFIX . $this->_tableName), $_cols);
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $_cols);
         
         if (!$_getDeleted && $this->_modlogActive) {
             // don't fetch deleted objects
@@ -576,7 +584,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected function _saveCustomFields(Tinebase_Record_Interface $_record)
     {
-        $customFieldsTableName = SQL_TABLE_PREFIX . $this->_tableName . '_' . 'custom';
+        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
         
         // delete all custom fields for this record first
         $this->_deleteCustomFields($_record->getId());
@@ -603,7 +611,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected function _getCustomFields(Tinebase_Record_Interface &$_record)
     {
-        $customFieldsTableName = SQL_TABLE_PREFIX . $this->_tableName . '_' . 'custom';
+        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
 
         $select = $this->_db->select()
             ->from(array('cftable' => $customFieldsTableName))
@@ -625,7 +633,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      */
     protected function _deleteCustomFields($_recordId)
     {
-        $customFieldsTableName = SQL_TABLE_PREFIX . $this->_tableName . '_' . 'custom';
+        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
 
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('record_id') . ' = ?', $_recordId)
