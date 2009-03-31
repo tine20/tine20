@@ -125,12 +125,12 @@ class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
         $select = parent::_getSelect($_cols, $_getDeleted);
         
         $select->joinLeft(
-            /* what */   array('exdate' => SQL_TABLE_PREFIX . 'cal_exdate'), 
+            /* what */   array('exdate' => $this->_tablePrefix . 'cal_exdate'), 
             /* on   */   $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => 'GROUP_CONCAT(' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
         
         //$select->joinLeft(
-        //    /* what */   array('attendee' => SQL_TABLE_PREFIX . 'cal_attendee'), 
+        //    /* what */   array('attendee' => $this->_tablePrefix . 'cal_attendee'), 
         //    /* on   */   $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'));
         
         $select->group(array_keys($this->_schema));
@@ -145,9 +145,9 @@ class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
      */
     protected function _saveExdates($_event)
     {
-        $this->_db->delete(SQL_TABLE_PREFIX . 'cal_exdate', $this->_db->quoteInto($this->_db->quoteIdentifier('cal_event_id') . '= ?', $_event->getId()));
+        $this->_db->delete($this->_tablePrefix . 'cal_exdate', $this->_db->quoteInto($this->_db->quoteIdentifier('cal_event_id') . '= ?', $_event->getId()));
         foreach ((array)$_event->exdate as $exdate) {
-            $this->_db->insert(SQL_TABLE_PREFIX . 'cal_exdate', array(
+            $this->_db->insert($this->_tablePrefix . 'cal_exdate', array(
                 'id'           => $_event->generateUID(),
                 'cal_event_id' => $_event->getId(),
                 'exdate'       => $exdate->get(Tinebase_Record_Abstract::ISO8601LONG)
