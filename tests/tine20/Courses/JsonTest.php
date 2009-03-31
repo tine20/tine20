@@ -75,8 +75,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         
         // checks
         $this->assertEquals($course['description'], $courseData['description']);
-        $this->assertEquals($course['type'], $courseData['type']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $courseData['created_by']);
+        $this->assertEquals($course['type'], $courseData['type']['value']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $courseData['created_by'], 'Created by has not been set.');
         $this->assertGreaterThan(0, $courseData['group_id']);
         $this->assertGreaterThan(0, count($courseData['members']));
         
@@ -120,6 +120,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         // update Course
         $courseData['description'] = "blubbblubb";
         $courseData['members'] = array();
+        $courseData['type'] = $courseData['type']['value'];
         $courseUpdated = $this->_json->saveCourse(Zend_Json::encode($courseData));
         
         //print_r($courseUpdated);
@@ -179,7 +180,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $courseData = $this->_json->getCourse($courseData['id']);
         
         // checks
-        $this->assertEquals(5, count($courseData['members']));
+        $this->assertEquals(4, count($courseData['members']));
         
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
@@ -198,9 +199,10 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             'name'          => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
             'type'          => Tinebase_Record_Abstract::generateUID(),
-            'members'       => array(
+            /*'members'       => array(
                 Tinebase_Core::getUser()->getId(),
             )
+            */
         );
     }
         
