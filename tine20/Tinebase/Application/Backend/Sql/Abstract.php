@@ -78,6 +78,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
      * @param Zend_Db_Adapter_Abstract $_db optional
      * @param string $_modelName
      * @param string $_tableName
+     * @param string $_tablePrefix
      *
      */
     public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL)
@@ -183,7 +184,7 @@ abstract class Tinebase_Application_Backend_Sql_Abstract implements Tinebase_App
         }
 
         $select = $this->_getSelect();
-        $select->where($this->_db->quoteIdentifier($this->_tablePrefix . $this->_identifier) . ' in (?)', (array) $_id);
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' in (?)', (array) $_id);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
