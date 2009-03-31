@@ -39,8 +39,8 @@ class Voipmanager_Backend_Snom_Line extends Tinebase_Application_Backend_Sql_Abs
     public function deletePhoneLines($_id)
     {
         $phoneId = Voipmanager_Model_Snom_Phone::convertSnomPhoneIdToInt($_id);
-        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName . '.snomphone_id') . ' = ?', $phoneId);
+        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('snomphone_id') . ' = ?', $phoneId);
 
-        $this->_db->delete($this->_tablePrefix . 'snom_lines', $where);
+        $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
     }    
 }
