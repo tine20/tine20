@@ -90,7 +90,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnitup',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
+            'accountEmailAddress'   => 'phpunit@metaways.de',
         )); 
         
         /*
@@ -204,10 +204,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         $accountData = $this->objects['accountUpdate']->toArray();
         $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId();
+        $accountData['accountPassword'] = 'test';
+        $accountData['accountPassword2'] = 'test';
         
         $encodedData = Zend_Json::encode($accountData);
         
-        $account = $this->_backend->saveUser($encodedData, 'test', 'test');
+        $account = $this->_backend->saveUser($encodedData);
         
         $this->assertTrue(is_array($account));
         $this->assertEquals('tine20phpunitup', $account['accountLoginName']);
