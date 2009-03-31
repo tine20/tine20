@@ -37,7 +37,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->_backend = new Calendar_Backend_Sql(SQL_TABLE_PREFIX . 'cal_events', 'Calendar_Model_Event');
+        $this->_backend = new Calendar_Backend_Sql();
         $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit test calendar',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
@@ -65,6 +65,22 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         $persistentEvent = $this->_backend->create($event);
                 
         $this->assertEquals($persistentEvent->summary, $event->summary);
+    }
+    
+    public function testUpdateEvent()
+    {
+        $event = $this->_getEvent();
+        $persistentEvent = $this->_backend->create($event);
+        
+        $persistentEvent->dtstart->addHour(3);
+        $persistentEvent->dtend->addHour(3);
+        $persistentEvent->summary = 'Robert Lembke:';
+        $persistentEvent->description = 'Wer spät zu Bett geht und früh heraus muß, weiß, woher das Wort Morgengrauen kommt';
+        
+        $updatedEvent = $this->_backend->update($persistentEvent);
+        
+        $this->assertEquals($persistentEvent->summary, $updatedEvent->summary);
+        $this->assertTrue($persistentEvent->dtstart->equals($updatedEvent->dtstart));
     }
     
     public function testGetEvent()
@@ -305,6 +321,23 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         
     }
     */
+    
+    public function testExDate()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=WEEKLY;INTERVAL=1;UNTIL=2009-05-20 23:59:59';
+        $event->exdate = array(
+            new Zend_Date('2009-04-29 06:00:00'),
+            new Zend_Date('2009-05-06 06:00:00'),
+        );
+        
+        $persistentEvent = $this->_backend->create($event);
+        
+        $this->assertEquals(2, count($persistentEvent->exdate), 'We put in two exdates, we should get out two exdates!');
+        foreach ($persistentEvent->exdate as $exdate) {
+        	$this->assertTrue($exdate->equals($event->exdate[0]) || $exdate->equals($event->exdate[1]), 'exdates mismatch');
+        }
+    }
     
     /**
      * returns a simple event
