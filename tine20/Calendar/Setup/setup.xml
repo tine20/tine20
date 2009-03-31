@@ -226,6 +226,7 @@
                     <reference>
                         <table>cal_events</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                     <ondelete>cascade</ondelete>
                 </index>
@@ -302,6 +303,7 @@
                     <reference>
                         <table>cal_events</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                     <ondelete>cascade</ondelete>
                 </index>
