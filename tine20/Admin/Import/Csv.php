@@ -49,15 +49,14 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         if ($_record->isValid()) {   
             if (!$this->_options['dryrun']) {
                 $record = $this->_controller->create($_record, $password, $password);
+                return $record;
+            } else {
+                return $_record;
             }
-            return $record;
         } else {
             // log it
         }
-        
-        return $record;
     }
-        
     
     /**
      * add some more values (primary group)
