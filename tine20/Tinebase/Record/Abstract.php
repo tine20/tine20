@@ -551,6 +551,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         foreach ($this->_datetimeFields as $field) {
             if (!isset($_data[$field]) || $_data[$field] instanceof Zend_Date) continue;
             
+            if (strpos($_data[$field], ',') !== false) {
+                $_data[$field] = explode(',', $_data[$field]);
+            }
+            
             if(is_array($_data[$field])) {
                 foreach($_data[$field] as $dataKey => $dataValue) {
                     if ($dataValue instanceof Zend_Date) continue;
@@ -574,6 +578,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         foreach ($this->_datetimeFields as $field) {
             if (!isset($_data[$field]) || $_data[$field] instanceof Zend_Date) continue;
+            
+            if (strpos($_data[$field], ',') !== false) {
+                $_data[$field] = explode(',', $_data[$field]);
+            }
             
             if(is_array($_data[$field])) {
                 foreach($_data[$field] as $dataKey => $dataValue) {
