@@ -204,6 +204,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
+     * returns id property of this model
+     *
+     * @return string
+     */
+    public function getIdProperty()
+    {
+        return $this->_identifier;
+    }
+    
+    /**
      * sets the record related properties from user generated input.
      * 
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
