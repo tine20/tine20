@@ -399,6 +399,9 @@ class Tinebase_Core
             }
             
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
+            
+            // place table prefix into the concrete adapter
+            $db->table_prefix = SQL_TABLE_PREFIX;
 
             self::set(self::DB, $db);
         } else {
