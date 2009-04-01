@@ -27,7 +27,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
     protected $_filterGroup = NULL;
     
     /**
-     * @var Tinebase_Application_Controller_Record_Abstract
+     * @var Tinebase_Controller_Record_Abstract
      */
     protected $_controller = NULL;
     

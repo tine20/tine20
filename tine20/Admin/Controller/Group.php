@@ -16,7 +16,7 @@
  *
  * @package     Admin
  */
-class Admin_Controller_Group extends Tinebase_Application_Controller_Abstract
+class Admin_Controller_Group extends Tinebase_Controller_Abstract
 {
     /**
      * holdes the instance of the singleton

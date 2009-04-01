@@ -20,7 +20,7 @@
  * @package Tasks
  * @subpackage  Controller
  */
-class Tasks_Controller extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface, Tinebase_Container_Interface
+class Tasks_Controller extends Tinebase_Controller_Abstract implements Tinebase_Events_Interface, Tinebase_Container_Interface
 {
     /**
      * the constructor

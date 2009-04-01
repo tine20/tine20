@@ -19,7 +19,7 @@
  * @package     Crm
  * @subpackage  Controller
  */
-class Crm_Controller extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface, Tinebase_Container_Interface
+class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Events_Interface, Tinebase_Container_Interface
 {
     /**
      * the constructor

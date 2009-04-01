@@ -70,7 +70,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     /**
      * the record controller
      *
-     * @var Tinebase_Application_Controller_Record_Interface
+     * @var Tinebase_Controller_Record_Interface
      */
     protected $_controller = NULL;
     

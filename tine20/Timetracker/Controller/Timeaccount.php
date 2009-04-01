@@ -17,7 +17,7 @@
  * @package     Timetracker
  * @subpackage  Controller
  */
-class Timetracker_Controller_Timeaccount extends Tinebase_Application_Controller_Record_Abstract
+class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor

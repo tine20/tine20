@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  Controller
  */
-interface Tinebase_Application_Controller_Record_Interface
+interface Tinebase_Controller_Record_Interface
 {    
     /**
      * get list of records

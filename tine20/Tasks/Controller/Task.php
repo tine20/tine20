@@ -20,7 +20,7 @@
  * @package Tasks
  * @subpackage  Controller
  */
-class Tasks_Controller_Task extends Tinebase_Application_Controller_Record_Abstract
+class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor

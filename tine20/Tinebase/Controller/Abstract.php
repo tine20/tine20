@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Application_Controller_Abstract
+abstract class Tinebase_Controller_Abstract
 {
     /**
      * application name (is needed in checkRight())

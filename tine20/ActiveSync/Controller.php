@@ -22,7 +22,7 @@
  * @package     ActiveSync
  * @subpackage  ActiveSync
  */
-class ActiveSync_Controller extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface
+class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tinebase_Events_Interface
 {
     /**
      * holdes the instance of the singleton

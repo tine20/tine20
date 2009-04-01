@@ -17,7 +17,7 @@
  * @package     Addressbook
  * @subpackage  Controller
  */
-class Addressbook_Controller_Contact extends Tinebase_Application_Controller_Record_Abstract
+class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor

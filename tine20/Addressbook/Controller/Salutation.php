@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add possiblity to change salutations (extend Tinebase_Application_Controller_Record_Abstract)
+ * @todo        add possiblity to change salutations (extend Tinebase_Controller_Record_Abstract)
  */
 
 /**
@@ -18,7 +18,7 @@
  * @package     Addressbook
  * @subpackage  Controller
  */
-class Addressbook_Controller_Salutation extends Tinebase_Application_Controller_Abstract
+class Addressbook_Controller_Salutation extends Tinebase_Controller_Abstract
 {
     /**
      * the salutation backend

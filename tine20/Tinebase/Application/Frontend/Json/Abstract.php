@@ -43,10 +43,10 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * Return a single record
      *
      * @param   string $_uid
-     * @param   Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @param   Tinebase_Controller_Record_Interface $_controller the record controller
      * @return  array record data
      */
-    protected function _get($_uid, Tinebase_Application_Controller_Record_Interface $_controller)
+    protected function _get($_uid, Tinebase_Controller_Record_Interface $_controller)
     {
         $record = $_controller->get($_uid);
         return $this->_recordToJson($record);
@@ -55,13 +55,13 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
     /**
      * Returns all records
      *
-     * @param   Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @param   Tinebase_Controller_Record_Interface $_controller the record controller
      * @return  array record data
      * 
      * @todo    add sort/dir params here?
      * @todo    add translation here? that is needed for example for getSalutations() in the addressbook
      */
-    protected function _getAll(Tinebase_Application_Controller_Record_Interface $_controller)
+    protected function _getAll(Tinebase_Controller_Record_Interface $_controller)
     {
         $records = $_controller->getAll();
         
@@ -76,11 +76,11 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      *
      * @param string $_filter json encoded
      * @param string $_paging json encoded
-     * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @param Tinebase_Controller_Record_Interface $_controller the record controller
      * @param string $_filterModel the class name of the filter model to use
      * @return array
      */
-    protected function _search($_filter, $_paging, Tinebase_Application_Controller_Record_Interface $_controller, $_filterModel)
+    protected function _search($_filter, $_paging, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
         $decodedFilter = Zend_Json::decode($_filter);
         
@@ -112,12 +112,12 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * creates/updates a record
      *
      * @param   $_recordData
-     * @param   Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @param   Tinebase_Controller_Record_Interface $_controller the record controller
      * @param   $_modelName for example: 'Task' for Tasks_Model_Task
      * @param   $_identifier of the record (default: id)
      * @return  array created/updated record
      */
-    protected function _save($_recordData, Tinebase_Application_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id')
+    protected function _save($_recordData, Tinebase_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id')
     {
         $modelClass = $this->_applicationName . "_Model_" . $_modelName;
         $record = new $modelClass(array(), TRUE);
@@ -135,11 +135,11 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      *
      * @param string $_filter json encoded filter
      * @param string $_data json encoded key/value pairs 
-     * @param Tinebase_Application_Controller_Record_Interface $_controller
+     * @param Tinebase_Controller_Record_Interface $_controller
      * @param string FilterGroup name
      * @return array with number of updated records
      */
-    protected function _updateMultiple($_filter, $_data, Tinebase_Application_Controller_Record_Interface $_controller, $_filterModel)
+    protected function _updateMultiple($_filter, $_data, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
         $filter = new $_filterModel(Zend_Json::decode($_filter));
         
@@ -154,10 +154,10 @@ abstract class Tinebase_Application_Frontend_Json_Abstract extends Tinebase_Appl
      * deletes existing records
      *
      * @param array $_ids 
-     * @param Tinebase_Application_Controller_Record_Interface $_controller the record controller
+     * @param Tinebase_Controller_Record_Interface $_controller the record controller
      * @return string
      */
-    protected function _delete($_ids, Tinebase_Application_Controller_Record_Interface $_controller)
+    protected function _delete($_ids, Tinebase_Controller_Record_Interface $_controller)
     {
         if (strpos($_ids, '[') !== false) {
             $_ids = Zend_Json::decode($_ids);

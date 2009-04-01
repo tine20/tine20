@@ -19,7 +19,7 @@
  * @package     Crm
  * @subpackage  Controller
  */
-class Crm_Controller_Lead extends Tinebase_Application_Controller_Record_Abstract
+class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor

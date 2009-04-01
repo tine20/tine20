@@ -17,7 +17,7 @@
  * @package     Courses
  * @subpackage  Controller
  */
-class Courses_Controller_Course extends Tinebase_Application_Controller_Record_Abstract
+class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor

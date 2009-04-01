@@ -17,7 +17,7 @@
  * @package     ExampleApplication
  * @subpackage  Controller
  */
-class ExampleApplication_Controller_ExampleRecord extends Tinebase_Application_Controller_Record_Abstract
+class ExampleApplication_Controller_ExampleRecord extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor

@@ -19,12 +19,12 @@
  * @package     Tinebase
  * @subpackage  Controller
  */
-abstract class Tinebase_Application_Controller_Record_Abstract extends Tinebase_Application_Controller_Abstract implements Tinebase_Application_Controller_Record_Interface
+abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_Abstract implements Tinebase_Controller_Record_Interface
 {
    /**
      * application backend class
      *
-     * @var Tinebase_Application_Backend_Interface
+     * @var Tinebase_Backend_Interface
      */
     protected $_backend;
 

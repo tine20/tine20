@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-class Felamimail_Controller extends Tinebase_Application_Controller_Abstract implements Tinebase_Events_Interface
+class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tinebase_Events_Interface
 {
     protected $accounts = NULL;
     

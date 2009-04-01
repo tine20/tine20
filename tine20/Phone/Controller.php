@@ -15,7 +15,7 @@
  * 
  * @package     Phone
  */
-class Phone_Controller extends Tinebase_Application_Controller_Abstract
+class Phone_Controller extends Tinebase_Controller_Abstract
 {
     /**
      * the constructor

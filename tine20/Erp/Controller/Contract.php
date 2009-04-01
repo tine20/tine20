@@ -17,7 +17,7 @@
  * @package     Erp
  * @subpackage  Controller
  */
-class Erp_Controller_Contract extends Tinebase_Application_Controller_Record_Abstract
+class Erp_Controller_Contract extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor

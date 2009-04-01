@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        extend Tinebase_Application_Controller_Record_Abstract
+ * @todo        extend Tinebase_Controller_Record_Abstract
  */
 
 /**
@@ -18,7 +18,7 @@
  * @package     Crm
  * @subpackage  Controller
  */
-class Crm_Controller_LeadStates extends Tinebase_Application_Controller_Abstract
+class Crm_Controller_LeadStates extends Tinebase_Controller_Abstract
 {
     /**
      * the constructor
