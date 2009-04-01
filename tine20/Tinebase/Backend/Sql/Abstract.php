@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Backend_Sql_Abstract implements Tinebase_Application_Backend_Interface
+abstract class Tinebase_Backend_Sql_Abstract implements Tinebase_Backend_Interface
 {
     /**
      * backend type constant

@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-interface Tinebase_Application_Backend_Interface
+interface Tinebase_Backend_Interface
 {
     /**
      * Search for records matching given filter

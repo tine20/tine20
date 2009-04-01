@@ -16,7 +16,7 @@
  * @package     Admin
  * @subpackage  Samba
  */
-class Admin_Backend_SambaMachine_Ldap implements Tinebase_Application_Backend_Interface
+class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
 {
     /**
      * @var array
