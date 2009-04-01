@@ -139,7 +139,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function searchNotes(Tinebase_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'notes');
+            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'));
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
         //$_filter->appendFilterSql($select);
@@ -162,7 +162,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function searchNotesCount(Tinebase_Model_NoteFilter $_filter)
     {
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'notes', array('count' => 'COUNT(id)'));
+            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'), array('count' => 'COUNT(id)'));
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
         //$_filter->appendFilterSql($select);
