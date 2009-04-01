@@ -86,8 +86,12 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         });
         
         // init app picker
+        var allApps = Tine.Tinebase.appMgr.getAll();
+        if (! Tine.Tinebase.appMgr.get(this.defaultAppName)) {
+            this.defaultAppName = allApps.first().appName;
+        }
         this.appPicker = new Tine.Tinebase.AppPicker({
-            apps: Tine.Tinebase.appMgr.getAll(),
+            apps: allApps,
             defaultAppName: this.defaultAppName
         });
                     
