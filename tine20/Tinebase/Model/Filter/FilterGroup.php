@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  * 
@@ -297,25 +297,6 @@ class Tinebase_Model_Filter_FilterGroup
         return $this->_filterModel;
     }
     
-    /**
-     * appends tenor of this filterdata to given sql select object
-     * 
-     * NOTE: In order to archive nested filters we use the extended 
-     *       Tinebase_Model_Filter_FilterGroup select object. This object
-     *       appends all contained filters at once concated by the concetation
-     *       operator of the filtergroup
-     *
-     * @param  Zend_Db_Select $_select
-     */
-    public function appendFilterSql($_select)
-    {
-        foreach ($this->_filterObjects as $filter) {
-            $groupSelect = new Tinebase_Model_Filter_DbGroupSelect($_select);
-            $filter->appendFilterSql($groupSelect);
-            $groupSelect->appendWhere($this->_concatenationCondition);
-        }
-    }
-
     /**
      * returns array with the filter settings of this filter group 
      *
