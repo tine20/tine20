@@ -20,19 +20,12 @@
  */
 class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
 {
-    protected $_applicationName = 'ActiveSync';
-    
     /**
-     * backend for data storage and authentication
+     * app name
      *
-     * @var ActiveSync_Controller
+     * @var string
      */
-    protected $_controller;
-    
-    public function __construct()
-    {
-        $this->_controller = ActiveSync_Controller::getInstance();
-    }
+    protected $_applicationName = 'ActiveSync';
     
     /**
      * authenticate user
@@ -44,7 +37,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
      */
     public function authenticate($_username, $_password, $_ipAddress)
     {
-        return $this->_controller->authenticate($_username, $_password, $_ipAddress);
+        return ActiveSync_Controller::getInstance()->authenticate($_username, $_password, $_ipAddress);
     }
     
     /**
@@ -88,7 +81,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
         $policyKey = (int)$_SERVER['HTTP_X_MS_POLICYKEY']; 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $asVersion Command: $_command");
         
-        $device = $this->_controller->getUserDevice($_deviceId, $userAgent, $asVersion);
+        $device = ActiveSync_Controller::getInstance()->getUserDevice($_deviceId, $userAgent, $asVersion);
         
         #if($_command != 'Provision' && $_command != 'Ping' && $policyKey != $device->policykey) {
         #    header("HTTP/1.1 449 Retry after sending a PROVISION command");
