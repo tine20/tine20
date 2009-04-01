@@ -91,7 +91,7 @@ class Tinebase_TempFile extends Tinebase_Application_Backend_Sql_Abstract
            'size'        => $uploadedFile['size'],
         ));
         
-        $this->_db->insert($this->_tableName, $tempFile->toArray());
+        $this->create($tempFile);
         
         return $tempFile;
     }
