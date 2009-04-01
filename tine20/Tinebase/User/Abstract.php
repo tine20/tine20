@@ -103,7 +103,7 @@ abstract class Tinebase_User_Abstract
             for ($i=0; $i<strlen($_account->accountFirstName); $i++) {
                 
                 $userName = strtolower(self::replaceSpechialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
-                if (! ! $this->userNameExists($userName)) {
+                if (! $this->userNameExists($userName)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
                     return $userName;
                 }
