@@ -26,7 +26,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Crm_Acl_Rights extends Tinebase_Application_Rights_Abstract
+class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
    /**
      * the right to manage leads

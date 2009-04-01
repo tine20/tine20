@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        move some functionality to Tinebase_Acl_Roles
- * @todo        extend Tinebase_Application_Rights_Abstract and removed no longer needed code
  */
 
 /**
@@ -25,7 +24,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Tinebase_Acl_Rights extends Tinebase_Application_Rights_Abstract
+class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
     /**
      * the right to send bugreports

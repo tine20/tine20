@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-interface Tinebase_Application_Rights_Interface
+interface Tinebase_Acl_Rights_Interface
 {
     /**
      * get all possible application rights

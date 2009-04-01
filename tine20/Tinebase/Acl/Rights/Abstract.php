@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Application_Rights_Abstract implements Tinebase_Application_Rights_Interface
+abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Interface
 {
     /**
      * the right to be an administrative account for an application

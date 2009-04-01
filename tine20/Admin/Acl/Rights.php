@@ -26,7 +26,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Admin_Acl_Rights extends Tinebase_Application_Rights_Abstract
+class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
     /**
      * the right to manage roles

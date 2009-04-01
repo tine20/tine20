@@ -20,7 +20,7 @@
  * @package     Timetracker
  * @subpackage  Acl
  */
-class Timetracker_Acl_Rights extends Tinebase_Application_Rights_Abstract
+class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
     /**
      * the right to manage timeaccounts

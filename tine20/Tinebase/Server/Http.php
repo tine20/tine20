@@ -45,7 +45,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
                 $applicationParts = explode('.', $_REQUEST['method']);
                 $applicationName = ucfirst($applicationParts[0]);
                 
-                if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
+                if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
                     try {
                         $server->setClass($applicationName.'_Frontend_Http', $applicationName);
                     } catch (Exception $e) {

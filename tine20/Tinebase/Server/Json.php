@@ -89,7 +89,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                         break;
                         
                     default;
-                        if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Application_Rights_Abstract::RUN)) {
+                        if(Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
                             try {
                                 $server->setClass($applicationName.'_Frontend_Json', $applicationName);
                             } catch (Exception $e) {
