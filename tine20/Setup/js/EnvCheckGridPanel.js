@@ -65,6 +65,12 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
         });
         
         this.store.on('beforeload', function() {
+            if (! this.loadMask) {
+                this.loadMask = new Ext.LoadMask(this.el, {msg: this.app.i18n._("Performing Environment Checks...")});
+            }
+            
+            this.loadMask.show();
+            
             Ext.Ajax.request({
                 params: {
                     method: 'Setup.envCheck'
@@ -75,6 +81,7 @@ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
                     Tine.Setup.registry.replace('setupChecks', data);
                     
                     this.store.loadData(data.results);
+                    this.loadMask.hide();
                 }
             })
             
