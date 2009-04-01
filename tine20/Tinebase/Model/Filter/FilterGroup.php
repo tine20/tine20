@@ -298,6 +298,18 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
+     * returns filter objects
+     *
+     * @return array
+     * 
+     * @todo remove after concreate filter backends are sperated from concrete filter models
+     */
+    public function getFilterObjects()
+    {
+        return $this->_filterObjects;
+    }
+    
+    /**
      * returns array with the filter settings of this filter group 
      *
      * @param  bool $_valueToJson resolve value for json api?

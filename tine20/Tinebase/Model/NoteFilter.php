@@ -47,19 +47,4 @@ class Tinebase_Model_NoteFilter extends Tinebase_Model_Filter_FilterGroup
             'note_type_id'           => array(),
         */
     );
-    
-    /**
-     * appends current filters to a given select object
-     * 
-     * @param  Zend_Db_Select
-     * @return void
-     * 
-     * @todo add created_by filter (join with user table for that?)
-     */
-    /*
-    public function appendFilterSql($_select)
-    {
-        parent::appendFilterSql($_select);
-    }
-    */
 }

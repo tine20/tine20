@@ -83,12 +83,13 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     }
     
     /**
-     * appends current filters to a given select object
+     * appends custom filters to a given select object
      * 
-     * @param  Zend_Db_Select
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
      * @return void
      */
-    public function appendFilterSql($_select)
+    public function appendFilterSql($_select, $_backend)
     {
         // ensure acl policies
         $this->_appendAclSqlFilter($_select);
@@ -97,8 +98,6 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         $this->_appendShowClosedSql($_select);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
-        
-        parent::appendFilterSql($_select);
     }
     
     /**

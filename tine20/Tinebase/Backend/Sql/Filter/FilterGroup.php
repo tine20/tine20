@@ -34,10 +34,19 @@ class Tinebase_Backend_Sql_Filter_FilterGroup
      */
     public static function appendFilters($_select, $_filters, $_backend)
     {
-        foreach ($_filters as $filter) {
+        // support for direct sql filter append in derived filter groups
+        if (method_exists($_filters, 'appendFilterSql')) {
+            $_filters->appendFilterSql($_select, $_backend);
+        }
+        
+        foreach ($_filters->getFilterObjects() as $filter) {
             $groupSelect = new Tinebase_Model_Backend_Sql_GroupSelect($_select);
-            $filter->appendFilterSql($groupSelect, $_backend);
-            $groupSelect->appendWhere($this->_concatenationCondition);
+            if ($filter instanceof Tinebase_Model_Filter_Abstract) {
+                $filter->appendFilterSql($groupSelect, $_backend);
+                $groupSelect->appendWhere($_filters->getCondition());
+            } else {
+                self::appendFilters($groupSelect, $filter, $_backend);
+            }
         }
     }
 }

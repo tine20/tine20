@@ -63,8 +63,13 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
         $this->_options = $_options;
     }
     
-    
-    public function appendFilterSql($_select)
+    /**
+     * appends sql to given select statement
+     *
+     * @param Zend_Db_Select                $_select
+     * @param Tinebase_Backend_Sql_Abstract $_backend
+     */
+    public function appendFilterSql($_select, $_backend)
     {
         $db = Tinebase_Core::getDb();
         

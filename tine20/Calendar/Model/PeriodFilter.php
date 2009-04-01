@@ -124,9 +124,10 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     /**
      * appeds sql to given select statement
      *
-     * @param Zend_Db_Select $_select
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
      */
-    public function appendFilterSql($_select)
+    public function appendFilterSql($_select, $_backend)
     {
         $filter = new Calendar_Model_EventFilter(array(
             array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
@@ -144,9 +145,6 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
             ))
         ), Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
         
-        return $filter->appendFilterSql($_select);
-        //$appendMethod = 'append' . self::$_type . 'EventFilterSql';
-        //return $this->$appendMethod($_select);
-        
+        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $filter, $_backend);
     }
 }

@@ -95,12 +95,13 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
     }
     
     /**
-     * appends current filters to a given select object
+     * appends custom filters to a given select object
      * 
-     * @param  Zend_Db_Select
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
      * @return void
      */
-    public function appendFilterSql($_select)
+    public function appendFilterSql($_select, $_backend)
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' op:' . $this->_operator);
         

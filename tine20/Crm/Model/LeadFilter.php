@@ -44,12 +44,13 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
     );
 
     /**
-     * appends current filters to a given select object
+     * appends custom filters to a given select object
      * 
-     * @param  Zend_Db_Select
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
      * @return void
      */
-    public function appendFilterSql($_select)
+    public function appendFilterSql($_select, $_backend)
     {
         $db = Tinebase_Core::getDb();
         
@@ -68,7 +69,5 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
-        
-        parent::appendFilterSql($_select);
     }
 }

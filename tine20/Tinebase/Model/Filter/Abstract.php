@@ -131,9 +131,10 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * appends sql to given select statement
      *
-     * @param Zend_Db_Select $_select
+     * @param Zend_Db_Select                $_select
+     * @param Tinebase_Backend_Sql_Abstract $_backend
      */
-    abstract public function appendFilterSql($_select);
+    abstract public function appendFilterSql($_select, $_backend);
 
     /**
      * returns array with the filter settings of this filter

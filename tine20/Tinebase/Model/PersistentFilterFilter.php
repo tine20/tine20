@@ -43,18 +43,16 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
     protected $_isResolved = FALSE;
     
     /**
-     * appends current filters to a given select object
-     * - add user phone ids to filter
+     * appends custom filters to a given select object
      * 
-     * @param  Zend_Db_Select
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
      * @return void
      */
-    public function appendFilterSql($_select)
+    public function appendFilterSql($_select, $_backend)
     {
         // ensure acl policies
         $this->_appendAclSqlFilter($_select);
-                
-        parent::appendFilterSql($_select);
     }
     
     /**

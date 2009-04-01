@@ -75,15 +75,15 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
     }
     
     /**
-     * appends sql to given select statement
-     *
-     * @param Zend_Db_Select $_select
+     * appends custom filters to a given select object
+     * 
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
+     * @return void
      */
-    public function appendFilterSql($_select)
+    public function appendFilterSql($_select, $_backend)
     {
         $this->_appendAclSqlFilter($_select);
-        
-        parent::appendFilterSql($_select);
     }
     
     /**

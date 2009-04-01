@@ -55,13 +55,14 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
     */
     
     /**
-     * appends current filters to a given select object
+     * appends custom filters to a given select object
      * - add user phone ids to filter
      * 
-     * @param  Zend_Db_Select
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
      * @return void
      */
-    public function appendFilterSql($_select)
+    public function appendFilterSql($_select, $_backend)
     {
         $accountIdFilter = $this->_findFilter('account_id');
         if($accountIdFilter !== NULL) {
@@ -77,7 +78,5 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
             // remove filter
             $this->_removeFilter('account_id');
         }
-        
-        parent::appendFilterSql($_select);
     }
 }

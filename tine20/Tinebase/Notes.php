@@ -109,7 +109,8 @@ class Tinebase_Notes
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'notes');
         
-        $_filter->appendFilterSql($select);
+        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
+        //$_filter->appendFilterSql($select);
         $_pagination->appendPaginationSql($select);
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
@@ -131,7 +132,8 @@ class Tinebase_Notes
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'notes', array('count' => 'COUNT(id)'));
         
-        $_filter->appendFilterSql($select);
+        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
+        //$_filter->appendFilterSql($select);
         
         $result = $this->_db->fetchOne($select);
         return $result;        
