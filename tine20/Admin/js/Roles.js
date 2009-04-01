@@ -646,7 +646,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	                        fieldLabel: this.translation.gettext('Role Name'), 
 	                        name:'name',
 	                        anchor:'100%',
-	                        allowBlank: false
+	                        allowBlank: false,
+	                        maxLength: 128
 	                    }, {
 	                        xtype:'textarea',
 	                        name: 'description',
