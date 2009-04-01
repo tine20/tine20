@@ -107,7 +107,7 @@ class Erp_Model_Contract extends Tinebase_Record_Abstract
                 if (!isset($relation['id'])) {
                     $relationData = array(
                         'own_model'              => 'Erp_Model_Contract',
-                        'own_backend'            => Erp_Backend_Contract::TYPE,
+                        'own_backend'            => 'Sql',
                         'own_id'                 => (isset($data['id'])) ? $data['id'] : 0,
                         'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'type'                   => $relation['type'],
