@@ -22,8 +22,9 @@ abstract class Tinebase_Backend_Abstract implements Tinebase_Backend_Interface
     /**
      * backend type constant
      *
+     * @var string
      */
-    const TYPE = NULL;
+    protected $_type = NULL;
         
     /**
      * Model name
@@ -39,7 +40,7 @@ abstract class Tinebase_Backend_Abstract implements Tinebase_Backend_Interface
      */
     public function getType()
     {
-        return self::TYPE;
+        return $this->_type;
     }
     
     /**

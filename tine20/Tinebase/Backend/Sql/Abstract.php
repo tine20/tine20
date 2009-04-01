@@ -9,6 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        use const for type (set in constructor)
  */
 
 /**
@@ -20,10 +21,11 @@
 abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract implements Tinebase_Backend_Sql_Interface
 {
     /**
-     * backend type constant
+     * backend type
      *
+     * @var string
      */
-    const TYPE = 'Sql';
+    protected $_type = 'Sql';
     
     /**
      * Table name without prefix
