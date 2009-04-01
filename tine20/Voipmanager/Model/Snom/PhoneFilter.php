@@ -72,7 +72,7 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
             if(empty($_validPhoneIds)) {
                 $_select->where('1=0');
             } else {      
-                $_select->where($db->quoteInto($db->quoteIdentifier('id') . ' IN (?)', $_validPhoneIds));
+                $_select->where($db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.id') . ' IN (?)', $_validPhoneIds));
             }
             
             // remove filter

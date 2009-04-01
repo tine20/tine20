@@ -52,7 +52,7 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $db = Tinebase_Core::getDb();
+        $db = $_backend->getAdapter();
         
         $showClosed = false;
         foreach ($this->_customData as $customData) {
@@ -64,9 +64,8 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         if($showClosed){
             // nothing to filter
         } else {
-            $_select->where($db->quoteIdentifier('end') . ' IS NULL');
+            $_select->where($db->quoteIdentifier($backend->getTableName() . '.end') . ' IS NULL');
         }
-        
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
     }

@@ -63,7 +63,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
             // nothing to filter
         } else {
             $where = $db->quoteInto($db->quoteIdentifier('status.status_is_open') . ' = ?', 1, Zend_Db::INT_TYPE) .
-                     ' OR ' . $db->quoteIdentifier('status_id') . ' IS NULL';
+                     ' OR ' . $db->quoteIdentifier('tasks.status_id') . ' IS NULL';
             $_select->where($where);
         }
     }

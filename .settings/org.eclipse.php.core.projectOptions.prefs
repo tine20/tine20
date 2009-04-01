@@ -1,5 +1,3 @@
-#Mon Nov 24 11:29:14 CET 2008
+#Mon Mar 30 12:19:24 CEST 2009
 eclipse.preferences.version=1
-org.eclipse.php.core.contextRoot=
-org.eclipse.php.core.defaultEncoding=
-org.eclipse.php.core.includePath=<?xml version\="1.0" encoding\="UTF-8"?>\n<includepath>\n\t<includepathentry kind\="lib" path\="/usr/share/php/Zend" createdReference\="false" contentKind\="source">\n</includepathentry>\n</includepath>\n
+org.eclipse.php.core.includePath=<?xml version\="1.0" encoding\="UTF-8"?>\n<includepath>\n\t<includepathentry kind\="var" path\="PHPUNIT" createdReference\="false" contentKind\="source">\n</includepathentry>\n</includepath>\n
