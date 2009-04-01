@@ -104,7 +104,7 @@ class Admin_Controller_User extends Tinebase_Application_Controller_Abstract
     }
     
     /**
-     * get account -> renamed to get user
+     * get account
      *
      * @param   int $_accountId account id to get
      * @return  Tinebase_Model_FullUser
