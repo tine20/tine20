@@ -117,6 +117,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
     },
     
     onAlterApplications: function(btn, e) {
+        this.grid.loadMask.show();
         var appNames = [];
         var apps = this.selectionModel.getSelections();
         
@@ -132,6 +133,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             },
             success: function() {
                 this.store.load();
+                this.grid.loadMask.hide();
             },
             fail: function() {
                 Ext.Msg.alert(this.app.i18n._('Shit'), this.app.i18n._('Where are the backup tapes'));
