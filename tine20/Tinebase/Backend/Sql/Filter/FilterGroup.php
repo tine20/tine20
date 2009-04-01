@@ -41,12 +41,14 @@ class Tinebase_Backend_Sql_Filter_FilterGroup
         
         foreach ($_filters->getFilterObjects() as $filter) {
             $groupSelect = new Tinebase_Model_Backend_Sql_GroupSelect($_select);
+            
             if ($filter instanceof Tinebase_Model_Filter_Abstract) {
                 $filter->appendFilterSql($groupSelect, $_backend);
-                $groupSelect->appendWhere($_filters->getCondition());
             } else {
                 self::appendFilters($groupSelect, $filter, $_backend);
             }
+            
+            $groupSelect->appendWhere($_filters->getCondition());
         }
     }
 }
