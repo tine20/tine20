@@ -44,12 +44,15 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
      {
          $action = $this->_opSqlMap[$this->_operator];
          
+         $db = $_backend->getAdapter();
+         
          // prepare value
          $value = $this->_value ? 1 : 0;
 		
          if (! empty($this->_options['fields'])) {
              foreach ((array) $this->_options['fields'] as $fieldName) {
-                 $_select->where($this->_getQuotedFieldName() . $action['sqlop'], $value); 
+                 $quotedField = $db->quoteIdentifier(strpos($fieldName, '.') === false ? $_backend->getTableName() . '.' . $fieldName : $fieldName);
+                 $_select->where($quotedField . $action['sqlop'], $value); 
              }
          } else {  
              $_select->where($this->_getQuotedFieldName($_backend) . $action['sqlop'], $value);
