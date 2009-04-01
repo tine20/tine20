@@ -263,23 +263,38 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>type</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
+                    <name>user_type</name>
+                    <type>enum</type>
+                    <value>user</value>
+                    <value>group</value>
+                    <value>groupmember</value>
+                    <value>resource</value>
                     <default>user</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>role</name>
+                    <type>enum</type>
+                    <value>REQ</value>
+                    <value>OPT</value>
+                    <default>REQ</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>status</name>
+                    <type>enum</type>
+                    <value>NEEDS-ACTION</value>
+                    <value>ACCEPTED</value>
+                    <value>DECLINED</value>
+                    <value>TENTATIVE</value>
+                    <default>NEEDS-ACTION</default>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>quantity</name>
                     <type>integer</type>
                     <notnull>true</notnull>
                     <default>1</default>
-                </field>
-                <field>
-                    <name>status</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <default>0</default>
                 </field>
                 <field>
                     <name>status_authkey</name>
@@ -314,9 +329,9 @@
                     </field>
                 </index>
                 <index>
-                    <name>type</name>
+                    <name>user_type</name>
                     <field>
-                        <name>type</name>
+                        <name>user_type</name>
                     </field>
                 </index>
                 <index>

@@ -9,7 +9,11 @@
  * @version     $Id$
  */
 
-
+/**
+ * Model of an rrule
+ *
+ * @package Calendar
+ */
 class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 {
     /**
@@ -52,6 +56,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
+        /*
         // tine record fields
         'id'                   => array('allowEmpty' => true,  'Alnum'),
         'created_by'           => array('allowEmpty' => true,  'Int'  ),
@@ -63,7 +68,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         'deleted_by'           => array('allowEmpty' => true          ),
         'seq'                  => array('allowEmpty' => true,  'Int'  ),
     
-        'event_id'             => array('allowEmpty' => true,  'Alnum'),
+        'cal_event_id'         => array('allowEmpty' => true,  'Alnum'),
+        */
     
         'freq'                 => array('allowEmpty' => true, 'InArray' => array(self::FREQ_DAILY, self::FREQ_MONTHLY, self::FREQ_WEEKLY, self::FREQ_YEARLY)),
         'interval'             => array('allowEmpty' => true, 'Int'   ),
@@ -81,9 +87,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_datetimeFields = array(
-        'creation_time', 
-        'last_modified_time', 
-        'deleted_time', 
+        //'creation_time', 
+        //'last_modified_time', 
+        //'deleted_time', 
         'until',
     );
     
