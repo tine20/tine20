@@ -49,10 +49,10 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
 		
          if (! empty($this->_options['fields'])) {
              foreach ((array) $this->_options['fields'] as $fieldName) {
-                 $_select->where(Tinebase_Core::getDb()->quoteIdentifier($fieldName) . $action['sqlop'], $value); 
+                 $_select->where($this->_getQuotedFieldName() . $action['sqlop'], $value); 
              }
          } else {  
-             $_select->where(Tinebase_Core::getDb()->quoteIdentifier($this->_field) . $action['sqlop'], $value);
+             $_select->where($this->_getQuotedFieldName($_backend) . $action['sqlop'], $value);
          }
      }
 }

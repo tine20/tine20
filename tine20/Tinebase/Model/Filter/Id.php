@@ -47,8 +47,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          $action = $this->_opSqlMap[$this->_operator];
          
          // quote field identifier
-         // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
-         $field = $db = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
+         $field = $this->_getQuotedFieldName($_backend);
          
          //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_value, TRUE));
          

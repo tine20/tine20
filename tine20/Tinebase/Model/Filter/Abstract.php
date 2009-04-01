@@ -148,7 +148,7 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     protected function _getQuotedFieldName($_backend) {
         $_backend->getAdapter()->quoteIdentifier(
-            $_backend->getTablePrefix() . $_backend->getTableName() . '.' . $this->_field
+            $_backend->getTableName() . '.' . $this->_field
         );
     }
     

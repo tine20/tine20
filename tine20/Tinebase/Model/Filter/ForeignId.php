@@ -77,7 +77,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
             $this->_foreignIds = $this->_controller->search($this->_filterGroup, new Tinebase_Model_Pagination(), FALSE, TRUE);
         }
         
-        $_select->where($db->quoteIdentifier($this->_field) . ' IN (?)', empty($this->_foreignIds) ? array('') : $this->_foreignIds);
+        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_foreignIds) ? array('') : $this->_foreignIds);
     }
     
     public function setRequiredGrants(array $_grants)

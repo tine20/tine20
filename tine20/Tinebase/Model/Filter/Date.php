@@ -64,8 +64,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         $value = (array)$this->_getDateValues($this->_operator, $this->_value);
          
         // quote field identifier
-        // ZF 1.7+ $field = $_select->getAdapter()->quoteIdentifier($this->field);
-        $field = Tinebase_Core::getDb()->quoteIdentifier($this->_field);
+        $field = $this->_getQuotedFieldName($_backend);
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
