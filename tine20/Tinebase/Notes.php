@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  Notes 
  */
-class Tinebase_Notes
+class Tinebase_Notes implements Tinebase_Backend_Sql_Interface 
 {
     /**
      * @var Zend_Db_Adapter_Pdo_Mysql
@@ -93,6 +93,38 @@ class Tinebase_Notes
             'name' => SQL_TABLE_PREFIX . 'note_types',
             'primary' => 'id'
         ));        
+    }
+    
+    /************************** sql backend interface ************************/
+    
+    /**
+     * get table name
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return 'notes';
+    }
+    
+    /**
+     * get table prefix
+     *
+     * @return string
+     */
+    public function getTablePrefix()
+    {
+        return $this->_db->table_prefix;
+    }
+    
+    /**
+     * get db adapter
+     *
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function getAdapter()
+    {
+        return $this->_db;
     }
     
     /************************** get notes ************************/
