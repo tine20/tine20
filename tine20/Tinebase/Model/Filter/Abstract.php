@@ -133,9 +133,26 @@ abstract class Tinebase_Model_Filter_Abstract
      *
      * @param Zend_Db_Select                $_select
      * @param Tinebase_Backend_Sql_Abstract $_backend
+     * 
+     * @todo to be removed once we split filter model / backend
      */
     abstract public function appendFilterSql($_select, $_backend);
-
+    
+    /**
+     * returns quoted column name for sql backend
+     *
+     * @param  Tinebase_Backend_Sql_Interface $_backend
+     * @return string
+     * 
+     * @todo to be removed once we split filter model / backend
+     */
+    protected function _getQuotedFieldName($_backend) {
+        $_backend->getAdapter()->quoteIdentifier(
+            $_backend->getTablePrefix() . $_backend->getTableName() . '.' . $this->_field
+        );
+    }
+    
+    
     /**
      * returns array with the filter settings of this filter
      *
