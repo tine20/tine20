@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
+class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     /**
      * checks if a user is logged in. If not we redirect to login

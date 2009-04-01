@@ -19,7 +19,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Application_Frontend_Http_Abstract extends Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Http_Interface
+abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstract implements Tinebase_Frontend_Http_Interface
 {
     /**
      * Returns all JS files which must be included for this app

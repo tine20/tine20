@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
      * wait for changes

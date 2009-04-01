@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        use functions from Tinebase_Application_Frontend_Json_Abstract
+ * @todo        use functions from Tinebase_Frontend_Json_Abstract
  *              -> get/save/getAll
  * @todo        remove deprecated functions afterwards
  */
@@ -23,7 +23,7 @@
  * @subpackage  Frontend
  * @todo        handle timezone management
  */
-class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     protected $_applicationName = 'Addressbook';
     
@@ -100,7 +100,7 @@ class Addressbook_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstr
      * get salutations
      *
      * @return array
-     * @todo   use _getAll() from Tinebase_Application_Frontend_Json_Abstract
+     * @todo   use _getAll() from Tinebase_Frontend_Json_Abstract
      */
    public function getSalutations()
     {

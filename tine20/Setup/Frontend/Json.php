@@ -15,7 +15,7 @@
  * @package     Setup
  * @subpackage  Frontend
  */
-class Setup_Frontend_Json extends Tinebase_Application_Frontend_Abstract
+class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
 {
     /**
      * the internal name of the application

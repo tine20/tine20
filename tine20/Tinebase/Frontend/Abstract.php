@@ -10,16 +10,18 @@
  * @version     $Id$
  */
 
-
 /**
- * Abstract class for an Tine 2.0 application with Json interface
- * Each tine application must extend this class to gain an native tine 2.0 user
- * interface.
+ * Abstract class for an Tine 2.0 application
  * 
  * @package     Tinebase
  * @subpackage  Application
  */
-Interface Tinebase_Application_Frontend_Json_Interface extends Tinebase_Application_Frontend_Interface
+abstract class Tinebase_Frontend_Abstract implements Tinebase_Frontend_Interface
 {
-
+    /**
+     * Application name
+     *
+     * @var string
+     */
+    protected $_applicationName;
 }

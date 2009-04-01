@@ -17,7 +17,7 @@
  *
  * @package     Tinebase
  */
-class Setup_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
+class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     /**
      * the internal name of the application

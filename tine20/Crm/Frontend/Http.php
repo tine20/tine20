@@ -16,7 +16,7 @@
  *
  * @package     Crm
  */
-class Crm_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
+class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Crm';
     

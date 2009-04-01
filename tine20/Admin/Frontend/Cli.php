@@ -18,7 +18,7 @@
  * @package     Admin
  * @subpackage  Frontend
  */
-class Admin_Frontend_Cli extends Tinebase_Application_Frontend_Cli_Abstract
+class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application

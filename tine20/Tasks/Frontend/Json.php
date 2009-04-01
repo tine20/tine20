@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        use functions from Tinebase_Application_Frontend_Json_Abstract
+ * @todo        use functions from Tinebase_Frontend_Json_Abstract
  */
 
 
@@ -16,7 +16,7 @@
  * json interface for tasks
  * @package     Tasks
  */
-class Tasks_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     protected $_applicationName = 'Tasks';
     

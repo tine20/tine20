@@ -22,7 +22,7 @@
  * @package     ActiveSync
  * @subpackage  ActiveSync
  */
-class ActiveSync_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class ActiveSync_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     protected $_applicationName = 'ActiveSync';
     

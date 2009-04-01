@@ -17,7 +17,7 @@
  * @package     ExampleApplication
  * @subpackage  Frontend
  */
-class ExampleApplication_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
      * the controller

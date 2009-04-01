@@ -19,7 +19,7 @@
  * @package     Erp
  * @subpackage  Frontend
  */
-class Erp_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Erp_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {   
     /**
      * contract controller

@@ -11,17 +11,11 @@
  */
 
 /**
- * Abstract class for an Tine 2.0 application
- * 
+ * Interface for an Tine 2.0 application
+ *
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Application_Frontend_Abstract implements Tinebase_Application_Frontend_Interface
+interface Tinebase_Frontend_Interface
 {
-    /**
-     * Application name
-     *
-     * @var string
-     */
-    protected $_applicationName;
 }

@@ -16,7 +16,7 @@
  * @package     Timetracker
  * @subpackage  Frontend
  */
-class Timetracker_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
+class Timetracker_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Timetracker';
     

@@ -15,7 +15,7 @@
  *
  * @package     Admin
  */
-class Admin_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
+class Admin_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     /**
      * the application name

@@ -17,7 +17,7 @@
  * @package     Timetracker
  * @subpackage  Frontend
  */
-class Timetracker_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {    
     /**
      * timesheet controller

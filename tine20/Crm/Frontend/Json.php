@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        use functions from Tinebase_Application_Frontend_Json_Abstract
+ * @todo        use functions from Tinebase_Frontend_Json_Abstract
  */
 
 /**
@@ -17,7 +17,7 @@
  *
  * @package     Crm
  */
-class Crm_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
      * the internal name of the application

@@ -17,7 +17,7 @@
  *
  * @package     Voipmanager Management
  */
-class Voipmanager_Frontend_Http extends Tinebase_Application_Frontend_Http_Abstract
+class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Voipmanager';
     

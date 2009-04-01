@@ -16,7 +16,7 @@
  *
  * @package     Phone
  */
-class Phone_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     protected $_applicationName = 'Phone';
     

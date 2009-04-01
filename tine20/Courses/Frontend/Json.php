@@ -17,7 +17,7 @@
  * @package     Courses
  * @subpackage  Frontend
  */
-class Courses_Frontend_Json extends Tinebase_Application_Frontend_Json_Abstract
+class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
      * the controller

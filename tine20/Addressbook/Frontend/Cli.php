@@ -16,7 +16,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Frontend_Cli extends Tinebase_Application_Frontend_Cli_Abstract
+class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application

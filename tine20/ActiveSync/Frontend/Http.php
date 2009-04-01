@@ -18,7 +18,7 @@
  * @package     ActiveSync
  * @subpackage  Frontend
  */
-class ActiveSync_Frontend_Http extends Tinebase_Application_Frontend_Abstract
+class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
 {
     protected $_applicationName = 'ActiveSync';
     
