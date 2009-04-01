@@ -18,7 +18,7 @@
  * @package     Timetracker
  * @subpackage  Backend
  */
-class Tinebase_ImportExportDefinition extends Tinebase_Application_Backend_Sql_Abstract
+class Tinebase_ImportExportDefinition extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

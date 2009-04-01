@@ -18,7 +18,7 @@
  *
  * @package     ActiveSync
  */
-class ActiveSync_Backend_ContentState extends Tinebase_Application_Backend_Sql_Abstract
+class ActiveSync_Backend_ContentState extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

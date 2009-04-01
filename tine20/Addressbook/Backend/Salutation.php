@@ -16,7 +16,7 @@
  * @package     Addressbook
  * 
  */
-class Addressbook_Backend_Salutation extends Tinebase_Application_Backend_Sql_Abstract
+class Addressbook_Backend_Salutation extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

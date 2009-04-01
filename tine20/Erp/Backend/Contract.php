@@ -17,7 +17,7 @@
  * @package     Erp
  * @subpackage  Backend
  */
-class Erp_Backend_Contract extends Tinebase_Application_Backend_Sql_Abstract
+class Erp_Backend_Contract extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

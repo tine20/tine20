@@ -17,7 +17,7 @@
  * 
  *  
  */
-class Calendar_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
+class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

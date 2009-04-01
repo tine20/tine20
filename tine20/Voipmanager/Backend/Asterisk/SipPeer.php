@@ -15,7 +15,7 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Application_Backend_Sql_Abstract
+class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

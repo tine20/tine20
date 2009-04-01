@@ -24,7 +24,7 @@
  * @todo    add function for complete removal of tasks?
  * @todo    split backend (status/tasks)?
  */
-class Tasks_Backend_Sql extends Tinebase_Application_Backend_Sql_Abstract
+class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

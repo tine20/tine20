@@ -17,7 +17,7 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Snom_Phone extends Tinebase_Application_Backend_Sql_Abstract
+class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

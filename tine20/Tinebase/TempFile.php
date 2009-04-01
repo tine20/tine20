@@ -18,7 +18,7 @@
  * @todo automatic garbage collection via cron
  *
  */
-class Tinebase_TempFile extends Tinebase_Application_Backend_Sql_Abstract
+class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

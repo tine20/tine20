@@ -15,7 +15,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_Leads extends Tinebase_Application_Backend_Sql_Abstract
+class Crm_Backend_Leads extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
