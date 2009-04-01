@@ -64,7 +64,7 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         if($showClosed){
             // nothing to filter
         } else {
-            $_select->where($db->quoteIdentifier($backend->getTableName() . '.end') . ' IS NULL');
+            $_select->where($db->quoteIdentifier($_backend->getTableName() . '.end') . ' IS NULL');
         }
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
