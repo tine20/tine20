@@ -15,7 +15,7 @@
  * Events consists of the properties of Calendar_Model_Evnet except Tags and Notes 
  * which are as always handles by their controllers/backends
  * 
- *  
+ * @package Calendar 
  */
 class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
@@ -125,13 +125,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select = parent::_getSelect($_cols, $_getDeleted);
         
         $select->joinLeft(
-            /* what */   array('exdate' => $this->_tablePrefix . 'cal_exdate'), 
-            /* on   */   $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
+            /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'), 
+            /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => 'GROUP_CONCAT(' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
         
+        // we need this _somewhere_ for acl filter
         //$select->joinLeft(
-        //    /* what */   array('attendee' => $this->_tablePrefix . 'cal_attendee'), 
-        //    /* on   */   $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'));
+        //    /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'), 
+        //    /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
+        //    /* select */ array());
         
         $select->group(array_keys($this->_schema));
         
