@@ -391,7 +391,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         				'<div class="bordercorner_2"></div>',
         				'<div class="bordercorner_3"></div>',
         				'<div class="bordercorner_4"></div>',
-        				'<div class="preview-panel-declaration">beschreibung</div>',
+        				'<div class="preview-panel-declaration">' /* + this.app.i18n._('Description') */ + '</div>',
         				'<div class="preview-panel-timesheet-description preview-panel-left" ext:qtip="{[this.encode(values.description)]}">',
         					'<span class="preview-panel-nonbold">',
         					 '{[this.encode(values.description, "longtext")]}',
@@ -405,7 +405,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         				'<div class="bordercorner_gray_2"></div>',
         				'<div class="bordercorner_gray_3"></div>',
         				'<div class="bordercorner_gray_4"></div>',
-        				'<div class="preview-panel-declaration">detail</div>',
+        				'<div class="preview-panel-declaration">' /* + this.app.i18n._('Detail') */ + '</div>',
         				'<div class="preview-panel-timesheet-leftside preview-panel-left">',
         				// @todo add custom fields here
         				/*
