@@ -147,7 +147,7 @@ abstract class Tinebase_Model_Filter_Abstract
      * @todo to be removed once we split filter model / backend
      */
     protected function _getQuotedFieldName($_backend) {
-        $_backend->getAdapter()->quoteIdentifier(
+        return $_backend->getAdapter()->quoteIdentifier(
             $_backend->getTableName() . '.' . $this->_field
         );
     }
