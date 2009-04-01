@@ -197,7 +197,7 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
         //Tinebase_Core::getLogger()->debug(print_r($_record->toArray(),true));
         
         try {
-            $db = $this->_backend->getDb();
+            $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             // add personal container id if container id is missing in record
@@ -262,7 +262,7 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
     public function update(Tinebase_Record_Interface $_record)
     {
         try {
-            $db = $this->_backend->getDb();
+            $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             if(!$_record->isValid()) {
@@ -358,7 +358,7 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
         }
                     
         try {        
-            $db = $this->_backend->getDb();
+            $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             foreach ($records as $record) {

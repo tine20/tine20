@@ -1,0 +1,54 @@
+<?php
+/**
+ * Tine 2.0
+ * 
+ * @package     Tinebase
+ * @subpackage  Backend
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @version     $Id$
+ * 
+ */
+
+/**
+ * Abstract class for a Tine 2.0 backend
+ * 
+ * @package     Tinebase
+ * @subpackage  Backend
+ */
+abstract class Tinebase_Backend_Abstract implements Tinebase_Backend_Interface
+{
+    /**
+     * backend type constant
+     *
+     */
+    const TYPE = NULL;
+        
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = NULL;
+        
+    /**
+     * get backend type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return self::TYPE;
+    }
+    
+    /**
+     * get model name
+     *
+     * @return string
+     */
+    public function getModelName()
+    {
+        return $this->_modelName;
+    }
+}

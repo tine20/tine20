@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Application
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -15,9 +15,9 @@
  * Abstract class for a Tine 2.0 sql backend
  * 
  * @package     Tinebase
- * @subpackage  Application
+ * @subpackage  Backend
  */
-abstract class Tinebase_Backend_Sql_Abstract implements Tinebase_Backend_Interface
+abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract implements Tinebase_Backend_Sql_Interface
 {
     /**
      * backend type constant
@@ -39,13 +39,6 @@ abstract class Tinebase_Backend_Sql_Abstract implements Tinebase_Backend_Interfa
      */
     protected $_tablePrefix = NULL;
     
-    /**
-     * Model name
-     *
-     * @var string
-     */
-    protected $_modelName = NULL;
-
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
      *
@@ -423,26 +416,6 @@ abstract class Tinebase_Backend_Sql_Abstract implements Tinebase_Backend_Interfa
     /*************************** other ************************************/
     
     /**
-     * returns the db adapter
-     *
-     * @return Zend_Db_Adapter_Abstract
-     */
-    public function getDb()
-    {
-        return $this->_db;
-    }
-    
-    /**
-     * get backend type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-    
-    /**
      * get table name
      *
      * @return string
@@ -453,13 +426,23 @@ abstract class Tinebase_Backend_Sql_Abstract implements Tinebase_Backend_Interfa
     }
     
     /**
-     * get model name
+     * get table prefix
      *
      * @return string
      */
-    public function getModelName()
+    public function getTablePrefix()
     {
-        return $this->_modelName;
+        return $this->_tablePrefix;
+    }
+    
+    /**
+     * get db adapter
+     *
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function getAdapter()
+    {
+        return $this->_db;
     }
     
     /*************************** protected helper funcs ************************************/
