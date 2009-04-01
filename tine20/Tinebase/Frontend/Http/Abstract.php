@@ -29,7 +29,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     public function getJsFilesToInclude()
     {
         $standardFile = "{$this->_applicationName}/js/{$this->_applicationName}.js";
-        if (file_exists(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/$standardFile")) {
+        if (file_exists(dirname(dirname(dirname(dirname(__FILE__)))) . "/$standardFile")) {
             return array($standardFile);
         }
         return array();
@@ -37,14 +37,14 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     }
     
     /**
-     * Retruns all CSS files which must be inclued for this app
+     * Returns all CSS files which must be inclued for this app
      *
      * @return array Array of filenames
      */
     public function getCssFilesToInclude()
     {
         $standardFile = "{$this->_applicationName}/css/{$this->_applicationName}.css";
-        if (file_exists(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/$standardFile")) {
+        if (file_exists(dirname(dirname(dirname(dirname(__FILE__)))) . "/$standardFile")) {
             return array($standardFile);
         }
         return array();
@@ -58,7 +58,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      */
     public static function _appendFileTime( $_file )
     {
-        $path = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/$_file";
+        $path = dirname(dirname(dirname(dirname(__FILE__)))) . "/$_file";
         return "$_file?". @filectime($path);
     }
 }
