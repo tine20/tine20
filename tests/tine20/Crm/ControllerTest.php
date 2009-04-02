@@ -600,13 +600,13 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $resultProducts = Crm_Controller_LeadProducts::getInstance()
                 ->saveProducts($someProducts);
         
-        $this->assertEquals($someProducts, $resultProducts);
+        $this->assertEquals($someProducts->toArray(), $resultProducts->toArray());
         
         // get every saved product back from database one by one
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
         
         foreach ($this->_objects['someProducts'] as $product) {
-        	$this->assertEquals($product, $backend->get($product->id));
+        	$this->assertEquals($product->toArray(), $backend->get($product->id)->toArray());
         }
         
         // update some products
@@ -647,13 +647,13 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $resultLeadTypes = Crm_Controller_LeadTypes::getInstance()
                 ->saveLeadtypes($someLeadTypes);
         
-        $this->assertEquals($someLeadTypes, $resultLeadTypes);
+        $this->assertEquals($someLeadTypes->toArray(), $resultLeadTypes->toArray());
         
         // get every saved lead type back from database one by one
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
         
         foreach ($this->_objects['someLeadTypes'] as $leadType) {
-            $this->assertEquals($leadType, $backend->get($leadType->id));
+            $this->assertEquals($leadType->toArray(), $backend->get($leadType->id)->toArray());
         }
         
         // update some lead types
@@ -696,13 +696,13 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $resultLeadSources = Crm_Controller_LeadSources::getInstance()
                 ->saveLeadsources($someLeadSources);
         
-        $this->assertEquals($someLeadSources, $resultLeadSources);
+        $this->assertEquals($someLeadSources->toArray(), $resultLeadSources->toArray());
         
         // get every saved lead source back from database one by one
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
         
         foreach ($this->_objects['someLeadSources'] as $leadSource) {
-            $this->assertEquals($leadSource, $backend->get($leadSource->id));
+            $this->assertEquals($leadSource->toArray(), $backend->get($leadSource->id)->toArray());
         }
         
         // update some lead sources
@@ -745,13 +745,13 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $resultLeadStates = Crm_Controller_LeadStates::getInstance()
                 ->saveLeadstates($someLeadStates);
         
-        $this->assertEquals($someLeadStates, $resultLeadStates);
+        $this->assertEquals($someLeadStates->toArray(), $resultLeadStates->toArray());
         
         // get every saved lead state back from database one by one
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
         
         foreach ($this->_objects['someLeadStates'] as $leadState) {
-            $this->assertEquals($leadState, $backend->get($leadState->id));
+            $this->assertEquals($leadState->toArray(), $backend->get($leadState->id)->toArray());
         }
         
         // update some lead states
