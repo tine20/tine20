@@ -41,6 +41,29 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected $_modlogActive = TRUE;
     
     /**
+     * attendee backend
+     * 
+     * @var Calendar_Backend_Sql_Attendee
+     */
+    protected $_attendeeBackend = NULL;
+    
+    /**
+     * the constructor
+     *
+     * @param Zend_Db_Adapter_Abstract $_db optional
+     * @param string $_modelName
+     * @param string $_tableName
+     * @param string $_tablePrefix
+     *
+     */
+    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL)
+    {
+        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix);
+        
+        $this->_attendeeBackend = new Calendar_Backend_Sql_Attendee($_dbAdapter);
+    }
+    
+    /**
      * Creates new entry
      *
      * @param   Tinebase_Record_Interface $_record
@@ -56,6 +79,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $event = parent::create($_record);
         $this->_saveExdates($_record);
+        $this->_saveAttendee($_record);
         
         return $this->get($event->getId());
     }
@@ -73,6 +97,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $event = parent::update($_record);
         $this->_saveExdates($_record);
+        $this->_saveAttendee($_record);
         
         return $this->get($event->getId());
     }
@@ -141,6 +166,35 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * converts raw data from adapter into a single record
+     *
+     * @param  array $_data
+     * @return Tinebase_Record_Abstract
+     */
+    protected function __rawDataToRecord($_rawData) {
+        $event = parent::_rawDataToRecord($_rawData);
+        
+        $this->appendForeignRecordSetToRecord($event, 'attendee', 'id', 'cal_event_id', $this->_attendeeBackend);
+        
+        return $event;
+    }
+    
+    /**
+     * converts raw data from adapter into a set of records
+     *
+     * @param  array $_rawData of arrays
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _rawDataToRecordSet(array $_rawData)
+    {
+        $events = parent::_rawDataToRecordSet($_rawData);
+        
+        $this->appendForeignRecordSetToRecordSet($events, 'attendee', 'id', 'cal_event_id', $this->_attendeeBackend);
+        
+        return $events;
+    }
+    
+    /**
      * saves exdates of an event
      *
      * @param Calendar_Model_Event $_event
@@ -154,6 +208,28 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 'cal_event_id' => $_event->getId(),
                 'exdate'       => $exdate->get(Tinebase_Record_Abstract::ISO8601LONG)
             ));
+        }
+    }
+    
+    /**
+     * saves attendee of given event
+     * 
+     * @param Calendar_Model_Evnet $_event
+     */
+    protected function _saveAttendee($_event)
+    {
+        $attendee = $_event->attendee instanceof Tinebase_Record_RecordSet ? 
+            $_event->attendee : 
+            new Tinebase_Record_RecordSet($this->_attendeeBackend->getModelName());
+            
+        $currentAttendee = $this->_attendeeBackend->getMultipleByProperty($_event->getId(), 'cal_event_id');
+        
+        $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
+        $this->_attendeeBackend->delete($diff['toDeleteIds']);
+        
+        foreach ($attendee as $attende) {
+            $method = $attende->getId() ? 'update' : 'create';
+            $this->_attendeeBackend->$method($attende);
         }
     }
     
