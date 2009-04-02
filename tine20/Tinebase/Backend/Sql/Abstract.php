@@ -110,8 +110,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * Gets one entry (by property)
      *
-     * @param mixed $_value
-     * @param string $_property
+     * @param  mixed  $_value
+     * @param  string $_property
+     * @param  bool   $_getDeleted
      * @throws Tinebase_Exception_NotFound
      */
     public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
@@ -138,6 +139,34 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         return $result;
+    }
+    
+    /**
+     * gets multiple entries (by property)
+     *
+     * @param  mixed  $_value
+     * @param  string $_property
+     * @param  bool   $_getDeleted
+     * @param  string $_orderBy        defaults to $_property
+     * @param  string $_orderDirection defaults to 'ASC'
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getMultipleByProperty($_value, $_property='name', $_getDeleted = FALSE, $_orderBy = NULL, $_orderDirection = 'ASC')
+    {
+        $columnName = $this->_db->quoteIdentifier($this->_tableName . '.' . $_property);
+        $value = empty($_value) ? array('') : (array)$_value;
+        $orderBy = $this->_tableName . $_orderBy ? $_orderBy : $_property;
+        
+        $select = $this->_getSelect('*', $_getDeleted)
+                       ->where($columnName . 'IN (?)', $_value)
+                       ->order($orderBy . ' ' . $_orderDirection);
+        
+        $stmt = $this->_db->query($select);
+        
+        $resultSet = new Tinebase_Record_RecordSet($this->_modelName, $stmt->fetchAll(), true);
+        $resultSet->addIndices(array($_property));
+        
+        return $resultSet;
     }
     
     /**
@@ -413,6 +442,74 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $this->_saveCustomFields($_record);
         }
         */
+    }
+    
+    /*************************** foreign record fetchers *******************************/
+    
+    /**
+     * appends foreign record (1:1 relation) to given record
+     *
+     * @param Tinebase_Record_Abstract      $_record            Record to append the foreign record to
+     * @param string                        $_appendTo          Property in the record where to append the foreign record to
+     * @param string                        $_recordKey         Property in the record where the foreign key value is in
+     * @param string                        $_foreignKey        Key property in foreign table of the record to append
+     * @param Tinebase_Backend_Sql_Abstract $_foreignBackend    Foreign table backend 
+     */
+    public function appendForeignRecordToRecord($_record, $_appendTo, $_recordKey, $_foreignKey, $_foreignBackend)
+    {
+        try { 
+            $_record->$_appendTo = $_foreignBackend->getByProperty($_record->$_recordKey, $_foreignKey);
+        } catch (Tinebase_Exception_NotFound $e) {
+            $_record->$_appendTo = NULL;
+        }
+    }
+    
+    /**
+     * appends foreign recordSet (1:n relation) to given record
+     *
+     * @param Tinebase_Record_Abstract      $_record            Record to append the foreign records to
+     * @param string                        $_appendTo          Property in the record where to append the foreign records to
+     * @param string                        $_recordKey         Property in the record where the foreign key value is in
+     * @param string                        $_foreignKey        Key property in foreign table of the records to append
+     * @param Tinebase_Backend_Sql_Abstract $_foreignBackend    Foreign table backend 
+     */
+    public function appendForeignRecordSetToRecord($_record, $_appendTo, $_recordKey, $_foreignKey, $_foreignBackend)
+    {
+        $_record->$_appendTo = $_foreignBackend->getMultipleByProperty($_record->$_recordKey, $_foreignKey);
+    }
+    
+    /**
+     * appends foreign record (1:1/n:1 relation) to given recordSet
+     *
+     * @param Tinebase_Record_RecordSet     $_recordSet         Records to append the foreign record to
+     * @param string                        $_appendTo          Property in the records where to append the foreign record to
+     * @param string                        $_recordKey         Property in the records where the foreign key value is in
+     * @param string                        $_foreignKey        Key property in foreign table of the record to append
+     * @param Tinebase_Backend_Sql_Abstract $_foreignBackend    Foreign table backend 
+     */
+    public function appendForeignRecordToRecordSet($_recordSet, $_appendTo, $_recordKey, $_foreignKey, $_foreignBackend)
+    {
+        $allForeignRecords = $_foreignBackend->getMultipleByProperty($_recordSet->$_recordKey, $_foreignKey);
+        foreach ($_recordSet as $record) {
+            $record->$_appendTo = $allForeignRecords->filter($_foreignKey, $record->$_recordKey)->getFirstRecord();
+        }
+    }
+    
+    /**
+     * appends foreign recordSet (1:n/m:n relation) to given recordSet
+     *
+     * @param Tinebase_Record_RecordSet     $_recordSet         Records to append the foreign records to
+     * @param string                        $_appendTo          Property in the records where to append the foreign records to
+     * @param string                        $_recordKey         Property in the records where the foreign key value is in
+     * @param string                        $_foreignKey        Key property in foreign table of the records to append
+     * @param Tinebase_Backend_Sql_Abstract $_foreignBackend    Foreign table backend 
+     */
+    public function appendForeignRecordSetToRecordSet($_recordSet, $_appendTo, $_recordKey, $_foreignKey, $_foreignBackend)
+    {
+        $allForeignRecords = $_foreignBackend->getMultipleByProperty($_recordSet->$_recordKey, $_foreignKey);
+        foreach ($_recordSet as $record) {
+            $record->$_appendTo = $allForeignRecords->filter($_foreignKey, $record->$_recordKey);
+        }
     }
     
     /*************************** other ************************************/
