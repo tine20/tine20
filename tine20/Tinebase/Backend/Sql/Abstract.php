@@ -155,7 +155,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         $columnName = $this->_db->quoteIdentifier($this->_tableName . '.' . $_property);
         $value = empty($_value) ? array('') : (array)$_value;
-        $orderBy = $this->_tableName . $_orderBy ? $_orderBy : $_property;
+        $orderBy = $this->_tableName . '.' . ($_orderBy ? $_orderBy : $_property);
         
         $select = $this->_getSelect('*', $_getDeleted)
                        ->where($columnName . 'IN (?)', $value)
@@ -419,13 +419,20 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
       * Deletes entries
       * 
-      * @param string|integer|Tinebase_Record_Interface $_id
+      * @param string|integer|Tinebase_Record_Interface|array $_id
       * @return void
       * 
       * @todo   delete custom fields?
       */
     public function delete($_id) 
     {
+        if (is_array($_id)) {
+            foreach ($_id as $id) {
+                $this->delete($id);
+            }
+            return;
+        }
+        
         $id = $this->_convertId($_id);
         $identifier = $this->_getRecordIdentifier();
         
