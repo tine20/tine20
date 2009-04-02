@@ -23,39 +23,48 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     /**
      * import single record (create password if in data)
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param array $_recordData
      * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _importRecord($_record)
+    protected function _importRecord($_recordData)
     {
-        // add prefix to login name if given
-        if (isset($this->_options['accountLoginNamePrefix']) && isset($_record['accountLoginName'])) {
-            $_record['accountLoginName'] = $this->_options['accountLoginNamePrefix'] . $_record['accountLoginName'];
+        $record = new $this->_modelName($_recordData, TRUE);
+        
+        // add prefix to login name if given or create valid login name
+        if (isset($record->accountLoginName)) {
+            if (isset($this->_options['accountLoginNamePrefix'])) {
+                $record->accountLoginName = $this->_options['accountLoginNamePrefix'] . $record->accountLoginName;
+            }
+        } else {
+            $record->accountLoginName = Tinebase_User::getInstance()->generateUserName($record);
         }
         
-        Tinebase_Events::fireEvent(new Admin_Event_BeforeImportUser($_record, $this->_options));
+        // fire 'before import' event
+        Tinebase_Events::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
         
-        // generate passwd
-        $password = $_record['accountLoginName'];
+        // generate passwd (use accountLoginName or password from options or password from csv in this order)
+        $password = $record->accountLoginName;
         if (isset($this->_options['password'])) {
             $password = $this->_options['password'];
         }
-        if (isset($_record['password']) && !empty($_record['password'])) {
-            $password = $_record['password'];
+        if (isset($_recordData['password']) && !empty($_recordData['password'])) {
+            $password = $_recordData['password'];
         }
             
-        if ($_record->isValid()) {   
+        // try to create record with password
+        if ($record->isValid()) {   
             if (!$this->_options['dryrun']) {
-                $record = $this->_controller->create($_record, $password, $password);
-                return $record;
-            } else {
-                return $_record;
+                $record = $this->_controller->create($record, $password, $password);
             }
         } else {
-            // log it
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Record invalid: ' . print_r($_record->getValidationErrors(), TRUE));
+            throw Tinebase_Exception_Record_Validation('Imported record is invalid.');
         }
+        
+        return $record;
     }
     
     /**

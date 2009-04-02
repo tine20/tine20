@@ -123,7 +123,6 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             if (! file_exists($_filename)) {
                 throw new Tinebase_Exception_NotFound("File $_filename not found.");
             }
-          
             $_resource = fopen($_filename, 'r');
         }
         
@@ -146,24 +145,25 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             if (is_array($recordData)) {
                 try {
                     $recordData = $this->_doMapping($recordData, $headline);
-                    $recordData = $this->_doConversions($recordData);
-                    // merge additional values (like group id, container id ...)
-                    $recordData = array_merge($recordData, $this->_addData($recordData));
                     
-                    //print_r($recordData);
-                    
-                    // import record into tine!
-                    $record = new $this->_modelName($recordData, true);
-                    $importedRecord = $this->_importRecord($record);
-                    
-                    if ($this->_options['dryrun']) {
-                        $result['results']->addRecord($importedRecord);
+                    if (!empty($recordData)) {
+                        $recordData = $this->_doConversions($recordData);
+
+                        // merge additional values (like group id, container id ...)
+                        $recordData = array_merge($recordData, $this->_addData($recordData));
+                        
+                        // import record into tine!
+                        $importedRecord = $this->_importRecord($recordData);
+                        
+                        if ($this->_options['dryrun']) {
+                            $result['results']->addRecord($importedRecord);
+                        }
+                        $result['totalcount']++;
                     }
-                    $result['totalcount']++;
                     
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                 }
             }
@@ -236,23 +236,25 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     /**
      * import single record
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param array $_recordData
      * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_Record_Validation
      * 
      * @todo check conditions (duplicates, ...)
      */
-    protected function _importRecord($_record)
+    protected function _importRecord($_recordData)
     {
-        if ($_record->isValid()) {   
+        $record = new $this->_modelName($_recordData, TRUE);
+        
+        if ($record->isValid()) {   
             if (!$this->_options['dryrun']) {
                 $record = call_user_func(array($this->_controller, $this->_createMethod), $_record);
-                return $record;
-            } else {
-                return $_record;
             }
         } else {
-            // log it
+            throw Tinebase_Exception_Record_Validation('Imported record is invalid.');
         }
+        
+        return $record;
     }
         
     /**
