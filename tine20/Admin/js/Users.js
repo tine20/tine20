@@ -153,17 +153,22 @@ Tine.Admin.Users.Main = function() {
             });
         },
     
+        /**
+         * reset password
+         * 
+         * @todo add checkbox for must change pw
+         */
         resetPasswordHandler: function(_button, _event) {
             Ext.MessageBox.prompt(this.translation.gettext('Set new password'), this.translation.gettext('Please enter the new password:'), function(_button, _text) {
                 if(_button == 'ok') {
-                    //var accountId = Ext.getCmp('AdminUserGrid').getSelectionModel().getSelected().id;
                     var accountObject = Ext.util.JSON.encode(Ext.getCmp('AdminUserGrid').getSelectionModel().getSelected().data);
                     
                     Ext.Ajax.request( {
-                        params : {
+                        params: {
                             method    : 'Admin.resetPassword',
                             account   : accountObject,
-                            password  : _text
+                            password  : _text,
+                            mustChange: false
                         },
                         callback : function(_options, _success, _response) {
                             if(_success === true) {

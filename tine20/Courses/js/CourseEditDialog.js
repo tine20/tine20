@@ -242,7 +242,8 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         params : {
                             method    : 'Admin.resetPassword',
                             account   : accountObject.id,
-                            password  : this.record.data.name
+                            password  : this.record.data.name,
+                            mustChange: true
                         }
                     });
                     /*

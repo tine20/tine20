@@ -149,9 +149,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param Tinebase_Model_FullUser $_account the account
      * @param string $_password the new password
      * @param string $_passwordRepeat the new password again
+     * @param bool $_mustChange
      * @return unknown
+     * 
+     * @todo add must change pwd info to normal tine user accounts
      */
-    public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat, $_mustChange = FALSE)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -161,8 +164,13 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $result = $this->_userBackend->setPassword($_account->accountLoginName, $_password);
         
+        Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . 
+            ' Set new password for user ' . $_account->accountLoginName . '. Must change:' . $_mustChange
+        );
+        
         if ($this->_manageSAM) {
-            $samResult = $this->_samBackend->setPassword($_account, $_password);
+            $samResult = $this->_samBackend->setPassword($_account, $_password, TRUE, $_mustChange);
         }
                 
         return $result;

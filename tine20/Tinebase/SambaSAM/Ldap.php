@@ -200,10 +200,11 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * @param   Tinebase_Model_FullUser $_user
      * @param   string                  $_password
      * @param   bool                    $_encrypt encrypt password
+     * @param   bool                    $_mustChange
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_user, $_password, $_encrypt = TRUE)
+    public function setPassword($_user, $_password, $_encrypt = TRUE, $_mustChange = FALSE)
 	{
         if (! $_encrypt) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make shure to reset the users password!');
@@ -214,6 +215,11 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
                 'sambalmpassword' => $this->_generateLMPassword($_password),
                 'sambapwdlastset' => Zend_Date::now()->getTimestamp()
             ); 
+            
+            if ($_mustChange) {
+                $ldapData['sambapwdmustchange'] = '1';
+                $ldapData['sambapwdcanchange'] = '1';
+            }
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
