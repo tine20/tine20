@@ -16,7 +16,7 @@
  *
  * @package  Voipmanager
  */
-class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
+class Voipmanager_Backend_Snom_Xml
 {
     protected $_guiLanguages = array(
         'CZ'    => 'Cestina',
@@ -57,6 +57,8 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
         'TR'    => 'Turkce',
     );
     
+    protected $_baseURL;
+    
     /**
      * constructor
      *
@@ -69,6 +71,207 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
         } else {
             $this->_db = Zend_Db_Table_Abstract::getDefaultAdapter();
         }
+        
+        $this->_baseURL = Voipmanager_Frontend_Snom_Abstract::getBaseUrl();
+    }
+    
+    protected function _appendLocationSettings(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        $snomLocation     = new Voipmanager_Backend_Snom_Location($this->_db);        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        $locationSettings = $snomLocation->get($_phone->location_id);
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localtion_id " . print_r($locationSettings, true));
+        $locationSettings = $locationSettings->toArray();
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        
+        unset($locationsSettings['id']);
+        unset($locationsSettings['name']);
+        unset($locationsSettings['description']);
+        unset($locationsSettings['registrar']);
+        unset($locationsSettings['base_download_url']);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        
+        // see http://wiki.snom.com/Interoperability/Asterisk#Basic_Asterisk_configuration
+        $locationSettings['user_phone']         = 'off';
+        $locationSettings['filter_registrar']   = 'off';
+        $locationSettings['challenge_response'] = 'off';
+        $locationSettings['call_completion']    = 'off';
+        // disable redundant keys
+        $locationSettings['redundant_fkeys']    = 'off';
+        
+        $locationSettings['setting_server']     = Voipmanager_Frontend_Snom_Abstract::getBaseUrl() . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
+        $locationSettings['firmware_status']    = Voipmanager_Frontend_Snom_Abstract::getBaseUrl() . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
+        foreach($locationSettings as $key => $value) {
+            $child = $_xml->addChild($key, $value);
+            if($key == 'admin_mode') {
+                $child->addAttribute('perm', 'RW');
+            } else {
+                $child->addAttribute('perm', 'RO');
+            }
+        }
+        
+        // reset old dialplan
+        $child = $_xml->addChild('user_dp_str1');
+        $child->addAttribute('perm', 'RW');
+    }
+    
+    protected function _appendPhoneUrls(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
+    {
+        $locationSettings = array();
+                                
+        $locationSettings['setting_server']          = $this->_baseURL . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
+        $locationSettings['firmware_status']         = $this->_baseURL . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
+        
+        // add directory button
+        $locationSettings['dkey_directory']          = 'url ' . $this->_baseURL . '?method=Phone.directory&amp;mac=$mac';
+        
+        // add redirect on/off action url
+        $locationSettings['action_redirection_on_url'] = $this->_baseURL . '?method=Voipmanager.redirect&amp;mac=$mac&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time';
+        $locationSettings['action_redirection_off_url'] = $this->_baseURL . '?method=Voipmanager.redirect&amp;mac=$mac&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time';
+        
+        // callhistory logging
+        $locationSettings['action_incoming_url']     = $this->_baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=incoming&amp;callId=$call-id&amp;local=$local&amp;remote=$remote';
+        $locationSettings['action_outgoing_url']     = $this->_baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=outgoing&amp;callId=$call-id&amp;local=$local&amp;remote=$remote';
+        $locationSettings['action_connected_url']    = $this->_baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=connected&amp;callId=$call-id&amp;local=$local&amp;remote=$remote';
+        $locationSettings['action_disconnected_url'] = $this->_baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=disconnected&amp;callId=$call-id&amp;local=$local&amp;remote=$remote';
+        $locationSettings['action_missed_url']       = $this->_baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=missed&amp;callId=$call-id&amp;local=$local&amp;remote=$remote';
+        
+        foreach($locationSettings as $key => $value) {
+            $child = $_xml->addChild($key, $value);
+            $child->addAttribute('perm', 'RO');
+        }        
+    }
+    
+    protected function _appendPhoneSettings(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
+    {
+        $phoneSettings['http_client_user']['value'] = $_phone->http_client_user;
+        $phoneSettings['http_client_user']['perms'] = 'RO';
+        $phoneSettings['http_client_pass']['value'] = $_phone->http_client_pass;
+        $phoneSettings['http_client_pass']['perms'] = 'RO';
+        
+        /**
+         * disabled until snom releases new software image which fixes a bug
+         */
+        #$phoneSettings['redirect_event']['value'] = $_phone->redirect_event;
+        #$phoneSettings['redirect_event']['perms'] = 'RW';
+        #$phoneSettings['redirect_number']['value'] = $_phone->redirect_number;
+        #$phoneSettings['redirect_number']['perms'] = 'RW';
+        #$phoneSettings['redirect_time']['value'] = $_phone->redirect_time;
+        #$phoneSettings['redirect_time']['perms'] = 'RW';
+        
+        foreach($phoneSettings as $key => $value) {
+            $child = $_xml->addChild($key, $value['value']);
+            $child->addAttribute('perm', $value['perms']);
+        }
+    }
+    
+    protected function _appendUserSettings(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
+    {
+        $phoneSettinsgBackend = new Voipmanager_Backend_Snom_PhoneSettings($this->_db);
+        $phoneSettings = $phoneSettinsgBackend->get($_phone->getId());
+                
+        $templateBackend = new Voipmanager_Backend_Snom_Template($this->_db);
+        $template = $templateBackend->get($_phone->template_id);
+        
+        $defaultPhoneSettingsBackend = new Voipmanager_Backend_Snom_Setting($this->_db);
+        $defaultPhoneSettings = $defaultPhoneSettingsBackend->get($template->setting_id);
+
+        $userSettings = array();
+        
+        foreach($phoneSettings AS $key => $value) {
+            if($key == 'phone_id') {
+                continue;
+            }
+            
+            $isWriteAbleProperty = $key . '_writable';
+            
+            if($defaultPhoneSettings->$isWriteAbleProperty == true && $value !== NULL) {
+                $userSettings[$key]['value'] = $value;
+                $userSettings[$key]['perms'] = 'RW';
+            } elseif($defaultPhoneSettings->$key !== NULL) {
+                $userSettings[$key]['value'] = $defaultPhoneSettings->$key;
+                if($defaultPhoneSettings->$isWriteAbleProperty == true) {
+                    $userSettings[$key]['perms'] = 'RW';
+                } else {
+                    $userSettings[$key]['perms'] = 'RO';
+                }
+            }            
+        }
+        
+        foreach($userSettings as $key => $value) {
+            $child = $_xml->addChild($key, $value['value']);
+            $child->addAttribute('perm', $value['perms']);
+        }
+    }
+    
+    protected function _appendPhoneLines(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
+    {
+        $asteriskPeer = new Voipmanager_Backend_Asterisk_SipPeer($this->_db);
+        $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);
+        
+        $lines = array();
+        $location = $snomLocation->get($_phone->location_id);
+        
+        foreach($_phone->lines as $snomLine) {
+            $line = array();
+            $line['user_active']    = ($snomLine->lineactive == 1 ? 'on' : 'off');
+            $line['user_idle_text'] = $snomLine->idletext;
+            
+            $asteriskLine = $asteriskPeer->get($snomLine->asteriskline_id);
+            // remove <some tag> from the end of the line
+            $line['user_realname'] = trim(preg_replace('/<\d+>$/', '', $asteriskLine->callerid));
+            $line['user_name']     = $asteriskLine->name;
+            $line['user_host']     = $location->registrar;
+            $line['user_mailbox']  = $asteriskLine->mailbox;
+            $line['user_pass']     = $asteriskLine->secret;
+            
+            $lines[$snomLine->linenumber] = $line;
+        }
+        
+        foreach($lines as $lineId => $line) {
+            foreach($line as $key => $value) {
+                $child = $_xml->addChild($key, $value);
+                $child->addAttribute('idx', $lineId);
+                $child->addAttribute('perm', 'RO');
+            }
+            // reset old dialplan
+            $child = $_xml->addChild('user_dp_str');
+            $child->addAttribute('idx', $lineId);
+            $child->addAttribute('perm', 'RO');
+        }
+        
+    }
+    
+    protected function _appendDialPlan(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
+    {
+        // Metaways specific dialplan
+        
+        $child = $_xml->addChild('template');
+        $child->addAttribute('match', '[1-4].');
+        $child->addAttribute('timeout', 0);
+        $child->addAttribute('scheme', 'sip');
+        $child->addAttribute('user', 'phone');
+        
+        $child = $_xml->addChild('template');
+        $child->addAttribute('match', '5..');
+        $child->addAttribute('timeout', 0);
+        $child->addAttribute('scheme', 'sip');
+        $child->addAttribute('user', 'phone');
+        
+        $child = $_xml->addChild('template');
+        $child->addAttribute('match', '[6-8].');
+        $child->addAttribute('timeout', 0);
+        $child->addAttribute('scheme', 'sip');
+        $child->addAttribute('user', 'phone');
+        
+        $child = $_xml->addChild('template');
+        $child->addAttribute('match', '9..');
+        $child->addAttribute('timeout', 0);
+        $child->addAttribute('scheme', 'sip');
+        $child->addAttribute('user', 'phone');
+        
     }
     
     /**
@@ -80,119 +283,47 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
      */
     public function getConfig(Voipmanager_Model_Snom_Phone $_phone)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " phone " . print_r($_phone->toArray(), true));
+        
         if (!$_phone->isValid()) {
             throw new Voipmanager_Exception_Validation('invalid phone');
         }
         
-        $baseURL = $this->_getBaseUrl();
-        
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><settings></settings>');
+        
+        $phoneSettings = $xml->addChild('phone-settings');
+        
+        $this->_appendLocationSettings($_phone, $phoneSettings);
 
-        $xmlPhoneSettings = $xml->addChild('phone-settings');
+        $this->_appendPhoneUrls($_phone, $phoneSettings);
+        $this->_appendPhoneSettings($_phone, $phoneSettings);
+        $this->_appendPhoneLines($_phone, $phoneSettings);
         
-        $locationSettings = $this->_getLocationSettings($_phone);
-        foreach($locationSettings as $key => $value) {
-            $child = $xmlPhoneSettings->addChild($key, $value);
-            if($key == 'admin_mode') {
-                $child->addAttribute('perm', 'RW');
-            } else {
-                $child->addAttribute('perm', 'RO');
-            }
-        }
+        $this->_appendUserSettings($_phone, $phoneSettings);
         
-        // reset old dialplan
-        $child = $xmlPhoneSettings->addChild('user_dp_str1');
-        $child->addAttribute('perm', 'RW');
-        // add directory button
-        $child = $xmlPhoneSettings->addChild('dkey_directory', 'url ' . $baseURL . '?method=Phone.directory&amp;mac=$mac');
-        $child->addAttribute('perm', 'RO');
-        // add redirect on/off action url
-        $child = $xmlPhoneSettings->addChild('action_redirection_on_url', $baseURL . '?method=Voipmanager.redirect&amp;mac=$mac&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
-        $child->addAttribute('perm', 'RO');
-        $child = $xmlPhoneSettings->addChild('action_redirection_off_url', $baseURL . '?method=Voipmanager.redirect&amp;mac=$mac&amp;event=$redirect_event&amp;number=$redirect_number&amp;time=$redirect_time');
-        $child->addAttribute('perm', 'RO');
-        // callhistory logging
-        $child = $xmlPhoneSettings->addChild('action_incoming_url', $baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=incoming&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
-        $child->addAttribute('perm', 'RO');
-        $child = $xmlPhoneSettings->addChild('action_outgoing_url', $baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=outgoing&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
-        $child->addAttribute('perm', 'RO');
-        $child = $xmlPhoneSettings->addChild('action_connected_url', $baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=connected&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
-        $child->addAttribute('perm', 'RO');
-        $child = $xmlPhoneSettings->addChild('action_disconnected_url', $baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=disconnected&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
-        $child->addAttribute('perm', 'RO');
-        $child = $xmlPhoneSettings->addChild('action_missed_url', $baseURL . '?method=Phone.callHistory&amp;mac=$mac&amp;event=missed&amp;callId=$call-id&amp;local=$local&amp;remote=$remote');
-        $child->addAttribute('perm', 'RO');
-        // disable redundant keys
-        $child = $xmlPhoneSettings->addChild('redundant_fkeys', 'off');
-        $child->addAttribute('perm', 'RO');
-                
-        $phoneSettings = $this->_getPhoneSettings($_phone);
-        foreach($phoneSettings as $key => $value) {
-          $child = $xmlPhoneSettings->addChild($key, $value['value']);
-          $child->addAttribute('perm', $value['perms']);
-        }
-              
-        $userSettings = $this->_getUserSettings($_phone);
-        foreach($userSettings as $key => $value) {
-          $child = $xmlPhoneSettings->addChild($key, $value['value']);
-          $child->addAttribute('perm', $value['perms']);
-        }
-              
-        $lines = $this->_getLines($_phone);
-        foreach($lines as $lineId => $line) {
-            foreach($line as $key => $value) {
-                $child = $xmlPhoneSettings->addChild($key, $value);
-                $child->addAttribute('idx', $lineId);
-                $child->addAttribute('perm', 'RO');
-            }
-            // reset old dialplan
-            $child = $xmlPhoneSettings->addChild('user_dp_str');
-            $child->addAttribute('idx', $lineId);
-            $child->addAttribute('perm', 'RO');
-        }
+        // append available languages
+        $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);
+        $locationSettings = $snomLocation->get($_phone->location_id);
         
         $guiLanguages = $xml->addChild('gui-languages');
-    
         foreach($this->_guiLanguages as $iso => $translated) {
             $child = $guiLanguages->addChild('language');
-            $child->addAttribute('url', $locationSettings['base_download_url'] . '/' . $_phone->current_software . '/snomlang/gui_lang_' . $iso . '.xml');
+            $child->addAttribute('url', $locationSettings->base_download_url . '/' . $_phone->current_software . '/snomlang/gui_lang_' . $iso . '.xml');
             $child->addAttribute('name', $translated);
         }
       
         $webLanguages = $xml->addChild('web-languages');
-    
         foreach($this->_webLanguages as $iso => $translated) {
             $child = $webLanguages->addChild('language');
-            $child->addAttribute('url', $locationSettings['base_download_url'] . '/' . $_phone->current_software . '/snomlang/web_lang_' . $iso . '.xml');
+            $child->addAttribute('url', $locationSettings->base_download_url . '/' . $_phone->current_software . '/snomlang/web_lang_' . $iso . '.xml');
             $child->addAttribute('name', $translated);
         }
       
-        // Metaways specific dialplan
+        // append dialplann
         $dialPlan = $xml->addChild('dialplan');
-    
-        $child = $dialPlan->addChild('template');
-        $child->addAttribute('match', '[1-4].');
-        $child->addAttribute('timeout', 0);
-        $child->addAttribute('scheme', 'sip');
-        $child->addAttribute('user', 'phone');
-        
-        $child = $dialPlan->addChild('template');
-        $child->addAttribute('match', '5..');
-        $child->addAttribute('timeout', 0);
-        $child->addAttribute('scheme', 'sip');
-        $child->addAttribute('user', 'phone');
-        
-        $child = $dialPlan->addChild('template');
-        $child->addAttribute('match', '[6-8].');
-        $child->addAttribute('timeout', 0);
-        $child->addAttribute('scheme', 'sip');
-        $child->addAttribute('user', 'phone');
-        
-        $child = $dialPlan->addChild('template');
-        $child->addAttribute('match', '9..');
-        $child->addAttribute('timeout', 0);
-        $child->addAttribute('scheme', 'sip');
-        $child->addAttribute('user', 'phone');
+        $this->_appendDialPlan($_phone, $dialPlan);
+
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $xml->asXML());
         
         return $xml->asXML();
     }
@@ -210,9 +341,10 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
             throw new Voipmanager_Exception_Validation('invalid phone');
         }
         
-        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><firmware-settings></firmware-settings>');
+        $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);
+        $locationSettings = $snomLocation->get($_phone->location_id);
         
-        $locationSettings = $this->_getLocationSettings($_phone);
+        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><firmware-settings></firmware-settings>');
         
         $select = $this->_db->select()
             ->from(Tinebase_Core::get('voipdbTablePrefix') . 'snom_phones', array())
@@ -223,140 +355,9 @@ class Voipmanager_Backend_Snom_Xml extends Voipmanager_Frontend_Snom_Abstract
         $firmware = $this->_db->fetchOne($select);
     
         if(!empty($firmware)) {
-            $child = $xml->addChild('firmware', $locationSettings['base_download_url'] . '/' . $firmware);
+            $child = $xml->addChild('firmware', $locationSettings->base_download_url . '/' . $firmware);
         }
     
         return $xml->asXML();        
-    }
-    
-    /**
-     * get general phonesettings like http client username/password and
-     * call forward settings
-     *
-     * @param Voipmanager_Model_Snom_Phone $_phone
-     * @return array
-     */
-    protected function _getPhoneSettings(Voipmanager_Model_Snom_Phone $_phone)
-    {
-        $phoneSettings['http_client_user']['value'] = $_phone->http_client_user;
-        $phoneSettings['http_client_user']['perms'] = 'RO';
-        $phoneSettings['http_client_pass']['value'] = $_phone->http_client_pass;
-        $phoneSettings['http_client_pass']['perms'] = 'RO';
-        
-        /**
-         * disabled until snom releases new software image which fixes a bug
-         */
-        #$phoneSettings['redirect_event']['value'] = $_phone->redirect_event;
-        #$phoneSettings['redirect_event']['perms'] = 'RW';
-        #$phoneSettings['redirect_number']['value'] = $_phone->redirect_number;
-        #$phoneSettings['redirect_number']['perms'] = 'RW';
-        #$phoneSettings['redirect_time']['value'] = $_phone->redirect_time;
-        #$phoneSettings['redirect_time']['perms'] = 'RW';
-        
-        return $phoneSettings;
-    }
-    
-    /**
-     * get location settings
-     *
-     * @param Voipmanager_Model_Snom_Phone $_phone
-     * @return array
-     */
-    protected function _getLocationSettings(Voipmanager_Model_Snom_Phone $_phone)
-    {
-        $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);        
-        $location = $snomLocation->get($_phone->location_id);
-        $locationsSettings = $location->toArray();
-                
-        unset($locationsSettings['id']);
-        unset($locationsSettings['name']);
-        unset($locationsSettings['description']);
-        unset($locationsSettings['registrar']);
-        unset($locationsSettings['base_download_url']);
-        
-        // see http://wiki.snom.com/Interoperability/Asterisk#Basic_Asterisk_configuration
-        $locationsSettings['user_phone'] = 'off';
-        $locationsSettings['filter_registrar'] = 'off';
-        $locationsSettings['challenge_response'] = 'off';
-        $locationsSettings['call_completion'] = 'off';
-
-        $locationsSettings['setting_server'] = $this->_getBaseUrl() . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
-        $locationsSettings['firmware_status'] = $this->_getBaseUrl() . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
-        
-        return $locationsSettings;
-    }
-    
-    /**
-     * get user editable settings
-     *
-     * @param Voipmanager_Model_Snom_Phone $_phone
-     * @return array
-     */
-    protected function _getUserSettings(Voipmanager_Model_Snom_Phone $_phone)
-    {
-        $phoneSettinsgBackend = new Voipmanager_Backend_Snom_PhoneSettings($this->_db);
-        $phoneSettings = $phoneSettinsgBackend->get($_phone->getId());
-                
-        $templateBackend = new Voipmanager_Backend_Snom_Template($this->_db);
-        $template = $templateBackend->get($_phone->template_id);
-        
-        $defaultPhoneSettingsBackend = new Voipmanager_Backend_Snom_Setting($this->_db);
-        $defaultPhoneSettings = $defaultPhoneSettingsBackend->get($template->setting_id);
-
-        $userSettings = array();
-        
-        foreach($phoneSettings AS $key => $value) {
-            if($key == 'phone_id') {
-                continue;
-            }
-            $isWriteAbleProperty = $key . '_writable';
-            if($defaultPhoneSettings->$isWriteAbleProperty == true && $value !== NULL) {
-                $userSettings[$key]['value'] = $value;
-                $userSettings[$key]['perms'] = 'RW';
-            } elseif($defaultPhoneSettings->$key !== NULL) {
-                $userSettings[$key]['value'] = $defaultPhoneSettings->$key;
-                if($defaultPhoneSettings->$isWriteAbleProperty == true) {
-                    $userSettings[$key]['perms'] = 'RW';
-                } else {
-                    $userSettings[$key]['perms'] = 'RO';
-                }
-            }            
-        }
-        
-        return $userSettings;        
-    }
-    
-    /**
-     * return array of phone lines
-     *
-     * @param Voipmanager_Model_Snom_Phone $_phone
-     * @return array the lines
-     */
-    protected function _getLines(Voipmanager_Model_Snom_Phone $_phone)
-    {
-        $asteriskPeer = new Voipmanager_Backend_Asterisk_SipPeer($this->_db);
-        $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);
-        
-        $lines = array();
-        $location = $snomLocation->get($_phone->location_id);
-        
-        foreach($_phone->lines as $snomLine) {
-            $line = array();
-            $line['user_active'] = ($snomLine->lineactive == 1 ? 'on' : 'off');
-            $line['user_idle_text'] = $snomLine->idletext;
-            
-            $asteriskLine = $asteriskPeer->get($snomLine->asteriskline_id);
-            // remove <xxx> from the end of the line
-            $line['user_realname'] = trim(preg_replace('/<\d+>$/', '', $asteriskLine->callerid));
-            $line['user_name']     = $asteriskLine->name;
-            $line['user_host']     = $location->registrar;
-            $line['user_mailbox']  = $asteriskLine->mailbox;
-            $line['user_pass']     = $asteriskLine->secret;
-            
-            $lines[$snomLine->linenumber] = $line;
-        }
-        
-        return $lines;
-    }
-    
+    }    
 }
