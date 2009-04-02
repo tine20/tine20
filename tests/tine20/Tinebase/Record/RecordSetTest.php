@@ -323,6 +323,21 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => '300', 'string' => 'Test2'), true));
         $result = $this->object->sort('string', 'ASC');
     }
+    
+    public function testIndices()
+    {
+        $recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '100', 'string' => 'bommel'), true));
+        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '200', 'string' => 'bommel'), true));
+        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '300', 'string' => 'super'), true));
+        
+        $filterResultWOIndices = $recordSet->filter('string', 'bommel');
+        $this->assertEquals(2, count($filterResultWOIndices));
+        
+        $recordSet->addIndices(array('string'));
+        $filterResultWIndices = $recordSet->filter('string', 'bommel');
+        $this->assertEquals(count($filterResultWOIndices), count($filterResultWIndices));
+    }
 }
 // Call Tinebase_Record_RecordSetTest::main() if this source file is executed directly.
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordSetTest::main') {

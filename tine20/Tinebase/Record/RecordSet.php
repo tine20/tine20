@@ -52,7 +52,13 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     protected $_validationErrors = array();
 
-
+    /**
+     * Holds indices
+     *
+     * @var array indicesname => indicesarray
+     */
+    protected $_indices = array();
+    
     /**
      * creates new Tinebase_Record_RecordSet
      *
@@ -97,11 +103,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         end($this->_listOfRecords);
         $index = key($this->_listOfRecords);
         
+        // maintain indices
         $recordId = $_record->getId();
         if ($recordId) {
             $this->_idMap[$recordId] = $index;
         } else {
             $this->_idLess[] = $index;
+        }
+        foreach ($this->_indices as $name => &$propertyIndex) {
+            $propertyIndex[$index] = $_record->$name;
         }
 		
         return $index;
@@ -178,7 +188,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
-     * sets given property in all given records identified by their indices
+     * sets given property in all records with data from given values identified by their indices
      *
      * @param string $_name property name
      * @param array  $_values index => property value
@@ -342,6 +352,33 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
 
     /**
+     * adds indices to this record set
+     *
+     * @param array $_properties
+     */
+    public function addIndices(array $_properties)
+    {
+        foreach ($_properties as $property) {
+            if (! array_key_exists($property, $this->_indices)) {
+                $this->_indices[$property] = array();
+            }
+        }
+        
+        $this->_buildIndices();
+    }
+    
+    /**
+     * build all indices of this set
+     *
+     */
+    protected function _buildIndices()
+    {
+        foreach ($this->_indices as $name => $propertyIndex) {
+            $this->_indices[$name] = $this->__get($name);
+        }
+    }
+    
+    /**
      * filter recordset and return subset
      *
      * @param string $_field
@@ -352,12 +389,20 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function filter($_field, $_value)
     {
-        $result = clone($this);
-        
-        // remove all entries that don't match the filter
-        foreach ($result as $index => $record) {
-            if ($record->$_field !== $_value) {
-                unset($result[$index]);
+        if (array_key_exists($_field, $this->_indices)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering with indices, expecting fast results ;-)'); 
+            $matchingRecords = array_intersect_key($this->_listOfRecords, array_keys($this->_indices[$_field], $_value));
+            $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
+            $result->addIndices(array_keys($this->_indices));
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering without indices, expecting slow results');   
+            $result = clone($this);
+            
+            // remove all entries that don't match the filter
+            foreach ($result as $index => $record) {
+                if ($record->$_field !== $_value) {
+                    unset($result[$index]);
+                }
             }
         }
         
@@ -384,6 +429,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $this->_idLess        = array();
         $this->_idMap         = array();
         $this->_listOfRecords = array();
+        $namedIndices = array_keys($this->_indices);
+        $this->_indices = array();
+        $this->addIndices($namedIndices);
         
         foreach (array_keys($offsetToSortFieldMap) as $oldOffset) {
             $this->addRecord($oldListOfRecords[$oldOffset]);
