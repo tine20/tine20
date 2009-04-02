@@ -129,12 +129,6 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         $_phone->http_client_pass = Tinebase_Record_Abstract::generateUID(20);
         $_phone->http_client_info_sent = 0;
         
-        unset($_phone->settings_loaded_at);
-        unset($_phone->firmware_checked_at);
-        unset($_phone->last_modified_time);
-        unset($_phone->ipaddress);
-        unset($_phone->current_software);
-        
         $phone = $this->_backend->create($_phone);
         
         // force the right phone_id
@@ -188,11 +182,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      */
     public function update(Tinebase_Record_Interface $_phone)
     {
-        unset($_phone->settings_loaded_at);
-        unset($_phone->firmware_checked_at);
-        unset($_phone->last_modified_time);
-        unset($_phone->ipaddress);
-        unset($_phone->current_software);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phone->toArray(), true));
         
         $phone = $this->_backend->update($_phone);
         
