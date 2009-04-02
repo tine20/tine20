@@ -20,6 +20,13 @@
 class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * config of courses
+     *
+     * @var Zend_Config
+     */
+    protected $_config = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -31,6 +38,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $this->_currentAccount = Tinebase_Core::getUser();   
         $this->_purgeRecords = FALSE;
         $this->_doContainerACLChecks = FALSE;
+        $this->_config = isset($this->_config) ? $this->_config : new Zend_Config(array());
     }    
     
     /**
@@ -64,10 +72,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      */
     public function create(Tinebase_Record_Interface $_record)
     {
-        if (! isset(Tinebase_Core::getConfig()->courses)) {
-            Tinebase_Core::getConfig()->courses = new Zend_Config(array());
-        }
-        
         $record = parent::create($_record);
         
         // add teacher account
@@ -88,12 +92,12 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $event = new Courses_Event_BeforeAddTeacher($account, $record);
         Tinebase_Events::fireEvent($event);
         
-        $password = Tinebase_Core::getConfig()->courses->get('teacher_password', $account->accountLoginName);
+        $password = $this->_config->get('teacher_password', $account->accountLoginName);
         $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
         
         // add to teacher group if available
-        if (isset(Tinebase_Core::getConfig()->courses->teacher_group) && !empty(Tinebase_Core::getConfig()->courses->teacher_group)) {
-            Admin_Controller_Group::getInstance()->addGroupMember(Tinebase_Core::getConfig()->courses->teacher_group, $account->getId());
+        if (isset($this->_config->teacher_group) && !empty($this->_config->teacher_group)) {
+            Admin_Controller_Group::getInstance()->addGroupMember($this->_config->teacher_group, $account->getId());
         }
         
         return $record;

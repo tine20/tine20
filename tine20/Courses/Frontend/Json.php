@@ -34,6 +34,13 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_groupController = NULL;
     
     /**
+     * config of courses
+     *
+     * @var Zend_Config
+     */
+    protected $_config = NULL;
+    
+    /**
      * the constructor
      *
      */
@@ -43,10 +50,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_controller = Courses_Controller_Course::getInstance();
         $this->_groupController = Admin_Controller_Group::getInstance();
         
-        if (! isset(Tinebase_Core::getConfig()->courses)) {
-            Tinebase_Core::getConfig()->courses = new Zend_Config(array());
-        }
-        
+        $this->_config = isset($this->_config) ? $this->_config : new Zend_Config(array());
     }
     
     /************************************** protected helper functions **********************/
@@ -86,7 +90,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $result = parent::_multipleRecordsToJson($_records);
         
-        $knownTypes = Tinebase_Core::getConfig()->courses->get('course_types', array());
+        $knownTypes = $this->_config->get('course_types', array());
         if (!is_array($knownTypes)) {
             $knownTypes = $knownTypes->toArray();
         }
@@ -147,11 +151,11 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _manageInternetGroup(array $_members, $_internet)
     {
-        if (!isset(Tinebase_Core::getConfig()->courses) || !isset(Tinebase_Core::getConfig()->courses->internet_group)) {
+        if (!isset($this->_config) || !isset($this->_config->internet_group)) {
             return;
         }
 
-        $inetGroupId = Tinebase_Core::getConfig()->courses->internet_group;
+        $inetGroupId = $this->_config->internet_group;
         $groupController = Admin_Controller_Group::getInstance();
         
         // add or remove members to or from internet group (defined in config.inc.php)
@@ -225,9 +229,9 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $this->_groupController->update($group);
             
             // add new members to students group
-            if (isset(Tinebase_Core::getConfig()->courses->students_group) && !empty(Tinebase_Core::getConfig()->courses->students_group)) {
+            if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
                 foreach ($addedMembers as $member) {
-                    $this->_groupController->addGroupMember(Tinebase_Core::getConfig()->courses->students_group, $member['id']);
+                    $this->_groupController->addGroupMember($this->_config->students_group, $member['id']);
                 }
             }
             
@@ -271,7 +275,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // get definition and start import with admin user import csv plugin
         $definitionBackend = new Tinebase_ImportExportDefinition();
         
-        $definition = $definitionBackend->getByProperty(Tinebase_Core::getConfig()->courses->get('import_definition', 'admin_user_import_csv'));
+        $definition = $definitionBackend->getByProperty($this->_config->get('import_definition', 'admin_user_import_csv'));
         $importer = new $definition->plugin(
             $definition, 
             Admin_Controller_User::getInstance(),
@@ -288,10 +292,10 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $members = $this->_getCourseMembers($groupId);
         
         // add to student group if available
-        if (isset(Tinebase_Core::getConfig()->courses->students_group) && !empty(Tinebase_Core::getConfig()->courses->students_group)) {
+        if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
             $groupController = Admin_Controller_Group::getInstance(); 
             foreach ($members as $member) {
-                $groupController->addGroupMember(Tinebase_Core::getConfig()->courses->students_group, $member['id']);
+                $groupController->addGroupMember($this->_config->students_group, $member['id']);
             }
         }
         
@@ -311,7 +315,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchCourseTypes($filter, $paging)
     {
         $result = array();
-        foreach (Tinebase_Core::getConfig()->courses->get('course_types', array()) as $id => $name) {
+        foreach ($this->_config->get('course_types', array()) as $id => $name) {
             array_push($result, array(
                 'id'   => $id,
                 'name' => $name
