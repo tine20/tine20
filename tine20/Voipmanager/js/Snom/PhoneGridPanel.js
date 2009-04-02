@@ -131,13 +131,15 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             	header: this.app.i18n._('settings loaded at'), 
             	dataIndex: 'settings_loaded_at', 
             	width: 100, 
-            	hidden: true 
+            	hidden: true,
+                renderer: Tine.Tinebase.common.dateTimeRenderer 
             },{ 
             	id: 'last_modified_time', 
             	header: this.app.i18n._('last modified'), 
             	dataIndex: 'last_modified_time', 
             	width: 100, 
-            	hidden: true 
+            	hidden: true,
+                renderer: Tine.Tinebase.common.dateTimeRenderer 
            	}];
     },
     
