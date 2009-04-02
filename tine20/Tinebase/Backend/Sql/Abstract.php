@@ -131,7 +131,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
-        $result = new $this->_modelName($queryResult);
+        $result = $this->_rawDataToRecord($queryResult);
                
         // get custom fields
         if ($result->has('customfields')) {
@@ -158,12 +158,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $orderBy = $this->_tableName . $_orderBy ? $_orderBy : $_property;
         
         $select = $this->_getSelect('*', $_getDeleted)
-                       ->where($columnName . 'IN (?)', $_value)
+                       ->where($columnName . 'IN (?)', $value)
                        ->order($orderBy . ' ' . $_orderDirection);
         
         $stmt = $this->_db->query($select);
         
-        $resultSet = new Tinebase_Record_RecordSet($this->_modelName, $stmt->fetchAll(), true);
+        $resultSet = $this->_rawDataToRecordSet($stmt->fetchAll());
         $resultSet->addIndices(array($_property));
         
         return $resultSet;
@@ -192,7 +192,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         
-        $result = new Tinebase_Record_RecordSet($this->_modelName, $queryResult, true);
+        $result = $this->_rawDataToRecordSet($queryResult);
         
         return $result;
     }
@@ -223,7 +223,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, true));
         
-        $result = new Tinebase_Record_RecordSet($this->_modelName, $queryResult);
+        $result = $this->_rawDataToRecordSet($queryResult);
         
         return $result;
     }
@@ -238,8 +238,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
     {
-        $result = ($_onlyIds) ? array() : new Tinebase_Record_RecordSet($this->_modelName);
-        
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
@@ -255,14 +253,15 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         // get records
         $stmt = $this->_db->query($select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        foreach ($rows as $row) {
-            if ($_onlyIds) {
+        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        if ($_onlyIds) {
+            $result = array();
+            foreach ($rows as $row) {
                 $result[] = $row[$this->_getRecordIdentifier()];
-            } else {
-                $record = new $this->_modelName($row, true, true);
-                $result->addRecord($record);
             }
+        } else {
+            $result = $this->_rawDataToRecordSet($rows);
         }
         
         return $result;
@@ -310,7 +309,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $_record->setId($newId);
         }
     	
-        $recordArray = $_record->toArray();
+        $recordArray = $this->_recordToRawData($_record);
         
         // unset id if autoincrement & still empty
         if (empty($_record->$identifier) || $_record->$identifier == 'NULL' ) {
@@ -367,7 +366,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $id = $_record->getId();
 
-        $recordArray = $_record->toArray();
+        $recordArray = $this->_recordToRawData($_record);
         $recordArray = array_intersect_key($recordArray, $this->_schema);
         
         $this->_prepareData($recordArray);
@@ -567,6 +566,38 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         return $select;
     }
     
+    /**
+     * converts record into raw data for adapter
+     *
+     * @param  Tinebase_Record_Abstract $_record
+     * @return array
+     */
+    protected function _recordToRawData($_record)
+    {
+        return $_record->toArray();
+    }
+    
+    /**
+     * converts raw data from adapter into a single record
+     *
+     * @param  array $_data
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _rawDataToRecord(array $_rawdata)
+    {
+        return new $this->_modelName($_rawdata, true);
+    }
+    
+    /**
+     * converts raw data from adapter into a set of records
+     *
+     * @param  array $_rawData of arrays
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _rawDataToRecordSet(array $_rawData)
+    {
+        return new Tinebase_Record_RecordSet($this->_modelName, $_rawData, true);
+    }
     
     /**
      * add the fields to search for to the query
