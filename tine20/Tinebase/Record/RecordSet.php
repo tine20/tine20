@@ -410,6 +410,20 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * returns first record of this set
+     *
+     * @return Tinebase_Record_Abstract|NULL
+     */
+    public function getFirstRecord()
+    {
+        if (array_key_exists(0, $this->_listOfRecords)) {
+            return $this->_listOfRecords[0];
+        } else {
+            return NULL;
+        }
+    }
+    
+    /**
      * sorts this recordset
      *
      * @param string $_field
