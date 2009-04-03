@@ -133,7 +133,7 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
         this.tpl = new Ext.XTemplate(
             '<div class="x-panel-header x-panel-header-noborder x-unselectable x-accordion-hd">',
                 '<img class="x-panel-inline-icon {iconCls}" src="' + Ext.BLANK_IMAGE_URL + '"/>',
-                '<span class="x-panel-header-text">{title}</span>',
+                '<span class="x-panel-header-text app-panel-apptitle-text">{title}</span>',
             '</div>'
         ).compile();
 

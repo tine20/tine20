@@ -131,4 +131,14 @@ html, body {
     /*background:transparent url(../../library/ExtJS/resources/images/default/panel/light-hd.gif) repeat-x scroll 0pt -9px;*/
     background:#EBF3FD url(../../library/ExtJS/resources/images/default/grid/grid3-hrow-over.gif) repeat-x scroll left bottom;
 }
+
+.app-panel-appicon-text {
+    position: absolute;
+    top: 0px;
+    width: 20px;
+    overflow: hidden;
+}
+
+.app-panel-apptitle-text {
+    margin-left: 5px;
 }
