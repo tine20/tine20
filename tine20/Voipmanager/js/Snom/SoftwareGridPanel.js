@@ -66,17 +66,20 @@ Tine.Voipmanager.SnomSoftwareGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gr
             	header: this.app.i18n._('id'), 
             	dataIndex: 'id', 
             	width: 20, 
+                sortable: true,
             	hidden: true 
            	},{ 
            		id: 'name', 
           		header: this.app.i18n._('name'), 
           		dataIndex: 'name', 
-          		width: 150 
+          		width: 150,
+                sortable: true
           	},{ 
           		id: 'description', 
           		header: this.app.i18n._('Description'), 
           		dataIndex: 'description', 
-          		width: 250 
+          		width: 250,
+                sortable: true
           	}];
     },
     
