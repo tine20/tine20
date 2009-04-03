@@ -15,6 +15,7 @@
  * Events consists of the properties of Calendar_Model_Evnet except Tags and Notes 
  * which are as always handles by their controllers/backends
  * 
+ * @todo add handling for class_id
  * @package Calendar 
  */
 class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
@@ -174,7 +175,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected function _rawDataToRecord($_rawData) {
         $event = parent::_rawDataToRecord($_rawData);
         
-        $this->appendForeignRecordSetToRecord($event, 'attendee', 'id', 'cal_event_id', $this->_attendeeBackend);
+        $this->appendForeignRecordSetToRecord($event, 'attendee', 'id', Calendar_Backend_Sql_Attendee::FOREIGNKEY_EVENT, $this->_attendeeBackend);
         
         return $event;
     }
@@ -189,7 +190,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $events = parent::_rawDataToRecordSet($_rawData);
         
-        $this->appendForeignRecordSetToRecordSet($events, 'attendee', 'id', 'cal_event_id', $this->_attendeeBackend);
+        $this->appendForeignRecordSetToRecordSet($events, 'attendee', 'id', Calendar_Backend_Sql_Attendee::FOREIGNKEY_EVENT, $this->_attendeeBackend);
         
         return $events;
     }
@@ -223,7 +224,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             new Tinebase_Record_RecordSet($this->_attendeeBackend->getModelName());
         $attendee->cal_event_id = $_event->getId();
             
-        $currentAttendee = $this->_attendeeBackend->getMultipleByProperty($_event->getId(), 'cal_event_id');
+        $currentAttendee = $this->_attendeeBackend->getMultipleByProperty($_event->getId(), Calendar_Backend_Sql_Attendee::FOREIGNKEY_EVENT);
         
         $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
         $this->_attendeeBackend->delete($diff['toDeleteIds']);

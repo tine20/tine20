@@ -17,6 +17,11 @@
 class Calendar_Backend_Sql_Attendee extends Tinebase_Backend_Sql_Abstract
 {
     /**
+     * event foreign key column
+     */
+    const FOREIGNKEY_EVENT = 'cal_event_id';
+    
+    /**
      * Table name without prefix
      *
      * @var string
