@@ -38,7 +38,23 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
  
-         
+        // add context menu actions
+        var action_resetHttpClientInfo = new Ext.Action({
+           text: this.app.i18n._('reset phones HTTP authentication'), 
+           handler: this.resetHttpClientInfo,
+           iconCls: 'action_resetHttpClientInfo',
+           scope: this
+        });
+        
+        var action_openPhonesWebGui = new Ext.Action({
+           text: this.app.i18n._('Open phones web gui'), 
+           handler: this.openPhonesWebGui,
+           iconCls: 'action_openPhonesWebGui',
+           scope: this
+        });
+        
+        this.contextMenuItems = [action_resetHttpClientInfo, action_openPhonesWebGui];
+        
         Tine.Voipmanager.SnomPhoneGridPanel.superclass.initComponent.call(this);
     },
     
@@ -169,5 +185,55 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         return [
 
         ];
-    } 
+    },
+    
+    /**
+     * onclick handler for resetHttpClientInfo
+     */
+    resetHttpClientInfo: function(_button, _event) {
+        Ext.MessageBox.confirm('Confirm', 'Do you really want to send HTTP Client Info again?', function(_button){
+            if (_button == 'yes') {
+            
+                var phoneIds = [];
+                
+                var selectedRows = this.selectionModel.getSelections();
+                for (var i = 0; i < selectedRows.length; ++i) {
+                    phoneIds.push(selectedRows[i].id);
+                }
+                
+                phoneIds = Ext.util.JSON.encode(phoneIds);
+                
+                Ext.Ajax.request({
+                    url: 'index.php',
+                    params: {
+                        method: 'Voipmanager.resetHttpClientInfo',
+                        _phoneIds: phoneIds
+                    },
+                    text: 'sending HTTP Client Info to phone(s)...',
+                    success: function(_result, _request){
+                        // not really needed to reload store
+                        //Ext.getCmp('Voipmanager_Phones_Grid').getStore().reload();
+                    },
+                    failure: function(result, request){
+                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to send HTTP Client Info to the phone(s).');
+                    }
+                });
+            }
+        }, this);
+    },
+    
+    /**
+     * onclick handler for openPhonesWebGui
+     */
+    openPhonesWebGui: function(_button, _event) {
+        var phoneIp;
+                
+        var selectedRows = this.selectionModel.getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            phoneIp = selectedRows[i].get('ipaddress');
+            if (phoneIp && phoneIp.length >= 7) {
+                window.open('http://' + phoneIp, '_blank',  'width=1024,height=768');
+            }
+        }
+    }
 });
