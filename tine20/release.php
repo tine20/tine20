@@ -256,9 +256,12 @@ if ($opts->a || $opts->m) {
         'library/ExtJS/adapter/ext/ext-base.js',   
         'library/ExtJS/resources/css/ext-all.css',
         'library/ExtJS/resources/css/xtheme-gray.css',
-        'images/empty_photo.png',
+        //'images/empty_photo.png',
         'images/oxygen/16x16/actions/knewstuff.png'
     );
+    
+    exec("cd $tine20path; find images -depth 1 -type f -name *.png", $baseImages);
+    $files = array_merge($files, $baseImages);
     
     $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all.css');
     preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
