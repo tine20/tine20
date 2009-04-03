@@ -1,7 +1,6 @@
 Ext.namespace('Tine.Calendar');
 
 Ext.onReady(function(){
-    console.log(Ext.util.CSS.getRule('.CalendarIconCls'));
     Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDay() + '.png)');
 });
 
