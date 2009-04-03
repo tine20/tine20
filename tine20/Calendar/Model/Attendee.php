@@ -72,7 +72,7 @@ class Calendar_Model_Attendee extends Tinebase_Record_Abstract
         'seq'                  => array('allowEmpty' => true,  'Int'  ),
         */
         
-        'cal_event_id'         => array('allowEmpty' => false, 'Alnum'),
+        'cal_event_id'         => array('allowEmpty' => true,  'Alnum'),
         'user_id'              => array('allowEmpty' => false, 'Int'  ),
         'user_type'            => array('allowEmpty' => true,  'InArray' => array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE)),
         'role'                 => array('allowEmpty' => true,  'InArray' => array(self::ROLE_OPTIONAL, self::ROLE_REQUIRED)),

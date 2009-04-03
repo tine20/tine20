@@ -171,7 +171,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  array $_data
      * @return Tinebase_Record_Abstract
      */
-    protected function __rawDataToRecord($_rawData) {
+    protected function _rawDataToRecord($_rawData) {
         $event = parent::_rawDataToRecord($_rawData);
         
         $this->appendForeignRecordSetToRecord($event, 'attendee', 'id', 'cal_event_id', $this->_attendeeBackend);
@@ -221,6 +221,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $attendee = $_event->attendee instanceof Tinebase_Record_RecordSet ? 
             $_event->attendee : 
             new Tinebase_Record_RecordSet($this->_attendeeBackend->getModelName());
+        $attendee->cal_event_id = $_event->getId();
             
         $currentAttendee = $this->_attendeeBackend->getMultipleByProperty($_event->getId(), 'cal_event_id');
         

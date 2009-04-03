@@ -64,7 +64,8 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         $event = $this->_getEvent();
         $persistentEvent = $this->_backend->create($event);
                 
-        $this->assertEquals($persistentEvent->summary, $event->summary);
+        $this->assertEquals($event->summary, $persistentEvent->summary);
+        $this->_assertAttendee($event->attendee, $persistentEvent->attendee);
     }
     
     public function testUpdateEvent()
@@ -81,6 +82,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($persistentEvent->summary, $updatedEvent->summary);
         $this->assertTrue($persistentEvent->dtstart->equals($updatedEvent->dtstart));
+        $this->_assertAttendee($persistentEvent->attendee, $updatedEvent->attendee);
     }
     
     public function testGetEvent()
@@ -90,7 +92,8 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         
         $loadedEvent = $this->_backend->get($persistentEvent->getId());
         
-        $this->assertEquals($loadedEvent->summary, $event->summary);
+        $this->assertEquals($event->summary, $loadedEvent->summary);
+        $this->_assertAttendee($event->attendee, $loadedEvent->attendee);
     }
     
     public function testDeleteEvent()
@@ -99,9 +102,12 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         $persistentEvent = $this->_backend->create($event);
         
         $this->_backend->delete($persistentEvent->getId());
-        
+
+        $attendeeBackend = new Calendar_Backend_Sql_Attendee($this->_backend->getAdapter());
+        $this->assertEquals(0, count($attendeeBackend->getMultipleByProperty($persistentEvent->getId(), 'cal_event_id')));
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $loadedEvent = $this->_backend->get($persistentEvent->getId());
+        
     }
     
     public function testSearchEvents()
@@ -114,6 +120,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtstart'      => '2009-04-02 22:00:00',
                 'dtend'        => '2009-04-02 23:59:59',
                 'summary'      => 'non recur event ending before search period => should _not_ be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -122,6 +129,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtstart'      => '2009-04-02 23:30:00',
                 'dtend'        => '2009-04-03 00:30:00',
                 'summary'      => 'non recur event ending within search period => should be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -130,6 +138,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtstart'      => '2009-04-06 12:00:00',
                 'dtend'        => '2009-04-07 12:00:00',
                 'summary'      => 'non recur event completly within search period => should be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -138,6 +147,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtstart'      => '2009-04-10 23:30:00',
                 'dtend'        => '2009-04-11 00:30:00',
                 'summary'      => 'non recur event starting within search period => should be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -146,6 +156,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtstart'      => '2009-04-11 00:00:00',
                 'dtend'        => '2009-04-11 02:00:00',
                 'summary'      => 'non recur event starting after search period => should _not_ be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -155,6 +166,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtend'        => '2009-03-27 23:59:59',
                 'rrule'        => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-02 23:59:59',
                 'summary'      => 'recur event ending before search period => should _not_ be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -164,6 +176,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtend'        => '2009-03-27 23:59:59',
                 'rrule'        => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-05 23:59:59',
                 'summary'      => 'recur event ending within search period => should be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -173,6 +186,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtend'        => '2009-04-03 23:59:59',
                 'rrule'        => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-06 23:59:59',
                 'summary'      => 'recur event completly within search period => should be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -182,6 +196,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtend'        => '2009-04-03 23:59:59',
                 'rrule'        => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-12 23:59:59',
                 'summary'      => 'recur event starting within search period => should be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -191,6 +206,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
                 'dtend'        => '2009-04-11 02:00:00',
                 'rrule'        => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-15 02:00:00',
                 'summary'      => 'recur event starting after search period => should _not_ be found',
+                'attendee'     => $this->_getAttendee(),
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
@@ -220,6 +236,11 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
             } else {
                 $this->assertFalse(in_array($eventId, $eventsFoundIds), 'The following event is in the search result, but should not be :' . print_r($event->toArray(), true));
             }
+        }
+        
+        $expectedAttendee = $this->_getAttendee();
+        foreach ($eventsFound as $fetchedEvent) {
+            $this->_assertAttendee($expectedAttendee, $fetchedEvent->attendee);
         }
     }
     
@@ -340,6 +361,17 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * asserts attendee
+     *
+     * @param Tinebase_Record_RecordSet $_expected
+     * @param Tinebase_Record_RecordSet $_actual
+     */
+    protected function _assertAttendee($_expected, $_actual)
+    {
+        $this->assertEquals(count($_expected), count($_actual));
+    }
+    
+    /**
      * returns a simple event
      *
      * @return Calendar_Model_Event
@@ -351,6 +383,7 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
             'dtstart'     => '2009-03-25 06:00:00',
             'dtend'       => '2009-03-25 06:15:00',
             'description' => 'Earyly to bed and early to rise, makes a men helthy, welthy and wise',
+            'attendee'    => $this->_getAttendee(),
         
             'container_id' => $this->_testCalendar->getId(),
             'organizer'    => Tinebase_Core::getUser()->getId(),
@@ -358,6 +391,20 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         ));
         
         
+    }
+    
+    protected function _getAttendee()
+    {
+        return new Tinebase_Record_RecordSet('Calendar_Model_Attendee', array(
+            array(
+                'user_id'   => Tinebase_Core::getUser()->getId(),
+                'role'      => Calendar_Model_Attendee::ROLE_REQUIRED
+            ),
+            array(
+                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
+                'user_type' => Calendar_Model_Attendee::USERTYPE_GROUP
+            )
+        ));
     }
 }
     
