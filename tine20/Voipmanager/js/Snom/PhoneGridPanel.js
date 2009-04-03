@@ -232,7 +232,7 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         for (var i = 0; i < selectedRows.length; ++i) {
             phoneIp = selectedRows[i].get('ipaddress');
             if (phoneIp && phoneIp.length >= 7) {
-                window.open('http://' + phoneIp, '_blank',  'width=1024,height=768');
+                window.open('http://' + phoneIp, '_blank',  'width=1024,height=768,scrollbars=1');
             }
         }
     }
