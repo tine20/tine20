@@ -1,5 +1,10 @@
 Ext.namespace('Tine.Calendar');
 
+Ext.onReady(function(){
+    console.log(Ext.util.CSS.getRule('.CalendarIconCls'));
+    Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDay() + '.png)');
+});
+
 Date.Const = {
     msMINUTE : 60*1000,
 	msHOUR   : 60*60*1000,
