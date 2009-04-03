@@ -1704,7 +1704,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     
     /**
      * update to 0.21
-     * - remove constraint from config user table
+     * - alter result col in access log table
      */
     public function update_20()
     {
@@ -1998,5 +1998,73 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->addCol('accounts', $declaration);
         
         $this->setApplicationVersion('Tinebase', '0.24');
+    }
+
+    /**
+     * update to 0.25
+     * - rename config_user table to preferences
+     * - add/alter some fields
+     */
+    public function update_24()
+    {
+        $this->_backend->renameTable('config_user', 'preferences');
+
+        // delete unique key constraint
+        $this->_backend->dropIndex('preferences', 'application_id-name-user_id');
+        
+        // rename user_id to account id
+        $field = '<field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>false</notnull>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('preferences', $declaration, 'user_id');
+        
+        // add new fields
+        $field = '<field>
+                    <name>account_type</name>
+                    <type>enum</type>
+                    <value>user</value>
+                    <value>anyone</value>
+                    <value>group</value>
+                    <notnull>true</notnull>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('preferences', $declaration);
+
+        $field = '<field>
+                    <name>type</name>
+                    <type>enum</type>
+                    <value>normal</value>
+                    <value>default</value>
+                    <value>forced</value>
+                    <notnull>true</notnull>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('preferences', $declaration);
+        
+        // add unique key constraint again (app_id-name-account_id-account_type)
+        $index = '<index>
+                    <name>app_id-name-account_id-account_type</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                </index>';
+        $declaration = new Setup_Backend_Schema_Index_Xml($index);
+        $this->_backend->addIndex('preferences', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '0.25');
     }
 }

@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        replace Zend_Db_Table_Abstract with Zend_Db_Adapter_Abstract
+ * @todo        move preferences functions to Tinebase_Preferences
  */
 
 /**
@@ -63,7 +64,7 @@ class Tinebase_Config
     private function __construct() 
     {
         $this->_configTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config'));
-        $this->_configUserTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config_user'));
+        $this->_configUserTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'preferences'));
         
         $this->_configCustomFieldsTablename = SQL_TABLE_PREFIX . 'config_customfields';
         $this->_db = $this->_configTable->getAdapter();
@@ -147,7 +148,7 @@ class Tinebase_Config
         $select = $this->_configUserTable->select();
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId))
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name))
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('user_id') . ' = ?', $_userId));
+               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_userId));
         
         if (!$row = $this->_configTable->fetchRow($select)) {
             if ($_checkDefault) {
@@ -242,7 +243,7 @@ class Tinebase_Config
             $_config->setId($newId);
             
             $configArray = $_config->toArray();
-            $configArray['user_id'] = $_userId;
+            $configArray['account_id'] = $_userId;
             
             // create new
             $this->_configUserTable->insert($configArray); 

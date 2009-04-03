@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.24</version>
+    <version>0.25</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1547,8 +1547,8 @@
         </table>
 
         <table>
-            <name>config_user</name>
-            <version>2</version>
+            <name>preferences</name>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1557,10 +1557,18 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>user_id</name>
+                    <name>account_type</name>
+                    <type>enum</type>
+                    <value>anyone</value>
+                    <value>user</value>
+                    <value>group</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
                     <type>integer</type>
                     <unsigned>true</unsigned>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>application_id</name>
@@ -1578,7 +1586,15 @@
                     <name>value</name>
                     <type>text</type>
                     <notnull>true</notnull>
-                </field>                
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>enum</type>
+                    <value>normal</value>
+                    <value>default</value>
+                    <value>forced</value>
+                    <notnull>true</notnull>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1587,7 +1603,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>application_id-name-user_id</name>
+                    <name>app_id-name-account_id-account_type</name>
                     <unique>true</unique>
                     <field>
                         <name>application_id</name>
@@ -1596,7 +1612,10 @@
                         <name>name</name>
                     </field>
                     <field>
-                        <name>user_id</name>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
                     </field>
                 </index>
                 <index>
