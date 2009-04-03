@@ -65,22 +65,26 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             	id: 'id', 
             	header: this.app.i18n._('Id'), 
             	dataIndex: 'id', 
-            	width: 30, 
+            	width: 30,
+            	sortable: true,
             	hidden: true 
             },{ 
             	id: 'macaddress', 
             	header: this.app.i18n._('MAC address'), 
             	dataIndex: 'macaddress',
-            	width: 50 
+            	width: 50,
+            	sortable: true
             },{ 
             	id: 'description', 
             	header: this.app.i18n._('description'), 
-            	dataIndex: 'description' 
+            	dataIndex: 'description',
+            	sortable: true
             },{
                 id: 'location_id',
                 header: this.app.i18n._('Location'),
                 dataIndex: 'location_id',
                 width: 70,
+                sortable: true,
                 renderer: function(_data,_obj, _rec) {
                     return _rec.data.location;
                 }
@@ -89,6 +93,7 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                 header: this.app.i18n._('Template'),
                 dataIndex: 'template_id',
                 width: 70,
+                sortable: true,
                 renderer: function(_data,_obj, _rec) {
                     return _rec.data.template;
                 }                                
@@ -96,41 +101,48 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             	id: 'ipaddress', 
             	header: this.app.i18n._('IP Address'), 
             	dataIndex: 'ipaddress', 
-            	width: 50 
+            	width: 50,
+                sortable: true
             },{ 
             	id: 'current_software', 
             	header: this.app.i18n._('Software'), 
             	dataIndex: 'current_software', 
-            	width: 50 
+            	width: 50,
+            	sortable: true
             },{ 
             	id: 'current_model', 
             	header: this.app.i18n._('current model'), 
             	dataIndex: 'current_model', 
-            	width: 70, 
+            	width: 70,
+            	sortable: true,
             	hidden: true 
             },{ 
             	id: 'redirect_event', 
             	header: this.app.i18n._('redirect event'), 
             	dataIndex: 'redirect_event', 
-            	width: 70, 
+            	width: 70,
+            	sortable: true,
             	hidden: true 
             },{ 
             	id: 'redirect_number', 
             	header: this.app.i18n._('redirect number'), 
             	dataIndex: 'redirect_number', 
-            	width: 100, 
+            	width: 100,
+            	sortable: true,
             	hidden: true 
             },{ 
             	id: 'redirect_time', 
             	header: this.app.i18n._('redirect time'), 
             	dataIndex: 'redirect_time', 
-            	width: 25, 
+            	width: 25,
+            	sortable: true,
             	hidden: true 
             },{ 
             	id: 'settings_loaded_at', 
             	header: this.app.i18n._('settings loaded at'), 
             	dataIndex: 'settings_loaded_at', 
             	width: 100, 
+                sortable: true,
             	hidden: true,
                 renderer: Tine.Tinebase.common.dateTimeRenderer 
             },{ 
@@ -138,6 +150,7 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             	header: this.app.i18n._('last modified'), 
             	dataIndex: 'last_modified_time', 
             	width: 100, 
+                sortable: true,
             	hidden: true,
                 renderer: Tine.Tinebase.common.dateTimeRenderer 
            	}];
