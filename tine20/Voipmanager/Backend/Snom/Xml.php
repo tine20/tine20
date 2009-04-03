@@ -226,6 +226,7 @@ class Voipmanager_Backend_Snom_Xml
             $line['user_host']     = $location->registrar;
             $line['user_mailbox']  = $asteriskLine->mailbox;
             $line['user_pass']     = $asteriskLine->secret;
+            $line['user_server_type'] = 'asterisk';
             
             $lines[$snomLine->linenumber] = $line;
         }
