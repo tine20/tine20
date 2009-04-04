@@ -77,23 +77,23 @@ msgstr ""
 msgid "IN-PROCESS"
 msgstr ""
 
-#: js/Tasks.js:74
+#: js/Tasks.js:75
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Tasks.js:74
+#: js/Tasks.js:75
 msgid "Tasks"
 msgstr ""
 
-#: js/Tasks.js:78
+#: js/Tasks.js:79
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Tasks.js:78
+#: js/Tasks.js:79
 msgid "to do lists"
 msgstr ""
 

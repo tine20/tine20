@@ -13,38 +13,38 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:116
-msgid "Report bugs"
-msgstr "Рапорт на грешките"
-
-#: Acl/Rights.php:117
-msgid "Report bugs to tine20.org directly when they occour"
-msgstr "Директен рапорт на настъпилите грешките към tine20.org"
-
-#: Acl/Rights.php:120
-msgid "Check version"
-msgstr "Провери версия"
-
-#: Acl/Rights.php:121
-msgid "Check tine20.org for new versions"
-msgstr "Провери tine20.org за нови версии"
-
-#: Application/Rights/Abstract.php:56
+#: Acl/Rights/Abstract.php:56
 msgid "admin"
 msgstr "Администратор"
 
-#: Application/Rights/Abstract.php:57
+#: Acl/Rights/Abstract.php:57
 msgid "admin right description"
 msgstr "oписание на администраторските права"
 
-#: Application/Rights/Abstract.php:60
+#: Acl/Rights/Abstract.php:60
 msgid "run"
 msgstr "изпълни"
 
-#: Application/Rights/Abstract.php:61
+#: Acl/Rights/Abstract.php:61
 msgid "run right description"
 msgstr ""
 "За да бъде операцията изпълнена. Вие се нуждаете от администраторски права."
+
+#: Acl/Rights.php:115
+msgid "Report bugs"
+msgstr "Рапорт на грешките"
+
+#: Acl/Rights.php:116
+msgid "Report bugs to tine20.org directly when they occour"
+msgstr "Директен рапорт на настъпилите грешките към tine20.org"
+
+#: Acl/Rights.php:119
+msgid "Check version"
+msgstr "Провери версия"
+
+#: Acl/Rights.php:120
+msgid "Check tine20.org for new versions"
+msgstr "Провери tine20.org за нови версии"
 
 #: Export/Ods.php:197
 #, fuzzy
@@ -67,7 +67,7 @@ msgstr "Обработен/създаден от "
 msgid "Activities"
 msgstr "Операции"
 
-#: Frontend/Http.php:271 js/tineInit.js:246
+#: Frontend/Http.php:271 js/tineInit.js:248
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
@@ -101,7 +101,7 @@ msgid_plural "{0} workdays"
 msgstr[0] "{0} работен ден"
 msgstr[1] "{0} работни дни"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:360
+#: js/ExceptionDialog.js:34 js/MainScreen.js:364
 #: js/widgets/AccountpickerPanel.js:149
 #: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:161
 #: js/widgets/EditRecord.js:136
@@ -157,7 +157,7 @@ msgstr "Вход"
 msgid "Register"
 msgstr "Регистрация"
 
-#: js/Login.js:61 js/Login.js:95
+#: js/Login.js:61 js/Login.js:97
 msgid "Please enter your login data"
 msgstr "Моля задайте Вашите входни данни."
 
@@ -165,15 +165,15 @@ msgstr "Моля задайте Вашите входни данни."
 msgid "Username"
 msgstr "Потребителско име"
 
-#: js/Login.js:84
+#: js/Login.js:85
 msgid "Password"
 msgstr "Парола"
 
-#: js/Login.js:123
+#: js/Login.js:125
 msgid "Logging you in..."
 msgstr "Вашите входни данни се обработват..."
 
-#: js/Login.js:123 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:125 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/container/ContainerTree.js:353
 #: js/widgets/container/ContainerTree.js:381
 #: js/widgets/container/ContainerTree.js:417
@@ -181,19 +181,19 @@ msgstr "Вашите входни данни се обработват..."
 msgid "Please wait"
 msgstr "Моля изчакайте"
 
-#: js/Login.js:135
+#: js/Login.js:137
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Влизането е успешно. Tine 2.0 ще бъде заредена..."
 
-#: js/Login.js:135 js/MainScreen.js:438
+#: js/Login.js:137 js/MainScreen.js:442
 msgid "Please wait!"
 msgstr "Моля изчакайте!"
 
-#: js/Login.js:141
+#: js/Login.js:143
 msgid "Login failure"
 msgstr "Неуспешен вход"
 
-#: js/Login.js:142
+#: js/Login.js:144
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Вашето(-ите) потребителско име или(и) парола е (са) грешни!!!"
 
@@ -221,70 +221,70 @@ msgstr "Часова зона"
 msgid "Language"
 msgstr "Език"
 
-#: js/MainScreen.js:172
+#: js/MainScreen.js:176
 msgid "Change password"
 msgstr "Смени парола"
 
-#: js/MainScreen.js:178
+#: js/MainScreen.js:182
 msgid "Install Google Gears"
 msgstr ""
 "Инсталира Гоогел-Гиерс (Google Gears - помощни програми за работа в off line)"
 
-#: js/MainScreen.js:184
+#: js/MainScreen.js:188
 msgid "Logout"
 msgstr "Изход"
 
-#: js/MainScreen.js:185
+#: js/MainScreen.js:189
 msgid "Logout from Tine 2.0"
 msgstr "Излизане от Tine 2.0"
 
-#: js/MainScreen.js:324
+#: js/MainScreen.js:328
 msgid "Change Password For \"{0}\""
 msgstr "Сменя парола за \"{0}\""
 
-#: js/MainScreen.js:348
+#: js/MainScreen.js:352
 msgid "Old Password"
 msgstr "Стара парола"
 
-#: js/MainScreen.js:352
+#: js/MainScreen.js:356
 msgid "New Password"
 msgstr "Нова парола"
 
-#: js/MainScreen.js:356
+#: js/MainScreen.js:360
 msgid "Repeat new Password"
 msgstr "Повтори новата парола"
 
-#: js/MainScreen.js:366 js/widgets/AccountpickerPanel.js:141
+#: js/MainScreen.js:370 js/widgets/AccountpickerPanel.js:141
 #: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:144
 #: js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:375
+#: js/MainScreen.js:379
 msgid "Please Wait!"
 msgstr "Моля изчакайте"
 
-#: js/MainScreen.js:376
+#: js/MainScreen.js:380
 msgid "changing password..."
 msgstr "сменя парола..."
 
-#: js/MainScreen.js:387
+#: js/MainScreen.js:391
 msgid "Success"
 msgstr "Успех"
 
-#: js/MainScreen.js:388
+#: js/MainScreen.js:392
 msgid "Your password has been changed."
 msgstr "Вашата парола е сменена."
 
-#: js/MainScreen.js:394 js/MainScreen.js:404
+#: js/MainScreen.js:398 js/MainScreen.js:408
 msgid "Failure"
 msgstr "Грешка"
 
-#: js/MainScreen.js:405
+#: js/MainScreen.js:409
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новито пароли не съвпадат. Моля задай повторно"
 
-#: js/MainScreen.js:423
+#: js/MainScreen.js:427
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -292,17 +292,17 @@ msgstr ""
 "Инсталирането на Гиерс (Gears) ще провери актуалното състояние на Tine 2.0 и "
 "ще кочи всички необходими полета  на вашия компютър."
 
-#: js/MainScreen.js:436 js/widgets/app/GridPanel.js:506
+#: js/MainScreen.js:440 js/widgets/app/GridPanel.js:518
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
 msgstr "Потвърди"
 
-#: js/MainScreen.js:436
+#: js/MainScreen.js:440
 msgid "Are you sure you want to logout?"
 msgstr "Наистина ли желаете да излезете?"
 
-#: js/MainScreen.js:438
+#: js/MainScreen.js:442
 msgid "Logging you out..."
 msgstr "Подготвя излизане..."
 
@@ -318,11 +318,11 @@ msgid_plural "to do lists"
 msgstr[0] "списък със задачи"
 msgstr[1] "списъка със задачи"
 
-#: js/tineInit.js:229
+#: js/tineInit.js:231
 msgid "Connection lost, please check your network!"
 msgstr "Връзка е прекъсната. Моля проверете връзката Ви с интернет!"
 
-#: js/tineInit.js:237
+#: js/tineInit.js:239
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -330,24 +330,24 @@ msgstr ""
 "За съжаление сървъра не може да отговори на Вашето запитване. Моля проверете "
 "Вашата мрежа или се свържете с Вашият администратор."
 
-#: js/tineInit.js:247
+#: js/tineInit.js:249
 msgid "Your session timed out. You need to login again."
 msgstr ""
 "Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
 
-#: js/tineInit.js:260
+#: js/tineInit.js:262
 msgid "Insufficient Rights"
 msgstr "Липса на права"
 
-#: js/tineInit.js:261
+#: js/tineInit.js:263
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "За съжаление Вие нямате необходимите за това права."
 
-#: js/tineInit.js:270
+#: js/tineInit.js:272
 msgid "Concurrent Updates"
 msgstr "Конкурентно актуализиране"
 
-#: js/tineInit.js:271
+#: js/tineInit.js:273
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -603,31 +603,31 @@ msgstr ""
 "Няма {0} намерени. Моля оритайте до промените Вашите критерий на търсене, "
 "опции на показване или {1} в които търсите."
 
-#: js/widgets/app/GridPanel.js:491
+#: js/widgets/app/GridPanel.js:503
 msgid "Not Allowed"
 msgstr "Непозволено"
 
-#: js/widgets/app/GridPanel.js:492
+#: js/widgets/app/GridPanel.js:504
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вие нямате необходите права да изтриете всички страници наведнъж"
 
-#: js/widgets/app/GridPanel.js:504
+#: js/widgets/app/GridPanel.js:516
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Наистина ли желаете да изтриете записа"
 msgstr[1] "Наистина ли желаете да изтриете записите"
 
-#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:392
+#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:392
 msgid "Deleting {0}"
 msgstr "Изтрива {0}"
 
-#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:366
+#: js/widgets/app/GridPanel.js:533 js/widgets/EditDialog.js:366
 #: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Грешка"
 
-#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:402
+#: js/widgets/app/GridPanel.js:533 js/widgets/EditDialog.js:402
 msgid "Could not delete {0}."
 msgstr "Не може да изтрие {0}."
 
@@ -1156,51 +1156,51 @@ msgstr ""
 msgid "Please consider updating!"
 msgstr "Внимание - актуализира!"
 
-#: Notes.php:295
+#: Notes.php:329
 msgid "by"
 msgstr "от"
 
-#: Notes.php:301
+#: Notes.php:335
 msgid "Changed fields:"
 msgstr "Променени полета:"
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2084
 msgid "note"
 msgstr "бележка"
 
-#: Setup/setup.xml:2070
+#: Setup/setup.xml:2089
 msgid "default note type"
 msgstr "отсъстващ тип на бележка"
 
-#: Setup/setup.xml:2096
+#: Setup/setup.xml:2115
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:2101
+#: Setup/setup.xml:2120
 msgid "telephone call"
 msgstr "телефонно позвъняване"
 
-#: Setup/setup.xml:2127
+#: Setup/setup.xml:2146
 msgid "email"
 msgstr "Имейл"
 
-#: Setup/setup.xml:2132
+#: Setup/setup.xml:2151
 msgid "email contact"
 msgstr "Имейл контакт"
 
-#: Setup/setup.xml:2158
+#: Setup/setup.xml:2177
 msgid "created"
 msgstr "създаден"
 
-#: Setup/setup.xml:2163
+#: Setup/setup.xml:2182
 msgid "record created"
 msgstr "създадена документация"
 
-#: Setup/setup.xml:2189
+#: Setup/setup.xml:2208
 msgid "changed"
 msgstr "променен"
 
-#: Setup/setup.xml:2194
+#: Setup/setup.xml:2213
 msgid "record changed"
 msgstr "променена документация"
 

@@ -1,0 +1,739 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Admin\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2009-03-31 08:55+0800\n"
+"Last-Translator: Frank <frank.cchuang@gmail.com>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: TAIWAN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: Acl/Rights.php:162
+msgid "manage access log"
+msgstr "管理存取紀錄"
+
+#: Acl/Rights.php:163
+msgid "delete access log entries"
+msgstr "清空紀錄檔"
+
+#: Acl/Rights.php:166
+msgid "manage accounts"
+msgstr "帳號管理"
+
+#: Acl/Rights.php:167
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr "編修帳號, 群組, 群組成員, 變更使用者密碼"
+
+#: Acl/Rights.php:170
+msgid "manage applications"
+msgstr "應用程式管理"
+
+#: Acl/Rights.php:171
+msgid "enable and disable applications, edit application settings"
+msgstr "啟用或關閉應用程式或編輯設定"
+
+#: Acl/Rights.php:174
+msgid "manage roles"
+msgstr "角色管理"
+
+#: Acl/Rights.php:175
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr "新增編輯角色, 加入成員或新增應用程式權限給角色"
+
+#: Acl/Rights.php:178
+msgid "manage shared tags"
+msgstr "標籤(tags)分享管理"
+
+#: Acl/Rights.php:179
+msgid "add, delete and edit shared tags"
+msgstr "新增, 修改, 刪除標籤(tags)分享"
+
+#: Acl/Rights.php:182
+msgid "view access log"
+msgstr "檢視紀錄檔"
+
+#: Acl/Rights.php:183
+msgid "view access log list"
+msgstr "檢視紀錄檔列表"
+
+#: Acl/Rights.php:186
+msgid "view accounts"
+msgstr "檢視帳號"
+
+#: Acl/Rights.php:187
+msgid "view accounts list and details"
+msgstr "檢視帳號列表和明細"
+
+#: Acl/Rights.php:190
+msgid "view applications"
+msgstr "檢視應用程式"
+
+#: Acl/Rights.php:191
+msgid "view applications list and details"
+msgstr "檢視應用程式列表和明細"
+
+#: Acl/Rights.php:194
+msgid "view roles"
+msgstr "檢視角色"
+
+#: Acl/Rights.php:195
+msgid "view roles list and details"
+msgstr "檢視角色列表和明細"
+
+#: js/Admin.js:19 js/Users.js:486
+#, fuzzy
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "帳號"
+
+#: js/Admin.js:31
+msgid "Groups"
+msgstr "群組"
+
+#: js/Admin.js:43
+msgid "Computers"
+msgstr ""
+
+#: js/Admin.js:55
+msgid "Applications"
+msgstr "應用程式"
+
+#: js/Admin.js:67
+msgid "Access Log"
+msgstr "存取記錄"
+
+#: js/Admin.js:79
+msgid "Shared Tags"
+msgstr "分享標記"
+
+#: js/Admin.js:91
+msgid "Roles"
+msgstr "角色"
+
+#: js/Admin.js:126
+msgid "Admin"
+msgstr "管理者"
+
+#: js/Admin.js:267 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Users.js:187
+msgid "Confirm"
+msgstr "再確認"
+
+#: js/Admin.js:267
+msgid "Do you really want to delete the selected access log entries?"
+msgstr ""
+
+#: js/Admin.js:382
+msgid "delete entry"
+msgstr ""
+
+#: js/Admin.js:383
+msgid "select all"
+msgstr "全選"
+
+#: js/Admin.js:388 js/Admin.js:786 js/Groups.js:111 js/Roles.js:112
+#: js/Tags.js:103 js/Users.js:225
+msgid "enter searchfilter"
+msgstr ""
+
+#: js/Admin.js:418
+msgid "Display from:"
+msgstr ""
+
+#: js/Admin.js:422
+msgid "to:"
+msgstr ""
+
+#: js/Admin.js:427 js/Admin.js:803 js/Groups.js:131 js/Roles.js:132
+#: js/Tags.js:123 js/Users.js:241
+msgid "Search:"
+msgstr "尋找:"
+
+#: js/Admin.js:500
+msgid "invalid password"
+msgstr "密碼無效"
+
+#: js/Admin.js:504
+msgid "ambiguous username"
+msgstr ""
+
+#: js/Admin.js:508
+msgid "user not found"
+msgstr "無此帳號"
+
+#: js/Admin.js:512
+msgid "failure"
+msgstr "失敗"
+
+#: js/Admin.js:516
+msgid "success"
+msgstr "成功"
+
+#: js/Admin.js:537
+msgid "Displaying access log entries {0} - {1} of {2}"
+msgstr ""
+
+#: js/Admin.js:538
+msgid "No access log entries to display"
+msgstr ""
+
+#: js/Admin.js:542
+msgid "Session ID"
+msgstr ""
+
+#: js/Admin.js:543 js/UserEditDialog.js:101
+msgid "Login Name"
+msgstr "登入帳號"
+
+#: js/Admin.js:544 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
+#: js/SambaMachineGrid.js:86 js/Tags.js:165
+msgid "Name"
+msgstr "名字"
+
+#: js/Admin.js:545
+msgid "IP Address"
+msgstr "IP 位址"
+
+#: js/Admin.js:546
+msgid "Login Time"
+msgstr "登入時間"
+
+#: js/Admin.js:547
+msgid "Logout Time"
+msgstr "登出時間"
+
+#: js/Admin.js:548
+msgid "Account ID"
+msgstr ""
+
+#: js/Admin.js:549
+msgid "Result"
+msgstr ""
+
+#: js/Admin.js:779
+msgid "enable application"
+msgstr "啟用應用程式"
+
+#: js/Admin.js:780
+msgid "disable application"
+msgstr "關閉應用程式"
+
+#: js/Admin.js:781
+msgid "settings"
+msgstr "設定"
+
+#: js/Admin.js:832 js/UserEditDialog.js:89
+msgid "disabled"
+msgstr "關閉"
+
+#: js/Admin.js:835 js/UserEditDialog.js:89
+msgid "enabled"
+msgstr "啟用"
+
+#: js/Admin.js:839
+msgid "unknown status ({0})"
+msgstr ""
+
+#: js/Admin.js:868
+msgid "Displaying application {0} - {1} of {2}"
+msgstr ""
+
+#: js/Admin.js:869
+msgid "No applications to display"
+msgstr "無此應用程式顯示"
+
+#: js/Admin.js:873
+msgid "order"
+msgstr ""
+
+#: js/Admin.js:874
+msgid "name"
+msgstr ""
+
+#: js/Admin.js:875
+msgid "status"
+msgstr "狀態"
+
+#: js/Admin.js:876
+msgid "version"
+msgstr "版本"
+
+#: js/Groups.js:47
+msgid "Do you really want to delete the selected groups?"
+msgstr "確認刪除已選的群組嗎?"
+
+#: js/Groups.js:64
+msgid "Deleting group(s)..."
+msgstr "正在刪除群組..."
+
+#: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:207
+msgid "Failed"
+msgstr "失敗"
+
+#: js/Groups.js:69 js/Groups.js:406
+msgid "Some error occurred while trying to delete the group."
+msgstr ""
+
+#: js/Groups.js:82
+msgid "add group"
+msgstr "新增群組"
+
+#: js/Groups.js:90
+msgid "edit group"
+msgstr "編輯群組"
+
+#: js/Groups.js:98
+msgid "delete group"
+msgstr "刪除群組"
+
+#: js/Groups.js:169
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Displaying groups {0} - {1} of {2}"
+
+#: js/Groups.js:170 js/Groups.js:221
+msgid "No groups to display"
+msgstr "無此群組"
+
+#: js/Groups.js:175 js/Roles.js:176 js/SambaMachineGrid.js:80 js/Users.js:294
+msgid "ID"
+msgstr ""
+
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:654
+#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:92 js/Tags.js:166
+#: js/Tags.js:548
+msgid "Description"
+msgstr "描述"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Please wait"
+msgstr "請稍後"
+
+#: js/Groups.js:343 js/Roles.js:399 js/Tags.js:297
+msgid "Updating Memberships"
+msgstr "更新會員資料"
+
+#: js/Groups.js:378
+msgid "Could not save group."
+msgstr "無法儲存群組"
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346
+msgid "Errors"
+msgstr "錯誤"
+
+#: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/Groups.js:398
+msgid "Deleting group..."
+msgstr "正在刪除群組..."
+
+#: js/Groups.js:520
+msgid "Group Members"
+msgstr "群組成員"
+
+#: js/Groups.js:551
+msgid "Group Name"
+msgstr "群組名稱"
+
+#: js/Groups.js:594 js/Users.js:393
+msgid "add account"
+msgstr "新增帳號"
+
+#: js/Groups.js:601
+msgid "remove account"
+msgstr "移除帳號"
+
+#: js/Groups.js:619
+msgid "Add new group"
+msgstr "加入新群組"
+
+#: js/Groups.js:621
+msgid "Edit Group \"{0}\""
+msgstr "修改群組 \"{0}\""
+
+#: js/Roles.js:48
+msgid "Do you really want to delete the selected roles?"
+msgstr "確認刪除已選的角色嗎?"
+
+#: js/Roles.js:65
+msgid "Deleting role(s)..."
+msgstr "正在刪除角色..."
+
+#: js/Roles.js:70 js/Roles.js:467
+msgid "Some error occurred while trying to delete the role."
+msgstr ""
+
+#: js/Roles.js:83
+msgid "add role"
+msgstr "新增角色"
+
+#: js/Roles.js:91
+msgid "edit role"
+msgstr "編輯角色"
+
+#: js/Roles.js:99
+msgid "delete role"
+msgstr "刪除角色"
+
+#: js/Roles.js:170
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr ""
+
+#: js/Roles.js:171 js/Roles.js:222
+msgid "No roles to display"
+msgstr "無此角色"
+
+#: js/Roles.js:439
+msgid "Could not save role."
+msgstr "無法儲存角色"
+
+#: js/Roles.js:459
+msgid "Deleting role..."
+msgstr "正在刪除角色..."
+
+#: js/Roles.js:594
+msgid "Role members"
+msgstr "角色成員"
+
+#: js/Roles.js:604
+msgid "Members"
+msgstr "成員"
+
+#: js/Roles.js:616 js/Tags.js:564
+msgid "Rights"
+msgstr "權限"
+
+#: js/Roles.js:646
+msgid "Role Name"
+msgstr "角色名稱"
+
+#: js/Roles.js:687
+msgid "Loading Role..."
+msgstr "角色載入中..."
+
+#: js/Roles.js:687 js/Tags.js:585
+msgid "Please Wait"
+msgstr "請稍後"
+
+#: js/Roles.js:727
+msgid "Add New Role"
+msgstr "加入新角色"
+
+#: js/Roles.js:729
+msgid "Edit Role \"{0}\""
+msgstr "編輯角色 \"{0}\""
+
+#: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
+msgid "Computer Name"
+msgstr ""
+
+#: js/SambaMachineModel.js:40
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] ""
+
+#: js/Tags.js:41
+msgid "Do you really want to delete the selected tags?"
+msgstr "確認刪除已選的標籤嗎?"
+
+#: js/Tags.js:58
+msgid "Deleting tag(s)..."
+msgstr "正在刪除標籤..."
+
+#: js/Tags.js:73
+msgid "add tag"
+msgstr "新增標籤"
+
+#: js/Tags.js:81
+msgid "edit tag"
+msgstr "編輯標籤"
+
+#: js/Tags.js:89
+msgid "delete tag"
+msgstr "刪除標籤"
+
+#: js/Tags.js:158
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr ""
+
+#: js/Tags.js:159 js/Tags.js:210
+msgid "No tags to display"
+msgstr "無此標記顯示"
+
+#: js/Tags.js:164 js/Tags.js:489
+msgid "Color"
+msgstr ""
+
+#: js/Tags.js:341
+msgid "Could not save tag."
+msgstr "無法儲存標記"
+
+#: js/Tags.js:359
+msgid "Deleting tag..."
+msgstr "正在刪除標記..."
+
+#: js/Tags.js:449
+msgid "Allowed Contexts"
+msgstr ""
+
+#: js/Tags.js:464
+msgid "Account Rights"
+msgstr "帳號權限"
+
+#: js/Tags.js:469
+msgid "View"
+msgstr "檢視"
+
+#: js/Tags.js:474
+msgid "Use"
+msgstr ""
+
+#: js/Tags.js:541
+msgid "Tag Name"
+msgstr "標籤名稱"
+
+#: js/Tags.js:567
+msgid "Context"
+msgstr "內容"
+
+#: js/Tags.js:585
+msgid "Loading Tag..."
+msgstr "載入標籤中..."
+
+#: js/Tags.js:616
+msgid "Add New Tag"
+msgstr "加入新標籤"
+
+#: js/Tags.js:618
+msgid "Edit Tag \"{0}\""
+msgstr "編輯標籤 \"{0}\""
+
+#: js/UserEditDialog.js:62
+msgid "Account"
+msgstr ""
+
+#: js/UserEditDialog.js:78
+msgid "First Name"
+msgstr "名字"
+
+#: js/UserEditDialog.js:83 js/Users.js:295
+msgid "Status"
+msgstr "狀態"
+
+#: js/UserEditDialog.js:92
+msgid "Last Name"
+msgstr "姓氏"
+
+#: js/UserEditDialog.js:97 js/Users.js:304
+msgid "Expires"
+msgstr "過期"
+
+#: js/UserEditDialog.js:99 js/UserEditDialog.js:134 js/UserEditDialog.js:202
+msgid "never"
+msgstr "從不"
+
+#: js/UserEditDialog.js:107 js/Users.js:301
+msgid "Last login at"
+msgstr "最後登入於"
+
+#: js/UserEditDialog.js:109 js/UserEditDialog.js:122
+msgid "don't know"
+msgstr ""
+
+#: js/UserEditDialog.js:109 js/UserEditDialog.js:122 js/UserEditDialog.js:180
+msgid "never logged in"
+msgstr "從未登入過"
+
+#: js/UserEditDialog.js:113
+msgid "Password"
+msgstr "密碼"
+
+#: js/UserEditDialog.js:116 js/UserEditDialog.js:128
+msgid "no password set"
+msgstr "未設定密碼"
+
+#: js/UserEditDialog.js:120 js/Users.js:302
+msgid "Last login from"
+msgstr "最後登入從"
+
+#: js/UserEditDialog.js:125
+msgid "Password again"
+msgstr "確認密碼"
+
+#: js/UserEditDialog.js:132
+msgid "Password set"
+msgstr "設定密碼"
+
+#: js/UserEditDialog.js:138
+msgid "Primary group"
+msgstr "主要群組"
+
+#: js/UserEditDialog.js:145
+msgid "Emailaddress"
+msgstr "電子郵件"
+
+#: js/UserEditDialog.js:149
+msgid "Home Directory"
+msgstr ""
+
+#: js/UserEditDialog.js:153
+msgid "Login Shell"
+msgstr ""
+
+#: js/UserEditDialog.js:160
+msgid "Fileserver"
+msgstr ""
+
+#: js/UserEditDialog.js:173
+msgid "Home Drive"
+msgstr ""
+
+#: js/UserEditDialog.js:178
+msgid "Logon Time"
+msgstr ""
+
+#: js/UserEditDialog.js:184
+msgid "Home Path"
+msgstr ""
+
+#: js/UserEditDialog.js:189
+msgid "Logoff Time"
+msgstr ""
+
+#: js/UserEditDialog.js:191
+msgid "never logged off"
+msgstr ""
+
+#: js/UserEditDialog.js:195
+msgid "Profile Path"
+msgstr ""
+
+#: js/UserEditDialog.js:200
+msgid "Password Last Set"
+msgstr ""
+
+#: js/UserEditDialog.js:206
+msgid "Logon Script"
+msgstr ""
+
+#: js/UserEditDialog.js:210
+msgid "Password Can Change"
+msgstr ""
+
+#: js/UserEditDialog.js:212 js/UserEditDialog.js:216 js/UserEditDialog.js:220
+msgid "not set"
+msgstr ""
+
+#: js/UserEditDialog.js:214
+msgid "Password Must Change"
+msgstr ""
+
+#: js/UserEditDialog.js:218
+msgid "Kick Off Time"
+msgstr ""
+
+#: js/Users.js:162
+msgid "Set new password"
+msgstr "設定新密碼"
+
+#: js/Users.js:162
+msgid "Please enter the new password:"
+msgstr "請輸入新密碼"
+
+#: js/Users.js:187
+msgid "Do you really want to delete the selected account(s)?"
+msgstr ""
+
+#: js/Users.js:202
+msgid "Deleting account(s)..."
+msgstr "正在刪除帳號..."
+
+#: js/Users.js:207
+msgid "Some error occurred while trying to delete the account(s)."
+msgstr ""
+
+#: js/Users.js:286
+msgid "Displaying accounts {0} - {1} of {2}"
+msgstr ""
+
+#: js/Users.js:287
+msgid "No accounts to display"
+msgstr "無此帳號"
+
+#: js/Users.js:296
+msgid "Displayname"
+msgstr "顯示暱稱"
+
+#: js/Users.js:297
+msgid "Loginname"
+msgstr "登入帳號"
+
+#: js/Users.js:298
+msgid "Last name"
+msgstr "姓氏"
+
+#: js/Users.js:299
+msgid "First name"
+msgstr "名字"
+
+#: js/Users.js:300
+msgid "Email"
+msgstr "電子郵件"
+
+#: js/Users.js:303
+msgid "Password changed"
+msgstr "變更密碼"
+
+#: js/Users.js:401
+msgid "edit account"
+msgstr "編輯帳號"
+
+#: js/Users.js:409
+msgid "delete account"
+msgstr "刪除帳號"
+
+#: js/Users.js:417
+msgid "enable account"
+msgstr "啟用帳號"
+
+#: js/Users.js:426
+msgid "disable account"
+msgstr "關閉帳號"
+
+#: js/Users.js:435
+msgid "reset password"
+msgstr "重設密碼"
+
+#: js/Users.js:512
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] ""
+
+#~ msgid "Deleting account..."
+#~ msgstr "正在刪除帳號中..."
+
+#~ msgid "Some error occurred while trying to delete the account."
+#~ msgstr "刪除帳號時, 系統發生錯誤"
+
+#~ msgid "Passwords do not match!"
+#~ msgstr "密碼錯誤"
+
+#~ msgid "Saving User Account"
+#~ msgstr "正在儲存使用者帳號"
+
+#~ msgid "Could not save user account."
+#~ msgstr "無法儲存使用者帳號"
+
+#~ msgid "Add New User Account"
+#~ msgstr "加入新的使用者帳號"
+
+#~ msgid "Edit User Account \"{0}\""
+#~ msgstr "編輯使用者帳號 \"{0}\""

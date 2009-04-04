@@ -96,7 +96,7 @@ msgstr "Pokaż zamknięte"
 msgid "IN-PROCESS"
 msgstr "W PRZETWARZANIU"
 
-#: js/Tasks.js:74
+#: js/Tasks.js:75
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -104,12 +104,12 @@ msgstr[0] "Zadania"
 msgstr[1] "Zadania"
 msgstr[2] "Zadania"
 
-#: js/Tasks.js:74
+#: js/Tasks.js:75
 #, fuzzy
 msgid "Tasks"
 msgstr "Zadania"
 
-#: js/Tasks.js:78
+#: js/Tasks.js:79
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -117,7 +117,7 @@ msgstr[0] "Lista to do"
 msgstr[1] "Lista to do"
 msgstr[2] "Lista to do"
 
-#: js/Tasks.js:78
+#: js/Tasks.js:79
 msgid "to do lists"
 msgstr "Listy to do"
 

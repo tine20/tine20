@@ -93,7 +93,7 @@ msgstr "zobrazit role"
 msgid "view roles list and details"
 msgstr "zobrazit podrobný seznam rolí"
 
-#: js/Admin.js:19 js/Users.js:457
+#: js/Admin.js:19 js/Users.js:486
 #, fuzzy
 msgid "User"
 msgid_plural "Users"
@@ -106,166 +106,170 @@ msgid "Groups"
 msgstr "Skupiny"
 
 #: js/Admin.js:43
+msgid "Computers"
+msgstr ""
+
+#: js/Admin.js:55
 msgid "Applications"
 msgstr "Aplikace"
 
-#: js/Admin.js:55
+#: js/Admin.js:67
 msgid "Access Log"
 msgstr "Přístupový log"
 
-#: js/Admin.js:67
+#: js/Admin.js:79
 msgid "Shared Tags"
 msgstr "Sdílené štítky"
 
-#: js/Admin.js:79
+#: js/Admin.js:91
 msgid "Roles"
 msgstr "Role"
 
-#: js/Admin.js:114
+#: js/Admin.js:126
 msgid "Admin"
 msgstr "Administrátor"
 
-#: js/Admin.js:251 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
-#: js/Users.js:166
+#: js/Admin.js:267 js/Groups.js:47 js/Roles.js:48 js/Tags.js:41
+#: js/Users.js:187
 msgid "Confirm"
 msgstr "Potvrdit"
 
-#: js/Admin.js:251
+#: js/Admin.js:267
 msgid "Do you really want to delete the selected access log entries?"
 msgstr "Opravdu chcete smazat vybrané záznamy přístupového logu?"
 
-#: js/Admin.js:366
+#: js/Admin.js:382
 msgid "delete entry"
 msgstr "smazat záznam"
 
-#: js/Admin.js:367
+#: js/Admin.js:383
 msgid "select all"
 msgstr "vybrat vše"
 
-#: js/Admin.js:372 js/Admin.js:770 js/Groups.js:111 js/Roles.js:112
-#: js/Tags.js:103 js/Users.js:204
+#: js/Admin.js:388 js/Admin.js:786 js/Groups.js:111 js/Roles.js:112
+#: js/Tags.js:103 js/Users.js:225
 msgid "enter searchfilter"
 msgstr "zadejte hledaný výraz"
 
-#: js/Admin.js:402
+#: js/Admin.js:418
 msgid "Display from:"
 msgstr "Zobrazit od:"
 
-#: js/Admin.js:406
+#: js/Admin.js:422
 msgid "to:"
 msgstr "do:"
 
-#: js/Admin.js:411 js/Admin.js:787 js/Groups.js:131 js/Roles.js:132
-#: js/Tags.js:123 js/Users.js:220
+#: js/Admin.js:427 js/Admin.js:803 js/Groups.js:131 js/Roles.js:132
+#: js/Tags.js:123 js/Users.js:241
 msgid "Search:"
 msgstr "Hledat:"
 
-#: js/Admin.js:484
+#: js/Admin.js:500
 msgid "invalid password"
 msgstr "neplatné heslo"
 
-#: js/Admin.js:488
+#: js/Admin.js:504
 msgid "ambiguous username"
 msgstr "nejednoznačné uživatelské jméno"
 
-#: js/Admin.js:492
+#: js/Admin.js:508
 msgid "user not found"
 msgstr "uživatel nebyl nalezen"
 
-#: js/Admin.js:496
+#: js/Admin.js:512
 msgid "failure"
 msgstr "chyba"
 
-#: js/Admin.js:500
+#: js/Admin.js:516
 msgid "success"
 msgstr "úspěch"
 
-#: js/Admin.js:521
+#: js/Admin.js:537
 msgid "Displaying access log entries {0} - {1} of {2}"
 msgstr "Zobrazuji záznamy přístupového logu {0} - {1} z {2}"
 
-#: js/Admin.js:522
+#: js/Admin.js:538
 msgid "No access log entries to display"
 msgstr "Žádné záznamy přístupového logu ke zobrazení"
 
-#: js/Admin.js:526
+#: js/Admin.js:542
 msgid "Session ID"
 msgstr "ID relace"
 
-#: js/Admin.js:527 js/UserEditDialog-old.js:145 js/UserEditDialog.js:110
+#: js/Admin.js:543 js/UserEditDialog.js:101
 msgid "Login Name"
 msgstr "Přihlašovací jméno"
 
-#: js/Admin.js:528 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
-#: js/Tags.js:165
+#: js/Admin.js:544 js/Groups.js:176 js/Groups.js:488 js/Roles.js:177
+#: js/SambaMachineGrid.js:86 js/Tags.js:165
 msgid "Name"
 msgstr "Jméno"
 
-#: js/Admin.js:529
+#: js/Admin.js:545
 msgid "IP Address"
 msgstr "IP adresa"
 
-#: js/Admin.js:530
+#: js/Admin.js:546
 msgid "Login Time"
 msgstr "Čas přihlášení"
 
-#: js/Admin.js:531
+#: js/Admin.js:547
 msgid "Logout Time"
 msgstr "Čas odhlášení"
 
-#: js/Admin.js:532
+#: js/Admin.js:548
 msgid "Account ID"
 msgstr "ID účtu"
 
-#: js/Admin.js:533
+#: js/Admin.js:549
 msgid "Result"
 msgstr "Výsledek"
 
-#: js/Admin.js:763
+#: js/Admin.js:779
 msgid "enable application"
 msgstr "povolit aplikaci"
 
-#: js/Admin.js:764
+#: js/Admin.js:780
 msgid "disable application"
 msgstr "zakázat aplikaci"
 
-#: js/Admin.js:765
+#: js/Admin.js:781
 msgid "settings"
 msgstr "nastavení"
 
-#: js/Admin.js:816 js/UserEditDialog.js:98
+#: js/Admin.js:832 js/UserEditDialog.js:89
 msgid "disabled"
 msgstr "zakázáno"
 
-#: js/Admin.js:819 js/UserEditDialog.js:98
+#: js/Admin.js:835 js/UserEditDialog.js:89
 msgid "enabled"
 msgstr "povoleno"
 
-#: js/Admin.js:823
+#: js/Admin.js:839
 msgid "unknown status ({0})"
 msgstr "neznámý stav ({0})"
 
-#: js/Admin.js:852
+#: js/Admin.js:868
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "Zobrazuji aplikace {0} - {1} z {2}"
 
-#: js/Admin.js:853
+#: js/Admin.js:869
 msgid "No applications to display"
 msgstr "Žádné aplikace ke zobrazení"
 
-#: js/Admin.js:857
+#: js/Admin.js:873
 msgid "order"
 msgstr "pořadí"
 
-#: js/Admin.js:858
+#: js/Admin.js:874
 msgid "name"
 msgstr "název"
 
-#: js/Admin.js:859
+#: js/Admin.js:875
 msgid "status"
 msgstr "stav"
 
-#: js/Admin.js:860
+#: js/Admin.js:876
 msgid "version"
 msgstr "verze"
 
@@ -278,9 +282,7 @@ msgid "Deleting group(s)..."
 msgstr "Mažu skupinu(y)..."
 
 #: js/Groups.js:69 js/Groups.js:378 js/Groups.js:406 js/Roles.js:70
-#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/UserEditDialog-old.js:46
-#: js/UserEditDialog-old.js:57 js/UserEditDialog-old.js:82
-#: js/UserEditDialog-old.js:99 js/Users.js:186
+#: js/Roles.js:439 js/Roles.js:467 js/Tags.js:341 js/Users.js:207
 msgid "Failed"
 msgstr "Nepodařilo se"
 
@@ -308,12 +310,13 @@ msgstr "Zobrazuji skupiny {0} - {1} z {2}"
 msgid "No groups to display"
 msgstr "Žádné skupiny ke zobrazení"
 
-#: js/Groups.js:175 js/Roles.js:176 js/Users.js:273
+#: js/Groups.js:175 js/Roles.js:176 js/SambaMachineGrid.js:80 js/Users.js:294
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:653
-#: js/Tags.js:166 js/Tags.js:547
+#: js/Groups.js:177 js/Groups.js:558 js/Roles.js:178 js/Roles.js:654
+#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:92 js/Tags.js:166
+#: js/Tags.js:548
 msgid "Description"
 msgstr "Popis"
 
@@ -330,12 +333,10 @@ msgid "Could not save group."
 msgstr "Nepodařilo se uložit skupinu."
 
 #: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346
-#: js/UserEditDialog-old.js:105
 msgid "Errors"
 msgstr "Chyby"
 
 #: js/Groups.js:385 js/Roles.js:446 js/Tags.js:346
-#: js/UserEditDialog-old.js:105
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím vyznačené chyby."
 
@@ -351,7 +352,7 @@ msgstr "Členové skupiny"
 msgid "Group Name"
 msgstr "Název skupiny"
 
-#: js/Groups.js:594 js/Users.js:364
+#: js/Groups.js:594 js/Users.js:393
 msgid "add account"
 msgstr "přidat účet"
 
@@ -415,7 +416,7 @@ msgstr "Členové role"
 msgid "Members"
 msgstr "Členové"
 
-#: js/Roles.js:616 js/Tags.js:563
+#: js/Roles.js:616 js/Tags.js:564
 msgid "Rights"
 msgstr "Práva"
 
@@ -423,21 +424,33 @@ msgstr "Práva"
 msgid "Role Name"
 msgstr "Název role"
 
-#: js/Roles.js:686
+#: js/Roles.js:687
 msgid "Loading Role..."
 msgstr "Načítám roli..."
 
-#: js/Roles.js:686 js/Tags.js:584 js/UserEditDialog-old.js:62
+#: js/Roles.js:687 js/Tags.js:585
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
-#: js/Roles.js:726
+#: js/Roles.js:727
 msgid "Add New Role"
 msgstr "Přidat novou roli"
 
-#: js/Roles.js:728
+#: js/Roles.js:729
 msgid "Edit Role \"{0}\""
 msgstr "Editovat roli \"{0}\""
+
+#: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
+#, fuzzy
+msgid "Computer Name"
+msgstr "Název role"
+
+#: js/SambaMachineModel.js:40
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: js/Tags.js:41
 msgid "Do you really want to delete the selected tags?"
@@ -499,206 +512,250 @@ msgstr "Používat"
 msgid "Tag Name"
 msgstr "Název štítku"
 
-#: js/Tags.js:566
+#: js/Tags.js:567
 msgid "Context"
 msgstr "Kontext"
 
-#: js/Tags.js:584
+#: js/Tags.js:585
 msgid "Loading Tag..."
 msgstr "Načítám štítek..."
 
-#: js/Tags.js:615
+#: js/Tags.js:616
 msgid "Add New Tag"
 msgstr "Přidat nový štítek"
 
-#: js/Tags.js:617
+#: js/Tags.js:618
 msgid "Edit Tag \"{0}\""
 msgstr "Editovat štítek \"{0}\""
 
-#: js/UserEditDialog-old.js:40
-msgid "Deleting account..."
-msgstr "Mažu účet..."
-
-#: js/UserEditDialog-old.js:46
-msgid "Some error occurred while trying to delete the account."
-msgstr "Během mazání účtu došlo k chybě."
-
-#: js/UserEditDialog-old.js:57 js/UserEditDialog-old.js:58
-#: js/UserEditDialog-old.js:59
-msgid "Passwords do not match!"
-msgstr "Hesla se neshodují!"
-
-#: js/UserEditDialog-old.js:62
-msgid "Saving User Account"
-msgstr "Ukládám uživatelský účet"
-
-#: js/UserEditDialog-old.js:99
-msgid "Could not save user account."
-msgstr "Nepodařilo se uložit uživatelský účet."
-
-#: js/UserEditDialog-old.js:122 js/UserEditDialog.js:71
+#: js/UserEditDialog.js:62
 #, fuzzy
 msgid "Account"
-msgid_plural "Accounts"
-msgstr[0] "ID účtu"
-msgstr[1] "ID účtu"
-msgstr[2] "ID účtu"
+msgstr "ID účtu"
 
-#: js/UserEditDialog-old.js:138 js/UserEditDialog.js:87
+#: js/UserEditDialog.js:78
 msgid "First Name"
 msgstr "Křestní jméno"
 
-#: js/UserEditDialog-old.js:141 js/UserEditDialog.js:101
+#: js/UserEditDialog.js:83 js/Users.js:295
+msgid "Status"
+msgstr "Stav"
+
+#: js/UserEditDialog.js:92
 msgid "Last Name"
 msgstr "Příjmení"
 
-#: js/UserEditDialog-old.js:149 js/UserEditDialog.js:122
+#: js/UserEditDialog.js:97 js/Users.js:304
+msgid "Expires"
+msgstr "Vyprší"
+
+#: js/UserEditDialog.js:99 js/UserEditDialog.js:134 js/UserEditDialog.js:202
+msgid "never"
+msgstr "nikdy"
+
+#: js/UserEditDialog.js:107 js/Users.js:301
+msgid "Last login at"
+msgstr "Poslední přihlášení v"
+
+#: js/UserEditDialog.js:109 js/UserEditDialog.js:122
+msgid "don't know"
+msgstr ""
+
+#: js/UserEditDialog.js:109 js/UserEditDialog.js:122 js/UserEditDialog.js:180
+msgid "never logged in"
+msgstr "nikdy nepřihlášen"
+
+#: js/UserEditDialog.js:113
 msgid "Password"
 msgstr "Heslo"
 
-#: js/UserEditDialog-old.js:152 js/UserEditDialog-old.js:157
-#: js/UserEditDialog.js:125 js/UserEditDialog.js:137
+#: js/UserEditDialog.js:116 js/UserEditDialog.js:128
 msgid "no password set"
 msgstr "heslo nebylo nastaveno"
 
-#: js/UserEditDialog-old.js:154 js/UserEditDialog.js:134
+#: js/UserEditDialog.js:120 js/Users.js:302
+msgid "Last login from"
+msgstr "Poslední přihlášení z"
+
+#: js/UserEditDialog.js:125
 msgid "Password again"
 msgstr "Zopakovat heslo"
 
-#: js/UserEditDialog-old.js:159 js/UserEditDialog.js:147
+#: js/UserEditDialog.js:132
+msgid "Password set"
+msgstr "Heslo nastaveno"
+
+#: js/UserEditDialog.js:138
 msgid "Primary group"
 msgstr "Primární skupina"
 
-#: js/UserEditDialog-old.js:165 js/UserEditDialog.js:154
+#: js/UserEditDialog.js:145
 msgid "Emailaddress"
 msgstr "Emailová adresa"
 
-#: js/UserEditDialog-old.js:168 js/UserEditDialog.js:158
+#: js/UserEditDialog.js:149
 msgid "Home Directory"
 msgstr ""
 
-#: js/UserEditDialog-old.js:171 js/UserEditDialog.js:162
+#: js/UserEditDialog.js:153
 #, fuzzy
 msgid "Login Shell"
 msgstr "Přihlašovací jméno"
 
-#: js/UserEditDialog-old.js:185 js/UserEditDialog.js:92 js/Users.js:274
-msgid "Status"
-msgstr "Stav"
-
-#: js/UserEditDialog-old.js:205 js/UserEditDialog.js:106 js/Users.js:283
-msgid "Expires"
-msgstr "Vyprší"
-
-#: js/UserEditDialog-old.js:207 js/UserEditDialog-old.js:227
-#: js/UserEditDialog.js:108 js/UserEditDialog.js:143
-msgid "never"
-msgstr "nikdy"
-
-#: js/UserEditDialog-old.js:210 js/UserEditDialog.js:116 js/Users.js:280
-msgid "Last login at"
-msgstr "Poslední přihlášení v"
-
-#: js/UserEditDialog-old.js:212 js/UserEditDialog-old.js:220
-#: js/UserEditDialog.js:118 js/UserEditDialog.js:131
-msgid "never logged in"
-msgstr "nikdy nepřihlášen"
-
-#: js/UserEditDialog-old.js:218 js/UserEditDialog.js:129 js/Users.js:281
-msgid "Last login from"
-msgstr "Poslední přihlášení z"
-
-#: js/UserEditDialog-old.js:225 js/UserEditDialog.js:141
-msgid "Password set"
-msgstr "Heslo nastaveno"
-
-#: js/UserEditDialog-old.js:286
-msgid "Add New User Account"
-msgstr "Přidat nový uživatelský účet"
-
-#: js/UserEditDialog-old.js:288
-msgid "Edit User Account \"{0}\""
-msgstr "Editovat uživatelský účet \"{0}\""
-
-#: js/UserEditDialog.js:118 js/UserEditDialog.js:131
-msgid "don't know"
+#: js/UserEditDialog.js:160
+msgid "Fileserver"
 msgstr ""
 
-#: js/Users.js:141
+#: js/UserEditDialog.js:173
+msgid "Home Drive"
+msgstr ""
+
+#: js/UserEditDialog.js:178
+#, fuzzy
+msgid "Logon Time"
+msgstr "Čas přihlášení"
+
+#: js/UserEditDialog.js:184
+msgid "Home Path"
+msgstr ""
+
+#: js/UserEditDialog.js:189
+#, fuzzy
+msgid "Logoff Time"
+msgstr "Čas odhlášení"
+
+#: js/UserEditDialog.js:191
+#, fuzzy
+msgid "never logged off"
+msgstr "nikdy nepřihlášen"
+
+#: js/UserEditDialog.js:195
+msgid "Profile Path"
+msgstr ""
+
+#: js/UserEditDialog.js:200
+#, fuzzy
+msgid "Password Last Set"
+msgstr "Heslo nastaveno"
+
+#: js/UserEditDialog.js:206
+msgid "Logon Script"
+msgstr ""
+
+#: js/UserEditDialog.js:210
+#, fuzzy
+msgid "Password Can Change"
+msgstr "Heslo změněno"
+
+#: js/UserEditDialog.js:212 js/UserEditDialog.js:216 js/UserEditDialog.js:220
+msgid "not set"
+msgstr ""
+
+#: js/UserEditDialog.js:214
+#, fuzzy
+msgid "Password Must Change"
+msgstr "Heslo změněno"
+
+#: js/UserEditDialog.js:218
+msgid "Kick Off Time"
+msgstr ""
+
+#: js/Users.js:162
 msgid "Set new password"
 msgstr "Nastavit nové heslo"
 
-#: js/Users.js:141
+#: js/Users.js:162
 msgid "Please enter the new password:"
 msgstr "Zadejte prosím nové heslo:"
 
-#: js/Users.js:166
+#: js/Users.js:187
 msgid "Do you really want to delete the selected account(s)?"
 msgstr "Opravdu chcete smazat vybraný(é) účet(ty)?"
 
-#: js/Users.js:181
+#: js/Users.js:202
 msgid "Deleting account(s)..."
 msgstr "Mažu účet(ty)..."
 
-#: js/Users.js:186
+#: js/Users.js:207
 msgid "Some error occurred while trying to delete the account(s)."
 msgstr "Během mazání účtu(ů) došlo k chybě."
 
-#: js/Users.js:265
+#: js/Users.js:286
 msgid "Displaying accounts {0} - {1} of {2}"
 msgstr "Zobrazuji účty {0} - {1} z {2}"
 
-#: js/Users.js:266
+#: js/Users.js:287
 msgid "No accounts to display"
 msgstr "Žádné účty ke zobrazení"
 
-#: js/Users.js:275
+#: js/Users.js:296
 msgid "Displayname"
 msgstr "Zobrazované jméno"
 
-#: js/Users.js:276
+#: js/Users.js:297
 msgid "Loginname"
 msgstr "Přihlašovací jméno"
 
-#: js/Users.js:277
+#: js/Users.js:298
 msgid "Last name"
 msgstr "Příjmení"
 
-#: js/Users.js:278
+#: js/Users.js:299
 msgid "First name"
 msgstr "Křestní jméno"
 
-#: js/Users.js:279
+#: js/Users.js:300
 msgid "Email"
 msgstr "Email"
 
-#: js/Users.js:282
+#: js/Users.js:303
 msgid "Password changed"
 msgstr "Heslo změněno"
 
-#: js/Users.js:372
+#: js/Users.js:401
 msgid "edit account"
 msgstr "editovat účet"
 
-#: js/Users.js:380
+#: js/Users.js:409
 msgid "delete account"
 msgstr "smazat účet"
 
-#: js/Users.js:388
+#: js/Users.js:417
 msgid "enable account"
 msgstr "povolit účet"
 
-#: js/Users.js:397
+#: js/Users.js:426
 msgid "disable account"
 msgstr "zakázat účet"
 
-#: js/Users.js:406
+#: js/Users.js:435
 msgid "reset password"
 msgstr "resetovat heslo"
 
-#: js/Users.js:483
+#: js/Users.js:512
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#~ msgid "Deleting account..."
+#~ msgstr "Mažu účet..."
+
+#~ msgid "Some error occurred while trying to delete the account."
+#~ msgstr "Během mazání účtu došlo k chybě."
+
+#~ msgid "Passwords do not match!"
+#~ msgstr "Hesla se neshodují!"
+
+#~ msgid "Saving User Account"
+#~ msgstr "Ukládám uživatelský účet"
+
+#~ msgid "Could not save user account."
+#~ msgstr "Nepodařilo se uložit uživatelský účet."
+
+#~ msgid "Add New User Account"
+#~ msgstr "Přidat nový uživatelský účet"
+
+#~ msgid "Edit User Account \"{0}\""
+#~ msgstr "Editovat uživatelský účet \"{0}\""

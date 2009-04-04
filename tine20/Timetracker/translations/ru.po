@@ -51,6 +51,7 @@ msgstr "Дата"
 #: Export/Ods.php:185 Export/Ods.php:246 js/TimeaccountEditDialog.js:149
 #: js/TimeaccountGridPanel.js:52 js/TimesheetEditDialog.js:167
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
+#: js/TimesheetGridPanel.js:394
 msgid "Description"
 msgstr "Описание"
 
@@ -340,6 +341,10 @@ msgstr "Все время"
 #: js/TimesheetGridPanel.js:334
 msgid "Time of Billable Timesheets"
 msgstr "Время рассчитываемых записей времени"
+
+#: js/TimesheetGridPanel.js:408
+msgid "Detail"
+msgstr ""
 
 #: js/Timetracker.js:33
 msgid "All Timesheets"

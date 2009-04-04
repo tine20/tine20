@@ -14,38 +14,38 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:116
-msgid "Report bugs"
-msgstr "Fehler melden"
-
-#: Acl/Rights.php:117
-msgid "Report bugs to tine20.org directly when they occour"
-msgstr "Melden Sie Fehler direkt an tine20.org."
-
-#: Acl/Rights.php:120
-msgid "Check version"
-msgstr "Version prüfen"
-
-#: Acl/Rights.php:121
-msgid "Check tine20.org for new versions"
-msgstr "Bitte prüfen Sie tine20.org auf neue Versionen"
-
-#: Application/Rights/Abstract.php:56
+#: Acl/Rights/Abstract.php:56
 msgid "admin"
 msgstr "admin"
 
-#: Application/Rights/Abstract.php:57
+#: Acl/Rights/Abstract.php:57
 msgid "admin right description"
 msgstr "das Admin-Recht erlaubt dem User, alles zu tun ..."
 
-#: Application/Rights/Abstract.php:60
+#: Acl/Rights/Abstract.php:60
 msgid "run"
 msgstr "Ausführen"
 
-#: Application/Rights/Abstract.php:61
+#: Acl/Rights/Abstract.php:61
 msgid "run right description"
 msgstr ""
 "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
+
+#: Acl/Rights.php:115
+msgid "Report bugs"
+msgstr "Fehler melden"
+
+#: Acl/Rights.php:116
+msgid "Report bugs to tine20.org directly when they occour"
+msgstr "Melden Sie Fehler direkt an tine20.org."
+
+#: Acl/Rights.php:119
+msgid "Check version"
+msgstr "Version prüfen"
+
+#: Acl/Rights.php:120
+msgid "Check tine20.org for new versions"
+msgstr "Bitte prüfen Sie tine20.org auf neue Versionen"
 
 #: Export/Ods.php:197
 #, fuzzy
@@ -68,7 +68,7 @@ msgstr "Angelegt von"
 msgid "Activities"
 msgstr "Aktivitäten"
 
-#: Frontend/Http.php:271 js/tineInit.js:246
+#: Frontend/Http.php:271 js/tineInit.js:248
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
@@ -102,7 +102,7 @@ msgid_plural "{0} workdays"
 msgstr[0] "{0} Arbeitstag"
 msgstr[1] "{0} Arbeitstage"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:360
+#: js/ExceptionDialog.js:34 js/MainScreen.js:364
 #: js/widgets/AccountpickerPanel.js:149
 #: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:161
 #: js/widgets/EditRecord.js:136
@@ -159,7 +159,7 @@ msgstr "Anmelden"
 msgid "Register"
 msgstr "Registrieren"
 
-#: js/Login.js:61 js/Login.js:95
+#: js/Login.js:61 js/Login.js:97
 msgid "Please enter your login data"
 msgstr "Bitte geben sie ihre Anmeldedaten ein"
 
@@ -167,15 +167,15 @@ msgstr "Bitte geben sie ihre Anmeldedaten ein"
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/Login.js:84
+#: js/Login.js:85
 msgid "Password"
 msgstr "Passwort"
 
-#: js/Login.js:123
+#: js/Login.js:125
 msgid "Logging you in..."
 msgstr "Sie werden angemeldet..."
 
-#: js/Login.js:123 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:125 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/container/ContainerTree.js:353
 #: js/widgets/container/ContainerTree.js:381
 #: js/widgets/container/ContainerTree.js:417
@@ -183,19 +183,19 @@ msgstr "Sie werden angemeldet..."
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Login.js:135
+#: js/Login.js:137
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Anmeldung erfolgreich. Tine 2.0 wird geladen..."
 
-#: js/Login.js:135 js/MainScreen.js:438
+#: js/Login.js:137 js/MainScreen.js:442
 msgid "Please wait!"
 msgstr "Bitte warten!"
 
-#: js/Login.js:141
+#: js/Login.js:143
 msgid "Login failure"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: js/Login.js:142
+#: js/Login.js:144
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ihre Benutzername und Passwort Kombination ist falsch!"
 
@@ -223,71 +223,71 @@ msgstr "Zeitzone"
 msgid "Language"
 msgstr "Sprache"
 
-#: js/MainScreen.js:172
+#: js/MainScreen.js:176
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: js/MainScreen.js:178
+#: js/MainScreen.js:182
 msgid "Install Google Gears"
 msgstr "Google Gears installieren"
 
-#: js/MainScreen.js:184
+#: js/MainScreen.js:188
 msgid "Logout"
 msgstr "Abmelden"
 
-#: js/MainScreen.js:185
+#: js/MainScreen.js:189
 msgid "Logout from Tine 2.0"
 msgstr "Tine 2.0 Sitzung Beenden"
 
-#: js/MainScreen.js:324
+#: js/MainScreen.js:328
 msgid "Change Password For \"{0}\""
 msgstr "Passwort für \"{0}\" ändern"
 
-#: js/MainScreen.js:348
+#: js/MainScreen.js:352
 msgid "Old Password"
 msgstr "Altes Passwort"
 
-#: js/MainScreen.js:352
+#: js/MainScreen.js:356
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: js/MainScreen.js:356
+#: js/MainScreen.js:360
 msgid "Repeat new Password"
 msgstr "Wiederholung neues Passwort"
 
-#: js/MainScreen.js:366 js/widgets/AccountpickerPanel.js:141
+#: js/MainScreen.js:370 js/widgets/AccountpickerPanel.js:141
 #: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:144
 #: js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:375
+#: js/MainScreen.js:379
 msgid "Please Wait!"
 msgstr "Bitte warten!"
 
-#: js/MainScreen.js:376
+#: js/MainScreen.js:380
 msgid "changing password..."
 msgstr "Passwort wird geändert..."
 
-#: js/MainScreen.js:387
+#: js/MainScreen.js:391
 msgid "Success"
 msgstr "Erfolg"
 
-#: js/MainScreen.js:388
+#: js/MainScreen.js:392
 msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert"
 
-#: js/MainScreen.js:394 js/MainScreen.js:404
+#: js/MainScreen.js:398 js/MainScreen.js:408
 msgid "Failure"
 msgstr "Fehler"
 
-#: js/MainScreen.js:405
+#: js/MainScreen.js:409
 msgid "The new passwords mismatch, please correct them."
 msgstr ""
 "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die "
 "Eingabe."
 
-#: js/MainScreen.js:423
+#: js/MainScreen.js:427
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -295,17 +295,17 @@ msgstr ""
 "Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
 "indem alle benötigten Dateien local auf dem Computer gespeichert werden."
 
-#: js/MainScreen.js:436 js/widgets/app/GridPanel.js:506
+#: js/MainScreen.js:440 js/widgets/app/GridPanel.js:518
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/MainScreen.js:436
+#: js/MainScreen.js:440
 msgid "Are you sure you want to logout?"
 msgstr "Wollen sie sich wirklich Abmelden?"
 
-#: js/MainScreen.js:438
+#: js/MainScreen.js:442
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
@@ -321,11 +321,11 @@ msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
 msgstr[1] "Aufgabenlisten"
 
-#: js/tineInit.js:229
+#: js/tineInit.js:231
 msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
 
-#: js/tineInit.js:237
+#: js/tineInit.js:239
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -333,23 +333,23 @@ msgstr ""
 "Der Server konnte leider auf Ihre Anfrage nicht antworten. Bitte überprüfen "
 "Sie Ihr Netzwerk oder kontaktieren Sie Ihren Administrator."
 
-#: js/tineInit.js:247
+#: js/tineInit.js:249
 msgid "Your session timed out. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: js/tineInit.js:260
+#: js/tineInit.js:262
 msgid "Insufficient Rights"
 msgstr "Fehlende Berechtigungen"
 
-#: js/tineInit.js:261
+#: js/tineInit.js:263
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sie sind nicht berechtigt diese Aktion auszuführen"
 
-#: js/tineInit.js:270
+#: js/tineInit.js:272
 msgid "Concurrent Updates"
 msgstr "Passende Updates"
 
-#: js/tineInit.js:271
+#: js/tineInit.js:273
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -605,31 +605,31 @@ msgstr ""
 "Keine {0} gefunden. Versuchen Sie die Suchkriterien, Anzeigeoptionen oder "
 "{1} in denen Sie suchen zu ändern."
 
-#: js/widgets/app/GridPanel.js:491
+#: js/widgets/app/GridPanel.js:503
 msgid "Not Allowed"
 msgstr "Mangelnde Erlaubnis"
 
-#: js/widgets/app/GridPanel.js:492
+#: js/widgets/app/GridPanel.js:504
 msgid "You are not allowed to delete all pages at once"
 msgstr "Es ist ihnen nicht erlaubt alle Seiten auf einmal zu löschen"
 
-#: js/widgets/app/GridPanel.js:504
+#: js/widgets/app/GridPanel.js:516
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Möchten sie den ausgewählten Eintrag wirklich löschen?"
 msgstr[1] "Möchten Sie die ausgewählten Einträge wirklich löschen?"
 
-#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:392
+#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:392
 msgid "Deleting {0}"
 msgstr "Lösche {0}"
 
-#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:366
+#: js/widgets/app/GridPanel.js:533 js/widgets/EditDialog.js:366
 #: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:402
+#: js/widgets/app/GridPanel.js:533 js/widgets/EditDialog.js:402
 msgid "Could not delete {0}."
 msgstr "Konnte {0} nicht löschen."
 
@@ -1157,51 +1157,51 @@ msgstr "Dieses wichtige Update sollte umgehend installiert werden!"
 msgid "Please consider updating!"
 msgstr "Bitte bestätigen Sie das Update!"
 
-#: Notes.php:295
+#: Notes.php:329
 msgid "by"
 msgstr "von"
 
-#: Notes.php:301
+#: Notes.php:335
 msgid "Changed fields:"
 msgstr "Geänderte Felder:"
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2084
 msgid "note"
 msgstr "Notiz"
 
-#: Setup/setup.xml:2070
+#: Setup/setup.xml:2089
 msgid "default note type"
 msgstr "default note type"
 
-#: Setup/setup.xml:2096
+#: Setup/setup.xml:2115
 msgid "telephone"
 msgstr "Telefon"
 
-#: Setup/setup.xml:2101
+#: Setup/setup.xml:2120
 msgid "telephone call"
 msgstr "Telefonanruf"
 
-#: Setup/setup.xml:2127
+#: Setup/setup.xml:2146
 msgid "email"
 msgstr "Email"
 
-#: Setup/setup.xml:2132
+#: Setup/setup.xml:2151
 msgid "email contact"
 msgstr "Email Kontakt"
 
-#: Setup/setup.xml:2158
+#: Setup/setup.xml:2177
 msgid "created"
 msgstr "erstellt"
 
-#: Setup/setup.xml:2163
+#: Setup/setup.xml:2182
 msgid "record created"
 msgstr "Eintrag erstellt"
 
-#: Setup/setup.xml:2189
+#: Setup/setup.xml:2208
 msgid "changed"
 msgstr "geändert"
 
-#: Setup/setup.xml:2194
+#: Setup/setup.xml:2213
 msgid "record changed"
 msgstr "Eintrag geändert"
 

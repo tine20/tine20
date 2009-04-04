@@ -26,7 +26,7 @@ msgstr "Status"
 msgid "Depends on"
 msgstr "Depends on"
 
-#: js/ApplicationGridPanel.js:49 js/EnvCheckGridPanel.js:162
+#: js/ApplicationGridPanel.js:49 js/EnvCheckGridPanel.js:169
 msgid "Install application"
 msgstr "Install application"
 
@@ -38,11 +38,11 @@ msgstr "Uninstall application"
 msgid "Update application"
 msgstr "Update application"
 
-#: js/ApplicationGridPanel.js:137
+#: js/ApplicationGridPanel.js:139
 msgid "Shit"
 msgstr "Shit"
 
-#: js/ApplicationGridPanel.js:137
+#: js/ApplicationGridPanel.js:139
 msgid "Where are the backup tapes"
 msgstr "Where are the backup tapes"
 
@@ -130,7 +130,11 @@ msgstr "Save config"
 msgid "Download config file"
 msgstr "Download config file"
 
-#: js/EnvCheckGridPanel.js:103
+#: js/EnvCheckGridPanel.js:69
+msgid "Performing Environment Checks..."
+msgstr "Performing Environment Checks..."
+
+#: js/EnvCheckGridPanel.js:110
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -138,19 +142,19 @@ msgstr ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 
-#: js/EnvCheckGridPanel.js:133
+#: js/EnvCheckGridPanel.js:140
 msgid "Check"
 msgstr "Check"
 
-#: js/EnvCheckGridPanel.js:134
+#: js/EnvCheckGridPanel.js:141
 msgid "Result"
 msgstr "Result"
 
-#: js/EnvCheckGridPanel.js:135
+#: js/EnvCheckGridPanel.js:142
 msgid "Error"
 msgstr "Error"
 
-#: js/EnvCheckGridPanel.js:153
+#: js/EnvCheckGridPanel.js:160
 msgid "Run setup tests"
 msgstr "Run setup tests"
 

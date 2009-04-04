@@ -92,23 +92,23 @@ msgstr "Geschlossene Aufgaben anzeigen"
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
-#: js/Tasks.js:74
+#: js/Tasks.js:75
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Aufgabe"
 msgstr[1] "Aufgaben"
 
-#: js/Tasks.js:74
+#: js/Tasks.js:75
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: js/Tasks.js:78
+#: js/Tasks.js:79
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
 msgstr[1] "Aufgabenlisten"
 
-#: js/Tasks.js:78
+#: js/Tasks.js:79
 msgid "to do lists"
 msgstr "Aufgabenlisten"
 

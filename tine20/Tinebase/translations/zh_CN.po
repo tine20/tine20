@@ -13,37 +13,37 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Acl/Rights.php:116
-msgid "Report bugs"
-msgstr "报告错误"
-
-#: Acl/Rights.php:117
-msgid "Report bugs to tine20.org directly when they occour"
-msgstr "当错误发生时直接报告给 tine20.org"
-
-#: Acl/Rights.php:120
-msgid "Check version"
-msgstr "检查版本"
-
-#: Acl/Rights.php:121
-msgid "Check tine20.org for new versions"
-msgstr "查询 tine20.org 看是否有新版本"
-
-#: Application/Rights/Abstract.php:56
+#: Acl/Rights/Abstract.php:56
 msgid "admin"
 msgstr "管理"
 
-#: Application/Rights/Abstract.php:57
+#: Acl/Rights/Abstract.php:57
 msgid "admin right description"
 msgstr "管理权限描述"
 
-#: Application/Rights/Abstract.php:60
+#: Acl/Rights/Abstract.php:60
 msgid "run"
 msgstr "运行"
 
-#: Application/Rights/Abstract.php:61
+#: Acl/Rights/Abstract.php:61
 msgid "run right description"
 msgstr "运行权限描述"
+
+#: Acl/Rights.php:115
+msgid "Report bugs"
+msgstr "报告错误"
+
+#: Acl/Rights.php:116
+msgid "Report bugs to tine20.org directly when they occour"
+msgstr "当错误发生时直接报告给 tine20.org"
+
+#: Acl/Rights.php:119
+msgid "Check version"
+msgstr "检查版本"
+
+#: Acl/Rights.php:120
+msgid "Check tine20.org for new versions"
+msgstr "查询 tine20.org 看是否有新版本"
 
 #: Export/Ods.php:197
 #, fuzzy
@@ -66,7 +66,7 @@ msgstr "创建者"
 msgid "Activities"
 msgstr "活动"
 
-#: Frontend/Http.php:271 js/tineInit.js:246
+#: Frontend/Http.php:271 js/tineInit.js:248
 msgid "Authorisation Required"
 msgstr "需要授权"
 
@@ -97,7 +97,7 @@ msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0}工作日"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:360
+#: js/ExceptionDialog.js:34 js/MainScreen.js:364
 #: js/widgets/AccountpickerPanel.js:149
 #: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:161
 #: js/widgets/EditRecord.js:136
@@ -153,7 +153,7 @@ msgstr "登录"
 msgid "Register"
 msgstr "注册"
 
-#: js/Login.js:61 js/Login.js:95
+#: js/Login.js:61 js/Login.js:97
 msgid "Please enter your login data"
 msgstr "请输入登录数据"
 
@@ -161,15 +161,15 @@ msgstr "请输入登录数据"
 msgid "Username"
 msgstr "用户名"
 
-#: js/Login.js:84
+#: js/Login.js:85
 msgid "Password"
 msgstr "密码"
 
-#: js/Login.js:123
+#: js/Login.js:125
 msgid "Logging you in..."
 msgstr "正在登录 ..."
 
-#: js/Login.js:123 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:125 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/container/ContainerTree.js:353
 #: js/widgets/container/ContainerTree.js:381
 #: js/widgets/container/ContainerTree.js:417
@@ -177,19 +177,19 @@ msgstr "正在登录 ..."
 msgid "Please wait"
 msgstr "请等待"
 
-#: js/Login.js:135
+#: js/Login.js:137
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "登录成功，正加载 Tine 2.0 ..."
 
-#: js/Login.js:135 js/MainScreen.js:438
+#: js/Login.js:137 js/MainScreen.js:442
 msgid "Please wait!"
 msgstr "请等待！"
 
-#: js/Login.js:141
+#: js/Login.js:143
 msgid "Login failure"
 msgstr "登录失败"
 
-#: js/Login.js:142
+#: js/Login.js:144
 msgid "Your username and/or your password are wrong!!!"
 msgstr "你的用户名或者密码有误！！！"
 
@@ -217,85 +217,85 @@ msgstr "时区"
 msgid "Language"
 msgstr "语言"
 
-#: js/MainScreen.js:172
+#: js/MainScreen.js:176
 msgid "Change password"
 msgstr "修改密码"
 
-#: js/MainScreen.js:178
+#: js/MainScreen.js:182
 msgid "Install Google Gears"
 msgstr "安装 Google Gears"
 
-#: js/MainScreen.js:184
+#: js/MainScreen.js:188
 msgid "Logout"
 msgstr "登出"
 
-#: js/MainScreen.js:185
+#: js/MainScreen.js:189
 msgid "Logout from Tine 2.0"
 msgstr "从 Tine 2.0 登出"
 
-#: js/MainScreen.js:324
+#: js/MainScreen.js:328
 msgid "Change Password For \"{0}\""
 msgstr "为 \"{0}\"修改密码"
 
-#: js/MainScreen.js:348
+#: js/MainScreen.js:352
 msgid "Old Password"
 msgstr "旧密码"
 
-#: js/MainScreen.js:352
+#: js/MainScreen.js:356
 msgid "New Password"
 msgstr "新密码"
 
-#: js/MainScreen.js:356
+#: js/MainScreen.js:360
 msgid "Repeat new Password"
 msgstr "重复新密码"
 
-#: js/MainScreen.js:366 js/widgets/AccountpickerPanel.js:141
+#: js/MainScreen.js:370 js/widgets/AccountpickerPanel.js:141
 #: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:144
 #: js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "确认"
 
-#: js/MainScreen.js:375
+#: js/MainScreen.js:379
 msgid "Please Wait!"
 msgstr "请等待"
 
-#: js/MainScreen.js:376
+#: js/MainScreen.js:380
 msgid "changing password..."
 msgstr "修改密码..."
 
-#: js/MainScreen.js:387
+#: js/MainScreen.js:391
 msgid "Success"
 msgstr "成功"
 
-#: js/MainScreen.js:388
+#: js/MainScreen.js:392
 msgid "Your password has been changed."
 msgstr "你的密码已经被修改"
 
-#: js/MainScreen.js:394 js/MainScreen.js:404
+#: js/MainScreen.js:398 js/MainScreen.js:408
 msgid "Failure"
 msgstr "失败"
 
-#: js/MainScreen.js:405
+#: js/MainScreen.js:409
 msgid "The new passwords mismatch, please correct them."
 msgstr "新密码不匹配，请纠正"
 
-#: js/MainScreen.js:423
+#: js/MainScreen.js:427
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainScreen.js:436 js/widgets/app/GridPanel.js:506
+#: js/MainScreen.js:440 js/widgets/app/GridPanel.js:518
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
 msgstr "确认"
 
-#: js/MainScreen.js:436
+#: js/MainScreen.js:440
 msgid "Are you sure you want to logout?"
 msgstr "确实想登出？"
 
-#: js/MainScreen.js:438
+#: js/MainScreen.js:442
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
@@ -309,33 +309,33 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
 
-#: js/tineInit.js:229
+#: js/tineInit.js:231
 msgid "Connection lost, please check your network!"
 msgstr "失去连接，请检查网络"
 
-#: js/tineInit.js:237
+#: js/tineInit.js:239
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
 msgstr "服务器没有响应你的请求，请检查网络或联系管理员。"
 
-#: js/tineInit.js:247
+#: js/tineInit.js:249
 msgid "Your session timed out. You need to login again."
 msgstr "会话超时，需要重新登录"
 
-#: js/tineInit.js:260
+#: js/tineInit.js:262
 msgid "Insufficient Rights"
 msgstr "权限不够"
 
-#: js/tineInit.js:261
+#: js/tineInit.js:263
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "对不起，你不允许执行该动作"
 
-#: js/tineInit.js:270
+#: js/tineInit.js:272
 msgid "Concurrent Updates"
 msgstr "同时更新"
 
-#: js/tineInit.js:271
+#: js/tineInit.js:273
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -580,30 +580,30 @@ msgid ""
 "or the {1} you search in."
 msgstr "没有找到 {0}，请修改过滤条件，视图选项或搜索词 {1}"
 
-#: js/widgets/app/GridPanel.js:491
+#: js/widgets/app/GridPanel.js:503
 msgid "Not Allowed"
 msgstr "不允许"
 
-#: js/widgets/app/GridPanel.js:492
+#: js/widgets/app/GridPanel.js:504
 msgid "You are not allowed to delete all pages at once"
 msgstr "你不允许一次地删除所有页面"
 
-#: js/widgets/app/GridPanel.js:504
+#: js/widgets/app/GridPanel.js:516
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "真的想删除选中的记录？"
 
-#: js/widgets/app/GridPanel.js:509 js/widgets/EditDialog.js:392
+#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:392
 msgid "Deleting {0}"
 msgstr "正删除{0}"
 
-#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:366
+#: js/widgets/app/GridPanel.js:533 js/widgets/EditDialog.js:366
 #: js/widgets/EditDialog.js:402 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "失败"
 
-#: js/widgets/app/GridPanel.js:521 js/widgets/EditDialog.js:402
+#: js/widgets/app/GridPanel.js:533 js/widgets/EditDialog.js:402
 msgid "Could not delete {0}."
 msgstr "不能删除{0}"
 
@@ -1124,51 +1124,51 @@ msgstr "这是重要的更新，必需尽快安装！"
 msgid "Please consider updating!"
 msgstr "请考虑更新！"
 
-#: Notes.php:295
+#: Notes.php:329
 msgid "by"
 msgstr "由"
 
-#: Notes.php:301
+#: Notes.php:335
 msgid "Changed fields:"
 msgstr "已修改的字段："
 
-#: Setup/setup.xml:2065
+#: Setup/setup.xml:2084
 msgid "note"
 msgstr "注释"
 
-#: Setup/setup.xml:2070
+#: Setup/setup.xml:2089
 msgid "default note type"
 msgstr "缺省注释类型"
 
-#: Setup/setup.xml:2096
+#: Setup/setup.xml:2115
 msgid "telephone"
 msgstr "电话"
 
-#: Setup/setup.xml:2101
+#: Setup/setup.xml:2120
 msgid "telephone call"
 msgstr "电话呼叫"
 
-#: Setup/setup.xml:2127
+#: Setup/setup.xml:2146
 msgid "email"
 msgstr "电子邮件"
 
-#: Setup/setup.xml:2132
+#: Setup/setup.xml:2151
 msgid "email contact"
 msgstr "电子邮件联系"
 
-#: Setup/setup.xml:2158
+#: Setup/setup.xml:2177
 msgid "created"
 msgstr "生成的"
 
-#: Setup/setup.xml:2163
+#: Setup/setup.xml:2182
 msgid "record created"
 msgstr "记录已生成"
 
-#: Setup/setup.xml:2189
+#: Setup/setup.xml:2208
 msgid "changed"
 msgstr "已修改"
 
-#: Setup/setup.xml:2194
+#: Setup/setup.xml:2213
 msgid "record changed"
 msgstr "记录已修改"
 

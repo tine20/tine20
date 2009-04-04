@@ -13,19 +13,19 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: Controller/Course.php:75
+#: Controller/Course.php:79
 msgid "teacher"
 msgstr ""
 
-#: Controller/Course.php:81
+#: Controller/Course.php:85
 msgid "Teacher"
 msgstr ""
 
-#: Controller/Course.php:82
+#: Controller/Course.php:86
 msgid "Teacher Account"
 msgstr ""
 
-#: Frontend/Json.php:195 js/CourseEditDialog.js:135 js/CourseGridPanel.js:48
+#: Frontend/Json.php:213 js/CourseEditDialog.js:135 js/CourseGridPanel.js:48
 #: js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
@@ -40,31 +40,31 @@ msgstr ""
 msgid "Course Name"
 msgstr ""
 
-#: js/CourseEditDialog.js:155
+#: js/CourseEditDialog.js:155 js/CourseEditDialog.js:162
 msgid "Course / School Type"
 msgstr ""
 
-#: js/CourseEditDialog.js:160
+#: js/CourseEditDialog.js:173
 msgid "Description"
 msgstr ""
 
-#: js/CourseEditDialog.js:166 js/CourseGridPanel.js:74
+#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:75
 msgid "Internet"
 msgstr ""
 
-#: js/CourseEditDialog.js:196 js/CourseEditDialog.js:247
+#: js/CourseEditDialog.js:209 js/CourseEditDialog.js:260
 msgid "Members"
 msgstr ""
 
-#: js/CourseEditDialog.js:223
+#: js/CourseEditDialog.js:236
 msgid "Reset Password"
 msgstr ""
 
-#: js/CourseEditDialog.js:227
+#: js/CourseEditDialog.js:250
 msgid "Set new password"
 msgstr ""
 
-#: js/CourseEditDialog.js:227
+#: js/CourseEditDialog.js:250
 msgid "Please enter the new password:"
 msgstr ""
 
@@ -87,5 +87,11 @@ msgstr ""
 #: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:77
+msgid "Course Type"
+msgid_plural "Course Types"
 msgstr[0] ""
 msgstr[1] ""

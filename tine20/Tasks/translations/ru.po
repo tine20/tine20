@@ -98,7 +98,7 @@ msgstr "Показ закрылся"
 msgid "IN-PROCESS"
 msgstr "НЕЗАВЕРШЕННЫЙ"
 
-#: js/Tasks.js:74
+#: js/Tasks.js:75
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -106,12 +106,12 @@ msgstr[0] "Задания"
 msgstr[1] "Задания"
 msgstr[2] "Задания"
 
-#: js/Tasks.js:74
+#: js/Tasks.js:75
 #, fuzzy
 msgid "Tasks"
 msgstr "Задания"
 
-#: js/Tasks.js:78
+#: js/Tasks.js:79
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -119,7 +119,7 @@ msgstr[0] "Сделать список"
 msgstr[1] "Сделать список"
 msgstr[2] "Сделать список"
 
-#: js/Tasks.js:78
+#: js/Tasks.js:79
 msgid "to do lists"
 msgstr "Делать списки"
 
