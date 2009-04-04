@@ -47,7 +47,7 @@ class Tinebase_Translation
         //'pt',      // Portuguese           Holger Rothemund <holger@rothemund.org>
         'ru',      // Russian              Ilia Yurkovetskiy <i.yurkovetskiy@metaways.de>
         'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
-        //'zh_TW',   // Chinese Traditional  Frank Huang <frank.cchuang@gmail.com>
+        'zh_TW',   // Chinese Traditional  Frank Huang <frank.cchuang@gmail.com>
     );
     
     /**
