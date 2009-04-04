@@ -430,6 +430,9 @@ function statistics($_verbose)
         }
     }
     
+    // clean up unwanted messages.mo
+    `rm messages.mo`;
+    
     $results = array(
         'version'      => getDevelopmentRevision(),
         'langStats'    => array_values($langStats),
