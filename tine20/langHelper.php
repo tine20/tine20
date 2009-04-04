@@ -19,6 +19,8 @@ if (isset($_SERVER['HTTP_HOST'])) {
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
+require_once 'Tinebase/Helper.php';
+
 /**
  * path to tine 2.0 checkout
  */
@@ -428,6 +430,7 @@ function statistics($_verbose)
     }
     
     $results = array(
+        'version'      => getDevelopmentRevision(),
         'langStats'    => array_values($langStats),
         'poFilesStats' => $poFilesStats
     );
