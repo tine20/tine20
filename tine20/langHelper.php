@@ -411,6 +411,7 @@ function statistics($_verbose)
                 $langStats[$langCode] = array_key_exists($langCode,$langStats) ? $langStats[$langCode] : array(
                     'locale'       => '',
                     'language'     => '',
+                    'region'       => $locale->getCountryTranslation($langLocale->getRegion()),
                     'translated'   => 0,
                     'fuzzy'        => 0,
                     'untranslated' => 0,
@@ -434,6 +435,7 @@ function statistics($_verbose)
         'langStats'    => array_values($langStats),
         'poFilesStats' => $poFilesStats
     );
+    
     file_put_contents($statsFile, Zend_Json::encode($results));
 }
 
