@@ -11,7 +11,7 @@
  */
 
 /**
- * class Tinebase_Model_Image
+ * class Tinebase_Model_Config
  * 
  * @package     Tinebase
  * @subpackage  Record

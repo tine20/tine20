@@ -10,7 +10,6 @@
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
  * @todo        finish implementation
- * @todo        add preference model
  */
 
 
@@ -22,6 +21,19 @@
  */
 class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
 {
+    /**
+     * timezone pref const
+     *
+     */
+    const TIMEZONE = 'timezone';
+
+    /**
+     * application
+     *
+     * @var string
+     */
+    protected $_application = 'Tinebase';    
+    
     /**
      * Table name without prefix
      *
@@ -35,6 +47,8 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Tinebase_Model_Preference';
+    
+    /*************** singleton ****************/
     
     /**
      * don't clone. Use the singleton.
@@ -68,9 +82,35 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
     /**
      * the private constructor
      *
+     * @todo find a way to make constructor private even if parent is public (?)
      */
-    private function __construct()
+    public function __construct()
     {
         parent::__construct();
+    }
+    
+    /**************** public funcs **************/
+    
+    /**
+     * get value of preference
+     *
+     * @param string $_preference
+     * @return string
+     */
+    public function getValue($_preference) {
+        return $this->getValueForUser($_preference, Tinebase_Core::getUser()->getId());
+    }
+    
+    /**
+     * get value of preference for a user
+     *
+     * @param string $_preference
+     * @param integer $_userId
+     * @return string
+     * 
+     * @todo finish implementation
+     */
+    public function getValueForUser($_preference, $_userId) {
+        
     }
 }
