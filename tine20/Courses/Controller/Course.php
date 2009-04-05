@@ -38,7 +38,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $this->_currentAccount = Tinebase_Core::getUser();   
         $this->_purgeRecords = FALSE;
         $this->_doContainerACLChecks = FALSE;
-        $this->_config = isset($this->_config) ? $this->_config : new Zend_Config(array());
+        $this->_config = isset(Tinebase_Core::getConfig()->courses) ? Tinebase_Core::getConfig()->courses : new Zend_Config(array());
     }    
     
     /**

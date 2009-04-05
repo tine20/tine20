@@ -50,7 +50,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_controller = Courses_Controller_Course::getInstance();
         $this->_groupController = Admin_Controller_Group::getInstance();
         
-        $this->_config = isset($this->_config) ? $this->_config : new Zend_Config(array());
+        $this->_config = isset(Tinebase_Core::getConfig()->courses) ? Tinebase_Core::getConfig()->courses : new Zend_Config(array());
     }
     
     /************************************** protected helper functions **********************/
