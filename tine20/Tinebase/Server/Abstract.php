@@ -44,11 +44,11 @@ abstract class Tinebase_Server_Abstract
 
         Tinebase_Core::setupDatabaseConnection();
 
+        Tinebase_Core::setupCache();
+        
         Tinebase_Core::setupUserTimezone();
         
         Tinebase_Core::setupUserLocale();
-        
-        Tinebase_Core::setupCache();
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
