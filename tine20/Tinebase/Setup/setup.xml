@@ -228,7 +228,7 @@
                         <name>login_name</name>
                     </field>
                 </index>
-               <index>
+                <index>
                     <name>primary_group_id</name>
                     <field>
                         <name>primary_group_id</name>
@@ -1619,7 +1619,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>config_user::application_id--applications::id</name>
+                    <name>preferences::application_id--applications::id</name>
                     <field>
                         <name>application_id</name>
                     </field>
@@ -1627,7 +1627,26 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
+                        <ondelete>cascade</ondelete>
                     </reference>
+                </index>
+                <index>
+                    <name>name</name>
+                    <field>
+                        <name>name</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account_id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
                 </index>
             </declaration>
         </table>
