@@ -79,9 +79,9 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
         'id'                => array('allowEmpty' => true ),
         'account_id'        => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
         'account_type'      => array('presence' => 'required', 'allowEmpty' => false, 'InArray' => array(
-            'anyone', 
-            'user', 
-            'group',
+            self::ACCOUNT_TYPE_ANYONE, 
+            self::ACCOUNT_TYPE_USER, 
+            self::ACCOUNT_TYPE_GROUP,
         )),
         'application_id'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
         'name'              => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
