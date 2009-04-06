@@ -21,6 +21,13 @@ if (Ext.isIE8) {
 }
 
 /**
+ * fix broken ext email validator
+ * 
+ * @type RegExp
+ */
+Ext.form.VTypes.email = /^([0-9,a-z,A-Z]+)([.,_,-]([0-9,a-z,A-Z]+))*[@]([0-9,a-z,A-Z]+)([.,_,-]([0-9,a-z,A-Z]+))*[.]([a-z,A-Z]){2,6}$/;
+
+/**
  * fix timezone handling for date picker
  * 
  * The getValue function always returns 00:00:00 as time. So if a form got filled
