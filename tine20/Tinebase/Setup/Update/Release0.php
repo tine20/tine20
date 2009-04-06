@@ -2009,9 +2009,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     {
         $this->_backend->renameTable('config_user', 'preferences');
 
-        // delete unique key constraint
-        $this->_backend->dropIndex('preferences', 'application_id-name-user_id');
-        
         // rename user_id to account id
         $field = '<field>
                     <name>account_id</name>
@@ -2045,7 +2042,11 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
         $this->_backend->addCol('preferences', $declaration);
         
-        // add unique key constraint again (app_id-name-account_id-account_type)
+        // delete old unique key constraint and foreign key
+        $this->_backend->dropForeignKey('preferences', 'config_user::application_id--applications::id');
+        $this->_backend->dropIndex('preferences', 'application_id-name-user_id');
+        
+        // add unique key constraint(app_id-name-account_id-account_type)
         $index = '<index>
                     <name>app_id-name-account_id-account_type</name>
                     <unique>true</unique>
@@ -2064,6 +2065,23 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 </index>';
         $declaration = new Setup_Backend_Schema_Index_Xml($index);
         $this->_backend->addIndex('preferences', $declaration);
+        
+        // add foreign key
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>preferences::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+        ');
+        $this->_backend->addForeignKey('preferences', $declaration);
         
         $this->setApplicationVersion('Tinebase', '0.25');
     }
