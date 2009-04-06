@@ -19,8 +19,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     // todo in this controller:
     //
     // add fns for participats state settings -> move to attendee controller?
+    // add group attendee handling -> move to attendee controller?
+    //
     // add handling to compute recurset (JSON) -> recur model/controller (computation/cacheing)?
+    //
     // add handling to append all exceptions (AS)
+    //
     // handle alarms -> generic approach
     
     /**
