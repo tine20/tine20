@@ -5,12 +5,11 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
  * @todo        replace Zend_Db_Table_Abstract with Zend_Db_Adapter_Abstract
- * @todo        move preferences functions to Tinebase_Preferences
  */
 
 /**
@@ -27,13 +26,6 @@ class Tinebase_Config
      * @var Zend_Db_Table_Abstract
      */
     protected $_configTable;
-
-    /**
-     * the table object for the SQL_TABLE_PREFIX . user config table
-     *
-     * @var Zend_Db_Table_Abstract
-     */
-    protected $_configUserTable;
 
     /**
      * the name of the customfields table
@@ -64,7 +56,6 @@ class Tinebase_Config
     private function __construct() 
     {
         $this->_configTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config'));
-        $this->_configUserTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'preferences'));
         
         $this->_configCustomFieldsTablename = SQL_TABLE_PREFIX . 'config_customfields';
         $this->_db = $this->_configTable->getAdapter();
