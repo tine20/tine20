@@ -2103,6 +2103,17 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         ));
         Tinebase_Core::getPreference()->create($localePref);
         
+        // delete old user config settings
+        $oldSettings = array('Locale', 'Timezone');
+        foreach ($oldSettings as $oldSetting) {
+            try {
+                $oldConfig = Tinebase_Config::getInstance()->getConfig($oldSetting);
+                Tinebase_Config::getInstance()->deleteConfig($oldConfig); 
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // do nothing
+            }
+        }
+        
         $this->setApplicationVersion('Tinebase', '0.25');
     }
 }
