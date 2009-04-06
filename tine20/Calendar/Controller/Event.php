@@ -17,7 +17,6 @@
 class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
 {
     // todo in this controller:
-    // handle organizer & organizer tz
     //
     // ensure rights:
     //   search container + implicit organizer & participant
@@ -72,51 +71,32 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     }
     
     /****************************** overwritten functions ************************/
-
+    
     /**
-     * add one record
-     *
+     * inspect creation of one record
+     * 
      * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
-     * @throws  Tinebase_Exception_Record_Validation
+     * @return  void
      */
-    public function create(Tinebase_Record_Interface $_task)
+    protected function _inspectCreate(Tinebase_Record_Interface $_record)
     {
-        if(empty($_task->class_id)) {
-            $_task->class_id = NULL;
-        }
-        return parent::create($_task);
+        $_record->uid = Tinebase_Record_Abstract::generateUID();
+        $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
     }
     
     /**
-     * update one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
-     * @throws  Tinebase_Exception_Record_Validation
+     * inspect update of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record          the update record
+     * @param   Tinebase_Record_Interface $_currentRecord   the current persistent record
+     * @return  void
      */
-    public function update(Tinebase_Record_Interface $_task)
+    protected function _inspectUpdate($_record, $_currentRecord)
     {
-        return parent::update($_task);
+        // if dtstart of an event changes, we update the originator_tz
+        if (! $_currentRecord->dtstart->equals($_record->dtstart)) {
+            $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        }
     }
     
-    /**
-     * ensures organizer && organizer tz
-     *
-     * // not easy: organizer creates event: tz is 
-     * @param Calendar_Model_Event $_event
-     */
-    public function _handleOrganizer($_event)
-    {
-        if (empty(Tinebase_User::getInstance()->getUserById($_event->organizer)->getId())) {
-            $_event->organizer = $this->_currentAccount->getId();
-        }
-        
-        if ($_event->organizer == $this->_currentAccount->getId()) {
-            // use session timezone?
-        }
-        $_event->organizer_tz = Tinebase_Config::getInstance()->getPreference($_event->organizer, Tinebase_Config::TIMEZONE);
-    }
 }

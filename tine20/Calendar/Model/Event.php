@@ -95,7 +95,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         // calendar helper fields
         'is_all_day_evnet'      => array('allowEmpty' => true         ),
         'rrule_until'           => array('allowEmpty' => true         ),
-        'organizer_tz'          => array('allowEmpty' => true         ),
+        'originator_tz'         => array('allowEmpty' => true         ),
     );
     
     /**
