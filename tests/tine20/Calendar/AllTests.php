@@ -35,6 +35,7 @@ class Calendar_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Tests');
         $suite->addTestSuite('Calendar_RruleTests');
         $suite->addTestSuite('Calendar_Backend_SqlTests');
+        $suite->addTestSuite('Calendar_Controller_EventTests');
         return $suite;
     }
 }
