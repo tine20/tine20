@@ -60,6 +60,29 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
     /**************************** public functions *********************************/
     
     /**
+     * get interceptor (alias for getValue())
+     *
+     * @param string $_preferenceName
+     * @return string
+     */
+    public function __get($_preferenceName)
+    {
+        return $this->getValue($_preferenceName);
+    }
+
+    /**
+     * set interceptor (alias for setValue())
+     *
+     * @param string $_preferenceName
+     * @param string $_value
+     * 
+     * @todo add check if $_preferenceName exists as constant in class?
+     */
+    public function __set($_preferenceName, $_value) {
+        $this->setValue($_preferenceName, $_value);
+    }
+    
+    /**
      * get value of preference
      *
      * @param string $_preferenceName
@@ -145,7 +168,7 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
             );
         
             
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();

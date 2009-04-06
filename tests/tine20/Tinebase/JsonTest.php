@@ -138,21 +138,17 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSetLocaleAsPreference()
     {
-        $userId = Zend_Registry::get('currentAccount')->getId();
-        $oldPreference = Tinebase_Config::getInstance()->getPreference($userId, 'Locale');
+        $oldPreference = Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE};
         
         $locale = 'de';
         $result = $this->_instance->setLocale($locale, TRUE, FALSE);
         
-        //print_r($result);
-        //$this->assertEquals($locale, $result['locale']['locale']);
-        
         // get config setting from db
-        $preference = Tinebase_Config::getInstance()->getPreference($userId, 'Locale');
-        $this->assertEquals($locale, $preference->value, "didn't get right locale preference");
+        $preference = Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE};
+        $this->assertEquals($locale, $preference, "Didn't get right locale preference.");
         
         // restore old setting
-        Tinebase_Config::getInstance()->setPreference($userId, $oldPreference);
+        Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = $oldPreference;
     }
 
     /**
@@ -170,23 +166,21 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSetTimezoneAsPreference()
     {
-        $userId = Zend_Registry::get('currentAccount')->getId();
-        $oldPreference = Tinebase_Config::getInstance()->getPreference($userId, 'Timezone');
+        $oldPreference = Tinebase_Core::getPreference()->{Tinebase_Preference::TIMEZONE};
         
         $timezone = 'America/Vancouver';
         $result = $this->_instance->setTimezone($timezone, true);        
-        //print_r($result);
         
         // check json result
         $this->assertEquals($timezone, $result);
         
         // get config setting from db
-        $preference = Tinebase_Config::getInstance()->getPreference($userId, 'Timezone');
-        $this->assertEquals($timezone, $preference->value, "didn't get right timezone preference");
+        $preference = Tinebase_Core::getPreference()->{Tinebase_Preference::TIMEZONE};
+        $this->assertEquals($timezone, $preference, "Didn't get right timezone preference.");
         
         // restore old settings
-        Tinebase_Core::set('userTimeZone', $oldPreference->value);
-        Tinebase_Config::getInstance()->setPreference($userId, $oldPreference);
+        Tinebase_Core::set('userTimeZone', $oldPreference);
+        Tinebase_Core::getPreference()->{Tinebase_Preference::TIMEZONE} = $oldPreference;
     }
     
     /**

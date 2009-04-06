@@ -441,10 +441,7 @@ class Tinebase_Core
                     self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value '$localeString'");
                     
                 } elseif (isset($session->currentAccount)) {
-                    $localeString = Tinebase_Config::getInstance()
-                        ->getPreference(self::getUser()->getId(), 'Locale')
-                        ->value;
-                        
+                    $localeString = self::getPreference()->{Tinebase_Preference::LOCALE};
                     self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " preference '$localeString'");
                 }
             }
@@ -457,14 +454,9 @@ class Tinebase_Core
         }
         self::set('locale', $locale);
         
-        // save locale in config
+        // save locale as preference
         if ($_saveaspreference && Tinebase_Core::isRegistered(self::USER)) {
-            $preference = new Tinebase_Model_Config(array(
-                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-                'name' => 'Locale',
-                'value' => (string)$locale
-            ));
-            Tinebase_Config::getInstance()->setPreference(self::getUser()->getId(), $preference);
+            self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
         }
     }
     
@@ -644,6 +636,8 @@ class Tinebase_Core
      *
      * @param string $_application
      * @return Tinebase_Preference
+     * 
+     * @todo create Preference controller/backend interface as soon as other applications get preferences
      */
     public static function getPreference($_application = 'Tinebase')
     {

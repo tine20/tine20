@@ -78,6 +78,11 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $prefValue = $this->_instance->getValue(Tinebase_Preference::TIMEZONE);
         
         $this->assertEquals('Europe/Berlin', $prefValue);
+
+        // test get interceptor
+        $prefValue = $this->_instance->{Tinebase_Preference::TIMEZONE};
+        
+        $this->assertEquals('Europe/Berlin', $prefValue);
     }
     
     /**
@@ -90,11 +95,12 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $this->_instance->setValue(Tinebase_Preference::TIMEZONE, $newValue);
 
         $prefValue = $this->_instance->getValue(Tinebase_Preference::TIMEZONE);
-        
         $this->assertEquals($newValue, $prefValue);
         
-        // reset old default value
-        $this->_instance->setValue(Tinebase_Preference::TIMEZONE, 'Europe/Berlin');
+        // reset old default value (with set interceptor)
+        $this->_instance->{Tinebase_Preference::TIMEZONE} = 'Europe/Berlin';
+        $prefValue = $this->_instance->getValue(Tinebase_Preference::TIMEZONE);
+        $this->assertEquals('Europe/Berlin', $prefValue);
     }
 
     /**

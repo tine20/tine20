@@ -130,40 +130,6 @@ class Tinebase_Config
     }
 
     /**
-     * returns one preference value identified by user id, config name and application id
-     * 
-     * @param   int     $_userId 
-     * @param   string  $_name config name/key
-     * @param   string  $_applicationId application id (if NULL -> use Tinebase application)
-     * @param   bool    $_checkDefault
-     * @return  Tinebase_Model_Config  the config record
-     * @throws  Tinebase_Exception_NotFound
-     */
-    public function getPreference($_userId, $_name, $_applicationId = NULL, $_checkDefault = TRUE)
-    {
-        $applicationId = ($_applicationId !== NULL ) 
-            ? Tinebase_Model_Application::convertApplicationIdToInt($_applicationId) 
-            : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-        
-        $select = $this->_configUserTable->select();
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId))
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name))
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_userId));
-        
-        if (!$row = $this->_configTable->fetchRow($select)) {
-            if ($_checkDefault) {
-                $result = $this->getConfig($_name, $applicationId);
-            } else {
-                throw new Tinebase_Exception_NotFound("User preference with name $_name not found!");
-            }
-        } else {
-            $result = new Tinebase_Model_Config($row->toArray());    
-        }
-        
-        return $result;
-    }
-    
-    /**
      * returns all config settings for one application
      * 
      * @param   string $_applicationId application id
@@ -221,39 +187,6 @@ class Tinebase_Config
         return $config;
     }     
 
-    /**
-     * sets one config value identified by config name and application id
-     * 
-     * @param   int     $_userId 
-     * @param   Tinebase_Model_Config $_config record to set
-     * @return  Tinebase_Model_Config
-     */
-    public function setPreference($_userId, Tinebase_Model_Config $_config)
-    {
-        // check if already in
-        try {
-            $config = $this->getPreference($_userId, $_config->name, $_config->application_id, FALSE);
-            $config->value = $_config->value;
-
-            // update
-            $this->_configUserTable->update($config->toArray(), $this->_db->quoteInto('id = ?', $config->getId()));             
-            
-        } catch (Tinebase_Exception_NotFound $e) {
-            $newId = $_config->generateUID();
-            $_config->setId($newId);
-            
-            $configArray = $_config->toArray();
-            $configArray['account_id'] = $_userId;
-            
-            // create new
-            $this->_configUserTable->insert($configArray); 
-        }
-
-        $config =  $this->getPreference($_userId, $_config->name, $_config->application_id);
-        
-        return $config;
-    }     
-    
     /**
      * deletes one config setting
      * 
