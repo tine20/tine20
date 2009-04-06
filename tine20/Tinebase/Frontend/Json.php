@@ -141,19 +141,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $timezone = Tinebase_Core::setupUserTimezone($timezoneString, $saveaspreference);
         
         return $timezone;
-        /*
-        return array(
-            'locale' => array(
-                'locale'   => $locale->toString(), 
-                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                'region'   => $locale->getCountryTranslation($locale->getRegion())
-            ),
-            'translationFiles' => array(
-                'generic' => Tinebase_Translation::getJsTranslationFile($locale, 'generic'),
-                'tine'    => Tinebase_Translation::getJsTranslationFile($locale, 'tine'),
-                'ext'     => Tinebase_Translation::getJsTranslationFile($locale, 'ext')
-            ));
-        */
     }
     
     /**
@@ -381,7 +368,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $registryData =  array(
-            'timeZone'         => Tinebase_Core::get('userTimeZone'),
+            'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),

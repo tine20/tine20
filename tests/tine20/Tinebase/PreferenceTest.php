@@ -8,7 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        add tests
+ * @todo        add forced pref test
  */
 
 /**
@@ -56,15 +56,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_instance = Tinebase_Preference::getInstance();
-        
-        /*
-        $this->objects['config'] = new Tinebase_Model_Config(array(
-            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            "name"              => "Test Name",
-            "value"             => "Test value",              
-        ));
-        */
+        $this->_instance = Tinebase_Core::getPreference();
     }
 
     /**
@@ -78,13 +70,42 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * get preference
+     * get default preference
      *
-     * @todo implement
      */
-    public function testGetPreference()
+    public function testGetDefaultPreference()
     {
-        // do something
-        $this->assertTrue(TRUE);
+        $prefValue = $this->_instance->getValue(Tinebase_Preference::TIMEZONE);
+        
+        $this->assertEquals('Europe/Berlin', $prefValue);
+    }
+    
+    /**
+     * test set timezone pref
+     *
+     */
+    public function testSetPreference()
+    {
+        $newValue = 'Europe/Nicosia';
+        $this->_instance->setValue(Tinebase_Preference::TIMEZONE, $newValue);
+
+        $prefValue = $this->_instance->getValue(Tinebase_Preference::TIMEZONE);
+        
+        $this->assertEquals($newValue, $prefValue);
+        
+        // reset old default value
+        $this->_instance->setValue(Tinebase_Preference::TIMEZONE, 'Europe/Berlin');
+    }
+
+    /**
+     * test get default value
+     *
+     */
+    public function testGetDefaultPreferenceValue()
+    {
+        $defaultValue = 'Shangri-La';
+        $prefValue = $this->_instance->getValue('SomeNonexistantPref', $defaultValue);
+        
+        $this->assertEquals($defaultValue, $prefValue);
     }
 }

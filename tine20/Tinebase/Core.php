@@ -75,6 +75,12 @@ class Tinebase_Core
      *
      */
     const INPUT_FILTER = 'inputFilter';
+
+    /**
+     * constant for preferences registry
+     *
+     */
+    const PREFERENCES = 'preferences';
     
     /**************** other consts *************************/
     
@@ -484,32 +490,19 @@ class Tinebase_Core
         $session = self::get(self::SESSION);
         
         if ($_timezone === NULL) {
-            // get timezone from config/preferences
-            if (isset($session->currentAccount)) {
-                $timezone = Tinebase_Config::getInstance()
-                    ->getPreference(self::getUser()->getId(), 'Timezone')
-                    ->value;
-            } else {
-                $timezone = Tinebase_Config::getInstance()
-                    ->getConfig('Timezone')
-                    ->value;
-            }
-        } else {
+            // get timezone from preferences
+            $timezone = self::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
             
+        } else {
             $timezone = $_timezone;
 
-            // save locale in config
             if ($_saveaspreference) {
-                $preference = new Tinebase_Model_Config(array(
-                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-                    'name' => 'Timezone',
-                    'value' => $timezone
-                ));
-                Tinebase_Config::getInstance()->setPreference(self::getUser()->getId(), $preference);
+                // save as user preference
+                self::getPreference()->setValue(Tinebase_Preference::TIMEZONE, $timezone);
             }
         }
         
-        self::set('userTimeZone', $timezone);
+        self::set(self::USERTIMEZONE, $timezone);
         
         return $timezone;
     }
@@ -645,7 +638,36 @@ class Tinebase_Core
         // save in registry
         self::set(self::INPUT_FILTER, $filters);
     }
-    
+
+    /**
+     * get preferences instance by application name (create+save it to registry if it doesn't exist)
+     *
+     * @param string $_application
+     * @return Tinebase_Preference
+     */
+    public static function getPreference($_application = 'Tinebase')
+    {
+        $result = NULL;
+        
+        if (self::isRegistered(self::PREFERENCES)) {
+            $prefs = self::get(self::PREFERENCES);
+            if (isset($prefs[$_application])) {
+                $result = $prefs[$_application];
+            }
+        } else {
+            $prefs = array();
+        }
+        
+        if ($result === NULL) {
+            $prefClassName = $_application . '_Preference';
+            $result = new $prefClassName();
+            $prefs[$_application] = $result;
+            self::set(self::PREFERENCES, $prefs);
+        }
+        
+        return $result;
+    }
+
     /**
      * get db adapter
      *

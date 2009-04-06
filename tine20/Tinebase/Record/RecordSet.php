@@ -391,7 +391,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         if (array_key_exists($_field, $this->_indices)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering with indices, expecting fast results ;-)'); 
-            $matchingRecords = array_intersect_key($this->_listOfRecords, array_keys($this->_indices[$_field], $_value));
+            $matchingRecords = array_intersect_key($this->_listOfRecords, array_flip((array) array_keys($this->_indices[$_field], $_value)));
             $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
             $result->addIndices(array_keys($this->_indices));
         } else {
