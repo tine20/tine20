@@ -48,12 +48,13 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
     
     public function tearDown()
     {
-        $eventIds = $this->_backend->search(new Calendar_Model_EventFilter(array(
+        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        )), new Tinebase_Model_Pagination(array()), true);
+        )), new Tinebase_Model_Pagination(array()));
         
-        foreach ($eventIds as $eventId) {
-        	$this->_backend->delete($eventId);
+        // only delete events from our testcalendar. (container_id filter also allowes implicts from other calendars)
+        foreach ($events as $event) {
+        	$this->_backend->delete($event->getId());
         }
         
         Tinebase_Container::getInstance()->deleteContainer($this->_testCalendar);
