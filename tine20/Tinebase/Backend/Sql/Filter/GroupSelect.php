@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  */
-class Tinebase_Model_Backend_Sql_GroupSelect
+class Tinebase_Backend_Sql_Filter_GroupSelect
 {
     /**
      * @var Zend_Db_Select
@@ -37,7 +37,7 @@ class Tinebase_Model_Backend_Sql_GroupSelect
     /**
      * save an instance of the select object
      *
-     * @param  Zend_Db_Select|Tinebase_Model_Backend_Sql_GroupSelect $_select
+     * @param  Zend_Db_Select|Tinebase_Backend_Sql_Filter_GroupSelect $_select
      * @return void
      */
     public function __construct($_select)
