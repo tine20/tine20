@@ -155,12 +155,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => 'GROUP_CONCAT(' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
         
-        // we need this _somewhere_ for acl filter
-        //$select->joinLeft(
-        //    /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'), 
-        //    /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
-        //    /* select */ array());
-        
         $select->group(array_keys($this->_schema));
         
         return $select;
