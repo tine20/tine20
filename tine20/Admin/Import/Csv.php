@@ -60,7 +60,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 $record = $this->_controller->create($record, $password, $password);
             }
         } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Record invalid: ' . print_r($_record->getValidationErrors(), TRUE));
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Record invalid: ' . print_r($record->getValidationErrors(), TRUE));
             throw Tinebase_Exception_Record_Validation('Imported record is invalid.');
         }
         
