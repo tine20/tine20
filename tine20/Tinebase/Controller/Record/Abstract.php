@@ -217,6 +217,7 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
             }
             
+            $this->_inspectCreate($_record);
             $record = $this->_backend->create($_record);
             
             // set relations / tags / notes
@@ -249,6 +250,17 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
         }
         
         return $this->get($record);
+    }
+    
+    /**
+     * inspect creation of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    {
+        
     }
     
     /**
@@ -287,6 +299,7 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
                 $currentMods = $modLog->writeModLog($_record, $currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
             }
             
+            $this->_inspectUpdate($_record, $currentRecord);
             $record = $this->_backend->update($_record);
     
             // set relations & tags & notes
@@ -316,6 +329,18 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
         }
         return $this->get($record->getId());
     }    
+    
+    /**
+     * inspect update of one record
+     * 
+     * @param   Tinebase_Record_Interface $_record          the update record
+     * @param   Tinebase_Record_Interface $_currentRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectUpdate($_record, $_currentRecord)
+    {
+        
+    }
     
     /**
      * update multiple records
