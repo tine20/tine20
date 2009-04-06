@@ -40,8 +40,6 @@ class Setup_Import_TineInitial
         $configSettings = array(
             "Default User Group" => "Users",              
             "Default Admin Group" => "Administrators",
-            "Locale" => "auto",              
-            "Timezone" => "Europe/Berlin",              
         );
         
         $configBackend = Tinebase_Config::getInstance();
@@ -55,7 +53,7 @@ class Setup_Import_TineInitial
             ));            
             $configBackend->setConfig($config);
         }
-        
+
         /***************** admin account, groups and roles ************************/
         
         echo "Creating initial user(tine20admin), groups and roles ...<br>";
