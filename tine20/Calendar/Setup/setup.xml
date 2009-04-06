@@ -139,7 +139,7 @@
                     <type>datetime</type>
                 </field>
                 <field>
-                    <name>organizer_tz</name>
+                    <name>originator_tz</name>
                     <type>text</type>
                     <length>255</length>
                 </field>
