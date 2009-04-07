@@ -182,7 +182,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     protected function _rawDataToRecordSet(array $_rawData)
     {
-        $events = parent::_rawDataToRecordSet($_rawData);
+        $events = new Tinebase_Record_RecordSet($this->_modelName);
+        $events->addIndices(array('rrule', 'recurid'));
+        
+        foreach ($_rawData as $rawEvent) {
+            $events->addRecord(new Calendar_Model_Event($rawEvent, true));
+        }
         
         $this->appendForeignRecordSetToRecordSet($events, 'attendee', 'id', Calendar_Backend_Sql_Attendee::FOREIGNKEY_EVENT, $this->_attendeeBackend);
         
