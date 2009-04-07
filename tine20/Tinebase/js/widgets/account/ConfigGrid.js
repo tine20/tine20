@@ -98,6 +98,17 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
             this.action_removeAccount.setDisabled(selectionModel.getCount() < 1);
         }, this);
         
+        // remove non-plugin config columns
+        var nonPluginColumns = [];
+        for (var i=0; i < this.configColumns.length; i++) {
+        	if (!this.configColumns[i].init || typeof(this.configColumns[i].init) != 'function') {
+        		nonPluginColumns.push(this.configColumns[i]);
+        	}
+        }
+        for (var i=0; i < nonPluginColumns.length; i++) {
+        	this.configColumns.remove(nonPluginColumns[i]);
+        }
+        
         /* grid panel */
         this.configGridPanel = new Ext.grid.EditorGridPanel({
             title: this.accountListTitle,
