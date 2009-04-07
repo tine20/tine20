@@ -324,19 +324,21 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $result = $this->object->sort('string', 'ASC');
     }
     
-    public function testIndices()
+    public function testSimpleFilter()
     {
         $recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
         $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '100', 'string' => 'bommel'), true));
-        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '200', 'string' => 'bommel'), true));
-        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '300', 'string' => 'super'), true));
+        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '200', 'string' => 'super'), true));
+        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '300', 'string' => 'bommel'), true));
         
         $filterResultWOIndices = $recordSet->filter('string', 'bommel');
         $this->assertEquals(2, count($filterResultWOIndices));
+        $this->assertEquals(array(100, 300), $filterResultWOIndices->getArrayOfIds());
         
         $recordSet->addIndices(array('string'));
         $filterResultWIndices = $recordSet->filter('string', 'bommel');
         $this->assertEquals(count($filterResultWOIndices), count($filterResultWIndices));
+        $this->assertEquals(array(100, 300), $filterResultWIndices->getArrayOfIds());
     }
 }
 // Call Tinebase_Record_RecordSetTest::main() if this source file is executed directly.
