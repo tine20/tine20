@@ -16,6 +16,8 @@
 class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     // todos :
+    // ensure exdates have dtstart timepart (fix for ext datepicker)
+    //
     // add handling to compute recurset
     //      $candidates = $events->filter('rrule', "/^FREQ.*/", TRUE)
     //      foreach ($candidates as $candidate) {
