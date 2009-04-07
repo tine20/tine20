@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        add forced pref test
  */
 
 /**
@@ -113,5 +112,33 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $prefValue = $this->_instance->getValue('SomeNonexistantPref', $defaultValue);
         
         $this->assertEquals($defaultValue, $prefValue);
+    }
+    
+    /**
+     * test forced preference
+     *
+     * @todo remove user pref as well?
+     */
+    public function testForcedPreference()
+    {
+        $forcedPref = new Tinebase_Model_Preference(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name'              => 'testForcedPref',
+            'value'             => 'forced value',
+            'account_id'        => 0,
+            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_FORCED
+        ));
+        $forcedPref = $this->_instance->create($forcedPref);
+        
+        // set pref for user
+        $this->_instance->testForcedPref = 'user value';
+        
+        $pref = $this->_instance->testForcedPref;
+        
+        $this->assertEquals($forcedPref->value, $pref);
+        
+        // cleanup
+        $this->_instance->delete($forcedPref);
     }
 }
