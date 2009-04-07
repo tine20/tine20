@@ -358,13 +358,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function addIndices(array $_properties)
     {
-        foreach ($_properties as $property) {
-            if (! array_key_exists($property, $this->_indices)) {
-                $this->_indices[$property] = array();
+        if (! empty($_properties)) {
+            foreach ($_properties as $property) {
+                if (! array_key_exists($property, $this->_indices)) {
+                    $this->_indices[$property] = array();
+                }
             }
+            
+            $this->_buildIndices();
         }
-        
-        $this->_buildIndices();
     }
     
     /**
@@ -387,24 +389,25 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * 
      * @todo add regular expressions as $_value
      */
-    public function filter($_field, $_value)
+    public function filter($_field, $_value, $_valueIsRegExp = FALSE)
     {
         if (array_key_exists($_field, $this->_indices)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering with indices, expecting fast results ;-)'); 
-            $matchingRecords = array_intersect_key($this->_listOfRecords, array_flip((array) array_keys($this->_indices[$_field], $_value)));
-            $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
-            $result->addIndices(array_keys($this->_indices));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering with indices, expecting fast results ;-)');
+            $valueMap = $this->_indices[$_field];
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering without indices, expecting slow results');   
-            $result = clone($this);
-            
-            // remove all entries that don't match the filter
-            foreach ($result as $index => $record) {
-                if ($record->$_field !== $_value) {
-                    unset($result[$index]);
-                }
-            }
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering without indices, expecting slow results');
+            $valueMap = $this->$_field;
         }
+        
+        if ($_valueIsRegExp) {
+            $matchingMap = preg_grep($_value,  $valueMap);
+        } else {
+            $matchingMap = array_flip((array)array_keys($valueMap, $_value));
+        }
+        $matchingRecords = array_intersect_key($this->_listOfRecords, $matchingMap);
+        
+        $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
+        $result->addIndices(array_keys($this->_indices));
         
         return $result;
     }

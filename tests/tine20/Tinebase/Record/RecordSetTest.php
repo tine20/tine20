@@ -340,9 +340,25 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(count($filterResultWOIndices), count($filterResultWIndices));
         $this->assertEquals(array(100, 300), $filterResultWIndices->getArrayOfIds());
     }
+    
+    public function testRegexpFilter()
+    {
+        $recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '100', 'string' => 'bommel-1'), true));
+        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '200', 'string' => 'super-1'), true));
+        $recordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => '300', 'string' => 'bommel-2'), true));
+        
+        $filterResultWOIndices = $recordSet->filter('string', '/^bommel.*/', TRUE);
+        $this->assertEquals(2, count($filterResultWOIndices));
+        $this->assertEquals(array(100, 300), $filterResultWOIndices->getArrayOfIds());
+        
+        $recordSet->addIndices(array('string'));
+        $filterResultWIndices = $recordSet->filter('string', '/^bommel.*/', TRUE);
+        $this->assertEquals(count($filterResultWOIndices), count($filterResultWIndices));
+        $this->assertEquals(array(100, 300), $filterResultWIndices->getArrayOfIds());
+    }
 }
 // Call Tinebase_Record_RecordSetTest::main() if this source file is executed directly.
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordSetTest::main') {
     Tinebase_Record_RecordSetTest::main();
 }
-?>
