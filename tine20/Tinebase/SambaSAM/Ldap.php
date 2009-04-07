@@ -213,13 +213,16 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
             $ldapData = array(
                 'sambantpassword' => $this->_generateNTPassword($_password),
                 'sambalmpassword' => $this->_generateLMPassword($_password),
-                'sambapwdlastset' => Zend_Date::now()->getTimestamp()
+                'sambapwdlastset' => ($_mustChange) ? '0' : Zend_Date::now()->getTimestamp()
             ); 
             
+            // @deprecated
+            /*
             if ($_mustChange) {
                 $ldapData['sambapwdmustchange'] = '1';
                 $ldapData['sambapwdcanchange'] = '1';
             }
+            */
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
