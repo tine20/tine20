@@ -35,6 +35,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     const WDAY_FRIDAY    = 'FR';
     const WDAY_SATURDAY  = 'SA';
     
+    const TS_HOUR = 3600;
+    const TS_DAY  = 86400;
+    
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -104,11 +107,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeRecuranceSet($_event, $_exceptions, $_from, $_until)
     {
-        // all recur computations are done in the timezone of the orginator
-        $_event->setTimezone($_event->originator_tz);
-        $_from->setTimezone($_event->originator_tz);
-        $_until->setTimezone($_event->originator_tz);
-        date_default_timezone_set($_event->originator_tz);
+        // get timestamps
+        $fromTS     = $_from->getTimestamp();
+        $untilTS    = $_until->getTimestamp();
+        $dtstartTS  = $_event->dtstart->getTimestamp();
+        $dtendTS    = $_event->dtend->getTimestamp();
         
         $completeRecurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
@@ -117,19 +120,17 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         switch ($rrule->freq) {
             case self::FREQ_DAILY:
-                $computationStartDate = clone $_event->dtstart;
+                $computationStartDateTS = $dtstartTS;
                 $computationOffsetDays = 0;
                 
                 // if dtstart is before $_from, we compute the offset where to start our calculations
-                if ($_event->dtstart->isEarlier($_from)) {
-                    $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtstart->getTimestamp()) / (3600 * 24 * $rrule->interval)) * $rrule->interval;
-                    $computationStartDate->addDay($computationOffsetDays);
+                if (($dtstartTS - $fromTS) < 0) {
+                    $computationOffsetDays = floor(($fromTS - $dtstartTS) / (self::TS_DAY * $rrule->interval)) * $rrule->interval;
                 }
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationOffsetDays: ' . $computationOffsetDays);
                 
-                $computationSpan = $_until->getTimestamp() - $_from->getTimestamp();
-                $numOfRecuances = floor($computationSpan / (3600 * 24 * $rrule->interval));
-                
+                $computationSpan = $untilTS - $fromTS;
+                $numOfRecuances = floor($computationSpan / (self::TS_DAY * $rrule->interval - 1));
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $numOfRecuances: ' . $numOfRecuances);
                 
                 $recurEventClone = clone $_event;
@@ -138,14 +139,24 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 unset($recurEventClone->rrule);
                 unset($recurEventClone->rrule_until);
                 
+                $eventLength = clone $_event->dtend;
+                $eventLength->sub($_event->dtstart);
+                
                 // create recur events
-                for ($i=0; $i<$numOfRecuances; $i++) {
+                for ($i=1; $i<$numOfRecuances+1; $i++) {
                     $recurEvent = clone $recurEventClone;
                     
-                    $recurEvent->dtstart->add($computationOffsetDays  +  ($i+1) * $rrule->interval, Zend_Date::DAY_SHORT);
-                    $recurEvent->dtend->add($computationOffsetDays  +  ($i+1) * $rrule->interval, Zend_Date::DAY_SHORT);
-                    echo (string) $recurEvent->dtstart . "\n";
-                    echo (string) $recurEvent->dtstart->getTimezone() . "\n";
+                    $recurEvent->dtstart = new Zend_Date($dtstartTS + ($computationOffsetDays + $i * $rrule->interval) * self::TS_DAY, Zend_Date::TIMESTAMP);
+                    $recurEvent->dtend   = new Zend_Date($dtendTS   + ($computationOffsetDays + $i * $rrule->interval) * self::TS_DAY, Zend_Date::TIMESTAMP);
+                    
+                    $originatorsDtstart = clone $recurEvent->dtstart;
+                    $originatorsDtstart->setTimezone($_event->originator_tz);
+                    $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+                    
+                    // we calculate dtend from the event length, as events during 
+                    // a dst boundary could get dtend less than dtstart otherwise 
+                    $recurEvent->dtend = clone $recurEvent->dtstart;
+                    $recurEvent->dtend->add($eventLength);
                     
                     $completeRecurSet->addRecord($recurEvent);
                 }
@@ -158,13 +169,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             case self::FREQ_YEARLY:
                 break;
         }
-        
-        // reset timzone of current php process and convert dates to utc
-        date_default_timezone_set('UTC');
-        $_event->setTimezone('UTC');
-        $_from->setTimezone('UTC');
-        $_until->setTimezone('UTC');
-        $completeRecurSet->setTimezone('UTC');
         
         // filter out exdates and exceptions
         $finalRecurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
