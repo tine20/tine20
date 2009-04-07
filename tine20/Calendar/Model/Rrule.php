@@ -94,7 +94,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     );
     
     /**
-     * Computes the recurdates of the given event leaving out $_event->exdate and $_exceptions
+     * Computes the recurance set of the given event leaving out $_event->exdate and $_exceptions
      *
      * @param  Calendar_Model_Event         $_event
      * @param  Tinebase_Record_RecordSet    $_exceptions
@@ -104,7 +104,79 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeRecuranceSet($_event, $_exceptions, $_from, $_until)
     {
+        // all recur computations are done in the timezone of the orginator
+        $_event->setTimezone($_event->originator_tz);
+        $_from->setTimezone($_event->originator_tz);
+        $_until->setTimezone($_event->originator_tz);
+        date_default_timezone_set($_event->originator_tz);
         
+        $completeRecurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $rrule = new Calendar_Model_Rrule();
+        $rrule->setFromString($_event->rrule);
+        
+        switch ($rrule->freq) {
+            case self::FREQ_DAILY:
+                $computationStartDate = clone $_event->dtstart;
+                $computationOffsetDays = 0;
+                
+                // if dtstart is before $_from, we compute the offset where to start our calculations
+                if ($_event->dtstart->isEarlier($_from)) {
+                    $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtstart->getTimestamp()) / (3600 * 24 * $rrule->interval)) * $rrule->interval;
+                    $computationStartDate->addDay($computationOffsetDays);
+                }
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationOffsetDays: ' . $computationOffsetDays);
+                
+                $computationSpan = $_until->getTimestamp() - $_from->getTimestamp();
+                $numOfRecuances = floor($computationSpan / (3600 * 24 * $rrule->interval));
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $numOfRecuances: ' . $numOfRecuances);
+                
+                $recurEventClone = clone $_event;
+                $recurEventClone->setId(NULL);
+                unset($recurEventClone->exdate);
+                unset($recurEventClone->rrule);
+                unset($recurEventClone->rrule_until);
+                
+                // create recur events
+                for ($i=0; $i<$numOfRecuances; $i++) {
+                    $recurEvent = clone $recurEventClone;
+                    
+                    $recurEvent->dtstart->add($computationOffsetDays  +  ($i+1) * $rrule->interval, Zend_Date::DAY_SHORT);
+                    $recurEvent->dtend->add($computationOffsetDays  +  ($i+1) * $rrule->interval, Zend_Date::DAY_SHORT);
+                    echo (string) $recurEvent->dtstart . "\n";
+                    echo (string) $recurEvent->dtstart->getTimezone() . "\n";
+                    
+                    $completeRecurSet->addRecord($recurEvent);
+                }
+                break;
+                
+            case self::FREQ_WEEKLY:
+                break;
+            case self::FREQ_MONTHLY:
+                break;
+            case self::FREQ_YEARLY:
+                break;
+        }
+        
+        // reset timzone of current php process and convert dates to utc
+        date_default_timezone_set('UTC');
+        $_event->setTimezone('UTC');
+        $_from->setTimezone('UTC');
+        $_until->setTimezone('UTC');
+        $completeRecurSet->setTimezone('UTC');
+        
+        // filter out exdates and exceptions
+        $finalRecurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        foreach ($completeRecurSet as $recurEvent) {
+            $reucurIdDtstart = clone $recurEvent->dtstart;
+            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+            
+            // todo check exceptions & exdate
+            $finalRecurSet->addRecord($recurEvent);
+        }
+        
+        return $finalRecurSet;
     }
     
     /**

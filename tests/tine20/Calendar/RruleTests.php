@@ -49,6 +49,30 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($rruleString, (string)$rrule);
     }
     
+    public function testCalcDaily()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'change t-shirt',
+            'dtstart'       => '1979-05-06 08:00:00',
+            'dtend'         => '1979-05-06 08:05:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=2;UNTIL=2009-04-01 08:00:00',
+            'originator_tz' => 'Europe/Berlin'
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        // note: 2009-03-29 Europe/Berlin switched to DST
+        $from = new Zend_Date('2009-03-25 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-04-05 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
+        foreach($recurSet as $event) {
+            //echo (string) $event->dtstart . "\n";
+        }
+    }
+    
 }
     
 
