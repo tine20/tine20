@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @deprecated  use EditDialog instead. This class will be removed when all
+ *              dialogs are moved to the EditDialog widget
  */
 Ext.namespace('Tine.widgets');
 
@@ -15,8 +17,6 @@ Ext.namespace('Tine.widgets.dialog');
 
 /**
  * Generic 'Edit Record' dialog
- * @depricated, use EditDialog instead. This class will be removed when all
- * dialogs are moved to the EditDialog widget
  *
  */
 Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
