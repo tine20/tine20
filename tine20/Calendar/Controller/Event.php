@@ -21,9 +21,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     // add fns for participats state settings -> move to attendee controller?
     // add group attendee handling -> move to attendee controller?
     //
-    // add handling to compute recurset (JSON) -> recur model/controller (computation/cacheing)?
-    //
-    // add handling to append all exceptions (AS)
+    // add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
     //
     // handle alarms -> generic approach
     
@@ -87,14 +85,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     /**
      * inspect update of one record
      * 
-     * @param   Tinebase_Record_Interface $_record          the update record
-     * @param   Tinebase_Record_Interface $_currentRecord   the current persistent record
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectUpdate($_record, $_currentRecord)
+    protected function _inspectUpdate($_record, $_oldRecord)
     {
         // if dtstart of an event changes, we update the originator_tz
-        if (! $_currentRecord->dtstart->equals($_record->dtstart)) {
+        if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         }
     }

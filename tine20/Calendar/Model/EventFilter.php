@@ -46,6 +46,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'dtstart'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'dtend'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'rrule'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'recurid'        => array('filter' => 'Tinebase_Model_Filter_Text'),
         'rrule_until'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
     );
 }

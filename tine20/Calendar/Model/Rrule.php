@@ -94,6 +94,20 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     );
     
     /**
+     * Computes the recurdates of the given event leaving out $_event->exdate and $_exceptions
+     *
+     * @param  Calendar_Model_Event         $_event
+     * @param  Tinebase_Record_RecordSet    $_exceptions
+     * @param  Zend_Date                    $_from
+     * @param  Zend_Date                    $_until
+     * @return Tinebase_Record_RecordSet
+     */
+    public static function computeRecuranceSet($_event, $_exceptions, $_from, $_until)
+    {
+        
+    }
+    
+    /**
      * @var array supported rrule parts
      */
     protected $_rruleParts = array('freq', 'interval', 'until', 'wkst', 'byday', 'bymonth');
