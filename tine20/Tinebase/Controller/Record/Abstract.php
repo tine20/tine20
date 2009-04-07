@@ -333,11 +333,11 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
     /**
      * inspect update of one record
      * 
-     * @param   Tinebase_Record_Interface $_record          the update record
-     * @param   Tinebase_Record_Interface $_currentRecord   the current persistent record
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectUpdate($_record, $_currentRecord)
+    protected function _inspectUpdate($_record, $_oldRecord)
     {
         
     }
