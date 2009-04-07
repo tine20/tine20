@@ -165,6 +165,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * recursivly clone properties
      *
+     * NOTE: array of dates are not yet cloned (todo?)
      */
     public function __clone()
     {
