@@ -54,8 +54,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'change t-shirt',
-            'dtstart'       => '1979-05-06 08:00:00',
-            'dtend'         => '1979-05-06 08:05:00',
+            'dtstart'       => '1979-06-05 08:00:00',
+            'dtend'         => '1979-06-05 08:05:00',
             'rrule'         => 'FREQ=DAILY;INTERVAL=2;UNTIL=2009-04-01 08:00:00',
             'originator_tz' => 'Europe/Berlin'
         ));
@@ -64,13 +64,15 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         // note: 2009-03-29 Europe/Berlin switched to DST
         $from = new Zend_Date('2009-03-25 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-04-05 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-04-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
         
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
-        foreach($recurSet as $event) {
-            //echo (string) $event->dtstart . "\n";
-        }
+        $this->assertEquals('2009-03-25 08:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-03-27 08:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-03-29 07:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-03-31 07:00:00', $recurSet[3]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals(4, count($recurSet));
     }
     
 }
