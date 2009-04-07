@@ -386,8 +386,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param string $_field
      * @param string $_value
      * @return Tinebase_Record_RecordSet
-     * 
-     * @todo add regular expressions as $_value
      */
     public function filter($_field, $_value, $_valueIsRegExp = FALSE)
     {
