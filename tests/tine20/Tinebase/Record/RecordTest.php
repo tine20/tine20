@@ -140,6 +140,19 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $this->assertTrue(array_key_exists('date_single', $diff));
     }
 
+    public function testClone()
+    {
+        $record = new Tinebase_Record_DummyRecord(array(
+            'string' => 'test',
+            'date_single' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+        ), true);
+        
+        $clone = clone $record;
+        $clone->date_single->addDay(1);
+        
+        $this->assertFalse($record->date_single == $clone->date_single, 'date in record and clone is equal');
+    }
+    
     /**
      * test if equal
      *

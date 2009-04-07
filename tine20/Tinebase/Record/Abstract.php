@@ -163,6 +163,20 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
+     * recursivly clone properties
+     *
+     */
+    public function __clone()
+    {
+        foreach ($this->_properties as $name => $value)
+        {
+            if (is_object($value)) {
+                $this->_properties[$name] = clone $value;
+            }
+        }
+    }
+    
+    /**
      * sets identifier of record
      * 
      * @param int identifier
