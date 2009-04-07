@@ -49,10 +49,7 @@ Tine.Courses.Model.Course = Tine.Tinebase.Record.create(Tine.Courses.Model.Cours
 
 Tine.Courses.Model.Course.getDefaultData = function() { 
     return {
-    	/*
-        is_open: 1,
-        is_billable: true
-        */
+        type: Tine.Courses.registry.get('defaultType')
     };
 };
 

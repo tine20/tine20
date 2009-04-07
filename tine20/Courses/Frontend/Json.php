@@ -133,9 +133,14 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $result = array();
         foreach ($members['results'] as $member) {
+            
+            // get full user for login name
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($member['accountId']);
+            
             $result[] = array(
                 'id'    => $member['accountId'],
                 'name'  => $member['accountDisplayName'],
+                'data'  => $fullUser->accountLoginName,
                 'type'  => 'user',
             );
         }
@@ -169,6 +174,24 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /************************************** public API **************************************/
+    
+    /**
+     * Returns registry data of the application.
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        $types = $this->_config->get('course_types', array());
+        $defaultType = (!empty($types)) ? array_shift(array_flip($types->toArray())) : '';
+        
+        return array(
+            'defaultType' => array(
+                'value' => $defaultType,
+                'records' => $this->searchCourseTypes(NULL, NULL)
+            )
+        );
+    }
     
     /**
      * Search for records matching given arguments
@@ -235,7 +258,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
             
-            // delte members wich got removed from course
+            // delete members wich got removed from course
             Admin_Controller_User::getInstance()->delete($removedMembers);
         }
         

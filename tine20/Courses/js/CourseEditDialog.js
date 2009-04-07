@@ -230,13 +230,18 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 fields: Tine.Tinebase.Model.Account
             });
             
-            var columns = [];
+            var columns = [{
+                id: 'data',
+                header: this.app.i18n._("Login"),
+                width: 100,
+                dataIndex: 'data'
+            }];
             
             var action_resetPwd = new Ext.Action({
                 text: _('Reset Password'),
-                //disabled: true,
                 scope: this,
                 handler: function(_button, _event) {
+                	this.loadMask.show();
                 	var accountObject = Ext.getCmp('CoursesMembersGrid').configGridPanel.getSelectionModel().getSelected().data;
                     Ext.Ajax.request( {
                         params : {
@@ -244,6 +249,10 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             account   : accountObject.id,
                             password  : this.record.data.name,
                             mustChange: true
+                        },
+                        scope: this,
+                        success: function() {
+                            this.loadMask.hide();
                         }
                     });
                     /*
