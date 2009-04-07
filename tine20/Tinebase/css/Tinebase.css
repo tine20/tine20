@@ -78,6 +78,9 @@ html, body {
 .action_import {
     background-image:url(../../images/oxygen/16x16/actions/view-sort-ascending.png) !important;
 }   
+.action_preferences {
+    background-image:url(../../images/oxygen/16x16/actions/exec.png) !important;
+}   
 
 /* ----- renderer ------------------------------------------------------------*/
 .renderer {

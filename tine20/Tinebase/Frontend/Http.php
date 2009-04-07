@@ -95,6 +95,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/ActionUpdater.js',
             'Tinebase/js/widgets/EditRecord.js',
             'Tinebase/js/widgets/EditDialog.js',
+            'Tinebase/js/widgets/PreferencesDialog.js',
             'Tinebase/js/widgets/Priority.js',
             'Tinebase/js/widgets/VersionCheck.js',
             'Tinebase/js/widgets/AccountpickerPanel.js',

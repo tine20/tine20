@@ -46,6 +46,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                     items: [
                         this.action_changePassword,
                         this.action_installGoogleGears,
+                        this.action_editPreferences,
                         '-', 
                         this.action_logout
                     ]                
@@ -175,13 +176,21 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         this.action_changePassword = new Ext.Action({
             text: _('Change password'),
             handler: this.onChangePassword,
-            disabled: !Tine.Tinebase.registry.get('changepw')
+            disabled: !Tine.Tinebase.registry.get('changepw'),
+            iconCls: 'action_password'
         });
         
         this.action_installGoogleGears = new Ext.Action({
             text: _('Install Google Gears'),
             handler: this.onInstallGoogleGears,
             disabled: (window.google && google.gears) ? true : false
+        });
+        
+        this.action_editPreferences = new Ext.Action({
+            text: _('Edit Preferences'),
+            handler: this.onEditPreferences,
+            disabled: false,
+            iconCls: 'action_preferences'
         });
 
         this.action_logout = new Ext.Action({
@@ -430,6 +439,13 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             height: 400,
             url: "http://gears.google.com/?action=install&message=" + message
         });
+    },
+
+    /**
+     * @private
+     */
+    onEditPreferences: function() {
+    	Tine.widgets.dialog.Preferences.openWindow({});
     },
     
     /**
