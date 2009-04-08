@@ -181,16 +181,6 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
-     * set options 
-     *
-     * @param array $_options
-     */
-    protected function _setOptions(array $_options)
-    {
-        $this->_options = $_options;
-    }
-    
-    /**
      * Add a filter to this group
      *
      * @param  Tinebase_Model_Filter_Abstract $_filter
@@ -352,6 +342,39 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
+     * returns true if filter for a field is set in this group
+     *
+     * @param string $_field
+     * @return bool
+     */
+    public function isFilterSet($_field)
+    {
+        $result = FALSE;
+        
+        foreach ($this->_filterObjects as $object) {
+            if ($object->getField() == $_field) {
+                $result = TRUE;
+                break;
+            }
+        }
+        
+        return $result;
+    }
+    
+    /************************ protected functions *****************************/
+    
+    
+    /**
+     * set options 
+     *
+     * @param array $_options
+     */
+    protected function _setOptions(array $_options)
+    {
+        $this->_options = $_options;
+    }
+    
+    /**
      * return filter object
      *
      * @param string $_field
@@ -367,7 +390,7 @@ class Tinebase_Model_Filter_FilterGroup
         
         return NULL;
     }
-
+    
     /**
      * remove filter object
      *
