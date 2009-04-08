@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -40,8 +40,8 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
         'equals'     => array('sqlop' => ' = ?'   ,     'wildcards' => '?'  ),
         'startswith' => array('sqlop' => ' LIKE ?',     'wildcards' => '?%' ),
         'endswith'   => array('sqlop' => ' LIKE ?',     'wildcards' => '%?' ),
-        'greater'    => array('sqlop' =>  ' > ?',       'wildcards' => '?'  ),
-        'less'       => array('sqlop' =>  ' < ?',       'wildcards' => '?'  ),
+        'greater'    => array('sqlop' => ' > ?',        'wildcards' => '?'  ),
+        'less'       => array('sqlop' => ' < ?',        'wildcards' => '?'  ),
         'not'        => array('sqlop' => ' NOT LIKE ?', 'wildcards' => '?'  ),
         'in'         => array('sqlop' => ' IN (?)',     'wildcards' => '?'  ),
     );
@@ -54,37 +54,44 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-         $action = $this->_opSqlMap[$this->_operator];
+        $action = $this->_opSqlMap[$this->_operator];
          
-         // quote field identifier
-         $field = $this->_getQuotedFieldName($_backend);
+        // quote field identifier
+        $field = $this->_getQuotedFieldName($_backend);
          
-         // replace wildcards from user
-         $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
+        // only string replace if value is no array 
+        if ($this->_operator !== 'in') {
+            // replace wildcards from user ()
+            $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
+            // add wildcard to value according to operator
+            $value = str_replace('?', $value, $action['wildcards']);
+            
+        } else {
+            $value = $this->_value;
+        }
          
-         // add wildcard to value according to operator
-         $value = str_replace('?', $value, $action['wildcards']);
-         
-         if (in_array($this->_operator, array('equals', 'greater', 'less', 'in'))) {
-             // discard wildcards silently
-             $value = str_replace(array('%', '\\_'), '', $value);
-             
-             if ($this->_operator == 'in' && empty($value)) {
-                 // prevent sql error
-                 $_select->where('1=0');
-             } elseif ($this->_operator == 'equals' && ($value === '' || $value === NULL || $value === false)) {
-                 $_select->where($field . 'IS NULL');
-             } else {
-                 // finally append query to select object
-                 $_select->where($field . $action['sqlop'], $value, Zend_Db::INT_TYPE);
-             }
-         } else {
+        if (in_array($this->_operator, array('equals', 'greater', 'less', 'in'))) {
+            if ($this->_operator !== 'in') {
+                // discard wildcards silently
+                $value = str_replace(array('%', '\\_'), '', $value);
+            }
+            
+            if ($this->_operator == 'in' && empty($value)) {
+                // prevent sql error
+                $_select->where('1=0');
+            } elseif ($this->_operator == 'equals' && ($value === '' || $value === NULL || $value === false)) {
+                $_select->where($field . 'IS NULL');
+            } else {
+                // finally append query to select object
+                $_select->where($field . $action['sqlop'], $value, Zend_Db::INT_TYPE);
+            }
+        } else {
             // finally append query to select object
             $_select->where($field . $action['sqlop'], $value);
             
-             if ($this->_operator == 'not') {
-                 $_select->orWhere($field . ' IS NULL');
-             }
-         }
-     }
+            if ($this->_operator == 'not') {
+                $_select->orWhere($field . ' IS NULL');
+            }
+        }
+    }
 }
