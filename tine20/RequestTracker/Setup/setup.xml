@@ -5,4 +5,5 @@
     <order>70</order>
     <depends />
     <tables />
+    <status>disabled</status>
 </application>
