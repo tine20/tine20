@@ -216,6 +216,26 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
         }
     }
     
+    /**
+     * get matching preferences from recordset with multiple prefs)
+     *
+     * @param Tinebase_Record_RecordSet $_preferences
+     */
+    public function getMatchingPreferences(Tinebase_Record_RecordSet $_preferences)
+    {
+        $_preferences->addIndices(array('name'));
+        
+        // get unique names, the matching preference and add it to result set
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Preference');
+        $uniqueNames = array_unique($_preferences->name);
+        foreach ($uniqueNames as $name) {
+            $singlePrefSet = $_preferences->filter('name', $name);
+            $result->addRecord($this->_getMatchingPreference($singlePrefSet));
+        }
+        
+        return $result;
+    }
+    
     /**************************** protected functions *********************************/
     
     /**

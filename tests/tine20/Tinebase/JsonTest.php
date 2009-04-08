@@ -6,7 +6,7 @@
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        add more tests
@@ -195,17 +195,16 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * search preferences by application
      *
-     * @todo finish
+     * @todo set user pref and check it
      */
     public function testSearchPreferences()
     {
-        //-- set user pref
-        
         // search prefs
         $result = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter()));
         
-        //-- check results
-        //print_r($result);
+        // check results
+        $this->assertTrue(isset($result['results']));
+        $this->assertEquals(2, $result['totalcount']);
     }
 
     /**
@@ -229,15 +228,13 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'account_id', 
+                'field' => 'account', 
                 'operator' => 'equals', 
-                'value' => Tinebase_Core::getUser()->getId()
-            ),
-            array(
-                'field' => 'account_type', 
-                'operator' => 'equals', 
-                'value' => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
-            ),
+                'value' => array(
+                    'accountId'     => Tinebase_Core::getUser()->getId(),
+                    'accountType'   => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
+                )
+            )
         );        
     }
 }

@@ -446,7 +446,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $filter json encoded
      * @return array
      * 
-     * @todo    get matching results (use Tinebase_Preference::_getMatchingPreference)
      */
     public function searchPreferencesForApplication($applicationName, $filter)
     {
@@ -460,13 +459,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter->createFilter('application_id', 'equals', $tinebaseAppId);
         
         $backend = Tinebase_Core::getPreference($applicationName);
-        $records = $backend->search($filter, NULL);
+        $allPrefs = $backend->search($filter, NULL);
+        
+        // get single matching preferences for each different pref
+        $records = $backend->getMatchingPreferences($allPrefs);
         
         $result = $this->_multipleRecordsToJson($records);
         
         return array(
             'results'       => $result,
-            'totalcount'    => $backend->searchCount($filter),
+            'totalcount'    => count($result)
         );
     }
     

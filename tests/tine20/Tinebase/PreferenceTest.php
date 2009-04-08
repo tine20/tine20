@@ -121,9 +121,10 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      */
     public function testForcedPreference()
     {
+        $forcedPrefName ='testForcedPref';
         $forcedPref = new Tinebase_Model_Preference(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name'              => 'testForcedPref',
+            'name'              => $forcedPrefName,
             'value'             => 'forced value',
             'account_id'        => 0,
             'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
@@ -134,11 +135,42 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         // set pref for user
         $this->_instance->testForcedPref = 'user value';
         
-        $pref = $this->_instance->testForcedPref;
+        $pref = $this->_instance->$forcedPrefName;
         
         $this->assertEquals($forcedPref->value, $pref);
         
         // cleanup
         $this->_instance->delete($forcedPref);
+        $filter = $this->_getPreferenceFilter();
+        $userPrefs = $this->_instance->search($filter);
+        foreach($userPrefs->filter('name', $forcedPrefName) as $userPref) {
+            $this->_instance->delete($userPref->getId());
+        }
+    }
+
+    /******************** protected helper funcs ************************/
+    
+    /**
+     * get preference filter
+     *
+     * @return Tinebase_Model_PreferenceFilter
+     */
+    protected function _getPreferenceFilter()
+    {
+        return new Tinebase_Model_PreferenceFilter(array(
+            array(
+                'field' => 'account', 
+                'operator' => 'equals', 
+                'value' => array(
+                    'accountId'     => Tinebase_Core::getUser()->getId(),
+                    'accountType'   => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
+                )
+            ),
+            array(
+                'field' => 'type', 
+                'operator' => 'equals', 
+                'value' => Tinebase_Model_Preference::TYPE_NORMAL
+            )
+        ));
     }
 }
