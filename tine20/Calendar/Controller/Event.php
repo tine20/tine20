@@ -18,6 +18,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
 {
     // todo in this controller:
     //
+    // clear all recurfiedls on save/update if not an recur event
+    // only allow to create exceptions via exceptions api
+    //
     // add fns for participats state settings -> move to attendee controller?
     // add group attendee handling -> move to attendee controller?
     //
