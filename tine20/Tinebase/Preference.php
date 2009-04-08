@@ -94,7 +94,7 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
     {
         $accountId = (Tinebase_Core::isRegistered(Tinebase_Core::USER)) ? Tinebase_Core::getUser()->getId() : 0; 
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get ' . $_preferenceName . ' for user ' . $accountId);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference"' . $_preferenceName . '" for account id' . $accountId);
         
         try {
             $result = $this->getValueForUser(
@@ -118,7 +118,7 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
      * get value of preference for a user/group
      *
      * @param string $_preferenceName
-     * @param integer $_userId
+     * @param integer $_accountId
      * @param string $_accountType
      * @return string
      * @throws Tinebase_Exception_NotFound
@@ -127,48 +127,21 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
      */
     public function getValueForUser($_preferenceName, $_accountId, $_accountType = 'user')
     {
-
         $select = $this->_getSelect('*');
         
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(); 
+        
         // build query: ... WHERE (user OR group OR anyone) AND name AND application_id
+        $filter = new Tinebase_Model_PreferenceFilter(array(
+            array('field'     => 'account',         'operator'  => 'equals', 'value'     => array(
+                'accountId' => $_accountId, 'accountType' => $_accountType)
+            ),
+            array('field'     => 'application_id',  'operator'  => 'equals', 'value'     => $appId),
+            array('field'     => 'name',            'operator'  => 'equals', 'value'     => $_preferenceName),
+        ));
+        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
         
-        // user
-        $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($select);
-        
-        $groupSelectUser = new Tinebase_Backend_Sql_Filter_GroupSelect($groupSelect);
-        $groupSelectUser
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.account_id') . ' = ?', $_accountId)
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type') . ' = ?', $_accountType);
-        $groupSelectUser->appendWhere(Zend_Db_Select::SQL_OR);
-        
-        if ($_accountId !== 0) {
-            // anyone / default
-            $groupSelectAnyone = new Tinebase_Backend_Sql_Filter_GroupSelect($groupSelect);
-            $groupSelectAnyone
-                ->where($this->_db->quoteIdentifier($this->_tableName . '.account_id') . ' = 0')
-                ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type') . ' = ?', Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE);
-            $groupSelectAnyone->appendWhere(Zend_Db_Select::SQL_OR);
-                
-            // group
-            $groups = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
-            $groupSelectGroups = new Tinebase_Backend_Sql_Filter_GroupSelect($groupSelect);
-            $groupSelectGroups
-                ->where($this->_db->quoteIdentifier($this->_tableName . '.account_id') . ' IN (?)', $groups)
-                ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type') . ' = ?', Tinebase_Model_Preference::ACCOUNT_TYPE_GROUP);
-            $groupSelectGroups->appendWhere(Zend_Db_Select::SQL_OR);
-        }
-        $groupSelect->appendWhere(Zend_Db_Select::SQL_AND);
-        
-        // name + app id
-        $select
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.name') . ' = ?', $_preferenceName)
-            ->where(
-                $this->_db->quoteIdentifier($this->_tableName . '.application_id') . ' = ?', 
-                Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId()
-            );
-        
-            
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -253,6 +226,7 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
      * @return Tinebase_Model_Preference
      * 
      * @todo add more sorting here?
+     * @todo use this in search function as well
      */
     protected function _getMatchingPreference(Tinebase_Record_RecordSet $_preferences)
     {
