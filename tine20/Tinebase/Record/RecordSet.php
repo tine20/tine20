@@ -228,7 +228,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function __get($_name)
     {
         if (array_key_exists($_name, $this->_indices)) {
-            return $this->_indices[$_name];
+            $propertiesArray = $this->_indices[$_name];
         } else {
             $propertiesArray = array();
             foreach ($this->_listOfRecords as $index => $record) {
@@ -385,6 +385,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     protected function _buildIndices()
     {
         foreach ($this->_indices as $name => $propertyIndex) {
+            unset($this->_indices[$name]);
             $this->_indices[$name] = $this->__get($name);
         }
     }
