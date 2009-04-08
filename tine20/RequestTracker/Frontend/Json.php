@@ -25,24 +25,26 @@ class RequestTracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_backend = NULL;
     
-    public function __construct()
-    {
-        $this->_backend = new RequestTracker_Backend_Rest();
-    }
-    
     public function searchTickets($filter, $paging)
     {
         $filter = new RequestTracker_Model_TicketFilter(Zend_Json::decode($filter));
         $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
         return array(
-            'results'    => $this->_backend->search($filter, $paging)->toArray(),
-            'totalCount' => $this->_backend->searchCount($filter)
+            'results'    => $this->_getBackend()->search($filter, $paging)->toArray(),
+            'totalCount' => $this->_getBackend()->searchCount($filter)
         );
     }
     
     public function getTicket($id)
     {
-        return $this->_backend->get($id)->toArray();
+        return $this->_getBackend()->get($id)->toArray();
+    }
+    
+    protected function _getBackend()
+    {
+        if (! $this->_backend) {
+            $this->_backend = new RequestTracker_Backend_Rest();
+        }
     }
 }
