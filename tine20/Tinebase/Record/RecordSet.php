@@ -212,6 +212,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     	foreach ($this->_listOfRecords as $record) {
     		$record->$_name = $_value;
     	}
+        if (array_key_exists($_name, $this->_indices)) {
+            foreach ($this->_indices[$_name] as $key => $oldvalue) {
+                $this->_indices[$_name][$key] = $_value;
+            }
+        }
     }
     
     /**
@@ -222,9 +227,13 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function __get($_name)
     {
-        $propertiesArray = array();
-        foreach ($this->_listOfRecords as $index => $record) {
-            $propertiesArray[$index] = $record->$_name;
+        if (array_key_exists($_name, $this->_indices)) {
+            return $this->_indices[$_name];
+        } else {
+            $propertiesArray = array();
+            foreach ($this->_listOfRecords as $index => $record) {
+                $propertiesArray[$index] = $record->$_name;
+            }
         }
         return $propertiesArray;
     }
