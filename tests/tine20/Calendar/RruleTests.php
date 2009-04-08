@@ -109,6 +109,51 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    public function testDatenArrayConverstions()
+    {
+        $date = new Zend_Date('1979-06-05 11:22:33', Tinebase_Record_Abstract::ISO8601LONG);
+        $dateArray = array(
+            'day'       => 5 ,
+            'month'     => 6, 
+            'year'      => 1979, 
+            'hour'      => 11, 
+            'minute'    => 22, 
+            'second'    => 33
+        );
+        
+        $this->assertTrue($date->equals(Calendar_Model_Rrule::array2date($dateArray)), 'array2date failed');
+        $this->assertEquals($dateArray, Calendar_Model_Rrule::date2array($date), 'date2array failed');
+    }
+    
+    public function testGetMonthDiff()
+    {
+        $from  = new Zend_Date('1979-06-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+
+        $until = new Zend_Date('1980-06-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals(12, Calendar_Model_Rrule::getMonthDiff($from, $until));
+        
+        $until = new Zend_Date('1982-07-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals(37, Calendar_Model_Rrule::getMonthDiff($from, $until));
+    }
+    
+    public function testAddMonthIngnoringDay()
+    {
+        $date  = new Zend_Date('2009-01-31 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        for ($i=0; $i<12; $i++) {
+            $dateArr = Calendar_Model_Rrule::addMonthIngnoringDay($date, $i);
+            $this->assertEquals(31, $dateArr['day']);
+            $this->assertEquals($i+1, $dateArr['month']);
+            $this->assertEquals(2009, $dateArr['year']);
+        }
+        
+        for ($i=12; $i<24; $i++) {
+            $dateArr = Calendar_Model_Rrule::addMonthIngnoringDay($date, $i);
+            $this->assertEquals(31, $dateArr['day']);
+            $this->assertEquals($i-11, $dateArr['month']);
+            $this->assertEquals(2010, $dateArr['year']);
+        }
+    }
+    
     public function testCalcWeekly()
     {
         // note: 1979-06-05 was a tuesday
@@ -156,6 +201,9 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         */
+        
+        $from = new Zend_Date('2008-02-25 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        //print_r($from->toArray());
     }
     
 }

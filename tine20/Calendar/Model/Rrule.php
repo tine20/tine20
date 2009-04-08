@@ -91,6 +91,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         'interval'             => array('allowEmpty' => true, 'Int'   ),
         'byday'                => array('allowEmpty' => true, 'Regex' => '/^[\-0-9A_Z,]{2,}$/'),
         'bymonth'              => array('allowEmpty' => true, 'Int'   ),
+        'bymonthday'           => array('allowEmpty' => true, 'Int'   ),
         'wkst'                 => array('allowEmpty' => true, 'InArray' => array(self::WDAY_SUNDAY, self::WDAY_MONDAY, self::WDAY_TUESDAY, self::WDAY_WEDNESDAY, self::WDAY_THURSDAY, self::WDAY_FRIDAY, self::WDAY_SATURDAY)),
         'until'                => array('allowEmpty' => true          ),
         
@@ -112,7 +113,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     /**
      * @var array supported rrule parts
      */
-    protected $_rruleParts = array('freq', 'interval', 'until', 'wkst', 'byday', 'bymonth');
+    protected $_rruleParts = array('freq', 'interval', 'until', 'wkst', 'byday', 'bymonth', 'bymonthday');
     
     /**
      * set from ical rrule string
@@ -219,6 +220,27 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
                 
             case self::FREQ_MONTHLY:
+                if ($rrule->bymonthday) {
+                    // NOTE: non existing dates will be discarded (e.g. 31. Feb.)
+                    //       for correct computations we deal with virtual dates, represented as arrays
+                    $computationStartDateArray = self::date2array($_event->dtstart);
+                    $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
+                    
+                    // if dtstart is before $_from, we compute the offset where to start our calculations
+                    if ($_event->dtstart->isEarlier($_from)) {
+                        $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtstart->getTimestamp()) / (self::TS_DAY * $_rrule->interval)) * $_rrule->interval;
+                        $computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
+                    }
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate);
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate);
+                    
+                    
+                } else if ($rrule->byday) {
+                    
+                } else {
+                    throw new Exception('mal formated rrule');
+                }
+                
                 break;
             case self::FREQ_YEARLY:
                 break;
@@ -332,5 +354,63 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         }
         
         return $next;
+    }
+    
+    /**
+     * converts a Zend_Date to Array
+     *
+     * @param  Zend_Date $_date
+     * $return array
+     */
+    public static function date2array($_date)
+    {
+        return array_intersect_key($_date->toArray(), array_flip(array(
+            'day' , 'month', 'year', 'hour', 'minute', 'second'
+        )));
+    }
+    
+    /**
+     * converts array to Zend_Date
+     *
+     * @param  array $_dateArray
+     * @return Zend_Date
+     */
+    public static function array2date(array $_dateArray)
+    {
+            return new Zend_Date(mktime($_dateArray['hour'], $_dateArray['minute'], $_dateArray['second'], $_dateArray['month'], $_dateArray['day'], $_dateArray['year']), Zend_Date::TIMESTAMP);
+    }
+    
+    /**
+     * get number of month different from $_date1 to $_date2
+     *
+     * @param  Zend_Date|array $_from
+     * @param  Zend_Date|array $_until
+     * @return int
+     */
+    public static function getMonthDiff($_from, $_until)
+    {
+        $date1Array = is_array($_from) ? $_from : self::date2array($_from);
+        $date2Array = is_array($_until) ? $_until : self::date2array($_until);
+        
+        return (12 * $date2Array['year'] + $date2Array['month']) - (12 * $date1Array['year'] + $date1Array['month']);
+    }
+    
+    /**
+     * add month and don't touch the day.
+     * NOTE: The resulting date may no exist e.g. 31. Feb. -> virtual date 
+     *
+     * @param  Zend_Date|array  $_date
+     * @param  int              $_months
+     * @return array
+     */
+    public static function addMonthIngnoringDay($_date, $_months)
+    {
+        $dateArr = is_array($_date) ? $_date : self::date2array($_date);
+        
+        $totalMonth = 12 * $dateArr['year'] + $dateArr['month'] + $_months;
+        $dateArr['year'] = $totalMonth % 12 ? floor($totalMonth/12) : $totalMonth/12 -1;
+        $dateArr['month'] = $totalMonth % 12 ? $totalMonth % 12 : 12;
+        
+        return $dateArr;
     }
 }
