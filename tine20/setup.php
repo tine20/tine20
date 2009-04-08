@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /**
  * Tine 2.0 - this file starts the setup process
