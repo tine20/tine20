@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id: Json.php 5047 2008-10-22 10:51:07Z c.weiss@metaways.de $
  */
@@ -304,7 +304,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return array('success' => true);
     }
     
-
     /**
      * authenticate user by username and password
      *
@@ -436,5 +435,51 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         die(Zend_Json::encode($registryData));
+    }
+
+    /************************ preferences functions ***************************/
+    
+    /**
+     * search preferences
+     *
+     * @param string $applicationName
+     * @param string $filter json encoded
+     * @return array
+     * 
+     * @todo    get matching results (use Tinebase_Preference::_getMatchingPreference)
+     */
+    public function searchPreferencesForApplication($applicationName, $filter)
+    {
+        $decodedFilter = Zend_Json::decode($filter);
+        
+        $filter = new Tinebase_Model_PreferenceFilter(array());
+        $filter->setFromArrayInUsersTimezone($decodedFilter);
+        
+        // make sure, appid is set (tinebase appid is default)
+        $tinebaseAppId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
+        $filter->createFilter('application_id', 'equals', $tinebaseAppId);
+        
+        $backend = Tinebase_Core::getPreference($applicationName);
+        $records = $backend->search($filter, NULL);
+        
+        $result = $this->_multipleRecordsToJson($records);
+        
+        return array(
+            'results'       => $result,
+            'totalcount'    => $backend->searchCount($filter),
+        );
+    }
+    
+    /**
+     * save preferences for application
+     *
+     * @param string $applicationName
+     * @param string $data json encoded preferences data
+     * 
+     * @todo implement
+     */
+    public function savePreferences($applicationName, $data)
+    {
+        
     }
 }

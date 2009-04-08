@@ -191,4 +191,53 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $noteTypes = $this->_instance->getNoteTypes();
         $this->assertTrue($noteTypes['totalcount'] >= 5);
     }
+    
+    /**
+     * search preferences by application
+     *
+     * @todo finish
+     */
+    public function testSearchPreferences()
+    {
+        //-- set user pref
+        
+        // search prefs
+        $result = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter()));
+        
+        //-- check results
+        //print_r($result);
+    }
+
+    /**
+     * search preferences by user
+     *
+     * @todo implement
+     */
+    public function testSavePreferences()
+    {
+        
+    }
+    
+    /******************** protected helper funcs ************************/
+    
+    /**
+     * get preference filter
+     *
+     * @return array
+     */
+    protected function _getPreferenceFilter()
+    {
+        return array(
+            array(
+                'field' => 'account_id', 
+                'operator' => 'equals', 
+                'value' => Tinebase_Core::getUser()->getId()
+            ),
+            array(
+                'field' => 'account_type', 
+                'operator' => 'equals', 
+                'value' => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
+            ),
+        );        
+    }
 }
