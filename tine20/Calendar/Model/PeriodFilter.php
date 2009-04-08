@@ -122,7 +122,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     */
     
     /**
-     * appeds sql to given select statement
+     * appends sql to given select statement
      *
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
