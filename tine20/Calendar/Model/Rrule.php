@@ -35,6 +35,19 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     const WDAY_FRIDAY    = 'FR';
     const WDAY_SATURDAY  = 'SA';
     
+    /**
+     * maps weeksdays to digits
+     */
+    static $WEEKDAY_DIGIT_MAP = array(
+        self::WDAY_SUNDAY     => 0,
+        self::WDAY_MONDAY     => 1,
+        self::WDAY_TUESDAY    => 2,
+        self::WDAY_WEDNESDAY  => 3,
+        self::WDAY_THURSDAY   => 4,
+        self::WDAY_FRIDAY     => 5,
+        self::WDAY_SATURDAY   => 6
+    );
+    
     const TS_HOUR = 3600;
     const TS_DAY  = 86400;
     
@@ -180,63 +193,34 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $rrule = new Calendar_Model_Rrule();
         $rrule->setFromString($_event->rrule);
         
-        $exceptionsRecurIds = self::getExceptionsRecurIds($_event, $_exceptions);
+        $_exceptionRecurIds = self::getExceptionsRecurIds($_event, $_exceptions);
         $recurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        
-        $eventLength = clone $_event->dtend;
-        $eventLength->sub($_event->dtstart);
         
         switch ($rrule->freq) {
             case self::FREQ_DAILY:
-                $computationStartDate = clone $_event->dtstart;
-                $computationEndDate   = $rrule->until->isEarlier($_until) ? $rrule->until : $_until;
-                
-                // if dtstart is before $_from, we compute the offset where to start our calculations
-                if ($_event->dtstart->isEarlier($_from)) {
-                    $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtstart->getTimestamp()) / (self::TS_DAY * $rrule->interval)) * $rrule->interval;
-                    $computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
-                }
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate);
-                
-                while ($computationStartDate->addDay($rrule->interval)->isEarlier($computationEndDate)) {
-                    $recurEvent = self::cloneEvent($_event);
-                    $recurEvent->dtstart = clone ($computationStartDate);
-                    
-                    $originatorsDtstart = clone $recurEvent->dtstart;
-                    $originatorsDtstart->setTimezone($_event->originator_tz);
-                    $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
-                    
-                    // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
-                    $recurEvent->dtend = clone $recurEvent->dtstart;
-                    $recurEvent->dtend->add($eventLength);
-                    
-                    $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
-                    
-                    if (! in_array($recurEvent->recurid, $exceptionsRecurIds)) {
-                        $recurSet->addRecord($recurEvent);
-                    }
-                }
+                self::_computeRecurDaily($_event, $rrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 break;
                 
             case self::FREQ_WEEKLY:
+                $dailyrrule = clone ($rrule);
+                $dailyrrule->freq = self::FREQ_DAILY;
+                $dailyrrule->interval = 7 * $rrule->interval;
+                
+                foreach (explode(',', $rrule->byday) as $recurWeekDay) {
+                    $baseEvent = clone $_event;
+                    
+                    if($baseEvent->dtstart->get(Zend_Date::WEEKDAY_DIGIT) != self::$WEEKDAY_DIGIT_MAP[$recurWeekDay]) {
+                        $baseEvent->dtstart = self::getNextWday($baseEvent->dtstart, $recurWeekDay);
+                        $baseEvent->dtend   = self::getNextWday($baseEvent->dtend,   $recurWeekDay);
+                    }
+                    
+                    self::_computeRecurDaily($baseEvent, $dailyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                }
                 break;
+                
             case self::FREQ_MONTHLY:
                 break;
             case self::FREQ_YEARLY:
-                
-                //echo  (int)Zend_Date::isDate('2008-02-29 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-                
-                
-                $test = new Zend_Date('2009-01-31 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-                $testArr = $test->toArray();
-                //print_r($testArr);
-                for ($i=0; $i<12; $i++){
-                    
-                    //echo $test . "\n";
-                }
-                //echo $_event->dtstart->addYear(1);
-                
                 break;
                 
         }
@@ -281,5 +265,72 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         return $clone;
     }
     
+    /**
+     * computes daily recuring events and inserts them into given $_recurSet
+     *
+     * @param Calendar_Model_Event      $_event
+     * @param Calendar_Model_Rrule      $_rrule
+     * @param array                     $_exceptionRecurIds
+     * @param Zend_Date                 $_from
+     * @param Zend_Date                 $_until
+     * @param Tinebase_Record_RecordSet $_recurSet
+     * @return void
+     */
+    protected static function _computeRecurDaily($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
+    {
+        $computationStartDate = clone $_event->dtstart;
+        $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
+        
+        // if dtstart is before $_from, we compute the offset where to start our calculations
+        if ($_event->dtstart->isEarlier($_from)) {
+            $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtstart->getTimestamp()) / (self::TS_DAY * $_rrule->interval)) * $_rrule->interval;
+            $computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
+        }
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate);
+        
+        $eventLength = clone $_event->dtend;
+        $eventLength->sub($_event->dtstart);
+        
+        while ($computationStartDate->addDay($_rrule->interval)->isEarlier($computationEndDate)) {
+            $recurEvent = self::cloneEvent($_event);
+            $recurEvent->dtstart = clone ($computationStartDate);
+            
+            $originatorsDtstart = clone $recurEvent->dtstart;
+            $originatorsDtstart->setTimezone($_event->originator_tz);
+            $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+            
+            // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
+            $recurEvent->dtend = clone $recurEvent->dtstart;
+            $recurEvent->dtend->add($eventLength);
+            
+            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            
+            if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
+                $_recurSet->addRecord($recurEvent);
+            }
+        }
+    }
     
+    /**
+     * gets next occourance of wday
+     *
+     * @param  Zend_Date  $_date
+     * @param  int|string $_wday
+     * @return Zend_Date
+     */
+    public static function getNextWday($_date, $_wday)
+    {
+        $wdayDigit = is_int($_wday) ? $_wday : self::$WEEKDAY_DIGIT_MAP[$_wday];
+        
+        $next = clone $_date;
+        $offset = $_date->get(Zend_Date::WEEKDAY_DIGIT) - $wdayDigit;
+        if ($offset >= 0) {
+            $next->addDay(7 - $offset);
+        } else {
+            $next->addDay(abs($offset));
+        }
+        
+        return $next;
+    }
 }

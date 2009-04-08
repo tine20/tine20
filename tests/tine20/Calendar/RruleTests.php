@@ -91,8 +91,54 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($recurSet));
     }
     
+    public function testGetNextWday()
+    {
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-12 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-15 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-12 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-05 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
+    public function testCalcWeekly()
+    {
+        // note: 1979-06-05 was a tuesday
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'take a bath',
+            'dtstart'       => '1979-06-05 17:00:00',
+            'dtend'         => '1979-06-05 18:00:00',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=SU',
+            'originator_tz' => 'Europe/Berlin'
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Zend_Date('2009-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-06-30 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(4, count($recurSet));
+        
+        $from = new Zend_Date('2013-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2013-06-30 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(5, count($recurSet));
+    }
+    
     public function testCalcYearly()
     {
+        /*
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'yearly 29.feb',
@@ -109,7 +155,9 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $until = new Zend_Date('2013-03-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
         
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        */
     }
+    
 }
     
 
