@@ -446,6 +446,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $filter json encoded
      * @return array
      * 
+     * @todo add acl / user can't change other users preferences (exception: admins)
      */
     public function searchPreferencesForApplication($applicationName, $filter)
     {
@@ -457,6 +458,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // make sure, appid is set (tinebase appid is default)
         $tinebaseAppId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
         $filter->createFilter('application_id', 'equals', $tinebaseAppId);
+        
+        // make sure account is set in filter
+        if (!$filter->isFilterSet('account')) {
+            $filter->createFilter('account', 'equals', array(
+                'accountId' => Tinebase_Core::getUser()->getId(), 
+                'accountType' => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
+            ));
+        }
         
         $backend = Tinebase_Core::getPreference($applicationName);
         $allPrefs = $backend->search($filter, NULL);
