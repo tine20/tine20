@@ -205,7 +205,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     onRender: function(ct, position) {
         Tine.Tinebase.MainScreen.superclass.onRender.call(this, ct, position);
         Tine.Tinebase.MainScreen = this;
-        this.ativateDefaultApp();
+        this.activateDefaultApp();
         
         // check for new version 
         if (Tine.Tinebase.common.hasRight('check_version', 'Tinebase')) {
@@ -213,13 +213,13 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         }
     },
     
-    ativateDefaultApp: function() {
+    activateDefaultApp: function() {
         if (this.appPicker.getTreeCardPanel().rendered) {
             var defaultApp = Tine.Tinebase.appMgr.get(this.defaultAppName);
         	defaultApp.getMainScreen().show();
             document.title = 'Tine 2.0 - ' + defaultApp.getTitle();
         } else {
-            this.ativateDefaultApp.defer(10, this);
+            this.activateDefaultApp.defer(10, this);
         }
     },
     
