@@ -166,6 +166,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             items: [{
                 region: 'west',
                 xtype: 'panel',
+                title: _('Applications'),
                 html: 'tree panel',
                 width: 200,
                 frame: true
@@ -179,12 +180,15 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 },
                 items: []
                 */ 
-            },{
+            }, new Tine.widgets.dialog.PreferencesPanel({
+                region: 'center'
+            })
+            /*{
                 region: 'center',
                 xtype: 'panel',
                 html: 'prefs',
                 frame: true
-            }]
+            }*/]
             //region: 'center'
         }];
         
@@ -327,6 +331,110 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         }
         */
     }    
+});
+
+/**
+ * preferences panel
+ */
+Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
+    
+    //private
+    layout: 'form',
+    border: true,
+    frame: true,
+    labelAlign: 'top',
+    autoScroll: true,
+    defaults: {
+        anchor: '100%',
+        labelSeparator: ''
+    },
+    
+    initComponent: function() {
+        this.title = _('Preferences');
+        
+        var prefStore = this.getPrefStore();
+        if (prefStore) {
+            this.items = [];
+            /*
+            prefStore.each(function(def) {
+                var fieldDef = {
+                    fieldLabel: def.get('label'),
+                    name: 'customfield_' + def.get('name'),
+                    xtype: def.get('type')
+                };
+                
+                try {
+                    var fieldObj = Ext.ComponentMgr.create(fieldDef);
+                    this.items.push(fieldObj);
+                    
+                    // ugh a bit ugly
+                    def.fieldObj = fieldObj;
+                } catch (e) {
+                    console.error('unable to create custom field "' + def.get('name') + '". Check definition!');
+                    prefStore.remove(def);
+                }
+                
+            }, this);
+            
+            this.formField = new Tine.widgets.customfields.CustomfieldsPanelFormField({
+                prefStore: prefStore
+            });
+            
+            this.items.push(this.formField);
+            */
+            
+        } else {
+            this.html = '<div class="x-grid-empty">' + _('There are no preferences yet') + "</div>";
+        }
+        
+        Tine.widgets.dialog.PreferencesPanel.superclass.initComponent.call(this);
+        
+        // added support for defered rendering as a quick hack: it would be better to 
+        // let cfpanel be a plugin of editDialog
+        /*
+        this.on('render', function() {
+            // fill data from record into form wich is not done due to defered rendering
+            this.setAllCfValues(this.quickHack.record.get('customfields'));
+        }, this);
+        */
+    },
+    
+    getPrefStore: function() {
+    	return null;
+    	/*
+        var appName = this.recordClass.getMeta('appName');
+        var modelName = this.recordClass.getMeta('modelName');
+        if (Tine[appName].registry.containsKey('customfields')) {
+            var allCfs = Tine[appName].registry.get('customfields');
+            var prefStore = new Ext.data.JsonStore({
+                fields: Tine.Tinebase.Model.Customfield,
+                data: allCfs
+            });
+            
+            prefStore.filter('model', appName + '_Model_' + modelName);
+            
+            if (prefStore.getCount() > 0) {
+                return prefStore;
+            }
+        }
+        */
+    }
+    
+    /*
+    setAllCfValues: function(customfields) {
+        // check if all cfs are already rendered
+        var allRendered = false;
+        this.items.each(function(item) {
+            allRendered |= item.rendered;
+        }, this);
+        
+        if (! allRendered) {
+            this.setAllCfValues.defer(100, this, [customfields]);
+        } else {
+            this.formField.setValue(customfields);
+        }
+    }
+    */
 });
 
 /**
