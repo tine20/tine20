@@ -177,3 +177,15 @@ Tine.Tinebase.Model.Customfield = Ext.data.Record.create([
     { name: 'type'           },
     { name: 'length'         }
 ]);
+
+/**
+ * Model of a preference
+ * 
+ * @constructor {Ext.data.Record}
+ */
+Tine.Tinebase.Model.Preference = Ext.data.Record.create([
+    {name: 'id'             },
+    {name: 'name'           },
+    {name: 'value'          },
+    {name: 'type'           }
+]);

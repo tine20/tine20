@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        load default/forced/anyone prefs into store
  * @todo        add save functionality
  * @todo        add app tree view
  * @todo        add lock to force prefs
@@ -85,17 +84,14 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         
         this.i18n = new Locale.Gettext();
         this.i18n.textdomain('Tinebase');
+        
         // init actions
-        console.log('actions');
         this.initActions();
         // init buttons and tbar
-        console.log('buttons');
         this.initButtons();
         // init preferences
-        console.log('prefs');
         this.initPreferences();
         // get items for this dialog
-        console.log('form');
         this.items = this.getItems();
         
         Tine.widgets.dialog.Preferences.superclass.initComponent.call(this);
@@ -180,7 +176,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 },
                 items: []
                 */ 
-            }, new Tine.widgets.dialog.PreferencesPanel({
+            }, new Tine.widgets.dialog.PreferencesCardPanel({
                 region: 'center'
             })
             /*{
@@ -334,14 +330,16 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
 });
 
 /**
- * preferences panel
+ * preferences card panel
+ * -> this panel is filled with the preferences subpanels containing the pref stores for the apps
+ * 
  */
-Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
+Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
     
     //private
-    layout: 'form',
+    layout: 'card',
     border: true,
-    frame: true,
+    //frame: true,
     labelAlign: 'top',
     autoScroll: true,
     defaults: {
@@ -351,16 +349,92 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
     
     initComponent: function() {
         this.title = _('Preferences');
+        this.initPrefStore();
+        Tine.widgets.dialog.PreferencesCardPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * init app preferences store
+     * 
+     * @todo add applicationName as param
+     * @todo add filter
+     * @todo use generic json backend here
+     * @todo move this function to another place?
+     */
+    initPrefStore: function() {
+        var store = new Ext.data.JsonStore({
+            fields: Tine.Tinebase.Model.Preference,
+            baseParams: {
+                method: 'Tinebase.searchPreferencesForApplication',
+                applicationName: 'Tinebase',
+                filter: ''
+            },
+            listeners: {
+                load: this.onStoreLoad,
+                scope: this
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
         
-        var prefStore = this.getPrefStore();
-        if (prefStore) {
+        console.log('loading store...');
+        store.load();
+    },
+
+    /**
+     * called after a new set of Records has been loaded
+     * 
+     * @param  {Ext.data.Store} this.store
+     * @param  {Array}          loaded records
+     * @param  {Array}          load options
+     * @return {Void}
+     */
+    onStoreLoad: function(store, records, options) {
+        console.log('loaded');
+        var card = new Tine.widgets.dialog.PreferencesPanel({
+            prefStore: store
+        }); 
+        this.add(card);
+        this.layout.container.add(card);
+        this.layout.setActiveItem(card.id);
+        card.doLayout();
+    }
+});
+
+/**
+ * preferences panel with the preference input fields for an application
+ */
+Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
+    
+	/**
+	 * the prefs store
+	 * @type 
+	 */
+	prefStore: null,
+	
+    //private
+    layout: 'form',
+    border: true,
+    labelAlign: 'top',
+    autoScroll: true,
+    defaults: {
+        anchor: '100%',
+        labelSeparator: ''
+    },
+    
+    initComponent: function() {
+        if (this.prefStore) {
+            console.log(this.prefStore);
             this.items = [];
-            /*
-            prefStore.each(function(def) {
+            this.prefStore.each(function(pref) {
                 var fieldDef = {
-                    fieldLabel: def.get('label'),
-                    name: 'customfield_' + def.get('name'),
-                    xtype: def.get('type')
+                    fieldLabel: pref.get('name'),
+                    name: 'pref_' + pref.get('name'),
+                    xtype: 'textfield',
+                    value: pref.get('value')
+                    //xtype: pref.get('type')
                 };
                 
                 try {
@@ -368,73 +442,22 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     this.items.push(fieldObj);
                     
                     // ugh a bit ugly
-                    def.fieldObj = fieldObj;
+                    pref.fieldObj = fieldObj;
                 } catch (e) {
-                    console.error('unable to create custom field "' + def.get('name') + '". Check definition!');
-                    prefStore.remove(def);
+                    console.error('Unable to create preference field "' + pref.get('name') + '". Check definition!');
+                    this.prefStore.remove(pref);
                 }
                 
             }, this);
-            
-            this.formField = new Tine.widgets.customfields.CustomfieldsPanelFormField({
-                prefStore: prefStore
-            });
-            
-            this.items.push(this.formField);
-            */
-            
+
         } else {
             this.html = '<div class="x-grid-empty">' + _('There are no preferences yet') + "</div>";
         }
         
+        console.log(this.items);
+        
         Tine.widgets.dialog.PreferencesPanel.superclass.initComponent.call(this);
-        
-        // added support for defered rendering as a quick hack: it would be better to 
-        // let cfpanel be a plugin of editDialog
-        /*
-        this.on('render', function() {
-            // fill data from record into form wich is not done due to defered rendering
-            this.setAllCfValues(this.quickHack.record.get('customfields'));
-        }, this);
-        */
-    },
-    
-    getPrefStore: function() {
-    	return null;
-    	/*
-        var appName = this.recordClass.getMeta('appName');
-        var modelName = this.recordClass.getMeta('modelName');
-        if (Tine[appName].registry.containsKey('customfields')) {
-            var allCfs = Tine[appName].registry.get('customfields');
-            var prefStore = new Ext.data.JsonStore({
-                fields: Tine.Tinebase.Model.Customfield,
-                data: allCfs
-            });
-            
-            prefStore.filter('model', appName + '_Model_' + modelName);
-            
-            if (prefStore.getCount() > 0) {
-                return prefStore;
-            }
-        }
-        */
     }
-    
-    /*
-    setAllCfValues: function(customfields) {
-        // check if all cfs are already rendered
-        var allRendered = false;
-        this.items.each(function(item) {
-            allRendered |= item.rendered;
-        }, this);
-        
-        if (! allRendered) {
-            this.setAllCfValues.defer(100, this, [customfields]);
-        } else {
-            this.formField.setValue(customfields);
-        }
-    }
-    */
 });
 
 /**
