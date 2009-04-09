@@ -347,6 +347,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         }
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  virtual computationStartDate: ' . self::array2string($computationStartDateArray));
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate->toString(Tinebase_Record_Abstract::ISO8601LONG));
+    
     }
     
     /**
