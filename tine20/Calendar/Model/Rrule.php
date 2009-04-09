@@ -295,8 +295,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtend->getTimestamp()) / (self::TS_DAY * $_rrule->interval)) * $_rrule->interval;
             $computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
         $eventLength = clone $_event->dtend;
         $eventLength->sub($_event->dtstart);
@@ -341,12 +341,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($_event->dtstart->isEarlier($_from)) {
-            $computationOffsetWeeks = self::getMonthDiff($_event->dtend, $_from);
-            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetWeeks);
+            $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth-1);
             //$computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
         }
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  virtual computationStartDate: ' . self::array2string($computationStartDateArray));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate->toString(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     /**
@@ -385,7 +385,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
-     * converts array to Zend_Date
+     * converts date array to Zend_Date
      *
      * @param  array $_dateArray
      * @return Zend_Date
@@ -393,6 +393,18 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     public static function array2date(array $_dateArray)
     {
             return new Zend_Date(mktime($_dateArray['hour'], $_dateArray['minute'], $_dateArray['second'], $_dateArray['month'], $_dateArray['day'], $_dateArray['year']), Zend_Date::TIMESTAMP);
+    }
+    
+    /**
+     * converts date array to string
+     *
+     * @param  array $_dateArray
+     * @return string
+     */
+    public static function array2string(array $_dateArray)
+    {
+        return $_dateArray['year'] . '-' . str_pad($_dateArray['month'], 2, '0', STR_PAD_LEFT) . '-' . str_pad($_dateArray['day'], 2, '0', STR_PAD_LEFT) . ' ' . 
+                str_pad($_dateArray['hour'], 2, '0', STR_PAD_LEFT) . ':' . str_pad($_dateArray['minute'], 2, '0', STR_PAD_LEFT) . ':' . str_pad($_dateArray['second'], 2, '0', STR_PAD_LEFT);
     }
     
     /**
