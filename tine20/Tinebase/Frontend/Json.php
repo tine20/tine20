@@ -478,10 +478,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $applicationName
      * @param string $data json encoded preferences data
      * 
-     * @todo implement
+     * @todo add user id param? / or add extra saveForUser function?
      */
     public function savePreferences($applicationName, $data)
     {
+        $decodedData = Zend_Json::decode($data);
+        $backend = Tinebase_Core::getPreference($applicationName); 
         
+        foreach ($decodedData as $name => $value) {
+            $backend->$name = $value;
+        }
     }
 }

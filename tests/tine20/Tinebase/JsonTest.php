@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add more tests
  */
 
 /**
@@ -210,11 +209,26 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * search preferences by user
      *
-     * @todo implement
      */
     public function testSavePreferences()
     {
+        $prefData = $this->_getPreferenceData();
+        $this->_instance->savePreferences('Tinebase', Zend_Json::encode($prefData));
+
+        // search saved prefs
+        $result = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE)));
         
+        // check results
+        $this->assertTrue(isset($result['results']));
+        $this->assertEquals(3, $result['totalcount']);
+        
+        $savedPrefData = array();
+        foreach ($result['results'] as $result) {
+            $savedPrefData[$result['name']] = $result['value'];
+            // cleanup
+            Tinebase_Core::getPreference()->delete($result['id']);
+        }
+        $this->assertEquals($prefData, $savedPrefData);
     }
     
     /******************** protected helper funcs ************************/
@@ -222,11 +236,12 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get preference filter
      *
+     * @param bool $_savedPrefs
      * @return array
      */
-    protected function _getPreferenceFilter()
+    protected function _getPreferenceFilter($_savedPrefs = FALSE)
     {
-        return array(
+        $result = array(
             array(
                 'field' => 'account', 
                 'operator' => 'equals', 
@@ -235,6 +250,35 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
                     'accountType'   => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
                 )
             )
+        );
+
+        if ($_savedPrefs) {
+            $result[] = array(
+                'field' => 'type', 
+                'operator' => 'equals', 
+                'value' => Tinebase_Model_Preference::TYPE_NORMAL
+            );
+            $result[] = array(
+                'field' => 'name', 
+                'operator' => 'contains', 
+                'value' => 'testPref'
+            );
+        }
+        
+        return $result;
+    }
+
+    /**
+     * get preference data for testSavePreferences()
+     *
+     * @return array
+     */
+    protected function _getPreferenceData()
+    {
+        return array(
+            'testPref1' => 'testValue1',
+            'testPref2' => 'testValue2',
+            'testPref3' => 'testValue3',
         );        
     }
 }
