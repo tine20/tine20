@@ -12,6 +12,11 @@
 /**
  * Model of an rrule
  *
+ * @todo move calculations to rrule controller
+ * @todo move date helpers to Tinebase_DateHelpers
+ * @todo rrule->until must be adopted to orginator tz for computations
+ * @todo rrule models should  string-->model converted from backend and viceavice
+ * 
  * @package Calendar
  */
 class Calendar_Model_Rrule extends Tinebase_Record_Abstract
@@ -295,19 +300,23 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtend->getTimestamp()) / (self::TS_DAY * $_rrule->interval)) * $_rrule->interval;
             $computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
         $eventLength = clone $_event->dtend;
         $eventLength->sub($_event->dtstart);
         
-        while ($computationStartDate->addDay($_rrule->interval)->isEarlier($computationEndDate)) {
+        while (true) {
+            $computationStartDate->addDay($_rrule->interval);
+            
             $recurEvent = self::cloneEvent($_event);
             $recurEvent->dtstart = clone ($computationStartDate);
             
             $originatorsDtstart = clone $recurEvent->dtstart;
             $originatorsDtstart->setTimezone($_event->originator_tz);
             $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+            
+            if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
+                break;
+            }
             
             // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
             $recurEvent->dtend = clone $recurEvent->dtstart;
@@ -342,12 +351,47 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($_event->dtstart->isEarlier($_from)) {
             $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
-            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth-1);
-            //$computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth -1);
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  virtual computationStartDate: ' . self::array2string($computationStartDateArray));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate->toString(Tinebase_Record_Abstract::ISO8601LONG));
-    
+        
+        $eventLength = clone $_event->dtend;
+        $eventLength->sub($_event->dtstart);
+        
+        while(true) {
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $_rrule->interval);
+            //echo self::array2string($computationStartDateArray) . "\n";
+            $recurEvent = self::cloneEvent($_event);
+            $recurEvent->dtstart = self::array2date($computationStartDateArray);
+            
+            $originatorsDtstart = clone $recurEvent->dtstart;
+            $originatorsDtstart->setTimezone($_event->originator_tz);
+            $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+            
+            // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
+            $recurEvent->dtend = clone $recurEvent->dtstart;
+            $recurEvent->dtend->add($eventLength);
+            
+            // skip non existing dates
+            if (! Zend_Date::isDate(self::array2string($computationStartDateArray), Tinebase_Record_Abstract::ISO8601LONG)) {
+                continue;
+            }
+            
+            // skip events ending before our period.
+            // NOTE: such events could be included, cause our offset only calcs months and not seconds
+            if ($_from->compare($recurEvent->dtend) >= 0) {
+                continue;
+            }
+            
+            if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
+                break;
+            }
+            
+            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            
+            if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
+                $_recurSet->addRecord($recurEvent);
+            }
+        }
     }
     
     /**

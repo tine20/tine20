@@ -76,9 +76,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         // note: 2009-03-29 Europe/Berlin switched to DST
         $from = new Zend_Date('2009-03-23 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2009-04-03 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
-        
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
-        
         $this->assertEquals('2009-03-23 08:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-03-27 08:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-03-29 07:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
@@ -88,24 +86,22 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         // lets also cover the case when recurevent start during calcualtion period:
         $from = new Zend_Date('1979-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('1979-06-14 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
-        
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(4, count($recurSet), 'recur start in period failed');
 
         // lets cover the case when search period boudaries are in the middle of the recur events
         // lets also cover the case when recurevent start during calcualtion period:
-        $from = new Zend_Date('2009-03-01 08:03:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-03-03 08:03:00', Tinebase_Record_Abstract::ISO8601LONG);
-        
+        $from = new Zend_Date('2009-03-27 08:03:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-03-29 07:03:00', Tinebase_Record_Abstract::ISO8601LONG);
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'boundary inclusions failed');
         
         // and finaly lets cover the case when period boundaries are the boundaries of the recur events
         $from = new Zend_Date('2009-03-01 08:05:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2009-03-03 08:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
-        $this->assertEquals(0, count($recurSet), 'boundary exclusion failed');
+        $this->assertEquals(1, count($recurSet), 'boundary exclusion failed');
+        $this->assertEquals('2009-03-03 08:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     public function testCalcWeekly()
@@ -154,17 +150,49 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             'dtstart'       => '1979-06-05 15:00:00',
             'dtend'         => '1979-06-05 16:00:00',
             'rrule'         => 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=5',
+            'exdate'        => '2009-02-05 15:00:00,2009-05-05 14:00:00',
             'originator_tz' => 'Europe/Berlin'
         ));
         
-        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event', array(
+            array(
+                'uid'           => $event->uid,
+                'summary'       => 'official birthday party',
+                'dtstart'       => '2009-06-05 20:00:00',
+                'dtend'         => '2009-06-06 05:00:00',
+                'recurid'       => $event->uid . '-' . '2009-06-05 14:00:00'
+            )
+        ));
         
         // note: 2009-03-29 Europe/Berlin switched to DST
         $from = new Zend_Date('2009-01-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2009-06-30 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
-        //$this->assertEquals(2, count($recurSet), 'odd interval failed');
+        $this->assertEquals('2009-01-05 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-03-05 15:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-05 14:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        //$this->assertEquals('2009-04-06 14:00:00', $recurSet[3]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals(3, count($recurSet));
         
+        // lets also cover the case when recurevent start during calcualtion period:
+        $from = new Zend_Date('1979-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('1979-10-31 23:49:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(4, count($recurSet), 'recur start in period failed');
+        
+        // lets cover the case when search period boudaries are in the middle of the recur events
+        // lets also cover the case when recurevent start during calcualtion period:
+        $from = new Zend_Date('2009-03-05 15:30:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-04-05 14:30:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(2, count($recurSet), 'boundary inclusions failed');
+        
+        // and finaly lets cover the case when period boundaries are the boundaries of the recur events
+        $from = new Zend_Date('2009-03-05 16:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-04-05 14:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(1, count($recurSet), 'boundary exclusion failed');
+        $this->assertEquals('2009-04-05 14:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     public function testCalcYearly()
