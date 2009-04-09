@@ -221,20 +221,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 
             case self::FREQ_MONTHLY:
                 if ($rrule->bymonthday) {
-                    // NOTE: non existing dates will be discarded (e.g. 31. Feb.)
-                    //       for correct computations we deal with virtual dates, represented as arrays
-                    $computationStartDateArray = self::date2array($_event->dtstart);
-                    $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
-                    
-                    // if dtstart is before $_from, we compute the offset where to start our calculations
-                    if ($_event->dtstart->isEarlier($_from)) {
-                        $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtstart->getTimestamp()) / (self::TS_DAY * $_rrule->interval)) * $_rrule->interval;
-                        $computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
-                    }
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate);
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate);
-                    
-                    
+                    self::_computeRecurMonthlyByMonthDay($_event, $rrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 } else if ($rrule->byday) {
                     
                 } else {
@@ -305,7 +292,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($_event->dtstart->isEarlier($_from)) {
-            $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtstart->getTimestamp()) / (self::TS_DAY * $_rrule->interval)) * $_rrule->interval;
+            $computationOffsetDays = floor(($_from->getTimestamp() - $_event->dtend->getTimestamp()) / (self::TS_DAY * $_rrule->interval)) * $_rrule->interval;
             $computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
         }
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate);
@@ -332,6 +319,34 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $_recurSet->addRecord($recurEvent);
             }
         }
+    }
+    
+    /**
+     * computes daily recuring events and inserts them into given $_recurSet
+     *
+     * @param Calendar_Model_Event      $_event
+     * @param Calendar_Model_Rrule      $_rrule
+     * @param array                     $_exceptionRecurIds
+     * @param Zend_Date                 $_from
+     * @param Zend_Date                 $_until
+     * @param Tinebase_Record_RecordSet $_recurSet
+     * @return void
+     */
+    protected static function _computeRecurMonthlyByMonthDay($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
+    {
+        // NOTE: non existing dates will be discarded (e.g. 31. Feb.)
+        //       for correct computations we deal with virtual dates, represented as arrays
+        $computationStartDateArray = self::date2array($_event->dtstart);
+        $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
+        
+        // if dtstart is before $_from, we compute the offset where to start our calculations
+        if ($_event->dtstart->isEarlier($_from)) {
+            $computationOffsetWeeks = self::getMonthDiff($_event->dtend, $_from);
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetWeeks);
+            //$computationStartDate->add(new Zend_Date($computationOffsetDays * self::TS_DAY, Zend_Date::TIMESTAMP));
+        }
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationStartDate: ' . $computationStartDate);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $computationEndDate: ' . $computationEndDate);
     }
     
     /**
