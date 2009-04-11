@@ -224,11 +224,9 @@ Tine.Crm.Product.renderer = function(data) {
     record = Tine.Crm.Product.getStore().getById(data);
     
     if (record) {
-        //return record.data.value;
         return Ext.util.Format.htmlEncode(record.data.productsource);
     }
     else {
-        Ext.getCmp('leadDialog').doLayout();
         return Ext.util.Format.htmlEncode(data);
     }
 };

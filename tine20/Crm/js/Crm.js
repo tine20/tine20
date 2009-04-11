@@ -1800,7 +1800,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         // fix to have the tab panel in the right height accross browsers
         Ext.getCmp('editMainTabPanel').on('afterlayout', function(container) {
             var height = this.getInnerHeight();
-            //var height = Ext.getCmp('leadDialog').getInnerHeight();
             Ext.getCmp('editMainTabPanel').setHeight(660);
         });
         
