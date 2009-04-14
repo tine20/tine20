@@ -1,0 +1,7 @@
+<?php
+// test config settings
+return array(
+    'url'       => 'http://localhost/tine20/',
+    'username'  => 'tine20admin',
+    'password'  => 'lars',
+);

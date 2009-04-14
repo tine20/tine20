@@ -10,10 +10,6 @@
  * @version     $Id$
  */
 
-$url      = 'http://playground.tine20.org/tine20/';
-$username = 'utester';
-$password = 'utester1234';
-
 /*
  * Set error reporting 
  */
@@ -45,12 +41,19 @@ Zend_Loader::registerAutoload();
 
 date_default_timezone_set('UTC');
 
-// copy connection data to global scope
-$GLOBALS['TestHelper']['url'] = $url;
-$GLOBALS['TestHelper']['username'] = $username;
-$GLOBALS['TestHelper']['password'] = $password;
+// get config
+if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
+    $config = new Zend_Config(require dirname(__FILE__) . '/config.inc.php');
+} else {
+    throw new Exception("Couldn't find config.inc.php! \n");
+}
 
-$connection = new Tinebase_Connection($url, $username, $password);
+// copy connection data to global scope
+$GLOBALS['TestHelper']['url'] = $config->url;
+$GLOBALS['TestHelper']['username'] = $config->username;
+$GLOBALS['TestHelper']['password'] = $config->password;
+
+$connection = new Tinebase_Connection($config->url, $config->username, $config->password);
 Tinebase_Connection::setDefaultConnection($connection);
 
-unset($url, $username, $password, $testRoot, $tineRoot, $phpClientPath, $connection);
+unset($testRoot, $tineRoot, $phpClientPath, $connection);
