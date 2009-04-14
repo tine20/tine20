@@ -51,12 +51,14 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         #'Rtf'               => 'rtf'
     );
     
-    protected $_folders = array(array(
-        'folderId'      => 'tasksroot',
-        'parentId'      => 0,
-        'displayName'   => 'Tasks',
-        'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_TASK
-    ));
+    protected $_folders = array(
+        'tasksroot' => array(
+            'folderId'      => 'tasksroot',
+            'parentId'      => 0,
+            'displayName'   => 'Tasks',
+            'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_TASK
+        )
+    );
     
     protected $_applicationName     = 'Tasks';
     
