@@ -46,5 +46,7 @@ class RequestTracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! $this->_backend) {
             $this->_backend = new RequestTracker_Backend_Rest();
         }
+        
+        return $this->_backend;
     }
 }
