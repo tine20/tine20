@@ -592,46 +592,6 @@ class Tinebase_Core
     }
 
     /**
-     * get record input filter by model name
-     *
-     * @param string $_modelName
-     * @return Zend_Filter_Input|NULL
-     */
-    public static function getInputFilter($_modelName)
-    {
-        $result = NULL;
-        
-        if (self::isRegistered(self::INPUT_FILTER)) {
-            $filters = self::get(self::INPUT_FILTER);
-            if (isset($filters[$_modelName])) {
-                $result = $filters[$_modelName];
-            }
-        }
-        
-        return $result;
-    }
-
-    /**
-     * get record input filter by model name
-     *
-     * @param Zend_Filter_Input $_filter
-     * @param string $_modelName
-     */
-    public static function setInputFilter($_filter, $_modelName)
-    {
-        if (self::isRegistered(self::INPUT_FILTER)) {
-            $filters = self::get(self::INPUT_FILTER);
-        } else {
-            $filters = array();
-        }
-        
-        $filters[$_modelName] = $_filter;
-        
-        // save in registry
-        self::set(self::INPUT_FILTER, $filters);
-    }
-
-    /**
      * get preferences instance by application name (create+save it to registry if it doesn't exist)
      *
      * @param string $_application
