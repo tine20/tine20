@@ -76,7 +76,7 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Int
             } else {
                 switch ($this->_operator) {
                     case 'equals':
-                        $result['value'] = Tinebase_User::getInstance()->getUserById($this->_value)->toArray();
+                        $result['value'] = $result['value'] ? Tinebase_User::getInstance()->getUserById($this->_value)->toArray() : $result['value'];
                         break;
                     case 'in':
                         $result['value'] = array();
