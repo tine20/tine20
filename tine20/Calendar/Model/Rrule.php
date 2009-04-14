@@ -436,7 +436,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurEvent->dtstart = clone $computationStartDate;
             
             if ($byDayInterval < 0) {
-                $recurEvent->dtstart->addMonth($_rrule->interval + 1)->subDay(1);
+                $recurEvent->dtstart->addMonth(1)->subDay(1);
             }
             self::skipWday($recurEvent->dtstart, $byDayWeekday, $byDayInterval, TRUE);
             
