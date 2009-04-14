@@ -100,7 +100,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $task->organizer = Tinebase_Core::getUser()->getId();
         }
         
-        return $this->_taskToJson($task);
+        return $this->_recordToJson($task);
     }
 
     /**
@@ -120,7 +120,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param Tasks_Model_Task $_task
      * @return array task data
      */
-    protected function _taskToJson($_task)
+    protected function _recordToJson($_task)
     {
         $_task->setTimezone($this->_userTimezone);
         $_task->bypassFilters = true;
@@ -151,7 +151,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
         foreach ($_tasks as &$task) {
             $index = $accounts->getIndexById($task->organizer);
-            $task->organizer = ($index !== FALSE) ? $accounts[$index] : Tinebase_User::getInstance()->getNonExistentUser()->toArray();
+            $task->organizer = ($index !== FALSE) ? $accounts[$index] : NULL;
         }
         
         $result = $_tasks->toArray();
