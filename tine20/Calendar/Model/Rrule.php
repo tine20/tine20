@@ -350,7 +350,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($_event->dtstart->isEarlier($_from)) {
             $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
-            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth -1);
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth - $_rrule->interval);
         }
         
         $eventLength = clone $_event->dtend;
@@ -404,7 +404,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @param Tinebase_Record_RecordSet $_recurSet
      * @return void
      */
-    public function _computeRecurMonthlyByDay($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
+    public static function _computeRecurMonthlyByDay($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
     {
         $computationStartDateArray = self::date2array($_event->dtstart);
         $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
@@ -412,7 +412,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($_event->dtstart->isEarlier($_from)) {
             $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
-            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth -1);
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth - $_rrule->interval);
+            //echo self::array2string($computationStartDateArray);
         }
         
         $eventLength = clone $_event->dtend;
@@ -422,7 +423,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $computationStartDate = self::array2date($computationStartDateArray);
         
         $byDayInterval = (int) substr($_rrule->byday, 0, -2);
-        $byDayWeekday  = substr($_rrule->byday, -1, 2);
+        $byDayWeekday  = substr($_rrule->byday, -2);
         
         if ($byDayInterval === 0 || ! array_key_exists($byDayWeekday, self::$WEEKDAY_DIGIT_MAP)) {
             throw new Exception('mal formated rrule byday part: "' . $_rrule->byday . '"');
@@ -437,7 +438,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             if ($byDayInterval < 0) {
                 $recurEvent->dtstart->addMonth($_rrule->interval + 1)->subDay(1);
             }
-            self::skipWday($recurEvent->dtstart,  $byDayWeekday, $byDayWeekday, TRUE);
+            self::skipWday($recurEvent->dtstart, $byDayWeekday, $byDayInterval, TRUE);
             
             $originatorsDtstart = clone $recurEvent->dtstart;
             $originatorsDtstart->setTimezone($_event->originator_tz);

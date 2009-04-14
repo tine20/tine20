@@ -193,6 +193,34 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(1, count($recurSet), 'boundary exclusion failed');
         $this->assertEquals('2009-04-05 14:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        // try odd interval
+        $event->rrule = 'FREQ=MONTHLY;INTERVAL=5;BYMONTHDAY=5';
+        $from = new Zend_Date('2009-01-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-11-05 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(2, count($recurSet), 'odd interval failed');
+        
+    }
+    
+    public function testCalcMonthlyByDay()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'thanks for moni',
+            'dtstart'       => '1974-02-11 15:00:00',
+            'dtend'         => '1974-02-11 16:00:00',
+            'rrule'         => 'FREQ=MONTHLY;INTERVAL=5;BYDAY=4SU',
+            'originator_tz' => 'Europe/Berlin'
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Zend_Date('2009-02-22 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-07-26 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        //print_r($recurSet->toArray());
     }
     
     public function testCalcYearly()
