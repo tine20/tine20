@@ -67,7 +67,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initGridEvents: function() {    
         this.grid.on('newentry', function(taskData){
             var selectedNode = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode();
-            taskData.container_id = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : -1;
+            taskData.container_id = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : null;
             var task = new Tine.Tasks.Task(taskData);
             
             Tine.Tasks.JsonBackend.saveRecord(task, {
