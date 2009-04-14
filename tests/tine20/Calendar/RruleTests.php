@@ -219,7 +219,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $from = new Zend_Date('2009-02-22 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2009-07-26 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
-        $this->assertEquals(2, count($recurSet), 'odd interval failed');
+        $this->assertEquals(2, count($recurSet), 'forward skip failed');
         $this->assertEquals('2009-02-22 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-07-26 14:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         
@@ -245,15 +245,14 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $from = new Zend_Date('2009-02-01 15:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2009-12-31 14:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
-        $this->assertEquals(3, count($recurSet), 'odd interval failed');
+        $this->assertEquals(3, count($recurSet), 'backward skip failed');
         $this->assertEquals('2009-08-26 14:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-10-28 15:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-12-30 15:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
-    public function testCalcYearly()
+    public function testCalcYearlyByMonthDay()
     {
-        /*
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'yearly 29.feb',
@@ -268,12 +267,28 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         // note: 2009-03-29 Europe/Berlin switched to DST
         $from = new Zend_Date('2008-02-25 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2013-03-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
-        
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
-        */
+        $this->assertEquals(1, count($recurSet), 'leapyear only failed');
+        $this->assertEquals('2012-02-29 08:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
+    public function testCalcYearlyByDay()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'yearly last friday in february',
+            'dtstart'       => '2008-02-29 08:00:00',
+            'dtend'         => '2008-02-29 10:00:00',
+            'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=2;BYDAY=-1FR',
+            'originator_tz' => 'Europe/Berlin'
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
         $from = new Zend_Date('2008-02-25 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        //print_r($from->toArray());
+        $until = new Zend_Date('2013-03-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(5, count($recurSet), 'yearlybyday failed');
     }
     
     /************************** date helper tests ***************************/

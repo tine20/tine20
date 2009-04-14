@@ -231,9 +231,29 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 } else {
                     throw new Exception('mal formated rrule');
                 }
-                
                 break;
+                
             case self::FREQ_YEARLY:
+                $computitionEvent = clone $_event;
+                $computitionEvent->dtstart->setMonth($rrule->bymonth);
+                
+                $yearlyrrule = clone $rrule;
+                $yearlyrrule->freq = self::FREQ_MONTHLY;
+                $yearlyrrule->interval = 12;
+                
+                //$yearlyrrule->byday = $rrule->byday ? $rrule->byday : NULL;
+                //$yearlyrrule->bymonthday = $rrule->byday ? NULL : $_event->getDay();
+                
+                if (! $rrule->byday) {
+                    unset($yearlyrrule->byday);
+                    $yearlyrrule->bymonthday = $_event->dtstart->get(Zend_Date::DAY);
+                    
+                    self::_computeRecurMonthlyByMonthDay($computitionEvent, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                } else {
+                    unset($yearlyrrule->bymonthday);
+                    
+                    self::_computeRecurMonthlyByDay($computitionEvent, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                }
                 break;
                 
         }
@@ -449,7 +469,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurEvent->dtend->add($eventLength);
             
             // skip non existing dates
-            if ($computationStartDate->getMonth() != $recurEvent->dtstart->getMonth()) {
+            if ($computationStartDate->get(Zend_Date::MONTH) != $recurEvent->dtstart->get(Zend_Date::MONTH)) {
                 continue;
             }
             
