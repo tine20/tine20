@@ -255,7 +255,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             $pdfGenerator->generateLeadPdf($_lead);
             $pdfOutput = $pdfGenerator->render();
         } catch ( Zend_Pdf_Exception $e ) {
-            Tinebacse_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
             $pdfOutput = NULL;
         }
                 
