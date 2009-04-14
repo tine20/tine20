@@ -222,22 +222,67 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     
     /************************** date helper tests ***************************/
     
-    public function testGetNextWday()
+    public function testSkipWday()
     {
+        // $_n == +1
         $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $this->assertEquals('2009-04-12 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2009-04-15 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-12 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-15 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
         $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $this->assertEquals('2009-04-12 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-12 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
         $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $this->assertEquals('2009-04-05 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::getNextWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-05 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        // $_n == +2
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-19 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY, 2)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-21 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_TUESDAY, 2)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        // $_n == -1
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-06 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_MONDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-02 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_THURSDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-01 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-04 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SATURDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-03-29 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        // $_n == -2
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-03-29 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY, -2)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-03-31 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_TUESDAY, -2)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+    
+        // $_considerDateItself == TRUE
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, 1, TRUE)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, -1, TRUE)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+    
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-15 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, 2, TRUE)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $this->assertEquals('2009-04-01 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, -2, TRUE)->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
     }
     
     public function testDatenArrayConverstions()

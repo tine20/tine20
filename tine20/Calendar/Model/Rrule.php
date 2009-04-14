@@ -215,10 +215,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 foreach (explode(',', $rrule->byday) as $recurWeekDay) {
                     $baseEvent = clone $_event;
                     
-                    if($baseEvent->dtstart->get(Zend_Date::WEEKDAY_DIGIT) != self::$WEEKDAY_DIGIT_MAP[$recurWeekDay]) {
-                        $baseEvent->dtstart = self::getNextWday($baseEvent->dtstart, $recurWeekDay);
-                        $baseEvent->dtend   = self::getNextWday($baseEvent->dtend,   $recurWeekDay);
-                    }
+                    self::skipWday($baseEvent->dtstart, $recurWeekDay, 1, TRUE);
+                    self::skipWday($baseEvent->dtend,   $recurWeekDay, 1, TRUE);
                     
                     self::_computeRecurDaily($baseEvent, $dailyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 }
@@ -228,6 +226,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 if ($rrule->bymonthday) {
                     self::_computeRecurMonthlyByMonthDay($_event, $rrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 } else if ($rrule->byday) {
+                    self::_computeRecurMonthlyByDay($_event, $rrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                     
                 } else {
                     throw new Exception('mal formated rrule');
@@ -331,7 +330,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
-     * computes daily recuring events and inserts them into given $_recurSet
+     * computes monthly (bymonthday) recuring events and inserts them into given $_recurSet
      *
      * @param Calendar_Model_Event      $_event
      * @param Calendar_Model_Rrule      $_rrule
@@ -395,25 +394,124 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
-     * gets next occourance of wday
+     * computes monthly (byday) recuring events and inserts them into given $_recurSet
      *
-     * @param  Zend_Date  $_date
-     * @param  int|string $_wday
-     * @return Zend_Date
+     * @param Calendar_Model_Event      $_event
+     * @param Calendar_Model_Rrule      $_rrule
+     * @param array                     $_exceptionRecurIds
+     * @param Zend_Date                 $_from
+     * @param Zend_Date                 $_until
+     * @param Tinebase_Record_RecordSet $_recurSet
+     * @return void
      */
-    public static function getNextWday($_date, $_wday)
+    public function _computeRecurMonthlyByDay($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
     {
-        $wdayDigit = is_int($_wday) ? $_wday : self::$WEEKDAY_DIGIT_MAP[$_wday];
+        $computationStartDateArray = self::date2array($_event->dtstart);
+        $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
         
-        $next = clone $_date;
-        $offset = $_date->get(Zend_Date::WEEKDAY_DIGIT) - $wdayDigit;
-        if ($offset >= 0) {
-            $next->addDay(7 - $offset);
-        } else {
-            $next->addDay(abs($offset));
+        // if dtstart is before $_from, we compute the offset where to start our calculations
+        if ($_event->dtstart->isEarlier($_from)) {
+            $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth -1);
         }
         
-        return $next;
+        $eventLength = clone $_event->dtend;
+        $eventLength->sub($_event->dtstart);
+        
+        $computationStartDateArray['day'] = 1;
+        $computationStartDate = self::array2date($computationStartDateArray);
+        
+        $byDayInterval = (int) substr($_rrule->byday, 0, -2);
+        $byDayWeekday  = substr($_rrule->byday, -1, 2);
+        
+        if ($byDayInterval === 0 || ! array_key_exists($byDayWeekday, self::$WEEKDAY_DIGIT_MAP)) {
+            throw new Exception('mal formated rrule byday part: "' . $_rrule->byday . '"');
+        }
+        
+        while(true) {
+            $computationStartDate->addMonth($_rrule->interval);
+            
+            $recurEvent = self::cloneEvent($_event);
+            $recurEvent->dtstart = clone $computationStartDate;
+            
+            if ($byDayInterval < 0) {
+                $recurEvent->dtstart->addMonth($_rrule->interval + 1)->subDay(1);
+            }
+            self::skipWday($recurEvent->dtstart,  $byDayWeekday, $byDayWeekday, TRUE);
+            
+            $originatorsDtstart = clone $recurEvent->dtstart;
+            $originatorsDtstart->setTimezone($_event->originator_tz);
+            $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+            
+            // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
+            $recurEvent->dtend = clone $recurEvent->dtstart;
+            $recurEvent->dtend->add($eventLength);
+            
+            // skip non existing dates
+            if ($computationStartDate->getMonth() != $recurEvent->dtstart->getMonth()) {
+                continue;
+            }
+            
+            // skip events ending before our period.
+            // NOTE: such events could be included, cause our offset only calcs months and not seconds
+            if ($_from->compare($recurEvent->dtend) >= 0) {
+                continue;
+            }
+            
+            if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
+                break;
+            }
+            
+            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            
+            if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
+                $_recurSet->addRecord($recurEvent);
+            }
+        }
+    }
+    
+    /**
+     * skips date to (n'th next/previous) occurance of $_wday
+     *
+     * @param Zend_Date  $_date
+     * @param int|string $_wday
+     * @param int        $_n
+     * @param bool       $_considerDateItself
+     */
+    public static function skipWday($_date, $_wday, $_n = +1, $_considerDateItself = FALSE)
+    {
+        $wdayDigit = is_int($_wday) ? $_wday : self::$WEEKDAY_DIGIT_MAP[$_wday];
+        $wdayOffset = $_date->get(Zend_Date::WEEKDAY_DIGIT) - $wdayDigit;
+        
+        if ($_n == 0) {
+            throw new Exception('$_n must not be 0');
+        }
+        
+        $direction = $_n > 0 ? 'forward' : 'backward';
+        $weeks = abs($_n);
+        
+        if ($_considerDateItself && $wdayOffset == 0) {
+            $weeks--;
+        }
+        
+        switch ($direction) {
+            case 'forward':
+                if ($wdayOffset >= 0) {
+                    $_date->addDay(($weeks * 7) - $wdayOffset);
+                } else {
+                    $_date->addDay(abs($wdayOffset) + ($weeks -1) * 7);
+                }
+                break;
+            case 'backward':
+                if ($wdayOffset > 0) {
+                    $_date->subDay(abs($wdayOffset) + ($weeks -1) * 7);
+                } else {
+                    $_date->subDay(($weeks * 7) + $wdayOffset);
+                }
+                break;
+        }
+            
+        return $_date;
     }
     
     /**
