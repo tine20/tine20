@@ -194,7 +194,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * search preferences by application
      *
-     * @todo set user pref and check it
+     * @todo check locale/timezones
      */
     public function testSearchPreferences()
     {
@@ -207,28 +207,68 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * search preferences by application
+     *
+     */
+    public function testSearchPreferencesWithOptions()
+    {
+        // add new default pref
+        $pref = $this->_getPreferenceWithOptions();
+        $pref = Tinebase_Core::getPreference()->create($pref);        
+        
+        // search prefs
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter()));
+        
+        // check results
+        $this->assertTrue(isset($results['results']));
+        $this->assertEquals(3, $results['totalcount']);
+        
+        foreach ($results['results'] as $result) {
+            if ($result['name'] == 'testPref') {
+                $this->assertEquals($pref->value, $result['value']);
+                $this->assertTrue(is_array($result['options']));
+                $this->assertEquals(2, $result['options']['totalcount']);
+            }
+        }
+        
+        Tinebase_Core::getPreference()->delete($pref);
+    }
+    
+    /**
      * search preferences by user
      *
      */
     public function testSavePreferences()
     {
+        // add new default pref
+        $pref = $this->_getPreferenceWithOptions();
+        $pref = Tinebase_Core::getPreference()->create($pref);        
+        
         $prefData = $this->_getPreferenceData();
         $this->_instance->savePreferences('Tinebase', Zend_Json::encode($prefData));
 
         // search saved prefs
-        $result = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE)));
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE)));
         
         // check results
-        $this->assertTrue(isset($result['results']));
-        $this->assertEquals(3, $result['totalcount']);
+        $this->assertTrue(isset($results['results']));
+        $this->assertEquals(3, $results['totalcount']);
         
         $savedPrefData = array();
-        foreach ($result['results'] as $result) {
+        foreach ($results['results'] as $result) {
             $savedPrefData[$result['name']] = $result['value'];
+            
+            if ($result['name'] == 'testPref') {
+                $this->assertTrue(is_array($result['options']), 'options missing');
+                $this->assertEquals(2, $result['options']['totalcount']);
+            }            
             // cleanup
             Tinebase_Core::getPreference()->delete($result['id']);
         }
         $this->assertEquals($prefData, $savedPrefData);
+        
+        // cleanup
+        Tinebase_Core::getPreference()->delete($pref);
     }
     
     /******************** protected helper funcs ************************/
@@ -254,11 +294,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
 
         if ($_savedPrefs) {
             $result[] = array(
-                'field' => 'type', 
-                'operator' => 'equals', 
-                'value' => Tinebase_Model_Preference::TYPE_NORMAL
-            );
-            $result[] = array(
                 'field' => 'name', 
                 'operator' => 'contains', 
                 'value' => 'testPref'
@@ -276,9 +311,37 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getPreferenceData()
     {
         return array(
-            'testPref1' => 'testValue1',
+            'testPref' => 'value2',
             'testPref2' => 'testValue2',
             'testPref3' => 'testValue3',
         );        
+    }
+    
+    /**
+     * get preference with options
+     *
+     * @return Tinebase_Model_Preference
+     */
+    protected function _getPreferenceWithOptions()
+    {
+        return new Tinebase_Model_Preference(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name'              => 'testPref',
+            'value'             => 'value1',
+            'account_id'        => 0,
+            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
+            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
+                <options>
+                    <option>
+                        <label>option1</label>
+                        <value>value1</value>
+                    </option>
+                    <option>
+                        <label>option2</label>
+                        <value>value2</value>
+                    </option>
+                </options>'
+        ));
     }
 }

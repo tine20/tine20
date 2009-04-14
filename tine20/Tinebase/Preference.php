@@ -236,17 +236,49 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
         return $result;
     }
     
+    /**
+     * convert options xml string to array
+     *
+     * @param Tinebase_Model_Preference $_preference
+     * 
+     * @todo add special arrays for locale + timezone
+     */
+    public function convertOptionsToArray(Tinebase_Model_Preference $_preference)
+    {
+        if (empty($_preference->options)) {
+            return;
+        }
+        
+        $optionsXml = new SimpleXMLElement($_preference->options);
+        
+        if ($optionsXml->special) {
+            switch ($optionsXml->special) {
+                case Tinebase_Preference::TIMEZONE:
+                    $_preference->options = 'timezone';
+                    break;
+                case Tinebase_Preference::LOCALE:
+                    $_preference->options = 'locale';
+                    break;
+            }
+        } else {
+            $result = array();
+            foreach($optionsXml->option as $option) {
+                $result['results'][] = (array) $option;
+            }
+            $result['totalcount'] = count($result['results']);
+            $_preference->options = $result;
+        }
+    }
+    
     /**************************** protected functions *********************************/
     
     /**
      * get matching preference from result set
-     * order: forced > user > group > default
+     * - order: forced > user > group > default
+     * - get options xml from default pref if available
      * 
      * @param Tinebase_Record_RecordSet $_preferences
      * @return Tinebase_Model_Preference
-     * 
-     * @todo add more sorting here?
-     * @todo use this in search function as well
      */
     protected function _getMatchingPreference(Tinebase_Record_RecordSet $_preferences)
     {
@@ -276,6 +308,15 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
                     // get first record of the remaining result set (defaults/anyone)
                     $result = $_preferences->getFirstRecord();
                 }
+            }
+        }
+        
+        // add options from default preference
+        if ($result->type !== Tinebase_Model_Preference::TYPE_DEFAULT) {
+            $defaults = $_preferences->filter('type', Tinebase_Model_Preference::TYPE_DEFAULT);
+            if (count($defaults) > 0) {
+                $defaultPref = $defaults->getFirstRecord();
+                $result->options = $defaultPref->options;
             }
         }
 

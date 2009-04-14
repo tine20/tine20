@@ -2116,4 +2116,50 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.25');
     }
+
+    /**
+     * update to 0.26
+     * - add new field to preferences table: options
+     */
+    public function update_25()
+    {
+        $field = '<field>
+                    <name>options</name>
+                    <type>text</type>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('preferences', $declaration);
+        
+        // get default prefs and add options
+        $filter = new Tinebase_Model_PreferenceFilter(array(
+            array(
+                'field' => 'account', 
+                'operator' => 'equals', 
+                'value' => array(
+                    'accountId'     => 0,
+                    'accountType'   => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE
+                ),
+            ),
+            array(
+                'field' => 'type', 
+                'operator' => 'equals', 
+                'value' => Tinebase_Model_Preference::TYPE_DEFAULT
+            )
+        ));        
+        
+        $backend = Tinebase_Core::getPreference();
+        $prefs = $backend->search($filter, NULL);
+        
+        foreach($prefs as $pref) {
+            if(in_array($pref->name, array(Tinebase_Preference::LOCALE, Tinebase_Preference::TIMEZONE))) {
+                $pref->options = '<?xml version="1.0" encoding="UTF-8"?>
+                <options>
+                    <special>' . $pref->name . '</special>
+                </options>';
+                $backend->update($pref);
+            }
+        }
+        
+        $this->setApplicationVersion('Tinebase', '0.26');
+    }
 }

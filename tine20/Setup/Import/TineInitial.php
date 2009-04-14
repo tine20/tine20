@@ -34,7 +34,7 @@ class Setup_Import_TineInitial
     public function initialLoad()
     {
         
-        /***************** initial config settings ************************/
+        /***************** initial config/preference settings ************************/
         
         echo "Creating initial config settings ...<br>";
         $configSettings = array(
@@ -53,7 +53,35 @@ class Setup_Import_TineInitial
             ));            
             $configBackend->setConfig($config);
         }
-
+        
+        // add default settings for timezone and locale
+        $timezonePref = new Tinebase_Model_Preference(array(
+            'application_id'    => $tinebaseAppId,
+            'name'              => Tinebase_Preference::TIMEZONE,
+            'value'             => 'Europe/Berlin',
+            'account_id'        => 0,
+            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
+            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
+                <options>
+                    <special>timezone</special>
+                </options>'
+        ));
+        Tinebase_Core::getPreference()->create($timezonePref);
+        $localePref = new Tinebase_Model_Preference(array(
+            'application_id'    => $tinebaseAppId,
+            'name'              => Tinebase_Preference::LOCALE,
+            'value'             => 'auto',
+            'account_id'        => 0,
+            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
+            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
+                <options>
+                    <special>locale</special>
+                </options>'
+        ));
+        Tinebase_Core::getPreference()->create($localePref);
+        
         /***************** admin account, groups and roles ************************/
         
         echo "Creating initial user(tine20admin), groups and roles ...<br>";

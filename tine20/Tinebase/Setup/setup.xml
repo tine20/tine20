@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.25</version>
+    <version>0.26</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1548,7 +1548,7 @@
 
         <table>
             <name>preferences</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1595,6 +1595,10 @@
                     <value>forced</value>
                     <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>options</name>
+                    <type>text</type>
+                </field>                
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -2243,72 +2247,6 @@
                 <name>is_user_type</name>
                 <value>0</value>
             </field>            
-        </record>
-        <record>
-            <table>
-                <name>preferences</name>
-            </table>
-            <field>
-                <name>id</name>
-                <value special="uid"></value>
-            </field>
-            <field>
-                <name>application_id</name>
-                <value special="application_id">Tinebase</value>
-            </field>
-            <field>
-                <name>name</name>
-                <value>timezone</value>
-            </field>
-            <field>
-                <name>value</name>
-                <value>Europe/Berlin</value>
-            </field>
-            <field>
-                <name>account_id</name>
-                <value>0</value>
-            </field>
-            <field>
-                <name>account_type</name>
-                <value>anyone</value>
-            </field>
-            <field>
-                <name>type</name>
-                <value>default</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>preferences</name>
-            </table>
-            <field>
-                <name>id</name>
-                <value special="uid"></value>
-            </field>
-            <field>
-                <name>application_id</name>
-                <value special="application_id">Tinebase</value>
-            </field>
-            <field>
-                <name>name</name>
-                <value>locale</value>
-            </field>
-            <field>
-                <name>value</name>
-                <value>auto</value>
-            </field>
-            <field>
-                <name>account_id</name>
-                <value>0</value>
-            </field>
-            <field>
-                <name>account_type</name>
-                <value>anyone</value>
-            </field>
-            <field>
-                <name>type</name>
-                <value>default</value>
-            </field>
         </record>
     </defaultRecords>
 </application>

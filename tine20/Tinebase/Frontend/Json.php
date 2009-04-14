@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id: Json.php 5047 2008-10-22 10:51:07Z c.weiss@metaways.de $
+ * 
+ * @todo        remove deprecated functions
  */
 
 /**
@@ -60,6 +62,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @return array list of all available translations
      *
+     * @deprecated move to preferences
      */
     public function getAvailableTranslations()
     {
@@ -105,6 +108,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array list of all available timezones
      *
      * @todo add territory to translation?
+     * @deprecated move to preferences
      */
     public function getAvailableTimezones()
     {
@@ -497,5 +501,28 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($decodedData as $name => $value) {
             $backend->$name = $value;
         }
+    }
+    
+    /************************ protected functions ***************************/
+    
+    /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @return array data
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    {
+        switch ($_records->getRecordClassName()) {
+            case 'Tinebase_Model_Preference':
+                // convert options xml to array
+                foreach ($_records as $record) {
+                    Tinebase_Core::getPreference()->convertOptionsToArray($record);
+                }
+                break;
+        }
+        
+        $result = parent::_multipleRecordsToJson($_records);
+        return $result;
     }
 }

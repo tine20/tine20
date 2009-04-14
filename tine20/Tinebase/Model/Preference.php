@@ -76,20 +76,22 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                => array('allowEmpty' => true ),
-        'account_id'        => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
-        'account_type'      => array('presence' => 'required', 'allowEmpty' => false, 'InArray' => array(
+        'id'                => array('allowEmpty' => TRUE),
+        'account_id'        => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
+        'account_type'      => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
             self::ACCOUNT_TYPE_ANYONE, 
             self::ACCOUNT_TYPE_USER, 
             self::ACCOUNT_TYPE_GROUP,
         )),
-        'application_id'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
-        'name'              => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
-        'value'             => array('presence' => 'required', 'allowEmpty' => false ),        
-        'type'              => array('presence' => 'required', 'allowEmpty' => false, 'InArray' => array(
+        'application_id'    => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
+        'name'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
+        'value'             => array('presence' => 'required', 'allowEmpty' => FALSE),
+        'type'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
             self::TYPE_NORMAL, 
             self::TYPE_DEFAULT, 
             self::TYPE_FORCED,
         )),
+        // xml field with select options for this preference => only available in TYPE_DEFAULT prefs
+        'options'            => array('allowEmpty' => TRUE),        
     );
 }
