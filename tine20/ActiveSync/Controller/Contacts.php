@@ -86,12 +86,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @todo retrieve users real container
      * @var array
      */
-    protected $_folders = array(array(
-        'folderId'      => 'contatcsroot',
-        'parentId'      => 0,
-        'displayName'   => 'Contacts',
-        'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT
-    ));
+    protected $_folders = array(
+        'contatcsroot' => array(
+            'folderId'      => 'contatcsroot',
+            'parentId'      => 0,
+            'displayName'   => 'Contacts',
+            'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT
+        )
+    );
     
     protected $_applicationName     = 'Addressbook';
     
