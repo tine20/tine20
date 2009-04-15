@@ -194,7 +194,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * search preferences by application
      *
-     * @todo check locale/timezones
      */
     public function testSearchPreferences()
     {
@@ -204,6 +203,18 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         // check results
         $this->assertTrue(isset($result['results']));
         $this->assertEquals(2, $result['totalcount']);
+        
+        //check locale/timezones options
+        foreach ($result['results'] as $pref) {
+            switch($pref['name']) {
+                case Tinebase_Preference::LOCALE:
+                    $this->assertGreaterThan(10, $pref['options']['totalcount']);
+                    break;
+                case Tinebase_Preference::TIMEZONE:
+                    $this->assertGreaterThan(500, $pref['options']['totalcount']);
+                    break;
+            }
+        }
     }
 
     /**

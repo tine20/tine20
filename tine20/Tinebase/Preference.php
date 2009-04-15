@@ -240,8 +240,6 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
      * convert options xml string to array
      *
      * @param Tinebase_Model_Preference $_preference
-     * 
-     * @todo add special arrays for locale + timezone
      */
     public function convertOptionsToArray(Tinebase_Model_Preference $_preference)
     {
@@ -253,14 +251,38 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
         
         if ($optionsXml->special) {
             switch ($optionsXml->special) {
+                
+                /****************** timezone options *******************/
                 case Tinebase_Preference::TIMEZONE:
-                    $_preference->options = 'timezone';
+                    $locale =  Tinebase_Core::get('locale');
+            
+                    $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
+                    $availableTimezones = DateTimeZone::listIdentifiers();
+                    $result = array();
+                    foreach ($availableTimezones as $timezone) {
+                        $result[] = array(
+                            'timezone' => $timezone,
+                            'timezoneTranslation' => array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL
+                        );
+                    }
+                    $_preference->options = array(
+                        'results'    => $result,
+                        'totalcount' => count($result)
+                    );
                     break;
+                
+                /****************** locale options ********************/
                 case Tinebase_Preference::LOCALE:
-                    $_preference->options = 'locale';
+                    $availableTranslations = Tinebase_Translation::getAvailableTranslations();
+                    $_preference->options = array(
+                        'results'    => $availableTranslations,
+                        'totalcount' => count($availableTranslations)
+                    );
                     break;
             }
         } else {
+            
+            /****************** other options ********************/
             $result = array();
             foreach($optionsXml->option as $option) {
                 $result['results'][] = (array) $option;
