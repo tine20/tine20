@@ -459,13 +459,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ));
         }
         
-        $backend = Tinebase_Core::getPreference($applicationName);
-        $allPrefs = $backend->search($filter, NULL);
-        
-        // get single matching preferences for each different pref
-        $records = $backend->getMatchingPreferences($allPrefs);
-        
-        $result = $this->_multipleRecordsToJson($records);
+        // check if application has preference class
+        if ($backend = Tinebase_Core::getPreference($applicationName)) {
+            $allPrefs = $backend->search($filter, NULL);
+            
+            // get single matching preferences for each different pref
+            $records = $backend->getMatchingPreferences($allPrefs);
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
+            
+            $result = $this->_multipleRecordsToJson($records);
+        } else {
+            $result = array();
+        }
         
         return array(
             'results'       => $result,
@@ -513,6 +519,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
     {
+        if (count($_records) == 0) {
+            return array();
+        }
+        
         switch ($_records->getRecordClassName()) {
             case 'Tinebase_Model_Preference':
                 // convert options xml to array

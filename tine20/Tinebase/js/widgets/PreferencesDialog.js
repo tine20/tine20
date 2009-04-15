@@ -8,10 +8,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add app tree view
  * @todo        add admin mode
  * @todo        add lock to force prefs
- * @todo        show prefs for all apps
  * @todo        add filter toolbar
  * @todo        add preference label translations
  * @todo        use proxy store?
@@ -55,9 +53,20 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     i18n: null,
 
     /**
-     * @property {Tine.widgets.dialog.PreferencesCardPanel} prefsPanel
+     * @property {Tine.widgets.dialog.PreferencesCardPanel} prefsCardPanel
      */
-    prefsPanel: null,
+    prefsCardPanel: null,
+    
+    /**
+     * @property {Tine.widgets.dialog.PreferencesApplicationsPanel} treePanel
+     */
+    treePanel: null,
+    
+    /**
+     * @property {Object} prefPanels
+     * here we store the pref panels for all apps
+     */    
+    prefPanels: {},
     
     // private
     bodyStyle:'padding:5px',
@@ -153,25 +162,26 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * NOTE: when this method gets called, all initalisation is done.
      */
     getItems: function() {
-    	this.prefsPanel = new Tine.widgets.dialog.PreferencesCardPanel({
+    	this.prefsCardPanel = new Tine.widgets.dialog.PreferencesCardPanel({
             region: 'center'
         });
+        this.treePanel = new Tine.widgets.dialog.PreferencesApplicationsPanel({
+            title: _('Applications'),
+            region: 'west',
+            width: 200,
+            frame: true
+        })
         return [{
         	xtype: 'panel',
-        	//title: this.i18n._('Preferences'),
             autoScroll: true,
             border: true,
             frame: true,
             layout: 'border',
             height: 424,
-            items: [{
-                region: 'west',
-                xtype: 'panel',
-                title: _('Applications'),
-                html: 'tree panel',
-                width: 200,
-                frame: true
-            }, this.prefsPanel]
+            items: [
+                this.treePanel,
+                this.prefsCardPanel
+            ]
         }];
     },
     
@@ -204,24 +214,29 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**
      * generic apply changes handler
      * 
+     * @todo activate again
      * @todo add app name (from panel) to data array
      * @todo only reload if special values have changed?
      */
     onApplyChanges: function(button, event, closeWindow) {
     	
+    	return;
     	this.loadMask.show();
     	
     	// get values from card panels
     	var data = {};
-    	for (var i=0; i < this.prefsPanel.items.items.length; i++) {
-    		var formPanel = this.prefsPanel.items.items[i];
+    	/*
+    	 * use this.prefPanels.each ...
+    	for (var i=0; i < this.prefsCardPanel.items.items.length; i++) {
+    		var formPanel = this.prefsCardPanel.items.items[i];
     		for (var j=0; j < formPanel.items.length; j++) {
     			data[formPanel.items.items[j].name] = formPanel.items.items[j].getValue();
     		}
     	}
+    	*/
     	
     	// save preference data
-    	//console.log(data);
+    	console.log(data);
     	Ext.Ajax.request({
             scope: this,
             params: {
@@ -245,7 +260,208 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 Ext.MessageBox.alert(_('Errors'), _('Saving of preferences failed.'));    
             }
         });
-    }    
+    },
+    
+    /**
+     * init app preferences store
+     * 
+     * @param {String} appName
+     * 
+     * @todo add filter
+     * @todo use generic json backend here?
+     */
+    initPrefStore: function(appName) {
+    	this.loadMask.show();
+        var store = new Ext.data.JsonStore({
+            fields: Tine.Tinebase.Model.Preference,
+            baseParams: {
+                method: 'Tinebase.searchPreferencesForApplication',
+                applicationName: appName,
+                filter: ''
+            },
+            listeners: {
+                load: this.onStoreLoad,
+                scope: this
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
+        
+        //console.log('created store for ' + appName);
+        store.load();
+    },
+
+    /**
+     * called after a new set of preference Records has been loaded
+     * 
+     * @param  {Ext.data.Store} this.store
+     * @param  {Array}          loaded records
+     * @param  {Array}          load options
+     */
+    onStoreLoad: function(store, records, options) {
+        //console.log('loaded');
+        //console.log(store);
+        
+        var card = new Tine.widgets.dialog.PreferencesPanel({
+            prefStore: store
+        });
+        
+        // add to panel registry
+        var appName = store.baseParams.applicationName;
+        
+        this.prefPanels[appName] = card;
+        
+        this.activateCard(card, false);
+        this.loadMask.hide();
+    },
+    
+    /**
+     * activateCard in preferences panel
+     * 
+     * @param {Tine.widgets.dialog.PreferencesPanel} panel
+     * @param {boolean} exists
+     */
+    activateCard: function(panel, exists) {
+    	if (!exists) {
+            this.prefsCardPanel.add(panel);
+            this.prefsCardPanel.layout.container.add(panel);
+    	}
+        this.prefsCardPanel.layout.setActiveItem(panel.id);
+        panel.doLayout();    	
+    },
+    
+    /**
+     * showPrefsForApp 
+     * - check stores (create new store if not exists)
+     * - activate pref panel for app
+     * 
+     * @param {String} appName
+     */
+    showPrefsForApp: function(appName) {
+        // check stores/panels
+        if (!this.prefPanels[appName]) {
+            // add new card + store
+            this.initPrefStore(appName);
+        } else {
+        	this.activateCard(this.prefPanels[appName], true);
+        }
+    }
+});
+
+/**
+ * preferences application tree panel
+ * -> this panel is filled with the preferences subpanels containing the pref stores for the apps
+ * 
+ * @todo use fire event in parent panel?
+ */
+Tine.widgets.dialog.PreferencesApplicationsPanel = Ext.extend(Ext.tree.TreePanel, {
+
+	// presets
+    iconCls: 'x-new-application',
+    rootVisible: false,
+    border: false,
+    autoScroll: true,
+    
+    /**
+     * initComponent
+     * 
+     */
+    initComponent: function(){
+        
+        Tine.widgets.dialog.PreferencesApplicationsPanel.superclass.initComponent.call(this);
+        
+        this.initTreeNodes();
+        this.initHandlers();
+    },
+
+    /**
+     * afterRender -> selects Tinebase prefs panel
+     * 
+     * @private
+     * 
+     * @todo activate default app/prefs after render
+     */
+    afterRender: function() {
+        Tine.widgets.dialog.PreferencesApplicationsPanel.superclass.afterRender.call(this);
+
+        /*
+        this.expandPath('/root/Tinebase');
+        this.selectPath('/root/Tinebase');
+        */
+    },
+    
+    /**
+     * initTreeNodes with Tinebase and apps prefs
+     * 
+     * @private
+     */
+    initTreeNodes: function() {
+        var treeRoot = new Ext.tree.TreeNode({
+            text: 'root',
+            draggable:false,
+            allowDrop:false,
+            id:'root'
+        });
+        this.setRootNode(treeRoot);
+        
+        // add tinebase/general prefs node
+        var generalNode = new Ext.tree.TreeNode({
+            text: _('General Preferences'),
+            cls: 'file',
+            id: 'Tinebase',
+            leaf: null,
+            expanded: true
+        });
+        treeRoot.appendChild(generalNode);
+
+        // add all apps
+        var allApps = Tine.Tinebase.appMgr.getAll();
+
+        // console.log(allApps);
+        allApps.each(function(app) {
+            var node = new Ext.tree.TreeNode({
+                text: app.getTitle(),
+                cls: 'file',
+                id: app.appName,
+                leaf: null
+            });
+    
+            treeRoot.appendChild(node);
+        }, this);
+    },
+    
+    /**
+     * initTreeNodes with Tinebase and apps prefs
+     * 
+     * @private
+     */
+    initHandlers: function() {
+        this.on('click', function(node){
+            // note: if node is clicked, it is not selected!
+            node.getOwnerTree().selectPath(node.getPath());
+            node.expand();
+            
+            //console.log(node);
+            
+            // get parent pref panel
+            var parentPanel = this.findParentByType(Tine.widgets.dialog.Preferences);
+            //console.log(parentPanel);
+
+            // add panel to card panel to show prefs for chosen app
+            parentPanel.showPrefsForApp(node.id);
+            
+        }, this);
+        
+        this.on('beforeexpand', function(_panel) {
+            if(_panel.getSelectionModel().getSelectedNode() === null) {
+                _panel.expandPath('/root');
+                _panel.selectPath('/root/Tinebase');
+            }
+            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
+        }, this);
+    }
 });
 
 /**
@@ -262,62 +478,13 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
     labelAlign: 'top',
     autoScroll: true,
     defaults: {
-        anchor: '100%',
-        labelSeparator: ''
+        anchor: '100%'
     },
     
     initComponent: function() {
         this.title = _('Preferences');
-        this.initPrefStore();
+        //this.html = _('Select Application or General Preferences');
         Tine.widgets.dialog.PreferencesCardPanel.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * init app preferences store
-     * 
-     * @todo add applicationName as param
-     * @todo add filter
-     * @todo use generic json backend here?
-     * @todo move this function to another place?
-     */
-    initPrefStore: function() {
-        var store = new Ext.data.JsonStore({
-            fields: Tine.Tinebase.Model.Preference,
-            baseParams: {
-                method: 'Tinebase.searchPreferencesForApplication',
-                applicationName: 'Tinebase',
-                filter: ''
-            },
-            listeners: {
-                load: this.onStoreLoad,
-                scope: this
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            remoteSort: false
-        });
-        
-        store.load();
-    },
-
-    /**
-     * called after a new set of Records has been loaded
-     * 
-     * @param  {Ext.data.Store} this.store
-     * @param  {Array}          loaded records
-     * @param  {Array}          load options
-     * @return {Void}
-     */
-    onStoreLoad: function(store, records, options) {
-        //console.log('loaded');
-        var card = new Tine.widgets.dialog.PreferencesPanel({
-            prefStore: store
-        });
-        this.add(card);
-        this.layout.container.add(card);
-        this.layout.setActiveItem(card.id);
-        card.doLayout();
     }
 });
 
@@ -370,7 +537,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     fieldDef.triggerAction = 'all';
                 }
                 
-                console.log(fieldDef);
+                //console.log(fieldDef);
                 try {
                     var fieldObj = Ext.ComponentMgr.create(fieldDef);
                     this.items.push(fieldObj);
