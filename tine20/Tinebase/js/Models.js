@@ -187,5 +187,6 @@ Tine.Tinebase.Model.Preference = Ext.data.Record.create([
     {name: 'id'             },
     {name: 'name'           },
     {name: 'value'          },
-    {name: 'type'           }
+    {name: 'type'           },
+    {name: 'options'        }
 ]);

@@ -240,6 +240,8 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
      * convert options xml string to array
      *
      * @param Tinebase_Model_Preference $_preference
+     * 
+     * @todo add timezone translations?
      */
     public function convertOptionsToArray(Tinebase_Model_Preference $_preference)
     {
@@ -258,26 +260,24 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
             
                     $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
                     $availableTimezones = DateTimeZone::listIdentifiers();
+                    /*
                     $result = array();
                     foreach ($availableTimezones as $timezone) {
-                        $result[] = array(
-                            'timezone' => $timezone,
-                            'timezoneTranslation' => array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL
-                        );
+                        $result[] = array($timezone, array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL);
                     }
-                    $_preference->options = array(
-                        'results'    => $result,
-                        'totalcount' => count($result)
-                    );
+                    */
+                    $_preference->options = $availableTimezones;
                     break;
                 
                 /****************** locale options ********************/
                 case Tinebase_Preference::LOCALE:
                     $availableTranslations = Tinebase_Translation::getAvailableTranslations();
-                    $_preference->options = array(
-                        'results'    => $availableTranslations,
-                        'totalcount' => count($availableTranslations)
-                    );
+                    $result = array();
+                    foreach ($availableTranslations as $lang) {
+                        $region = (!empty($lang['region'])) ? ' / ' . $lang['region'] : '';
+                        $result[] = array($lang['locale'], $lang['language'] . $region);
+                    }
+                    $_preference->options = $result;
                     break;
             }
         } else {
@@ -285,7 +285,7 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
             /****************** other options ********************/
             $result = array();
             foreach($optionsXml->option as $option) {
-                $result['results'][] = (array) $option;
+                $result['results'][] = array($option->value, $option->label);
             }
             $result['totalcount'] = count($result['results']);
             $_preference->options = $result;

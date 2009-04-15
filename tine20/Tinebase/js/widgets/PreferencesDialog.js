@@ -8,13 +8,14 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add save functionality
  * @todo        add app tree view
+ * @todo        add admin mode
  * @todo        add lock to force prefs
  * @todo        show prefs for all apps
- * @todo        add user search/filter toolbar
- * 
- * @todo        finish implementation
+ * @todo        add filter toolbar
+ * @todo        add preference label translations
+ * @todo        use proxy store?
+ * @todo        update js registry?
  */
 
 Ext.namespace('Tine.widgets');
@@ -52,7 +53,12 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @property {Locale.gettext} i18n
      */
     i18n: null,
-        
+
+    /**
+     * @property {Tine.widgets.dialog.PreferencesCardPanel} prefsPanel
+     */
+    prefsPanel: null,
+    
     // private
     bodyStyle:'padding:5px',
     layout: 'fit',
@@ -151,6 +157,9 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * NOTE: when this method gets called, all initalisation is done.
      */
     getItems: function() {
+    	this.prefsPanel = new Tine.widgets.dialog.PreferencesCardPanel({
+            region: 'center'
+        });
         return [{
         	xtype: 'panel',
         	//title: this.i18n._('Preferences'),
@@ -166,63 +175,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 html: 'tree panel',
                 width: 200,
                 frame: true
-                /*
-                labelAlign: 'top',
-                formDefaults: {
-                    xtype:'textfield',
-                    anchor: '100%',
-                    labelSeparator: '',
-                    columnWidth: .333
-                },
-                items: []
-                */ 
-            }, new Tine.widgets.dialog.PreferencesCardPanel({
-                region: 'center'
-            })
-            /*{
-                region: 'center',
-                xtype: 'panel',
-                html: 'prefs',
-                frame: true
-            }*/]
-            //region: 'center'
+            }, this.prefsPanel]
         }];
-        
-            //layout: 'border'
-                
-                /*
-            xtype: 'tabpanel',
-            border: false,
-            plain:true,
-            activeTab: 0,
-            border: false,
-            items: [{               
-                title: this.i18n._('Preferences'),
-                autoScroll: true,
-                border: false,
-                frame: true,
-                layout: 'border',
-                items: [{
-                    region: 'center',
-                    xtype: 'columnform',
-                    labelAlign: 'top',
-                    formDefaults: {
-                        xtype:'textfield',
-                        anchor: '100%',
-                        labelSeparator: '',
-                        columnWidth: .333
-                    },
-                    items: [] 
-                }]
-            } ,{
-                title: this.app.i18n._('Access'),
-                layout: 'fit',
-                items: [this.getGrantsGrid()]
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            }) ]*/
     },
     
     /**
@@ -230,28 +184,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      */
     onRender : function(ct, position){
         Tine.widgets.dialog.Preferences.superclass.onRender.call(this, ct, position);
-        //this.loadMask = new Ext.LoadMask(ct, {msg: _('Loading ...')});
-        //    this.loadMask.show();
-    },
-    
-    /**
-     * update (action updater) top and bottom toolbars
-     */
-    updateToolbars: function(record, containerField) {
-    	/*
-        if (! this.evalGrants) {
-            return;
-        }
-        
-        var actions = [
-            this.action_saveAndClose,
-            this.action_applyChanges,
-            this.action_delete,
-            this.action_cancel
-        ];
-        Tine.widgets.actionUpdater(record, actions, containerField);
-        Tine.widgets.actionUpdater(record, this.tbarItems, containerField);
-        */
+        this.loadMask = new Ext.LoadMask(ct, {msg: _('Loading ...')});
+        //this.loadMask.show();
     },
     
     /**
@@ -267,65 +201,54 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @private
      */
     onSaveAndClose: function(button, event){
-    	/*
         this.onApplyChanges(button, event, true);
         this.fireEvent('saveAndClose');
-        */
     },
     
     /**
      * generic apply changes handler
+     * 
+     * @todo add app name (from panel) to data array
+     * @todo only reload if special values have changed?
      */
     onApplyChanges: function(button, event, closeWindow) {
-    	/*
-        var form = this.getForm();
-        if(form.isValid()) {
-            this.loadMask.show();
-            
-            this.onRecordUpdate();
-            
-            if (this.mode !== 'local') {
-                this.recordProxy.saveRecord(this.record, {
-                    scope: this,
-                    success: function(record) {
-                        // override record with returned data
-                        this.record = record;
-                        
-                        // update form with this new data
-                        // NOTE: We update the form also when window should be closed,
-                        //       cause sometimes security restrictions might prevent
-                        //       closing of native windows
-                        this.onRecordLoad();
-                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
-                        
-                        // free 0 namespace if record got created
-                        this.window.rename(this.windowNamePrefix + this.record.id);
-                        
-                        if (closeWindow) {
-                            this.purgeListeners();
-                            this.window.close();
-                        }
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert(_('Failed'), String.format(_('Could not save {0}.'), this.i18nRecordName)); 
-                    }
-                });
-            } else {
-                this.onRecordLoad();
-                this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+    	
+    	this.loadMask.show();
+    	
+    	// get values from card panels
+    	var data = {};
+    	for (var i=0; i < this.prefsPanel.items.items.length; i++) {
+    		var formPanel = this.prefsPanel.items.items[i];
+    		for (var j=0; j < formPanel.items.length; j++) {
+    			data[formPanel.items.items[j].name] = formPanel.items.items[j].getValue();
+    		}
+    	}
+    	
+    	// save preference data
+    	//console.log(data);
+    	Ext.Ajax.request({
+            scope: this,
+            params: {
+                method: 'Tinebase.savePreferences',
+                applicationName: 'Tinebase',
+                data: Ext.util.JSON.encode(data)
+            },
+            success: function(response) {
+                this.loadMask.hide();
                 
-                // free 0 namespace if record got created
-                this.window.rename(this.windowNamePrefix + this.record.id);
-                        
+                // reload mainscreen 
+                var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
+                mainWindow.location = window.location.href.replace(/#+.*/, '');
+                
                 if (closeWindow) {
                     this.purgeListeners();
                     this.window.close();
                 }
+            },
+            failure: function (response) {
+                Ext.MessageBox.alert(_('Errors'), _('Saving of preferences failed.'));    
             }
-        } else {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
-        }
-        */
+        });
     }    
 });
 
@@ -358,7 +281,7 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
      * 
      * @todo add applicationName as param
      * @todo add filter
-     * @todo use generic json backend here
+     * @todo use generic json backend here?
      * @todo move this function to another place?
      */
     initPrefStore: function() {
@@ -379,7 +302,7 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
             remoteSort: false
         });
         
-        console.log('loading store...');
+        //console.log('loading store...');
         store.load();
     },
 
@@ -392,10 +315,10 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
      * @return {Void}
      */
     onStoreLoad: function(store, records, options) {
-        console.log('loaded');
+        //console.log('loaded');
         var card = new Tine.widgets.dialog.PreferencesPanel({
             prefStore: store
-        }); 
+        });
         this.add(card);
         this.layout.container.add(card);
         this.layout.setActiveItem(card.id);
@@ -405,38 +328,79 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
 
 /**
  * preferences panel with the preference input fields for an application
+ * 
  */
 Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
     
 	/**
 	 * the prefs store
-	 * @type 
+	 * @cfg {Ext.data.Store}
 	 */
 	prefStore: null,
 	
+    /**
+     * @cfg {string} app name
+     */
+    appName: 'Tinebase',
+	
     //private
     layout: 'form',
+	//layout: 'fit',
     border: true,
     labelAlign: 'top',
     autoScroll: true,
     defaults: {
-        anchor: '100%',
+        anchor: '95%',
         labelSeparator: ''
     },
+    bodyStyle: 'padding:5px',
     
     initComponent: function() {
         if (this.prefStore) {
-            console.log(this.prefStore);
+            
             this.items = [];
             this.prefStore.each(function(pref) {
+            	//if (pref.get('name') === 'timezone') {
+            	//	this.items.push(new Tine.widgets.TimezoneChooser({}));
+            	//} else if (pref.get('name') === 'locale') {
+            	//	this.items.push(new Tine.widgets.LangChooser({}));
+            	//}
+            		
+        	    // check if options avExt.ux.PopupWindowGroup.getMainWindowailable -> use combobox
                 var fieldDef = {
-                    fieldLabel: pref.get('name'),
-                    name: 'pref_' + pref.get('name'),
-                    xtype: 'textfield',
-                    value: pref.get('value')
-                    //xtype: pref.get('type')
+                    fieldLabel: _(pref.get('name')),
+                    //name: 'pref_' + pref.get('name'),
+                    name: pref.get('name'),
+                    value: pref.get('value'),
+                    xtype: (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield'
                 };
                 
+                if (pref.get('options') && pref.get('options').length > 0) {
+                	// add additional combobox config
+                	fieldDef.store = pref.get('options');
+                	fieldDef.mode = 'local';
+                    fieldDef.forceSelection = true;
+                    fieldDef.triggerAction = 'all';
+                    
+                    if (pref.get('name') === 'locale') {
+                    	console.log(pref.get('options'));
+                    	/*
+                        this.tpl = new Ext.XTemplate(
+                            '<tpl for=".">' +
+                                '<div class="x-combo-list-item">' +
+                                    '{language} <tpl if="region.length &gt; 1">{region}</tpl> [{locale}]' + 
+                                '</div>' +
+                            '</tpl>',{
+                                encode: function(value) {
+                                    return Ext.util.Format.htmlEncode(value);
+                                }
+                            }
+                        );
+                        */
+                    }
+                }
+                
+                console.log(fieldDef);
                 try {
                     var fieldObj = Ext.ComponentMgr.create(fieldDef);
                     this.items.push(fieldObj);
@@ -444,17 +408,16 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     // ugh a bit ugly
                     pref.fieldObj = fieldObj;
                 } catch (e) {
+                	//console.log(e);
                     console.error('Unable to create preference field "' + pref.get('name') + '". Check definition!');
                     this.prefStore.remove(pref);
                 }
-                
             }, this);
 
         } else {
             this.html = '<div class="x-grid-empty">' + _('There are no preferences yet') + "</div>";
         }
-        
-        console.log(this.items);
+        //console.log(this.items);
         
         Tine.widgets.dialog.PreferencesPanel.superclass.initComponent.call(this);
     }

@@ -78,10 +78,13 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             id: 'tineFooter',
             height: 26,
             items:[
-                String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName), '-',
+                String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName), 
+                // @deprecated lang + timezone moved to preferences dialog
+                /*'-',
                 //String.format(_('Timezone: {0}'), Tine.Tinebase.registry.get('timeZone')), '-',
                 _('Timezone') + ': ' , new Tine.widgets.TimezoneChooser({}), '-',
                 _('Language') + ': ' , new Tine.widgets.LangChooser({}),
+                */
                 '->',
                 this.onlineStatus
             ]

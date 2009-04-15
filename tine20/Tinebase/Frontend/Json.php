@@ -61,8 +61,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * NOTE available are those, having a Tinebase translation
      * 
      * @return array list of all available translations
-     *
-     * @deprecated move to preferences
      */
     public function getAvailableTranslations()
     {
@@ -89,17 +87,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // save in cookie (expires in 30 days)
         if ($setcookie) {
             setcookie('TINE20LOCALE', $localeString, time()+60*60*24*30);
-        }        
-        
-        /* No need for return values yet. Client needs to reload!
-        return array(
-            'locale' => array(
-                'locale'   => $locale->toString(), 
-                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                'region'   => $locale->getCountryTranslation($locale->getRegion())
-            )
-        );
-        */
+        }
     }
 
     /**
@@ -108,15 +96,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array list of all available timezones
      *
      * @todo add territory to translation?
-     * @deprecated move to preferences
+     * @deprecated moved to preferences / do we need this elsewhere?
      */
     public function getAvailableTimezones()
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' This function is marked as deprecated.');
+        
         $locale =  Tinebase_Core::get('locale');
 
         $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
-        //asort($availableTimezones);
-        //$availableTimezones = array_flip($availableTimezones);
         
         $availableTimezones = DateTimeZone::listIdentifiers();
         $result = array();
@@ -491,14 +479,26 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $applicationName
      * @param string $data json encoded preferences data
      * 
-     * @todo add user id param? / or add extra saveForUser function?
+     * @todo add user id param? / or add extra saveForUser/saveDefault function?
+     * @todo use update multiple?
      */
     public function savePreferences($applicationName, $data)
     {
         $decodedData = Zend_Json::decode($data);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
+        
         $backend = Tinebase_Core::getPreference($applicationName); 
         
         foreach ($decodedData as $name => $value) {
+            switch ($name) {
+                case Tinebase_Preference::LOCALE:
+                    $this->setLocale($value, FALSE, TRUE);
+                    break;
+                case Tinebase_Preference::TIMEZONE:
+                    $this->setTimezone($value, FALSE);
+                    break;
+            }
             $backend->$name = $value;
         }
     }

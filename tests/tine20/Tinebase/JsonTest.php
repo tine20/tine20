@@ -208,10 +208,10 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         foreach ($result['results'] as $pref) {
             switch($pref['name']) {
                 case Tinebase_Preference::LOCALE:
-                    $this->assertGreaterThan(10, $pref['options']['totalcount']);
+                    $this->assertGreaterThan(10, count($pref['options']));
                     break;
                 case Tinebase_Preference::TIMEZONE:
-                    $this->assertGreaterThan(500, $pref['options']['totalcount']);
+                    $this->assertGreaterThan(500, count($pref['options']));
                     break;
             }
         }

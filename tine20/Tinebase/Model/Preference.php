@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        move account type constants to a better place because it is needed at multiple places
+ * @todo        add 'reload required' property?
  */
 
 /**
