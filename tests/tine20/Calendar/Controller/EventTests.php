@@ -102,6 +102,33 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $secondUpdatedEvent->originator_tz, 'originator_tz must be adopted if dtsart is updatet!');
     }
     
+    public function testDeleteEvent()
+    {
+        $event = $this->_getEvent();
+        $persitentEvent = $this->_controller->create($event);
+        
+        $this->_controller->delete($persitentEvent->getId());
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_controller->get($persitentEvent->getId());
+    }
+    
+    /**
+     * part of generic controller, but needs to be tested somewhere...
+     * @todo move to a better place
+     *
+     */
+    public function testDeleteACL()
+    {
+        $event = $this->_getEvent();
+        $persitentEvent = $this->_controller->create($event);
+        
+        // remove all container grants
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), true);
+        
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->_controller->delete($persitentEvent->getId());
+    }
+    
     /**
      * tests implicit READ grants for organizer and participants
      */
@@ -113,7 +140,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $persitentEvent = $this->_controller->create($event);
         
         // remove all container grants
-        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array()), true);
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), true);
         
         $loadedEvent = $this->_controller->get($persitentEvent->getId());
         $this->assertEquals($persitentEvent->getId(), $loadedEvent->getId(), 'organizer should have implicit read grant!');
@@ -151,7 +178,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $persitentEvent = $this->_controller->create($event);
         
         // remove all container grants
-        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array()), true);
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), true);
         
         $loadedEvent = $this->_controller->get($persitentEvent->getId());
         $this->assertEquals($persitentEvent->getId(), $loadedEvent->getId(), 'attendee should have implicit read grant!');
