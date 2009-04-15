@@ -44,6 +44,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 menu: {
                     id: 'Tinebase_System_Menu',     
                     items: [
+                        this.action_aboutTine,
+                        '-',
                         this.action_changePassword,
                         this.action_installGoogleGears,
                         this.action_editPreferences,
@@ -173,6 +175,12 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      * @private
      */
     initActions: function() {
+        this.action_aboutTine = new Ext.Action({
+            text: _('About Tine 2.0'),
+            handler: this.onAboutTine20,
+            iconCls: 'action_about'
+        });
+        
         this.action_changePassword = new Ext.Action({
             text: _('Change password'),
             handler: this.onChangePassword,
@@ -326,6 +334,36 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             northPanel.layout.setActiveItem(_toolbar.id);
             northPanel.doLayout();
         }
+    },
+    
+    /**
+     * @private
+     */
+    onAboutTine20: function() {
+        Ext.Msg.show({
+            title: _('About Tine 2.0'),
+            msg: 
+                '<div class="tb-about-dlg">' +
+                    '<div class="tb-about-img"><a href="http://www.tine20.org" target="_blank"><img src="' + Tine.Login.loginLogo + '" /></a></div>' +
+                    '<div class="tb-about-version">Version: ' + Tine.Tinebase.registry.get('version').codename + ' (' + Tine.Tinebase.registry.get('version').packageString + ')' + '</div>' +
+                    '<div class="tb-about-build">' + Tine.Tinebase.registry.get('build') + '</div>' +
+                    '<div class="tb-about-copyright">Copyright: 2007-' + new Date().getFullYear() + '&nbsp;<a href="http://www.metaways.de" target="_blank">Metaways Infosystems GmbH</a></div>' +
+                '</div>',
+            width: 400,
+            //height: 200,
+            buttons: Ext.Msg.OK,
+            animEl: 'elId'
+        });
+        /*
+        Ext.Msg.show({
+           title: _('About Tine 2.0'),
+           msg: 'Version: 2009-02-10',
+           buttons: Ext.Msg.OK,
+           //fn: processResult,
+           animEl: 'elId',
+           icon: 'mb-about'
+        });
+        */
     },
     
     /**
