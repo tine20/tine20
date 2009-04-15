@@ -19,8 +19,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     // todo in this controller:
     //
     // only allow to create exceptions via exceptions api -> backend stuff
-    // transform whole day events into 00:00:00 to 23:59:59  -> client/frontend stuff (must be done in usertimezone)
-    //
+    // 
     // add fns for participats state settings -> move to attendee controller?
     // add group attendee handling -> move to attendee controller?
     //
@@ -71,6 +70,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
     
+    /**
+     * creates an exception instance of a recuring evnet
+     *
+     * @param Calendar_Model_Event  $_event
+     * @param bool                  $_deleteInstance
+     */
+    public function createRecurException($_event, $_deleteInstance = FALSE)
+    {
+        
+    }
+    
     /****************************** overwritten functions ************************/
     
     /**
@@ -81,7 +91,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectCreate(Tinebase_Record_Interface $_record)
     {
-        $_record->uid = Tinebase_Record_Abstract::generateUID();
+        $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
         $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         
     }
@@ -98,7 +108,53 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         // if dtstart of an event changes, we update the originator_tz
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+            
+            // update exdates and recurids if dtsart of an recurevent changes
+            if (! empty($_record->rrule)) {
+                $diff = clone $_record->dtstart;
+                $diff->sub($_oldRecord->dtstart);
+                
+                foreach ((array)$_record->exdate as $exdate) {
+                    $exdate->add($diff);
+                }
+                
+                $exceptions = $this->_backend->getMultipleByProperty($_record->uid, 'uid');
+                unset($exceptions[$exceptions->getIndexById($_record->getId())]);
+                foreach ($exceptions as $exception) {
+                    $originalDtstart = new Zend_Date(substr($exception->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
+                    $originalDtstart->add($diff);
+                    $exception->recurid = $exception->uid . '-' . $originalDtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+                    $this->_backend->update($exception);
+                }
+            }
         }
+        
+        // delete recur exceptions if update is not longer a recur series
+        if (! empty($_oldRecord->rrule) && empty($_record->rrule)) {
+            $exceptionIds = $this->_backend->getMultipleByProperty($_record->uid, 'uid')->getId();
+            unset($exceptionIds[array_search($_record->getId(), $exceptionIds)]);
+            $this->_backend->delete($exceptionIds);
+        }
+    }
+    
+    /**
+     * inspects delete action
+     *
+     * @param array $_ids
+     * @return array of ids to actually delete
+     */
+    protected function _inspectDelete(array $_ids) {
+        $events = $this->_backend->getMultiple($_ids);
+        
+        foreach ($events as $event) {
+            if (! empty($event->rrule)) {
+                $exceptionIds = $this->_backend->getMultipleByProperty($event->uid, 'uid')->getId();
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting persistent ' . count($exceptionIds) . 'exceptions for recuring series with uid' . $event->uid);
+                $_ids = array_merge($_ids, $exceptionIds);
+            }
+        }
+        
+        return array_unique($_ids);
     }
     
     /**

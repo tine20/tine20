@@ -116,6 +116,24 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     );
     
     /**
+     * sets record related properties
+     * 
+     * @param string _name of property
+     * @param mixed _value of property
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @return void
+     */
+    public function __set($_name, $_value)
+    {
+        // ensure exdate as array
+        if ($_name == 'exdate' && ! empty($_value) && ! is_array($_value)) {
+            $_value = array($_value);
+        }
+        
+        parent::__set($_name, $_value);
+    }
+    
+    /**
      * the constructor
      * it is needed because we have more validation fields in Calendars
      * 

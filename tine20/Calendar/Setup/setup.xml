@@ -122,7 +122,7 @@
                 <field>
                     <name>recurid</name>
                     <type>text</type>
-                    <length>40</length>
+                    <length>60</length>
                 </field>
                 <field>
                     <name>rrule</name>

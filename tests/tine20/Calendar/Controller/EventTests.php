@@ -102,6 +102,36 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $secondUpdatedEvent->originator_tz, 'originator_tz must be adopted if dtsart is updatet!');
     }
     
+    /**
+     * @todo use exception api once we have it!
+     *
+     */
+    public function testUpdateRecuingDtstart()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $event->exdate = array(new Zend_Date('2009-04-07 13:00:00', Tinebase_Record_Abstract::ISO8601LONG));
+        $persitentEvent = $this->_controller->create($event);
+        
+        $exception = clone $persitentEvent;
+        $exception->dtstart->addDay(2);
+        $exception->dtend->addDay(2);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = $this->_controller->create($exception);
+        
+        $persitentEvent->dtstart->addHour(5);
+        $persitentEvent->dtend->addHour(5);
+        
+        $updatedEvent = $this->_controller->update($persitentEvent);
+        $updatedException = $this->_controller->get($persitentException->getId());
+        
+        $this->assertEquals('2009-04-07 18:00:00', $updatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate');
+        $this->assertEquals('2009-04-08 18:00:00', substr($updatedException->recurid, -19), 'failed to update persistent exception');
+    }
+    
     public function testDeleteEvent()
     {
         $event = $this->_getEvent();

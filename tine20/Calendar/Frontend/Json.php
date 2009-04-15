@@ -16,6 +16,9 @@
 class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     // todos :
+    //
+    // add fn deleteRecurSeries($_uid) cause we don't nessesaryly have the id of the series in the client 
+    //
     // ensure exdates have dtstart timepart (fix for ext datepicker)
     //
     // add handling to compute recurset
@@ -26,6 +29,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     //          $events->merge($recurSet);
     //      }
     //
+    // transform whole day events into 00:00:00 to 23:59:59 (also ensure this in AS Frontend!)
     
     protected $_applicationName = 'Calendar';
     

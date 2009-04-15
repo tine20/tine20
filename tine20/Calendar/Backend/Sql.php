@@ -49,6 +49,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected $_attendeeBackend = NULL;
     
     /**
+     * exdate backend
+     *
+     * @var Calendar_Backend_Sql_Exdate
+     *
+    protected $_exdateBackend = NULL;
+    */
+    
+    /**
      * the constructor
      *
      * @param Zend_Db_Adapter_Abstract $_db optional
@@ -254,5 +262,20 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $_event->rrule_until = $rrule->until;
         }
     }
+    
+    /**
+     * Enter description here...
+     *
+     * @return unknown
+     *
+    protected function _getExdateBackend()
+    {
+        if (! $this->_exdateBackend) {
+            $this->_exdateBackend = new Calendar_Backend_Sql_Exdate($this->_db);
+        }
+        
+        return $this->_exdateBackend;
+    }
+    */
     
 }
