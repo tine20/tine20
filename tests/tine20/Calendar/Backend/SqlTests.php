@@ -361,6 +361,19 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         }
     }
     
+    public function testRruleUntil()
+    {
+        $event = $this->_getEvent();
+        
+        $event->rrule_until = Zend_Date::now();
+        $persitentEvent = $this->_backend->create($event);
+        $this->assertNull($persitentEvent->rrule_until, 'rrul_until is not unset');
+        
+        $persitentEvent->rrule = 'FREQ=YEARLY;INTERVAL=1;BYMONTH=2;UNTIL=2010-04-01 08:00:00';
+        $updatedEvent = $this->_backend->update($persitentEvent);
+        $this->assertEquals('2010-04-01 08:00:00', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
     /**
      * asserts attendee
      *

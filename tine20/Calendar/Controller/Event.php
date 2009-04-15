@@ -18,9 +18,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
 {
     // todo in this controller:
     //
-    // clear all recurfiedls on save/update if not an recur event
-    // only allow to create exceptions via exceptions api
-    // transform whole day events into 00:00:00 to 23:59:59
+    // only allow to create exceptions via exceptions api -> backend stuff
+    // transform whole day events into 00:00:00 to 23:59:59  -> client/frontend stuff (must be done in usertimezone)
     //
     // add fns for participats state settings -> move to attendee controller?
     // add group attendee handling -> move to attendee controller?
@@ -84,6 +83,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $_record->uid = Tinebase_Record_Abstract::generateUID();
         $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        
     }
     
     /**
