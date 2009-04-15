@@ -73,7 +73,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     layout: 'fit',
     cls: 'tw-editdialog',
     anchor:'100% 100%',
-    //deferredRender: false,
     buttonAlign: 'right',
     
     //private
@@ -214,42 +213,55 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**
      * generic apply changes handler
      * 
-     * @todo activate again
-     * @todo add app name (from panel) to data array
-     * @todo only reload if special values have changed?
      */
     onApplyChanges: function(button, event, closeWindow) {
     	
-    	return;
     	this.loadMask.show();
     	
     	// get values from card panels
     	var data = {};
-    	/*
-    	 * use this.prefPanels.each ...
-    	for (var i=0; i < this.prefsCardPanel.items.items.length; i++) {
-    		var formPanel = this.prefsCardPanel.items.items[i];
-    		for (var j=0; j < formPanel.items.length; j++) {
-    			data[formPanel.items.items[j].name] = formPanel.items.items[j].getValue();
-    		}
+    	for each (panel in this.prefPanels) {
+    		//console.log(panel);
+    		data[panel.appName] = {};
+            for (var j=0; j < panel.items.length; j++) {
+            	if (panel.items.items[j] && panel.items.items[j].name) {
+                    data[panel.appName][panel.items.items[j].name] = panel.items.items[j].getValue();
+            	}
+            }
     	}
-    	*/
+    	/*
+    	this.prefPanels.each(function(panel) {
+            for (var j=0; j < panel.items.length; j++) {
+                data[panel.items.items[j].name] = panel.items.items[j].getValue();
+            }    		
+        }, this);
+        */
     	
     	// save preference data
-    	console.log(data);
+    	//console.log(data);
     	Ext.Ajax.request({
             scope: this,
             params: {
                 method: 'Tinebase.savePreferences',
-                applicationName: 'Tinebase',
                 data: Ext.util.JSON.encode(data)
             },
             success: function(response) {
                 this.loadMask.hide();
                 
-                // reload mainscreen 
-                var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
-                mainWindow.location = window.location.href.replace(/#+.*/, '');
+                // reload mainscreen (only if timezone or locale have changed
+                if (data.Tinebase && 
+                        (data.Tinebase.locale   != Tine.Tinebase.registry.get('locale').locale ||
+                         data.Tinebase.timezone != Tine.Tinebase.registry.get('timeZone'))
+                ) {
+                	/*
+                	console.log('reload');
+                	console.log(data.Tinebase);
+                	console.log(Tine.Tinebase.registry.get('locale').locale);
+                	console.log(Tine.Tinebase.registry.get('timeZone'));
+                	*/
+                    var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
+                    mainWindow.location = window.location.href.replace(/#+.*/, '');
+                }
                 
                 if (closeWindow) {
                     this.purgeListeners();
@@ -303,14 +315,14 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     onStoreLoad: function(store, records, options) {
         //console.log('loaded');
         //console.log(store);
+        var appName = store.baseParams.applicationName;
         
         var card = new Tine.widgets.dialog.PreferencesPanel({
-            prefStore: store
+            prefStore: store,
+            appName: appName
         });
         
         // add to panel registry
-        var appName = store.baseParams.applicationName;
-        
         this.prefPanels[appName] = card;
         
         this.activateCard(card, false);
