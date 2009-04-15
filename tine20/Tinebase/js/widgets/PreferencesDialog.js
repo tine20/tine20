@@ -129,10 +129,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * init buttons
      */
     initButtons: function() {
-        var genericButtons = [
-//            this.action_delete
-        ];
-        
         this.buttons = [
             this.action_cancel,
             this.action_saveAndClose
@@ -302,7 +298,6 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
             remoteSort: false
         });
         
-        //console.log('loading store...');
         store.load();
     },
 
@@ -345,7 +340,6 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
 	
     //private
     layout: 'form',
-	//layout: 'fit',
     border: true,
     labelAlign: 'top',
     autoScroll: true,
@@ -360,16 +354,9 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             
             this.items = [];
             this.prefStore.each(function(pref) {
-            	//if (pref.get('name') === 'timezone') {
-            	//	this.items.push(new Tine.widgets.TimezoneChooser({}));
-            	//} else if (pref.get('name') === 'locale') {
-            	//	this.items.push(new Tine.widgets.LangChooser({}));
-            	//}
-            		
-        	    // check if options avExt.ux.PopupWindowGroup.getMainWindowailable -> use combobox
+        	    // check if options available -> use combobox
                 var fieldDef = {
                     fieldLabel: _(pref.get('name')),
-                    //name: 'pref_' + pref.get('name'),
                     name: pref.get('name'),
                     value: pref.get('value'),
                     xtype: (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield'
@@ -381,23 +368,6 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 	fieldDef.mode = 'local';
                     fieldDef.forceSelection = true;
                     fieldDef.triggerAction = 'all';
-                    
-                    if (pref.get('name') === 'locale') {
-                    	console.log(pref.get('options'));
-                    	/*
-                        this.tpl = new Ext.XTemplate(
-                            '<tpl for=".">' +
-                                '<div class="x-combo-list-item">' +
-                                    '{language} <tpl if="region.length &gt; 1">{region}</tpl> [{locale}]' + 
-                                '</div>' +
-                            '</tpl>',{
-                                encode: function(value) {
-                                    return Ext.util.Format.htmlEncode(value);
-                                }
-                            }
-                        );
-                        */
-                    }
                 }
                 
                 console.log(fieldDef);
@@ -417,7 +387,6 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
         } else {
             this.html = '<div class="x-grid-empty">' + _('There are no preferences yet') + "</div>";
         }
-        //console.log(this.items);
         
         Tine.widgets.dialog.PreferencesPanel.superclass.initComponent.call(this);
     }
