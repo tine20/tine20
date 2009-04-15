@@ -482,30 +482,30 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save preferences for application
      *
-     * @param string $applicationName
      * @param string $data json encoded preferences data
      * 
      * @todo add user id param? / or add extra saveForUser/saveDefault function?
      * @todo use update multiple?
      */
-    public function savePreferences($applicationName, $data)
+    public function savePreferences($data)
     {
         $decodedData = Zend_Json::decode($data);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
         
-        $backend = Tinebase_Core::getPreference($applicationName); 
-        
-        foreach ($decodedData as $name => $value) {
-            switch ($name) {
-                case Tinebase_Preference::LOCALE:
-                    $this->setLocale($value, FALSE, TRUE);
-                    break;
-                case Tinebase_Preference::TIMEZONE:
-                    $this->setTimezone($value, FALSE);
-                    break;
+        foreach ($decodedData as $applicationName => $data) {
+            $backend = Tinebase_Core::getPreference($applicationName); 
+            foreach ($data as $name => $value) {
+                switch ($name) {
+                    case Tinebase_Preference::LOCALE:
+                        $this->setLocale($value, FALSE, TRUE);
+                        break;
+                    case Tinebase_Preference::TIMEZONE:
+                        $this->setTimezone($value, FALSE);
+                        break;
+                }
+                $backend->$name = $value;
             }
-            $backend->$name = $value;
         }
     }
     
