@@ -51,7 +51,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
         header("MS-ASProtocolVersions: 2.5");
         # no Notify(SMS AUTD)
         #header("MS-ASProtocolCommands: Sync,SendMail,SmartForward,SmartReply,GetAttachment,GetHierarchy,CreateCollection,DeleteCollection,MoveCollection,FolderSync,FolderCreate,FolderDelete,FolderUpdate,MoveItems,GetItemEstimate,MeetingResponse,ResolveRecipients,ValidateCert,Provision,Search,Ping");
-        header("MS-ASProtocolCommands: FolderSync,GetItemEstimate,Ping,Provision,SendMail,Settings,Sync");
+        header("MS-ASProtocolCommands: FolderCreate,FolderDelete,FolderSync,FolderUpdate,GetItemEstimate,Ping,Provision,SendMail,Settings,SmartReply,Sync");
     }
     
     /**
