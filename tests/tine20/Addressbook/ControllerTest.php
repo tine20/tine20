@@ -316,7 +316,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteUserAccountContact()
     {
-        $this->setExpectedException('Tinebase_Exception');
+        $this->setExpectedException('Addressbook_Exception_AccessDenied');
         Addressbook_Controller_Contact::getInstance()->delete(Tinebase_Core::getUser()->getId());
     }
     

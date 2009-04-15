@@ -367,19 +367,19 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
      * @param   array array of record identifiers
      * @return  void
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
-     * 
-     * @todo check container grants!!
      */
     public function delete($_ids)
     {
         if ($_ids instanceof $this->_modelName) {
-            $_ids = $_ids->getId();
+            $_ids = (array)$_ids->getId();
         }
         
-        $records = $this->_backend->getMultiple((array)$_ids);
-        if (count((array)$_ids) != count($records)) {
-            //throw new Tinebase_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$_ids) . ' records exist');
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$_ids) . ' records exist.');
+        $ids = $this->_inspectDelete((array) $_ids);
+        
+        $records = $this->_backend->getMultiple((array)$ids);
+        if (count((array)$ids) != count($records)) {
+            //throw new Tinebase_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$ids) . ' records exist');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
         }
                     
         try {        
@@ -387,6 +387,7 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             foreach ($records as $record) {
+                $this->_checkGrant($record, 'delete');
                 $this->_deleteRecord($record);
             }
             
@@ -396,8 +397,18 @@ abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_A
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getTraceAsString(), true));
-            throw new Tinebase_Exception($e->getMessage());
+            throw $e;
         }                        
+    }
+    
+    /**
+     * inspects delete action
+     *
+     * @param array $_ids
+     * @return array of ids to actually delete
+     */
+    protected function _inspectDelete(array $_ids) {
+        return $_ids;
     }
     
     /*********** helper funcs **************/
