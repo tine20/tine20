@@ -19,7 +19,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     //
     // add fn deleteRecurSeries($_uid) cause we don't nessesaryly have the id of the series in the client 
     //
-    // ensure exdates have dtstart timepart (fix for ext datepicker)
+    // ensure rrule_until has dtstart timepart (fix for ext datepicker)
     //
     // add handling to compute recurset
     //      $candidates = $events->filter('rrule', "/^FREQ.*/", TRUE)
