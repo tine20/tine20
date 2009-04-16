@@ -104,10 +104,6 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }
     
-    /**
-     * @todo use exception api once we have it!
-     *
-     */
     public function testUpdateRecuingDtstart()
     {
         $event = $this->_getEvent();
@@ -143,10 +139,48 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2009-04-08 13:00:00', substr($secondUpdatedException->recurid, -19), 'failed to update persistent exception (sub)');
     }
     
-    /**
-     * @todo use exception api once we have it!
-     *
-     */
+    public function testUpdateRecurDtstartOverDst()
+    {
+        // note: 2009-03-29 Europe/Berlin switched to DST
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2009-03-25 18:00:00',
+            'dtend'         => '2009-03-25 18:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
+            'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
+            'container_id'  => $this->_testCalendar->getId(),
+        ));
+        
+        $persitentEvent = $this->_controller->create($event);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $from = new Zend_Date('2009-03-26 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-04-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persitentEvent, $exceptions, $from, $until);
+        
+        $exceptionBeforeDstBoundary = clone $recurSet[1];
+        $persistentExceptionBeforeDstBoundary = $this->_controller->createRecurException($exceptionBeforeDstBoundary);
+        
+        $exceptionAfterDstBoundary = clone $recurSet[2];
+        $persistentExceptionAfterDstBoundary = $this->_controller->createRecurException($exceptionAfterDstBoundary);
+        
+        $persitentEvent->dtstart->addDay(5);
+        $persitentEvent->dtend->addDay(5);
+        $updatedPersistenEvent = $this->_controller->update($persitentEvent);
+        
+        $persistentEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+            array('field' => 'uid', 'operator' => 'equals', 'value' => $persitentEvent->uid)
+        )));
+        
+        $exceptions = $persistentEvents->filter('recurid', "/^{$persitentEvent->uid}-.*/", TRUE);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($updatedPersistenEvent, $exceptions, $from->addDay(5), $until->addDay(5));
+        
+        $this->assertEquals(2, count($recurSet));
+    }
+    
     public function testUpdateImplicitDeleteRcuringExceptions()
     {
         $event = $this->_getEvent();
@@ -303,7 +337,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $persitentEvent = $this->_controller->get($persitentEvent->getId());
         $this->assertNull($persitentEvent->exdate);
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'uid',     'operotor' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
         )));
         $this->assertEquals(2, count($events));
     }
@@ -325,7 +359,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->assertType('Zend_Date', $persitentEventWithExdate->exdate[0]);
         $this->assertEquals($persitentEventWithExdate->exdate, $persitentEvent->exdate);
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'uid',     'operotor' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
         )));
         $this->assertEquals(1, count($events));
     }
@@ -348,7 +382,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $persitentEvent = $this->_controller->get($persitentEvent->getId());
         $this->assertType('Zend_Date', $persitentEvent->exdate[0]);
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'uid',     'operotor' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
         )));
         $this->assertEquals(1, count($events));
     }

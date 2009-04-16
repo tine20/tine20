@@ -94,7 +94,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             return $this->create($_event);
         } else {
             $baseEvent = $this->_backend->search(new Calendar_Model_EventFilter(array(
-                array('field' => 'uid',     'operotor' => 'equals', 'value' => $_event->uid),
+                array('field' => 'uid',     'operator' => 'equals', 'value' => $_event->uid),
                 array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
             )))->getFirstRecord();
             
@@ -122,14 +122,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     protected function _inspectCreate(Tinebase_Record_Interface $_record)
     {
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
-        $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         
     }
     
     /**
      * inspect update of one record
-     * 
-     * @todo consider dst transitions!
      * 
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
@@ -148,17 +146,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $diff->sub($_oldRecord->dtstart);
                 
                 // update rrule->until
-                // this becomes wrong if the events is moved over a dst transistion
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting rrule_until');
                 $rrule = Calendar_Model_Rrule::getRruleFromString($_record->rrule);
-                $rrule->until->add($diff);
+                Calendar_Model_Rrule::addUTCDateDstFix($rrule->until, $diff, $_record->originator_tz);
                 $_record->rrule = (string) $rrule;
                 
                 // update exdate(s)
-                // this becomes wrong if the events is moved over a dst transistion
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($_record->exdate) . ' exdate(s)');
                 foreach ((array)$_record->exdate as $exdate) {
-                    $exdate->add($diff);
+                    Calendar_Model_Rrule::addUTCDateDstFix($exdate, $diff, $_record->originator_tz);
                 }
                 
                 // update exceptions
@@ -166,9 +162,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 unset($exceptions[$exceptions->getIndexById($_record->getId())]);
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($exceptions) . ' recurid(s)');
                 foreach ($exceptions as $exception) {
-                    // this becomes wrong if the events is moved over a dst transistion
                     $originalDtstart = new Zend_Date(substr($exception->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
-                    $originalDtstart->add($diff);
+                    Calendar_Model_Rrule::addUTCDateDstFix($originalDtstart, $diff, $_record->originator_tz);
+                    
                     $exception->recurid = $exception->uid . '-' . $originalDtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
                     $this->_backend->update($exception);
                 }
@@ -274,4 +270,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         
         return $hasGrant;
     }
+    
+    /****************************** attendee functions ************************/
+    
+    //public function setAttendeeStatus($_event, $_attendee)
 }

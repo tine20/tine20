@@ -34,6 +34,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'uid'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'container_id'   => array('filter' => 'Calendar_Model_EventAclFilter', 'options' => array('applicationName' => 'Calendar')),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
         'period'         => array('filter' => 'Calendar_Model_PeriodFilter'),

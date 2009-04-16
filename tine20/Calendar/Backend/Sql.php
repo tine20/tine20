@@ -49,14 +49,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected $_attendeeBackend = NULL;
     
     /**
-     * exdate backend
-     *
-     * @var Calendar_Backend_Sql_Exdate
-     *
-    protected $_exdateBackend = NULL;
-    */
-    
-    /**
      * the constructor
      *
      * @param Zend_Db_Adapter_Abstract $_db optional
@@ -110,42 +102,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         return $this->get($event->getId());
     }
-    
-    /**
-     * Search for direct events matching given filter
-     * 
-     * Direct events are those, which duration (events dtstart -> dtend)
-     *   reaches in the seached period.
-     *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * @param boolean $_onlyIds
-     * @return Tinebase_Record_RecordSet|array
-     *
-    public function searchDirectEvents(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
-    {
-        Calendar_Model_PeriodFilter::setType(Calendar_Model_PeriodFilter::TYPE_DIRECT);
-        return parent::search($_filter, $_pagination, $_onlyIds);
-    }
-    */
-    
-    /**
-     * Search for base events of recuring events matching given filter
-     * 
-     * Recur Base events are those recuring events which potentially could have
-     *   recurances in the searched period
-     *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * @param boolean $_onlyIds
-     * @return Tinebase_Record_RecordSet|array
-     *
-    public function searchRecurBaseEvents(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
-    {
-        Calendar_Model_PeriodFilter::setType(Calendar_Model_PeriodFilter::TYPE_RECURBASE);
-        return parent::search($_filter, $_pagination, $_onlyIds);
-    }
-    */
     
     /**
      * get the basic select object to fetch records from the database
@@ -266,20 +222,5 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $_event->rrule_until = $rrule->until;
         }
     }
-    
-    /**
-     * Enter description here...
-     *
-     * @return unknown
-     *
-    protected function _getExdateBackend()
-    {
-        if (! $this->_exdateBackend) {
-            $this->_exdateBackend = new Calendar_Backend_Sql_Exdate($this->_db);
-        }
-        
-        return $this->_exdateBackend;
-    }
-    */
     
 }

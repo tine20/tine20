@@ -24,7 +24,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     // add handling to compute recurset
     //      $candidates = $events->filter('rrule', "/^FREQ.*/", TRUE)
     //      foreach ($candidates as $candidate) {
-    //          $exceptions = $events->filter('recurdid', "/^{$candidate->uid}-.*/", TRUE);
+    //          $exceptions = $events->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
     //          $recurSet = Calendar_Model_Rrule::computeRecuranceSet($canditae, $exceptions, $from, $until);
     //          $events->merge($recurSet);
     //      }

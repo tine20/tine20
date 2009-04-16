@@ -618,4 +618,20 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         return $dateArr;
     }
+    
+    /**
+     * adds date to date and applies dst fix
+     *
+     * @param Zend_Date $_dateInUTC
+     * @param Zend_Date $_addDateInUTC
+     * @param string    $_timezoneForDstFix
+     */
+    public static function addUTCDateDstFix($_dateInUTC, $_addDateInUTC, $_timezoneForDstFix)
+    {
+        $_dateInUTC->setTimezone($_timezoneForDstFix);
+        $_dateInUTC->add($_dateInUTC->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+        $_dateInUTC->add($_addDateInUTC);
+        $_dateInUTC->sub($_dateInUTC->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+        $_dateInUTC->setTimezone('UTC');
+    }
 }
