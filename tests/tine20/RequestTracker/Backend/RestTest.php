@@ -41,6 +41,13 @@ class RequestTracker_Backend_RestTests extends PHPUnit_Framework_TestCase
         
     }
     
+    public function testGetQueues()
+    {
+        $availableQueues = $this->_backend->getQueues();
+        print_r($availableQueues);
+        $this->assertGreaterThan(0, $availableQueues);
+    }
+    
     public function testSearch()
     {
         $filter = new RequestTracker_Model_TicketFilter(array(

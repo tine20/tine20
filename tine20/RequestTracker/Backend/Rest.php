@@ -48,6 +48,48 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
     }
     
     /**
+     * check available queues
+     * 
+     * @return array of queueNames
+     */
+    public function getQueues()
+    {
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cacheId = 'RequestTrackerGetQueues' . Tinebase_Core::getUser()->getId();
+        $availableQueues = $cache->load($cacheId);
+        
+        if (!$availableQueues) {
+            $availableQueues = array();
+            foreach ($this->_config->rest->queues as $queueName) {
+                if ($this->_checkQueue($queueName)) {
+                    $availableQueues[] = $queueName;
+                }
+            }
+            
+            $cache->save($availableQueues, $cacheId, array('rt'));
+        }
+        
+        return $availableQueues;
+    }
+    
+    /**
+     * checks if queue is available for current user
+     *
+     * @param  string $_queueName
+     * @return bool
+     */
+    protected function _checkQueue($_queueName)
+    {
+        $this->_httpClient->resetParameters();
+        $this->_httpClient->setUri($this->_config->rest->url . "/REST/1.0/queue/$_queueName/show");
+        $this->_httpClient->setMethod(Zend_Http_Client::GET);
+        
+        $response = $this->_httpClient->request();
+        
+        return (preg_match('/^Name: .+/m', $response->getBody()));
+    }
+    
+    /**
      * Search for records matching given filter
      *
      * @param  Tinebase_Model_Filter_FilterGroup $_filter
