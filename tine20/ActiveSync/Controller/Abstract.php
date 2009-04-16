@@ -263,7 +263,7 @@ abstract class ActiveSync_Controller_Abstract
      *
      * @return array
      */
-    public function getServerEntries()
+    public function getServerEntries($_folderId)
     {
         $contentFilter     = new $this->_contentFilterClass(array(
             array(
@@ -284,5 +284,5 @@ abstract class ActiveSync_Controller_Abstract
     
     abstract protected function _toTineFilter(SimpleXMLElement $_data);
     
-    abstract public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_serverId);    
+    abstract public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId);    
 }

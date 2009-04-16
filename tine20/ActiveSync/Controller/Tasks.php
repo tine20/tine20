@@ -64,7 +64,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     
     protected $_modelName           = 'Task';    
     
-    public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_serverId)
+    public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
     {
         $data = $this->_contentController->get($_serverId);
         
