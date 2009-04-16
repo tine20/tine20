@@ -82,7 +82,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/form/ImageCropper.js',
             'Tinebase/js/ux/form/Spinner.js',
             'Tinebase/js/ux/form/SpinnerStrategy.js',
-            'Tinebase/js/ux/LockCombo.js',
+            'Tinebase/js/ux/form/LockCombo.js',
             'Tinebase/js/ux/form/LockTextfield.js',
             'Tinebase/js/ux/layout/HorizontalFitLayout.js',
             'Tinebase/js/ux/layout/CenterLayout.js',

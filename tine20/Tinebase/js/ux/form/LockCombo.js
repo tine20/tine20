@@ -9,12 +9,12 @@
  * @todo        switch lock and trigger icons (because only the trigger icon has a round upper right corner)
  */
  
-Ext.namespace('Ext.ux');
+Ext.namespace('Ext.ux', 'Ext.ux.form');
 
 /**
  * Generic widget for a twin trigger combo field
  */
-Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
+Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {String} paramName
      */
@@ -44,7 +44,7 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     initComponent : function(){
-        Ext.ux.LockCombo.superclass.initComponent.call(this);
+        Ext.ux.form.LockCombo.superclass.initComponent.call(this);
 
         if(!this.hiddenFieldData) {
             this.hiddenFieldData = '1';
@@ -103,7 +103,7 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
 	
 
     onRender:function(ct, position) {        
-        Ext.ux.LockCombo.superclass.onRender.call(this, ct, position); // render the Ext.Button
+        Ext.ux.form.LockCombo.superclass.onRender.call(this, ct, position); // render the Ext.Button
         this.hiddenBox = ct.parent().createChild({tag:'input', type:'hidden', name: this.hiddenFieldId, id: this.hiddenFieldId, value: this.hiddenFieldData });        
         Ext.ComponentMgr.register(this.hiddenBox);
     },
@@ -156,4 +156,4 @@ Ext.ux.LockCombo = Ext.extend(Ext.form.ComboBox, {
 		}
     }	
 });
-Ext.reg('lockCombo', Ext.ux.LockCombo);
+Ext.reg('lockCombo', Ext.ux.form.LockCombo);
