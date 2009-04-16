@@ -415,19 +415,19 @@ msgstr "Ausgewählte Einträge entfernen"
 msgid "Leads"
 msgstr "Leads"
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Loading Lead..."
 msgstr "Lade Lead..."
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Please Wait"
 msgstr "Bitte warten"
 
-#: js/Crm.js:1846
+#: js/Crm.js:1845
 msgid "Add New Lead"
 msgstr "Neuen Lead hinzufügen"
 
-#: js/Crm.js:1848
+#: js/Crm.js:1847
 msgid "Edit Lead \"{0}\""
 msgstr "Lead \"{0}\" bearbeiten"
 

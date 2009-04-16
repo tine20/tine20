@@ -11,4 +11,44 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: js/Model.js:42 js/TicketGridPanel.js:40
+msgid "Ticket"
+msgid_plural "Tickets"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/TicketGridPanel.js:41
+msgid "Owner"
+msgstr ""
+
+#: js/TicketGridPanel.js:42
+msgid "Queue"
+msgstr ""
+
+#: js/TicketGridPanel.js:43 js/TicketGridPanel.js:70
+msgid "Status"
+msgstr ""
+
+#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:61
+msgid "Ticket ID"
+msgstr ""
+
+#: js/TicketGridPanel.js:45
+msgid "Description"
+msgstr ""
+
+#: js/TicketGridPanel.js:64
+msgid "Subject"
+msgstr ""
+
+#: js/TicketGridPanel.js:76
+msgid "Final Priority"
+msgstr ""
+
+#: js/TicketGridPanel.js:82
+msgid "Due"
+msgstr ""

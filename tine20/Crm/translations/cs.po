@@ -417,19 +417,19 @@ msgstr "Odstranit vybrané produkty"
 msgid "Leads"
 msgstr "Leady"
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Loading Lead..."
 msgstr "Načítám lead..."
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
-#: js/Crm.js:1846
+#: js/Crm.js:1845
 msgid "Add New Lead"
 msgstr "Přidat nový lead"
 
-#: js/Crm.js:1848
+#: js/Crm.js:1847
 msgid "Edit Lead \"{0}\""
 msgstr "Editovat lead \"{0}\""
 

@@ -25,7 +25,7 @@ msgstr ""
 msgid "Teacher Account"
 msgstr ""
 
-#: Frontend/Json.php:213 js/CourseEditDialog.js:135 js/CourseGridPanel.js:48
+#: Frontend/Json.php:236 js/CourseEditDialog.js:135 js/CourseGridPanel.js:48
 #: js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
@@ -52,19 +52,23 @@ msgstr ""
 msgid "Internet"
 msgstr ""
 
-#: js/CourseEditDialog.js:209 js/CourseEditDialog.js:260
+#: js/CourseEditDialog.js:209 js/CourseEditDialog.js:269
 msgid "Members"
 msgstr ""
 
-#: js/CourseEditDialog.js:236
+#: js/CourseEditDialog.js:235
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:241
 msgid "Reset Password"
 msgstr ""
 
-#: js/CourseEditDialog.js:250
+#: js/CourseEditDialog.js:259
 msgid "Set new password"
 msgstr ""
 
-#: js/CourseEditDialog.js:250
+#: js/CourseEditDialog.js:259
 msgid "Please enter the new password:"
 msgstr ""
 
@@ -90,7 +94,7 @@ msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:77
+#: js/Models.js:74
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] ""

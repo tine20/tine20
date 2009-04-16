@@ -414,19 +414,19 @@ msgstr "Изтрий селектираните продукти"
 msgid "Leads"
 msgstr "Предложения"
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Loading Lead..."
 msgstr "Зарежда предложения"
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Please Wait"
 msgstr "Моля почакайте"
 
-#: js/Crm.js:1846
+#: js/Crm.js:1845
 msgid "Add New Lead"
 msgstr "Добавя ново предложение"
 
-#: js/Crm.js:1848
+#: js/Crm.js:1847
 msgid "Edit Lead \"{0}\""
 msgstr "Редактира предложение \"{0}\""
 

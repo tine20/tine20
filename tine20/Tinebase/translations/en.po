@@ -50,19 +50,19 @@ msgstr "Created by"
 msgid "Activities"
 msgstr "Activities"
 
-#: Frontend/Http.php:271 js/tineInit.js:248
+#: Frontend/Http.php:272 js/tineInit.js:248
 msgid "Authorisation Required"
 msgstr "Authorisation Required"
 
-#: Frontend/Http.php:272
+#: Frontend/Http.php:273
 msgid "Your session is not valid. You need to login again."
 msgstr "Your session is not valid. You need to login again."
 
-#: Frontend/Http.php:298 js/ExceptionDialog.js:26
+#: Frontend/Http.php:299 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Abnormal End"
 
-#: Frontend/Http.php:299 js/ExceptionDialog.js:51
+#: Frontend/Http.php:300 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "An error occurred, the program ended abnormal."
 
@@ -84,10 +84,10 @@ msgid_plural "{0} workdays"
 msgstr[0] "{0} workday"
 msgstr[1] "{0} workdays"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:364
+#: js/ExceptionDialog.js:34 js/MainScreen.js:414
 #: js/widgets/AccountpickerPanel.js:149
 #: js/widgets/container/ContainerSelect.js:251 js/widgets/EditDialog.js:161
-#: js/widgets/EditRecord.js:136
+#: js/widgets/EditRecord.js:136 js/widgets/PreferencesDialog.js:120
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -167,7 +167,7 @@ msgstr "Please wait"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Login successful. Loading Tine 2.0..."
 
-#: js/Login.js:137 js/MainScreen.js:442
+#: js/Login.js:137 js/MainScreen.js:499
 msgid "Please wait!"
 msgstr "Please wait!"
 
@@ -179,93 +179,102 @@ msgstr "Login failure"
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Your username and/or your password are wrong!!!"
 
-#: js/MainScreen.js:54 js/widgets/container/ContainerGrants.js:105
+#: js/MainScreen.js:57 js/widgets/container/ContainerGrants.js:105
 msgid "Admin"
 msgstr "Admin"
 
-#: js/MainScreen.js:62
+#: js/MainScreen.js:65 js/widgets/PreferencesDialog.js:161
+#: js/widgets/PreferencesDialog.js:270
 msgid "Preferences"
 msgstr "Preferences"
 
-#: js/MainScreen.js:78
+#: js/MainScreen.js:81
 msgid "User: {0}"
 msgstr "User: {0}"
 
-#: js/MainScreen.js:79
+#: js/MainScreen.js:84
 msgid "Timezone: {0}"
 msgstr "Timezone: {0}"
 
-#: js/MainScreen.js:80 js/widgets/TimezoneChooser.js:34
+#: js/MainScreen.js:85 js/widgets/TimezoneChooser.js:34
 msgid "Timezone"
 msgstr "Timezone"
 
-#: js/MainScreen.js:81 js/widgets/LangChooser.js:40
+#: js/MainScreen.js:86 js/widgets/LangChooser.js:40
 msgid "Language"
 msgstr "Language"
 
-#: js/MainScreen.js:176
+#: js/MainScreen.js:182 js/MainScreen.js:347 js/MainScreen.js:362
+msgid "About Tine 2.0"
+msgstr "About Tine 2.0"
+
+#: js/MainScreen.js:188
 msgid "Change password"
 msgstr "Change password"
 
-#: js/MainScreen.js:182
+#: js/MainScreen.js:195
 msgid "Install Google Gears"
 msgstr "Install Google Gears"
 
-#: js/MainScreen.js:188
+#: js/MainScreen.js:201
+msgid "Edit Preferences"
+msgstr "Edit Preferences"
+
+#: js/MainScreen.js:208
 msgid "Logout"
 msgstr "Logout"
 
-#: js/MainScreen.js:189
+#: js/MainScreen.js:209
 msgid "Logout from Tine 2.0"
 msgstr "Logout from Tine 2.0"
 
-#: js/MainScreen.js:328
+#: js/MainScreen.js:378
 msgid "Change Password For \"{0}\""
 msgstr "Change Password For \"{0}\""
 
-#: js/MainScreen.js:352
+#: js/MainScreen.js:402
 msgid "Old Password"
 msgstr "Old Password"
 
-#: js/MainScreen.js:356
+#: js/MainScreen.js:406
 msgid "New Password"
 msgstr "New Password"
 
-#: js/MainScreen.js:360
+#: js/MainScreen.js:410
 msgid "Repeat new Password"
 msgstr "Repeat new Password"
 
-#: js/MainScreen.js:370 js/widgets/AccountpickerPanel.js:141
+#: js/MainScreen.js:420 js/widgets/AccountpickerPanel.js:141
 #: js/widgets/container/ContainerSelect.js:260 js/widgets/EditDialog.js:144
-#: js/widgets/EditRecord.js:115
+#: js/widgets/EditRecord.js:115 js/widgets/PreferencesDialog.js:112
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:379
+#: js/MainScreen.js:429
 msgid "Please Wait!"
 msgstr "Please Wait!"
 
-#: js/MainScreen.js:380
+#: js/MainScreen.js:430
 msgid "changing password..."
 msgstr "changing password..."
 
-#: js/MainScreen.js:391
+#: js/MainScreen.js:441
 msgid "Success"
 msgstr "Success"
 
-#: js/MainScreen.js:392
+#: js/MainScreen.js:442
 msgid "Your password has been changed."
 msgstr "Your password has been changed."
 
-#: js/MainScreen.js:398 js/MainScreen.js:408
+#: js/MainScreen.js:448 js/MainScreen.js:458
 msgid "Failure"
 msgstr "Failure"
 
-#: js/MainScreen.js:409
+#: js/MainScreen.js:459
 msgid "The new passwords mismatch, please correct them."
 msgstr "The new passwords mismatch, please correct them."
 
-#: js/MainScreen.js:427
+#: js/MainScreen.js:477
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -273,17 +282,17 @@ msgstr ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 
-#: js/MainScreen.js:440 js/widgets/app/GridPanel.js:518
+#: js/MainScreen.js:497 js/widgets/app/GridPanel.js:518
 #: js/widgets/container/ContainerTree.js:379 js/widgets/EditDialog.js:390
 #: js/widgets/grid/PersistentFilterPicker.js:123
 msgid "Confirm"
 msgstr "Confirm"
 
-#: js/MainScreen.js:440
+#: js/MainScreen.js:497
 msgid "Are you sure you want to logout?"
 msgstr "Are you sure you want to logout?"
 
-#: js/MainScreen.js:442
+#: js/MainScreen.js:499
 msgid "Logging you out..."
 msgstr "Logging you out..."
 
@@ -761,7 +770,7 @@ msgstr "Transfering {0}..."
 msgid "Could not save {0}."
 msgstr "Could not save {0}."
 
-#: js/widgets/EditDialog.js:382
+#: js/widgets/EditDialog.js:382 js/widgets/PreferencesDialog.js:245
 msgid "Errors"
 msgstr "Errors"
 
@@ -970,6 +979,22 @@ msgstr "setting new language..."
 msgid "loading new language..."
 msgstr "loading new language..."
 
+#: js/widgets/PreferencesDialog.js:170
+msgid "Applications"
+msgstr "Applications"
+
+#: js/widgets/PreferencesDialog.js:183
+msgid "Loading ..."
+msgstr "Loading ..."
+
+#: js/widgets/PreferencesDialog.js:245
+msgid "Saving of preferences failed."
+msgstr "Saving of preferences failed."
+
+#: js/widgets/PreferencesDialog.js:388
+msgid "There are no preferences yet"
+msgstr "There are no preferences yet"
+
 #: js/widgets/Priority.js:23
 msgid "low"
 msgstr "low"
@@ -1136,42 +1161,42 @@ msgstr "by"
 msgid "Changed fields:"
 msgstr "Changed fields:"
 
-#: Setup/setup.xml:2084
+#: Setup/setup.xml:2107
 msgid "note"
 msgstr "note"
 
-#: Setup/setup.xml:2089
+#: Setup/setup.xml:2112
 msgid "default note type"
 msgstr "default note type"
 
-#: Setup/setup.xml:2115
+#: Setup/setup.xml:2138
 msgid "telephone"
 msgstr "telephone"
 
-#: Setup/setup.xml:2120
+#: Setup/setup.xml:2143
 msgid "telephone call"
 msgstr "telephone call"
 
-#: Setup/setup.xml:2146
+#: Setup/setup.xml:2169
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2151
+#: Setup/setup.xml:2174
 msgid "email contact"
 msgstr "email contact"
 
-#: Setup/setup.xml:2177
+#: Setup/setup.xml:2200
 msgid "created"
 msgstr "created"
 
-#: Setup/setup.xml:2182
+#: Setup/setup.xml:2205
 msgid "record created"
 msgstr "record created"
 
-#: Setup/setup.xml:2208
+#: Setup/setup.xml:2231
 msgid "changed"
 msgstr "changed"
 
-#: Setup/setup.xml:2213
+#: Setup/setup.xml:2236
 msgid "record changed"
 msgstr "record changed"

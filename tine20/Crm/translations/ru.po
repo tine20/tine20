@@ -421,19 +421,19 @@ msgstr "Убрать отобранные продукты"
 msgid "Leads"
 msgstr "Советы продажи"
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Loading Lead..."
 msgstr "Загрузка совета продажи..."
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Please Wait"
 msgstr "Пожалуйста подождите"
 
-#: js/Crm.js:1846
+#: js/Crm.js:1845
 msgid "Add New Lead"
 msgstr "Добавить новый совет продажи"
 
-#: js/Crm.js:1848
+#: js/Crm.js:1847
 #, fuzzy
 msgid "Edit Lead \"{0}\""
 msgstr "Обработать совет продажи \"{0}\""

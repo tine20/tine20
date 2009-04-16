@@ -399,19 +399,19 @@ msgstr "Remove selected products"
 msgid "Leads"
 msgstr "Leads"
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Loading Lead..."
 msgstr "Loading Lead..."
 
-#: js/Crm.js:1815
+#: js/Crm.js:1814
 msgid "Please Wait"
 msgstr "Please Wait"
 
-#: js/Crm.js:1846
+#: js/Crm.js:1845
 msgid "Add New Lead"
 msgstr "Add New Lead"
 
-#: js/Crm.js:1848
+#: js/Crm.js:1847
 msgid "Edit Lead \"{0}\""
 msgstr "Edit Lead \"{0}\""
 
