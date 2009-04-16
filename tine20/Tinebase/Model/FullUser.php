@@ -30,13 +30,13 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      */
     protected $_filters = array(
         //'accountId'             => 'Digits',
-        'accountLoginName'      => 'StringTrim',
+        'accountLoginName'      => array('StringTrim', 'StringToLower'),
         //'accountPrimaryGroup'   => 'Digits',
         'accountDisplayName'    => 'StringTrim',
         'accountLastName'       => 'StringTrim',
         'accountFirstName'      => 'StringTrim',
         'accountFullName'       => 'StringTrim',
-        'accountEmailAddress'   => 'StringTrim',
+        'accountEmailAddress'   => array('StringTrim', 'StringToLower'),
     ); // _/-\_
     
     /**
