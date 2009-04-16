@@ -143,8 +143,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             scope: this,
             handler: this.onSwitchAdminMode,
             iconCls: 'action_adminMode',
-            enableToggle: true,
-            disabled: true
+            enableToggle: true
+            //disabled: true
         });
     },
     
@@ -223,6 +223,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * generic apply changes handler
      * 
      * @todo display alert message if there are changed panels with data from the other mode
+     * @todo submit 'lock' info as well in admin mode
      */
     onApplyChanges: function(button, event, closeWindow) {
     	
@@ -232,11 +233,17 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     	var data = {};
     	var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
     	for each (panel in panelsToSave) {
-    		//console.log(panel);
+    		console.log(panel);
     		data[panel.appName] = {};
             for (var j=0; j < panel.items.length; j++) {
-            	if (panel.items.items[j] && panel.items.items[j].name) {
-                    data[panel.appName][panel.items.items[j].name] = panel.items.items[j].getValue();
+            	var item = panel.items.items[j];
+            	if (item && item.name) {
+                    if (this.adminMode) {
+                    	data[panel.appName][item.prefId] = {value: item.getValue()};
+                    	data[panel.appName][item.prefId].type = (Ext.getCmp(item.name + '_writable').getValue() == 1) ? 'default' : 'forced';
+                    } else {
+                        data[panel.appName][item.name] = {value: item.getValue()};
+                    }
             	}
             }
     	}
@@ -249,35 +256,31 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         */
     	
     	// save preference data
-    	//console.log(data);
+    	console.log(data);
     	Ext.Ajax.request({
             scope: this,
             params: {
                 method: 'Tinebase.savePreferences',
-                data: Ext.util.JSON.encode(data)
+                data: Ext.util.JSON.encode(data),
+                adminMode: this.adminMode
             },
             success: function(response) {
                 this.loadMask.hide();
                 
                 // reload mainscreen (only if timezone or locale have changed
-                if (data.Tinebase && 
+                if (!this.adminMode && data.Tinebase && 
                         (data.Tinebase.locale   != Tine.Tinebase.registry.get('locale').locale ||
                          data.Tinebase.timezone != Tine.Tinebase.registry.get('timeZone'))
                 ) {
-                	/*
-                	console.log('reload');
-                	console.log(data.Tinebase);
-                	console.log(Tine.Tinebase.registry.get('locale').locale);
-                	console.log(Tine.Tinebase.registry.get('timeZone'));
-                	*/
                     var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
                     mainWindow.location = window.location.href.replace(/#+.*/, '');
                 }
-                
+                /*
                 if (closeWindow) {
                     this.purgeListeners();
                     this.window.close();
                 }
+                */
             },
             failure: function (response) {
                 Ext.MessageBox.alert(_('Errors'), _('Saving of preferences failed.'));    
@@ -286,7 +289,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     },
     
     /**
+     * onSwitchAdminMode
+     * 
      * @private
+     * 
+     * @todo enable/disable apps according to admin right for applications
      */
     onSwitchAdminMode: function(button, event) {
     	this.adminMode = (!this.adminMode);
@@ -298,7 +305,10 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         }
         
         // activate panel in card panel
-        this.showPrefsForApp(this.treePanel.getSelectionModel().getSelectedNode().id);
+        var selectedNode = this.treePanel.getSelectionModel().getSelectedNode();
+        if (selectedNode) {
+            this.showPrefsForApp(this.treePanel.getSelectionModel().getSelectedNode().id);
+        }
     },
 
 	/**
@@ -306,17 +316,20 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * 
      * @param {String} appName
      * 
-     * @todo add filter
      * @todo use generic json backend here?
      */
     initPrefStore: function(appName) {
     	this.loadMask.show();
+    	
+    	// set filter to get only default/forced values if in admin mode
+    	var filter = (this.adminMode) ? [{field: 'account', operator: 'equals', value: {accountId: 0, accountType: 'anyone'}}] : '';
+    	
         var store = new Ext.data.JsonStore({
             fields: Tine.Tinebase.Model.Preference,
             baseParams: {
                 method: 'Tinebase.searchPreferencesForApplication',
                 applicationName: appName,
-                filter: ''
+                filter: Ext.util.JSON.encode(filter)
             },
             listeners: {
                 load: this.onStoreLoad,
@@ -346,7 +359,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         
         var card = new Tine.widgets.dialog.PreferencesPanel({
             prefStore: store,
-            appName: appName
+            appName: appName,
+            adminMode: this.adminMode
         });
         
         card.on('change', function(appName) {
@@ -542,6 +556,7 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
 /**
  * preferences panel with the preference input fields for an application
  * 
+ * @todo make admin mode work for textfields
  * @todo add checkbox type
  */
 Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
@@ -553,10 +568,15 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
 	prefStore: null,
 	
     /**
-     * @cfg {string} app name
+     * @cfg {String} appName
      */
     appName: 'Tinebase',
-	
+
+    /**
+     * @cfg {Boolean} adminMode activated?
+     */
+    adminMode: false,
+    
     //private
     layout: 'form',
     border: true,
@@ -583,19 +603,29 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             
             this.items = [];
             this.prefStore.each(function(pref) {
+            	
+            	// evaluate xtype
+            	var xtype = (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield';
+            	if (xtype == 'combo' && this.adminMode) {
+            		xtype = 'lockCombo';
+            	} else if (xtype == 'textfield' && this.adminMode) {
+            		xtype = 'lockTextfield';
+            	}
+            	
         	    // check if options available -> use combobox or textfield
                 var fieldDef = {
                     fieldLabel: _(pref.get('name')),
                     name: pref.get('name'),
                     value: pref.get('value'),
-                    xtype: (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield',
+                    xtype: xtype,
                     listeners: {
                     	scope: this,
                     	change: function(field, newValue, oldValue) {
                     		// fire change event
                     		this.fireEvent('change', this.appName);
                     	}
-                    }
+                    },
+                    prefId: pref.id
                 };
                 
                 if (pref.get('options') && pref.get('options').length > 0) {
@@ -604,6 +634,15 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 	fieldDef.mode = 'local';
                     fieldDef.forceSelection = true;
                     fieldDef.triggerAction = 'all';
+                }
+                
+                if (this.adminMode) {
+                	// set lock (value forced => hiddenFieldData = '0')
+                	fieldDef.hiddenFieldData = (pref.get('type') == 'default') ? '1' : '0';
+                	fieldDef.hiddenFieldId = pref.get('name') + '_writable';
+                	//console.log(pref);
+                } else {
+                	fieldDef.disabled = (pref.get('type') == 'forced');
                 }
                 
                 //console.log(fieldDef);

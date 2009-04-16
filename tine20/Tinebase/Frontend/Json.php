@@ -482,12 +482,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save preferences for application
      *
-     * @param string $data json encoded preferences data
-     * 
-     * @todo add user id param? / or add extra saveForUser/saveDefault function?
-     * @todo use update multiple?
+     * @param string    $data       json encoded preferences data
+     * @param bool      $adminMode  submit in admin mode?
      */
-    public function savePreferences($data)
+    public function savePreferences($data, $adminMode)
     {
         $decodedData = Zend_Json::decode($data);
         
@@ -495,16 +493,28 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         foreach ($decodedData as $applicationName => $data) {
             $backend = Tinebase_Core::getPreference($applicationName); 
-            foreach ($data as $name => $value) {
-                switch ($name) {
-                    case Tinebase_Preference::LOCALE:
-                        $this->setLocale($value, FALSE, TRUE);
-                        break;
-                    case Tinebase_Preference::TIMEZONE:
-                        $this->setTimezone($value, FALSE);
-                        break;
+            if ($adminMode) {
+                // update default/forced preferences
+                $records = $backend->getMultiple(array_keys($data));
+                foreach ($records as $preference) {
+                    $preference->value = $data[$preference->getId()]['value'];
+                    $preference->type = $data[$preference->getId()]['type'];
+                    $backend->update($preference);
                 }
-                $backend->$name = $value;
+                
+            } else {
+                // set user prefs
+                foreach ($data as $name => $value) {
+                    switch ($name) {
+                        case Tinebase_Preference::LOCALE:
+                            $this->setLocale($value['value'], FALSE, TRUE);
+                            break;
+                        case Tinebase_Preference::TIMEZONE:
+                            $this->setTimezone($value['value'], FALSE);
+                            break;
+                    }
+                    $backend->$name = $value['value'];
+                }
             }
         }
     }

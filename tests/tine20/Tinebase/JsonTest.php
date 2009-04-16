@@ -246,7 +246,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * search preferences by user
+     * save preferences for user
      *
      */
     public function testSavePreferences()
@@ -255,8 +255,8 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $pref = $this->_getPreferenceWithOptions();
         $pref = Tinebase_Core::getPreference()->create($pref);        
         
-        $prefData = $this->_getPreferenceData();
-        $this->_instance->savePreferences(Zend_Json::encode($prefData));
+        $prefData = $this->_getUserPreferenceData();
+        $this->_instance->savePreferences(Zend_Json::encode($prefData), false);
 
         // search saved prefs
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE)));
@@ -267,7 +267,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         
         $savedPrefData = array();
         foreach ($results['results'] as $result) {
-            $savedPrefData['Tinebase'][$result['name']] = $result['value'];
+            $savedPrefData['Tinebase'][$result['name']] = array('value' => $result['value']);
             
             if ($result['name'] == 'testPref') {
                 $this->assertTrue(is_array($result['options']), 'options missing');
@@ -281,6 +281,33 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         // cleanup
         Tinebase_Core::getPreference()->delete($pref);
     }
+
+    /**
+     * save admin prefs
+     *
+     */
+    public function testSaveAdminPreferences()
+    {
+        // add new default pref
+        $pref = $this->_getPreferenceWithOptions();
+        $pref = Tinebase_Core::getPreference()->create($pref);        
+        
+        $prefData = array();
+        $prefData['Tinebase'][$pref->getId()] = array('value' => 'test', 'type' => 'forced');
+        $this->_instance->savePreferences(Zend_Json::encode($prefData), true);
+
+        // search saved prefs
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE)));
+
+        // check results
+        $this->assertTrue(isset($results['results']));
+        $this->assertEquals(1, $results['totalcount']);
+        $this->assertEquals($prefData['Tinebase'][$pref->getId()]['value'], $results['results'][0]['value']);
+        $this->assertEquals($prefData['Tinebase'][$pref->getId()]['type'], $results['results'][0]['type']);
+                
+        // cleanup
+        Tinebase_Core::getPreference()->delete($pref);
+    }
     
     /******************** protected helper funcs ************************/
     
@@ -290,15 +317,17 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      * @param bool $_savedPrefs
      * @return array
      */
-    protected function _getPreferenceFilter($_savedPrefs = FALSE)
+    protected function _getPreferenceFilter($_savedPrefs = FALSE, $_adminPrefs = FALSE)
     {
         $result = array(
             array(
                 'field' => 'account', 
                 'operator' => 'equals', 
                 'value' => array(
-                    'accountId'     => Tinebase_Core::getUser()->getId(),
-                    'accountType'   => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
+                    'accountId'     => ($_adminPrefs) ? 0 : Tinebase_Core::getUser()->getId(),
+                    'accountType'   => ($_adminPrefs) 
+                        ? Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE 
+                        : Tinebase_Model_Preference::ACCOUNT_TYPE_USER
                 )
             )
         );
@@ -319,13 +348,13 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getPreferenceData()
+    protected function _getUserPreferenceData()
     {
         return array(
             'Tinebase' => array(
-                'testPref' => 'value2',
-                'testPref2' => 'testValue2',
-                'testPref3' => 'testValue3',
+                'testPref' => array('value' => 'value2'),
+                'testPref2' => array('value' => 'testValue2'),
+                'testPref3' => array('value' => 'testValue3'),
             )
         );        
     }
