@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add admin mode
- * @todo        add lock to force prefs
  * @todo        add filter toolbar
  * @todo        add preference label translations
  * @todo        use proxy store?
@@ -275,12 +273,10 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                     var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
                     mainWindow.location = window.location.href.replace(/#+.*/, '');
                 }
-                /*
                 if (closeWindow) {
                     this.purgeListeners();
                     this.window.close();
                 }
-                */
             },
             failure: function (response) {
                 Ext.MessageBox.alert(_('Errors'), _('Saving of preferences failed.'));    
@@ -508,11 +504,8 @@ Tine.widgets.dialog.PreferencesApplicationsPanel = Ext.extend(Ext.tree.TreePanel
             node.getOwnerTree().selectPath(node.getPath());
             node.expand();
             
-            //console.log(node);
-            
             // get parent pref panel
             var parentPanel = this.findParentByType(Tine.widgets.dialog.Preferences);
-            //console.log(parentPanel);
 
             // add panel to card panel to show prefs for chosen app
             parentPanel.showPrefsForApp(node.id);
@@ -603,21 +596,12 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             
             this.items = [];
             this.prefStore.each(function(pref) {
-            	
-            	// evaluate xtype
-            	var xtype = (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield';
-            	if (xtype == 'combo' && this.adminMode) {
-            		xtype = 'lockCombo';
-            	} else if (xtype == 'textfield' && this.adminMode) {
-            		xtype = 'lockTextfield';
-            	}
-            	
+            	            	
         	    // check if options available -> use combobox or textfield
                 var fieldDef = {
                     fieldLabel: _(pref.get('name')),
                     name: pref.get('name'),
                     value: pref.get('value'),
-                    xtype: xtype,
                     listeners: {
                     	scope: this,
                     	change: function(field, newValue, oldValue) {
@@ -627,6 +611,20 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     },
                     prefId: pref.id
                 };
+                
+                // evaluate xtype
+                var xtype = (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield';
+                if (xtype == 'combo' && this.adminMode) {
+                    xtype = 'lockCombo';
+                } else if (xtype == 'textfield' && this.adminMode) {
+                    xtype = 'lockTextfield';
+                    /*
+                    xtype = 'lockCombo';
+                    //fieldDef.hideTrigger = true;
+                    fieldDef.store = [pref.get('value')];
+                    */
+                }
+                fieldDef.xtype = xtype;
                 
                 if (pref.get('options') && pref.get('options').length > 0) {
                 	// add additional combobox config
@@ -640,7 +638,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 	// set lock (value forced => hiddenFieldData = '0')
                 	fieldDef.hiddenFieldData = (pref.get('type') == 'default') ? '1' : '0';
                 	fieldDef.hiddenFieldId = pref.get('name') + '_writable';
-                	//console.log(pref);
+                	console.log(pref);
                 } else {
                 	fieldDef.disabled = (pref.get('type') == 'forced');
                 }
