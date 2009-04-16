@@ -238,7 +238,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             if ($result['name'] == 'testPref') {
                 $this->assertEquals($pref->value, $result['value']);
                 $this->assertTrue(is_array($result['options']));
-                $this->assertEquals(2, $result['options']['totalcount']);
+                $this->assertEquals(2, count($result['options']));
             }
         }
         
@@ -271,7 +271,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             
             if ($result['name'] == 'testPref') {
                 $this->assertTrue(is_array($result['options']), 'options missing');
-                $this->assertEquals(2, $result['options']['totalcount']);
+                $this->assertEquals(2, count($result['options']));
             }            
             // cleanup
             Tinebase_Core::getPreference()->delete($result['id']);

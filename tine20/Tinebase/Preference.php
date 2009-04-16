@@ -285,9 +285,9 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
             /****************** other options ********************/
             $result = array();
             foreach($optionsXml->option as $option) {
-                $result['results'][] = array($option->value, $option->label);
+                $result[] = array($option->value, $option->label);
             }
-            $result['totalcount'] = count($result['results']);
+            //$result['totalcount'] = count($result['results']);
             $_preference->options = $result;
         }
     }
