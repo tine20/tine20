@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: LockCombo.js 2256 2008-07-04 14:51:39Z twadewitz $
  *
+ * @todo        switch lock and trigger icons (because only the trigger icon has a round upper right corner)
  */
  
 Ext.namespace('Ext.ux');
