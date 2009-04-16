@@ -71,12 +71,6 @@ class Tinebase_Core
     const USERTIMEZONE = 'userTimeZone';    
     
     /**
-     * constant for input filter registry
-     *
-     */
-    const INPUT_FILTER = 'inputFilter';
-
-    /**
      * constant for preferences registry
      *
      */
