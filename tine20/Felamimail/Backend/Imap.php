@@ -20,6 +20,162 @@
 class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
 {
     /**
+     * wheter to use UID as message identifier
+     *
+     * @var bool
+     */
+    protected $_useUid;
+    
+    /**
+     * create instance with parameters
+     * Supported paramters are
+     *   - user username
+     *   - host hostname or ip address of IMAP server [optional, default = 'localhost']
+     *   - password password for user 'username' [optional, default = '']
+     *   - port port for IMAP server [optional, default = 110]
+     *   - ssl 'SSL' or 'TLS' for secure sockets
+     *   - folder select this folder [optional, default = 'INBOX']
+     *
+     * @param  array $params mail reader specific parameters
+     * @throws Zend_Mail_Storage_Exception
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function __construct($params)
+    {
+        if (is_array($params)) {
+            $params = (object)$params;
+        }
+
+        $this->_has['flags'] = true;
+
+        if ($params instanceof Zend_Mail_Protocol_Imap) {
+            $this->_protocol = $params;
+            try {
+                $this->selectFolder('INBOX');
+            } catch(Zend_Mail_Storage_Exception $e) {
+                /**
+                 * @see Zend_Mail_Storage_Exception
+                 */
+                require_once 'Zend/Mail/Storage/Exception.php';
+                throw new Zend_Mail_Storage_Exception('cannot select INBOX, is this a valid transport?');
+            }
+            return;
+        }
+
+        if (!isset($params->user)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('need at least user in params');
+        }
+
+        $this->_messageClass = 'Felamimail_Model_Message';
+        $this->_useUid = true;
+        
+        $host     = isset($params->host)     ? $params->host     : 'localhost';
+        $password = isset($params->password) ? $params->password : '';
+        $port     = isset($params->port)     ? $params->port     : null;
+        $ssl      = isset($params->ssl)      ? $params->ssl      : false;
+
+        $this->_protocol = new Felamimail_Protocol_Imap();
+        $this->_protocol->connect($host, $port, $ssl);
+        if (!$this->_protocol->login($params->user, $password)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot login, user or password wrong');
+        }
+        $this->selectFolder(isset($params->folder) ? $params->folder : 'INBOX');
+    }
+    
+    /**
+     * Fetch a message
+     *
+     * @param int $id number of message
+     * @return Zend_Mail_Message
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function getMessage($id)
+    {
+        $data = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER'), $id, null, $this->_useUid);
+        $header = $data['RFC822.HEADER'];
+
+        $flags = array();
+        foreach ($data['FLAGS'] as $flag) {
+            $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
+        }
+
+        return new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $header, 'flags' => $flags));
+    }
+    
+    /**
+     * Get raw content of message or part
+     *
+     * @param  int               $id   number of message
+     * @param  null|array|string $part path to part or null for messsage content
+     * @return string raw content
+     * @throws Zend_Mail_Protocol_Exception
+     * @throws Zend_Mail_Storage_Exception
+     */
+    public function getRawContent($id, $part = null)
+    {
+        if ($part !== null) {
+            // TODO: implement
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('not implemented');
+        }
+
+        return $this->_protocol->fetch('RFC822.TEXT', $id, null, $this->_useUid);
+    }
+    
+    /**
+     * set flags for message
+     *
+     * NOTE: this method can't set the recent flag.
+     *
+     * @param  int   $id    number of message
+     * @param  array $flags new flags for message
+     * @throws Zend_Mail_Storage_Exception
+     */
+    public function setFlags($id, $flags)
+    {
+        if (!$this->_protocol->store($flags, $id, null, null, true, $this->_useUid)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot set flags, have you tried to set the recent flag or special chars?');
+        }
+    }
+    
+    public function addFlags($id, $flags)
+    {
+        if (!$this->_protocol->store($flags, $id, null, '+', true, $this->_useUid)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot set flags, have you tried to set the recent flag or special chars?');
+        }
+    }
+    
+    public function clearFlags($id, $flags)
+    {
+        if (!$this->_protocol->store($flags, $id, null, '-', true, $this->_useUid)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot set flags, have you tried to set the recent flag or special chars?');
+        }
+    }
+    
+    /**
      * get root folder or given folder
      *
      * @param  string $reference mailbox reference for list
@@ -64,67 +220,77 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         return $result;
     }
     
-    public function getSummary($id)
+    /**
+     * return uid for given message numbers
+     *
+     * @param unknown_type $from
+     * @param unknown_type $to
+     * @return unknown
+     */
+    public function getUid($from, $to = null)
     {
-        $messages = array();
-
-        $data = $this->_protocol->fetch(array('INTERNALDATE', 'RFC822.SIZE', 'UID', 'FLAGS', 'ENVELOPE'), $id);
-
-        foreach($data as $messageInfo) {
-
-            #var_dump($messageInfo);
-
-            $flags = array();
-            foreach ($messageInfo['FLAGS'] as $flag) {
-                $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
-            }
-
-            $message = array(
-                'uid'           => $messageInfo['UID'],
-                'flags'         => $flags,
-                'received'      => new Zend_Date($messageInfo['INTERNALDATE'], 'dd-MMM-YYYY HH:mm:ss ZZZ', 'en'),
-                'size'          => $messageInfo['RFC822.SIZE'],
-                'sent'          => new Zend_Date($messageInfo['ENVELOPE'][0], Zend_Date::RFC_1123, 'en'),
-                'subject'       => $this->decodeMimeHeader($messageInfo['ENVELOPE'][1]),
-                'from'          => $this->decodeMimeHeader($messageInfo['ENVELOPE'][2]),
-                'sender'        => $this->decodeMimeHeader($messageInfo['ENVELOPE'][3]),
-                'replyTo'       => $this->decodeMimeHeader($messageInfo['ENVELOPE'][4]),
-                'to'            => $this->decodeMimeHeader($messageInfo['ENVELOPE'][5]),
-                'cc'            => $this->decodeMimeHeader($messageInfo['ENVELOPE'][6]),
-                'bcc'           => $this->decodeMimeHeader($messageInfo['ENVELOPE'][7]),
-                'inReplyTo'     => $this->decodeMimeHeader($messageInfo['ENVELOPE'][8]),
-                'messageId'     => $messageInfo['ENVELOPE'][9],
-
-            );
-
-            $messages[] = $message;
-        }
-
-        return $messages;
-    }
-
-    protected function decodeMimeHeader($header)
-    {
-        if(is_array($header)) {
-            // from, to, cc, bcc, ...
-            foreach($header as $key => $value) {
-                foreach($value as $key2 => $value2) {
-                    $value[$key2] = $this->decodeMimeHeader($value2);
-                }
-                $header[$key] = $value;
-            }
-        } elseif($header === 'NIL') {
-            $header = NULL;
+        $data = $this->_protocol->fetch('UID', $from, $to);
+        
+        if(!is_array($data)) {
+            return array($from => $data);
         } else {
-            // just a string
-            $header = iconv_mime_decode($header);
+            return $data;
         }
-
-        return $header;
     }
     
-    public function search(array $parameters)
+    public function getSummary($from, $to = null)
     {
-        return $this->_protocol->search($parameters);
+        $summary = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER'), $from, $to, $this->_useUid);
+        
+        $messages = array();
+        
+        foreach($summary as $id => $data) {
+            $header = $data['RFC822.HEADER'];
+    
+            $flags = array();
+            foreach ($data['FLAGS'] as $flag) {
+                $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
+            }
+    
+            if($this->_useUid === true) {
+                $key = $data['UID'];
+            } else {
+                $key = $id;
+            }
+            $messages[$key] = new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $header, 'flags' => $flags));
+        }
+        
+        return $messages;
+        
+        //$data = $this->_protocol->fetch(array('INTERNALDATE', 'RFC822.SIZE', 'UID', 'FLAGS', 'ENVELOPE'), $from, $to);
+        
+    }
+    
+    /**
+     * Remove a message from server. If you're doing that from a web enviroment
+     * you should be careful and use a uniqueid as parameter if possible to
+     * identify the message.
+     *
+     * @param   int $id number of message
+     * @return  null
+     * @throws  Zend_Mail_Storage_Exception
+     */
+    public function removeMessage($id)
+    {
+        if (!$this->_protocol->store(array(Zend_Mail_Storage::FLAG_DELETED), $id, null, '+', true, $this->_useUid)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot set deleted flag');
+        }
+        // TODO: expunge here or at close? we can handle an error here better and are more fail safe
+        if (!$this->_protocol->expunge()) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('message marked as deleted, but could not expunge');
+        }
     }
 }

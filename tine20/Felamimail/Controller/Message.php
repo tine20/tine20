@@ -93,10 +93,66 @@ class Felamimail_Controller_Message
      */
     public function getMessage($_globalName, $_messageId)
     {        
-        $this->_imap->selectFolder($_globalName);
+        if($this->_imap->getCurrentFolder() != $_globalName) {
+            $this->_imap->selectFolder($_globalName);
+        }
         
         $message = $this->_imap->getMessage($_messageId);
         
         return $message;
+    }
+    
+    /**
+     * fetch message from folder
+     *
+     * @param string $_globalName the complete folder name
+     * @param string $_messageId the message id
+     * @return void
+     */
+    public function deleteMessage($_serverId, $_globalName, $_messageId)
+    {        
+        if($this->_imap->getCurrentFolder() != $_globalName) {
+            $this->_imap->selectFolder($_globalName);
+        }
+        
+        $message = $this->_imap->removeMessage($_messageId);
+    }
+    
+    /**
+     * Enter description here...
+     *
+     * @param unknown_type $_globalName
+     * @param unknown_type $_messageId
+     * @param unknown_type $from
+     * @param unknown_type $to
+     * @return array
+     */
+    public function getUid($_globalName, $from, $to = null)
+    {
+        if($this->_imap->getCurrentFolder() != $_globalName) {
+            $this->_imap->selectFolder($_globalName);
+        }
+        
+        $foundEntries = $this->_imap->getUid($from, $to);
+        
+        return $foundEntries;
+    }
+    
+    public function addFlags($_serverId, $_globalName, $_id, $_flags)
+    {
+        if($this->_imap->getCurrentFolder() != $_globalName) {
+            $this->_imap->selectFolder($_globalName);
+        }
+        
+        $this->_imap->addFlags($_id, $_flags);
+    }
+    
+    public function clearFlags($_serverId, $_globalName, $_id, $_flags)
+    {
+        if($this->_imap->getCurrentFolder() != $_globalName) {
+            $this->_imap->selectFolder($_globalName);
+        }
+        
+        $this->_imap->clearFlags($_id, $_flags);
     }
 }
