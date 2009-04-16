@@ -49,10 +49,6 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
     
     public function tearDown()
     {
-        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        )), new Tinebase_Model_Pagination(array()), false);
-        
         // we need to have some rights to delete all events via controller ;-)
         Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
@@ -61,6 +57,10 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
             'deleteGrant'   => true,
             'adminGrant'    => true,
         ))), true);
+        
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )), new Tinebase_Model_Pagination(array()), false);
         
         // only delete events from our testcalendar. (container_id filter also allowes implicts from other calendars)
         foreach ($events as $event) {
@@ -100,6 +100,8 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $updatedEvent->dtend->addHour(1);
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
         $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $secondUpdatedEvent->originator_tz, 'originator_tz must be adopted if dtsart is updatet!');
+    
+        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }
     
     /**
@@ -283,6 +285,49 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_AccessDenied');
         $this->_controller->update($persitentEvent);
         $this->_controller->delete(($persitentEvent->getId()));
+    }
+    
+    public function testCreateRecurException()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
+        $persitentEvent = $this->_controller->create($event);
+        
+        $exception = clone $persitentEvent;
+        $exception->dtstart->addDay(3);
+        $exception->dtend->addDay(3);
+        $exception->summary = 'Abendbrot';
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = $this->_controller->createRecurException($exception);
+        
+        $persitentEvent = $this->_controller->get($persitentEvent->getId());
+        $this->assertNull($persitentEvent->exdate);
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operotor' => 'equals', 'value' => $persitentEvent->uid),
+        )));
+        $this->assertEquals(2, count($events));
+    }
+    
+    public function testDeleteNonPersistentRecurException()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
+        $persitentEvent = $this->_controller->create($event);
+        
+        $exception = clone $persitentEvent;
+        $exception->dtstart->addDay(3);
+        $exception->dtend->addDay(3);
+        $exception->summary = 'Abendbrot';
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentEventWithExdate = $this->_controller->createRecurException($exception, true);
+        
+        $persitentEvent = $this->_controller->get($persitentEvent->getId());
+        $this->assertType('Zend_Date', $persitentEventWithExdate->exdate[0]);
+        $this->assertEquals($persitentEventWithExdate->exdate, $persitentEvent->exdate);
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operotor' => 'equals', 'value' => $persitentEvent->uid),
+        )));
+        $this->assertEquals(1, count($events));
     }
     
     /**

@@ -74,17 +74,39 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      * NOTE: deleting persistent exceptions is done via a normal delte action
      *       and handled in the delteInspection
      * 
-     * @param Calendar_Model_Event  $_event
-     * @param bool                  $_deleteInstance
+     * @param  Calendar_Model_Event  $_event
+     * @param  bool                  $_deleteInstance
+     * @return Calendar_Model_Event  exception Event | updated baseEvent
      */
     public function createRecurException($_event, $_deleteInstance = FALSE)
     {
-        $_event->setId(NULL);
-        unset($_event->rrule);
-        unset($_event->exdate);
+        // NOTE: recurd is computed by rrule recur computations and therefore is already
+        //       part of the event.
+        if (empty($_event->recurid)) {
+            throw new Exception('recurid must be present to create exceptions!');
+        }
         
-        // fetch series to get original dtstart
-        //$_event->recurid = $_event->uid . '-' . $_event->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        if (! $_deleteInstance) {
+            $_event->setId(NULL);
+            unset($_event->rrule);
+            unset($_event->exdate);
+            
+            return $this->create($_event);
+        } else {
+            $baseEvent = $this->_backend->search(new Calendar_Model_EventFilter(array(
+                array('field' => 'uid',     'operotor' => 'equals', 'value' => $_event->uid),
+                array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
+            )))->getFirstRecord();
+            
+            $exdate = new Zend_Date(substr($_event->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
+            if (is_array($baseEvent->exdate)) {
+                $baseEvent->exdate[] = $exdate;
+            } else {
+                $baseEvent->exdate = array($exdate);
+            }
+            
+            return $this->update($baseEvent);
+        }
     }
     
     /****************************** overwritten functions ************************/
