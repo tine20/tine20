@@ -191,10 +191,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         $events = $this->_backend->getMultiple($_ids);
         
         foreach ($events as $event) {
+            
+            // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
                 $exceptionIds = $this->_backend->getMultipleByProperty($event->uid, 'uid')->getId();
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recuring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
+            }
+            
+            // deletetd persistent recur instances must be added to exdate of the baseEvent
+            if (! empty($event->recurid)) {
+                $this->createRecurException($event, true);
             }
         }
         

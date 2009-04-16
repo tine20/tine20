@@ -330,6 +330,29 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($events));
     }
     
+    public function testDeletePersistentRecurException()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
+        $persitentEvent = $this->_controller->create($event);
+        
+        $exception = clone $persitentEvent;
+        $exception->dtstart->addDay(3);
+        $exception->dtend->addDay(3);
+        $exception->summary = 'Abendbrot';
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = $this->_controller->createRecurException($exception);
+        
+        $this->_controller->delete($persitentException->getId());
+        
+        $persitentEvent = $this->_controller->get($persitentEvent->getId());
+        $this->assertType('Zend_Date', $persitentEvent->exdate[0]);
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operotor' => 'equals', 'value' => $persitentEvent->uid),
+        )));
+        $this->assertEquals(1, count($events));
+    }
+    
     /**
      * returns a simple event
      *
