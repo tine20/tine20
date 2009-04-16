@@ -31,12 +31,6 @@ Ext.namespace('Tine.widgets.dialog');
  */
 Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**
-     * @cfg {Array} tbarItems
-     * additional toolbar items (defaults to false)
-     */
-    tbarItems: false,
-    
-    /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
     /**
@@ -67,6 +61,18 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * here we store the pref panels for all apps
      */    
     prefPanels: {},
+
+    /**
+     * @property {boolean} adminMode
+     * when adminMode is activated -> show defaults/forced values
+     */    
+    adminMode: false,
+
+    /**
+     * @property {Object} prefPanels
+     * here we store the pref panels for all apps [admin mode]
+     */    
+    adminPrefPanels: {},
     
     // private
     bodyStyle:'padding:5px',
@@ -103,8 +109,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.initActions();
         // init buttons and tbar
         this.initButtons();
-        // init preferences
-        this.initPreferences();
         // get items for this dialog
         this.items = this.getItems();
         
@@ -113,10 +117,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     
     /**
      * init actions
+     * 
+     * @todo only allow admin mode if user has admin right
      */
     initActions: function() {
         this.action_saveAndClose = new Ext.Action({
-            //requiredGrant: 'editGrant',
             text: _('Ok'),
             minWidth: 70,
             scope: this,
@@ -131,6 +136,16 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             handler: this.onCancel,
             iconCls: 'action_cancel'
         });
+
+        this.action_switchAdminMode = new Ext.Action({
+            text: _('Admin Mode'),
+            minWidth: 70,
+            scope: this,
+            handler: this.onSwitchAdminMode,
+            iconCls: 'action_adminMode',
+            enableToggle: true,
+            disabled: true
+        });
     },
     
     /**
@@ -142,17 +157,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             this.action_saveAndClose
         ];
        
-        if (this.tbarItems) {
-            this.tbar = new Ext.Toolbar({
-                items: this.tbarItems
-            });
-        }
-    },
-    
-    /**
-     * init preferences to edit (does nothing at the moment)
-     */
-    initPreferences: function() {
+        this.tbar = new Ext.Toolbar({
+            items: [
+                this.action_switchAdminMode
+            ]
+        });
     },
     
     /**
@@ -213,6 +222,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**
      * generic apply changes handler
      * 
+     * @todo display alert message if there are changed panels with data from the other mode
      */
     onApplyChanges: function(button, event, closeWindow) {
     	
@@ -220,7 +230,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     	
     	// get values from card panels
     	var data = {};
-    	for each (panel in this.prefPanels) {
+    	var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
+    	for each (panel in panelsToSave) {
     		//console.log(panel);
     		data[panel.appName] = {};
             for (var j=0; j < panel.items.length; j++) {
@@ -275,6 +286,22 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     },
     
     /**
+     * @private
+     */
+    onSwitchAdminMode: function(button, event) {
+    	this.adminMode = (!this.adminMode);
+    	
+        if (this.adminMode) {
+        	this.prefsCardPanel.addClass('prefpanel_adminMode');
+        } else {
+        	this.prefsCardPanel.removeClass('prefpanel_adminMode');
+        }
+        
+        // activate panel in card panel
+        this.showPrefsForApp(this.treePanel.getSelectionModel().getSelectedNode().id);
+    },
+
+	/**
      * init app preferences store
      * 
      * @param {String} appName
@@ -322,8 +349,18 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             appName: appName
         });
         
+        card.on('change', function(appName) {
+            // mark card as changed in tree
+        	var node = this.treePanel.getNodeById(appName);
+        	node.setText(node.text + '*');
+        }, this);
+        
         // add to panel registry
-        this.prefPanels[appName] = card;
+        if (this.adminMode) {
+            this.adminPrefPanels[appName] = card;
+        } else {
+        	this.prefPanels[appName] = card;
+        }
         
         this.activateCard(card, false);
         this.loadMask.hide();
@@ -352,12 +389,14 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @param {String} appName
      */
     showPrefsForApp: function(appName) {
+    	var panel = (this.adminMode) ? this.adminPrefPanels[appName] : this.prefPanels[appName];
+    	
         // check stores/panels
-        if (!this.prefPanels[appName]) {
+        if (!panel) {
             // add new card + store
             this.initPrefStore(appName);
         } else {
-        	this.activateCard(this.prefPanels[appName], true);
+        	this.activateCard(panel, true);
         }
     }
 });
@@ -485,8 +524,8 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
     
     //private
     layout: 'card',
-    border: true,
-    //frame: true,
+    border: false,
+    frame: true,
     labelAlign: 'top',
     autoScroll: true,
     defaults: {
@@ -503,6 +542,7 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
 /**
  * preferences panel with the preference input fields for an application
  * 
+ * @todo add checkbox type
  */
 Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
     
@@ -529,16 +569,33 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
     bodyStyle: 'padding:5px',
     
     initComponent: function() {
-        if (this.prefStore) {
+    	
+        this.addEvents(
+            /**
+             * @event change
+             * @param appName
+             * Fired when a value is changed
+             */
+            'change'
+        );    	
+    	
+        if (this.prefStore && this.prefStore.getCount() > 0) {
             
             this.items = [];
             this.prefStore.each(function(pref) {
-        	    // check if options available -> use combobox
+        	    // check if options available -> use combobox or textfield
                 var fieldDef = {
                     fieldLabel: _(pref.get('name')),
                     name: pref.get('name'),
                     value: pref.get('value'),
-                    xtype: (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield'
+                    xtype: (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield',
+                    listeners: {
+                    	scope: this,
+                    	change: function(field, newValue, oldValue) {
+                    		// fire change event
+                    		this.fireEvent('change', this.appName);
+                    	}
+                    }
                 };
                 
                 if (pref.get('options') && pref.get('options').length > 0) {
@@ -564,7 +621,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             }, this);
 
         } else {
-            this.html = '<div class="x-grid-empty">' + _('There are no preferences yet') + "</div>";
+            this.html = '<div class="x-grid-empty">' + _('There are no preferences for this application.') + "</div>";
         }
         
         Tine.widgets.dialog.PreferencesPanel.superclass.initComponent.call(this);

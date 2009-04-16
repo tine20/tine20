@@ -85,6 +85,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/dialog-information.png) !important;
 }
 
+.action_adminMode {
+    background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
+}
+
 /* ----- about dialog --------------------------------------------------------*/
 .tb-about-dlg {
     text-align: center;

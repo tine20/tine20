@@ -173,7 +173,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	   'Tinebase/css/widgets/FilterToolbar.css',
     	   'Tinebase/css/widgets/AccountPicker.css',
     	   'Tinebase/css/widgets/PreviewPanel.css',
-    	   // yui stuff
+           'Tinebase/css/widgets/PreferencesPanel.css',
+    	// yui stuff
     	   //'../yui/build/assets/skins/sam/resize.css',
     	   //'../yui/build/assets/skins/sam/imagecropper.css',
     	);
