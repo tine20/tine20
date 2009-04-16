@@ -210,12 +210,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected function _saveExdates($_event)
     {
         $this->_db->delete($this->_tablePrefix . 'cal_exdate', $this->_db->quoteInto($this->_db->quoteIdentifier('cal_event_id') . '= ?', $_event->getId()));
-        foreach ((array)$_event->exdate as $exdate) {
-            $this->_db->insert($this->_tablePrefix . 'cal_exdate', array(
-                'id'           => $_event->generateUID(),
-                'cal_event_id' => $_event->getId(),
-                'exdate'       => $exdate->get(Tinebase_Record_Abstract::ISO8601LONG)
-            ));
+        
+        // only save exdates if its an recuring event
+        if (! empty($_event->rrule)) {
+            foreach ((array)$_event->exdate as $exdate) {
+                $this->_db->insert($this->_tablePrefix . 'cal_exdate', array(
+                    'id'           => $_event->generateUID(),
+                    'cal_event_id' => $_event->getId(),
+                    'exdate'       => $exdate->get(Tinebase_Record_Abstract::ISO8601LONG)
+                ));
+            }
         }
     }
     

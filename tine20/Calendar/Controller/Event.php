@@ -18,8 +18,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
 {
     // todo in this controller:
     //
-    // only allow to create exceptions via exceptions api -> backend stuff
-    // 
     // add fns for participats state settings -> move to attendee controller?
     // add group attendee handling -> move to attendee controller?
     //
@@ -73,12 +71,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     /**
      * creates an exception instance of a recuring evnet
      *
+     * NOTE: deleting persistent exceptions is done via a normal delte action
+     *       and handled in the delteInspection
+     * 
      * @param Calendar_Model_Event  $_event
      * @param bool                  $_deleteInstance
      */
     public function createRecurException($_event, $_deleteInstance = FALSE)
     {
+        $_event->setId(NULL);
+        unset($_event->rrule);
+        unset($_event->exdate);
         
+        // fetch series to get original dtstart
+        //$_event->recurid = $_event->uid . '-' . $_event->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
     }
     
     /****************************** overwritten functions ************************/
@@ -99,6 +105,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     /**
      * inspect update of one record
      * 
+     * @todo consider dst transitions!
+     * 
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
@@ -107,6 +115,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         // if dtstart of an event changes, we update the originator_tz
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
             $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
             
             // update exdates and recurids if dtsart of an recurevent changes
@@ -114,13 +123,26 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $diff = clone $_record->dtstart;
                 $diff->sub($_oldRecord->dtstart);
                 
+                // update rrule->until
+                // this becomes wrong if the events is moved over a dst transistion
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting rrule_until');
+                $rrule = Calendar_Model_Rrule::getRruleFromString($_record->rrule);
+                $rrule->until->add($diff);
+                $_record->rrule = (string) $rrule;
+                
+                // update exdate(s)
+                // this becomes wrong if the events is moved over a dst transistion
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($_record->exdate) . ' exdate(s)');
                 foreach ((array)$_record->exdate as $exdate) {
                     $exdate->add($diff);
                 }
                 
+                // update exceptions
                 $exceptions = $this->_backend->getMultipleByProperty($_record->uid, 'uid');
                 unset($exceptions[$exceptions->getIndexById($_record->getId())]);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($exceptions) . ' recurid(s)');
                 foreach ($exceptions as $exception) {
+                    // this becomes wrong if the events is moved over a dst transistion
                     $originalDtstart = new Zend_Date(substr($exception->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
                     $originalDtstart->add($diff);
                     $exception->recurid = $exception->uid . '-' . $originalDtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
@@ -149,7 +171,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         foreach ($events as $event) {
             if (! empty($event->rrule)) {
                 $exceptionIds = $this->_backend->getMultipleByProperty($event->uid, 'uid')->getId();
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting persistent ' . count($exceptionIds) . 'exceptions for recuring series with uid' . $event->uid);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recuring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
             }
         }

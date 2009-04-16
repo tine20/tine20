@@ -109,7 +109,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
     public function testUpdateRecuingDtstart()
     {
         $event = $this->_getEvent();
-        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
         $event->exdate = array(new Zend_Date('2009-04-07 13:00:00', Tinebase_Record_Abstract::ISO8601LONG));
         $persitentEvent = $this->_controller->create($event);
         
@@ -127,9 +127,45 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         
         $updatedEvent = $this->_controller->update($persitentEvent);
         $updatedException = $this->_controller->get($persitentException->getId());
-        
         $this->assertEquals('2009-04-07 18:00:00', $updatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate');
         $this->assertEquals('2009-04-08 18:00:00', substr($updatedException->recurid, -19), 'failed to update persistent exception');
+        $this->assertEquals('2009-04-30 18:30:00', Calendar_Model_Rrule::getRruleFromString($updatedEvent->rrule)->until->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update until in rrule');
+        $this->assertEquals('2009-04-30 18:30:00', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update rrule_until');
+        
+        sleep(1); // wait for modlog
+        $updatedEvent->dtstart->subHour(5);
+        $updatedEvent->dtend->subHour(5);
+        $secondUpdatedEvent = $this->_controller->update($updatedEvent);
+        $secondUpdatedException = $this->_controller->get($persitentException->getId());
+        $this->assertEquals('2009-04-07 13:00:00', $secondUpdatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate (sub)');
+        $this->assertEquals('2009-04-08 13:00:00', substr($secondUpdatedException->recurid, -19), 'failed to update persistent exception (sub)');
+    }
+    
+    /**
+     * @todo use exception api once we have it!
+     *
+     */
+    public function testUpdateImplicitDeleteRcuringExceptions()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
+        $event->exdate = array(new Zend_Date('2009-04-07 13:00:00', Tinebase_Record_Abstract::ISO8601LONG));
+        $persitentEvent = $this->_controller->create($event);
+        
+        $exception = clone $persitentEvent;
+        $exception->dtstart->addDay(2);
+        $exception->dtend->addDay(2);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = $this->_controller->create($exception);
+        
+        unset($persitentEvent->rrule);
+        $updatedEvent = $this->_controller->update($persitentEvent);
+        $this->assertNull($updatedEvent->exdate);
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_controller->get($persitentException->getId());
     }
     
     public function testDeleteEvent()
@@ -140,6 +176,31 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->_controller->delete($persitentEvent->getId());
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persitentEvent->getId());
+    }
+    
+    /**
+     * @todo use exception api once we have it!
+     *
+     */
+    public function testDeleteRecurExceptions()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
+        $event->exdate = array(new Zend_Date('2009-04-07 13:00:00', Tinebase_Record_Abstract::ISO8601LONG));
+        $persitentEvent = $this->_controller->create($event);
+        
+        $exception = clone $persitentEvent;
+        $exception->dtstart->addDay(2);
+        $exception->dtend->addDay(2);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = $this->_controller->create($exception);
+        
+        $this->_controller->delete($persitentEvent->getId());
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_controller->get($persitentException->getId());
     }
     
     /**

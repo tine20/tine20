@@ -139,6 +139,20 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
+     * creates a rrule from string
+     *
+     * @param string $_rruleString
+     * @return Calendar_Model_Rrule
+     */
+    public static function getRruleFromString($_rruleString)
+    {
+        $rrule = new Calendar_Model_Rrule();
+        $rrule->setFromString($_rruleString);
+        
+        return $rrule;
+    }
+    
+    /**
      * returns a ical rrule string
      *
      * @return string
