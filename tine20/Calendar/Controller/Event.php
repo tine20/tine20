@@ -100,7 +100,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             
             $exdate = new Zend_Date(substr($_event->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
             if (is_array($baseEvent->exdate)) {
-                $baseEvent->exdate[] = $exdate;
+                $exdates = $baseEvent->exdate;
+                array_push($exdates, $exdate);
+                $baseEvent->exdate = $exdates;
             } else {
                 $baseEvent->exdate = array($exdate);
             }
