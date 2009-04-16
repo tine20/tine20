@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
+ * @todo        add translations to prefs
+ * @todo        add prefs to array for existance check
  */
 
 
