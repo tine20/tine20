@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        use 'defer' to select root node and load first store after render
+ * @todo        create generic app tree panel?
  */
 
 Ext.namespace('Tine.widgets');
@@ -23,7 +25,7 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
 
     // presets
     iconCls: 'x-new-application',
-    rootVisible: false,
+    rootVisible: true,
     border: false,
     autoScroll: true,
     
@@ -50,9 +52,12 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         Tine.widgets.dialog.PreferencesTreePanel.superclass.afterRender.call(this);
 
         /*
-        this.expandPath('/root/Tinebase');
-        this.selectPath('/root/Tinebase');
+        console.log('after render');
+        this.expandPath('/Tinebase');
+        this.selectPath('/Tinebase');
+        //this.fireEvent('click', this.getSelectionModel().getSelectedNode());
         */
+        this.getRootNode().select();
     },
     
     /**
@@ -61,24 +66,19 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initTreeNodes: function() {
+    	
+    	// general preferences are tree root
         var treeRoot = new Ext.tree.TreeNode({
-            text: 'root',
+            text: _('General Preferences'),
+            //cls: 'file',
+            id: 'Tinebase',
+            //leaf: null,
             draggable:false,
             allowDrop:false,
-            id:'root'
+            expanded: true
         });
         this.setRootNode(treeRoot);
         
-        // add tinebase/general prefs node
-        var generalNode = new Ext.tree.TreeNode({
-            text: _('General Preferences'),
-            cls: 'file',
-            id: 'Tinebase',
-            leaf: null,
-            expanded: true
-        });
-        treeRoot.appendChild(generalNode);
-
         // add all apps
         var allApps = Tine.Tinebase.appMgr.getAll();
 
@@ -116,8 +116,8 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.on('beforeexpand', function(_panel) {
             if(_panel.getSelectionModel().getSelectedNode() === null) {
-                _panel.expandPath('/root');
-                _panel.selectPath('/root/Tinebase');
+                _panel.expandPath('/Tinebase');
+                _panel.selectPath('/Tinebase');
             }
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
