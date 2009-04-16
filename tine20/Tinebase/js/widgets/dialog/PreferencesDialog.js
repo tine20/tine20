@@ -261,7 +261,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             params: {
                 method: 'Tinebase.savePreferences',
                 data: Ext.util.JSON.encode(data),
-                adminMode: this.adminMode
+                adminMode: (this.adminMode) ? 1 : 0
             },
             success: function(response) {
                 this.loadMask.hide();
@@ -274,6 +274,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                     var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
                     mainWindow.location = window.location.href.replace(/#+.*/, '');
                 }
+                
                 if (closeWindow) {
                     this.purgeListeners();
                     this.window.close();

@@ -489,11 +489,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $decodedData = Zend_Json::decode($data);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminMode, true));
         
         foreach ($decodedData as $applicationName => $data) {
+            
             $backend = Tinebase_Core::getPreference($applicationName); 
-            if ($adminMode) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+            
+            if ($adminMode == TRUE) {
                 // update default/forced preferences
                 $records = $backend->getMultiple(array_keys($data));
                 foreach ($records as $preference) {
@@ -503,8 +507,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 
             } else {
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
                 // set user prefs
                 foreach ($data as $name => $value) {
+                    
+                    // @todo move this switch to Tinebase_Preference / every app should define its own special handlers
                     switch ($name) {
                         case Tinebase_Preference::LOCALE:
                             $this->setLocale($value['value'], FALSE, TRUE);

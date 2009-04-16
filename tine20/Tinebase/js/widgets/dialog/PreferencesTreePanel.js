@@ -10,6 +10,7 @@
  *
  * @todo        use 'defer' to select root node and load first store after render
  * @todo        create generic app tree panel?
+ * @todo        add button: set default value(s)
  */
 
 Ext.namespace('Tine.widgets');
