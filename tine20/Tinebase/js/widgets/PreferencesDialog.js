@@ -305,6 +305,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         if (selectedNode) {
             this.showPrefsForApp(this.treePanel.getSelectionModel().getSelectedNode().id);
         }
+        
+        this.treePanel.checkGrants(this.adminMode);
     },
 
 	/**
@@ -400,6 +402,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      */
     showPrefsForApp: function(appName) {
     	var panel = (this.adminMode) ? this.adminPrefPanels[appName] : this.prefPanels[appName];
+    	
+    	if (!this.adminMode) {
+    		// check grant for pref and enable/disable button
+			this.action_switchAdminMode.setDisabled(!Tine.Tinebase.common.hasRight('admin', appName));
+    	}
     	
         // check stores/panels
         if (!panel) {
@@ -519,6 +526,24 @@ Tine.widgets.dialog.PreferencesApplicationsPanel = Ext.extend(Ext.tree.TreePanel
             }
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
+    },
+
+    /**
+     * check grants for tree nodes / apps
+     * 
+     * @param {Bool} adminMode
+     */
+    checkGrants: function(adminMode) {
+        var root = this.getRootNode();
+    	        
+        root.eachChild(function(node) {
+            // enable or disable according to admin rights / admin mode
+            if (!Tine.Tinebase.common.hasRight('admin', node.id) && adminMode) {
+                node.disable();
+            } else {
+            	node.enable();
+            }
+    	});
     }
 });
 
