@@ -298,7 +298,8 @@ class Tinebase_Timemachine_ModificationLog
             'products',
             'jpegphoto',
             'grants',
-            'customfields'
+            'customfields',
+            'exdate'
         ));
         
         foreach ($diffs as $field => $newValue) {
