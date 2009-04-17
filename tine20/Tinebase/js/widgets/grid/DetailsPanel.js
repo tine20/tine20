@@ -17,6 +17,12 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
  * @extends Ext.Panel
  */
 Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
+    /**
+     * @cfg {Number}
+     * default Heights
+     */
+    defaultHeight: 125,
+    
     border: false,
     autoScroll: true,
     layout: 'fit',
@@ -65,6 +71,14 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         } else if (count > 1) {
         	this.showMulti(sm, this.body);
         }
+    },
+    
+    getLoadMask: function() {
+        if (! this.loadMask) {
+            this.loadMask = new Ext.LoadMask(this.el);
+        }
+        
+        return this.loadMask;
     }
     
 });

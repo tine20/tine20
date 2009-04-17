@@ -63,6 +63,11 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         limit: 50
     },
     /**
+     * @cfg {Tine.widgets.grid.DetailsPanel} detailsPanel
+     * if set, it becomes rendered in region south 
+     */
+    detailsPanel: null,
+    /**
      * @cfg {Array} i18nDeleteQuestion 
      * spechialised strings for deleteQuestion
      */
@@ -148,7 +153,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 collapseMode: 'mini',
                 split: true,
                 layout: 'fit',
-                height: 125,
+                height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 125,
                 items: this.detailsPanel
                 
             });
