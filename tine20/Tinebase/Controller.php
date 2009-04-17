@@ -83,6 +83,7 @@ class Tinebase_Controller
             Tinebase_Core::set(Tinebase_Core::USER, $account);
             Tinebase_Core::getSession()->currentAccount = $account;
             
+            $accountsController->cachePassword($_password);
             $account->setLoginTime($_ipAddress);
             
             Tinebase_AccessLog::getInstance()->addLoginEntry(
