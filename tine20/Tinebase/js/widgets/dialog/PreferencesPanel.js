@@ -90,7 +90,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             	            	
         	    // check if options available -> use combobox or textfield
                 var fieldDef = {
-                    fieldLabel: _(pref.get('name')),
+                    fieldLabel: pref.get('label'),
                     name: pref.get('name'),
                     value: pref.get('value'),
                     listeners: {
@@ -109,11 +109,6 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     xtype = 'lockCombo';
                 } else if (xtype == 'textfield' && this.adminMode) {
                     xtype = 'lockTextfield';
-                    /*
-                    xtype = 'lockCombo';
-                    //fieldDef.hideTrigger = true;
-                    fieldDef.store = [pref.get('value')];
-                    */
                 }
                 fieldDef.xtype = xtype;
                 
