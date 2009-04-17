@@ -437,8 +437,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $applicationName
      * @param string $filter json encoded
      * @return array
-     * 
-     * @todo add acl / user can't change other users preferences (exception: admins)
      */
     public function searchPreferencesForApplication($applicationName, $filter)
     {
@@ -479,7 +477,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // get single matching preferences for each different pref
             $records = $backend->getMatchingPreferences($allPrefs);
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
             
             $result = $this->_multipleRecordsToJson($records);
         } else {
@@ -511,6 +509,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
             
             if ($adminMode == TRUE) {
+                // only admins are allowed to update app pref defaults/forced prefs
+                if (!Tinebase_Acl_Roles::getInstance()->hasRight($applicationName, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
+                    throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preference defaults.');
+                }
+                
                 // update default/forced preferences
                 $records = $backend->getMultiple(array_keys($data));
                 foreach ($records as $preference) {
@@ -521,18 +524,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
             } else {
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+
                 // set user prefs
                 foreach ($data as $name => $value) {
-                    
-                    // @todo move this switch to Tinebase_Preference / every app should define its own special handlers
-                    switch ($name) {
-                        case Tinebase_Preference::LOCALE:
-                            $this->setLocale($value['value'], FALSE, TRUE);
-                            break;
-                        case Tinebase_Preference::TIMEZONE:
-                            $this->setTimezone($value['value'], FALSE);
-                            break;
-                    }
+                    $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName);
                     $backend->$name = $value['value'];
                 }
             }

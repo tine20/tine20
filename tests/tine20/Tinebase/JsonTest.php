@@ -271,38 +271,34 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * save preferences for user
      *
+     * @todo add test for saving of other users prefs and acl check
      */
     public function testSavePreferences()
     {
-        // add new default pref
-        $pref = $this->_getPreferenceWithOptions();
-        $pref = Tinebase_Core::getPreference()->create($pref);        
-        
         $prefData = $this->_getUserPreferenceData();
         $this->_instance->savePreferences(Zend_Json::encode($prefData), false);
 
         // search saved prefs
-        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE)));
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(FALSE)));
+        
+        //print_r($results);
         
         // check results
         $this->assertTrue(isset($results['results']));
-        $this->assertEquals(3, $results['totalcount']);
+        $this->assertEquals(2, $results['totalcount']);
         
         $savedPrefData = array();
         foreach ($results['results'] as $result) {
-            $savedPrefData['Tinebase'][$result['name']] = array('value' => $result['value']);
+            if ($result['name'] == 'timezone') {
+                $savedPrefData['Tinebase'][$result['name']] = array('value' => $result['value']);
             
-            if ($result['name'] == 'testPref') {
                 $this->assertTrue(is_array($result['options']), 'options missing');
-                $this->assertEquals(2, count($result['options']));
+                $this->assertGreaterThan(500, count($result['options']));
+                // cleanup
+                Tinebase_Core::getPreference()->delete($result['id']);
             }            
-            // cleanup
-            Tinebase_Core::getPreference()->delete($result['id']);
         }
         $this->assertEquals($prefData, $savedPrefData);
-        
-        // cleanup
-        Tinebase_Core::getPreference()->delete($pref);
     }
 
     /**
@@ -379,9 +375,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             'Tinebase' => array(
-                'testPref' => array('value' => 'value2'),
-                'testPref2' => array('value' => 'testValue2'),
-                'testPref3' => array('value' => 'testValue3'),
+                'timezone' => array('value' => 'Europe/Amsterdam'),
             )
         );        
     }

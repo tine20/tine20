@@ -62,6 +62,47 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
     /**************************** public functions *********************************/
     
     /**
+     * get all possible application prefs
+     * - every app should overwrite this
+     *
+     * @return  array   all application prefs
+     */
+    public function getAllApplicationPreferences()
+    {
+        $allPrefs = ($this->_application == 'Tinebase') 
+            ? array(
+                self::TIMEZONE,
+                self::LOCALE
+            )
+            : array();
+            
+        return $allPrefs;
+    }
+    
+    /**
+     * do some call json functions if preferences name match
+     * - every app should define its own special handlers
+     *
+     * @param Tinebase_Frontend_Json_Abstract $_jsonFrontend
+     * @param string $name
+     * @param string $value
+     * @param string $appName
+     */
+    public function doSpecialJsonFrontendActions(Tinebase_Frontend_Json_Abstract $_jsonFrontend, $name, $value, $appName = 'Tinebase')
+    {
+        if ($appName == $this->_application) {
+            switch ($name) {
+                case Tinebase_Preference::LOCALE:
+                    $_jsonFrontend->setLocale($value, FALSE, TRUE);
+                    break;
+                case Tinebase_Preference::TIMEZONE:
+                    $_jsonFrontend->setTimezone($value, FALSE);
+                    break;
+            }
+        }
+    }
+    
+    /**
      * get interceptor (alias for getValue())
      *
      * @param string $_preferenceName
@@ -81,7 +122,9 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
      * @todo add check if $_preferenceName exists as constant in class?
      */
     public function __set($_preferenceName, $_value) {
-        $this->setValue($_preferenceName, $_value);
+        if (in_array($_preferenceName, $this->getAllApplicationPreferences())) {
+            $this->setValue($_preferenceName, $_value);
+        }
     }
     
     /**
@@ -143,7 +186,7 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
         ));
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -186,15 +229,21 @@ class Tinebase_Preference extends Tinebase_Backend_Sql_Abstract
      */
     public function setValueForUser($_preferenceName, $_value, $_accountId) 
     {
+        // check acl first
+        $userId = Tinebase_Core::getUser()->getId();
+        if ($_accountId !== $userId && !Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, $userId, Tinebase_Acl_Rights_Abstract::ADMIN)) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preferences.');
+        }
+        
         $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId();
         
         // check if already there -> update
         $select = $this->_getSelect('*');
         $select
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.account_id') . ' = ?', $_accountId)
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type') . ' = ?', Tinebase_Model_Preference::ACCOUNT_TYPE_USER)
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.name') . ' = ?', $_preferenceName)
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.application_id') . ' = ?', $appId);
+            ->where($this->_db->quoteIdentifier($this->_tableName . '.account_id')      . ' = ?', $_accountId)
+            ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type')    . ' = ?', Tinebase_Model_Preference::ACCOUNT_TYPE_USER)
+            ->where($this->_db->quoteIdentifier($this->_tableName . '.name')            . ' = ?', $_preferenceName)
+            ->where($this->_db->quoteIdentifier($this->_tableName . '.application_id')  . ' = ?', $appId);
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
