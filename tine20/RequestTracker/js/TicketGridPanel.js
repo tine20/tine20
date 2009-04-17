@@ -40,7 +40,7 @@
             filterModels: [
                 //{label: this.app.i18n._('Ticket'), field: 'query', operators: ['contains']},
                 {label: this.app.i18n._('Owner'), field: 'owner'},
-                {label: this.app.i18n._('Queue'), field: 'queue'},
+                //{label: this.app.i18n._('Queue'), field: 'queue'},
                 {label: this.app.i18n._('Status'), field: 'status'},
                 {label: this.app.i18n._('Ticket ID'), field: 'id', valueType: 'number'}
                 //{label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
@@ -58,35 +58,47 @@
      */
     getColumns: function(){
         return [
-            { id: 'id', header: this.app.i18n._("Ticket ID"), width: 70, sortable: true, dataIndex: 'id'
+            { id: 'id', header: this.app.i18n._("Ticket ID"), width: 40, sortable: true, dataIndex: 'id'
         },{
             id: 'Queue',
             header: this.app.i18n._("Queue"),
-            width: 100,
+            width: 50,
             sortable: true,
             dataIndex: 'Queue'
         },{
             id: 'Subject',
             header: this.app.i18n._("Subject"),
-            width: 350,
+            width: 250,
             sortable: true,
             dataIndex: 'Subject'
         },{
+            id: 'Requestors',
+            header: this.app.i18n._("Requestors"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'Requestors'
+        },{
+            id: 'Owner',
+            header: this.app.i18n._("Owner"),
+            width: 50,
+            sortable: true,
+            dataIndex: 'Owner'
+        },{
             id: 'Status',
             header: this.app.i18n._("Status"),
-            width: 70,
+            width: 40,
             sortable: true,
             dataIndex: 'Status'
         },{
             id: 'FinalPriority',
             header: this.app.i18n._("Final Priority"),
-            width: 70,
+            width: 60,
             sortable: true,
             dataIndex: 'FinalPriority'
         },{
             id: 'Due',
             header: this.app.i18n._("Due"),
-            width: 100,
+            width: 80,
             sortable: true,
             dataIndex: 'Due',
             renderer: Tine.Tinebase.common.dateTimeRenderer

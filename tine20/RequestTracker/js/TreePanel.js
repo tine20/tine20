@@ -16,6 +16,8 @@ Ext.ns('Tine.RequestTracker');
  * @constructor
  */
 Tine.RequestTracker.TreePanel = Ext.extend(Ext.tree.TreePanel, {
+    border: false,
+    
     initComponent: function() {
         this.root = {
             id: 'queues',
