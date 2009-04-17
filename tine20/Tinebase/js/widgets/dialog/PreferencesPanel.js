@@ -1,0 +1,157 @@
+/*
+ * Tine 2.0
+ * 
+ * @package     Tinebase
+ * @subpackage  widgets
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+
+Ext.namespace('Tine.widgets');
+
+Ext.namespace('Tine.widgets.dialog');
+
+/**
+ * preferences card panel
+ * -> this panel is filled with the preferences subpanels containing the pref stores for the apps
+ * 
+ */
+Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
+    
+    //private
+    layout: 'card',
+    border: false,
+    frame: true,
+    labelAlign: 'top',
+    autoScroll: true,
+    defaults: {
+        anchor: '100%'
+    },
+    
+    initComponent: function() {
+        this.title = _('Preferences');
+        //this.html = _('Select Application or General Preferences');
+        Tine.widgets.dialog.PreferencesCardPanel.superclass.initComponent.call(this);
+    }
+});
+
+/**
+ * preferences panel with the preference input fields for an application
+ * 
+ * @todo add checkbox type
+ */
+Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
+    
+	/**
+	 * the prefs store
+	 * @cfg {Ext.data.Store}
+	 */
+	prefStore: null,
+	
+    /**
+     * @cfg {String} appName
+     */
+    appName: 'Tinebase',
+
+    /**
+     * @cfg {Boolean} adminMode activated?
+     */
+    adminMode: false,
+    
+    //private
+    layout: 'form',
+    border: true,
+    labelAlign: 'top',
+    autoScroll: true,
+    defaults: {
+        anchor: '95%',
+        labelSeparator: ''
+    },
+    bodyStyle: 'padding:5px',
+    
+    initComponent: function() {
+    	
+        this.addEvents(
+            /**
+             * @event change
+             * @param appName
+             * Fired when a value is changed
+             */
+            'change'
+        );    	
+    	
+        if (this.prefStore && this.prefStore.getCount() > 0) {
+            
+            this.items = [];
+            this.prefStore.each(function(pref) {
+            	            	
+        	    // check if options available -> use combobox or textfield
+                var fieldDef = {
+                    fieldLabel: _(pref.get('name')),
+                    name: pref.get('name'),
+                    value: pref.get('value'),
+                    listeners: {
+                    	scope: this,
+                    	change: function(field, newValue, oldValue) {
+                    		// fire change event
+                    		this.fireEvent('change', this.appName);
+                    	}
+                    },
+                    prefId: pref.id
+                };
+                
+                // evaluate xtype
+                var xtype = (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield';
+                if (xtype == 'combo' && this.adminMode) {
+                    xtype = 'lockCombo';
+                } else if (xtype == 'textfield' && this.adminMode) {
+                    xtype = 'lockTextfield';
+                    /*
+                    xtype = 'lockCombo';
+                    //fieldDef.hideTrigger = true;
+                    fieldDef.store = [pref.get('value')];
+                    */
+                }
+                fieldDef.xtype = xtype;
+                
+                if (pref.get('options') && pref.get('options').length > 0) {
+                	// add additional combobox config
+                	fieldDef.store = pref.get('options');
+                	fieldDef.mode = 'local';
+                    fieldDef.forceSelection = true;
+                    fieldDef.triggerAction = 'all';
+                }
+                
+                if (this.adminMode) {
+                	// set lock (value forced => hiddenFieldData = '0')
+                	fieldDef.hiddenFieldData = (pref.get('type') == 'default') ? '1' : '0';
+                	fieldDef.hiddenFieldId = pref.get('name') + '_writable';
+                	console.log(pref);
+                } else {
+                	fieldDef.disabled = (pref.get('type') == 'forced');
+                }
+                
+                //console.log(fieldDef);
+                try {
+                    var fieldObj = Ext.ComponentMgr.create(fieldDef);
+                    this.items.push(fieldObj);
+                    
+                    // ugh a bit ugly
+                    pref.fieldObj = fieldObj;
+                } catch (e) {
+                	//console.log(e);
+                    console.error('Unable to create preference field "' + pref.get('name') + '". Check definition!');
+                    this.prefStore.remove(pref);
+                }
+            }, this);
+
+        } else {
+            this.html = '<div class="x-grid-empty">' + _('There are no preferences for this application.') + "</div>";
+        }
+        
+        Tine.widgets.dialog.PreferencesPanel.superclass.initComponent.call(this);
+    }
+});

@@ -108,6 +108,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 			'Tinebase/js/widgets/customfields/CustomfieldsCombo.js',
             'Tinebase/js/widgets/dialog/PreferencesDialog.js',
             'Tinebase/js/widgets/dialog/PreferencesTreePanel.js',
+            'Tinebase/js/widgets/dialog/PreferencesPanel.js',
             'Tinebase/js/widgets/grid/DetailsPanel.js',
             'Tinebase/js/widgets/grid/FilterModel.js',
             'Tinebase/js/widgets/grid/FilterPlugin.js',
