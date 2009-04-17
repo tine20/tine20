@@ -46,7 +46,6 @@
              ],
              defaultFilter: 'id',
              filters: [
-                {field: 'queue', operator: 'equals', value: 'service'},
                 {field: 'status', operator: 'equals', value: 'open'}
              ]
         });
@@ -59,6 +58,12 @@
     getColumns: function(){
         return [
             { id: 'id', header: this.app.i18n._("Ticket ID"), width: 70, sortable: true, dataIndex: 'id'
+        },{
+            id: 'Queue',
+            header: this.app.i18n._("Queue"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'Queue'
         },{
             id: 'Subject',
             header: this.app.i18n._("Subject"),

@@ -25,6 +25,33 @@ class RequestTracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_backend = NULL;
     
+    /**
+     * returns all queus current user has access to
+     *
+     * @return string JSON
+     */
+    public function searchQueues()
+    {
+        $response = array();
+        $queues = $this->_getBackend()->getQueues();
+        foreach ($queues as $queue) {
+            $response[] = array(
+                'id'    => $queue,
+                'text'  => $queue,
+            );
+        }
+        
+        echo Zend_Json::encode($response);
+        die();
+    }
+    
+    /**
+     * search tickets
+     *
+     * @param string $filter
+     * @param string $paging
+     * @return array
+     */
     public function searchTickets($filter, $paging)
     {
         $filter = new RequestTracker_Model_TicketFilter(Zend_Json::decode($filter));

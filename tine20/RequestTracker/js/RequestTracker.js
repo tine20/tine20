@@ -12,8 +12,3 @@
  
  // default mainscreen
 Tine.RequestTracker.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
-
-// tree panel
-Tine.RequestTracker.TreePanel = Ext.extend(Ext.Panel, {
-    html: ''
-});
