@@ -128,10 +128,13 @@
             },
             
             tpl: new Ext.XTemplate(
-                '<div>',
+                '<div class="RequestTracker-History">',
                     '<tpl for="History">',
-                        '<div class="RequestTracker-History-Item" style="border: 1px solid gray;">',
-                            '{[this.encode(values.Content)]}',
+                        '<div class="RequestTracker-History-Item RequestTracker-History-{[this.encode(values.Type)]}">',
+                            '<div class="RequestTracker-History-Created">{[this.encode(values.Created)]}</div>',
+                            //'<div class="RequestTracker-History-Creator">{[this.encode(values.Creator)]}</div>',
+                            '<div class="RequestTracker-History-Description">{[this.encode(values.Description)]}</div>',
+                            '<div class="RequestTracker-History-Content">{[this.encode(values.Content)]}</div>',
                         '</div>',
                      '</tpl>',
                 '</div>',{

@@ -11,3 +11,73 @@
 .RequestTrackerIconCls {
     background-image:url(../../images/oxygen/16x16/actions/news-subscribe.png) !important;
 }
+
+.RequestTracker-History {
+    /*padding: 2px;*/
+    font-family:arial,tahoma,helvetica,sans-serif;
+	font-size:11px;
+	font-size-adjust:none;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+}
+
+.RequestTracker-History-Item {
+	padding: 2px 0px 2px 5px;
+    border-top: 1px solid #EDEDED;
+}
+
+.RequestTracker-History-Correspond {
+    border-left: 5px solid #006699;
+    border-right: 2px solid #006699;
+}
+
+.RequestTracker-History-Create {
+    border-left: 5px solid #006699;
+    border-right: 2px solid #006699;
+}
+
+.RequestTracker-History-Take {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-Give {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-Force {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-Steal {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-Status {
+    border-left: 5px solid #BB3322;
+    border-right: 2px solid #BB3322;
+}
+
+.RequestTracker-History-Set {
+    border-left: 5px solid #BB3322;
+    border-right: 2px solid #BB3322;
+}
+
+.RequestTracker-History-Created {
+    float: left;
+    padding-right: 10px;
+}
+
+.RequestTracker-History-Description {
+    font-weight: bold;
+    clear: right;
+}
+
+.RequestTracker-History-Content {
+    padding-left: 30px;
+}

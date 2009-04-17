@@ -108,10 +108,10 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         
         $this->_httpClient->setParameterGet('format', 'l');
         Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' about to query ' . $this->_config->rest->url . "/REST/1.0/search/ticket/");
-        
         $response = $this->_httpClient->request();
-        Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
-        Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
+        
+        //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
+        //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
         
         $tickets = $this->_rawDataToRecords($response->getBody());
         $this->_searchCountCache = count($tickets);
@@ -151,6 +151,9 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         $this->_httpClient->setParameterGet('format', 'l');
         $this->_httpClient->setMethod(Zend_Http_Client::GET);
         $response = $this->_httpClient->request();
+        
+        //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
+        //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
         
         $ticket->History = $this->_rawDataToHistory($response->getBody());
         
@@ -319,6 +322,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
             if (preg_match("/^\nContent: (.*)\nCreator:/sm", $rawHistory, $matches)) {
                 $dataArray['Content'] = $matches[1];
             }
+            
             
             $history->addRecord(new RequestTracker_Model_TicketHistoryItem($dataArray));
         }
