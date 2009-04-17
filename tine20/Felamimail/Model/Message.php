@@ -39,6 +39,8 @@ class Felamimail_Model_Message extends Zend_Mail_Message
     
     public function getBody($_contentType)
     {
+        $part = null;
+        
         if($this->isMultipart()) {
             foreach (new RecursiveIteratorIterator($this) as $messagePart) {
                 $contentType    = $messagePart->getHeaderField('content-type', 0);
@@ -49,6 +51,10 @@ class Felamimail_Model_Message extends Zend_Mail_Message
             }
         } else {
             $part = $this;
+        }
+        
+        if($part === null) {
+            return "no text part found";
         }
         
         $content = $part->getContent();
@@ -91,41 +97,14 @@ class Felamimail_Model_Message extends Zend_Mail_Message
      */
     public static function parseAdresslist($_addressList)
     {
-        $addresses = array();
-        $inParenthesis = false;
+        $stream = fopen("php://temp", 'r+');
+        fputs($stream, $_addressList);
+        rewind($stream);
         
-        for($i = 0; $i < strlen($_addressList); $i++) {
-            switch($_addressList[$i]) {
-                case '"':
-                    $address .= $_addressList[$i];
-                    $inParenthesis = !$inParenthesis;
-                    
-                    break;
-                    
-                case ',':
-                    if($inParenthesis) {
-                        $address .= $_addressList[$i];
-                    } else {
-                        $addresses[] = trim($address);
-                        $address = '';
-                    }
-                    
-                    break;
-                    
-                default:
-                    $address .= $_addressList[$i];
-                    
-                    break;
-            }
-        }
-
-        $address = trim($address);
-        if(!empty($address)) {
-            $addresses[] = $address;
-        }
+        $addresses = fgetcsv($stream);
         
         foreach($addresses as $key => $address) {
-            if(preg_match('/"(.*)<(.+@[^@]+)>/', $address, $matches)) {
+            if(preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
                 $addresses[$key] = array('name' => trim(trim($matches[1]), '"'), 'address' => trim($matches[2]));
             } else {
                 $addresses[$key] = array('name' => null, 'address' => $address);
