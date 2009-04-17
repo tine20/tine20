@@ -6,6 +6,9 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        extend Tinebase_Frontend_Cli_Abstract
+ * @todo        add verbose + dryrun to updateTimeaccountGrants()
  */
 
 /**
@@ -105,7 +108,11 @@ class Timetracker_Frontend_Cli
                 );
             }
             $ta->grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grants);
+            
+            // @todo add dryrun
             Timetracker_Controller_Timeaccount::getInstance()->update($ta);
+            // @todo verbose
+            //echo 'updating ' . $ta->number . "\n";
             echo '.';
         }
         echo "done.\n";
