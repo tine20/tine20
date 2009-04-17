@@ -480,6 +480,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
             
             $result = $this->_multipleRecordsToJson($records);
+            
+            // @todo add translated labels and descriptions
+            //$translations = $backend-
         } else {
             $result = array();
         }
@@ -550,8 +553,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         switch ($_records->getRecordClassName()) {
             case 'Tinebase_Model_Preference':
-                // convert options xml to array
                 foreach ($_records as $record) {
+                    // convert options xml to array
                     Tinebase_Core::getPreference()->convertOptionsToArray($record);
                 }
                 break;

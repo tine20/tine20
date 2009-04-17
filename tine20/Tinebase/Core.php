@@ -591,9 +591,7 @@ class Tinebase_Core
      * get preferences instance by application name (create+save it to registry if it doesn't exist)
      *
      * @param string $_application
-     * @return Tinebase_Preference
-     * 
-     * @todo create Preference controller/backend interface as soon as other applications get preferences
+     * @return Tinebase_Preference_Abstract
      */
     public static function getPreference($_application = 'Tinebase')
     {
