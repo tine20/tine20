@@ -452,11 +452,24 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter->createFilter('application_id', 'equals', $tinebaseAppId);
         
         // make sure account is set in filter
+        $userId = Tinebase_Core::getUser()->getId();
         if (!$filter->isFilterSet('account')) {
             $filter->createFilter('account', 'equals', array(
-                'accountId' => Tinebase_Core::getUser()->getId(), 
+                'accountId' => $userId, 
                 'accountType' => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
             ));
+        } else {
+            // only admins can search for other users prefs
+            $accountFilter = $filter->getAclFilter();
+            $accountFilterValue = $accountFilter->getValue(); 
+            if ($accountFilterValue['accountId'] != $userId && $accountFilterValue['accountType'] == Tinebase_Model_Preference::ACCOUNT_TYPE_USER) {
+                if (!Tinebase_Acl_Roles::getInstance()->hasRight($applicationName, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
+                    return array(
+                        'results'       => array(),
+                        'totalcount'    => 0
+                    );
+                }
+            }
         }
         
         // check if application has preference class

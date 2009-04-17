@@ -246,6 +246,29 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * search preferences of another user
+     *
+     * @todo add check for the case that searching user has no admin rights
+     */
+    public function testSearchPreferencesOfOtherUsers()
+    {
+        // add new default pref
+        $pref = $this->_getPreferenceWithOptions();
+        $pref->account_id = 2;
+        $pref->account_type = Tinebase_Model_Preference::ACCOUNT_TYPE_USER;
+        $pref = Tinebase_Core::getPreference()->create($pref);        
+        
+        // search prefs
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', Zend_Json::encode($this->_getPreferenceFilter(TRUE, FALSE, 2)));
+        
+        // check results
+        $this->assertTrue(isset($results['results']));
+        $this->assertEquals(1, $results['totalcount']);
+        
+        Tinebase_Core::getPreference()->delete($pref);
+    }
+    
+    /**
      * save preferences for user
      *
      */
@@ -317,14 +340,18 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      * @param bool $_savedPrefs
      * @return array
      */
-    protected function _getPreferenceFilter($_savedPrefs = FALSE, $_adminPrefs = FALSE)
+    protected function _getPreferenceFilter($_savedPrefs = FALSE, $_adminPrefs = FALSE, $_userId = NULL)
     {
+        if ($_userId === NULL) {
+            $_userId = Tinebase_Core::getUser()->getId();
+        }
+        
         $result = array(
             array(
                 'field' => 'account', 
                 'operator' => 'equals', 
                 'value' => array(
-                    'accountId'     => ($_adminPrefs) ? 0 : Tinebase_Core::getUser()->getId(),
+                    'accountId'     => ($_adminPrefs) ? 0 : $_userId,
                     'accountType'   => ($_adminPrefs) 
                         ? Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE 
                         : Tinebase_Model_Preference::ACCOUNT_TYPE_USER

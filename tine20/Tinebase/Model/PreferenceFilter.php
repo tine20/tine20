@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add acl filter (only admins (?) can see other users prefs and set defaults/forced prefs)
- * @todo        add facade for user/group/anyone filter -> PreferenceAccountFilter
  */
 
 /**
@@ -45,4 +43,14 @@ class Tinebase_Model_PreferenceFilter extends Tinebase_Model_Filter_FilterGroup
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'type'           => array('filter' => 'Tinebase_Model_Filter_Text'),
     );    
+    
+    /**
+     * returns acl filter of this group or NULL if not set
+     *
+     * @return Tinebase_Model_PreferenceAccountFilter
+     */
+    public function getAclFilter()
+    {
+        return $this->_findFilter('account');
+    }
 }
