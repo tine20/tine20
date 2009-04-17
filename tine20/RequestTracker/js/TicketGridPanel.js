@@ -29,6 +29,8 @@
         this.plugins.push(this.filterToolbar);
         this.plugins.push(this.app.getMainScreen().getTreePanel().getFilterPlugin());
         
+        this.initDetailsPanel();
+        
         Tine.RequestTracker.GridPanel.superclass.initComponent.call(this);
     },
     
@@ -103,5 +105,57 @@
             dataIndex: 'Due',
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }];
+    },
+    
+    initDetailsPanel: function() {
+        this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
+            defaultHeight: 375,
+            gridpanel: this,
+            currentId: null,
+            
+            updateDetails: function(record, body) {
+                if (record.id !== this.currentId) {
+                    this.currentId = record.id;
+                    Tine.RequestTracker.ticketBackend.loadRecord(record, {
+                        scope: this,
+                        success: function(ticket) {
+                            this.tpl.overwrite(body, ticket.data);
+                            this.getLoadMask().hide();
+                        }
+                    });
+                    this.getLoadMask().show();
+                }
+            },
+            
+            tpl: new Ext.XTemplate(
+                '<div>',
+                    '<tpl for="History">',
+                        '<div class="RequestTracker-History-Item" style="border: 1px solid gray;">',
+                            '{[this.encode(values.Content)]}',
+                        '</div>',
+                     '</tpl>',
+                '</div>',{
+                encode: function(value, type, prefix) {
+                    if (value) {
+                        if (type) {
+                            switch (type) {
+                                case 'longtext':
+                                    value = Ext.util.Format.ellipsis(value, 150);
+                                    break;
+                                default:
+                                    value += type;
+                            }                           
+                        }
+                        
+                        var encoded = Ext.util.Format.htmlEncode(value);
+                        encoded = Ext.util.Format.nl2br(encoded);
+                        
+                        return encoded;
+                    } else {
+                        return '';
+                    }
+                }
+            })
+        });
     }
 });
