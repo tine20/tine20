@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        add pref description to input fields
  */
 
 Ext.namespace('Tine.widgets');
@@ -33,7 +34,6 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
     
     initComponent: function() {
         this.title = _('Preferences');
-        //this.html = _('Select Application or General Preferences');
         Tine.widgets.dialog.PreferencesCardPanel.superclass.initComponent.call(this);
     }
 });
@@ -100,7 +100,8 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     		this.fireEvent('change', this.appName);
                     	}
                     },
-                    prefId: pref.id
+                    prefId: pref.id,
+                    description: pref.get('description')
                 };
                 
                 // evaluate xtype
@@ -124,7 +125,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 	// set lock (value forced => hiddenFieldData = '0')
                 	fieldDef.hiddenFieldData = (pref.get('type') == 'default') ? '1' : '0';
                 	fieldDef.hiddenFieldId = pref.get('name') + '_writable';
-                	console.log(pref);
+                	//console.log(pref);
                 } else {
                 	fieldDef.disabled = (pref.get('type') == 'forced');
                 }
@@ -133,8 +134,9 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 try {
                     var fieldObj = Ext.ComponentMgr.create(fieldDef);
                     this.items.push(fieldObj);
-                    
+
                     // ugh a bit ugly
+                    // what does that do??
                     pref.fieldObj = fieldObj;
                 } catch (e) {
                 	//console.log(e);
@@ -147,6 +149,28 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             this.html = '<div class="x-grid-empty">' + _('There are no preferences for this application.') + "</div>";
         }
         
+        Ext.QuickTips.init();
+
         Tine.widgets.dialog.PreferencesPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * afterRender -> adds qtips to all elements
+     * 
+     * @private
+     * 
+     * @todo add qtip to label as well
+     */
+    afterRender: function() {
+        Tine.widgets.dialog.PreferencesPanel.superclass.afterRender.call(this);
+        
+        for (var i=0; i < this.items.items.length; i++) {
+            Ext.QuickTips.register({
+                target: this.items.items[i],
+                title: _('Preference description'),
+                text: this.items.items[i].description,
+                width: 200
+            });        	
+        }
     }
 });
