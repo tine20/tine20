@@ -481,8 +481,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             $result = $this->_multipleRecordsToJson($records);
             
-            // @todo add translated labels and descriptions
-            //$translations = $backend-
+            // add translated labels and descriptions
+            $translations = $backend->getTranslatedPreferences();
+            foreach ($result as &$prefArray) {
+                if (isset($translations[$prefArray['name']])) {
+                    $prefArray = array_merge($prefArray, $translations[$prefArray['name']]);
+                } else {
+                    $prefArray = array_merge($prefArray, array('label' => $prefArray['name']));
+                }
+            }
         } else {
             $result = array();
         }

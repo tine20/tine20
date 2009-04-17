@@ -214,6 +214,9 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
                     $this->assertGreaterThan(500, count($pref['options']));
                     break;
             }
+            // check label and description
+            $this->assertTrue(isset($pref['label']) && !empty($pref['label']));
+            $this->assertTrue(isset($pref['description']) && !empty($pref['description']));
         }
     }
 
