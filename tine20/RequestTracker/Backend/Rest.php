@@ -323,7 +323,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
                 $dataArray['Content'] = $matches[1];
             }
             
-            
+            //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' History Type :' . $dataArray['Type']);
             $history->addRecord(new RequestTracker_Model_TicketHistoryItem($dataArray));
         }
         

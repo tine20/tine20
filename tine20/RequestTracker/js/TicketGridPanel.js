@@ -120,6 +120,7 @@
                         scope: this,
                         success: function(ticket) {
                             this.tpl.overwrite(body, ticket.data);
+                            this.getEl().down('div').down('div').scrollTo('top', 0, false);
                             this.getLoadMask().hide();
                         }
                     });

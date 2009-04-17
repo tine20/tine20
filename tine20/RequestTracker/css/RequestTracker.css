@@ -28,6 +28,21 @@
     border-top: 1px solid #EDEDED;
 }
 
+.RequestTracker-History-Created {
+    float: left;
+    padding-right: 10px;
+}
+
+.RequestTracker-History-Description {
+    font-weight: bold;
+    clear: right;
+}
+
+.RequestTracker-History-Content {
+    padding-left: 30px;
+}
+
+/******************* History Types *******************/
 .RequestTracker-History-Correspond {
     border-left: 5px solid #006699;
     border-right: 2px solid #006699;
@@ -44,6 +59,11 @@
 }
 
 .RequestTracker-History-Give {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-AddWatcher {
     border-left: 5px solid #4488CC;
     border-right: 2px solid #4488CC;
 }
@@ -68,16 +88,7 @@
     border-right: 2px solid #BB3322;
 }
 
-.RequestTracker-History-Created {
-    float: left;
-    padding-right: 10px;
-}
-
-.RequestTracker-History-Description {
-    font-weight: bold;
-    clear: right;
-}
-
-.RequestTracker-History-Content {
-    padding-left: 30px;
+.RequestTracker-History-AddReminder {
+    border-left: 5px solid #888888;
+    border-right: 2px solid #888888;
 }
