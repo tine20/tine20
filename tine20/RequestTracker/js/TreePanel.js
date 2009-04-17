@@ -37,5 +37,57 @@ Tine.RequestTracker.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             }
         });
         Tine.RequestTracker.TreePanel.superclass.initComponent.call(this);
+    },
+    
+    onRender: function(ct, position) {
+        Tine.RequestTracker.TreePanel.superclass.onRender.call(this, ct, position);
+        this.getRootNode().on('expand', function(rn){rn.select()});
+    },
+    
+    /**
+     * returns a filter plugin to be used in a grid
+     */
+    getFilterPlugin: function() {
+        if (!this.filterPlugin) {
+            var scope = this;
+            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
+                
+                /**
+                 * gets value of this container filter
+                 */
+                getValue: function() {
+                    var value = [];
+                    var node = scope.getSelectionModel().getSelectedNode();
+                    if (node && node.id !== 'queues') {
+                        value.push({
+                            field: 'queue',
+                            operator: 'equals',
+                            value: node.id
+                        });
+                    }
+                    
+                    return value;
+                },
+                
+                /**
+                 * sets the selected container (node) of this tree
+                 * 
+                 * @param {Array} all filters
+                 */
+                setValue: function(filters) {
+                    for (var i=0; i<filters.length; i++) {
+                        if (filters[i].field == 'Queue') {
+                            console.log(filters[i].value);
+                        }
+                    }
+                }
+            });
+            
+            this.on('click', function(node){
+                this.filterPlugin.onFilterChange();
+            }, this);
+        }
+        
+        return this.filterPlugin;
     }
 });

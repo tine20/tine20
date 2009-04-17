@@ -27,6 +27,7 @@
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
+        this.plugins.push(this.app.getMainScreen().getTreePanel().getFilterPlugin());
         
         Tine.RequestTracker.GridPanel.superclass.initComponent.call(this);
     },
