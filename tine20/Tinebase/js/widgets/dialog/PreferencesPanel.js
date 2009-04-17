@@ -164,13 +164,16 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
     afterRender: function() {
         Tine.widgets.dialog.PreferencesPanel.superclass.afterRender.call(this);
         
-        for (var i=0; i < this.items.items.length; i++) {
-            Ext.QuickTips.register({
-                target: this.items.items[i],
-                title: _('Preference description'),
-                text: this.items.items[i].description,
-                width: 200
-            });        	
+        if (this.items && this.items.items) {
+            for (var i=0; i < this.items.items.length; i++) {
+            	var field = this.items.items[i];
+                Ext.QuickTips.register({
+                    target: field,
+                    title: field.fieldLabel,
+                    text: field.description,
+                    width: 200
+                });        	
+            }
         }
     }
 });
