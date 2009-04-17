@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        use 'defer' to select root node and load first store after render
  * @todo        create generic app tree panel?
  * @todo        add button: set default value(s)
  */
@@ -20,7 +19,6 @@ Ext.namespace('Tine.widgets.dialog');
 /**
  * preferences application tree panel
  * 
- * @todo use fire event in parent panel?
  */
 Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
 
@@ -40,25 +38,14 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.initTreeNodes();
         this.initHandlers();
+        this.selectRoot.defer(200, this);
     },
 
     /**
-     * afterRender -> selects Tinebase prefs panel
-     * 
-     * @private
-     * 
-     * @todo activate default app/prefs after render
+     * select root node
      */
-    afterRender: function() {
-        Tine.widgets.dialog.PreferencesTreePanel.superclass.afterRender.call(this);
-
-        /*
-        console.log('after render');
-        this.expandPath('/Tinebase');
-        this.selectPath('/Tinebase');
-        //this.fireEvent('click', this.getSelectionModel().getSelectedNode());
-        */
-        this.getRootNode().select();
+    selectRoot: function() {
+    	this.fireEvent('click', this.getRootNode());
     },
     
     /**
@@ -71,11 +58,9 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
     	// general preferences are tree root
         var treeRoot = new Ext.tree.TreeNode({
             text: _('General Preferences'),
-            //cls: 'file',
             id: 'Tinebase',
-            //leaf: null,
-            draggable:false,
-            allowDrop:false,
+            draggable: false,
+            allowDrop: false,
             expanded: true
         });
         this.setRootNode(treeRoot);
