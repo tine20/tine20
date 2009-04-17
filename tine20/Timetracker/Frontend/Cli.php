@@ -77,5 +77,38 @@ class Timetracker_Frontend_Cli
         }
         echo "done.\n";
     }
- 
+
+    /**
+     * replace single user accounts with one or more groups for each timeaccount in filter
+     *
+     */
+    public function updateTimeaccountGrants()
+    {
+        // get tas matching filter
+        $filter = new Timetracker_Model_TimeaccountFilter(array(
+            array('field' => 'query', 'operator' => 'contains', 'value' => 'some value')
+        ));
+        $tas = Timetracker_Controller_Timeaccount::getInstance()->search($filter);
+        
+        // group ids to set book own grant for
+        $groupIds = array(1, 2);
+        
+        echo 'Updating timeaccount grants';
+        // loop tas and update with new grants
+        foreach ($tas as $ta) {
+            $grants = array();
+            foreach($groupIds as $id) {
+                $grants[] = array(
+                    'account_id'    => $id,
+                    'account_type'  => 'group',
+                    'book_own'      => TRUE,
+                );
+            }
+            $ta->grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grants);
+            Timetracker_Controller_Timeaccount::getInstance()->update($ta);
+            echo '.';
+        }
+        echo "done.\n";
+    }
+    
 }
