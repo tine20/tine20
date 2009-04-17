@@ -84,4 +84,10 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
         
         $this->_uit->deleteUsers($createdUserIds);
     }
+    
+    public function testCachePassword()
+    {
+        Tinebase_User::getInstance()->cachePassword('secret');
+        $this->assertEquals('secret', Tinebase_User::getInstance()->getCachedPassword());
+    }
 }       

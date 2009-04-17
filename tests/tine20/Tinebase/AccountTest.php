@@ -21,6 +21,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 /**
  * Test class for Tinebase_Group
+ * @depricated, some fns might be moved to other testclasses
  */
 class Tinebase_UserTest extends PHPUnit_Framework_TestCase
 {

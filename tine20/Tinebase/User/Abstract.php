@@ -91,6 +91,51 @@ abstract class Tinebase_User_Abstract
     }
     
     /**
+     * caches user password for authentication on foreign systems
+     *
+     * @param  string $_password
+     * @return void
+     */
+    public function cachePassword($_password)
+    {
+        $key = substr(Tinebase_Record_Abstract::generateUID(), 0, 24);
+        Tinebase_Config::getInstance()->setConfig(new Tinebase_Model_Config(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name'           => 'passwordCacheKey',
+            'value'          => $key
+        )));
+        
+        $td = mcrypt_module_open('tripledes', '', 'cbc', '');
+        $iv = substr(str_pad(Tinebase_Core::getUser()->accountLoginName, 0, 8), 0, 8);
+        mcrypt_generic_init($td, $key, $iv);
+        $encryptedData = mcrypt_generic($td, $_password);
+        mcrypt_generic_deinit($td);
+        mcrypt_module_close($td);
+        
+        Tinebase_Core::getSession()->passwordCache = base64_encode($encryptedData);
+    }
+    
+    /**
+     * gets cached password
+     *
+     * @return string
+     */
+    public function getCachedPassword()
+    {
+        $key = Tinebase_Config::getInstance()->getConfig('passwordCacheKey', Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId())->value;
+        $iv = substr(str_pad(Tinebase_Core::getUser()->accountLoginName, 0, 8), 0, 8);
+        $encryptedData = base64_decode(Tinebase_Core::getSession()->passwordCache);
+        
+        $td = mcrypt_module_open('tripledes', '', 'cbc', '');
+        mcrypt_generic_init($td, $key, $iv);
+        $password = mdecrypt_generic($td, $encryptedData);
+        mcrypt_generic_deinit($td);
+        mcrypt_module_close($td);
+        
+        return trim($password);
+    }
+    
+    /**
      * account name generation
      *
      * @param Tinebase_Model_FullUser $_account
