@@ -245,7 +245,10 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         $tickets = new Tinebase_Record_RecordSet('RequestTracker_Model_Ticket');
         
         foreach (explode("\n--\n", $_rawData) as $rawTicket) {
-            $tickets->addRecord($this->_rawDataToTicket($rawTicket));
+            $ticket = $this->_rawDataToTicket($rawTicket);
+            if ($ticket->getId()) {
+                $tickets->addRecord($ticket);
+            }
         }
         
         return $tickets;
