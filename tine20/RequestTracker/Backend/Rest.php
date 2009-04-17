@@ -378,7 +378,13 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         // login
         $this->_httpClient->setMethod(Zend_Http_Client::POST);
         $this->_httpClient->setUri($this->_config->rest->url . "/REST/1.0/ticket/");
-        $this->_httpClient->setAuth($this->_config->rest->username, $this->_config->rest->password);
+        
+        $loginName = Tinebase_Core::getUser()->accountLoginName;
+        if ($this->_config->useCustomCredendials) {
+            $this->_httpClient->setAuth($this->_config->customCredentials->$loginName->username, $this->_config->customCredentials->$loginName->password);
+        } else {
+            $this->_httpClient->setAuth(Tinebase_Core::getUser()->accountLoginName, Tinebase_User::getInstance()->getCachedPassword());
+        }
         
         $response = $this->_httpClient->request();
         
