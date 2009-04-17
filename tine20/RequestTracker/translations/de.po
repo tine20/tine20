@@ -2,51 +2,54 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - RequestTracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"PO-Revision-Date: 2009-04-17 22:09+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Model.js:42 js/TicketGridPanel.js:40
+#: js/Model.js:42
+#: js/TicketGridPanel.js:40
 msgid "Ticket"
 msgid_plural "Tickets"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ticket"
+msgstr[1] "Tickets"
 
 #: js/TicketGridPanel.js:41
 msgid "Owner"
-msgstr ""
+msgstr "Besitzer"
 
 #: js/TicketGridPanel.js:42
 msgid "Queue"
-msgstr ""
+msgstr "Warteschlange"
 
-#: js/TicketGridPanel.js:43 js/TicketGridPanel.js:70
+#: js/TicketGridPanel.js:43
+#: js/TicketGridPanel.js:70
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
-#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:61
+#: js/TicketGridPanel.js:44
+#: js/TicketGridPanel.js:61
 msgid "Ticket ID"
-msgstr ""
+msgstr "Ticket ID"
 
 #: js/TicketGridPanel.js:45
 msgid "Description"
-msgstr ""
+msgstr "Beschreibung"
 
 #: js/TicketGridPanel.js:64
 msgid "Subject"
-msgstr ""
+msgstr "Betreff"
 
 #: js/TicketGridPanel.js:76
 msgid "Final Priority"
-msgstr ""
+msgstr "Priorität"
 
 #: js/TicketGridPanel.js:82
 msgid "Due"
-msgstr ""
+msgstr "Fälligkeit"
+
