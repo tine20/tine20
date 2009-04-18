@@ -18,6 +18,15 @@
 class RequestTracker_Model_Ticket extends Tinebase_Record_Abstract
 {
     /**
+     * supported status for a ticket
+     *
+     * @var array
+     */
+    public static $status = array(
+        'new', 'open', 'stalled', 'waiting', 'pending', 'resolved', 'rejected', 'deleted'
+    );
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 

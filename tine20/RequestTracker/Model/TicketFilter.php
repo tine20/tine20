@@ -34,9 +34,12 @@ class RequestTracker_Model_TicketFilter extends Tinebase_Model_Filter_FilterGrou
      */
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('id', 'subject'))), // NOTE: RT cant deal with mixed and/or filters
         'queue'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'status'         => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'subject'        => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'requestor'      => array('filter' => 'Tinebase_Model_Filter_Text'),
         'owner'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
     
 }

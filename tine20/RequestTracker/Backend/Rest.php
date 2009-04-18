@@ -110,7 +110,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' about to query ' . $this->_config->rest->url . "/REST/1.0/search/ticket/");
         $response = $this->_httpClient->request();
         
-        //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
+        Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
         //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
         
         $tickets = $this->_rawDataToRecords($response->getBody());
@@ -152,7 +152,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         $this->_httpClient->setMethod(Zend_Http_Client::GET);
         $response = $this->_httpClient->request();
         
-        //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
+        Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' request :' . $this->_httpClient->getLastRequest());
         //Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' response :' . $response->asString());
         
         $ticket->History = $this->_rawDataToHistory($response->getBody());
@@ -336,11 +336,42 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
      * @param  Tinebase_Model_Filter_FilterGroup $_filter
      * @return void
      */
-    protected function _appendFilter($_filter, $_condition = 'AND') {
+    protected function _appendFilter($_filter, $_condition = ' AND ') {
         if ($_filter) {
             $parms = array();
             foreach ($_filter->getFilterObjects() as $filterObject) {
-                $parms[] = $filterObject->getField() . "= '" . $filterObject->getValue() . "'";
+                switch ($filterObject->getOperator()) {
+                    case 'equals':      $op='=';    break;
+                    case 'contains':    $op='LIKE'; break;
+                    case 'not':         $op='!=';   break;
+                    case 'greater':     $op='>';    break;
+                    case 'less':        $op='<';    break;
+                }
+                
+                $field = $filterObject->getField();
+                $value = $filterObject->getValue();
+                
+                switch ($field) {
+                    case 'query':
+                        $parms[] = "(id = '$value' OR subject LIKE '$value')";
+                        break;
+                    case 'status':
+                        if ($op !== '=') {
+                            $idx = array_search($value, RequestTracker_Model_Ticket::$status);
+                            if ($op == '>') {
+                                $status = array_slice(RequestTracker_Model_Ticket::$status, 0, $idx+1);
+                            } else {
+                                $status = array_slice(RequestTracker_Model_Ticket::$status, $idx, count(RequestTracker_Model_Ticket::$status));
+                            }
+                            Tinebase_Core::getLogger()->debug(__FILE__ . '::' . __LINE__ . ' filter for status :' . print_r($status, true));
+                            $parms[] = "(status = '" .implode("' OR status = '", $status) . "')";
+                            break;
+                        }
+                        // fall through for '='
+                    default:
+                        $parms[] = "$field $op '$value'";
+                        break;
+                }
             }
             
             $this->_httpClient->setParameterGet('query', implode($_condition, $parms));

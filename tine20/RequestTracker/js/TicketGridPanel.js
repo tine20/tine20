@@ -40,16 +40,19 @@
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                //{label: this.app.i18n._('Ticket'), field: 'query', operators: ['contains']},
-                {label: this.app.i18n._('Owner'), field: 'owner'},
-                //{label: this.app.i18n._('Queue'), field: 'queue'},
-                {label: this.app.i18n._('Status'), field: 'status'},
-                {label: this.app.i18n._('Ticket ID'), field: 'id', valueType: 'number'}
+                {label: this.app.i18n._('Ticket'), field: 'query', operators: ['contains']},
+                {label: this.app.i18n._('Ticket ID'), field: 'id', valueType: 'number'},
+                {label: this.app.i18n._('Queue'), field: 'queue'},
+                {label: this.app.i18n._('Subject'), field: 'subject', operators: ['contains', 'equals', 'not']},
+                {label: this.app.i18n._('Requestors'), field: 'requestor', operators: ['contains', 'equals', 'not']},
+                {label: this.app.i18n._('Owner'), field: 'owner', operators: ['contains', 'equals', 'not']},
+                new Tine.RequestTracker.TicketGridStatusFilter({})
                 //{label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
              ],
-             defaultFilter: 'id',
+             defaultFilter: 'query',
              filters: [
-                {field: 'status', operator: 'equals', value: 'open'}
+                {field: 'status', operator: 'greater', value: 'open'},
+                {field: 'query', operator: 'contains', value: ''}
              ]
         });
     },    

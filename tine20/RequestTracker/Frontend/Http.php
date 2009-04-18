@@ -29,6 +29,7 @@ class RequestTracker_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'RequestTracker/js/RequestTracker.js',
             'RequestTracker/js/Model.js',
             'RequestTracker/js/TreePanel.js',
+            'RequestTracker/js/StatusCombo.js',
             'RequestTracker/js/TicketGridPanel.js',
         );
     }

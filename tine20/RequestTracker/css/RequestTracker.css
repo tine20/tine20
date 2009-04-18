@@ -49,6 +49,11 @@
     border-right: 2px solid #006699;
 }
 
+.RequestTracker-History-Comment {
+    border-left: 5px solid #006699;
+    border-right: 2px solid #006699;
+}
+
 .RequestTracker-History-Create {
     border-left: 5px solid #006699;
     border-right: 2px solid #006699;
