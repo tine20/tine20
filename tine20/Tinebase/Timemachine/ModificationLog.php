@@ -299,7 +299,8 @@ class Tinebase_Timemachine_ModificationLog
             'jpegphoto',
             'grants',
             'customfields',
-            'exdate'
+            'exdate',
+            'attendee'
         ));
         
         foreach ($diffs as $field => $newValue) {
