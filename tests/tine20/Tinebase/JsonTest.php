@@ -151,16 +151,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test get timezones
-     *
-     */
-    public function testGetAvailableTimezones()
-    {
-        $list = $this->_instance->getAvailableTimezones();        
-        $this->assertTrue(count($list['results']) > 85);
-    }
-    
-    /**
      * test set timezone and save it in db
      */
     public function testSetTimezoneAsPreference()
