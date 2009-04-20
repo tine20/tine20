@@ -193,7 +193,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     }
     
     /**
-     * do the mapping
+     * do the mapping and replacements
      *
      * @param array $_data
      * @param array $_headline [optional]
@@ -208,8 +208,20 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             if ($field['destination'] == '' || !isset($_data[$index])) {
                 continue;
             }
-            //$data[$field['destination']] = $_data[$headline[$field['source']]];
-            $data[$field['destination']] = $_data[$index];
+            
+            if (isset($field['replace'])) {
+                if ($field['replace'] === '\n') {
+                    $_data[$index] = str_replace("\\n", "\r\n", $_data[$index]);
+                }
+            }
+            
+            if (isset($field['separator'])) {
+                $data[$field['destination']] = explode($field['separator'], $_data[$index]);
+            } else if (isset($field['fixed'])) {
+                $data[$field['destination']] = $field['fixed'];
+            } else {
+                $data[$field['destination']] = $_data[$index];
+            }
         }
         
         return $data;
@@ -227,7 +239,15 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     {
         $data = array();
         foreach ($_data as $key => $value) {
-            $data[$key] = @iconv($this->_options['encoding'], $this->_encoding, $value);
+            if (is_array($value)) {
+                $result = array();
+                foreach ($value as $singleValue) {
+                    $result[] = @iconv($this->_options['encoding'], $this->_encoding, $singleValue);
+                }
+                $data[$key] = $result;
+            } else {
+                $data[$key] = @iconv($this->_options['encoding'], $this->_encoding, $value);
+            }
         }
         
         return $data;
@@ -244,16 +264,19 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      */
     protected function _importRecord($_recordData)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
+        
         $record = new $this->_modelName($_recordData, TRUE);
         
-        if ($record->isValid()) {   
+        if ($record->isValid()) {
             if (!$this->_options['dryrun']) {
-                $record = call_user_func(array($this->_controller, $this->_createMethod), $_record);
+                $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
             }
         } else {
-            throw Tinebase_Exception_Record_Validation('Imported record is invalid.');
+            throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
         }
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
         return $record;
     }
         
@@ -261,9 +284,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * add some more values (overwrite that if you need some special/dynamic fields)
      *
      * @param  array recordData
-     * @return array additional recordData
      */
-    protected function _addData($recordData)
+    protected function _addData()
     {
         return array();
     }

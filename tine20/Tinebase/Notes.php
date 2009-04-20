@@ -264,7 +264,25 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         if ($_record[$_notesProperty] instanceOf Tinebase_Record_RecordSet) {
             $notesToSet = $_record[$_notesProperty];
         } else {
-            $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $_record[$_notesProperty]);
+            if (count($_record[$_notesProperty]) > 0 && $_record[$_notesProperty][0] instanceOf Tinebase_Record_Abstract) {
+                // array of notes records given
+                $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $_record[$_notesProperty]);
+            } else {
+                // array of arrays given
+                $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
+                foreach($_record[$_notesProperty] as $noteData) {
+                    if (!empty($noteData)) {
+                        $noteArray = (!is_array($noteData)) ? array('note' => $noteData) : $noteData;
+                        if (!isset($noteArray['note_type_id'])) {
+                            // get default note type
+                            $defaultNote = $this->getNoteTypeByName('note');
+                            $noteArray['note_type_id'] = $defaultNote->getId();
+                        }
+                        $note = new Tinebase_Model_Note($noteArray);
+                        $notesToSet->addRecord($note);
+                    }
+                }
+            }
         }
         
         //$toAttach = array_diff($notesToSet->getArrayOfIds(), $currentNotesIds);
