@@ -138,6 +138,76 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         }
     }
     
+    public function testAttendeeStatusViaSave()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[0]->user_id = 555;
+        $event->attendee[0]->status = Calendar_Model_Attendee::STATUS_ACCEPTED;
+        unset($event->attendee[1]);
+        
+        $persistendEvent = $this->_controller->create($event);
+        $this->assertEquals(Calendar_Model_Attendee::STATUS_NEEDSACTION, $persistendEvent->attendee[0]->status, 'creation of other attedee must not set status');
+        
+        $persistendEvent->attendee[0]->status = Calendar_Model_Attendee::STATUS_ACCEPTED;
+        $updatedEvent = $this->_controller->update($persistendEvent);
+        $this->assertEquals(Calendar_Model_Attendee::STATUS_NEEDSACTION, $updatedEvent->attendee[0]->status, 'updateing of other attedee must not set status');
+    }
+    
+    public function testSetAttendeeStatus()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        unset($event->attendee[1]);
+        
+        $persistendEvent = $this->_controller->create($event);
+        $attendee = $persistendEvent->attendee[0];
+        
+        $attendee->status = Calendar_Model_Attendee::STATUS_DECLINED;
+        $this->_controller->setAttendeeStatus($persistendEvent, $attendee, $attendee->status_authkey);
+        
+        $loadedEvent = $this->_controller->get($persistendEvent->getId());
+        $this->assertEquals(Calendar_Model_Attendee::STATUS_DECLINED, $loadedEvent->attendee[0]->status, 'status not set');
+        
+    }
+    
+    public function testSetAttendeeStatusImplicitRecurException()
+    {
+        // note: 2009-03-29 Europe/Berlin switched to DST
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2009-03-25 18:00:00',
+            'dtend'         => '2009-03-25 18:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
+            'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
+            'container_id'  => $this->_testCalendar->getId(),
+        ));
+        $event->attendee = $this->_getAttendee();
+        unset($event->attendee[1]);
+        
+        $persitentEvent = $this->_controller->create($event);
+        $attendee = $persitentEvent->attendee[0];
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $from = new Zend_Date('2009-03-26 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-04-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persitentEvent, $exceptions, $from, $until);
+        
+        $exception = $recurSet->getFirstRecord();
+        $attendee = $exception->attendee[0];
+        $attendee->status = Calendar_Model_Attendee::STATUS_ACCEPTED;
+        
+        $this->_controller->setAttendeeStatus($exception, $attendee, $attendee->status_authkey);
+        
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+            array('field' => 'uid', 'operator' => 'equals', 'value' => $persitentEvent->uid)
+        )));
+        $this->assertEquals(2, count($events));
+    }
+    
     public function testUpdateRecuingDtstart()
     {
         $event = $this->_getEvent();

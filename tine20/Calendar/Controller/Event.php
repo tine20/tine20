@@ -18,11 +18,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
 {
     // todo in this controller:
     //
-    // add fns for participats state settings -> move to attendee controller?
-    // add group attendee handling -> move to attendee controller?
-    //
+    // add group attendee handling
     // add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
-    //
     // handle alarms -> generic approach
     
     /**
@@ -118,18 +115,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             throw new Exception('recurid must be present to create exceptions!');
         }
         
+        $baseEvent = $this->_getRecurBaseEvent($_event);
+        
         if (! $_deleteInstance) {
             $_event->setId(NULL);
             unset($_event->rrule);
             unset($_event->exdate);
             
-            return $this->create($_event);
-        } else {
-            $baseEvent = $this->_backend->search(new Calendar_Model_EventFilter(array(
-                array('field' => 'uid',     'operator' => 'equals', 'value' => $_event->uid),
-                array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
-            )))->getFirstRecord();
+            $_event->attendee->setId(NULL);
+            $_event->notes->setId(NULL);
             
+            // we need to touch the recur base event, so that sync action find the updates
+            $this->_backend->update($baseEvent);
+            
+            return $this->create($_event);
+            
+        } else {
             $exdate = new Zend_Date(substr($_event->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
             if (is_array($baseEvent->exdate)) {
                 $exdates = $baseEvent->exdate;
@@ -141,6 +142,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             
             return $this->update($baseEvent);
         }
+    }
+    
+    /**
+     * returns base event of a recuring series
+     *
+     * @param  Calendar_Model_Event $_event
+     * @return Calendar_Model_Event
+     */
+    protected function _getRecurBaseEvent($_event)
+    {
+        return $this->_backend->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $_event->uid),
+            array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
+        )))->getFirstRecord();
     }
     
     /****************************** overwritten functions ************************/
@@ -208,6 +223,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             $exceptionIds = $this->_backend->getMultipleByProperty($_record->uid, 'uid')->getId();
             unset($exceptionIds[array_search($_record->getId(), $exceptionIds)]);
             $this->_backend->delete($exceptionIds);
+        }
+        
+        // touch base event of a recur series if an persisten exception changes
+        if ($_record->recurid) {
+            $baseEvent = $this->_getRecurBaseEvent($_record);
+            $this->_backend->update($baseEvent);
         }
     }
     
@@ -306,7 +327,50 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     /****************************** attendee functions ************************/
     
     /**
-     * saves attendee of given event
+     * sets attendee status for a single attendee on the given event
+     * 
+     * NOTE: for recur events we implicitly create an exceptions on demand
+     *
+     * @param Calendar_Model_Event    $_event
+     * @param Calendar_Model_Attendee $_attendee
+     * @param string                  $_authKey
+     */
+    public function setAttendeeStatus($_event, $_attendee, $_authKey)
+    {
+        $eventId = $_event->getId();
+        if (! $eventId) {
+            if ($_event->recurid) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating recur exception for a exceptional attendee status");
+                $this->_doContainerACLChecks = FALSE;
+                $event = $this->createRecurException($_event);
+                $this->_doContainerACLChecks = TRUE;
+            } else {
+                throw new Exception("cant set status, invalid event given");
+            }
+        } else {
+            $event = $this->get($eventId);
+        }
+        
+        $currentAttendee = $event->attendee[$event->attendee->getIndexById($_attendee->getId())];
+        $currentAttendee->status = $_attendee->status;
+        
+        if ($currentAttendee->status_authkey == $_authKey) {
+            $this->_backend->updateAttendee($currentAttendee);
+            
+            // touch event
+            $event = $_event->recurid ? $this->_getRecurBaseEvent($_event) : $this->_backend->get($_event->getId());
+            $this->_backend->update($event);
+        } else {
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttendee->user_type} {$currentAttendee->user_id}");
+        }
+    }
+    
+    /**
+     * saves all attendee of given event
+     * 
+     * NOTE: This function is executetd in a create/update context. As such the user
+     *       has edit/update the event and can do anything besides status setting
      * 
      * @param Calendar_Model_Evnet $_event
      */
@@ -327,37 +391,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             
             if ($attenderId) {
                 $currentAttender = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
-                $attender->status_authkey = $currentAttender->status_authkey;
                 
-                switch ($attender->user_type) {
-                    case Calendar_Model_Attendee::USERTYPE_GROUP:
-                        // only updating role is supporte
-                        $currentAttender->role = $attender->role;
-                        $this->_backend->updateAttendee($currentAttender);
-                        break;
-                        
-                    case Calendar_Model_Attendee::USERTYPE_GROUPMEMBER:
-                    case Calendar_Model_Attendee::USERTYPE_USER:
-                        // Updating is only allowed by attendee itselv
-                        if ($attender->user_id == Tinebase_Core::getUser()->getId()) {
-                            $this->_backend->updateAttendee($attender);
-                        } else {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$attender->user_type} {$attender->user_id}");
-                        }
-                        break;
-                        
-                    case Calendar_Model_Attendee::USERTYPE_RESOURCE:
-                        // no acl yet
-                        $this->_backend->updateAttendee($attender);
-                        break;
+                if (! (($currentAttender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER 
+                        || $currentAttender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER)
+                        && $currentAttender->user_id == Tinebase_Core::getUser()->getId())) {
+
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$attender->user_type} {$attender->user_id}");
+                    $attendee->status = $currentAttender->status;
                 }
                 
+                $attender->status_authkey = $currentAttender->status_authkey;
+                $this->_backend->updateAttendee($attender);
+                
             } else {
-                // NOTE: status_authkey gets generated by backend
+                if (! (($attender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER 
+                        || $attender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER)
+                        && $attender->user_id == Tinebase_Core::getUser()->getId())) {
+
+                    $attendee->status = Calendar_Model_Attendee::STATUS_NEEDSACTION;
+                }
                 $this->_backend->createAttendee($attender);
             }
         }
     }
-
-    //public function setAttendeeStatus($_event, $_attendee)
 }
