@@ -90,39 +90,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * returns list of all available timezones in the current locale
-     * 
-     * @return array list of all available timezones
-     *
-     * @todo remove later
-     * @deprecated moved to preferences
-     */
-    /*
-    public function getAvailableTimezones()
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' This function is marked as deprecated.');
-        
-        $locale =  Tinebase_Core::get('locale');
-
-        $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
-        
-        $availableTimezones = DateTimeZone::listIdentifiers();
-        $result = array();
-        foreach ($availableTimezones as $timezone) {
-            $result[] = array(
-                'timezone' => $timezone,
-                'timezoneTranslation' => array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL
-            );
-        }
-        
-        return array(
-            'results'    => $result,
-            'totalcount' => count($result)
-        );
-    }
-    */
-    
-    /**
      * sets timezone
      *
      * @param  string $timezoneString
