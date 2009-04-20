@@ -9,7 +9,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id: Json.php 5047 2008-10-22 10:51:07Z c.weiss@metaways.de $
  * 
- * @todo        remove deprecated functions
  */
 
 /**
@@ -95,9 +94,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @return array list of all available timezones
      *
-     * @todo add territory to translation?
-     * @deprecated moved to preferences / do we need this elsewhere?
+     * @todo remove later
+     * @deprecated moved to preferences
      */
+    /*
     public function getAvailableTimezones()
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' This function is marked as deprecated.');
@@ -120,6 +120,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'totalcount' => count($result)
         );
     }
+    */
     
     /**
      * sets timezone
@@ -472,7 +473,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // check if application has preference class
         if ($backend = Tinebase_Core::getPreference($applicationName)) {
-            $allPrefs = $backend->search($filter, NULL);
+            $paging = new Tinebase_Model_Pagination(array(
+                'dir'       => 'ASC',
+                'sort'      => array('name')
+            ));
+            $allPrefs = $backend->search($filter, $paging);
             
             // get single matching preferences for each different pref
             $records = $backend->getMatchingPreferences($allPrefs);
