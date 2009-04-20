@@ -152,10 +152,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      *
      * @param array $_data the new data to set
      * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
-     * @throws Tinebase_Record_Exception when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {
+        if (!isset($_data['n_family']) && !isset($_data['org_name'])) {
+            $_data['org_name'] = '';
+        }
+        
         // always update fileas and fn
         $_data['n_fileas'] = (!empty($_data['n_family'])) ? $_data['n_family'] : $_data['org_name'];
         if (!empty($_data['n_given'])) {
