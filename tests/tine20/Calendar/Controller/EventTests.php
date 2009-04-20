@@ -107,16 +107,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
     public function testAttendeeBasics()
     {
         $event = $this->_getEvent();
-        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attendee', array(
-            array(
-                'user_id'   => Tinebase_Core::getUser()->getId(),
-                'role'      => Calendar_Model_Attendee::ROLE_REQUIRED
-            ),
-            array(
-                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type' => Calendar_Model_Attendee::USERTYPE_GROUP
-            )
-        ));
+        $event->attendee = $this->_getAttendee();
         
         $persistendEvent = $this->_controller->create($event);
         $this->assertEquals(2, count($persistendEvent->attendee));
@@ -130,6 +121,21 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
         $this->assertEquals(1, count($secondUpdatedEvent->attendee));
         $this->assertEquals(Calendar_Model_Attendee::ROLE_OPTIONAL, $secondUpdatedEvent->attendee->getFirstRecord()->role);
+    }
+    
+    public function testAttendeeAuthKeyPreserv()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        
+        $persistendEvent = $this->_controller->create($event);
+        $newAuthKey = Tinebase_Record_Abstract::generateUID();
+        $persistendEvent->attendee->status_authkey = $newAuthKey;
+        
+        $updatedEvent = $this->_controller->update($persistendEvent);
+        foreach ($updatedEvent->attendee as $attender) {
+            $this->assertNotEquals($newAuthKey, $attender->status_authkey);
+        }
     }
     
     public function testUpdateRecuingDtstart()
@@ -431,6 +437,21 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
             'container_id' => $this->_testCalendar->getId(),
         ));
     }
+    
+    protected function _getAttendee()
+    {
+        return new Tinebase_Record_RecordSet('Calendar_Model_Attendee', array(
+            array(
+                'user_id'   => Tinebase_Core::getUser()->getId(),
+                'role'      => Calendar_Model_Attendee::ROLE_REQUIRED
+            ),
+            array(
+                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
+                'user_type' => Calendar_Model_Attendee::USERTYPE_GROUP
+            )
+        ));
+    }
+    
 }
     
 
