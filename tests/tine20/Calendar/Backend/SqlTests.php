@@ -64,9 +64,15 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
     {
         $event = $this->_getEvent();
         $persistentEvent = $this->_backend->create($event);
-                
-        $this->assertEquals($event->summary, $persistentEvent->summary);
-        $this->_assertAttendee($event->attendee, $persistentEvent->attendee);
+        
+        $event->attendee->cal_event_id = $persistentEvent->getId();
+        foreach ($event->attendee as $attender) {
+            $this->_backend->createAttendee($attender);
+        }
+
+        $loadedPersitentEvent = $this->_backend->get($persistentEvent->getId());
+        $this->assertEquals($event->summary, $loadedPersitentEvent->summary);
+        $this->_assertAttendee($event->attendee, $loadedPersitentEvent->attendee);
     }
     
     public function testUpdateEvent()
@@ -74,22 +80,33 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         $event = $this->_getEvent();
         $persistentEvent = $this->_backend->create($event);
         
+        $event->attendee->cal_event_id = $persistentEvent->getId();
+        foreach ($event->attendee as $attender) {
+            $this->_backend->createAttendee($attender);
+        }
+        
         $persistentEvent->dtstart->addHour(3);
         $persistentEvent->dtend->addHour(3);
         $persistentEvent->summary = 'Robert Lembke:';
         $persistentEvent->description = 'Wer spät zu Bett geht und früh heraus muß, weiß, woher das Wort Morgengrauen kommt';
         
         $updatedEvent = $this->_backend->update($persistentEvent);
+        $loadedPersitentEvent = $this->_backend->get($persistentEvent->getId());
         
-        $this->assertEquals($persistentEvent->summary, $updatedEvent->summary);
-        $this->assertTrue($persistentEvent->dtstart->equals($updatedEvent->dtstart));
-        $this->_assertAttendee($persistentEvent->attendee, $updatedEvent->attendee);
+        $this->assertEquals($loadedPersitentEvent->summary, $updatedEvent->summary);
+        $this->assertTrue($loadedPersitentEvent->dtstart->equals($updatedEvent->dtstart));
+        $this->_assertAttendee($loadedPersitentEvent->attendee, $updatedEvent->attendee);
     }
     
     public function testGetEvent()
     {
         $event = $this->_getEvent();
         $persistentEvent = $this->_backend->create($event);
+        
+        $event->attendee->cal_event_id = $persistentEvent->getId();
+        foreach ($event->attendee as $attender) {
+            $this->_backend->createAttendee($attender);
+        }
         
         $loadedEvent = $this->_backend->get($persistentEvent->getId());
         
@@ -215,7 +232,11 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
         ));
         
         foreach ($events as $event) {
-            $this->_backend->create($event);
+            $persistentEvent = $this->_backend->create($event);
+            $event->attendee->cal_event_id = $persistentEvent->getId();
+            foreach ($event->attendee as $attender) {
+                $this->_backend->createAttendee($attender);
+            }
         }
         
         $filter = new Calendar_Model_EventFilter(array(

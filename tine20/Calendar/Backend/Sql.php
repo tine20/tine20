@@ -80,7 +80,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $event = parent::create($_record);
         $this->_saveExdates($_record);
-        $this->_saveAttendee($_record);
+        //$this->_saveAttendee($_record);
         
         return $this->get($event->getId());
     }
@@ -98,7 +98,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $event = parent::update($_record);
         $this->_saveExdates($_record);
-        $this->_saveAttendee($_record);
+        //$this->_saveAttendee($_record);
         
         return $this->get($event->getId());
     }
@@ -183,7 +183,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * saves attendee of given event
      * 
      * @param Calendar_Model_Evnet $_event
-     */
+     *
     protected function _saveAttendee($_event)
     {
         $attendee = $_event->attendee instanceof Tinebase_Record_RecordSet ? 
@@ -201,6 +201,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $this->_attendeeBackend->$method($attende);
         }
     }
+    */
     
     /**
      * sets rrule until field in event model
@@ -223,4 +224,33 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
     }
     
+    /****************************** attendee functions ************************/
+    
+    /**
+     * gets attendee of a given event
+     *
+     * @param Calendar_Model_Event $_event
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getEventAttendee(Calendar_Model_Event $_event)
+    {
+        $attendee = $this->_attendeeBackend->getMultipleByProperty($_event->getId(), Calendar_Backend_Sql_Attendee::FOREIGNKEY_EVENT);
+        
+        return $attendee;
+    }
+    
+    public function createAttendee(Calendar_Model_Attendee $_attendee)
+    {
+        $this->_attendeeBackend->create($_attendee);
+    }
+    
+    public function updateAttendee(Calendar_Model_Attendee $_attendee)
+    {
+        $this->_attendeeBackend->update($_attendee);
+    }
+    
+    public function deleteAttendee(array $_ids)
+    {
+        $this->_attendeeBackend->delete($_ids);
+    }
 }

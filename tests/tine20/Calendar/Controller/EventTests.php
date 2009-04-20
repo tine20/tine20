@@ -104,6 +104,34 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }
     
+    public function testAttendeeBasics()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attendee', array(
+            array(
+                'user_id'   => Tinebase_Core::getUser()->getId(),
+                'role'      => Calendar_Model_Attendee::ROLE_REQUIRED
+            ),
+            array(
+                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
+                'user_type' => Calendar_Model_Attendee::USERTYPE_GROUP
+            )
+        ));
+        
+        $persistendEvent = $this->_controller->create($event);
+        $this->assertEquals(2, count($persistendEvent->attendee));
+        
+        unset($persistendEvent->attendee[0]);
+        $updatedEvent = $this->_controller->update($persistendEvent);
+        $this->assertEquals(1, count($updatedEvent->attendee));
+        
+        sleep(1);
+        $updatedEvent->attendee->getFirstRecord()->role = Calendar_Model_Attendee::ROLE_OPTIONAL;
+        $secondUpdatedEvent = $this->_controller->update($updatedEvent);
+        $this->assertEquals(1, count($secondUpdatedEvent->attendee));
+        $this->assertEquals(Calendar_Model_Attendee::ROLE_OPTIONAL, $secondUpdatedEvent->attendee->getFirstRecord()->role);
+    }
+    
     public function testUpdateRecuingDtstart()
     {
         $event = $this->_getEvent();

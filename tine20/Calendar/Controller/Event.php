@@ -69,6 +69,38 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_Record_Validation
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        $event = parent::create($_record);
+        
+        $this->_saveAttendee($_record);
+        return $this->get($event->getId());
+    }
+    
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_Record_Validation
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $event = parent::update($_record);
+        
+        $this->_saveAttendee($_record);
+        return $this->get($event->getId());
+    }
+    
+    /**
      * creates an exception instance of a recuring evnet
      *
      * NOTE: deleting persistent exceptions is done via a normal delte action
@@ -273,5 +305,28 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     
     /****************************** attendee functions ************************/
     
+    /**
+     * saves attendee of given event
+     * 
+     * @param Calendar_Model_Evnet $_event
+     */
+    protected function _saveAttendee($_event)
+    {
+        $attendee = $_event->attendee instanceof Tinebase_Record_RecordSet ? 
+            $_event->attendee : 
+            new Tinebase_Record_RecordSet('Calendar_Model_Attendee');
+        $attendee->cal_event_id = $_event->getId();
+            
+        $currentAttendee = $this->_backend->getEventAttendee($_event);
+        
+        $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
+        $this->_backend->deleteAttendee($diff['toDeleteIds']);
+        
+        foreach ($attendee as $attender) {
+            $method = $attender->getId() ? 'updateAttendee' : 'createAttendee';
+            $this->_backend->$method($attender);
+        }
+    }
+
     //public function setAttendeeStatus($_event, $_attendee)
 }
