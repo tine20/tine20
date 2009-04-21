@@ -56,7 +56,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
              $_select->where('1=0');
          } else {
              // finally append query to select object
-             $_select->where($this->_field . $action['sqlop'], $this->_value);
+             $_select->where($field . $action['sqlop'], $this->_value);
          }
      }
 }
