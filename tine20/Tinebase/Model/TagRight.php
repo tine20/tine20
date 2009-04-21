@@ -52,7 +52,11 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'           => array('Alnum', 'allowEmpty' => true),
         'tag_id'       => array('Alnum', 'allowEmpty' => true),
-        'account_type' => array('InArray' => array('user', 'group', 'anyone'), 'presence' => 'required', 'allowEmpty' => false),
+        'account_type' => array('InArray' => array(
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, 
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+        ), 'presence' => 'required', 'allowEmpty' => false),
         'account_id'   => array('Alnum', 'presence' => 'required', 'allowEmpty' => false),
         'view_right'   => array('presence' => 'required', 'default' => false, 'InArray' => array(true, false), 'allowEmpty' => true),
         'use_right'    => array('presence' => 'required', 'default' => false, 'InArray' => array(true, false), 'allowEmpty' => true),
@@ -84,11 +88,11 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
         $db = Tinebase_Core::getDb();
         $currentAccountId = Tinebase_Core::getUser()->getId();
         $currentGroupIds = Tinebase_Group::getInstance()->getGroupMemberships($currentAccountId);
-        $groupCondition = ( !empty($currentGroupIds) ) ? ' OR (' . $db->quoteInto('acl.account_type = ?', 'group') . 
+        $groupCondition = ( !empty($currentGroupIds) ) ? ' OR (' . $db->quoteInto('acl.account_type = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . 
             ' AND ' . $db->quoteInto('acl.account_id IN (?)', $currentGroupIds, Zend_Db::INT_TYPE) . ' )' : '';
         
-        $where = $db->quoteInto($db->quoteIdentifier('acl.account_type') . ' = ?', 'anyone') . ' OR (' .
-            $db->quoteInto('acl.account_type = ?', 'user') . ' AND ' . 
+        $where = $db->quoteInto($db->quoteIdentifier('acl.account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) . ' OR (' .
+            $db->quoteInto('acl.account_type = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) . ' AND ' . 
             $db->quoteInto('acl.account_id = ?', $currentAccountId, Zend_Db::INT_TYPE) . ' ) ' .
             $groupCondition;
         
