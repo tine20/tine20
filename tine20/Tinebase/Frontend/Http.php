@@ -92,7 +92,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/DatepickerRange.js',
             // Tine 2.0 specific widgets
             'Tinebase/js/widgets/LangChooser.js',
-            'Tinebase/js/widgets/TimezoneChooser.js',
             'Tinebase/js/widgets/ActionUpdater.js',
             'Tinebase/js/widgets/EditRecord.js',
             'Tinebase/js/widgets/EditDialog.js',
