@@ -227,10 +227,10 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     	this.loadMask.show();
     	
     	// get values from card panels
-    	var data = {};
+    	var panel, data = {};
     	var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
-    	for each (panel in panelsToSave) {
-    		console.log(panel);
+    	for (panelName in panelsToSave) {
+            panel = panelsToSave[panel];
     		data[panel.appName] = {};
             for (var j=0; j < panel.items.length; j++) {
             	var item = panel.items.items[j];
