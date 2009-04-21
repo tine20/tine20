@@ -18,6 +18,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
 {
     // todo in this controller:
     //
+    // add free time search
     // add group attendee handling
     // add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
     // handle alarms -> generic approach
