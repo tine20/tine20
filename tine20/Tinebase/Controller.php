@@ -83,7 +83,9 @@ class Tinebase_Controller
             Tinebase_Core::set(Tinebase_Core::USER, $account);
             Tinebase_Core::getSession()->currentAccount = $account;
             
-            $accountsController->cachePassword($_password);
+            $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_username, $_password);
+            Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
+            
             $account->setLoginTime($_ipAddress);
             
             Tinebase_AccessLog::getInstance()->addLoginEntry(

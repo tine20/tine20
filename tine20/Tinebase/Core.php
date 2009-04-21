@@ -56,7 +56,13 @@ class Tinebase_Core
      * constant for current account/user
      *
      */
-    const USER = 'currentAccount';    
+    const USER = 'currentAccount';
+    
+    /**
+     * const for current users credentialcache
+     *
+     */
+    const USERCREDENTIALCACHE = 'usercredentialcache';
 
     /**
      * constant for database adapter
@@ -310,6 +316,14 @@ class Tinebase_Core
         Zend_Locale::setCache($cache);
         
         self::set(self::CACHE, $cache);
+    }
+    
+    public static function setupCredentialCache()
+    {
+        if (isset ($_COOKIE['credentialcache'])) {
+            $cacheData = Zend_Json::decode($_COOKIE['credentialcache']);
+            self::set(self::USERCREDENTIALCACHE, new Tinebase_Model_CredentialCache($cacheData));
+        }
     }
     
     /**

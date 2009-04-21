@@ -83,7 +83,7 @@ class Tinebase_Auth
      */
     protected $_backendType = Tinebase_Auth_Factory::SQL;
     
-/**
+    /**
      * the instance of the authenticationbackend
      *
      * @var Tinebase_Auth_Sql

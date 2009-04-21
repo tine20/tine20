@@ -2162,4 +2162,51 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.26');
     }
+    
+    /**
+     * update to 0.27
+     * - add table credential_cache
+     */
+    public function update_26()
+    {
+        $tableDefinition = '
+            <table>
+                <name>credential_cache</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>cache</name>
+                        <type>clob</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>creation_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>valid_until</name>
+                        <type>datetime</type>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>
+        ';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+        
+        $this->setApplicationVersion('Tinebase', '0.27');
+    }
 }

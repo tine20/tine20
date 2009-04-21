@@ -87,7 +87,17 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
     
     public function testCachePassword()
     {
-        Tinebase_User::getInstance()->cachePassword('secret');
-        $this->assertEquals('secret', Tinebase_User::getInstance()->getCachedPassword());
+        //Tinebase_User::getInstance()->cachePassword('secret');
+        //$this->assertEquals('secret', Tinebase_User::getInstance()->getCachedPassword());
+        $InCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials('username', 'secret');
+        
+        $outCache = new Tinebase_Model_CredentialCache(array(
+            'id'    => $InCache->getId(),
+            'key'   => $InCache->key
+        ));
+        
+        Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($outCache);
+        $this->assertEquals('username', $outCache->username);
+        $this->assertEquals('secret', $outCache->password);
     }
 }       
