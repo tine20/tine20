@@ -11,6 +11,7 @@
  * @todo        add conditions (what to do when record already exists)
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
  * @todo        add more conversions e.g. date/accounts
+ * @todo        add tests for tags + notes
  * 
  */
 
@@ -87,6 +88,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @var string
      */
     protected $_createMethod = 'create';
+    
+    /************************* public functions **************************/
     
     /**
      * the constructor
@@ -171,6 +174,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         
         return $result;
     }
+    
+    /*************************** protected functions ********************************/
     
     /**
      * get raw data of a single record
@@ -264,19 +269,27 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      */
     protected function _importRecord($_recordData)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
         
         $record = new $this->_modelName($_recordData, TRUE);
         
         if ($record->isValid()) {
             if (!$this->_options['dryrun']) {
+                
+                // create/add shared tags
+                if (isset($_recordData['tags'])) {
+                    $record->tags = $this->_addSharedTags($_recordData['tags']);
+                }
+
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+                
                 $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
             }
         } else {
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
         return $record;
     }
         
@@ -326,5 +339,58 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         }
         
         return $config->toArray();
+    }
+
+    /**
+     *  add/create shared tags if they don't exist
+     *
+     * @param   array $_tags array of tag strings
+     * @return  array with valid tag ids
+     */
+    protected function _addSharedTags($_tags)
+    {
+        $result = array();
+        foreach ($_tags as $tag) {
+            // only check non-empty tags
+            if (empty($tag)) {
+                continue; 
+            }
+            
+            $name = (strlen($tag) > 20) ? substr($tag, 0, 20) : $tag;
+            
+            try {
+                $existing = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
+                $id = $existing->getId();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (isset($this->_options['shared_tags']) && $this->_options['shared_tags'] == 'create') {
+                    // create shared tag
+                    $newTag = new Tinebase_Model_Tag(array(
+                        'name'          => $name,
+                        'description'   => $tag . ' (imported)',
+                        'type'          => Tinebase_Model_Tag::TYPE_SHARED,
+                        'color'         => '#000099'
+                    ));
+                    
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create new tag: ' . print_r($newTag->toArray(), true));
+                    
+                    $newTag = Tinebase_Tags::getInstance()->createTag($newTag);
+                    
+                    $right = new Tinebase_Model_TagRight(array(
+                        'tag_id'        => $newTag->getId(),
+                        'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                        'account_id'    => 0,
+                        'view_right'    => TRUE,
+                        'use_right'     => TRUE,
+                    ));
+                    Tinebase_Tags::getInstance()->setRights($right);
+                    Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
+                    
+                    $id = $newTag->getId();
+                }
+            }
+            $result[] = $id;
+        }
+        
+        return $result;
     }
 }

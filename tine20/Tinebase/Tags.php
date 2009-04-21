@@ -100,15 +100,16 @@ class Tinebase_Tags
     
     /**
      * Returns (bare) tags identified by its id(s)
-     * @todo check context ?
      * 
-     * @param  string|array|Tinebase_Record_RecordSet  $_id
-     * @param  string                                  $_right the required right current user must have on the tags
-     * @param  bool                                    $_ignoreAcl
-     * @return Tinebase_Record_RecordSet               Set of Tinebase_Model_Tag
+     * @param   string|array|Tinebase_Record_RecordSet  $_id
+     * @param   string                                  $_right the required right current user must have on the tags
+     * @param   bool                                    $_ignoreAcl
+     * @return  Tinebase_Record_RecordSet               Set of Tinebase_Model_Tag
      * @throws  Tinebase_Exception_NotFound
+     * 
+     * @todo    check context
      */
-    public function getTagsById($_id, $_right=Tinebase_Model_TagRight::VIEW_RIGHT, $_ignoreAcl=false)
+    public function getTagsById($_id, $_right = Tinebase_Model_TagRight::VIEW_RIGHT, $_ignoreAcl = false)
     {
         $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         
@@ -121,14 +122,52 @@ class Tinebase_Tags
                 Tinebase_Model_TagRight::applyAclSql($select, $_right);
             }
             
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+            
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Model_Tag($tagArray, true));
             }
-        }        
-        if (is_string($_id) && empty($tags)) {
-            throw new Tinebase_Exception_NotFound("Tag with id '$_id'' not found.");
+        }
+        if (count($tags) === 0) {
+            //if (is_string($_id)) {
+            //    throw new Tinebase_Exception_NotFound("Tag $_id not found or insufficient rights.");
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Tag(s) not found: ' . print_r($_id, true));
         }
         return $tags;
+    }
+
+    /**
+     * Returns tags identified by its names
+     * 
+     * @param   string  $_name name of the tag to search for
+     * @param   string  $_right the required right current user must have on the tags
+     * @param   string  $_application the required right current user must have on the tags
+     * @param   bool    $_ignoreAcl
+     * @return  Tinebase_Model_Tag
+     * @throws  Tinebase_Exception_NotFound
+     * 
+     * @todo    check context
+     */
+    public function getTagByName($_name, $_right = Tinebase_Model_TagRight::VIEW_RIGHT, $_application = NULL, $_ignoreAcl = false)
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'tags')
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = (?)', $_name));
+        if ($_ignoreAcl !== true) {
+            Tinebase_Model_TagRight::applyAclSql($select, $_right);
+        }
+        
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+                
+        if (!$queryResult) {
+            throw new Tinebase_Exception_NotFound("Tag with name $_name not found!");
+        }
+        
+        $result = new Tinebase_Model_Tag($queryResult);
+        
+        return $result;
     }
     
     /**
@@ -297,12 +336,14 @@ class Tinebase_Tags
      */
     public function setTagsOfRecord($_record, $_tagsProperty='tags')
     {
-        $tagsToSet = $this->CreateTagsFly($_record[$_tagsProperty])->getArrayOfIds();
+        $tagsToSet = $this->_createTagsOnTheFly($_record[$_tagsProperty])->getArrayOfIds();
         $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Model_TagRight::USE_RIGHT)->getArrayOfIds();
         
         
         $toAttach = array_diff($tagsToSet, $currentTags);
         $toDetach = array_diff($currentTags, $tagsToSet);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attaching tags: ' . print_r($toAttach, true));
         
         // manage tags
         $appId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
@@ -315,7 +356,7 @@ class Tinebase_Tags
                 // backend property not supported by record yet
                 'record_backend_id' => ''
             ));
-            $this->addOccurrence($tagId, +1);
+            $this->_addOccurrence($tagId, +1);
         }
         foreach ($toDetach as $tagId) {
             $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', array(
@@ -324,10 +365,10 @@ class Tinebase_Tags
                 $this->_db->quoteInto('record_id = ?',      $recordId), 
                 // backend property not supported by record yet
             ));
-            $this->addOccurrence($tagId, -1);
+            $this->_addOccurrence($tagId, -1);
         }
         
-        // todo: history log
+        // @todo: history log
     }
     
     /**
@@ -339,8 +380,10 @@ class Tinebase_Tags
      * @return  Tinebase_Record_RecordSet       set of all tags
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    protected function CreateTagsFly($_mixedTags)
+    protected function _createTagsOnTheFly($_mixedTags)
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tags on the fly: ' . print_r($_mixedTags, true));
+        
         $tagIds = array();
         foreach ($_mixedTags as $tag) {
             if (is_string($tag)) {
@@ -369,7 +412,7 @@ class Tinebase_Tags
      * @param  int                             $_toAdd
      * @return void
      */
-    protected function addOccurrence($_tag, $_toAdd)
+    protected function _addOccurrence($_tag, $_toAdd)
     {
         $tagId = $_tag instanceof Tinebase_Model_Tag ? $_tag->getId() : $_tag;
         
@@ -483,7 +526,7 @@ class Tinebase_Tags
     /**
      * sets all given contexts for a given tag
      * 
-     * @param   array  $_contexts
+     * @param   array  $_contexts array of application ids (0 or 'any' for all apps)
      * @param   string $_tagId
      * @throws  Tinebase_Exception_InvalidArgument
      */
@@ -497,10 +540,10 @@ class Tinebase_Tags
             $_contexts = array(0);
         }
         
-        foreach ($_contexts as $content) {
+        foreach ($_contexts as $context) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
                 'tag_id'         => $_tagId,
-                'application_id' => $content
+                'application_id' => $context
             ));
         }
     }
