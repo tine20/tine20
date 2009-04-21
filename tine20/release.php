@@ -260,7 +260,8 @@ if ($opts->a || $opts->m) {
         'images/oxygen/16x16/actions/knewstuff.png'
     );
     
-    exec("cd $tine20path; find images -maxdepth 1 -type f -name *.png", $baseImages);
+    // no subdirs! => solaris does not know find -maxdeps 1
+    exec("cd $tine20path/images; ls | egrep '\.png|\.gif|\.jpg'", $baseImages);
     $files = array_merge($files, $baseImages);
     
     $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all.css');
