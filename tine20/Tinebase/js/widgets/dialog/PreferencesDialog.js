@@ -229,19 +229,22 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     	// get values from card panels
     	var panel, data = {};
     	var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
-    	for (panelName in panelsToSave) {
-            panel = panelsToSave[panel];
-    		data[panel.appName] = {};
-            for (var j=0; j < panel.items.length; j++) {
-            	var item = panel.items.items[j];
-            	if (item && item.name) {
-                    if (this.adminMode) {
-                    	data[panel.appName][item.prefId] = {value: item.getValue()};
-                    	data[panel.appName][item.prefId].type = (Ext.getCmp(item.name + '_writable').getValue() == 1) ? 'default' : 'forced';
-                    } else {
-                        data[panel.appName][item.name] = {value: item.getValue()};
-                    }
-            	}
+
+        for (panelName in panelsToSave) {
+            if (panelsToSave.hasOwnProperty(panelName)) {
+                panel = panelsToSave[panel];
+        		data[panel.appName] = {};
+                for (var j=0; j < panel.items.length; j++) {
+                	var item = panel.items.items[j];
+                	if (item && item.name) {
+                        if (this.adminMode) {
+                        	data[panel.appName][item.prefId] = {value: item.getValue()};
+                        	data[panel.appName][item.prefId].type = (Ext.getCmp(item.name + '_writable').getValue() == 1) ? 'default' : 'forced';
+                        } else {
+                            data[panel.appName][item.name] = {value: item.getValue()};
+                        }
+                	}
+                }
             }
     	}
     	/*
