@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        move account type constants to a better place because it is needed at multiple places
  * @todo        add 'reload required' property?
  * @todo        add 'grouping' property?
  */
@@ -41,24 +40,6 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
     const TYPE_FORCED = 'forced';
 
     /**
-     * account type user
-     *
-     */
-    const ACCOUNT_TYPE_USER = 'user';
-    
-    /**
-     * account type group
-     *
-     */
-    const ACCOUNT_TYPE_GROUP = 'group';
-    
-    /**
-     * account type anyone
-     *
-     */
-    const ACCOUNT_TYPE_ANYONE = 'anyone';
-    
-    /**
      * identifier field name
      *
      * @var string
@@ -81,9 +62,9 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
         'id'                => array('allowEmpty' => TRUE),
         'account_id'        => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
         'account_type'      => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
-            self::ACCOUNT_TYPE_ANYONE, 
-            self::ACCOUNT_TYPE_USER, 
-            self::ACCOUNT_TYPE_GROUP,
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, 
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
         )),
         'application_id'    => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
         'name'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),

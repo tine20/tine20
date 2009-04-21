@@ -127,7 +127,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
             'name'              => $forcedPrefName,
             'value'             => 'forced value',
             'account_id'        => 0,
-            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
             'type'              => Tinebase_Model_Preference::TYPE_FORCED
         ));
         $forcedPref = $this->_instance->create($forcedPref);
@@ -163,7 +163,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
                 'operator' => 'equals', 
                 'value' => array(
                     'accountId'     => Tinebase_Core::getUser()->getId(),
-                    'accountType'   => Tinebase_Model_Preference::ACCOUNT_TYPE_USER
+                    'accountType'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
                 )
             ),
             array(

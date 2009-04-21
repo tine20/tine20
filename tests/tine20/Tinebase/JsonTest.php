@@ -248,7 +248,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
         $pref->account_id = 2;
-        $pref->account_type = Tinebase_Model_Preference::ACCOUNT_TYPE_USER;
+        $pref->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
         $pref = Tinebase_Core::getPreference()->create($pref);        
         
         // search prefs
@@ -342,8 +342,8 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
                 'value' => array(
                     'accountId'     => ($_adminPrefs) ? 0 : $_userId,
                     'accountType'   => ($_adminPrefs) 
-                        ? Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE 
-                        : Tinebase_Model_Preference::ACCOUNT_TYPE_USER
+                        ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE 
+                        : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
                 )
             )
         );
@@ -385,7 +385,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             'name'              => 'testPref',
             'value'             => 'value1',
             'account_id'        => 0,
-            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
             'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
             'options'           => '<?xml version="1.0" encoding="UTF-8"?>
                 <options>

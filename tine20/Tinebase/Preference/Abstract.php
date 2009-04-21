@@ -107,8 +107,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             $result = $this->getValueForUser(
                 $_preferenceName, $accountId, 
                 ($accountId === 0) 
-                    ? Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE
-                    : Tinebase_Model_Preference::ACCOUNT_TYPE_USER
+                    ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
+                    : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
             ); 
         } catch (Tinebase_Exception_NotFound $tenf) {
             if ($_default !== NULL) {
@@ -203,7 +203,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $select = $this->_getSelect('*');
         $select
             ->where($this->_db->quoteIdentifier($this->_tableName . '.account_id')      . ' = ?', $_accountId)
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type')    . ' = ?', Tinebase_Model_Preference::ACCOUNT_TYPE_USER)
+            ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type')    . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
             ->where($this->_db->quoteIdentifier($this->_tableName . '.name')            . ' = ?', $_preferenceName)
             ->where($this->_db->quoteIdentifier($this->_tableName . '.application_id')  . ' = ?', $appId);
             
@@ -217,7 +217,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 'name'              => $_preferenceName,
                 'value'             => $_value,
                 'account_id'        => $_accountId,
-                'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_USER,
+                'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 'type'              => Tinebase_Model_Preference::TYPE_NORMAL
             ));
             $this->create($preference);
@@ -331,12 +331,12 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             } 
             
             // check user
-            $user = $_preferences->filter('account_type', Tinebase_Model_Preference::ACCOUNT_TYPE_USER);
+            $user = $_preferences->filter('account_type', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
             if (count($user) > 0) {
                 $result = $user->getFirstRecord();
             } else {
                 // check group
-                $group = $_preferences->filter('account_type', Tinebase_Model_Preference::ACCOUNT_TYPE_GROUP);
+                $group = $_preferences->filter('account_type', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP);
                 if (count($group) > 0) {
                     $result = $group->getFirstRecord();
                 } else {                

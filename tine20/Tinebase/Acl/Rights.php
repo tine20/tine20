@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        move some functionality to Tinebase_Acl_Roles
+ * @todo        use the defined ACCOUNT_TYPE consts anywhere
  */
 
 /**
@@ -37,6 +38,24 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const CHECK_VERSION = 'check_version';
+    
+    /**
+     * account type anyone
+     * @staticvar string
+     */
+    const ACCOUNT_TYPE_ANYONE   = 'anyone';
+    
+    /**
+     * account type user
+     * @staticvar string
+     */
+    const ACCOUNT_TYPE_USER     = 'user';
+
+    /**
+     * account type group
+     * @staticvar string
+     */
+    const ACCOUNT_TYPE_GROUP    = 'group';
     
     /**
      * holdes the instance of the singleton

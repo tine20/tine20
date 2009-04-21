@@ -60,7 +60,7 @@ class Setup_Import_TineInitial
             'name'              => Tinebase_Preference::TIMEZONE,
             'value'             => 'Europe/Berlin',
             'account_id'        => 0,
-            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
             'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
             'options'           => '<?xml version="1.0" encoding="UTF-8"?>
                 <options>
@@ -73,7 +73,7 @@ class Setup_Import_TineInitial
             'name'              => Tinebase_Preference::LOCALE,
             'value'             => 'auto',
             'account_id'        => 0,
-            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
             'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
             'options'           => '<?xml version="1.0" encoding="UTF-8"?>
                 <options>

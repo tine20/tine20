@@ -2089,7 +2089,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'name'              => Tinebase_Preference::TIMEZONE,
             'value'             => 'Europe/Berlin',
             'account_id'        => 0,
-            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
             'type'              => Tinebase_Model_Preference::TYPE_DEFAULT
         ));
         Tinebase_Core::getPreference()->create($timezonePref);
@@ -2098,7 +2098,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'name'              => Tinebase_Preference::LOCALE,
             'value'             => 'auto',
             'account_id'        => 0,
-            'account_type'      => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE,
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
             'type'              => Tinebase_Model_Preference::TYPE_DEFAULT
         ));
         Tinebase_Core::getPreference()->create($localePref);
@@ -2137,7 +2137,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 'operator' => 'equals', 
                 'value' => array(
                     'accountId'     => 0,
-                    'accountType'   => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE
+                    'accountType'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
                 ),
             ),
             array(

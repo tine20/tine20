@@ -64,7 +64,7 @@ class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstr
             $field = $_backend->getAdapter()->quoteIdentifier(
                 $_backend->getTableName() . '.account_type'
             );
-            $_select->where(Tinebase_Core::getDb()->quoteInto($field . '= ?', Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE));
+            $_select->where(Tinebase_Core::getDb()->quoteInto($field . '= ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE));
             
         } else {
             $conditions = array(
@@ -74,17 +74,17 @@ class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstr
                 )),
                 array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
                    array('field' => 'account_id',   'operator' => 'equals',  'value' => 0),
-                   array('field' => 'account_type', 'operator' => 'equals',  'value' => Tinebase_Model_Preference::ACCOUNT_TYPE_ANYONE),
+                   array('field' => 'account_type', 'operator' => 'equals',  'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE),
                 )),            
             );
             
             // add groups if accountType is user
-            if ($this->_accountType === Tinebase_Model_Preference::ACCOUNT_TYPE_USER) {
+            if ($this->_accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
                 $groups = Tinebase_Group::getInstance()->getGroupMemberships($this->_accountId);
                 $conditions[] = 
                     array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
                        array('field' => 'account_id',   'operator' => 'in',     'value' => $groups),
-                       array('field' => 'account_type', 'operator' => 'equals', 'value' => Tinebase_Model_Preference::ACCOUNT_TYPE_GROUP),
+                       array('field' => 'account_type', 'operator' => 'equals', 'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP),
                     ));
             }
     
