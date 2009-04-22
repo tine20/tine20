@@ -65,9 +65,6 @@ $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
 TestServer::getInstance()->initFramework();
 
 Zend_Registry::set('locale', new Zend_Locale($config->locale));
-if ($config->imap && !empty($config->imap)) {
-    Zend_Registry::set('imap_config', $config->imap);
-}
 
 $tinebaseController = Tinebase_Controller::getInstance();
 if (!$tinebaseController->login($config->username, $config->password, $config->ip)){
