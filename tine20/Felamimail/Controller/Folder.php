@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        implement this
+ * @todo        finish implementation
  */
 
 /**
@@ -26,6 +26,23 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
      * @var Felamimail_Controller_Folder
      */
     private static $_instance = NULL;
+    
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton
+     */
+    private function __construct() {
+        $this->_currentAccount = Tinebase_Core::getUser();
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
     
     /**
      * the singleton pattern
@@ -75,21 +92,23 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
     /**
      * get (sub) folder
      *
-     * @param unknown_type $_accountId
-     * @param unknown_type $_folderName
-     * 
-     * @todo implement
+     * @param string $_backendId
+     * @param string $_folderName
+     * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function getSubFolder($_accountId, $_folderName)
+    public function getSubFolders($_backendId = 'default', $_folderName = '')
     {
-        /*
-        $imapConnection = $this->getImapConnection($_accountId);
+        $imapConnection = $this->_getBackend($_backendId);
         
         if(empty($folderName)) {
             $folder = $imapConnection->getFolders('', '%');
         } else {
             $folder = $imapConnection->getFolders($folderName.'/', '%');
         }
-        */
+        
+        $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder', $folder);
+        $result->parent = $_folderName;
+        
+        return $result;
     }
 }

@@ -66,11 +66,24 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     /**
      * get folders from the server
      *
-     * @todo implement
+     * @todo add 'get subfolders' test 
      */
     public function testGetFolders()
     {
+        $result = $this->_controller->getSubFolders();
         
+        $this->assertGreaterThan(0, count($result));
+        
+        // get inbox folder and do more checks
+        $inboxFolder = $result->filter('localName', 'INBOX')->getFirstRecord();
+        $this->assertFalse($inboxFolder === NULL);
+        $this->assertTrue($inboxFolder->isSelectable);
+        $this->assertTrue($inboxFolder->hasChildren);
+
+        // get subfolders of INBOX
+        $resultInboxSub = $this->_controller->getSubFolders('default', $inboxFolder->localName);
+        
+        //print_r($resultInboxSub->toArray());
     }
     
     /**

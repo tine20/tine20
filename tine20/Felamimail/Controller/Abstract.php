@@ -37,23 +37,6 @@ abstract class Felamimail_Controller_Abstract extends Tinebase_Controller_Abstra
     protected $_imapBackends = array();
         
     /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton
-     */
-    private function __construct() {
-        $this->_currentAccount = Tinebase_Core::getUser();
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {        
-    }
-    
-    /**
      * init imap connection
      *
      * @param array $_config
@@ -61,12 +44,17 @@ abstract class Felamimail_Controller_Abstract extends Tinebase_Controller_Abstra
      * 
      * @todo get matching config for given backendId
      * @todo add something like 'useCustomCredentials' to use config imap settings instead of account settings from db
+     * @todo do we need a backend for each folder on the mailserver?
+     * 
      */
     protected function _getBackend($_backendId = 'default')
     {
         if (!isset($this->_imapBackends[$_backendId])) {
             // we need to instantiate a new imap backend
             $imapConfig = Tinebase_Core::getConfig()->imap;
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Connecting to server ' . $imapConfig->host . ':' . $imapConfig->port . ' with username ' . $imapConfig->user);
+            
             $this->_imapBackends[$_backendId] = new Felamimail_Backend_Imap($imapConfig->toArray());
         }
         

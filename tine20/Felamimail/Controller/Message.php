@@ -29,6 +29,23 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract
     private static $_instance = NULL;
     
     /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton
+     */
+    private function __construct() {
+        $this->_currentAccount = Tinebase_Core::getUser();
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {        
+    }
+    
+    /**
      * the singleton pattern
      *
      * @param $_config imap config data
