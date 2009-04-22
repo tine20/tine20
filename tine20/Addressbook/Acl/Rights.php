@@ -96,7 +96,7 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $rightDescriptions = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
                 'text'          => $translate->_('manage shared folders'),
-                'description'   => $translate->_('Create, edit and delete shared folders of an application'),
+                'description'   => $translate->_('Create new shared addressbook folders'),
             ),
         );
         
