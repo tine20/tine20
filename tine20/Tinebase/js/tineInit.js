@@ -206,7 +206,8 @@ Tine.Tinebase.tineInit = {
          */
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
             // detect resoponse errors (e.g. html from xdebug)
-            if (response.responseText.charAt(0) == '<') {
+            //if (response.responseText.charAt(0) == '<') {
+            if (! response.responseText.match(/^{+/)) {
                 var htmlText = response.responseText;
                 response.responseText = Ext.util.JSON.encode({
                     msg: htmlText,
