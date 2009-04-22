@@ -61,6 +61,19 @@ class Tinebase_Model_CredentialCache extends Tinebase_Record_Abstract
     );
     
     /**
+     * returns cacheid 
+     * 
+     * @return array
+     */
+    public function getCacheId()
+    {
+        return array(
+            'id'    => $this->getId(),
+            'key'   => $this->key
+        );
+    }
+    
+    /**
      * returns array with record related properties 
      *
      * @param boolean $_recursive

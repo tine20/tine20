@@ -46,6 +46,8 @@ abstract class Tinebase_Server_Abstract
 
         Tinebase_Core::setupCache();
         
+        Tinebase_Core::setupUserCredentialCache();
+        
         Tinebase_Core::setupUserTimezone();
         
         Tinebase_Core::setupUserLocale();

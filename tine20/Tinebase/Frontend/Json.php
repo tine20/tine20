@@ -279,8 +279,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'account'       => Tinebase_Core::getUser()->getPublicUser()->toArray(),
 				'jsonKey'       => Tinebase_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
-			);
+            );
+            
+            if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
+                $cacheId = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE)->getCacheId();
+                setcookie('usercredentialcache', base64_encode(Zend_Json::encode($cacheId)));
+            }
+        
         } else {
+            
+            setcookie('usercredentialcache');
             $response = array(
 				'success'      => FALSE,
 				'errorMessage' => "Wrong username or password!"
@@ -299,6 +307,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         
+        setcookie('usercredentialcache');
         $result = array(
 			'success'=> true,
         );

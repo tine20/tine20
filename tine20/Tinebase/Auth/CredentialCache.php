@@ -97,6 +97,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     public function getCachedCredentials($_cache)
     {
         if (! ($_cache->username && $_cache->password)) {
+            
             $_cache->setFromArray($this->get($_cache->getId())->toArray());
             $this->_decrypt($_cache);
         }
