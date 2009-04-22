@@ -214,7 +214,6 @@ Tine.Tinebase.tineInit = {
                 });
                 
                 connection.fireEvent('requestexception', connection, response, options);
-                return false;
             }
         });
         
@@ -293,11 +292,13 @@ Tine.Tinebase.tineInit = {
                     windowHeight = Ext.getBody().getHeight(true) * 0.7;
                 }
                 
-                var win = new Tine.Tinebase.ExceptionDialog({
-                    height: windowHeight,
-                    exceptionInfo: data
-                });
-                win.show();
+                if (! Tine.Tinebase.exceptionDlg) {
+                    Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                        height: windowHeight,
+                        exceptionInfo: data
+                    });
+                    Tine.Tinebase.exceptionDlg.show();
+                }
                 break;
             }
             
@@ -363,11 +364,13 @@ Tine.Tinebase.tineInit = {
             windowHeight = Ext.getBody().getHeight(true) * 0.7;
         }
         
-        var win = new Tine.Tinebase.ExceptionDialog({
-            height: windowHeight,
-            exceptionInfo: data
-        });
-        win.show();
+        if (! Tine.Tinebase.exceptionDlg) {
+            Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                height: windowHeight,
+                exceptionInfo: data
+            });
+            win.show();
+        }
         return true;
     },
     
