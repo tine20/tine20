@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -21,14 +21,23 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
     /**
      * the right to be an administrative account for an application
      *
+     * @staticvar string
      */
     const ADMIN = 'admin';
         
     /**
      * the right to run an application
      *
+     * @staticvar string
      */
     const RUN = 'run';
+    
+    /**
+     * the right to manage shared folders of an application
+     *
+     * @staticvar string
+     */
+    const MANAGE_SHARED_FOLDERS = 'manage_shared_folders';
     
     /**
      * get all possible application rights

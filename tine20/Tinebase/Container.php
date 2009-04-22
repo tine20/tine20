@@ -106,13 +106,26 @@ class Tinebase_Container
                     
                 case Tinebase_Model_Container::TYPE_SHARED:
                     $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
-                    if(!Tinebase_Core::getUser()->hasRight((string) $application, Tinebase_Acl_Rights::ADMIN)) {
-                        throw new Tinebase_Exception_AccessDenied('permission to add shared container denied');
+                    $appName = (string) $application;
+                    $manageRight = FALSE;
+                    
+                    // check for MANAGE_SHARED_FOLDERS right
+                    $appAclClassName = $appName . '_Acl_Rights';
+                    if (@class_exists($appAclClassName)) {
+                        $appAclObj = call_user_func(array($appAclClassName, 'getInstance'));
+                        $allRights = $appAclObj->getAllApplicationRights();
+                        if (in_array(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, $allRights)) {
+                            $manageRight = Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS);
+                        }
+                    }
+                    
+                    if(!$manageRight && !Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::ADMIN)) {
+                        throw new Tinebase_Exception_AccessDenied('Permission to add shared container denied.');
                     }
                     break;
                     
                 default:
-                    throw new Tinebase_Exception_InvalidArgument('Can add personal or shared folders only when ignoring Acl.');
+                    throw new Tinebase_Exception_InvalidArgument('Can add personal or shared folders only when ignoring ACL.');
                     break;
             }
         }
