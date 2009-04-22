@@ -412,7 +412,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                         '<span class="preview-panel-symbolcompare">' + this.app.i18n._('Phone') + '</span>{[this.encode(values.tel_home)]}<br/>',
                         '<span class="preview-panel-symbolcompare">' + this.app.i18n._('Mobile') + '</span>{[this.encode(values.tel_cell_private)]}<br/>',
                         '<span class="preview-panel-symbolcompare">' + this.app.i18n._('Fax') + '</span>{[this.encode(values.tel_fax_home)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">' + this.app.i18n._('E-Mail') + '</span><a href="mailto:{[this.encode(values.email)]}">{[this.encode(values.email_home, "shorttext")]}</a><br/>',
+                        '<span class="preview-panel-symbolcompare">' + this.app.i18n._('E-Mail') + '</span><a href="mailto:{[this.encode(values.email_home)]}">{[this.encode(values.email_home, "shorttext")]}</a><br/>',
                         '<span class="preview-panel-symbolcompare">' + this.app.i18n._('Web') + '</span><a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url_home, "shorttext")]}</a><br/>',
                         /*
                         '<!-- <img src="images/oxygen/16x16/apps/kcall.png"/>--> <span class="preview-panel-symbolcompare">phone</span>0404040<br/>',
