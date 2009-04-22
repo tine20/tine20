@@ -107,7 +107,6 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
         }
         
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder', $folder);
-        $result->parent = $_folderName;
         
         return $result;
     }
