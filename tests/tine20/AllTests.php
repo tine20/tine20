@@ -40,6 +40,7 @@ class AllTests
         $suite->addTest(Timetracker_AllTests::suite());
         $suite->addTest(Courses_AllTests::suite());
         $suite->addTest(Calendar_AllTests::suite());
+        $suite->addTest(Felamimail_AllTests::suite());
         
         return $suite;
     }
