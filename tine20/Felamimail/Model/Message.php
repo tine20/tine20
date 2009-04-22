@@ -3,7 +3,7 @@
  * Tine 2.0
  *
  * @package     Felamimail
- * @subpackage  Controller
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -37,6 +37,12 @@ class Felamimail_Model_Message extends Zend_Mail_Message
         parent::__construct($params);
     }
     
+    /**
+     * get message body
+     *
+     * @param string $_contentType
+     * @return string
+     */
     public function getBody($_contentType)
     {
         $part = null;
@@ -90,7 +96,7 @@ class Felamimail_Model_Message extends Zend_Mail_Message
     }
     
     /**
-     * Enter description here...
+     * parse address list
      *
      * @param unknown_type $_adressList
      * @return array
