@@ -283,7 +283,7 @@ class Tinebase_Application
         
         // call getAllApplicationRights for application (if it has specific rights)
         $appAclClassName = $application->name . '_Acl_Rights';
-        if ( @class_exists($appAclClassName) ) {
+        if (@class_exists($appAclClassName)) {
             $appAclObj = call_user_func(array($appAclClassName, 'getInstance'));
             $allRights = $appAclObj->getAllApplicationRights();
         } else {
