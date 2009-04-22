@@ -79,7 +79,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
         
         $select = $this->_db->select()    
             ->from($this->_tablePrefix . 'snom_phones_acl')
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'user'))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('snom_phone_id') . ' = ?', $phoneId))
             ->where($this->_db->quoteIdentifier('read_right'). '= 1')
             ->where($this->_db->quoteIdentifier('write_right'). '= 1')

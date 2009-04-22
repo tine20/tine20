@@ -504,7 +504,7 @@ class Timetracker_Setup_Import_Egw14
                     break;
             }
             
-            Tinebase_Container::getInstance()->addGrants($timeaccountContainer, 'user', $userId, $grants, TRUE);            
+            Tinebase_Container::getInstance()->addGrants($timeaccountContainer, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $userId, $grants, TRUE);            
         }
         
         $this->_counters['timeaccounts']++;
@@ -571,7 +571,7 @@ class Timetracker_Setup_Import_Egw14
             // set rights
             $tagRights = new Tinebase_Model_TagRight(array(
                 'tag_id'        => $newTag->getId(),
-                'account_type'  => 'anyone',
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                 'account_id'    => 0,
                 'view_right'    => TRUE,
                 'use_right'     => TRUE,

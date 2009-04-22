@@ -546,7 +546,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
-                $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'user'),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
                 );
             $roleMembersTable->delete($where);
             

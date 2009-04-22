@@ -141,7 +141,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'id'    => $member['accountId'],
                 'name'  => $member['accountDisplayName'],
                 'data'  => $fullUser->accountLoginName,
-                'type'  => 'user',
+                'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             );
         }
         

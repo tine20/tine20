@@ -137,7 +137,7 @@ class Setup_Import_TineInitial
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
             array(
                 'account_id'    => $adminGroup->getId(),
-                'account_type'  => 'group', 
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
         
@@ -149,7 +149,7 @@ class Setup_Import_TineInitial
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($userRole->getId(), array(
             array(
                 'account_id'    => $userGroup->getId(),
-                'account_type'  => 'group', 
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
         
@@ -224,10 +224,10 @@ class Setup_Import_TineInitial
         // give Users group read rights to the internal addressbook
         // give Adminstrators group read/edit/admin rights to the internal addressbook
         $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL);
-        Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
+        Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
             Tinebase_Model_Container::GRANT_READ
         ), TRUE);
-        Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
+        Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
             Tinebase_Model_Container::GRANT_READ,
             Tinebase_Model_Container::GRANT_EDIT,
             Tinebase_Model_Container::GRANT_ADMIN
@@ -236,11 +236,11 @@ class Setup_Import_TineInitial
         // @todo move that to erp application initial setup script
         // add shared container for erp contracts
         $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
-        Tinebase_Container::getInstance()->addGrants($sharedContracts, 'group', $userGroup, array(
+        Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
             Tinebase_Model_Container::GRANT_READ,
             Tinebase_Model_Container::GRANT_EDIT
         ), TRUE);
-        Tinebase_Container::getInstance()->addGrants($sharedContracts, 'group', $adminGroup, array(
+        Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
             Tinebase_Model_Container::GRANT_ADD,
             Tinebase_Model_Container::GRANT_READ,
             Tinebase_Model_Container::GRANT_EDIT,

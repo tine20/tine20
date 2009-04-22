@@ -196,7 +196,7 @@ class Tinebase_Tags
                 // this needs to be moved into Tinebase Controller later
                 $right = new Tinebase_Model_TagRight(array(
                     'tag_id'        => $newId,
-                    'account_type'  => 'user',
+                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                     'account_id'    => $currentAccountId,
                     'view_right'    => true,
                     'use_right'     => true,

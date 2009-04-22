@@ -224,7 +224,7 @@ class Setup_Import_Egw14
                     $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);  
                 }
 
-                Tinebase_Container::getInstance()->addGrants($container, 'user', $contact->contact_owner, array(
+                Tinebase_Container::getInstance()->addGrants($container, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $contact->contact_owner, array(
                     Tinebase_Model_Container::GRANT_ANY,
                 ), TRUE);
                                 
@@ -241,7 +241,7 @@ class Setup_Import_Egw14
                         'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
                     ));
                     $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
-                    Tinebase_Container::getInstance()->addGrants($container, 'group', $userGroup, array(
+                    Tinebase_Container::getInstance()->addGrants($container, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
                         Tinebase_Model_Container::GRANT_READ,
                         Tinebase_Model_Container::GRANT_ADD,
                         Tinebase_Model_Container::GRANT_EDIT,

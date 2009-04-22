@@ -383,13 +383,13 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($_items as $num => $item) {
             
             switch ($item[$prefix . 'type']) {
-                case 'user':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     $item[$prefix . 'name'] = Tinebase_User::getInstance()->getUserById($item[$prefix . 'id'])->accountDisplayName;
                     break;
-                case 'group':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                     $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;
                     break;
-                case 'anyone':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                     $item[$prefix . 'name'] = 'Anyone';
                     break;
                 default:

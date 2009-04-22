@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage
  */
 
 /**
@@ -163,7 +165,7 @@ class Tinebase_Container
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     array(
                         'account_id'     => $accountId,
-                        'account_type'   => 'user',
+                        'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                         //'account_name'   => 'not used',
                         'readGrant'      => true,
                         'addGrant'       => true,
@@ -173,7 +175,7 @@ class Tinebase_Container
                     ),            
                     array(
                         'account_id'      => 0,
-                        'account_type'    => 'anyone',
+                        'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                         //'account_name'    => 'not used',
                         'readGrant'       => true
                     )            
@@ -183,7 +185,7 @@ class Tinebase_Container
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     array(
                         'account_id'     => $accountId,
-                        'account_type'   => 'user',
+                        'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                         //'account_name'   => 'not used',
                         'readGrant'      => true,
                         'addGrant'       => true,
@@ -221,13 +223,13 @@ class Tinebase_Container
         }
         
         switch($_accountType) {
-            case 'user':
+            case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                 $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
                 break;
-            case 'group':
+            case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                 $accountId = Tinebase_Model_Group::convertGroupIdToInt($_accountId);
                 break;
-            case 'anyone':
+            case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                 $accountId = 0;
                 break;
             default:
@@ -305,9 +307,11 @@ class Tinebase_Container
                 ->where($tableContainerAcl . '.' . $colAccountGrant . ' = ?', $_grant)
                 
                 # beware of the extra parenthesis of the next 3 rows
-                ->where('(' . $tableContainerAcl . '.' . $colAccountId . ' = ? AND ' . $tableContainerAcl . "." . $colAccountType . " ='user'", $accountId)
-                ->orWhere($tableContainerAcl . '.' . $colAccountId . ' IN (?) AND ' . $tableContainerAcl . "." . $colAccountType . " ='group'", $groupMemberships)
-                ->orWhere($tableContainerAcl . '.' . $colAccountType . ' = ?)', 'anyone')
+                ->where('(' . $tableContainerAcl . '.' . $colAccountId . ' = ? AND ' . 
+                    $tableContainerAcl . "." . $colAccountType . " = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+                ->orWhere($tableContainerAcl . '.' . $colAccountId . ' IN (?) AND ' . 
+                    $tableContainerAcl . "." . $colAccountType . " = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+                ->orWhere($tableContainerAcl . '.' . $colAccountType . ' = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
                 
                 ->group(SQL_TABLE_PREFIX . 'container.id')
                 ->order(SQL_TABLE_PREFIX . 'container.name');
@@ -497,9 +501,9 @@ class Tinebase_Container
             ->where('user.account_grant = ?', $_grant)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type ='user'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
-            ->orWhere('user.account_type = ?)', 'anyone')
+            ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+            ->orWhere("user.account_id IN (?) AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+            ->orWhere('user.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
@@ -552,9 +556,11 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . 
+                SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . 
+                SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_SHARED)
@@ -598,9 +604,9 @@ class Tinebase_Container
             ->where('owner.account_grant = ?', Tinebase_Model_Container::GRANT_ADMIN)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type ='user'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
-            ->orWhere('user.account_type = ?)', 'anyone')
+            ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+            ->orWhere("user.account_id IN (?) AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+            ->orWhere('user.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
             
             ->where('user.account_grant = ?', $_grant)
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
@@ -657,9 +663,9 @@ class Tinebase_Container
             ->where('owner.account_grant = ?', Tinebase_Model_Container::GRANT_ADMIN)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type ='user'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
-            ->orWhere('user.account_type = ?)', 'anyone')
+            ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+            ->orWhere("user.account_id IN (?) AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+            ->orWhere('user.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
             
             ->where('user.account_grant = ?', $_grant)
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
@@ -816,9 +822,11 @@ class Tinebase_Container
                 ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
     
                 # beware of the extra parenthesis of the next 3 rows
-                ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+                ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . 
+                    SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . 
+                    SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
                 
                 ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $grant)
                 ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId);
@@ -939,9 +947,11 @@ class Tinebase_Container
                 ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
     
                 # beware of the extra parenthesis of the next 3 rows
-                ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
-                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+                ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . 
+                    SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . 
+                    SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+                ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
     
                 ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
                 ->group(SQL_TABLE_PREFIX . 'container_acl.account_grant');
@@ -993,9 +1003,9 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
 
             ->where(SQL_TABLE_PREFIX . 'container.id IN (?)', array_keys($containers))
             ->group(SQL_TABLE_PREFIX . 'container.id');

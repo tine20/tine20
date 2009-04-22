@@ -65,7 +65,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $declaration->name      = 'account_type';
         $declaration->type      = 'enum';
         $declaration->notnull   = 'true';
-        $declaration->value     = array('anyone', 'account', 'group');
+        $declaration->value     = array(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 'account', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP);
         
         $this->_backend->addCol('application_rights', $declaration);
         
@@ -83,7 +83,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         
         $data = array(
-            'account_type' => 'anyone'
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
         );
         $where = array(
             $this->_db->quoteIdentifier('account_id') . ' IS NULL',
@@ -103,7 +103,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         
         $data = array(
-            'account_type' => 'group'
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
         );
         $where = array(
             $this->_db->quoteIdentifier('account_id') . ' IS NULL',
@@ -116,7 +116,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             'account_id' => new Zend_Db_Expr('group_id'),
         );
         $where = array(
-            $rightsTable->getAdapter()->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'group'),
+            $rightsTable->getAdapter()->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP),
         );
         $rightsTable->update($data, $where);
 
@@ -386,7 +386,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
             array(
                 'account_id'    => $adminGroup->getId(),
-                'account_type'  => 'group', 
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
         
@@ -398,7 +398,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($userRole->getId(), array(
             array(
                 'account_id'    => $userGroup->getId(),
-                'account_type'  => 'group', 
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
         
@@ -1604,11 +1604,11 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $adminGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default Admin Group']);
         $userGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default User Group']);
         
-        Tinebase_Container::getInstance()->addGrants($sharedContracts, 'group', $userGroup, array(
+        Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
             Tinebase_Model_Container::GRANT_READ,
             Tinebase_Model_Container::GRANT_EDIT
         ), TRUE);
-        Tinebase_Container::getInstance()->addGrants($sharedContracts, 'group', $adminGroup, array(
+        Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
             Tinebase_Model_Container::GRANT_ADD,
             Tinebase_Model_Container::GRANT_READ,
             Tinebase_Model_Container::GRANT_EDIT,

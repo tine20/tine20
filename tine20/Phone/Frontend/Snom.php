@@ -77,7 +77,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         $readAbleContainer = array();
         
         foreach($phone->rights as $right) {
-            if($right->account_type == 'user') {
+            if($right->account_type == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
                 $containers = $tbContainer->getContainerByACL($right->account_id, 'Addressbook', Tinebase_Model_Container::GRANT_READ);
                 $readAbleContainer = array_merge($readAbleContainer, $containers->getArrayOfIds());
             }

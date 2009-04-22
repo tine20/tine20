@@ -81,7 +81,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         ));
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => $this->_currentAccount->getId(),
-            'account_type'  => 'user',
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             'book_own'      => TRUE,
             'view_all'      => TRUE,
             'book_all'      => TRUE,

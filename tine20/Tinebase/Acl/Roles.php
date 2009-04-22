@@ -403,8 +403,8 @@ class Tinebase_Acl_Roles
         $memberships = array();
         
         $select = $this->_roleMembersTable->select();
-        $select ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_accountId) . ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'user'))
-                ->orwhere($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND ' .  $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'group'));
+        $select ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_accountId) . ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER))
+                ->orwhere($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND ' .  $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP));
         
         $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
         
@@ -433,7 +433,7 @@ class Tinebase_Acl_Roles
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?', $roleId);
         $this->_roleMembersTable->delete($where);
               
-        $validTypes = array( 'user', 'group', 'anyone');
+        $validTypes = array( Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         foreach ( $_roleMembers as $member ) {
             if ( !in_array($member['account_type'], $validTypes) ) {
                 throw new Tinebase_Exception_InvalidArgument('account_type must be one of ' . 

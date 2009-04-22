@@ -151,13 +151,13 @@ class Tinebase_Frontend_Json_Container
         
         foreach($result['results'] as &$value) {
             switch($value['account_type']) {
-                case 'user':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     $value['account_name'] = Tinebase_User::getInstance()->getUserById($value['account_id'])->toArray();
                     break;
-                case 'group':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                     $value['account_name'] = Tinebase_Group::getInstance()->getGroupById($value['account_id'])->toArray();
                     break;
-                case 'anyone':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                     $value['account_name'] = array('accountDisplayName' => 'Anyone');
                     break;
                 default:

@@ -132,7 +132,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * 
      * @todo add param for getting default value ?
      */
-    public function getValueForUser($_preferenceName, $_accountId, $_accountType = 'user')
+    public function getValueForUser($_preferenceName, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $select = $this->_getSelect('*');
         

@@ -103,7 +103,7 @@ class Timetracker_Frontend_Cli
             foreach($groupIds as $id) {
                 $grants[] = array(
                     'account_id'    => $id,
-                    'account_type'  => 'group',
+                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
                     'book_own'      => TRUE,
                 );
             }
