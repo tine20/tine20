@@ -28,7 +28,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     
     /**
      * create instance with parameters
-     * Supported paramters are
+     * Supported parameters are
      *   - user username
      *   - host hostname or ip address of IMAP server [optional, default = 'localhost']
      *   - password password for user 'username' [optional, default = '']
