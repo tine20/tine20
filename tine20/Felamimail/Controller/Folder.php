@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        implement this
  */
 
 /**
@@ -17,24 +18,8 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Folder
+class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
 {
-    /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton 
-     */
-    private function __construct() {
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {        
-    }
-    
     /**
      * holdes the instance of the singleton
      *
@@ -56,18 +41,54 @@ class Felamimail_Controller_Folder
         return self::$_instance;
     }
     
+    /**
+     * create folder
+     *
+     * @todo implement
+     */
     public function createFolder()
     {
         
     }
     
+    /**
+     * create folder
+     *
+     * @todo implement
+     */
     public function deleteFolder()
     {
         
     }
     
+    /**
+     * create folder
+     *
+     * @todo implement
+     */
     public function renameFolder()
     {
         
+    }
+
+    /**
+     * get (sub) folder
+     *
+     * @param unknown_type $_accountId
+     * @param unknown_type $_folderName
+     * 
+     * @todo implement
+     */
+    public function getSubFolder($_accountId, $_folderName)
+    {
+        /*
+        $imapConnection = $this->getImapConnection($_accountId);
+        
+        if(empty($folderName)) {
+            $folder = $imapConnection->getFolders('', '%');
+        } else {
+            $folder = $imapConnection->getFolders($folderName.'/', '%');
+        }
+        */
     }
 }

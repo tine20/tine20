@@ -17,34 +17,8 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Message
+class Felamimail_Controller_Message extends Felamimail_Controller_Abstract
 {
-    /**
-     * the current imap connection
-     * 
-     * @var Zend_Mail_Storage_Imap
-     */
-    protected $_imap = NULL;
-        
-    /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton 
-     */
-    private function __construct() {
-        $this->_currentAccount = Tinebase_Core::getUser();
-
-        $this->_imap = new Felamimail_Backend_Imap(Tinebase_Core::getConfig()->imap->toArray());
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {        
-    }
-    
     /**
      * holdes the instance of the singleton
      *

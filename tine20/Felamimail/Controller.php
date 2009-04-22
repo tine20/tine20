@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        remove deprecated code
+ * @todo        do we need this controller?
  */
 class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tinebase_Events_Interface
 {
@@ -62,19 +64,19 @@ class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tine
      * all events get routed through this function
      *
      * @param Tinebase_Events_Abstract $_eventObject the eventObject
-     * 
-     * @todo    write test
      */
     public function handleEvents(Tinebase_Events_Abstract $_eventObject)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
-        
+
+        /*
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
                 break;
             case 'Admin_Event_DeleteAccount':
                 break;
         }
+        */
     }
         
 	/**
@@ -82,6 +84,7 @@ class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tine
 	 *
 	 * @return array list of configured accounts
 	 */
+    /*
 	public function getListOfAccounts() 
 	{
 	    if($this->accounts === NULL) {
@@ -90,7 +93,9 @@ class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tine
 		
 		return $this->accounts;
 	}
+	*/
 	
+	/*
     public function getAccount($_accountId) 
     {
         if($this->accounts === NULL) {
@@ -133,7 +138,9 @@ class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tine
 	        
 	    }
 	}
+    */
 
+	/*
 	public function getEmailOverview($_accountId, $_folderName, $_filter, $_sort, $_dir, $_limit, $_start)
 	{
 	    $result = array();
@@ -147,29 +154,19 @@ class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tine
 	    $seenMessages = $imapConnection->getSummary(array_slice($seen, $_start, $_limit));
 	    
 	    foreach($seenMessages as $message) {
-/*	        $result[] = array(
-	           'uid'      => $message->uid,
-	           'subject'  => $message->getHeader('subject'),
-               'from'     => $message->getHeader('from'),
-               'to'       => $message->getHeader('to'),
-               'sent'     => $message->getHeader('date'),
-	           'received' => $message->internalDate,
-	           'size'     => $message->size
-	        ); */
+//	        $result[] = array(
+//	           'uid'      => $message->uid,
+//	           'subject'  => $message->getHeader('subject'),
+//               'from'     => $message->getHeader('from'),
+//               'to'       => $message->getHeader('to'),
+//               'sent'     => $message->getHeader('date'),
+//	           'received' => $message->internalDate,
+//	           'size'     => $message->size
+//	        ); 
 	        $result[] = $message;
 	    }
 	    
 	    return $result;
 	}
-	
-	public function getSubFolder($_accountId, $_folderName)
-	{
-        $imapConnection = $this->getImapConnection($_accountId);
-        
-        if(empty($folderName)) {
-            $folder = $imapConnection->getFolders('', '%');
-        } else {
-            $folder = $imapConnection->getFolders($folderName.'/', '%');
-        }
-	}
+	*/
 }
