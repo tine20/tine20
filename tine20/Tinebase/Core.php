@@ -106,10 +106,13 @@ class Tinebase_Core
     {
         // disable magic_quotes_runtime
         ini_set('magic_quotes_runtime', 0);
-        ini_set('display_errors', 0);
-        ini_set('log_errors', 1);
         
-        self::setupExceptionErrorHandler();
+        // display errors we can't handle ourselves
+        error_reporting(E_COMPILE_ERROR | E_CORE_ERROR | E_ERROR | E_PARSE);
+        ini_set('display_errors', 1);
+        
+        ini_set('log_errors', 1);
+        set_error_handler('Tinebase_Core::errorHandler', E_ALL);
         
         $server = NULL;
         
@@ -189,28 +192,50 @@ class Tinebase_Core
     /******************************* SETUP ************************************/
     
     /**
-     * PHP < 5.3 don't throws exceptions for Catchable fatal errors per default, 
-     * so we convert them into exceptions manually
-     */
-    public static function setupExceptionErrorHandler()
-    {
-        if (version_compare(PHP_VERSION, '5.3.0') === 1) {
-            set_error_handler('Tinebase_Core::exceptionErrorHandler');
-        }
-    }
-    
-    /**
      * tines error expeption handler for catchable fatal errors
      *
+     * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default, 
+     * so we convert them into exceptions manually
+     * 
      * @param integer $severity
      * @param string $errstr
      * @param string $errfile
      * @param integer $errline
      * @throws ErrorException
      */
-    public static function exceptionErrorHandler($severity, $errstr, $errfile, $errline )
+    public static function errorHandler($severity, $errstr, $errfile, $errline)
     {
-        throw new ErrorException($errstr, 0, $severity, $errfile, $errline);
+        if (error_reporting() == 0) { 
+            return; 
+        }
+        
+        switch ($severity) {
+            case E_COMPILE_ERROR:
+            case E_CORE_ERROR:
+            case E_ERROR:
+            case E_PARSE:
+            case E_RECOVERABLE_ERROR:
+            case E_USER_ERROR:
+                throw new ErrorException($errstr, 0, $severity, $errfile, $errline);
+                break;
+                
+            case E_COMPILE_WARNING:
+            case E_CORE_WARNING:
+            case E_USER_WARNING:
+            case E_WARNING:
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                break;
+                
+            case E_NOTICE:
+            case E_STRICT:
+            case E_USER_NOTICE:
+            default:
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                break;
+            
+                
+        }
+        
     }
     
     /**
