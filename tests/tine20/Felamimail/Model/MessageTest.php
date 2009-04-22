@@ -8,7 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        implement tests
+ * @todo        add tests
  */
 
 /**
@@ -17,19 +17,14 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Felamimail_Controller_FolderTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Felamimail_Model_MessageTest::main');
 }
 
 /**
  * Test class for Tinebase_Group
  */
-class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
+class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Felamimail_Controller_Folder
-     */
-    protected $_controller = array();
-    
     /**
      * Runs the test methods of this class.
      *
@@ -38,7 +33,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Folder Controller Tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Message Model Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -50,7 +45,6 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_controller = Felamimail_Controller_Folder::getInstance();        
     }
 
     /**
@@ -64,39 +58,11 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * get folders from the server
+     * test for parsing address lists
      *
-     * @todo implement
      */
-    public function testGetFolders()
+    public function testParseAdresslist()
     {
         
-    }
-    
-    /**
-     * create a mail folder on the server
-     *
-     * @todo implement
-     */
-    public function testCreateFolder()
-    {
-        /*
-        $this->_controller->createFolder();
-        $this->_controller->deleteFolder();
-        */
-    }
-
-    /**
-     * rename mail folder on the server
-     *
-     * @todo implement
-     */
-    public function testRenameFolder()
-    {
-        /*
-        $this->_controller->createFolder();
-        $this->_controller->renameFolder();
-        $this->_controller->deleteFolder();
-        */
     }
 }
