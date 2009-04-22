@@ -28,8 +28,8 @@ class AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
+
         $suite->addTest(Tinebase_AllTests::suite());
-		
         $suite->addTest(Addressbook_AllTests::suite());
         $suite->addTest(Admin_AllTests::suite());
         $suite->addTest(Crm_AllTests::suite());
@@ -40,7 +40,11 @@ class AllTests
         $suite->addTest(Timetracker_AllTests::suite());
         $suite->addTest(Courses_AllTests::suite());
         $suite->addTest(Calendar_AllTests::suite());
-        $suite->addTest(Felamimail_AllTests::suite());
+        
+        // only call Felamimail tests if imap is configured in config.inc.php
+        if (Zend_Registry::isRegistered('imap_config')) {
+            $suite->addTest(Felamimail_AllTests::suite());
+        }
         
         return $suite;
     }
