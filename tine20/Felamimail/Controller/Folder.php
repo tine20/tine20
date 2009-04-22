@@ -30,6 +30,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
     /**
      * the singleton pattern
      *
+     * @param $_config imap config data
      * @return Felamimail_Controller_Folder
      */
     public static function getInstance() 

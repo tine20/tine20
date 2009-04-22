@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add support for multiple backends
+ * @todo        add support for caching backend(s)
  */
 
 /**
@@ -29,11 +31,12 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract
     /**
      * the singleton pattern
      *
+     * @param $_config imap config data
      * @return Felamimail_Controller_Message
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === NULL) {            
             self::$_instance = new Felamimail_Controller_Message();
         }
         
@@ -55,7 +58,7 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract
         
         Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
         
-        $this->_imap->appendMessage($_mail, 'Sent');
+        $this->_getBackend()->appendMessage($_mail, 'Sent');
     }
     
     /**
@@ -67,11 +70,11 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract
      */
     public function getMessage($_globalName, $_messageId)
     {        
-        if($this->_imap->getCurrentFolder() != $_globalName) {
-            $this->_imap->selectFolder($_globalName);
+        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getBackend()->selectFolder($_globalName);
         }
         
-        $message = $this->_imap->getMessage($_messageId);
+        $message = $this->_getBackend()->getMessage($_messageId);
         
         return $message;
     }
@@ -85,11 +88,11 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract
      */
     public function deleteMessage($_serverId, $_globalName, $_messageId)
     {        
-        if($this->_imap->getCurrentFolder() != $_globalName) {
-            $this->_imap->selectFolder($_globalName);
+        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getBackend()->selectFolder($_globalName);
         }
         
-        $message = $this->_imap->removeMessage($_messageId);
+        $message = $this->_getBackend()->removeMessage($_messageId);
     }
     
     /**
@@ -103,30 +106,30 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract
      */
     public function getUid($_globalName, $from, $to = null)
     {
-        if($this->_imap->getCurrentFolder() != $_globalName) {
-            $this->_imap->selectFolder($_globalName);
+        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getBackend()->selectFolder($_globalName);
         }
         
-        $foundEntries = $this->_imap->getUid($from, $to);
+        $foundEntries = $this->_getBackend()->getUid($from, $to);
         
         return $foundEntries;
     }
     
     public function addFlags($_serverId, $_globalName, $_id, $_flags)
     {
-        if($this->_imap->getCurrentFolder() != $_globalName) {
-            $this->_imap->selectFolder($_globalName);
+        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getBackend()->selectFolder($_globalName);
         }
         
-        $this->_imap->addFlags($_id, $_flags);
+        $this->_getBackend()->addFlags($_id, $_flags);
     }
     
     public function clearFlags($_serverId, $_globalName, $_id, $_flags)
     {
-        if($this->_imap->getCurrentFolder() != $_globalName) {
-            $this->_imap->selectFolder($_globalName);
+        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getBackend()->selectFolder($_globalName);
         }
         
-        $this->_imap->clearFlags($_id, $_flags);
+        $this->_getBackend()->clearFlags($_id, $_flags);
     }
 }
