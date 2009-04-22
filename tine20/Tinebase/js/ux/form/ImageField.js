@@ -157,8 +157,10 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         
         var upload = new Ext.menu.Item({
             text: _('Change Image'),
-            iconCls: 'action_uploadImage'
+            iconCls: 'action_uploadImage',
+            plugins: [new Ext.ux.file.BrowsePlugin({})]
         });
+        /*
         upload.on('render', function(){
             var ct = upload.getEl();
             var bb = new Ext.ux.form.BrowseButton({
@@ -172,6 +174,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                 }
             });
         }, this);
+        */
         
         this.ctxMenu = new Ext.menu.Menu({
             items: [

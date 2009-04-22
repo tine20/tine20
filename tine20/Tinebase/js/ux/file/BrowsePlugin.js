@@ -181,7 +181,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     onRender: function(){
         
-        this.buttonCt = this.buttonCt || this.component.el.child('.x-btn-center em');
+        this.buttonCt = this.buttonCt || this.component.el.child('.x-btn-center em') || this.component.el;
         this.buttonCt.position('relative'); // this is important!
         var styleCfg = {
             position: 'absolute',
