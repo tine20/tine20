@@ -95,15 +95,17 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
      * @param string $_backendId
      * @param string $_folderName
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
+     * 
+     * @todo get delimiter from backend?
      */
-    public function getSubFolders($_backendId = 'default', $_folderName = '')
+    public function getSubFolders($_backendId = 'default', $_folderName = '', $_delimiter = '/')
     {
         $imapConnection = $this->_getBackend($_backendId);
         
-        if(empty($folderName)) {
+        if(empty($_folderName)) {
             $folder = $imapConnection->getFolders('', '%');
         } else {
-            $folder = $imapConnection->getFolders($folderName.'/', '%');
+            $folder = $imapConnection->getFolders($_folderName . $_delimiter, '%');
         }
         
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder', $folder);

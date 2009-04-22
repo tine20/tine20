@@ -66,7 +66,6 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     /**
      * get folders from the server
      *
-     * @todo add 'get subfolders' test 
      */
     public function testGetFolders()
     {
@@ -82,6 +81,10 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
 
         // get subfolders of INBOX
         $resultInboxSub = $this->_controller->getSubFolders('default', $inboxFolder->localName);
+        $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
+        
+        $first = $resultInboxSub->getFirstRecord();
+        $this->assertTrue(preg_match("/^INBOX\//", $first->globalName) == 1);
         
         //print_r($resultInboxSub->toArray());
     }
