@@ -296,7 +296,12 @@ Tine.Tinebase.tineInit = {
                 if (! Tine.Tinebase.exceptionDlg) {
                     Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
                         height: windowHeight,
-                        exceptionInfo: data
+                        exceptionInfo: data,
+                        listeners: {
+                            close: function() {
+                                Tine.Tinebase.exceptionDlg = null;
+                            }
+                        }
                     });
                     Tine.Tinebase.exceptionDlg.show();
                 }
@@ -368,9 +373,14 @@ Tine.Tinebase.tineInit = {
         if (! Tine.Tinebase.exceptionDlg) {
             Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
                 height: windowHeight,
-                exceptionInfo: data
+                exceptionInfo: data,
+                listeners: {
+                    close: function() {
+                        Tine.Tinebase.exceptionDlg = null;
+                    }
+                }
             });
-            win.show();
+            Tine.Tinebase.exceptionDlg.show(Tine.Tinebase.exceptionDlg);
         }
         return true;
     },
