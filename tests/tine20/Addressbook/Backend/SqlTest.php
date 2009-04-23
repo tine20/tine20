@@ -232,13 +232,16 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
     
     /**
      * test if image is in contact
+     * 
+     * API change 2009-04-26, image must now be queried separatly
      *
      */
     public function testImage()
     {
-        $contact = $this->_backend->get($GLOBALS['Addressbook_ControllerTest']['contactId']);
+        //$contact = $this->_backend->get($GLOBALS['Addressbook_ControllerTest']['contactId']);
+        $image = $this->_backend->getImage($GLOBALS['Addressbook_ControllerTest']['contactId']);
         $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
-        file_put_contents($tmpPath, $contact->jpegphoto);
+        file_put_contents($tmpPath, $image);
         $this->assertFileEquals(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif', $tmpPath);
         unset($tmpPath);
     }
@@ -258,6 +261,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
     /**
      * try to remove image
      *
+     * API change 2009-04-26, image must now be queried separatly
      */
     public function testRemoveImage()
     {

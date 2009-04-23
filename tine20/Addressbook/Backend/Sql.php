@@ -71,7 +71,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $contact = parent::create($_record);
         if (! empty($_record->jpegphoto)) {
-            $this->_saveImage($contact->getId(), $_record->jpegphoto);
+            $contact->jpegphoto = $this->_saveImage($contact->getId(), $_record->jpegphoto);
         }
         
         return $contact;
@@ -87,9 +87,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function update(Tinebase_Record_Interface $_record) 
     {
         $contact = parent::update($_record);
-        if (! empty($_record->jpegphoto)) {
-            $this->_saveImage($contact->getId(), $_record->jpegphoto);
-        }
+        $contact->jpegphoto = $this->_saveImage($contact->getId(), $_record->jpegphoto);
         
         return $contact;
     }
@@ -113,8 +111,9 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * saves image to db
      *
-     * @param int $_contactId
-     * @param blob $imageData
+     * @param  int $_contactId
+     * @param  blob $imageData
+     * @return blob
      */
     public function _saveImage($_contactId, $imageData)
     {
@@ -123,6 +122,8 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             'contact_id'    =>$_contactId,
             'image'         => base64_encode($imageData)
         ));
+        
+        return $imageData;
     }
     
     /**
