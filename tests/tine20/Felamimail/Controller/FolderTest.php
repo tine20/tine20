@@ -8,7 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        implement tests
+ * @todo        add removeFolder
  */
 
 /**
@@ -102,20 +102,26 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($testFolder === NULL, 'No test folder created.');
         $this->assertTrue($testFolder->isSelectable);
         
-        //$this->_controller->deleteFolder();
+        //$this->_controller->removeFolder();
     }
 
     /**
      * rename mail folder on the server
      *
-     * @todo implement
      */
     public function testRenameFolder()
     {
-        /*
-        $this->_controller->createFolder();
-        $this->_controller->renameFolder();
-        $this->_controller->deleteFolder();
-        */
+        $this->_controller->createFolder('test', 'INBOX');
+
+        $this->_controller->renameFolder('INBOX/test', 'INBOX/test_renamed');
+        
+        $resultInboxSub = $this->_controller->getSubFolders('INBOX');
+        $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
+        $testFolder = $resultInboxSub->filter('localName', 'test_renamed')->getFirstRecord();
+        
+        $this->assertFalse($testFolder === NULL, 'No renamed folder found.');
+        $this->assertTrue($testFolder->isSelectable);
+        
+        //$this->_controller->removeFolder();
     }
 }

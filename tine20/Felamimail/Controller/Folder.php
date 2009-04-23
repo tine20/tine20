@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        finish implementation
  */
 
 /**
@@ -61,6 +60,9 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
     /**
      * create folder
      *
+     * @param string $_folderName to create
+     * @param string $_parentFolder
+     * @param string $_backendId [optional]
      */
     public function createFolder($_folderName, $_parentFolder = '', $_backendId = 'default')
     {
@@ -70,31 +72,40 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
     }
     
     /**
-     * create folder
+     * remove folder
      *
-     * @todo implement
+     * @param string $_folderName globalName (complete path) of folder to delete
+     * @param string $_backendId
+     * 
+     * @todo add test
      */
-    public function deleteFolder($_folderName, $_backendId = 'default')
-    {
-        $imap = $this->_getBackend($_backendId);
-    }
-    
-    /**
-     * create folder
-     *
-     */
-    public function renameFolder($_newFolderName, $_oldFolderName, $_backendId = 'default')
+    public function removeFolder($_folderName, $_backendId = 'default')
     {
         $imap = $this->_getBackend($_backendId);
         
-        //$imap
+        $imap->removeFolder($_folderName);
+    }
+    
+    /**
+     * rename folder
+     *
+     * @param string $_oldFolderName globalName (complete path) of folder to rename
+     * @param string $_newFolderName new globalName of folder
+     * @param string $_backendId [optional]
+     */
+    public function renameFolder($_oldFolderName, $_newFolderName, $_backendId = 'default')
+    {
+        $imap = $this->_getBackend($_backendId);
+        
+        $imap->renameFolder($_oldFolderName, $_newFolderName);
     }
 
     /**
      * get (sub) folder
      *
      * @param string $_folderName
-     * @param string $_backendId
+     * @param string $_backendId [optional]
+     * @param string $_delimiter [optional]
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      * 
      * @todo get delimiter from backend?
