@@ -58,6 +58,43 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * Creates new entry
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_InvalidArgument
+     * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo    remove autoincremental ids later
+     */
+    public function create(Tinebase_Record_Interface $_record) 
+    {
+        $contact = parent::create($_record);
+        if (! empty($_record->jpegphoto)) {
+            $this->_saveImage($contact->getId(), $_record->jpegphoto);
+        }
+        
+        return $contact;
+    }
+    
+    /**
+     * Updates existing entry
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Interface Record|NULL
+     */
+    public function update(Tinebase_Record_Interface $_record) 
+    {
+        $contact = parent::update($_record);
+        if (! empty($_record->jpegphoto)) {
+            $this->_saveImage($contact->getId(), $_record->jpegphoto);
+        }
+        
+        return $contact;
+    }
+    
+    /**
      * returns contact image
      *
      * @param int $_contactId
@@ -67,10 +104,25 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'addressbook_image', array('image'))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('contact_id'). ' = ?', $_contactId), Zend_Db::INT_TYPE);
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('contact_id'). ' = ?', $_contactId, Zend_Db::INT_TYPE));
         $imageData = $this->_db->fetchOne($select, 'image');
         
         return $imageData ? base64_decode($imageData) : '';
+    }
+    
+    /**
+     * saves image to db
+     *
+     * @param int $_contactId
+     * @param blob $imageData
+     */
+    public function _saveImage($_contactId, $imageData)
+    {
+        $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $_contactId, Zend_Db::INT_TYPE));
+        $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
+            'contact_id'    =>$_contactId,
+            'image'         => base64_encode($imageData)
+        ));
     }
     
     /**
