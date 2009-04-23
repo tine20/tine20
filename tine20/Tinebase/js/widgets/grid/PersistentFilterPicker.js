@@ -146,74 +146,27 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     
 });
 
-Tine.widgets.grid.PersistentFilterLoader = Ext.extend(Ext.tree.TreeLoader, {
-    /**
-     * @cfg {Number} how many chars of the containername to display
-     */
-    displayLength: 25,
-    
-    /**
-     * @cfg {application}
-     */
-    app: null,
-    
-    // trick parent
-    url: true,
-    
+Tine.widgets.grid.PersistentFilterLoader = Ext.extend(Tine.widgets.data.TreeLoader, {
+
+	method: 'Tinebase_PersistentFilter.search',
+
     /**
      * @private
      */
-    requestData: function(node, callback){
+    initComponent: function() {
         var gridPanel = this.app.getMainScreen().getContentPanel();
+    	var model = gridPanel.store.reader.recordType.getMeta('appName') + '_Model_' + gridPanel.store.reader.recordType.getMeta('modelName') + 'Filter';
+        this.filter = [
+            {field: 'model', operator: 'equals', value: model}
+        ];
         
-        var model = gridPanel.store.reader.recordType.getMeta('appName') + '_Model_' + gridPanel.store.reader.recordType.getMeta('modelName') + 'Filter';
-        
-        if(this.fireEvent("beforeload", this, node, callback) !== false){
-            
-            this.transId = Ext.Ajax.request({
-                params: {
-                    method: 'Tinebase_PersistentFilter.search',
-                    filter: Ext.util.JSON.encode([
-                        {field: 'model', operator: 'equals', value: model}
-                    ])
-                },
-                success: this.handleResponse,
-                failure: this.handleFailure,
-                scope: this,
-                argument: {callback: callback, node: node}
-            });
-        } else {
-            // if the load is cancelled, make sure we notify
-            // the node that we are done
-            if(typeof callback == "function"){
-                callback();
-            }
-        }
+        Tine.widgets.grid.PersistentFilterLoader.superclass.initComponent.call(this);
     },
-    
-    processResponse : function(response, node, callback){
-        var data = Ext.util.JSON.decode(response.responseText);
-        var o = data.results;
-        
-        try {
-            node.beginUpdate();
-            for(var i = 0, len = o.length; i < len; i++){
-                var n = this.createNode(o[i]);
-                if(n){
-                    node.appendChild(n);
-                }
-            }
-            node.endUpdate();
-            if(typeof callback == "function"){
-                callback(this, node);
-            }
-        }catch(e){
-            this.handleFailure(response);
-        }
-    },
-    
-    /**
+	
+	/**
      * @private
+     * 
+     * @todo generalize this?
      */
     createNode: function(attr) {
         var isPersistentFilter = !!attr.model && !!attr.filters,
