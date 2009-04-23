@@ -70,11 +70,11 @@ function getDevelopmentRevision()
                 $date = trim($line);
             }
             
-            if (! $branch && preg_match('/svn\.tine20\.org\/svn/', $line)) {
+            if (! isset($branch) && preg_match('/svn\.tine20\.org\/svn/', $line)) {
                 $parts = explode('/', $line);
                 $branch = $parts[count($parts)-2];
             }
-            if ($branch && $date && $line) {
+            if (isset($branch) && isset($date) && $line) {
                 break;
             }
         }
