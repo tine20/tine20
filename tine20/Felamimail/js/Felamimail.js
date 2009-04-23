@@ -4,38 +4,68 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Felamimail.js 7176 2009-03-05 12:26:08Z p.schuele@metaways.de $
  *
+ * @todo        make it work!
+ * @todo        add multiple accounts
+ * @todo        use generic tree panel?
  */
  
 Ext.namespace('Tine.Felamimail');
 
-Tine.Felamimail.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
+Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
-    // quick hack to get filter saving grid working
-    //recordClass: Tine.Felamimail.Model.Message,
-    
+	rootVisible: true,
+    title: 'Email',
+    id: 'felamimail-tree',
+    iconCls: 'FelamimailIconCls',	
+	
     initComponent: function() {
-        this.filterMountId = 'Message';
+    	
+        //this.loader = 
+
+        this.loader.on("beforeload", function(_loader, _node) {
+            _loader.baseParams.accountId    = _node.attributes.accountId;
+            _loader.baseParams.folderName   = _node.attributes.folderName;
+        }, this);
         
-        this.root = {
-            id: 'root',
-            leaf: false,
-            expanded: true,
-            children: [{
-                text: this.app.i18n._('Messages'),
-                id: 'Message',
-                iconCls: 'FelamimailMessage',
-                expanded: true,
-                children: [{
-                    text: this.app.i18n._('All Messages'),
-                    id: 'allrecords',
-                    leaf: true
-                }]
-            }]
-        };
+        // set the root node
+        var treeRoot = new Ext.tree.TreeNode({
+            text: 'root',
+            draggable: false,
+            allowDrop: false,
+            folderName: '',
+            accountId: 'default',
+            id: 'root'
+        });
+        treePanel.setRootNode(treeRoot);
         
+        /*
+        for(var i=0; i<Tine.Felamimail.initialTree.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Tine.Felamimail.initialTree[i]));
+        }
+        
+        treePanel.on('click', function(_node, _event) {
+            Tine.Felamimail.Email.show(_node);
+        }, this);
+
+        treePanel.on('beforeexpand', function(_panel) {
+            if(_panel.getSelectionModel().getSelectedNode() === null) {
+                _panel.expandPath('/root');
+                _panel.selectPath('/root/account1');
+            }
+            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
+        }, this);
+
+        treePanel.on('contextmenu', function(_node, _event) {
+            _event.stopEvent();
+            //_node.select();
+            //_node.getOwnerTree().fireEvent('click', _node);
+            //console.log(_node.attributes.contextMenuClass);
+        });
+        */
+    	        
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
         
     	/*
@@ -55,17 +85,20 @@ Tine.Felamimail.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker,
      */
     afterRender: function() {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
+        /*
         var type = this.app.getMainScreen().activeContentType;
 
         this.expandPath('/root/' + type + '/allrecords');
         this.selectPath('/root/' + type + '/allrecords');
-    },
+        */
+    }
     
     /**
      * returns a filter plugin to be used in a grid
      * 
      * ???
      */
+    /*
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             var scope = this;
@@ -83,9 +116,63 @@ Tine.Felamimail.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker,
         
         return this.filterPlugin;
     }
+    */
 });
 
-//Tine.Felamimail.FilterPanel = Tine.widgets.grid.PersistentFilterPicker
+Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
+	
+    method: 'Felamimail.searchFolders',
+
+    /**
+     * @private
+     */
+    initComponent: function() {
+        this.filter = [
+            {field: 'model', operator: 'equals', value: model}
+        ];
+        
+        Tine.Felamimail.TreeLoader.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * request data
+     * 
+     * @param {} node
+     * @param {} callback
+     * @private
+     */
+    requestData: function(node, callback){
+    	// @todo add node to filter
+    	
+    	Tine.Felamimail.TreeLoader.superclass.requestData.call(this, node, callback);
+    },
+        
+    /**
+     * @private
+     * 
+     * @todo generalize this?
+     */
+    createNode: function(attr) {
+    	/*
+        var isPersistentFilter = !!attr.model && !!attr.filters,
+        node = isPersistentFilter ? {
+            isPersistentFilter: isPersistentFilter,
+            text: attr.name,
+            id: attr.id,
+            leaf: attr.leaf === false ? attr.leaf : true,
+            filter: attr
+        } : attr;
+        */
+    	node = {
+    		id: attr.localName,
+    		leaf: (attr.hasChildren == 1),
+    		text: attr.localName
+    		//-- add more
+    	};
+        return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
+    }
+	
+});
 
 /**
  * default message backend
