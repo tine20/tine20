@@ -7,14 +7,47 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
+    /**
+     * application name
+     *
+     * @var string
+     */
     protected $_applicationName = 'Felamimail';
     
+    /**
+     * search folders
+     *
+     * @param string $filter
+     * @return array
+     * 
+     * @todo finish, add _toJson and add test
+     * @todo let controller implement search interface
+     */
+    public function searchFolders($filter)
+    {
+        //return $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
+    }
+    
+    /**
+     * get email overview
+     *
+     * @param unknown_type $accountId
+     * @param unknown_type $folderName
+     * @param unknown_type $filter
+     * @param unknown_type $sort
+     * @param unknown_type $dir
+     * @param unknown_type $limit
+     * @param unknown_type $start
+     * @return unknown
+     * 
+     * @deprecated 
+     */
     public function getEmailOverview($accountId, $folderName, $filter, $sort, $dir, $limit, $start)
     {
         $controller = new Felamimail_Controller();
@@ -37,9 +70,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	 * @param unknown_type $accountId
 	 * @param unknown_type $location
 	 * @param unknown_type $folderName
+	 * 
+	 * @deprecated 
 	 */
 	public function getSubTree($accountId, $location, $folderName) 
 	{
+	    /*
 		$nodes = array();
 
 		$controller = new Felamimail_Controller();
@@ -76,18 +112,21 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 		}
 		
 		echo Zend_Json::encode($nodes); 
+        */
 
 		// exit here, as the Zend_Server's  processing is adding a result code, which breaks the result array
 		exit;
 	}
 	
     /**
-     * Returns the structure of the initial tree for this application.
+     * Returns the structure of the initial tree (email accounts) for this application.
      *
      * This function returns the needed structure, to display the initial tree, after the the logoin.
      * Additional tree items get loaded on demand.
      *
      * @return array
+     * 
+     * @deprecated 
      */
     public static function getInitialTree()
     {
@@ -111,6 +150,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
+     * @todo rework that
      */
     public function getRegistryData()
     {
@@ -120,6 +160,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * send mail
      *
+     * @todo rework that
      */
     public function sendMail($message)
     {
