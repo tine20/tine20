@@ -88,7 +88,7 @@ Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilte
 //Tine.ExampleApplication.FilterPanel = Tine.widgets.grid.PersistentFilterPicker
 
 /**
- * default timesaccounts backend
+ * default ExampleRecord backend
  */
 Tine.ExampleApplication.recordBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'ExampleApplication',

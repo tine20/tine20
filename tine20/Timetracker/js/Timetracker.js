@@ -107,7 +107,7 @@ Tine.Timetracker.timesheetBackend = new Tine.Tinebase.widgets.app.JsonBackend({
 });
 
 /**
- * default timesaccounts backend
+ * default timeaccounts backend
  */
 Tine.Timetracker.timeaccountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Timetracker',
