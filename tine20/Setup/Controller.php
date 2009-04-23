@@ -69,6 +69,9 @@ class Setup_Controller
      */
     private function __construct()
     {
+        // setup actions could take quite a while we try to set max execution time to 5 minutes
+        Setup_Core::setExecutionLifeTime(300);
+        
         $this->_baseDir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
         
         if (Setup_Core::get(Setup_Core::CHECKDB)) {

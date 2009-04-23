@@ -563,7 +563,23 @@ class Tinebase_Core
         $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());
         Zend_Mail::setDefaultTransport($transport);
     }
-
+    
+    /**
+     * set php execution life (max) time
+     *
+     * @param int $_seconds
+     */
+    public static function setExecutionLifeTime($_seconds)
+    {
+        if(ini_get('max_execution_time') < $_seconds) { 
+            if((bool)ini_get('safe_mode') === true) {
+                Setup_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' max_execution_time(' . ini_get('max_execution_time') . ') is to low. Can\'t set limit to ' . $_seconds . ' because of safe mode restrictions.');
+            } else { 
+                set_time_limit($_seconds);
+            }
+        }
+    }
+    
     /******************************* REGISTRY ************************************/
     
     /**

@@ -15,6 +15,8 @@ Ext.ns('Tine', 'Tine.Setup');
  * init ajax
  */
 Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createInterceptor(function() {
+    // setup calls can take quite a while
+    Ext.Ajax.timeout = 300000;
     Tine.Tinebase.tineInit.requestUrl = 'setup.php'
     
     return true;

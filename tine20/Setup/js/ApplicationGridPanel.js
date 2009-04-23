@@ -117,13 +117,21 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
     },
     
     onAlterApplications: function(btn, e) {
-        this.grid.loadMask.show();
         var appNames = [];
         var apps = this.selectionModel.getSelections();
         
         for(var i=0; i<apps.length; i++) {
             appNames.push(apps[i].get('name'));
         }
+        
+        var msg = this.app.i18n.n_('Updating Application "{0}".', 'Updating {0} Applications.', appNames.length);
+        msg = String.format(msg, appNames.length == 1 ? appNames[0] : appNames.length ) + ' ' + this.app.i18n._('This may take a while');
+        
+        var longLoadMask = new Ext.LoadMask(this.grid.getEl(), {
+            msg: msg,
+            removeMask: true
+        });
+        longLoadMask.show();
         
         Ext.Ajax.request({
             scope: this,
@@ -133,7 +141,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             },
             success: function() {
                 this.store.load();
-                this.grid.loadMask.hide();
+                longLoadMask.hide();
             },
             fail: function() {
                 Ext.Msg.alert(this.app.i18n._('Shit'), this.app.i18n._('Where are the backup tapes'));

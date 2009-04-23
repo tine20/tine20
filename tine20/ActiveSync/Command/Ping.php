@@ -103,13 +103,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         }
         
         $lifeTime = $this->_device->pinglifetime;
-        if(ini_get('max_execution_time') < $lifeTime) { 
-            if((bool)ini_get('safe_mode') === true) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' max_execution_time(' . ini_get('max_execution_time') . ') is to low. Can\'t set limit to ' . $lifeTime . ' because of safe mode restrictions.');
-            } else { 
-                set_time_limit($lifetime);
-            }
-        }
+        Tinebase_Core::setExecutionLifeTime($lifeTime);
         
         $intervalEnd = $intervalStart + $lifeTime;
         $folders = unserialize($this->_device->pingfolder);
