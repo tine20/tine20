@@ -437,9 +437,11 @@ class Tinebase_Core
                 case self::PDO_MYSQL:
                     $db = Zend_Db::factory('Pdo_Mysql', $dbConfig->toArray());
                     $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
+                    $db->query("SET NAMES UTF8");
                     break;
                 case self::PDO_OCI:
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
+                    $db->query("SET NAMES UTF8");
                     break;
                 default:
                     throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');

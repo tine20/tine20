@@ -60,7 +60,21 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
-
+    
+    /**
+     * gets binary contactImage
+     *
+     * @param int $_contactId
+     * @return blob
+     */
+    public function getImage($_contactId) {
+        // ensure user has rights to see image
+        $this->get($_contactId);
+        
+        $image = $this->_backend->getImage($_contactId);
+        return $image;
+    }
+    
     /****************************** overwritten functions ************************/
     
     /**

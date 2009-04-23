@@ -2209,4 +2209,131 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.27');
     }
+    
+    /**
+     * update to 0.28
+     * - repair db charset for users with non defautl utf8 client charset
+     */
+    public function update_27()
+    {
+        $config = Setup_Core::getConfig();
+        $tableprefix = $config->database->tableprefix;
+        
+        // have a second db connection with default charset
+        $orgDb = Zend_Db::factory('Pdo_Mysql', $config->database->toArray());
+        
+        /** addressbook: store image in separat table **/
+        $tableDefinition = '
+            <table>
+                <name>addressbook_image</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>contact_id</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>image</name>
+                        <type>blob</type>
+                    </field>
+                    <index>
+                        <name>contact_id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>contact_id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>addressbook_image::contact_id-addressbook::id</name>
+                        <field>
+                            <name>contact_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>addressbook</table>
+                            <field>id</field>
+                            <ondelete>CASCADE</ondelete>
+                        </reference>
+                        <ondelete>cascade</ondelete>
+                    </index>
+                </declaration>
+            </table>
+        ';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);
+        
+        $select = $orgDb->select()
+            ->from("{$tableprefix}addressbook", array('id'))
+            ->where($orgDb->quoteIdentifier('jpegphoto') . " IS NOT NULL");
+        $contactIds = $orgDb->fetchAll($select);
+        
+        foreach ($contactIds as $contactId) {
+            $contactId = $contactId['id'];
+            $select = $orgDb->select()
+                ->from("{$tableprefix}addressbook", array('id', 'jpegphoto'))
+                ->where($orgDb->quoteInto($orgDb->quoteIdentifier('id') .' = ?', $contactId));
+            
+            $imageData = $orgDb->fetchRow($select);
+            $orgDb->insert("{$tableprefix}addressbook_image", array(
+                'contact_id' => $imageData['id'],
+                'image'      => base64_encode($imageData['jpegphoto'])
+            ));
+        }
+        $this->_backend->dropCol('addressbook', 'jpegphoto');
+        
+        /** convert serialized object into json objects **/
+        $select = $orgDb->select()
+            ->from("{$tableprefix}filter", array('id', 'filters'));
+        $filters = $orgDb->fetchAll($select);
+        
+        foreach ($filters as $filter) {
+            $filterObject = unserialize($filter['filters']);
+            $orgDb->update(
+                "{$tableprefix}filter", 
+                array('filters' => Zend_Json::encode($filterObject)), 
+                $orgDb->quoteInto($orgDb->quoteIdentifier('id') .' = ?', $filter['id'])
+            );
+        }
+        
+        /** convert db contenets for installations which had a clientcharset != utf8 **/
+        $originalCharset = array_value('Value', array_value(0, $orgDb->query("SHOW VARIABLES LIKE 'character_set_client'")->fetchAll()));
+        if (strtolower($originalCharset) != 'utf8') {
+            $this->_db->query("SET FOREIGN_KEY_CHECKS=0");
+            $orgDb->query("SET FOREIGN_KEY_CHECKS=0");
+            
+            // build the list of tables to convert
+            $tables = array();
+            $rawTables = $this->_db->query("SHOW TABLES")->fetchAll();
+            foreach ($rawTables as $rawTable) {
+                $tableName = array_values($rawTable);
+                $tableName = $tableName[0];
+                
+                if (preg_match("/^$tableprefix/", $tableName) && $tableName != "{$tableprefix}addressbook_image") {
+                    $tables[] = $tableName;
+                }
+            }
+            
+            // the actual charset conversion is done by the db.
+            foreach ($tables as $tableName) {
+                //$this->_db->query("SET character_set_client = '$originalCharset'");
+                
+                $select = $orgDb->select()->from($tableName);
+                $result = $orgDb->fetchAll($select);
+                
+                $orgDb->query("TRUNCATE TABLE " . $this->_db->quoteIdentifier($tableName));
+                //$this->_db->query("SET character_set_client = 'utf8'");
+                
+                foreach ($result as $row) {
+                    $this->_db->insert($tableName, $row);
+                }
+            
+                
+            }
+            $this->_db->query("SET FOREIGN_KEY_CHECKS=1");
+        }
+        $orgDb->closeConnection();
+        $this->setApplicationVersion('Tinebase', '0.28');
+    }
 }

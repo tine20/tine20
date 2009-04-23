@@ -473,7 +473,42 @@
                     </field>
                 </index>
             </declaration>
-        </table>        
+        </table>
+        <table>
+            <name>addressbook_image</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>contact_id</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>image</name>
+                    <type>blob</type>
+                </field>
+                <index>
+                    <name>contact_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>addressbook_image::contact_id-addressbook::id</name>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                    </reference>
+                    <ondelete>cascade</ondelete>
+                </index>
+            </declaration>
+        </table>
     </tables>    
     <defaultRecords>
         <record>

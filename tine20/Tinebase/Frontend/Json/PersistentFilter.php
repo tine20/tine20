@@ -54,7 +54,7 @@ class Tinebase_Frontend_Json_PersistentFilter
         )->toArray();
         
         foreach ($result as &$record) {
-            $record['filters'] = unserialize($record['filters']);
+            $record['filters'] = Zend_Json::decode($record['filters']);
         }
         
         return array(
@@ -73,7 +73,7 @@ class Tinebase_Frontend_Json_PersistentFilter
     {
         $persistentFilter = $this->_backend->get($filterId);
         
-        $filter = new $persistentFilter->model(unserialize($persistentFilter->filters));
+        $filter = new $persistentFilter->model(Zend_Json::decode($persistentFilter->filters));
         
         //$result = $filter->toArray(TRUE);
         
@@ -106,7 +106,7 @@ class Tinebase_Frontend_Json_PersistentFilter
             'account_id'        => Tinebase_Core::getUser()->getId(),
             'application_id'    => $applicationId,
             'model'             => get_class($filter),
-            'filters'           => serialize($filter->toArray()),
+            'filters'           => Zend_Json::encode($filter->toArray()),
             'name'              => $name
         ));
         

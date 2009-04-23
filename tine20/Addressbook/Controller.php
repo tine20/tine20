@@ -127,16 +127,19 @@ class Addressbook_Controller extends Tinebase_Controller_Abstract implements Tin
      */
     public function getImage($_identifier, $_location='')
     {
-        $contact = Addressbook_Controller_Contact::getInstance()->get($_identifier);
-        if (empty($contact->jpegphoto)) {
+        // get contact to ensure user has read rights
+        $image = Addressbook_Controller_Contact::getInstance()->getImage($_identifier);
+        
+        
+        if (empty($image)) {
             throw new Addressbook_Exception_NotFound('Contact has no image.');
         }
-        $imageInfo = Tinebase_ImageHelper::getImageInfoFromBlob($contact->jpegphoto);
+        $imageInfo = Tinebase_ImageHelper::getImageInfoFromBlob($image);
         
         return new Tinebase_Model_Image($imageInfo + array(
             'id'           => $_identifier,
             'application'  => 'Addressbook',
-            'data'         => $contact->jpegphoto
+            'data'         => $image
         ));
     }
 }
