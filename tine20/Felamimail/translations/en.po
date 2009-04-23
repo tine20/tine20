@@ -1,0 +1,75 @@
+#: js/FelamimailEditDialog.js:59 js/FelamimailGridPanel.js:54 js/Models.js:50
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "Message"
+msgstr[1] "Messages"
+
+#: js/FelamimailEditDialog.js:75 js/FelamimailGridPanel.js:76
+msgid "Number"
+msgstr "Number"
+
+#: js/FelamimailEditDialog.js:80 js/FelamimailGridPanel.js:82
+msgid "Title"
+msgstr "Title"
+
+#: js/FelamimailEditDialog.js:89
+msgid "Unit"
+msgstr "Unit"
+
+#: js/FelamimailEditDialog.js:93
+msgid "Unit Price"
+msgstr "Unit Price"
+
+#: js/FelamimailEditDialog.js:98 js/FelamimailGridPanel.js:95
+msgid "Budget"
+msgstr "Budget"
+
+#: js/FelamimailEditDialog.js:102
+msgid "Timesheets are billable"
+msgstr "Timesheets are billable"
+
+#: js/FelamimailEditDialog.js:106 js/FelamimailGridPanel.js:88
+msgid "Status"
+msgstr "Status"
+
+#: js/FelamimailEditDialog.js:112
+msgid "closed"
+msgstr "closed"
+
+#: js/FelamimailEditDialog.js:112
+msgid "open"
+msgstr "open"
+
+#: js/FelamimailEditDialog.js:114
+msgid "Billed"
+msgstr "Billed"
+
+#: js/FelamimailEditDialog.js:122
+msgid "not yet billed"
+msgstr "not yet billed"
+
+#: js/FelamimailEditDialog.js:123
+msgid "to bill"
+msgstr "to bill"
+
+#: js/FelamimailEditDialog.js:124
+msgid "billed"
+msgstr "billed"
+
+#: js/FelamimailGridPanel.js:55
+msgid "Description"
+msgstr "Description"
+
+#: js/FelamimailGridPanel.js:117
+msgid "Show closed"
+msgstr "Show closed"
+
+#: js/Models.js:54
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "record list"
+msgstr[1] "record lists"
+
+#: Setup/_setup.xml:6
+msgid "Email"
+msgstr "Email"

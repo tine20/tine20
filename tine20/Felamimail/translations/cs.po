@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Felamimail\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: js/FelamimailEditDialog.js:59 js/FelamimailGridPanel.js:54 js/Models.js:50
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/FelamimailEditDialog.js:75 js/FelamimailGridPanel.js:76
+msgid "Number"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:80 js/FelamimailGridPanel.js:82
+msgid "Title"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:89
+msgid "Unit"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:93
+msgid "Unit Price"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:98 js/FelamimailGridPanel.js:95
+msgid "Budget"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:102
+msgid "Timesheets are billable"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:106 js/FelamimailGridPanel.js:88
+msgid "Status"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:112
+msgid "closed"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:112
+msgid "open"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:114
+msgid "Billed"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:122
+msgid "not yet billed"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:123
+msgid "to bill"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:124
+msgid "billed"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:55
+msgid "Description"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:117
+msgid "Show closed"
+msgstr ""
+
+#: js/Models.js:54
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Setup/_setup.xml:6
+msgid "Email"
+msgstr ""

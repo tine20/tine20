@@ -3,7 +3,7 @@
 <!-- @todo rename file to activate app -->
 <application>
     <name>Felamimail</name>
-    <!-- gettext('Email') -->   
+    <!-- gettext('Felamimail') -->   
     <version>0.1</version>
     <order>30</order>
     <status>disabled</status>
