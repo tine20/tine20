@@ -19,7 +19,9 @@
  * @package     Tinebase
  * @subpackage  Controller
  */
-abstract class Tinebase_Controller_Record_Abstract extends Tinebase_Controller_Abstract implements Tinebase_Controller_Record_Interface
+abstract class Tinebase_Controller_Record_Abstract 
+    extends Tinebase_Controller_Abstract 
+    implements Tinebase_Controller_Record_Interface, Tinebase_Controller_SearchInterface
 {
    /**
      * application backend class

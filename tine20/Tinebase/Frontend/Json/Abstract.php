@@ -76,11 +76,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param string $_filter json encoded
      * @param string $_paging json encoded
-     * @param Tinebase_Controller_Record_Interface $_controller the record controller
+     * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string $_filterModel the class name of the filter model to use
      * @return array
      */
-    protected function _search($_filter, $_paging, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
+    protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel)
     {
         $decodedFilter = Zend_Json::decode($_filter);
         
