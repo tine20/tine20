@@ -95,6 +95,10 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             //$import = new Setup_Import_Egw14();
             $import->import();
         }
+        
+        return array(
+            'success'=> true,
+        );
     }
 
     /**
@@ -112,6 +116,10 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         if(count($applications) > 0) {
             $this->_controller->updateApplications($applications);
         }
+        
+        return array(
+            'success'=> true,
+        );
     }
 
     /**
@@ -123,6 +131,10 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     {
         $decodedNames = Zend_Json::decode($applicationNames);
         $this->_controller->uninstallApplications($decodedNames);
+        
+        return array(
+            'success'=> true,
+        );
     }
     
     /**

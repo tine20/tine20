@@ -33,7 +33,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     {
         $statement = $this->getCreateStatement($_table);
         $this->execQueryVoid($statement);
-        #echo "<pre>$statement</pre><hr>";
+        #// auto shutup by cweiss: echo "<pre>$statement</pre><hr>";
     }
     
     public function getCreateStatement(Setup_Backend_Schema_Table_Abstract  $_table)
@@ -157,13 +157,13 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $compareString = preg_replace('/ AUTO_INCREMENT=\d*/', '', $dump[0]['Create Table']);
         
         if ($compareString != $string) {
-            echo "XML<br/>" . $string;
-            echo "<hr color=red>MYSQL<br/>";
+            // auto shutup by cweiss: echo "XML<br/>" . $string;
+            // auto shutup by cweiss: echo "<hr color=red>MYSQL<br/>";
             for ($i = 0 ; $i < (strlen($compareString)+1) ; $i++) {
                 if ($compareString[$i] == $string[$i]) {
-                    echo $compareString[$i];
+                    // auto shutup by cweiss: echo $compareString[$i];
                 } else {
-                    echo "<font color=red>" . $compareString[$i] . "</font>";
+                    // auto shutup by cweiss: echo "<font color=red>" . $compareString[$i] . "</font>";
                 }
             }
             throw new Setup_Exception("<h1>Failure</h1>");
@@ -178,10 +178,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                     if (NULL != (array_diff($spalte->toArray(), $existingField->toArray()))) {
                         
                         print_r("Differences between database and newest xml declarations\n");
-                        echo $_table->name . " database: ";
+                        // auto shutup by cweiss: echo $_table->name . " database: ";
                        // var_dump($existingField);
                         var_dump($existingField->toArray());
-                        echo "XML field: ";
+                        // auto shutup by cweiss: echo "XML field: ";
                        // var_dump($spalte);
                         var_dump($spalte->toArray());
                         

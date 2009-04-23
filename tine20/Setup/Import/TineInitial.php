@@ -36,7 +36,7 @@ class Setup_Import_TineInitial
         
         /***************** initial config/preference settings ************************/
         
-        echo "Creating initial config settings ...<br>";
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial config settings ...');
         $configSettings = array(
             "Default User Group" => "Users",              
             "Default Admin Group" => "Administrators",
@@ -84,7 +84,7 @@ class Setup_Import_TineInitial
         
         /***************** admin account, groups and roles ************************/
         
-        echo "Creating initial user(tine20admin), groups and roles ...<br>";
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial user(tine20admin), groups and roles ...');
         
         // or initialize the database ourself
         // add the admin group

@@ -207,7 +207,7 @@ class Setup_Controller
                     try {
                         $this->_backend->checkTable($table);
                     } catch (Setup_Exception $e) {
-                        echo $e->getMessage();
+                        Setup_Core::getLogger()->error(__METHOD__ . '::' . __LINE__ . " Checking table failed with message '{$e->getMessage()}'");
                     }
                 } else {
                     throw new Setup_Exception('Table ' . $table->name . ' for application' . $_application->name . " does not exist. \n<strong>Update broken</strong>");
@@ -247,7 +247,6 @@ class Setup_Controller
                     // we must do at least one update
                     do {
                         $functionName = 'update_' . $minor;
-                        //echo "FUNCTIONNAME: $functionName<br>";
                         
                         try {
                             $db = Setup_Core::getDb();
