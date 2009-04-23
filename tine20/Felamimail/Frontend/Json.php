@@ -130,6 +130,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public static function getInitialTree()
     {
+        /*
         $controller = new Felamimail_Controller();
         $accounts = $controller->getListOfAccounts();        
         
@@ -143,6 +144,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
 		return $treeNodes;
+        */
 	}
 	
 	/**
@@ -154,7 +156,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        return array('initialTree' => self::getInitialTree());
+        //return array('initialTree' => self::getInitialTree());
+        return array();
     }
     
     /**
