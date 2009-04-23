@@ -48,7 +48,6 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract
     /**
      * the singleton pattern
      *
-     * @param $_config imap config data
      * @return Felamimail_Controller_Message
      */
     public static function getInstance() 

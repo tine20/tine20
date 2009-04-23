@@ -47,7 +47,6 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
     /**
      * the singleton pattern
      *
-     * @param $_config imap config data
      * @return Felamimail_Controller_Folder
      */
     public static function getInstance() 
@@ -62,11 +61,12 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
     /**
      * create folder
      *
-     * @todo implement
      */
-    public function createFolder()
+    public function createFolder($_folderName, $_parentFolder = '', $_backendId = 'default')
     {
+        $imap = $this->_getBackend($_backendId);
         
+        $imap->createFolder($_folderName, $_parentFolder);
     }
     
     /**
@@ -74,38 +74,39 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
      *
      * @todo implement
      */
-    public function deleteFolder()
+    public function deleteFolder($_folderName, $_backendId = 'default')
     {
-        
+        $imap = $this->_getBackend($_backendId);
     }
     
     /**
      * create folder
      *
-     * @todo implement
      */
-    public function renameFolder()
+    public function renameFolder($_newFolderName, $_oldFolderName, $_backendId = 'default')
     {
+        $imap = $this->_getBackend($_backendId);
         
+        //$imap
     }
 
     /**
      * get (sub) folder
      *
-     * @param string $_backendId
      * @param string $_folderName
+     * @param string $_backendId
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      * 
      * @todo get delimiter from backend?
      */
-    public function getSubFolders($_backendId = 'default', $_folderName = '', $_delimiter = '/')
+    public function getSubFolders($_folderName = '', $_backendId = 'default', $_delimiter = '/')
     {
-        $imapConnection = $this->_getBackend($_backendId);
+        $imap = $this->_getBackend($_backendId);
         
         if(empty($_folderName)) {
-            $folder = $imapConnection->getFolders('', '%');
+            $folder = $imap->getFolders('', '%');
         } else {
-            $folder = $imapConnection->getFolders($_folderName . $_delimiter, '%');
+            $folder = $imap->getFolders($_folderName . $_delimiter, '%');
         }
         
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder', $folder);

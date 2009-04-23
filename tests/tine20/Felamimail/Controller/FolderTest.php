@@ -80,26 +80,29 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($inboxFolder->hasChildren);
 
         // get subfolders of INBOX
-        $resultInboxSub = $this->_controller->getSubFolders('default', $inboxFolder->localName);
+        $resultInboxSub = $this->_controller->getSubFolders($inboxFolder->localName);
         $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
         
         $first = $resultInboxSub->getFirstRecord();
         $this->assertTrue(preg_match("/^INBOX\//", $first->globalName) == 1);
-        
-        //print_r($resultInboxSub->toArray());
     }
     
     /**
      * create a mail folder on the server
      *
-     * @todo implement
      */
     public function testCreateFolder()
     {
-        /*
-        $this->_controller->createFolder();
-        $this->_controller->deleteFolder();
-        */
+        $this->_controller->createFolder('test', 'INBOX');
+
+        $resultInboxSub = $this->_controller->getSubFolders('INBOX');
+        $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
+        $testFolder = $resultInboxSub->filter('localName', 'test')->getFirstRecord();
+        
+        $this->assertFalse($testFolder === NULL, 'No test folder created.');
+        $this->assertTrue($testFolder->isSelectable);
+        
+        //$this->_controller->deleteFolder();
     }
 
     /**
