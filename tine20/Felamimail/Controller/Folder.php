@@ -117,6 +117,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
         if(empty($_folderName)) {
             $folder = $imap->getFolders('', '%');
         } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $_delimiter);
             $folder = $imap->getFolders($_folderName . $_delimiter, '%');
         }
         
