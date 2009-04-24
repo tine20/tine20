@@ -451,7 +451,7 @@ Tine.Tinebase.tineInit = {
         }
         
         if (needSelfUpdate) {
-            if (! google.gears.localServer) {
+            if (google.gears.localServer) {
                 google.gears.localServer.removeManagedStore('tine20-store');
                 google.gears.localServer.removeStore('tine20-package-store');
             }
