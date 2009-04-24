@@ -16,19 +16,6 @@ Tine.Timetracker.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
     activeContentType: 'Timesheet',
     
-    /*
-    show: function() {
-        if(this.fireEvent("beforeshow", this) !== false){
-            this.setTreePanel();
-            this.setContentPanel();
-            this.setToolbar();
-            this.updateMainToolbar();
-            
-            this.fireEvent('show', this);
-        }
-        return this;
-    },*/
-    
     setContentPanel: function() {
         
         // which content panel?
