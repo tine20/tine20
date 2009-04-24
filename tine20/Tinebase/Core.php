@@ -394,15 +394,10 @@ class Tinebase_Core
         Zend_Session::start();
         
         define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20_CODENAME',      'trunk');
+        define('TINE20_CODENAME',      getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
-        define('TINE20_RELEASETIME',   Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG));
+        define('TINE20_RELEASETIME',   'none');
 
-        if (TINE20_BUILDTYPE == 'RELEASE') {
-            // set error mode to suppress notices & warnings in release mode
-            error_reporting(E_ERROR);
-        }
-                
         $session = new Zend_Session_Namespace('tinebase');
         
         if (!isset($session->jsonKey)) {
