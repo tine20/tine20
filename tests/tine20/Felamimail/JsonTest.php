@@ -61,6 +61,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {        
     }
+
+    /************************ test functions *********************************/
     
     /**
      * test search folders
@@ -77,11 +79,47 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertTrue(in_array($folder['localName'], $expectedFolders));
         }
     }
+
+    /**
+     * test search messages
+     *
+     */
+    public function testSearchMessages()
+    {
+        $filter = $this->_getMessageFilter();
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        
+        $this->assertGreaterThan(0, $result['totalcount']);
+
+        $firstMail = $result['results'][0];
+        $this->assertEquals('testmail', $firstMail['subject']);
+        $this->assertEquals('unittest@tine20.org', $firstMail['to']);
+    }
     
+    
+    /************************ protected functions ****************************/
+    
+    /**
+     * get folder filter
+     *
+     * @return array
+     */
     protected function _getFolderFilter()
     {
         return array(array(
             'field' => 'globalName', 'operator' => 'equals', 'value' => ''
+        ));
+    }
+
+    /**
+     * get message filter
+     *
+     * @return array
+     */
+    protected function _getMessageFilter()
+    {
+        return array(array(
+            'field' => 'folder', 'operator' => 'equals', 'value' => 'INBOX'
         ));
     }
 }

@@ -10,7 +10,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        make search messages work
  * @todo        add functions for rename/create/delete folders
  * @todo        remove deprecated code
  */
@@ -40,16 +39,46 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $filter
      * @param string $pagination
      * @return array
-     * 
-     * @todo implement this, controller funcs + write test
      */
     public function searchMessages($filter, $paging)
     {
-        //return $this->_search($filter, $pagination, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
+        $controller = Felamimail_Controller_Message::getInstance();
+        
+        $decodedFilter = Zend_Json::decode($filter);
+        
+        if (is_array($decodedFilter)) {
+            $filter = new Felamimail_Model_MessageFilter(array());
+            $filter->setFromArrayInUsersTimezone($decodedFilter);
+        } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
+            $persistentFilterJson = new Tinebase_Frontend_Json_PersistentFilter(); 
+            $filter = $persistentFilterJson->get($decodedFilter);
+        } else {
+            // filter is empty
+            $filter = new Felamimail_Model_MessageFilter(array());
+        }
+
+        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
+        
+        $messages = $controller->search($filter, $pagination);
+        $result = array();
+        foreach($messages as $id => $message) {
+            $result[] = array(
+                'id'       => $id,
+                'subject'  => $message->subject,
+                'from'     => $message->from,
+                'to'       => $message->to,
+                'sent'     => $message->date,
+                //'uid'      => $message->uid,
+                //'received' => $message->internalDate,
+                //'size'     => $message->size
+            ); 
+            //$result[] = $message->toArray(); ?
+        }
         
         return array(
-            'results' => array(),
-            'totalcount' => 0
+            'results'       => $result,
+            'totalcount'    => count($result), //$controller->searchCount($filter),
+            'filter'        => $filter->toArray(TRUE),
         );
     }
     

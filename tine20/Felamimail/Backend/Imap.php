@@ -111,6 +111,31 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * get all messages of selected folder
+     * 
+     * @todo add paging?
+     */
+    public function getMessages()
+    {
+        $useUidSetting = $this->_useUid;
+        $this->_useUid = FALSE;
+        
+        $count = $this->countMessages();
+        $result = array();
+        $i = 1;
+        
+        //$result = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER'), 1, $this->countMessages(), FALSE);
+        
+        while ($i <= $count) {
+            $result[$i] = $this->getMessage($i);
+            $i++;
+        }
+        
+        $this->_useUid = $useUidSetting;
+        return $result;
+    }
+    
+    /**
      * Get raw content of message or part
      *
      * @param  int               $id   number of message
