@@ -42,6 +42,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     protected $_validators = array(
         'localName'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'globalName'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), // global name is the path from root folder
+        'backendId'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'default'),
         'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'isSelectable'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'hasChildren'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),

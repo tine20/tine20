@@ -9,7 +9,6 @@
  *
  * @todo        make it work!
  * @todo        add multiple accounts
- * @todo        use generic tree panel?
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -30,6 +29,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     app: null,
     
 	rootVisible: true,
+	autoScroll: true,
     id: 'felamimail-tree',
 	
     initComponent: function() {
@@ -38,44 +38,20 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             app: this.app
         });
 
-        console.log('init tree panel');
-        
-        /*
-        this.loader.on("beforeload", function(_loader, _node) {
-            _loader.baseParams.backendId    = _node.attributes.backendId;
-            _loader.baseParams.folderName   = _node.attributes.folderName;
-        }, this);
-        */
-        
         // set the root node
-        //var treeRoot = new Ext.tree.TreeNode({
         this.root = new Ext.tree.AsyncTreeNode({
             text: 'default',
-            draggable: false,
-            allowDrop: false,
-            folderName: '',
             globalName: '',
             backendId: 'default',
+            draggable: false,
+            allowDrop: false,
             expanded: false,
+            leaf: false,
             id: '/'
+            //iconCls: 'FelamimailMessage'
         });
-        
+                
         /*
-        this.root = new Ext.tree.TreeNode({
-            text: 'default',
-            id: '/'        	
-        });
-        */
-        
-        /*
-        for(var i=0; i<Tine.Felamimail.initialTree.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Tine.Felamimail.initialTree[i]));
-        }
-        
-        treePanel.on('click', function(_node, _event) {
-            Tine.Felamimail.Email.show(_node);
-        }, this);
-
         treePanel.on('beforeexpand', function(_panel) {
             if(_panel.getSelectionModel().getSelectedNode() === null) {
                 _panel.expandPath('/root');
@@ -94,6 +70,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     	        
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
         
+        this.on('click', function(node) {
+            node.expand();
+        }, this);
+    	
     	/*
         this.on('click', function(node) {
             if (node.attributes.isPersistentFilter != true) {
@@ -142,7 +122,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     }
 });
 
-Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
+Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.data.TreeLoader, {
 	
     method: 'Felamimail.searchFolders',
 
@@ -150,9 +130,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
      * @private
      */
     initComponent: function() {
-        this.filter = [
-            {field: 'model', operator: 'equals', value: model}
-        ];
+        this.filter = [];
         
         Tine.Felamimail.TreeLoader.superclass.initComponent.call(this);
     },
@@ -165,8 +143,12 @@ Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
      * @private
      */
     requestData: function(node, callback){
-    	// @todo add node to filter
-    	console.log(node);
+    	// add globalName to filter
+    	//console.log(node);
+    	this.filter = [
+            {field: 'backendId', operator: 'equals', value: node.attributes.backendId},
+            {field: 'globalName', operator: 'equals', value: node.attributes.globalName}
+        ];
     	
     	Tine.Felamimail.TreeLoader.superclass.requestData.call(this, node, callback);
     },
@@ -177,20 +159,12 @@ Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
      * @todo generalize this?
      */
     createNode: function(attr) {
-    	/*
-        var isPersistentFilter = !!attr.model && !!attr.filters,
-        node = isPersistentFilter ? {
-            isPersistentFilter: isPersistentFilter,
-            text: attr.name,
-            id: attr.id,
-            leaf: attr.leaf === false ? attr.leaf : true,
-            filter: attr
-        } : attr;
-        */
     	node = {
     		id: attr.localName,
-    		leaf: (attr.hasChildren == 1),
-    		text: attr.localName
+    		leaf: (attr.hasChildren != 1),
+    		text: attr.localName,
+    		globalName: attr.globalName,
+    		backendId: attr.backendId
     		//-- add more
     	};
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);

@@ -114,8 +114,6 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      *
      * @param string $_folderName globalName (complete path) of folder to delete
      * @param string $_backendId
-     * 
-     * @todo add test
      */
     public function removeFolder($_folderName, $_backendId = 'default')
     {
@@ -155,11 +153,17 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
         if(empty($_folderName)) {
             $folder = $imap->getFolders('', '%');
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $_delimiter);
-            $folder = $imap->getFolders($_folderName . $_delimiter, '%');
+            try {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $_delimiter);
+                $folder = $imap->getFolders($_folderName . $_delimiter, '%');
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
+                $folder = array();
+            }
         }
         
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder', $folder);
+        $result->backendId = $_backendId;
         
         return $result;
     }
