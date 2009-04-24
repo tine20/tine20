@@ -25,7 +25,7 @@ Ext.onReady(function() {
             waitForInits.defer(100);
         } else {
             Tine.Tinebase.tineInit.onLangFilesLoad();
-            Tine.Tinebase.tineInit.initGears();
+            Tine.Tinebase.tineInit.checkSelfUpdate();
             Tine.Tinebase.tineInit.renderWindow();
         }
     };
@@ -37,11 +37,11 @@ Ext.onReady(function() {
 Ext.namespace('Tine');
 
 Tine.clientVersion = {};
-Tine.clientVersion.codename         = '$HeadURL$';
+Tine.clientVersion.codeName         = '$HeadURL$';
 Tine.clientVersion.buildType        = 'none';
 Tine.clientVersion.buildDate        = 'none';
 Tine.clientVersion.packageString    = 'none';
-Tine.clientVersion.releasetime      = 'none';
+Tine.clientVersion.releaseTime      = 'none';
 
 /**
  * static tine init functions
@@ -434,22 +434,52 @@ Tine.Tinebase.tineInit = {
     },
     
     /**
-     * initialises gears
+     * check if selfupdate is needed
      */
-    initGears: function() {
-        if (! google.gears.localServer) {
+    checkSelfUpdate: function() {
+        var needSelfUpdate, serverVersion = Tine.Tinebase.registry.get('version'), clientVersion = Tine.clientVersion;
+        if (clientVersion.codeName.match(/^\$HeadURL/)) {
             return;
         }
         
-        //console.log(Tine.clientVersion);
-        if (Tine.Tinebase.registry.get("version") == 'RELEASE') {
-            
-            // check for selfudate
-            //if ()
+        var cp = new Ext.state.CookieProvider({});
+        
+        if (serverVersion.packageString != 'none') {
+            needSelfUpdate = (serverVersion.packageString !== clientVersion.packageString);
+        } else {
+            needSelfUpdate = (serverVersion.codeName !== clientVersion.codeName);
+        }
+        
+        if (needSelfUpdate) {
+            if (! google.gears.localServer) {
+                google.gears.localServer.removeManagedStore('tine20-store');
+                google.gears.localServer.removeStore('tine20-package-store');
+            }
+            if (cp.get('clientreload', '0') == '0') {
+                
+                cp.set('clientreload', '1');
+                window.location = window.location.href.replace(/#+.*/, '');
+                return;
+                
+            } else {
+                new Ext.LoadMask(Ext.getBody(), {
+                    msg: _('Fatal Error: Client self-update failed, please contact your administrator.'),
+                    msgCls: ''
+                }).show();
+            }
         } else {
             
+            cp.clear('clientreload');
+            
+            // if no selfupdate is needed we store langfile and index.php in manifest
+            if (clientVersion.buildType == 'RELEASE' && google.gears.localServer) {
+                var pgkStore = google.gears.localServer.createStore('tine20-package-store');
+                var resources = [
+                    'index.php'
+                ];
+                pgkStore.capture(resources, Ext.emptyFn);
+            }
         }
-        //console.log(Tine.Tinebase.registry.get("version"));
     },
     
     /**
