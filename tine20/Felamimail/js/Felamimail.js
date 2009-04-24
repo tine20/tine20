@@ -7,7 +7,11 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Felamimail.js 7176 2009-03-05 12:26:08Z p.schuele@metaways.de $
  *
- * @todo        make it work!
+ * @todo        set (folder+backend) filter in message grid
+ * @todo        add context menu
+ *              - add/rename/delete folders
+ *              - change account settings
+ *              - add new accounts
  * @todo        add multiple accounts
  */
  

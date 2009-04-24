@@ -10,6 +10,9 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        make search messages work
+ * @todo        add functions for rename/create/delete folders
+ * @todo        remove deprecated code
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
