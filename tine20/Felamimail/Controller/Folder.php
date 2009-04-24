@@ -71,7 +71,6 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
-     * 
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {

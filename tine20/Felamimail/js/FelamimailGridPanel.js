@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:MessageGridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  */
  
@@ -14,7 +14,7 @@ Ext.namespace('Tine.Felamimail');
 /**
  * Message grid panel
  */
-Tine.Felamimail.MessageGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
+Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
     recordClass: Tine.Felamimail.Model.Message,
     evalGrants: false,
@@ -36,7 +36,7 @@ Tine.Felamimail.MessageGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPane
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);        
         
-        Tine.Felamimail.MessageGridPanel.superclass.initComponent.call(this);
+        Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Felamimail', 'records'));
         this.action_editInNewWindow.requiredGrant = 'editGrant';
@@ -49,6 +49,7 @@ Tine.Felamimail.MessageGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPane
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
+                {label: this.app.i18n._('Subject'),    field: 'subject',       operators: ['contains']},
                 // @todo add filtes
                 /*
                 {label: this.app.i18n._('Message'),    field: 'query',       operators: ['contains']},
@@ -57,9 +58,9 @@ Tine.Felamimail.MessageGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPane
                     field: 'status'
                 }),
                 */
-                new Tine.widgets.tags.TagFilter({app: this.app})
+                //new Tine.widgets.tags.TagFilter({app: this.app})
              ],
-             defaultFilter: 'query',
+             defaultFilter: 'subject',
              filters: []
         });
     },    

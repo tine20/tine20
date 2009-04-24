@@ -3,7 +3,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
@@ -11,12 +11,14 @@
  
 Ext.ns('Tine.Felamimail');
 
-// default mainscreen
+ // default mainscreen
+Tine.Felamimail.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
+
+/*
 Tine.Felamimail.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
     activeContentType: 'Message',
     
-    /*
     show: function() {
         if(this.fireEvent("beforeshow", this) !== false){
             this.setTreePanel();
@@ -27,7 +29,7 @@ Tine.Felamimail.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
             this.fireEvent('show', this);
         }
         return this;
-    },*/
+    },
     
     setContentPanel: function() {
         
@@ -54,9 +56,6 @@ Tine.Felamimail.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         return this['Message' + 'GridPanel'];
     },
     
-    /**
-     * sets toolbar in mainscreen
-     */
     setToolbar: function() {
         var type = this.activeContentType;
         
@@ -67,3 +66,4 @@ Tine.Felamimail.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
     }
 });
+*/

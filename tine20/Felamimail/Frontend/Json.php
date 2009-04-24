@@ -25,12 +25,29 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $filter
      * @return array
-     * 
-     * @todo finish, add _toJson and add test
      */
     public function searchFolders($filter)
     {
         return $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
+    }
+
+    /**
+     * search messages
+     *
+     * @param string $filter
+     * @param string $pagination
+     * @return array
+     * 
+     * @todo implement this, controller funcs + write test
+     */
+    public function searchMessages($filter, $paging)
+    {
+        //return $this->_search($filter, $pagination, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
+        
+        return array(
+            'results' => array(),
+            'totalcount' => 0
+        );
     }
     
     /**

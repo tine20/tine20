@@ -14,32 +14,58 @@
  
 Ext.namespace('Tine.Felamimail');
 
+/**
+ * folder tree panel
+ * 
+ * @class Tine.Felamimail.TreePanel
+ * @extends Ext.tree.TreePanel
+ * 
+ * @todo do we need something like this: http://examples.extjs.eu/?ex=treestate
+ */
 Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
+	
+    /**
+     * @cfg {application}
+     */
+    app: null,
     
 	rootVisible: true,
-    title: 'Email',
     id: 'felamimail-tree',
-    iconCls: 'FelamimailIconCls',	
 	
     initComponent: function() {
     	
-        //this.loader = 
+        this.loader = new Tine.Felamimail.TreeLoader({
+            app: this.app
+        });
 
+        console.log('init tree panel');
+        
+        /*
         this.loader.on("beforeload", function(_loader, _node) {
-            _loader.baseParams.accountId    = _node.attributes.accountId;
+            _loader.baseParams.backendId    = _node.attributes.backendId;
             _loader.baseParams.folderName   = _node.attributes.folderName;
         }, this);
+        */
         
         // set the root node
-        var treeRoot = new Ext.tree.TreeNode({
-            text: 'root',
+        //var treeRoot = new Ext.tree.TreeNode({
+        this.root = new Ext.tree.AsyncTreeNode({
+            text: 'default',
             draggable: false,
             allowDrop: false,
             folderName: '',
-            accountId: 'default',
-            id: 'root'
+            globalName: '',
+            backendId: 'default',
+            expanded: false,
+            id: '/'
         });
-        treePanel.setRootNode(treeRoot);
+        
+        /*
+        this.root = new Ext.tree.TreeNode({
+            text: 'default',
+            id: '/'        	
+        });
+        */
         
         /*
         for(var i=0; i<Tine.Felamimail.initialTree.length; i++) {
@@ -91,24 +117,22 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.expandPath('/root/' + type + '/allrecords');
         this.selectPath('/root/' + type + '/allrecords');
         */
-    }
+    },
     
     /**
      * returns a filter plugin to be used in a grid
      * 
-     * ???
      */
-    /*
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             var scope = this;
             this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
                 getValue: function() {
-                    var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
+                    //var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
                     return [
                         //{field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
                         //{field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                        //{field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
+                        //{field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.backendId : null        }
                     ];
                 }
             });
@@ -116,7 +140,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         return this.filterPlugin;
     }
-    */
 });
 
 Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
@@ -143,6 +166,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
      */
     requestData: function(node, callback){
     	// @todo add node to filter
+    	console.log(node);
     	
     	Tine.Felamimail.TreeLoader.superclass.requestData.call(this, node, callback);
     },
