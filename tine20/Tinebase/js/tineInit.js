@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id: tineInit.js 7831 2009-04-22 22:37:18Z c.weiss@metaways.de $
  *
  */
 
@@ -25,6 +25,7 @@ Ext.onReady(function() {
             waitForInits.defer(100);
         } else {
             Tine.Tinebase.tineInit.onLangFilesLoad();
+            Tine.Tinebase.tineInit.initGears();
             Tine.Tinebase.tineInit.renderWindow();
         }
     };
@@ -34,7 +35,13 @@ Ext.onReady(function() {
 /** ------------------------ Tine 2.0 Initialisation ----------------------- **/
 
 Ext.namespace('Tine');
-Tine.Build = '$Build: $';
+
+Tine.clientVersion = {};
+Tine.clientVersion.codename         = '$HeadURL$';
+Tine.clientVersion.buildType        = 'none';
+Tine.clientVersion.buildDate        = 'none';
+Tine.clientVersion.packageString    = 'none';
+Tine.clientVersion.releasetime      = 'none';
 
 /**
  * static tine init functions
@@ -421,25 +428,28 @@ Tine.Tinebase.tineInit = {
                     Tine[p].registry = mainWindow.Tine[p].registry;
                 }
             }
-            /*
-            Tine.Tinebase.registry = mainWindow.Tine.Tinebase.registry;
             
-            if (Tine.Tinebase.registry.get('userApplications')) {
-                var userApps = Tine.Tinebase.registry.get('userApplications');
-                var app;
-                for(var i=0; i<userApps.length; i++) {
-                    app = userApps[i];
-                    
-                    if (app.name !== 'Tinebase') {
-                    	if (Tine[app.name]) {
-                    	   Tine[app.name].registry = mainWindow.Tine[app.name].registry;	
-                    	} 
-                    }
-                }
-            }
-            */
             Tine.Tinebase.tineInit.initList.initRegistry = true;
         }
+    },
+    
+    /**
+     * initialises gears
+     */
+    initGears: function() {
+        if (! google.gears.localServer) {
+            return;
+        }
+        
+        //console.log(Tine.clientVersion);
+        if (Tine.Tinebase.registry.get("version") == 'RELEASE') {
+            
+            // check for selfudate
+            //if ()
+        } else {
+            
+        }
+        //console.log(Tine.Tinebase.registry.get("version"));
     },
     
     /**

@@ -14,6 +14,7 @@ if (php_sapi_name() != 'cli') {
     die('not allowed!');
 }
 
+require_once 'Tinebase/Helper.php';
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
@@ -179,6 +180,7 @@ function concatCss(array $_files, $_filename)
 function concatJs(array $_files, $_filename)
 {
     global $tine20path, $build;
+    $revisionInfo = getDevelopmentRevision();
     
     $jsDebug = fopen("$tine20path/$_filename", 'w+');
     
@@ -187,7 +189,10 @@ function concatJs(array $_files, $_filename)
         if (file_exists("$tine20path/$filename")) {
             fwrite($jsDebug, '// file: ' . "$tine20path/$filename" . "\n");
             $jsContent = file_get_contents("$tine20path/$filename");
-            $jsContent = preg_replace('/\$.*Build:.*\$/i', $build, $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.codename.*;/i', "Tine.clientVersion.codename = '$revisionInfo';", $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.buildType.*;/i', "Tine.clientVersion.buildType = 'DEBUG';", $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.buildDate.*;/i', "Tine.clientVersion.buildDate = '" + Zend_Date::now()->toString(Tinebase_Record_Abstract::ISO8601LONG) + "';", $jsContent);
+            //$jsContent = preg_replace('/\$.*Build:.*\$/i', $build, $jsContent);
             fwrite($jsDebug, $jsContent . "\n");
         }
     }
@@ -208,8 +213,12 @@ function compress($_infile, $_outfile)
     global $opts, $tine20path, $yuiCompressorPath;
     
 if (file_exists($yuiCompressorPath)) {
+        $contents = file_get_contents("$tine20path/$_infile");
+        $contents = preg_replace('/Tine\.clientVersion\.buildType.*;/i', "Tine.clientVersion.buildType='RELEASE';", $contents);
+        file_put_contents("$tine20path/$_outfile", $contents);
+        
         $verbose = $opts->v ? ' --verbose ' : '';
-        system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/$_outfile $tine20path/$_infile");
+        system("java -jar $yuiCompressorPath $verbose --charset utf-8 -o $tine20path/$_outfile $tine20path/$_outfile");
     } else {
         copy("$tine20path/$_infile","$tine20path/$_outfile");
     }

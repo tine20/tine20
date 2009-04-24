@@ -96,7 +96,8 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         var info = {
            msg: this.exceptionInfo,
            description: Ext.getCmp('tb-exceptiondialog-description').getValue(),
-           build: Tine.Tinebase.registry.get('build') ? Tine.Tinebase.registry.get('build') : Tine.Build
+           clientVersion: Tine.clientVersion,
+           serverVersion: Tine.Tinebase.registry.get('version')
         };
         // NOTE:  - we have about 80 chars overhead (url, paramnames etc) in each request
         //        - 1024 chars are expected to be pass client/server limits savely => 940
