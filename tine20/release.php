@@ -293,9 +293,9 @@ if ($opts->a || $opts->m) {
     preg_match_all('/src=[\'|"](.*gif)/U', $tineJs, $matches);
     $files = array_merge($files, $matches[1]);
     
-    exec("cd $tine20path; find library/ExtJS/resources/images/ -type f -name *.gif", $extImages);
+    exec("cd $tine20path; find library/ExtJS/resources/images -type f -name *.gif", $extImages);
     $files = array_merge($files, $extImages);
-    exec("cd $tine20path; find library/ExtJS/resources/images/ -type f -name *.png", $extImages);
+    exec("cd $tine20path; find library/ExtJS/resources/images -type f -name *.png", $extImages);
     $files = array_merge($files, $extImages);
     
     $manifest = array(
