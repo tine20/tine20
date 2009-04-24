@@ -451,7 +451,7 @@ Tine.Tinebase.tineInit = {
         }
         
         if (needSelfUpdate) {
-            if (google.gears.localServer) {
+            if (window.google && google.gears && google.gears.localServer) {
                 google.gears.localServer.removeManagedStore('tine20-store');
                 google.gears.localServer.removeStore('tine20-package-store');
             }
@@ -471,7 +471,7 @@ Tine.Tinebase.tineInit = {
             cp.clear('clientreload');
             
             // if no selfupdate is needed we store langfile and index.php in manifest
-            if (google.gears.localServer) {
+            if (window.google && google.gears && google.gears.localServer) {
                 if (serverVersion.buildType == 'RELEASE') {
                     if (! google.gears.localServer.openStore('tine20-package-store')) {
                         var pkgStore = google.gears.localServer.createStore('tine20-package-store');
