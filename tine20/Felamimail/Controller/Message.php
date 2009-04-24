@@ -97,7 +97,15 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* im
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
         $filterValues = $this->_extractFilter($_filter);
-        return $this->_getBackend($filterVales['backendId'])->countMessages();
+        
+        if (empty($filterValues['folder'])) {
+            $result = 0;
+        } else {
+            $this->_getBackend($filterValues['backendId'])->selectFolder($filterValues['folder']);
+            $result = $this->_getBackend($filterVales['backendId'])->countMessages();
+        }
+            
+        return $result;
         //$this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backendId']];    
     }
     

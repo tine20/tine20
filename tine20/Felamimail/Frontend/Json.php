@@ -10,7 +10,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add functions for rename/create/delete folders
+ * @todo        add functions for rename/create folders
  * @todo        remove deprecated code
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
@@ -22,6 +22,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_applicationName = 'Felamimail';
     
+    /***************************** folder funcs *******************************/
+    /***************************** folder funcs *******************************/
+    
     /**
      * search folders
      *
@@ -30,9 +33,58 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchFolders($filter)
     {
-        return $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
+        try {
+            $results = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
+
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // @todo return error message if connection failed
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+            $results = array(
+                'results'       => array(),
+                'totalcount'    => 0
+            );
+            
+            // only test data
+            // @todo remove that later
+            /*
+            $results = array(
+                'results'       => array(
+                    array(
+                        'localName'             => 'INBOX',
+                        'globalName'            => 'INBOX',
+                        'backendId'             => 'default',
+                        'delimiter'             => '/',
+                        'isSelectable'          => 1,
+                        'hasChildren'           => ''
+                    )
+                ),
+                'totalcount'    => 1
+            );
+            */
+        }
+        
+        return $results;
     }
 
+    /**
+     * delete folder
+     *
+     * @param string $folder the folder global name to delete
+     * @param string $backendId
+     * @return array
+     */
+    public function deleteFolder($folder, $backendId)
+    {
+        $result = Felamimail_Controller_Folder::getInstance()->removeFolder($folder, $backendId);
+
+        return array(
+            'status'    => ($result) ? 'success' : 'failure'
+        );
+    }
+    
+    /***************************** messages funcs *******************************/
+    /***************************** messages funcs *******************************/
+    
     /**
      * search messages
      *
@@ -81,6 +133,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'filter'        => $filter->toArray(TRUE),
         );
     }
+
+    /***************************** old funcs *******************************/
     
     /**
      * get email overview
