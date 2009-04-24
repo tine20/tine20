@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
@@ -27,7 +27,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
     protected $_lastSearchCount = array();
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Felamimail_Controller_Folder
      */
@@ -105,7 +105,6 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
     public function createFolder($_folderName, $_parentFolder = '', $_backendId = 'default')
     {
         $imap = $this->_getBackend($_backendId);
-        
         $imap->createFolder($_folderName, $_parentFolder);
     }
     
@@ -118,7 +117,6 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
     public function removeFolder($_folderName, $_backendId = 'default')
     {
         $imap = $this->_getBackend($_backendId);
-        
         $imap->removeFolder($_folderName);
     }
     
@@ -132,7 +130,6 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
     public function renameFolder($_oldFolderName, $_newFolderName, $_backendId = 'default')
     {
         $imap = $this->_getBackend($_backendId);
-        
         $imap->renameFolder($_oldFolderName, $_newFolderName);
     }
 
