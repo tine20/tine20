@@ -30,15 +30,5 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag'),
         //'group_id'       => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Tinebase_Model_GroupFilter', 'controller' => 'Tinebase_Group')),
-    
-        //
-        /*
-        'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'showClosed'     => array('custom' => true),
-        'isBookable'     => array('custom' => true),
-        */
     );
 }
