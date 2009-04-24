@@ -468,18 +468,22 @@ Tine.Tinebase.tineInit = {
                 }).show();
             }
         } else {
-            
             cp.clear('clientreload');
             
             // if no selfupdate is needed we store langfile and index.php in manifest
-            if (clientVersion.buildType == 'RELEASE' && google.gears.localServer) {
-                if (! google.gears.localServer.openStore('tine20-package-store')) {
-                    var pkgStore = google.gears.localServer.createStore('tine20-package-store');
-                    var resources = [
-                        'index.php',
-                        'Tinebase/js/Locale/build/' + Tine.Tinebase.registry.get('locale').locale + '-all.js'
-                    ];
-                    pkgStore.capture(resources, Ext.emptyFn);
+            if (google.gears.localServer) {
+                if (serverVersion.buildType == 'RELEASE') {
+                    if (! google.gears.localServer.openStore('tine20-package-store')) {
+                        var pkgStore = google.gears.localServer.createStore('tine20-package-store');
+                        var resources = [
+                            '',
+                            'index.php',
+                            'Tinebase/js/Locale/build/' + Tine.Tinebase.registry.get('locale').locale + '-all.js'
+                        ];
+                        pkgStore.capture(resources, function(){console.log(arguments)});
+                    }
+                } else {
+                    google.gears.localServer.removeStore('tine20-package-store');
                 }
             }
         }
