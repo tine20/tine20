@@ -342,10 +342,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
                 'region'   => $locale->getCountryTranslation($locale->getRegion()),
             ),
+            'version'          => array(
+                'buildType'     => TINE20_BUILDTYPE,
+                'codeName'      => TINE20_CODENAME,
+                'packageString' => TINE20_PACKAGESTRING,
+                'releaseTime'   => TINE20_RELEASETIME
+            ),
             'defaultUsername' => $defaultUsername,
             'defaultPassword' => $defaultPassword
         );
-
+        
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $registryData += array(    
                 'currentAccount'   => Tinebase_Core::getUser()->toArray(),
@@ -354,20 +360,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'userApplications' => Tinebase_Core::getUser()->getApplications()->toArray(),
                 'NoteTypes'        => $this->getNoteTypes(),
                 'CountryList'      => $this->getCountryList(),
-                'version'          => array(
-                    'codename'      => TINE20_CODENAME,
-                    'packageString' => TINE20_PACKAGESTRING,
-                    'releasetime'   => TINE20_RELEASETIME
-                ), 
                 'changepw'         => (isset(Tinebase_Core::getConfig()->accounts)
                                         && isset(Tinebase_Core::getConfig()->accounts->changepw))
                                             ? Tinebase_Core::getConfig()->accounts->changepw
                                             : true
             );
-        }
-        
-        if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
-            $registryData['build'] = getDevelopmentRevision();
         }
         
         return $registryData;
