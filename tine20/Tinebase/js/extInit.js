@@ -38,10 +38,11 @@ if (window.google && google.gears) {
             
             google.gears.localServer.store = google.gears.localServer.createManagedStore('tine20-store');
             google.gears.localServer.store.manifestUrl = 'Tinebase/js/tine20-manifest.js';
-        
-            //google.gears.localServer.store.checkForUpdate();
-            //console.log(google.gears.localServer.store.updateStatus);
-            //console.log(google.gears.localServer.store.lastErrorMessage);
+            
+            if (google.gears.localServer.store.updateStatus == 3) {
+                console.info('gears localserver store failure: ' + google.gears.localServer.store.lastErrorMessage);
+                google.gears.localServer.store.checkForUpdate();
+            }
         } catch (e) {
             console.info("can't initialize gears: " + e);
         }

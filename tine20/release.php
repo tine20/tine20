@@ -189,7 +189,7 @@ function concatJs(array $_files, $_filename)
         if (file_exists("$tine20path/$filename")) {
             fwrite($jsDebug, '// file: ' . "$tine20path/$filename" . "\n");
             $jsContent = file_get_contents("$tine20path/$filename");
-            $jsContent = preg_replace('/Tine\.clientVersion\.codename.*;/i',  "Tine.clientVersion.codename = '$revisionInfo';", $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.codeName.*;/i',  "Tine.clientVersion.codeName = '$revisionInfo';", $jsContent);
             $jsContent = preg_replace('/Tine\.clientVersion\.buildType.*;/i', "Tine.clientVersion.buildType = 'DEBUG';", $jsContent);
             $jsContent = preg_replace('/Tine\.clientVersion\.buildDate.*;/i', "Tine.clientVersion.buildDate = '" . Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG) . "';", $jsContent);
             //$jsContent = preg_replace('/\$.*Build:.*\$/i', $build, $jsContent);
@@ -270,7 +270,7 @@ if ($opts->a || $opts->m) {
     );
     
     // no subdirs! => solaris does not know find -maxdeps 1
-    exec("cd $tine20path/images; ls | egrep '\.png|\.gif|\.jpg'", $baseImages);
+    exec("cd $tine20path; ls images/* | grep images/ | egrep '\.png|\.gif|\.jpg'", $baseImages);
     $files = array_merge($files, $baseImages);
     
     $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all.css');
@@ -306,10 +306,17 @@ if ($opts->a || $opts->m) {
 
     $files = array_unique($files);
     foreach($files as $file) {
-        $manifest['entries'][] = array(
-            'url'           => '../../' . $file,
-            #'ignoreQuery'   => true
-        );
+        if (! is_file("$tine20path/$file")) {
+            echo "WARNING $file not found, remoing it from manifest.\n";
+        } else if (substr(basename($file), 0, 1) == '.' || ! in_array(array_value(1, explode('.', basename($file))), array('js', 'css', 'gif', 'png', 'jpg')))  {
+            echo "INFO $file is unwanted, remoing it from manifest.\n";
+        } else {
+            $manifest['entries'][] = array(
+                'url'           => '../../' . $file,
+                #'ignoreQuery'   => true
+            );
+            
+        }
     }
     
     $jsonManifest = json_encode($manifest);
