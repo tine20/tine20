@@ -20,11 +20,11 @@
 class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implements Tinebase_Controller_SearchInterface
 {
     /**
-     * last search count
+     * last search count (2 dim array: userId => backendId => count)
      *
-     * @var integer
+     * @var array
      */
-    protected $_lastSearchCount = 0;
+    protected $_lastSearchCount = array();
     
     /**
      * holdes the instance of the singleton
@@ -66,34 +66,20 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
     
     /**
      * get list of records
-     * 
      *
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo add AND/OR conditions for multiple filters of the same field?
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
         // get backendId and globalName from filter
-        $filters = $_filter->getFilterObjects();
-        $globalName = '';
-        $backendId = 'default';
-        foreach($filters as $filter) {
-            switch($filter->getField()) {
-                case 'backendId':
-                    $backendId = $filter->getValue();
-                    break;
-                case 'globalName':
-                    $globalName = $filter->getValue();
-                    break;
-            }
-        }
+        $filterValues = $this->_extractFilter($_filter);
         
-        $result = $this->getSubFolders($globalName, $backendId);
-        $this->_lastSearchCount = count($result);
+        $result = $this->getSubFolders($filterValues['globalName'], $filterValues['backendId']);
+        $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backendId']] = count($result);
         
         return $result;
     }
@@ -106,7 +92,8 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
-        return $this->_lastSearchCount;    
+        $filterValues = $this->_extractFilter($_filter);
+        return $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backendId']];    
     }
     
     /**
@@ -174,6 +161,33 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
         }
         
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder', $folder);
+        
+        return $result;
+    }
+    
+    /**
+     * extract values from folder filter
+     *
+     * @param Felamimail_Model_FolderFilter $_filter
+     * @return array (assoc) with filter values
+     * 
+     * @todo add AND/OR conditions for multiple filters of the same field?
+     */
+    protected function _extractFilter(Felamimail_Model_FolderFilter $_filter)
+    {
+        $result = array('backendId' => 'default', 'globalName' => '');
+        
+        $filters = $_filter->getFilterObjects();
+        foreach($filters as $filter) {
+            switch($filter->getField()) {
+                case 'backendId':
+                    $result['backendId'] = $filter->getValue();
+                    break;
+                case 'globalName':
+                    $result['globalName'] = $filter->getValue();
+                    break;
+            }
+        }
         
         return $result;
     }
