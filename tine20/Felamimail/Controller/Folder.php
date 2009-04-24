@@ -17,8 +17,15 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
+class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implements Tinebase_Controller_SearchInterface
 {
+    /**
+     * last search count
+     *
+     * @var integer
+     */
+    protected $_lastSearchCount = 0;
+    
     /**
      * holdes the instance of the singleton
      *
@@ -55,6 +62,51 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract
         }
         
         return self::$_instance;
+    }
+    
+    /**
+     * get list of records
+     * 
+     *
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param bool $_getRelations
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo add AND/OR conditions for multiple filters of the same field?
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    {
+        // get backendId and globalName from filter
+        $filters = $_filter->getFilterObjects();
+        $globalName = '';
+        $backendId = 'default';
+        foreach($filters as $filter) {
+            switch($filter->getField()) {
+                case 'backendId':
+                    $backendId = $filter->getValue();
+                    break;
+                case 'globalName':
+                    $globalName = $filter->getValue();
+                    break;
+            }
+        }
+        
+        $result = $this->getSubFolders($globalName, $backendId);
+        $this->_lastSearchCount = count($result);
+        
+        return $result;
+    }
+    
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    {
+        return $this->_lastSearchCount;    
     }
     
     /**

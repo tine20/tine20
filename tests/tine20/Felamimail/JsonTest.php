@@ -62,4 +62,26 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {        
     }
     
+    /**
+     * test search folders
+     *
+     */
+    public function testSearchFolders()
+    {
+        $filter = $this->_getFolderFilter();
+        $result = $this->_json->searchFolders(Zend_Json::encode($filter));
+        
+        $this->assertEquals(6, $result['totalcount']);
+        $expectedFolders = array('Drafts', 'INBOX', 'Junk', 'Sent', 'Templates', 'Trash');
+        foreach ($result['results'] as $folder) {
+            $this->assertTrue(in_array($folder['localName'], $expectedFolders));
+        }
+    }
+    
+    protected function _getFolderFilter()
+    {
+        return array(array(
+            'field' => 'globalName', 'operator' => 'equals', 'value' => ''
+        ));
+    }
 }
