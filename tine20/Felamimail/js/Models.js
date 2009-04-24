@@ -16,23 +16,13 @@ Ext.ns('Tine.Felamimail', 'Tine.Felamimail.Model');
  * Message model fields
  */
 Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
-    { name: 'id' }
-    /*
-    // add record fields here
-    { name: 'container_id' },
-    { name: 'title' },
-    { name: 'number' },
-    { name: 'description' },
-    { name: 'budget' },
-    { name: 'budget_unit' },
-    { name: 'price' },
-    { name: 'price_unit' },
-    { name: 'is_open' },
-    { name: 'is_billable' },
-    { name: 'status' },
-    { name: 'account_grants'},
-    { name: 'grants'},
-    */
+    { name: 'id' },
+    { name: 'subject' },
+    { name: 'from' },
+    { name: 'to' },
+    { name: 'sent' },
+    { name: 'received' },
+    { name: 'flags' }
     // tine 2.0 notes + tags
     //{ name: 'notes'},
     //{ name: 'tags' }

@@ -74,11 +74,12 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* im
         // get backendId and globalName from filter
         $filterValues = $this->_extractFilter($_filter);
         
-        //$result = $this->getSubFolders($filterValues['globalName'], $filterValues['backendId']);
-        //$this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backendId']] = count($result);
-        
-        $this->_getBackend($filterValues['backendId'])->selectFolder($filterValues['folder']);
-        $result = $this->_getBackend($filterValues['backendId'])->getMessages();
+        if (empty($filterValues['folder'])) {
+            $result = array();
+        } else {
+            $this->_getBackend($filterValues['backendId'])->selectFolder($filterValues['folder']);
+            $result = $this->_getBackend($filterValues['backendId'])->getMessages();
+        }
         
         //$seenMessages = $imapConnection->getSummary(array_slice($seen, $_start, $_limit));
         

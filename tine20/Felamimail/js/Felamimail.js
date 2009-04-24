@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Felamimail.js 7176 2009-03-05 12:26:08Z p.schuele@metaways.de $
  *
- * @todo        set (folder+backend) filter in message grid
  * @todo        add context menu
  *              - add/rename/delete folders
  *              - change account settings
@@ -56,14 +55,16 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         });
                 
         /*
-        treePanel.on('beforeexpand', function(_panel) {
+        this.on('beforeexpand', function(_panel) {
             if(_panel.getSelectionModel().getSelectedNode() === null) {
-                _panel.expandPath('/root');
-                _panel.selectPath('/root/account1');
+                _panel.expandPath('/');
+                _panel.selectPath('/');
             }
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
+        */
 
+        /*
         treePanel.on('contextmenu', function(_node, _event) {
             _event.stopEvent();
             //_node.select();
@@ -76,20 +77,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.on('click', function(node) {
             node.expand();
+            console.log(node.attributes.globalName);
+            this.expandPath('/' + node.attributes.globalName);
+            this.selectPath('/' + node.attributes.globalName);
+            this.filterPlugin.onFilterChange();
         }, this);
-    	
-    	/*
-        this.on('click', function(node) {
-            if (node.attributes.isPersistentFilter != true) {
-                var contentType = node.getPath().split('/')[2];
-                
-                this.app.getMainScreen().activeContentType = contentType;
-                this.app.getMainScreen().show();
-            }
-        }, this);
-        */
 	},
-    
+        
     /**
      * @private
      */
@@ -106,17 +100,19 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     /**
      * returns a filter plugin to be used in a grid
      * 
+     * @todo add backend id
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             var scope = this;
             this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
                 getValue: function() {
-                    //var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
+                	console.log(scope);
+                	var node = scope.getSelectionModel().getSelectedNode();
+                    var nodeAttributes = (node) ? node.attributes : {};
                     return [
-                        //{field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
-                        //{field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                        //{field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.backendId : null        }
+                        {field: 'folder',       operator: 'equals', value: nodeAttributes.globalName ? nodeAttributes.globalName : '' },
+                        {field: 'backendId',    operator: 'equals', value: nodeAttributes.backendId  ? nodeAttributes.backendId : 'default' }
                     ];
                 }
             });
@@ -148,7 +144,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.data.TreeLoader, {
      */
     requestData: function(node, callback){
     	// add globalName to filter
-    	//console.log(node);
     	this.filter = [
             {field: 'backendId', operator: 'equals', value: node.attributes.backendId},
             {field: 'globalName', operator: 'equals', value: node.attributes.globalName}
@@ -164,12 +159,11 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.data.TreeLoader, {
      */
     createNode: function(attr) {
     	node = {
-    		id: attr.localName,
+    		id: attr.localName, // attr.globalName?
     		leaf: (attr.hasChildren != 1),
     		text: attr.localName,
     		globalName: attr.globalName,
     		backendId: attr.backendId
-    		//-- add more
     	};
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
     }

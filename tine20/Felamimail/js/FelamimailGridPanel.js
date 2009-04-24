@@ -20,10 +20,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     evalGrants: false,
     
     // grid specific
-    defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
+    defaultSortInfo: {field: 'sent', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
-        autoExpandColumn: 'title'
+        autoExpandColumn: 'subject'
     },
     
     initComponent: function() {
@@ -50,7 +50,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Subject'),    field: 'subject',       operators: ['contains']},
-                // @todo add filtes
+                // @todo add filters
                 /*
                 {label: this.app.i18n._('Message'),    field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
@@ -68,36 +68,40 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * returns cm
      * @private
-     * 
-     * @todo    add more columns
      */
     getColumns: function(){
-        return [/*{
-            id: 'number',
-            header: this.app.i18n._("Number"),
+        return [{
+            id: 'id',
+            header: this.app.i18n._("Id"),
             width: 100,
             sortable: true,
-            dataIndex: 'number'
+            dataIndex: 'id'
         },{
-            id: 'title',
-            header: this.app.i18n._("Title"),
-            width: 350,
+            id: 'subject',
+            header: this.app.i18n._("Subject"),
+            width: 300,
             sortable: true,
-            dataIndex: 'title'
+            dataIndex: 'subject'
         },{
-            id: 'status',
-            header: this.app.i18n._("Status"),
+            id: 'from',
+            header: this.app.i18n._("From"),
             width: 150,
             sortable: true,
-            dataIndex: 'status',
-            renderer: this.statusRenderer.createDelegate(this)
+            dataIndex: 'from'
+            //renderer: this.statusRenderer.createDelegate(this)
         },{
-            id: 'budget',
-            header: this.app.i18n._("Budget"),
-            width: 100,
+            id: 'to',
+            header: this.app.i18n._("To"),
+            width: 150,
             sortable: true,
-            dataIndex: 'budget'
-        }*/];
+            dataIndex: 'to'
+        },{
+            id: 'sent',
+            header: this.app.i18n._("Sent"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'sent'
+        }];
     },
     
     /**
