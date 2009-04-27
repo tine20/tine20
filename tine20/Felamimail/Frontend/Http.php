@@ -30,7 +30,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         return array(
             'Felamimail/js/Models.js',
             'Felamimail/js/Felamimail.js',
-            'Felamimail/js/MainScreen.js',
+            'Felamimail/js/FelamimailTreePanel.js',
             'Felamimail/js/FelamimailGridPanel.js',
             'Felamimail/js/FelamimailEditDialog.js',
         );
