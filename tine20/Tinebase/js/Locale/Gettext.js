@@ -32,22 +32,8 @@ Locale.Gettext.prototype.textdomain = function (domain) {
 };
 
 Locale.Gettext.prototype.getmsg = function (domain, category, reload) {
-  var locale = Tine.Tinebase.registry.get('locale').locale;
-  if (! locale) {
-    console.error('attempt to gain translation at include time. Requested domain: "' + domain + '"');
-  }
-  if (! locale || locale == 'en') {
-    return Locale.Gettext.prototype._msgs.emptyDomain;
-  }
-  
   var key = this._getkey(category, domain);
   return Locale.Gettext.prototype._msgs[key];
-  
-  /*
-  return reload || typeof Locale.Gettext.prototype._msgs[key] == 'undefined'
-    ? Locale.Gettext.prototype._msgs[key] = new Locale.Gettext.PO(this._url(category, domain))
-    : Locale.Gettext.prototype._msgs[key];
-  */
 };
 
 Locale.Gettext.prototype._msgs = {};
@@ -76,12 +62,12 @@ Locale.Gettext.prototype._url = function (category, domain) {
 */
 
 Locale.Gettext.prototype.dcgettext = function (domain, msgid, category) {
-  //console.log(msgid);
-  return this.getmsg(domain, category).get(msgid) || msgid;
+  var msg = this.getmsg(domain, category);
+  
+  return msg ? msg.get(msgid) || msgid : msgid;
 };
 
 Locale.Gettext.prototype.dcngettext = function (domain, msgid, msgid_plural, n, category) {
-  //console.log(msgid);
   var msg = this.getmsg(domain, category);
   return (msg.get(msgid, msgid_plural) || [msgid, msgid_plural])[msg.plural(n)];
 };
