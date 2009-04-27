@@ -110,9 +110,12 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract
     protected function _handleCompletedDate($_task)
     {
         $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
-        $status = $allStatus[$allStatus->getIndexById($_task->status_id)];
         
-        if ($status) {
+        $statusId = $allStatus->getIndexById($_task->status_id);
+        
+        if (is_int($statusId)){
+            $status = $allStatus[$statusId];
+            
             if($status->status_is_open) {
                 $_task->completed = NULL;
             } elseif (! $_task->completed instanceof Zend_Date) {

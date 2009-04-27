@@ -289,6 +289,13 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function offsetGet($_offset)
     {
+        if (! is_int($_offset)) {
+            throw new Tinebase_Exception_UnexpectedValue("index must be of type integer (". gettype($_offset) .") " . $_offset .  ' given');
+        }
+        if (! array_key_exists($_offset, $this->_listOfRecords)) {
+            throw new Tinebase_Exception_NotFound("No such entry with index $_offset in this record set");
+        }
+        
         return $this->_listOfRecords[$_offset];
     }
     
