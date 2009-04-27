@@ -6,18 +6,197 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        use this in container + email folder trees
+ * @todo        do some more generalizing (method params, ...)
+ * @todo        add icons for grants / rename actions
+ * @todo        use this in email folder trees
  */
 Ext.namespace('Tine.widgets', 'Tine.widgets.tree');
 
 /**
- * generic tree context menu with
- * - create
+ * returns generic tree context menu with
+ * - create/add
  * - rename
  * - delete
+ * - edit grants
  * 
- * @class Tine.widgets.tree.ContextMenu
- * @extends Ext.menu.Menu
+ * ctxNode class var is required in calling class
  */
-Tine.widgets.tree.ContextMenu = Ext.extend(Ext.menu.Menu, {
- });
+Tine.widgets.tree.ContextMenu = {
+	
+    /**
+     * create new Ext.menu.Menu with actions
+     * 
+     * @param {} config has the node name, actions, etc.
+     * @return {}
+     */
+	getMenu: function(config) {
+        
+        /***************** define action handlers *****************/
+        var handler = {
+            addNode: function() {
+                console.log('add');
+                console.log(this.ctxNode);
+                Ext.MessageBox.prompt(String.format(config.il8n._('New {0}'), config.nodeName), String.format(config.il8n._('Please enter the name of the new {0}:'), config.nodeName), function(_btn, _text) {
+                    if( this.ctxNode && _btn == 'ok') {
+                        if (! _text) {
+                            Ext.Msg.alert(String.format(config.il8n._('No {0} added'), config.nodeName), String.format(config.il8n._('You have to supply a {0} name!'), config.nodeName));
+                            return;
+                        }
+                        Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Creating {0}...' ), config.nodeName));
+                        var parentNode = this.ctxNode;
+                        
+                        Ext.Ajax.request({
+                            params: {
+                                method: config.backend + '.add' + config.backendModel,
+                                application: this.appName,
+                                containerName: _text,
+                                containerType: parentNode.attributes.containerType
+                            },
+                            scope: this,
+                            success: function(_result, _request){
+                                var container = Ext.util.JSON.decode(_result.responseText);
+                                var newNode = this.loader.createNode(container);
+                                parentNode.appendChild(newNode);
+                                this.fireEvent('containeradd', container);
+                                Ext.MessageBox.hide();
+                            }
+                        });
+                        
+                    }
+                }, this);
+            },
+            deleteNode: function() {
+                if (this.ctxNode) {
+                    var node = this.ctxNode;
+                    Ext.MessageBox.confirm(config.il8n._('Confirm'), String.format(config.il8n._('Do you really want to delete the {0} "{1}"?'), config.nodeName, node.text), function(_btn){
+                        if ( _btn == 'yes') {
+                            Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Deleting {0} "{1}"' ), config.nodeName , node.text));
+                            
+                            Ext.Ajax.request({
+                                params: {
+                                    method: config.backend + '.delete' + config.backendModel,
+                                    containerId: node.attributes.container.id
+                                },
+                                scope: this,
+                                success: function(_result, _request){
+                                    if(node.isSelected()) {
+                                        this.getSelectionModel().select(node.parentNode);
+                                        this.fireEvent('click', node.parentNode);
+                                    }
+                                    node.remove();
+                                    this.fireEvent('containerdelete', node.attributes.container);
+                                    Ext.MessageBox.hide();
+                                }
+                            });
+                        }
+                    }, this);
+                }
+            },
+            renameNode: function() {
+                if (this.ctxNode) {
+                    var node = this.ctxNode;
+                    Ext.MessageBox.show({
+                        title: 'Rename ' + config.nodeName,
+                        msg: String.format(config.il8n._('Please enter the new name of the {0}:'), config.nodeName),
+                        buttons: Ext.MessageBox.OKCANCEL,
+                        value: node.text,
+                        fn: function(_btn, _text){
+                            if (_btn == 'ok') {
+                                if (! _text) {
+                                    Ext.Msg.alert(String.format(config.il8n._('Not renamed {0}'), config.nodeName), String.format(config.il8n._('You have to supply a {0} name!'), config.nodeName));
+                                    return;
+                                }
+                                Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Updating {0} "{1}"'), config.nodeName, node.text));
+                                
+                                Ext.Ajax.request({
+                                    params: {
+                                        method: config.backend + '.rename' + config.backendModel,
+                                        containerId: node.attributes.container.id,
+                                        newName: _text
+                                    },
+                                    scope: this,
+                                    success: function(_result, _request){
+                                        var container = Ext.util.JSON.decode(_result.responseText);
+                                        node.setText(_text);
+                                        this.fireEvent('containerrename', container);
+                                        Ext.MessageBox.hide();
+                                    }
+                                });
+                            }
+                        },
+                        scope: this,
+                        prompt: true,
+                        icon: Ext.MessageBox.QUESTION
+                    });
+                }
+            },
+            
+            // @todo generalize that?
+            managePermissions: function() {
+                if (this.ctxNode) {
+                    var node = this.ctxNode;
+                    var window = new Ext.ux.PopupWindow({
+                        url: 'index.php',
+                        name: 'TinebaseManageContainerGrants' + node.attributes.container.id,
+                        layout: 'fit',
+                        modal: true,
+                        width: 700,
+                        height: 450,
+                        title: String.format(_('Manage Permissions for {0} "{1}"'), config.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                        contentPanelConstructor: 'Tine.widgets.container.grantDialog',
+                        contentPanelConstructorConfig: {
+                            containerName: config.nodeName,
+                            grantContainer: node.attributes.container
+                        }
+                    });
+                }
+            }
+        }
+        
+        /****************** create ITEMS array ****************/
+        
+        var items = [];
+        for (var i=0; i < config.actions.length; i++) {
+            switch(config.actions[i]) {
+                case 'add':
+                    items.push(new Ext.Action({
+                        text: String.format(config.il8n._('Add {0}'), config.nodeName),
+                        iconCls: 'action_add',
+                        handler: handler.addNode,
+                        scope: config.scope
+                    }));
+                    break;
+                case 'delete':
+                    items.push(new Ext.Action({
+                        text: String.format(config.il8n._('Delete {0}'), config.nodeName),
+                        iconCls: 'action_delete',
+                        handler: handler.deleteNode,
+                        scope: config.scope
+                    }));
+                    break;
+                case 'rename':
+                    items.push(new Ext.Action({
+                        text: String.format(config.il8n._('Rename {0}'), config.nodeName),
+                        iconCls: 'action_rename',
+                        handler: handler.renameNode,
+                        scope: config.scope
+                    }));
+                    break;
+                case 'grants':
+                    items.push(new Ext.Action({
+                        text: config.il8n._('Manage permissions'),
+                        iconCls: 'action_managePermissions',
+                        handler: handler.managePermissions,
+                        scope: config.scope
+                    }));
+                    break;
+            }
+        }
+
+        /******************* return menu **********************/
+        
+        return new Ext.menu.Menu({
+		    items: items
+		});
+	}
+};

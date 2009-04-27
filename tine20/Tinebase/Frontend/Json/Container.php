@@ -110,7 +110,9 @@ class Tinebase_Frontend_Json_Container
             throw new Tinebase_Exception('Container not found or permission to delete container denied!');
         }
         
-        return 'success';
+        return array(
+            'success'      => TRUE
+        );
     }
     
     /**

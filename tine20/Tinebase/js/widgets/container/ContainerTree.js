@@ -336,167 +336,28 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 		this.expandPath('/root/all');
 		this.selectPath('/root/all');
 	},
+    
 	// private
 	initContextMenu: function() {
-        var translation = new Locale.Gettext();
-        translation.textdomain('Tinebase');
-
-        var handler = {
-			addContainer: function() {
-				Ext.MessageBox.prompt(String.format(translation._('New {0}'), this.containerName), String.format(translation._('Please enter the name of the new {0}:'), this.containerName), function(_btn, _text) {
-                    if( this.ctxNode && _btn == 'ok') {
-                        if (! _text) {
-                            Ext.Msg.alert(String.format(translation._('No {0} added'), this.containerName), String.format(translation._('You have to supply a {0} name!'), this.containerName));
-                            return;
-                        }
-						Ext.MessageBox.wait(translation._('Please wait'), String.format(translation._('Creating {0}...' ), this.containerName));
-						var parentNode = this.ctxNode;
-						
-						Ext.Ajax.request({
-		                    params: {
-		                        method: 'Tinebase_Container.addContainer',
-								application: this.appName,
-		                        containerName: _text,
-		                        containerType: parentNode.attributes.containerType
-		                    },
-							scope: this,
-		                    success: function(_result, _request){
-	                            var container = Ext.util.JSON.decode(_result.responseText);
-                                var newNode = this.loader.createNode(container);
-	                            parentNode.appendChild(newNode);
-								this.fireEvent('containeradd', container);
-								Ext.MessageBox.hide();
-		                    }
-		                });
-					    
-					}
-				}, this);
-			},
-			deleteContainer: function() {
-				if (this.ctxNode) {
-					var node = this.ctxNode;
-					Ext.MessageBox.confirm(translation._('Confirm'), String.format(translation._('Do you really want to delete the {0} "{1}"?'), this.containerName, node.text), function(_btn){
-						if ( _btn == 'yes') {
-							Ext.MessageBox.wait(translation._('Please wait'), String.format(translation._('Deleting {0} "{1}"' ), this.containerName , node.text));
-							
-							Ext.Ajax.request({
-								params: {
-									method: 'Tinebase_Container.deleteContainer',
-									containerId: node.attributes.container.id
-								},
-								scope: this,
-								success: function(_result, _request){
-									if(node.isSelected()) {
-                                        this.getSelectionModel().select(node.parentNode);
-                                        this.fireEvent('click', node.parentNode);
-			                        }
-			                        node.remove();
-									this.fireEvent('containerdelete', node.attributes.container);
-									Ext.MessageBox.hide();
-								}
-							});
-						}
-					}, this);
-				}
-            },
-			renameContainer: function() {
-				if (this.ctxNode) {
-					var node = this.ctxNode;
-					Ext.MessageBox.show({
-						title: 'Rename ' + this.containerName,
-						msg: String.format(translation._('Please enter the new name of the {0}:'), this.containerName),
-						buttons: Ext.MessageBox.OKCANCEL,
-						value: node.text,
-						fn: function(_btn, _text){
-							if (_btn == 'ok') {
-                                if (! _text) {
-                                    Ext.Msg.alert(String.format(translation._('Not renamed {0}'), this.containerName), String.format(translation._('You have to supply a {0} name!'), this.containerName));
-                                    return;
-                                }
-								Ext.MessageBox.wait(translation._('Please wait'), String.format(translation._('Updating {0} "{1}"'), this.containerName, node.text));
-								
-								Ext.Ajax.request({
-									params: {
-										method: 'Tinebase_Container.renameContainer',
-										containerId: node.attributes.container.id,
-										newName: _text
-									},
-									scope: this,
-									success: function(_result, _request){
-										var container = Ext.util.JSON.decode(_result.responseText);
-										node.setText(_text);
-										this.fireEvent('containerrename', container);
-										Ext.MessageBox.hide();
-									}
-								});
-							}
-						},
-						scope: this,
-						prompt: true,
-						icon: Ext.MessageBox.QUESTION
-					});
-				}
-            },
-			managePermissions: function() {
-				if (this.ctxNode) {
-					var node = this.ctxNode;
-                    var window = new Ext.ux.PopupWindow({
-                        url: 'index.php',
-                        name: 'TinebaseManageContainerGrants' + node.attributes.container.id,
-                        layout: 'fit',
-                        modal: true,
-                        width: 700,
-                        height: 450,
-                        title: String.format(_('Manage Permissions for {0} "{1}"'), this.containerName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
-                        contentPanelConstructor: 'Tine.widgets.container.grantDialog',
-                        contentPanelConstructorConfig: {
-                            containerName: this.containerName,
-                            grantContainer: node.attributes.container
-                        }
-                    });
-				}
-            }
-		};
-		
-		var actions = {
-			addContainer: new Ext.Action({
-				text: String.format(translation._('Add {0}'), this.containerName),
-				iconCls: 'action_add',
-				handler: handler.addContainer,
-				scope: this
-			}),
-			deleteContainer: new Ext.Action({
-				text: String.format(translation._('Delete {0}'), this.containerName),
-				iconCls: 'action_delete',
-				handler: handler.deleteContainer,
-				scope: this
-			}),
-			renameContainer: new Ext.Action({
-				text: String.format(translation._('Rename {0}'), this.containerName),
-				iconCls: 'action_rename',
-				handler: handler.renameContainer,
-				scope: this
-			}),
-			grantsContainer: new Ext.Action({
-				text: translation._('Manage permissions'),
-				iconCls: 'action_managePermissions',
-				handler: handler.managePermissions,
-                scope: this
-			})
-		};
-		
-	    this.contextMenuUserFolder = new Ext.menu.Menu({
-	        items: [
-	            actions.addContainer
-	        ]
-	    });
+        var il8n = new Locale.Gettext();
+        il8n.textdomain('Tinebase');
+        
+        this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
+            il8n: il8n,
+            nodeName: this.containerName,
+            actions: ['add'],
+            scope: this,
+            backend: 'Tinebase_Container',
+            backendModel: 'Container'
+        });
 	    
-	    this.contextMenuSingleContainer= new Ext.menu.Menu({
-	        items: [
-	            actions.deleteContainer,
-	            actions.renameContainer,
-	            actions.grantsContainer
-	        ]
+	    this.contextMenuSingleContainer= Tine.widgets.tree.ContextMenu.getMenu({
+            il8n: il8n,
+            nodeName: this.containerName,
+	    	actions: ['delete', 'rename', 'grants'],
+            scope: this,
+            backend: 'Tinebase_Container',
+            backendModel: 'Container'
 	    });
 	}
 });
