@@ -15,6 +15,7 @@ require_once 'Zend/Mail/Storage/Imap.php';
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @deprecated 
  */
 class Felamimail_Imap extends Zend_Mail_Storage_Imap
 {

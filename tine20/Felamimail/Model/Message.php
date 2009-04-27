@@ -1,123 +1,54 @@
 <?php
 /**
- * Tine 2.0
- *
+ * class to hold message cache data
+ * 
  * @package     Felamimail
- * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        add Tinebase_Record_Abstract Message or make Message a tine record?
  */
 
 /**
- * message model for Felamimail
- *
+ * class to hold message cache data
+ * 
  * @package     Felamimail
- * @subpackage  Model
  */
-class Felamimail_Model_Message extends Zend_Mail_Message 
-{    
+class Felamimail_Model_Message extends Tinebase_Record_Abstract
+{  
     /**
-     * Public constructor
-     *
-     * In addition to the parameters of Zend_Mail_Message::__construct() this constructor supports:
-     * - uid  use UID FETCH if ftru
-     *
-     * @param  array $params  list of parameters
-     * @throws Zend_Mail_Exception
-     */
-    public function __construct(array $params)
-    {
-        if (isset($params['uid'])) {
-            $this->_useUid = (bool)$params['uid'];
-        }
-        
-        parent::__construct($params);
-    }
+     * key in $_validators/$_properties array for the field which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'messageuid';    
     
     /**
-     * get message body
+     * application the record belongs to
      *
-     * @param string $_contentType
-     * @return string
+     * @var string
      */
-    public function getBody($_contentType)
-    {
-        $part = null;
-        
-        if($this->isMultipart()) {
-            foreach (new RecursiveIteratorIterator($this) as $messagePart) {
-                $contentType    = $messagePart->getHeaderField('content-type', 0);
-                if($contentType == $_contentType) {
-                    $part = $messagePart;
-                    break;
-                }
-            }
-        } else {
-            $part = $this;
-        }
-        
-        if($part === null) {
-            return "no text part found";
-        }
-        
-        $content = $part->getContent();
-        
-        try {
-            $encoding       = $part->getHeaderField('content-transfer-encoding');
-        } catch(Zend_Mail_Exception $e) {
-            $encoding       = null;
-        }
-        
-        switch (strtolower($encoding)) {
-            case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                $content = quoted_printable_decode($content);
-                break;
-            case Zend_Mime::ENCODING_BASE64:
-                $content = base64_decode($content);
-                break;
-        }
-        
-        
-        try {
-            $charset        = $part->getHeaderField('content-type', 'charset');
-        } catch(Zend_Mail_Exception $e) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no charset header found. assume iso-8859-1");
-            $charset        = 'iso-8859-1';
-        }
-        
-        if(strtolower($charset) != 'utf-8') {
-            $content = iconv($charset, 'utf-8', $content);
-        }
-        
-        return $content;
-    }
-    
-    /**
-     * parse address list
-     *
-     * @param unknown_type $_adressList
-     * @return array
-     */
-    public static function parseAdresslist($_addressList)
-    {
-        $stream = fopen("php://temp", 'r+');
-        fputs($stream, $_addressList);
-        rewind($stream);
-        
-        $addresses = fgetcsv($stream);
-        
-        foreach($addresses as $key => $address) {
-            if(preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
-                $addresses[$key] = array('name' => trim(trim($matches[1]), '"'), 'address' => trim($matches[2]));
-            } else {
-                $addresses[$key] = array('name' => null, 'address' => $address);
-            }
-        }
+    protected $_application = 'Felamimail';
 
-        return $addresses;
-    }
+    /**
+     * list of zend validator
+     * 
+     * this validators get used when validating user generated content with Zend_Input_Filter
+     *
+     * @var array
+     */
+    protected $_validators = array(
+        'backendId'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'globalName'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), // global name is the path from root folder
+        'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
+        'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'to'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'cc'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'received'              => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'sent'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+    );
 }

@@ -106,7 +106,7 @@ class ActiveSync_Command_SendMail
                     
                 case 'to':
                     $tos = $this->_incomingMessage->getHeader('to');
-                    $tos = Felamimail_Model_Message::parseAdresslist($tos);
+                    $tos = Felamimail_Message::parseAdresslist($tos);
                     foreach($tos as $to) {
                         $_mail->addTo($to['address'], $to['name']);
                     }
@@ -115,7 +115,7 @@ class ActiveSync_Command_SendMail
                     
                 case 'cc':
                     $ccs = $this->_incomingMessage->getHeader('cc');
-                    $ccs = Felamimail_Model_Message::parseAdresslist($ccs);
+                    $ccs = Felamimail_Message::parseAdresslist($ccs);
                     foreach($ccs as $cc) {
                         $_mail->addCc($cc['address'], $cc['name']);
                     }
@@ -124,7 +124,7 @@ class ActiveSync_Command_SendMail
                     
                 case 'bcc':
                     $bccs = $this->_incomingMessage->getHeader('bcc');
-                    $bccs = Felamimail_Model_Message::parseAdresslist($bccs);
+                    $bccs = Felamimail_Message::parseAdresslist($bccs);
                     foreach($bccs as $bcc) {
                         $_mail->addBcc($bcc['address'], $bcc['name']);
                     }

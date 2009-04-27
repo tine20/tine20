@@ -4,14 +4,14 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:MessageFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id:FolderFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
  */
 
 /**
- * Message filter Class
+ * cache entry filter Class
  * @package     Felamimail
  */
 class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup 
@@ -25,7 +25,9 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'folder'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'subject'        => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'backendId'      => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'globalName'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'subject'        => array('filter' => 'Tinebase_Model_Filter_Text'), 
+        'from'           => array('filter' => 'Tinebase_Model_Filter_Text'), 
     );
 }

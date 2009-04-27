@@ -67,7 +67,7 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* im
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
-     * @return array of Felamimail_Model_Message
+     * @return array of Felamimail_Message
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {

@@ -70,7 +70,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             throw new Zend_Mail_Storage_Exception('need at least user in params');
         }
 
-        $this->_messageClass = 'Felamimail_Model_Message';
+        $this->_messageClass = 'Felamimail_Message';
         $this->_useUid = true;
         
         $host     = isset($params->host)     ? $params->host     : 'localhost';
