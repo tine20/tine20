@@ -146,7 +146,7 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
     
 });
 
-Tine.widgets.grid.PersistentFilterLoader = Ext.extend(Tine.widgets.data.TreeLoader, {
+Tine.widgets.grid.PersistentFilterLoader = Ext.extend(Tine.widgets.tree.Loader, {
 
 	method: 'Tinebase_PersistentFilter.search',
 

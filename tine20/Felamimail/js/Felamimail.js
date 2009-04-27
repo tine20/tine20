@@ -263,7 +263,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     }
 });
 
-Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.data.TreeLoader, {
+Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
 	
     method: 'Felamimail.searchFolders',
 
