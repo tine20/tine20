@@ -23,7 +23,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'globalName';    
+    protected $_identifier = 'id';    
     
     /**
      * application the record belongs to
@@ -40,11 +40,15 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'localName'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'globalName'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), // global name is the path from root folder
-        'backendId'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'default'),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'localname'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'globalname'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), // global name is the path from root folder
+        'backend_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'default'),
         'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'isSelectable'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'hasChildren'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+        'is_selectable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+        'has_children'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+    // cache sync values 
+        'uidnext'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'uidvalidity'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 }

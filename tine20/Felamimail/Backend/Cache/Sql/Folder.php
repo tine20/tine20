@@ -16,20 +16,20 @@
  *
  * @package     Felamimail
  */
-class Felamimail_Backend_Cache_Sql extends Tinebase_Backend_Sql_Abstract
+class Felamimail_Backend_Cache_Sql_Folder extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
      *
      * @var string
      */
-    protected $_tableName = 'felamimail_cache_message';
+    protected $_tableName = 'felamimail_cache_folder';
     
     /**
      * Model name
      *
      * @var string
      */
-    protected $_modelName = 'Felamimail_Model_Message';
+    protected $_modelName = 'Felamimail_Model_Folder';
 
 }
