@@ -128,7 +128,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         
         // defaults
         $ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
-        $ldapData['sambaacctflags'] = isset($ldapData['sambaacctflags']) ? $ldapData['sambaacctflags'] : '[U          ]';
+        $ldapData['sambaacctflags'] = (isset($ldapData['sambaacctflags']) && !empty($ldapData['sambaacctflags'])) ? $ldapData['sambaacctflags'] : '[U          ]';
         $ldapData['sambapwdcanchange']	= isset($ldapData['sambapwdcanchange'])  ? $ldapData['sambapwdcanchange']  : 0;
         $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] : 2147483647;
 
