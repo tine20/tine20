@@ -8,6 +8,8 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        add acl
  */
 
 /**
@@ -115,8 +117,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
         } else {
             $result = parent::searchCount($_filter);
             /*
-            $this->_getBackend($filterValues['backendId'])->selectFolder($filterValues['folder']);
-            $result = $this->_getBackend($filterVales['backendId'])->countMessages();
+            $this->_getImapBackend($filterValues['backendId'])->selectFolder($filterValues['folder']);
+            $result = $this->_getImapBackend($filterVales['backendId'])->countMessages();
             */
         }
             
@@ -143,7 +145,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
         
         Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
         
-        $this->_getBackend()->appendMessage($_mail, 'Sent');
+        $this->_getImapBackend()->appendMessage($_mail, 'Sent');
     }
     
     /**
@@ -155,11 +157,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      */
     public function getMessage($_globalName, $_messageId)
     {        
-        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getBackend()->selectFolder($_globalName);
+        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getImapBackend()->selectFolder($_globalName);
         }
         
-        $message = $this->_getBackend()->getMessage($_messageId);
+        $message = $this->_getImapBackend()->getMessage($_messageId);
         
         return $message;
     }
@@ -173,11 +175,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      */
     public function deleteMessage($_serverId, $_globalName, $_messageId)
     {        
-        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getBackend()->selectFolder($_globalName);
+        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getImapBackend()->selectFolder($_globalName);
         }
         
-        $message = $this->_getBackend()->removeMessage($_messageId);
+        $message = $this->_getImapBackend()->removeMessage($_messageId);
     }
     
     /**
@@ -191,11 +193,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      */
     public function getUid($_globalName, $from, $to = null)
     {
-        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getBackend()->selectFolder($_globalName);
+        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getImapBackend()->selectFolder($_globalName);
         }
         
-        $foundEntries = $this->_getBackend()->getUid($from, $to);
+        $foundEntries = $this->_getImapBackend()->getUid($from, $to);
         
         return $foundEntries;
     }
@@ -210,11 +212,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      */
     public function addFlags($_serverId, $_globalName, $_id, $_flags)
     {
-        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getBackend()->selectFolder($_globalName);
+        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getImapBackend()->selectFolder($_globalName);
         }
         
-        $this->_getBackend()->addFlags($_id, $_flags);
+        $this->_getImapBackend()->addFlags($_id, $_flags);
     }
     
     /**
@@ -227,11 +229,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      */
     public function clearFlags($_serverId, $_globalName, $_id, $_flags)
     {
-        if($this->_getBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getBackend()->selectFolder($_globalName);
+        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
+            $this->_getImapBackend()->selectFolder($_globalName);
         }
         
-        $this->_getBackend()->clearFlags($_id, $_flags);
+        $this->_getImapBackend()->clearFlags($_id, $_flags);
     }
 
     /************************* protected funcs *************************/

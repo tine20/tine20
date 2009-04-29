@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        add acl
+ * @todo        think about using the sort dir + paging for caching as well, cache only the first page initially, and so on
  * @todo        add param to include subfolders?
  */
 
@@ -81,24 +82,25 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
         return self::$_instance;
     }
     
+    /***************************** public funcs *******************************/
+    
     /**
      * update cache if required
      *
      * @param string $_folderId
      * 
      * @todo    check if mails have been deleted (compare counts)
-     * @todo    parse received data to get Zend_Date
-     * @todo    get message size
-     * @todo    make encoding changeable via prefs or backend settings
+     * @todo    create new folder if no uidvalidity
+     * @todo    write tests for cache handling
+     * @todo    split this into smaller functions
      */
     public function update($_folderId)
     {
-        $folder = $this->_folderBackend->get($_folderId);
-
-        $backend = $this->_getBackend($folder->backend_id);
-        $backendFolderValues = $backend->selectFolder($folder->globalname);
+        $folder                 = $this->_folderBackend->get($_folderId);
+        $backend                = $this->_getImapBackend($folder->backend_id);
+        $backendFolderValues    = $backend->selectFolder($folder->globalname);
         
-        //print_r($backendFolderValues);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($backendFolderValues, TRUE));
         
         // check uidnext
         if ($folder->uidnext < $backendFolderValues['uidnext']) {
@@ -112,40 +114,20 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
                 $messages = $backend->getSummary($folder->uidnext, $backendFolderValues['uidnext']);
             }
 
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                 ' Trying to add ' . count($messages) . ' new messages to cache. Old uidnext: ' . $folder->uidnext .
                 ' New uidnext: ' . $backendFolderValues['uidnext']
             );
             
             // get all (?) message headers from folder and save them in cache db
-            foreach ($messages as $uid => $message) {
-                
-                try {
-                    $cachedMessage = new Felamimail_Model_Message(array(
-                        'messageuid'    => $uid,
-                        'subject'       => @iconv('ISO_8859-1', $this->_encoding, $message->subject),
-                        'from'          => @iconv('ISO_8859-1', $this->_encoding, $message->from),
-                        'to'            => @iconv('ISO_8859-1', $this->_encoding, $message->to),
-                        'sent'          => new Zend_Date($message->date),
-                        'folder_id'     => $_folderId,
-                        'timestamp'     => Zend_Date::now()
-                        //'received'      => $message->received,
-                        //'size'          => $message->size
-                    ));
-                    
-                    $this->_messageCacheBackend->create($cachedMessage);
-                } catch (Zend_Mail_Exception $zme) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                        ' Could not parse message ' . $uid . ' in folder ' . $folder->globalname .
-                        '. Error: ' . $zme->getMessage()
-                    );
-                }
-            }
+            $this->_addMessages($messages, $_folderId);
+            
         } else {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No need to get new messages, cache is up to date.');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No need to get new messages, cache is up to date.');
         }
         
         if ($folder->uidvalidity != $backendFolderValues['uidvalidity']) {
+            // @todo create new folder and update cache again
             throw new Tinebase_Exception_UnexpectedValue(
                 'Got non matching uidvalidity value: ' . $backendFolderValues['uidvalidity'] .'. Expected: ' . $folder->uidvalidity);
         }
@@ -153,10 +135,35 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
         // save nextuid/validity in folder
         if ($folder->uidnext != $backendFolderValues['uidnext']) {
             $folder->uidnext = $backendFolderValues['uidnext'];
-            $this->_folderBackend->update($folder);
+            $folder = $this->_folderBackend->update($folder);
         }
         
-        //-- check if mails have been deleted (compare counts)
+        // check if mails have been deleted (compare counts)
+        // @todo save count in folder table ?
+        // @todo use only getMessageuidsByFolderId here?
+        $folderCount = $this->_messageCacheBackend->searchCountByFolderId($_folderId);
+        if ($backendFolderValues['exists'] < $folderCount) {
+            // some messages have been deleted
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Checking for deleted messages.' .
+                ' cached msgs: ' . $folderCount . ' server msgs: ' . $backendFolderValues['exists']
+            );
+            
+            // get cached msguids
+            $cachedMsguids = $this->_messageCacheBackend->getMessageuidsByFolderId($_folderId);
+            
+            // get server msguids
+            $uids = $backend->getUid(1, $backend->countMessages());
+            
+            // array diff the msg uids to delete from cache
+            $uidsToDelete = array_diff($cachedMsguids, $uids);
+            $this->_messageCacheBackend->deleteMessageuidsByFolderId($uidsToDelete, $_folderId);
+            
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' No need to remove old messages from cache / it is up to date.' .
+                ' cached msgs: ' . $folderCount . ' server msgs: ' . $backendFolderValues['exists']
+            );
+        }
     }
     
     /**
@@ -173,5 +180,44 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
         $folder->uidnext = 0;
         $folder->uidvalidity = 0;
         $this->_folderBackend->update($folder);
+    }
+    
+    /***************************** protected funcs *******************************/
+    
+    /**
+     * add messages to cache
+     *
+     * @param array $_messages
+     * @param string $_folderId
+     * 
+     * @todo add more parsing of header and other mail stats (size, received, ...)
+     * @todo make encoding changeable via prefs or backend settings
+     */
+    protected function _addMessages($_messages, $_folderId, $_encodingFrom = 'ISO_8859-1')
+    {
+        foreach ($_messages as $uid => $message) {
+            
+            try {
+                $cachedMessage = new Felamimail_Model_Message(array(
+                    'messageuid'    => $uid,
+                    'subject'       => @iconv($_encodingFrom, $this->_encoding, $message->subject),
+                    'from'          => @iconv($_encodingFrom, $this->_encoding, $message->from),
+                    'to'            => @iconv($_encodingFrom, $this->_encoding, $message->to),
+                    'sent'          => new Zend_Date($message->date),
+                    'folder_id'     => $_folderId,
+                    'timestamp'     => Zend_Date::now()
+                    //'received'      => $message->received,
+                    //'size'          => $message->size
+                ));
+                
+                $this->_messageCacheBackend->create($cachedMessage);
+                
+            } catch (Zend_Mail_Exception $zme) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                    ' Could not parse message ' . $uid . ' | ' . $message->subject .
+                    '. Error: ' . $zme->getMessage()
+                );
+            }
+        }        
     }
 }

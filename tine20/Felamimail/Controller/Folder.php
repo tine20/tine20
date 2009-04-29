@@ -127,7 +127,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function create($_folderName, $_parentFolder = '', $_backendId = 'default')
     {
-        $imap = $this->_getBackend($_backendId);
+        $imap = $this->_getImapBackend($_backendId);
         $imap->createFolder($_folderName, $_parentFolder);
         
         // create new folder
@@ -149,7 +149,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function delete($_folderName, $_backendId = 'default')
     {
-        $imap = $this->_getBackend($_backendId);
+        $imap = $this->_getImapBackend($_backendId);
         $imap->removeFolder($_folderName);
         
         try {
@@ -170,7 +170,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function rename($_oldFolderName, $_newFolderName, $_backendId = 'default')
     {
-        $imap = $this->_getBackend($_backendId);
+        $imap = $this->_getImapBackend($_backendId);
         $imap->renameFolder($_oldFolderName, $_newFolderName);
         
         // rename folder in db
@@ -201,7 +201,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function getSubFolders($_folderName = '', $_backendId = 'default')
     {
-        $imap = $this->_getBackend($_backendId);
+        $imap = $this->_getImapBackend($_backendId);
         
         if(empty($_folderName)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get subfolders of root for backend ' . $_backendId);

@@ -47,7 +47,7 @@ abstract class Felamimail_Controller_Abstract extends Tinebase_Controller_Abstra
      * @todo do we need a backend for each folder on the mailserver?
      * 
      */
-    protected function _getBackend($_backendId = 'default')
+    protected function _getImapBackend($_backendId = 'default')
     {
         if (!isset($this->_imapBackends[$_backendId])) {
             // we need to instantiate a new imap backend
