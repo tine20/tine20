@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        make sort by name work in config grid panel 
  */
  
 Ext.namespace('Tine.widgets', 'Tine.widgets.account');
@@ -85,6 +86,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
                 dataIndex: this.recordPrefix + 'name', 
                 renderer: Tine.Tinebase.common.accountRenderer,
                 width: 70
+                //sortable: true
             }].concat(this.configColumns)
         );
         columnModel.defaultSortable = true; // by default columns are sortable

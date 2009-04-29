@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        make sorting work in grants grid
  */
  
 Ext.namespace('Tine.Timetracker');
@@ -31,7 +32,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     onRecordLoad: function() {
-        // make shure grants grid is initialised
+        // make sure grants grid is initialised
         this.getGrantsGrid();
         
         var grants = this.record.get('grants') || [];
@@ -193,7 +194,9 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 root: 'results',
                 totalProperty: 'totalcount',
                 id: 'id',
-                fields: Tine.Timetracker.Model.TimeaccountGrant
+                fields: Tine.Timetracker.Model.TimeaccountGrant/*,
+                remoteSort: false,
+                sortInfo: {field: "account_name", direction: "DESC"}*/
             });
             
             var columns = [
