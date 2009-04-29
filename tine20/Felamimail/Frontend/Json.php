@@ -89,7 +89,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * search messages
      *
      * @param string $filter
-     * @param string $pagination
+     * @param string $paging
      * @return array
      */
     public function searchMessages($filter, $paging)

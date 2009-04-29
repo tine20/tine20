@@ -93,7 +93,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
             // update cache?
             $this->_cacheController->update($folderId);
         
-            $result = parent::search($_filter);
+            $result = parent::search($_filter, $_pagination);
         }
         
         return $result;
