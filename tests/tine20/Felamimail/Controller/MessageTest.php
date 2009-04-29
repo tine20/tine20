@@ -75,6 +75,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
         
+        // clear cache
+        Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
+        
         // search messages in inbox
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
@@ -90,6 +93,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $cacheBackend->get($firstMessage->getId());
         $this->assertEquals($folder->getId(), $cachedMessage->folder_id);
         $this->assertEquals(Zend_Date::now()->toString('YYYY-MM-dd'), $cachedMessage->timestamp->toString('YYYY-MM-dd'));
+        
+        // clear cache
+        Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
     }
     
     
