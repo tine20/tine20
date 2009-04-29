@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        activate tests again with caching
  */
 
 /**
@@ -76,7 +77,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(6, $result['totalcount']);
         $expectedFolders = array('Drafts', 'INBOX', 'Junk', 'Sent', 'Templates', 'Trash');
         foreach ($result['results'] as $folder) {
-            $this->assertTrue(in_array($folder['localName'], $expectedFolders));
+            $this->assertTrue(in_array($folder['localname'], $expectedFolders));
         }
     }
 
@@ -86,7 +87,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchMessages()
     {
-        $filter = $this->_getMessageFilter();
+        // get inbox folder id
+        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        
+        $filter = $this->_getMessageFilter($folder->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         
         $this->assertGreaterThan(0, $result['totalcount']);
@@ -116,10 +122,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getMessageFilter()
+    protected function _getMessageFilter($_folderId)
     {
         return array(array(
-            'field' => 'folder', 'operator' => 'equals', 'value' => 'INBOX'
+            'field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId
         ));
     }
 }

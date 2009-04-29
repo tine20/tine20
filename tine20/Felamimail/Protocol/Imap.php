@@ -140,4 +140,50 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
 
         return $result;
     }
+    
+    /**
+     * Examine and select have the same response. The common code for both
+     * is in this method
+     * 
+     * - overwritten to get UIDNEXT
+     *
+     * @param  string $command can be 'EXAMINE' or 'SELECT' and this is used as command
+     * @param  string $box which folder to change to or examine
+     * @return bool|array false if error, array with returned information
+     *                    otherwise (flags, exists, recent, uidvalidity)
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function examineOrSelect($command = 'EXAMINE', $box = 'INBOX')
+    {
+        $this->sendRequest($command, array($this->escapeString($box)), $tag);
+
+        $result = array();
+        while (!$this->readLine($tokens, $tag)) {
+            if ($tokens[0] == 'FLAGS') {
+                array_shift($tokens);
+                $result['flags'] = $tokens;
+                continue;
+            }
+            switch ($tokens[1]) {
+                case 'EXISTS':
+                case 'RECENT':
+                    $result[strtolower($tokens[1])] = $tokens[0];
+                    break;
+                case '[UIDVALIDITY':
+                    $result['uidvalidity'] = (int)$tokens[2];
+                    break;
+                case '[UIDNEXT':
+                    $result['uidnext'] = (int)$tokens[2];
+                    break;
+                default:
+                    // ignore
+            }
+        }
+
+        if ($tokens[0] != 'OK') {
+            return false;
+        }
+        return $result;
+    }
+    
 }

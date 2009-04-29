@@ -8,9 +8,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        make  Messages normal tine records?
- * @todo        add support for caching backend(s)
  */
 
 /**
@@ -19,7 +16,7 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* implements Tinebase_Controller_SearchInterface */
+class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract //Felamimail_Controller_Abstract implements Tinebase_Controller_SearchInterface
 {
     /**
      * holdes the instance of the singleton
@@ -29,12 +26,25 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* im
     private static $_instance = NULL;
     
     /**
+     * cache controller
+     *
+     * @var Felamimail_Controller_Cache
+     */
+    protected $_cacheController = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
      */
     private function __construct() {
+        $this->_modelName = 'Felamimail_Model_Message';
+        $this->_doContainerACLChecks = FALSE;
+        $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
+        
         $this->_currentAccount = Tinebase_Core::getUser();
+        
+        $this->_cacheController = Felamimail_Controller_Cache::getInstance();
     }
     
     /**
@@ -67,21 +77,24 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* im
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
-     * @return array of Felamimail_Message
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo add support for multiple folders
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
-        // get backendId and globalName from filter
+        // get folder_id from filter (has to be set)
         $filterValues = $this->_extractFilter($_filter);
+        $folderId = $filterValues['folder_id'];
         
-        if (empty($filterValues['folder'])) {
-            $result = array();
+        if (empty($folderId) || $folderId == '/') {
+            $result = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
         } else {
-            $this->_getBackend($filterValues['backendId'])->selectFolder($filterValues['folder']);
-            $result = $this->_getBackend($filterValues['backendId'])->getMessages();
-        }
+            // update cache?
+            $this->_cacheController->update($folderId);
         
-        //$seenMessages = $imapConnection->getSummary(array_slice($seen, $_start, $_limit));
+            $result = parent::search($_filter);
+        }
         
         return $result;
     }
@@ -91,18 +104,20 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* im
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
-     * 
-     * @todo activate pagination
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
+        // get folder_id from filter (has to be set)
         $filterValues = $this->_extractFilter($_filter);
         
-        if (empty($filterValues['folder'])) {
+        if (empty($filterValues['folder_id'])) {
             $result = 0;
         } else {
+            $result = parent::searchCount($_filter);
+            /*
             $this->_getBackend($filterValues['backendId'])->selectFolder($filterValues['folder']);
             $result = $this->_getBackend($filterVales['backendId'])->countMessages();
+            */
         }
             
         return $result;
@@ -110,6 +125,8 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* im
     }
     
     /************************* other public funcs *************************/
+    
+    // @todo check if those are needed
     
     /**
      * send one message through smtp
@@ -227,17 +244,13 @@ class Felamimail_Controller_Message extends Felamimail_Controller_Abstract /* im
      */
     protected function _extractFilter(Felamimail_Model_MessageFilter $_filter)
     {
-        $result = array('backendId' => 'default', 'folder' => '');
+        //$result = array('backendId' => 'default', 'folder' => '');
+        $result = array('folder_id' => '');
         
         $filters = $_filter->getFilterObjects();
         foreach($filters as $filter) {
-            switch($filter->getField()) {
-                case 'backendId':
-                    $result['backendId'] = $filter->getValue();
-                    break;
-                case 'folder':
-                    $result['folder'] = $filter->getValue();
-                    break;
+            if (in_array($filter->getField(), array_keys($result))) {
+                $result[$filter->getField()] = $filter->getValue();
             }
         }
         

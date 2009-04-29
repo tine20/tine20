@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        check if folders are created/deleted/changed in backend
  */
 
 /**
@@ -73,37 +74,43 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, count($result));
         
         // get inbox folder and do more checks
-        $inboxFolder = $result->filter('localName', 'INBOX')->getFirstRecord();
-        $this->assertFalse($inboxFolder === NULL);
-        $this->assertTrue($inboxFolder->isSelectable);
-        $this->assertTrue(empty($inboxFolder->hasChildren));
+        $inboxFolder = $result->filter('localname', 'INBOX')->getFirstRecord();
+        //print_r($inboxFolder->toArray());
+        $this->assertFalse($inboxFolder === NULL, 'inbox not found');
+        $this->assertTrue(($inboxFolder->is_selectable == 1), 'should be selectable');
+        $this->assertTrue(($inboxFolder->has_children == 0), 'has children');
+        
+        // check if entry is created/exists in db
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        //print_r($folder->toArray());
+        $this->assertTrue(!empty($folder->id));
+        $this->assertEquals('INBOX', $folder->localname);
     }
     
     /**
      * create a mail folder on the server
      *
+     *
      */
     public function testCreateFolder()
     {
-        $this->_controller->createFolder('test', 'INBOX');
+        $newFolder = $this->_controller->create('test', 'INBOX');
 
+        // check returned data (id)
+        $this->assertTrue(!empty($newFolder->id));
+        $this->assertEquals('INBOX/test', $newFolder->globalname);
+        
+        // search for subfolders
         $resultInboxSub = $this->_controller->getSubFolders('INBOX');
         
         $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
-        $testFolder = $resultInboxSub->filter('localName', 'test')->getFirstRecord();
+        $testFolder = $resultInboxSub->filter('localname', 'test')->getFirstRecord();
         
         $this->assertFalse($testFolder === NULL, 'No test folder created.');
-        $this->assertTrue($testFolder->isSelectable);
-        
-        $this->_controller->removeFolder('INBOX/test');
-        
-        // this doesn't work. why?
-        /*
-        $resultInboxSub = $this->_controller->getSubFolders('INBOX');
-        
-        $testFolder = $resultInboxSub->filter('localName', 'test')->getFirstRecord();
-        $this->assertTrue($testFolder === NULL, 'Test not deleted.');
-        */
+        $this->assertTrue(($testFolder->is_selectable == 1));
+
+        $this->_controller->delete('INBOX/test');
     }
 
     /**
@@ -112,17 +119,19 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     public function testRenameFolder()
     {
-        $this->_controller->createFolder('test', 'INBOX');
+        $this->_controller->create('test', 'INBOX');
 
-        $this->_controller->renameFolder('INBOX/test', 'INBOX/test_renamed');
+        $renamedFolder = $this->_controller->rename('INBOX/test', 'INBOX/test_renamed');
+        
+        $this->assertEquals('test_renamed', $renamedFolder->localname);
         
         $resultInboxSub = $this->_controller->getSubFolders('INBOX');
         $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
-        $testFolder = $resultInboxSub->filter('localName', 'test_renamed')->getFirstRecord();
+        $testFolder = $resultInboxSub->filter('localname', 'test_renamed')->getFirstRecord();
         
         $this->assertFalse($testFolder === NULL, 'No renamed folder found.');
-        $this->assertTrue($testFolder->isSelectable);
+        $this->assertTrue(($testFolder->is_selectable == 1));
         
-        $this->_controller->removeFolder('INBOX/test_renamed');
+        $this->_controller->delete('INBOX/test_renamed');
     }
 }

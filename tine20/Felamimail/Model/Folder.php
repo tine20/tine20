@@ -40,15 +40,25 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'localname'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'globalname'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), // global name is the path from root folder
         'backend_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'default'),
         'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_selectable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'has_children'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-    // cache sync values 
-        'uidnext'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'has_children'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // cache/mailbox sync values 
+        'uidnext'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'uidvalidity'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    );
+    
+    /**
+     * name of fields containing datetime or or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'timestamp',
     );
 }

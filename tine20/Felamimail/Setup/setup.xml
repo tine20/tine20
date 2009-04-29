@@ -96,7 +96,7 @@
             </declaration>
         </table>
         <table>
-            <name>felamimail_cache_folder</name>
+            <name>felamimail_folder</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -110,6 +110,10 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>user_id</name>
+                    <type>integer</type>
                 </field>
                 <field>
                     <name>localname</name>
@@ -146,6 +150,10 @@
                     <type>text</type>
                     <length>40</length>
                 </field>
+                <field>
+                    <name>timestamp</name>
+                    <type>datetime</type>
+                </field>                
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -153,6 +161,7 @@
                         <name>id</name>
                     </field>
                 </index>
+                <!-- @todo add unique key for backend + globalname? seems to be too long ... -->
                 <!-- @todo add foreign key index to backend? -->
             </declaration>
         </table>
@@ -160,6 +169,12 @@
             <name>felamimail_cache_message</name>
             <version>1</version>
             <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
                 <field>
                     <name>messageuid</name>
                     <type>integer</type>
@@ -209,6 +224,17 @@
                     <name>flags</name>
                     <type>integer</type>
                 </field>
+                <field>
+                    <name>timestamp</name>
+                    <type>datetime</type>
+                </field>                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
                 <index>
                     <name>messageuid-folder_id</name>
                     <unique>true</unique>
@@ -226,9 +252,10 @@
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>felamimail_cache_folder</table>
+                        <table>felamimail_folder</table>
                         <field>id</field>
-                        <!-- ondelete>cascade</ondelete? -->
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
                 </index>
             </declaration>

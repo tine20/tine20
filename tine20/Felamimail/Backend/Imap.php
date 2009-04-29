@@ -91,6 +91,46 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * select given folder
+     * 
+     * - overwritten to get results (UIDNEXT, UIDVALIDITY, ...)
+     *
+     * folder must be selectable!
+     *
+     * @param  Zend_Mail_Storage_Folder|string $globalName global name of folder or instance for subfolder
+     * @return array with folder values
+     * @throws Zend_Mail_Storage_Exception
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function selectFolder($globalName)
+    {
+        $this->_currentFolder = $globalName;
+        if (!$result = $this->_protocol->select($this->_currentFolder)) {
+            $this->_currentFolder = '';
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot change folder, maybe it does not exist');
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * examine given folder
+     * 
+     * @param  Zend_Mail_Storage_Folder|string $globalName global name of folder or instance for subfolder
+     * @return array with folder values
+     */
+    public function examineFolder($globalName)
+    {
+        $this->_currentFolder = $globalName;
+        $result = $this->_protocol->examine($this->_currentFolder);        
+        return $result;
+    }
+    
+    /**
      * Fetch a message
      *
      * @param int $id number of message
@@ -108,31 +148,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
 
         return new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $header, 'flags' => $flags));
-    }
-    
-    /**
-     * get all messages of selected folder
-     * 
-     * @todo add paging?
-     */
-    public function getMessages()
-    {
-        $useUidSetting = $this->_useUid;
-        $this->_useUid = FALSE;
-        
-        $count = $this->countMessages();
-        $result = array();
-        $i = 1;
-        
-        //$result = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER'), 1, $this->countMessages(), FALSE);
-        
-        while ($i <= $count) {
-            $result[$i] = $this->getMessage($i);
-            $i++;
-        }
-        
-        $this->_useUid = $useUidSetting;
-        return $result;
     }
     
     /**
@@ -248,9 +263,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     /**
      * return uid for given message numbers
      *
-     * @param unknown_type $from
-     * @param unknown_type $to
-     * @return unknown
+     * @param int $from
+     * @param int|null $to
+     * @return array
      */
     public function getUid($from, $to = null)
     {
@@ -263,6 +278,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
     }
     
+    /**
+     * get messages summary
+     *
+     * @param int $from
+     * @param int|null $to
+     * @return array with $this->_messageClass (Felamimail_Message)
+     */
     public function getSummary($from, $to = null)
     {
         $summary = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER'), $from, $to, $this->_useUid);

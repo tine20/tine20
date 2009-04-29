@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        rename to Felamimail_Model_Cache_Message?
  */
 
 /**
@@ -23,7 +24,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'messageuid';    
+    protected $_identifier = 'id';    
     
     /**
      * application the record belongs to
@@ -40,6 +41,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
         'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
@@ -50,5 +52,17 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'sent'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'flags'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    );
+    
+    /**
+     * name of fields containing datetime or or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'timestamp',
+        'received',
+        'sent',
     );
 }

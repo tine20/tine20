@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add cleanup routine for deleted (by other clients)/outofdate  folders?
  */
 
 /**
@@ -27,6 +28,22 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
     protected $_lastSearchCount = array();
     
     /**
+     * Enter description here...
+     * 
+     * @staticvar string
+     * @todo get delimiter from backend?
+     * 
+     */
+    const DELIMITER = '/';
+    
+    /**
+     * folder backend
+     *
+     * @var Felamimail_Backend_Folder
+     */
+    protected $_folderBackend = NULL;
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Felamimail_Controller_Folder
@@ -40,6 +57,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     private function __construct() {
         $this->_currentAccount = Tinebase_Core::getUser();
+        $this->_folderBackend = new Felamimail_Backend_Folder();
     }
     
     /**
@@ -63,6 +81,8 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
         
         return self::$_instance;
     }
+
+    /************************************* public functions *************************************/
     
     /**
      * get list of records
@@ -74,11 +94,10 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
-        // get backendId and globalName from filter
         $filterValues = $this->_extractFilter($_filter);
         
-        $result = $this->getSubFolders($filterValues['globalName'], $filterValues['backendId']);
-        $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backendId']] = count($result);
+        $result = $this->getSubFolders($filterValues['globalname'], $filterValues['backend_id']);
+        $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backend_id']] = count($result);
         
         return $result;
     }
@@ -92,7 +111,8 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
         $filterValues = $this->_extractFilter($_filter);
-        return $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backendId']];    
+        
+        return $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backend_id']];
     }
     
     /**
@@ -101,11 +121,24 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      * @param string $_folderName to create
      * @param string $_parentFolder
      * @param string $_backendId [optional]
+     * @return Felamimail_Model_Folder
+     * 
+     * @todo get delimiter from backend?
      */
-    public function createFolder($_folderName, $_parentFolder = '', $_backendId = 'default')
+    public function create($_folderName, $_parentFolder = '', $_backendId = 'default')
     {
         $imap = $this->_getBackend($_backendId);
         $imap->createFolder($_folderName, $_parentFolder);
+        
+        // create new folder
+        $folder = new Felamimail_Model_Folder(array(
+            'localname'     => $_folderName,
+            'globalname'    => $_parentFolder . self::DELIMITER . $_folderName,
+            'backend_id'    => $_backendId
+        ));           
+        
+        $folder = $this->_folderBackend->create($folder);
+        return $folder;
     }
     
     /**
@@ -114,10 +147,17 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      * @param string $_folderName globalName (complete path) of folder to delete
      * @param string $_backendId
      */
-    public function removeFolder($_folderName, $_backendId = 'default')
+    public function delete($_folderName, $_backendId = 'default')
     {
         $imap = $this->_getBackend($_backendId);
         $imap->removeFolder($_folderName);
+        
+        try {
+            $folder = $this->_folderBackend->getByBackendAndGlobalName($_backendId, $_folderName);
+            $this->_folderBackend->delete($folder->getId());
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder.');
+        }
     }
     
     /**
@@ -126,44 +166,86 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      * @param string $_oldFolderName globalName (complete path) of folder to rename
      * @param string $_newFolderName new globalName of folder
      * @param string $_backendId [optional]
+     * @return Felamimail_Model_Folder
      */
-    public function renameFolder($_oldFolderName, $_newFolderName, $_backendId = 'default')
+    public function rename($_oldFolderName, $_newFolderName, $_backendId = 'default')
     {
         $imap = $this->_getBackend($_backendId);
         $imap->renameFolder($_oldFolderName, $_newFolderName);
+        
+        // rename folder in db
+        try {
+            $folder = $this->_folderBackend->getByBackendAndGlobalName($_backendId, $_oldFolderName);
+            $folder->globalname = $_newFolderName;
+            $globalNameParts = explode(self::DELIMITER, $_newFolderName);
+            $folder->localname = array_pop($globalNameParts);
+            $folder = $this->_folderBackend->update($folder);
+            
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Trying to rename non-existant folder.');
+            throw $tenf;
+        }
+        
+        return $folder;
     }
 
     /**
-     * get (sub) folder
+     * get (sub) folder and create folders in db backend
      *
      * @param string $_folderName
      * @param string $_backendId [optional]
-     * @param string $_delimiter [optional]
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      * 
+     * @todo delete all subfolders from db first?
      * @todo get delimiter from backend?
      */
-    public function getSubFolders($_folderName = '', $_backendId = 'default', $_delimiter = '/')
+    public function getSubFolders($_folderName = '', $_backendId = 'default')
     {
         $imap = $this->_getBackend($_backendId);
         
         if(empty($_folderName)) {
-            $folder = $imap->getFolders('', '%');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get subfolders of root for backend ' . $_backendId);
+            $folders = $imap->getFolders('', '%');
         } else {
             try {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $_delimiter);
-                $folder = $imap->getFolders($_folderName . $_delimiter, '%');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . self::DELIMITER);
+                $folders = $imap->getFolders($_folderName . self::DELIMITER, '%');
             } catch (Zend_Mail_Storage_Exception $zmse) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
-                $folder = array();
+                $folders = array();
             }
         }
         
-        $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder', $folder);
-        $result->backendId = $_backendId;
+        // do some mapping and save folder in db
+        $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
+        
+        foreach ($folders as $folderData) {
+            try {
+                $folder = $this->_folderBackend->getByBackendAndGlobalName($_backendId, $folderData['globalName']);
+                $folder->is_selectable = ($folderData['isSelectable'] == '1');
+                $folder->has_children = ($folderData['hasChildren'] == '1');
+                
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // create new folder
+                $folder = new Felamimail_Model_Folder(array(
+                    'localname'     => $folderData['localName'],
+                    'globalname'    => $folderData['globalName'],
+                    'is_selectable' => ($folderData['isSelectable'] == '1'),
+                    'has_children'  => ($folderData['hasChildren'] == '1'),
+                    'backend_id'    => $_backendId,
+                    'timestamp'     => Zend_Date::now()
+                ));
+                
+                $folder = $this->_folderBackend->create($folder);
+            }
+            
+            $result->addRecord($folder);
+        }
         
         return $result;
     }
+    
+    /************************************* protected functions *************************************/
     
     /**
      * extract values from folder filter
@@ -175,16 +257,16 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     protected function _extractFilter(Felamimail_Model_FolderFilter $_filter)
     {
-        $result = array('backendId' => 'default', 'globalName' => '');
+        $result = array('backend_id' => 'default', 'globalname' => '');
         
         $filters = $_filter->getFilterObjects();
         foreach($filters as $filter) {
             switch($filter->getField()) {
-                case 'backendId':
-                    $result['backendId'] = $filter->getValue();
+                case 'backend_id':
+                    $result['backend_id'] = $filter->getValue();
                     break;
-                case 'globalName':
-                    $result['globalName'] = $filter->getValue();
+                case 'globalname':
+                    $result['globalname'] = $filter->getValue();
                     break;
             }
         }

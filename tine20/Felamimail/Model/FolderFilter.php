@@ -25,7 +25,8 @@ class Felamimail_Model_FolderFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'globalName'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'backendId'      => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'globalname'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'backend_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

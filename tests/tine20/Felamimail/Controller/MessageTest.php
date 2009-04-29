@@ -61,5 +61,50 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {        
     }
+
+    /********************************* test funcs *************************************/
     
+    /**
+     * test search with cache
+     *
+     */
+    public function testSearchWithCache()
+    {
+        // get inbox folder id
+        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        
+        // search messages in inbox
+        $result = $this->_controller->search($this->_getFilter($folder->getId()));
+        
+        //print_r($result->toArray());
+        // check result
+        $firstMessage = $result->getFirstRecord();
+        $this->assertGreaterThan(0, count($result));
+        $this->assertEquals($folder->getId(), $firstMessage->folder_id);
+        $this->assertEquals('testmail', $firstMessage->subject);
+        
+        // check cache entries
+        $cacheBackend = new Felamimail_Backend_Cache_Sql_Message();
+        $cachedMessage = $cacheBackend->get($firstMessage->getId());
+        $this->assertEquals($folder->getId(), $cachedMessage->folder_id);
+        $this->assertEquals(Zend_Date::now()->toString('YYYY-MM-dd'), $cachedMessage->timestamp->toString('YYYY-MM-dd'));
+    }
+    
+    
+    /********************************* protected helper funcs *************************************/
+    
+    /**
+     * get message filter
+     *
+     * @param string $_folderId
+     * @return Felamimail_Model_MessageFilter
+     */
+    protected function _getFilter($_folderId)
+    {
+        return new Felamimail_Model_MessageFilter(array(
+            array('field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId)
+        ));
+    }
 }

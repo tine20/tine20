@@ -25,9 +25,10 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'backendId'      => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'globalName'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'subject'        => array('filter' => 'Tinebase_Model_Filter_Text'), 
-        'from'           => array('filter' => 'Tinebase_Model_Filter_Text'), 
+        //'backendId'      => array('filter' => 'Tinebase_Model_Filter_Text'),
+        //'globalName'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'folder_id'     => array('filter' => 'Tinebase_Model_Filter_Id'), 
+        'subject'       => array('filter' => 'Tinebase_Model_Filter_Text'), 
+        'from'          => array('filter' => 'Tinebase_Model_Filter_Text'), 
     );
 }
