@@ -20,8 +20,8 @@ Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'subject' },
     { name: 'from' },
     { name: 'to' },
-    { name: 'sent' },
-    { name: 'received' },
+    { name: 'sent',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'received', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'flags' },
     { name: 'size' }
     // tine 2.0 notes + tags

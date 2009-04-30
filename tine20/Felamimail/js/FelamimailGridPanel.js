@@ -102,13 +102,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             width: 150,
             sortable: true,
             dataIndex: 'sent',
-            hidden: true
+            hidden: true,
+            renderer: Tine.Tinebase.common.dateTimeRenderer
         },{
             id: 'received',
             header: this.app.i18n._("Received"),
             width: 150,
             sortable: true,
-            dataIndex: 'received'
+            dataIndex: 'received',
+            renderer: Tine.Tinebase.common.dateTimeRenderer
         },{
             id: 'size',
             header: this.app.i18n._("Size"),
