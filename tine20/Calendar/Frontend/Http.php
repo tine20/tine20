@@ -26,14 +26,16 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
+            'Calendar/js/CalendarPanel.js',
+            'Calendar/js/DaysView.js',
             'Calendar/js/Calendar.js',
-            //'Calendar/js/GridView_Days.js'
         );
     }
     
     public function getCssFilesToInclude()
     {
         return array(
+            'Calendar/css/daysviewpanel.css',
             'Calendar/css/Calendar.css'
         );
     }

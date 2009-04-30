@@ -16,6 +16,7 @@ Ext.ns('Tine.Calendar');
 
 Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     view: null,
+    border: false,
     
     initComponent: function() {
         Tine.Calendar.CalendarPanel.superclass.initComponent.call(this);
