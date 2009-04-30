@@ -114,6 +114,9 @@ class Tinebase_Core
         ini_set('log_errors', 1);
         set_error_handler('Tinebase_Core::errorHandler', E_ALL);
         
+        // set default internal encoding
+        ini_set('iconv.internal_encoding', 'utf-8');
+        
         $server = NULL;
         
         /**************************** JSON API *****************************/
