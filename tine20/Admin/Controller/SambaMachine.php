@@ -58,6 +58,9 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
      */
     private function __construct() 
     {
+        if (!Tinebase_Core::getConfig()->samba) {
+            throw new Admin_Exception('No samba settings defined in config.');
+        }
         $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
         $this->_options = $sambaOptions;
 
