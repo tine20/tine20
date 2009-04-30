@@ -220,6 +220,7 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
                     'timestamp'     => Zend_Date::now(),
                     'received'      => new Zend_Date($value['received']),
                     'size'          => $value['size'],
+                    'flags'         => Zend_Json::encode($message->getFlags())
                 ));
                 
                 $this->_messageCacheBackend->create($cachedMessage);
