@@ -1,0 +1,118 @@
+.cal-daysviewpanel-header {
+    position: relative;
+}
+
+.cal-daysviewpanel-header-inner {
+    position: relative;
+    background:#F9F9F9 url(../../ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+}
+
+.cal-daysviewpanel-header-offset {
+    position: relative;
+    margin-left:45px;
+    margin-right:15px;
+    /*right:0;*/
+    top:0;
+}
+
+.cal-daysviewpanel-daysheader {
+    height: 24px;
+    cursor:default;
+    padding:1px 0 0;
+}
+
+.cal-daysviewpanel-dayheader {
+	float: left;
+}
+
+.cal-daysviewpanel-dayheader-day {
+	padding-top: 3px;
+	text-align: center;
+	color:black;
+    font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    white-space:nowrap;
+}
+
+.cal-daysviewpanel-dayheader-day-wrap {
+    border-left: 3px double #E1E1E1;
+    height: 23px;
+}
+
+.cal-daysviewpanel-body-inner {
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+
+.cal-daysviewpanel-scroller {
+    overflow:auto;
+    position:relative;
+}
+
+.cal-daysviewpanel-body-daycolumns {
+    position:absolute;
+    left:45px;
+    right:0;
+    top:0;
+}
+
+.cal-daysviewpanel-body-daycolumn {
+	float: left;
+}
+
+.cal-daysviewpanel-body-daycolumn-inner {
+	border-left: 3px double #EDEDED;
+	height:100%;
+    position:absolute;
+    top:0;
+}
+
+.cal-daysviewpanel-daycolumn-row {
+	margin-left: 3px;
+}
+
+.cal-daysviewpanel-daycolumn-row:hover {
+	background-color:#DFE8F6;
+    cursor:pointer;
+}
+
+.cal-daysviewpanel-timeRow-time {
+	width: 40px;
+	padding-top: 2px;
+	text-align: right;
+	color:black;
+	font-family:arial,tahoma,helvetica,sans-serif;
+	font-size:11px;
+	font-size-adjust:none;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	white-space:nowrap;
+}
+
+
+.cal-daysviewpanel-timeRow-on {
+	border-top: 1px solid #EDEDED;
+	position: absolute;
+	width: 100%;
+	/*background-color:#F1F1F1;*/
+}
+.cal-daysviewpanel-timeRow-off {
+	width: 100%;
+	position: absolute;
+	/*background-color:#FFFFFF;*/
+}
+
+.cal-daysviewpanel-daycolumn-row-on {
+}
+
+.cal-daysviewpanel-daycolumn-row-off {
+	border-top: 1px dotted #EDEDED;
+}
