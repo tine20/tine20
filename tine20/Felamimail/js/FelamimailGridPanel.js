@@ -20,7 +20,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     evalGrants: false,
     
     // grid specific
-    defaultSortInfo: {field: 'sent', direction: 'DESC'},
+    defaultSortInfo: {field: 'received', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'subject'
@@ -101,7 +101,20 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             header: this.app.i18n._("Sent"),
             width: 150,
             sortable: true,
-            dataIndex: 'sent'
+            dataIndex: 'sent',
+            hidden: true
+        },{
+            id: 'received',
+            header: this.app.i18n._("Received"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'received'
+        },{
+            id: 'size',
+            header: this.app.i18n._("Size"),
+            width: 80,
+            sortable: true,
+            dataIndex: 'size'
         }];
     },
     
