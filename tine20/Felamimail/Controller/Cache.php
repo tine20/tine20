@@ -206,12 +206,8 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
      *
      * @param array $_messages
      * @param string $_folderId
-     * 
-     * @todo moved flags & to & cc & bcc to extra tables
-     * @todo received/sent time isn't parsed correctly sometimes 
-     * @todo make encoding changeable via prefs or backend settings? -> use ini_set in Tinebase_Core
      */
-    protected function _addMessages($_messages, $_folderId /*, $_encodingFrom = 'ISO_8859-1' */)
+    protected function _addMessages($_messages, $_folderId)
     {
         // set time limit to infinity for this operation
         set_time_limit(0);
