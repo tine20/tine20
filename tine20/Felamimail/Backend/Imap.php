@@ -193,6 +193,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
     }
     
+    /**
+     * add flags
+     *
+     * @param int $id
+     * @param array $flags
+     */
     public function addFlags($id, $flags)
     {
         if (!$this->_protocol->store($flags, $id, null, '+', true, $this->_useUid)) {
@@ -204,6 +210,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
     }
     
+    /**
+     * clear flags
+     *
+     * @param int $id
+     * @param array $flags
+     */
     public function clearFlags($id, $flags)
     {
         if (!$this->_protocol->store($flags, $id, null, '-', true, $this->_useUid)) {
@@ -287,7 +299,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getSummary($from, $to = null)
     {
-        $summary = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER'), $from, $to, $this->_useUid);
+        $summary = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE'), $from, $to, $this->_useUid);
         
         $messages = array();
         
@@ -304,7 +316,16 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             } else {
                 $key = $id;
             }
-            $messages[$key] = new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $header, 'flags' => $flags));
+            $messages[$key] = array(
+                'message' => new $this->_messageClass(array(
+                    'handler' => $this, 
+                    'id' => $id, 
+                    'headers' => $header, 
+                    'flags' => $flags,
+                )),
+                'received' => $data['INTERNALDATE'],
+                'size' => $data['RFC822.SIZE'],
+            );
         }
         
         return $messages;

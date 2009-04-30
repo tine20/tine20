@@ -96,11 +96,15 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
      */
     public function update($_folderId)
     {
+        /***************** get folder & backend *****************************/
+        
         $folder                 = $this->_folderBackend->get($_folderId);
         $backend                = $this->_getImapBackend($folder->backend_id);
         $backendFolderValues    = $backend->selectFolder($folder->globalname);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($backendFolderValues, TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($backendFolderValues, TRUE));
+        
+        /***************** check for messages to add ************************/
         
         // check uidnext
         if ($folder->uidnext < $backendFolderValues['uidnext']) {
@@ -119,12 +123,14 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
                 ' New uidnext: ' . $backendFolderValues['uidnext']
             );
             
-            // get all (?) message headers from folder and save them in cache db
+            // get message headers and save them in cache db
             $this->_addMessages($messages, $_folderId);
             
         } else {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No need to get new messages, cache is up to date.');
         }
+        
+        /***************** check uidvalidity and update folder *************/
         
         if ($folder->uidvalidity != $backendFolderValues['uidvalidity']) {
             // @todo create new folder and update cache again
@@ -138,10 +144,13 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
             $folder = $this->_folderBackend->update($folder);
         }
         
+        /***************** check for messages to delete *********************/
+        
         // check if mails have been deleted (compare counts)
         // @todo save count in folder table ?
         // @todo use only getMessageuidsByFolderId here?
         $folderCount = $this->_messageCacheBackend->searchCountByFolderId($_folderId);
+        
         if ($backendFolderValues['exists'] < $folderCount) {
             // some messages have been deleted
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Checking for deleted messages.' .
@@ -191,11 +200,14 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
      * @param string $_folderId
      * 
      * @todo add more parsing of header and other mail stats (size, received, ...)
-     * @todo make encoding changeable via prefs or backend settings
+     * @todo make encoding changeable via prefs or backend settings?
      */
     protected function _addMessages($_messages, $_folderId, $_encodingFrom = 'ISO_8859-1')
     {
-        foreach ($_messages as $uid => $message) {
+        foreach ($_messages as $uid => $value) {
+            $message = $value['message'];
+            
+            //var_dump($message);
             
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
@@ -205,9 +217,9 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
                     'to'            => @iconv($_encodingFrom, $this->_encoding, $message->to),
                     'sent'          => new Zend_Date($message->date),
                     'folder_id'     => $_folderId,
-                    'timestamp'     => Zend_Date::now()
-                    //'received'      => $message->received,
-                    //'size'          => $message->size
+                    'timestamp'     => Zend_Date::now(),
+                    'received'      => new Zend_Date($value['received']),
+                    'size'          => $value['size'],
                 ));
                 
                 $this->_messageCacheBackend->create($cachedMessage);

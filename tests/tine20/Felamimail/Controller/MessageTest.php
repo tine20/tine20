@@ -82,6 +82,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
         //print_r($result->toArray());
+        
         // check result
         $firstMessage = $result->getFirstRecord();
         $this->assertGreaterThan(0, count($result));
