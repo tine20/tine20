@@ -16,7 +16,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
 Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     
     /**
-     * @cfg {Tine.Tinebase.Record} recordClass
+     * @cfg {Tine.Tinebase.data.Record} recordClass
      * the recordClass this customfields panel is for
      */
     recordClass: null,

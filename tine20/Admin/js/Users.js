@@ -478,7 +478,7 @@ Tine.Admin.Model.UserArray = [
     { name: 'sambaSAM' }
 ];
 
-Tine.Admin.Model.User = Tine.Tinebase.Record.create(Tine.Admin.Model.UserArray, {
+Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserArray, {
     appName: 'Admin',
     modelName: 'User',
     idProperty: 'accountId',
@@ -504,7 +504,7 @@ Tine.Admin.Model.SAMUserArray = [
     { name: 'pwdMustChange', type: 'date', dateFormat: Date.patterns.ISO8601Long }
 ];
 
-Tine.Admin.Model.SAMUser = Tine.Tinebase.Record.create(Tine.Admin.Model.SAMUserArray, {
+Tine.Admin.Model.SAMUser = Tine.Tinebase.data.Record.create(Tine.Admin.Model.SAMUserArray, {
     appName: 'Admin',
     modelName: 'SAMUser',
     idProperty: 'sid',

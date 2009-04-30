@@ -32,7 +32,7 @@ Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
  * @type {Tine.Tinebase.Message}
  * record definition
  */
-Tine.Felamimail.Model.Message = Tine.Tinebase.Record.create(Tine.Felamimail.Model.MessageArray, {
+Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create(Tine.Felamimail.Model.MessageArray, {
     appName: 'Felamimail',
     modelName: 'Message',
     idProperty: 'id',

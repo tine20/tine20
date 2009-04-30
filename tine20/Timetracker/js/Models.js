@@ -34,10 +34,10 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat
 ]);
 
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Timesheet record definition
  */
-Tine.Timetracker.Model.Timesheet = Tine.Tinebase.Record.create(Tine.Timetracker.Model.TimesheetArray, {
+Tine.Timetracker.Model.Timesheet = Tine.Tinebase.data.Record.create(Tine.Timetracker.Model.TimesheetArray, {
     appName: 'Timetracker',
     modelName: 'Timesheet',
     idProperty: 'id',
@@ -94,10 +94,10 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
 ]);
 
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Timesheet record definition
  */
-Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.Record.create(Tine.Timetracker.Model.TimeaccountArray, {
+Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timetracker.Model.TimeaccountArray, {
     appName: 'Timetracker',
     modelName: 'Timeaccount',
     idProperty: 'id',

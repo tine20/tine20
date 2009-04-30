@@ -121,7 +121,7 @@ Tine.Setup.Model.ApplicationArray = Tine.Tinebase.Model.genericFields.concat([
 /**
  * Task record definition
  */
-Tine.Setup.Model.Application = Tine.Tinebase.Record.create(Tine.Setup.Model.ApplicationArray, {
+Tine.Setup.Model.Application = Tine.Tinebase.data.Record.create(Tine.Setup.Model.ApplicationArray, {
     appName: 'Setup',
     modelName: 'Application',
     idProperty: 'name',

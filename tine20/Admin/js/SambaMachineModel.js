@@ -32,7 +32,7 @@ Tine.Admin.Model.sambaMachineArray = [
     { name: 'pwdMustChange', type: 'date', dateFormat: Date.patterns.ISO8601Long }
 ];
 
-Tine.Admin.Model.SambaMachine = Tine.Tinebase.Record.create(Tine.Admin.Model.sambaMachineArray, {
+Tine.Admin.Model.SambaMachine = Tine.Tinebase.data.Record.create(Tine.Admin.Model.sambaMachineArray, {
     appName: 'Admin',
     modelName: 'SambaMachine',
     idProperty: 'accountId',

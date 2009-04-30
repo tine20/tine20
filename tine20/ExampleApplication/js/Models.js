@@ -42,7 +42,7 @@ Tine.ExampleApplication.Model.ExampleRecordArray = Tine.Tinebase.Model.genericFi
  * @type {Tine.Tinebase.ExampleRecord}
  * record definition
  */
-Tine.ExampleApplication.Model.ExampleRecord = Tine.Tinebase.Record.create(Tine.ExampleApplication.Model.ExampleRecordArray, {
+Tine.ExampleApplication.Model.ExampleRecord = Tine.Tinebase.data.Record.create(Tine.ExampleApplication.Model.ExampleRecordArray, {
     appName: 'ExampleApplication',
     modelName: 'ExampleRecord',
     idProperty: 'id',

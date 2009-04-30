@@ -35,7 +35,7 @@ Tine.RequestTracker.Model.ticketArray = [
     { name: 'History' }
 ];
 
-Tine.RequestTracker.Model.Ticket = Tine.Tinebase.Record.create(Tine.RequestTracker.Model.ticketArray, {
+Tine.RequestTracker.Model.Ticket = Tine.Tinebase.data.Record.create(Tine.RequestTracker.Model.ticketArray, {
     appName: 'RequestTracker',
     modelName: 'Ticket',
     titleProperty: 'Subject',

@@ -9,9 +9,9 @@
  * @version     $Id$
  */
  
-Ext.ns('Tine.Tinebase');
+Ext.ns('Tine.Tinebase', 'Tine.Tinebase.data');
 
-Tine.Tinebase.Record = function(data, id){
+Tine.Tinebase.data.Record = function(data, id){
     if (id || id === 0) {
         this.id = id;
     } else if (data[this.idProperty]) {
@@ -23,10 +23,10 @@ Tine.Tinebase.Record = function(data, id){
 };
 
 /**
- * @class Tine.Tinebase.Record
+ * @class Tine.Tinebase.data.Record
  * @extends {Ext.data.Record}
  */
-Ext.extend(Tine.Tinebase.Record, Ext.data.Record, {
+Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
     /**
      * @cfg {String} appName
      * internal/untranslated app name (required)
@@ -87,12 +87,12 @@ Ext.extend(Tine.Tinebase.Record, Ext.data.Record, {
  * Generate a constructor for a specific Record layout.
  * 
  * @param {Array} def see {@link Ext.data.Record#create}
- * @param {Object} meta information see {@link Tine.Tinebase.Record}
+ * @param {Object} meta information see {@link Tine.Tinebase.data.Record}
  * 
  * <br>usage:<br>
 <b>IMPORTANT: the ngettext comments are required for the translation system!</b>
 <pre><code>
-var TopicRecord = Tine.Tinebase.Record.create([
+var TopicRecord = Tine.Tinebase.data.Record.create([
     {name: 'summary', mapping: 'topic_title'},
     {name: 'details', mapping: 'username'}
 ], {
@@ -110,8 +110,8 @@ var TopicRecord = Tine.Tinebase.Record.create([
 });
 </code></pre>
  */
-Tine.Tinebase.Record.create = function(o, meta) {
-    var f = Ext.extend(Tine.Tinebase.Record, {});
+Tine.Tinebase.data.Record.create = function(o, meta) {
+    var f = Ext.extend(Tine.Tinebase.data.Record, {});
     var p = f.prototype;
     Ext.apply(p, meta);
     p.fields = new Ext.util.MixedCollection(false, function(field){

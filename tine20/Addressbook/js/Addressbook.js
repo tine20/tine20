@@ -443,10 +443,10 @@ Tine.Addressbook.Model.ContactArray = [
 ];
 
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Contact record definition
  */
-Tine.Addressbook.Model.Contact = Tine.Tinebase.Record.create(Tine.Addressbook.Model.ContactArray, {
+Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbook.Model.ContactArray, {
     appName: 'Addressbook',
     modelName: 'Contact',
     idProperty: 'id',

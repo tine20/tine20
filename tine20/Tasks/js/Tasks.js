@@ -67,7 +67,7 @@ Tine.Tasks.TaskArray = Tine.Tinebase.Model.genericFields.concat([
 /**
  * Task record definition
  */
-Tine.Tasks.Task = Tine.Tinebase.Record.create(Tine.Tasks.TaskArray, {
+Tine.Tasks.Task = Tine.Tinebase.data.Record.create(Tine.Tasks.TaskArray, {
     appName: 'Tasks',
     modelName: 'Task',
     idProperty: 'id',

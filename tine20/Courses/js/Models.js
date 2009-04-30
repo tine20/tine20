@@ -33,7 +33,7 @@ Tine.Courses.Model.CourseArray = Tine.Tinebase.Model.genericFields.concat([
  * @type {Tine.Tinebase.Course}
  * record definition
  */
-Tine.Courses.Model.Course = Tine.Tinebase.Record.create(Tine.Courses.Model.CourseArray, {
+Tine.Courses.Model.Course = Tine.Tinebase.data.Record.create(Tine.Courses.Model.CourseArray, {
     appName: 'Courses',
     modelName: 'Course',
     idProperty: 'id',
@@ -66,7 +66,7 @@ Tine.Courses.Model.CourseTypeArray = [
  * @type {Tine.Tinebase.CourseType}
  * record definition
  */
-Tine.Courses.Model.CourseType = Tine.Tinebase.Record.create(Tine.Courses.Model.CourseTypeArray, {
+Tine.Courses.Model.CourseType = Tine.Tinebase.data.Record.create(Tine.Courses.Model.CourseTypeArray, {
     appName: 'Courses',
     modelName: 'CourseType',
     idProperty: 'id',

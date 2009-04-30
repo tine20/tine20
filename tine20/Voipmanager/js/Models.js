@@ -71,10 +71,10 @@ Tine.Voipmanager.Model.SnomPhoneArray = Tine.Tinebase.Model.genericFields.concat
 ]);
 
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.SnomPhone = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomPhoneArray, {
+Tine.Voipmanager.Model.SnomPhone = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.SnomPhoneArray, {
     appName: 'Voipmanager',
     modelName: 'SnomPhone',
     idProperty: 'id',
@@ -122,10 +122,10 @@ Tine.Voipmanager.Model.SnomLocationArray = Tine.Tinebase.Model.genericFields.con
     {name: 'time_24_format'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.SnomLocation = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomLocationArray, {
+Tine.Voipmanager.Model.SnomLocation = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.SnomLocationArray, {
     appName: 'Voipmanager',
     modelName: 'SnomLocation',
     idProperty: 'id',
@@ -159,10 +159,10 @@ Tine.Voipmanager.Model.SnomTemplateArray = Tine.Tinebase.Model.genericFields.con
     {name: 'software_id'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.SnomTemplate = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomTemplateArray, {
+Tine.Voipmanager.Model.SnomTemplate = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.SnomTemplateArray, {
     appName: 'Voipmanager',
     modelName: 'SnomTemplate',
     idProperty: 'id',
@@ -197,10 +197,10 @@ Tine.Voipmanager.Model.SnomSoftwareArray = Tine.Tinebase.Model.genericFields.con
     {name: 'softwareimage_snom370'}   
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.SnomSoftware = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomSoftwareArray, {
+Tine.Voipmanager.Model.SnomSoftware = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.SnomSoftwareArray, {
     appName: 'Voipmanager',
     modelName: 'SnomSoftware',
     idProperty: 'id',
@@ -230,10 +230,10 @@ Tine.Voipmanager.Model.SnomSoftwareImageArray = Tine.Tinebase.Model.genericField
     {name: 'softwareimage'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.SnomSoftwareImage = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomSoftwareImageArray, {
+Tine.Voipmanager.Model.SnomSoftwareImage = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.SnomSoftwareImageArray, {
     appName: 'Voipmanager',
     modelName: 'SnomSoftwareImage',
     idProperty: 'model',
@@ -268,10 +268,10 @@ Tine.Voipmanager.Model.SnomLineArray = Tine.Tinebase.Model.genericFields.concat(
     {name: 'name'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.SnomLine = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomLineArray, {
+Tine.Voipmanager.Model.SnomLine = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.SnomLineArray, {
     appName: 'Voipmanager',
     modelName: 'SnomLine',
     idProperty: 'id',
@@ -325,10 +325,10 @@ Tine.Voipmanager.Model.SnomSettingArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'show_call_status_writable'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.SnomSetting = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomSettingArray, {
+Tine.Voipmanager.Model.SnomSetting = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.SnomSettingArray, {
     appName: 'Voipmanager',
     modelName: 'SnomSetting',
     idProperty: 'id',
@@ -373,7 +373,7 @@ Tine.Voipmanager.Model.SnomOwnerArray = Tine.Tinebase.Model.genericFields.concat
 
     //{name: 'accountDisplayName'}
 ]);
-Tine.Voipmanager.Model.SnomOwner = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.SnomOwnerArray, {
+Tine.Voipmanager.Model.SnomOwner = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.SnomOwnerArray, {
     appName: 'Voipmanager',
     modelName: 'SnomOwner',
     idProperty: 'account_id',
@@ -451,10 +451,10 @@ Tine.Voipmanager.Model.AsteriskSipPeerArray = Tine.Tinebase.Model.genericFields.
     {name: 'busy-level'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.AsteriskSipPeer = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.AsteriskSipPeerArray, {
+Tine.Voipmanager.Model.AsteriskSipPeer = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.AsteriskSipPeerArray, {
     appName: 'Voipmanager',
     modelName: 'AsteriskSipPeer',
     idProperty: 'id',
@@ -485,10 +485,10 @@ Tine.Voipmanager.Model.AsteriskContextArray = Tine.Tinebase.Model.genericFields.
     {name: 'description'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.AsteriskContext = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.AsteriskContextArray, {
+Tine.Voipmanager.Model.AsteriskContext = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.AsteriskContextArray, {
     appName: 'Voipmanager',
     modelName: 'AsteriskContext',
     idProperty: 'id',
@@ -540,10 +540,10 @@ Tine.Voipmanager.Model.AsteriskVoicemailArray = Tine.Tinebase.Model.genericField
     {name: 'hidefromdir'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.AsteriskVoicemail = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.AsteriskVoicemailArray, {
+Tine.Voipmanager.Model.AsteriskVoicemail = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.AsteriskVoicemailArray, {
     appName: 'Voipmanager',
     modelName: 'AsteriskVoicemail',
     idProperty: 'id',
@@ -575,10 +575,10 @@ Tine.Voipmanager.Model.AsteriskMeetmeArray = Tine.Tinebase.Model.genericFields.c
 	{name: 'adminpin'}
 ]);
 /**
- * @type {Tine.Tinebase.Record}
+ * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Voipmanager.Model.AsteriskMeetme = Tine.Tinebase.Record.create(Tine.Voipmanager.Model.AsteriskMeetmeArray, {
+Tine.Voipmanager.Model.AsteriskMeetme = Tine.Tinebase.data.Record.create(Tine.Voipmanager.Model.AsteriskMeetmeArray, {
     appName: 'Voipmanager',
     modelName: 'AsteriskMeetme',
     idProperty: 'id',

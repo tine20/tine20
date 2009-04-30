@@ -76,7 +76,7 @@ Tine.Erp.ContractArray = Tine.Tinebase.Model.genericFields.concat([
 /**
  * Contract record definition
  */
-Tine.Erp.Contract = Tine.Tinebase.Record.create(Tine.Erp.ContractArray, {
+Tine.Erp.Contract = Tine.Tinebase.data.Record.create(Tine.Erp.ContractArray, {
     appName: 'Erp',
     modelName: 'Contract',
     idProperty: 'id',
