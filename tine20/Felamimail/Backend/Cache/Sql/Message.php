@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Cache.php 7879 2009-04-26 06:28:07Z l.kneschke@metaways.de $
+ * @version     $Id$
  * 
  */
 
@@ -31,7 +31,96 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Felamimail_Model_Message';
+    
+    /**
+     * foreign tables (key => tablename)
+     *
+     * @var array
+     */
+    protected $_foreignTables = array(
+        'to'    => 'felamimail_cache_message_to', 
+        'cc'    => 'felamimail_cache_message_cc', 
+        'bcc'   => 'felamimail_cache_message_bcc', 
+        'flags' => 'felamimail_cache_message_flag'
+    );
 
+    /******************* overwritten functions *********************/
+    
+    /**
+     * Creates new entry
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function create(Tinebase_Record_Interface $_record) 
+    {
+        $record = parent::create($_record);
+        
+        // update to/cc/bcc/flags
+        foreach ($this->_foreignTables as $field => $tablename) {
+            $record->{$field} = $this->createForeignValues($_record, $field, $tablename);
+        }
+        
+        return $record;
+    }
+    
+    /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     * 
+     * @todo add name (to, cc, bcc)
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {        
+        $select = parent::_getSelect($_cols, $_getDeleted);
+
+        if ($_cols === '*') {
+            // add to/cc/bcc/flags
+            foreach ($this->_foreignTables as $field => $tablename) {
+                $fieldName = ($field == 'flags') ? 'flag' : 'email';
+                $select->joinLeft(
+                    $this->_tablePrefix . $tablename, 
+                    $this->_tablePrefix . $tablename . '.message_id = ' . $this->_tableName . '.id', 
+                    array($field => 'GROUP_CONCAT(DISTINCT ' . $this->_tablePrefix . $tablename . '.' . $fieldName . ')')
+                );
+            }
+        }
+        
+        return $select;
+    }
+
+    /******************* public functions *********************/
+    
+    /**
+     * create foreign values (to/cc/bcc/flags) 
+     *
+     * @param Felamimail_Model_Message $_message
+     * @param string $_field
+     * @param string $_tablename
+     * @return array
+     */
+    public function createForeignValues(Felamimail_Model_Message $_message, $_field, $_tablename)
+    {
+        if (!isset($_message->{$_field})) {
+            return array();
+        }
+        
+        $messageId = $_message->getId();
+        
+        foreach ($_message->{$_field} as $data) {
+            if ($_field == 'flags') {
+                $data = array('flag' => $data);
+            }
+            $data['message_id'] = $messageId;
+            $this->_db->insert($this->_tablePrefix . $_tablename, $data);
+        }
+        
+        return $_message->{$_field};
+    }
+    
     /**
      * delete all cached messages for one folder
      *
@@ -51,8 +140,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      *
      * @param string $_folderId
      * @return integer
-     * 
-     * @todo write test
      */
     public function searchCountByFolderId($_folderId)
     {
@@ -69,8 +156,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      *
      * @param string $_folderId
      * @return array
-     * 
-     * @todo write test
      */
     public function getMessageuidsByFolderId($_folderId)
     {
@@ -96,9 +181,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @param array $_msguids
      * @param string $_folderId
      * @return boolean success
-     * 
-     * @todo write test
-     * @todo add tablename to identifiers?
      */
     public function deleteMessageuidsByFolderId($_msguids, $_folderId)
     {

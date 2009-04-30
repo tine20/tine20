@@ -48,6 +48,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'to'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'cc'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'bcc'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'received'              => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'sent'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 

@@ -89,10 +89,8 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
      *
      * @param string $_folderId
      * 
-     * @todo    check if mails have been deleted (compare counts)
-     * @todo    create new folder if no uidvalidity
      * @todo    write tests for cache handling
-     * @todo    split this into smaller functions
+     * @todo    split this into smaller functions?
      */
     public function update($_folderId)
     {
@@ -133,9 +131,19 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
         /***************** check uidvalidity and update folder *************/
         
         if ($folder->uidvalidity != $backendFolderValues['uidvalidity']) {
-            // @todo create new folder and update cache again
-            throw new Tinebase_Exception_UnexpectedValue(
-                'Got non matching uidvalidity value: ' . $backendFolderValues['uidvalidity'] .'. Expected: ' . $folder->uidvalidity);
+            
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                ' Got non matching uidvalidity value: ' . $backendFolderValues['uidvalidity'] .'. Expected: ' . $folder->uidvalidity .
+                ' Clearing cache ...'
+            );
+            
+            // update folder and cache again
+            $this->clear($_folderId);
+            $this->update($_folderId);
+            return;
+            
+            //throw new Tinebase_Exception_UnexpectedValue(
+            //    'Got non matching uidvalidity value: ' . $backendFolderValues['uidvalidity'] .'. Expected: ' . $folder->uidvalidity);
         }
         
         // save nextuid/validity in folder
@@ -199,29 +207,43 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
      * @param array $_messages
      * @param string $_folderId
      * 
-     * @todo add more parsing of header and other mail stats (size, received, ...)
-     * @todo make encoding changeable via prefs or backend settings?
+     * @todo moved flags & to & cc & bcc to extra tables
+     * @todo received/sent time isn't parsed correctly sometimes 
+     * @todo make encoding changeable via prefs or backend settings? -> use ini_set in Tinebase_Core
      */
-    protected function _addMessages($_messages, $_folderId, $_encodingFrom = 'ISO_8859-1')
+    protected function _addMessages($_messages, $_folderId /*, $_encodingFrom = 'ISO_8859-1' */)
     {
+        // set time limit to infinity for this operation
+        set_time_limit(0);
+        
         foreach ($_messages as $uid => $value) {
             $message = $value['message'];
-            
-            //var_dump($message);
             
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
                     'messageuid'    => $uid,
-                    'subject'       => @iconv($_encodingFrom, $this->_encoding, $message->subject),
-                    'from'          => @iconv($_encodingFrom, $this->_encoding, $message->from),
-                    'to'            => @iconv($_encodingFrom, $this->_encoding, $message->to),
-                    'sent'          => new Zend_Date($message->date),
+                    'subject'       => $this->_convertText($message->subject),
+                    'from'          => $this->_convertText($message->from),
+                    'to'            => $this->_convertAddresses($message->to),
+                    'sent'          => $this->_convertDate($message->date),
                     'folder_id'     => $_folderId,
                     'timestamp'     => Zend_Date::now(),
-                    'received'      => new Zend_Date($value['received']),
+                    'received'      => $this->_convertDate($value['received']),
                     'size'          => $value['size'],
-                    'flags'         => Zend_Json::encode($message->getFlags())
+                    'flags'         => $message->getFlags()
                 ));
+                
+                // try to get cc & bcc
+                try {
+                    $cachedMessage->cc = $this->_convertAddresses($message->cc);
+                } catch (Zend_Mail_Exception $zme) {
+                    // no cc available
+                }
+                try {
+                    $cachedMessage->bcc = $this->_convertAddresses($message->bcc);
+                } catch (Zend_Mail_Exception $zme) {
+                    // no bcc available
+                }
                 
                 $this->_messageCacheBackend->create($cachedMessage);
                 
@@ -230,7 +252,73 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
                     ' Could not parse message ' . $uid . ' | ' . $message->subject .
                     '. Error: ' . $zme->getMessage()
                 );
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                    ' Failed to create cache entry for msg ' . $uid . ' | ' . $message->subject .
+                    '. Error: ' . $zdse->getMessage()
+                );
             }
-        }        
+        }
+    }
+    
+    /**
+     * convert date from sent/received
+     *
+     * @param string $_dateString
+     * @return Zend_Date
+     */
+    protected function _convertDate($_dateString)
+    {
+        // strip of timezone information for example: (CEST)
+        $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
+        
+        // append dummy weekday if missing
+        if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
+            $dateString = 'xxx, ' . $dateString;
+        }
+        
+        try {
+            # Fri,  6 Mar 2009 20:00:36 +0100
+            $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
+        } catch (Zend_Date_Exception $e) {
+            # Fri,  6 Mar 2009 20:00:36 CET
+            $date = new Zend_Date($dateString, 'EEE, d MMM YYYY hh:mm:ss zzz', 'en_US');
+            #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " date header $headerValue => $dateString => $date => " . $date->get(Zend_Date::ISO_8601));
+        }
+        
+        return $date;
+    }
+
+    /**
+     * convert text
+     *
+     * @param string $_string
+     * @return string
+     */
+    protected function _convertText($_string)
+    {
+        $string = $_string;
+        if(preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
+            $string = preg_replace('/(=[1-9,a-f]{2})/e', "strtoupper('\\1')", $string);
+            $string = iconv_mime_decode($string, 2);
+        }
+        
+        return $string;
+    }
+    
+    /**
+     * convert addresses into array with name/address
+     *
+     * @param string $_addresses
+     * @return array
+     */
+    protected function _convertAddresses($_addresses)
+    {
+        $addresses = Felamimail_Message::parseAdresslist($_addresses);
+        $result = array();
+        foreach($addresses as $address) {
+            $result[] = array('email' => $address['address'], 'name' => $address['name']);
+        }
+        return $result;
     }
 }

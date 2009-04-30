@@ -195,17 +195,6 @@
                     <type>text</type>
                     <length>256</length>
                 </field>
-                <!-- @todo move to & cc to extra tables --> 
-                <field>
-                    <name>to</name>
-                    <type>text</type>
-                    <length>256</length>
-                </field>
-                <field>
-                    <name>cc</name>
-                    <type>text</type>
-                    <length>256</length>
-                </field>
                 <field>
                     <name>received</name>
                     <type>datetime</type>
@@ -217,10 +206,6 @@
                 <field>
                     <name>size</name>
                     <type>integer</type>
-                </field>
-                <field>
-                    <name>flags</name>
-                    <type>text</type>
                 </field>
                 <field>
                     <name>timestamp</name>
@@ -251,6 +236,142 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>felamimail_folder</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>felamimail_cache_message_flag</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>message_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>flag</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>flag::message_id--message::id</name>
+                    <field>
+                        <name>message_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>felamimail_cache_message</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>felamimail_cache_message_to</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>message_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>email</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <index>
+                    <name>to::message_id--message::id</name>
+                    <field>
+                        <name>message_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>felamimail_cache_message</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>felamimail_cache_message_cc</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>message_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>email</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <index>
+                    <name>cc::message_id--message::id</name>
+                    <field>
+                        <name>message_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>felamimail_cache_message</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>felamimail_cache_message_bcc</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>message_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>email</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <index>
+                    <name>bcc::message_id--message::id</name>
+                    <field>
+                        <name>message_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>felamimail_cache_message</table>
                         <field>id</field>
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>

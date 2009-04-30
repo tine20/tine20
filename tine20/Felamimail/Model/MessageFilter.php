@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:FolderFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
+ * @todo        add more filters (to, cc, bcc, flags, ...)
  */
 
 /**

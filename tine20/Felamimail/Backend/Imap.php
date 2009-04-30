@@ -301,6 +301,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     {
         $summary = $this->_protocol->fetch(array('FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE'), $from, $to, $this->_useUid);
         
+        //print_r($summary);
+        
         $messages = array();
         
         foreach($summary as $id => $data) {
