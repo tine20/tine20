@@ -86,6 +86,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                     $this->_tablePrefix . $tablename . '.message_id = ' . $this->_tableName . '.id', 
                     array($field => 'GROUP_CONCAT(DISTINCT ' . $this->_tablePrefix . $tablename . '.' . $fieldName . ')')
                 );
+                $select->group($this->_tableName . '.id');
             }
         }
         
