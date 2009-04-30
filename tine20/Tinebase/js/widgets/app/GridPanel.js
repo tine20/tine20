@@ -97,6 +97,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     contextMenu: null,
     
+    /**
+     * @cfg {function} 
+     */
+    getViewRowClass: null,
     
     /**
      * @private
@@ -293,6 +297,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         
         // init view
         var view =  new Ext.grid.GridView({
+            getRowClass: this.getViewRowClass,
             autoFill: true,
             forceFit:true,
             ignoreAdd: true,

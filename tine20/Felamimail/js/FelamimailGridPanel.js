@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @todo        add flags (use getRowClass from Ext.grid.GridView)
+ * @todo        make font-weight work for flagged (unseen) mails
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -27,6 +27,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         autoExpandColumn: 'subject'
     },
     
+    // Return CSS class to apply to rows depending upon flags
+    getViewRowClass: function(record, index) {
+        var flags = record.get('flags');
+        var className = '';
+        if(flags !== null) {
+            if (flags.match(/Flagged/)) {
+                className += ' flag_flagged';
+            }
+            if (!flags.match(/Seen/)) {
+                //console.log('not seen');
+                className += ' flag_seen';
+            }
+        }
+        return className;
+    },
+    
     initComponent: function() {
         this.recordProxy = Tine.Felamimail.recordBackend;
         
@@ -41,7 +57,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Felamimail', 'records'));
         this.action_editInNewWindow.requiredGrant = 'editGrant';
-        
     },
     
     /**
@@ -96,7 +111,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             header: this.app.i18n._("To"),
             width: 150,
             sortable: true,
-            dataIndex: 'to'
+            dataIndex: 'to',
+            hidden: true
         },{
             id: 'sent',
             header: this.app.i18n._("Sent"),
@@ -117,7 +133,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             header: this.app.i18n._("Size"),
             width: 80,
             sortable: true,
-            dataIndex: 'size'
+            dataIndex: 'size',
+            hidden: true
         }];
     },
     

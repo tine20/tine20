@@ -31,3 +31,13 @@
 .FelamimailIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
 }
+
+.flag_seen {
+	/* not working yet .... :( */
+	/* font-weight: bold; */
+	background-color: #999999;
+}
+
+.flag_flagged {
+    background-color: #ee0000;
+}
