@@ -32,12 +32,16 @@
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
 }
 
-.flag_seen {
-	/* not working yet .... :( */
-	font-weight: bold;
-	/* background-color: #999999; */
+/***** flag classes ******/
+
+.flag_unread td{
+    font-weight: bold;
 }
 
 .flag_flagged {
-    background-color: #ee0000;
+    color: #ff0000;
+}
+
+.flag_deleted td {
+    text-decoration: line-through; 
 }

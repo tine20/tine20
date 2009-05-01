@@ -27,7 +27,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         autoExpandColumn: 'subject'
     },
     
-    // Return CSS class to apply to rows depending upon flags
+    /**
+     * Return CSS class to apply to rows depending upon flags
+     * 
+     * @param {} record
+     * @param {} index
+     * @return {String}
+     */
     getViewRowClass: function(record, index) {
         var flags = record.get('flags');
         var className = '';
@@ -35,9 +41,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             if (flags.match(/Flagged/)) {
                 className += ' flag_flagged';
             }
+            if (flags.match(/Deleted/)) {
+                className += ' flag_deleted';
+            }
             if (!flags.match(/Seen/)) {
-                //console.log('not seen');
-                className += ' flag_seen';
+                className += ' flag_unread';
             }
         }
         return className;
@@ -93,6 +101,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             sortable: true,
             dataIndex: 'id',
             hidden: true
+        }, {
+            id: 'flags',
+            //header: this.app.i18n._("Status"),
+            width: 20,
+            sortable: true,
+            dataIndex: 'flags',
+            renderer: Tine.Felamimail.getFlagIcon
         },{
             id: 'subject',
             header: this.app.i18n._("Subject"),
