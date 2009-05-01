@@ -96,7 +96,20 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
     {
         $filterValues = $this->_extractFilter($_filter);
         
-        $result = $this->getSubFolders($filterValues['globalname'], $filterValues['backend_id']);
+        try {
+            // try to get folders from imap backend
+            $result = $this->getSubFolders($filterValues['globalname'], $filterValues['backend_id']);    
+            
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+            
+            // get folders from db
+            $filter = new Felamimail_Model_FolderFilter(array(
+                array('field' => 'parent', 'operator' => 'equals', 'value' => $filterValues['globalname'])
+            ));
+            $result = $this->_folderBackend->search($filter);
+        }
+        
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backend_id']] = count($result);
         
         return $result;
@@ -233,7 +246,8 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
                     'is_selectable' => ($folderData['isSelectable'] == '1'),
                     'has_children'  => ($folderData['hasChildren'] == '1'),
                     'backend_id'    => $_backendId,
-                    'timestamp'     => Zend_Date::now()
+                    'timestamp'     => Zend_Date::now(),
+                    'user_id'       => $this->_currentAccount->getId()
                 ));
                 
                 $folder = $this->_folderBackend->create($folder);

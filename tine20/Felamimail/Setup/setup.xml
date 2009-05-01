@@ -126,6 +126,11 @@
                     <length>256</length>
                 </field>
                 <field>
+                    <name>parent</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
                     <name>delimiter</name>
                     <type>text</type>
                     <length>1</length>

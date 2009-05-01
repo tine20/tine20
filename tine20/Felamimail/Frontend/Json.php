@@ -33,37 +33,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchFolders($filter)
     {
-        try {
-            $results = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
-
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            // @todo return error message if connection failed
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-            $results = array(
-                'results'       => array(),
-                'totalcount'    => 0
-            );
-            
-            // only test data
-            // @todo remove that later
-            /*
-            $results = array(
-                'results'       => array(
-                    array(
-                        'localName'             => 'INBOX',
-                        'globalName'            => 'INBOX',
-                        'backendId'             => 'default',
-                        'delimiter'             => '/',
-                        'isSelectable'          => 1,
-                        'hasChildren'           => ''
-                    )
-                ),
-                'totalcount'    => 1
-            );
-            */
-        }
-        
-        return $results;
+        return $results = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
     }
 
     /**

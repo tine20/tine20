@@ -34,8 +34,8 @@
 
 .flag_seen {
 	/* not working yet .... :( */
-	/* font-weight: bold; */
-	background-color: #999999;
+	font-weight: bold;
+	/* background-color: #999999; */
 }
 
 .flag_flagged {

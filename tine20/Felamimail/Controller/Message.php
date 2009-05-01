@@ -241,7 +241,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
     /**
      * extract values from folder filter
      *
-     * @param Felamimail_Model_FolderFilter $_filter
+     * @param Felamimail_Model_MessageFilter $_filter
      * @return array (assoc) with filter values
      */
     protected function _extractFilter(Felamimail_Model_MessageFilter $_filter)
