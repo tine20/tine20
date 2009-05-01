@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        show new mails and number of unread mails next to folder name
  * @todo        generalize context menu (items) -> and use it in container tree as well
  * @todo        add context menu
  *              - add/rename folders

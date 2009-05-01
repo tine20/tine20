@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @todo        make font-weight work for flagged (unseen) mails
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -29,6 +28,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * Return CSS class to apply to rows depending upon flags
+     * - checks Flagged, Deleted and Seen
      * 
      * @param {} record
      * @param {} index
@@ -104,7 +104,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }, {
             id: 'flags',
             //header: this.app.i18n._("Status"),
-            width: 20,
+            width: 16,
             sortable: true,
             dataIndex: 'flags',
             renderer: Tine.Felamimail.getFlagIcon
