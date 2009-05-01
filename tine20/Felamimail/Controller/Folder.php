@@ -247,7 +247,8 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
                     'has_children'  => ($folderData['hasChildren'] == '1'),
                     'backend_id'    => $_backendId,
                     'timestamp'     => Zend_Date::now(),
-                    'user_id'       => $this->_currentAccount->getId()
+                    'user_id'       => $this->_currentAccount->getId(),
+                    'parent'        => $_folderName
                 ));
                 
                 $folder = $this->_folderBackend->create($folder);
