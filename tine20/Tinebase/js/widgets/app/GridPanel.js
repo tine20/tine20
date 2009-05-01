@@ -308,7 +308,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     v.scrollTop = v.scroller.dom.scrollTop;
                 },
                 refresh: function(v) {
-                    // on paging-refreshes (prev/last...) we don't preserv the scroller state
+                    // on paging-refreshes (prev/last...) we don't preserve the scroller state
                     if (v.isPagingRefresh) {
                         v.scrollToTop();
                         v.isPagingRefresh = false;
