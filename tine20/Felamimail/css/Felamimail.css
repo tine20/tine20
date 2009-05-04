@@ -45,3 +45,8 @@
 .flag_deleted td {
     text-decoration: line-through; 
 }
+
+.FelamimailFlagIcon {
+    width: 12px;
+    height: 12px;
+}
