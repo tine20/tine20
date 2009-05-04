@@ -8,6 +8,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        add tests for attachments
+ * @todo        use testmails from files/ dir
  * @todo        activate tests again with caching
  */
 
@@ -102,6 +104,28 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('unittest@tine20.org', $firstMail['to']);
     }
     
+    /**
+     * try to get a message from imap server (with complete body, attachments, etc)
+     *
+     * @todo check for correct charset/encoding
+     */
+    public function testGetMessage()
+    {
+        // get inbox folder id
+        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        
+        $filter = $this->_getMessageFilter($folder->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        
+        $firstMail = $result['results'][0];
+        
+        // get complete message
+        $message = $this->_json->getMessage($firstMail['id']);
+        
+        $this->assertGreaterThan(0, preg_match('/Metaways Infosystems GmbH/', $message['body']));
+    }
     
     /************************ protected functions ****************************/
     

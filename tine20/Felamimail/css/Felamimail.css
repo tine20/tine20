@@ -50,3 +50,9 @@
     width: 12px;
     height: 12px;
 }
+
+/**** preview *****/
+
+.preview-panel-felamimail-body {
+	margin: 5px;
+}

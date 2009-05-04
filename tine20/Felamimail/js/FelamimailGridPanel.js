@@ -52,11 +52,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     initComponent: function() {
-        this.recordProxy = Tine.Felamimail.recordBackend;
+        this.recordProxy = Tine.Felamimail.messageBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
+        this.initDetailsPanel();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);        
@@ -88,6 +89,72 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
              filters: []
         });
     },    
+    
+    initDetailsPanel: function() {
+        this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
+            defaultHeight: 300,
+            gridpanel: this,
+            currentId: null,
+            
+            updateDetails: function(record, body) {
+                if (record.id !== this.currentId) {
+                    this.currentId = record.id;
+                    Tine.Felamimail.messageBackend.loadRecord(record, {
+                        scope: this,
+                        success: function(message) {
+                            record.data.body = message.data.body;
+                            this.tpl.overwrite(body, message.data);
+                            this.getEl().down('div').down('div').scrollTo('top', 0, false);
+                            this.getLoadMask().hide();
+                        }
+                    });
+                    this.getLoadMask().show();
+                } else {
+                    this.tpl.overwrite(body, record.data);
+                }
+            },
+
+            tpl: new Ext.XTemplate(
+                '<div class="preview-panel-felamimail-body">',
+                    //'<tpl for="Body">',
+                            '<div class="Mail-Body-Content">{[this.encode(values.body)]}</div>',
+                    // '</tpl>',
+                '</div>',{
+                
+                encode: function(value, type, prefix) {
+                    if (value) {
+                        console.log(value);
+                        /*
+                        if (type) {
+                            switch (type) {
+                                case 'longtext':
+                                    value = Ext.util.Format.ellipsis(value, 150);
+                                    break;
+                                default:
+                                    value += type;
+                            }                           
+                        }
+                        */
+                        
+                        var encoded = Ext.util.Format.htmlEncode(value);
+                        encoded = Ext.util.Format.nl2br(encoded);
+                        
+                        return encoded;
+                    } else {
+                        return '';
+                    }
+                    return value;
+                }
+            }),
+            
+            // use default Tpl for default and multi view
+            defaultTpl: new Ext.XTemplate(
+                '<div class="preview-panel-felamimail-body">',
+                    '<div class="Mail-Body-Content"></div>',
+                '</div>'
+            )
+        });
+    },
     
     /**
      * returns cm

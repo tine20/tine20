@@ -236,7 +236,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
                     'messageuid'    => $uid,
-                    'from'          => $this->_convertText($message->from),
+                    'from'          => Felamimail_Message::convertText($message->from),
                     'sent'          => $this->_convertDate($message->date),
                     'folder_id'     => $_folderId,
                     'timestamp'     => Zend_Date::now(),
@@ -249,7 +249,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                 foreach ($exceptionFields as $field) {
                     try {
                         if ($field === 'subject') {
-                            $cachedMessage->subject = $this->_convertText($message->subject);
+                            $cachedMessage->subject = Felamimail_Message::convertText($message->subject);
                             $subject = $cachedMessage->subject;
                         } else {
                             $cachedMessage->{$field} = $this->_convertAddresses($message->{$field});
@@ -303,23 +303,6 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         return $date;
     }
 
-    /**
-     * convert text
-     *
-     * @param string $_string
-     * @return string
-     */
-    protected function _convertText($_string)
-    {
-        $string = $_string;
-        if(preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
-            $string = preg_replace('/(=[1-9,a-f]{2})/e', "strtoupper('\\1')", $string);
-            $string = iconv_mime_decode($string, 2);
-        }
-        
-        return $string;
-    }
-    
     /**
      * convert addresses into array with name/address
      *

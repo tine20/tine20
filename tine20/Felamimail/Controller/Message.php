@@ -139,22 +139,23 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $message = parent::get($_id);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->get($message->folder_id);
         
         try {
-            $imapBackend                = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+            $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
+            $rawContent             = $imapBackend->getRawContent($message->messageuid);
+            $message->body          = Felamimail_Message::convertText($rawContent, FALSE);
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawContent, true));
+            
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // no imap connection -> no body
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-            return $message;
         }
-        $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
-        
-        $imapMessage = $imapBackend->getMessage($message->message_uid);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapMessage->toArray(), true));
         
         return $message;
     }

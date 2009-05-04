@@ -23,7 +23,7 @@ Tine.Felamimail.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
  * 
  * @type Tine.Tinebase.widgets.app.JsonBackend
  */
-Tine.Felamimail.recordBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Felamimail.messageBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Felamimail',
     modelName: 'Message',
     recordClass: Tine.Felamimail.Model.Message

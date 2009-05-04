@@ -119,4 +119,29 @@ class Felamimail_Message extends Zend_Mail_Message
 
         return $addresses;
     }
+
+    /**
+     * convert text
+     *
+     * @param string $_string
+     * @param boolean $_isHeader (if not, use base64 decode)
+     * @return string
+     * 
+     * @todo make it work for message body (use table for quoted printables?)
+     */
+    public static function convertText($_string, $_isHeader = TRUE)
+    {
+        $string = $_string;
+        if(preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
+            $string = preg_replace('/(=[1-9,a-f]{2})/e', "strtoupper('\\1')", $string);
+            if ($_isHeader) {
+                $string = iconv_mime_decode($string, 2);
+            } else {
+                //$string = imap_base64($string);
+                //$string = base64_decode($string);
+            }
+        }
+        
+        return $string;
+    }
 }

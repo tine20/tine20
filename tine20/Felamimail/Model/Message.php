@@ -54,6 +54,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'flags'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'body'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
