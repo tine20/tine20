@@ -39,7 +39,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     getViewRowClass: function(record, index) {
         var flags = record.get('flags');
         var className = '';
-        console.log(flags);
         if(flags !== null) {
             if (flags.match(/Flagged/)) {
                 className += ' flag_flagged';
@@ -47,9 +46,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             if (flags.match(/Deleted/)) {
                 className += ' flag_deleted';
             }
-            if (!flags.match(/Seen/)) {
-                className += ' flag_unread';
-            }
+        }
+        if (flags === null || !flags.match(/Seen/)) {
+            className += ' flag_unread';
         }
         return className;
     },
@@ -67,8 +66,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         
-        this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Felamimail', 'records'));
-        this.action_editInNewWindow.requiredGrant = 'editGrant';        
+        //this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Felamimail', 'records'));
+        //this.action_editInNewWindow.requiredGrant = 'editGrant';
+        
+        this.grid.getSelectionModel().on('rowselect', function(selModel, rowIndex, r) {
+            // toggle read/seen flag of mail
+            Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
+        }, this);
     },
     
     /**
@@ -96,7 +100,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * the details panel (shows message content)
      * 
-     * @todo    update row if unseen -> seen change
      */
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
@@ -110,17 +113,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     Tine.Felamimail.messageBackend.loadRecord(record, {
                         scope: this,
                         success: function(message) {
-                            record.data.body = message.data.body;
-                            
-                            // update row if unseen -> seen
-                            //console.log(record);
-                            //console.log(message.data);
-                            //record.data.flags = message.data.flags;
-                            
-                            //var el = Element.get(this.grid.view.getRow(0));
-                            //el.removeClass('flag_unread');
-                            //this.grid.view.refresh();
-                            //this.grid.getSelectionModel().selectRecords(record);
+                            record.data.body = message.data.body;                            
+                            record.data.flags = message.data.flags;
                             
                             this.tpl.overwrite(body, message.data);
                             this.getEl().down('div').down('div').scrollTo('top', 0, false);
