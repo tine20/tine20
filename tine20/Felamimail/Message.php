@@ -42,6 +42,8 @@ class Felamimail_Message extends Zend_Mail_Message
      *
      * @param string $_contentType
      * @return string
+     * 
+     * @todo    add possibility to get ascii text even if it is a html mail
      */
     public function getBody($_contentType)
     {

@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
+ * @todo        add actions (reply, ...)
+ * @todo        add attachments
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -37,6 +39,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     getViewRowClass: function(record, index) {
         var flags = record.get('flags');
         var className = '';
+        console.log(flags);
         if(flags !== null) {
             if (flags.match(/Flagged/)) {
                 className += ' flag_flagged';
@@ -65,7 +68,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Felamimail', 'records'));
-        this.action_editInNewWindow.requiredGrant = 'editGrant';
+        this.action_editInNewWindow.requiredGrant = 'editGrant';        
     },
     
     /**
@@ -90,6 +93,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         });
     },    
     
+    /**
+     * the details panel (shows message content)
+     * 
+     * @todo    update row if unseen -> seen change
+     */
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
             defaultHeight: 300,
@@ -103,6 +111,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                         scope: this,
                         success: function(message) {
                             record.data.body = message.data.body;
+                            
+                            // update row if unseen -> seen
+                            //console.log(record);
+                            //console.log(message.data);
+                            //record.data.flags = message.data.flags;
+                            
+                            //var el = Element.get(this.grid.view.getRow(0));
+                            //el.removeClass('flag_unread');
+                            //this.grid.view.refresh();
+                            //this.grid.getSelectionModel().selectRecords(record);
+                            
                             this.tpl.overwrite(body, message.data);
                             this.getEl().down('div').down('div').scrollTo('top', 0, false);
                             this.getLoadMask().hide();
@@ -123,7 +142,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 
                 encode: function(value, type, prefix) {
                     if (value) {
-                        console.log(value);
                         /*
                         if (type) {
                             switch (type) {

@@ -123,6 +123,21 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * add flag to message
+     *
+     * @param string $_messageId
+     * @param string $_flag
+     */
+    public function addFlag($_messageId, $_flag)
+    {
+        $data = array(
+            'flag'          => $_flag,
+            'message_id'    => $_messageId
+        );
+        $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags'], $data);
+    }
+    
+    /**
      * delete all cached messages for one folder
      *
      * @param string $_folderId

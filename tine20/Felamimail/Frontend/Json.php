@@ -51,6 +51,21 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'status'    => ($result) ? 'success' : 'failure'
         );
     }
+
+    /**
+     * refresh folder
+     *
+     * @param string $folderId the folder id to delete
+     * @return array
+     */
+    public function refreshFolder($folderId)
+    {
+        $result = Felamimail_Controller_Cache::getInstance()->clear($folderId);
+
+        return array(
+            'status'    => ($result) ? 'success' : 'failure'
+        );
+    }
     
     /***************************** messages funcs *******************************/
     /***************************** messages funcs *******************************/

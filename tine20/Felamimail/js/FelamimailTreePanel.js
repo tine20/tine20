@@ -137,7 +137,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 items: [
                     this.getCreateAction(node),
                     this.getRenameAction(node),
-                    this.getDeleteAction(node)
+                    this.getDeleteAction(node),
+                    this.getRefreshAction(node)
                 ]
             });
         }
@@ -259,6 +260,33 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         });
                     }
                 }, this);
+            }
+        };
+    },
+    
+    /**
+     * get refresh action
+     * 
+     * @param {Ext.tree.AsyncTreeNode}
+     * @return {Object} action item
+     */
+    getRefreshAction: function(node) {
+        return {
+            text: _('Refresh'),
+            iconCls: 'x-tbar-loading',
+            scope: this,
+            handler: function() {                        
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Felamimail.refreshFolder',
+                        folderId: node.id
+                    },
+                    scope: this,
+                    success: function(_result, _request){
+                        // update grid
+                        this.filterPlugin.onFilterChange();
+                    }
+                });
             }
         };
     }
