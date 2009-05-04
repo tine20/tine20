@@ -23,6 +23,11 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      */
     defaultHeight: 125,
     
+    /**
+     * @property {Tine.Tinebase.widgets.app.GridPanel}
+     */
+    grid: null,
+    
     border: false,
     autoScroll: true,
     layout: 'fit',
@@ -48,6 +53,8 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * @param grid
      */
     doBind: function(grid) {
+        this.grid = grid;
+        
         grid.getSelectionModel().on('selectionchange', function(sm) {
             this.onDetailsUpdate(sm);
         }, this);
