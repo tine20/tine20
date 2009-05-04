@@ -216,18 +216,20 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
      */
     protected function _addMessages($_messages, $_folderId)
     {
+        // set fields with try / catch blocks
+        $exceptionFields = array('subject', 'to', 'cc', 'bcc');
+        
         // set time limit to infinity for this operation
         set_time_limit(0);
         
         foreach ($_messages as $uid => $value) {
             $message = $value['message'];
+            $subject = '';
             
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
                     'messageuid'    => $uid,
-                    'subject'       => $this->_convertText($message->subject),
                     'from'          => $this->_convertText($message->from),
-                    'to'            => $this->_convertAddresses($message->to),
                     'sent'          => $this->_convertDate($message->date),
                     'folder_id'     => $_folderId,
                     'timestamp'     => Zend_Date::now(),
@@ -236,28 +238,30 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
                     'flags'         => $message->getFlags()
                 ));
                 
-                // try to get cc & bcc
-                try {
-                    $cachedMessage->cc = $this->_convertAddresses($message->cc);
-                } catch (Zend_Mail_Exception $zme) {
-                    // no cc available
-                }
-                try {
-                    $cachedMessage->bcc = $this->_convertAddresses($message->bcc);
-                } catch (Zend_Mail_Exception $zme) {
-                    // no bcc available
+                // try to get 'subject', 'to', 'cc', 'bcc'
+                foreach ($exceptionFields as $field) {
+                    try {
+                        if ($field === 'subject') {
+                            $cachedMessage->subject = $this->_convertText($message->subject);
+                            $subject = $cachedMessage->subject;
+                        } else {
+                            $cachedMessage->{$field} = $this->_convertAddresses($message->{$field});
+                        }
+                    } catch (Zend_Mail_Exception $zme) {
+                        // no 'subject', 'to', 'cc', 'bcc' available
+                    }
                 }
                 
                 $this->_messageCacheBackend->create($cachedMessage);
                 
             } catch (Zend_Mail_Exception $zme) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                    ' Could not parse message ' . $uid . ' | ' . $message->subject .
+                    ' Could not parse message ' . $uid . ' | ' . $subject .
                     '. Error: ' . $zme->getMessage()
                 );
             } catch (Zend_Db_Statement_Exception $zdse) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                    ' Failed to create cache entry for msg ' . $uid . ' | ' . $message->subject .
+                    ' Failed to create cache entry for msg ' . $uid . ' | ' . $subject .
                     '. Error: ' . $zdse->getMessage()
                 );
             }
@@ -319,8 +323,10 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
     {
         $addresses = Felamimail_Message::parseAdresslist($_addresses);
         $result = array();
-        foreach($addresses as $address) {
-            $result[] = array('email' => $address['address'], 'name' => $address['name']);
+        if (is_array($addresses)) {
+            foreach($addresses as $address) {
+                $result[] = array('email' => $address['address'], 'name' => $address['name']);
+            }
         }
         return $result;
     }
