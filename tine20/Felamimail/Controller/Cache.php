@@ -20,8 +20,15 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
+class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felamimail_Controller_Abstract
 {
+    /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Felamimail';
+    
     /**
      * @var default charset
      */
@@ -99,7 +106,7 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
         $folder                 = $this->_folderBackend->get($_folderId);
         
         try {
-            $backend                = $this->_getImapBackend($folder->backend_id);
+            $backend                = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // no imap connection -> no update
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
@@ -321,11 +328,13 @@ class Felamimail_Controller_Cache extends Felamimail_Controller_Abstract
      */
     protected function _convertAddresses($_addresses)
     {
-        $addresses = Felamimail_Message::parseAdresslist($_addresses);
         $result = array();
-        if (is_array($addresses)) {
-            foreach($addresses as $address) {
-                $result[] = array('email' => $address['address'], 'name' => $address['name']);
+        if (!empty($_addresses)) {
+            $addresses = Felamimail_Message::parseAdresslist($_addresses);
+            if (is_array($addresses)) {
+                foreach($addresses as $address) {
+                    $result[] = array('email' => $address['address'], 'name' => $address['name']);
+                }
             }
         }
         return $result;

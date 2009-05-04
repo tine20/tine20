@@ -18,8 +18,15 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implements Tinebase_Controller_SearchInterface
+class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract /* Felamimail_Controller_Abstract */ implements Tinebase_Controller_SearchInterface
 {
+    /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Felamimail';
+    
     /**
      * last search count (2 dim array: userId => backendId => count)
      *
@@ -140,14 +147,15 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function create($_folderName, $_parentFolder = '', $_backendId = 'default')
     {
-        $imap = $this->_getImapBackend($_backendId);
+        $imap = Felamimail_Backend_ImapFactory::factory($_backendId);
         $imap->createFolder($_folderName, $_parentFolder);
         
         // create new folder
         $folder = new Felamimail_Model_Folder(array(
             'localname'     => $_folderName,
             'globalname'    => $_parentFolder . self::DELIMITER . $_folderName,
-            'backend_id'    => $_backendId
+            'backend_id'    => $_backendId,
+            'parent'        => $_parentFolder
         ));           
         
         $folder = $this->_folderBackend->create($folder);
@@ -162,7 +170,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function delete($_folderName, $_backendId = 'default')
     {
-        $imap = $this->_getImapBackend($_backendId);
+        $imap = Felamimail_Backend_ImapFactory::factory($_backendId);
         $imap->removeFolder($_folderName);
         
         try {
@@ -183,7 +191,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function rename($_oldFolderName, $_newFolderName, $_backendId = 'default')
     {
-        $imap = $this->_getImapBackend($_backendId);
+        $imap = Felamimail_Backend_ImapFactory::factory($_backendId);
         $imap->renameFolder($_oldFolderName, $_newFolderName);
         
         // rename folder in db
@@ -214,7 +222,7 @@ class Felamimail_Controller_Folder extends Felamimail_Controller_Abstract implem
      */
     public function getSubFolders($_folderName = '', $_backendId = 'default')
     {
-        $imap = $this->_getImapBackend($_backendId);
+        $imap = Felamimail_Backend_ImapFactory::factory($_backendId);
         
         if(empty($_folderName)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get subfolders of root for backend ' . $_backendId);

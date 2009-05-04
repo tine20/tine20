@@ -18,8 +18,15 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract //Felamimail_Controller_Abstract implements Tinebase_Controller_SearchInterface
+class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 {
+    /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Felamimail';
+    
     /**
      * holdes the instance of the singleton
      *
@@ -71,7 +78,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
         return self::$_instance;
     }
     
-    /************************* functions required by Tinebase_Controller_SearchInterface *************************/
+    /************************* overwritten public funcs *************************/
     
     /**
      * get list of records
@@ -116,14 +123,40 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
             $result = 0;
         } else {
             $result = parent::searchCount($_filter);
-            /*
-            $this->_getImapBackend($filterValues['backendId'])->selectFolder($filterValues['folder']);
-            $result = $this->_getImapBackend($filterVales['backendId'])->countMessages();
-            */
         }
             
         return $result;
-        //$this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['backendId']];    
+    }
+    
+    /**
+     * get by id
+     *
+     * @param string $_id
+     * @param int $_containerId
+     * @return Tinebase_Record_Interface
+     */
+    public function get($_id, $_containerId = NULL)
+    {
+        $message = parent::get($_id);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+        
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->get($message->folder_id);
+        
+        try {
+            $imapBackend                = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // no imap connection -> no body
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+            return $message;
+        }
+        $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
+        
+        $imapMessage = $imapBackend->getMessage($message->message_uid);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapMessage->toArray(), true));
+        
+        return $message;
     }
     
     /************************* other public funcs *************************/
@@ -134,6 +167,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      * send one message through smtp
      *
      * @todo use userspecific settings
+     * 
+     * @deprecated
      */
     public function sendMessage(Zend_Mail $_mail)
     {
@@ -153,25 +188,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      *
      * @param string $_globalName the complete folder name
      * @param string $_messageId the message id
-     * @return Zend_Mail_Message
-     */
-    public function getMessage($_globalName, $_messageId)
-    {        
-        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getImapBackend()->selectFolder($_globalName);
-        }
-        
-        $message = $this->_getImapBackend()->getMessage($_messageId);
-        
-        return $message;
-    }
-    
-    /**
-     * fetch message from folder
-     *
-     * @param string $_globalName the complete folder name
-     * @param string $_messageId the message id
      * @return void
+     * 
+     * @deprecated
      */
     public function deleteMessage($_serverId, $_globalName, $_messageId)
     {        
@@ -190,6 +209,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      * @param unknown_type $from
      * @param unknown_type $to
      * @return array
+     * 
+     * @deprecated
      */
     public function getUid($_globalName, $from, $to = null)
     {
@@ -209,6 +230,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      * @param unknown_type $_globalName
      * @param unknown_type $_id
      * @param unknown_type $_flags
+     * 
+     * @deprecated
      */
     public function addFlags($_serverId, $_globalName, $_id, $_flags)
     {
@@ -226,6 +249,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract 
      * @param unknown_type $_globalName
      * @param unknown_type $_id
      * @param unknown_type $_flags
+     * 
+     * @deprecated
      */
     public function clearFlags($_serverId, $_globalName, $_id, $_flags)
     {

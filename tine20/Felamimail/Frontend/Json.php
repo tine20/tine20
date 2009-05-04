@@ -66,7 +66,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
     }
-
+    
+    /**
+     * get message data
+     *
+     * @param string $id
+     * @return array
+     */
+    public function getMessage($id)
+    {
+        return $this->_get($id, Felamimail_Controller_Message::getInstance());
+    }
+    
     /***************************** old funcs *******************************/
     
     /**
