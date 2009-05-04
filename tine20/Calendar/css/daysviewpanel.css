@@ -1,3 +1,5 @@
+/********************************* Header *********************************/
+
 .cal-daysviewpanel-header {
     position: relative;
 }
@@ -44,6 +46,7 @@
     height: 23px;
 }
 
+/********************************* Body *********************************/
 .cal-daysviewpanel-body-inner {
 	position: relative;
 	top: 0px;
@@ -64,6 +67,7 @@
 
 .cal-daysviewpanel-body-daycolumn {
 	float: left;
+	position: absolute;
 }
 
 .cal-daysviewpanel-body-daycolumn-inner {
@@ -115,4 +119,10 @@
 
 .cal-daysviewpanel-daycolumn-row-off {
 	border-top: 1px dotted #EDEDED;
+}
+
+/********************************* Events *********************************/
+.cal-daysviewpanel-event {
+    position: absolute;
+    border: 1px solid black;
 }

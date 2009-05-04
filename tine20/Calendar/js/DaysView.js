@@ -62,6 +62,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.initTimeScale();
         this.initDateScale();
         this.initTemplates();
+        
     },
     
     /**
@@ -106,6 +107,28 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         });
     },
     
+    initDropZone: function() {
+        this.dd = new Ext.dd.DropZone(this.scroller.dom, {
+            ddGroup: 'cal-event',
+            notifyOver : function(dd, e, data) {
+                var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e.getTarget());
+                return target ? 'x-dd-drop-ok' : 'x-dd-drop-nodrop';
+            },
+            notifyOut : function() {
+                console.log('notifyOut');
+                //delete this.grid;
+            },
+            notifyDrop : function(dd, e, data) {
+                //console.log(data);
+                //console.log('notifyDrop');
+                //console.log(e.getTarget());
+                var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e.getTarget());
+                console.log('droped event to ' + target);
+                return !!target;
+            }
+        });
+    },
+    
     /**
      * renders the view
      */
@@ -127,7 +150,73 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * fill the events into the view
      */
     afterRender: function() {
+        this.initDropZone();
+        
+        // init dragables
+        this.dragZone = new Ext.dd.DragZone(this.el, {
+            ddGroup: 'cal-event',
+            daysView: this,
+            //moveOnly: true,
+            //scroll: false,
+            containerScroll: true,
+            
+            getDragData: function(e) {
+                var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
+                if (eventEl) {
+                    var d = eventEl.cloneNode(true);
+                    
+                    var width = Ext.fly(eventEl).getWidth();
+                    Ext.fly(d).setTop(0);
+                    Ext.fly(d).setWidth(width);
+                    d.id = Ext.id();
+                    
+                    return {
+                        scope: this.daysView,
+                        sourceEl: eventEl,
+                        repairXY: Ext.fly(eventEl).getXY(),
+                        repairWidth: Ext.fly(eventEl).getWidth(),
+                        ddel: d
+                    }
+                }
+            },
+            
+            getRepairXY: function() {
+                return this.dragData.repairXY;
+            }
+        });
+        
+        
         // put the events in
+        this.renderEvent({
+            id: 'lakdjf',
+            summary: 'testEvent'
+        })
+    },
+    
+    /**
+     * renders a single event into this daysview
+     * @param {Tine.Calendar.Model.Event} event
+     */
+    renderEvent: function(event) {
+        
+        var eventEl = this.templates.event.append(this.dayCols[2], {
+            id: event.id,
+            summary: event.summary, // needs to be croped according to widht
+            zIndex: 100,
+            width: '80%',
+            height: '70px',
+            left: '0%',
+            top: '140px'
+        }, true);
+        
+        new Ext.Resizable(eventEl, {
+            handles: 's',
+            pinned: true,
+            disableTrackOver: true,
+            dynamic: true,
+            heightIncrement: 20
+        });
+        
     },
     
     /**
@@ -137,12 +226,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @return {Date}
      */
     getTargetDateTime: function(target) {
-        var parts = target.id.split(':');
-        
-        var timePart = this.timeScale.getAt(parts[2]);
-        var datePart = this.dateScale.getAt(parts[1]);
-        
-        return datePart.get('date').add(Date.MINUTE, timePart.get('minutes'));
+        if (target.id.match(/^ext-gen\d+:\d+:\d+/)) {
+            var parts = target.id.split(':');
+            
+            var timePart = this.timeScale.getAt(parts[2]);
+            var datePart = this.dateScale.getAt(parts[1]);
+            
+            return datePart.get('date').add(Date.MINUTE, timePart.get('minutes'));
+        }
     },
     
     /**
@@ -165,6 +256,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.scroller.setStyle('overflow-x', 'hidden');
         
         this.mainBody = new E(this.scroller.dom.firstChild);
+        
+        this.dayCols = this.mainBody.dom.firstChild.lastChild.childNodes;
 
         this.focusEl = new E(this.scroller.dom.childNodes[1]);
         this.focusEl.swallowEvent("click", true);
@@ -320,6 +413,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         ts.overRow = new Ext.XTemplate(
             '<div class="cal-daysviewpanel-daycolumn-row" style="height: {height};">' +
                 '<div id="{id}" class="{cls}" >&#160;</div>'+
+            '</div>'
+        );
+        
+        ts.event = new Ext.XTemplate(
+            '<div id="{id}", class="cal-daysviewpanel-event" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}">' +
+                '{summary}' +
             '</div>'
         );
         
