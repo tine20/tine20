@@ -65,11 +65,37 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.startDate.setMinutes(0);
         this.startDate.setSeconds(0);
         
+        this.endDate = this.startDate.add(Date.DAY, this.numOfDays+1);
+        
+        this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        
         this.initData(calPanel.store);
         
         this.initTimeScale();
         this.initDateScale();
         this.initTemplates();
+        
+        /*
+        this.layoutRecord = Ext.data.Record.create([
+            'eventId', 
+            'event', 
+            'eventLength',
+            'is_all_day_evnet',
+            'colIdx', 
+            'top', 
+            'height', 
+            'width', 
+            'left', 
+            'concurrentCount'
+        ]);
+        
+        this.eventsLayoutStore = new Ext.data.SimpleStore({
+            id: 'eventId',
+            fields: this.layoutRecord,
+            data: []
+        });
+        */
     },
     
     /**
@@ -95,6 +121,53 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         this.ds = ds;
     },
+    
+    /*
+    calcEventsLayout: function() {
+        this.eventsLayoutStore.loadData([], false);
+        this.eventsConcurrencyMap = new Array(this.numOfDays);
+        this.wholeDayConcurrencyMap = new Array(this.numOfDays);
+        
+        var rStart = this.startDate.getTime();
+        var rEnd = rStart.add(Date.DAY, this.numOfDays+1);
+        
+            
+        this.ds.each(function(event) {
+            var dtStart = event.get('dtstart');
+            var dtStartTs = dtStart.getTime();
+            var dtEnd = event.get('dtend');
+            var dtEndTs = dtEnd.getTime();
+            var eventLength = dtEndTs - dtStartTs;
+            
+            if (eStart > rEnd || eEnd < rStart) {
+                // skip, out of range!
+                return true;
+            }
+            
+            // Simultaneously check
+            if (! event.get('is_all_day_evnet')) {
+                
+            
+            }
+            
+            this.eventsLayoutStore.add(new this.layoutRecord({
+                id: event.get('id'),
+                event: event,
+                length: eventLength,
+                isAllDayEvnet : event.get('is_all_day_evnet'),
+                colIdx: this.getDateColumn(dtStart),
+                top: this.getTimeOffset(dtStart),
+                height: this.getTimeOffset(dtEnd) - this.getTimeOffset(dtStart),
+                width: 80,
+                left: 0,
+                concurrentCount: 1
+            }));
+            
+        }, this);
+        
+        console.log(this.eventsLayoutStore);
+    },
+    */
     
     /**
      * inits time scale
@@ -226,6 +299,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.initDropZone();
         this.initDragZone();
         
+        // calculate duration and parallels
+        this.ds.each(function(event) {
+            var registry = event.get('is_all_day_evnet') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
+            registry.register(event);
+        }, this);
+        
         // put the events in
         this.ds.each(this.insertEvent, this);
         this.scrollToNow();
@@ -255,6 +334,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var dtStart = event.get('dtstart');
         var dtEnd = event.get('dtend');
         
+        var parallels = this.parallelScrollerEventsRegistry.getEvents(dtStart, dtEnd);
+        var pos = parallels.indexOf(event);
+        
         var eventEl = this.templates.event.append(this.dayCols[this.getDateColumn(dtStart)], {
             id: event.get('id'),
             summary: event.get('summary'),
@@ -262,9 +344,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             color: color,
             bgColor: bgColor,
             zIndex: 100,
-            width: '80%',
+            width: Math.round(90 * 1/event.parallels) + '%',
             height: (this.getTimeOffset(dtEnd) - this.getTimeOffset(dtStart)) + 'px',
-            left: '3px',
+            left: Math.round(pos * 90 * 1/event.parallels) + '%',
             top: this.getTimeOffset(dtStart) + 'px'
         }, true);
                 

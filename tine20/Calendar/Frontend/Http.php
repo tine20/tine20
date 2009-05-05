@@ -26,6 +26,8 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
+            'Calendar/js/ParallelEventsRegistry.js',
+            'Calendar/js/Model.js',
             'Calendar/js/CalendarPanel.js',
             'Calendar/js/DaysView.js',
             'Calendar/js/Calendar.js',

@@ -123,6 +123,7 @@
 
 /********************************* Events *********************************/
 .cal-daysviewpanel-event {
+	margin-left: 3px;
 	background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
 	border-radius: 8px;
     position: absolute;

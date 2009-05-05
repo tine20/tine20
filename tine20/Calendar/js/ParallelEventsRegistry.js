@@ -1,0 +1,177 @@
+/* 
+ * Tine 2.0
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+
+Ext.ns('Tine.Calendar');
+
+/**
+ * registry to cope with parallel events
+ * 
+ * @class Tine.Events.ParallelEventsRegistry
+ * @constructor
+ */
+Tine.Calendar.ParallelEventsRegistry = function(config) {
+    Ext.apply(this, config);
+    
+    this.dtStartTs = this.dtStart.getTime();
+    this.dtEndTs = this.dtEnd.getTime();
+    this.dt = this.granularity * Date.msMINUTE;
+    
+    var timeScale = Math.ceil((this.dtEndTs - this.dtStartTs) / this.dt);
+    this.map = new Array(timeScale);
+}
+
+Tine.Calendar.ParallelEventsRegistry.prototype = {
+    /**
+     * @cfg {Date} dtStart
+     * start of range for this registry
+     */
+    dtStart: null,
+    /**
+     * @cfg {Date} dtEnd
+     * end of range for this registry 
+     */
+    dtEnd: null,
+    /**
+     * @cfg {Number} granularity
+     * granularity of this registry in minutes
+     */
+    granularity: 15,
+    /**
+     * @cfg {String} dtStartProperty
+     */
+    dtStartProperty: 'dtstart',
+    /**
+     * @cfg {String} dtEndProperty
+     */
+    dtEndProperty: 'dtend',
+    
+    /**
+     * @private {Array} map
+     * hols registry 
+     */
+    map: null,
+    /**
+     * @private {Number} dtStartTs
+     */
+    dtStartTs: null,
+    /**
+     * @private {Number} dtEndTs
+     */
+    dtEndTs: null,
+    /**
+     * @private {Number} dt
+     */
+    dt: null,
+    
+    /**
+     * register event
+     * @param {Ext.data.Record} event
+     * @param {bool} returnAffected
+     * @return mixed
+     */
+    register: function(event, returnAffected) {
+        var dtStart = event.get(this.dtStartProperty);
+        var dtStartTs = dtStart.getTime();
+        var dtEnd = event.get(this.dtEndProperty);
+        var dtEndTs = dtEnd.getTime();
+        
+        // layout helper
+        event.duration = dtEndTs - dtStartTs;
+        
+        var startIdx = this.tsToIdx(dtStart) +1;
+        var endIdx = this.tsToIdx(dtEndTs) -1;
+        
+        for (var i=startIdx; i<=endIdx; i++) {
+            if (! Ext.isArray(this.map[i])) {
+                this.map[i] = [];
+            }
+            
+            this.map[i].push(event);
+        }
+        
+        //console.info('pushed event from startIdx"' + startIdx + '" to endIdx "' + endIdx + '".');
+        if (returnAffected) {
+            return this.getEvents(dtStart, dtEnd);
+        }
+    },
+    
+    /**
+     * unregister event
+     * @param {Ext.data.Record} event
+     */
+    unregister: function(event) {
+        
+    },
+    
+    /**
+     * returns events of current range sorted by duration
+     * 
+     * @param  {Date} dtStart
+     * @param  {Date} dtEnd
+     * @return {Array}
+     */
+    getEvents: function(dtStart, dtEnd) {
+        var dtStartTs = dtStart.getTime();
+        var dtEndTs = dtEnd.getTime();
+        
+        var startIdx = this.tsToIdx(dtStart);
+        var endIdx = this.tsToIdx(dtEndTs);
+        //console.info('get events from startIdx"' + startIdx + '" to endIdx "' + endIdx + '".'   )
+        
+        return this.getEventsFromIdx(startIdx, endIdx);
+    },
+    
+    /**
+     * @private
+     * @param  {Number} startIdx
+     * @param  {Number} endIdx
+     * @return {Array}
+     */
+    getEventsFromIdx: function(startIdx, endIdx) {
+        var events = [];
+        var parallels = 1;
+        for (var i=startIdx; i<=endIdx; i++) {
+            if (Ext.isArray(this.map[i])) {
+                parallels = this.map[i].length > parallels ? this.map[i].length : parallels;
+                for (var j=0; j<this.map[i].length; j++) {
+                    if (events.indexOf(this.map[i][j]) === -1) {
+                        events.push(this.map[i][j]);
+                    }
+                }
+            }
+        }
+        
+        // sort by duration and dtstart
+        var scope = this;
+        events.sort(function(a, b) {
+            var result =  b.duration - a.duration;
+            if (! result) {
+                result = a.get(scope.dtStartProperty).getTime() - b.get(scope.dtStartProperty).getTime();
+            }
+            
+            return result;
+        });
+        
+        // layout helper
+        for (var i=0; i<events.length; i++) {
+            events[i].parallels = parallels;
+        }
+        
+        return events;
+    },
+    
+    /**
+     * @private
+     * @param  {Number} ts
+     * @return {Number}
+     */
+    tsToIdx: function(ts) {
+        return Math.round((ts - this.dtStartTs) / this.dt);
+    }
+};

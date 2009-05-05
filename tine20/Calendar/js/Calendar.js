@@ -32,7 +32,22 @@ Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         if (! this.dvp) {
             this.dvp = new Tine.Calendar.CalendarPanel({
                 //title: 'my lovely calendar',
-                view: new Tine.Calendar.DaysView({})
+                view: new Tine.Calendar.DaysView({}),
+                store: new Ext.data.JsonStore({
+                    id: id,
+                    fields: Tine.Calendar.EventArray,
+                    data: [
+                        {id : '1', summary: 'Breakfast', color: '#FD0000', dtstart: '2009-05-07 08:00:00', dtend: '2009-05-07 09:00:00'},
+                        {id : '2', summary: 'Lunch', color: '#FD0000', dtstart: '2009-05-07 13:00:00', dtend: '2009-05-07 15:00:00'},
+                        {id : '3', summary: 'Supper', color: '#FD0000', dtstart: '2009-05-07 18:00:00', dtend: '2009-05-07 19:00:00'},
+                        {id : '4', summary: 'test', color: '#FD0000', dtstart: '2009-05-08 09:00:00', dtend: '2009-05-08 12:00:00'},
+                        {id : '5', summary: 'test', color: '#FD0000', dtstart: '2009-05-08 09:00:00', dtend: '2009-05-08 10:00:00'},
+                        {id : '6', summary: 'test', color: '#FD0000', dtstart: '2009-05-08 10:00:00', dtend: '2009-05-08 11:00:00'},
+                        {id : '7', summary: 'test', color: '#FD0000', dtstart: '2009-05-08 15:00:00', dtend: '2009-05-08 18:00:00'},
+                        {id : '8', summary: 'test', color: '#FD0000', dtstart: '2009-05-08 15:45:00', dtend: '2009-05-08 17:30:00'},
+                        {id : '9', summary: 'test', color: '#FD0000', dtstart: '2009-05-08 16:30:00', dtend: '2009-05-08 19:30:00'}
+                    ]
+                })
             })
         }
         
