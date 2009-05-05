@@ -10,6 +10,35 @@
  * 
  */
 
+/**
+ * magic_quotes_gpc Hack!!!
+ * @author Florian Blasel
+ * 
+ * If you are on a shared host you may not able to change the php setting for magic_quotes_gpc
+ * this hack will solve this BUT this takes performance (speed)!
+ */
+/*
+if (ini_get('magic_quotes_gpc')) {
+    function __magic_quotes_gpc($requests) {
+        foreach($requests AS $k=>&$v) {
+            if (is_array($v)) {
+                $requests[stripslashes($k)] = __magic_quotes_gpc($v);
+            } else {
+                $requests[stripslashes($k)] = stripslashes($v);
+            }
+        }
+        return $requests;
+    } 
+    
+    // Change the incomming data if needed
+    $_GET = __magic_quotes_gpc( $_GET );
+    $_POST = __magic_quotes_gpc( $_POST );
+    $_COOKIE = __magic_quotes_gpc( $_COOKIE );
+    $_ENV = __magic_quotes_gpc( $_ENV );
+    $_REQUEST = __magic_quotes_gpc( $_REQUEST );
+} // end magic_quotes_gpc Hack
+*/
+
 set_include_path('.' . PATH_SEPARATOR . dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
 
 require_once 'Zend/Loader.php';

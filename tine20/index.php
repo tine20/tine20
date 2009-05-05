@@ -13,7 +13,7 @@
 
 /**
  * magic_quotes_gpc Hack!!!
- * @autor Florian Blasel
+ * @author Florian Blasel
  * 
  * If you are on a shared host you may not able to change the php setting for magic_quotes_gpc
  * this hack will solve this BUT this takes performance (speed)!
