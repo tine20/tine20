@@ -72,10 +72,17 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             renderer: this.courseTypeRenderer
         },{
             id: 'internet',
-            header: this.app.i18n._("Internet"),
+            header: this.app.i18n._("Internet Access"),
             width: 150,
             sortable: true,
             dataIndex: 'internet',
+            renderer: Tine.Tinebase.common.booleanRenderer
+        },{
+            id: 'fileserver',
+            header: this.app.i18n._("Fileserver Access"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'fileserver',
             renderer: Tine.Tinebase.common.booleanRenderer
         }];
     },

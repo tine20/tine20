@@ -149,26 +149,26 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * add or remove members from internet group
+     * add or remove members from internet/fileserver groups
      *
      * @param array $_members array of member ids
-     * @param boolean $_internet yes/no
+     * @param boolean $_access yes/no
      */
-    protected function _manageInternetGroup(array $_members, $_internet)
+    protected function _manageAccessGroups(array $_members, $_access, $type = 'internet_group')
     {
-        if (!isset($this->_config) || !isset($this->_config->internet_group)) {
+        if (!isset($this->_config) || !isset($this->_config->{$type})) {
             return;
         }
 
-        $inetGroupId = $this->_config->internet_group;
+        $groupId = $this->_config->{$type};
         $groupController = Admin_Controller_Group::getInstance();
         
-        // add or remove members to or from internet group (defined in config.inc.php)
+        // add or remove members to or from internet/fileserver groups (defined in config.inc.php)
         foreach ($_members as $memberId) {
-            if ($_internet) {
-                $groupController->addGroupMember($inetGroupId, $memberId);
+            if ($_access) {
+                $groupController->addGroupMember($groupId, $memberId);
             } else {
-                $groupController->removeGroupMember($inetGroupId, $memberId);
+                $groupController->removeGroupMember($groupId, $memberId);
             }
         }
     }
@@ -239,15 +239,15 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
         
         if (empty($group->id)) {
-            $savedGroup = $this->_groupController->create($group);
-            $course->group_id = $savedGroup->getId();
-            $savedRecord = $this->_controller->create($course);
+            $savedGroup         = $this->_groupController->create($group);
+            $course->group_id   = $savedGroup->getId();
+            $savedRecord        = $this->_controller->create($course);
         } else {
             $currentMembers = $this->_groupController->getGroupMembers($course->group_id);
-            $addedMembers = array_diff((array)$group->members, $currentMembers);
+            $addedMembers   = array_diff((array)$group->members, $currentMembers);
             $removedMembers = array_diff($currentMembers, (array)$group->members);
+            $savedRecord    = $this->_controller->update($course);
             
-            $savedRecord = $this->_controller->update($course);
             $group->setId($course->group_id);
             $this->_groupController->update($group);
             
@@ -262,9 +262,10 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Admin_Controller_User::getInstance()->delete($removedMembers);
         }
         
-        // add/remove members to/from internet group
+        // add/remove members to/from internet/fileserver group
         if (! empty($group->members)) {
-            $this->_manageInternetGroup($group->members, $savedRecord->internet);
+            $this->_manageAccessGroups($group->members, $savedRecord->internet,   'internet_group');
+            $this->_manageAccessGroups($group->members, $savedRecord->fileserver, 'fileserver_group');
         }
 
         return $this->_recordToJson($savedRecord);

@@ -176,10 +176,16 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         height: 60
                     }, {
                         hideLabel: true,
-                        boxLabel: this.app.i18n._('Internet'),
+                        boxLabel: this.app.i18n._('Internet Access'),
                         name: 'internet',
                         xtype: 'checkbox',
-                        columnWidth: 0.33
+                        columnWidth: 0.5
+                    }, {
+                        hideLabel: true,
+                        boxLabel: this.app.i18n._('Fileserver Access'),
+                        name: 'fileserver',
+                        xtype: 'checkbox',
+                        columnWidth: 0.5
                     }]]
                 }, {
                     // activities and tags
