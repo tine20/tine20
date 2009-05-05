@@ -85,10 +85,13 @@ class Setup_Update_Abstract
     {
         $select = $this->_db->select()
                 ->from( SQL_TABLE_PREFIX . 'application_tables')
-                ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
+                ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName)
+                ->orwhere($this->_db->quoteIdentifier('name') . ' = ?', $_tableName);
 
         $stmt = $select->query();
         $rows = $stmt->fetchAll();
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $result = ( isset($rows[0]['version']) ) ? $rows[0]['version'] : 0; 
         

@@ -2212,7 +2212,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     
     /**
      * update to 0.28
-     * - repair db charset for users with non defautl utf8 client charset
+     * - repair db charset for users with non default utf8 client charset
      */
     public function update_27()
     {
@@ -2335,5 +2335,28 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         }
         $orgDb->closeConnection();
         $this->setApplicationVersion('Tinebase', '0.28');
+    }
+
+    /**
+     * update to 1.0
+     * - tag name length increased to 40 chars
+     * - last update script in this class -> add new funcs to Release1.php
+     */    
+    public function update_28()
+    {
+        $this->validateTableVersion('tags', '1');        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+        <field>
+            <name>name</name>
+            <type>text</type>
+            <length>40</length>
+            <default>NULL</default>
+        </field>
+        ');
+        $this->_backend->alterCol('tags', $declaration);
+        
+        $this->setTableVersion('tags', '2');
+        $this->setApplicationVersion('Tinebase', '1.0');
     }
 }
