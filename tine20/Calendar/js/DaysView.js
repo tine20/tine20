@@ -112,7 +112,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             ddGroup: 'cal-event',
             notifyOver : function(dd, e, data) {
                 var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e.getTarget());
-                return target ? 'x-dd-drop-ok' : 'x-dd-drop-nodrop';
+                return target ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
             },
             notifyOut : function() {
                 console.log('notifyOut');
@@ -152,12 +152,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     afterRender: function() {
         this.initDropZone();
         
+        this.scroller.ddScrollConfig = {
+            vthresh: 50,
+            hthresh: -1,
+            frequency: 100,
+            increment: 100
+        };
+        Ext.dd.ScrollManager.register(this.scroller);
+        
         // init dragables
         this.dragZone = new Ext.dd.DragZone(this.el, {
             ddGroup: 'cal-event',
             daysView: this,
-            //moveOnly: true,
-            //scroll: false,
+            scroll: false,
             containerScroll: true,
             
             getDragData: function(e) {
@@ -188,8 +195,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         // put the events in
         this.renderEvent({
-            id: 'lakdjf',
-            summary: 'testEvent'
+            id: 'lakdjf', 
+            summary: 'testEventa dfadsfadfa sdfasdf adsfadsf adsfalk;jal;ks djf;l kadjf;lkjad s;lf kjads;lkjf ;laskjdfkl jads;klfjakl;ds jfkl;asdjfkl;jads;kfjk;asdjf;klajdsf;klja;ksdfj;klajsdf;lkajsd;lkfj;lakdsjfk;ladjsf',
+            color: '#0000FD'
         })
     },
     
@@ -199,24 +207,59 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     renderEvent: function(event) {
         
+        //var width = Math.floor(Ext.fly(this.dayCols[1]).getWidth() * 0.8);
+        
+        // lighten up background
+        var r = Math.min(this.hex2dec(event.color.substring(1,3)) + 150, 255);
+        var g = Math.min(this.hex2dec(event.color.substring(3,5)) + 150, 255);
+        var b = Math.min(this.hex2dec(event.color.substring(5,7)) + 150, 255);
+        var bgColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+        
         var eventEl = this.templates.event.append(this.dayCols[2], {
             id: event.id,
             summary: event.summary, // needs to be croped according to widht
+            color: event.color,
+            bgColor: bgColor,
             zIndex: 100,
             width: '80%',
             height: '70px',
-            left: '0%',
+            left: '3px',
             top: '140px'
         }, true);
-        
+                
         new Ext.Resizable(eventEl, {
             handles: 's',
-            pinned: true,
             disableTrackOver: true,
             dynamic: true,
             heightIncrement: 20
         });
         
+        
+    },
+    
+    hex2dec: function(hex) {
+        var dec = 0;
+        hex = hex.toString();
+        var length = hex.length, multiplier, digit;
+        for (var i=0; i<length; i++) {
+            
+            multiplier = Math.pow(16, (Math.abs(i - hex.length)-1));
+            digit = parseInt(hex[i], 10);
+            if (isNaN(digit)) {
+                switch (hex[i].toString().toUpperCase()) {
+                    case 'A': digit = 10;  break;
+                    case 'B': digit = 11;  break;
+                    case 'C': digit = 12;  break;
+                    case 'D': digit = 13;  break;
+                    case 'E': digit = 14;  break;
+                    case 'F': digit = 15;  break;
+                    default: return NaN;
+                }
+            }
+            dec = dec + (multiplier * digit);
+        }
+        
+        return dec;
     },
     
     /**
@@ -417,10 +460,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         );
         
         ts.event = new Ext.XTemplate(
-            '<div id="{id}", class="cal-daysviewpanel-event" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}">' +
-                '{summary}' +
+            '<div id="{id}", class="cal-daysviewpanel-event" style="width: {width}; height: {height}; left: {left}; top: {top}; background-color: {bgColor}; border-color: {color}; z-index: {zIndex};">' +
+                '<div class="cal-daysviewpanel-event-header" style="background-color: {color};">' +
+                    '<div class="cal-daysviewpanel-event-header-inner">08:00</div>' +
+                '</div>' +
+                '<div class="cal-daysviewpanel-event-body">{summary}</div>' +
             '</div>'
         );
+        
         
         for(var k in ts){
             var t = ts[k];

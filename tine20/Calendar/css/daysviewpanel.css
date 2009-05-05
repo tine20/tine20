@@ -123,6 +123,83 @@
 
 /********************************* Events *********************************/
 .cal-daysviewpanel-event {
+	background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
+	border-radius: 8px;
     position: absolute;
-    border: 1px solid black;
+    border: 1px solid #808080;
+    overflow: hidden;
+    
+    text-align: left;
+    color:black;
+    font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    white-space:nowrap;
 }
+
+.ext-gecko .cal-daysviewpanel-event {
+    -moz-border-radius: 8px;
+}
+
+.ext-safari .cal-daysviewpanel-event {
+    -webkit-border-radius: 8px;
+}
+
+.cal-daysviewpanel-event-drop-nodrop .x-dd-drop-icon {
+	left: 3px;
+	top: 0px;
+	background-color: transparent;
+    background-image:url(../../library/ExtJS/resources/images/default/dd/drop-no.gif);
+}
+
+.cal-daysviewpanel-event-drop-ok .x-dd-drop-icon {
+    left: 3px;
+    top: 0px;
+    background-image:url(../../library/ExtJS/resources/images/default/dd/drop-yes.gif);
+}
+
+.cal-daysviewpanel-event-header {
+	width: 100%;
+	position: absolute;
+    top: -1px;
+    height: 14px;
+    background-color: #808080;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.ext-gecko .cal-daysviewpanel-event-header {
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+}
+
+.ext-safari .cal-daysviewpanel-event-header {
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+}
+
+.cal-daysviewpanel-event-header-inner {
+	color: white;
+    position: absolute;
+    top: 1px;
+    left: 4px;
+}
+
+.cal-daysviewpanel-event-drop-ok .cal-daysviewpanel-event-header-inner,
+.cal-daysviewpanel-event-drop-nodrop .cal-daysviewpanel-event-header-inner {
+    left: 17px;
+}
+
+.cal-daysviewpanel-event-body {
+    position: absolute;
+    width: 100%;
+    top: 13px;
+    padding: 0px 4px;
+    white-space: normal;
+}
+
+

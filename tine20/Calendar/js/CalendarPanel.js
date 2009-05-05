@@ -23,41 +23,6 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         this.autoScroll = false;
         this.autoWidth = false;
-        
-        /*
-        this.addEvents({
-            validatedrop:true,
-            beforedragover:true,
-            dragover:true,
-            beforedrop:true,
-            drop:true
-        });
-        */
-    },
-    
-    initEvents2 : function(){
-        Tine.Calendar.CalendarPanel.superclass.initEvents.call(this);
-        //this.dd = new Ext.ux.Portal.DropZone(this, this.dropConfig);
-        //Ext.dd.ScrollManager.register(this.body);
-        this.dd = new Ext.dd.DropZone(this.view.dayCols[1], {
-            getTargetFromEvent: function(e) {
-                console.log(e);
-            },
-            onDrag: function() {
-                console.log('onDrag');
-            },
-            notifyOver : function(dd, e, data) {
-                console.log('notifyOver')
-            },
-            notifyOut : function() {
-                console.log('notifyOut');
-                //delete this.grid;
-            },
-            notifyDrop : function(dd, e, data) {
-                console.log('notifyDrop');
-            }
-                //delete this.grid;
-        });
     },
     
     onRender: function(ct, position) {
