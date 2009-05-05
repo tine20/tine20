@@ -189,6 +189,11 @@
     left: 4px;
 }
 
+.cal-daysviewpanel-event-header-icons {
+    position: absolute;
+    right: 4px;
+}
+
 .cal-daysviewpanel-event-drop-ok .cal-daysviewpanel-event-header-inner,
 .cal-daysviewpanel-event-drop-nodrop .cal-daysviewpanel-event-header-inner {
     left: 17px;

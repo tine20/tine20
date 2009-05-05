@@ -15,9 +15,25 @@ Date.msDAY    = 24 * Date.msHOUR;
 Ext.ns('Tine.Calendar');
 
 Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
+    
+    /**
+     * @cfg {Tine.Calendar.someView} view
+     */
     view: null,
+    
+    /**
+     * @cfg {Ext.data.Store} store
+     */
+    store: null,
+    
+    /**
+     * @cfg {Bool} border
+     */
     border: false,
     
+    /**
+     * @private
+     */
     initComponent: function() {
         Tine.Calendar.CalendarPanel.superclass.initComponent.call(this);
         
@@ -25,6 +41,9 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.autoWidth = false;
     },
     
+    /**
+     * @private
+     */
     onRender: function(ct, position) {
         Tine.Calendar.CalendarPanel.superclass.onRender.apply(this, arguments);
         
@@ -43,6 +62,9 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.view.render();
     },
     
+    /**
+     * @private
+     */
     afterRender : function(){
         Tine.Calendar.CalendarPanel.superclass.afterRender.call(this);
         this.view.layout();
@@ -51,6 +73,9 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.viewReady = true;
     },
     
+    /**
+     * @private
+     */
     onResize: function(ct, position) {
         Tine.Calendar.CalendarPanel.superclass.onResize.apply(this, arguments);
         if(this.viewReady){
@@ -58,7 +83,9 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         }
     },
     
-    // private
+    /**
+     * @private
+     */
     processEvent : function(name, e){
         this.fireEvent(name, e);
         var t = e.getTarget();
@@ -83,27 +110,37 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             
     },
     
-    // private
+    /**
+     * @private
+     */
     onClick : function(e){
         this.processEvent("click", e);
     },
 
-    // private
+    /**
+     * @private
+     */
     onMouseDown : function(e){
         this.processEvent("mousedown", e);
     },
 
-    // private
+    /**
+     * @private
+     */
     onContextMenu : function(e, t){
         this.processEvent("contextmenu", e);
     },
 
-    // private
+    /**
+     * @private
+     */
     onDblClick : function(e){
         this.processEvent("dblclick", e);
     },
     
-    // private
+    /**
+     * @private
+     */
     onKeyDown : function(e){
         this.fireEvent("keydown", e);
     }
