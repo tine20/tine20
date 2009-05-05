@@ -107,7 +107,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     getToolbarItems: function() {
         this.internetOnButton = new Ext.Action({
-            text: _('Internet Access On'),
+            text: this.app.i18n._('Internet Access On'),
             iconCls: 'action_enable',
             scope: this,
             disabled: true,
@@ -118,7 +118,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             handler: this.updateAccessHandler
         });
         this.internetOffButton = new Ext.Action({
-            text: _('Internet Access Off'),
+            text: this.app.i18n._('Internet Access Off'),
             iconCls: 'action_disable',
             scope: this,
             disabled: true,
@@ -129,7 +129,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             handler: this.updateAccessHandler
         });
         this.fileserverOnButton = new Ext.Action({
-            text: _('Fileserver Access On'),
+            text: this.app.i18n._('Fileserver Access On'),
             iconCls: 'action_enable',
             scope: this,
             disabled: true,
@@ -140,7 +140,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             handler: this.updateAccessHandler
         });
         this.fileserverOffButton = new Ext.Action({
-            text: _('Fileserver Access Off'),
+            text: this.app.i18n._('Fileserver Access Off'),
             iconCls: 'action_disable',
             scope: this,
             disabled: true,
@@ -181,7 +181,10 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 this.grid.loadMask.hide();
             },
             failure: function(result, request){
-                Ext.MessageBox.alert(_('Failed'), _('Some error occured while trying to update the courses.'));
+                Ext.MessageBox.alert(
+                    this.app.i18n._('Failed'), 
+                    this.app.i18n._('Some error occured while trying to update the courses.')
+                );
             },
             scope: this
         });

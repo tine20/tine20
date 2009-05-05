@@ -1,25 +1,21 @@
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr "teacher"
+#: js/Courses.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Courses"
 
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr "Teacher"
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr "Teacher Account"
-
-#: Frontend/Json.php:236 js/CourseEditDialog.js:135 js/CourseGridPanel.js:48
-#: js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Course"
-msgstr[1] "Courses"
+#: js/Courses.js:32
+msgid "All Courses"
+msgstr "All Courses"
 
 #: js/CourseEditDialog.js:34
 msgid "Import course members"
 msgstr "Import course members"
+
+#: js/CourseEditDialog.js:135 js/CourseGridPanel.js:51 js/Models.js:42
+#: Frontend/Json.php:241
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Course"
+msgstr[1] "Courses"
 
 #: js/CourseEditDialog.js:151
 msgid "Course Name"
@@ -33,54 +29,86 @@ msgstr "Course / School Type"
 msgid "Description"
 msgstr "Description"
 
-#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:75
-msgid "Internet"
-msgstr "Internet"
+#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:78
+msgid "Internet Access"
+msgstr "Internet Access"
 
-#: js/CourseEditDialog.js:209 js/CourseEditDialog.js:269
+#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:85
+msgid "Fileserver Access"
+msgstr "Fileserver Access"
+
+#: js/CourseEditDialog.js:215 js/CourseEditDialog.js:275
 msgid "Members"
 msgstr "Members"
 
-#: js/CourseEditDialog.js:235
+#: js/CourseEditDialog.js:241
 msgid "Login"
 msgstr "Login"
 
-#: js/CourseEditDialog.js:241
+#: js/CourseEditDialog.js:247
 msgid "Reset Password"
 msgstr "Reset Password"
 
-#: js/CourseEditDialog.js:259
+#: js/CourseEditDialog.js:265
 msgid "Set new password"
 msgstr "Set new password"
 
-#: js/CourseEditDialog.js:259
+#: js/CourseEditDialog.js:265
 msgid "Please enter the new password:"
 msgstr "Please enter the new password:"
 
-#: js/CourseGridPanel.js:62
+#: js/CourseGridPanel.js:65
 msgid "Name"
 msgstr "Name"
 
-#: js/CourseGridPanel.js:68
+#: js/CourseGridPanel.js:71
 msgid "Type"
 msgstr "Type"
 
-#: js/Courses.js:27 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Courses"
+#: js/CourseGridPanel.js:110
+msgid "Internet Access On"
+msgstr "Internet Access On"
 
-#: js/Courses.js:32
-msgid "All Courses"
-msgstr "All Courses"
+#: js/CourseGridPanel.js:121
+msgid "Internet Access Off"
+msgstr "Internet Access Off"
 
-#: js/Models.js:45
+#: js/CourseGridPanel.js:132
+msgid "Fileserver Access On"
+msgstr "Fileserver Access On"
+
+#: js/CourseGridPanel.js:143
+msgid "Fileserver Access Off"
+msgstr "Fileserver Access Off"
+
+#: js/CourseGridPanel.js:184
+msgid "Failed"
+msgstr "Failed"
+
+#: js/CourseGridPanel.js:184
+msgid "Some error occured while trying to update the courses."
+msgstr "Some error occured while trying to update the courses."
+
+#: js/Models.js:46
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "record list"
 msgstr[1] "record lists"
 
-#: js/Models.js:74
+#: js/Models.js:75
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Course Type"
 msgstr[1] "Course Types"
+
+#: Controller/Course.php:79
+msgid "teacher"
+msgstr "teacher"
+
+#: Controller/Course.php:85
+msgid "Teacher"
+msgstr "Teacher"
+
+#: Controller/Course.php:86
+msgid "Teacher Account"
+msgstr "Teacher Account"
