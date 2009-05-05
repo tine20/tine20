@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        refactor this (requiredGrant is required even if skipGrants == true) 
  */
  
  Ext.namespace('Tine', 'Tine.widgets');
@@ -230,6 +231,10 @@ Tine.widgets.actionUpdater = function(records, actions, containerField, skipGran
                 if (records.length > 1 && ! initialConfig.allowMultiple) {
                     enable = false;
                 }
+                if (records.length == 0) {
+                    enable = false;
+                }
+                
                 action.setDisabled(!enable);
                 if (initialConfig.singularText && initialConfig.pluralText && initialConfig.translationObject) {
                     var text = initialConfig.translationObject.n_(initialConfig.singularText, initialConfig.pluralText, records.length);
