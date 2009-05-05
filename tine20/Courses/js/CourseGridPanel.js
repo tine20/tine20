@@ -4,7 +4,7 @@
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:TimeaccountGridPanel.js 7169 2009-03-05 10:37:38Z p.schuele@metaways.de $
  *
  */
@@ -26,12 +26,15 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         autoExpandColumn: 'name'
     },
     
+    /**
+     * init Tine.Courses.CourseGridPanel
+     */
     initComponent: function() {
         this.recordProxy = Tine.Courses.coursesBackend;
         
-        //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
+        this.actionToolbarItems = this.getToolbarItems();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -87,7 +90,100 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }];
     },
     
+    /**
+     * course type renderer
+     * 
+     * @param {} value
+     * @return {}
+     */
     courseTypeRenderer: function(value) {
         return (value.name);
+    },
+    
+    /**
+     * return additional tb items: internet/fileserver access on/off
+     * 
+     * @return {Array} with Ext.Action
+     */
+    getToolbarItems: function() {
+        this.internetOnButton = new Ext.Action({
+            text: _('Internet Access On'),
+            iconCls: 'action_enable',
+            scope: this,
+            disabled: true,
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
+            type: 'internet',
+            access: 1,
+            handler: this.updateAccessHandler
+        });
+        this.internetOffButton = new Ext.Action({
+            text: _('Internet Access Off'),
+            iconCls: 'action_disable',
+            scope: this,
+            disabled: true,
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
+            type: 'internet',
+            access: 0,
+            handler: this.updateAccessHandler
+        });
+        this.fileserverOnButton = new Ext.Action({
+            text: _('Fileserver Access On'),
+            iconCls: 'action_enable',
+            scope: this,
+            disabled: true,
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
+            type: 'fileserver',
+            access: 1,
+            handler: this.updateAccessHandler
+        });
+        this.fileserverOffButton = new Ext.Action({
+            text: _('Fileserver Access Off'),
+            iconCls: 'action_disable',
+            scope: this,
+            disabled: true,
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
+            type: 'fileserver',
+            access: 0,
+            handler: this.updateAccessHandler
+        });
+        return ['-', this.internetOnButton, this.internetOffButton, '-', this.fileserverOnButton, this.fileserverOffButton];
+    },
+    
+    /**
+     * update access of course(s)
+     * 
+     * @param {Ext.Action} button
+     * @param {} event
+     */
+    updateAccessHandler: function(button, event) {
+        
+        var courses = this.grid.getSelectionModel().getSelections();            
+        var toUpdateIds = [];
+        for (var i = 0; i < courses.length; ++i) {
+            toUpdateIds.push(courses[i].data.id);
+        }
+        
+        this.grid.loadMask.show();
+        Ext.Ajax.request({
+            params: {
+                method: 'Courses.updateAccess',
+                ids: Ext.util.JSON.encode(toUpdateIds),
+                type: button.type,
+                access: button.access
+            },
+            success: function(_result, _request) {
+                // reload store
+                this.store.load();
+                this.grid.loadMask.hide();
+            },
+            failure: function(result, request){
+                Ext.MessageBox.alert(_('Failed'), _('Some error occured while trying to update the courses.'));
+            },
+            scope: this
+        });
     }
 });

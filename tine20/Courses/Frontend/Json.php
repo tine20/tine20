@@ -154,14 +154,19 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $_members array of member ids
      * @param boolean $_access yes/no
      */
-    protected function _manageAccessGroups(array $_members, $_access, $type = 'internet_group')
+    protected function _manageAccessGroups(array $_members, $_access, $_type = 'internet')
     {
-        if (!isset($this->_config) || !isset($this->_config->{$type})) {
+        
+        $configField = $_type . '_group';
+        
+        if (!isset($this->_config) || !isset($this->_config->{$configField})) {
             return;
         }
 
-        $groupId = $this->_config->{$type};
+        $groupId = $this->_config->{$configField};
         $groupController = Admin_Controller_Group::getInstance();
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting $_type to $_access for " . print_r($_members, true));
         
         // add or remove members to or from internet/fileserver groups (defined in config.inc.php)
         foreach ($_members as $memberId) {
@@ -264,8 +269,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // add/remove members to/from internet/fileserver group
         if (! empty($group->members)) {
-            $this->_manageAccessGroups($group->members, $savedRecord->internet,   'internet_group');
-            $this->_manageAccessGroups($group->members, $savedRecord->fileserver, 'fileserver_group');
+            $this->_manageAccessGroups($group->members, $savedRecord->internet,   'internet');
+            $this->_manageAccessGroups($group->members, $savedRecord->fileserver, 'fileserver');
         }
 
         return $this->_recordToJson($savedRecord);
@@ -350,6 +355,39 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'results'       => $result,
             'totalcount'    => count($result),
             'filter'        => $filter,
+        );
+    }
+    
+    /**
+     * update fileserver/internet access
+     *
+     * @param string $ids
+     * @param string $type
+     * @param boolean $access
+     * @return array
+     */
+    public function updateAccess($ids, $type, $access)
+    {
+        $result = FALSE;
+        $ids = Zend_Json::decode($ids);
+        $allowedTypes = array('internet', 'fileserver');
+        
+        if (in_array($type, $allowedTypes)) {
+            
+            foreach ($ids as $courseId) {
+                $course = $this->_controller->get($courseId);
+                $members = $this->_groupController->getGroupMembers($course->group_id);
+                
+                // update course and groups
+                $this->_manageAccessGroups($members, $access, $type);
+                $course->{$type} = $access;
+                $course = $this->_controller->update($course);
+            }
+            $result = TRUE;
+        }
+        
+        return array(
+            'status'    => ($result) ? 'success' : 'failure'
         );
     }
 }
