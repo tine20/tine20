@@ -53,11 +53,22 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     scrollOffset: 19,
     
     /**
+     * @property {Tine.Calendar.Event} activeEvent
+     * @private
+     */
+    activeEvent: null,
+    /**
      * @property {Ext.data.Store}
      * @private
      */
     ds: null,
     
+    
+    /**
+     * init this view
+     * 
+     * @param {Tine.Calendar.CalendarPanel} calPanel
+     */
     init: function(calPanel) {
         this.calPanel = calPanel;
         
@@ -75,27 +86,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.initTimeScale();
         this.initDateScale();
         this.initTemplates();
-        
-        /*
-        this.layoutRecord = Ext.data.Record.create([
-            'eventId', 
-            'event', 
-            'eventLength',
-            'is_all_day_evnet',
-            'colIdx', 
-            'top', 
-            'height', 
-            'width', 
-            'left', 
-            'concurrentCount'
-        ]);
-        
-        this.eventsLayoutStore = new Ext.data.SimpleStore({
-            id: 'eventId',
-            fields: this.layoutRecord,
-            data: []
-        });
-        */
     },
     
     /**
@@ -121,53 +111,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         this.ds = ds;
     },
-    
-    /*
-    calcEventsLayout: function() {
-        this.eventsLayoutStore.loadData([], false);
-        this.eventsConcurrencyMap = new Array(this.numOfDays);
-        this.wholeDayConcurrencyMap = new Array(this.numOfDays);
-        
-        var rStart = this.startDate.getTime();
-        var rEnd = rStart.add(Date.DAY, this.numOfDays+1);
-        
-            
-        this.ds.each(function(event) {
-            var dtStart = event.get('dtstart');
-            var dtStartTs = dtStart.getTime();
-            var dtEnd = event.get('dtend');
-            var dtEndTs = dtEnd.getTime();
-            var eventLength = dtEndTs - dtStartTs;
-            
-            if (eStart > rEnd || eEnd < rStart) {
-                // skip, out of range!
-                return true;
-            }
-            
-            // Simultaneously check
-            if (! event.get('is_all_day_evnet')) {
-                
-            
-            }
-            
-            this.eventsLayoutStore.add(new this.layoutRecord({
-                id: event.get('id'),
-                event: event,
-                length: eventLength,
-                isAllDayEvnet : event.get('is_all_day_evnet'),
-                colIdx: this.getDateColumn(dtStart),
-                top: this.getTimeOffset(dtStart),
-                height: this.getTimeOffset(dtEnd) - this.getTimeOffset(dtStart),
-                width: 80,
-                left: 0,
-                concurrentCount: 1
-            }));
-            
-        }, this);
-        
-        console.log(this.eventsLayoutStore);
-    },
-    */
     
     /**
      * inits time scale
@@ -359,6 +302,54 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     /**
+     * returns events dom
+     * @param {Tine.Calendar.Model.Event} event
+     */
+    getEvent: function(event) {
+        //var colIdx = this.getDateColumn(event.get('dtstart'));
+        //var eventDom = Ext.fly(this.dayCols[colIdx]).down(event.get('id'));
+        //console.log(eventDom);
+    },
+    
+    /**
+     * removes a evnet from the dom
+     * @param {Tine.Calendar.Model.Event} event
+     */
+    removeEvent: function(event) {
+        var event = Ext.get(event.get('id'));
+        if (event) {
+            event.remove();
+        }
+    },
+    
+    /**
+     * sets currentlcy active event
+     * 
+     * @param {Tine.Calendar.Event} event
+     */
+    setActiveEvent: function(event) {
+        if (this.activeEvent) {
+            var curEl = Ext.get(this.activeEvent.id);
+            curEl.removeClass('cal-daysviewpanel-event-active');
+            curEl.setStyle({'z-index': 100});
+        }
+        
+        this.activeEvent = event;
+        var el = Ext.get(event.id);
+        el.addClass('cal-daysviewpanel-event-active');
+        curEl.setStyle({'z-index': 1000});
+    },
+    
+    /**
+     * gets currentlcy active event
+     * 
+     * @return {Tine.Calendar.Event} event
+     */
+    getActiveEvent: function() {
+        return this.activeEvent;
+    },
+    
+    /**
      * @private
      */
     onDataChange : function(){
@@ -384,7 +375,23 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     onAdd : function(ds, records, index){
         for (var i=0; i<records.length; i++) {
-            this.insertEvent(records[i]);
+            var event = records[i];
+            
+            var registry = event.get('is_all_day_evnet') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
+            registry.register(event);
+            
+            var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
+            console.log(parallelEvents);
+            
+            for (var j=0; j<parallelEvents.length; j++) {
+                this.removeEvent(parallelEvents[j]);
+            }
+            
+            for (var j=0; j<parallelEvents.length; j++) {
+                this.insertEvent(parallelEvents[j]);
+            }
+            
+            this.setActiveEvent(event);
         }
     },
 
@@ -393,11 +400,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     onRemove : function(ds, record, index, isUpdate){
         if(isUpdate !== true){
-            this.fireEvent("beforeeventremoved", this, index, record);
+            //this.fireEvent("beforeeventremoved", this, index, record);
         }
-        this.removeEvent(index);
+        this.removeEvent(record);
         if(isUpdate !== true){
-            this.fireEvent("eventremoved", this, index, record);
+            //this.fireEvent("eventremoved", this, index, record);
         }
     },
 
@@ -448,6 +455,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var datePart = this.dateScale.getAt(parts[1]);
             
             return datePart.get('date').add(Date.MINUTE, timePart.get('minutes'));
+        }
+    },
+    
+    /**
+     * gets event el of target
+     * 
+     * @param {dom} target
+     * @return {Tine.Calendar.Model.Event}
+     */
+    getTargetEvent: function(target) {
+        var el = Ext.fly(target);
+        if (el.hasClass('cal-daysviewpanel-event') || (el = el.up('[class=cal-daysviewpanel-event]', 5))) {
+            return this.ds.getById(el.dom.id);
         }
     },
     

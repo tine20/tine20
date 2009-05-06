@@ -15,22 +15,19 @@ Date.msDAY    = 24 * Date.msHOUR;
 Ext.ns('Tine.Calendar');
 
 Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
-    
     /**
      * @cfg {Tine.Calendar.someView} view
      */
     view: null,
-    
     /**
      * @cfg {Ext.data.Store} store
      */
     store: null,
-    
     /**
      * @cfg {Bool} border
      */
     border: false,
-    
+
     /**
      * @private
      */
@@ -92,9 +89,25 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         var v = this.view;
         
         var date = v.getTargetDateTime(t);
+        if (! date) {
+            // fetch event id;
+            var event = v.getTargetEvent(t);
+        }
         
         if (name == 'dblclick') {
-            console.log('we should create a new event on dblclick ;-)');
+            if (date) {
+                this.store.add(new Tine.Calendar.Event({
+                    id: Ext.id(),
+                    dtstart: date,
+                    dtend: date.add(Date.HOUR, 1)
+                }));
+            }
+        }
+        
+        if (name == 'click') {
+            if (event) {
+                this.view.setActiveEvent(event);
+            }
         }
         
         /*

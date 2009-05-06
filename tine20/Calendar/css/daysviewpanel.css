@@ -208,4 +208,7 @@
     white-space: normal;
 }
 
+.cal-daysviewpanel-event-active {
+    border-width: 2px;
+}
 

@@ -41,7 +41,7 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      * @cfg {Number} granularity
      * granularity of this registry in minutes
      */
-    granularity: 15,
+    granularity: 5,
     /**
      * @cfg {String} dtStartProperty
      */

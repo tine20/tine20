@@ -34,7 +34,7 @@ Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
                 //title: 'my lovely calendar',
                 view: new Tine.Calendar.DaysView({}),
                 store: new Ext.data.JsonStore({
-                    id: id,
+                    id: 'id',
                     fields: Tine.Calendar.EventArray,
                     data: [
                         {id : '1', summary: 'Breakfast', color: '#FD0000', dtstart: '2009-05-07 08:00:00', dtend: '2009-05-07 09:00:00'},
