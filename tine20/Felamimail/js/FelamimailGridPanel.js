@@ -28,7 +28,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     defaultSortInfo: {field: 'received', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
-        autoExpandColumn: 'subject'
+        autoExpandColumn: 'subject',
+        // drag n drop
+        enableDragDrop: true,
+        ddGroup: 'mailToTreeDDGroup'
     },
     
     /**
@@ -75,8 +78,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         //this.action_editInNewWindow.requiredGrant = 'editGrant';
         
         this.grid.getSelectionModel().on('rowselect', function(selModel, rowIndex, r) {
-            // toggle read/seen flag of mail
-            Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
+            // toggle read/seen flag of mail (only if 1 selected row)
+            if (selModel.getCount() == 1) {
+                Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
+            }
         }, this);
     },
     
@@ -210,6 +215,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                             this.tpl.overwrite(body, message.data);
                             this.getEl().down('div').down('div').scrollTo('top', 0, false);
                             this.getLoadMask().hide();
+                            
+                            // toggle read/seen flag of mail
+                            //Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
                         }
                     });
                     this.getLoadMask().show();

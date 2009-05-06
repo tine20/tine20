@@ -42,6 +42,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 	rootVisible: true,
 	autoScroll: true,
     id: 'felamimail-tree',
+    // drag n drop
+    enableDrop: true,
+    ddGroup: 'mailToTreeDDGroup',
 	
     /**
      * init
@@ -71,6 +74,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     	// add handlers
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
+        this.on('beforenodedrop', this.onBeforenodedrop, this);
 	},
     
     /**
@@ -143,6 +147,37 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             });
         }
         menu.showAt(e.getXY());
+    },
+    
+    /**
+     * mail got dropped on folder node
+     * 
+     * @param {Object} dropEvent
+     */
+    onBeforenodedrop: function(dropEvent) {
+        
+        var folderId = dropEvent.target.id;
+        var ids = [];
+        
+        for (var i=0; i < dropEvent.data.selections.length; i++) {
+            ids.push(dropEvent.data.selections[i].id);
+        };
+        
+        // move messages to folder
+        Ext.Ajax.request({
+            params: {
+                method: 'Felamimail.moveMessages',
+                folderId: folderId,
+                ids: Ext.util.JSON.encode(ids)
+            },
+            scope: this,
+            success: function(_result, _request){
+                // update grid
+                this.filterPlugin.onFilterChange();
+            }
+        });
+        
+        return true;
     },
     
     /********************** actions *******************/
@@ -275,7 +310,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             text: _('Refresh'),
             iconCls: 'x-tbar-loading',
             scope: this,
-            handler: function() {                        
+            handler: function() {
                 Ext.Ajax.request({
                     params: {
                         method: 'Felamimail.refreshFolder',
@@ -325,17 +360,22 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     /**
      * @private
      * 
+     * @todo try to disable '+' on nodes that don't have children / it looks like that leafs can't be drop targets :(
      * @todo what about equal folder names (=id) in different subtrees?
      * @todo generalize this?
      */
     createNode: function(attr) {
     	var node = {
     		id: attr.id,
-    		leaf: (attr.has_children != 1),
+    		leaf: false,
     		text: attr.localname,
     		globalname: attr.globalname,
     		backend_id: attr.backend_id,
-    		folderNode: true
+    		folderNode: true,
+            allowDrop: true
+            //expandable: (attr.has_children == '1'),
+            //allowChildren: (attr.has_children == 1)
+            //childNodes: []
     	};
         //console.log(node);
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);

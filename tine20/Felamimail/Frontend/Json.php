@@ -94,16 +94,35 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * deletes existing records
+     * deletes existing messages
      *
-     * @param string $ids 
+     * @param string $ids  message ids
      * @return string
+     * @return array
      * 
      * @todo add test
      */
     public function deleteMessages($ids)
     {
         return array('status' => $this->_delete($ids, Felamimail_Controller_Message::getInstance()));
+    }
+
+    /**
+     * move messsages to folder
+     *
+     * @param string $ids message ids
+     * @param string $folderId
+     * @return array
+     * 
+     * @todo add test
+     */
+    public function moveMessages($ids, $folderId)
+    {
+        $result = Felamimail_Controller_Message::getInstance()->moveMessages(Zend_Json::decode($ids), $folderId);
+        
+        return array(
+            'status' => ($result) ? 'success' : 'failure'
+        );
     }
     
     /***************************** old funcs *******************************/

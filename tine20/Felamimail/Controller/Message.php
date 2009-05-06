@@ -171,8 +171,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Record_Interface $_record
      * 
+     * @todo allow to configure Trash folder name (as account option) and if messages should be moved there
      * @todo always assume that a trash folder exists?
-     * @todo allow to configure Trash folder name (as account option)?
      */
     protected function _deleteRecord(Tinebase_Record_Interface $_record)
     {
@@ -235,6 +235,40 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $_message->flags .= ' ' . $flag;
             $this->_backend->addFlag($_message->getId(), $flag);
         }
+    }
+    
+    /**
+     * move messages to folder
+     *
+     * @param array $_ids
+     * @param string $_folderId
+     * @return boolean success
+     */
+    public function moveMessages($_ids, $_folderId)
+    {
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->get($_folderId);
+
+        try {
+            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // no imap connection -> no delete on server
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+            return FALSE;
+        }
+        
+        $messages = $this->_backend->getMultiple($_ids);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Moving ' . count($messages) . ' messages to folder ' . $folder->globalname);
+        
+        foreach ($messages as $message) {
+            $imapBackend->moveMessage($message->messageuid, $folder->globalname);
+        }
+        
+        // remove from cache db table
+        $this->_backend->delete($_ids);
+                
+        return TRUE;
     }
     
     // @todo check if those are needed
