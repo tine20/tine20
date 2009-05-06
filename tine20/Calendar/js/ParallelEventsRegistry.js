@@ -106,7 +106,11 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      * @param {Ext.data.Record} event
      */
     unregister: function(event) {
-        
+        for (var i=0; i<this.map.length; i++) {
+            if (Ext.isArray(this.map[i])) {
+                    this.map[i].remove(event);
+            }
+        }
     },
     
     /**

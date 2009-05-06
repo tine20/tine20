@@ -96,6 +96,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         if (name == 'dblclick') {
             if (date) {
+                // add new event
                 this.store.add(new Tine.Calendar.Event({
                     id: Ext.id(),
                     dtstart: date,
@@ -109,7 +110,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 this.view.setActiveEvent(event);
             }
         }
-        
+
         /*
             var row = v.findRowIndex(t);
             var cell = v.findCellIndex(t);
@@ -156,5 +157,14 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      */
     onKeyDown : function(e){
         this.fireEvent("keydown", e);
+    },
+    
+    /**
+     * @private
+     */
+    onEventResize: function(t,w,h,e) {
+        console.log(t);
+        console.log(this.view.getTargetEvent(t.el));
+        //this.processEvent("eventresize", e);
     }
 });

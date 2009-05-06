@@ -297,7 +297,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             handles: 's',
             disableTrackOver: true,
             dynamic: true,
-            heightIncrement: this.granularityUnitHeights
+            heightIncrement: this.granularityUnitHeights,
+            listeners: {
+                scope: this,
+                resize: this.onEventResize
+            }
         });
     },
     
@@ -337,7 +341,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.activeEvent = event;
         var el = Ext.get(event.id);
         el.addClass('cal-daysviewpanel-event-active');
-        curEl.setStyle({'z-index': 1000});
+        el.setStyle({'z-index': 1000});
     },
     
     /**
@@ -347,6 +351,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     getActiveEvent: function() {
         return this.activeEvent;
+    },
+    
+    onEventResize: function(rz, width, height) {
+        var event = this.ds.getById(rz.el.id);
+        var duration = Math.round(height * this.timeGranularity / this.granularityUnitHeights);
+        
+        event.set('dtend', event.get('dtstart').add(Date.MINUTE, duration));
     },
     
     /**
@@ -366,8 +377,17 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * @private
      */
-    onUpdate : function(ds, record){
-        this.refreshEvent(record);
+    onUpdate : function(ds, event){
+        var registry = event.get('is_all_day_evnet') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
+        registry.unregister(event);
+        registry.register(event);
+        
+        var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
+        
+        for (var j=0; j<parallelEvents.length; j++) {
+            this.removeEvent(parallelEvents[j]);
+            this.insertEvent(parallelEvents[j]);
+        }
     },
 
     /**
@@ -381,13 +401,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             registry.register(event);
             
             var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
-            console.log(parallelEvents);
             
             for (var j=0; j<parallelEvents.length; j++) {
                 this.removeEvent(parallelEvents[j]);
-            }
-            
-            for (var j=0; j<parallelEvents.length; j++) {
                 this.insertEvent(parallelEvents[j]);
             }
             
