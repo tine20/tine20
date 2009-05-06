@@ -534,7 +534,18 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchSambaMachines($filter, $paging)
     {
-        return $this->_search($filter, $paging, Admin_Controller_SambaMachine::getInstance(), 'Admin_Model_SambaMachineFilter'); 
+        try {
+            $result = $this->_search($filter, $paging, Admin_Controller_SambaMachine::getInstance(), 'Admin_Model_SambaMachineFilter');
+        } catch (Admin_Exception $ae) {
+            // no samba settings defined
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $ae->getMessage());
+            $result = array(
+                'results'       => array(),
+                'totalcount'    => 0
+            );
+        }
+        
+        return $result;
     }
 
     /**
