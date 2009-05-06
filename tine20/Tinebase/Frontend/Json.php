@@ -239,7 +239,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get note types
      *
-     * @todo add test
      */
     public function getNoteTypes()
     {
@@ -427,7 +426,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $decodedFilter = Zend_Json::decode($filter);
         
         $filter = new Tinebase_Model_PreferenceFilter(array());
-        $filter->setFromArrayInUsersTimezone($decodedFilter);
+        
+        if (!empty($decodedFilter)) {
+            $filter->setFromArrayInUsersTimezone($decodedFilter);
+        }
         
         // make sure, appid is set (tinebase appid is default)
         $tinebaseAppId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
