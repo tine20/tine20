@@ -158,13 +158,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.dd = new Ext.dd.DropZone(this.scroller.dom, {
             ddGroup: 'cal-event',
             notifyOver : function(dd, e, data) {
+                var sourceEl = Ext.fly(data.sourceEl);
+                sourceEl.setStyle({'border-style': 'dashed'});
+                sourceEl.setOpacity(0.5);
+                
                 var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e.getTarget());
                 return target ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
             },
+            
             notifyOut : function() {
                 //console.log('notifyOut');
                 //delete this.grid;
             },
+            
             notifyDrop : function(dd, e, data) {
                 var v = data.scope;
                 
@@ -206,9 +212,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             getDragData: function(e) {
                 var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
                 if (eventEl) {
-                    Ext.fly(eventEl).setStyle({'border-style': 'dashed'});
-                    Ext.fly(eventEl).setOpacity(0.5);
-                    
                     var d = eventEl.cloneNode(true);
                     
                     var width = (Ext.fly(this.daysView.dayCols[0]).getWidth() * 0.9);
