@@ -46,6 +46,9 @@
     height: 23px;
 }
 
+.cal-daysviewpanel-wholedayheader {
+    position: relative;
+}
 /********************************* Body *********************************/
 .cal-daysviewpanel-body-inner {
 	position: relative;
@@ -216,3 +219,11 @@
     border-style: dashed;
 }
 
+/****************************** Whole Day Events ******************************/
+.cal-daysviewpanel-wholedayevent-body {
+	position: absolute;
+    width: 100%;
+    top: 1px;
+    padding: 0px 4px;
+    white-space: normal;
+}
