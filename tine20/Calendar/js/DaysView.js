@@ -212,6 +212,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             getDragData: function(e) {
                 var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
                 if (eventEl) {
+                    var event = this.daysView.ds.getById(eventEl.id);
+                    this.daysView.setActiveEvent(event);
+                    
                     var d = eventEl.cloneNode(true);
                     
                     var width = (Ext.fly(this.daysView.dayCols[0]).getWidth() * 0.9);
@@ -295,7 +298,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var bgColor = 'rgb(' + r + ',' + g + ',' + b + ')';
         
         var dtStart = event.get('dtstart');
-        var dtEnd = event.get('dtend');
+        var dtEnd = event.get('dtend').add(Date.SECOND, -1);
         
         var parallels = this.parallelScrollerEventsRegistry.getEvents(dtStart, dtEnd);
         var pos = parallels.indexOf(event);
@@ -374,15 +377,27 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     
     onBeforeEventResize: function(rz, e) {
         var event = this.ds.getById(rz.el.id);
+        
         rz.el.setStyle({'border-style': 'dashed'});
         rz.el.setOpacity(0.5);
+        
+        // rz supresses resize event if element is not resized
+        rz.onMouseUp = rz.onMouseUp.createSequence(function() {
+            rz.el.setStyle({'border-style': 'solid'});
+            rz.el.setOpacity(1);
+        });
         
         this.setActiveEvent(event);
     },
     
     onEventResize: function(rz, width, height) {
         var event = this.ds.getById(rz.el.id);
+        
+        var originalDuration = event.duration / Date.msMINUTE;
         var duration = Math.round(height * this.timeGranularity / this.granularityUnitHeights);
+        
+        // NOTE: recalculate new duration to neglegt diffs due to borders etc.
+        duration = duration - (duration - originalDuration) % 15;
         
         event.set('dtend', event.get('dtstart').add(Date.MINUTE, duration));
     },
@@ -405,7 +420,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onUpdate : function(ds, event){
-        
         // relayout original context
         var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_evnet')) ? 
             this.parallelWholeDayEventsRegistry : 
