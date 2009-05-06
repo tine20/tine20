@@ -232,7 +232,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
 
         for (panelName in panelsToSave) {
             if (panelsToSave.hasOwnProperty(panelName)) {
-                panel = panelsToSave[panel];
+                panel = panelsToSave[panelName];
+                console.log(panel);
         		data[panel.appName] = {};
                 for (var j=0; j < panel.items.length; j++) {
                 	var item = panel.items.items[j];
@@ -247,13 +248,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 }
             }
     	}
-    	/*
-    	this.prefPanels.each(function(panel) {
-            for (var j=0; j < panel.items.length; j++) {
-                data[panel.items.items[j].name] = panel.items.items[j].getValue();
-            }    		
-        }, this);
-        */
     	
     	// save preference data
     	console.log(data);
@@ -269,8 +263,9 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 
                 // reload mainscreen (only if timezone or locale have changed
                 if (!this.adminMode && data.Tinebase && 
-                        (data.Tinebase.locale   != Tine.Tinebase.registry.get('locale').locale ||
-                         data.Tinebase.timezone != Tine.Tinebase.registry.get('timeZone'))
+                        ((data.Tinebase.locale.value   != Tine.Tinebase.registry.get('locale').locale &&
+                            data.Tinebase.locale.value != 'auto') ||
+                         data.Tinebase.timezone.value != Tine.Tinebase.registry.get('timeZone'))
                 ) {
                     var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
                     mainWindow.location = window.location.href.replace(/#+.*/, '');

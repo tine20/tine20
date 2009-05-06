@@ -9,6 +9,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
+ * @todo        add 'getTitleTranslation' function?
  * @todo        migrate from Zend_Db_Table to plain Zend_Db
  */
 

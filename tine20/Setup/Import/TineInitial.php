@@ -1,14 +1,15 @@
 <?php
 /**
  * Tine 2.0
- * class for initial tine 2.0 
+ * class for initial tine 2.0 data
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Matthias Greiling <m.greiling@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        move this to Tinebase_Setup_Import ?
  */
 
 /**
@@ -30,6 +31,7 @@ class Setup_Import_TineInitial
     /**
      * fill the Database with default values and initialise admin account 
      *
+     * @todo split this function in smaller subs
      */    
     public function initialLoad()
     {
@@ -54,7 +56,7 @@ class Setup_Import_TineInitial
             $configBackend->setConfig($config);
         }
         
-        // add default settings for timezone and locale
+        // add default settings for timezone, default app and locale
         $timezonePref = new Tinebase_Model_Preference(array(
             'application_id'    => $tinebaseAppId,
             'name'              => Tinebase_Preference::TIMEZONE,
@@ -81,6 +83,19 @@ class Setup_Import_TineInitial
                 </options>'
         ));
         Tinebase_Core::getPreference()->create($localePref);
+        $defaultAppPref = new Tinebase_Model_Preference(array(
+            'application_id'    => $tinebaseAppId,
+            'name'              => Tinebase_Preference::DEFAULT_APP,
+            'value'             => 'Addressbook',
+            'account_id'        => 0,
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
+            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
+                <options>
+                    <special>' . Tinebase_Preference::DEFAULT_APP . '</special>
+                </options>'
+        ));
+        Tinebase_Core::getPreference()->create($defaultAppPref);
         
         /***************** admin account, groups and roles ************************/
         

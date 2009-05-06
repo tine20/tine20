@@ -35,6 +35,12 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     const LOCALE = 'locale';
     
     /**
+     * default application
+     *
+     */
+    const DEFAULT_APP = 'defaultapp';
+    
+    /**
      * application
      *
      * @var string
@@ -53,7 +59,8 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
         $allPrefs = ($this->_application == 'Tinebase') 
             ? array(
                 self::TIMEZONE,
-                self::LOCALE
+                self::LOCALE,
+                self::DEFAULT_APP
             )
             : array();
             
@@ -77,6 +84,10 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             self::LOCALE  => array(
                 'label'         => $translate->_('Language'),
                 'description'   => $translate->_('The language of the Tine 2.0 GUI.'),
+            ),
+            self::DEFAULT_APP  => array(
+                'label'         => $translate->_('Default Application'),
+                'description'   => $translate->_('The default application to show after login.'),
             ),
         );
         

@@ -395,9 +395,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $registryData[$application->name]['customfields'] = Tinebase_Config::getInstance()->getCustomFieldsForApplication($application)->toArray();
                     
                     // add preferences for app
-                    $appPrefsClass = $application->name . '_Preference';
-                    if (class_exists($appPrefsClass)) {
-                        $appPrefs = new $appPrefsClass;
+                    $appPrefs =Tinebase_Core::getPreference($application->name);
+                    if ($appPrefs !== NULL) {
                         $allPrefs = $appPrefs->getAllApplicationPreferences();
                         foreach($allPrefs as $pref) {
                             $registryData[$application->name]['preferences'][$pref] = $appPrefs->{$pref};
@@ -467,7 +466,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // get single matching preferences for each different pref
             $records = $backend->getMatchingPreferences($allPrefs);
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
             
             $result = $this->_multipleRecordsToJson($records);
             
@@ -532,6 +531,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
         }
+        
+        return array(
+            'status'    => 'success'
+        );
     }
     
     /************************ protected functions ***************************/

@@ -254,6 +254,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      *
      * @param Tinebase_Model_Preference $_preference
      * 
+     * @todo add application title translations
      * @todo add timezone translations?
      */
     public function convertOptionsToArray(Tinebase_Model_Preference $_preference)
@@ -265,6 +266,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $optionsXml = new SimpleXMLElement($_preference->options);
         
         if ($optionsXml->special) {
+            $result = array();
             switch ($optionsXml->special) {
                 
                 /****************** timezone options *******************/
@@ -274,25 +276,33 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                     $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
                     $availableTimezones = DateTimeZone::listIdentifiers();
                     /*
-                    $result = array();
                     foreach ($availableTimezones as $timezone) {
                         $result[] = array($timezone, array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL);
                     }
                     */
-                    $_preference->options = $availableTimezones;
+                    $result = $availableTimezones;
                     break;
                 
                 /****************** locale options ********************/
                 case Tinebase_Preference::LOCALE:
                     $availableTranslations = Tinebase_Translation::getAvailableTranslations();
-                    $result = array();
                     foreach ($availableTranslations as $lang) {
                         $region = (!empty($lang['region'])) ? ' / ' . $lang['region'] : '';
                         $result[] = array($lang['locale'], $lang['language'] . $region);
                     }
-                    $_preference->options = $result;
+                    break;
+                    
+                /****************** application options ********************/
+                case Tinebase_Preference::DEFAULT_APP:
+                    $applications = Tinebase_Application::getInstance()->getApplications();
+                    foreach ($applications as $app) {
+                        if ($app->status == 'enabled') {
+                             $result[] = array($app->name, $app->name);
+                        }
+                    }
                     break;
             }
+            $_preference->options = $result;
         } else {
             
             /****************** other options ********************/
