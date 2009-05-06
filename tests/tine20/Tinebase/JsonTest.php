@@ -192,7 +192,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         
         // check results
         $this->assertTrue(isset($result['results']));
-        $this->assertEquals(2, $result['totalcount']);
+        $this->assertGreaterThan(2, $result['totalcount']);
         
         //check locale/timezones options
         foreach ($result['results'] as $pref) {
@@ -225,7 +225,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         
         // check results
         $this->assertTrue(isset($results['results']));
-        $this->assertEquals(3, $results['totalcount']);
+        $this->assertGreaterThan(3, $results['totalcount']);
         
         foreach ($results['results'] as $result) {
             if ($result['name'] == 'testPref') {
@@ -278,7 +278,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         
         // check results
         $this->assertTrue(isset($results['results']));
-        $this->assertEquals(2, $results['totalcount']);
+        $this->assertGreaterThan(2, $results['totalcount']);
         
         $savedPrefData = array();
         foreach ($results['results'] as $result) {

@@ -466,7 +466,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // get single matching preferences for each different pref
             $records = $backend->getMatchingPreferences($allPrefs);
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
             
             $result = $this->_multipleRecordsToJson($records);
             
