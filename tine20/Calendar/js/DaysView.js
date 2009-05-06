@@ -162,13 +162,24 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 return target ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
             },
             notifyOut : function() {
-                console.log('notifyOut');
+                //console.log('notifyOut');
                 //delete this.grid;
             },
             notifyDrop : function(dd, e, data) {
-                var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e.getTarget());
-                console.log('droped event to ' + target);
-                return !!target;
+                var v = data.scope;
+                
+                var targetDate = v.getTargetDateTime(e.getTarget());
+                
+                if (targetDate) {
+                    var event = v.ds.getById(data.sourceEl.id);
+                    
+                    event.beginEdit();
+                    event.set('dtstart', targetDate);
+                    event.set('dtend', targetDate.add(Date.MILLI, event.duration));
+                    event.endEdit();
+                }
+                
+                return !!targetDate;
             }
         });
     },
@@ -195,9 +206,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             getDragData: function(e) {
                 var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
                 if (eventEl) {
+                    Ext.fly(eventEl).setStyle({'border-style': 'dashed'});
+                    Ext.fly(eventEl).setOpacity(0.5);
+                    
                     var d = eventEl.cloneNode(true);
                     
-                    var width = Ext.fly(eventEl).getWidth();
+                    var width = (Ext.fly(this.daysView.dayCols[0]).getWidth() * 0.9);
                     Ext.fly(d).setTop(0);
                     Ext.fly(d).setWidth(width);
                     d.id = Ext.id();
@@ -212,8 +226,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 }
             },
             
-            getRepairXY: function() {
-                return this.dragData.repairXY;
+            getRepairXY: function(e, dd) {
+                Ext.fly(this.dragData.sourceEl).setStyle({'border-style': 'solid'});
+                Ext.fly(this.dragData.sourceEl).setOpacity(1, 1);
+                
+                return Ext.fly(this.dragData.sourceEl).getXY();
             }
         });
     },
@@ -308,11 +325,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * returns events dom
      * @param {Tine.Calendar.Model.Event} event
+     * @return {Ext.Element}
      */
     getEvent: function(event) {
-        //var colIdx = this.getDateColumn(event.get('dtstart'));
-        //var eventDom = Ext.fly(this.dayCols[colIdx]).down(event.get('id'));
-        //console.log(eventDom);
+        return Ext.get(event.get('id'));
     },
     
     /**
@@ -320,7 +336,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @param {Tine.Calendar.Model.Event} event
      */
     removeEvent: function(event) {
-        var event = Ext.get(event.get('id'));
+        var event = this.getEvent(event);
         if (event) {
             event.remove();
         }
@@ -378,8 +394,24 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onUpdate : function(ds, event){
+        
+        // relayout original context
+        var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_evnet')) ? 
+            this.parallelWholeDayEventsRegistry : 
+            this.parallelScrollerEventsRegistry;
+        var originalDtstart = event.modified.hasOwnProperty('dtstart') ? event.modified.dtstart : event.get('dtstart');
+        var originalDtend = event.modified.hasOwnProperty('dtend') ? event.modified.dtend : event.get('dtend');
+            
+        originalRegistry.unregister(event);
+        
+        var originalParallels = originalRegistry.getEvents(originalDtstart, originalDtend);
+        for (var j=0; j<originalParallels.length; j++) {
+            this.removeEvent(originalParallels[j]);
+            this.insertEvent(originalParallels[j]);
+        }
+        
+        // relayout actual context
         var registry = event.get('is_all_day_evnet') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-        registry.unregister(event);
         registry.register(event);
         
         var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));

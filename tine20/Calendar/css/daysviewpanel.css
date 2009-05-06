@@ -212,3 +212,7 @@
     border-width: 2px;
 }
 
+.cal-daysviewpanel-event-onedit {
+    border-style: dashed;
+}
+
