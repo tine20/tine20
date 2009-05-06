@@ -188,6 +188,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract /* Felam
      * @param string $_newFolderName new globalName of folder
      * @param string $_backendId [optional]
      * @return Felamimail_Model_Folder
+     * 
+     * @todo disallow renaming of special folders like Trash, Sent, ...?
      */
     public function rename($_oldFolderName, $_newFolderName, $_backendId = 'default')
     {

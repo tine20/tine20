@@ -1,3 +1,6 @@
+// @deprecated
+// TODO: remove later
+
 Ext.namespace('Tine.Felamimail');
 
 Tine.Felamimail = function() {

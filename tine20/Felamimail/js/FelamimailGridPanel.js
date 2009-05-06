@@ -4,11 +4,14 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * @todo        add actions (reply, ...)
+ * @todo        add dragndrop
+ * @todo        add header to preview
  * @todo        add attachments
+ * @todo        add more filters (to/cc/date...)
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -53,10 +56,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         return className;
     },
     
+    /**
+     * init message grid
+     */
     initComponent: function() {
         this.recordProxy = Tine.Felamimail.messageBackend;
         
-        this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         this.initDetailsPanel();
@@ -73,6 +78,92 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             // toggle read/seen flag of mail
             Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
         }, this);
+    },
+    
+    /**
+     * init actions with actionToolbar, contextMenu and actionUpdater
+     * 
+     * @private
+     */
+    initActions: function() {
+
+        this.action_deleteRecord = new Ext.Action({
+            requiredGrant: 'deleteGrant',
+            allowMultiple: true,
+            singularText: this.app.i18n._('Delete'),
+            pluralText: this.app.i18n._('Delete'),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.tranlation,
+            text: this.app.i18n._('Delete'),
+            handler: this.onDeleteRecords,
+            disabled: true,
+            iconCls: 'action_delete',
+            scope: this
+        });
+        
+        this.actions = [
+            this.action_deleteRecord
+        ];
+        
+        this.actionToolbar = new Ext.Toolbar({
+            split: false,
+            height: 26,
+            items: this.actions
+        });
+        
+        this.contextMenu = new Ext.menu.Menu({
+            items: this.actions.concat(this.contextMenuItems)
+        });
+        
+        // pool together all our actions, so that we can hand them over to our actionUpdater
+        for (var all=this.actionToolbarItems.concat(this.contextMenuItems), i=0; i<all.length; i++) {
+            if(this.actions.indexOf(all[i]) == -1) {
+                this.actions.push(all[i]);
+            }
+        }
+        
+        /*
+        this.action_editInNewWindow = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(_('Edit {0}'), this.i18nRecordName),
+            disabled: true,
+            actionType: 'edit',
+            handler: this.onEditInNewWindow,
+            iconCls: 'action_edit',
+            scope: this
+        });
+        
+        this.action_addInNewWindow = new Ext.Action({
+            requiredGrant: 'addGrant',
+            actionType: 'add',
+            text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
+            handler: this.onEditInNewWindow,
+            iconCls: this.app.appName + 'IconCls',
+            scope: this
+        });
+                
+        this.actions = [
+            this.action_addInNewWindow,
+            this.action_editInNewWindow,
+            this.action_deleteRecord
+        ];
+        
+        this.actionToolbar = new Ext.Toolbar({
+            split: false,
+            height: 26,
+            items: this.actions.concat(this.actionToolbarItems)
+        });
+        
+        this.contextMenu = new Ext.menu.Menu({
+            items: this.actions.concat(this.contextMenuItems)
+        });
+        
+        // pool together all our actions, so that we can hand them over to our actionUpdater
+        for (var all=this.actionToolbarItems.concat(this.contextMenuItems), i=0; i<all.length; i++) {
+            if(this.actions.indexOf(all[i]) == -1) {
+                this.actions.push(all[i]);
+            }
+        }
+        */
     },
     
     /**
@@ -239,25 +330,5 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     statusRenderer: function(value) {
         return this.app.i18n._hidden(value);
-    },
-    
-    /**
-     * return additional tb items
-     */
-    getToolbarItems: function(){
-    	/*
-        this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
-            text: this.app.i18n._('Show closed'),
-            iconCls: 'action_showArchived',
-            field: 'showClosed'
-        });
-        */
-        
-        return [
-            /*
-            new Ext.Toolbar.Separator(),
-            this.action_showClosedToggle
-            */
-        ];
-    }    
+    }
 });

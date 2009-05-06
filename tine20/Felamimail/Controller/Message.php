@@ -78,7 +78,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
     
-    /************************* overwritten public funcs *************************/
+    /************************* overwritten funcs *************************/
     
     /**
      * get list of records
@@ -139,7 +139,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $message = parent::get($_id);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->get($message->folder_id);
@@ -147,8 +147,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         try {
             $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
             $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
-            //$rawContent             = $imapBackend->getRawContent($message->messageuid);
-            //$message->body          = Felamimail_Message::convertText($rawContent, FALSE);
             $imapMessage            = $imapBackend->getMessage($message->messageuid);
             $message->body          = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
             
@@ -166,6 +164,43 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $message;
+    }
+    
+    /**
+     * delete one record
+     *
+     * @param Tinebase_Record_Interface $_record
+     * 
+     * @todo always assume that a trash folder exists?
+     * @todo allow to configure Trash folder name (as account option)?
+     */
+    protected function _deleteRecord(Tinebase_Record_Interface $_record)
+    {
+        // remove from cache db table
+        parent::_deleteRecord($_record);
+        
+        // remove from server
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->get($_record->folder_id);
+        
+        try {
+            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+            if ($imapBackend->getCurrentFolder() != $folder->globalname) {
+                $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
+            }
+            
+            if ($folder->globalname == 'Trash') {
+                // only delete if in Trash
+                $imapBackend->removeMessage($_record->messageuid);
+            } else {
+                // move to trash
+                $imapBackend->moveMessage($_record->messageuid, 'Trash');
+            }
+            
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // no imap connection -> no delete on server
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+        }
     }
     
     /************************* other public funcs *************************/
@@ -222,24 +257,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
         
         $this->_getImapBackend()->appendMessage($_mail, 'Sent');
-    }
-    
-    /**
-     * fetch message from folder
-     *
-     * @param string $_globalName the complete folder name
-     * @param string $_messageId the message id
-     * @return void
-     * 
-     * @deprecated
-     */
-    public function deleteMessage($_serverId, $_globalName, $_messageId)
-    {        
-        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getImapBackend()->selectFolder($_globalName);
-        }
-        
-        $message = $this->_getImapBackend()->removeMessage($_messageId);
     }
     
     /**
