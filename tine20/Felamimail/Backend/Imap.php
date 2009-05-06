@@ -363,4 +363,23 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             throw new Zend_Mail_Storage_Exception('message marked as deleted, but could not expunge');
         }
     }
+    
+    /**
+     * copy an existing message
+     *
+     * @param  int                             $id     number of message
+     * @param  string|Zend_Mail_Storage_Folder $folder name or instance of targer folder
+     * @return null
+     * @throws Zend_Mail_Storage_Exception
+     */
+    public function copyMessage($id, $folder)
+    {
+        if (!$this->_protocol->copy($folder, $id, null, $this->_useUid)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot copy message, does the folder exist?');
+        }
+    }
 }
