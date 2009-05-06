@@ -316,11 +316,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         new Ext.Resizable(eventEl, {
             handles: 's',
             disableTrackOver: true,
-            dynamic: true,
-            heightIncrement: this.granularityUnitHeights,
+            heightIncrement: this.granularityUnitHeights/2,
             listeners: {
                 scope: this,
-                resize: this.onEventResize
+                resize: this.onEventResize,
+                beforeresize: this.onBeforeEventResize
             }
         });
     },
@@ -370,6 +370,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     getActiveEvent: function() {
         return this.activeEvent;
+    },
+    
+    onBeforeEventResize: function(rz, e) {
+        var event = this.ds.getById(rz.el.id);
+        rz.el.setStyle({'border-style': 'dashed'});
+        rz.el.setOpacity(0.5);
+        
+        this.setActiveEvent(event);
     },
     
     onEventResize: function(rz, width, height) {
@@ -423,6 +431,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.removeEvent(parallelEvents[j]);
             this.insertEvent(parallelEvents[j]);
         }
+        
+        this.setActiveEvent(this.getActiveEvent());
     },
 
     /**
@@ -713,7 +723,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         );
         
         ts.event = new Ext.XTemplate(
-            '<div id="{id}", class="cal-daysviewpanel-event" style="width: {width}; height: {height}; left: {left}; top: {top}; background-color: {bgColor}; border-color: {color}; z-index: {zIndex};">' +
+            '<div id="{id}", class="cal-daysviewpanel-event" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">' +
                 '<div class="cal-daysviewpanel-event-header" style="background-color: {color};">' +
                     '<div class="cal-daysviewpanel-event-header-inner">{startTime}</div>' +
                     '<div class="cal-daysviewpanel-event-header-icons"></div>' +
