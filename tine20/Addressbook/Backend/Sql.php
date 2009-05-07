@@ -87,7 +87,9 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function update(Tinebase_Record_Interface $_record) 
     {
         $contact = parent::update($_record);
-        $contact->jpegphoto = $this->_saveImage($contact->getId(), $_record->jpegphoto);
+        if (isset($_record->jpegphoto)) {
+            $contact->jpegphoto = $this->_saveImage($contact->getId(), $_record->jpegphoto);
+        }
         
         return $contact;
     }
@@ -118,10 +120,12 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function _saveImage($_contactId, $imageData)
     {
         $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $_contactId, Zend_Db::INT_TYPE));
-        $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
-            'contact_id'    =>$_contactId,
-            'image'         => base64_encode($imageData)
-        ));
+        if (! empty($imageData)) {
+            $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
+                'contact_id'    =>$_contactId,
+                'image'         => base64_encode($imageData)
+            ));
+        }
         
         return $imageData;
     }
