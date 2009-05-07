@@ -68,4 +68,25 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'received',
         'sent',
     );
+    
+    /**
+     * fills a record from json data
+     *
+     * @param string $_data json encoded data
+     * 
+     * @todo    get delimiter from row? could be ';' or ','
+     */
+    public function setFromJson($_data)
+    {
+        $recordData = Zend_Json::decode($_data);
+        $this->setFromArray($recordData);
+        
+        $toExplode = array('to', 'cc', 'bcc');
+        $delimiter = ',';
+        foreach ($toExplode as $field) {
+            if (!empty($recordData[$field])) {
+                $this->{$field} = explode($delimiter, $recordData[$field]);
+            }
+        }
+    }
 }

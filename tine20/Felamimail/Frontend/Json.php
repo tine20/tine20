@@ -125,6 +125,28 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
     
+    /**
+     * save + send message
+     * 
+     * - this function has to be named 'saveMessage' because of the generic edit dialog function names
+     *
+     * @param  string $recordData
+     * @return array
+     * 
+     * @todo add test
+     */
+    public function saveMessage($recordData)
+    {
+        $message = new Felamimail_Model_Message();
+        $message->setFromJsonInUsersTimezone($recordData);
+        
+        $result = Felamimail_Controller_Message::getInstance()->sendMessage($message);
+
+        return array(
+            'status' => ($result) ? 'success' : 'failure'
+        );
+    }
+    
     /***************************** old funcs *******************************/
     
     /**

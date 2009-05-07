@@ -3,10 +3,15 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
+ * @todo        use it for reply/reply to all/forward
+ * @todo        add buttons for add cc/ add bcc
+ * @todo        add contact search combo for to/cc/bcc
+ * @todo        add signature
+ * @todo        add attachments
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -19,9 +24,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowNamePrefix: 'MessageEditWindow_',
     appName: 'Felamimail',
     recordClass: Tine.Felamimail.Model.Message,
-    recordProxy: Tine.Felamimail.recordBackend,
+    recordProxy: Tine.Felamimail.messageBackend,
     loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    tbarItems: [/*{xtype: 'widget-activitiesaddbutton'}*/],
     evalGrants: false,
     
     /**
@@ -34,13 +39,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordLoad: function() {
     	// you can do something here
 
-    	Tine.Felamimail.MessageEditDialog.superclass.onRecordLoad.call(this);        
-    },
-    
-    onRecordUpdate: function() {
-        Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
+    	Tine.Felamimail.MessageEditDialog.superclass.onRecordLoad.call(this);
         
-        // you can do something here    
+        this.window.setTitle(_('Write New Mail'));
     },
     
     /**
@@ -50,109 +51,46 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         return {
-            xtype: 'tabpanel',
+            //title: this.app.i18n._('Message'),
+            autoScroll: true,
             border: false,
-            plain:true,
-            activeTab: 0,
-            border: false,
-            items:[{               
-                title: this.app.i18n._('Message'),
-                autoScroll: true,
-                border: false,
-                frame: true,
-                layout: 'border',
-                items: [{
-                    region: 'center',
-                    xtype: 'columnform',
-                    labelAlign: 'top',
-                    formDefaults: {
-                        xtype:'textfield',
-                        anchor: '100%',
-                        labelSeparator: '',
-                        columnWidth: .333
-                    },
-                    items: [/*[{
-                        fieldLabel: this.app.i18n._('Number'),
-                        name: 'number',
+            frame: true,
+            layout: 'border',
+            items: [{
+                region: 'center',
+                xtype: 'columnform',
+                labelAlign: 'top',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '100%',
+                    labelSeparator: '',
+                    columnWidth: 1
+                },
+                items: [[{
+                        fieldLabel: this.app.i18n._('To'),
+                        name: 'to',
                         allowBlank: false
-                        }, {
-                        columnWidth: .666,
-                        fieldLabel: this.app.i18n._('Title'),
-                        name: 'title',
+                    }/*, {
+                        fieldLabel: this.app.i18n._('Cc'),
+                        name: 'cc',
+                        allowBlank: true
+                    }, {
+                        fieldLabel: this.app.i18n._('Bcc'),
+                        name: 'bcc',
                         allowBlank: false
-                        }], [{
-                        columnWidth: 1,
-                        xtype: 'textarea',
-                        name: 'description',
-                        height: 150
-                        }], [{
-                            fieldLabel: this.app.i18n._('Unit'),
-                            name: 'price_unit'
-                        }, {
-                        	xtype: 'numberfield',
-                            fieldLabel: this.app.i18n._('Unit Price'),
-                            name: 'price',
-                            allowNegative: false
-                            //decimalSeparator: ','
-                        }, {
-                            fieldLabel: this.app.i18n._('Budget'),
-                            name: 'budget'
-                        }, {
-                            hideLabel: true,
-                            boxLabel: this.app.i18n._('Timesheets are billable'),
-                            name: 'is_billable',
-                            xtype: 'checkbox'
-                        }, {
-                            fieldLabel: this.app.i18n._('Status'),
-                            name: 'is_open',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
-                        }, {
-                            fieldLabel: this.app.i18n._('Billed'),
-                            name: 'status',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            value: 'not yet billed',
-                            store: [
-                                ['not yet billed', this.app.i18n._('not yet billed')], 
-                                ['to bill', this.app.i18n._('to bill')],
-                                ['billed', this.app.i18n._('billed')]
-                            ]
-                        }]*/] 
-                }, {
-                    // activities and tags
-                    layout: 'accordion',
-                    animate: true,
-                    region: 'east',
-                    width: 210,
-                    split: true,
-                    collapsible: true,
-                    collapseMode: 'mini',
-                    margins: '0 5 0 5',
-                    border: true,
-                    items: [
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Felamimail',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    }),
-                    new Tine.widgets.tags.TagPanel({
-                        app: 'Felamimail',
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    })]
-                }]
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })]
+                    }*/, {
+                        fieldLabel: this.app.i18n._('Subject'),
+                        name: 'subject',
+                        allowBlank: false
+                    }, {
+                        fieldLabel: this.app.i18n._('Body'),
+                        name: 'body',
+                        allowBlank: true,
+                        xtype:'htmleditor',
+                        height: 280
+                    }
+                ]] 
+            }]
         };
     }
 });

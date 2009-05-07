@@ -92,6 +92,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     initActions: function() {
 
+        this.action_addInNewWindow = new Ext.Action({
+            requiredGrant: 'addGrant',
+            actionType: 'add',
+            text: this.app.i18n._('Write'),
+            handler: this.onEditInNewWindow,
+            iconCls: this.app.appName + 'IconCls',
+            scope: this
+        });
+        
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
@@ -106,6 +115,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         });
         
         this.actions = [
+            this.action_addInNewWindow,
             this.action_deleteRecord
         ];
         
@@ -136,16 +146,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             iconCls: 'action_edit',
             scope: this
         });
-        
-        this.action_addInNewWindow = new Ext.Action({
-            requiredGrant: 'addGrant',
-            actionType: 'add',
-            text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
-            handler: this.onEditInNewWindow,
-            iconCls: this.app.appName + 'IconCls',
-            scope: this
-        });
-                
+                        
         this.actions = [
             this.action_addInNewWindow,
             this.action_editInNewWindow,

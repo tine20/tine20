@@ -278,27 +278,47 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return TRUE;
     }
     
-    // @todo check if those are needed
-    
     /**
      * send one message through smtp
      *
+     * @todo make it work
      * @todo use userspecific settings
-     * 
-     * @deprecated
+     * @todo save in sent folder
      */
-    public function sendMessage(Zend_Mail $_mail)
+    public function sendMessage(Felamimail_Model_Message $_message)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
+
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+                
         $config = array(
             'ssl' => 'tls',
             'port' => 25
         );
+        
+        /*
+        $zendMail = new Felamimail_Message();
+        $zendMail->
+        
+        $mail->setBodyText('My Nice Test Text');
+        $mail->setBodyHtml('My Nice <b>Test</b> Text');
+        $mail->setFrom('somebody@example.com', 'Some Sender');
+        $mail->addTo('somebody_else@example.com', 'Some Recipient');
+        $mail->setSubject('TestSubject');
+        $mail->send();
+        */
+        
+        /*
         $transport = new Zend_Mail_Transport_Smtp('localhost', $config);
         
         Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
         
         $this->_getImapBackend()->appendMessage($_mail, 'Sent');
+        */
     }
+    
+    // @todo check if those are needed
     
     /**
      * Enter description here...
