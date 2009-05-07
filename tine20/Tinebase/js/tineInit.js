@@ -17,13 +17,13 @@ Ext.onReady(function() {
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initErrorHandler();
     Tine.Tinebase.tineInit.initRegistry();
-    Tine.Tinebase.tineInit.initWindowMgr();
     Tine.Tinebase.tineInit.initState();
     
     var waitForInits = function() {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
             waitForInits.defer(100);
         } else {
+            Tine.Tinebase.tineInit.initWindowMgr();
             Tine.Tinebase.tineInit.onLangFilesLoad();
             Tine.Tinebase.tineInit.checkSelfUpdate();
             Tine.Tinebase.tineInit.renderWindow();
@@ -501,8 +501,12 @@ Tine.Tinebase.tineInit = {
         /**
          * initialise window types
          */
+        var windowType = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').windowtype) 
+            ? Tine.Tinebase.registry.get('preferences').windowtype 
+            : 'Browser';
+
         Tine.WindowFactory = new Ext.ux.WindowFactory({
-            windowType: 'Browser'
+            windowType: windowType
         });
         
         /**
