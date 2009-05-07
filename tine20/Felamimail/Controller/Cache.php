@@ -114,7 +114,10 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         }
         $backendFolderValues    = $backend->selectFolder($folder->globalname);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($backendFolderValues, TRUE));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Select Folder: ' . $backend->getCurrentFolder() 
+            //' Values: ' . print_r($backendFolderValues, TRUE)
+        );
         
         /***************** check for messages to add ************************/
         

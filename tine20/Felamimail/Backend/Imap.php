@@ -20,6 +20,12 @@
 class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
 {
     /**
+     * protocol handler
+     * @var null|Felamimail_Protocol_Imap
+     */
+    protected $_protocol;
+
+    /**
      * wheter to use UID as message identifier
      *
      * @var bool

@@ -70,7 +70,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.initDetailsPanel();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);        
+        this.plugins.push(this.filterToolbar);         
         
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         

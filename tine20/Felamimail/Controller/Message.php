@@ -261,6 +261,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Moving ' . count($messages) . ' messages to folder ' . $folder->globalname);
         
+        // select source folder
+        $firstMessage = $messages->getFirstRecord();
+        $sourceFolder = $folderBackend->get($firstMessage->folder_id);
+        if($imapBackend->getCurrentFolder() != $sourceFolder->globalname) {
+            $imapBackend->selectFolder($sourceFolder->globalname);
+        }
+        
         foreach ($messages as $message) {
             $imapBackend->moveMessage($message->messageuid, $folder->globalname);
         }
