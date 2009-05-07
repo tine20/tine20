@@ -19,6 +19,28 @@
 abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
 {
     /**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_db = NULL;
+    
+    /**
+     * config object
+     *
+     * @var Zend_Config
+     */
+    protected $_config = NULL;
+    
+    /**
+     * constructor
+     *
+     */
+    public function __construct()
+    {
+        $this->_config = Tinebase_Core::getConfig();
+        $this->_db = Tinebase_Core::getDb();
+    }
+    
+    /**
      * checks if application is installed at all
      *
      * @param unknown_type $_application
@@ -43,7 +65,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function tableVersionQuery($_tableName)
     {
-        $select = Tinebase_Core::getDb()->select()
+        $select = $this->_db->select()
             ->from( SQL_TABLE_PREFIX . 'application_tables')
             ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
@@ -61,7 +83,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function applicationVersionQuery($_application)
     {
-        $select = Tinebase_Core::getDb()->select()
+        $select = $this->_db->select()
             ->from( SQL_TABLE_PREFIX . 'applications')
             ->where($this->_db->quoteIdentifier('name') . ' = ?', $_application);
 
@@ -124,7 +146,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         
         #var_dump($data);
         #var_dump(SQL_TABLE_PREFIX . $_record->table->name);
-        Tinebase_Core::getDb()->insert(SQL_TABLE_PREFIX . $_record->table->name, $data);
+        $this->_db->insert(SQL_TABLE_PREFIX . $_record->table->name, $data);
     }
 
     /**
@@ -134,7 +156,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */    
     public function execQueryVoid($_statement)
     {
-        $stmt = Tinebase_Core::getDb()->query($_statement);
+        $stmt = $this->_db->query($_statement);
     }
     
     /**
@@ -145,7 +167,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */       
     public function execQuery($_statement)
     {
-        $stmt = Tinebase_Core::getDb()->query($_statement);
+        $stmt = $this->_db->query($_statement);
         
         return $stmt->fetchAll();
     }
@@ -157,7 +179,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function dropTable($_tableName)
     {
-        $statement = "DROP TABLE " . Tinebase_Core::getDb()->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
+        $statement = "DROP TABLE " . $this->_db->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
     }
 }

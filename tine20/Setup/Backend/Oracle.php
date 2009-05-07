@@ -17,16 +17,9 @@
  */
 class Setup_Backend_Oracle extends Setup_Backend_Abstract
 {
-    protected $_config = '';
-    
     protected $_table ='';
    
     protected $_autoincrementID = '';
-   
-    public function __construct()
-    {
-        $this->_config = Tinebase_Core::getConfig();
-    }
     
     /**
      * takes the xml stream and creates a table
@@ -116,7 +109,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
     public function tableExists($_tableName)
     {
-         $select = Tinebase_Core::getDb()->select()
+         $select = $this->_db->select()
           ->from('information_schema.tables')
           ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
           ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
@@ -133,7 +126,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     public function getExistingSchema($_tableName)
     {
         // Get common table information
-         $select = Tinebase_Core::getDb()->select()
+         $select = $this->_db->select()
           ->from('information_schema.tables')
           ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
           ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
@@ -145,7 +138,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         //$existingTable = new Setup_Backend_Schema_Table($tableInfo);
         $existingTable = Setup_Backend_Schema_Table_Factory::factory('Mysql', $tableInfo);
        // get field informations
-        $select = Tinebase_Core::getDb()->select()
+        $select = $this->_db->select()
           ->from('information_schema.COLUMNS')
           ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName);
 
@@ -160,7 +153,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 $index = Setup_Backend_Schema_Index_Factory::factory('Mysql', $tableColumn);
                         
                 // get foreign keys
-                $select = Tinebase_Core::getDb()->select()
+                $select = $this->_db->select()
                   ->from('information_schema.KEY_COLUMN_USAGE')
                   ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName)
                   ->where($this->_db->quoteIdentifier('COLUMN_NAME') . ' = ?', $tableColumn['COLUMN_NAME']);
@@ -238,7 +231,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
 #    public function dropTable($_tableName)
 #    {
-#        $statement = "DROP TABLE " . Tinebase_Core::getDb()->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
+#        $statement = "DROP TABLE " . $this->_db->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
 #        $this->execQueryVoid($statement);
 #    }
     
@@ -444,7 +437,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                     if($_field->default === NULL) {
                         $buffer[] = "DEFAULT NULL" ;
                     } else {
-                        $buffer[] = Tinebase_Core::getDb()->quoteInto("DEFAULT ?", $_field->default) ;
+                        $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
                     }
                 }    
                 
@@ -480,7 +473,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 if($_field->default === NULL) {
                     $buffer[] = "DEFAULT NULL" ;
                 } else {
-                    $buffer[] = Tinebase_Core::getDb()->quoteInto("DEFAULT ?", $_field->default) ;
+                    $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
                 }
             }    
 
