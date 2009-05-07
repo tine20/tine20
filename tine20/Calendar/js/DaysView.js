@@ -231,6 +231,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             getDragData: function(e) {
                 var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
                 if (eventEl) {
+                    //Ext.fly(eventEl).setStyle({cursor: 'move'});
                     var event = this.daysView.ds.getById(eventEl.id);
                     this.daysView.setActiveEvent(event);
                     
