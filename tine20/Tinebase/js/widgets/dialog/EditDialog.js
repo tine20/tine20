@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        move that to dialog subdir?
- *
  */
 Ext.namespace('Tine.widgets');
 
