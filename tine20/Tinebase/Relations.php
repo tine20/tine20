@@ -293,7 +293,7 @@ class Tinebase_Relations
      * adds a new relation
      * 
      * @param   Tinebase_Model_Relation $_relation 
-     * @return  Tinebase_Model_Relation the new relation
+     * @return  Tinebase_Model_Relation|NULL the new relation
      * @throws  Tinebase_Exception_Record_Validation
      */
     protected function _addRelation($_relation)
@@ -303,7 +303,15 @@ class Tinebase_Relations
         if (!$_relation->isValid()) {
             throw new Tinebase_Exception_Record_Validation('Relation is not valid' . print_r($_relation->getValidationErrors(),true));
         }
-        return $this->_backend->addRelation($_relation);
+        
+        try {
+            $result = $this->_backend->addRelation($_relation);            
+        } catch(Zend_Db_Statement_Exception $zse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add relation: ' . $zse->getMessage());
+            $result = NULL;
+        }
+        
+        return $result;
     }
     
     /**
