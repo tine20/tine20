@@ -220,6 +220,32 @@
 }
 
 /****************************** Whole Day Events ******************************/
+.cal-daysviewpanel-wholedayheader-daycols {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.cal-daysviewpanel-body-wholedaycolumn {
+    position: absolute;
+    height: 100%;
+}
+
+.cal-daysviewpanel-body-wholedaycolumn-over {
+    height: 100%;
+    margin-left: 3px;
+}
+
+.cal-daysviewpanel-body-wholedaycolumn-over:hover {
+    background-color:#DFE8F6;
+    cursor:pointer;
+}
+
+.cal-daysviewpanel-wholedayheader-pos {
+	position: relative;
+}
+
 .cal-daysviewpanel-wholedayevent-body {
 	position: absolute;
     width: 100%;

@@ -130,7 +130,7 @@
                     <length>255</length>
                 </field>
                 <field>
-                    <name>is_all_day_evnet</name>
+                    <name>is_all_day_event</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>

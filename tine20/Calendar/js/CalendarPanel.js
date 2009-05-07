@@ -100,8 +100,10 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 this.store.add(new Tine.Calendar.Event({
                     id: Ext.id(),
                     dtstart: date,
-                    dtend: date.add(Date.HOUR, 1)
+                    dtend: date.add(Date.HOUR, date.is_all_day_event ? 24 : 1),
+                    is_all_day_event: date.is_all_day_event
                 }));
+                e.preventDefault();
             }
         }
         

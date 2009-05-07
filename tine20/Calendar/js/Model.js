@@ -42,7 +42,7 @@ Tine.Calendar.EventArray = Tine.Tinebase.Model.genericFields.concat([
     //{ name: 'exrule' },
     //{ name: 'rdate' },
     { name: 'rrule' },
-    { name: 'is_all_day_evnet' },
+    { name: 'is_all_day_event' },
     { name: 'rrule_until', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'originator_tz' }
 ]);

@@ -93,7 +93,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         //'rdate'                 => array('allowEmpty' => true         ),
         'rrule'                 => array('allowEmpty' => true         ),
         // calendar helper fields
-        'is_all_day_evnet'      => array('allowEmpty' => true         ),
+        'is_all_day_event'      => array('allowEmpty' => true         ),
         'rrule_until'           => array('allowEmpty' => true         ),
         'originator_tz'         => array('allowEmpty' => true         ),
     );
