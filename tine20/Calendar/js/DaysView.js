@@ -369,7 +369,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 bgColor: bgColor,
                 zIndex: 100,
                 width: Math.round(90 * 1/event.parallels) + '%',
-                height: (this.getTimeOffset(dtEnd) - this.getTimeOffset(dtStart)) + 'px',
+                //height: (this.getTimeOffset(dtEnd) - this.getTimeOffset(dtStart)) + 'px',
+                height: this.getTimeHeight(dtStart, dtEnd) + 'px',
                 left: Math.round(pos * 90 * 1/event.parallels) + '%',
                 top: this.getTimeOffset(dtStart) + 'px'
             }, true);
@@ -629,6 +630,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var d = this.granularityUnitHeights / this.timeGranularity;
         
         return Math.round(d * ( 60 * date.getHours() + date.getMinutes()));
+    },
+    
+    getTimeHeight: function(dtStart, dtEnd) {
+        var d = this.granularityUnitHeights / this.timeGranularity;
+        //((dtEnd.getTime() - dtStart.getTime()) / Date.msMinute);
+        return Math.round(d * ((dtEnd.getTime() - dtStart.getTime()) / Date.msMINUTE));
     },
     
     /**
