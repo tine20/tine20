@@ -291,7 +291,7 @@ Tine.Tinebase.tineInit = {
                              (data.trace[i].line ? '(' + data.trace[i].line + ')' : '') + ': ' +
                              (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i].type + '</b>' : '') +
                              '<b>' + data.trace[i]['function'] + '</b>' +
-                            '(' + (data.trace[i].args[0] ? data.trace[i].args[0] : '') + ')<br/>';
+                            '(' + ((data.trace[i].args && data.trace[i].args[0]) ? data.trace[i].args[0] : '') + ')<br/>';
                 }
                 data.traceHTML = trace;
                 
