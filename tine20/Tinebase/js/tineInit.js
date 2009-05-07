@@ -417,6 +417,8 @@ Tine.Tinebase.tineInit = {
                             }
                         }
                     }
+                    
+                    Tine.Tinebase.registry.on('replace', Tine.Tinebase.tineInit.initList.onRegistryChange);
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
             });
@@ -429,7 +431,22 @@ Tine.Tinebase.tineInit = {
                 }
             }
             
+            Tine.Tinebase.registry.on('replace', Tine.Tinebase.tineInit.initList.onRegistryChange);
             Tine.Tinebase.tineInit.initList.initRegistry = true;
+        }
+    },
+    
+    /**
+     * executed when a value in Tinebase registry changed
+     * @param {string} key
+     * @param {value} oldValue
+     * @param {value} newValue
+     */
+    onRegistryChange: function(key, oldValue, newValue) {
+        switch (key) {
+            case 'windowtype':
+                //console.log('hier');
+                break;
         }
     },
     
