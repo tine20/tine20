@@ -168,6 +168,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             displayLength: this.displayLength,
 	        baseParams: {
 	            jsonKey: Tine.Tinebase.registry.get('jsonKey'),
+                requestType : 'JSON',
 				method: 'Tinebase_Container.getContainer',
 				application: this.appName,
 				containerType: Tine.Tinebase.container.TYPE_PERSONAL
