@@ -39,6 +39,12 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      *
      */
     const DEFAULT_APP = 'defaultapp';
+
+    /**
+     * default application
+     *
+     */
+    const WINDOW_TYPE = 'windowtype';
     
     /**
      * application
@@ -60,7 +66,8 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             ? array(
                 self::TIMEZONE,
                 self::LOCALE,
-                self::DEFAULT_APP
+                self::DEFAULT_APP,
+                self::WINDOW_TYPE
             )
             : array();
             
@@ -88,6 +95,10 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_APP  => array(
                 'label'         => $translate->_('Default Application'),
                 'description'   => $translate->_('The default application to show after login.'),
+            ),
+            self::WINDOW_TYPE  => array(
+                'label'         => $translate->_('Window Type'),
+                'description'   => $translate->_('You can choose between ExtJs style windows or normal Browser popup windows.'),
             ),
         );
         
