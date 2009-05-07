@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        move $this->_db calls to backend class
  */
 
 /**
@@ -314,7 +315,6 @@ class Setup_Controller
         
         // check if applications table exists
         try {
-            // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
             $applicationTable = Setup_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
         } catch (Zend_Db_Statement_Exception $e) {
             $result = TRUE;
@@ -531,16 +531,33 @@ class Setup_Controller
      */
     public function uninstallApplications($_applications)
     {
-        // get xml and sort apps first
-        $applications = array();
-        foreach($_applications as $applicationName) {
-            $applications[$applicationName] = $this->getSetupXml($applicationName);
-        }
-        $applications = $this->_sortUninstallableApplications($applications);
-        
-        foreach ($applications as $name => $xml) {
-            $app = Tinebase_Application::getInstance()->getApplicationByName($name);
-            $this->_uninstallApplication($app);
+        // deactivate foreign key check if all installed apps should be uninstalled
+        $installedApps = Tinebase_Application::getInstance()->getApplications();
+        if (count($installedApps) == count($_applications) && get_class($this->_backend) == 'Setup_Backend_Mysql') {
+            $this->_backend->setForeignKeyChecks(0);
+            foreach ($installedApps as $app) {
+                if ($app->name != 'Tinebase') {
+                    $this->_uninstallApplication($app);
+                } else {
+                    $tinebase = $app;
+                }
+            }
+            // tinebase should be uninstalled last
+            $this->_uninstallApplication($tinebase);
+            $this->_backend->setForeignKeyChecks(1);
+        } else {
+            
+            // get xml and sort apps first
+            $applications = array();
+            foreach($_applications as $applicationName) {
+                $applications[$applicationName] = $this->getSetupXml($applicationName);
+            }
+            $applications = $this->_sortUninstallableApplications($applications);
+            
+            foreach ($applications as $name => $xml) {
+                $app = Tinebase_Application::getInstance()->getApplicationByName($name);
+                $this->_uninstallApplication($app);
+            }
         }
     }
     

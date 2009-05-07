@@ -493,4 +493,16 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
         return $snippet;
     }
+    
+    /**
+     * enable/disabled foreign key checks
+     *
+     * @param integer|string|boolean $_value
+     */
+    public function setForeignKeyChecks($_value)
+    {
+        if ($_value == 0 || $_value == 1) {
+            $this->_db->query("SET FOREIGN_KEY_CHECKS=" . $_value);
+        }
+    }
 }
