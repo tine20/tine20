@@ -11,6 +11,9 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        fix this for build script: 
+ *              Notice: Use of undefined constant SQL_TABLE_PREFIX - assumed 'SQL_TABLE_PREFIX' 
+ *                  in /var/www/tine20build/tine20/ActiveSync/Backend/Device.php on line 28
  */
 
 /**
