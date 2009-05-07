@@ -259,6 +259,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onRender : function(ct, position){
         Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
         
+        // recalculate height, as autoHeight fails for Ext.Window ;-(
+        this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
+        
         if (this.showContainerSelector) {
             this.recordContainerEl = this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
             var ContainerForm = new Tine.widgets.container.selectionComboBox({
