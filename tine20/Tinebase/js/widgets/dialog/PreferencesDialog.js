@@ -182,7 +182,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             border: true,
             frame: true,
             layout: 'border',
-            height: 424,
             items: [
                 this.treePanel,
                 this.prefsCardPanel
@@ -195,6 +194,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      */
     onRender : function(ct, position){
         Tine.widgets.dialog.Preferences.superclass.onRender.call(this, ct, position);
+        
+        // recalculate height, as autoHeight fails for Ext.Window ;-(
+        this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
+        
+        this.window.setTitle(this.i18n._('Edit Preferences'));
         this.loadMask = new Ext.LoadMask(ct, {msg: _('Loading ...')});
         //this.loadMask.show();
     },
@@ -250,7 +254,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     	}
     	
     	// save preference data
-    	console.log(data);
+    	//console.log(data);
     	Ext.Ajax.request({
             scope: this,
             params: {
