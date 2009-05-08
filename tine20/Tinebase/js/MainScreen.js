@@ -85,8 +85,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         });
         
         // get default app from preferences if available
-        this.defaultAppName = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').defaultapp) 
-            ? Tine.Tinebase.registry.get('preferences').defaultapp 
+        this.defaultAppName = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('defaultapp')) 
+            ? Tine.Tinebase.registry.get('preferences').get('defaultapp') 
             : this.defaultAppName;
         
         // init app picker

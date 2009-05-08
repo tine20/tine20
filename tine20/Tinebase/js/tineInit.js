@@ -411,7 +411,16 @@ Tine.Tinebase.tineInit = {
 
                                 for (var key in appData) {
                                     if (appData.hasOwnProperty(key)) {
-                                        Tine[app].registry.add(key, appData[key]);
+                                        if (key == 'preferences') {
+                                            var prefs = new Ext.util.MixedCollection();
+                                            for (var pref in appData[key]) {
+                                                if (appData[key].hasOwnProperty(pref)) {
+                                                    prefs.add(pref, appData[key][pref]);
+                                                }
+                                            }                        
+                                        } else {
+                                            Tine[app].registry.add(key, appData[key]);
+                                        }
                                     }
                                 }
                             }
@@ -518,8 +527,8 @@ Tine.Tinebase.tineInit = {
         /**
          * initialise window types
          */
-        var windowType = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').windowtype) 
-            ? Tine.Tinebase.registry.get('preferences').windowtype 
+        var windowType = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('windowtype')) 
+            ? Tine.Tinebase.registry.get('preferences').get('windowtype') 
             : 'Browser';
 
         Tine.WindowFactory = new Ext.ux.WindowFactory({
