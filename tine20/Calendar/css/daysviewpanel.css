@@ -171,6 +171,22 @@
     -webkit-border-top-right-radius: 0px;
 }
 
+.cal-daysviewpanel-event-cropbottom {
+    border-bottom-style: none;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.ext-gecko .cal-daysviewpanel-event-cropbottom {
+    -moz-border-radius-bottomleft: 0px;
+    -moz-border-radius-bottomright: 0px;
+}
+
+.ext-safari .cal-daysviewpanel-event-cropbottom {
+    -webkit-border-bottom-left-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+}
+
 .cal-daysviewpanel-event-drop-nodrop .x-dd-drop-icon {
 	left: 3px;
 	top: 0px;
