@@ -17,6 +17,7 @@ Ext.ns('Tine.Felamimail', 'Tine.Felamimail.Model');
  */
 Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
+    { name: 'account_id' },
     { name: 'subject' },
     { name: 'from' },
     { name: 'to' },
@@ -51,8 +52,40 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create(Tine.Felamimail
     }
 });
 
+/**
+ * @type {Array}
+ * Account model fields
+ */
+Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
+    { name: 'id' },
+    { name: 'name' },
+    { name: 'user' }
+]);
+
+/**
+ * @type {Tine.Tinebase.Account}
+ * record definition
+ */
+Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail.Model.AccountArray, {
+    appName: 'Felamimail',
+    modelName: 'Account',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Account', 'Accounts', n);
+    recordName: 'Account',
+    recordsName: 'Accounts',
+    containerProperty: 'container_id',
+    // ngettext('record list', 'record lists', n);
+    containerName: 'record list',
+    containersName: 'record lists' /*,
+    getTitle: function() {
+        return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
+    } */
+});
+
 Tine.Felamimail.Model.Message.getDefaultData = function() { 
     return {
+        account_id: 'default'
     	/*
         is_open: 1,
         is_billable: true

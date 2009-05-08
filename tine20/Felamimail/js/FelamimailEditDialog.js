@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @todo        add account chooser (from/accountId)
  * @todo        use it for reply/reply to all/forward
  * @todo        add buttons for add cc/ add bcc
  * @todo        add contact search combo for to/cc/bcc
@@ -42,7 +41,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     	Tine.Felamimail.MessageEditDialog.superclass.onRecordLoad.call(this);
         
-        this.window.setTitle(_('Write New Mail'));
+        //TODO set title for ext windows as well
+        //this.window.setTitle(_('Write New Mail'));
     },
     
     /**
@@ -68,6 +68,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: 1
                 },
                 items: [[{
+                        xtype:'reccombo',
+                        name: 'account_id',
+                        fieldLabel: this.app.i18n._('From'),
+                        displayField: 'user',
+                        store: new Ext.data.Store({
+                            fields: Tine.Felamimail.Model.Account,
+                            proxy: Tine.Felamimail.accountBackend,
+                            reader: Tine.Felamimail.accountBackend.getReader(),
+                            remoteSort: true,
+                            sortInfo: {field: 'user', dir: 'ASC'}
+                        })
+                    },{
                         fieldLabel: this.app.i18n._('To'),
                         name: 'to',
                         allowBlank: false
@@ -101,6 +113,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
+    //config.title = _('Write New Mail');
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 470,

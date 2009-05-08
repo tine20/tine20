@@ -19,7 +19,7 @@ Ext.namespace('Tine.Felamimail');
 Tine.Felamimail.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
 
 /**
- * default message backend
+ * message backend
  * 
  * @type Tine.Tinebase.widgets.app.JsonBackend
  */
@@ -27,6 +27,17 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Felamimail',
     modelName: 'Message',
     recordClass: Tine.Felamimail.Model.Message
+});
+
+/**
+ * account backend
+ * 
+ * @type Tine.Tinebase.widgets.app.JsonBackend
+ */
+Tine.Felamimail.accountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Felamimail',
+    modelName: 'Account',
+    recordClass: Tine.Felamimail.Model.Account
 });
 
 /**
