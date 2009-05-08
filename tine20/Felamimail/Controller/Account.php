@@ -42,7 +42,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     private function __construct() {
         $this->_modelName = 'Felamimail_Model_Account';
         $this->_doContainerACLChecks = FALSE;
-        $this->_backend = new Felamimail_Account();
+        $this->_backend = new Felamimail_Backend_Account();
         
         $this->_currentAccount = Tinebase_Core::getUser();
     }
@@ -67,5 +67,52 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
+    }
+
+    /******************************** overwritten funcs *********************************/
+    /**
+     * get list of records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param bool $_getRelations
+     * @param boolean $_onlyIds
+     * @return Tinebase_Record_RecordSet|array
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    {
+        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
+        
+        //  add account from config.inc.php if available
+        if (isset(Tinebase_Core::getConfig()->imap)) {
+            $result->addRecord(new Felamimail_Model_Account(
+                Tinebase_Core::getConfig()->imap->toArray()
+            ));
+        }
+        
+        return $result;
+    }
+
+    /**
+     * get by id
+     *
+     * @param string $_id
+     * @param int $_containerId
+     * @return Tinebase_Record_Interface
+     */
+    public function get($_id, $_containerId = NULL)
+    {
+        if ($_id === Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
+            if (! isset(Tinebase_Core::getConfig()->imap)) {
+                throw new Felamimail_Exception('No default imap account defined in config.inc.php!');
+            }
+            
+            // get account data from config file    
+            $record = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray());
+        } else {
+            $record = parent::get($_id, $_containerId);
+        }
+        
+        return $record;    
     }
 }

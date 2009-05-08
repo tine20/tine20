@@ -21,6 +21,12 @@
 class Felamimail_Model_Account extends Tinebase_Record_Abstract
 {  
     /**
+     * default account id
+     *
+     */
+    const DEFAULT_ACCOUNT_ID = 'default';
+    
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
@@ -44,19 +50,19 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'user_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'hostname'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'username'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'user_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
         'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
         'secure_connection'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),
         'signature'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // smtp config
         'smtp_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 25),
-        'smtp_hostname'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'smtp_hostname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_auth'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'login'),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -78,4 +84,36 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+    
+    /**
+     * get imap config array
+     *
+     * @return array
+     */
+    public function getImapConfig()
+    {
+        $imapConfigFields = array('host', 'port', 'user', 'password');
+        
+        $result = array();
+        foreach ($imapConfigFields as $field) {
+            $result[$field] = $this->{$field};
+        }
+        return $result;
+    }
+    
+    /**
+     * get smtp config
+     *
+     * @return array
+     * 
+     * @todo finish
+     */
+    public function getSmtpConfig()
+    {
+        $result = array(
+            'host'  => $this->smtp_hostname,
+        );
+        
+        return $result;
+    }
 }

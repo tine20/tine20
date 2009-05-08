@@ -26,12 +26,12 @@
                     <length>256</length>
                 </field>
                 <field>
-                    <name>hostname</name>
+                    <name>host</name>
                     <type>text</type>
                     <length>256</length>
                 </field>
                 <field>
-                    <name>username</name>
+                    <name>user</name>
                     <type>text</type>
                     <length>256</length>
                 </field>
