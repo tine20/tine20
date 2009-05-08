@@ -494,6 +494,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string    $data       json encoded preferences data
      * @param bool      $adminMode  submit in admin mode?
+     * @return array with the changed prefs
      */
     public function savePreferences($data, $adminMode)
     {
@@ -502,6 +503,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminMode, true));
         
+        $result = array();
         foreach ($decodedData as $applicationName => $data) {
             
             $backend = Tinebase_Core::getPreference($applicationName); 
@@ -528,12 +530,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 foreach ($data as $name => $value) {
                     $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName);
                     $backend->$name = $value['value'];
+                    $result[$applicationName][] = array('name' => $name, 'value' => $value['value']);
                 }
             }
         }
         
         return array(
-            'status'    => 'success'
+            'status'    => 'success',
+            'results'   => $result
         );
     }
     
