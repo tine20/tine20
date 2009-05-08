@@ -455,13 +455,13 @@ Tine.Tinebase.tineInit = {
      */
     onPreferenceChange: function(key, oldValue, newValue) {
         switch (key) {
+            case 'windowtype':
+                console.log('hier');
+                //break;
             case 'timezone':
             case 'locale':
                 // reload mainscreen (only if timezone or locale have changed
                 window.location = window.location.href.replace(/#+.*/, '');
-                break;
-            case 'windowtype':
-                //console.log('hier');
                 break;
         }
     },
