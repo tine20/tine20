@@ -101,6 +101,16 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         
         this.i18n = new Locale.Gettext();
         this.i18n.textdomain('Tinebase');
+
+        // delete panels
+        // TODO: do we need that?
+        var panelsToDelete = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
+        for (panelName in panelsToDelete) {
+            if (panelsToDelete.hasOwnProperty(panelName)) {
+                console.log('deleting panel (init)' + panelName);
+                panelsToDelete[panelName].destroy();
+            }
+        }
         
         // init actions
         this.initActions();
@@ -201,6 +211,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.window.setTitle(this.i18n._('Edit Preferences'));
         this.loadMask = new Ext.LoadMask(ct, {msg: _('Loading ...')});
         //this.loadMask.show();
+        
+        // init pref panels
+        // TODO: do we need that?
+        console.log('init');
+        this.prefPanels, this.adminPrefPanels = {};
     },
     
     /**
@@ -250,6 +265,20 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 
                 if (closeWindow) {
                     this.purgeListeners();
+                    // delete panels
+                    // TODO: do we need that?
+                    var panelsToDelete = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
+                    for (panelName in panelsToDelete) {
+                        if (panelsToDelete.hasOwnProperty(panelName)) {
+                            console.log('deleting panel' + panelName);
+                            panelsToDelete[panelName].destroy();
+                        }
+                    }
+                    
+                    // TODO: do we need that?
+                    console.log('destroy card panel');
+                    this.prefsCardPanel.destroy();
+                    
                     this.window.close();
                 }
             },
@@ -433,8 +462,12 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @param {String} appName
      */
     showPrefsForApp: function(appName) {
+        
     	var panel = (this.adminMode) ? this.adminPrefPanels[appName] : this.prefPanels[appName];
-    	
+
+        console.log(appName);
+        console.log(panel);
+        
     	if (!this.adminMode) {
     		// check grant for pref and enable/disable button
 			this.action_switchAdminMode.setDisabled(!Tine.Tinebase.common.hasRight('admin', appName));
