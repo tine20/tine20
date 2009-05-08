@@ -186,6 +186,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 if (targetDate) {
                     var event = v.ds.getById(data.sourceEl.id);
                     
+                    // deny all day drop on the same day
+                    if (Math.abs(targetDate.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE) {
+                        return false;
+                    }
+                    
                     event.beginEdit();
                     event.set('dtstart', targetDate);
                     
@@ -325,14 +330,21 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var bgColor = 'rgb(' + r + ',' + g + ',' + b + ')';
         
         var dtStart = event.get('dtstart');
+        var startColNum = this.getColumnNumber(dtStart);
         var dtEnd = event.get('dtend').add(Date.SECOND, -1);
+        var endColNum = this.getColumnNumber(dtEnd);
+        
+        // skip dates not in our diplay range
+        if (endColNum < 0 || startColNum > this.numOfDays) {
+            return;
+        }
         
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         var parallels = registry.getEvents(dtStart, dtEnd);
         var pos = parallels.indexOf(event);
         
+        
         if (event.get('is_all_day_event')) { 
-            
             var offsetWidth = Ext.fly(this.wholeDayArea).getWidth();
             
             var eventEl = this.templates.wholeDayEvent.append(this.getWholeDayEl(pos), {
@@ -362,7 +374,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             });
             
         } else {
-            var eventEl = this.templates.event.append(this.getDateColumnEl(dtStart), {
+            var eventEl = this.templates.event.append(this.getDateColumnEl(startColNum), {
                 id: event.get('id'),
                 summary: event.get('summary'),
                 startTime: dtStart.format('H:i'),
@@ -668,8 +680,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.focusEl.swallowEvent("click", true);
     },
     
-    getDateColumnEl: function(date) {
-        return this.dayCols[Math.floor((date.add(Date.SECOND, 1).getTime() - this.startDate.getTime()) / Date.msDAY)];
+    getColumnNumber: function(date) {
+        return Math.floor((date.add(Date.SECOND, 1).getTime() - this.startDate.getTime()) / Date.msDAY);
+    },
+    
+    getDateColumnEl: function(pos) {
+        return this.dayCols[pos];
     },
     
     getWholeDayEl: function(pos) {
