@@ -358,9 +358,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 extraCls = extraCls + ' cal-daysviewpanel-event-cropleft';
             }
             
-            console.log(endColNum);
             if (endColNum > this.numOfDays) {
-                
                 width = width - Math.abs(endColNum - this.numOfDays) * (offsetWidth/this.numOfDays);
                 extraCls = extraCls + ' cal-daysviewpanel-event-cropright';
             }
@@ -393,18 +391,29 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             });
             
         } else {
+            
+            var top = this.getTimeOffset(dtStart);
+            var height = this.getTimeHeight(dtStart, dtEnd);
+            
+            if (startColNum < 0) {
+                startColNum = 0;
+                extraCls = extraCls + ' cal-daysviewpanel-event-croptop';
+                top = 0;
+                height = this.getTimeHeight(this.startDate, dtEnd);
+            }
+            
             var eventEl = this.templates.event.append(this.getDateColumnEl(startColNum), {
                 id: event.get('id'),
                 summary: event.get('summary'),
                 startTime: dtStart.format('H:i'),
+                extraCls: extraCls,
                 color: color,
                 bgColor: bgColor,
                 zIndex: 100,
                 width: Math.round(90 * 1/event.parallels) + '%',
-                //height: (this.getTimeOffset(dtEnd) - this.getTimeOffset(dtStart)) + 'px',
-                height: this.getTimeHeight(dtStart, dtEnd) + 'px',
+                height: height + 'px',
                 left: Math.round(pos * 90 * 1/event.parallels) + '%',
-                top: this.getTimeOffset(dtStart) + 'px'
+                top: top + 'px'
             }, true);
                     
             new Ext.Resizable(eventEl, {
@@ -921,7 +930,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         );
         
         ts.event = new Ext.XTemplate(
-            '<div id="{id}", class="cal-daysviewpanel-event" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">' +
+            '<div id="{id}", class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">' +
                 '<div class="cal-daysviewpanel-event-header" style="background-color: {color};">' +
                     '<div class="cal-daysviewpanel-event-header-inner">{startTime}</div>' +
                     '<div class="cal-daysviewpanel-event-header-icons"></div>' +

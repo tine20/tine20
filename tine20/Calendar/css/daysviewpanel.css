@@ -155,6 +155,22 @@
     -webkit-border-radius: 8px;
 }
 
+.cal-daysviewpanel-event-croptop {
+    border-top-style: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.ext-gecko .cal-daysviewpanel-event-croptop {
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 0px;
+}
+
+.ext-safari .cal-daysviewpanel-event-croptop {
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+}
+
 .cal-daysviewpanel-event-drop-nodrop .x-dd-drop-icon {
 	left: 3px;
 	top: 0px;
@@ -186,6 +202,23 @@
 .ext-safari .cal-daysviewpanel-event-header {
     -webkit-border-top-left-radius: 8px;
     -webkit-border-top-right-radius: 8px;
+}
+
+.cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
+	display: none;
+    border-top-style: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.ext-gecko .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 0px;
+}
+
+.ext-safari .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
 }
 
 .cal-daysviewpanel-event-header-inner {
