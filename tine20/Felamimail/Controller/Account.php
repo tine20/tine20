@@ -70,6 +70,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
 
     /******************************** overwritten funcs *********************************/
+    
     /**
      * get list of records
      *
@@ -93,6 +94,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         return $result;
     }
 
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
+    {
+        $count = parent::searchCount($_filter);        
+        if (isset(Tinebase_Core::getConfig()->imap)) {
+            $count++;
+        }
+        return $count;
+    }
+    
     /**
      * get by id
      *

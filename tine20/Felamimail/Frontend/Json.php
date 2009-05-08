@@ -160,9 +160,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @return array
      */
-    public static function searchAccounts($filter)
+    public function searchAccounts($filter)
     {
-        return $results = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
+        return $results = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
         
         /*
         $controller = new Felamimail_Controller();

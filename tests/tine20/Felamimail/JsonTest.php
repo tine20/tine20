@@ -127,6 +127,25 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, preg_match('/Metaways Infosystems GmbH/', $message['body']));
     }
     
+    /**
+     * test search for accounts and check default account from config
+     *
+     */
+    public function testSearchAccounts()
+    {
+        $results = $this->_json->searchAccounts('');
+
+        $this->assertGreaterThan(0, $results['totalcount']);
+        $default = array();
+        foreach ($results['results'] as $result) {
+            if ($result['user'] == 'unittest@tine20.org') {
+                $default = $result;
+            }
+        }
+        $this->assertTrue(! empty($default));
+        $this->assertEquals(143, $result['port']);
+    }
+    
     /************************ protected functions ****************************/
     
     /**
