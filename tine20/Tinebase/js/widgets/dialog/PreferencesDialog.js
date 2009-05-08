@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        fix ext window type problem (dialog only works the 1. time it is loaded)
  * @todo        add filter toolbar
  * @todo        use proxy store?
  */
@@ -243,19 +244,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             },
             success: function(response) {
                 this.loadMask.hide();
-                
-                // reload mainscreen (only if timezone or locale have changed
-                // -> this should be handled by listeners attached to the registry values
-                // @todo move this to tineInit.js
-                // @deprecated
-//                if (!this.adminMode && data.Tinebase && 
-//                        ((data.Tinebase.locale.value   != Tine.Tinebase.registry.get('locale').locale &&
-//                            data.Tinebase.locale.value != 'auto') ||
-//                         data.Tinebase.timezone.value != Tine.Tinebase.registry.get('timeZone'))
-//                ) {
-//                    var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
-//                    mainWindow.location = window.location.href.replace(/#+.*/, '');
-//                }
                 
                 // update registry
                 this.updateRegistry(Ext.util.JSON.decode(response.responseText).results);
