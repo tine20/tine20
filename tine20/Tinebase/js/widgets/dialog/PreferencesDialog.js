@@ -10,7 +10,6 @@
  *
  * @todo        add filter toolbar
  * @todo        use proxy store?
- * @todo        update js registry?
  */
 
 Ext.namespace('Tine.widgets');
@@ -231,27 +230,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     	this.loadMask.show();
     	
     	// get values from card panels
-    	var panel, data = {};
-    	var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
-
-        for (panelName in panelsToSave) {
-            if (panelsToSave.hasOwnProperty(panelName)) {
-                panel = panelsToSave[panelName];
-                console.log(panel);
-        		data[panel.appName] = {};
-                for (var j=0; j < panel.items.length; j++) {
-                	var item = panel.items.items[j];
-                	if (item && item.name) {
-                        if (this.adminMode) {
-                        	data[panel.appName][item.prefId] = {value: item.getValue()};
-                        	data[panel.appName][item.prefId].type = (Ext.getCmp(item.name + '_writable').getValue() == 1) ? 'default' : 'forced';
-                        } else {
-                            data[panel.appName][item.name] = {value: item.getValue()};
-                        }
-                	}
-                }
-            }
-    	}
+        var data = this.getValuesFromPanels();
     	
     	// save preference data
     	//console.log(data);
@@ -266,14 +245,20 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 this.loadMask.hide();
                 
                 // reload mainscreen (only if timezone or locale have changed
-                if (!this.adminMode && data.Tinebase && 
-                        ((data.Tinebase.locale.value   != Tine.Tinebase.registry.get('locale').locale &&
-                            data.Tinebase.locale.value != 'auto') ||
-                         data.Tinebase.timezone.value != Tine.Tinebase.registry.get('timeZone'))
-                ) {
-                    var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
-                    mainWindow.location = window.location.href.replace(/#+.*/, '');
-                }
+                // -> this should be handled by listeners attached to the registry values
+                // @todo move this to tineInit.js
+                // @deprecated
+//                if (!this.adminMode && data.Tinebase && 
+//                        ((data.Tinebase.locale.value   != Tine.Tinebase.registry.get('locale').locale &&
+//                            data.Tinebase.locale.value != 'auto') ||
+//                         data.Tinebase.timezone.value != Tine.Tinebase.registry.get('timeZone'))
+//                ) {
+//                    var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow(); 
+//                    mainWindow.location = window.location.href.replace(/#+.*/, '');
+//                }
+                
+                // update registry
+                this.updateRegistry(Ext.util.JSON.decode(response.responseText).results);
                 
                 if (closeWindow) {
                     this.purgeListeners();
@@ -284,6 +269,63 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 Ext.MessageBox.alert(_('Errors'), _('Saving of preferences failed.'));    
             }
         });
+    },
+    
+    /**
+     * get values from card panels
+     * 
+     * @return {Object} with form data
+     */
+    getValuesFromPanels: function() {
+        var panel, data = {};
+        var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
+
+        for (panelName in panelsToSave) {
+            if (panelsToSave.hasOwnProperty(panelName)) {
+                panel = panelsToSave[panelName];
+                //console.log(panel);
+                data[panel.appName] = {};
+                for (var j=0; j < panel.items.length; j++) {
+                    var item = panel.items.items[j];
+                    if (item && item.name) {
+                        if (this.adminMode) {
+                            data[panel.appName][item.prefId] = {value: item.getValue()};
+                            data[panel.appName][item.prefId].type = (Ext.getCmp(item.name + '_writable').getValue() == 1) ? 'default' : 'forced';
+                        } else {
+                            data[panel.appName][item.name] = {value: item.getValue()};
+                        }
+                    }
+                }
+            }
+        }
+        
+        return data;
+    },
+    
+    /**
+     * update registry after saving of prefs
+     * 
+     * @param {Object} data
+     */
+    updateRegistry: function(data) {
+        for (application in data) {
+            if (data.hasOwnProperty(application)) {
+                appPrefs = data[application];
+                var registryValues = Tine[application].registry.get('preferences');
+                var changed = false;
+                for (var i=0; i < appPrefs.length; i++) {
+                    if (registryValues.get(appPrefs[i].name) != appPrefs[i].value) {
+                        registryValues.replace(appPrefs[i].name, appPrefs[i].value);
+                        changed = true;
+                    }
+                }
+                
+                if (changed) {
+                    Tine[application].registry.replace('preferences', registryValues);
+                }
+            }
+        }
+        //console.log(Tine.Tinebase.registry.get('preferences'));
     },
     
     /**

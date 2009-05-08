@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: tineInit.js 7831 2009-04-22 22:37:18Z c.weiss@metaways.de $
  *
+ * @todo        move locale/timezone registry values to preferences MixedCollection?
  */
 
 Ext.onReady(function() {
@@ -417,7 +418,10 @@ Tine.Tinebase.tineInit = {
                                                 if (appData[key].hasOwnProperty(pref)) {
                                                     prefs.add(pref, appData[key][pref]);
                                                 }
-                                            }                        
+                                            }
+                                            prefs.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
+                                            //prefs.on('replace', function() {console.log('buh');});
+                                            Tine[app].registry.add(key, prefs);
                                         } else {
                                             Tine[app].registry.add(key, appData[key]);
                                         }
@@ -427,7 +431,6 @@ Tine.Tinebase.tineInit = {
                         }
                     }
                     
-                    Tine.Tinebase.registry.on('replace', Tine.Tinebase.tineInit.initList.onRegistryChange);
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
             });
@@ -440,18 +443,17 @@ Tine.Tinebase.tineInit = {
                 }
             }
             
-            Tine.Tinebase.registry.on('replace', Tine.Tinebase.tineInit.initList.onRegistryChange);
             Tine.Tinebase.tineInit.initList.initRegistry = true;
         }
     },
     
     /**
-     * executed when a value in Tinebase registry changed
+     * executed when a value in Tinebase registry/preferences changed
      * @param {string} key
      * @param {value} oldValue
      * @param {value} newValue
      */
-    onRegistryChange: function(key, oldValue, newValue) {
+    onPreferenceChange: function(key, oldValue, newValue) {
         switch (key) {
             case 'windowtype':
                 //console.log('hier');
