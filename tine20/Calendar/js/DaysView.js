@@ -323,6 +323,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         // @todo fetch color from calendar
         var color = '#FD0000';
         
+        var extraCls = '';
+        
         // lighten up background
         var r = Math.min(this.hex2dec(color.substring(1,3)) + 150, 255);
         var g = Math.min(this.hex2dec(color.substring(3,5)) + 150, 255);
@@ -331,7 +333,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         var dtStart = event.get('dtstart');
         var startColNum = this.getColumnNumber(dtStart);
-        var dtEnd = event.get('dtend').add(Date.SECOND, -1);
+        var dtEnd = event.get('dtend');//.add(Date.SECOND, -1);
         var endColNum = this.getColumnNumber(dtEnd);
         
         // skip dates not in our diplay range
@@ -347,16 +349,33 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (event.get('is_all_day_event')) { 
             var offsetWidth = Ext.fly(this.wholeDayArea).getWidth();
             
+            var width = Math.round(offsetWidth * (dtEnd.getTime() - dtStart.getTime()) / (this.numOfDays * Date.msDAY)) -5;
+            var left = Math.round(offsetWidth * (dtStart.getTime() - this.startDate.getTime()) / (this.numOfDays * Date.msDAY));
+            
+            if (startColNum < 0) {
+                width = width - Math.abs(startColNum) * (offsetWidth/this.numOfDays);
+                left = 0;
+                extraCls = extraCls + ' cal-daysviewpanel-event-cropleft';
+            }
+            
+            console.log(endColNum);
+            if (endColNum > this.numOfDays) {
+                
+                width = width - Math.abs(endColNum - this.numOfDays) * (offsetWidth/this.numOfDays);
+                extraCls = extraCls + ' cal-daysviewpanel-event-cropright';
+            }
+                        
             var eventEl = this.templates.wholeDayEvent.append(this.getWholeDayEl(pos), {
                 id: event.get('id'),
                 summary: event.get('summary'),
                 startTime: dtStart.format('H:i'),
+                extraCls: extraCls,
                 color: color,
                 bgColor: bgColor,
                 zIndex: 100,
-                width: Math.round(offsetWidth * (dtEnd.getTime() - dtStart.getTime()) / (this.numOfDays * Date.msDAY)) -5  +'px',
+                width: width  +'px',
                 height: '15px',
-                left: Math.round(offsetWidth * (dtStart.getTime() - this.startDate.getTime()) / (this.numOfDays * Date.msDAY)) + 'px',
+                left: left + 'px',
                 top: '1px'
             }, true);
             
@@ -689,12 +708,15 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     getWholeDayEl: function(pos) {
+        pos = Math.abs(pos);
+        
         for (var i=this.wholeDayArea.childNodes.length; i<pos+3; i++) {
             Ext.DomHelper.insertBefore(this.wholeDayArea.lastChild, '<div class="cal-daysviewpanel-wholedayheader-pos">&#160;</div>');
             this.layout();
             //console.log('inserted slice: ' + i);
         }
 
+        //console.log(pos);
         return this.wholeDayArea.childNodes[pos];
     },
     
@@ -909,7 +931,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         );
         
         ts.wholeDayEvent = new Ext.XTemplate(
-            '<div id="{id}", class="cal-daysviewpanel-event" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">' +
+            '<div id="{id}", class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">' +
                 '<div class="cal-daysviewpanel-wholedayevent-body">{[Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(values.summary))]}</div>' +
                 '<div class="cal-daysviewpanel-event-icons"></div>' +
             '</div>'

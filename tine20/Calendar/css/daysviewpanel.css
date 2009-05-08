@@ -255,3 +255,36 @@
     padding: 0px 4px;
     white-space: normal;
 }
+
+.cal-daysviewpanel-event-cropleft {
+    border-left-style: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.ext-gecko .cal-daysviewpanel-event-cropleft {
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-bottomleft: 0px;
+}
+
+.ext-safari .cal-daysviewpanel-event-cropleft {
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+}
+
+.cal-daysviewpanel-event-cropright {
+	background-image: none;
+    border-right-style: hidden;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.ext-gecko .cal-daysviewpanel-event-cropright {
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomright: 0px;
+}
+
+.ext-safari .cal-daysviewpanel-event-cropright {
+    -webkit-border-top-right-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+}
