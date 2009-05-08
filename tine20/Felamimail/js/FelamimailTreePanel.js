@@ -60,7 +60,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.root = new Ext.tree.AsyncTreeNode({
             text: 'default',
             globalname: '',
-            backend_id: 'default',
+            account_id: 'default',
             draggable: false,
             allowDrop: false,
             expanded: false,
@@ -207,7 +207,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             params: {
                                 method: 'Felamimail.createFolder',
                                 folder: parentNode.attributes.globalname + '/' + _text, // ?
-                                backend_id: node.attributes.backend_id
+                                account_id: node.attributes.account_id
                             },
                             scope: this,
                             success: function(_result, _request){
@@ -248,7 +248,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             params: {
                                 method: 'Felamimail.deleteFolder',
                                 folder: node.attributes.globalname,
-                                backend_id: node.attributes.backend_id
+                                account_id: node.attributes.account_id
                             },
                             scope: this,
                             success: function(){
@@ -284,7 +284,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             params: {
                                 method:     'Felamimail.deleteFolder',
                                 folder:     node.attributes.globalname,
-                                backendId:  node.attributes.backend_id
+                                accountId:  node.attributes.account_id
                             },
                             scope: this,
                             success: function(){
@@ -350,7 +350,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     requestData: function(node, callback){
     	// add globalname to filter
     	this.filter = [
-            {field: 'backend_id', operator: 'equals', value: node.attributes.backend_id},
+            {field: 'account_id', operator: 'equals', value: node.attributes.account_id},
             {field: 'globalname', operator: 'equals', value: node.attributes.globalname}
         ];
     	
@@ -370,7 +370,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     		leaf: false,
     		text: attr.localname,
     		globalname: attr.globalname,
-    		backend_id: attr.backend_id,
+    		account_id: attr.account_id,
     		folderNode: true,
             allowDrop: true
             //expandable: (attr.has_children == '1'),

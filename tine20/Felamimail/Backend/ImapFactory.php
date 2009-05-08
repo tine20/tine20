@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Factory.php 7539 2009-04-01 11:01:13Z p.schuele@metaways.de $
  * 
- * @todo        get matching config for given backendId
+ * @todo        get matching config for given accountId
  * @todo        add something like 'useCustomCredentials' to use config imap settings instead of account settings from db
  * @todo        add support for multiple accounts per user
  * @todo        do we need a backend for each folder on the mailserver? 
@@ -34,23 +34,23 @@ class Felamimail_Backend_ImapFactory
     private static $_backends = array();
     
     /**
-     * factory function to return a selected contacts backend class
+     * factory function to return a selected account/imap backend class
      *
-     * @param   string $_backendId
+     * @param   string $_accountId
      * @return  Felamimail_Backend_Imap
      */
-    static public function factory ($_backendId)
+    static public function factory ($_accountId)
     {
-        if (!isset(self::$_backends[$_backendId])) {
+        if (!isset(self::$_backends[$_accountId])) {
             // we need to instantiate a new imap backend
             $imapConfig = Tinebase_Core::getConfig()->imap;
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                 ' Connecting to server ' . $imapConfig->host . ':' . $imapConfig->port . ' with username ' . $imapConfig->user);
             
-            self::$_backends[$_backendId] = new Felamimail_Backend_Imap($imapConfig->toArray());
+            self::$_backends[$_accountId] = new Felamimail_Backend_Imap($imapConfig->toArray());
         }
         
-        $instance = self::$_backends[$_backendId];
+        $instance = self::$_backends[$_accountId];
         return $instance;
     }
 }    

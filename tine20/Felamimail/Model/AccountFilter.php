@@ -6,15 +6,15 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:FolderFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id:AccountFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
  */
 
 /**
- * Folder filter Class
+ * Account filter Class
  * @package     Felamimail
  */
-class Felamimail_Model_FolderFilter extends Tinebase_Model_Filter_FilterGroup 
+class Felamimail_Model_AccountFilter extends Tinebase_Model_Filter_FilterGroup 
 {
     /**
      * @var string application of this filter group
@@ -26,8 +26,7 @@ class Felamimail_Model_FolderFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'globalname'    => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'parent'        => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'account_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'user_id'       => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'name'          => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

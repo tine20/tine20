@@ -36,14 +36,14 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     /**
      * get saved folder record by backend and globalname
      *
-     * @param string $_backendId
+     * @param string $_accountId
      * @param string $_globalName
      * @return Felamimail_Model_Folder
      */
-    public function getByBackendAndGlobalName($_backendId, $_globalName)
+    public function getByBackendAndGlobalName($_accountId, $_globalName)
     {
         $filter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'backend_id', 'operator' => 'equals', 'value' => $_backendId),
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $_accountId),
             array('field' => 'globalname', 'operator' => 'equals', 'value' => $_globalName),
         ));
         

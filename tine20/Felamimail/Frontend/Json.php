@@ -40,12 +40,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * delete folder
      *
      * @param string $folder the folder global name to delete
-     * @param string $backendId
+     * @param string $accountId
      * @return array
      */
-    public function deleteFolder($folder, $backendId)
+    public function deleteFolder($folder, $accountId)
     {
-        $result = Felamimail_Controller_Folder::getInstance()->delete($folder, $backendId);
+        $result = Felamimail_Controller_Folder::getInstance()->delete($folder, $accountId);
 
         return array(
             'status'    => ($result) ? 'success' : 'failure'
@@ -133,7 +133,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string $recordData
      * @return array
      * 
-     * @todo add backendId param
+     * @todo add accountId param
      * @todo add test
      */
     public function saveMessage($recordData)

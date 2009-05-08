@@ -44,7 +44,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'localname'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'globalname'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), // global name is the path from root folder
         'parent'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'backend_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'default'),
+        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'default'),
         'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_selectable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'has_children'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),

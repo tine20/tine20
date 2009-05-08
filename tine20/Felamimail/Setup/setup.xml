@@ -7,7 +7,7 @@
     <status>disabled</status>
     <tables>
         <table>
-            <name>felamimail_backend</name>
+            <name>felamimail_account</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -26,17 +26,22 @@
                     <length>256</length>
                 </field>
                 <field>
-                    <name>host</name>
+                    <name>hostname</name>
                     <type>text</type>
                     <length>256</length>
                 </field>
                 <field>
-                    <name>user</name>
+                    <name>username</name>
                     <type>text</type>
                     <length>256</length>
                 </field>
                 <field>
                     <name>password</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>email</name>
                     <type>text</type>
                     <length>256</length>
                 </field>
@@ -50,6 +55,25 @@
                     <value>none</value>
                     <value>TLS</value>
                     <value>SSL</value>
+                </field>
+                <field>
+                    <name>signature</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>smtp_hostname</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>smtp_port</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>smtp_auth</name>
+                    <type>enum</type>
+                    <value>login</value>
+                    <value>plain</value>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -106,7 +130,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>backend_id</name>
+                    <name>account_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -166,8 +190,8 @@
                         <name>id</name>
                     </field>
                 </index>
-                <!-- @todo add unique key for backend + globalname? seems to be too long ... -->
-                <!-- @todo add foreign key index to backend? -->
+                <!-- @todo add unique key for account + globalname? seems to be too long ... -->
+                <!-- @todo add foreign key index to account? -->
             </declaration>
         </table>
         <table>

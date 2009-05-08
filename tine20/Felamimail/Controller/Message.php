@@ -145,7 +145,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $folder = $folderBackend->get($message->folder_id);
         
         try {
-            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->account_id);
             $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
             $imapMessage            = $imapBackend->getMessage($message->messageuid);
             $message->body          = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
@@ -184,7 +184,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $folder = $folderBackend->get($_record->folder_id);
         
         try {
-            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->account_id);
             if ($imapBackend->getCurrentFolder() != $folder->globalname) {
                 $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
             }
@@ -222,7 +222,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $folder = $_folder;
         }
         
-        $imapBackend = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+        $imapBackend = Felamimail_Backend_ImapFactory::factory($folder->account_id);
 
         if($imapBackend->getCurrentFolder() != $folder->globalname) {
             $imapBackend->selectFolder($folder->globalname);
@@ -250,7 +250,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $folder = $folderBackend->get($_folderId);
 
         try {
-            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->account_id);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // no imap connection -> no delete on server
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
@@ -281,7 +281,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * send one message through smtp
      *
-     * @todo add backendId param
+     * @todo add accountId param
      * @todo add mail & name from account settings
      * @todo add smtp host from account settings
      * @todo add name for 'to'
@@ -373,7 +373,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _extractFilter(Felamimail_Model_MessageFilter $_filter)
     {
-        //$result = array('backendId' => 'default', 'folder' => '');
+        //$result = array('accountId' => 'default', 'folder' => '');
         $result = array('folder_id' => '');
         
         $filters = $_filter->getFilterObjects();

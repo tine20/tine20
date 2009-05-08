@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @todo        add account chooser (from/backendId)
+ * @todo        add account chooser (from/accountId)
  * @todo        use it for reply/reply to all/forward
  * @todo        add buttons for add cc/ add bcc
  * @todo        add contact search combo for to/cc/bcc

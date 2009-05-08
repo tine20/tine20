@@ -106,7 +106,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         $folder                 = $this->_folderBackend->get($_folderId);
         
         try {
-            $backend                = Felamimail_Backend_ImapFactory::factory($folder->backend_id);
+            $backend                = Felamimail_Backend_ImapFactory::factory($folder->account_id);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // no imap connection -> no update
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
