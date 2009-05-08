@@ -129,7 +129,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initButtons();
         // init record 
         this.initRecord();
-        // get itmes for this dialog
+        // get items for this dialog
         this.items = this.getFormItems();
         
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
