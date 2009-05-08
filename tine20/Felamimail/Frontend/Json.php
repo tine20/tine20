@@ -133,6 +133,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string $recordData
      * @return array
      * 
+     * @todo add backendId param
      * @todo add test
      */
     public function saveMessage($recordData)
@@ -142,9 +143,42 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $result = Felamimail_Controller_Message::getInstance()->sendMessage($message);
 
+        return $this->_recordToJson($result);
+        
+        /*
         return array(
             'status' => ($result) ? 'success' : 'failure'
         );
+        */
+    }
+
+    /***************************** accounts funcs *******************************/
+    /***************************** accounts funcs *******************************/
+    
+    /**
+     * search accounts
+     *
+     * @return array
+     */
+    public static function searchAccounts($filter)
+    {
+        return $results = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
+        
+        /*
+        $controller = new Felamimail_Controller();
+        $accounts = $controller->getListOfAccounts();        
+        
+        $treeNodes = array();
+        
+        foreach($accounts as $id => $accountData) {
+            $treeNode = new Tinebase_Ext_Treenode('Felamimail', 'email', $id, $accountData->name, FALSE);
+            $treeNode->accountId = $id;
+            $treeNode->folderName = '';
+            $treeNodes[] = $treeNode;
+        }
+
+        return $treeNodes;
+        */
     }
     
     /***************************** old funcs *******************************/
@@ -232,36 +266,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 		// exit here, as the Zend_Server's  processing is adding a result code, which breaks the result array
 		exit;
 	}
-	
-    /**
-     * Returns the structure of the initial tree (email accounts) for this application.
-     *
-     * This function returns the needed structure, to display the initial tree, after the the logoin.
-     * Additional tree items get loaded on demand.
-     *
-     * @return array
-     * 
-     * @deprecated 
-     */
-    public static function getInitialTree()
-    {
-        /*
-        $controller = new Felamimail_Controller();
-        $accounts = $controller->getListOfAccounts();        
-        
-        $treeNodes = array();
-        
-        foreach($accounts as $id => $accountData) {
-            $treeNode = new Tinebase_Ext_Treenode('Felamimail', 'email', $id, $accountData->name, FALSE);
-            $treeNode->accountId = $id;
-            $treeNode->folderName = '';
-            $treeNodes[] = $treeNode;
-        }
-
-		return $treeNodes;
-        */
-	}
-	
+		
 	/**
      * Returns registry data of felamimail.
      * @see Tinebase_Application_Json_Abstract

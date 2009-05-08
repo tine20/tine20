@@ -281,8 +281,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * send one message through smtp
      *
-     * @todo make it work
-     * @todo use userspecific settings
+     * @todo add backendId param
+     * @todo add mail & name from account settings
+     * @todo add smtp host from account settings
+     * @todo add name for 'to'
+     * @todo add cc & bcc
      * @todo save in sent folder
      */
     public function sendMessage(Felamimail_Model_Message $_message)
@@ -290,32 +293,31 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
-        $config = array(
-            'ssl' => 'tls',
-            'port' => 25
-        );
+        // build mail
+        $mail = new Tinebase_Mail();
+        $mail->setBodyText(strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_message->body)));
+        $mail->setBodyHtml($_message->body);
         
-        /*
-        $zendMail = new Felamimail_Message();
-        $zendMail->
+        $mail->setFrom(Tinebase_Core::getConfig()->imap->user, Tinebase_Core::getConfig()->imap->user);
+        foreach ($_message->to as $to) {
+            $mail->addTo($to, $to);
+        }
+        $mail->setSubject($_message->subject);
+
+        // set transport + send mail
+        if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
+            $smtpConfig = Tinebase_Core::getConfig()->imap->smtp->toArray();
+            $transport = new Zend_Mail_Transport_Smtp($smtpConfig['hostname'], $smtpConfig);
+            Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
+
+            // save in sent folder
+            //Felamimail_Backend_ImapFactory::factory($_folder) ->appendMessage($_mail, 'Sent');
+        }
         
-        $mail->setBodyText('My Nice Test Text');
-        $mail->setBodyHtml('My Nice <b>Test</b> Text');
-        $mail->setFrom('somebody@example.com', 'Some Sender');
-        $mail->addTo('somebody_else@example.com', 'Some Recipient');
-        $mail->setSubject('TestSubject');
-        $mail->send();
-        */
         
-        /*
-        $transport = new Zend_Mail_Transport_Smtp('localhost', $config);
-        
-        Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
-        
-        $this->_getImapBackend()->appendMessage($_mail, 'Sent');
-        */
+        return $_message;
     }
     
     // @todo check if those are needed
