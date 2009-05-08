@@ -97,16 +97,6 @@ Tine.Admin.Applications.Main = function() {
         iconCls: 'action_settings'
     });
 
-    // removed, is replaced by role management
-    /*
-    var _action_permissions = new Ext.Action({
-        text: 'permissions',
-        disabled: true,
-        handler: _permissionsButtonHandler,
-        iconCls: 'action_permissions'
-    });
-    */
-    
 	var _createApplicationaDataStore = function()
     {
         /**
@@ -296,29 +286,28 @@ Tine.Admin.Applications.Main = function() {
             loadMask: true,
             autoExpandColumn: 'name',
             border: false,
-            /**
-             * Return CSS class to apply to rows depending upon flags
-             * - checks Flagged, Deleted and Seen
-             * 
-             * @param {} record
-             * @param {} index
-             * @return {String}
-             */
-            getViewRowClass: function(record, index) {
-                var flags = record.get('flags');
-                var className = '';
-                if(flags !== null) {
-                    if (flags.match(/Flagged/)) {
-                        className += ' flag_flagged';
+            viewConfig: {            
+                /**
+                 * Return CSS class to apply to rows depending upon flags
+                 * - checks Flagged, Deleted and Seen
+                 * 
+                 * @param {} record
+                 * @param {} index
+                 * @return {String}
+                 */
+                getRowClass: function(record, index) {
+                    //console.log(record);
+                    var className = '';
+                    switch(record.get('status')) {
+                        case 'disabled':
+                            className = 'grid_row_disabled';
+                            break;
+                        case 'enabled':
+                            className = 'grid_row_enabled';
+                            break;
                     }
-                    if (flags.match(/Deleted/)) {
-                        className += ' flag_deleted';
-                    }
+                    return className;
                 }
-                if (flags === null || !flags.match(/Seen/)) {
-                    className += ' flag_unread';
-                }
-                return className;
             }
         });
         

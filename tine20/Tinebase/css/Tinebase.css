@@ -167,3 +167,13 @@ html, body {
 .app-panel-apptitle-text {
     margin-left: 5px;
 }
+
+/******* grid row classes *********/
+.grid_row_enabled td{
+	font-weight: bold;
+	/* background-color: '#b5efc8'; */
+}
+
+.grid_row_disabled td{
+    /* background-color: '#efb5b5'; */
+}
