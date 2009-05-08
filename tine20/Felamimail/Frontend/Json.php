@@ -133,13 +133,15 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string $recordData
      * @return array
      * 
-     * @todo add accountId param
+     * @todo catch mail errors and show error in 'nicer' window
      * @todo add test
      */
     public function saveMessage($recordData)
     {
         $message = new Felamimail_Model_Message();
         $message->setFromJsonInUsersTimezone($recordData);
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r(Zend_Json::decode($recordData), TRUE));
         
         $result = Felamimail_Controller_Message::getInstance()->sendMessage($message);
 

@@ -280,20 +280,20 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     
     /**
      * send one message through smtp
-     *
-     * @todo add accountId param
+     * 
+     * @ŧodo append mail to sent folder (appendMessage only supports strings 
+     *  at the moment, how do we get the string representation?)
      * @todo add mail & name from account settings
      * @todo add smtp host from account settings
      * @todo add name for 'to'
      * @todo add cc & bcc
-     * @todo save in sent folder
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
         // build mail
         $mail = new Tinebase_Mail();
@@ -312,10 +312,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $transport = new Zend_Mail_Transport_Smtp($smtpConfig['hostname'], $smtpConfig);
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
 
-            // save in sent folder
-            //Felamimail_Backend_ImapFactory::factory($_folder) ->appendMessage($_mail, 'Sent');
+            // save in sent folder (account id is in from property)
+            //Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mail->generateMessage(), 'Sent');
         }
-        
         
         return $_message;
     }

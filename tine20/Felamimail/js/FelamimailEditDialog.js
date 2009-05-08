@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
+ * @ŧodo        make account combo work when loading from json
  * @todo        use it for reply/reply to all/forward
  * @todo        add buttons for add cc/ add bcc
  * @todo        add contact search combo for to/cc/bcc
@@ -69,7 +70,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 items: [[{
                         xtype:'reccombo',
-                        name: 'account_id',
+                        name: 'from',
                         fieldLabel: this.app.i18n._('From'),
                         displayField: 'user',
                         store: new Ext.data.Store({

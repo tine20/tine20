@@ -17,7 +17,6 @@ Ext.ns('Tine.Felamimail', 'Tine.Felamimail.Model');
  */
 Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
-    { name: 'account_id' },
     { name: 'subject' },
     { name: 'from' },
     { name: 'to' },
@@ -85,7 +84,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail
 
 Tine.Felamimail.Model.Message.getDefaultData = function() { 
     return {
-        account_id: 'default'
+        from: 'default'
     	/*
         is_open: 1,
         is_billable: true
