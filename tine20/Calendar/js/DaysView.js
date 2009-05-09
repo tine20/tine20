@@ -387,17 +387,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 top: '1px'
             }, true);
             
-            new Ext.Resizable(eventEl, {
-                handles: 'e',
-                disableTrackOver: true,
-                widthIncrement: Math.round(offsetWidth / this.numOfDays),
-                minWidth: Math.round(offsetWidth / this.numOfDays),
-                listeners: {
-                    scope: this,
-                    resize: this.onEventResize,
-                    beforeresize: this.onBeforeEventResize
-                }
-            });
+            if (! (endColNum > this.numOfDays)) {
+                new Ext.Resizable(eventEl, {
+                    handles: 'e',
+                    disableTrackOver: true,
+                    widthIncrement: Math.round(offsetWidth / this.numOfDays),
+                    minWidth: Math.round(offsetWidth / this.numOfDays),
+                    listeners: {
+                        scope: this,
+                        resize: this.onEventResize,
+                        beforeresize: this.onBeforeEventResize
+                    }
+                });
+            }
             
         } else {
             
