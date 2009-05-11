@@ -215,6 +215,9 @@ Ext.ux.PopupWindowGroup.getMainWindow = function() {
     var w = window;
     while ( w.name != Ext.ux.PopupWindowGroup.MainWindowName) {
         w = w.opener;
+        if (! w) {
+            return false;
+        }
     }
     return w;
 };
@@ -226,7 +229,8 @@ Ext.ux.PopupWindowGroup.getMainWindow = function() {
  * popup windows, create additional instances of {@link Ext.ux.PopupWindowGroup} as needed.
  * @singleton
  */
-if (window.name == Ext.ux.PopupWindowGroup.MainWindowName || window.name === '') {
+var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow();
+if (! mainWindow || mainWindow == window) {
     Ext.ux.PopupWindowMgr = new Ext.ux.PopupWindowGroup();
     window.name = Ext.ux.PopupWindowGroup.MainWindowName;
     window.isMainWindow = true;
