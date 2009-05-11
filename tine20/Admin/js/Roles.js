@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        make this work with ext windows
  */
  
 Ext.namespace('Tine.Admin.Roles');
@@ -426,6 +427,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 },
                 success: function(response) {
                     if(window.opener.Tine.Admin.Roles) {
+                        // TODO use event
                         window.opener.Tine.Admin.Roles.Main.reload();
                     }
                     if(_closeWindow === true) {
