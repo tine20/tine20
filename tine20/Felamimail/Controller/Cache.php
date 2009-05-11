@@ -236,6 +236,9 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             $message = $value['message'];
             $subject = '';
             
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($message, true));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message->contentType);
+            
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
                     'messageuid'    => $uid,
@@ -245,7 +248,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                     'timestamp'     => Zend_Date::now(),
                     'received'      => $this->_convertDate($value['received']),
                     'size'          => $value['size'],
-                    'flags'         => $message->getFlags()
+                    'flags'         => $message->getFlags(),
+                    'attachment'    => (preg_match('/multipart\/mixed/', $message->contentType) > 0)
                 ));
                 
                 // try to get 'subject', 'to', 'cc', 'bcc'

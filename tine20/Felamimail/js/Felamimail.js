@@ -39,25 +39,3 @@ Tine.Felamimail.accountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     modelName: 'Account',
     recordClass: Tine.Felamimail.Model.Account
 });
-
-/**
- * get flag icon
- * 
- * @param {} flags
- * @return {}
- */
-Tine.Felamimail.getFlagIcon = function(flags) {
-    if (!flags) {
-        return '';
-    }
-    
-    var icon = '';
-    if (flags.match(/Answered/)) {
-        icon = 'images/oxygen/16x16/actions/mail-reply-sender.png';
-    }   
-    if (flags.match(/Passed/)) {
-        icon = 'images/oxygen/16x16/actions/mail-forward.png';
-    }   
-    
-    return '<img class="FelamimailFlagIcon" src="' + icon + '">'; // ext:qtip="' + status.data.status_name + '">';
-};

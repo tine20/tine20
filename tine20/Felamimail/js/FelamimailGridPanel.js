@@ -9,7 +9,6 @@
  *
  * @todo        finish reply all implementation
  * @todo        add header to preview
- * @todo        add attachments
  * @todo        add more filters (to/cc/date...)
  */
  
@@ -289,12 +288,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             dataIndex: 'id',
             hidden: true
         }, {
+            id: 'attachment',
+            width: 16,
+            sortable: true,
+            dataIndex: 'attachment',
+            renderer: this.attachmentRenderer
+        }, {
             id: 'flags',
-            //header: this.app.i18n._("Status"),
             width: 16,
             sortable: true,
             dataIndex: 'flags',
-            renderer: Tine.Felamimail.getFlagIcon
+            renderer: this.flagRenderer
         },{
             id: 'subject',
             header: this.app.i18n._("Subject"),
@@ -307,7 +311,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             width: 150,
             sortable: true,
             dataIndex: 'from'
-            //renderer: this.statusRenderer.createDelegate(this)
         },{
             id: 'to',
             header: this.app.i18n._("To"),
@@ -341,14 +344,36 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     /**
-     * status column renderer
+     * attachment column renderer
      * @param {string} value
      * @return {string}
      */
-    statusRenderer: function(value) {
-        return this.app.i18n._hidden(value);
+    attachmentRenderer: function(value) {
+        return (value == 1) ? '<img class="FelamimailFlagIcon" src="images/oxygen/16x16/actions/attach.png">' : '';
     },
-
+    
+    /**
+     * get flag icon
+     * 
+     * @param {} flags
+     * @return {}
+     */
+    flagRenderer: function(flags) {
+        if (!flags) {
+            return '';
+        }
+        
+        var icon = '';
+        if (flags.match(/Answered/)) {
+            icon = 'images/oxygen/16x16/actions/mail-reply-sender.png';
+        }   
+        if (flags.match(/Passed/)) {
+            icon = 'images/oxygen/16x16/actions/mail-forward.png';
+        }   
+        
+        return '<img class="FelamimailFlagIcon" src="' + icon + '">'; // ext:qtip="' + status.data.status_name + '">';
+    },
+    
     /********************************* event handler **************************************/
     
     /**

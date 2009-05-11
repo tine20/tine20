@@ -220,6 +220,10 @@
                     <type>text</type>
                 </field>
                 <field>
+                    <name>attachment</name>
+                    <type>boolean</type>
+                </field>
+                <field>
                     <name>from</name>
                     <type>text</type>
                     <length>256</length>
