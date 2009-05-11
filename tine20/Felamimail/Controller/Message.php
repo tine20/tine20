@@ -214,6 +214,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function addFlags($_message, $_flags, $_folder = NULL)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add flags: ' . print_r($_flags, TRUE));
+        
         if ($_folder === NULL) {
             $folderBackend = new Felamimail_Backend_Folder();
             $folder = $folderBackend->get($_message->folder_id);

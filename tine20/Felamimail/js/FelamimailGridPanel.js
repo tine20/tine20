@@ -89,8 +89,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * init actions with actionToolbar, contextMenu and actionUpdater
      * 
      * @private
-     * 
-     * @todo add actions to action updater
      */
     initActions: function() {
 
@@ -104,16 +102,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         });
 
         this.action_reply = new Ext.Action({
-            requiredGrant: 'addGrant',
+            requiredGrant: 'readGrant',
             actionType: 'reply',
             text: this.app.i18n._('Reply'),
             handler: this.onEditInNewWindow,
             iconCls: 'action_email_reply',
-            scope: this
+            scope: this,
+            disabled: true
         });
 
         this.action_replyAll = new Ext.Action({
-            requiredGrant: 'addGrant',
+            requiredGrant: 'readGrant',
             actionType: 'replyAll',
             text: this.app.i18n._('Reply To All'),
             handler: this.onEditInNewWindow,
@@ -123,20 +122,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         });
 
         this.action_forward = new Ext.Action({
-            requiredGrant: 'addGrant',
+            requiredGrant: 'readGrant',
             actionType: 'forward',
             text: this.app.i18n._('Forward'),
             handler: this.onEditInNewWindow,
             iconCls: 'action_email_forward',
-            scope: this
+            scope: this,
+            disabled: true
         });
 
         this.action_flag = new Ext.Action({
-            requiredGrant: 'addGrant',
-            //actionType: 'edit',
-            text: this.app.i18n._('Flag'),
-            //handler: this.onEditInNewWindow,
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Toggle Flag'),
+            handler: this.onToggleFlag,
             iconCls: 'action_email_flag',
+            allowMultiple: true,
             scope: this,
             disabled: true
         });
@@ -179,65 +179,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 this.actions.push(all[i]);
             }
         }
-    },
-    
-    /**
-     * generic edit in new window handler
-     * - overwritten parent func
-     * - action type edit: reply/replyAll/forward
-     * 
-     * @param {} button
-     * @param {} event
-     * 
-     * @todo add quoting on reply
-     * @todo add forwarding message
-     * @todo set default 'from' (account id)
-     */
-    onEditInNewWindow: function(button, event) {
-        var recordData = this.recordClass.getDefaultData();
-        recordData.id = 0;
-        
-        if (    button.actionType == 'reply'
-            ||  button.actionType == 'replyAll'
-            ||  button.actionType == 'forward'
-        ) {
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            var selectedRecord = selectedRows[0];
-            
-            //recordData.id = selectedRecord.id;
-            
-            switch (button.actionType) {
-                case 'replyAll':
-                case 'reply':
-                    recordData.to = selectedRecord.get('from');
-                    recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
-                    recordData.subject = _('Re: ') + selectedRecord.get('subject');
-                    break;
-                case 'forward':
-                    recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
-                    recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
-                    break;
-            }
-        }
-        
-        console.log(recordData);
-        
-        var record = new this.recordClass(recordData, recordData.id);
-        
-        console.log(record);
-        //console.log(button);
-        
-        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
-            record: record
-            /*
-            listeners: {
-                scope: this,
-                'update': function(record) {
-                    this.store.load({});
-                }
-            }
-            */
-        });
     },
     
     /**
@@ -407,5 +348,86 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     statusRenderer: function(value) {
         return this.app.i18n._hidden(value);
+    },
+
+    /********************************* event handler **************************************/
+    
+    /**
+     * generic edit in new window handler
+     * - overwritten parent func
+     * - action type edit: reply/replyAll/forward
+     * 
+     * @param {} button
+     * @param {} event
+     * 
+     * @todo add quoting to reply body text
+     * @todo add forwarding message
+     */
+    onEditInNewWindow: function(button, event) {
+        var recordData = this.recordClass.getDefaultData();
+        
+        if (    button.actionType == 'reply'
+            ||  button.actionType == 'replyAll'
+            ||  button.actionType == 'forward'
+        ) {
+            var selectedRows = this.grid.getSelectionModel().getSelections();
+            var selectedRecord = selectedRows[0];
+            
+            switch (button.actionType) {
+                case 'replyAll':
+                case 'reply':
+                    recordData.to = selectedRecord.get('from');
+                    recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
+                    recordData.subject = _('Re: ') + selectedRecord.get('subject');
+                    break;
+                case 'forward':
+                    recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
+                    recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
+                    break;
+            }
+        }
+        
+        var record = new this.recordClass(recordData, 0);
+        
+        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
+            record: record
+        });
+    },
+    
+    /**
+     * toggle flagged status of mail(s)
+     * 
+     * @param {} button
+     * @param {} event
+     */
+    onToggleFlag: function(button, event) {
+        var messages = this.grid.getSelectionModel().getSelections();            
+        var toUpdateIds = [];
+        for (var i = 0; i < messages.length; ++i) {
+            toUpdateIds.push(messages[i].data.id);
+        }
+        
+        // check if set or clear flag
+        var method = (messages[0].get('flags').match(/Flagged/)) ? 'clearFlag' : 'setFlag';
+        
+        this.grid.loadMask.show();
+        Ext.Ajax.request({
+            params: {
+                method: 'Felamimail.' + method,
+                ids: Ext.util.JSON.encode(toUpdateIds),
+                flag: Ext.util.JSON.encode('\\Flagged')
+            },
+            success: function(_result, _request) {
+                this.store.load();
+                this.grid.loadMask.hide();
+            },
+            failure: function(result, request){
+                Ext.MessageBox.alert(
+                    this.app.i18n._('Failed'), 
+                    this.app.i18n._('Some error occured while trying to update the messages.')
+                );
+            },
+            scope: this
+        });
     }
 });

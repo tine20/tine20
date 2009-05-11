@@ -154,14 +154,14 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $firstMail = $result['results'][0];
         
         // add flag
-        $this->_json->setFlag(Zend_Json::encode(array($firstMail['id'])), '\Flagged');
+        $this->_json->setFlag(Zend_Json::encode(array($firstMail['id'])), Zend_Json::encode('\\Flagged'));
         
         // check flags
         $message = $this->_json->getMessage($firstMail['id']);
         $this->assertTrue(preg_match('/\\Flagged/', $message['flags']) > 0);
         
         // remove flag
-        $this->_json->clearFlag(Zend_Json::encode(array($firstMail['id'])), '\Flagged');
+        $this->_json->clearFlag(Zend_Json::encode(array($firstMail['id'])), Zend_Json::encode('\\Flagged'));
         
         // check flags
         $message = $this->_json->getMessage($firstMail['id']);
