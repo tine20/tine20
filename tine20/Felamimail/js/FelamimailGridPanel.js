@@ -7,8 +7,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @todo        implement all actions (reply, flag, ...)
- * @todo        make some action work only if 1..x messages are selected
+ * @todo        finish reply all implementation
  * @todo        add header to preview
  * @todo        add attachments
  * @todo        add more filters (to/cc/date...)
