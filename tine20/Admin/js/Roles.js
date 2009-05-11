@@ -9,6 +9,7 @@
  * @version     $Id$
  *
  * @todo        make this work with ext windows
+ * @todo        refactor this (don't use Ext.getCmp, etc.)
  */
  
 Ext.namespace('Tine.Admin.Roles');
@@ -29,7 +30,8 @@ Tine.Admin.Roles.Main = {
          * onclick handler for addBtn
          */
         addRole: function(_button, _event) {
-            Tine.Admin.Roles.EditDialog.openWindow({role: null});
+            //Tine.Admin.Roles.EditDialog.openWindow({role: null});
+            this.openEditWindow(null);
         },
 
         /**
@@ -37,11 +39,9 @@ Tine.Admin.Roles.Main = {
          */
         editRole: function(_button, _event) {
             var selectedRows = Ext.getCmp('AdminRolesGrid').getSelectionModel().getSelections();
-            
-            Tine.Admin.Roles.EditDialog.openWindow({role: selectedRows[0]});
+            this.openEditWindow(selectedRows[0]);
         },
 
-        
         /**
          * onclick handler for deleteBtn
          */
@@ -76,6 +76,26 @@ Tine.Admin.Roles.Main = {
         }    
     },
     
+    /**
+     * open edit window
+     * 
+     * @param {} record
+     */
+    openEditWindow: function (record) {
+        var popupWindow = Tine.Admin.Roles.EditDialog.openWindow({
+            role: record,
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    this.reload();
+                }
+            }                
+        });
+    },
+    
+    /**
+     * init roles grid
+     */
     initComponent: function() {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
@@ -245,7 +265,8 @@ Tine.Admin.Roles.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
         	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
-                Tine.Admin.Roles.EditDialog.openWindow({role: record});
+                //Tine.Admin.Roles.EditDialog.openWindow({role: record});
+                this.openEditWindow(record);
         	}
         }, this);
 
@@ -426,15 +447,12 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     roleRights: Ext.util.JSON.encode(roleRights)
                 },
                 success: function(response) {
-                    if(window.opener.Tine.Admin.Roles) {
-                        // TODO use event
-                        window.opener.Tine.Admin.Roles.Main.reload();
-                    }
+                    this.fireEvent('update', Ext.util.JSON.encode(this.role.data));
+                    Ext.MessageBox.hide();
                     if(_closeWindow === true) {
-                        window.close();
+                        this.window.close();
                     } else {
                         this.onRecordLoad(response);
-                        Ext.MessageBox.hide();
                     }
                 },
                 failure: function ( result, request) { 
