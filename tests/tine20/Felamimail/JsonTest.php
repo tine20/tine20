@@ -111,12 +111,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMessage()
     {
-        // get inbox folder id
-        Felamimail_Controller_Folder::getInstance()->getSubFolders();
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
-        
-        $filter = $this->_getMessageFilter($folder->getId());
+        $inbox = $this->_getInboxFolder();
+        $filter = $this->_getMessageFilter($inbox->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         
         $firstMail = $result['results'][0];
@@ -146,6 +142,52 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(143, $result['port']);
     }
     
+    /**
+     * test flags
+     * 
+     */
+    public function testSetAndClearFlags()
+    {
+        $inbox = $this->_getInboxFolder();
+        $filter = $this->_getMessageFilter($inbox->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $firstMail = $result['results'][0];
+        
+        // add flag
+        $this->_json->setFlag(Zend_Json::encode(array($firstMail['id'])), '\Flagged');
+        
+        // check flags
+        $message = $this->_json->getMessage($firstMail['id']);
+        $this->assertTrue(preg_match('/\\Flagged/', $message['flags']) > 0);
+        
+        // remove flag
+        $this->_json->clearFlag(Zend_Json::encode(array($firstMail['id'])), '\Flagged');
+        
+        // check flags
+        $message = $this->_json->getMessage($firstMail['id']);
+        $this->assertTrue(preg_match('/\\Flagged/', $message['flags']) == 0);
+    }
+    
+    /**
+     * test send and delete
+     * 
+     * @todo implement
+     */
+    public function testSendAndDeleteMessage()
+    {
+        
+    }
+    
+    /**
+     * test send and delete
+     * 
+     * @todo implement
+     */
+    public function testMoveMessage()
+    {
+        
+    }
+    
     /************************ protected functions ****************************/
     
     /**
@@ -170,5 +212,19 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         return array(array(
             'field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId
         ));
+    }
+    
+    /**
+     * get inbox
+     *
+     * @return Felamimail_Model_Folder
+     */
+    protected function _getInboxFolder()
+    {
+        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        
+        return $folder;
     }
 }

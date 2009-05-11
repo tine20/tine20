@@ -208,9 +208,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * add flags to message
      *
-     * @param Felamimail_Model_Message $_message
-     * @param array $_flags
-     * @param Felamimail_Model_Folder $_folder [optional]
+     * @param Felamimail_Model_Message  $_message
+     * @param array                     $_flags
+     * @param Felamimail_Model_Folder   $_folder [optional]
      */
     public function addFlags($_message, $_flags, $_folder = NULL)
     {
@@ -231,10 +231,39 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // save each flag in backend, cache db and message record
         $imapBackend->addFlags($_message->messageuid, $_flags);
         foreach ($_flags as $flag) {
-            //$imapBackend->addFlags($_message->messageuid, array($flag => $flag));
             $_message->flags .= ' ' . $flag;
             $this->_backend->addFlag($_message->getId(), $flag);
         }
+    }
+    
+    /**
+     * clear message flag(s)
+     *
+     * @param Felamimail_Model_Message  $_message
+     * @param array                     $_flags
+     * @param Felamimail_Model_Folder   $_folder [optional]
+     */
+    public function clearFlags($_message, $_flags, $_folder = NULL)
+    {
+        if ($_folder === NULL) {
+            $folderBackend = new Felamimail_Backend_Folder();
+            $folder = $folderBackend->get($_message->folder_id);
+            
+        } else {
+            $folder = $_folder;
+        }
+        
+        $imapBackend = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+
+        if($imapBackend->getCurrentFolder() != $folder->globalname) {
+            $imapBackend->selectFolder($folder->globalname);
+        }
+        
+        // remove flag in imap backend, cache db and message record
+        $imapBackend->clearFlags($_message->messageuid, $_flags);
+        foreach ($_flags as $flag) {
+            $this->_backend->clearFlag($_message->getId(), $flag);
+        }        
     }
     
     /**
@@ -343,25 +372,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $foundEntries;
     }
     
-    /**
-     * Enter description here...
-     *
-     * @param unknown_type $_serverId
-     * @param unknown_type $_globalName
-     * @param unknown_type $_id
-     * @param unknown_type $_flags
-     * 
-     * @deprecated
-     */
-    public function clearFlags($_serverId, $_globalName, $_id, $_flags)
-    {
-        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getImapBackend()->selectFolder($_globalName);
-        }
-        
-        $this->_getImapBackend()->clearFlags($_id, $_flags);
-    }
-
     /************************* protected funcs *************************/
     
     /**

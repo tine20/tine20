@@ -154,6 +154,40 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         */
     }
 
+    /**
+     * set flag of messages
+     *
+     * @param string $ids
+     * @param string $flag
+     * @return array
+     */
+    public function setFlag($ids, $flag)
+    {
+        foreach (Zend_Json::decode($ids) as $id) {
+            $message = Felamimail_Controller_Message::getInstance()->get($id);
+            Felamimail_Controller_Message::getInstance()->addFlags($message, array($flag));
+        }
+        
+        return array('status' => 'success');
+    }
+
+    /**
+     * clear flag of messages
+     *
+     * @param string $ids
+     * @param string $flag
+     * @return array
+     */
+    public function clearFlag($ids, $flag)
+    {
+        foreach (Zend_Json::decode($ids) as $id) {
+            $message = Felamimail_Controller_Message::getInstance()->get($id);
+            Felamimail_Controller_Message::getInstance()->clearFlags($message, array($flag));
+        }
+        
+        return array('status' => 'success');
+    }
+    
     /***************************** accounts funcs *******************************/
     /***************************** accounts funcs *******************************/
     
