@@ -142,7 +142,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     this.getCreateAction(node),
                     this.getRenameAction(node),
                     this.getDeleteAction(node),
-                    this.getRefreshAction(node)
+                    this.getRefreshCacheAction(node)
                 ]
             });
         }
@@ -305,10 +305,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Ext.tree.AsyncTreeNode}
      * @return {Object} action item
      */
-    getRefreshAction: function(node) {
+    getRefreshCacheAction: function(node) {
         return {
-            text: _('Refresh'),
-            iconCls: 'x-tbar-loading',
+            text: _('Update Cache'),
+            iconCls: 'action_update_cache',
             scope: this,
             handler: function() {
                 Ext.Ajax.request({

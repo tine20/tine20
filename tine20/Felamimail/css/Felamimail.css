@@ -20,6 +20,10 @@
     background-image:url(../../images/oxygen/16x16/actions/mail-forward.png) !important;
 }
 
+.action_update_cache {
+	background-image:url(../../images/oxygen/16x16/actions/mail-receive.png) !important;
+}
+
 /*
 .action_email_previuosMessage {
     background-image:url(../../images/oxygen/16x16/actions/find-previous.png) !important;
