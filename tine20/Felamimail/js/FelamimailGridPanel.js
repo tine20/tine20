@@ -7,8 +7,8 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @todo        add actions (reply, ...)
- * @todo        add dragndrop
+ * @todo        implement all actions (reply, flag, ...)
+ * @todo        make some action work only if 1..x messages are selected
  * @todo        add header to preview
  * @todo        add attachments
  * @todo        add more filters (to/cc/date...)
@@ -89,16 +89,56 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * init actions with actionToolbar, contextMenu and actionUpdater
      * 
      * @private
+     * 
+     * @todo add actions to action updater
      */
     initActions: function() {
 
-        this.action_addInNewWindow = new Ext.Action({
+        this.action_write = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.app.i18n._('Write'),
             handler: this.onEditInNewWindow,
             iconCls: this.app.appName + 'IconCls',
             scope: this
+        });
+
+        this.action_reply = new Ext.Action({
+            requiredGrant: 'addGrant',
+            actionType: 'reply',
+            text: this.app.i18n._('Reply'),
+            handler: this.onEditInNewWindow,
+            iconCls: 'action_email_reply',
+            scope: this
+        });
+
+        this.action_replyAll = new Ext.Action({
+            requiredGrant: 'addGrant',
+            actionType: 'replyAll',
+            text: this.app.i18n._('Reply To All'),
+            handler: this.onEditInNewWindow,
+            iconCls: 'action_email_replyAll',
+            scope: this,
+            disabled: true
+        });
+
+        this.action_forward = new Ext.Action({
+            requiredGrant: 'addGrant',
+            actionType: 'forward',
+            text: this.app.i18n._('Forward'),
+            handler: this.onEditInNewWindow,
+            iconCls: 'action_email_forward',
+            scope: this
+        });
+
+        this.action_flag = new Ext.Action({
+            requiredGrant: 'addGrant',
+            //actionType: 'edit',
+            text: this.app.i18n._('Flag'),
+            //handler: this.onEditInNewWindow,
+            iconCls: 'action_email_flag',
+            scope: this,
+            disabled: true
         });
         
         this.action_deleteRecord = new Ext.Action({
@@ -115,7 +155,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         });
         
         this.actions = [
-            this.action_addInNewWindow,
+            this.action_write,
+            this.action_reply,
+            this.action_replyAll,
+            this.action_forward,
+            this.action_flag,
             this.action_deleteRecord
         ];
         
@@ -135,41 +179,65 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 this.actions.push(all[i]);
             }
         }
+    },
+    
+    /**
+     * generic edit in new window handler
+     * - overwritten parent func
+     * - action type edit: reply/replyAll/forward
+     * 
+     * @param {} button
+     * @param {} event
+     * 
+     * @todo add quoting on reply
+     * @todo add forwarding message
+     * @todo set default 'from' (account id)
+     */
+    onEditInNewWindow: function(button, event) {
+        var recordData = this.recordClass.getDefaultData();
+        recordData.id = 0;
         
-        /*
-        this.action_editInNewWindow = new Ext.Action({
-            requiredGrant: 'readGrant',
-            text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(_('Edit {0}'), this.i18nRecordName),
-            disabled: true,
-            actionType: 'edit',
-            handler: this.onEditInNewWindow,
-            iconCls: 'action_edit',
-            scope: this
-        });
-                        
-        this.actions = [
-            this.action_addInNewWindow,
-            this.action_editInNewWindow,
-            this.action_deleteRecord
-        ];
-        
-        this.actionToolbar = new Ext.Toolbar({
-            split: false,
-            height: 26,
-            items: this.actions.concat(this.actionToolbarItems)
-        });
-        
-        this.contextMenu = new Ext.menu.Menu({
-            items: this.actions.concat(this.contextMenuItems)
-        });
-        
-        // pool together all our actions, so that we can hand them over to our actionUpdater
-        for (var all=this.actionToolbarItems.concat(this.contextMenuItems), i=0; i<all.length; i++) {
-            if(this.actions.indexOf(all[i]) == -1) {
-                this.actions.push(all[i]);
+        if (    button.actionType == 'reply'
+            ||  button.actionType == 'replyAll'
+            ||  button.actionType == 'forward'
+        ) {
+            var selectedRows = this.grid.getSelectionModel().getSelections();
+            var selectedRecord = selectedRows[0];
+            
+            //recordData.id = selectedRecord.id;
+            
+            switch (button.actionType) {
+                case 'replyAll':
+                case 'reply':
+                    recordData.to = selectedRecord.get('from');
+                    recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
+                    recordData.subject = _('Re: ') + selectedRecord.get('subject');
+                    break;
+                case 'forward':
+                    recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
+                    recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
+                    break;
             }
         }
-        */
+        
+        console.log(recordData);
+        
+        var record = new this.recordClass(recordData, recordData.id);
+        
+        console.log(record);
+        //console.log(button);
+        
+        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
+            record: record
+            /*
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    this.store.load({});
+                }
+            }
+            */
+        });
     },
     
     /**

@@ -85,9 +85,5 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail
 Tine.Felamimail.Model.Message.getDefaultData = function() { 
     return {
         from: 'default'
-    	/*
-        is_open: 1,
-        is_billable: true
-        */
     };
 };

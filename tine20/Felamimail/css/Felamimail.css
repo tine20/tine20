@@ -20,6 +20,7 @@
     background-image:url(../../images/oxygen/16x16/actions/mail-forward.png) !important;
 }
 
+/*
 .action_email_previuosMessage {
     background-image:url(../../images/oxygen/16x16/actions/find-previous.png) !important;
 }
@@ -27,6 +28,7 @@
 .action_email_nextMessage {
     background-image:url(../../images/oxygen/16x16/actions/find-next.png) !important;
 }
+*/
 
 .FelamimailIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
