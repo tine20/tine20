@@ -237,7 +237,6 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             $subject = '';
             
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($message, true));
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message->contentType);
             
             try {
                 $cachedMessage = new Felamimail_Model_Message(array(
