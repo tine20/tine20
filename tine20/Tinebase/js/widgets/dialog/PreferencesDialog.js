@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        fix ext window type problem (dialog only works the 1. time it is loaded)
  * @todo        add filter toolbar
  * @todo        use proxy store?
  */
@@ -102,16 +101,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.i18n = new Locale.Gettext();
         this.i18n.textdomain('Tinebase');
 
-        // delete panels
-        // TODO: do we need that?
-        var panelsToDelete = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
-        for (panelName in panelsToDelete) {
-            if (panelsToDelete.hasOwnProperty(panelName)) {
-                console.log('deleting panel (init)' + panelName);
-                panelsToDelete[panelName].destroy();
-            }
-        }
-        
         // init actions
         this.initActions();
         // init buttons and tbar
@@ -211,11 +200,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.window.setTitle(this.i18n._('Edit Preferences'));
         this.loadMask = new Ext.LoadMask(ct, {msg: _('Loading ...')});
         //this.loadMask.show();
-        
-        // init pref panels
-        // TODO: do we need that?
-        console.log('init');
-        this.prefPanels, this.adminPrefPanels = {};
     },
     
     /**
@@ -225,6 +209,29 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.fireEvent('cancel');
         this.purgeListeners();
         this.window.close();
+    },
+
+    /**
+     * @private
+     */
+    onDestroy: function(){
+        // delete panels
+        for (var panelName in this.adminPrefPanels) {
+            if (this.adminPrefPanels.hasOwnProperty(panelName)) {
+                this.adminPrefPanels[panelName].destroy();
+                this.adminPrefPanels[panelName] = null;
+            }
+        }
+        for (panelName in this.prefPanels) {
+            if (this.prefPanels.hasOwnProperty(panelName)) {
+                this.prefPanels[panelName].destroy();
+                this.prefPanels[panelName] = null;
+            }
+        }
+        this.prefsCardPanel.destroy();
+        this.prefsCardPanel = null;
+        
+        Tine.widgets.dialog.Preferences.superclass.onDestroy.apply(this, arguments);
     },
     
     /**
@@ -249,7 +256,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         var data = this.getValuesFromPanels();
     	
     	// save preference data
-    	//console.log(data);
     	Ext.Ajax.request({
             scope: this,
             params: {
@@ -265,20 +271,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 
                 if (closeWindow) {
                     this.purgeListeners();
-                    // delete panels
-                    // TODO: do we need that?
-                    var panelsToDelete = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
-                    for (panelName in panelsToDelete) {
-                        if (panelsToDelete.hasOwnProperty(panelName)) {
-                            console.log('deleting panel' + panelName);
-                            panelsToDelete[panelName].destroy();
-                        }
-                    }
-                    
-                    // TODO: do we need that?
-                    console.log('destroy card panel');
-                    this.prefsCardPanel.destroy();
-                    
                     this.window.close();
                 }
             },
@@ -300,7 +292,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         for (panelName in panelsToSave) {
             if (panelsToSave.hasOwnProperty(panelName)) {
                 panel = panelsToSave[panelName];
-                //console.log(panel);
                 data[panel.appName] = {};
                 for (var j=0; j < panel.items.length; j++) {
                     var item = panel.items.items[j];
@@ -342,7 +333,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 }
             }
         }
-        //console.log(Tine.Tinebase.registry.get('preferences'));
     },
     
     /**
@@ -400,7 +390,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             remoteSort: false
         });
         
-        //console.log('created store for ' + appName);
         store.load();
     },
 
@@ -412,8 +401,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @param  {Array}          load options
      */
     onStoreLoad: function(store, records, options) {
-        //console.log('loaded');
-        //console.log(store);
         var appName = store.baseParams.applicationName;
         
         var card = new Tine.widgets.dialog.PreferencesPanel({
@@ -465,9 +452,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         
     	var panel = (this.adminMode) ? this.adminPrefPanels[appName] : this.prefPanels[appName];
 
-        console.log(appName);
-        console.log(panel);
-        
     	if (!this.adminMode) {
     		// check grant for pref and enable/disable button
 			this.action_switchAdminMode.setDisabled(!Tine.Tinebase.common.hasRight('admin', appName));
