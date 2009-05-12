@@ -47,7 +47,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                         '-',
                         this.action_changePassword,
                         this.action_installGoogleGears,
-                        this.action_editPreferences,
                         '-', 
                         this.action_logout
                     ]                
@@ -55,19 +54,22 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             }, {
                 text: _('Admin'),
                 id: 'Tinebase_System_AdminButton',
-                iconCls: 'AddressbookTreePanel',
                 disabled: true,
                 menu: {
                     id: 'Tinebase_System_AdminMenu'
                 }     
-            }, {
+            },{
                 text: _('Preferences'),
                 id: 'Tinebase_System_PreferencesButton',
-                iconCls: 'AddressbookTreePanel',
-                disabled: true,
+                disabled: false,
+                handler: this.onEditPreferences
+                /*,
                 menu: {
-                    id: 'Tinebase_System_PreferencesMenu'
-                }
+                    id: 'Tinebase_System_PreferencesMenu',
+                    items: [
+                        //this.action_editPreferences
+                    ]
+                }*/
             }, '->', 
             this.action_logout
         ]});
@@ -196,12 +198,15 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             disabled: (window.google && google.gears) ? true : false
         });
         
+        /*
         this.action_editPreferences = new Ext.Action({
-            text: _('Edit Preferences'),
+            text: _('Preferences'),
             handler: this.onEditPreferences,
             disabled: false,
-            iconCls: 'action_preferences'
+            //id: 'Tinebase_System_PreferencesButton',
+            iconCls: 'AddressbookTreePanel' //''action_preferences'
         });
+        */
 
         this.action_logout = new Ext.Action({
             text: _('Logout'),

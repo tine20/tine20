@@ -625,10 +625,6 @@ Tine.Crm.Main = {
         } else {
         	adminButton.setDisabled(true);
         }
-
-        var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('crmThumbnailApplication');
-        adminButton.setDisabled(false);
     },
 
     /**

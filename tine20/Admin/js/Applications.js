@@ -355,10 +355,6 @@ Tine.Admin.Applications.Main = function() {
             //} else {
                 adminButton.setDisabled(true);
             //}
-    
-            var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-            preferencesButton.setIconClass('AdminTreePanel');
-            preferencesButton.setDisabled(true);
         }
     };
     

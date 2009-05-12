@@ -720,10 +720,6 @@ Tine.Phone.Main = {
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('PhoneTreePanel');
         adminButton.setDisabled(true);
-
-        var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('PhoneTreePanel');
-        preferencesButton.setDisabled(true);
     },
     
 	show: function(_node) 
