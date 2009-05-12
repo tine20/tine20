@@ -227,7 +227,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
     protected function _addMessages($_messages, $_folderId)
     {
         // set fields with try / catch blocks
-        $exceptionFields = array('subject', 'to', 'cc', 'bcc');
+        $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'attachment');
         
         // set time limit to infinity for this operation
         set_time_limit(0);
@@ -248,17 +248,21 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                     'received'      => $this->_convertDate($value['received']),
                     'size'          => $value['size'],
                     'flags'         => $message->getFlags(),
-                    'attachment'    => (preg_match('/multipart\/mixed/', $message->contentType) > 0)
                 ));
                 
-                // try to get 'subject', 'to', 'cc', 'bcc'
+                // try to get optional fields
                 foreach ($exceptionFields as $field) {
                     try {
-                        if ($field === 'subject') {
-                            $cachedMessage->subject = Felamimail_Message::convertText($message->subject);
-                            $subject = $cachedMessage->subject;
-                        } else {
-                            $cachedMessage->{$field} = $this->_convertAddresses($message->{$field});
+                        switch ($field) {
+                            case 'subject':
+                                $cachedMessage->subject = Felamimail_Message::convertText($message->subject);
+                                $subject = $cachedMessage->subject;
+                                break;
+                            case 'attachment':
+                                $cachedMessage->attachment = (preg_match('/multipart\/mixed/', $message->contentType) > 0);
+                                break;
+                            default:
+                                $cachedMessage->{$field} = $this->_convertAddresses($message->{$field});
                         }
                     } catch (Zend_Mail_Exception $zme) {
                         // no 'subject', 'to', 'cc', 'bcc' available
