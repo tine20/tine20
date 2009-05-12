@@ -132,18 +132,26 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @todo    generalize that (it's basically the same like the container tree menu...)?
      */
     onContextMenu: function(node, e) {
+        //console.log(node);
     	// only for folder nodes
         if (!node.attributes.folderNode) {
         	// @todo add/edit/remove account
             return;
         } else {
+            
+            var menuItems = [
+                this.getCreateAction(node),
+                this.getRenameAction(node),
+                this.getDeleteAction(node),
+                this.getRefreshCacheAction(node)
+            ];
+            
+            if (node.attributes.globalname == 'Trash') {
+                menuItems.push(this.getEmptyFolderAction(node));
+            }
+            
             var menu = new Ext.menu.Menu({
-                items: [
-                    this.getCreateAction(node),
-                    this.getRenameAction(node),
-                    this.getDeleteAction(node),
-                    this.getRefreshCacheAction(node)
-                ]
+                items: menuItems
             });
         }
         menu.showAt(e.getXY());
@@ -314,6 +322,33 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 Ext.Ajax.request({
                     params: {
                         method: 'Felamimail.refreshFolder',
+                        folderId: node.id
+                    },
+                    scope: this,
+                    success: function(_result, _request){
+                        // update grid
+                        this.filterPlugin.onFilterChange();
+                    }
+                });
+            }
+        };
+    },
+
+    /**
+     * get empty folder action
+     * 
+     * @param {Ext.tree.AsyncTreeNode}
+     * @return {Object} action item
+     */
+    getEmptyFolderAction: function(node) {
+        return {
+            text: _('Empty Folder'),
+            iconCls: 'action_folder_emptytrash',
+            scope: this,
+            handler: function() {
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Felamimail.emptyFolder',
                         folderId: node.id
                     },
                     scope: this,
