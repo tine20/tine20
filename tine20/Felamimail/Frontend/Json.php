@@ -67,6 +67,23 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'status'    => ($result) ? 'success' : 'failure'
         );
     }
+
+    /**
+     * remove all messages from folder
+     *
+     * @param string $folderId the folder id to delete
+     * @return array
+     * 
+     * @todo implement
+     */
+    public function emptyFolder($folderId)
+    {
+        //$result = Felamimail_Controller_Cache::getInstance()->clear($folderId);
+
+        return array(
+            'status'    => ($result) ? 'success' : 'failure'
+        );
+    }
     
     /***************************** messages funcs *******************************/
     /***************************** messages funcs *******************************/
@@ -77,9 +94,27 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $filter
      * @param string $paging
      * @return array
+     * 
+     * @todo add flush to improve caching mechanism
      */
     public function searchMessages($filter, $paging)
     {
+        /*
+        ignore_user_abort();
+        header("Connection: close");
+        
+        ob_start();
+        //-- search & output here
+        echo Zend_Json::encode(array('changes' => 'contacts'));
+        $size = ob_get_length();
+        header("Content-Length: $size");
+        ob_end_flush(); // Strange behaviour, will not work
+        flush();        
+        Zend_Session::writeClose(true);
+        Tinebase_Core::setExecutionLifeTime();
+        //-- update rest of cache here
+        */
+        
         return $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
     }
     
