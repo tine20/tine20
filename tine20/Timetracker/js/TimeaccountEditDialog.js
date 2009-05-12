@@ -108,11 +108,6 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fieldLabel: this.app.i18n._('Budget'),
                             name: 'budget'
                         }, {
-                            hideLabel: true,
-                            boxLabel: this.app.i18n._('Timesheets are billable'),
-                            name: 'is_billable',
-                            xtype: 'checkbox'
-                        }, {
                             fieldLabel: this.app.i18n._('Status'),
                             name: 'is_open',
                             xtype: 'combo',
@@ -139,6 +134,11 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fieldLabel: this.app.i18n._('Cleared In'),
                             name: 'billed_in',
                             xtype: 'textfield'
+                        }, {
+                            hideLabel: true,
+                            boxLabel: this.app.i18n._('Timesheets are billable'),
+                            name: 'is_billable',
+                            xtype: 'checkbox'
                         }]] 
                 }, {
                     // activities and tags
