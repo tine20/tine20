@@ -21,6 +21,16 @@
 class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * imap flags to constants translation
+     * @var array
+     */
+    protected static $_allowedFlags = array('\Answered' => Zend_Mail_Storage::FLAG_ANSWERED,
+                                            '\Seen'     => Zend_Mail_Storage::FLAG_SEEN,
+                                            '\Deleted'  => Zend_Mail_Storage::FLAG_DELETED,
+                                            '\Draft'    => Zend_Mail_Storage::FLAG_DRAFT,
+                                            '\Flagged'  => Zend_Mail_Storage::FLAG_FLAGGED);
+    
+    /**
      * application name (is needed in checkRight())
      *
      * @var string
@@ -155,7 +165,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // set /seen flag
             if (preg_match('/\\Seen/', $message->flags) === 0) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add \Seen flag to msg uid ' . $message->messageuid);
-                $this->addFlags($message, array('\Seen'), $folder);
+                $this->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN), $folder);
             }
             
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
@@ -232,7 +242,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         // save each flag in backend, cache db and message record
-        $imapBackend->addFlags($_message->messageuid, $_flags);
+        $imapBackend->addFlags($_message->messageuid, array_intersect($_flags, array_keys(self::$_allowedFlags)));
         foreach ($_flags as $flag) {
             $_message->flags .= ' ' . $flag;
             $this->_backend->addFlag($_message->getId(), $flag);
@@ -324,7 +334,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
         // build mail
         $mail = new Tinebase_Mail();
@@ -350,9 +360,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // add reply/forward flags if set
             if (! empty($_message->flags) && 
                 ! empty($_message->id) &&
-                ($_message->flags == '\Answered' || $_message->flags == '\Passed')
+                ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
             ) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add ' . $_message->flags . ' flag to message.');
                 $message = $this->get($_message->id);
                 $this->addFlags($message, array($_message->flags));
             }

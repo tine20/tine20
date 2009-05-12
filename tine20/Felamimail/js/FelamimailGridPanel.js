@@ -10,6 +10,7 @@
  * @todo        finish reply all implementation
  * @todo        add header to preview
  * @todo        add more filters (to/cc/date...)
+ * @todo        add \recent flag
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -204,6 +205,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * the details panel (shows message content)
      * 
+     * @todo add headers
      */
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
@@ -289,13 +291,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             hidden: true
         }, {
             id: 'attachment',
-            width: 16,
+            width: 12,
             sortable: true,
             dataIndex: 'attachment',
             renderer: this.attachmentRenderer
         }, {
             id: 'flags',
-            width: 16,
+            width: 24,
             sortable: true,
             dataIndex: 'flags',
             renderer: this.flagRenderer
@@ -357,21 +359,28 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * 
      * @param {} flags
      * @return {}
+     * 
+     * @todo use spacer if first flag is not set
      */
     flagRenderer: function(flags) {
         if (!flags) {
             return '';
         }
         
-        var icon = '';
+        var icons = [];
         if (flags.match(/Answered/)) {
-            icon = 'images/oxygen/16x16/actions/mail-reply-sender.png';
+            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: _('Answered')});
         }   
         if (flags.match(/Passed/)) {
-            icon = 'images/oxygen/16x16/actions/mail-forward.png';
+            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: _('Forwarded')});
         }   
         
-        return '<img class="FelamimailFlagIcon" src="' + icon + '">'; // ext:qtip="' + status.data.status_name + '">';
+        var result = '';
+        for (var i=0; i < icons.length; i++) {
+            result = result + '<img class="FelamimailFlagIcon" src="' + icons[i].src + '" ext:qtip="' + icons[i].qtip + '">';
+        }
+        
+        return result;
     },
     
     /********************************* event handler **************************************/
@@ -389,6 +398,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     onEditInNewWindow: function(button, event) {
         var recordData = this.recordClass.getDefaultData();
+        var recordId = 0;
         
         if (    button.actionType == 'reply'
             ||  button.actionType == 'replyAll'
@@ -397,24 +407,36 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             var selectedRows = this.grid.getSelectionModel().getSelections();
             var selectedRecord = selectedRows[0];
             
+            recordId = selectedRecord.id;
+            
             switch (button.actionType) {
                 case 'replyAll':
                 case 'reply':
+                    recordData.id = recordId;
                     recordData.to = selectedRecord.get('from');
                     recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
                     recordData.subject = _('Re: ') + selectedRecord.get('subject');
+                    recordData.flags = '\\Answered';
                     break;
                 case 'forward':
+                    recordData.id = recordId;
                     recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
                     recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
+                    recordData.flags = 'Passed';
                     break;
             }
         }
         
-        var record = new this.recordClass(recordData, 0);
+        var record = new this.recordClass(recordData, recordId);
         
         var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
-            record: record
+            record: record,
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    this.store.load({});
+                }
+            }
         });
     },
     
