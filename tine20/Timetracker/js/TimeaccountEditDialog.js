@@ -133,6 +133,12 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 ['to bill', this.app.i18n._('to bill')],
                                 ['billed', this.app.i18n._('billed')]
                             ]
+                        }, {
+                            //disabled: true,
+                            //emptyText: this.app.i18n._('not cleared yet...'),
+                            fieldLabel: this.app.i18n._('Cleared In'),
+                            name: 'billed_in',
+                            xtype: 'textfield'
                         }]] 
                 }, {
                     // activities and tags

@@ -52,4 +52,24 @@ class Timetracker_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Timetracker', '0.3');
     }
+
+    /**
+     * update function 3
+     * - add billed_in to timeaccounts
+     *
+     */    
+    public function update_3()
+    {
+        $field = '<field>
+            <name>billed_in</name>
+            <type>text</type>
+            <length>256</length>
+            <notnull>false</notnull>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('timetracker_timeaccount', $declaration);
+        
+        $this->setApplicationVersion('Timetracker', '0.4');
+    }
 }

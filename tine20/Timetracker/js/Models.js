@@ -85,6 +85,7 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     { name: 'price_unit' },
     { name: 'is_open' },
     { name: 'is_billable' },
+    { name: 'billed_in' },
     { name: 'status' },
     { name: 'account_grants'},
     { name: 'grants'},

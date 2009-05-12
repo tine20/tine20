@@ -2,7 +2,7 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>0.3</version>
+    <version>0.4</version>
     <order>60</order>
     <status>enabled</status>
     <depends>
@@ -11,7 +11,7 @@
     <tables>
         <table>
             <name>timetracker_timeaccount</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -66,7 +66,13 @@
                     <name>is_billable</name>
                     <type>boolean</type>
                     <default>true</default>
-                </field>                                
+                </field>
+                <field>
+                    <name>billed_in</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>
                 <field>
                     <name>status</name>
                     <type>enum</type>
