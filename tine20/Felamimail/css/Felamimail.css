@@ -38,6 +38,10 @@
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
 }
 
+.action_folder_emptytrash {
+    background-image:url(../../images/oxygen/16x16/actions/emptytrash.png) !important;
+}
+
 /***** flag classes ******/
 
 .flag_unread td{
