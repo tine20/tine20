@@ -204,14 +204,38 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test reply mail
      * 
-     * @todo implement
      */
     public function testReplyMessage()
     {
+        $inbox = $this->_getFolder();
+        $filter = $this->_getMessageFilter($inbox->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $firstMail = $result['results'][0];
+        
+        //print_r($firstMail);
+        $messageToSend              = $this->_getMessageData();
+        $messageToSend['flags']     = '\\Answered';
+        $messageToSend['subject']   = 'Re: ' . $firstMail['subject'];
+        $messageToSend['id']        = $firstMail['id'];
+        $returned                   = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        
+        //-- delete from sent folder?
+        
+        // check answered flag and remove it afterwards
+        $inbox = $this->_getFolder();
+        $filter = $this->_getMessageFilter($inbox->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $firstMail = $result['results'][0];
+        
+        $this->assertTrue(preg_match("/\\\\Answered/", $firstMail['flags']) > 0, 'could not find flag');
+        
+        //-- check In-Reply-To header
+        
+        $this->_json->clearFlag(Zend_Json::encode(array($firstMail['id'])), Zend_Json::encode('\\Answered'));
     }
     
     /**
-     * test send and delete
+     * test move
      * 
      * @todo implement
      */

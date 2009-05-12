@@ -313,7 +313,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * send one message through smtp
      * 
-     * @todo set reply-to header for replies
+     * @todo set In-Reply-To header for replies (which message id?)
      * @todo add mail & name from account settings
      * @todo add smtp host from account settings
      * @todo add name for 'to'
@@ -324,7 +324,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
         // build mail
         $mail = new Tinebase_Mail();
@@ -346,6 +346,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
             // save in sent folder (account id is in from property)
             Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mail->__toString(), 'Sent');
+            
+            // add reply/forward flags if set
+            if (! empty($_message->flags) && 
+                ! empty($_message->id) &&
+                ($_message->flags == '\Answered' || $_message->flags == '\Passed')
+            ) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add ' . $_message->flags . ' flag to message.');
+                $message = $this->get($_message->id);
+                $this->addFlags($message, array($_message->flags));
+            }
         }
         
         return $_message;
