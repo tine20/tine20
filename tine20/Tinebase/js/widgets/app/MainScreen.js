@@ -161,12 +161,14 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
      * updates main toolbar
      */
     updateMainToolbar : function() {
-        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
-        menu.removeAll();
-
-        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-        adminButton.setIconClass('TasksTreePanel');
-        adminButton.setDisabled(true);
+        //if (! 'platform' in window) { // waits for more prism
+            var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+            menu.removeAll();
+    
+            var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+            adminButton.setIconClass('TasksTreePanel');
+            adminButton.setDisabled(true);
+        //}
     }
     
 });

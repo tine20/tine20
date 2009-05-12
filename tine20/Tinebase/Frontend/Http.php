@@ -141,6 +141,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/Application.js',
             'Tinebase/js/AppManager.js',
             'Tinebase/js/AppPicker.js',
+            'Tinebase/js/MainMenu.js',
             'Tinebase/js/MainScreen.js',
             'Tinebase/js/Login.js',
             'Tinebase/js/common.js',

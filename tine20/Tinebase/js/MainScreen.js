@@ -35,7 +35,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         this.initActions();
         
         // init main menu
-        this.tineMenu = new Ext.Toolbar({
+        this.tineMenu = new Tine.Tinebase.MainMenu({
             id: 'tineMenu',
             height: 26,
             items:[{
@@ -107,10 +107,10 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             region: 'north',
             id:     'north-panel',
             split:  false,
-            height: 52,
+            height: /*'platform' in window ? 26 :*/ 52,
             border: false,
             layout:'border',
-            items: [{
+            items: [/*'platform' in window ? {} :*/ {
                 region: 'north',
                 height: 26,
                 border: false,
