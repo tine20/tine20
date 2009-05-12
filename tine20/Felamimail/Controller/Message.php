@@ -194,6 +194,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $imapBackend->removeMessage($_record->messageuid);
             } else {
                 // move to trash
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" . $_record->subject . "' to Trash.");
                 $imapBackend->moveMessage($_record->messageuid, 'Trash');
             }
             
@@ -312,8 +313,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * send one message through smtp
      * 
-     * @ŧodo append mail to sent folder (appendMessage only supports strings 
-     *  at the moment, how do we get the string representation?)
+     * @todo set reply-to header for replies
      * @todo add mail & name from account settings
      * @todo add smtp host from account settings
      * @todo add name for 'to'
@@ -336,43 +336,21 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $mail->addTo($to, $to);
         }
         $mail->setSubject($_message->subject);
+        $mail->setDate(Zend_Date::now('en_US')->toString(Felamimail_Model_Message::DATE_FORMAT));
 
         // set transport + send mail
         if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
             $smtpConfig = Tinebase_Core::getConfig()->imap->smtp->toArray();
             $transport = new Zend_Mail_Transport_Smtp($smtpConfig['hostname'], $smtpConfig);
-            Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
+            //Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
 
             // save in sent folder (account id is in from property)
-            //Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mail->generateMessage(), 'Sent');
+            Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mail->__toString(), 'Sent');
         }
         
         return $_message;
     }
     
-    // @todo check if those are needed
-    
-    /**
-     * Enter description here...
-     *
-     * @param unknown_type $_globalName
-     * @param unknown_type $_messageId
-     * @param unknown_type $from
-     * @param unknown_type $to
-     * @return array
-     * 
-     * @deprecated
-     */
-    public function getUid($_globalName, $from, $to = null)
-    {
-        if($this->_getImapBackend()->getCurrentFolder() != $_globalName) {
-            $this->_getImapBackend()->selectFolder($_globalName);
-        }
-        
-        $foundEntries = $this->_getImapBackend()->getUid($from, $to);
-        
-        return $foundEntries;
-    }
     
     /************************* protected funcs *************************/
     

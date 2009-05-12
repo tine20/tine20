@@ -306,7 +306,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
         } catch (Zend_Date_Exception $e) {
             # Fri,  6 Mar 2009 20:00:36 CET
-            $date = new Zend_Date($dateString, 'EEE, d MMM YYYY hh:mm:ss zzz', 'en_US');
+            $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
             #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " date header $headerValue => $dateString => $date => " . $date->get(Zend_Date::ISO_8601));
         }
         

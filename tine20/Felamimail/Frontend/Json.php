@@ -11,6 +11,7 @@
  * @version     $Id$
  *
  * @todo        add functions for rename/create folders
+ * @todo        add empty trash function
  * @todo        remove deprecated code
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
@@ -99,8 +100,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $ids  message ids
      * @return string
      * @return array
-     * 
-     * @todo add test
      */
     public function deleteMessages($ids)
     {
@@ -134,7 +133,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array
      * 
      * @todo catch mail errors and show error in 'nicer' window
-     * @todo add test
      */
     public function saveMessage($recordData)
     {

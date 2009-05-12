@@ -43,4 +43,22 @@ class Tinebase_Mail extends Zend_Mail
         }
         return $this;
     }
+    
+    /**
+     * convert mail to string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $headersString = '';
+        foreach ($this->getHeaders() as $key => $value) {
+            $headersString .= "$key: ";
+            foreach ($value as $headerLine) {
+                $headersString .= "$headerLine\n";                
+            }
+        }
+        
+        return $headersString . "\n\n" . $this->getBodyText(TRUE);
+    }
 }

@@ -111,7 +111,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMessage()
     {
-        $inbox = $this->_getInboxFolder();
+        $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         
@@ -148,7 +148,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAndClearFlags()
     {
-        $inbox = $this->_getInboxFolder();
+        $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         $firstMail = $result['results'][0];
@@ -171,11 +171,43 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test send and delete
      * 
-     * @todo implement
      */
     public function testSendAndDeleteMessage()
     {
+        $messageToSend = $this->_getMessageData();
+        $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
         
+        // check if message is in sent folder
+        $sent = $this->_getFolder('Sent');
+        $filter = $this->_getMessageFilter($sent->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        //print_r($result);
+        $firstMail = $result['results'][0];
+        
+        $this->assertEquals($firstMail['subject'],  $messageToSend['subject']);
+        $this->assertEquals($firstMail['to'],       $messageToSend['to']);
+        //$this->assertEquals($firstMail['body'],     $messageToSend['body']);
+        
+        // delete message from inbox & sent
+        $this->_json->deleteMessages($firstMail['id']);
+        
+        $sent = $this->_getFolder();
+        $filter = $this->_getMessageFilter($sent->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        foreach ($result['results'] as $mail) {
+            if ($mail['subject'] == $messageToSend['subject']) {
+                $this->_json->deleteMessages($mail['id']);
+            }
+        }
+    }
+
+    /**
+     * test reply mail
+     * 
+     * @todo implement
+     */
+    public function testReplyMessage()
+    {
     }
     
     /**
@@ -205,6 +237,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get message filter
      *
+     * @param string $_folderId
      * @return array
      */
     protected function _getMessageFilter($_folderId)
@@ -215,16 +248,33 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * get inbox
+     * get mailbox
      *
+     * @param string $_name
      * @return Felamimail_Model_Folder
      */
-    protected function _getInboxFolder()
+    protected function _getFolder($_name = 'INBOX')
     {
         Felamimail_Controller_Folder::getInstance()->getSubFolders();
         $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        $folder = $folderBackend->getByBackendAndGlobalName('default', $_name);
         
         return $folder;
+    }
+
+    /**
+     * get message data
+     *
+     * @return array
+     */
+    protected function _getMessageData()
+    {
+        return array(
+            'from'      => 'default',
+            'subject'   => 'test',
+            'to'        => 'unittest@tine20.org',
+            'body'      => 'aaaaaa <br>',
+            //'flags'     => array('\Answered')
+        );
     }
 }
