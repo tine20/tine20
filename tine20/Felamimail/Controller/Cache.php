@@ -9,9 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add acl
- * @todo        think about using the sort dir + paging for caching as well, cache only the first page initially, and so on
- * @todo        add param to include subfolders?
  */
 
 /**
@@ -33,6 +30,13 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      * @var default charset
      */
     protected $_encoding = 'UTF-8';
+    
+    /**
+     * number of initially cached messages
+     *
+     * @var int
+     */
+    protected $_initialNumber = 100;
     
     /**
      * folder backend
@@ -96,17 +100,17 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      *
      * @param string $_folderId
      * 
+     * @todo    split this into smaller functions (initial import, delete)
      * @todo    write tests for cache handling
-     * @todo    split this into smaller functions?
      */
     public function update($_folderId)
     {
         /***************** get folder & backend *****************************/
         
-        $folder                 = $this->_folderBackend->get($_folderId);
+        $folder = $this->_folderBackend->get($_folderId);
         
         try {
-            $backend                = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+            $backend = Felamimail_Backend_ImapFactory::factory($folder->account_id);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // no imap connection -> no update
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
@@ -125,10 +129,34 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         if ($folder->uidnext < $backendFolderValues['uidnext']) {
             // get missing mails
             if (empty($folder->uidnext)) {
-                $uids = $backend->getUid(1, $backend->countMessages());
+                //$uids = $backend->getUid(1, $backend->countMessages());
+
+                /********* initial import ***********************************/
+                
+                // only get the first 100 mails and mark cache as 'incomplete'
+                $messageCount = $backend->countMessages();
+                
+                if ($messageCount > $this->_initialNumber) {
+                    $bottom = $messageCount - $this->_initialNumber;
+                    $folder->cache_status = 'incomplete';
+                } else {
+                    $bottom = 1;
+                    $folder->cache_status = 'complete';
+                }
+                
+                $uids = $backend->getUid($bottom, $messageCount);
+                
+                if ($folder->cache_status == 'incomplete') {
+                    $folder->cache_lowest_uid = min($uids); 
+                }
+                
                 $messages = $backend->getSummary($uids);
                 $folder->uidvalidity = $backendFolderValues['uidvalidity'];
+                
             } else {
+                
+                /********* update *******************************************/
+                
                 // only get messages with $backendFolderValues['uidnext'] > uid > $folder->uidnext
                 $messages = $backend->getSummary($folder->uidnext, $backendFolderValues['uidnext']);
             }
@@ -158,9 +186,6 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             $this->clear($_folderId);
             $this->update($_folderId);
             return;
-            
-            //throw new Tinebase_Exception_UnexpectedValue(
-            //    'Got non matching uidvalidity value: ' . $backendFolderValues['uidvalidity'] .'. Expected: ' . $folder->uidvalidity);
         }
         
         // save nextuid/validity in folder
@@ -173,7 +198,6 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         
         // check if mails have been deleted (compare counts)
         // @todo save count in folder table ?
-        // @todo use only getMessageuidsByFolderId here?
         $folderCount = $this->_messageCacheBackend->searchCountByFolderId($_folderId);
         
         if ($backendFolderValues['exists'] < $folderCount) {
@@ -201,6 +225,61 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
     }
     
     /**
+     * finish initial import of folder messages
+     *
+     * @param string $_folderId
+     * @return boolean
+     */
+    public function initialImport($_folderId)
+    {
+        // check first
+        $folder = $this->_folderBackend->get($_folderId);
+        if ($folder->cache_status != 'incomplete') {
+            // do nothing
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Caching of folder ' . $folder->globalname . ' is already complete.');
+            return FALSE;
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Finishing Initial import for folder ' . $folder->globalname . ' ... ');
+        }
+        
+        try {
+            $backend = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // no imap connection -> no update
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+            return FALSE;
+        }
+        $backendFolderValues    = $backend->selectFolder($folder->globalname);
+
+        // update folder
+        $folder->cache_status = 'updating';
+        $folder = $this->_folderBackend->update($folder);
+        
+        // get the remaining messages from imap backend
+        $messageCount = $backend->countMessages();
+        $uids = $backend->getUid(1, $messageCount - $this->_initialNumber - 1);
+        //$messages = $backend->getSummary(1, $folder->cache_lowest_uid - 1);
+        $messages = $backend->getSummary($uids);
+        
+        // import        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Initial import: trying to add ' . count($messages) . ' new messages to cache.'
+        );
+        
+        // get message headers and save them in cache db
+        $this->_addMessages($messages, $_folderId);
+        
+        // update folder
+        $folder->cache_status = 'complete';
+        $folder->cache_lowest_uid = 0;
+        $folder = $this->_folderBackend->update($folder);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ... done with Initial import for folder ' . $folder->globalname);
+        
+        return TRUE;
+    }
+    
+    /**
      * remove all cached messages for this folder
      *
      * @param string $_folderId
@@ -209,10 +288,12 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
     {
         $this->_messageCacheBackend->deleteByFolderId($_folderId);
         
-        // set folder uidnext + uidvalidity to 0
+        // set folder uidnext + uidvalidity to 0 and reset cache status
         $folder = $this->_folderBackend->get($_folderId);
         $folder->uidnext = 0;
         $folder->uidvalidity = 0;
+        $folder->cache_status = 'empty';
+        $folder->cache_lowest_uid = 0;
         $this->_folderBackend->update($folder);
     }
     

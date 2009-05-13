@@ -90,32 +90,40 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * search messages
+     * - use output buffer mechanism to update incomplete cache
      *
      * @param string $filter
      * @param string $paging
      * @return array
-     * 
-     * @todo add flush to improve caching mechanism
      */
     public function searchMessages($filter, $paging)
     {
-        /*
         ignore_user_abort();
         header("Connection: close");
         
         ob_start();
-        //-- search & output here
-        echo Zend_Json::encode(array('changes' => 'contacts'));
+        // search & output here
+        $result = $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter'); 
+        echo Zend_Json::encode($result);
         $size = ob_get_length();
         header("Content-Length: $size");
         ob_end_flush(); // Strange behaviour, will not work
         flush();        
         Zend_Session::writeClose(true);
-        Tinebase_Core::setExecutionLifeTime();
-        //-- update rest of cache here
-        */
-        
-        return $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
+        Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+
+        // update rest of cache here
+        if ($result['totalcount'] > 0) {
+            // get folder id from filter
+            $folderId = '';
+            foreach ($result['filter'] as $filterSetting) {
+                if ($filterSetting['field'] == 'folder_id') {
+                    $folderId = $filterSetting['value'];
+                    break;
+                }
+            }
+            Felamimail_Controller_Cache::getInstance()->initialImport($folderId);
+        }
     }
     
     /**

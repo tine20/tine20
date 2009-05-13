@@ -52,6 +52,12 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     // cache/mailbox sync values 
         'uidnext'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'uidvalidity'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'cache_status'          => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            Zend_Filter_Input::DEFAULT_VALUE => 'empty', 
+            'InArray' => array('empty', 'complete', 'incomplete', 'updating')
+        ),
+        'cache_lowest_uid'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
     
     /**

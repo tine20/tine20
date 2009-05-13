@@ -180,6 +180,19 @@
                     <length>40</length>
                 </field>
                 <field>
+                    <name>cache_status</name>
+                    <type>enum</type>
+                    <value>empty</value>
+                    <value>complete</value>
+                    <value>incomplete</value>
+                    <value>updating</value>
+                </field>
+                <field>
+                    <name>cache_lowest_uid</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>
+                <field>
                     <name>timestamp</name>
                     <type>datetime</type>
                 </field>                
