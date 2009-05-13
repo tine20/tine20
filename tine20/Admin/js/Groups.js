@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        refactor this (don't use Ext.getCmp, etc.)
  */
 
 Ext.namespace('Tine.Admin.Groups');
@@ -28,7 +29,8 @@ Tine.Admin.Groups.Main = {
          * onclick handler for addBtn
          */
         addGroup: function(_button, _event) {
-            Tine.Admin.Groups.EditDialog.openWindow({});
+            //Tine.Admin.Groups.EditDialog.openWindow({});
+            this.openEditWindow(null);
         },
 
         /**
@@ -36,7 +38,8 @@ Tine.Admin.Groups.Main = {
          */
         editGroup: function(_button, _event) {
             var selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
-            Tine.Admin.Groups.EditDialog.openWindow({group: selectedRows[0]});
+            //Tine.Admin.Groups.EditDialog.openWindow({group: selectedRows[0]});
+            this.openEditWindow(selectedRows[0]);
         },
 
         
@@ -72,6 +75,23 @@ Tine.Admin.Groups.Main = {
                 }
             });
         }    
+    },
+    
+    /**
+     * open edit window
+     * 
+     * @param {} record
+     */
+    openEditWindow: function (record) {
+        var popupWindow = Tine.Admin.Groups.EditDialog.openWindow({
+            group: record,
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    this.reload();
+                }
+            }                
+        });
     },
     
     initComponent: function() {
@@ -243,7 +263,8 @@ Tine.Admin.Groups.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
         	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
-                Tine.Admin.Groups.EditDialog.openWindow({group: record});
+                //Tine.Admin.Groups.EditDialog.openWindow({group: record});
+                this.openEditWindow(record);
         	}
         }, this);
 
@@ -364,15 +385,19 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     groupMembers: Ext.util.JSON.encode(groupMembers)
                 },
                 success: function(response) {
+                    /*
                     if(window.opener.Tine.Admin.Groups) {
                         window.opener.Tine.Admin.Groups.Main.reload();
                     }
+                    */
+                    this.fireEvent('update', Ext.util.JSON.encode(this.group.data));
                     if(_closeWindow === true) {
-                        window.close();
+                        //window.close();
+                        this.window.close()
                     } else {
                         this.onRecordLoad(response);
-                        Ext.MessageBox.hide();
                     }
+                    Ext.MessageBox.hide();
                 },
                 failure: function ( result, request) { 
                     Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save group.')); 
