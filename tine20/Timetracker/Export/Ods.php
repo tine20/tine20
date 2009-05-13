@@ -269,6 +269,11 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
                     'type'      => 'float', 
                     'width'     => '3cm'
                 ),
+                'billed_in' => array(
+                    'header'    => $this->_translate->_('Cleared In'),
+                    'type'      => 'string', 
+                    'width'     => '3cm'
+                ),
                 'is_open' => array(
                     'header'    => $this->_translate->_('Open'),
                     'type'      => 'float', 
