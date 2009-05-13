@@ -187,7 +187,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
-                {label: this.app.i18n._('From'),        field: 'from',          operators: ['contains']}
+                {label: this.app.i18n._('From'),        field: 'from',          operators: ['contains']},
+                {label: this.app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true}
                 // @todo add filters
                 /*
                 {label: this.app.i18n._('Message'),    field: 'query',       operators: ['contains']},
