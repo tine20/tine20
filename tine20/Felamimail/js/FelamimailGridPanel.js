@@ -7,10 +7,10 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
+ * @todo        add more filters (to/cc/date...)
+ * @todo        mark message as unread
  * @todo        finish reply all implementation
  * @todo        add header to preview
- * @todo        add more filters (to/cc/date...)
- * @todo        add \recent flag
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -186,7 +186,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Subject'),    field: 'subject',       operators: ['contains']}
+                {label: this.app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
+                {label: this.app.i18n._('From'),        field: 'from',          operators: ['contains']}
                 // @todo add filters
                 /*
                 {label: this.app.i18n._('Message'),    field: 'query',       operators: ['contains']},
