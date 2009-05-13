@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        make this work with ext windows
  * @todo        refactor this (don't use Ext.getCmp, etc.)
  */
  
@@ -30,7 +29,6 @@ Tine.Admin.Roles.Main = {
          * onclick handler for addBtn
          */
         addRole: function(_button, _event) {
-            //Tine.Admin.Roles.EditDialog.openWindow({role: null});
             this.openEditWindow(null);
         },
 
@@ -265,7 +263,6 @@ Tine.Admin.Roles.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
         	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
-                //Tine.Admin.Roles.EditDialog.openWindow({role: record});
                 this.openEditWindow(record);
         	}
         }, this);
