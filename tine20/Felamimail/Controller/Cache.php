@@ -122,6 +122,9 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             //' Values: ' . print_r($backendFolderValues, TRUE)
         );
         
+        // remove old \Recent flag from cached messages
+        $this->_messageCacheBackend->clearFlag($_folderId, '\Recent', 'folder');
+        
         /***************** check for messages to add ************************/
         
         // check uidnext & get missing mails
@@ -151,7 +154,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         } else {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No need to get new messages, cache is up to date.');
         }
-        
+                
         /***************** check uidvalidity and update folder *************/
         
         if ($folder->uidvalidity != $backendFolderValues['uidvalidity']) {
@@ -400,7 +403,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         $messages = $_backend->getSummary($uids);
         $_folder->uidvalidity = $_backendFolderValues['uidvalidity'];
         
-        return $_messages;
+        return $messages;
     }
 
     /**

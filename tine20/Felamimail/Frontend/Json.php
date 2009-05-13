@@ -104,6 +104,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         ob_start();
         // search & output here
         $result = $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter'); 
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($result, TRUE));
+        
         echo Zend_Json::encode($result);
         $size = ob_get_length();
         header("Content-Length: $size");

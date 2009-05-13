@@ -113,7 +113,10 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         
         foreach ($_message->{$_field} as $data) {
             if ($_field == 'flags') {
-                $data = array('flag' => $data);
+                $data = array(
+                    'flag'      => $data,
+                    'folder_id' => $_message->folder_id
+                );
             }
             $data['message_id'] = $messageId;
             $this->_db->insert($this->_tablePrefix . $_tablename, $data);
@@ -125,28 +128,30 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * add flag to message
      *
-     * @param string $_messageId
+     * @param Felamimail_Model_Message $_messageId
      * @param string $_flag
      */
-    public function addFlag($_messageId, $_flag)
+    public function addFlag($_message, $_flag)
     {
         $data = array(
             'flag'          => $_flag,
-            'message_id'    => $_messageId
+            'message_id'    => $_message->getId(),
+            'folder_id'     => $_message->folder_id
         );
         $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags'], $data);
     }
 
     /**
-     * remove flag from message
+     * remove flag from message / all messages in a folder
      *
-     * @param string $_messageId
+     * @param string $_foreignId
      * @param string $_flag
+     * @param string $_type message|folder
      */
-    public function clearFlag($_messageId, $_flag)
+    public function clearFlag($_foreignId, $_flag, $_type = 'message')
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' = ?', $_messageId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier($_type . '_id') . ' = ?', $_foreignId),
             $this->_db->quoteInto($this->_db->quoteIdentifier('flag') . ' = ?', $_flag)
         );
         

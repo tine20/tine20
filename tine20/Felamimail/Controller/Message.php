@@ -245,7 +245,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $imapBackend->addFlags($_message->messageuid, array_intersect($_flags, array_keys(self::$_allowedFlags)));
         foreach ($_flags as $flag) {
             $_message->flags .= ' ' . $flag;
-            $this->_backend->addFlag($_message->getId(), $flag);
+            $this->_backend->addFlag($_message, $flag);
         }
     }
     

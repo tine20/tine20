@@ -300,6 +300,12 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>folder_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
                     <name>flag</name>
                     <type>text</type>
                     <length>128</length>
@@ -313,6 +319,19 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>felamimail_cache_message</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
+                    </reference>
+                </index>
+                <index>
+                    <name>flag::folder_id--folder::id</name>
+                    <field>
+                        <name>folder_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>felamimail_folder</table>
                         <field>id</field>
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
