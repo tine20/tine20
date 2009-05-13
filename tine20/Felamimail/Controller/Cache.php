@@ -178,6 +178,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         // save nextuid/validity in folder
         if ($folder->uidnext != $backendFolderValues['uidnext']) {
             $folder->uidnext = $backendFolderValues['uidnext'];
+            $folder->timestamp = Zend_Date::now();
             $folder = $this->_folderBackend->update($folder);
         }
         
@@ -191,17 +192,34 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
     /**
      * finish initial import of folder messages
      *
-     * @param string $_folderId
-     * @return boolean
+     * @param   string $_folderId
+     * @return  boolean
      */
     public function initialImport($_folderId)
     {
-        // check first
         $folder = $this->_folderBackend->get($_folderId);
+        
+        // check status first
         if ($folder->cache_status != 'incomplete') {
-            // do nothing
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Caching of folder ' . $folder->globalname . ' is already complete.');
-            return TRUE;
+            if ($folder->cache_status == 'updating') {
+                if ($folder->timestamp->compare(Zend_Date::now()->subMinute(5)) == -1) {
+                    // it seems that the old import process ended (timestamp is older than 5 mins) -> start a new one
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                        . ' Old initial import process ended without finishing: '
+                        . $folder->timestamp->get() . ' / ' . Zend_Date::now()->subMinute(5)->get() 
+                        . ' Starting new import for folder ' 
+                        . $folder->globalname . ' ... '
+                    );
+                } else {
+                    // do nothing
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Caching of folder ' . $folder->globalname . ' is still running.');
+                    return TRUE;
+                }
+            } else {
+                // do nothing
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Caching of folder ' . $folder->globalname . ' is already complete.');
+                return TRUE;
+            }
         } else {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Finishing Initial import for folder ' . $folder->globalname . ' ... ');
         }
@@ -215,19 +233,24 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         }
         $backendFolderValues    = $backend->selectFolder($folder->globalname);
 
-        // update folder
+        // update folder and add timestamp to folder to check for deadlocks (status = updating & timestamp is older than 5 mins)
         $folder->cache_status = 'updating';
+        $folder->timestamp = Zend_Date::now();
         $folder = $this->_folderBackend->update($folder);
         
         // get the remaining messages from imap backend
         $messageCount = $backend->countMessages();
-        $uids = $backend->getUid(1, $messageCount - $this->_initialNumber - 1);
+        $folderCount = $this->_messageCacheBackend->searchCountByFolderId($_folderId);
+        
+        $uids = $backend->getUid(1, $messageCount - $folderCount);
         //$messages = $backend->getSummary(1, $folder->cache_lowest_uid - 1);
-        $messages = $backend->getSummary($uids);
+        sort($uids, SORT_NUMERIC);
+        $messages = $backend->getSummary(array_reverse($uids));
         
         // import        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Initial import: trying to add ' . count($messages) . ' new messages to cache.'
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Initial import: trying to add ' . count($messages) . ' new messages to cache.'
+            . ' Beginning with message uid: ' . $uids[0]
         );
         
         // get message headers and save them in cache db
