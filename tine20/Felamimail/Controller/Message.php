@@ -31,6 +31,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                                             '\Flagged'  => Zend_Mail_Storage::FLAG_FLAGGED);
     
     /**
+     * totalcount of messages in folder
+     *
+     * @var integer
+     */
+    protected $_totalcount = 0;
+    
+    /**
      * application name (is needed in checkRight())
      *
      * @var string
@@ -110,7 +117,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $result = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
         } else {
             // update cache?
-            $this->_cacheController->update($folderId);
+            $this->_totalcount = $this->_cacheController->update($folderId);
         
             $result = parent::search($_filter, $_pagination);
         }
@@ -131,6 +138,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (empty($filterValues['folder_id'])) {
             $result = 0;
+        } elseif (! empty($this->_totalcount)) {
+            $result = $this->_totalcount;
         } else {
             $result = parent::searchCount($_filter);
         }
