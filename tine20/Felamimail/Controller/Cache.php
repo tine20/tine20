@@ -99,12 +99,14 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      * update cache if required
      *
      * @param string $_folderId
-     * @return integer number of messages in mailbox
+     * @return integer number of messages in mailbox (only if cache is incomplete)
      * 
-     * @todo    write tests for cache handling
+     * @todo write tests for cache handling
      */
     public function update($_folderId)
     {
+        $result = 0;
+        
         /***************** get folder & backend *****************************/
         
         $folder = $this->_folderBackend->get($_folderId);
@@ -136,6 +138,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                 /********* initial ******************************************/
                 
                 $messages = $this->_updateInitial($backend, $folder, $backendFolderValues, $messageCount);
+                $result = $messageCount;
                 
             } else {
                 
@@ -182,7 +185,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         
         $this->_updateDelete($backend, $_folderId, $backendFolderValues, $messageCount);
         
-        return $messageCount;
+        return $result;
     }
     
     /**
