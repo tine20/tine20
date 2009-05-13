@@ -352,7 +352,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
             $smtpConfig = Tinebase_Core::getConfig()->imap->smtp->toArray();
             $transport = new Zend_Mail_Transport_Smtp($smtpConfig['hostname'], $smtpConfig);
-            //Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
+            Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
 
             // save in sent folder (account id is in from property)
             Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mail->__toString(), 'Sent');
