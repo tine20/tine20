@@ -103,7 +103,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         });
                     
         // init generic mainscreen layout
-        this.items = [{
+        var mainscreen = [{
             region: 'north',
             id:     'north-panel',
             split:  false,
@@ -169,6 +169,18 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             collapseMode: 'mini',
             layout: 'fit',
             items: this.appPicker
+        }];
+        
+        this.items = [{
+            region: 'north',
+            border: false,
+            cls: 'tine-mainscreen-topbox',
+            html: ''
+        }, {
+            region: 'center',
+            border: false,
+            layout: 'border',
+            items: mainscreen
         }];
         
         Tine.Tinebase.MainScreen.superclass.initComponent.call(this);
