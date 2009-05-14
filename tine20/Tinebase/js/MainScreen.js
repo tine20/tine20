@@ -175,7 +175,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             region: 'north',
             border: false,
             cls: 'tine-mainscreen-topbox',
-            html: ''
+            html: '<div class="tine-mainscreen-topbox-left"></div><div class="tine-mainscreen-topbox-middle"></div><div class="tine-mainscreen-topbox-right"></div>'
         }, {
             region: 'center',
             border: false,
