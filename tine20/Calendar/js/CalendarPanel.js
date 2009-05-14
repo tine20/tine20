@@ -36,6 +36,22 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         this.autoScroll = false;
         this.autoWidth = false;
+        
+        this.store.on('add', this.onAddEvent, this);
+        this.store.on('update', this.onUpdateEvent, this);
+        this.store.on('remove', this.onRemoveEvent, this);
+    },
+    
+    onAddEvent: function(store, events, index) {
+        console.log('A new event has been added -> call backend create');
+    },
+    
+    onUpdateEvent: function(store, event, operation) {
+        console.log('A existing event has been updated -> call backend update');    
+    },
+    
+    onRemoveEvent: function(store, event, index) {
+        console.log('A existing event has been deleted -> call backend delete'); 
     },
     
     /**
@@ -112,7 +128,18 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 this.view.setActiveEvent(event);
             }
         }
-
+        
+        /*
+        if (name == 'mousedown' && date) {
+            this.store.add(new Tine.Calendar.Event({
+                id: Ext.id(),
+                dtstart: date, 
+                dtend: date.add(Date.MINUTE, 15),
+                is_all_day_event: date.is_all_day_event
+            }));
+        }
+        */
+        
         /*
             var row = v.findRowIndex(t);
             var cell = v.findCellIndex(t);
@@ -159,14 +186,6 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      */
     onKeyDown : function(e){
         this.fireEvent("keydown", e);
-    },
-    
-    /**
-     * @private
-     */
-    onEventResize: function(t,w,h,e) {
-        console.log(t);
-        console.log(this.view.getTargetEvent(t.el));
-        //this.processEvent("eventresize", e);
     }
+    
 });
