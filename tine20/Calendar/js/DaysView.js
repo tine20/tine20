@@ -297,6 +297,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     afterRender: function() {
         
+        this.mainWrap.on('dblclick', this.onDblClick, this);
         this.mainWrap.on('mousedown', this.onMouseDown, this);
         this.mainWrap.on('mouseup', this.onMouseUp, this);
         
@@ -565,43 +566,65 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         registry.register(event);
         
         var resizeable = this.insertEvent(event);
-        
-        resizeable.on('resize', function() {
-            this.ds.remove(event);
-            registry.unregister(event);
-            this.removeEvent(event);
-            this.ds.resumeEvents();
-            
-            if (event.get('is_all_day_event')) {
-                var keep = true;
-            } else {
-                var keep = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE >= this.timeGranularity;
-            }
-            
-            if (keep) {
-                // don't create events with very small duration
-                this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
-            }
-            
-        }, this);
-        
-        // fix duration when mouse already has been moved
-        resizeable.onMouseMove = resizeable.onMouseMove.createSequence(function(e, target) {
-            var eventXY = e.getXY();
-            
-            if (event.get('is_all_day_event')) {
+        if (event.isRangeAdd) {
+            resizeable.on('resize', function() {
+                this.ds.remove(event);
+                registry.unregister(event);
+                this.removeEvent(event);
+                this.ds.resumeEvents();
                 
-                //this.resizeElement();
-            } else {
-                var height = eventXY[1] - this.proxy.getTop();
+                if (event.get('is_all_day_event')) {
+                    var keep = true;
+                } else {
+                    var keep = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE >= this.timeGranularity;
+                }
                 
-                this.proxy.setHeight(height);
-                this.resizeElement();
-            }
-        }, resizeable);
+                if (keep) {
+                    // don't create events with very small duration
+                    this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
+                }
+                
+            }, this);
+            
+            // fix duration when mouse already has been moved
+            resizeable.onMouseMove = resizeable.onMouseMove.createSequence(function(e, target) {
+                var eventXY = e.getXY();
+                
+                if (event.get('is_all_day_event')) {
+                    
+                    //this.resizeElement();
+                } else {
+                    var height = eventXY[1] - this.proxy.getTop();
+                    
+                    this.proxy.setHeight(height);
+                    this.resizeElement();
+                }
+            }, resizeable);
+            
+            var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
+            resizeable[rzPos].onMouseDown.call(resizeable[rzPos], e);
+        }
+    },
+    
+    /**
+     * @private
+     */
+    onDblClick: function(e, target) {
+        e.stopEvent();
         
-        var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
-        resizeable[rzPos].onMouseDown.call(resizeable[rzPos], e);
+        var dtStart = this.getTargetDateTime(target);
+        if (dtStart) {
+            var newId = 'cal-daysviewpanel-new-' + Ext.id();
+            var event = new Tine.Calendar.Event({
+                id: newId,
+                dtstart: dtStart, 
+                dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1),
+                is_all_day_event: dtStart.is_all_day_event
+            }, newId);
+            
+            //this.createEvent.defer(400, this, [e, event]);
+            this.createEvent(e, event);
+        }
     },
     
     /**
@@ -613,21 +636,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         var dtStart = this.getTargetDateTime(target);
         if (dtStart) {
-            
-            /*
-            // calculate offset in minutes
-            if (dtStart.is_all_day_event) {
-                
-            } else {
-                var offset = (this.timeGranularity/ this.granularityUnitHeights) * (e.getXY()[1] - Ext.fly(target).getTop());
-            }
-            */
-            
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Event({
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.is_all_day_event ? dtStart.add(Date.DAY) : dtStart.add(Date.MINUTE, 1),
+                dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1),
                 is_all_day_event: dtStart.is_all_day_event
             }, newId);
             event.isRangeAdd = true;

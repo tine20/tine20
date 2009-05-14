@@ -110,6 +110,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             var event = v.getTargetEvent(t);
         }
         
+        /*
         if (name == 'dblclick') {
             if (date) {
                 // add new event
@@ -122,6 +123,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 e.preventDefault();
             }
         }
+        */
         
         if (name == 'click') {
             if (event) {
