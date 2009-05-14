@@ -1,0 +1,99 @@
+/*Brandig*/
+
+.x-panel-body {
+	background-color:transparent;
+}
+
+.tine-mainscreen-topbox {
+	height:70px;
+	background-color:#ffb300;
+	clear:both;
+}
+
+.tine-mainscreen-topbox-left {
+	padding-top:10px;
+	padding-left:10px;
+	width:173px;
+	height:53px;
+	float:left;
+	background-image::url(images/lufthansa/logo.gif);
+}
+
+.tine-mainscreen-topbox-middle{
+	float:left;
+}
+
+.tine-mainscreen-topbox-right {
+	float:left;
+}
+
+/*End Brandig*/
+
+.x-panel-header {
+    color:#01006a;
+	background-image:url(images/lufthansa/panel/white-top-bottom.gif);
+}
+
+.x-accordion-hd {
+	background-image:url(images/lufthansa/panel/light-hd.gif);
+}
+
+.app-panel-header-active {
+	background-image:url(images/lufthansa/panel/light-hd_active.gif);
+}
+
+
+/*Tree*/
+.x-tree-node .x-tree-selected {
+	background-color:#ffb305;
+}
+
+.x-tree-node-expanded .x-tree-node-icon {
+background-image:url(images/lufthansa/tree/folder-open.gif);
+}
+
+.x-tree-node-collapsed .x-tree-node-icon {
+background-image:url(images/lufthansa/tree/folder.gif);
+}
+
+/*Preview-Panal*/
+
+.preview-panel {
+	background-color:#dcdcdc;
+}
+
+.preview-panel-declaration {
+	color:#000066;
+}
+
+.preview-panel-timesheet-right {
+	border:3px solid #ebebeb;
+}
+
+.bordercorner_gray_1 {
+background-image:url(images/lufthansa/preview/bordercorner_1.gif);
+}
+
+.bordercorner_gray_2 {
+background-image:url(images/lufthansa/preview/bordercorner_2.gif);
+}
+
+.bordercorner_gray_3 {
+background-image:url(images/lufthansa/preview/bordercorner_2.gif);
+}
+
+.bordercorner_gray_4 {
+background-image:url(images/lufthansa/preview/bordercorner_2.gif);
+}
+
+/* Tools */
+.x-tool {
+    background-image:url(images/lufthansa/panel/tool-sprites.gif);
+}
+
+td.x-grid3-hd-over .x-grid3-hd-inner, 
+td.sort-desc .x-grid3-hd-inner, 
+td.sort-asc .x-grid3-hd-inner, 
+td.x-grid3-hd-menu-open .x-grid3-hd-inner {
+background:#EBF3FD url(images/lufthansa/grid/grid3-hrow-over.gif) repeat-x scroll left bottom;
+}
