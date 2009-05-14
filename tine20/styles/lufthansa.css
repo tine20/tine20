@@ -16,7 +16,7 @@
 	width:173px;
 	height:53px;
 	float:left;
-	background-image::url(images/lufthansa/logo.gif);
+	background:url(images/lufthansa/logo.gif) no-repeat;
 }
 
 .tine-mainscreen-topbox-middle{
