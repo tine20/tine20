@@ -101,15 +101,52 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             backendModel: 'Folder'
         };        
         
-        // TODO add getRefreshCacheAction here
-        config.actions = ['add'];
+        var updateCacheConfig = {
+            text: _('Update Cache'),
+            iconCls: 'action_update_cache',
+            scope: this,
+            handler: function() {
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Felamimail.refreshFolder',
+                        folderId: this.ctxNode.id
+                    },
+                    scope: this,
+                    success: function(_result, _request){
+                        // update grid
+                        this.filterPlugin.onFilterChange();
+                    }
+                });
+            }
+        };
+        
+        // system folder ctx menu
+        config.actions = ['add', updateCacheConfig];
         this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
-        config.actions = ['add', 'delete', 'rename'];
+        // user folder ctx menu
+        config.actions = ['add', 'rename', updateCacheConfig, 'delete'];
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
-        // TODO add empty trash here
-        config.actions = ['add'];
+        // trash ctx menu
+        config.actions = ['add', {
+            text: _('Empty Folder'),
+            iconCls: 'action_folder_emptytrash',
+            scope: this,
+            handler: function() {
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Felamimail.emptyFolder',
+                        folderId: this.ctxNode.id
+                    },
+                    scope: this,
+                    success: function(_result, _request){
+                        // update grid
+                        this.filterPlugin.onFilterChange();
+                    }
+                });
+            }
+        }];
         this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     },
     
@@ -185,30 +222,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 this.contextMenuUserFolder.showAt(event.getXY());
             }
         }
-        
-        /*
-        //console.log(node);
-    	// only for folder nodes
-        if (!node.attributes.folderNode) {
-            return;
-        } else {
-            var menuItems = [
-                this.getCreateAction(node),
-                this.getRenameAction(node),
-                this.getDeleteAction(node),
-                this.getRefreshCacheAction(node)
-            ];
-            
-            if (node.attributes.globalname == 'Trash') {
-                menuItems.push(this.getEmptyFolderAction(node));
-            }
-            
-            var menu = new Ext.menu.Menu({
-                items: menuItems
-            });
-        }
-        menu.showAt(e.getXY());
-        */
     },
     
     /**
@@ -240,66 +253,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         });
         
         return true;
-    },
-    
-    /********************** actions *******************/
-
-    /**
-     * get refresh action
-     * 
-     * @param {Ext.tree.AsyncTreeNode}
-     * @return {Object} action item
-     * 
-     * TODO use it in general ctx menu
-     */
-    getRefreshCacheAction: function(node) {
-        return {
-            text: _('Update Cache'),
-            iconCls: 'action_update_cache',
-            scope: this,
-            handler: function() {
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Felamimail.refreshFolder',
-                        folderId: node.id
-                    },
-                    scope: this,
-                    success: function(_result, _request){
-                        // update grid
-                        this.filterPlugin.onFilterChange();
-                    }
-                });
-            }
-        };
-    },
-
-    /**
-     * get empty folder action
-     * 
-     * @param {Ext.tree.AsyncTreeNode}
-     * @return {Object} action item
-     * 
-     * TODO use it in general ctx menu
-     */
-    getEmptyFolderAction: function(node) {
-        return {
-            text: _('Empty Folder'),
-            iconCls: 'action_folder_emptytrash',
-            scope: this,
-            handler: function() {
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Felamimail.emptyFolder',
-                        folderId: node.id
-                    },
-                    scope: this,
-                    success: function(_result, _request){
-                        // update grid
-                        this.filterPlugin.onFilterChange();
-                    }
-                });
-            }
-        };
     }
 });
 
