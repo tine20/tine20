@@ -354,7 +354,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var endColNum = this.getColumnNumber(dtEnd);
         
         // skip dates not in our diplay range
-        if (endColNum < 0 || startColNum > this.numOfDays) {
+        if (endColNum < 0 || startColNum > this.numOfDays-1) {
             return;
         }
         
@@ -687,8 +687,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     onMouseDown: function(e, target) {
         this.scroller.focus();
-        
-        e.stopEvent();
         this.mouseDown = true;
         
         var dtStart = this.getTargetDateTime(target);
