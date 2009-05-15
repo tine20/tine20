@@ -232,7 +232,7 @@ Tine.widgets.tree.ContextMenu = {
                     }));
                     break;
                 default:
-                    // TODO add custom actions
+                    // add custom actions
                     items.push(new Ext.Action(config.actions[i]));
             }
         }
