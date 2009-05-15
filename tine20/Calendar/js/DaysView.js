@@ -558,6 +558,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.insertEvent(event);
         this.setActiveEvent(event);
         
+        //var eventEls = this.getEventEls(event);
+        //eventEls[0].setStyle({'border-style': 'dashed'});
+        //eventEls[0].setOpacity(0.5);
+        
         // start sizing for range adds
         if (event.isRangeAdd) {
             // don't create events with very small duration
@@ -641,7 +645,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         event.set('summary', summary);
         
         // after title
-        
         
         //this.abortCreateEvent(event);
         this.ds.suspendEvents();

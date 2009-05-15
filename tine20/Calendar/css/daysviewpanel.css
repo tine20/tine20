@@ -337,3 +337,14 @@
     -webkit-border-top-right-radius: 0px;
     -webkit-border-bottom-right-radius: 0px;
 }
+
+.cal-daysviewpanel-wholedayevent-body .x-form-text {
+	position: absolute;
+	top: 0px;
+    padding-top: 0px;
+    height: 11px;
+}
+.cal-daysviewpanel-wholedayevent-body .x-form-field {
+    height: 11px;
+    font-size: 10px;
+}
