@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @todo        add more filters (to/cc/date...)
+ * @todo        add more filters (to/cc...)
  * @todo        mark message as unread
  * @todo        finish reply all implementation
  * @todo        add header to preview
@@ -247,20 +247,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 
                 encode: function(value, type, prefix) {
                     if (value) {
-                        /*
-                        if (type) {
-                            switch (type) {
-                                case 'longtext':
-                                    value = Ext.util.Format.ellipsis(value, 150);
-                                    break;
-                                default:
-                                    value += type;
-                            }                           
-                        }
-                        */
-                        
                         var encoded = Ext.util.Format.htmlEncode(value);
                         encoded = Ext.util.Format.nl2br(encoded);
+                        // TODO it should be enough to replace only 2 or more spaces
+                        encoded = encoded.replace(/ /g, '&nbsp;');
                         
                         return encoded;
                     } else {
