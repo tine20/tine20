@@ -156,11 +156,6 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _manageAccessGroups(array $_members, $_access, $_type = 'internet')
     {
-        // invert access for fileserver group (if access -> remove members from group)
-        if ($_type == 'fileserver') {
-            $_access = ! $_access;
-        }
-        
         $configField = $_type . '_group';
         
         if (!isset($this->_config) || !isset($this->_config->{$configField})) {
