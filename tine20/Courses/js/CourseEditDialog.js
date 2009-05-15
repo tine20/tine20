@@ -251,7 +251,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 	var accountObject = Ext.getCmp('CoursesMembersGrid').configGridPanel.getSelectionModel().getSelected().data;
                     Ext.Ajax.request( {
                         params : {
-                            method    : 'Admin.resetPassword',
+                            method    : 'Courses.resetPassword',
                             account   : accountObject.id,
                             password  : this.record.data.name,
                             mustChange: true
