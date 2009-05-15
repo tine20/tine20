@@ -36,25 +36,29 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         this.autoScroll = false;
         this.autoWidth = false;
-        
-        this.store.on('add', this.onAddEvent, this);
-        this.store.on('update', this.onUpdateEvent, this);
-        this.store.on('remove', this.onRemoveEvent, this);
     },
     
-    onAddEvent: function(store, events, index) {
-        console.log(events);
-        console.log('A new event has been added -> call backend create');
+    onAddEvent: function(event) {
+        console.log('A new event has been added -> call backend saveRecord');
+        Tine.Calendar.backend.saveRecord(event, {
+            scope: this,
+            success: function(createdEvent) {
+                this.store.remove(event);
+                this.store.add(createdEvent);
+            }
+        });
     },
     
-    onUpdateEvent: function(store, event, operation) {
+    onUpdateEvent: function(event) {
         console.log('A existing event has been updated -> call backend update');    
     },
     
+    /*
     onRemoveEvent: function(store, event, index) {
         console.log(event);
         console.log('A existing event has been deleted -> call backend delete'); 
     },
+    */
     
     /**
      * @private
@@ -65,10 +69,14 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         var c = this.body;
         this.el.addClass('cal-panel');
         this.view.init(this);
-
-        c.on("mousedown", this.onMouseDown, this);
-        c.on("click", this.onClick, this);
-        c.on("dblclick", this.onDblClick, this);
+        
+        // quick add/update actions
+        this.view.on('addEvent', this.onAddEvent, this);
+        this.view.on('updateEvent', this.onUpdateEvent, this);
+        
+        //c.on("mousedown", this.onMouseDown, this);
+        //c.on("click", this.onClick, this);
+        //c.on("dblclick", this.onDblClick, this);
         c.on("contextmenu", this.onContextMenu, this);
         c.on("keydown", this.onKeyDown, this);
 

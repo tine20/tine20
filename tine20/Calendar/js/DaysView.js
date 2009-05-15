@@ -11,8 +11,24 @@ Ext.ns('Tine.Calendar');
 
 Tine.Calendar.DaysView = function(config){
     Ext.apply(this, config);
-    //this.addEvents();
     Tine.Calendar.DaysView.superclass.constructor.call(this);
+    
+    this.addEvents(
+        /**
+         * @event addEvent
+         * fired when a new event got inserted
+         * 
+         * @param {Tine.Calendar.Event} event
+         */
+        'addEvent',
+        /**
+         * @event updateEvent
+         * fired when an event go resised/moved
+         * 
+         * @param {Tine.Calendar.Event} event
+         */
+        'updateEvent'
+    );
 };
 
 Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
@@ -212,6 +228,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     
                     event.set('is_all_day_event', targetDate.is_all_day_event);
                     event.endEdit();
+                    v.fireEvent('updateEvent', event);
                 }
                 
                 return !!targetDate;
@@ -596,6 +613,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
             event.resizeable[rzPos].onMouseDown.call(event.resizeable[rzPos], e);
+            
         } else {
             this.startEditSummary(event);
         }
@@ -656,9 +674,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.editing = false;
         event.set('summary', summary);
         
-        // after summary
-        
-        //this.abortCreateEvent(event);
         this.ds.suspendEvents();
         this.ds.remove(event);
         this.ds.resumeEvents();
@@ -668,6 +683,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.removeEvent(event);
         
         this.ds.add(event);
+        this.fireEvent('addEvent', event);
 
         //this.ds.resumeEvents();
         //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
@@ -711,6 +727,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }, newId);
             event.isRangeAdd = true;
             
+            e.stopEvent();
             this.createEvent.defer(400, this, [e, event]);
         }
     },
@@ -766,6 +783,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var duration = originalDuration + diff;
             
             event.set('dtend', event.get('dtstart').add(Date.MINUTE, duration));
+            
+            // don't fire update events on rangeAdd
+            if (! event.isRangeAdd) {
+                this.fireEvent('updateEvent', event);
+            }
         }
     },
     
@@ -841,11 +863,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * @private
      */
-    onRemove : function(ds, record, index, isUpdate){
+    onRemove : function(ds, event, index, isUpdate){
         if(isUpdate !== true){
             //this.fireEvent("beforeeventremoved", this, index, record);
         }
-        this.removeEvent(record);
+        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
+        registry.unregister(event);
+        this.removeEvent(event);
+        
         if(isUpdate !== true){
             //this.fireEvent("eventremoved", this, index, record);
         }

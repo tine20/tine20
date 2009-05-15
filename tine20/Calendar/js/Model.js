@@ -72,3 +72,9 @@ Tine.Calendar.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     modelName: 'Event',
     recordClass: Tine.Calendar.Event
 });*/
+
+Tine.Calendar.backend = new Tine.Tinebase.data.AbstractBackend({
+    appName: 'Calendar',
+    modelName: 'Event',
+    recordClass: Tine.Calendar.Event
+});
