@@ -289,7 +289,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      *
      * @param int $_groupId
      * @param int $_accountId
-     * @return unknown
+     * @return void
      */
     public function removeGroupMember($_groupId, $_accountId) 
     {
@@ -305,7 +305,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         $data = array('memberuid' => $accountMetaData['uid']);
         
-        if ($this->_options['useRfc2307bis']) {
+        if (isset($this->_options['useRfc2307bis']) && $this->_options['useRfc2307bis']) {
             
             if (count($memberUidNumbers) > 1) { 
                 $data['member'] = $accountMetaData['dn'];
