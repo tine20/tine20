@@ -35,6 +35,15 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     protected $_lastSearchCount = array();
     
     /**
+     * system folder names
+     *
+     * @var array
+     * 
+     * @todo    get these from account settings?
+     */
+    protected $_systemFolders = array('trash', 'inbox', 'drafts', 'junk', 'sent', 'templates');
+    
+    /**
      * Enter description here...
      * 
      * @staticvar string
@@ -184,24 +193,28 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     /**
      * rename folder
      *
-     * @param string $_oldFolderName globalName (complete path) of folder to rename
+     * @param string $_oldFolderName local (complete path) of folder to rename
      * @param string $_newFolderName new globalName of folder
      * @param string $_accountId [optional]
      * @return Felamimail_Model_Folder
      * 
-     * @todo disallow renaming of special folders like Trash, Sent, ...?
+     * @todo use delimiter?
      */
-    public function rename($_oldFolderName, $_newFolderName, $_accountId = 'default')
+    public function rename($_newLocalName, $_oldGlobalName, $_accountId = 'default')
     {
+        //$globalNameParts = explode(self::DELIMITER, $_oldGlobalName);
+        //$folder->localname = array_pop($globalNameParts);
+        
+        $newGlobalName = preg_replace("/[_\-a-zA-Z0-9]+$/", $_newLocalName, $_oldGlobalName);
+        
         $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
-        $imap->renameFolder($_oldFolderName, $_newFolderName);
+        $imap->renameFolder($_oldGlobalName, $newGlobalName);
         
         // rename folder in db
         try {
-            $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $_oldFolderName);
-            $folder->globalname = $_newFolderName;
-            $globalNameParts = explode(self::DELIMITER, $_newFolderName);
-            $folder->localname = array_pop($globalNameParts);
+            $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $_oldGlobalName);
+            $folder->globalname = $newGlobalName;
+            $folder->localname = $_newLocalName;
             $folder = $this->_folderBackend->update($folder);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -258,7 +271,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                     'account_id'    => $_accountId,
                     'timestamp'     => Zend_Date::now(),
                     'user_id'       => $this->_currentAccount->getId(),
-                    'parent'        => $_folderName
+                    'parent'        => $_folderName,
+                    'system_folder' => in_array(strtolower($folderData['localName']), $this->_systemFolders)
                 ));
                 
                 $folder = $this->_folderBackend->create($folder);

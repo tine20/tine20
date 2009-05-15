@@ -7,15 +7,10 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        show new mails and number of unread mails next to folder name
- * @todo        generalize context menu (items) -> and use it in container tree as well
- * @todo        add context menu
- *              - add/rename folders
- *              - change account settings
- *              - add new accounts
- * @todo        add multiple accounts
- * @todo        add folder model?
- * @todo        save tree state? @see http://examples.extjs.eu/?ex=treestate
+ * TODO         show new mails and number of unread mails next to folder name
+ * TODO         add multiple accounts + change account settings
+ * TODO         add folder model?
+ * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -56,7 +51,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         });
 
         // set the root node
-        // @todo make multiple accounts/backends possible
         this.root = new Ext.tree.AsyncTreeNode({
             text: 'default',
             globalname: '',
@@ -68,7 +62,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             id: '/'
             //iconCls: 'FelamimailMessage'
         });
-                
+        
+        this.initContextMenu();
+        
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
         
     	// add handlers
@@ -78,9 +74,50 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 	},
     
     /**
+     * init context menu
+     * 
+     * TODO add account context menu
+     */
+    initContextMenu: function() {
+        var il8n = new Locale.Gettext();
+        il8n.textdomain('Felamimail');
+        
+        /*
+        this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
+            il8n: il8n,
+            nodeName: this.containerName,
+            actions: ['add'],
+            scope: this,
+            backend: 'Tinebase_Container',
+            backendModel: 'Container'
+        });
+        */
+        
+        var config = {
+            il8n: il8n,
+            nodeName: il8n._('Folder'),
+            scope: this,
+            backend: 'Felamimail',
+            backendModel: 'Folder'
+        };        
+        
+        // TODO add getRefreshCacheAction here
+        config.actions = ['add'];
+        this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
+        
+        config.actions = ['add', 'delete', 'rename'];
+        this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
+        
+        // TODO add empty trash here
+        config.actions = ['add'];
+        this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
+    },
+    
+    
+    /**
      * returns a filter plugin to be used in a grid
      *
-     * @todo use folder id here
+     * TODO use folder id here
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
@@ -125,20 +162,36 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * - create folder
      * - rename folder
      * - delete folder
+     * - ...
      * 
      * @param {} node
-     * @param {} e
+     * @param {} event
      * 
-     * @todo    generalize that (it's basically the same like the container tree menu...)?
+     * TODO add account context menu
      */
-    onContextMenu: function(node, e) {
-        //console.log(node);
-    	// only for folder nodes
-        if (!node.attributes.folderNode) {
-        	// @todo add/edit/remove account
+    onContextMenu: function(node, event) {
+        this.ctxNode = node;
+        
+        if (! node.attributes.folderNode) {
+            // TODO add/edit/remove account
             return;
         } else {
             
+            if (node.attributes.globalname == 'Trash') {
+                this.contextMenuTrash.showAt(event.getXY());
+            } else if (node.attributes.systemFolder) {
+                this.contextMenuSystemFolder.showAt(event.getXY());    
+            } else {
+                this.contextMenuUserFolder.showAt(event.getXY());
+            }
+        }
+        
+        /*
+        //console.log(node);
+    	// only for folder nodes
+        if (!node.attributes.folderNode) {
+            return;
+        } else {
             var menuItems = [
                 this.getCreateAction(node),
                 this.getRenameAction(node),
@@ -155,6 +208,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             });
         }
         menu.showAt(e.getXY());
+        */
     },
     
     /**
@@ -191,127 +245,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     /********************** actions *******************/
 
     /**
-     * get create action
-     * 
-     * @param {Ext.tree.AsyncTreeNode}
-     * @return {Object} action item
-     */
-    getCreateAction: function(node) {
-        return {
-            text: _('Create Folder'),
-            iconCls: 'notes_createdIcon',
-            scope: this,
-            handler: function() {
-                Ext.MessageBox.prompt(String.format(translation._('New {0}'), this.containerName), String.format(translation._('Please enter the name of the new {0}:'), this.containerName), function(_btn, _text) {
-                    if( this.ctxNode && _btn == 'ok') {
-                        if (! _text) {
-                            Ext.Msg.alert(String.format(translation._('No {0} added'), this.containerName), String.format(translation._('You have to supply a {0} name!'), this.containerName));
-                            return;
-                        }
-                        Ext.MessageBox.wait(translation._('Please wait'), String.format(translation._('Creating {0}...' ), this.containerName));
-                        var parentNode = this.ctxNode;
-                        
-                        Ext.Ajax.request({
-                            params: {
-                                method: 'Felamimail.createFolder',
-                                folder: parentNode.attributes.globalname + '/' + _text, // ?
-                                account_id: node.attributes.account_id
-                            },
-                            scope: this,
-                            success: function(_result, _request){
-                            	/*
-                                var container = Ext.util.JSON.decode(_result.responseText);
-                                var newNode = this.loader.createNode(container);
-                                parentNode.appendChild(newNode);
-                                this.fireEvent('containeradd', container);
-                                */
-                                Ext.MessageBox.hide();
-                            }
-                        });
-                        
-                    }
-                }, this);
-            }
-        };
-    },
-    
-    /**
-     * get rename action
-     * 
-     * @param {Ext.tree.AsyncTreeNode}
-     * @return {Object} action item
-     */
-    getRenameAction: function(node) {
-        return {
-            text: _('Rename Folder'),
-            iconCls: 'notes_changedIcon',
-            scope: this,
-            handler: function() {
-            	/*
-                Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the Folder "{0}"?'), node.text), function(_btn){
-                    if ( _btn == 'yes') {
-                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Folder "{0}"' ), node.text));
-                        
-                        Ext.Ajax.request({
-                            params: {
-                                method: 'Felamimail.deleteFolder',
-                                folder: node.attributes.globalname,
-                                account_id: node.attributes.account_id
-                            },
-                            scope: this,
-                            success: function(){
-                                node.unselect();
-                                node.remove();
-                                Ext.MessageBox.hide();
-                            }
-                        });
-                    }
-                }, this);
-                */
-            }
-        };
-    },
-    
-    /**
-     * get delete action
-     * 
-     * @param {Ext.tree.AsyncTreeNode}
-     * @return {Object} action item
-     */
-    getDeleteAction: function(node) {
-        return {
-            text: _('Delete Folder'),
-            iconCls: 'action_delete',
-            scope: this,
-            handler: function() {
-                Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the Folder "{0}"?'), node.text), function(_btn){
-                    if ( _btn == 'yes') {
-                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Folder "{0}"' ), node.text));
-                        
-                        Ext.Ajax.request({
-                            params: {
-                                method:     'Felamimail.deleteFolder',
-                                folder:     node.attributes.globalname,
-                                accountId:  node.attributes.account_id
-                            },
-                            scope: this,
-                            success: function(){
-                                node.unselect();
-                                node.remove();
-                                Ext.MessageBox.hide();
-                            }
-                        });
-                    }
-                }, this);
-            }
-        };
-    },
-    
-    /**
      * get refresh action
      * 
      * @param {Ext.tree.AsyncTreeNode}
      * @return {Object} action item
+     * 
+     * TODO use it in general ctx menu
      */
     getRefreshCacheAction: function(node) {
         return {
@@ -339,6 +278,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @param {Ext.tree.AsyncTreeNode}
      * @return {Object} action item
+     * 
+     * TODO use it in general ctx menu
      */
     getEmptyFolderAction: function(node) {
         return {
@@ -362,6 +303,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     }
 });
 
+/**
+ * tree loader
+ * 
+ * @class Tine.Felamimail.TreeLoader
+ * @extends Tine.widgets.tree.Loader
+ */
 Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
 	
     method: 'Felamimail.searchFolders',
@@ -395,9 +342,9 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     /**
      * @private
      * 
-     * @todo try to disable '+' on nodes that don't have children / it looks like that leafs can't be drop targets :(
-     * @todo what about equal folder names (=id) in different subtrees?
-     * @todo generalize this?
+     * TODO try to disable '+' on nodes that don't have children / it looks like that leafs can't be drop targets :(
+     * TODO what about equal folder names (=id) in different subtrees?
+     * TODO generalize this?
      */
     createNode: function(attr) {
     	var node = {
@@ -407,7 +354,8 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     		globalname: attr.globalname,
     		account_id: attr.account_id,
     		folderNode: true,
-            allowDrop: true
+            allowDrop: true,
+            systemFolder: (attr.system_folder == '1')
             //expandable: (attr.has_children == '1'),
             //allowChildren: (attr.has_children == 1)
             //childNodes: []

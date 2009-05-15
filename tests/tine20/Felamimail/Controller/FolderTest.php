@@ -121,7 +121,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     {
         $this->_controller->create('test', 'INBOX');
 
-        $renamedFolder = $this->_controller->rename('INBOX/test', 'INBOX/test_renamed');
+        $renamedFolder = $this->_controller->rename('test_renamed', 'INBOX/test');
         
         $this->assertEquals('test_renamed', $renamedFolder->localname);
         

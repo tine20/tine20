@@ -38,6 +38,28 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * add new folder
+     *
+     * @param string $name
+     * @param string $parent
+     * @param string $accountId
+     * @return array
+     */
+    public function addFolder($name, $parent, $accountId)
+    {
+        $result = Felamimail_Controller_Folder::getInstance()->create($name, $parent, $accountId);
+        
+        return $result->toArray();
+    }
+
+    public function renameFolder($newName, $oldGlobalName, $accountId)
+    {
+        $result = Felamimail_Controller_Folder::getInstance()->rename($newName, $oldGlobalName, $accountId);
+        
+        return $result->toArray();
+    }
+    
+    /**
      * delete folder
      *
      * @param string $folder the folder global name to delete
@@ -52,7 +74,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'status'    => ($result) ? 'success' : 'failure'
         );
     }
-
+    
     /**
      * refresh folder
      *

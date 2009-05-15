@@ -54,10 +54,9 @@ Tine.widgets.tree.ContextMenu = {
                         if (config.backendModel == 'Container') {
                             params.application = this.appName;
                             params.containerType = parentNode.attributes.containerType;
-                            
                         } else if (config.backendModel == 'Folder') {
                             params.parent = parentNode.attributes.globalname;
-                            params.accountId = node.attributes.account_id;
+                            params.accountId = parentNode.attributes.account_id;
                         }
                         
                         Ext.Ajax.request({
@@ -88,11 +87,20 @@ Tine.widgets.tree.ContextMenu = {
                         if ( _btn == 'yes') {
                             Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Deleting {0} "{1}"' ), config.nodeName , node.text));
                             
+                            var params = {
+                                method: config.backend + '.delete' + config.backendModel
+                            }
+                            
+                            // TODO try to generalize this
+                            if (config.backendModel == 'Container') {
+                                params.containerId = node.attributes.container.id
+                            } else if (config.backendModel == 'Folder') {
+                                params.folder = node.attributes.globalname;
+                                params.accountId = node.attributes.account_id;
+                            }
+                            
                             Ext.Ajax.request({
-                                params: {
-                                    method: config.backend + '.delete' + config.backendModel,
-                                    containerId: node.attributes.container.id
-                                },
+                                params: params,
                                 scope: this,
                                 success: function(_result, _request){
                                     if(node.isSelected()) {
@@ -135,8 +143,12 @@ Tine.widgets.tree.ContextMenu = {
                                     newName: _text
                                 };
                                 
+                                // TODO try to generalize this
                                 if (config.backendModel == 'Container') {
                                     params.containerId = node.attributes.container.id;
+                                } else if (config.backendModel == 'Folder') {
+                                    params.oldGlobalName = node.attributes.globalname;
+                                    params.accountId = node.attributes.account_id;
                                 }
                                 
                                 Ext.Ajax.request({

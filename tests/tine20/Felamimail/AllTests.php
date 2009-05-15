@@ -40,10 +40,8 @@ class Felamimail_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail All Tests');
         $suite->addTestSuite('Felamimail_JsonTest');
-        //$suite->addTestSuite('Felamimail_ControllerTest');
         $suite->addTestSuite('Felamimail_Controller_FolderTest');
         $suite->addTestSuite('Felamimail_Controller_MessageTest');
-        //$suite->addTestSuite('Felamimail_Backend_CacheTest');
         //$suite->addTestSuite('Felamimail_MessageTest');
         return $suite;
     }

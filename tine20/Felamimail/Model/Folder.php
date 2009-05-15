@@ -48,6 +48,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_selectable'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'has_children'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'system_folder'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // cache/mailbox sync values 
         'uidnext'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
