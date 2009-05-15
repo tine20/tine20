@@ -43,6 +43,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     },
     
     onAddEvent: function(store, events, index) {
+        console.log(events);
         console.log('A new event has been added -> call backend create');
     },
     
@@ -51,6 +52,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     },
     
     onRemoveEvent: function(store, event, index) {
+        console.log(event);
         console.log('A existing event has been deleted -> call backend delete'); 
     },
     

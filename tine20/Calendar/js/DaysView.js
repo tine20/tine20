@@ -27,6 +27,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     numOfDays: 4,
     /**
+     * @cfg {String} newEventSummary
+     */
+    newEventSummary: 'New Event',
+    /**
      * @cfg {Number} timeGranularity
      * granularity of timegrid in minutes
      */
@@ -51,7 +55,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @type Number
      */
     scrollOffset: 19,
-    
     /**
      * @property {bool} editing
      * @private
@@ -597,6 +600,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     abortCreateEvent: function(event) {
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         
+        this.ds.suspendEvents();
         this.ds.remove(event);
         this.ds.resumeEvents();
         
@@ -608,12 +612,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     startEditSummary: function(event) {
         var eventEls = this.getEventEls(event);
         
+        var bodyCls = event.get('is_all_day_event') ? 'cal-daysviewpanel-wholedayevent-body' : 'cal-daysviewpanel-event-body';
         new Ext.form.TextField({
             event: event,
-            renderTo: eventEls[0].down('div[class=cal-daysviewpanel-event-body]'),
+            renderTo: eventEls[0].down('div[class=' + bodyCls + ']'),
             width: '90%',
-            //value: this.calPanel.app.i18n._('New Event')
-            value: 'New Event',
+            value: this.newEventSummary,
             listeners: {
                 scope: this,
                 render: function(field) {
@@ -637,16 +641,20 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         event.set('summary', summary);
         
         // after title
-        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         
+        
+        //this.abortCreateEvent(event);
+        this.ds.suspendEvents();
         this.ds.remove(event);
         this.ds.resumeEvents();
         
+        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.unregister(event);
         this.removeEvent(event);
         
         this.ds.add(event);
         this.editing = false;
+
         //this.ds.resumeEvents();
         //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
     },
