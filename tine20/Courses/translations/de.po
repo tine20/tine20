@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-05-05 14:49+0100\n"
+"PO-Revision-Date: 2009-05-15 12:54+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -50,12 +50,12 @@ msgstr "Beschreibung"
 #: js/CourseEditDialog.js:179
 #: js/CourseGridPanel.js:78
 msgid "Internet Access"
-msgstr "Internetzugang"
+msgstr "Internet freigegeben"
 
 #: js/CourseEditDialog.js:185
 #: js/CourseGridPanel.js:85
 msgid "Fileserver Access"
-msgstr "Fileserverzugang"
+msgstr "Zugriff auf Fileserver gesperrt"
 
 #: js/CourseEditDialog.js:215
 #: js/CourseEditDialog.js:275
@@ -96,11 +96,11 @@ msgstr "Internetzugang Aus"
 
 #: js/CourseGridPanel.js:132
 msgid "Fileserver Access On"
-msgstr "Fileserverzugang An"
+msgstr "Fileserver sperren"
 
 #: js/CourseGridPanel.js:143
 msgid "Fileserver Access Off"
-msgstr "Fileserverzugang Aus"
+msgstr "Fileserver freigeben"
 
 #: js/CourseGridPanel.js:184
 msgid "Failed"
