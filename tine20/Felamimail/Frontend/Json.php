@@ -10,9 +10,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add functions for rename/create folders
- * @todo        add empty trash function
- * @todo        remove deprecated code
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -23,7 +20,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_applicationName = 'Felamimail';
     
-    /***************************** folder funcs *******************************/
     /***************************** folder funcs *******************************/
     
     /**
@@ -52,6 +48,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result->toArray();
     }
 
+    /**
+     * rename folder
+     *
+     * @param string $newName
+     * @param string $oldGlobalName
+     * @param string $accountId
+     * @return array
+     */
     public function renameFolder($newName, $oldGlobalName, $accountId)
     {
         $result = Felamimail_Controller_Folder::getInstance()->rename($newName, $oldGlobalName, $accountId);
@@ -107,7 +111,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
     
-    /***************************** messages funcs *******************************/
     /***************************** messages funcs *******************************/
     
     /**
@@ -257,7 +260,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /***************************** accounts funcs *******************************/
-    /***************************** accounts funcs *******************************/
     
     /**
      * search accounts
@@ -285,92 +287,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         */
     }
     
-    /***************************** old funcs *******************************/
+    /***************************** other funcs *******************************/
     
-    /**
-     * get email overview
-     *
-     * @param unknown_type $accountId
-     * @param unknown_type $folderName
-     * @param unknown_type $filter
-     * @param unknown_type $sort
-     * @param unknown_type $dir
-     * @param unknown_type $limit
-     * @param unknown_type $start
-     * @return unknown
-     * 
-     * @deprecated 
-     */
-    public function getEmailOverview($accountId, $folderName, $filter, $sort, $dir, $limit, $start)
-    {
-        $controller = new Felamimail_Controller();
-
-        $result = array(
-            'results'   => $controller->getEmailOverview($accountId, $folderName, $filter, $sort, $dir, $limit, $start)
-        );
-        
-        foreach($result['results'] as $key => $message) {
-            $result['results'][$key]['sent']     = $message['sent']->get(Tinebase_Record_Abstract::ISO8601LONG);
-            $result['results'][$key]['received'] = $message['received']->get(Tinebase_Record_Abstract::ISO8601LONG);
-        }
-        
-        return $result;
-    }
-    
-	/**
-	 * get subfolders for specified folder
-	 *
-	 * @param unknown_type $accountId
-	 * @param unknown_type $location
-	 * @param unknown_type $folderName
-	 * 
-	 * @deprecated 
-	 */
-	public function getSubTree($accountId, $location, $folderName) 
-	{
-	    /*
-		$nodes = array();
-
-		$controller = new Felamimail_Controller();
-		$accounts = $controller->getListOfAccounts();
-		
-		try {
-			$mail = new Felamimail_Imap($accounts[$accountId]->toArray());
-			
-			if(empty($folderName)) {
-				$folder = $mail->getFolders('', '%');
-			} else {
-				$folder = $mail->getFolders($folderName.'/', '%');
-			}
-			
-			//error_log(print_r($folder, true));
-			
-			foreach($folder as $folderArray) {
-				$treeNode = new Tinebase_Ext_Treenode(
-					'Felamimail', 
-					'email', 
-					$folderArray['globalName'], 
-					$folderArray['localName'], 
-					!$folderArray['hasChildren']
-				);
-				$treeNode->contextMenuClass = 'ctxMenuTreeFellow';
-                $treeNode->accountId  = $accountId;
-                $treeNode->folderName = $folderArray['globalName'];
-				$nodes[] = $treeNode;
-				
-			}
-			
-		} catch (Exception $e) {
-			error_log('ERROR: '. $e->getMessage());
-		}
-		
-		echo Zend_Json::encode($nodes); 
-        */
-
-		// exit here, as the Zend_Server's  processing is adding a result code, which breaks the result array
-		exit;
-	}
-		
 	/**
      * Returns registry data of felamimail.
      * @see Tinebase_Application_Json_Abstract
