@@ -6,9 +6,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        do some more generalizing (method params, ...)
- * @todo        add icons for grants / rename actions
- * @todo        use this in email folder trees
  */
 Ext.namespace('Tine.widgets', 'Tine.widgets.tree');
 
@@ -33,9 +30,12 @@ Tine.widgets.tree.ContextMenu = {
         
         /***************** define action handlers *****************/
         var handler = {
+            /**
+             * create
+             */
             addNode: function() {
-                console.log('add');
-                console.log(this.ctxNode);
+                //console.log('add');
+                //console.log(this.ctxNode);
                 Ext.MessageBox.prompt(String.format(config.il8n._('New {0}'), config.nodeName), String.format(config.il8n._('Please enter the name of the new {0}:'), config.nodeName), function(_btn, _text) {
                     if( this.ctxNode && _btn == 'ok') {
                         if (! _text) {
@@ -45,19 +45,31 @@ Tine.widgets.tree.ContextMenu = {
                         Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Creating {0}...' ), config.nodeName));
                         var parentNode = this.ctxNode;
                         
+                        var params = {
+                            method: config.backend + '.add' + config.backendModel,
+                            name: _text
+                        };
+                        
+                        // TODO try to generalize this
+                        if (config.backendModel == 'Container') {
+                            params.application = this.appName;
+                            params.containerType = parentNode.attributes.containerType;
+                            
+                        } else if (config.backendModel == 'Folder') {
+                            params.parent = parentNode.attributes.globalname;
+                            params.accountId = node.attributes.account_id;
+                        }
+                        
                         Ext.Ajax.request({
-                            params: {
-                                method: config.backend + '.add' + config.backendModel,
-                                application: this.appName,
-                                containerName: _text,
-                                containerType: parentNode.attributes.containerType
-                            },
+                            params: params,
                             scope: this,
                             success: function(_result, _request){
-                                var container = Ext.util.JSON.decode(_result.responseText);
-                                var newNode = this.loader.createNode(container);
+                                var nodeData = Ext.util.JSON.decode(_result.responseText);
+                                var newNode = this.loader.createNode(nodeData);
                                 parentNode.appendChild(newNode);
-                                this.fireEvent('containeradd', container);
+                                if (config.backendModel == 'Container') {
+                                    this.fireEvent('containeradd', nodeData);
+                                }
                                 Ext.MessageBox.hide();
                             }
                         });
@@ -65,6 +77,10 @@ Tine.widgets.tree.ContextMenu = {
                     }
                 }, this);
             },
+            
+            /**
+             * delete
+             */
             deleteNode: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
@@ -84,7 +100,9 @@ Tine.widgets.tree.ContextMenu = {
                                         this.fireEvent('click', node.parentNode);
                                     }
                                     node.remove();
-                                    this.fireEvent('containerdelete', node.attributes.container);
+                                    if (config.backendModel == 'Container') {
+                                        this.fireEvent('containerdelete', node.attributes.container);
+                                    }
                                     Ext.MessageBox.hide();
                                 }
                             });
@@ -92,6 +110,10 @@ Tine.widgets.tree.ContextMenu = {
                     }, this);
                 }
             },
+            
+            /**
+             * rename
+             */
             renameNode: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
@@ -108,17 +130,24 @@ Tine.widgets.tree.ContextMenu = {
                                 }
                                 Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Updating {0} "{1}"'), config.nodeName, node.text));
                                 
+                                var params = {
+                                    method: config.backend + '.rename' + config.backendModel,
+                                    newName: _text
+                                };
+                                
+                                if (config.backendModel == 'Container') {
+                                    params.containerId = node.attributes.container.id;
+                                }
+                                
                                 Ext.Ajax.request({
-                                    params: {
-                                        method: config.backend + '.rename' + config.backendModel,
-                                        containerId: node.attributes.container.id,
-                                        newName: _text
-                                    },
+                                    params: params,
                                     scope: this,
                                     success: function(_result, _request){
                                         var container = Ext.util.JSON.decode(_result.responseText);
                                         node.setText(_text);
-                                        this.fireEvent('containerrename', container);
+                                        if (config.backendModel == 'Container') {
+                                            this.fireEvent('containerrename', container);
+                                        }
                                         Ext.MessageBox.hide();
                                     }
                                 });
@@ -131,7 +160,7 @@ Tine.widgets.tree.ContextMenu = {
                 }
             },
             
-            // @todo generalize that?
+            // TODO  generalize that?
             managePermissions: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
@@ -190,6 +219,8 @@ Tine.widgets.tree.ContextMenu = {
                         scope: config.scope
                     }));
                     break;
+                default:
+                    // TODO add custom actions
             }
         }
 

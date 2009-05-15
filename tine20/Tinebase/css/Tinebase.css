@@ -12,6 +12,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
 
+.action_rename {
+    background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
+}
+
 .action_delete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
@@ -30,6 +34,10 @@ html, body {
 
 .action_saveAndClose {
     background-image:url(../../images/oxygen/16x16/actions/dialog-ok.png) !important;
+}
+
+.action_managePermissions {
+    background-image:url(../../images/oxygen/16x16/actions/password.png) !important;
 }
 
 .action_addContact {

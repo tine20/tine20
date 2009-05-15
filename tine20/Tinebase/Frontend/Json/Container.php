@@ -74,10 +74,10 @@ class Tinebase_Frontend_Json_Container
      * @return  array new container
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function addContainer($application, $containerName, $containerType)
+    public function addContainer($application, $name, $containerType)
     {
         $newContainer = new Tinebase_Model_Container(array(
-            'name'              => $containerName,
+            'name'              => $name,
             'type'              => $containerType,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId() 
