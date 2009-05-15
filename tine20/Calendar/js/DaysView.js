@@ -397,7 +397,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }, true);
             
             if (! (endColNum > this.numOfDays)) {
-                var resizeable = new Ext.Resizable(eventEl, {
+                event.resizeable = new Ext.Resizable(eventEl, {
                     handles: 'e',
                     disableTrackOver: true,
                     //dynamic: !!event.isRangeAdd,
@@ -451,7 +451,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 }, true);
                 
                 if (currColNum == endColNum) {
-                    var resizeable = new Ext.Resizable(eventEl, {
+                    event.resizeable = new Ext.Resizable(eventEl, {
                         handles: 's',
                         disableTrackOver: true,
                         dynamic: !!event.isRangeAdd,
@@ -465,8 +465,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 }
             }
         }
-        
-        return resizeable;
     },
     
     /**
@@ -529,25 +527,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         return this.activeEvent;
     },
     
-    onBeforeEventResize: function(rz, e) {
-        var parts = rz.el.id.split(':');
-        var event = this.ds.getById(parts[1]);
-        
-        rz.event = event;
-        rz.originalHeight = rz.el.getHeight();
-        
-        rz.el.setStyle({'border-style': 'dashed'});
-        rz.el.setOpacity(0.5);
-        
-        // rz supresses resize event if element is not resized
-        rz.onMouseUp = rz.onMouseUp.createSequence(function() {
-            rz.el.setStyle({'border-style': 'solid'});
-            rz.el.setOpacity(1);
-        });
-        
-        this.setActiveEvent(event);
-    },
-    
     /**
      * creates a new event directly from this view
      * @param {} event
@@ -559,20 +538,20 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             return;
         }
         
+        // insert event silently into store
         this.ds.suspendEvents();
         this.ds.add(event);
         
+        
+        // draw event
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.register(event);
+        this.insertEvent(event);
         
-        var resizeable = this.insertEvent(event);
+        // start sizing for range adds
         if (event.isRangeAdd) {
-            resizeable.on('resize', function() {
-                this.ds.remove(event);
-                registry.unregister(event);
-                this.removeEvent(event);
-                this.ds.resumeEvents();
-                
+            // don't create events with very small duration
+            event.resizeable.on('resize', function() {
                 if (event.get('is_all_day_event')) {
                     var keep = true;
                 } else {
@@ -580,14 +559,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 }
                 
                 if (keep) {
-                    // don't create events with very small duration
-                    this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
+                    this.startEditSummary(event);
+                } else {
+                    this.abortCreateEvent(event);
                 }
-                
             }, this);
             
             // fix duration when mouse already has been moved
-            resizeable.onMouseMove = resizeable.onMouseMove.createSequence(function(e, target) {
+            event.resizeable.onMouseMove = event.resizeable.onMouseMove.createSequence(function(e, target) {
                 var eventXY = e.getXY();
                 
                 if (event.get('is_all_day_event')) {
@@ -599,11 +578,68 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     this.proxy.setHeight(height);
                     this.resizeElement();
                 }
-            }, resizeable);
+            }, event.resizeable);
             
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
-            resizeable[rzPos].onMouseDown.call(resizeable[rzPos], e);
+            event.resizeable[rzPos].onMouseDown.call(event.resizeable[rzPos], e);
+        } else {
+            this.startEditSummary(event);
         }
+    },
+    
+    abortCreateEvent: function(event) {
+        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
+        
+        this.ds.remove(event);
+        this.ds.resumeEvents();
+        
+        registry.unregister(event);
+        this.removeEvent(event);
+    },
+    
+    startEditSummary: function(event) {
+        var eventEls = this.getEventEls(event);
+        
+        new Ext.form.TextField({
+            event: event,
+            renderTo: eventEls[0].down('div[class=cal-daysviewpanel-event-body]'),
+            width: '90%',
+            //value: this.calPanel.app.i18n._('New Event')
+            value: 'New Event',
+            listeners: {
+                scope: this,
+                render: function(field) {
+                    field.focus(true, 100);
+                },
+                blur: this.endEditSummary,
+                specialkey: this.endEditSummary
+            }
+            
+        });
+    },
+    
+    endEditSummary: function(field, e) {
+        var summary = field.getValue();
+        var event = field.event;
+        
+        if (! summary || (e && e.getKey() == e.ESC)) {
+            return this.abortCreateEvent(event);
+        }
+        
+        event.set('summary', summary);
+        
+        // after title
+        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
+        
+        this.ds.remove(event);
+        this.ds.resumeEvents();
+        
+        registry.unregister(event);
+        this.removeEvent(event);
+        
+        this.ds.add(event);
+        //this.ds.resumeEvents();
+        //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
     },
     
     /**
@@ -640,7 +676,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var event = new Tine.Calendar.Event({
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1),
+                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24) : dtStart.add(Date.MINUTE, this.timeGranularity/2),
                 is_all_day_event: dtStart.is_all_day_event
             }, newId);
             event.isRangeAdd = true;
@@ -654,6 +690,28 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     onMouseUp: function() {
         this.mouseDown = false;
+    },
+    
+    /**
+     * @private
+     */
+    onBeforeEventResize: function(rz, e) {
+        var parts = rz.el.id.split(':');
+        var event = this.ds.getById(parts[1]);
+        
+        rz.event = event;
+        rz.originalHeight = rz.el.getHeight();
+        
+        rz.el.setStyle({'border-style': 'dashed'});
+        rz.el.setOpacity(0.5);
+        
+        // rz supresses resize event if element is not resized
+        rz.onMouseUp = rz.onMouseUp.createSequence(function() {
+            rz.el.setStyle({'border-style': 'solid'});
+            rz.el.setOpacity(1);
+        });
+        
+        this.setActiveEvent(event);
     },
     
     /**
