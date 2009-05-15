@@ -74,11 +74,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $folderId the folder id to delete
      * @return array
      * 
-     * @todo implement
+     * @todo add test
      */
     public function emptyFolder($folderId)
     {
-        //$result = Felamimail_Controller_Cache::getInstance()->clear($folderId);
+        $result = Felamimail_Controller_Folder::getInstance()->emptyFolder($folderId);
 
         return array(
             'status'    => ($result) ? 'success' : 'failure'

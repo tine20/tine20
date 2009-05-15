@@ -270,6 +270,26 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         return $result;
     }
     
+    /**
+     * delete all messages in one folder
+     *
+     * @param string $_folderId
+     * @return void
+     */
+    public function emptyFolder($_folderId)
+    {
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId)
+        ));
+        
+        $messages = Felamimail_Controller_Message::getInstance()->search($filter);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to delete ' 
+            . count($messages) . ' messages from folder with id ' . $_folderId . '.'
+        );
+        return Felamimail_Controller_Message::getInstance()->delete($messages->getArrayOfIds());
+    }
+    
     /************************************* protected functions *************************************/
     
     /**
