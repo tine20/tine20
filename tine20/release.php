@@ -119,10 +119,7 @@ if ($opts->clean) {
     }
 }
 
-$includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles(array(
-    'Felamimail',
-    'Calendar'
-));
+$includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles();
 
 $setupIncludeFiles = Setup_Frontend_Http::getAllIncludeFiles();
 
