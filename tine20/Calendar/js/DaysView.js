@@ -638,15 +638,22 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (! this.editing) {
             return;
         }
-        this.editing = false;
+        
         
         var summary = field.getValue();
         var event = field.event;
         
+        // abort edit on ESC key
         if (! summary || (e && e.getKey() == e.ESC)) {
             return this.abortCreateEvent(event);
         }
         
+        // only commit edit on Enter & blur
+        if (e && e.getKey() != e.ENTER) {
+            return;
+        }
+        
+        this.editing = false;
         event.set('summary', summary);
         
         // after summary
