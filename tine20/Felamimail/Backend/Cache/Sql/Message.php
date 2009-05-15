@@ -189,6 +189,32 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * get count of cached messages by folder (id) 
+     *
+     * @param string $_folderId
+     * @return integer
+     * 
+     * @todo try to use only one db query for this
+     */
+    public function unreadCountByFolderId($_folderId)
+    {
+        $select = $this->_db->select();
+        $select->from(
+            array($this->_foreignTables['flags'] => $this->_tablePrefix . $this->_foreignTables['flags']), 
+            array('count' => 'COUNT(DISTINCT message_id)')
+        )->where(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $_folderId)
+        );
+        $totalCount = $this->_db->fetchOne($select);        
+
+        $select->where(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('flag') . ' = ?', '\Seen')
+        );
+        $seenCount = $this->_db->fetchOne($select);        
+        return $totalCount - $seenCount;
+    }
+    
+    /**
      * get messageuids by folder (id)
      *
      * @param string $_folderId

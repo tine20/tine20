@@ -8,6 +8,7 @@
  * @version     $Id$
  *
  * TODO         show new mails and number of unread mails next to folder name
+ * TODO         update number of unread mails if changed
  * TODO         add multiple accounts + change account settings
  * TODO         add folder model?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
@@ -295,11 +296,18 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     /**
      * @private
      * 
+     * TODO make unreadcount work
      * TODO try to disable '+' on nodes that don't have children / it looks like that leafs can't be drop targets :(
      * TODO what about equal folder names (=id) in different subtrees?
      * TODO generalize this?
      */
     createNode: function(attr) {
+        console.log(attr);
+        
+        if (attr.unreadcount > 0) {
+            attr.localname = '<strong>' + attr.localname + ' (' + attr.unreadcount + ')</strong>';
+        }
+        
     	var node = {
     		id: attr.id,
     		leaf: false,
@@ -309,6 +317,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     		folderNode: true,
             allowDrop: true,
             systemFolder: (attr.system_folder == '1')
+            //numUnread: 2
             //expandable: (attr.has_children == '1'),
             //allowChildren: (attr.has_children == 1)
             //childNodes: []

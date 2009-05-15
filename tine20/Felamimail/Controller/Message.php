@@ -380,6 +380,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $_message;
     }
     
+    /**
+     * get count of unread messages by folder 
+     *
+     * @param string $_folderId
+     * @return integer
+     * 
+     * @todo add test
+     */
+    public function getUnreadCount($_folderId)
+    {
+        $result = $this->_backend->unreadCountByFolderId($_folderId);
+        return $result;
+    }
     
     /************************* protected funcs *************************/
     
