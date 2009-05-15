@@ -53,6 +53,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     scrollOffset: 19,
     
     /**
+     * @property {bool} editing
+     * @private
+     */
+    editing: false,
+    /**
      * @property {Tine.Calendar.Event} activeEvent
      * @private
      */
@@ -534,11 +539,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     createEvent: function(e, event) {
         
         // only add range events if mouse is down long enough
-        if (event.isRangeAdd && ! this.mouseDown) {
+        if (this.editing || (event.isRangeAdd && ! this.mouseDown)) {
             return;
         }
         
         // insert event silently into store
+        this.editing = true;
         this.ds.suspendEvents();
         this.ds.add(event);
         
@@ -547,6 +553,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.register(event);
         this.insertEvent(event);
+        this.setActiveEvent(event);
         
         // start sizing for range adds
         if (event.isRangeAdd) {
@@ -595,6 +602,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         registry.unregister(event);
         this.removeEvent(event);
+        this.editing = false;
     },
     
     startEditSummary: function(event) {
@@ -638,6 +646,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.removeEvent(event);
         
         this.ds.add(event);
+        this.editing = false;
         //this.ds.resumeEvents();
         //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
     },
@@ -658,7 +667,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 is_all_day_event: dtStart.is_all_day_event
             }, newId);
             
-            //this.createEvent.defer(400, this, [e, event]);
             this.createEvent(e, event);
         }
     },
@@ -667,6 +675,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onMouseDown: function(e, target) {
+        this.scroller.focus();
+        
         e.stopEvent();
         this.mouseDown = true;
         
