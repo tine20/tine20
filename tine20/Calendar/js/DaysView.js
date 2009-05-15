@@ -635,6 +635,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     endEditSummary: function(field, e) {
+        if (! this.editing) {
+            return;
+        }
+        this.editing = false;
+        
         var summary = field.getValue();
         var event = field.event;
         
@@ -644,7 +649,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         event.set('summary', summary);
         
-        // after title
+        // after summary
         
         //this.abortCreateEvent(event);
         this.ds.suspendEvents();
@@ -656,7 +661,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.removeEvent(event);
         
         this.ds.add(event);
-        this.editing = false;
 
         //this.ds.resumeEvents();
         //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
