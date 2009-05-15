@@ -264,17 +264,17 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             'configWritable'   => Setup_Core::configFileWritable(),
             'checkDB'          => Setup_Core::get(Setup_Core::CHECKDB),
             'setupChecks'      => $this->envCheck(),
-            'configData'       => $this->loadConfig()
+            'configData'       => $this->loadConfig(),
+            'version'          => array(
+                'codename'      => TINE20SETUP_CODENAME,
+                'packageString' => TINE20SETUP_PACKAGESTRING,
+                'releasetime'   => TINE20SETUP_RELEASETIME
+            ),
         );
         
         if (Setup_Core::isRegistered(Setup_Core::USER)) {
             $registryData += array(
                 'currentAccount'   => Setup_Core::getUser(),
-                'version'          => array(
-                    'codename'      => TINE20SETUP_CODENAME,
-                    'packageString' => TINE20SETUP_PACKAGESTRING,
-                    'releasetime'   => TINE20SETUP_RELEASETIME
-                ), 
             );
         }
         

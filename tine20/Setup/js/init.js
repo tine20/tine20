@@ -31,6 +31,8 @@ Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.create
     return true;
 });
 
+Tine.Tinebase.tineInit.checkSelfUpdate = Ext.emptyFn;
+
 /**
  * render window
  */
