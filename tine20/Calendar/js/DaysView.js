@@ -770,10 +770,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var originalDuration = event.duration / Date.msMINUTE;
         
         if(event.get('is_all_day_event')) {
-            var offsetWidth = Ext.fly(this.wholeDayArea).getWidth();
-            var duration = Math.round(width * (this.numOfDays / offsetWidth));
-            event.set('dtend', event.get('dtstart').add(Date.DAY, duration));
+            var dayWidth = Ext.fly(this.wholeDayArea).getWidth() / this.numOfDays;
+            var diff = Math.round((rz.el.getRight() - rz.startPoint[0]) / dayWidth);
             
+            event.set('dtend', event.get('dtend').add(Date.DAY, diff));
         } else {
             
             var diff = Math.round((height - rz.originalHeight) * (this.timeGranularity / this.granularityUnitHeights));
@@ -783,11 +783,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var duration = originalDuration + diff;
             
             event.set('dtend', event.get('dtstart').add(Date.MINUTE, duration));
-            
-            // don't fire update events on rangeAdd
-            if (! event.isRangeAdd) {
-                this.fireEvent('updateEvent', event);
-            }
+        }
+        
+        // don't fire update events on rangeAdd
+        if (! event.isRangeAdd) {
+            this.fireEvent('updateEvent', event);
         }
     },
     

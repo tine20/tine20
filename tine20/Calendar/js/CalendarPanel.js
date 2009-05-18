@@ -43,6 +43,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(createdEvent) {
+                console.log('Backend returned newly created event -> replace event in view');
                 this.store.remove(event);
                 this.store.add(createdEvent);
             }
@@ -50,7 +51,15 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     },
     
     onUpdateEvent: function(event) {
-        console.log('A existing event has been updated -> call backend update');    
+        console.log('A existing event has been updated -> call backend saveRecord');
+        Tine.Calendar.backend.saveRecord(event, {
+            scope: this,
+            success: function(updatedEvent) {
+                console.log('Backend returned updated event -> replace event in view');
+                this.store.remove(event);
+                this.store.add(updatedEvent);
+            }
+        });
     },
     
     /*
