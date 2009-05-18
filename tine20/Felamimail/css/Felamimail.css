@@ -24,6 +24,10 @@
 	background-image:url(../../images/oxygen/16x16/actions/mail-receive.png) !important;
 }
 
+.action_mark_unread {
+    background-image:url(../../images/oxygen/16x16/actions/mail-mark-unread.png) !important;
+}
+	
 /*
 .action_email_previuosMessage {
     background-image:url(../../images/oxygen/16x16/actions/find-previous.png) !important;

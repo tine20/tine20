@@ -79,6 +79,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.grid.getSelectionModel().on('rowselect', function(selModel, rowIndex, r) {
             // toggle read/seen flag of mail (only if 1 selected row)
             if (selModel.getCount() == 1) {
+                // TODO check if it was unread -> update tree
                 Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
             }
         }, this);
@@ -134,7 +135,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Toggle Flag'),
             handler: this.onToggleFlag,
+            flag: 'Flagged',
             iconCls: 'action_email_flag',
+            allowMultiple: true,
+            scope: this,
+            disabled: true
+        });
+        
+        this.action_markUnread = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Mark Unread'),
+            handler: this.onToggleFlag,
+            flag: 'Seen',
+            iconCls: 'action_mark_unread',
             allowMultiple: true,
             scope: this,
             disabled: true
@@ -159,6 +172,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             this.action_replyAll,
             this.action_forward,
             this.action_flag,
+            this.action_markUnread,
             this.action_deleteRecord
         ];
         
@@ -449,16 +463,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }
         
         // check if set or clear flag
-        var method = (messages[0].get('flags').match(/Flagged/)) ? 'clearFlag' : 'setFlag';
+        if (button.flag == 'Flagged') {
+            var method = (messages[0].get('flags').match(/Flagged/)) ? 'clearFlag' : 'setFlag';
+        } else {
+            var method = 'clearFlag';
+        }
         
         this.grid.loadMask.show();
         Ext.Ajax.request({
             params: {
                 method: 'Felamimail.' + method,
                 ids: Ext.util.JSON.encode(toUpdateIds),
-                flag: Ext.util.JSON.encode('\\Flagged')
+                flag: Ext.util.JSON.encode('\\' + button.flag)
             },
             success: function(_result, _request) {
+                // TODO: update tree for unread count
+                // TODO: select message again 
                 this.store.load();
                 this.grid.loadMask.hide();
             },
