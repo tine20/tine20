@@ -504,20 +504,35 @@ class Setup_Controller
      */
     public function installApplications($_applications)
     {
+        // check requirements for initial install / add required apps to list
+        if (! $this->_isInstalled('Tinebase')) {
+            if (! in_array('Tinebase', $_applications)) {
+                // Tinebase has to be installed
+                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Tinebase has to be installed first.'); 
+                return FALSE;
+            }
+    
+            $minimumRequirements = array('Addressbook', 'Admin');
+            
+            foreach ($minimumRequirements as $requiredApp) {
+                if (!in_array($requiredApp, $_applications) && !$this->_isInstalled($requiredApp)) {
+                    // Addressbook has to be installed with Tinebase for initial data (user contact)
+                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                        . ' ' . $requiredApp . ' has to be installed with Tinebase (adding it to list).'
+                    ); 
+                    $_applications[] = $requiredApp;
+                }
+            }
+        }
+        
         // get xml and sort apps first
         $applications = array();
         foreach($_applications as $applicationName) {
             $applications[$applicationName] = $this->getSetupXml($applicationName);
         }
         $applications = $this->_sortInstallableApplications($applications);
-        
-        if (!in_array('Tinebase', array_keys($applications)) && !$this->_isInstalled('Tinebase')) {
-            // Tinebase has to be installed
-            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Tinebase has to be installed first.'); 
-            return FALSE;
-        }
-        
-        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' installing applications: ' . print_r(array_keys($applications), true));
+                
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' installing applications: ' . print_r(array_keys($applications), true));
         
         foreach ($applications as $name => $xml) {
             $this->_installApplication($xml);
