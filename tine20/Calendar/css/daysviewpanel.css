@@ -73,6 +73,7 @@
 .cal-daysviewpanel-body-daycolumn {
 	float: left;
 	position: absolute;
+	overflow: hidden;
 }
 
 .cal-daysviewpanel-body-daycolumn-inner {
