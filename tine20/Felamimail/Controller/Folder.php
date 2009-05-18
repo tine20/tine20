@@ -128,12 +128,14 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         // get number of unread messages if cache is complete
+        /*
         foreach ($result as $folder) {
             if ($folder->cache_status == 'complete') {
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get unread count for ' . $folder->globalname);
                 //$folder->unreadcount = Felamimail_Controller_Message::getInstance()->getUnreadCount($folder->getId());
             }
         }
+        */
         
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
         

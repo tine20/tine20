@@ -168,7 +168,7 @@
                     <name>has_children</name>
                     <type>boolean</type>
                     <default>0</default>
-                </field>                
+                </field>
                 <field>
                     <name>system_folder</name>
                     <type>boolean</type>
@@ -183,6 +183,10 @@
                     <name>uidvalidity</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>unreadcount</name>
+                    <type>integer</type>
                 </field>
                 <field>
                     <name>cache_status</name>

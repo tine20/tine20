@@ -189,14 +189,13 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * get count of cached messages by folder (id) 
+     * get count of seen cached messages by folder (id) 
      *
      * @param string $_folderId
      * @return integer
      * 
-     * @todo try to use only one db query for this
      */
-    public function unreadCountByFolderId($_folderId)
+    public function seenCountByFolderId($_folderId)
     {
         $select = $this->_db->select();
         $select->from(
@@ -204,14 +203,12 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             array('count' => 'COUNT(DISTINCT message_id)')
         )->where(
             $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $_folderId)
-        );
-        $totalCount = $this->_db->fetchOne($select);        
-
-        $select->where(
+        )->where(
             $this->_db->quoteInto($this->_db->quoteIdentifier('flag') . ' = ?', '\Seen')
         );
+
         $seenCount = $this->_db->fetchOne($select);        
-        return $totalCount - $seenCount;
+        return $seenCount;
     }
     
     /**

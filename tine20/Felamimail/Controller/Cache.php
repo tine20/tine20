@@ -179,17 +179,24 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             $this->update($_folderId);
             return 0;
         }
+                
+        /***************** check for messages to delete *********************/
+        
+        $this->_updateDelete($backend, $_folderId, $backendFolderValues, $messageCount);
+        
+        /***************** update folder ************************************/
         
         // save nextuid/validity in folder
         if ($folder->uidnext != $backendFolderValues['uidnext']) {
             $folder->uidnext = $backendFolderValues['uidnext'];
             $folder->timestamp = Zend_Date::now();
-            $folder = $this->_folderBackend->update($folder);
         }
         
-        /***************** check for messages to delete *********************/
+        // get unread count
+        $seenCount = $this->_messageCacheBackend->seenCountByFolderId($_folderId);
+        $folder->unreadcount = $messageCount - $seenCount;
         
-        $this->_updateDelete($backend, $_folderId, $backendFolderValues, $messageCount);
+        $folder = $this->_folderBackend->update($folder);        
         
         return $result;
     }
@@ -260,6 +267,10 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         
         // get message headers and save them in cache db
         $this->_addMessages($messages, $_folderId);
+        
+        // get number of unread messages
+        $seenCount = $this->_messageCacheBackend->seenCountByFolderId($_folderId);
+        $folder->unreadcount = $messageCount - $seenCount;
         
         // update folder
         $folder->cache_status = 'complete';

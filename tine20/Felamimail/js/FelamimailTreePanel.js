@@ -7,9 +7,9 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         show new mails and number of unread mails next to folder name
  * TODO         update number of unread mails if changed
  * TODO         add multiple accounts + change account settings
+ * TODO         reload folders every x minutes
  * TODO         add folder model?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  */
@@ -155,7 +155,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     /**
      * returns a filter plugin to be used in a grid
      *
-     * TODO use folder id here
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
@@ -183,6 +182,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * - update filter toolbar of grid
      * 
      * @param {} node
+     * 
+     * TODO: make reload of tree nodes work
      */
     onClick: function(node) {
         node.expand();
@@ -190,6 +191,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         if (node.id && node.id != '/') {
             this.filterPlugin.onFilterChange();
+            
+            //this.loader.load(node);
         }
     },
     
@@ -296,18 +299,10 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     /**
      * @private
      * 
-     * TODO make unreadcount work
      * TODO try to disable '+' on nodes that don't have children / it looks like that leafs can't be drop targets :(
-     * TODO what about equal folder names (=id) in different subtrees?
      * TODO generalize this?
      */
     createNode: function(attr) {
-        console.log(attr);
-        
-        if (attr.unreadcount > 0) {
-            attr.localname = '<strong>' + attr.localname + ' (' + attr.unreadcount + ')</strong>';
-        }
-        
     	var node = {
     		id: attr.id,
     		leaf: false,
@@ -322,7 +317,12 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             //allowChildren: (attr.has_children == 1)
             //childNodes: []
     	};
-        //console.log(node);
+
+        if (attr.unreadcount > 0) {
+            node.text = node.text + ' (' + attr.unreadcount + ')';
+            node.cls = 'node_unread';
+        }
+        
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
     }
 	
