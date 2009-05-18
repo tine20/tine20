@@ -272,16 +272,20 @@ class Setup_Import_TineInitial
         
         // @todo move that to erp application initial setup script
         // add shared container for erp contracts
-        $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
-        Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
-            Tinebase_Model_Container::GRANT_READ,
-            Tinebase_Model_Container::GRANT_EDIT
-        ), TRUE);
-        Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
-            Tinebase_Model_Container::GRANT_ADD,
-            Tinebase_Model_Container::GRANT_READ,
-            Tinebase_Model_Container::GRANT_EDIT,
-            Tinebase_Model_Container::GRANT_ADMIN
-        ), TRUE);
+        try {
+            $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
+            Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
+                Tinebase_Model_Container::GRANT_READ,
+                Tinebase_Model_Container::GRANT_EDIT
+            ), TRUE);
+            Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
+                Tinebase_Model_Container::GRANT_ADD,
+                Tinebase_Model_Container::GRANT_READ,
+                Tinebase_Model_Container::GRANT_EDIT,
+                Tinebase_Model_Container::GRANT_ADMIN
+            ), TRUE);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Erp application not found.');
+        }
     }
 }
