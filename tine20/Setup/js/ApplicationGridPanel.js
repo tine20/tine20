@@ -40,7 +40,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             {id: 'version',         width: 70,  sortable: true, dataIndex: 'version',         header: this.app.i18n._("Installed Version")},
             {id: 'current_version', width: 70,  sortable: true, dataIndex: 'current_version', header: this.app.i18n._("Available Version")},
             {id: 'install_status',  width: 70,  sortable: true, dataIndex: 'install_status',  header: this.app.i18n._("Status"),        renderer: this.upgradeStatusRenderer.createDelegate(this)},
-            {id: 'depends',         width: 150,  sortable: true, dataIndex: 'depends',        header: this.app.i18n._("Depends on")}
+            {id: 'depends',         width: 150, sortable: true, dataIndex: 'depends',         header: this.app.i18n._("Depends on")}
         ];
     },
     
@@ -95,7 +95,22 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         this.selectionModel.purgeListeners();
         
         this.selectionModel.on('selectionchange', this.onSelectionChange, this);
-        
+    },
+
+    /**
+     * on render
+     * 
+     * @param {} ct
+     * @param {} position
+     * 
+     * TODO: select all rows and display modal box with 'install all apps' button
+     */
+    onRender: function(ct, position) {
+        Tine.Setup.ApplicationGridPanel.superclass.onRender.call(this, ct, position);
+
+        //this.selectionModel.selectAll.defer(500, this);
+        //this.selectionModel.selectAll();
+        //console.log(this.selectionModel);
     },
     
     onSelectionChange: function(sm) {
