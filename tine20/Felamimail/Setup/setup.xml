@@ -185,6 +185,10 @@
                     <length>40</length>
                 </field>
                 <field>
+                    <name>totalcount</name>
+                    <type>integer</type>
+                </field>
+                <field>
                     <name>unreadcount</name>
                     <type>integer</type>
                 </field>

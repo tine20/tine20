@@ -7,10 +7,9 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @todo        add more filters (to/cc...)
- * @todo        mark message as unread
- * @todo        finish reply all implementation
- * @todo        add header to preview
+ * TODO         add more filters (to/cc...)
+ * TODO         finish reply all implementation
+ * TODO         add header to preview
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -43,6 +42,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     getViewRowClass: function(record, index) {
         var flags = record.get('flags');
+        //console.log(flags);
         var className = '';
         if(flags !== null) {
             if (flags.match(/Flagged/)) {
@@ -52,7 +52,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 className += ' flag_deleted';
             }
         }
-        if (flags === null || !flags.match(/Seen/)) {
+        if (flags === null || flags.match(/Seen/) === null) {
             className += ' flag_unread';
         }
         return className;
@@ -73,16 +73,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         
-        //this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Felamimail', 'records'));
-        //this.action_editInNewWindow.requiredGrant = 'editGrant';
-        
-        this.grid.getSelectionModel().on('rowselect', function(selModel, rowIndex, r) {
-            // toggle read/seen flag of mail (only if 1 selected row)
-            if (selModel.getCount() == 1) {
-                // TODO check if it was unread -> update tree
-                Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
-            }
-        }, this);
+        this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
     },
     
     /**
@@ -203,7 +194,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 {label: this.app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
                 {label: this.app.i18n._('From'),        field: 'from',          operators: ['contains']},
                 {label: this.app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true}
-                // @todo add filters
+                // TODO  add filters
                 /*
                 {label: this.app.i18n._('Message'),    field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
@@ -221,7 +212,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * the details panel (shows message content)
      * 
-     * @todo add headers
+     * TODO  add headers
      */
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
@@ -241,9 +232,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                             this.tpl.overwrite(body, message.data);
                             this.getEl().down('div').down('div').scrollTo('top', 0, false);
                             this.getLoadMask().hide();
-                            
-                            // toggle read/seen flag of mail
-                            //Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
+                            //this.gridpanel.markasread(record);
                         }
                     });
                     this.getLoadMask().show();
@@ -366,7 +355,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} flags
      * @return {}
      * 
-     * @todo use spacer if first flag is not set
+     * TODO  use spacer if first flag is not set
      */
     flagRenderer: function(flags) {
         if (!flags) {
@@ -392,7 +381,45 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         return result;
     },
     
+    /**
+     * mark mail as read
+     * - check if it was unread -> update tree and remove \Seen flag
+     * 
+     * @param {} record
+     * @param {} rowindex
+     */
+    markasread: function(record, rowindex) {
+        //console.log('markasread');
+        //console.log(record.data.flags);
+        //console.log(regexp);
+        
+        var regexp = new RegExp('[ \,]*\\\\Seen');
+        if (record.data.flags === null || ! record.data.flags.match(regexp)) {
+            record.data.flags += ' \\Seen';
+            this.app.getMainScreen().getTreePanel().updateUnreadCount(-1);
+            //var index = this.store.indexOfId(record.data.id);
+            //console.log(index);
+            Ext.get(this.grid.getView().getRow(rowindex)).removeClass('flag_unread');
+        }
+    },
+    
     /********************************* event handler **************************************/
+    
+    /**
+     * update class and unread count in tree on select
+     * 
+     * @param {} selModel
+     * @param {} rowIndex
+     * @param {} r
+     * 
+     */
+    onRowSelection: function(selModel, rowIndex, r) {
+        // toggle read/seen flag of mail (only if 1 selected row)
+        if (selModel.getCount() == 1) {
+            var record = selModel.getSelected();
+            this.markasread(record, rowIndex);
+        }
+    },
     
     /**
      * generic edit in new window handler
@@ -402,8 +429,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} button
      * @param {} event
      * 
-     * @todo add quoting to reply body text
-     * @todo add forwarding message
+     * TODO  add quoting to reply body text
+     * TODO  add forwarding message
      */
     onEditInNewWindow: function(button, event) {
         var recordData = this.recordClass.getDefaultData();
@@ -451,44 +478,90 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * toggle flagged status of mail(s)
+     * - Flagged/Seen
      * 
      * @param {} button
      * @param {} event
      */
     onToggleFlag: function(button, event) {
-        var messages = this.grid.getSelectionModel().getSelections();            
-        var toUpdateIds = [];
-        for (var i = 0; i < messages.length; ++i) {
-            toUpdateIds.push(messages[i].data.id);
-        }
         
-        // check if set or clear flag
+        var messages = this.grid.getSelectionModel().getSelections();
+        var regexp = new RegExp('[ \,]*\\\\' + button.flag);
+        
+        // check if set or clear flag and init some vars
         if (button.flag == 'Flagged') {
-            var method = (messages[0].get('flags').match(/Flagged/)) ? 'clearFlag' : 'setFlag';
-        } else {
+            var flagged = (messages[0].get('flags') !== null && messages[0].get('flags').match(/Flagged/) !== null);
+            var method = (flagged) ? 'clearFlag' : 'setFlag';
+            var flagClass = 'flag_flagged';
+        } else if (button.flag == 'Seen') {
+            var flagged = false;
             var method = 'clearFlag';
+            var flagClass = 'flag_unread';
         }
         
-        this.grid.loadMask.show();
-        Ext.Ajax.request({
-            params: {
-                method: 'Felamimail.' + method,
-                ids: Ext.util.JSON.encode(toUpdateIds),
-                flag: Ext.util.JSON.encode('\\' + button.flag)
-            },
-            success: function(_result, _request) {
-                // TODO: update tree for unread count
-                // TODO: select message again 
-                this.store.load();
-                this.grid.loadMask.hide();
-            },
-            failure: function(result, request){
-                Ext.MessageBox.alert(
-                    this.app.i18n._('Failed'), 
-                    this.app.i18n._('Some error occured while trying to update the messages.')
-                );
-            },
-            scope: this
-        });
+        // loop messages and update flags
+        //console.log(flagged);
+        //console.log(button.flag);
+        var toUpdateIds = [];
+        var index = 0;
+        for (var i = 0; i < messages.length; ++i) {
+            //console.log(messages[i]);
+            
+            index = this.store.indexOfId(messages[i].data.id);
+            if (flagged) {
+                Ext.get(this.grid.getView().getRow(index)).removeClass(flagClass);
+                messages[i].data.flags = messages[i].data.flags.replace(regexp, '');
+                // PUSH
+                toUpdateIds.push(messages[i].data.id);
+                
+            } else {
+                
+                Ext.get(this.grid.getView().getRow(index)).addClass(flagClass);
+                
+                if (button.flag == 'Seen') {
+                    // update tree panel and remove /Seen flag
+                    //console.log(messages[i].data.flags);
+                    if (messages[i].data.flags.match(regexp)) {
+                        this.app.getMainScreen().getTreePanel().updateUnreadCount(1);
+                        //messages[i].set('flags') = messages[i].data.flags.replace(regexp, '');
+                        messages[i].data.flags = messages[i].data.flags.replace(regexp, '');
+                        // PUSH
+                        toUpdateIds.push(messages[i].data.id);
+                        //console.log('after replace');
+                        //console.log(messages[i].data.flags);
+                    }
+                } else {
+                    // other flags
+                    if (! messages[i].data.flags.match(regexp)) {
+                        // add flag
+                        messages[i].data.flags = messages[i].data.flags + ',\\' + button.flag;
+                    }
+                    // PUSH
+                    toUpdateIds.push(messages[i].data.id);
+                }
+            }
+        }
+                
+        if (toUpdateIds.length > 0) {
+            //this.grid.loadMask.show();
+            Ext.Ajax.request({
+                params: {
+                    method: 'Felamimail.' + method,
+                    ids: Ext.util.JSON.encode(toUpdateIds),
+                    flag: Ext.util.JSON.encode('\\' + button.flag)
+                },
+                success: function(_result, _request) {
+                    //this.store.load();
+                    //this.grid.loadMask.hide();
+                },
+                failure: function(result, request){
+                    Ext.MessageBox.alert(
+                        this.app.i18n._('Failed'), 
+                        this.app.i18n._('Some error occured while trying to update the messages.')
+                    );
+                },
+                scope: this
+            });
+        }
     }
 });

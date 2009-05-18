@@ -7,9 +7,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         update number of unread mails if changed
  * TODO         add multiple accounts + change account settings
- * TODO         reload folders every x minutes
+ * TODO         reload folders (and number of unread messages) every x minutes
  * TODO         add folder model?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  */
@@ -173,6 +172,30 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         return this.filterPlugin;
     },
     
+    /**
+     * update unread count
+     * 
+     * @param {} change
+     * 
+     * TODO make css class update work (use add/remove class?)
+     */
+    updateUnreadCount: function(change) {
+        //console.log('update unread count: ' + change);
+        
+        var node = this.getSelectionModel().getSelectedNode();
+        node.attributes.unreadcount = Number(node.attributes.unreadcount) + Number(change);
+        
+        //console.log(node.attributes);
+        
+        if (node.attributes.unreadcount > 0) {
+            node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
+            node.cls = 'node_unread';
+        } else {
+            node.setText(node.attributes.localname);
+            node.cls = '';
+        }
+    },
+    
     /***************** event handler *******************/
     
     /**
@@ -183,7 +206,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @param {} node
      * 
-     * TODO: make reload of tree nodes work
+     * TODO: make reload of tree nodes work?
      */
     onClick: function(node) {
         node.expand();
@@ -192,7 +215,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         if (node.id && node.id != '/') {
             this.filterPlugin.onFilterChange();
             
-            //this.loader.load(node);
+            //this.loader.load(node.parentNode, null);
         }
     },
     
@@ -307,11 +330,13 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     		id: attr.id,
     		leaf: false,
     		text: attr.localname,
+            localname: attr.localname,
     		globalname: attr.globalname,
     		account_id: attr.account_id,
     		folderNode: true,
             allowDrop: true,
-            systemFolder: (attr.system_folder == '1')
+            systemFolder: (attr.system_folder == '1'),
+            unreadcount: attr.unreadcount
             //numUnread: 2
             //expandable: (attr.has_children == '1'),
             //allowChildren: (attr.has_children == 1)

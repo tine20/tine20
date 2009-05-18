@@ -9,8 +9,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        make unread count work
  * @todo        add cleanup routine for deleted (by other clients)/outofdate  folders?
+ * @todo        fill cache when subfolders are initialized?
  */
 
 /**
@@ -127,12 +127,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $result = $this->_folderBackend->search($filter);
         }
         
-        // get number of unread messages if cache is complete
+        // get number of unread messages if cache is complete ?
         /*
+        $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
         foreach ($result as $folder) {
             if ($folder->cache_status == 'complete') {
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get unread count for ' . $folder->globalname);
-                //$folder->unreadcount = Felamimail_Controller_Message::getInstance()->getUnreadCount($folder->getId());
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get unread count for ' . $folder->globalname);
+                $folder->unreadcount = $folder->totalcount - $messageCacheBackend->seenCountByFolderId($folder->getId());
             }
         }
         */
