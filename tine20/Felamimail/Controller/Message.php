@@ -199,6 +199,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $attachment['partId']       = $partNumber;
                     $attachment['messageUid']   = $message->messageuid;
                     $attachment['accountId']    = $folder->account_id;
+                    $attachment['size']         = $part->getSize();
                                         
                     $attachments[] = $attachment; 
                     $partNumber++;

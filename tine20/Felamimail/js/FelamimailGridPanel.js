@@ -8,7 +8,7 @@
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         finish reply all implementation
- * TODO         add header to preview
+ * TODO         show correct msg size (with all parts) in grid
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -271,7 +271,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                             + '&_partId=' + value[i].partId  
                             + '&_accountId=' + value[i].accountId 
                             + '" ext:qtip="' + Ext.util.Format.htmlEncode(value[i]['content-type']) 
-                            + '">' + value[i].filename + '</a>&nbsp;';
+                            + '">' + value[i].filename + '</a> (' + Ext.util.Format.fileSize(value[i].size) + ')';
                     }
                     
                     return result;
@@ -351,7 +351,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             width: 80,
             sortable: true,
             dataIndex: 'size',
-            hidden: true
+            hidden: true,
+            renderer: Ext.util.Format.fileSize
         }];
     },
     
