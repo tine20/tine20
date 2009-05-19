@@ -221,12 +221,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                             record.data.body = message.data.body;                            
                             record.data.flags = message.data.flags;
                             
-                            console.log(message);
+                            //console.log(message);
                             
                             this.tpl.overwrite(body, message.data);
                             this.getEl().down('div').down('div').scrollTo('top', 0, false);
                             this.getLoadMask().hide();
-                            //this.gridpanel.markasread(record);
                         }
                     });
                     this.getLoadMask().show();
@@ -261,12 +260,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     return value;
                 },
                 
+                // TODO add 'download all' button
                 showAttachments: function(value) {
-                    //console.log(value);
                     var result = (value.length > 0) ? '<b>' + _('Attachments') + ':</b> ' : '';
+                    var downloadLink = 'index.php?method=Felamimail.downloadAttachment&_messageUid=';
                     for (var i=0; i < value.length; i++) {
-                        result += '<a href="#" target="_blank" ext:qtip="'
-                            + Ext.util.Format.htmlEncode(value[i]['content-type']) 
+                        
+                        result += '<a href="' 
+                            + downloadLink + value[i].messageUid 
+                            + '&_partId=' + value[i].partId  
+                            + '&_accountId=' + value[i].accountId 
+                            + '" ext:qtip="' + Ext.util.Format.htmlEncode(value[i]['content-type']) 
                             + '">' + value[i].filename + '</a>&nbsp;';
                     }
                     

@@ -159,7 +159,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $message = parent::get($_id);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting message ' . $message->subject);
         
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->get($message->folder_id);
@@ -168,32 +168,47 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->account_id);
             $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
             $imapMessage            = $imapBackend->getMessage($message->messageuid);
+            
+            /********* add body ****************/
+            
             $message->body          = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+            
+            /********* add header **************/
             
             $message->headers       = '';
             foreach ($imapMessage->getHeaders() as $name => $value) {  
                 $message->headers  .= "<b>$name:</b> " . substr($value,0,40) . "\n";
             }
             
+            /********* add attachments *********/
+            
             $attachments   = array();
-            if ($imapMessage->countParts() > 1) {
+            $messageParts = $imapMessage->countParts();
+            if ( $messageParts > 1) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get ' 
+                    . $messageParts-1 . ' attachments.'
+                );
                 $partNumber = 2;
-                while ($partNumber <= $imapMessage->countParts()) {
-                    $part = $imapMessage->getPart($partNumber++);
-                    $headers = $part->getHeaders();
-                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($headers, true));
-                    //$message->attachments   .= implode("\n", $part->getHeaders());
-                    preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $headers['content-disposition'], $matches);
-                    //$message->attachments .= '<a href="#" target="_blank">' . $matches[1] . '</a>' . "\n";
-                    $headers['filename'] = $matches[1];
-                    $attachments[] = $headers; 
+                while ($partNumber <= $messageParts) {
+                    $part = $imapMessage->getPart($partNumber);
+
+                    $attachment = $part->getHeaders();
+                    preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $attachment['content-disposition'], $matches);
+                    
+                    $attachment['filename']     = $matches[1];
+                    $attachment['partId']       = $partNumber;
+                    $attachment['messageUid']   = $message->messageuid;
+                    $attachment['accountId']    = $folder->account_id;
+                                        
+                    $attachments[] = $attachment; 
+                    $partNumber++;
                 } 
             }
             $message->attachments = $attachments;
             
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
             
-            // set /seen flag
+            // set \Seen flag
             if (preg_match('/\\Seen/', $message->flags) === 0) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add \Seen flag to msg uid ' . $message->messageuid);
                 $this->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN), $folder);
@@ -354,6 +369,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * send one message through smtp
      * 
+     * @param Felamimail_Model_Message $_message
+     * 
      * @todo set In-Reply-To header for replies (which message id?)
      * @todo add mail & name from account settings
      * @todo add smtp host from account settings
@@ -399,6 +416,33 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $_message;
+    }
+    
+    /**
+     * get content of a message part
+     *
+     * @param string $_messageUid
+     * @param integer $_partId
+     * @param string $_accountId
+     * @return Zend_Mail_Part|NULL
+     */
+    public function getMessagePart($_messageUid, $_partId, $_accountId)
+    {
+        $result = NULL;
+        
+        try {
+            $imapBackend    = Felamimail_Backend_ImapFactory::factory($_accountId);
+            $imapMessage    = $imapBackend->getMessage($_messageUid);
+            $result         = $imapMessage->getPart($_partId);
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+            
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // no imap connection -> no download
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+        }
+        
+        return $result;
     }
     
     /************************* protected funcs *************************/
