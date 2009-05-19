@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        add acl
- * @todo        remove obsolete code
  */
 
 /**
@@ -215,61 +214,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $this->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN), $folder);
             }
         }
-        /*
-        
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->get($message->folder_id);
-        
-        try {
-            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-            $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
-            $imapMessage            = $imapBackend->getMessage($message->messageuid);
-            
-            $message->body          = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
-            
-            $message->headers       = '';
-            foreach ($imapMessage->getHeaders() as $name => $value) {  
-                $message->headers  .= "<b>$name:</b> " . substr($value,0,40) . "\n";
-            }
-            
-            $attachments   = array();
-            $messageParts = $imapMessage->countParts();
-            if ( $messageParts > 1) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get ' 
-                    . $messageParts-1 . ' attachments.'
-                );
-                $partNumber = 2;
-                while ($partNumber <= $messageParts) {
-                    $part = $imapMessage->getPart($partNumber);
-
-                    $attachment = $part->getHeaders();
-                    preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $attachment['content-disposition'], $matches);
-                    
-                    $attachment['filename']     = $matches[1];
-                    $attachment['partId']       = $partNumber;
-                    $attachment['messageId']    = $message->getId();
-                    $attachment['accountId']    = $folder->account_id;
-                    $attachment['size']         = $part->getSize();
-                                        
-                    $attachments[] = $attachment; 
-                    $partNumber++;
-                } 
-            }
-            $message->attachments = $attachments;
-            
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
-            
-            // set \Seen flag
-            if (preg_match('/\\Seen/', $message->flags) === 0) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add \Seen flag to msg uid ' . $message->messageuid);
-                $this->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN), $folder);
-            }
-            
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            // no imap connection -> no body
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-        }
-        */
         
         return $message;
     }
@@ -298,30 +242,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $imapBackend->moveMessage($_record->messageuid, 'Trash');
             }
         }
-        
-        /*
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->get($_record->folder_id);
-        try {
-            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-            if ($imapBackend->getCurrentFolder() != $folder->globalname) {
-                $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
-            }
-            
-            if ($folder->globalname == 'Trash') {
-                // only delete if in Trash
-                $imapBackend->removeMessage($_record->messageuid);
-            } else {
-                // move to trash
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" . $_record->subject . "' to Trash.");
-                $imapBackend->moveMessage($_record->messageuid, 'Trash');
-            }
-            
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            // no imap connection -> no delete on server
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-        }
-        */
     }
     
     /************************* other public funcs *************************/
@@ -336,22 +256,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function addFlags($_message, $_flags, $_folder = NULL)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add flags: ' . print_r($_flags, TRUE));
-        
-        /*
-        if ($_folder === NULL) {
-            $folderBackend = new Felamimail_Backend_Folder();
-            $folder = $folderBackend->get($_message->folder_id);
-            
-        } else {
-            $folder = $_folder;
-        }
-        
-        $imapBackend = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-
-        if($imapBackend->getCurrentFolder() != $folder->globalname) {
-            $imapBackend->selectFolder($folder->globalname);
-        }
-        */
         
         // save each flag in backend, cache db and message record
         if ($imapBackend = $this->_getBackendAndSelectFolder($_message->folder_id, $_folder)) {
@@ -372,22 +276,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function clearFlags($_message, $_flags, $_folder = NULL)
     {
-        /*
-        if ($_folder === NULL) {
-            $folderBackend = new Felamimail_Backend_Folder();
-            $folder = $folderBackend->get($_message->folder_id);
-            
-        } else {
-            $folder = $_folder;
-        }
-        
-        $imapBackend = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-
-        if($imapBackend->getCurrentFolder() != $folder->globalname) {
-            $imapBackend->selectFolder($folder->globalname);
-        }
-        */
-        
         // remove flag in imap backend, cache db and message record
         if ($imapBackend = $this->_getBackendAndSelectFolder($_message->folder_id, $_folder)) {
             $imapBackend->clearFlags($_message->messageuid, $_flags);
@@ -406,19 +294,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function moveMessages($_ids, $_folderId)
     {
-        /*
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->get($_folderId);
-
-        try {
-            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            // no imap connection -> no delete on server
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
-            return FALSE;
-        }
-        */
-        
         if ($imapBackend = $this->_getBackendAndSelectFolder($_folderId, $folder, FALSE)) {
             $messages = $this->_backend->getMultiple($_ids);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
@@ -521,7 +396,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string                    $_folderId
      * @param Felamimail_Backend_Folder &$_folder
-     * @param array                     &$backendFolderValues
      * @param boolean                   $_select
      * @return NULL|Felamimail_Backend_Imap
      */
