@@ -160,7 +160,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             var scope = this;
             this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
                 getValue: function() {
-                	//console.log(scope);
                 	var node = scope.getSelectionModel().getSelectedNode();
                     return [
                         {field: 'folder_id',     operator: 'equals', value: (node) ? node.id : '' }
@@ -189,10 +188,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         if (node.attributes.unreadcount > 0) {
             node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
-            node.cls = 'node_unread';
+            if (node.attributes.unreadcount == 1 && change == 1) {
+                // 0 -> 1
+                node.getUI().addClass('node_unread');
+            }
         } else {
             node.setText(node.attributes.localname);
-            node.cls = '';
+            node.getUI().removeClass('node_unread');
         }
     },
     

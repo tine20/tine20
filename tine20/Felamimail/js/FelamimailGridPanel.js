@@ -381,43 +381,30 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         return result;
     },
     
-    /**
-     * mark mail as read
-     * - check if it was unread -> update tree and remove \Seen flag
-     * 
-     * @param {} record
-     * @param {} rowindex
-     */
-    markasread: function(record, rowindex) {
-        //console.log('markasread');
-        //console.log(record.data.flags);
-        //console.log(regexp);
-        
-        var regexp = new RegExp('[ \,]*\\\\Seen');
-        if (record.data.flags === null || ! record.data.flags.match(regexp)) {
-            record.data.flags += ' \\Seen';
-            this.app.getMainScreen().getTreePanel().updateUnreadCount(-1);
-            //var index = this.store.indexOfId(record.data.id);
-            //console.log(index);
-            Ext.get(this.grid.getView().getRow(rowindex)).removeClass('flag_unread');
-        }
-    },
-    
     /********************************* event handler **************************************/
     
     /**
      * update class and unread count in tree on select
+     * - mark mail as read
+     * - check if it was unread -> update tree and remove \Seen flag
      * 
      * @param {} selModel
      * @param {} rowIndex
      * @param {} r
      * 
      */
-    onRowSelection: function(selModel, rowIndex, r) {
+    onRowSelection: function(selModel, rowIndex, record) {
         // toggle read/seen flag of mail (only if 1 selected row)
         if (selModel.getCount() == 1) {
-            var record = selModel.getSelected();
-            this.markasread(record, rowIndex);
+            //console.log(record.data.flags);
+            
+            var regexp = new RegExp('[ \,]*\\\\Seen');
+            if (record.data.flags === null || ! record.data.flags.match(regexp)) {
+                //console.log('markasread');
+                record.data.flags += ' \\Seen';
+                this.app.getMainScreen().getTreePanel().updateUnreadCount(-1);
+                Ext.get(this.grid.getView().getRow(rowIndex)).removeClass('flag_unread');
+            }
         }
     },
     
@@ -499,14 +486,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             var flagClass = 'flag_unread';
         }
         
-        // loop messages and update flags
+        
         //console.log(flagged);
         //console.log(button.flag);
+        
+        // loop messages and update flags
         var toUpdateIds = [];
         var index = 0;
         for (var i = 0; i < messages.length; ++i) {
-            //console.log(messages[i]);
-            
             index = this.store.indexOfId(messages[i].data.id);
             if (flagged) {
                 Ext.get(this.grid.getView().getRow(index)).removeClass(flagClass);
@@ -520,15 +507,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 
                 if (button.flag == 'Seen') {
                     // update tree panel and remove /Seen flag
-                    //console.log(messages[i].data.flags);
                     if (messages[i].data.flags.match(regexp)) {
                         this.app.getMainScreen().getTreePanel().updateUnreadCount(1);
-                        //messages[i].set('flags') = messages[i].data.flags.replace(regexp, '');
                         messages[i].data.flags = messages[i].data.flags.replace(regexp, '');
                         // PUSH
                         toUpdateIds.push(messages[i].data.id);
-                        //console.log('after replace');
-                        //console.log(messages[i].data.flags);
                     }
                 } else {
                     // other flags
