@@ -25,7 +25,9 @@ Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'flags' },
     { name: 'size' },
     { name: 'body' },
-    { name: 'attachment' }
+    { name: 'headers' },
+    { name: 'hasAttachment' },
+    { name: 'attachments' }
     // tine 2.0 notes + tags
     //{ name: 'notes'},
     //{ name: 'tags' }

@@ -67,8 +67,16 @@
 
 /**** preview *****/
 
-.preview-panel-felamimail-body {
-	margin: 5px;
+.preview-panel-felamimail {
+	padding: 5px;
+}
+
+.preview-panel-felamimail-headers {
+    background-color: #dddddd;
+}
+
+.preview-panel-felamimail-attachments {
+    background-color: #e5e5e5;
 }
 
 /***** node classes ******/

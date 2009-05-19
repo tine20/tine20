@@ -221,6 +221,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                             record.data.body = message.data.body;                            
                             record.data.flags = message.data.flags;
                             
+                            console.log(message);
+                            
                             this.tpl.overwrite(body, message.data);
                             this.getEl().down('div').down('div').scrollTo('top', 0, false);
                             this.getLoadMask().hide();
@@ -234,9 +236,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             },
 
             tpl: new Ext.XTemplate(
-                '<div class="preview-panel-felamimail-body">',
+                '<div class="preview-panel-felamimail">',
                     //'<tpl for="Body">',
-                            '<div class="Mail-Body-Content">{[this.encode(values.body)]}</div>',
+                            '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.encode(values.headers)]}">',
+                                '<b>' + _('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
+                                '<b>' + _('From') + ':</b> {[this.encode(values.from)]}',
+                            '</div>',
+                            '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments)]}</div>',
+                            '<div class="preview-panel-felamimail-body">{[this.encode(values.body)]}</div>',
                     // '</tpl>',
                 '</div>',{
                 
@@ -252,6 +259,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                         return '';
                     }
                     return value;
+                },
+                
+                showAttachments: function(value) {
+                    //console.log(value);
+                    var result = (value.length > 0) ? '<b>' + _('Attachments') + ':</b> ' : '';
+                    for (var i=0; i < value.length; i++) {
+                        result += '<a href="#" target="_blank" ext:qtip="'
+                            + Ext.util.Format.htmlEncode(value[i]['content-type']) 
+                            + '">' + value[i].filename + '</a>&nbsp;';
+                    }
+                    
+                    return result;
                 }
             }),
             
@@ -277,10 +296,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             dataIndex: 'id',
             hidden: true
         }, {
-            id: 'attachment',
+            id: 'hasAttachment',
             width: 12,
             sortable: true,
-            dataIndex: 'attachment',
+            dataIndex: 'hasAttachment',
             renderer: this.attachmentRenderer
         }, {
             id: 'flags',

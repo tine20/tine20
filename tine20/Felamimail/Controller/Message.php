@@ -170,7 +170,28 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $imapMessage            = $imapBackend->getMessage($message->messageuid);
             $message->body          = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawContent, true));
+            $message->headers       = '';
+            foreach ($imapMessage->getHeaders() as $name => $value) {  
+                $message->headers  .= "<b>$name:</b> " . substr($value,0,40) . "\n";
+            }
+            
+            $attachments   = array();
+            if ($imapMessage->countParts() > 1) {
+                $partNumber = 2;
+                while ($partNumber <= $imapMessage->countParts()) {
+                    $part = $imapMessage->getPart($partNumber++);
+                    $headers = $part->getHeaders();
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($headers, true));
+                    //$message->attachments   .= implode("\n", $part->getHeaders());
+                    preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $headers['content-disposition'], $matches);
+                    //$message->attachments .= '<a href="#" target="_blank">' . $matches[1] . '</a>' . "\n";
+                    $headers['filename'] = $matches[1];
+                    $attachments[] = $headers; 
+                } 
+            }
+            $message->attachments = $attachments;
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
             
             // set /seen flag
             if (preg_match('/\\Seen/', $message->flags) === 0) {

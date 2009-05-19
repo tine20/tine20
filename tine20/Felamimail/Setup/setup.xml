@@ -246,7 +246,7 @@
                     <type>text</type>
                 </field>
                 <field>
-                    <name>attachment</name>
+                    <name>hasAttachment</name>
                     <type>boolean</type>
                 </field>
                 <field>
