@@ -9,6 +9,7 @@
  * @version     $Id$
  *
  * @todo        move $this->_db calls to backend class
+ * @todo        add role rights (run, admin) to all new installed apps
  */
 
 /**
