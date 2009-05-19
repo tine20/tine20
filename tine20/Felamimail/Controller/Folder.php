@@ -127,8 +127,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $result = $this->_folderBackend->search($filter);
         }
         
-        // get number of unread messages if cache is complete ?
-        /*
+        // get number of unread messages if cache is complete 
+        // @todo replace this later?
         $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
         foreach ($result as $folder) {
             if ($folder->cache_status == 'complete') {
@@ -136,7 +136,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                 $folder->unreadcount = $folder->totalcount - $messageCacheBackend->seenCountByFolderId($folder->getId());
             }
         }
-        */
         
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
         
