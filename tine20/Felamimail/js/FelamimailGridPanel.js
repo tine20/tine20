@@ -8,7 +8,6 @@
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         finish reply all implementation
- * TODO         show correct msg size (with all parts) in grid
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -218,6 +217,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     Tine.Felamimail.messageBackend.loadRecord(record, {
                         scope: this,
                         success: function(message) {
+                            // TODO save more values?
                             record.data.body = message.data.body;                            
                             record.data.flags = message.data.flags;
                             
