@@ -123,12 +123,20 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchMessages($filter, $paging)
     {
+        $result = $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
+        
+        // no paging -> don't do initial cache import
+        if (empty($paging)) {
+            return $result;
+        }
+        
+        // use output buffer
         ignore_user_abort();
         header("Connection: close");
         
         ob_start();
         // search & output here
-        $result = $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter'); 
+        //$result = $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter'); 
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($result, TRUE));
         
