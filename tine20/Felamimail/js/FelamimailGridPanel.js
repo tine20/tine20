@@ -261,17 +261,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 },
                 
                 // TODO add 'download all' button
+                // TODO use popup or ajax request here?
+                // TODO show better error message on fail
                 showAttachments: function(value) {
                     var result = (value.length > 0) ? '<b>' + _('Attachments') + ':</b> ' : '';
-                    var downloadLink = 'index.php?method=Felamimail.downloadAttachment&_messageUid=';
+                    var downloadLink = 'index.php?method=Felamimail.downloadAttachment&_messageId=';
                     for (var i=0; i < value.length; i++) {
                         
                         result += '<a href="' 
-                            + downloadLink + value[i].messageUid 
+                            + downloadLink + value[i].messageId 
                             + '&_partId=' + value[i].partId  
-                            + '&_accountId=' + value[i].accountId 
-                            + '" ext:qtip="' + Ext.util.Format.htmlEncode(value[i]['content-type']) 
-                            + '">' + value[i].filename + '</a> (' + Ext.util.Format.fileSize(value[i].size) + ')';
+                            + '" ext:qtip="' + Ext.util.Format.htmlEncode(value[i]['content-type']) + '"'
+                            + ' target="_blank"'
+                            + '>' + value[i].filename + '</a> (' + Ext.util.Format.fileSize(value[i].size) + ')';
                     }
                     
                     return result;

@@ -42,18 +42,17 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * download email attachment
      *
-     * @param string $_messageUid
+     * @param string $_messageId
      * @param integer $_partId
-     * @param string $_accountId
      */
-    public function downloadAttachment($_messageUid, $_partId, $_accountId)
+    public function downloadAttachment($_messageId, $_partId)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Downloading Attachment ' . $_partId . ' of message with uid ' . $_messageUid
+            . ' Downloading Attachment ' . $_partId . ' of message with id ' . $_messageId
         );
         
         // get message part
-        $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageUid, $_partId, $_accountId);
+        $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageId, $_partId);
         
         if ($part !== NULL) {
             $headers = $part->getHeaders();
@@ -64,7 +63,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header("Content-Description: email attachment");
             header("Content-type: " . $headers['content-type']); 
             echo $part->getContent();
-            exit;
         }
+        exit;
     }
 }

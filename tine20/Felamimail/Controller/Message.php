@@ -197,7 +197,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     
                     $attachment['filename']     = $matches[1];
                     $attachment['partId']       = $partNumber;
-                    $attachment['messageUid']   = $message->messageuid;
+                    $attachment['messageId']    = $message->getId();
                     $attachment['accountId']    = $folder->account_id;
                     $attachment['size']         = $part->getSize();
                                         
@@ -422,21 +422,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * get content of a message part
      *
-     * @param string $_messageUid
+     * @param string $_id
      * @param integer $_partId
-     * @param string $_accountId
      * @return Zend_Mail_Part|NULL
      */
-    public function getMessagePart($_messageUid, $_partId, $_accountId)
+    public function getMessagePart($_id, $_partId)
     {
-        $result = NULL;
+        $result         = NULL;
+        $message        = parent::get($_id);
+        $folderBackend  = new Felamimail_Backend_Folder();
+        $folder         = $folderBackend->get($message->folder_id);
         
         try {
-            $imapBackend    = Felamimail_Backend_ImapFactory::factory($_accountId);
-            $imapMessage    = $imapBackend->getMessage($_messageUid);
-            $result         = $imapMessage->getPart($_partId);
+            $imapBackend            = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+            $backendFolderValues    = $imapBackend->selectFolder($folder->globalname);
+            $imapMessage            = $imapBackend->getMessage($message->messageuid);
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Parts:' . $imapMessage->countParts());
+            
+            $result                 = $imapMessage->getPart($_partId);
             
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // no imap connection -> no download
