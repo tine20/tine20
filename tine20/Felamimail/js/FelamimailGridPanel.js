@@ -193,16 +193,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             filterModels: [
                 {label: this.app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
                 {label: this.app.i18n._('From'),        field: 'from',          operators: ['contains']},
+                {label: this.app.i18n._('To'),          field: 'to',            operators: ['contains']},
+                {label: this.app.i18n._('Cc'),          field: 'cc',            operators: ['contains']},
+                {label: this.app.i18n._('Bcc'),         field: 'bcc',           operators: ['contains']},
                 {label: this.app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true}
-                // TODO  add filters
-                /*
-                {label: this.app.i18n._('Message'),    field: 'query',       operators: ['contains']},
-                {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
-                new Tine.Felamimail.TimeAccountStatusGridFilter({
-                    field: 'status'
-                }),
-                */
-                //new Tine.widgets.tags.TagFilter({app: this.app})
              ],
              defaultFilter: 'subject',
              filters: []
@@ -355,7 +349,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} flags
      * @return {}
      * 
-     * TODO  use spacer if first flag is not set
+     * TODO  use spacer if first flag(s) is not set?
      */
     flagRenderer: function(flags) {
         if (!flags) {

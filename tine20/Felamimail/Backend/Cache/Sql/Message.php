@@ -257,4 +257,14 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         
         return TRUE;
     }
+
+    /**
+     * get foreign table names (to, cc, ...)
+     *
+     * @return array
+     */
+    public function getForeignTableNames()
+    {
+        return $this->_foreignTables;
+    }
 }
