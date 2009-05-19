@@ -13,17 +13,17 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
     
     dtStart: null,
     
+    
     /**
      * @private
      * @property activeView
      */
-    activeView: 'day',
+    view: 'day',
     /**
      * @private
-     * @property periodPickers
-     * holds a period picker/buttion for each view
+     * @property periodPicker
      */
-    periodPickers: {},
+    periodPicker: null,
     
     
     initComponent: function() {
@@ -41,6 +41,18 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             this.dtStart = new Date();
         }
         
+        this.periodPicker = new Tine.Calendar.PagingToolbar[Ext.util.Format.capitalize(this.view) + 'PeriodPicker']({
+            tb: this,
+            listeners: {
+                scope: this,
+                change: function(picker, view, period) {
+                    this.dtStart = period.from.clone();
+                    this.fireEvent('change', this, view, period);
+                }
+            }
+        });
+        
+        /*
         var views = ['day', 'week', 'month'];
         for (var i=0, view; i<views.length; i++) {
             view = views[i];
@@ -79,9 +91,12 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             handler: this.onClick.createDelegate(this, ["prev"])
         });
         this.addSeparator();
+        this.periodPicker.render();
+        /*
         for (var view in this.periodPickers) {
             this.periodPickers[view].render();
         }
+        */
         this.addSeparator();
         this.nextBtn = this.addButton({
             tooltip: Ext.PagingToolbar.prototype.nextText,
@@ -94,46 +109,21 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             iconCls: "x-tbar-loading",
             handler: this.onClick.createDelegate(this, ["refresh"])
         });
+        
         this.addFill();
         
-        // view selectors
-        this.dayBtn = this.addButton({
-            pressed: this.activeView == 'day',
-            text: 'day view',
-            iconCls: 'cal-day-view',
-            xtype: 'tbbtnlockedtoggle',
-            handler: this.onClick.createDelegate(this, ["day"]),
-            enableToggle: true,
-            toggleGroup: 'Calendar_Toolbar_tgViews'
-        });
-        this.weekBtn = this.addButton({
-            pressed: this.activeView == 'week',
-            text: 'week view',
-            iconCls: 'cal-week-view',
-            xtype: 'tbbtnlockedtoggle',
-            handler: this.onClick.createDelegate(this, ["week"]),
-            enableToggle: true,
-            toggleGroup: 'Calendar_Toolbar_tgViews'
-        });
-        this.MonthBtn = this.addButton({
-            pressed: this.activeView == 'month',
-            text: 'month view',
-            iconCls: 'cal-month-view',
-            xtype: 'tbbtnlockedtoggle',
-            handler: this.onClick.createDelegate(this, ["month"]),
-            enableToggle: true,
-            toggleGroup: 'Calendar_Toolbar_tgViews'
-        });
-        
+        /*
         if(this.dsLoaded){
             this.onLoad.apply(this, this.dsLoaded);
         }
         //this.loading.disable();
+        */
 
     },
     
     onClick: function(which) {
         switch(which) {
+            /*
             case 'day' :
             case 'week':
             case 'month':
@@ -148,14 +138,14 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
                 }
                 break;
                 
-                
+            */    
             case 'next':
             case 'prev':
-                this.periodPickers[this.activeView][which]();
-                this.fireEvent('change', this, this.activeView, this.periodPickers[this.activeView].getPeriod());
+                this.periodPicker[which]();
+                this.fireEvent('change', this, this.activeView, this.periodPicker.getPeriod());
                 break;
             case 'refresh':
-                this.fireEvent('change', this, this.activeView, this.periodPickers[this.activeView].getPeriod());
+                this.fireEvent('change', this, this.activeView, this.periodPicker.getPeriod());
                 break;
         }
     }
@@ -199,7 +189,7 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
     init: function() {
         this.button = new Ext.Button({
             text: this.tb.dtStart.format(Ext.DatePicker.prototype.format),
-            hidden: this.tb.activeView != 'day',
+            //hidden: this.tb.activeView != 'day',
             menu: new Ext.menu.DateMenu({
                 listeners: {
                     scope: this,
@@ -248,14 +238,14 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
     init: function() {
         this.label = new Ext.form.Label({
             text: 'week',
-            style: 'padding-right: 3px',
-            hidden: this.tb.activeView != 'week'
+            style: 'padding-right: 3px'
+            //hidden: this.tb.activeView != 'week'
         });
         this.field = new Ext.form.TextField({
             value: this.tb.dtStart.getWeekOfYear(),
             width: 30,
             cls: "x-tbar-page-number",
-            hidden: this.tb.activeView != 'week',
+            //hidden: this.tb.activeView != 'week',
             listeners: {
                 scope: this,
                 specialkey: this.onSelect,
@@ -322,7 +312,7 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
     init: function() {
         this.button = new Ext.Button({
             text: Ext.DatePicker.prototype.monthNames[this.tb.dtStart.getMonth()] + this.tb.dtStart.format(' Y'),
-            hidden: this.tb.activeView != 'month',
+            //hidden: this.tb.activeView != 'month',
             menu: new Ext.menu.DateMenu({
                 hideMonthPicker: Ext.DatePicker.prototype.hideMonthPicker.createSequence(function() {
                     if (this.monthPickerActive) {
