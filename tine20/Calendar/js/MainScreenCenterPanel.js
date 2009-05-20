@@ -165,11 +165,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             switch(which) {
                 case 'day':
                     view = new Tine.Calendar.DaysView({
+                        startDate: tbar.getPeriod().from,
                         numOfDays: 1
                     });
                     break;
                 case 'week':
                     view = new Tine.Calendar.DaysView({
+                        startDate: tbar.getPeriod().from,
                         numOfDays: 7
                     });
                     break;
