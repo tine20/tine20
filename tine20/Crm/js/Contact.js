@@ -20,6 +20,8 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.Contact');
  */
 Tine.Crm.Contact.ComboBox = Ext.extend(Tine.Addressbook.SearchCombo, {
 
+    valueField: 'id',
+    
     //private
     initComponent: function(){
         this.contactFields = Tine.Addressbook.Model.ContactArray;

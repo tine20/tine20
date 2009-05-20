@@ -22,7 +22,6 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
 
 	id: 'contactSearchCombo',
 	
-    valueField: 'id',
     typeAhead: false,
     //hideTrigger: true, // IE7 doesn't like that!
     triggerAction: 'all',

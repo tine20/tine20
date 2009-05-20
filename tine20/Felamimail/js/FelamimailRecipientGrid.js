@@ -185,6 +185,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
  */
 Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
 
+    forceSelection: false,
+    
     //private
     initComponent: function() {
         this.tpl = new Ext.XTemplate(
@@ -230,6 +232,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * TODO make it possible to choose between office/home email addresses
      */
     onSelect: function(record) {
+        console.log(record);
         if (record.get('email') != '') {
             this.setValue(record.get('email'));
         } /*else {
