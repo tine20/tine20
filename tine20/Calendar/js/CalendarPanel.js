@@ -38,6 +38,14 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.autoWidth = false;
     },
     
+    getView: function() {
+        return this.view;
+    },
+    
+    getStore: function() {
+        return this.store;
+    },
+    
     onAddEvent: function(event) {
         console.log('A new event has been added -> call backend saveRecord');
         Tine.Calendar.backend.saveRecord(event, {
