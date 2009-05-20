@@ -135,22 +135,22 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     render: function() {
         var m = [
              '<table class="cal-monthview-inner" cellspacing="0"><thead><tr>',
-             "<th><span>", this.calWeekString, "</span></th>"
+             "<th class='cal-monthview-wkcell'><span>", this.calWeekString, "</span></th>"
          ];
         for(var i = 0; i < 7; i++){
             var d = this.startDay+i;
             if(d > 6){
                 d = d-7;
             }
-            m.push("<th><span>", this.dayNames[d], "</span></th>");
+            m.push("<th class='cal-monthview-daycell'><span>", this.dayNames[d], "</span></th>");
         }
-        m[m.length] = "</tr></thead><tbody><tr><td class='cal-monthview-wk'></td>";
+        m[m.length] = "</tr></thead><tbody><tr><td class='cal-monthview-wkcell'></td>";
         for(var i = 0; i < 42; i++) {
             if(i % 7 == 0 && i != 0){
-                m[m.length] = "</tr><tr><td class='cal-monthview-wk'></td>";
+                m[m.length] = "</tr><tr><td class='cal-monthview-wkcell'></td>";
             }
             m[m.length] = 
-                '<td>' +
+                '<td class="cal-monthview-daycell">' +
                     '<div class="cal-monthview-dayheader">' +
                         '<div class="cal-monthview-dayheader-inner"></div>' +
                     '</div>' +

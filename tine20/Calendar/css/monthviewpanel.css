@@ -11,6 +11,18 @@
     white-space:nowrap;
 }
 
+.cal-monthview-wkcell {
+    border-right: 3px double #E1E1E1;
+}
+
+.cal-monthview-daycell {
+    border-right: 1px solid #E1E1E1;
+}
+
+.cal-monthview-inner tbody td {
+    border-bottom: 1px solid #E1E1E1;
+}
+
 .cal-monthview-inner thead tr {
     position: relative;
     background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
@@ -32,7 +44,7 @@
 	color:#233D6D;
 	cursor:default;
 	font-family:arial,helvetica,tahoma,sans-serif;
-	font-size:10px;
+	font-size:12px;
 	font-size-adjust:none;
 	font-style:normal;
 	font-variant:normal;
