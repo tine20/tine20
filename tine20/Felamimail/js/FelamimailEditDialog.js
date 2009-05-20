@@ -46,7 +46,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.onRecordLoad();
     },
     
-    onRender : function(ct, position){
+    onRender: function(ct, position){
         Tine.Felamimail.MessageEditDialog.superclass.onRender.call(this, ct, position);
         
         //this.window.setTitle(this.record.get('subject'));

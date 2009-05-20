@@ -8,6 +8,7 @@
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         add name to email address for display
+ * TODO         add recipients when replying
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -38,6 +39,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     header: false,
     frame: true,
     border: false,
+    deferredRender: false,
     //region: 'center',
     //layout: 'border',
     
@@ -119,10 +121,26 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 dataIndex: 'address',
                 width: 40,
                 header: 'address',
-                // TODO use searchable combo here
-                editor: new Ext.form.TextField({})  
+                editor: new Tine.Felamimail.ContactSearchCombo({})
             }
         ]);
+    },
+    
+    /**
+     * on render event
+     * 
+     * @param {} ct
+     * @param {} position
+     * 
+     * TODO focus first 'To' address when composing new mail (it isn't working yet :( )
+     * TODO don't focus search combo if replying
+     */
+    onRender: function(ct, position){
+        Tine.Felamimail.RecipientGrid.superclass.onRender.call(this, ct, position);
+        
+        // TODO focus first 'To' row / second column (address)
+        //this.startEditing.defer(1500, this, 0, 1);
+        //this.startEditing(0, 1);
     },
     
     /**
@@ -134,7 +152,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} record
      * @param {} operation
      */
-    onUpdateStore : function(store, record, operation)
+    onUpdateStore: function(store, record, operation)
     {
         if (operation == 'edit') {
             this.record.data.to = [];
@@ -156,3 +174,67 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     }
 });
+
+/**
+ * contact email search combo
+ * 
+ * @class Tine.Felamimail.ContactSearchCombo
+ * @extends Tine.Addressbook.SearchCombo
+ * 
+ * TODO what about email_home?
+ */
+Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
+
+    //private
+    initComponent: function() {
+        this.tpl = new Ext.XTemplate(
+            '<tpl for="."><div class="search-item">',
+                '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
+                    '<tr>',
+                        '<td width="50%"><b>{[this.encode(values.n_fileas)]}</b></td>',
+                        '<td width="50%"><b>{[this.encode(values.email)]}</b></td>',
+                        /*
+                        '<td width="40%"><b>{[this.encode(values.n_fileas)]}</b><br/>{[this.encode(values.org_name)]}</td>',
+                        '<td width="40%">{[this.encode(values.email)]}<br/>',
+                            '{[this.encode(values.email_home)]}</td>',
+                        '<td width="20%">',
+                            '<img width="45px" height="39px" src="{jpegphoto}" />',
+                        '</td>',
+                        */
+                    '</tr>',
+                '</table>',
+            '</div></tpl>',
+            {
+                encode: function(value) {
+                     if (value) {
+                        return Ext.util.Format.htmlEncode(value);
+                    } else {
+                        return '';
+                    }
+                }
+            }
+        );
+        
+        Tine.Felamimail.ContactSearchCombo.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * override default onSelect
+     * - set email/name as value
+     * 
+     * @param {} record
+     * 
+     * TODO add name
+     * TODO make it possible to choose between office/home email addresses
+     */
+    onSelect: function(record) {
+        if (record.get('email') != '') {
+            this.setValue(record.get('email'));
+        } /*else {
+            this.setValue(record.get('email_home'));
+        } */
+        this.collapse();
+        this.fireEvent('blur', this);
+    }
+});
+
