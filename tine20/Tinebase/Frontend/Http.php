@@ -503,7 +503,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $d->close();
         
         return array(
-            'js'  => $jsFiles,
+            'js'  => array_unique($jsFiles),
             'css' => $cssFiles
         );
 	}

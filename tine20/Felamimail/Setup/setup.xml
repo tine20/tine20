@@ -5,6 +5,9 @@
     <version>0.1</version>
     <order>30</order>
     <status>disabled</status>
+    <depends>
+        <application>Addressbook</application>
+    </depends>    
     <tables>
         <table>
             <name>felamimail_account</name>
