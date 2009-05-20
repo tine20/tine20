@@ -65,9 +65,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         
         // TODO init recipients (on reply/reply to all)
-        for (var i=0; i < 3; i++) {
+        //for (var i=0; i < 3; i++) {
             this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
-        }
+        //}
         
         this.store.on('update', this.onUpdateStore, this);
     },
@@ -124,7 +124,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
      * store has been updated
-     * -> update record to/cc/bcc
+     * -> update record to/cc/bcc (if edit)
+     * -> add additional row (if new address has been added)
      * 
      * @param {} store
      * @param {} record
@@ -132,16 +133,23 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onUpdateStore : function(store, record, operation)
     {
-        this.record.data.to = [];
-        this.record.data.cc = [];
-        this.record.data.bcc = [];
-        
-        store.each(function(recipient){
-            if (recipient.data.address != '') {
-                this.record.data[recipient.data.type].push(recipient.data.address);
+        if (operation == 'edit') {
+            this.record.data.to = [];
+            this.record.data.cc = [];
+            this.record.data.bcc = [];
+            
+            store.each(function(recipient){
+                if (recipient.data.address != '') {
+                    this.record.data[recipient.data.type].push(recipient.data.address);
+                }
+            }, this);
+
+            // add additional row if new address has been added
+            if (record.modified.address == '') {
+                store.add(new Ext.data.Record({type: 'to', 'address': ''}));
             }
-        }, this);
-        //store.commitChanges();
-        //console.log(this.record);
+            
+            store.commitChanges();
+        }
     }
 });
