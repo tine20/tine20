@@ -189,20 +189,22 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     initComponent: function() {
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
+                '{[this.encode(values.n_fileas)]}',
+                ' (<b>{[this.encode(values.email)]}</b>)',
+                /*
                 '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                     '<tr>',
-                        '<td width="50%"><b>{[this.encode(values.n_fileas)]}</b></td>',
-                        '<td width="50%"><b>{[this.encode(values.email)]}</b></td>',
-                        /*
+                        //'<td width="50%"><b>{[this.encode(values.n_fileas)]}</b></td>',
+                        //'<td width="50%"><b>{[this.encode(values.email)]}</b></td>',
                         '<td width="40%"><b>{[this.encode(values.n_fileas)]}</b><br/>{[this.encode(values.org_name)]}</td>',
                         '<td width="40%">{[this.encode(values.email)]}<br/>',
                             '{[this.encode(values.email_home)]}</td>',
                         '<td width="20%">',
                             '<img width="45px" height="39px" src="{jpegphoto}" />',
                         '</td>',
-                        */
                     '</tr>',
                 '</table>',
+                */
             '</div></tpl>',
             {
                 encode: function(value) {
