@@ -7,11 +7,10 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * @ŧodo        make account combo work when loading from json
- * @todo        add contact search combo for to/cc/bcc
- * @todo        add signature
- * @todo        add attachments
- * @todo        window title = subject?
+ * TODO         add recipients to recipient grid on reply
+ * TODO         add attachments
+ * TODO         make account combo work when loading from json
+ * TODO         window title = subject?
  */
  
 Ext.namespace('Tine.Felamimail');

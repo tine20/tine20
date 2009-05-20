@@ -8,6 +8,9 @@
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         finish reply all implementation
+ * TODO         add recipients to recipient grid on reply
+ * TODO         add signature
+ * TODO         improve attachment download
  */
  
 Ext.namespace('Tine.Felamimail');
