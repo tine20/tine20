@@ -8,7 +8,6 @@
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * @ŧodo        make account combo work when loading from json
- * @todo        add buttons for add cc/ add bcc
  * @todo        add contact search combo for to/cc/bcc
  * @todo        add signature
  * @todo        add attachments
@@ -27,7 +26,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Felamimail.Model.Message,
     recordProxy: Tine.Felamimail.messageBackend,
     loadRecord: false,
-    tbarItems: [/*{xtype: 'widget-activitiesaddbutton'}*/],
+    tbarItems: [],
     evalGrants: false,
     //layout: 'form',
     
@@ -57,8 +56,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
-     * 
-     * TODO add recipient grid
      */
     getFormItems: function() {
         
@@ -122,24 +119,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             remoteSort: true,
                             sortInfo: {field: 'user', dir: 'ASC'}
                         })
-                    }, this.recipientGrid
-                    /*{
-                        fieldLabel: this.app.i18n._('To'),
-                        name: 'to',
-                        allowBlank: false
-                    }, {
-                        fieldLabel: this.app.i18n._('Cc'),
-                        name: 'cc',
-                        allowBlank: true
-                    }, {
-                        fieldLabel: this.app.i18n._('Bcc'),
-                        name: 'bcc',
-                        allowBlank: false
-                    }*/, {
+                    }, 
+                    this.recipientGrid,
+                    {
                         fieldLabel: this.app.i18n._('Subject'),
                         name: 'subject',
                         allowBlank: false
-                    }, 
+                    },
                     this.htmlEditor
                 ]] 
             }]
