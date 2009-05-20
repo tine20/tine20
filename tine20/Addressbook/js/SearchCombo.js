@@ -36,69 +36,36 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
         
         this.loadingText = _('Searching...');
     	
-        // Custom rendering Template
-    	// TODO move style def to css ?
-        var resultTpl = new Ext.XTemplate(
-            '<tpl for="."><div class="search-item">',
-                '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
-                    '<tr>',
-                        '<td width="30%"><b>{[this.encode(values.n_fileas)]}</b><br/>{[this.encode(values.org_name)]}</td>',
-                        '<td width="25%">{[this.encode(values.adr_one_street)]}<br/>',
-                        	'{[this.encode(values.adr_one_postalcode)]} {[this.encode(values.adr_one_locality)]}</td>',
-                        '<td width="25%">{[this.encode(values.tel_work)]}<br/>{[this.encode(values.tel_cell)]}</td>',
-                        '<td width="20%">',
-                            '<img width="45px" height="39px" src="{jpegphoto}" />',
-                        '</td>',
-                    '</tr>',
-                '</table>',
-            '</div></tpl>',
-            {
-                encode: function(value) {
-                     if (value) {
-                        return Ext.util.Format.htmlEncode(value);
-                    } else {
-                        return '';
-                    }
-                }
-            }
-        );
-        
-        this.tpl = resultTpl;
-
-        if (! this.contactFields) {
-            this.contactFields = Tine.Addressbook.Model.ContactArray;
-        }
+        this.initTemplate();
         this.initStore();
         
-        // use beforequery to set query filter
-        this.on('beforequery', function(qevent) {
-            var filter = [
-                {field: 'containerType', operator: 'equals', value: 'all' },
-                {field: 'query', operator: 'contains', value: qevent.query }
-            ];
-            this.store.baseParams.filter = Ext.util.JSON.encode(filter);            
-        });
-
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);        
+
+        this.on('beforequery', this.onBeforeQuery, this);
     },
     
     /**
-     * override default onSelect
+     * use beforequery to set query filter
      * 
+     * @param {} qevent
      */
-    onSelect: function(record){  
-        /*
-        record.data.relation_type = 'customer';            
-        var store = Ext.StoreMgr.lookup('ContactsStore');
-        
-        // check if already in
-        if (!store.getById(record.id)) {
-            store.add([record]);
-        }
-            
+    onBeforeQuery: function(qevent){
+        var filter = [
+            {field: 'containerType', operator: 'equals', value: 'all' },
+            {field: 'query', operator: 'contains', value: qevent.query }
+        ];
+        this.store.baseParams.filter = Ext.util.JSON.encode(filter);
+    },
+    
+    /**
+     * on select handler
+     * - this needs to be overwritten in most cases
+     * 
+     * @param {} record
+     */
+    onSelect: function(record){
+        this.setValue(record.get('n_fn'));
         this.collapse();
-        this.clearValue();
-        */
     },
     
     /**
@@ -113,6 +80,40 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     },
     
     /**
+     * init template
+     */
+    initTemplate: function() {
+        // Custom rendering Template
+        // TODO move style def to css ?
+        if (! this.tpl) {
+            this.tpl = new Ext.XTemplate(
+                '<tpl for="."><div class="search-item">',
+                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
+                        '<tr>',
+                            '<td width="30%"><b>{[this.encode(values.n_fileas)]}</b><br/>{[this.encode(values.org_name)]}</td>',
+                            '<td width="25%">{[this.encode(values.adr_one_street)]}<br/>',
+                                '{[this.encode(values.adr_one_postalcode)]} {[this.encode(values.adr_one_locality)]}</td>',
+                            '<td width="25%">{[this.encode(values.tel_work)]}<br/>{[this.encode(values.tel_cell)]}</td>',
+                            '<td width="20%">',
+                                '<img width="45px" height="39px" src="{jpegphoto}" />',
+                            '</td>',
+                        '</tr>',
+                    '</table>',
+                '</div></tpl>',
+                {
+                    encode: function(value) {
+                         if (value) {
+                            return Ext.util.Format.htmlEncode(value);
+                        } else {
+                            return '';
+                        }
+                    }
+                }
+            );
+        }
+    },
+    
+    /**
      * get contact store
      *
      * @return Ext.data.JsonStore with contacts
@@ -120,6 +121,11 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     initStore: function() {
         
         if (! this.store) {
+            
+            if (! this.contactFields) {
+                this.contactFields = Tine.Addressbook.Model.ContactArray;
+            }
+            
             // create store
             this.store = new Ext.data.JsonStore({
                 //fields: Tine.Addressbook.Model.Contact,
