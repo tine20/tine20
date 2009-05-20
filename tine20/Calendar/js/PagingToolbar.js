@@ -10,13 +10,12 @@
 Ext.ns('Tine.Calendar');
 
 Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
-    
-    dtStart: null,
-    
-    
     /**
-     * @private
-     * @property activeView
+     * @cfg {Date} dtstart
+     */
+    dtStart: null,
+    /**
+     * @cfg view
      */
     view: 'day',
     /**
@@ -25,7 +24,9 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
      */
     periodPicker: null,
     
-    
+    /**
+     * @private
+     */
     initComponent: function() {
         this.addEvents(
             /**
@@ -52,36 +53,12 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             }
         });
         
-        /*
-        var views = ['day', 'week', 'month'];
-        for (var i=0, view; i<views.length; i++) {
-            view = views[i];
-            this.periodPickers[view] = new Tine.Calendar.PagingToolbar[Ext.util.Format.capitalize(view) + 'PeriodPicker']({
-                tb: this,
-                listeners: {
-                    scope: this,
-                    change: function(picker, view, period) {
-                        this.dtStart = period.from.clone();
-                        this.fireEvent('change', this, view, period);
-                    }
-                }
-            });
-            
-        }
-        /*
-        this.periodPickers.day = new Tine.Calendar.PagingToolbar.DayPeriodPicker(this);
-        this.relayEvents(this.periodPickers.day, ['change']);
-        
-        this.periodPickers.week = new Tine.Calendar.PagingToolbar.WeekPeriodPicker(this);
-        this.relayEvents(this.periodPickers.week, ['change']);
-        
-        this.periodPickers.month = new Tine.Calendar.PagingToolbar.MonthPeriodPicker(this);
-        this.relayEvents(this.periodPickers.month, ['change']);
-        */
-        
         Tine.Calendar.PagingToolbar.superclass.initComponent.call(this);
     },
     
+    /**
+     * @private
+     */
     onRender: function(ct, position) {
         Tine.Calendar.PagingToolbar.superclass.onRender.call(this, ct, position);
         
@@ -92,11 +69,6 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
         });
         this.addSeparator();
         this.periodPicker.render();
-        /*
-        for (var view in this.periodPickers) {
-            this.periodPickers[view].render();
-        }
-        */
         this.addSeparator();
         this.nextBtn = this.addButton({
             tooltip: Ext.PagingToolbar.prototype.nextText,
@@ -121,24 +93,12 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
 
     },
     
+    /**
+     * @private
+     * @param {String} which
+     */
     onClick: function(which) {
         switch(which) {
-            /*
-            case 'day' :
-            case 'week':
-            case 'month':
-                if (which != this.activeView) {
-                    for (var view in this.periodPickers) {
-                        this.periodPickers[view][view == which ? 'show' : 'hide']();
-                    }
-                    this.activeView = which;
-                    this.periodPickers[this.activeView].update(this.dtStart);
-                    
-                    this.fireEvent('change', this, this.activeView, this.periodPickers[this.activeView].getPeriod());
-                }
-                break;
-                
-            */    
             case 'next':
             case 'prev':
                 this.periodPicker[which]();
@@ -148,10 +108,24 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
                 this.fireEvent('change', this, this.activeView, this.periodPicker.getPeriod());
                 break;
         }
+    },
+    
+    /**
+     * returns requested period
+     * @return {Array}
+     */
+    getPeriod: function() {
+        return this.periodPicker.getPeriod();
     }
     
 });
 
+/**
+ * @class Tine.Calendar.PagingToolbar.AbstractPeriodPicker
+ * @extends Ext.util.Observable
+ * @constructor
+ * @param {Object} config
+ */
 Tine.Calendar.PagingToolbar.AbstractPeriodPicker = function(config) {
     Ext.apply(this, config);
     this.addEvents(
