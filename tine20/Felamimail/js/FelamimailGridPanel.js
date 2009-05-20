@@ -8,7 +8,6 @@
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         finish reply all implementation
- * TODO         add recipients to recipient grid on reply
  * TODO         add signature
  * TODO         improve attachment download
  */
@@ -438,7 +437,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} event
      * 
      * TODO  add signature text
-     * TODO  add forwarding/reply ('_name_ wrote:') message
+     * TODO  add forwarding message
      */
     onEditInNewWindow: function(button, event) {
         var recordData = this.recordClass.getDefaultData();
@@ -458,7 +457,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 case 'reply':
                     recordData.id = recordId;
                     recordData.to = selectedRecord.get('from');
-                    recordData.body = '<br/><blockquote>' + Ext.util.Format.nl2br(selectedRecord.get('body')) + '</blockquote><br/>';
+                    recordData.body = '<br/>' + recordData.to + ' ' + _('wrote') + ':<br/><blockquote>' 
+                        + Ext.util.Format.nl2br(selectedRecord.get('body')) + '</blockquote><br/>';
                     recordData.subject = _('Re: ') + selectedRecord.get('subject');
                     recordData.flags = '\\Answered';
                     break;

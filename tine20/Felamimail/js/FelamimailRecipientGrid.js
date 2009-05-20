@@ -8,7 +8,7 @@
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         add name to email address for display
- * TODO         add recipients when replying
+ * TODO         add recipients when reply to all
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -67,9 +67,13 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             fields   : ['type', 'address']
         });
         
-        // TODO init recipients (on reply/reply to all)
-        this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
-        
+        // init recipients (on reply/TODO: reply to all)
+        if (this.record.get('to') && this.record.get('to') != '') {
+            this.store.add(new Ext.data.Record({type: 'to', 'address': this.record.get('to')}));
+            this.record.data.to = [this.record.get('to')];
+        } else {
+            this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
+        }
         this.store.on('update', this.onUpdateStore, this);
     },
     
@@ -232,7 +236,6 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * TODO make it possible to choose between office/home email addresses
      */
     onSelect: function(record) {
-        console.log(record);
         if (record.get('email') != '') {
             this.setValue(record.get('email'));
         } /*else {

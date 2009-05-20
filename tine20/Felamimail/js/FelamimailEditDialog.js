@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add recipients to recipient grid on reply
  * TODO         add attachments
  * TODO         make account combo work when loading from json
  * TODO         window title = subject?
@@ -80,7 +79,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         + 'blockquote {'
                             + 'margin: 5px 10px 0 3px;'
                             + 'padding-left: 10px;'
-                            + 'border-left: 5px solid #000066;'
+                            + 'border-left: 2px solid #000088;'
                         + '} '
                     + '</style>'
                     + '</head>'

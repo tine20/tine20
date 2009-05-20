@@ -102,6 +102,15 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 foreach($recordData[$field] as $addresses) {
                     $exploded = array_merge($exploded, explode($delimiter, $addresses));
                 }
+                
+                foreach ($exploded as &$recipient) {
+                    // get address 
+                    // @todo get name here
+                    if (preg_match("/<([a-zA-Z@_\-0-9\.]+)>/", $recipient, $matches) > 0) {
+                        $recipient = $matches[1];
+                    }
+                }
+                
                 $this->{$field} = $exploded;
             }
         }
