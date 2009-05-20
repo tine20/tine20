@@ -325,8 +325,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @todo set In-Reply-To header for replies (which message id?)
      * @todo add mail & name from account settings
      * @todo add smtp host from account settings
-     * @todo add name for 'to'
-     * @todo add cc & bcc
+     * @todo add name for to/cc/bcc
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
@@ -335,15 +334,26 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
-        // build mail
+        // build mail content
         $mail = new Tinebase_Mail();
         $mail->setBodyText(strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_message->body)));
         $mail->setBodyHtml($_message->body);
         
+        // set from
         $mail->setFrom(Tinebase_Core::getConfig()->imap->user, Tinebase_Core::getConfig()->imap->user);
+        
+        // add recipients
         foreach ($_message->to as $to) {
             $mail->addTo($to, $to);
         }
+        foreach ($_message->cc as $cc) {
+            $mail->addCc($cc, $cc);
+        }
+        foreach ($_message->bcc as $bcc) {
+            $mail->addBcc($bcc, $bcc);
+        }
+        
+        // set subject & date
         $mail->setSubject($_message->subject);
         $mail->setDate(Zend_Date::now('en_US')->toString(Felamimail_Model_Message::DATE_FORMAT));
 

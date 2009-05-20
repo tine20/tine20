@@ -29,6 +29,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     tbarItems: [/*{xtype: 'widget-activitiesaddbutton'}*/],
     evalGrants: false,
+    //layout: 'form',
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -60,6 +61,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO add recipient grid
      */
     getFormItems: function() {
+        
+        this.recipientGrid = new Tine.Felamimail.RecipientGrid({
+            fieldLabel: _('Recipients'),
+            record: this.record
+        });
         
         this.htmlEditor = new Ext.form.HtmlEditor({
             fieldLabel: this.app.i18n._('Body'),
@@ -116,11 +122,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             remoteSort: true,
                             sortInfo: {field: 'user', dir: 'ASC'}
                         })
-                    },{
+                    }, this.recipientGrid
+                    /*{
                         fieldLabel: this.app.i18n._('To'),
                         name: 'to',
                         allowBlank: false
-                    }/*, {
+                    }, {
                         fieldLabel: this.app.i18n._('Cc'),
                         name: 'cc',
                         allowBlank: true
@@ -132,7 +139,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Subject'),
                         name: 'subject',
                         allowBlank: false
-                    }, this.htmlEditor
+                    }, 
+                    this.htmlEditor
                 ]] 
             }]
         };
