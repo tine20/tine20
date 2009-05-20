@@ -47,27 +47,38 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     },
     
     onAddEvent: function(event) {
-        console.log('A new event has been added -> call backend saveRecord');
+        this.setLoading(true);
+        //console.log('A new event has been added -> call backend saveRecord');
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(createdEvent) {
-                console.log('Backend returned newly created event -> replace event in view');
+                //console.log('Backend returned newly created event -> replace event in view');
                 this.store.remove(event);
                 this.store.add(createdEvent);
+                this.setLoading(false);
             }
         });
     },
     
     onUpdateEvent: function(event) {
-        console.log('A existing event has been updated -> call backend saveRecord');
+        this.setLoading(true);
+        //console.log('A existing event has been updated -> call backend saveRecord');
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(updatedEvent) {
-                console.log('Backend returned updated event -> replace event in view');
+                //console.log('Backend returned updated event -> replace event in view');
                 this.store.remove(event);
                 this.store.add(updatedEvent);
+                this.setLoading(false);
             }
         });
+    },
+    
+    setLoading: function(bool) {
+        var tbar = this.getTopToolbar();
+        if (tbar && tbar.loading) {
+            tbar.loading[bool ? 'disable' : 'enable']();
+        }
     },
     
     /*

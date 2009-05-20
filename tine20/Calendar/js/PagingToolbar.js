@@ -54,6 +54,7 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
         });
         
         Tine.Calendar.PagingToolbar.superclass.initComponent.call(this);
+        this.bind(this.store);
     },
     
     /**
@@ -116,8 +117,53 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
      */
     getPeriod: function() {
         return this.periodPicker.getPeriod();
-    }
+    },
     
+    // private
+    beforeLoad : function(){
+        if(this.rendered && this.loading){
+            this.loading.disable();
+        }
+    },
+    
+    // private
+    onLoad : function(store, r, o){
+        this.loading.enable();
+    },
+
+
+    
+    /**
+     * Unbinds the paging toolbar from the specified {@link Ext.data.Store}
+     * @param {Ext.data.Store} store The data store to unbind
+     */
+    unbind : function(store){
+        store = Ext.StoreMgr.lookup(store);
+        store.un("beforeload", this.beforeLoad, this);
+        store.un("load", this.onLoad, this);
+        //store.un("loadexception", this.onLoadError, this);
+        this.store = undefined;
+    },
+
+    /**
+     * Binds the paging toolbar to the specified {@link Ext.data.Store}
+     * @param {Ext.data.Store} store The data store to bind
+     */
+    bind : function(store){
+        store = Ext.StoreMgr.lookup(store);
+        store.on("beforeload", this.beforeLoad, this);
+        store.on("load", this.onLoad, this);
+        //store.on("loadexception", this.onLoadError, this);
+        this.store = store;
+    },
+
+    // private
+    onDestroy : function(){
+        if(this.store){
+            this.unbind(this.store);
+        }
+        Tine.Calendar.PagingToolbar.superclass.onDestroy.call(this);
+    }
 });
 
 /**
