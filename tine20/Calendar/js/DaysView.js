@@ -47,6 +47,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     newEventSummary: 'New Event',
     /**
+     * @cfg {String} dayFormatString
+     */
+    dayFormatString: 'l, \\t\\he jS \\o\\f F',
+    /**
      * @cfg {Number} timeGranularity
      * granularity of timegrid in minutes
      */
@@ -61,11 +65,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * store holding timescale 
      */
     timeScale: null,
-    /**
-     * @property {Ext.data.Store} dateScale
-     * store holding datescale 
-     */
-    dateScale: null,
     /**
      * The amount of space to reserve for the scrollbar (defaults to 19 pixels)
      * @type Number
@@ -87,6 +86,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     ds: null,
     
+    /**
+     * updates periode to display
+     * @param {Array} periode
+     */
+    updatePeriode: function(periode) {
+        this.startDate = periode.from;
+        this.updateDayHeaders();
+    },
     
     /**
      * init this view
@@ -108,7 +115,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.initData(calPanel.store);
         
         this.initTimeScale();
-        this.initDateScale();
         this.initTemplates();
     },
     
@@ -153,26 +159,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.timeScale = new Ext.data.SimpleStore({
             fields: ['index', 'minutes', 'milliseconds', 'time'],
-            data: data,
-            id: 'index'
-        });
-    },
-    
-    /**
-     * inits date scale
-     * @private
-     */
-    initDateScale: function() {
-        var data = [];
-        var baseDate = this.startDate.clone(), date;
-        
-        for (var i=0; i<this.numOfDays; i++) {
-            date = baseDate.add(Date.DAY, i)
-            data.push([i, date, date.format('l, \\t\\he jS \\o\\f F')]);
-        }
-        
-        this.dateScale = new Ext.data.SimpleStore({
-            fields: ['index', 'date', 'dateString'],
             data: data,
             id: 'index'
         });
@@ -926,7 +912,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (target.id.match(/^ext-gen\d+:\d+/)) {
             var parts = target.id.split(':');
             
-            var date = this.dateScale.getAt(parts[1]).get('date');
+            var date = this.startDate.add(Date.DAY, parseInt(parts[1], 10));
             date.is_all_day_event = true;
             
             if (parts[2] ) {
@@ -1059,17 +1045,26 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var html = '';
         var width = 100/this.numOfDays;
         
-        this.dateScale.each(function(date) {
-            var index = date.get('index');
+        for (var i=0; i<this.numOfDays; i++) {
             html += this.templates.dayHeader.applyTemplate({
-                day: date.get('dateString'),
+                day: this.startDate.add(Date.DAY, i).format(this.dayFormatString),
                 height: this.granularityUnitHeights,
                 width: width + '%',
-                left: index * width + '%'
+                left: i * width + '%'
             });
-        }, this);
-        
+        }
         return html;
+    },
+    
+    /**
+     * updates HTML of day headers
+     */
+    updateDayHeaders: function() {
+        var dayHeaders = Ext.DomQuery.select('div[class=cal-daysviewpanel-dayheader-day]', this.innerHd);
+        
+        for (var i=0; i<dayHeaders.length; i++) {
+            Ext.fly(dayHeaders[i]).update(this.startDate.add(Date.DAY, i).format(this.dayFormatString));
+        }
     },
     
     /**
