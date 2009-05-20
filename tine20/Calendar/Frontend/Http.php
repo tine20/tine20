@@ -40,6 +40,7 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         return array(
             'Calendar/css/daysviewpanel.css',
+            'Calendar/css/monthviewpanel.css',
             'Calendar/css/Calendar.css'
         );
     }

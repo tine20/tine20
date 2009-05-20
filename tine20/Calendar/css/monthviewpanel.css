@@ -1,0 +1,42 @@
+.cal-monthview-inner th {
+    text-align: center;
+    color:black;
+    font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    white-space:nowrap;
+}
+
+.cal-monthview-inner thead tr {
+    position: relative;
+    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    height: 24px;
+}
+
+.cal-monthview-inner tbody td {
+	vertical-align: top;
+}
+
+.cal-monthview-dayheader {
+	position: relative;
+    width: 100%;
+}
+
+.cal-monthview-dayheader-inner {
+	padding: 2px 5px;
+	border-collapse:separate;
+	color:#233D6D;
+	cursor:default;
+	font-family:arial,helvetica,tahoma,sans-serif;
+	font-size:10px;
+	font-size-adjust:none;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	text-align:right !important;
+}
