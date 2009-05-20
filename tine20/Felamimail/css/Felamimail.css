@@ -92,3 +92,7 @@
 #felamimail-recipient-grid .x-grid3-hd-row {
     display:none;
 }
+
+#felamimail-recipient-grid td {
+    border-right: 1px solid #5555ff;	
+}
