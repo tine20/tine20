@@ -434,8 +434,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} button
      * @param {} event
      * 
-     * TODO  add quoting to reply body text
-     * TODO  add forwarding message
+     * TODO  add signature text
+     * TODO  add forwarding/reply ('_name_ wrote:') message
      */
     onEditInNewWindow: function(button, event) {
         var recordData = this.recordClass.getDefaultData();
@@ -455,13 +455,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 case 'reply':
                     recordData.id = recordId;
                     recordData.to = selectedRecord.get('from');
-                    recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
+                    recordData.body = '<br/><blockquote>' + Ext.util.Format.nl2br(selectedRecord.get('body')) + '</blockquote><br/>';
                     recordData.subject = _('Re: ') + selectedRecord.get('subject');
                     recordData.flags = '\\Answered';
                     break;
                 case 'forward':
                     recordData.id = recordId;
-                    recordData.body = Ext.util.Format.nl2br(selectedRecord.get('body'));
+                    recordData.body = '<br/><blockquote>' + Ext.util.Format.nl2br(selectedRecord.get('body')) + '</blockquote><br/>';
                     recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
                     recordData.flags = 'Passed';
                     break;

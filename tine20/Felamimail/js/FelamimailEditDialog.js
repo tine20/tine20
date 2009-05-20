@@ -56,8 +56,38 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
+     * 
+     * TODO add recipient grid
      */
     getFormItems: function() {
+        
+        this.htmlEditor = new Ext.form.HtmlEditor({
+            fieldLabel: this.app.i18n._('Body'),
+            name: 'body',
+            allowBlank: true,
+            height: 280,
+            // TODO add signature style
+            // TODO move css definitions to extern stylesheet?
+            getDocMarkup: function(){
+                var markup = '<html>'
+                    + '<head>'
+                    + '<META http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+                    + '<title></title>'
+                    + '<style type="text/css">'
+                        + 'blockquote {'
+                            + 'margin: 5px 10px 0 3px;'
+                            + 'padding-left: 10px;'
+                            + 'border-left: 5px solid #000066;'
+                        + '} '
+                    + '</style>'
+                    + '</head>'
+                    + '<body class="com-conjoon-groupware-email-EmailForm-htmlEditor-body">'
+                    + '</body></html>';
+        
+                return markup;
+            }
+        });
+        
         return {
             //title: this.app.i18n._('Message'),
             autoScroll: true,
@@ -102,13 +132,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Subject'),
                         name: 'subject',
                         allowBlank: false
-                    }, {
-                        fieldLabel: this.app.i18n._('Body'),
-                        name: 'body',
-                        allowBlank: true,
-                        xtype:'htmleditor',
-                        height: 280
-                    }
+                    }, this.htmlEditor
                 ]] 
             }]
         };
