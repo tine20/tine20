@@ -60,7 +60,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
-            fieldLabel: _('Recipients'),
+            //fieldLabel: _('Recipients'),
             record: this.record
         });
         

@@ -85,3 +85,10 @@
 .node_unread span{
     font-weight: bold;
 }
+
+/***** email composing dialog ******/
+
+/* disable grid headers */
+#felamimail-recipient-grid .x-grid3-hd-row {
+    display:none;
+}

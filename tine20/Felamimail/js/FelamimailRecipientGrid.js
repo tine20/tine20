@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add additional row on TAB in last row
  * TODO         add name to email address for display
  */
  
@@ -21,6 +20,8 @@ Ext.namespace('Tine.Felamimail');
  */
 Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
+    id: 'felamimail-recipient-grid',
+    
     /**
      * the message record
      * @type 
@@ -33,8 +34,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     autoExpandColumn: 'address',
     clicksToEdit:1,
     //margins : '2 5 2 5',
-    height: 88,
-    //header: false,
+    height: 80,
+    header: false,
     frame: true,
     border: false,
     //region: 'center',
@@ -65,9 +66,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         
         // TODO init recipients (on reply/reply to all)
-        //for (var i=0; i < 3; i++) {
-            this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
-        //}
+        this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
         
         this.store.on('update', this.onUpdateStore, this);
     },
@@ -82,6 +81,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 id: 'type',
                 dataIndex: 'type',
                 width: 80,
+                menuDisabled: true,
+                header: 'type',
                 renderer: function(value) {
                     switch(value) {
                         case 'to':
@@ -113,9 +114,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 })
             },{
                 resizable: true,
+                menuDisabled: true,
                 id: 'address',
                 dataIndex: 'address',
                 width: 40,
+                header: 'address',
                 // TODO use searchable combo here
                 editor: new Ext.form.TextField({})  
             }
