@@ -68,7 +68,7 @@ Ext.extend(Tine.Tinebase.data.AbstractBackend, Ext.data.DataProxy, {
      * @success {Object} root:[recrods], totalcount: number
      */
     searchRecords: function(filter, paging, options) {
-        options.success.defer(1000, options.scope);
+        options.success.defer(1000, options.scope, [{records: [], success: 1, totalRecords: 0}]);
     },
     
     /**
