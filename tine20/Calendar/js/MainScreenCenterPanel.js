@@ -126,6 +126,16 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         for (var i=this.changeViewActions.length-1; i>=0; i--) {
             this.changeViewActions[i].getEl().parent().insertAfter(spacerEl);
         }
+        
+        panel.getStore().load({});
+    },
+    
+    updateView: function(which) {
+        var panel = this.getCalendarPanel(which);
+        var period = panel.getTopToolbar().getPeriod();
+        
+        panel.getView().updatePeriode(period);
+        panel.getStore().load({});
     },
     
     /**
@@ -137,10 +147,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     getCalendarPanel: function(which) {
         if (! this.calendarPanels[which]) {
             // @todo make this a Ext.data.Store
-            var store = new Ext.data.JsonStore({
+            var store = new Ext.data.Store({
+                autoLoad: true,
                 id: 'id',
-                fields: Tine.Calendar.EventArray,
-                data: []
+                fields: Tine.Calendar.Event,
+                proxy: Tine.Calendar.backend,
+                reader: new Ext.data.JsonReader({})//, //Tine.Calendar.backend.getReader(),
             });
             
             var tbar = new Tine.Calendar.PagingToolbar({
@@ -156,7 +168,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                 tbar.addButton(this.changeViewActions[i]);
                             }
                         }
-                    }
+                    },
+                    change: this.updateView.createDelegate(this, [which])
                 }
             });
             
