@@ -68,7 +68,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: this.app.i18n._('Body'),
             name: 'body',
             allowBlank: true,
-            height: 280,
+            // TODO try to use autoheight
+            height: 200,
             // TODO add signature style
             // TODO move css definitions to extern stylesheet?
             getDocMarkup: function(){
