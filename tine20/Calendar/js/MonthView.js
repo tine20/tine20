@@ -151,8 +151,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         // update weeks
         var wkCells = Ext.DomQuery.select('td[class=cal-monthview-wkcell]', this.mainBody.dom);
         for(var i=0; i<wkCells.length; i++) {
-            if (this.dateMesh.length > i*7) {
-                wkCells[i].innerHTML = this.dateMesh[i*7].getWeekOfYear();
+            if (this.dateMesh.length > i*7 +1) {
+                // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
+                wkCells[i].innerHTML = this.dateMesh[i*7 +1].getWeekOfYear();
             }
         }
         
