@@ -349,6 +349,7 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
                     select: function(field) {
                         if (typeof(field.getValue) == 'function') {
                             this.update(field.getValue());
+                            this.fireEvent('change', this, 'month', this.getPeriod());
                         }
                     }
                 }

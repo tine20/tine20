@@ -13,7 +13,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {String} activeView
      */
-    activeView: 'week',
+    activeView: 'month',
     
     calendarPanels: {},
     
@@ -188,6 +188,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         numOfDays: 7
                     });
                     break;
+                case 'month':
+                    view = new Tine.Calendar.MonthView({
+                        periode: tbar.getPeriod()
+                    });
             }
             
             this.calendarPanels[which] = new Tine.Calendar.CalendarPanel({

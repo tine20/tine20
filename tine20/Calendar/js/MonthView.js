@@ -36,7 +36,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @cfg {Date} startDate
      * start date
      */
-    startDate: new Date(),
+    startDate: new Date().clearTime(),
     /**
      * @cfg {String} newEventSummary
      */
@@ -71,13 +71,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
     init: function(calPanel) {
         this.calPanel = calPanel;
-        
-        this.calcDateMesh(this.startDate);
-        
-        this.startDate.setHours(0);
-        this.startDate.setMinutes(0);
-        this.startDate.setSeconds(0);
-        
         //this.initData(calPanel.store);
     },
     
@@ -99,6 +92,17 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
 
         this.dateMesh = mesh;
+    },
+    
+    /**
+     * returns periode of currently displayed month
+     * @return {Object}
+     */
+    getPeriode: function() {
+        return {
+            from: this.dateMesh[0],
+            until: this.dateMesh[this.dateMesh.length -1]
+        };    
     },
     
     /**
@@ -129,12 +133,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
     updatePeriode: function(period) {
         this.toDay = new Date().clearTime();
+        this.startDate = period.from;
+        this.calcDateMesh();
 
         // update dates and bg colors
         var dayCells = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom);
         var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-inner]', this.mainBody.dom);
         for(var i=0; i<this.dateMesh.length; i++) {
-            dayCells[i].style.background = this.dateMesh[i].getMonth() == this.toDay.getMonth() ? 
+            dayCells[i].style.background = this.dateMesh[i].getMonth() == this.startDate.getMonth() ? 
                 this.dateMesh[i].getDate() == this.toDay.getDate() ? '#DFECFB' : '#FFFFFF' : '#F9F9F9';
                 
             dayHeaders[i].innerHTML = this.dateMesh[i].format('j');
@@ -143,8 +149,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         // update weeks
         var wkCells = Ext.DomQuery.select('td[class=cal-monthview-wkcell]', this.mainBody.dom);
         for(var i=0; i<wkCells.length; i++) {
-            wkCells[i].innerHTML = this.dateMesh[0].getWeekOfYear() + i;
+            if (this.dateMesh.length > i*7) {
+                wkCells[i].innerHTML = this.dateMesh[i*7].getWeekOfYear();
+            }
         }
+        
+        // show/hide last row
+        this.mainBody.last().setStyle({display: this.dateMesh.length > 35 ? 'table-row' : 'none'});
     },
     
     render: function() {
@@ -184,7 +195,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
     afterRender: function() {
         this.initElements();
-        this.updatePeriode();
+        this.updatePeriode({from: this.startDate});
     },
     
     layout: function() {
