@@ -93,6 +93,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     updatePeriode: function(periode) {
         this.startDate = periode.from;
         this.updateDayHeaders();
+        
+        var tbar = this.calPanel.getTopToolbar();
+        if (tbar) {
+            tbar.periodPicker.update(this.startDate);
+        }
     },
     
     /**

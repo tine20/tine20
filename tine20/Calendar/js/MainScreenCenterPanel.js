@@ -15,6 +15,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     activeView: 'month',
     
+    startDate: new Date().clearTime(),
+    
     calendarPanels: {},
     
     border: false,
@@ -107,7 +109,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
     },
     
-    changeView: function(view) {
+    changeView: function(view, startDate) {
+        if (startDate && Ext.isDate(startDate)) {
+            this.startDate = startDate.clone()
+        }
+        
         var panel = this.getCalendarPanel(view);
         var cardPanel = this.items.first();
         
@@ -122,11 +128,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         // move around changeViewButtons
         var tbar = panel.getTopToolbar();
         var spacerEl = Ext.fly(Ext.DomQuery.selectNode('div[class=ytb-spacer]', tbar.el.dom)).parent();
-        
         for (var i=this.changeViewActions.length-1; i>=0; i--) {
             this.changeViewActions[i].getEl().parent().insertAfter(spacerEl);
         }
+        this['show' + Ext.util.Format.capitalize(view) +  'View'].toggle(true);
         
+        panel.getView().updatePeriode({from: this.startDate});
         panel.getStore().load({});
     },
     
@@ -193,6 +200,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         periode: tbar.getPeriod()
                     });
             }
+            
+            view.on('changeView', this.changeView, this);
             
             this.calendarPanels[which] = new Tine.Calendar.CalendarPanel({
                 tbar: tbar,

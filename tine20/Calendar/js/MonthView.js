@@ -15,6 +15,13 @@ Tine.Calendar.MonthView = function(config){
     
     this.addEvents(
         /**
+         * @event changeView
+         * fired if user wants to change view
+         * @param {String} requested view name
+         * @param {mixed} start param of requested view
+         */
+        'changeView',
+        /**
          * @event addEvent
          * fired when a new event got inserted
          * 
@@ -105,6 +112,30 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         };    
     },
     
+    onDblClick: function(e, target) {
+        e.stopEvent();
+        switch(target.className) {
+            case 'cal-monthview-wkcell':
+                var wkIndex = Ext.DomQuery.select('td[class=cal-monthview-wkcell]', this.mainBody.dom).indexOf(target);
+                var startDate = this.dateMesh[7*wkIndex];
+                this.fireEvent('changeView', 'week', startDate);
+                break;
+                
+            case 'cal-monthview-dayheader-inner':
+                var dateIndex = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom).indexOf(target.parentNode.parentNode);
+                var date = this.dateMesh[dateIndex];
+                this.fireEvent('changeView', 'day', date);
+                break;
+                
+            case 'cal-monthview-daycell':
+                var dateIndex = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom).indexOf(target);
+                var date = this.dateMesh[dateIndex];
+                console.log("Create event at: " + date.format('Y-m-d'));
+                break;
+        }
+        
+        //console.log(Ext.get(target));
+    },
     /**
      * @private
      * @param {Ext.data.Store} ds
@@ -154,6 +185,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             if (this.dateMesh.length > i*7 +1) {
                 // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
                 wkCells[i].innerHTML = this.dateMesh[i*7 +1].getWeekOfYear();
+                //Ext.fly(wkCells[i]).unselectable(); // this supresses events ;-(
             }
         }
         
@@ -164,7 +196,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     render: function() {
         var m = [
              '<table class="cal-monthview-inner" cellspacing="0"><thead><tr class="cal-monthview-inner-header">',
-             "<th class='cal-monthview-wkcell-header'><span>", this.calWeekString, "</span></th>"
+             "<th class='cal-monthview-wkcell-header'><span >", this.calWeekString, "</span></th>"
          ];
         for(var i = 0; i < 7; i++){
             var d = this.startDay+i;
@@ -198,6 +230,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
     afterRender: function() {
         this.initElements();
+        this.el.on('dblclick', this.onDblClick, this);
+        
         this.updatePeriode({from: this.startDate});
     },
     

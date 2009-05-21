@@ -27,7 +27,6 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      * @cfg {Bool} border
      */
     border: false,
-
     /**
      * @private
      */
@@ -36,6 +35,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         this.autoScroll = false;
         this.autoWidth = false;
+        
+        this.relayEvents(this.view, 'changeView');
     },
     
     getView: function() {
