@@ -30,6 +30,7 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Calendar/js/Model.js',
             'Calendar/js/CalendarPanel.js',
             'Calendar/js/DaysView.js',
+            'Calendar/js/MonthView.js',
             'Calendar/js/Calendar.js',
             'Calendar/js/PagingToolbar.js',
             'Calendar/js/MainScreenCenterPanel.js',
