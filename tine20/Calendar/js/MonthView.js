@@ -173,7 +173,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         for(var i=0; i<this.dateMesh.length; i++) {
             dayCells[i].style.background = this.dateMesh[i].getMonth() == this.startDate.getMonth() ? '#FFFFFF' : '#F9F9F9';
             if (this.dateMesh[i].getTime() == this.toDay.getTime()) {
-                dayCells[i].style.background = '#DFECFB';
+                dayCells[i].style.background = '#EBF3FD';
             }
                 
             dayHeaders[i].innerHTML = this.dateMesh[i].format('j');
