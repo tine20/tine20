@@ -22,6 +22,10 @@ Tine.Calendar.MonthView = function(config){
          */
         'changeView',
         /**
+         * @event changePeriod
+         */
+        'changePeriod',
+        /**
          * @event addEvent
          * fired when a new event got inserted
          * 
@@ -102,10 +106,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     },
     
     /**
-     * returns periode of currently displayed month
+     * returns period of currently displayed month
      * @return {Object}
      */
-    getPeriode: function() {
+    getPeriod: function() {
         return {
             from: this.dateMesh[0],
             until: this.dateMesh[this.dateMesh.length -1]
@@ -162,7 +166,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.ds = ds;
     },
     
-    updatePeriode: function(period) {
+    updatePeriod: function(period) {
         this.toDay = new Date().clearTime();
         this.startDate = period.from;
         this.calcDateMesh();
@@ -232,7 +236,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.initElements();
         this.el.on('dblclick', this.onDblClick, this);
         
-        this.updatePeriode({from: this.startDate});
+        this.updatePeriod({from: this.startDate});
     },
     
     layout: function() {

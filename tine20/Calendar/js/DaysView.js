@@ -87,13 +87,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     ds: null,
     
     /**
-     * updates periode to display
-     * @param {Array} periode
+     * updates period to display
+     * @param {Array} period
      */
-    updatePeriode: function(periode) {
+    updatePeriod: function(period) {
         this.toDay = new Date().clearTime();
         
-        this.startDate = periode.from;
+        this.startDate = period.from;
         
         var tbar = this.calPanel.getTopToolbar();
         if (tbar) {

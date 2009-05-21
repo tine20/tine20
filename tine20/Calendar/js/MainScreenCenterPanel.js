@@ -133,7 +133,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         this['show' + Ext.util.Format.capitalize(view) +  'View'].toggle(true);
         
-        panel.getView().updatePeriode({from: this.startDate});
+        panel.getView().updatePeriod({from: this.startDate});
         panel.getStore().load({});
     },
     
@@ -141,7 +141,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var panel = this.getCalendarPanel(which);
         var period = panel.getTopToolbar().getPeriod();
         
-        panel.getView().updatePeriode(period);
+        panel.getView().updatePeriod(period);
         panel.getStore().load({});
     },
     
@@ -197,7 +197,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     break;
                 case 'month':
                     view = new Tine.Calendar.MonthView({
-                        periode: tbar.getPeriod()
+                        period: tbar.getPeriod()
                     });
             }
             
