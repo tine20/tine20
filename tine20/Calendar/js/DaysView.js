@@ -717,6 +717,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }, newId);
             
             this.createEvent(e, event);
+        } else if (target.className == 'cal-daysviewpanel-dayheader-day'){
+            var dayHeaders = Ext.DomQuery.select('div[class=cal-daysviewpanel-dayheader-day]', this.innerHd);
+            var date = this.startDate.add(Date.DAY, dayHeaders.indexOf(target));
+            this.fireEvent('changeView', 'day', date);
         }
     },
     
