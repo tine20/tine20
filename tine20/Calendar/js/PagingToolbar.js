@@ -62,13 +62,17 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
      */
     onRender: function(ct, position) {
         Tine.Calendar.PagingToolbar.superclass.onRender.call(this, ct, position);
-        
         this.prevBtn = this.addButton({
             tooltip: Ext.PagingToolbar.prototype.prevText,
             iconCls: "x-tbar-page-prev",
             handler: this.onClick.createDelegate(this, ["prev"])
         });
         this.addSeparator();
+        this.todayBtn = this.addButton({
+            text: Ext.DatePicker.prototype.todayText,
+            iconCls: 'cal-today-action',
+            handler: this.onClick.createDelegate(this, ["today"])
+        });
         this.periodPicker.render();
         this.addSeparator();
         this.nextBtn = this.addButton({
@@ -100,6 +104,7 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
      */
     onClick: function(which) {
         switch(which) {
+            case 'today':
             case 'next':
             case 'prev':
                 this.periodPicker[which]();
@@ -199,6 +204,7 @@ Ext.extend(Tine.Calendar.PagingToolbar.AbstractPeriodPicker, Ext.util.Observable
     render:     function() {},
     prev:       function() {},
     next:       function() {},
+    today:      function() {this.update(new Date().clearTime());},
     getPeriod:  function() {}
 });
 
