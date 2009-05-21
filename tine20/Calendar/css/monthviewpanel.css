@@ -50,6 +50,10 @@
     height: 23px;
 }
 
+.cal-monthview-inner-header tr, .cal-monthview-inner-header th, .cal-monthview-inner-header span, .cal-monthview-inner-header thead {
+    height: 23px;
+}
+
 .cal-monthview-dayheader {
 	position: relative;
     width: 100%;
@@ -63,3 +67,6 @@
 	text-align:right !important;
 }
 
+.cal-monthview-wkrow-hide {
+	display: none;
+}

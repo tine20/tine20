@@ -136,7 +136,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             case 'cal-monthview-daycell':
                 var dateIndex = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom).indexOf(target);
                 var date = this.dateMesh[dateIndex];
-                console.log("Create event at: " + date.format('Y-m-d'));
+                //console.log("Create event at: " + date.format('Y-m-d'));
                 break;
         }
         
@@ -196,14 +196,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
         
         // show/hide last row
-        this.mainBody.last().setStyle({display: this.dateMesh.length > 35 ? 'table-row' : 'none'});
+        this.mainBody.last()[(this.dateMesh.length > 35 ? 'remove' : 'add') + 'Class']('cal-monthview-wkrow-hide');
         
         this.fireEvent('changePeriod', period);
     },
     
     render: function() {
         var m = [
-             '<table class="cal-monthview-inner" cellspacing="0"><thead><tr class="cal-monthview-inner-header">',
+             '<table class="cal-monthview-inner" cellspacing="0"><thead><tr class="cal-monthview-inner-header" height="23px">',
              "<th class='cal-monthview-wkcell-header'><span >", this.calWeekString, "</span></th>"
          ];
         for(var i = 0; i < 7; i++){
