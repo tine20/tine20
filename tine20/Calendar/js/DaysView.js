@@ -91,6 +91,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @param {Array} periode
      */
     updatePeriode: function(periode) {
+        this.toDay = new Date().clearTime();
+        
         this.startDate = periode.from;
         this.updateDayHeaders();
         
@@ -1081,8 +1083,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     updateDayHeaders: function() {
         var dayHeaders = Ext.DomQuery.select('div[class=cal-daysviewpanel-dayheader-day]', this.innerHd);
         
-        for (var i=0; i<dayHeaders.length; i++) {
-            Ext.fly(dayHeaders[i]).update(this.startDate.add(Date.DAY, i).format(this.dayFormatString));
+        for (var i=0, date, isToDay, headerEl, dayColEl; i<dayHeaders.length; i++) {
+            
+            date = this.startDate.add(Date.DAY, i);
+            isToDay = date.getTime() == this.toDay.getTime();
+            
+            headerEl = Ext.fly(dayHeaders[i]);
+            
+            headerEl.update(date.format(this.dayFormatString));
+            headerEl.parent()[(isToDay ? 'add' : 'remove') + 'Class']('cal-daysviewpanel-dayheader-today');
+            Ext.fly(this.dayCols[i])[(isToDay ? 'add' : 'remove') + 'Class']('cal-daysviewpanel-body-daycolumn-today');
         }
     },
     
