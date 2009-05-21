@@ -26,7 +26,7 @@
 
 .cal-monthview-wkcell:hover{
 	background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
-    /*background:#EBF3FD url(../../library/ExtJS/resources/images/gray/toolbar/btn-over-bg.gif) repeat-x scroll left top;*/
+	cursor: pointer;
 }
 
 .cal-monthview-wkcell-header {
@@ -41,6 +41,7 @@
 
 .cal-monthview-dayheader-inner:hover {
     background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
+    cursor: pointer;
 }
 
 .cal-monthview-inner-header, cal-monthview-wkcell-header {
