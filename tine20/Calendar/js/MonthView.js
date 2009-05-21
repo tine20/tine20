@@ -61,6 +61,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     startDay: Ext.DatePicker.prototype.startDay,
     /**
+     * @private {Date} toDay
+     */
+    toDay: null,
+    /**
      * @private {Array} dateMesh
      */
     dateMesh: null,
@@ -88,12 +92,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
         
         while(d.getMonth() != this.startDate.add(Date.MONTH, 1).getMonth()) {
-            var meshRow = [];
             for (var i=0; i<7; i++) {
-                meshRow.push(d.add(Date.DAY, i).clone());
+                mesh.push(d.add(Date.DAY, i).clone());
             }
             d = d.add(Date.DAY, 7);
-            mesh.push(meshRow);
         }
 
         this.dateMesh = mesh;
@@ -126,16 +128,29 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     },
     
     updatePeriode: function(period) {
-        var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-inner]');
-        for(var i=0; i<dayHeaders.length; i++) {
-            dayHeaders[i].innerHTML = i;
+        this.toDay = new Date().clearTime();
+
+        // update dates and bg colors
+        var dayCells = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom);
+        var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-inner]', this.mainBody.dom);
+        for(var i=0; i<this.dateMesh.length; i++) {
+            dayCells[i].style.background = this.dateMesh[i].getMonth() == this.toDay.getMonth() ? 
+                this.dateMesh[i].getDate() == this.toDay.getDate() ? '#DFECFB' : '#FFFFFF' : '#F9F9F9';
+                
+            dayHeaders[i].innerHTML = this.dateMesh[i].format('j');
+        }
+        
+        // update weeks
+        var wkCells = Ext.DomQuery.select('td[class=cal-monthview-wkcell]', this.mainBody.dom);
+        for(var i=0; i<wkCells.length; i++) {
+            wkCells[i].innerHTML = this.dateMesh[0].getWeekOfYear() + i;
         }
     },
     
     render: function() {
         var m = [
-             '<table class="cal-monthview-inner" cellspacing="0"><thead><tr>',
-             "<th class='cal-monthview-wkcell'><span>", this.calWeekString, "</span></th>"
+             '<table class="cal-monthview-inner" cellspacing="0"><thead><tr class="cal-monthview-inner-header">',
+             "<th class='cal-monthview-wkcell-header'><span>", this.calWeekString, "</span></th>"
          ];
         for(var i = 0; i < 7; i++){
             var d = this.startDay+i;
