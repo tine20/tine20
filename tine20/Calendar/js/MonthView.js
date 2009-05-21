@@ -140,8 +140,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var dayCells = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom);
         var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-inner]', this.mainBody.dom);
         for(var i=0; i<this.dateMesh.length; i++) {
-            dayCells[i].style.background = this.dateMesh[i].getMonth() == this.startDate.getMonth() ? 
-                this.dateMesh[i].getDate() == this.toDay.getDate() ? '#DFECFB' : '#FFFFFF' : '#F9F9F9';
+            dayCells[i].style.background = this.dateMesh[i].getMonth() == this.startDate.getMonth() ? '#FFFFFF' : '#F9F9F9';
+            if (this.dateMesh[i].getTime() == this.toDay.getTime()) {
+                dayCells[i].style.background = '#DFECFB';
+            }
                 
             dayHeaders[i].innerHTML = this.dateMesh[i].format('j');
         }
