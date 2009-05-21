@@ -285,7 +285,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         if (e && e.getKey() == e.ENTER) {
             return field.blur();
         }
-        var diff = field.getValue() - this.dtStart.getWeekOfYear()
+        var diff = field.getValue() - this.dtStart.getWeekOfYear() - parseInt(this.dtStart.getDay() < 1 ? 1 : 0, 10);
         if (diff !== 0) {
             this.update(this.dtStart.add(Date.DAY, diff * 7))
             this.fireEvent('change', this, 'week', this.getPeriod());
