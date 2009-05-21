@@ -23,6 +23,8 @@ Tine.Calendar.MonthView = function(config){
         'changeView',
         /**
          * @event changePeriod
+         * fired when period changed
+         * @param {Object} period
          */
         'changePeriod',
         /**
@@ -195,6 +197,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         // show/hide last row
         this.mainBody.last().setStyle({display: this.dateMesh.length > 35 ? 'table-row' : 'none'});
+        
+        this.fireEvent('changePeriod', period);
     },
     
     render: function() {

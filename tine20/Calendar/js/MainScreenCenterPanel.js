@@ -202,6 +202,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
             
             view.on('changeView', this.changeView, this);
+            view.on('changePeriod', function(period) {
+                this.startDate = period.from;
+            }, this);
             
             this.calendarPanels[which] = new Tine.Calendar.CalendarPanel({
                 tbar: tbar,

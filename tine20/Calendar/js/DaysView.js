@@ -15,6 +15,19 @@ Tine.Calendar.DaysView = function(config){
     
     this.addEvents(
         /**
+         * @event changeView
+         * fired if user wants to change view
+         * @param {String} requested view name
+         * @param {mixed} start param of requested view
+         */
+        'changeView',
+        /**
+         * @event changePeriod
+         * fired when period changed
+         * @param {Object} period
+         */
+        'changePeriod',
+        /**
          * @event addEvent
          * fired when a new event got inserted
          * 
@@ -102,6 +115,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         this.updateDayHeaders();
+        this.fireEvent('changePeriod', period);
     },
     
     /**
