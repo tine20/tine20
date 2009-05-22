@@ -59,6 +59,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     calWeekString: 'WK',
     /**
+     * @cfg String moreString
+     */
+    moreString: '{0} more...',
+    /**
      * @cfg {Array} monthNames
      * An array of textual month names which can be overriden for localization support (defaults to Date.monthNames)
      */
@@ -367,9 +371,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     }
                 }
                 
-                if (hideCount > 0) {
-                    console.log(hideCount + 'events hidden in this cell');
-                }
+                this.dayCells[i].firstChild.firstChild.innerHTML = hideCount > 0 ? String.format(this.moreString, hideCount) : '';
             }
         }
     },
@@ -410,7 +412,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 this.fireEvent('changeView', 'week', startDate);
                 break;
                 
-            case 'cal-monthview-dayheader-inner':
+            case 'cal-monthview-dayheader-date':
+            case 'cal-monthview-dayheader-more':
                 var dateIndex = this.dayCells.indexOf(target.parentNode.parentNode);
                 var date = this.dateMesh[dateIndex];
                 this.fireEvent('changeView', 'day', date);
@@ -498,7 +501,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             m[m.length] = 
                 '<td class="cal-monthview-daycell">' +
                     '<div class="cal-monthview-dayheader">' +
-                        '<div class="cal-monthview-dayheader-inner"></div>' +
+                        '<div class="cal-monthview-dayheader-more"></div>' +
+                        '<div class="cal-monthview-dayheader-date"></div>' +
                     '</div>' +
                     '<div class="cal-monthview-daybody"><div /></div>' +
                 '</td>';
@@ -519,7 +523,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.calcDateMesh();
 
         // update dates and bg colors
-        var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-inner]', this.mainBody.dom);
+        var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-date]', this.mainBody.dom);
         for(var i=0; i<this.dateMesh.length; i++) {
             this.dayCells[i].style.background = this.dateMesh[i].getMonth() == this.startDate.getMonth() ? '#FFFFFF' : '#F9F9F9';
             if (this.dateMesh[i].getTime() == this.toDay.getTime()) {

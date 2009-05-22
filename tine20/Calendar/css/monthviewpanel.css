@@ -39,7 +39,7 @@
     border-top: 1px solid #E1E1E1;
 }
 
-.cal-monthview-dayheader-inner:hover {
+.cal-monthview-dayheader:hover {
     background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
     cursor: pointer;
 }
@@ -56,12 +56,21 @@ cal-monthview-wkcell-header {
     width: 100%;
 }
 
-.cal-monthview-dayheader-inner {
+.cal-monthview-dayheader-more {
+    position: absolute;
+    padding: 2px 5px;
+    border-collapse: separate;
+    color: #233D6D;
+    cursor: pointer;
+    text-align: left !important;
+}
+
+.cal-monthview-dayheader-date {
 	padding: 2px 5px;
 	border-collapse: separate;
-	color:#233D6D;
-	cursor:default;
-	text-align:right !important;
+	color: #233D6D;
+	cursor: pointer;
+	text-align: right !important;
 }
 
 .cal-monthview-daybody {
