@@ -7,9 +7,8 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
+ * TODO         reset record id of details grid on store reload/update
  * TODO         finish reply all implementation and activate button again
- * TODO         add signature
- * TODO         improve attachment download
  */
  
 Ext.namespace('Tine.Felamimail');

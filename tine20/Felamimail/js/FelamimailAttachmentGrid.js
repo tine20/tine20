@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         make it work
  * TODO         init attachments (on forward)
  */
  
@@ -51,9 +50,65 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
         this.initToolbar();
         this.initStore();
         this.initColumnModel();
+        this.initSelectionModel();
         
         Tine.Felamimail.AttachmentGrid.superclass.initComponent.call(this);
     },
+    
+    /**************************************** event handlers ***************************************/
+    
+    /**
+     * button event handlers
+     */
+    handlers: {   
+        
+        /**
+         * upload new attachment and add to store
+         * 
+         * @param {} _button
+         * @param {} _event
+         */
+        add: function(_button, _event) {
+
+            var input = _button.detachInputFile();
+            var uploader = new Ext.ux.file.Uploader({
+                input: input
+            });
+            uploader.on('uploadcomplete', function(uploader, file){
+                this.loadMask.hide();
+                
+                var attachment = new Tine.Felamimail.Model.Attachment(file.get('tempFile'));
+                this.store.add(attachment);
+                
+            }, this);
+            uploader.on('uploadfailure', this.onUploadFail, this);
+            
+            this.loadMask.show();
+            uploader.upload();
+        },
+
+        /**
+         * remove attachment from store
+         * 
+         * @param {} _button
+         * @param {} _event
+         */
+        remove: function(_button, _event) {
+            var selectedRows = this.getSelectionModel().getSelections();
+            for (var i = 0; i < selectedRows.length; ++i) {
+                this.store.remove(selectedRows[i]);
+            }                       
+        }
+    },
+    
+    /**
+     * 
+     */
+    onUploadFail: function() {
+        Ext.MessageBox.alert(_('Upload Failed'), _('Could not upload attachment. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
+    },
+
+    /**************************************** init funcs ***************************************/
     
     /**
      * init toolbar
@@ -71,6 +126,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
             text: _('Remove Attachment'),
             iconCls: 'actionRemove',
             scope: this,
+            disabled: true,
             handler: this.handlers.remove
         });
         
@@ -97,7 +153,6 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
             this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
         }
         */
-        this.store.on('update', this.onUpdateStore, this);
     },
     
     /**
@@ -107,10 +162,10 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
         this.cm = new Ext.grid.ColumnModel([
             {
                 resizable: true,
-                id: 'filename',
-                dataIndex: 'filename',
+                id: 'name',
+                dataIndex: 'name',
                 width: 300,
-                header: 'filename'
+                header: 'name'
             },{
                 resizable: true,
                 id: 'size',
@@ -124,77 +179,21 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
                 dataIndex: 'type',
                 width: 100,
                 header: 'type'
-                // TODO show type icon
+                // TODO show type icon?
                 //renderer: Ext.util.Format.fileSize
             }
         ]);
     },
 
     /**
-     * event handlers
+     * init sel model
      */
-    handlers: {   
+    initSelectionModel: function() {
+        this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         
-        /**
-         * upload new attachment and add to store
-         * 
-         * @param {} _button
-         * @param {} _event
-         */
-        add: function(_button, _event) {
-
-            var input = _button.detachInputFile();
-            var uploader = new Ext.ux.file.Uploader({
-                input: input
-            });
-            uploader.on('uploadcomplete', function(uploader, file){
-                //console.log(record);
-                this.loadMask.hide();
-                
-                var file = new Tine.Felamimail.Model.Attachment({
-                    filename: file.get('tempFile').name,
-                    size: file.get('tempFile').size,
-                    type: file.get('tempFile').type
-                });
-                this.store.add(file);
-                
-            }, this);
-            uploader.on('uploadfailure', this.onUploadFail, this);
-            
-            this.loadMask.show();
-            uploader.upload();
-        },
-
-        /**
-         * remove attachment from store
-         * 
-         * @param {} _button
-         * @param {} _event
-         */
-        remove: function(_button, _event) {
-            console.log('remove');
-        }
-    },
-    
-    /**
-     * store has been updated
-     * -> update record attachments
-     * 
-     * @param {} store
-     * @param {} record
-     * @param {} operation
-     * 
-     * TODO implement
-     */
-    onUpdateStore: function(store, record, operation)
-    {
-        
-    },
-
-    /**
-     * @private
-     */
-    onUploadFail: function() {
-        Ext.MessageBox.alert(_('Upload Failed'), _('Could not upload attachment. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
+        this.selModel.on('selectionchange', function(selModel) {
+            var rowCount = selModel.getCount();
+            this.actions.remove.setDisabled(rowCount == 0);
+        }, this);
     }
 });

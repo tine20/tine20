@@ -10,6 +10,7 @@
  * TODO         improve attachment download
  * TODO         add preference to show mails in html or text
  * TODO         replace 'mailto:' links and email addresses in message body with 'open compose tine mail dialog'
+ * TODO         load record again when filter changed
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -23,12 +24,14 @@ Ext.namespace('Tine.Felamimail');
 Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     defaultHeight: 300,
+    currentId: null,
     
     /**
      * init
      */
     initComponent: function() {
-        
+
+        // init detail template
         this.initTemplate();
         
         // use default Tpl for default and multi view
@@ -42,26 +45,34 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     },
         
     /**
-     * update details
+     * (on) update details
      * 
      * @param {} record
      * @param {} body
      */
     updateDetails: function(record, body) {
-        Tine.Felamimail.messageBackend.loadRecord(record, {
-            scope: this,
-            success: function(message) {
-                // save more values?
-                record.data.body    = message.data.body;                            
-                record.data.flags   = message.data.flags;
-                record.data.headers = message.data.headers;
-                
-                this.tpl.overwrite(body, message.data);
-                this.getEl().down('div').down('div').scrollTo('top', 0, false);
-                this.getLoadMask().hide();
-            }
-        });
-        this.getLoadMask().show();
+        // check if new record has been selected
+        if (record.id !== this.currentId) {                
+            this.currentId = record.id;
+            Tine.Felamimail.messageBackend.loadRecord(record, {
+                scope: this,
+                success: function(message) {
+                    // save more values?
+                    record.data.body        = message.data.body;                            
+                    record.data.flags       = message.data.flags;
+                    record.data.headers     = message.data.headers;
+                    record.data.attachments = message.data.attachments;
+                    
+                    this.tpl.overwrite(body, message.data);
+                    this.getEl().down('div').down('div').scrollTo('top', 0, false);
+                    this.getLoadMask().hide();
+                }
+            });
+            this.getLoadMask().show();
+            
+        } else {
+            this.tpl.overwrite(body, record.data);
+        }
     },
     
     /**

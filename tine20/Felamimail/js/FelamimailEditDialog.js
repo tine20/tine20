@@ -43,12 +43,36 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.onRecordLoad();
     },
     
+    /**
+     * on render
+     * 
+     * @param {} ct
+     * @param {} position
+     * 
+     * TODO use this to set initial window title?
+     */
     onRender: function(ct, position){
         Tine.Felamimail.MessageEditDialog.superclass.onRender.call(this, ct, position);
         
         //this.window.setTitle(this.record.get('subject'));
     },
         
+    /**
+     * execuded when record gets updated from form
+     * - add attachments to record here
+     * 
+     * TODO add recipients here as well?
+     */
+    onRecordUpdate: function() {
+
+        this.record.data.attachments = [];
+        this.attachmentGrid.store.each(function(record) {
+            this.record.data.attachments.push(record.data);
+        }, this);
+        
+        Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
+    },
+    
     /**
      * returns dialog
      * 

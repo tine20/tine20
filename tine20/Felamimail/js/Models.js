@@ -96,7 +96,7 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
  * record definition
  */
 Tine.Felamimail.Model.Attachment = Tine.Tinebase.data.Record.create([
-   { name: 'filename' },
+   { name: 'name' },
    { name: 'size' },
    { name: 'path' },
    { name: 'type' }

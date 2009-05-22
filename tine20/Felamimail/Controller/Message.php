@@ -319,6 +319,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * 
+     * @todo add attachments 
      * @todo set In-Reply-To header for replies (which message id?)
      * @todo add mail & name from account settings
      * @todo add smtp host from account settings
@@ -329,7 +330,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
         $mail = new Tinebase_Mail();
         
@@ -355,6 +356,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // set subject & date
         $mail->setSubject($_message->subject);
         $mail->setDate(Zend_Date::now('en_US')->toString(Felamimail_Model_Message::DATE_FORMAT));
+        
+        // @todo add attachments
+        foreach ($_message->attachments as $attachment) {
+            //$attachmentPart = new Zend_Mail_Part();
+            //$mail->addAttachment($attachmentPart);
+        }
 
         // set transport + send mail
         if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
