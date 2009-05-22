@@ -84,10 +84,10 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         // layout helper
         event.duration = dtEndTs - dtStartTs;
         
-        var startIdx = this.tsToIdx(dtStart) +1;
-        var endIdx = this.tsToIdx(dtEndTs) -1;
+        var startIdx = this.tsToIdx(dtStart);// +1;
+        var endIdx = this.tsToIdx(dtEndTs);// -1;
         
-        for (var i=startIdx; i<=endIdx; i++) {
+        for (var i=Math.max(startIdx,0); i<=Math.min(endIdx, this.map.length-1); i++) {
             if (! Ext.isArray(this.map[i])) {
                 this.map[i] = [];
             }
@@ -176,6 +176,6 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      * @return {Number}
      */
     tsToIdx: function(ts) {
-        return Math.round((ts - this.dtStartTs) / this.dt);
+        return Math.floor((ts - this.dtStartTs) / this.dt);
     }
 };
