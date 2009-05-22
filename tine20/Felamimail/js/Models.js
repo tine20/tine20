@@ -90,3 +90,14 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
         from: 'default'
     };
 };
+
+/**
+ * @type {Tine.Tinebase.Message}
+ * record definition
+ */
+Tine.Felamimail.Model.Attachment = Tine.Tinebase.data.Record.create([
+   { name: 'filename' },
+   { name: 'size' },
+   { name: 'path' },
+   { name: 'type' }
+]);

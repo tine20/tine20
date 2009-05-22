@@ -36,18 +36,19 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     /**
      * config values
      */
-    height: 80,
+    height: 100,
     header: false,
     frame: true,
     border: false,
     deferredRender: false,
+    loadMask: true,
     
     /**
      * init
      */
     initComponent: function() {
         
-        //this.initToolbar();
+        this.initToolbar();
         this.initStore();
         this.initColumnModel();
         
@@ -62,10 +63,11 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
             text: _('Add Attachment'),
             iconCls: 'actionAdd',
             scope: this,
+            plugins: [new Ext.ux.file.BrowsePlugin({})],
             handler: this.handlers.add
         });
 
-        this.actions.upload = new Ext.Action({
+        this.actions.remove = new Ext.Action({
             text: _('Remove Attachment'),
             iconCls: 'actionRemove',
             scope: this,
@@ -83,7 +85,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     initStore: function() {
         this.store = new Ext.data.SimpleStore({
-            fields   : ['filename', 'size']
+            fields: Tine.Felamimail.Model.Attachment
         });
         
         // init attachments (on forward)
@@ -108,16 +110,22 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
                 id: 'filename',
                 dataIndex: 'filename',
                 width: 300,
-                menuDisabled: true,
                 header: 'filename'
             },{
                 resizable: true,
-                menuDisabled: true,
                 id: 'size',
                 dataIndex: 'size',
                 width: 100,
                 header: 'size',
                 renderer: Ext.util.Format.fileSize
+            },{
+                resizable: true,
+                id: 'type',
+                dataIndex: 'type',
+                width: 100,
+                header: 'type'
+                // TODO show type icon
+                //renderer: Ext.util.Format.fileSize
             }
         ]);
     },
@@ -127,10 +135,42 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     handlers: {   
         
+        /**
+         * upload new attachment and add to store
+         * 
+         * @param {} _button
+         * @param {} _event
+         */
         add: function(_button, _event) {
-            console.log('add');
+
+            var input = _button.detachInputFile();
+            var uploader = new Ext.ux.file.Uploader({
+                input: input
+            });
+            uploader.on('uploadcomplete', function(uploader, file){
+                //console.log(record);
+                this.loadMask.hide();
+                
+                var file = new Tine.Felamimail.Model.Attachment({
+                    filename: file.get('tempFile').name,
+                    size: file.get('tempFile').size,
+                    type: file.get('tempFile').type
+                });
+                this.store.add(file);
+                
+            }, this);
+            uploader.on('uploadfailure', this.onUploadFail, this);
+            
+            this.loadMask.show();
+            uploader.upload();
         },
 
+        /**
+         * remove attachment from store
+         * 
+         * @param {} _button
+         * @param {} _event
+         */
         remove: function(_button, _event) {
             console.log('remove');
         }
@@ -149,5 +189,12 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     onUpdateStore: function(store, record, operation)
     {
         
+    },
+
+    /**
+     * @private
+     */
+    onUploadFail: function() {
+        Ext.MessageBox.alert(_('Upload Failed'), _('Could not upload attachment. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
     }
 });
