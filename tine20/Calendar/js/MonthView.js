@@ -95,10 +95,18 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         this.updatePeriod({from: this.startDate});
         
+        // create parallels registry
+        this.parallelEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({
+            dtStart: this.dateMesh[0], 
+            dtEnd: this.dateMesh[this.dateMesh.length-1].add(Date.DAY, 1).add(Date.SECOND, -1),
+            granularity: 60*24
+        });
+        
         // calculate duration and parallels
         this.ds.each(function(event) {
             this.parallelEventsRegistry.register(event);
         }, this);
+        
         this.ds.each(this.insertEvent, this);
     },
     
@@ -127,7 +135,25 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @param {Date} date
      */
     getDayCellIndex: function(date) {
-        return Math.round((date.clearTime().getTime() - this.dateMesh[0].getTime())/Date.msDAY);
+        return Math.round((date.clearTime(true).getTime() - this.dateMesh[0].getTime())/Date.msDAY);
+    },
+    
+    /**
+     * @private returns a child div in requested position
+     * 
+     * @param {dom} dayCell
+     * @param {Number} pos
+     * @return {dom}
+     */
+    getEventPosEl: function(dayCell, pos) {
+        pos = Math.abs(pos);
+        
+        for (var i=dayCell.childNodes.length; i<=pos; i++) {
+            Ext.DomHelper.insertAfter(dayCell.lastChild, '<div />');
+            //console.log('inserted slice: ' + i);
+        }
+
+        return dayCell.childNodes[pos];
     },
     
     /**
@@ -147,7 +173,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     init: function(calPanel) {
         this.calPanel = calPanel;
+        
         this.initData(calPanel.store);
+        this.initTemplates();
     },
     
     /**
@@ -176,6 +204,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.ds = ds;
     },
     
+    /**
+     * @private
+     */
     initElements: function() {
         var E = Ext.Element;
 
@@ -188,15 +219,29 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.mainBody = new E(this.el.dom.lastChild);
         
         this.dayCells = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom);
+        this.dayBodyCells = Ext.DomQuery.select('td[class=cal-monthview-daybody]', this.mainBody.dom);
     },
     
     /**
      * inits all tempaltes of this view
-     *
+     */
     initTemplates: function() {
         var ts = this.templates || {};
     
-        ts.master = new Ext.XTemplate(
+        ts.allDayEvent = new Ext.XTemplate(
+            '<div id="{id}" class="cal-monthview-alldayevent {extraCls}" style="background-color: {bgColor}; border-color: {color};">' +
+                '<div <tpl if="values.showIcon">class="cal-event-icon {iconCls}"</tpl>>' +
+                    '<div class="cal-monthview-alldayevent-summary">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
+                '</div>' +
+            '</div>'
+        );
+        
+        ts.event = new Ext.XTemplate(
+            '<div id="{id}" class="cal-monthview-event {extraCls}" style="background-color: {bgColor}; border-color: {color};">' +
+                '<div class="cal-event-icon {iconCls}">' +
+                    '<div class="cal-monthview-event-summary">{startTime} {[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
+                '</div>' +
+            '</div>'
         );
         
         for(var k in ts){
@@ -209,8 +254,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
 
         this.templates = ts;
     },
-    */
     
+    /**
+     * @private
+     * @param {Tine.Calendar.Event} event
+     */
     insertEvent: function(event) {
         var dtStart = event.get('dtstart');
         var startCellNumber = this.getDayCellIndex(dtStart);
@@ -227,13 +275,52 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         var is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
         
-        if (is_all_day_event) {
+        var data = {
+            startTime: dtStart.format('H:i'),
+            summary: event.get('summary') + ' ' + pos
+        };
+        
+        for (var i=Math.max(startCellNumber, 0); i<=endCellNumber; i++) {
+            var dayBody = this.dayCells[i].lastChild;
+            var tmpl = this.templates.event;
+            data.extraCls = '';
             
-        } else {
-            var dayBodyEl = Ext.get(this.dayCells[startCellNumber].lastChild);
-            dayBodyEl.insertFirst({tag: 'div', html: event.get('summary')});
-            //console.log(dayBody);
+            if (is_all_day_event) {
+                tmpl = this.templates.allDayEvent;
+                
+                if (i > startCellNumber) {
+                    data.extraCls += ' cal-monthview-wholdedayevent-cropleft';
+                }
+                if (i < endCellNumber) {
+                    data.extraCls += ' cal-monthview-wholdedayevent-cropright';
+                }
+                
+                // show icon on startCell and leftCells
+                data.showIcon = i == startCellNumber || i%7 == 0;
+            } 
+            
+            var posEl = this.getEventPosEl(dayBody, pos);
+            var eventEl = tmpl.overwrite(posEl, data, true);
+            continue;
+            
+            // insert at right pos
+            var cn = dayBody.childNodes.length;
+            if (i == 33) {
+                console.log(pos);
+            }
+            if (cn == 0) {
+                var eventEl = tmpl.insertFirst(dayBody, data, true);
+            } else {
+                if (pos >= cn) {
+                    var eventEl = tmpl.insertAfter(dayBody.lastChild, data, true);
+                } else {
+                    var eventEl = tmpl.insertBefore(dayBody.childNodes[Math.max(pos, cn-1)], data, true);
+                }
+            }
+            
+            
         }
+        
         
         //console.log(event);
         //console.log(dayCell)
@@ -255,14 +342,18 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var hdCels = this.mainHd.dom.firstChild.childNodes;
         Ext.fly(hdCels[0]).setWidth(50);
         for (var i=1; i<hdCels.length; i++) {
-            Ext.fly(hdCels[i]).setWidth((vw-50)/7);
+            Ext.get(hdCels[i]).setWidth((vw-50)/7);
         }
         
         var calRows = this.mainBody.dom.childNodes;
         for (var i=0; i<calRows.length; i++) {
-            Ext.fly(calRows[i]).setHeight((csize.height - hsize.height)/ (this.dateMesh.length > 35 ? 6 : 5));
+            Ext.get(calRows[i]).setHeight((csize.height - hsize.height)/ (this.dateMesh.length > 35 ? 6 : 5));
         }
-         
+        
+        var dhsize = Ext.get(this.dayCells[0].firstChild).getSize();
+        for (var i=0; i<this.dayCells.length; i++) {
+            Ext.get(this.dayCells[i].lastChild).setHeight(((csize.height - hsize.height) / (this.dateMesh.length > 35 ? 6 : 5)) - dhsize.height);
+        }
     },
     
     /**
@@ -391,7 +482,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     '<div class="cal-monthview-dayheader">' +
                         '<div class="cal-monthview-dayheader-inner"></div>' +
                     '</div>' +
-                    '<div class="cal-monthview-daybody"></div>' +
+                    '<div class="cal-monthview-daybody"><div /></div>' +
                 '</td>';
         }
         m.push('</tr></tbody></table></td></tr>');
@@ -429,13 +520,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 //Ext.fly(wkCells[i]).unselectable(); // this supresses events ;-(
             }
         }
-        
-        // build parallels registry
-        this.parallelEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({
-            dtStart: this.dateMesh[0], 
-            dtEnd: this.dateMesh[this.dateMesh.length-1].add(Date.DAY, 1)/*,
-            granularity: 60*/
-        });
         
         this.layout();
         this.fireEvent('changePeriod', period);

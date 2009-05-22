@@ -21,3 +21,10 @@
 .cal-month-view {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-month.png) !important;
 }
+
+.cal-event-icon {
+    background-image:url(../../images/oxygen/16x16/actions/view-calendar-list.png) !important;
+    background-position: 0 0;
+	background-repeat:no-repeat;
+	padding: 2px 0px 2px 18px;
+}
