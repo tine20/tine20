@@ -275,17 +275,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             getDragData: function(e) {
                 var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
                 if (eventEl) {
-                    //Ext.fly(eventEl).setStyle({cursor: 'move'});
                     var parts = eventEl.id.split(':');
                     var event = this.daysView.ds.getById(parts[1]);
                     
-                    
-                    // we don't support d&d for multipart events
-                    if (event.domIds.length > 1) return false;
-                    
                     this.daysView.setActiveEvent(event);
                     
-                    var d = eventEl.cloneNode(true);
+                    // we need to clone an event with summary in
+                    var d = Ext.get(event.domIds[0]).dom.cloneNode(true);
                     d.id = Ext.id();
                     
                     if (event.get('is_all_day_event')) { 
@@ -294,14 +290,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                         var width = (Ext.fly(this.daysView.dayCols[0]).getWidth() * 0.9);
                         Ext.fly(d).setTop(0);
                         Ext.fly(d).setWidth(width);
+                        Ext.fly(d).setHeight(this.daysView.getTimeHeight.call(this.daysView, event.get('dtstart'), event.get('dtend')));
                     }
                     
                     return {
                         scope: this.daysView,
                         sourceEl: eventEl,
                         event: event,
-                        //repairXY: Ext.fly(eventEl).getXY(),
-                        //repairWidth: Ext.fly(eventEl).getWidth(),
                         ddel: d
                     }
                 }
