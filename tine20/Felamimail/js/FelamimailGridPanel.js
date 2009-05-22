@@ -209,6 +209,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * TODO make currentId work even if grid store changed? / activate reload check again?
      * TODO check &nbsp; replace function (-> replace only 2+ spaces)?
      * TODO add ellipsis for headers?
+     * TODO add preference to show mails in html or text
      */
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
@@ -250,7 +251,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                                 '<b>' + _('From') + ':</b> {[this.encode(values.from)]}',
                             '</div>',
                             '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments)]}</div>',
-                            '<div class="preview-panel-felamimail-body">{[this.encode(values.body)]}</div>',
+                            '<div class="preview-panel-felamimail-body">{[this.showBody(values.body)]}</div>',
                     // '</tpl>',
                 '</div>',{
                 
@@ -262,6 +263,23 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                         encoded = encoded.replace(/ /g, '&nbsp;');
                         
                         return encoded;
+                    } else {
+                        return '';
+                    }
+                    return value;
+                },
+                
+                showBody: function(value, type, prefix) {
+                    if (value) {
+                        // TODO check preference
+                        // TODO remove IMG tags?
+                        /*
+                        value = Ext.util.Format.htmlEncode(value);
+                        // it should be enough to replace only 2 or more spaces
+                        value = value.replace(/ /g, '&nbsp;');
+                        */
+                        value = Ext.util.Format.nl2br(value);
+                        value = Ext.util.Format.stripScripts(value);
                     } else {
                         return '';
                     }
