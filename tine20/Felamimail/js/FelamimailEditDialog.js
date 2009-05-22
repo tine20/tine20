@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add attachments
  * TODO         make account combo work when loading from json
  * TODO         window title = subject?
  */
@@ -62,6 +61,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
             //fieldLabel: _('Recipients'),
+            record: this.record
+        });
+        
+        this.attachmentGrid = new Tine.Felamimail.AttachmentGrid({
+            //fieldLabel: _('Attachments'),
             record: this.record
         });
         
@@ -129,7 +133,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'subject',
                         allowBlank: false
                     },
-                    this.htmlEditor
+                    this.htmlEditor,
+                    this.attachmentGrid
                 ]] 
             }]
         };
@@ -144,7 +149,7 @@ Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     //config.title = _('Write New Mail');
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 470,
+        height: 550,
         name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',
         contentPanelConstructorConfig: config

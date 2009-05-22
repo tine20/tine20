@@ -396,6 +396,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     recordData.flags = 'Passed';
                     break;
             }
+        } else {
+            recordData.body = '<br/>';
         }
         
         // TODO change signature (get it from account settings)

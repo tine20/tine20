@@ -89,7 +89,7 @@
 /***** email composing dialog ******/
 
 /* disable grid headers */
-#felamimail-recipient-grid .x-grid3-hd-row {
+#felamimail-recipient-grid .x-grid3-hd-row, #felamimail-attachment-grid .x-grid3-hd-row {
     display:none;
 }
 

@@ -25,7 +25,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
      * the message record
-     * @type 
+     * @type Tine.Felamimail.Model.Message
      */
     record: null,
     
@@ -34,14 +34,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     autoExpandColumn: 'address',
     clicksToEdit:1,
-    //margins : '2 5 2 5',
     height: 80,
     header: false,
     frame: true,
     border: false,
     deferredRender: false,
-    //region: 'center',
-    //layout: 'border',
     
     /**
      * init
