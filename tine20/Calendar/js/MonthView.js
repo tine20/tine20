@@ -253,13 +253,18 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             getDragData: function(e) {
                 var eventEl = e.getTarget('div.cal-monthview-alldayevent', 10) || e.getTarget('div.cal-monthview-event', 10);
                 if (eventEl) {
-                    //Ext.fly(eventEl).setStyle({cursor: 'move'});
                     var parts = eventEl.id.split(':');
                     var event = this.view.ds.getById(parts[1]);
                     
                     this.view.setActiveEvent(event);
                     
-                    var d = eventEl.cloneNode(true);
+                    // we need to clone an event with summary in
+                    var d = Ext.get(event.domIds[0]).dom.cloneNode(true);
+                    
+                    var width = Ext.fly(eventEl).getWidth() * event.domIds.length;
+                    
+                    Ext.fly(d).removeClass(['cal-monthview-alldayevent-cropleft', 'cal-monthview-alldayevent-cropright']);
+                    Ext.fly(d).setWidth(width);
                     Ext.fly(d).setOpacity(0.5);
                     d.id = Ext.id();
                     
@@ -267,8 +272,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                         scope: this.view,
                         sourceEl: eventEl,
                         event: event,
-                        //repairXY: Ext.fly(eventEl).getXY(),
-                        //repairWidth: Ext.fly(eventEl).getWidth(),
                         ddel: d
                     }
                 }
