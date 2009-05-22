@@ -478,10 +478,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             }
         }
         
-        // signature is empty at the moment (get it from account settings)
-        var signature = '';
+        // TODO change signature (get it from account settings)
+        var signature = 'Sent with love from the new tine 2.0 email client ...<br/>'
+            + 'Please visit <a href="http://tine20.org">http://tine20.org</a>';
         if (signature != '') {
-            recordData.body += '<span class="signature">' + signature + '</span>';
+            recordData.body += '<br/><span class="signature">--<br/>' + signature + '</span>';
         }
         
         var record = new this.recordClass(recordData, recordId);

@@ -54,6 +54,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
+     * 
+     * TODO try to use autoheight
+     * TODO move css definitions to extern stylesheet?
      */
     getFormItems: function() {
         
@@ -66,10 +69,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: this.app.i18n._('Body'),
             name: 'body',
             allowBlank: true,
-            // TODO try to use autoheight
             height: 200,
-            // TODO add signature style
-            // TODO move css definitions to extern stylesheet?
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
@@ -80,6 +80,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             + 'margin: 5px 10px 0 3px;'
                             + 'padding-left: 10px;'
                             + 'border-left: 2px solid #000088;'
+                        + '} '
+                        + '.signature {'
+                            + 'font-size: 9px;'
+                            + 'color: #bbbbbb;'
                         + '} '
                     + '</style>'
                     + '</head>'
