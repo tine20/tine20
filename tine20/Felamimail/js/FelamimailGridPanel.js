@@ -279,12 +279,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 
                 showHeaders: function(value) {
                     if (value) {
+                        // TODO use this.formatHeaders() (but how?)
+                        //return Tine.Felamimail.GridPanel.formatHeaders(value, true);
                         var result = '';
                         for (header in value) {
                             if (value.hasOwnProperty(header)) {
-                                result += '<b>' + header + ':</b> ' + 
-                                    Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(value[header], 40))
-                                    + '<br/>';
+                                result += '<b>' + header + ':</b> ' 
+                                    + Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(value[header], 40)) + '<br/>';
                             }
                         }
                         return result;
@@ -482,23 +483,25 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             var selectedRecord = selectedRows[0];
             
             recordId = selectedRecord.id;
+            recordData.id = recordId;
+            
+            var body = (selectedRecord.data.headers['content-type'].match(/text\/html/)) 
+                ? selectedRecord.get('body')
+                : Ext.util.Format.nl2br(selectedRecord.get('body'));
             
             switch (button.actionType) {
                 case 'replyAll':
                 case 'reply':
-                    recordData.id = recordId;
                     recordData.to = selectedRecord.get('from');
                     recordData.body = '<br/>' + recordData.to + ' ' + _('wrote') + ':<br/>'
-                        + '<blockquote class="felamimail-body-blockquote">' 
-                        + Ext.util.Format.nl2br(selectedRecord.get('body')) + '</blockquote><br/>';
+                        + '<blockquote class="felamimail-body-blockquote">' + body + '</blockquote><br/>';
                     recordData.subject = _('Re: ') + selectedRecord.get('subject');
                     recordData.flags = '\\Answered';
                     break;
                 case 'forward':
-                    recordData.id = recordId;
                     recordData.body = '<br/>-----' + _('Original message') + '-----<br/>'
-                        //+ Ext.util.Format.nl2br(selectedRecord.get('headers')) + '<br/><br/>'
-                        + Ext.util.Format.nl2br(selectedRecord.get('body')) + '<br/>';
+                        + this.formatHeaders(selectedRecord.get('headers'), false) + '<br/><br/>'
+                        + body + '<br/>';
                     recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
                     recordData.flags = 'Passed';
                     break;
@@ -608,5 +611,29 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 scope: this
             });
         }
+    },
+    
+    /********************************* helper funcs **************************************/
+    
+    /**
+     * format headers
+     * 
+     * @param {Object} headers
+     * @param {Bool} ellipsis
+     * @return {String}
+     */
+    formatHeaders: function(headers, ellipsis) {
+        var result = '';
+        for (header in headers) {
+            if (headers.hasOwnProperty(header)) {
+                result += '<b>' + header + ':</b> ' 
+                    + Ext.util.Format.htmlEncode(
+                        (ellipsis) 
+                            ? Ext.util.Format.ellipsis(headers[header], 40)
+                            : headers[header]
+                    ) + '<br/>';
+            }
+        }        
+        return result;
     }
 });
