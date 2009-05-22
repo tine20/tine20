@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         finish reply all implementation
+ * TODO         finish reply all implementation and activate button again
  * TODO         add signature
  * TODO         improve attachment download
  */
@@ -160,7 +160,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.actions = [
             this.action_write,
             this.action_reply,
-            this.action_replyAll,
+            //this.action_replyAll,
             this.action_forward,
             this.action_flag,
             this.action_markUnread,
@@ -206,34 +206,40 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * the details panel (shows message content)
      * 
+     * TODO make currentId work even if grid store changed? / activate reload check again?
+     * TODO check &nbsp; replace function (-> replace only 2+ spaces)?
+     * TODO add ellipsis for headers?
      */
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
             defaultHeight: 300,
             gridpanel: this,
-            currentId: null,
+            //currentId: null,
             
             updateDetails: function(record, body) {
-                if (record.id !== this.currentId) {
-                    this.currentId = record.id;
-                    Tine.Felamimail.messageBackend.loadRecord(record, {
-                        scope: this,
-                        success: function(message) {
-                            // TODO save more values?
-                            record.data.body = message.data.body;                            
-                            record.data.flags = message.data.flags;
-                            
-                            //console.log(message);
-                            
-                            this.tpl.overwrite(body, message.data);
-                            this.getEl().down('div').down('div').scrollTo('top', 0, false);
-                            this.getLoadMask().hide();
-                        }
-                    });
-                    this.getLoadMask().show();
+                //if (record.id !== this.currentId) {
+                
+                this.currentId = record.id;
+                Tine.Felamimail.messageBackend.loadRecord(record, {
+                    scope: this,
+                    success: function(message) {
+                        // save more values?
+                        record.data.body    = message.data.body;                            
+                        record.data.flags   = message.data.flags;
+                        record.data.headers = message.data.headers;
+                        
+                        this.tpl.overwrite(body, message.data);
+                        this.getEl().down('div').down('div').scrollTo('top', 0, false);
+                        this.getLoadMask().hide();
+                    }
+                });
+                this.getLoadMask().show();
+
+                    /*
                 } else {
                     this.tpl.overwrite(body, record.data);
                 }
+                */
             },
 
             tpl: new Ext.XTemplate(
@@ -252,7 +258,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     if (value) {
                         var encoded = Ext.util.Format.htmlEncode(value);
                         encoded = Ext.util.Format.nl2br(encoded);
-                        // TODO it should be enough to replace only 2 or more spaces
+                        // it should be enough to replace only 2 or more spaces
                         encoded = encoded.replace(/ /g, '&nbsp;');
                         
                         return encoded;
@@ -375,7 +381,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} flags
      * @return {}
      * 
-     * TODO  use spacer if first flag(s) is not set?
+     * TODO  use spacer if first flag(s) is/are not set?
      */
     flagRenderer: function(flags) {
         if (!flags) {
@@ -437,7 +443,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} event
      * 
      * TODO  add signature text
-     * TODO  add forwarding message
      */
     onEditInNewWindow: function(button, event) {
         var recordData = this.recordClass.getDefaultData();
@@ -464,11 +469,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     break;
                 case 'forward':
                     recordData.id = recordId;
-                    recordData.body = '<br/><blockquote>' + Ext.util.Format.nl2br(selectedRecord.get('body')) + '</blockquote><br/>';
+                    recordData.body = '<br/>-----' + _('Original message') + '-----<br/>'
+                        + Ext.util.Format.nl2br(selectedRecord.get('headers')) + '<br/><br/>'
+                        + Ext.util.Format.nl2br(selectedRecord.get('body')) + '<br/>';
                     recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
                     recordData.flags = 'Passed';
                     break;
             }
+        }
+        
+        // signature is empty at the moment (get it from account settings)
+        var signature = '';
+        if (signature != '') {
+            recordData.body += '<span class="signature">' + signature + '</span>';
         }
         
         var record = new this.recordClass(recordData, recordId);
