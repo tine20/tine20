@@ -108,6 +108,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }, this);
         
         this.ds.each(this.insertEvent, this);
+        
+        this.layoutDayCells();
     },
     
     /**
@@ -219,7 +221,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.mainBody = new E(this.el.dom.lastChild);
         
         this.dayCells = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom);
-        this.dayBodyCells = Ext.DomQuery.select('td[class=cal-monthview-daybody]', this.mainBody.dom);
     },
     
     /**
@@ -229,7 +230,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var ts = this.templates || {};
     
         ts.allDayEvent = new Ext.XTemplate(
-            '<div id="{id}" class="cal-monthview-alldayevent {extraCls}" style="background-color: {bgColor}; border-color: {color};">' +
+            '<div id="{id}" class="cal-monthview-alldayevent {extraCls}" style="background-color: {bgColor};">' +
                 '<tpl if="values.showInfo">' +
                     '<div class="cal-event-icon {iconCls}">' +
                         '<div class="cal-monthview-alldayevent-summary">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
@@ -239,7 +240,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         );
         
         ts.event = new Ext.XTemplate(
-            '<div id="{id}" class="cal-monthview-event {extraCls}" style="background-color: {bgColor}; border-color: {color};">' +
+            '<div id="{id}" class="cal-monthview-event {extraCls}" style="color: {color};">' +
                 '<div class="cal-event-icon {iconCls}">' +
                     '<div class="cal-monthview-event-summary">{startTime} {[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
                 '</div>' +
@@ -279,7 +280,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         var data = {
             startTime: dtStart.format('H:i'),
-            summary: event.get('summary') + ' ' + pos
+            summary: event.get('summary'),
+            color: '#FD0000',
+            bgColor: '#FF9696'
         };
         
         for (var i=Math.max(startCellNumber, 0); i<=endCellNumber; i++) {
@@ -289,6 +292,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             
             if (is_all_day_event) {
                 tmpl = this.templates.allDayEvent;
+                data.color = 'black';
                 
                 if (i > startCellNumber) {
                     data.extraCls += ' cal-monthview-alldayevent-cropleft';
@@ -329,14 +333,35 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             Ext.get(hdCels[i]).setWidth((vw-50)/7);
         }
         
+        var rowHeight = ((csize.height - hsize.height - 2) / (this.dateMesh.length > 35 ? 6 : 5)) - 1;
+
         var calRows = this.mainBody.dom.childNodes;
         for (var i=0; i<calRows.length; i++) {
-            Ext.get(calRows[i]).setHeight((csize.height - hsize.height)/ (this.dateMesh.length > 35 ? 6 : 5));
+            Ext.get(calRows[i]).setHeight(rowHeight);
         }
         
         var dhsize = Ext.get(this.dayCells[0].firstChild).getSize();
         for (var i=0; i<this.dayCells.length; i++) {
-            Ext.get(this.dayCells[i].lastChild).setSize((vw-50)/7 ,((csize.height - hsize.height) / (this.dateMesh.length > 35 ? 6 : 5)) - dhsize.height);
+            Ext.get(this.dayCells[i].lastChild).setSize((vw-50)/7 ,rowHeight - dhsize.height);
+        }
+    },
+    
+    /**
+     * layouts the contents (sets 'more items marker')
+     */
+    layoutDayCells: function() {
+        for (var i=0; i<this.dayCells.length; i++) {
+            if (this.dayCells[i].lastChild.childNodes.length > 1) {
+                var height = 0;
+                for (var j=0; j<this.dayCells[i].lastChild.childNodes.length; j++) {
+                    height += Ext.fly(this.dayCells[i].lastChild.childNodes[j]).getHeight();
+                }
+                
+                console.log(height);
+                //console.log(Ext.get(this.dayCells[i].lastChild).getBox());
+                //console.log(Ext.get(this.dayCells[i].lastChild).getComputedHeight());
+                //console.log(this.dayCells[i].lastChild.childNodes)
+            }
         }
     },
     
