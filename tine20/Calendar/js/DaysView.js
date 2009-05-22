@@ -114,7 +114,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.startDate = tbar.periodPicker.getPeriod().from;
         }
         
+        this.endDate = this.startDate.add(Date.DAY, this.numOfDays+1);
+        
+        this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        
         this.updateDayHeaders();
+        
         this.fireEvent('changePeriod', period);
     },
     
