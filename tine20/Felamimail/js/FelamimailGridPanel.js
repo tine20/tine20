@@ -206,20 +206,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * the details panel (shows message content)
      * 
-     * TODO make currentId work even if grid store changed? / activate reload check again?
-     * TODO check &nbsp; replace function (-> replace only 2+ spaces)?
-     * TODO add ellipsis for headers?
      * TODO add preference to show mails in html or text
+     * TODO replace mailto: links with 'open compose tine mail dialog'
      */
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
             defaultHeight: 300,
             gridpanel: this,
-            //currentId: null,
             
             updateDetails: function(record, body) {
-                //if (record.id !== this.currentId) {
-                
                 this.currentId = record.id;
                 Tine.Felamimail.messageBackend.loadRecord(record, {
                     scope: this,
@@ -235,27 +230,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     }
                 });
                 this.getLoadMask().show();
-
-                    /*
-                } else {
-                    this.tpl.overwrite(body, record.data);
-                }
-                */
             },
 
             tpl: new Ext.XTemplate(
                 '<div class="preview-panel-felamimail">',
                     //'<tpl for="Body">',
-                            '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.encode(values.headers)]}">',
+                            '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.showHeaders(values.headers)]}">',
                                 '<b>' + _('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
                                 '<b>' + _('From') + ':</b> {[this.encode(values.from)]}',
                             '</div>',
                             '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments)]}</div>',
-                            '<div class="preview-panel-felamimail-body">{[this.showBody(values.body)]}</div>',
+                            '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers)]}</div>',
                     // '</tpl>',
                 '</div>',{
                 
-                encode: function(value, type, prefix) {
+                encode: function(value) {
                     if (value) {
                         var encoded = Ext.util.Format.htmlEncode(value);
                         encoded = Ext.util.Format.nl2br(encoded);
@@ -269,21 +258,39 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     return value;
                 },
                 
-                showBody: function(value, type, prefix) {
+                showBody: function(value, headers) {
                     if (value) {
                         // TODO check preference
-                        // TODO remove IMG tags?
-                        /*
-                        value = Ext.util.Format.htmlEncode(value);
-                        // it should be enough to replace only 2 or more spaces
-                        value = value.replace(/ /g, '&nbsp;');
-                        */
-                        value = Ext.util.Format.nl2br(value);
-                        value = Ext.util.Format.stripScripts(value);
+                        
+                        if (headers['content-type'].match(/text\/html/)) {
+                            // TODO remove IMG tags?
+                            value = Ext.util.Format.stripScripts(value);
+                        } else {
+                            value = Ext.util.Format.htmlEncode(value);
+                            // it should be enough to replace only 2 or more spaces
+                            value = value.replace(/ /g, '&nbsp;');
+                            value = Ext.util.Format.nl2br(value);
+                        }
                     } else {
                         return '';
                     }
                     return value;
+                },
+                
+                showHeaders: function(value) {
+                    if (value) {
+                        var result = '';
+                        for (header in value) {
+                            if (value.hasOwnProperty(header)) {
+                                result += '<b>' + header + ':</b> ' + 
+                                    Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(value[header], 40))
+                                    + '<br/>';
+                            }
+                        }
+                        return result;
+                    } else {
+                        return '';
+                    }
                 },
                 
                 // TODO add 'download all' button
@@ -460,7 +467,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} button
      * @param {} event
      * 
-     * TODO  add signature text
+     * TODO add signature text
+     * TODO show headers in 'forwarded' mail
      */
     onEditInNewWindow: function(button, event) {
         var recordData = this.recordClass.getDefaultData();
@@ -489,7 +497,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 case 'forward':
                     recordData.id = recordId;
                     recordData.body = '<br/>-----' + _('Original message') + '-----<br/>'
-                        + Ext.util.Format.nl2br(selectedRecord.get('headers')) + '<br/><br/>'
+                        //+ Ext.util.Format.nl2br(selectedRecord.get('headers')) + '<br/><br/>'
                         + Ext.util.Format.nl2br(selectedRecord.get('body')) + '<br/>';
                     recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
                     recordData.flags = 'Passed';

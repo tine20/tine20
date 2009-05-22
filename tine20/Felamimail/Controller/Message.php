@@ -163,19 +163,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder)) {
             
-            $imapMessage            = $imapBackend->getMessage($message->messageuid);
+            $imapMessage = $imapBackend->getMessage($message->messageuid);
             
             /********* add body ****************/
             
-            $message->body          = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+            $message->body = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
             
             /********* add header **************/
             
-            $message->headers       = '';
-            foreach ($imapMessage->getHeaders() as $name => $value) {  
-                //$message->headers  .= "<b>$name:</b> " . substr($value,0,40) . "\n";
-                $message->headers  .= "<b>$name:</b> $value\n";
-            }
+            $message->headers = $imapMessage->getHeaders();
             
             /********* add attachments *********/
             
