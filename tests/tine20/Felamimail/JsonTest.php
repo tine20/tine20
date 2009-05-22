@@ -93,6 +93,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         Felamimail_Controller_Folder::getInstance()->getSubFolders();
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
         
         $filter = $this->_getMessageFilter($folder->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
