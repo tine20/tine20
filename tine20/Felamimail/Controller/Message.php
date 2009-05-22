@@ -319,11 +319,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * 
-     * @todo add attachments 
      * @todo set In-Reply-To header for replies (which message id?)
      * @todo add mail & name from account settings
      * @todo add smtp host from account settings
      * @todo add name for to/cc/bcc
+     * @todo add max attachment size check?
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
@@ -357,10 +357,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setSubject($_message->subject);
         $mail->setDate(Zend_Date::now('en_US')->toString(Felamimail_Model_Message::DATE_FORMAT));
         
-        // @todo add attachments
+        // add attachments
         foreach ($_message->attachments as $attachment) {
-            //$attachmentPart = new Zend_Mail_Part();
-            //$mail->addAttachment($attachmentPart);
+            $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
+            $part->type = $attachment['type'];
+            $part->filename = $attachment['name'];
+            $part->encoding = Zend_Mime::ENCODING_8BIT;
+            $part->disposition = Zend_Mime::ENCODING_BASE64; //?
+            
+            $mail->addAttachment($part);
         }
 
         // set transport + send mail
