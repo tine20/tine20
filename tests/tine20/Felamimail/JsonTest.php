@@ -185,7 +185,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $firstMail = $result['results'][0];
         
         $this->assertEquals($firstMail['subject'],  $messageToSend['subject']);
-        $this->assertEquals($firstMail['to'],       $messageToSend['to']);
+        $this->assertEquals($firstMail['to'],       $messageToSend['to'][0]);
         //$this->assertEquals($firstMail['body'],     $messageToSend['body']);
         
         // delete message from inbox & sent
