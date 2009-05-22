@@ -87,17 +87,7 @@ cal-monthview-wkcell-header {
 
 .cal-monthview-event {
 	margin: 0px 0px;
-	border-radius: 8px;
 }
-
-.ext-gecko .cal-monthview-event {
-    -moz-border-radius: 8px;
-}
-
-.ext-safari .cal-monthview-event {
-    -webkit-border-radius: 8px;
-}
-
 
 .cal-monthview-event-summary {
     white-space: normal;

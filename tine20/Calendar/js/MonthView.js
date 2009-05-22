@@ -78,6 +78,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     startDay: Ext.DatePicker.prototype.startDay,
     /**
+     * @property {Tine.Calendar.Event} activeEvent
+     * @private
+     */
+    activeEvent: null,
+    /**
      * @private {Date} toDay
      */
     toDay: null,
@@ -96,6 +101,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     afterRender: function() {
         this.initElements();
         this.el.on('dblclick', this.onDblClick, this);
+        this.initDragZone();
         
         this.updatePeriod({from: this.startDate});
         
@@ -137,11 +143,35 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     },
     
     /**
+     * gets currentlcy active event
+     * 
+     * @return {Tine.Calendar.Event} event
+     */
+    getActiveEvent: function() {
+        return this.activeEvent;
+    },
+    
+    /**
      * returns index of dateCell given date is in
      * @param {Date} date
      */
     getDayCellIndex: function(date) {
         return Math.round((date.clearTime(true).getTime() - this.dateMesh[0].getTime())/Date.msDAY);
+    },
+    
+    /**
+     * returns events dom
+     * @param {Tine.Calendar.Model.Event} event
+     * @return {Array} of Ext.Element
+     */
+    getEventEls: function(event) {
+        if (event.domIds) {
+            var domEls = [];
+            for (var i=0; i<event.domIds.length; i++) {
+                domEls[i] = Ext.get(event.domIds[i]);
+            }
+            return domEls;
+        }
     },
     
     /**
@@ -208,6 +238,49 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             //ds.on("clear", this.onClear, this);
         }
         this.ds = ds;
+    },
+    
+    /**
+     * @private
+     */
+    initDragZone: function() {
+        // init dragables
+        this.dragZone = new Ext.dd.DragZone(this.el, {
+            ddGroup: 'cal-event',
+            view: this,
+            scroll: false,
+            
+            getDragData: function(e) {
+                var eventEl = e.getTarget('div.cal-monthview-alldayevent', 10) || e.getTarget('div.cal-monthview-event', 10);
+                if (eventEl) {
+                    //Ext.fly(eventEl).setStyle({cursor: 'move'});
+                    var parts = eventEl.id.split(':');
+                    var event = this.view.ds.getById(parts[1]);
+                    
+                    this.view.setActiveEvent(event);
+                    
+                    var d = eventEl.cloneNode(true);
+                    Ext.fly(d).setOpacity(0.5);
+                    d.id = Ext.id();
+                    
+                    return {
+                        scope: this.view,
+                        sourceEl: eventEl,
+                        event: event,
+                        //repairXY: Ext.fly(eventEl).getXY(),
+                        //repairWidth: Ext.fly(eventEl).getWidth(),
+                        ddel: d
+                    }
+                }
+            },
+            
+            getRepairXY: function(e, dd) {
+                //Ext.fly(this.dragData.sourceEl).setStyle({'border-style': 'solid'});
+                Ext.fly(this.dragData.sourceEl).setOpacity(1, 1);
+                
+                return Ext.fly(this.dragData.sourceEl).getXY();
+            }
+        });
     },
     
     /**
@@ -280,21 +353,29 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var parallels = this.parallelEventsRegistry.getEvents(dtStart, dtEnd, true);
         var pos = parallels.indexOf(event);
         
-        var is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
+        // save some layout info
+        event.is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
+        event.color = '#FD0000';
+        event.bgColor = '#FF9696';
         
         var data = {
             startTime: dtStart.format('H:i'),
             summary: event.get('summary'),
-            color: '#FD0000',
-            bgColor: '#FF9696'
+            color: event.color,
+            bgColor: event.bgColor
         };
         
+        //registry for dom ids
+        event.domIds = [];
+        
         for (var i=Math.max(startCellNumber, 0); i<=endCellNumber; i++) {
-            var dayBody = this.dayCells[i].lastChild;
+            data.id = Ext.id() + '-event:' + event.get('id');
+            event.domIds.push(data.id);
+                
             var tmpl = this.templates.event;
             data.extraCls = '';
             
-            if (is_all_day_event) {
+            if (event.is_all_day_event) {
                 tmpl = this.templates.allDayEvent;
                 data.color = 'black';
                 
@@ -309,7 +390,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 data.showInfo = i == startCellNumber || i%7 == 0;
             } 
             
-            var posEl = this.getEventPosEl(dayBody, pos);
+            var posEl = this.getEventPosEl(this.dayCells[i].lastChild, pos);
             var eventEl = tmpl.overwrite(posEl, data, true);
         }
         
@@ -515,6 +596,40 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
 
         //container.dom.insertBefore(el, position);
         //this.calPanel.body
+    },
+    
+    /**
+     * sets currentlcy active event
+     * 
+     * @param {Tine.Calendar.Event} event
+     */
+    setActiveEvent: function(event) {
+        if (this.activeEvent) {
+            var curEls = this.getEventEls(this.activeEvent);
+            for (var i=0; i<curEls.length; i++) {
+                curEls[i].removeClass('cal-monthview-active');
+                if (this.activeEvent.is_all_day_event) {
+                    curEls[i].setStyle({'background-color': this.activeEvent.bgColor});
+                    curEls[i].setStyle({'color': '#000000'});
+                } else {
+                    curEls[i].setStyle({'background-color': ''});
+                    curEls[i].setStyle({'color': event.color});
+                }
+            }
+        }
+        
+        this.activeEvent = event;
+        var els = this.getEventEls(event);
+        for (var i=0; i<els.length; i++) {
+            els[i].addClass('cal-monthview-active');
+            if (event.is_all_day_event) {
+                els[i].setStyle({'background-color': event.color});
+                els[i].setStyle({'color': '#FFFFFF'});
+            } else {
+                els[i].setStyle({'background-color': this.activeEvent.color});
+                els[i].setStyle({'color': '#FFFFFF'});
+            }
+        }
     },
     
     updatePeriod: function(period) {

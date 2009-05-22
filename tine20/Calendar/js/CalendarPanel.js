@@ -166,7 +166,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         if (name == 'click') {
             if (event) {
-                this.view.setActiveEvent(event);
+                //this.view.setActiveEvent(event);
             }
         }
         
