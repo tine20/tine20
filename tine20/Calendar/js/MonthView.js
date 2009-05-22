@@ -109,7 +109,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         this.ds.each(this.insertEvent, this);
         
-        this.layoutDayCells();
+        //this.layoutDayCells();
     },
     
     /**
@@ -341,9 +341,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
         
         var dhsize = Ext.get(this.dayCells[0].firstChild).getSize();
+        this.dayCellsHeight = rowHeight - dhsize.height;
+
         for (var i=0; i<this.dayCells.length; i++) {
-            Ext.get(this.dayCells[i].lastChild).setSize((vw-50)/7 ,rowHeight - dhsize.height);
+            Ext.get(this.dayCells[i].lastChild).setSize((vw-50)/7 ,this.dayCellsHeight);
         }
+        
+        this.layoutDayCells();
     },
     
     /**
@@ -352,15 +356,20 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     layoutDayCells: function() {
         for (var i=0; i<this.dayCells.length; i++) {
             if (this.dayCells[i].lastChild.childNodes.length > 1) {
-                var height = 0;
-                for (var j=0; j<this.dayCells[i].lastChild.childNodes.length; j++) {
-                    height += Ext.fly(this.dayCells[i].lastChild.childNodes[j]).getHeight();
+                for (var j=0, height=0, hideCount=0; j<this.dayCells[i].lastChild.childNodes.length; j++) {
+                    var eventEl = Ext.get(this.dayCells[i].lastChild.childNodes[j]);
+                    height += eventEl.getHeight();
+                    
+                    eventEl[height > this.dayCellsHeight ? 'hide' : 'show']();
+                    
+                    if (height > this.dayCellsHeight) {
+                        hideCount++;
+                    }
                 }
                 
-                console.log(height);
-                //console.log(Ext.get(this.dayCells[i].lastChild).getBox());
-                //console.log(Ext.get(this.dayCells[i].lastChild).getComputedHeight());
-                //console.log(this.dayCells[i].lastChild.childNodes)
+                if (hideCount > 0) {
+                    console.log(hideCount + 'events hidden in this cell');
+                }
             }
         }
     },
