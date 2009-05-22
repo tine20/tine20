@@ -173,7 +173,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             $message->headers       = '';
             foreach ($imapMessage->getHeaders() as $name => $value) {  
-                $message->headers  .= "<b>$name:</b> " . substr($value,0,40) . "\n";
+                //$message->headers  .= "<b>$name:</b> " . substr($value,0,40) . "\n";
+                $message->headers  .= "<b>$name:</b> $value\n";
             }
             
             /********* add attachments *********/
@@ -332,7 +333,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
         // build mail content
         $mail = new Tinebase_Mail();
@@ -361,6 +362,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
             $smtpConfig = Tinebase_Core::getConfig()->imap->smtp->toArray();
             $transport = new Zend_Mail_Transport_Smtp($smtpConfig['hostname'], $smtpConfig);
+            
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
 
             // save in sent folder (account id is in from property)
