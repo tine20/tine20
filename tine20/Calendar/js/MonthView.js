@@ -230,9 +230,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
         ts.allDayEvent = new Ext.XTemplate(
             '<div id="{id}" class="cal-monthview-alldayevent {extraCls}" style="background-color: {bgColor}; border-color: {color};">' +
-                '<div <tpl if="values.showIcon">class="cal-event-icon {iconCls}"</tpl>>' +
-                    '<div class="cal-monthview-alldayevent-summary">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
-                '</div>' +
+                '<tpl if="values.showInfo">' +
+                    '<div class="cal-event-icon {iconCls}">' +
+                        '<div class="cal-monthview-alldayevent-summary">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
+                    '</div>' +
+                '</tpl>' +
             '</div>'
         );
         
@@ -270,7 +272,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             return;
         }
         
-        var parallels = this.parallelEventsRegistry.getEvents(dtStart, dtEnd);
+        var parallels = this.parallelEventsRegistry.getEvents(dtStart, dtEnd, true);
         var pos = parallels.indexOf(event);
         
         var is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
@@ -289,36 +291,18 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 tmpl = this.templates.allDayEvent;
                 
                 if (i > startCellNumber) {
-                    data.extraCls += ' cal-monthview-wholdedayevent-cropleft';
+                    data.extraCls += ' cal-monthview-alldayevent-cropleft';
                 }
                 if (i < endCellNumber) {
-                    data.extraCls += ' cal-monthview-wholdedayevent-cropright';
+                    data.extraCls += ' cal-monthview-alldayevent-cropright';
                 }
                 
                 // show icon on startCell and leftCells
-                data.showIcon = i == startCellNumber || i%7 == 0;
+                data.showInfo = i == startCellNumber || i%7 == 0;
             } 
             
             var posEl = this.getEventPosEl(dayBody, pos);
             var eventEl = tmpl.overwrite(posEl, data, true);
-            continue;
-            
-            // insert at right pos
-            var cn = dayBody.childNodes.length;
-            if (i == 33) {
-                console.log(pos);
-            }
-            if (cn == 0) {
-                var eventEl = tmpl.insertFirst(dayBody, data, true);
-            } else {
-                if (pos >= cn) {
-                    var eventEl = tmpl.insertAfter(dayBody.lastChild, data, true);
-                } else {
-                    var eventEl = tmpl.insertBefore(dayBody.childNodes[Math.max(pos, cn-1)], data, true);
-                }
-            }
-            
-            
         }
         
         
@@ -352,7 +336,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         var dhsize = Ext.get(this.dayCells[0].firstChild).getSize();
         for (var i=0; i<this.dayCells.length; i++) {
-            Ext.get(this.dayCells[i].lastChild).setHeight(((csize.height - hsize.height) / (this.dateMesh.length > 35 ? 6 : 5)) - dhsize.height);
+            Ext.get(this.dayCells[i].lastChild).setSize((vw-50)/7 ,((csize.height - hsize.height) / (this.dateMesh.length > 35 ? 6 : 5)) - dhsize.height);
         }
     },
     
