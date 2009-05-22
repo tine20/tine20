@@ -120,7 +120,7 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      * @param  {Date} dtEnd
      * @return {Array}
      */
-    getEvents: function(dtStart, dtEnd) {
+    getEvents: function(dtStart, dtEnd, sortByDtStart) {
         var dtStartTs = dtStart.getTime();
         var dtEndTs = dtEnd.getTime();
         
@@ -128,7 +128,7 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         var endIdx = this.tsToIdx(dtEndTs);
         //console.info('get events from startIdx"' + startIdx + '" to endIdx "' + endIdx + '".'   )
         
-        return this.getEventsFromIdx(startIdx, endIdx);
+        return this.getEventsFromIdx(startIdx, endIdx, sortByDtStart);
     },
     
     /**
@@ -137,7 +137,7 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      * @param  {Number} endIdx
      * @return {Array}
      */
-    getEventsFromIdx: function(startIdx, endIdx) {
+    getEventsFromIdx: function(startIdx, endIdx, sortByDtStart) {
         var events = [];
         var parallels = 1;
         for (var i=startIdx; i<=endIdx; i++) {
@@ -154,12 +154,12 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         // sort by duration and dtstart
         var scope = this;
         events.sort(function(a, b) {
-            var result =  b.duration - a.duration;
-            if (! result) {
-                result = a.get(scope.dtStartProperty).getTime() - b.get(scope.dtStartProperty).getTime();
-            }
+            var d = b.duration - a.duration;
+            var s = a.get(scope.dtStartProperty).getTime() - b.get(scope.dtStartProperty).getTime();
             
-            return result;
+            return sortByDtStart ? 
+                s ? s : d:
+                d ? d : s;
         });
         
         // layout helper
