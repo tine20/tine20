@@ -81,10 +81,25 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private {Array} dateMesh
      */
     dateMesh: null,
+    /**
+     * @private {Tine.Calendar.ParallelEventsRegistry} parallelEventsRegistry
+     */
+    parallelEventsRegistry: null,
     
-    init: function(calPanel) {
-        this.calPanel = calPanel;
-        //this.initData(calPanel.store);
+    /**
+     * @private
+     */
+    afterRender: function() {
+        this.initElements();
+        this.el.on('dblclick', this.onDblClick, this);
+        
+        this.updatePeriod({from: this.startDate});
+        
+        // calculate duration and parallels
+        this.ds.each(function(event) {
+            this.parallelEventsRegistry.register(event);
+        }, this);
+        this.ds.each(this.insertEvent, this);
     },
     
     /**
@@ -108,6 +123,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     },
     
     /**
+     * returns index of dateCell given date is in
+     * @param {Date} date
+     */
+    getDayCellIndex: function(date) {
+        return Math.round((date.clearTime().getTime() - this.dateMesh[0].getTime())/Date.msDAY);
+    },
+    
+    /**
      * returns period of currently displayed month
      * @return {Object}
      */
@@ -116,6 +139,157 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             from: this.dateMesh[0],
             until: this.dateMesh[this.dateMesh.length -1]
         };    
+    },
+    
+    /**
+     * @private
+     * @param {Tine.Calendar.CalendarPanel} calPanel
+     */
+    init: function(calPanel) {
+        this.calPanel = calPanel;
+        this.initData(calPanel.store);
+    },
+    
+    /**
+     * @private
+     * @param {Ext.data.Store} ds
+     */
+    initData : function(ds){
+        if(this.ds){
+            this.ds.un("beforeload", this.onBeforeLoad, this);
+            this.ds.un("load", this.onLoad, this);
+            //this.ds.un("datachanged", this.onDataChange, this);
+            this.ds.un("add", this.onAdd, this);
+            this.ds.un("remove", this.onRemove, this);
+            this.ds.un("update", this.onUpdate, this);
+            //this.ds.un("clear", this.onClear, this);
+        }
+        if(ds){
+            ds.on("beforeload", this.onBeforeLoad, this);
+            ds.on("load", this.onLoad, this);
+           // ds.on("datachanged", this.onDataChange, this);
+            ds.on("add", this.onAdd, this);
+            ds.on("remove", this.onRemove, this);
+            ds.on("update", this.onUpdate, this);
+            //ds.on("clear", this.onClear, this);
+        }
+        this.ds = ds;
+    },
+    
+    initElements: function() {
+        var E = Ext.Element;
+
+        var el = this.calPanel.body.dom.firstChild;
+        var cs = el.childNodes;
+
+        this.el = new E(el);
+        
+        this.mainHd = new E(this.el.dom.firstChild);
+        this.mainBody = new E(this.el.dom.lastChild);
+        
+        this.dayCells = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom);
+    },
+    
+    /**
+     * inits all tempaltes of this view
+     *
+    initTemplates: function() {
+        var ts = this.templates || {};
+    
+        ts.master = new Ext.XTemplate(
+        );
+        
+        for(var k in ts){
+            var t = ts[k];
+            if(t && typeof t.compile == 'function' && !t.compiled){
+                t.disableFormats = true;
+                t.compile();
+            }
+        }
+
+        this.templates = ts;
+    },
+    */
+    
+    insertEvent: function(event) {
+        var dtStart = event.get('dtstart');
+        var startCellNumber = this.getDayCellIndex(dtStart);
+        var dtEnd = event.get('dtend');
+        var endCellNumber = this.getDayCellIndex(dtEnd);
+        
+        // skip out of range events
+        if (endCellNumber < 0 || startCellNumber >= this.dateMesh.length) {
+            return;
+        }
+        
+        var parallels = this.parallelEventsRegistry.getEvents(dtStart, dtEnd);
+        var pos = parallels.indexOf(event);
+        
+        var is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
+        
+        if (is_all_day_event) {
+            
+        } else {
+            var dayBodyEl = Ext.get(this.dayCells[startCellNumber].lastChild);
+            dayBodyEl.insertFirst({tag: 'div', html: event.get('summary')});
+            //console.log(dayBody);
+        }
+        
+        //console.log(event);
+        //console.log(dayCell)
+    },
+    
+    layout: function() {
+        if(!this.mainBody){
+            return; // not rendered
+        }
+        
+        var g = this.calPanel;
+        var c = g.body;
+        var csize = c.getSize(true);
+        var vw = csize.width;
+        
+        //this.el.setSize(csize.width, csize.height);
+        var hsize = this.mainHd.getSize(true);
+        
+        var hdCels = this.mainHd.dom.firstChild.childNodes;
+        Ext.fly(hdCels[0]).setWidth(50);
+        for (var i=1; i<hdCels.length; i++) {
+            Ext.fly(hdCels[i]).setWidth((vw-50)/7);
+        }
+        
+        var calRows = this.mainBody.dom.childNodes;
+        for (var i=0; i<calRows.length; i++) {
+            Ext.fly(calRows[i]).setHeight((csize.height - hsize.height)/ (this.dateMesh.length > 35 ? 6 : 5));
+        }
+         
+    },
+    
+    /**
+     * @private
+     */
+    onAdd : function(ds, records, index){
+        for (var i=0; i<records.length; i++) {
+            var event = records[i];
+            this.parallelEventsRegistry.register(event);
+            
+            var parallelEvents = this.parallelEventsRegistry.getEvents(event.get('dtstart'), event.get('dtend'));
+            
+            for (var j=0; j<parallelEvents.length; j++) {
+                //this.removeEvent(parallelEvents[j]);
+                //this.insertEvent(parallelEvents[j]);
+            }
+            
+            //this.setActiveEvent(event);
+        }
+    },
+    
+    /**
+     * @private
+     */
+    onBeforeLoad: function() {
+        console.log('onBeforeLoad');
+        //this.ds.each(this.removeEvent, this);
     },
     
     onDblClick: function(e, target) {
@@ -128,13 +302,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 break;
                 
             case 'cal-monthview-dayheader-inner':
-                var dateIndex = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom).indexOf(target.parentNode.parentNode);
+                var dateIndex = this.dayCells.indexOf(target.parentNode.parentNode);
                 var date = this.dateMesh[dateIndex];
                 this.fireEvent('changeView', 'day', date);
                 break;
                 
             case 'cal-monthview-daycell':
-                var dateIndex = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom).indexOf(target);
+                var dateIndex = this.dayCells.indexOf(target);
                 var date = this.dateMesh[dateIndex];
                 //console.log("Create event at: " + date.format('Y-m-d'));
                 break;
@@ -142,63 +316,57 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         //console.log(Ext.get(target));
     },
+    
     /**
      * @private
-     * @param {Ext.data.Store} ds
      */
-    initData : function(ds){
-        if(this.ds){
-            this.ds.un("beforeload", this.onBeforeLoad, this);
-            this.ds.un("load", this.onLoad, this);
-            this.ds.un("datachanged", this.onDataChange, this);
-            this.ds.un("add", this.onAdd, this);
-            this.ds.un("remove", this.onRemove, this);
-            this.ds.un("update", this.onUpdate, this);
-            this.ds.un("clear", this.onClear, this);
-        }
-        if(ds){
-            ds.on("beforeload", this.onBeforeLoad, this);
-            ds.on("load", this.onLoad, this);
-            ds.on("datachanged", this.onDataChange, this);
-            ds.on("add", this.onAdd, this);
-            ds.on("remove", this.onRemove, this);
-            ds.on("update", this.onUpdate, this);
-            ds.on("clear", this.onClear, this);
-        }
-        this.ds = ds;
+    onLoad : function(){
+        console.log('onLoad');
+        //this.ds.each(this.insertEvent, this);
     },
     
-    updatePeriod: function(period) {
-        this.toDay = new Date().clearTime();
-        this.startDate = period.from;
-        this.calcDateMesh();
-
-        // update dates and bg colors
-        var dayCells = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom);
-        var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-inner]', this.mainBody.dom);
-        for(var i=0; i<this.dateMesh.length; i++) {
-            dayCells[i].style.background = this.dateMesh[i].getMonth() == this.startDate.getMonth() ? '#FFFFFF' : '#F9F9F9';
-            if (this.dateMesh[i].getTime() == this.toDay.getTime()) {
-                dayCells[i].style.background = '#EBF3FD';
-            }
-                
-            dayHeaders[i].innerHTML = this.dateMesh[i].format('j');
+    /**
+     * @private
+     */
+    onRemove : function(ds, event, index, isUpdate){
+        this.parallelEventsRegistry.unregister(event);
+        //this.removeEvent(event);
+    },
+    
+    /**
+     * @private
+     */
+    onUpdate : function(ds, event){
+        /*
+        // relayout original context
+        var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_event')) ? 
+            this.parallelWholeDayEventsRegistry : 
+            this.parallelScrollerEventsRegistry;
+        var originalDtstart = event.modified.hasOwnProperty('dtstart') ? event.modified.dtstart : event.get('dtstart');
+        var originalDtend = event.modified.hasOwnProperty('dtend') ? event.modified.dtend : event.get('dtend');
+            
+        originalRegistry.unregister(event);
+        
+        var originalParallels = originalRegistry.getEvents(originalDtstart, originalDtend);
+        for (var j=0; j<originalParallels.length; j++) {
+            this.removeEvent(originalParallels[j]);
+            this.insertEvent(originalParallels[j]);
         }
         
-        // update weeks
-        var wkCells = Ext.DomQuery.select('td[class=cal-monthview-wkcell]', this.mainBody.dom);
-        for(var i=0; i<wkCells.length; i++) {
-            if (this.dateMesh.length > i*7 +1) {
-                // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
-                wkCells[i].innerHTML = this.dateMesh[i*7 +1].getWeekOfYear();
-                //Ext.fly(wkCells[i]).unselectable(); // this supresses events ;-(
-            }
+        // relayout actual context
+        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
+        registry.register(event);
+        
+        var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
+        
+        for (var j=0; j<parallelEvents.length; j++) {
+            this.removeEvent(parallelEvents[j]);
+            this.insertEvent(parallelEvents[j]);
         }
         
-        // show/hide last row
-        this.mainBody.last()[(this.dateMesh.length > 35 ? 'remove' : 'add') + 'Class']('cal-monthview-wkrow-hide');
-        
-        this.fireEvent('changePeriod', period);
+        event.commit(true);
+        this.setActiveEvent(this.getActiveEvent());
+        */
     },
     
     render: function() {
@@ -236,64 +404,40 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         //this.calPanel.body
     },
     
-    afterRender: function() {
-        this.initElements();
-        this.el.on('dblclick', this.onDblClick, this);
-        
-        this.updatePeriod({from: this.startDate});
-    },
-    
-    layout: function() {
-        if(!this.mainBody){
-            return; // not rendered
+    updatePeriod: function(period) {
+        this.toDay = new Date().clearTime();
+        this.startDate = period.from;
+        this.calcDateMesh();
+
+        // update dates and bg colors
+        var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-inner]', this.mainBody.dom);
+        for(var i=0; i<this.dateMesh.length; i++) {
+            this.dayCells[i].style.background = this.dateMesh[i].getMonth() == this.startDate.getMonth() ? '#FFFFFF' : '#F9F9F9';
+            if (this.dateMesh[i].getTime() == this.toDay.getTime()) {
+                this.dayCells[i].style.background = '#EBF3FD';
+            }
+                
+            dayHeaders[i].innerHTML = this.dateMesh[i].format('j');
         }
         
-        var g = this.calPanel;
-        var c = g.body;
-        var csize = c.getSize(true);
-        var vw = csize.width;
-        
-        this.el.setSize(csize.width, csize.height);
-        
-        var hdCels = this.mainHd.dom.firstChild.childNodes;
-        
-        
-        Ext.fly(hdCels[0]).setWidth(50);
-        for (var i=1; i<hdCels.length; i++) {
-            Ext.fly(hdCels[i]).setWidth((vw-50)/7);
-        }
-    },
-    
-    initElements: function() {
-        var E = Ext.Element;
-
-        var el = this.calPanel.body.dom.firstChild;
-        var cs = el.childNodes;
-
-        this.el = new E(el);
-        
-        this.mainHd = new E(this.el.dom.firstChild);
-        this.mainBody = new E(this.el.dom.lastChild);
-    },
-    
-    /**
-     * inits all tempaltes of this view
-     */
-    initTemplates: function() {
-        var ts = this.templates || {};
-    
-        ts.master = new Ext.XTemplate(
-        );
-        
-        for(var k in ts){
-            var t = ts[k];
-            if(t && typeof t.compile == 'function' && !t.compiled){
-                t.disableFormats = true;
-                t.compile();
+        // update weeks
+        var wkCells = Ext.DomQuery.select('td[class=cal-monthview-wkcell]', this.mainBody.dom);
+        for(var i=0; i<wkCells.length; i++) {
+            if (this.dateMesh.length > i*7 +1) {
+                // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
+                wkCells[i].innerHTML = this.dateMesh[i*7 +1].getWeekOfYear();
+                //Ext.fly(wkCells[i]).unselectable(); // this supresses events ;-(
             }
         }
-
-        this.templates = ts;
+        
+        // build parallels registry
+        this.parallelEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({
+            dtStart: this.dateMesh[0], 
+            dtEnd: this.dateMesh[this.dateMesh.length-1].add(Date.DAY, 1)/*,
+            granularity: 60*/
+        });
+        
+        this.layout();
+        this.fireEvent('changePeriod', period);
     }
-    
 });
