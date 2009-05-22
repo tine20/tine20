@@ -56,7 +56,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * NOTE: when this method gets called, all initalisation is done.
      * 
      * TODO try to use autoheight
-     * TODO move css definitions to extern stylesheet?
+     * TODO get css definitions from extern stylesheet?
      */
     getFormItems: function() {
         
@@ -73,21 +73,21 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
-                    + '<META http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+                    + '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
                     + '<title></title>'
                     + '<style type="text/css">'
-                        + 'blockquote {'
+                        + '.felamimail-body-blockquote {'
                             + 'margin: 5px 10px 0 3px;'
                             + 'padding-left: 10px;'
                             + 'border-left: 2px solid #000088;'
                         + '} '
-                        + '.signature {'
+                        + '.felamimail-body-signature {'
                             + 'font-size: 9px;'
                             + 'color: #bbbbbb;'
                         + '} '
                     + '</style>'
                     + '</head>'
-                    + '<body class="com-conjoon-groupware-email-EmailForm-htmlEditor-body">'
+                    + '<body>'
                     + '</body></html>';
         
                 return markup;

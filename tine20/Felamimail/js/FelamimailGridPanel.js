@@ -462,7 +462,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 case 'reply':
                     recordData.id = recordId;
                     recordData.to = selectedRecord.get('from');
-                    recordData.body = '<br/>' + recordData.to + ' ' + _('wrote') + ':<br/><blockquote>' 
+                    recordData.body = '<br/>' + recordData.to + ' ' + _('wrote') + ':<br/>'
+                        + '<blockquote class="felamimail-body-blockquote">' 
                         + Ext.util.Format.nl2br(selectedRecord.get('body')) + '</blockquote><br/>';
                     recordData.subject = _('Re: ') + selectedRecord.get('subject');
                     recordData.flags = '\\Answered';
@@ -482,7 +483,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         var signature = 'Sent with love from the new tine 2.0 email client ...<br/>'
             + 'Please visit <a href="http://tine20.org">http://tine20.org</a>';
         if (signature != '') {
-            recordData.body += '<br/><span class="signature">--<br/>' + signature + '</span>';
+            recordData.body += '<br/><span class="felamimail-body-signature">--<br/>' + signature + '</span>';
         }
         
         var record = new this.recordClass(recordData, recordId);

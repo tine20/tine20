@@ -333,12 +333,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
-        // build mail content
         $mail = new Tinebase_Mail();
-        $mail->setBodyText(strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_message->body)));
-        $mail->setBodyHtml($_message->body);
+        
+        // build mail content
+        $mail->setBodyText(strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_message->body)), 'UTF-8');
+        //$mail->setBodyHtml($_message->body, 'UTF-8');
+        $mail->setBodyHtml($this->_addHtmlMarkup($_message->body), 'UTF-8');
         
         // set from
         $mail->setFrom(Tinebase_Core::getConfig()->imap->user, Tinebase_Core::getConfig()->imap->user);
@@ -452,6 +454,39 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
         
+        return $result;
+    }
+
+    /**
+     * add html markup to message body
+     *
+     * @param string $_body
+     * @return string
+     * 
+     * @todo put this somewhere else (views?)?
+     */
+    protected function _addHtmlMarkup($_body)
+    {
+        $result = '<html>'
+            . '<head>'
+            . '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
+            . '<title></title>'
+            . '<style type="text/css">'
+                . '.felamimail-body-blockquote {'
+                    . 'margin: 5px 10px 0 3px;'
+                    . 'padding-left: 10px;'
+                    . 'border-left: 2px solid #000088;'
+                . '} '
+                . '.felamimail-body-signature {'
+                    . 'font-size: 9px;'
+                    . 'color: #bbbbbb;'
+                . '} '
+            . '</style>'
+            . '</head>'
+            . '<body>'
+            . $_body
+            . '</body></html>';
+            
         return $result;
     }
 }

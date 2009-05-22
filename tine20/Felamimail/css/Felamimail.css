@@ -96,3 +96,14 @@
 #felamimail-recipient-grid td {
     border-right: 1px solid #5555ff;	
 }
+
+.felamimail-body-blockquote {
+    margin: 5px 10px 0 3px;
+    padding-left: 10px;
+    border-left: 2px solid #000088;
+}
+
+.felamimail-body-signature {
+    font-size: 9px;
+    color: #bbbbbb;
+}
