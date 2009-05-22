@@ -296,7 +296,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         return array(
             'from'      => 'default',
             'subject'   => 'test',
-            'to'        => 'unittest@tine20.org',
+            'to'        => array('unittest@tine20.org'),
             'body'      => 'aaaaaa <br>',
             //'flags'     => array('\Answered')
         );

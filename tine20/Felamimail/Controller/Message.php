@@ -343,14 +343,20 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setFrom(Tinebase_Core::getConfig()->imap->user, Tinebase_Core::getConfig()->imap->user);
         
         // add recipients
-        foreach ($_message->to as $to) {
-            $mail->addTo($to, $to);
+        if (isset($_message->to)) {
+            foreach ($_message->to as $to) {
+                $mail->addTo($to, $to);
+            }
         }
-        foreach ($_message->cc as $cc) {
-            $mail->addCc($cc, $cc);
+        if (isset($_message->cc)) {
+            foreach ($_message->cc as $cc) {
+                $mail->addCc($cc, $cc);
+            }
         }
-        foreach ($_message->bcc as $bcc) {
-            $mail->addBcc($bcc, $bcc);
+        if (isset($_message->bcc)) {
+            foreach ($_message->bcc as $bcc) {
+                $mail->addBcc($bcc, $bcc);
+            }
         }
         
         // set subject & date
@@ -358,14 +364,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setDate(Zend_Date::now('en_US')->toString(Felamimail_Model_Message::DATE_FORMAT));
         
         // add attachments
-        foreach ($_message->attachments as $attachment) {
-            $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
-            $part->type = $attachment['type'];
-            $part->filename = $attachment['name'];
-            $part->encoding = Zend_Mime::ENCODING_8BIT;
-            $part->disposition = Zend_Mime::ENCODING_BASE64; //?
-            
-            $mail->addAttachment($part);
+        if (isset($_message->attachments)) {
+            foreach ($_message->attachments as $attachment) {
+                $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
+                $part->type = $attachment['type'];
+                $part->filename = $attachment['name'];
+                $part->encoding = Zend_Mime::ENCODING_8BIT;
+                $part->disposition = Zend_Mime::ENCODING_BASE64; //?
+                
+                $mail->addAttachment($part);
+            }
         }
 
         // set transport + send mail
