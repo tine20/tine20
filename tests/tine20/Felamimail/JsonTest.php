@@ -174,11 +174,15 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSendAndDeleteMessage()
     {
+        // clear cache and sent folder
+        $sent = $this->_getFolder('Sent');
+        Felamimail_Controller_Cache::getInstance()->clear($sent->getId());
+        Felamimail_Controller_Folder::getInstance()->emptyFolder($sent->getId());
+        
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
         
         // check if message is in sent folder
-        $sent = $this->_getFolder('Sent');
         $filter = $this->_getMessageFilter($sent->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         //print_r($result);
