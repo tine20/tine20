@@ -101,7 +101,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     afterRender: function() {
         this.initElements();
         this.el.on('dblclick', this.onDblClick, this);
+        
         this.initDragZone();
+        this.initDropZone();
         
         this.updatePeriod({from: this.startDate});
         
@@ -244,7 +246,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private
      */
     initDragZone: function() {
-        // init dragables
         this.dragZone = new Ext.dd.DragZone(this.el, {
             ddGroup: 'cal-event',
             view: this,
@@ -278,10 +279,44 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             },
             
             getRepairXY: function(e, dd) {
-                //Ext.fly(this.dragData.sourceEl).setStyle({'border-style': 'solid'});
                 Ext.fly(this.dragData.sourceEl).setOpacity(1, 1);
-                
                 return Ext.fly(this.dragData.sourceEl).getXY();
+            }
+        });
+    },
+    
+    initDropZone: function() {
+        this.dd = new Ext.dd.DropZone(this.el.dom, {
+            ddGroup: 'cal-event',
+            
+            notifyOver : function(dd, e, data) {
+                var target = e.getTarget('td.cal-monthview-daycell', 3);
+                return target ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
+            },
+            
+            notifyDrop : function(dd, e, data) {
+                var v = data.scope;
+                
+                var target = e.getTarget('td.cal-monthview-daycell', 3);
+                var targetDate = v.dateMesh[v.dayCells.indexOf(target)];
+                
+                if (targetDate) {
+                    var event = data.event;
+                    
+                    var diff = (targetDate.getTime() - event.get('dtstart').clearTime(true).getTime()) / Date.msDAY;
+                    if (! diff) {
+                        return false;
+                    }
+                    
+                    event.beginEdit();
+                    event.set('dtstart', event.get('dtstart').add(Date.DAY, diff));
+                    event.set('dtend', event.get('dtend').add(Date.DAY, diff));
+                    event.endEdit();
+                    
+                    v.fireEvent('updateEvent', event);
+                }
+                
+                return !!targetDate;
             }
         });
     },
@@ -396,10 +431,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             var posEl = this.getEventPosEl(this.dayCells[i].lastChild, pos);
             var eventEl = tmpl.overwrite(posEl, data, true);
         }
-        
-        
-        //console.log(event);
-        //console.log(dayCell)
     },
     
     layout: function() {
@@ -471,11 +502,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             var parallelEvents = this.parallelEventsRegistry.getEvents(event.get('dtstart'), event.get('dtend'));
             
             for (var j=0; j<parallelEvents.length; j++) {
-                //this.removeEvent(parallelEvents[j]);
-                //this.insertEvent(parallelEvents[j]);
+                this.removeEvent(parallelEvents[j]);
+                this.insertEvent(parallelEvents[j]);
             }
             
-            //this.setActiveEvent(event);
+            this.setActiveEvent(event);
         }
     },
     
@@ -483,8 +514,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private
      */
     onBeforeLoad: function() {
-        console.log('onBeforeLoad');
-        //this.ds.each(this.removeEvent, this);
+        //console.log('onBeforeLoad');
+        this.ds.each(this.removeEvent, this);
     },
     
     onDblClick: function(e, target) {
@@ -517,8 +548,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private
      */
     onLoad : function(){
-        console.log('onLoad');
-        //this.ds.each(this.insertEvent, this);
+        //console.log('onLoad');
+        this.ds.each(this.insertEvent, this);
     },
     
     /**
@@ -526,35 +557,30 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     onRemove : function(ds, event, index, isUpdate){
         this.parallelEventsRegistry.unregister(event);
-        //this.removeEvent(event);
+        this.removeEvent(event);
     },
     
     /**
      * @private
      */
     onUpdate : function(ds, event){
-        /*
         // relayout original context
-        var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_event')) ? 
-            this.parallelWholeDayEventsRegistry : 
-            this.parallelScrollerEventsRegistry;
         var originalDtstart = event.modified.hasOwnProperty('dtstart') ? event.modified.dtstart : event.get('dtstart');
         var originalDtend = event.modified.hasOwnProperty('dtend') ? event.modified.dtend : event.get('dtend');
             
-        originalRegistry.unregister(event);
+        this.parallelEventsRegistry.unregister(event);
         
-        var originalParallels = originalRegistry.getEvents(originalDtstart, originalDtend);
+        var originalParallels = this.parallelEventsRegistry.getEvents(originalDtstart, originalDtend);
         for (var j=0; j<originalParallels.length; j++) {
-            this.removeEvent(originalParallels[j]);
-            this.insertEvent(originalParallels[j]);
+            // no idea why this is not nessesary ...
+            //this.removeEvent(originalParallels[j]);
+            //this.insertEvent(originalParallels[j]);
         }
         
         // relayout actual context
-        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-        registry.register(event);
+        this.parallelEventsRegistry.register(event);
         
-        var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
-        
+        var parallelEvents = this.parallelEventsRegistry.getEvents(event.get('dtstart'), event.get('dtend'));
         for (var j=0; j<parallelEvents.length; j++) {
             this.removeEvent(parallelEvents[j]);
             this.insertEvent(parallelEvents[j]);
@@ -562,7 +588,21 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         event.commit(true);
         this.setActiveEvent(this.getActiveEvent());
-        */
+        this.layoutDayCells();
+    },
+    
+    /**
+     * removes a evnet from the dom
+     * @param {Tine.Calendar.Model.Event} event
+     */
+    removeEvent: function(event) {
+        var eventEls = this.getEventEls(event);
+        if (Ext.isArray(eventEls)) {
+            for (var i=0; i<eventEls.length; i++) {
+                eventEls[i].remove();
+            }
+            event.domIds = [];
+        }
     },
     
     render: function() {
