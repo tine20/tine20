@@ -150,3 +150,12 @@ cal-monthview-wkcell-header {
     white-space: nowrap;
     overflow: visible; 
 }
+
+
+/******************************* daypreviewbox ********************************/
+.cal-monthview-daypreviewbox {
+	position: absolute;
+	border-bottom: 1px solid #E1E1E1;
+	overflow-y: auto;
+	z-index: 5000;
+}

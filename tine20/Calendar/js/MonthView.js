@@ -100,7 +100,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     afterRender: function() {
         this.initElements();
+        this.el.on('mousedown', this.onMouseDown, this);
         this.el.on('dblclick', this.onDblClick, this);
+        this.el.on('click', this.onClick, this);
         
         this.initDragZone();
         this.initDropZone();
@@ -475,20 +477,35 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     layoutDayCells: function() {
         for (var i=0; i<this.dayCells.length; i++) {
             if (this.dayCells[i].lastChild.childNodes.length > 1) {
-                for (var j=0, height=0, hideCount=0; j<this.dayCells[i].lastChild.childNodes.length; j++) {
-                    var eventEl = Ext.get(this.dayCells[i].lastChild.childNodes[j]);
-                    height += eventEl.getHeight();
-                    
-                    eventEl[height > this.dayCellsHeight ? 'hide' : 'show']();
-                    
-                    if (height > this.dayCellsHeight) {
-                        hideCount++;
-                    }
-                }
-                
-                this.dayCells[i].firstChild.firstChild.innerHTML = hideCount > 0 ? String.format(this.moreString, hideCount) : '';
+                this.layoutDayCell(this.dayCells[i], true, true);
             }
         }
+    },
+    
+    /**
+     * layouts a single day cell
+     * 
+     * @param {dom} cell
+     * @param {Bool} hideOverflow
+     * @param {Bool} updateHeader
+     */
+    layoutDayCell: function(cell, hideOverflow, updateHeader) {
+        for (var j=0, height=0, hideCount=0; j<cell.lastChild.childNodes.length; j++) {
+            var eventEl = Ext.get(cell.lastChild.childNodes[j]);
+            height += eventEl.getHeight();
+            
+            eventEl[height > this.dayCellsHeight && hideOverflow ? 'hide' : 'show']();
+            
+            if (height > this.dayCellsHeight && hideOverflow) {
+                hideCount++;
+            }
+        }
+        
+        if (updateHeader) {
+            cell.firstChild.firstChild.innerHTML = hideCount > 0 ? String.format(this.moreString, hideCount) : '';
+        }
+        
+        return height;
     },
     
     /**
@@ -515,6 +532,35 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     onBeforeLoad: function() {
         this.ds.each(this.removeEvent, this);
+    },
+    
+    onClick: function(e, target) {
+        /** distinct click from dblClick **/
+        var now = new Date().getTime();
+        
+        if (now - parseInt(this.lastClickTime, 10) < 300) {
+            this.lastClickTime = now;
+            return e.stopEvent();
+        }
+        
+        if (Math.abs(e.getTime() - now) < 100) {
+            this.lastClickTime = now;
+            return this.onClick.defer(400, this, [e, target]);
+        }
+        /** end distinct click from dblClick **/
+        
+        switch(target.className) {
+            case 'cal-monthview-dayheader-date':
+            case 'cal-monthview-dayheader-more':
+                var moreText = target.parentNode.firstChild.innerHTML;
+                if (! moreText) {
+                    return;
+                }
+                
+                e.stopEvent();
+                this.zoomDayCell(target.parentNode.parentNode);
+                break;
+        }
     },
     
     onDblClick: function(e, target) {
@@ -548,6 +594,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     onLoad : function(){
         this.ds.each(this.insertEvent, this);
+    },
+    
+    /**
+     * @private
+     */
+    onMouseDown: function(e, target) {
+        this.el.focus();
+        this.unZoom();
     },
     
     /**
@@ -709,5 +763,35 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         this.layout();
         this.fireEvent('changePeriod', period);
+    },
+    
+    unZoom: function() {
+        if (this.zoomCell) {
+            var cell = Ext.get(this.zoomCell);
+            var height = cell.getHeight() - cell.first().getHeight();
+            cell.last().scrollTo('top');
+            cell.last().removeClass('cal-monthview-daypreviewbox');
+            cell.last().setHeight(height);
+            this.layoutDayCell(this.zoomCell, true, true);
+            
+            this.zoomCell = false;
+        }
+        
+    },
+    
+    zoomDayCell: function(cell) {
+        this.zoomCell = cell;
+        
+        var dayBodyEl = Ext.get(cell.lastChild);
+        var box = dayBodyEl.getBox();
+        var bgColor = Ext.fly(cell).getStyle('background-color');
+        
+        dayBodyEl.addClass('cal-monthview-daypreviewbox');
+        dayBodyEl.setBox(box);
+        dayBodyEl.setStyle('background-color', bgColor == 'transparent' ? '#FFFFFF' : bgColor);
+        
+        var height = this.layoutDayCell(cell, false, true) + 10;
+        var availHeight = this.el.getBottom() - box.y;
+        dayBodyEl.setHeight(Math.min(height, availHeight));
     }
 });
