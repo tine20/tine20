@@ -527,7 +527,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var eventEls = this.getEventEls(event);
         if (Ext.isArray(eventEls)) {
             for (var i=0; i<eventEls.length; i++) {
-                eventEls[i].remove();
+                if (eventEls[i] && typeof eventEls[i].remove == 'function') {
+                    eventEls[i].remove();
+                }
             }
             event.domIds = [];
         }
@@ -831,25 +833,32 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_event')) ? 
             this.parallelWholeDayEventsRegistry : 
             this.parallelScrollerEventsRegistry;
+        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         var originalDtstart = event.modified.hasOwnProperty('dtstart') ? event.modified.dtstart : event.get('dtstart');
         var originalDtend = event.modified.hasOwnProperty('dtend') ? event.modified.dtend : event.get('dtend');
             
-        originalRegistry.unregister(event);
+        
         
         var originalParallels = originalRegistry.getEvents(originalDtstart, originalDtend);
         for (var j=0; j<originalParallels.length; j++) {
             this.removeEvent(originalParallels[j]);
+        }
+        originalRegistry.unregister(event);
+        
+        var originalParallels = originalRegistry.getEvents(originalDtstart, originalDtend);
+        for (var j=0; j<originalParallels.length; j++) {
             this.insertEvent(originalParallels[j]);
         }
         
         // relayout actual context
-        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-        registry.register(event);
-        
         var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
-        
         for (var j=0; j<parallelEvents.length; j++) {
             this.removeEvent(parallelEvents[j]);
+        }
+        
+        registry.register(event);
+        var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
+        for (var j=0; j<parallelEvents.length; j++) {
             this.insertEvent(parallelEvents[j]);
         }
         
