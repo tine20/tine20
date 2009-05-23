@@ -185,14 +185,24 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @param {Number} pos
      * @return {dom}
      */
-    getEventPosEl: function(dayCell, pos) {
+    getEventSlice: function(dayCell, pos) {
         pos = Math.abs(pos);
         
         for (var i=dayCell.childNodes.length; i<=pos; i++) {
-            Ext.DomHelper.insertAfter(dayCell.lastChild, '<div />');
+            Ext.DomHelper.insertAfter(dayCell.lastChild, '<div class="cal-monthview-eventslice"/>');
             //console.log('inserted slice: ' + i);
         }
-
+        
+        // make shure cell is empty
+        while (dayCell.childNodes[pos].innerHTML) {
+            pos--;
+        }
+        
+        if (pos < 0) {
+            // no shure if this may happen, but safe is safe ;-)
+            Ext.DomHelper.insertBefore(dayCell.firstChild, '<div class="cal-monthview-eventslice"/>');
+            return dayCell.childNodes[0];
+        }
         return dayCell.childNodes[pos];
     },
     
@@ -430,7 +440,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 data.showInfo = i == startCellNumber || i%7 == 0;
             } 
             
-            var posEl = this.getEventPosEl(this.dayCells[i].lastChild, pos);
+            var posEl = this.getEventSlice(this.dayCells[i].lastChild, pos);
             var eventEl = tmpl.overwrite(posEl, data, true);
         }
     },
@@ -657,8 +667,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var eventEls = this.getEventEls(event);
         if (Ext.isArray(eventEls)) {
             for (var i=0; i<eventEls.length; i++) {
-                if (eventEls[i] && typeof eventEls[i].remove == 'function') {
+                if (eventEls[i] /*&& typeof eventEls[i].remove == 'function'*/) {
                     eventEls[i].remove();
+                    //eventEls[i].replaceWith({'tag': 'div'});
                 }
             }
             event.domIds = [];
@@ -688,7 +699,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                         '<div class="cal-monthview-dayheader-more"></div>' +
                         '<div class="cal-monthview-dayheader-date"></div>' +
                     '</div>' +
-                    '<div class="cal-monthview-daybody"><div /></div>' +
+                    '<div class="cal-monthview-daybody"><div class="cal-monthview-eventslice" /></div>' +
                 '</td>';
         }
         m.push('</tr></tbody></table></td></tr>');

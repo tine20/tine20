@@ -79,6 +79,10 @@ cal-monthview-wkcell-header {
 }
 
 /*********************************** Events ***********************************/
+.cal-monthview-eventslice {
+    height: 18px;
+}
+
 .cal-monthview-event-icon,
 .cal-monthview-alldayevent-icon {
     width: 16px;
@@ -91,7 +95,7 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-event-summary {
-    white-space: normal;
+    white-space: nowrap;
 }
 
 
