@@ -495,7 +495,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             height += eventEl.getHeight();
             
             eventEl[height > this.dayCellsHeight && hideOverflow ? 'hide' : 'show']();
-            
+
             if (height > this.dayCellsHeight && hideOverflow) {
                 hideCount++;
             }
@@ -768,10 +768,21 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     unZoom: function() {
         if (this.zoomCell) {
             var cell = Ext.get(this.zoomCell);
+            var dayBodyEl = cell.last();
             var height = cell.getHeight() - cell.first().getHeight();
-            cell.last().scrollTo('top');
-            cell.last().removeClass('cal-monthview-daypreviewbox');
-            cell.last().setHeight(height);
+            dayBodyEl.scrollTo('top');
+            dayBodyEl.removeClass('cal-monthview-daypreviewbox');
+            dayBodyEl.setStyle('background-color', cell.getStyle('background-color'));
+            dayBodyEl.setStyle('border-top', 'none');
+            dayBodyEl.setHeight(height);
+            
+            
+            // NOTE: we need both setWidht statements, otherwise safari keeps scroller space
+            for (var i=0; i<dayBodyEl.dom.childNodes.length; i++) {
+                Ext.get(dayBodyEl.dom.childNodes[i]).setWidth(dayBodyEl.getWidth());
+                Ext.get(dayBodyEl.dom.childNodes[i]).setWidth(dayBodyEl.first().getWidth());
+            }
+            
             this.layoutDayCell(this.zoomCell, true, true);
             
             this.zoomCell = false;
@@ -785,13 +796,15 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var dayBodyEl = Ext.get(cell.lastChild);
         var box = dayBodyEl.getBox();
         var bgColor = Ext.fly(cell).getStyle('background-color');
+        bgColor == 'transparent' ? '#FFFFFF' : bgColor
         
         dayBodyEl.addClass('cal-monthview-daypreviewbox');
         dayBodyEl.setBox(box);
-        dayBodyEl.setStyle('background-color', bgColor == 'transparent' ? '#FFFFFF' : bgColor);
+        dayBodyEl.setStyle('background-color', bgColor);
+        dayBodyEl.setStyle('border-top', '1px solid ' + bgColor);
         
-        var height = this.layoutDayCell(cell, false, true) + 10;
+        var requiredHeight = this.layoutDayCell(cell, false, true) + 10;
         var availHeight = this.el.getBottom() - box.y;
-        dayBodyEl.setHeight(Math.min(height, availHeight));
+        dayBodyEl.setHeight(Math.min(requiredHeight, availHeight));
     }
 });
