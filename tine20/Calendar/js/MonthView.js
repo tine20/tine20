@@ -514,7 +514,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private
      */
     onBeforeLoad: function() {
-        //console.log('onBeforeLoad');
         this.ds.each(this.removeEvent, this);
     },
     
@@ -548,7 +547,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private
      */
     onLoad : function(){
-        //console.log('onLoad');
         this.ds.each(this.insertEvent, this);
     },
     
@@ -568,21 +566,27 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var originalDtstart = event.modified.hasOwnProperty('dtstart') ? event.modified.dtstart : event.get('dtstart');
         var originalDtend = event.modified.hasOwnProperty('dtend') ? event.modified.dtend : event.get('dtend');
             
+        var originalParallels = this.parallelEventsRegistry.getEvents(originalDtstart, originalDtend);
+        for (var j=0; j<originalParallels.length; j++) {
+            this.removeEvent(originalParallels[j]);
+        }
         this.parallelEventsRegistry.unregister(event);
         
         var originalParallels = this.parallelEventsRegistry.getEvents(originalDtstart, originalDtend);
         for (var j=0; j<originalParallels.length; j++) {
-            // no idea why this is not nessesary ...
-            //this.removeEvent(originalParallels[j]);
-            //this.insertEvent(originalParallels[j]);
+            this.insertEvent(originalParallels[j]);
         }
         
+        
         // relayout actual context
+        var parallelEvents = this.parallelEventsRegistry.getEvents(event.get('dtstart'), event.get('dtend'));
+        for (var j=0; j<parallelEvents.length; j++) {
+            this.removeEvent(parallelEvents[j]);
+        }
         this.parallelEventsRegistry.register(event);
         
         var parallelEvents = this.parallelEventsRegistry.getEvents(event.get('dtstart'), event.get('dtend'));
         for (var j=0; j<parallelEvents.length; j++) {
-            this.removeEvent(parallelEvents[j]);
             this.insertEvent(parallelEvents[j]);
         }
         
@@ -599,7 +603,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var eventEls = this.getEventEls(event);
         if (Ext.isArray(eventEls)) {
             for (var i=0; i<eventEls.length; i++) {
-                eventEls[i].remove();
+                if (eventEls[i] && typeof eventEls[i].remove == 'function') {
+                    eventEls[i].remove();
+                }
             }
             event.domIds = [];
         }
