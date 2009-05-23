@@ -87,6 +87,7 @@ cal-monthview-wkcell-header {
 
 .cal-monthview-event {
 	margin: 0px 0px;
+	width: 100%;
 }
 
 .cal-monthview-event-summary {
@@ -100,6 +101,7 @@ cal-monthview-wkcell-header {
 	margin: 0px 0px 1px 0px;
 	background-color: red;
 	height: 17px;
+	width: 100%;
 }
 
 .ext-gecko .cal-monthview-alldayevent {
