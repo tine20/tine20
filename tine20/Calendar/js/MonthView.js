@@ -804,7 +804,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         dayBodyEl.setStyle('border-top', '1px solid ' + bgColor);
         
         var requiredHeight = this.layoutDayCell(cell, false, true) + 10;
-        var availHeight = this.el.getBottom() - box.y;
+        var availHeight = this.calPanel.el.getBottom() - box.y;
         dayBodyEl.setHeight(Math.min(requiredHeight, availHeight));
     }
 });
