@@ -195,14 +195,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         // make shure cell is empty
         while (dayCell.childNodes[pos].innerHTML) {
-            pos--;
+            pos++;
+            
+            if (pos > dayCell.childNodes.length -1) {
+                Ext.DomHelper.insertAfter(dayCell.lastChild, '<div class="cal-monthview-eventslice"/>');
+            }
         }
         
-        if (pos < 0) {
-            // no shure if this may happen, but safe is safe ;-)
-            Ext.DomHelper.insertBefore(dayCell.firstChild, '<div class="cal-monthview-eventslice"/>');
-            return dayCell.childNodes[0];
-        }
         return dayCell.childNodes[pos];
     },
     
