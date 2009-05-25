@@ -234,7 +234,6 @@ Tine.Tinebase.tineInit = {
          * @todo In production mode there should be a 'report bug' wizzard here
          */
         Ext.Ajax.on('requestexception', function(connection, response, options){
-            console.log(options);
             
             // if communication is lost, we can't create a nice ext window.
             if (response.status === 0) {
@@ -286,7 +285,7 @@ Tine.Tinebase.tineInit = {
                 });
                 break;
                 
-                // generic failure -> notify developers
+                // generic failure -> notify developers / only if no custom exception handler has been defined in options
                 default:
                 if (typeof options.exceptionHandler !== 'function') {
                     var trace = '';
