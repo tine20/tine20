@@ -307,10 +307,6 @@
     cursor:pointer;
 }
 
-.cal-daysviewpanel-wholedayheader-pos {
-	position: relative;
-}
-
 .cal-daysviewpanel-wholedayevent-body {
 	position: absolute;
     width: 100%;

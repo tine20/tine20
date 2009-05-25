@@ -419,7 +419,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var domId = Ext.id() + '-evnet:' + event.get('id');
             event.domIds.push(domId);
             
-            var eventEl = this.templates.wholeDayEvent.append(this.getWholeDayEl(pos), {
+            var eventEl = this.templates.wholeDayEvent.insertFirst(this.wholeDayArea, {
                 id: domId,
                 summary: event.get('summary'),
                 startTime: dtStart.format('H:i'),
@@ -430,7 +430,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 width: width  +'px',
                 height: '15px',
                 left: left + 'px',
-                top: '1px'
+                top: pos * 18 + 'px'//'1px'
             }, true);
             
             if (! (endColNum > this.numOfDays)) {
@@ -588,6 +588,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         registry.register(event);
         this.insertEvent(event);
         this.setActiveEvent(event);
+        this.layout();
         
         //var eventEls = this.getEventEls(event);
         //eventEls[0].setStyle({'border-style': 'dashed'});
@@ -864,6 +865,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         event.commit(true);
         this.setActiveEvent(this.getActiveEvent());
+        this.layout();
     },
 
     /**
@@ -885,6 +887,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             
             this.setActiveEvent(event);
         }
+        
+        this.layout();
     },
 
     /**
@@ -898,16 +902,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         registry.unregister(event);
         this.removeEvent(event);
         
-        if(isUpdate !== true){
-            //this.fireEvent("eventremoved", this, index, record);
-        }
-        
-        /*
-        if (event.get('is_all_day_event')) {
-            this.checkWholeDayEls();
-            this.layout();
-        }
-        */
+        this.layout();
     },
     
     /**
@@ -924,6 +919,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     onLoad : function(){
         //console.log('onLoad');
         this.ds.each(this.insertEvent, this);
+        this.layout();
         this.scrollToNow();
     },
     
@@ -1039,19 +1035,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         return this.dayCols[pos];
     },
     
-    getWholeDayEl: function(pos) {
-        pos = Math.abs(pos);
-        
-        for (var i=this.wholeDayArea.childNodes.length; i<pos+3; i++) {
-            Ext.DomHelper.insertBefore(this.wholeDayArea.lastChild, '<div class="cal-daysviewpanel-wholedayheader-pos">&#160;</div>');
-            this.layout();
-            //console.log('inserted slice: ' + i);
-        }
-
-        //console.log(pos);
-        return this.wholeDayArea.childNodes[pos];
-    },
-    
     checkWholeDayEls: function() {
         var freeIdxs = [];
         for (var i=0; i<this.wholeDayArea.childNodes.length-1; i++) {
@@ -1080,13 +1063,23 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var vw = csize.width;
         
         this.el.setSize(csize.width, csize.height);
-
+        
+        this.layoutWholeDayHeader();
         var hdHeight = this.mainHd.getHeight();
         
         var vh = csize.height - (hdHeight);
 
         this.scroller.setSize(vw, vh);
         this.innerHd.style.width = (vw)+'px';
+    },
+    
+    layoutWholeDayHeader: function() {
+        for (var i=0, bottom = 0; i<this.wholeDayArea.childNodes.length -1; i++) {
+            bottom = Math.max(parseInt(Ext.get(this.wholeDayArea.childNodes[i]).getBottom(), 10), bottom);
+        }
+        
+        var headerEl = Ext.get(this.wholeDayArea);
+        headerEl.setHeight(bottom - headerEl.getTop() + 10);
     },
     
     /**
@@ -1221,8 +1214,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         ts.header = new Ext.XTemplate(
             '<div class="cal-daysviewpanel-daysheader">{daysHeader}</div>' +
+            
             '<div class="cal-daysviewpanel-wholedayheader">' +
-                '<div class="cal-daysviewpanel-wholedayheader-pos">&#160;</div>' +
                 '<div class="cal-daysviewpanel-wholedayheader-daycols">{wholeDayCols}</div>' +
             '</div>'
         );
