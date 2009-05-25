@@ -359,9 +359,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
         
-        // set subject & date
+        // set subject
         $mail->setSubject($_message->subject);
-        $mail->setDate(Zend_Date::now('en_US')->toString(Felamimail_Model_Message::DATE_FORMAT));
         
         // add attachments
         if (isset($_message->attachments)) {
