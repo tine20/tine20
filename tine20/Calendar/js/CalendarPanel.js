@@ -140,13 +140,12 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      */
     processEvent : function(name, e){
         this.fireEvent(name, e);
-        var t = e.getTarget();
         var v = this.view;
         
-        var date = v.getTargetDateTime(t);
+        var date = v.getTargetDateTime(e);
         if (! date) {
             // fetch event id;
-            var event = v.getTargetEvent(t);
+            var event = v.getTargetEvent(e);
         }
         
         /*

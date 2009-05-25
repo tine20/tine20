@@ -206,6 +206,28 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         };    
     },
     
+    getTargetDateTime: function(e) {
+        var target = e.getTarget('td.cal-monthview-daycell', 3);
+        
+        if (target) {
+            var dateIdx = this.dayCells.indexOf(target);
+            var date = this.dateMesh[this.dayCells.indexOf(target)];
+        
+            // set some default time:
+            date.add(Date.HOUR, 10);
+            return date;
+        }
+    },
+    
+    getTargetEvent: function(e) {
+        var target = e.getTarget('div.cal-monthview-alldayevent', 10) || e.getTarget('div.cal-monthview-event', 10);
+        
+        if (target) {
+            var parts = target.id.split(':');
+            var event = this.ds.getById(parts[1]);
+        }
+    },
+    
     /**
      * @private
      * @param {Tine.Calendar.CalendarPanel} calPanel

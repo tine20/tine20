@@ -205,7 +205,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 sourceEl.setStyle({'border-style': 'dashed'});
                 sourceEl.setOpacity(0.5);
                 
-                var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e.getTarget());
+                var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
                 if (target) {
                     return Math.abs(target.getTime() - data.event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                 }
@@ -221,7 +221,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             notifyDrop : function(dd, e, data) {
                 var v = data.scope;
                 
-                var targetDate = v.getTargetDateTime(e.getTarget());
+                var targetDate = v.getTargetDateTime(e);
                 
                 if (targetDate) {
                     var event = data.event;
@@ -719,7 +719,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     onDblClick: function(e, target) {
         e.stopEvent();
         
-        var dtStart = this.getTargetDateTime(target);
+        var dtStart = this.getTargetDateTime(e);
         if (dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Event({
@@ -744,7 +744,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.scroller.focus();
         this.mouseDown = true;
         
-        var dtStart = this.getTargetDateTime(target);
+        var dtStart = this.getTargetDateTime(e);
         if (! this.editing && dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Event({
@@ -981,10 +981,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * get date of a (event) target
      * 
-     * @param {dom} target
+     * @param {Ext.EventObject} e
      * @return {Date}
      */
-    getTargetDateTime: function(target) {
+    getTargetDateTime: function(e) {
+        var target = e.getTarget();
         if (target.id.match(/^ext-gen\d+:\d+/)) {
             var parts = target.id.split(':');
             
