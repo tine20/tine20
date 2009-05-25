@@ -13,80 +13,196 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/FelamimailEditDialog.js:59 js/FelamimailGridPanel.js:54 js/Models.js:50
+#: js/FelamimailGridDetailsPanel.js:86 js/FelamimailEditDialog.js:175
+#: js/FelamimailGridPanel.js:193 js/FelamimailGridPanel.js:241
+msgid "Subject"
+msgstr ""
+
+#: js/FelamimailGridDetailsPanel.js:87 js/FelamimailEditDialog.js:163
+#: js/FelamimailGridPanel.js:194 js/FelamimailGridPanel.js:247
+msgid "From"
+msgstr ""
+
+#: js/FelamimailGridDetailsPanel.js:148 js/FelamimailEditDialog.js:111
+msgid "Attachments"
+msgstr ""
+
+#: js/FelamimailAttachmentGrid.js:109
+msgid "Upload Failed"
+msgstr ""
+
+#: js/FelamimailAttachmentGrid.js:110
+msgid ""
+"Could not upload attachment. Filesize could be too big. Please notify your "
+"Administrator."
+msgstr ""
+
+#: js/FelamimailAttachmentGrid.js:122
+msgid "Add Attachment"
+msgstr ""
+
+#: js/FelamimailAttachmentGrid.js:130
+msgid "Remove Attachment"
+msgstr ""
+
+#: js/FelamimailTreePanel.js:98
+msgid "Folder"
+msgstr ""
+
+#: js/FelamimailTreePanel.js:105
+msgid "Update Cache"
+msgstr ""
+
+#: js/FelamimailTreePanel.js:133
+msgid "Empty Folder"
+msgstr ""
+
+#: js/FelamimailRecipientGrid.js:92 js/FelamimailRecipientGrid.js:113
+msgid "To:"
+msgstr ""
+
+#: js/FelamimailRecipientGrid.js:95 js/FelamimailRecipientGrid.js:114
+msgid "Cc:"
+msgstr ""
+
+#: js/FelamimailRecipientGrid.js:98 js/FelamimailRecipientGrid.js:115
+msgid "Bcc:"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:88 js/FelamimailGridPanel.js:498
+msgid "Failed"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:89
+msgid "Could not send {0}."
+msgstr ""
+
+#: js/FelamimailEditDialog.js:90
+msgid "Error:"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:106
+msgid "Recipients"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:116
+msgid "Body"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:145 js/Models.js:45
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/FelamimailEditDialog.js:75 js/FelamimailGridPanel.js:76
-msgid "Number"
+#: js/FelamimailEditDialog.js:192
+msgid "Write New Mail"
 msgstr ""
 
-#: js/FelamimailEditDialog.js:80 js/FelamimailGridPanel.js:82
-msgid "Title"
+#: js/FelamimailGridPanel.js:88
+msgid "Write"
 msgstr ""
 
-#: js/FelamimailEditDialog.js:89
-msgid "Unit"
+#: js/FelamimailGridPanel.js:97
+msgid "Reply"
 msgstr ""
 
-#: js/FelamimailEditDialog.js:93
-msgid "Unit Price"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:98 js/FelamimailGridPanel.js:95
-msgid "Budget"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:102
-msgid "Timesheets are billable"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:106 js/FelamimailGridPanel.js:88
-msgid "Status"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:112
-msgid "closed"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:112
-msgid "open"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:114
-msgid "Billed"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:122
-msgid "not yet billed"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:123
-msgid "to bill"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:124
-msgid "billed"
-msgstr ""
-
-#: js/FelamimailGridPanel.js:55
-msgid "Description"
+#: js/FelamimailGridPanel.js:107
+msgid "Reply To All"
 msgstr ""
 
 #: js/FelamimailGridPanel.js:117
-msgid "Show closed"
+msgid "Forward"
 msgstr ""
 
-#: js/Models.js:54
+#: js/FelamimailGridPanel.js:126
+msgid "Toggle Flag"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:137
+msgid "Mark Unread"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:149 js/FelamimailGridPanel.js:150
+#: js/FelamimailGridPanel.js:152
+msgid "Delete"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:195 js/FelamimailGridPanel.js:253
+msgid "To"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:196
+msgid "Cc"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:197
+msgid "Bcc"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:198 js/FelamimailGridPanel.js:268
+msgid "Received"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:222
+msgid "Id"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:260
+msgid "Sent"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:275
+msgid "Size"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:308
+msgid "Answered"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:311
+msgid "Forwarded"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:314
+msgid "Recent"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:385
+msgid "wrote"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:387
+msgid "Re: "
+msgstr ""
+
+#: js/FelamimailGridPanel.js:391
+msgid "Original message"
+msgstr ""
+
+#: js/FelamimailGridPanel.js:394
+msgid "Fwd: "
+msgstr ""
+
+#: js/FelamimailGridPanel.js:499
+msgid "Some error occured while trying to update the messages."
+msgstr ""
+
+#: js/Models.js:49 js/Models.js:80
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: Setup/_setup.xml:6
-msgid "Email"
+#: js/Models.js:76
+msgid "Account"
+msgid_plural "Accounts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Setup/setup.xml:4
+msgid "Felamimail"
 msgstr ""

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-04-23 18:08+0100\n"
+"PO-Revision-Date: 2009-05-25 16:11+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -12,85 +12,206 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/FelamimailEditDialog.js:59
-#: js/FelamimailGridPanel.js:54
-#: js/Models.js:50
+#: js/FelamimailGridDetailsPanel.js:86
+#: js/FelamimailEditDialog.js:175
+#: js/FelamimailGridPanel.js:193
+#: js/FelamimailGridPanel.js:241
+msgid "Subject"
+msgstr "Betreff"
+
+#: js/FelamimailGridDetailsPanel.js:87
+#: js/FelamimailEditDialog.js:163
+#: js/FelamimailGridPanel.js:194
+#: js/FelamimailGridPanel.js:247
+msgid "From"
+msgstr "Von"
+
+#: js/FelamimailGridDetailsPanel.js:148
+#: js/FelamimailEditDialog.js:111
+msgid "Attachments"
+msgstr "Anhänge"
+
+#: js/FelamimailAttachmentGrid.js:109
+msgid "Upload Failed"
+msgstr "Hochladen fehlgeschlagen"
+
+#: js/FelamimailAttachmentGrid.js:110
+msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator."
+msgstr "Konnte Datei nicht hochladen. Eventuell war sie zu groß."
+
+#: js/FelamimailAttachmentGrid.js:122
+msgid "Add Attachment"
+msgstr "Anhang hinzufügen"
+
+#: js/FelamimailAttachmentGrid.js:130
+msgid "Remove Attachment"
+msgstr "Anhang entfernen"
+
+#: js/FelamimailTreePanel.js:98
+msgid "Folder"
+msgstr "Ordner"
+
+#: js/FelamimailTreePanel.js:105
+msgid "Update Cache"
+msgstr "Cache aktualisieren"
+
+#: js/FelamimailTreePanel.js:133
+msgid "Empty Folder"
+msgstr "Ordner leeren"
+
+#: js/FelamimailRecipientGrid.js:92
+#: js/FelamimailRecipientGrid.js:113
+msgid "To:"
+msgstr "To:"
+
+#: js/FelamimailRecipientGrid.js:95
+#: js/FelamimailRecipientGrid.js:114
+msgid "Cc:"
+msgstr "Cc:"
+
+#: js/FelamimailRecipientGrid.js:98
+#: js/FelamimailRecipientGrid.js:115
+msgid "Bcc:"
+msgstr "Bcc:"
+
+#: js/FelamimailEditDialog.js:88
+#: js/FelamimailGridPanel.js:498
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+#: js/FelamimailEditDialog.js:89
+msgid "Could not send {0}."
+msgstr "Konnte {0} nicht senden."
+
+#: js/FelamimailEditDialog.js:90
+msgid "Error:"
+msgstr "Fehler:"
+
+#: js/FelamimailEditDialog.js:106
+msgid "Recipients"
+msgstr "Empfänger"
+
+#: js/FelamimailEditDialog.js:116
+msgid "Body"
+msgstr "Nachricht"
+
+#: js/FelamimailEditDialog.js:145
+#: js/Models.js:45
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "Nachricht"
 msgstr[1] "Nachrichten"
 
-#: js/FelamimailEditDialog.js:75
-#: js/FelamimailGridPanel.js:76
-msgid "Number"
-msgstr ""
+#: js/FelamimailEditDialog.js:192
+msgid "Write New Mail"
+msgstr "Neue EMail verfassen"
 
-#: js/FelamimailEditDialog.js:80
-#: js/FelamimailGridPanel.js:82
-msgid "Title"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:89
-msgid "Unit"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:93
-msgid "Unit Price"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:98
-#: js/FelamimailGridPanel.js:95
-msgid "Budget"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:102
-msgid "Timesheets are billable"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:106
 #: js/FelamimailGridPanel.js:88
-msgid "Status"
-msgstr ""
+msgid "Write"
+msgstr "Verfassen"
 
-#: js/FelamimailEditDialog.js:112
-msgid "closed"
-msgstr ""
+#: js/FelamimailGridPanel.js:97
+msgid "Reply"
+msgstr "Antworten"
 
-#: js/FelamimailEditDialog.js:112
-msgid "open"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:114
-msgid "Billed"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:122
-msgid "not yet billed"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:123
-msgid "to bill"
-msgstr ""
-
-#: js/FelamimailEditDialog.js:124
-msgid "billed"
-msgstr ""
-
-#: js/FelamimailGridPanel.js:55
-msgid "Description"
-msgstr ""
+#: js/FelamimailGridPanel.js:107
+msgid "Reply To All"
+msgstr "Allen antworten"
 
 #: js/FelamimailGridPanel.js:117
-msgid "Show closed"
-msgstr ""
+msgid "Forward"
+msgstr "Weiterleiten"
 
-#: js/Models.js:54
+#: js/FelamimailGridPanel.js:126
+msgid "Toggle Flag"
+msgstr "Markieren"
+
+#: js/FelamimailGridPanel.js:137
+msgid "Mark Unread"
+msgstr "Ungelesen markieren"
+
+#: js/FelamimailGridPanel.js:149
+#: js/FelamimailGridPanel.js:150
+#: js/FelamimailGridPanel.js:152
+msgid "Delete"
+msgstr "Löschen"
+
+#: js/FelamimailGridPanel.js:195
+#: js/FelamimailGridPanel.js:253
+msgid "To"
+msgstr "An"
+
+#: js/FelamimailGridPanel.js:196
+msgid "Cc"
+msgstr "Kopie"
+
+#: js/FelamimailGridPanel.js:197
+msgid "Bcc"
+msgstr "Blindkopie"
+
+#: js/FelamimailGridPanel.js:198
+#: js/FelamimailGridPanel.js:268
+msgid "Received"
+msgstr "Empfangen"
+
+#: js/FelamimailGridPanel.js:222
+msgid "Id"
+msgstr "Id"
+
+#: js/FelamimailGridPanel.js:260
+msgid "Sent"
+msgstr "Gesendet"
+
+#: js/FelamimailGridPanel.js:275
+msgid "Size"
+msgstr "Größe"
+
+#: js/FelamimailGridPanel.js:308
+msgid "Answered"
+msgstr "Beantwortet"
+
+#: js/FelamimailGridPanel.js:311
+msgid "Forwarded"
+msgstr "Weitergeleitet"
+
+#: js/FelamimailGridPanel.js:314
+msgid "Recent"
+msgstr "Neu"
+
+#: js/FelamimailGridPanel.js:385
+msgid "wrote"
+msgstr "geschriebn"
+
+#: js/FelamimailGridPanel.js:387
+msgid "Re: "
+msgstr "Aw: "
+
+#: js/FelamimailGridPanel.js:391
+msgid "Original message"
+msgstr "Originalnachricht"
+
+#: js/FelamimailGridPanel.js:394
+msgid "Fwd: "
+msgstr "Fwd:"
+
+#: js/FelamimailGridPanel.js:499
+msgid "Some error occured while trying to update the messages."
+msgstr "Ein Fehler trat beim aktualisieren der Nachrichten auf."
+
+#: js/Models.js:49
+#: js/Models.js:80
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Nachrichtenliste"
+msgstr[1] "Nachrichtenlisten"
 
-#: Setup/_setup.xml:6
-msgid "Email"
-msgstr ""
+#: js/Models.js:76
+msgid "Account"
+msgid_plural "Accounts"
+msgstr[0] "Konto"
+msgstr[1] "Konten"
+
+#: Setup/setup.xml:4
+msgid "Felamimail"
+msgstr "Email"
 
