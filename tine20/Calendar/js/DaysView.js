@@ -347,6 +347,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.initDropZone();
         this.initDragZone();
         
+        this.updatePeriod({from: this.startDate});
+        
         if (this.dsLoaded) {
             this.onLoad.apply(this);
         }
