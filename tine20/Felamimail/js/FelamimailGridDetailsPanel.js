@@ -109,7 +109,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 if (value) {
                     // TODO check preference
                     
-                    if (headers['content-type'].match(/text\/html/)) {
+                    if (headers['content-type'] && headers['content-type'].match(/text\/html/)) {
                         // TODO remove IMG tags?
                         value = Ext.util.Format.stripScripts(value);
                     } else {
