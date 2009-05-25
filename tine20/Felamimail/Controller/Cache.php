@@ -379,8 +379,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      */
     protected function _convertDate($_dateString)
     {
-        // strip of timezone information for example: (CEST)
-        $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
+        // strip of timezone information for example: (CEST) / why should we need that?
+        //$dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
         
         // append dummy weekday if missing
         if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
