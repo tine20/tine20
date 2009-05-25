@@ -1092,11 +1092,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     layoutWholeDayHeader: function() {
-        for (var i=0, bottom = 0; i<this.wholeDayArea.childNodes.length -1; i++) {
+        var headerEl = Ext.get(this.wholeDayArea);
+        
+        for (var i=0, bottom = headerEl.getTop(); i<this.wholeDayArea.childNodes.length -1; i++) {
             bottom = Math.max(parseInt(Ext.get(this.wholeDayArea.childNodes[i]).getBottom(), 10), bottom);
         }
         
-        var headerEl = Ext.get(this.wholeDayArea);
         headerEl.setHeight(bottom - headerEl.getTop() + 10);
     },
     
