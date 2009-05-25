@@ -138,8 +138,13 @@ class Felamimail_Message extends Zend_Mail_Message
             if ($_isHeader) {
                 $string = iconv_mime_decode($string, 2);
             } else {
-                //$string = imap_base64($string);
                 //$string = base64_decode($string);
+                
+                /*
+                $string = preg_replace("/\=([A-F][A-F0-9])/","%$1",$string);
+                $string = urldecode($string);
+                $string = utf8_encode($string);
+                */                
             }
         }
         

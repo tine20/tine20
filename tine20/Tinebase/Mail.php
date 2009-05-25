@@ -48,6 +48,9 @@ class Tinebase_Mail extends Zend_Mail
      * convert mail to string
      *
      * @return string
+     * 
+     * @todo make this work correctly for html mails
+     * @todo add attachments
      */
     public function __toString()
     {
@@ -59,6 +62,7 @@ class Tinebase_Mail extends Zend_Mail
             }
         }
         
-        return $headersString . "\n\n" . $this->getBodyText(TRUE);
+        //return $headersString . "\n\n" . Felamimail_Message::convertText($this->getBodyText(TRUE), FALSE);
+        return $headersString . "\n\n" . $this->getBodyHtml(TRUE);
     }
 }
