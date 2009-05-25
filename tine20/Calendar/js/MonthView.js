@@ -499,6 +499,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @param {Bool} updateHeader
      */
     layoutDayCell: function(cell, hideOverflow, updateHeader) {
+        // clean empty slices
+        while (cell.lastChild.lastChild.innerHTML == '') {
+            Ext.fly(cell.lastChild.lastChild).remove();
+        }
+        
         for (var j=0, height=0, hideCount=0; j<cell.lastChild.childNodes.length; j++) {
             var eventEl = Ext.get(cell.lastChild.childNodes[j]);
             height += eventEl.getHeight();
@@ -549,13 +554,15 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         if (now - parseInt(this.lastClickTime, 10) < 300) {
             this.lastClickTime = now;
-            return e.stopEvent();
+            //e.stopEvent();
+            return;
         }
         
         if (Math.abs(e.getTime() - now) < 100) {
             this.lastClickTime = now;
             return this.onClick.defer(400, this, [e, target]);
         }
+        this.lastClickTime = now;
         /** end distinct click from dblClick **/
         
         switch(target.className) {
@@ -566,13 +573,15 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     return;
                 }
                 
-                e.stopEvent();
+                //e.stopEvent();
                 this.zoomDayCell(target.parentNode.parentNode);
                 break;
         }
     },
     
     onDblClick: function(e, target) {
+        this.lastClickTime = new Date().getTime();
+        
         e.stopEvent();
         switch(target.className) {
             case 'cal-monthview-wkcell':
@@ -666,9 +675,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var eventEls = this.getEventEls(event);
         if (Ext.isArray(eventEls)) {
             for (var i=0; i<eventEls.length; i++) {
-                if (eventEls[i] /*&& typeof eventEls[i].remove == 'function'*/) {
+                if (eventEls[i]) {
                     eventEls[i].remove();
-                    //eventEls[i].replaceWith({'tag': 'div'});
                 }
             }
             event.domIds = [];
@@ -777,6 +785,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
     unZoom: function() {
         if (this.zoomCell) {
+            // this prevents reopen of cell on header clicks
+            this.lastClickTime = new Date().getTime();
+            
             var cell = Ext.get(this.zoomCell);
             var dayBodyEl = cell.last();
             var height = cell.getHeight() - cell.first().getHeight();
