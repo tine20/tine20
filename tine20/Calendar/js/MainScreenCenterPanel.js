@@ -82,6 +82,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             items: [this.getCalendarPanel(this.activeView)]
         }];
         
+        // preload data
+        this.getCalendarPanel(this.activeView).getStore().load({});
+        
         // add detail panel
         if (this.detailsPanel) {
             this.items.push({
