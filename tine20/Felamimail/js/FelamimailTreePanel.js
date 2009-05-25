@@ -90,8 +90,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         });
         */
         
-        console.log(Tine.Tinebase.appMgr.get('Tinebase'));
-        
         var config = {
             nodeName: this.app.i18n._('Folder'),
             scope: this,
@@ -323,7 +321,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @private
      * 
      * TODO try to disable '+' on nodes that don't have children / it looks like that leafs can't be drop targets :(
-     * TODO generalize this?
      */
     createNode: function(attr) {
     	var node = {
