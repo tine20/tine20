@@ -336,7 +336,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // build mail content
         $mail->setBodyText(strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_message->body)), 'UTF-8');
-        //$mail->setBodyHtml($_message->body, 'UTF-8');
         $mail->setBodyHtml($this->_addHtmlMarkup($_message->body), 'UTF-8');
         
         // set from
@@ -363,6 +362,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setSubject($_message->subject);
         
         // add attachments
+        $contentType = 'text/html';
         if (isset($_message->attachments)) {
             foreach ($_message->attachments as $attachment) {
                 $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
@@ -372,8 +372,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $part->disposition = Zend_Mime::ENCODING_BASE64; //?
                 
                 $mail->addAttachment($part);
+                $contentType = 'multipart/mixed';
             }
         }
+        
+        // add headers
+        $mail->addHeader('content-type', $contentType);
 
         // set transport + send mail
         if (isset(Tinebase_Core::getConfig()->imap->smtp)) {

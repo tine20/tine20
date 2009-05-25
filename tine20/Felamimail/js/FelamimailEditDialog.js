@@ -85,9 +85,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var responseText = Ext.util.JSON.decode(response.responseText);
         //console.log(responseText);
         Ext.MessageBox.alert(
-            _('Failed'), 
-            String.format(_('Could not send {0}.'), this.i18nRecordName) 
-                + ' ( ' . _('Error:') + ' ' + responseText.msg + ')'
+            this.app.i18n._('Failed'), 
+            String.format(this.app.i18n._('Could not send {0}.'), this.i18nRecordName) 
+                + ' ( ' + this.app.i18n._('Error:') + ' ' + responseText.msg + ')'
         ); 
         this.loadMask.hide();
     },

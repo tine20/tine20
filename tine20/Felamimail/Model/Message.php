@@ -9,7 +9,6 @@
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
  * @todo        add flags as consts here?
- * @todo        rename to Felamimail_Model_Cache_Message?
  */
 
 /**
@@ -20,10 +19,11 @@
 class Felamimail_Model_Message extends Tinebase_Record_Abstract
 {  
     /**
-     * date format constant
+     * date format constants
      *
      */
-    const DATE_FORMAT = 'EEE, d MMM YYYY hh:mm:ss zzz';
+    const DATE_FORMAT = 'EEE, d MMM YYYY hh:mm:ss ZZZ';
+    const DATE_FORMAT_RECEIVED = 'dd-MMM-YYYY hh:mm:ss ZZZ';
     
     /**
      * key in $_validators/$_properties array for the field which 

@@ -376,25 +376,38 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      *
      * @param string $_dateString
      * @return Zend_Date
+     * 
+     * @todo make this work for all kinds of date formats
      */
     protected function _convertDate($_dateString)
     {
-        // strip of timezone information for example: (CEST) / why should we need that?
-        //$dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
+        // strip of timezone information for example: (CEST)
+        $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
         
         // append dummy weekday if missing
         if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
             $dateString = 'xxx, ' . $dateString;
         }
         
+        /*
         try {
             # Fri,  6 Mar 2009 20:00:36 +0100
             $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
         } catch (Zend_Date_Exception $e) {
             # Fri,  6 Mar 2009 20:00:36 CET
-            $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
+            $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT_RECEIVED, 'en_US');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' DATE_FORMAT');
             #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " date header $headerValue => $dateString => $date => " . $date->get(Zend_Date::ISO_8601));
         }
+        */
+        
+        $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT_RECEIVED, 'en_US');
+        
+        $date->setTimezone('UTC');
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_dateString);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $dateString);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $date->toString());
         
         return $date;
     }
