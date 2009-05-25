@@ -102,10 +102,14 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     },
     
     /**
-     * 
+     * on upload failure
      */
     onUploadFail: function() {
-        Ext.MessageBox.alert(_('Upload Failed'), _('Could not upload attachment. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
+        Ext.MessageBox.alert(
+            _('Upload Failed'), 
+            _('Could not upload attachment. Filesize could be too big. Please notify your Administrator.')
+        ).setIcon(Ext.MessageBox.ERROR);
+        this.loadMask.hide();
     },
 
     /**************************************** init funcs ***************************************/
