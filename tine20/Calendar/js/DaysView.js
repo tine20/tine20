@@ -279,6 +279,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     var parts = eventEl.id.split(':');
                     var event = this.daysView.ds.getById(parts[1]);
                     
+                    // don't allow dragging of dirty events
+                    if (event.dirty) {
+                        return;
+                    }
+                    
                     this.daysView.setActiveEvent(event);
                     
                     // we need to clone an event with summary in
@@ -630,7 +635,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }
             
             event.resizeable[rzPos].onMouseDown.call(event.resizeable[rzPos], e);
-            
+            //event.resizeable.startSizing.defer(2000, event.resizeable, [e, event.resizeable[rzPos]]);
         } else {
             this.startEditSummary(event);
         }
@@ -688,7 +693,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             return;
         }
         
-        this.editing = false;
+        
         event.set('summary', summary);
         
         this.ds.suspendEvents();
@@ -698,6 +703,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.unregister(event);
         this.removeEvent(event);
+        
+        this.editing = false;
         
         this.ds.add(event);
         this.fireEvent('addEvent', event);
@@ -738,7 +745,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.mouseDown = true;
         
         var dtStart = this.getTargetDateTime(target);
-        if (dtStart) {
+        if (! this.editing && dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Event({
                 id: newId,
@@ -778,6 +785,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             rz.el.setStyle({'border-style': 'solid'});
             rz.el.setOpacity(1);
         });
+        
+        //rz.onMouseMove = rz.onMouseMove.createSequence(function() {
+        //    console.log('move');
+        //});
         
         this.setActiveEvent(event);
     },
