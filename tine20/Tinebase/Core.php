@@ -226,14 +226,22 @@ class Tinebase_Core
             case E_CORE_WARNING:
             case E_USER_WARNING:
             case E_WARNING:
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                if (Tinebase_Core::isRegistered(Tinebase_Core::LOGGER)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                } else {
+                    error_log(" $errstr in {$errfile}::{$errline} ($severity)");
+                }
                 break;
                 
             case E_NOTICE:
             case E_STRICT:
             case E_USER_NOTICE:
             default:
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                if (Tinebase_Core::isRegistered(Tinebase_Core::LOGGER)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                } else {
+                    error_log(" $errstr in {$errfile}::{$errline} ($severity)");
+                }
                 break;
             
                 
