@@ -935,9 +935,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         for (var i=0; i<length; i++) {
             
             multiplier = Math.pow(16, (Math.abs(i - hex.length)-1));
-            digit = parseInt(hex[i], 10);
+            digit = parseInt(hex.toString().charAt([i]), 10);
             if (isNaN(digit)) {
-                switch (hex[i].toString().toUpperCase()) {
+                switch (hex.toString().charAt([i]).toUpperCase()) {
                     case 'A': digit = 10;  break;
                     case 'B': digit = 11;  break;
                     case 'C': digit = 12;  break;
