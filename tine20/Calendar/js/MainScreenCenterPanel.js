@@ -13,7 +13,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {String} activeView
      */
-    activeView: 'month',
+    activeView: 'week',
     
     startDate: new Date().clearTime(),
     
