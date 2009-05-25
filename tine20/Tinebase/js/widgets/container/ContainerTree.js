@@ -340,11 +340,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     
 	// private
 	initContextMenu: function() {
-        var il8n = new Locale.Gettext();
-        il8n.textdomain('Tinebase');
         
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
-            il8n: il8n,
             nodeName: this.containerName,
             actions: ['add'],
             scope: this,
@@ -353,7 +350,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         });
 	    
 	    this.contextMenuSingleContainer= Tine.widgets.tree.ContextMenu.getMenu({
-            il8n: il8n,
             nodeName: this.containerName,
 	    	actions: ['delete', 'rename', 'grants'],
             scope: this,

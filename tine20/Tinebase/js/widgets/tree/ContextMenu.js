@@ -36,13 +36,13 @@ Tine.widgets.tree.ContextMenu = {
             addNode: function() {
                 //console.log('add');
                 //console.log(this.ctxNode);
-                Ext.MessageBox.prompt(String.format(config.il8n._('New {0}'), config.nodeName), String.format(config.il8n._('Please enter the name of the new {0}:'), config.nodeName), function(_btn, _text) {
+                Ext.MessageBox.prompt(String.format(_('New {0}'), config.nodeName), String.format(_('Please enter the name of the new {0}:'), config.nodeName), function(_btn, _text) {
                     if( this.ctxNode && _btn == 'ok') {
                         if (! _text) {
-                            Ext.Msg.alert(String.format(config.il8n._('No {0} added'), config.nodeName), String.format(config.il8n._('You have to supply a {0} name!'), config.nodeName));
+                            Ext.Msg.alert(String.format(_('No {0} added'), config.nodeName), String.format(_('You have to supply a {0} name!'), config.nodeName));
                             return;
                         }
-                        Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Creating {0}...' ), config.nodeName));
+                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Creating {0}...' ), config.nodeName));
                         var parentNode = this.ctxNode;
                         
                         var params = {
@@ -83,9 +83,9 @@ Tine.widgets.tree.ContextMenu = {
             deleteNode: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
-                    Ext.MessageBox.confirm(config.il8n._('Confirm'), String.format(config.il8n._('Do you really want to delete the {0} "{1}"?'), config.nodeName, node.text), function(_btn){
+                    Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), config.nodeName, node.text), function(_btn){
                         if ( _btn == 'yes') {
-                            Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Deleting {0} "{1}"' ), config.nodeName , node.text));
+                            Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), config.nodeName , node.text));
                             
                             var params = {
                                 method: config.backend + '.delete' + config.backendModel
@@ -127,16 +127,16 @@ Tine.widgets.tree.ContextMenu = {
                     var node = this.ctxNode;
                     Ext.MessageBox.show({
                         title: 'Rename ' + config.nodeName,
-                        msg: String.format(config.il8n._('Please enter the new name of the {0}:'), config.nodeName),
+                        msg: String.format(_('Please enter the new name of the {0}:'), config.nodeName),
                         buttons: Ext.MessageBox.OKCANCEL,
                         value: node.text,
                         fn: function(_btn, _text){
                             if (_btn == 'ok') {
                                 if (! _text) {
-                                    Ext.Msg.alert(String.format(config.il8n._('Not renamed {0}'), config.nodeName), String.format(config.il8n._('You have to supply a {0} name!'), config.nodeName));
+                                    Ext.Msg.alert(String.format(_('Not renamed {0}'), config.nodeName), String.format(_('You have to supply a {0} name!'), config.nodeName));
                                     return;
                                 }
-                                Ext.MessageBox.wait(config.il8n._('Please wait'), String.format(config.il8n._('Updating {0} "{1}"'), config.nodeName, node.text));
+                                Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), config.nodeName, node.text));
                                 
                                 var params = {
                                     method: config.backend + '.rename' + config.backendModel,
@@ -201,7 +201,7 @@ Tine.widgets.tree.ContextMenu = {
             switch(config.actions[i]) {
                 case 'add':
                     items.push(new Ext.Action({
-                        text: String.format(config.il8n._('Add {0}'), config.nodeName),
+                        text: String.format(_('Add {0}'), config.nodeName),
                         iconCls: 'action_add',
                         handler: handler.addNode,
                         scope: config.scope
@@ -209,7 +209,7 @@ Tine.widgets.tree.ContextMenu = {
                     break;
                 case 'delete':
                     items.push(new Ext.Action({
-                        text: String.format(config.il8n._('Delete {0}'), config.nodeName),
+                        text: String.format(_('Delete {0}'), config.nodeName),
                         iconCls: 'action_delete',
                         handler: handler.deleteNode,
                         scope: config.scope
@@ -217,7 +217,7 @@ Tine.widgets.tree.ContextMenu = {
                     break;
                 case 'rename':
                     items.push(new Ext.Action({
-                        text: String.format(config.il8n._('Rename {0}'), config.nodeName),
+                        text: String.format(_('Rename {0}'), config.nodeName),
                         iconCls: 'action_rename',
                         handler: handler.renameNode,
                         scope: config.scope
@@ -225,7 +225,7 @@ Tine.widgets.tree.ContextMenu = {
                     break;
                 case 'grants':
                     items.push(new Ext.Action({
-                        text: config.il8n._('Manage permissions'),
+                        text: _('Manage permissions'),
                         iconCls: 'action_managePermissions',
                         handler: handler.managePermissions,
                         scope: config.scope
