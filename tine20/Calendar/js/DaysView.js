@@ -718,7 +718,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var event = new Tine.Calendar.Event({
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1),
+                dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1).add(Date.SECOND, -1),
                 is_all_day_event: dtStart.is_all_day_event
             }, newId);
             
@@ -743,7 +743,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var event = new Tine.Calendar.Event({
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24) : dtStart.add(Date.MINUTE, this.timeGranularity/2),
+                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, this.timeGranularity/2),
                 is_all_day_event: dtStart.is_all_day_event
             }, newId);
             event.isRangeAdd = true;
@@ -794,7 +794,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var dayWidth = Ext.fly(this.wholeDayArea).getWidth() / this.numOfDays;
             var diff = Math.round((rz.el.getRight() - rz.startPoint[0]) / dayWidth);
             
-            event.set('dtend', event.get('dtend').add(Date.DAY, diff));
+            event.set('dtend', event.get('dtend').add(Date.DAY, diff).add(Date.SECOND, -1));
         } else {
             
             var diff = Math.round((height - rz.originalHeight) * (this.timeGranularity / this.granularityUnitHeights));
