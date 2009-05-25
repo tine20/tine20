@@ -211,7 +211,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string $recordData
      * @return array
      * 
-     * @todo catch mail errors and show error in 'nicer' window
      */
     public function saveMessage($recordData)
     {
@@ -220,15 +219,15 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r(Zend_Json::decode($recordData), TRUE));
         
-        $result = Felamimail_Controller_Message::getInstance()->sendMessage($message);
-
-        return $this->_recordToJson($result);
+        try {
+            $result = Felamimail_Controller_Message::getInstance()->sendMessage($message);
+            $result = $this->_recordToJson($result);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $zmpe->getMessage());
+            throw $zmpe;
+        }
         
-        /*
-        return array(
-            'status' => ($result) ? 'success' : 'failure'
-        );
-        */
+        return $result;
     }
 
     /**

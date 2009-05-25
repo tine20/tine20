@@ -74,6 +74,25 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * show error if request fails
+     * 
+     * @param {} response
+     * @param {} request
+     * 
+     * TODO add exception dialog on critical errors?
+     */
+    onRequestFailed: function(response, request) {
+        var responseText = Ext.util.JSON.decode(response.responseText);
+        //console.log(responseText);
+        Ext.MessageBox.alert(
+            _('Failed'), 
+            String.format(_('Could not send {0}.'), this.i18nRecordName) 
+                + ' ( ' . _('Error:') + ' ' + responseText.msg + ')'
+        ); 
+        this.loadMask.hide();
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
