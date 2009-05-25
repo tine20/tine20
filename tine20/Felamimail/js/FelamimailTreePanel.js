@@ -79,9 +79,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * TODO add account context menu
      */
     initContextMenu: function() {
-        var il8n = new Locale.Gettext();
-        il8n.textdomain('Felamimail');
-        
         /*
         this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
             il8n: il8n,
@@ -93,16 +90,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         });
         */
         
+        console.log(Tine.Tinebase.appMgr.get('Tinebase'));
+        
         var config = {
-            il8n: il8n,
-            nodeName: il8n._('Folder'),
+            nodeName: this.app.i18n._('Folder'),
             scope: this,
             backend: 'Felamimail',
             backendModel: 'Folder'
         };        
         
         var updateCacheConfig = {
-            text: _('Update Cache'),
+            text: this.app.i18n._('Update Cache'),
             iconCls: 'action_update_cache',
             scope: this,
             handler: function() {
@@ -130,7 +128,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // trash ctx menu
         config.actions = ['add', {
-            text: _('Empty Folder'),
+            text: this.app.i18n._('Empty Folder'),
             iconCls: 'action_folder_emptytrash',
             scope: this,
             handler: function() {

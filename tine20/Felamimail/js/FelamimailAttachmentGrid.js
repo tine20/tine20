@@ -21,6 +21,7 @@ Ext.namespace('Tine.Felamimail');
 Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     
     id: 'felamimail-attachment-grid',
+    il8n: null,
     
     /**
      * actions
@@ -106,8 +107,8 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     onUploadFail: function() {
         Ext.MessageBox.alert(
-            _('Upload Failed'), 
-            _('Could not upload attachment. Filesize could be too big. Please notify your Administrator.')
+            this.il8n._('Upload Failed'), 
+            this.il8n._('Could not upload attachment. Filesize could be too big. Please notify your Administrator.')
         ).setIcon(Ext.MessageBox.ERROR);
         this.loadMask.hide();
     },
@@ -119,7 +120,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     initToolbar: function() {
         this.actions.add = new Ext.Action({
-            text: _('Add Attachment'),
+            text: this.il8n._('Add Attachment'),
             iconCls: 'actionAdd',
             scope: this,
             plugins: [new Ext.ux.file.BrowsePlugin({})],
@@ -127,7 +128,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
         });
 
         this.actions.remove = new Ext.Action({
-            text: _('Remove Attachment'),
+            text: this.il8n._('Remove Attachment'),
             iconCls: 'actionRemove',
             scope: this,
             disabled: true,
