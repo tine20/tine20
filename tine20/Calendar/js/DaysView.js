@@ -627,6 +627,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }, event.resizeable);
             
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
+            
+            // happens in IE
+            if (! e.browserEvent) {
+                e.browserEvent = {type: 'mousedown'};
+            }
+            
             event.resizeable[rzPos].onMouseDown.call(event.resizeable[rzPos], e);
             
         } else {
