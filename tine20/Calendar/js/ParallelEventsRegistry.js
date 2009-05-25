@@ -79,7 +79,7 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         var dtStart = event.get(this.dtStartProperty);
         var dtStartTs = dtStart.getTime();
         var dtEnd = event.get(this.dtEndProperty);
-        var dtEndTs = dtEnd.getTime();
+        var dtEndTs = dtEnd.getTime() - 1000;
         
         // layout helper
         event.duration = dtEndTs - dtStartTs;
