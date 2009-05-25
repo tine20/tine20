@@ -116,8 +116,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.endDate = this.startDate.add(Date.DAY, this.numOfDays+1);
         
-        this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
-        this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        //this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        //this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        //this.ds.each(this.removeEvent, this);
         
         this.updateDayHeaders();
         
@@ -341,17 +342,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.initDropZone();
         this.initDragZone();
         
-        // calculate duration and parallels
-        this.ds.each(function(event) {
-            var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-            registry.register(event);
-        }, this);
-        
-        // put the events in
-        this.ds.each(this.insertEvent, this);
-        this.scrollToNow();
+        if (this.dsLoaded) {
+            this.onLoad.apply(this);
+        }
         
         this.layout();
+        this.rendered = true;
     },
     
     scrollToNow: function() {
@@ -836,6 +832,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onUpdate : function(ds, event){
+        //console.log('onUpdate');
         // relayout original context
         var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_event')) ? 
             this.parallelWholeDayEventsRegistry : 
@@ -878,6 +875,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onAdd : function(ds, records, index){
+        //console.log('onAdd');
         for (var i=0; i<records.length; i++) {
             var event = records[i];
             
@@ -915,18 +913,32 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onBeforeLoad: function() {
-        //console.log('onBeforeLoad');
+        this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         this.ds.each(this.removeEvent, this);
     },
     
     /**
      * @private
      */
-    onLoad : function(){
+    onLoad : function() {
         //console.log('onLoad');
+        if(! this.rendered){
+            this.dsLoaded = true;
+            return;
+        }
+        
+        
+        this.ds.each(function(event) {
+            var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
+            registry.register(event);
+        }, this);
+        
+        // put the events in
         this.ds.each(this.insertEvent, this);
-        this.layout();
         this.scrollToNow();
+        
+        this.layout();
     },
     
     

@@ -109,21 +109,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         this.updatePeriod({from: this.startDate});
         
-        // create parallels registry
-        this.parallelEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({
-            dtStart: this.dateMesh[0], 
-            dtEnd: this.dateMesh[this.dateMesh.length-1].add(Date.DAY, 1).add(Date.SECOND, -1),
-            granularity: 60*24
-        });
+        if (this.dsLoaded) {
+            this.onLoad.apply(this);
+        }
         
-        // calculate duration and parallels
-        this.ds.each(function(event) {
-            this.parallelEventsRegistry.register(event);
-        }, this);
-        
-        this.ds.each(this.insertEvent, this);
-        
-        //this.layoutDayCells();
+        this.rendered = true;
     },
     
     /**
@@ -611,6 +601,23 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private
      */
     onLoad : function(){
+        if(! this.rendered){
+            this.dsLoaded = true;
+            return;
+        }
+        
+        // create parallels registry
+        this.parallelEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({
+            dtStart: this.dateMesh[0], 
+            dtEnd: this.dateMesh[this.dateMesh.length-1].add(Date.DAY, 1).add(Date.SECOND, -1),
+            granularity: 60*24
+        });
+        
+        // calculate duration and parallels
+        this.ds.each(function(event) {
+            this.parallelEventsRegistry.register(event);
+        }, this);
+        
         this.ds.each(this.insertEvent, this);
     },
     

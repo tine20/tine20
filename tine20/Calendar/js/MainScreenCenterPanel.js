@@ -155,7 +155,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (! this.calendarPanels[which]) {
             // @todo make this a Ext.data.Store
             var store = new Ext.data.Store({
-                autoLoad: true,
+                //autoLoad: true,
                 id: 'id',
                 fields: Tine.Calendar.Event,
                 proxy: Tine.Calendar.backend,
