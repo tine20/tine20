@@ -253,7 +253,8 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
      * performs an Ajax request
      */
     request: function(options) {
-        return Ext.Ajax.request({
+        
+        var requestOptions = {
             scope: this,
             params: options.params,
             success: function(response) {
@@ -276,6 +277,14 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
                     options.failure.apply(options.scope, args);
                 }
             }
-        });
+        };
+        
+        if (typeof options.exceptionHandler == 'function') {
+            requestOptions.exceptionHandler = function(response) {
+                options.exceptionHandler.call(options.scope, response, options);
+            };
+        }
+        
+        return Ext.Ajax.request(requestOptions);
     }
 });

@@ -234,6 +234,8 @@ Tine.Tinebase.tineInit = {
          * @todo In production mode there should be a 'report bug' wizzard here
          */
         Ext.Ajax.on('requestexception', function(connection, response, options){
+            console.log(options);
+            
             // if communication is lost, we can't create a nice ext window.
             if (response.status === 0) {
                 alert(_('Connection lost, please check your network!'));
@@ -249,7 +251,7 @@ Tine.Tinebase.tineInit = {
             }
             
             switch(data.code) {
-                // not autorised
+                // not authorised
                 case 401:
                 if (! options.params || options.params.method != 'Tinebase.logout') {
                     Ext.MessageBox.show({
@@ -286,32 +288,36 @@ Tine.Tinebase.tineInit = {
                 
                 // generic failure -> notify developers
                 default:
-                var trace = '';
-                for (var i=0,j=data.trace.length; i<j; i++) {
-                    trace += (data.trace[i].file ? data.trace[i].file : '[internal function]') +
-                             (data.trace[i].line ? '(' + data.trace[i].line + ')' : '') + ': ' +
-                             (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i].type + '</b>' : '') +
-                             '<b>' + data.trace[i]['function'] + '</b>' +
-                            '(' + ((data.trace[i].args && data.trace[i].args[0]) ? data.trace[i].args[0] : '') + ')<br/>';
-                }
-                data.traceHTML = trace;
-                
-                var windowHeight = 400;
-                if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
-                    windowHeight = Ext.getBody().getHeight(true) * 0.7;
-                }
-                
-                if (! Tine.Tinebase.exceptionDlg) {
-                    Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
-                        height: windowHeight,
-                        exceptionInfo: data,
-                        listeners: {
-                            close: function() {
-                                Tine.Tinebase.exceptionDlg = null;
+                if (typeof options.exceptionHandler !== 'function') {
+                    var trace = '';
+                    for (var i=0,j=data.trace.length; i<j; i++) {
+                        trace += (data.trace[i].file ? data.trace[i].file : '[internal function]') +
+                                 (data.trace[i].line ? '(' + data.trace[i].line + ')' : '') + ': ' +
+                                 (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i].type + '</b>' : '') +
+                                 '<b>' + data.trace[i]['function'] + '</b>' +
+                                '(' + ((data.trace[i].args && data.trace[i].args[0]) ? data.trace[i].args[0] : '') + ')<br/>';
+                    }
+                    data.traceHTML = trace;
+                    
+                    var windowHeight = 400;
+                    if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+                        windowHeight = Ext.getBody().getHeight(true) * 0.7;
+                    }
+                    
+                    if (! Tine.Tinebase.exceptionDlg) {
+                        Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                            height: windowHeight,
+                            exceptionInfo: data,
+                            listeners: {
+                                close: function() {
+                                    Tine.Tinebase.exceptionDlg = null;
+                                }
                             }
-                        }
-                    });
-                    Tine.Tinebase.exceptionDlg.show();
+                        });
+                        Tine.Tinebase.exceptionDlg.show();
+                    }
+                } else {
+                    options.exceptionHandler.call(options.scope, response, options);
                 }
                 break;
             }

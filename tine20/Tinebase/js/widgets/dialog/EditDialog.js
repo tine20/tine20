@@ -222,7 +222,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * execuded after record got updated from proxy
+     * executed after record got updated from proxy
      */
     onRecordLoad: function() {
         // interrupt process flow till dialog is rendered
@@ -244,7 +244,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * execuded when record gets updated from form
+     * executed when record gets updated from form
      */
     onRecordUpdate: function() {
         var form = this.getForm();
@@ -365,9 +365,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             this.window.close();
                         }
                     },
-                    failure: function ( result, request) { 
+                    // NOTE: we don't have a failure handler in the generic edit dialog any more (always open exception dialog on fail)
+                    //       -> use the method 'onRequestFailed' for custom handling in child class
+                    /*failure:  function (result, request) {
                         Ext.MessageBox.alert(_('Failed'), String.format(_('Could not save {0}.'), this.i18nRecordName)); 
-                    }
+                    },*/
+                    exceptionHandler: this.onRequestFailed
                 });
             } else {
                 this.onRecordLoad();
@@ -409,5 +412,4 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         });
     }
-
 });
