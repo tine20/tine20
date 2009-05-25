@@ -95,16 +95,14 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function handle()
     {
-        if ($_REQUEST['method'] == 'Tinebase.getJsTranslations') {
+        if (isset($_REQUEST['method']) && $_REQUEST['method'] == 'Tinebase.getJsTranslations') {
             $locale = Setup_Core::get('locale');
             $translations = Tinebase_Translation::getJsTranslations($locale);
             header('Content-Type: application/javascript');
             die($translations);
         }
         
-        //if ($_GET['mode'] == 'beta') {
-            return $this->mainScreen();
-        //}
+        return $this->mainScreen();
         
         // old http setup    
         /*
