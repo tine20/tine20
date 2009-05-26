@@ -368,7 +368,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var ts = this.templates || {};
     
         ts.allDayEvent = new Ext.XTemplate(
-            '<div id="{id}" class="cal-monthview-alldayevent {extraCls}" style="background-color: {bgColor};">' +
+            '<div id="{id}" class="cal-monthview-event cal-monthview-alldayevent {extraCls}" style="background-color: {bgColor};">' +
                 '<tpl if="values.showInfo">' +
                     '<div class="cal-event-icon {iconCls}">' +
                         '<div class="cal-monthview-alldayevent-summary">{[Ext.util.Format.htmlEncode(values.summary)]}</div>' +
@@ -628,6 +628,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             return;
         }
         
+        this.removeAllEvents();
+        
         // create parallels registry
         this.parallelEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({
             dtStart: this.dateMesh[0], 
@@ -697,10 +699,29 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     },
     
     /**
+     * removes all events from dom
+     */
+    removeAllEvents: function() {
+        var els = Ext.DomQuery.filter(Ext.DomQuery.select('div[class^=cal-monthview-event]', this.mainBody.dom), 'div[class=cal-monthview-eventslice]', true);
+        for (var i=0; i<els.length; i++) {
+            Ext.fly(els[i]).remove();
+        }
+        
+        this.ds.each(function(event) {
+            event.domIds = [];
+        });
+        this.layoutDayCells();
+    },
+    
+    /**
      * removes a evnet from the dom
      * @param {Tine.Calendar.Model.Event} event
      */
     removeEvent: function(event) {
+        if (event == this.activeEvent) {
+            this.activeEvent = null;
+        }
+        
         var eventEls = this.getEventEls(event);
         if (Ext.isArray(eventEls)) {
             for (var i=0; i<eventEls.length; i++) {
@@ -769,15 +790,17 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
         
         this.activeEvent = event;
-        var els = this.getEventEls(event);
-        for (var i=0; i<els.length; i++) {
-            els[i].addClass('cal-monthview-active');
-            if (event.is_all_day_event) {
-                els[i].setStyle({'background-color': event.color});
-                els[i].setStyle({'color': '#FFFFFF'});
-            } else {
-                els[i].setStyle({'background-color': this.activeEvent.color});
-                els[i].setStyle({'color': '#FFFFFF'});
+        if (event) {
+            var els = this.getEventEls(event);
+            for (var i=0; i<els.length; i++) {
+                els[i].addClass('cal-monthview-active');
+                if (event.is_all_day_event) {
+                    els[i].setStyle({'background-color': event.color});
+                    els[i].setStyle({'color': '#FFFFFF'});
+                } else {
+                    els[i].setStyle({'background-color': this.activeEvent.color});
+                    els[i].setStyle({'color': '#FFFFFF'});
+                }
             }
         }
     },

@@ -523,10 +523,28 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     /**
+     * removes all events from dom
+     */
+    removeAllEvents: function() {
+        var els = Ext.DomQuery.select('div[class^=cal-daysviewpanel-event]', this.mainWrap.dom);
+        for (var i=0; i<els.length; i++) {
+            Ext.fly(els[i]).remove();
+        }
+        
+        this.ds.each(function(event) {
+            event.domIds = [];
+        });
+    },
+    
+    /**
      * removes a evnet from the dom
      * @param {Tine.Calendar.Model.Event} event
      */
     removeEvent: function(event) {
+        if (event == this.activeEvent) {
+            this.activeEvent = null;
+        }
+        
         var eventEls = this.getEventEls(event);
         if (Ext.isArray(eventEls)) {
             for (var i=0; i<eventEls.length; i++) {
@@ -553,10 +571,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         this.activeEvent = event;
-        var els = this.getEventEls(event);
-        for (var i=0; i<els.length; i++) {
-            els[i].addClass('cal-daysviewpanel-event-active');
-            els[i].setStyle({'z-index': 1000});
+        if (event) {
+            var els = this.getEventEls(event);
+            for (var i=0; i<els.length; i++) {
+                els[i].addClass('cal-daysviewpanel-event-active');
+                els[i].setStyle({'z-index': 1000});
+            }
         }
     },
     
@@ -925,8 +945,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onBeforeLoad: function() {
-        this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
-        this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        //this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        //this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         this.ds.each(this.removeEvent, this);
     },
     
@@ -934,12 +954,17 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onLoad : function() {
-        //console.log('onLoad');
         if(! this.rendered){
             this.dsLoaded = true;
             return;
         }
         
+        // remove all old events from dom
+        this.removeAllEvents();
+        
+        // setup registry
+        this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
+        this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         
         this.ds.each(function(event) {
             var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
