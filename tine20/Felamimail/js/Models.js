@@ -61,7 +61,9 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create(Tine.Felamimail
 Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'name' },
-    { name: 'user' }
+    { name: 'user' },
+    { name: 'host' }
+    // TODO add more fields
 ]);
 
 /**

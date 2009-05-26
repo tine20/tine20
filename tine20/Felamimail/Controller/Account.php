@@ -87,9 +87,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         //  add account from config.inc.php if available
         if (isset(Tinebase_Core::getConfig()->imap)) {
-            $result->addRecord(new Felamimail_Model_Account(
+            $defaultAccount = new Felamimail_Model_Account(
                 Tinebase_Core::getConfig()->imap->toArray()
-            ));
+            );
+            $defaultAccount->setId('default');
+            $result->addRecord($defaultAccount);
         }
         
         return $result;

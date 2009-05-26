@@ -39,3 +39,34 @@ Tine.Felamimail.accountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     modelName: 'Account',
     recordClass: Tine.Felamimail.Model.Account
 });
+
+/**
+ * get account store
+ *
+ * @return Ext.data.JsonStore with accounts
+ */
+Tine.Felamimail.loadAccountStore = function(reload) {
+    
+    var store = Ext.StoreMgr.get('FelamimailAccountStore');
+    
+    if (!store) {
+        
+        //console.log(Tine.Felamimail.registry.get('accounts'));
+        
+        // create store (get from initial data)
+        store = new Ext.data.JsonStore({
+            fields: Tine.Felamimail.Model.Account,
+
+            // initial data from http request
+            data: Tine.Felamimail.registry.get('accounts'),
+            autoLoad: true,
+            id: 'id',
+            root: 'results',
+            totalProperty: 'totalcount'            
+        });
+        
+        Ext.StoreMgr.add('FelamimailAccountStore', store);
+    } 
+
+    return store;
+};

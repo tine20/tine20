@@ -33,8 +33,10 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     containerName: 'Folder',
     
+    accountStore: null,
+    
     /****** TreePanel config ******/
-	rootVisible: true,
+	rootVisible: false,
 	autoScroll: true,
     id: 'felamimail-tree',
     // drag n drop
@@ -51,18 +53,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         });
 
         // set the root node
-        this.root = new Ext.tree.AsyncTreeNode({
+        this.root = new Ext.tree.TreeNode({
             text: 'default',
-            globalname: '',
-            account_id: 'default',
             draggable: false,
             allowDrop: false,
-            expanded: false,
+            expanded: true,
             leaf: false,
-            id: '/'
-            //iconCls: 'FelamimailMessage'
+            id: 'root'
         });
-        
+
+        // add account nodes and context menu
+        this.initAccounts();
         this.initContextMenu();
         
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
@@ -72,6 +73,34 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
 	},
+    
+    /**
+     * add accounts from registry as nodes to root node
+     */
+    initAccounts: function() {
+        this.accountStore = Tine.Felamimail.loadAccountStore();
+        
+        this.accountStore.each(function(record){
+           
+            var node = new Ext.tree.AsyncTreeNode({
+                id: '/',
+                record: record,
+                globalname: '',
+                draggable: false,
+                allowDrop: false,
+                expanded: false,
+                text: record.get('name'),
+                qtip: record.get('host'),
+                leaf: false,
+                account_id: record.data.id
+            });
+            
+            //console.log(record);
+            //console.log(node);
+            
+            this.root.appendChild(node);
+        }, this);
+    },
     
     /**
      * init context menu

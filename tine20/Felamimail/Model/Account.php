@@ -116,4 +116,34 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         
         return $result;
     }
+
+    /**
+     * to array
+     * - don't show password
+     *
+     * @param boolean $_recursive
+     */
+    public function toArray($_recursive = TRUE)
+    {
+        $result = parent::toArray($_recursive);
+        
+        unset($result['password']);
+        
+        return $result;
+    }
+    
+    /**
+     * set from array
+     * - init name if not given
+     *
+     * @param array $_data
+     */
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+
+        if (! $this->name) {
+            $this->name = $this->user . '@' . $this->host;
+        }
+    }
 }

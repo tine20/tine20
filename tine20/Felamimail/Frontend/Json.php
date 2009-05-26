@@ -276,22 +276,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchAccounts($filter)
     {
         return $results = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
-        
-        /*
-        $controller = new Felamimail_Controller();
-        $accounts = $controller->getListOfAccounts();        
-        
-        $treeNodes = array();
-        
-        foreach($accounts as $id => $accountData) {
-            $treeNode = new Tinebase_Ext_Treenode('Felamimail', 'email', $id, $accountData->name, FALSE);
-            $treeNode->accountId = $id;
-            $treeNode->folderName = '';
-            $treeNodes[] = $treeNode;
-        }
-
-        return $treeNodes;
-        */
     }
     
     /***************************** other funcs *******************************/
@@ -301,42 +285,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
-     * @todo rework that
      */
     public function getRegistryData()
     {
-        //return array('initialTree' => self::getInitialTree());
-        return array();
-    }
-    
-    /**
-     * send mail
-     *
-     * @todo rework that
-     */
-    public function sendMail($message)
-    {
-        $message = Zend_Json::decode($message);
-        
-        $mail = new Zend_Mail('utf-8');
-        
-        $mail->setFrom('somebody@example.com', 'somebodys name')
-            ->setSubject('TestBetreff')
-            ->setBodyText('Dies ist der Text dieser E-Mail.')
-            ->setBodyHtml('Dies ist der <b>Text</b> dieser E-Mail.');
-        
-        $mail->addTo('somebody_else@example.com', 'Ein Empfänger');
-        /****************************************************
-            $mail->addCc('somebody_else@example.com', 'Ein Empfänger');
-            $mail->addBcc('somebody_else@example.com', 'Ein Empfänger');
-            $at = new Zend_Mime_Part($myImage);
-            $at->type        = 'image/gif';
-            $at->disposition = Zend_Mime::DISPOSITION_INLINE;
-            $at->encoding    = Zend_Mime::ENCODING_8BIT;
-            $at->filename    = 'test.gif';
-            $message->addAttachment($at);        
-        *****************************************************/
-
-        Felamimail_Controller_Message::getInstance()->sendMessage($mail);
+        return array('accounts' => $this->searchAccounts(''));
     }
 }
