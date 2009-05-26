@@ -79,11 +79,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     public function getTimesheetsByTimeaccountId($_timeaccountId)
     {
         $filter = new Timetracker_Model_TimesheetFilter(array(
-            /*array(
-                'field' => 'timeaccount_id', 
-                'operator' => 'equals', 
-                'value' => $_timeaccountId
-            ),*/
             array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
                 array('field' => 'id', 'operator' => 'equals', 'value' => $_timeaccountId),
             ))           
@@ -202,15 +197,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     {
         $aclFilter = $_filter->getAclFilter();
         
-        /*
-        if (! $aclFilter) {
-            // force a timeaccount_id filter (ACL)
-            $aclFilter = $_filter->createFilter('timeaccount_id', 'AND', NULL);
-            $_filter->addFilter($aclFilter);
-        }
-        */
-        
-        // do something like that
         switch ($_action) {
             case 'get':
                 $aclFilter->setRequiredGrants(array(
