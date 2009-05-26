@@ -163,7 +163,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $_ids = Zend_Json::decode($_ids);
         }
         $_controller->delete($_ids);
-        return 'success';
+        return array(
+            'status'    => 'success'
+        );  
     }
     
     /**

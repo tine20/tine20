@@ -262,7 +262,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteTimesheets($ids)
     {
-        $this->_delete($ids, $this->_timesheetController);
+        return $this->_delete($ids, $this->_timesheetController);
     }
 
     /**
@@ -307,7 +307,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteTimeaccounts($ids)
     {
-        $this->_delete($ids, $this->_timeaccountController);
+        return $this->_delete($ids, $this->_timeaccountController);
     }    
 
 }
