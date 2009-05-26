@@ -8,10 +8,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        refactor tests (delete all mails first, write one test mail to unittest account, ...)
  * @todo        add tests for attachments
  * @todo        use testmails from files/ dir
- * @todo        activate tests again with caching
  */
 
 /**
@@ -32,6 +30,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @var Felamimail_Frontend_Json
      */
     protected $_json = array();
+
+    /**
+     * message ids to delete
+     *
+     * @var array
+     */
+    protected $_messageIds = array();
     
     /**
      * Runs the test methods of this class.
@@ -83,53 +88,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertTrue(in_array($folder['localname'], $expectedFolders));
         }
     }
-
-    /**
-     * test search messages
-     *
-     * @todo activate again
-     */
-    public function testSearchMessages()
-    {
-        /*
-        // get inbox folder id
-        Felamimail_Controller_Folder::getInstance()->getSubFolders();
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
-        Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
-        
-        $filter = $this->_getMessageFilter($folder->getId());
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
-        
-        $this->assertGreaterThan(0, $result['totalcount']);
-
-        $firstMail = $result['results'][0];
-        $this->assertEquals('testmail', $firstMail['subject']);
-        $this->assertEquals('unittest@tine20.org', $firstMail['to']);
-        */
-    }
-    
-    /**
-     * try to get a message from imap server (with complete body, attachments, etc)
-     *
-     * @todo activate again
-     * @todo check for correct charset/encoding
-     */
-    public function testGetMessage()
-    {
-        /*
-        $inbox = $this->_getFolder();
-        $filter = $this->_getMessageFilter($inbox->getId());
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
-        
-        $firstMail = $result['results'][0];
-        
-        // get complete message
-        $message = $this->_json->getMessage($firstMail['id']);
-        
-        $this->assertGreaterThan(0, preg_match('/Metaways Infosystems GmbH/', $message['body']));
-        */
-    }
     
     /**
      * test search for accounts and check default account from config
@@ -151,106 +109,137 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * clear sent, inbox & trash
+     *
+     */
+    public function testClearFolders()
+    {
+        $foldersToClear = array('Sent', 'INBOX', 'Trash');
+        
+        foreach ($foldersToClear as $folderName) {
+            $folder = $this->_getFolder($folderName);
+            Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
+            Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
+        }
+
+        $filter = $this->_getMessageFilter($folder->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        
+        $this->assertEquals(0, $result['totalcount']);
+    }
+
+    /**
+     * test search messages
+     *
+     */
+    public function testSendMessage()
+    {
+        $messageToSend = $this->_getMessageData();
+        $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        
+        // check if message is in sent folder
+        $sent = $this->_getFolder('Sent');
+        $filter = $this->_getMessageFilter($sent->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        //print_r($result);
+
+        $message = array(); 
+        foreach ($result['results'] as $mail) {
+            if ($mail['subject'] == $messageToSend['subject']) {
+                $message = $mail;
+            }
+        }
+        $this->assertGreaterThan(0, $result['totalcount']);
+        $this->assertTrue(! empty($message));
+        $this->assertEquals($message['subject'],  $messageToSend['subject']);
+        $this->assertEquals($message['to'],       $messageToSend['to'][0]);
+        
+        // delete message from inbox & sent
+        $this->_json->deleteMessages($message['id']);
+        $this->_deleteMessage($messageToSend['subject']);
+    }
+    
+    /**
+     * try to get a message from imap server (with complete body, attachments, etc)
+     *
+     * @todo check for correct charset/encoding
+     */
+    public function testGetMessage()
+    {
+        $message = $this->_sendMessage();     
+        
+        // get complete message
+        $message = $this->_json->getMessage($message['id']);
+        
+        // check
+        $this->assertGreaterThan(0, preg_match('/aaaaaa/', $message['body']));
+        
+        // delete
+        $this->_deleteMessage($message['subject']);
+    }
+    
+    /**
      * test flags
      * 
      */
     public function testSetAndClearFlags()
     {
-        $inbox = $this->_getFolder();
-        $filter = $this->_getMessageFilter($inbox->getId());
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
-        $firstMail = $result['results'][0];
+        $message = $this->_sendMessage();
         
         // add flag
-        $this->_json->setFlag(Zend_Json::encode(array($firstMail['id'])), Zend_Json::encode('\\Flagged'));
+        $this->_json->setFlag(Zend_Json::encode(array($message['id'])), Zend_Json::encode('\\Flagged'));
         
         // check flags
-        $message = $this->_json->getMessage($firstMail['id']);
+        $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(preg_match('/\\Flagged/', $message['flags']) > 0);
         
         // remove flag
-        $this->_json->clearFlag(Zend_Json::encode(array($firstMail['id'])), Zend_Json::encode('\\Flagged'));
+        $this->_json->clearFlag(Zend_Json::encode(array($message['id'])), Zend_Json::encode('\\Flagged'));
         
         // check flags
-        $message = $this->_json->getMessage($firstMail['id']);
+        $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(preg_match('/\\Flagged/', $message['flags']) == 0);
+        
+        // delete
+        $this->_deleteMessage($message['subject']);
     }
     
     /**
-     * test send and delete
-     * 
-     * @todo activate again
-     */
-    public function testSendAndDeleteMessage()
-    {
-        /*
-        // clear cache and sent folder
-        $sent = $this->_getFolder('Sent');
-        Felamimail_Controller_Cache::getInstance()->clear($sent->getId());
-        Felamimail_Controller_Folder::getInstance()->emptyFolder($sent->getId());
-        
-        $messageToSend = $this->_getMessageData();
-        $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
-        
-        // check if message is in sent folder
-        $filter = $this->_getMessageFilter($sent->getId());
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
-        //print_r($result);
-        
-        $this->assertTrue(isset($result['results'][0]));
-        $firstMail = $result['results'][0];
-        $this->assertEquals($firstMail['subject'],  $messageToSend['subject']);
-        $this->assertEquals($firstMail['to'],       $messageToSend['to'][0]);
-        //$this->assertEquals($firstMail['body'],     $messageToSend['body']);
-        
-        // delete message from inbox & sent
-        $this->_json->deleteMessages($firstMail['id']);
-        
-        $sent = $this->_getFolder();
-        $filter = $this->_getMessageFilter($sent->getId());
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
-        foreach ($result['results'] as $mail) {
-            if ($mail['subject'] == $messageToSend['subject']) {
-                $this->_json->deleteMessages($mail['id']);
-            }
-        }
-        */
-    }
-
-    /**
      * test reply mail
      * 
-     * @todo activate again
+     * @todo check In-Reply-To header
      */
     public function testReplyMessage()
     {
-        /*
+        $message = $this->_sendMessage();
+        
+        $replyMessage              = $this->_getMessageData();
+        $replyMessage['flags']     = '\\Answered';
+        $replyMessage['subject']   = 'Re: ' . $message['subject'];
+        $replyMessage['id']        = $message['id'];
+        $returned                   = $this->_json->saveMessage(Zend_Json::encode($replyMessage));
+        
         $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
-        $firstMail = $result['results'][0];
+        $replyMessageFound = array();
+        $originalMessage = array();
+        foreach ($result['results'] as $mail) {
+            if ($mail['subject'] == $replyMessage['subject']) {
+                $replyMessageFound = $mail;
+            }
+            if ($mail['subject'] == $message['subject']) {
+                $originalMessage = $mail;
+            }
+        }
+        $this->assertTrue(! empty($replyMessageFound));
         
-        //print_r($firstMail);
-        $messageToSend              = $this->_getMessageData();
-        $messageToSend['flags']     = '\\Answered';
-        $messageToSend['subject']   = 'Re: ' . $firstMail['subject'];
-        $messageToSend['id']        = $firstMail['id'];
-        $returned                   = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        // check answered flag
+        $this->assertTrue(preg_match("/\\\\Answered/", $originalMessage['flags']) > 0, 'could not find flag');
         
-        //-- delete from sent folder?
-        
-        // check answered flag and remove it afterwards
-        $inbox = $this->_getFolder();
-        $filter = $this->_getMessageFilter($inbox->getId());
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
-        $firstMail = $result['results'][0];
-        
-        $this->assertTrue(preg_match("/\\\\Answered/", $firstMail['flags']) > 0, 'could not find flag');
-        
-        //-- check In-Reply-To header
-        
-        $this->_json->clearFlag(Zend_Json::encode(array($firstMail['id'])), Zend_Json::encode('\\Answered'));
-        */
+        // delete
+        $this->_deleteMessage($message['subject']);
+        $this->_deleteMessage($replyMessage['subject']);
     }
     
     /**
@@ -319,5 +308,47 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'body'      => 'aaaaaa <br>',
             //'flags'     => array('\Answered')
         );
+    }
+
+    /**
+     * delete message
+     *
+     * @param string $_subject
+     */
+    protected function _deleteMessage($_subject) 
+    {
+        $inbox = $this->_getFolder();
+        $filter = $this->_getMessageFilter($inbox->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        foreach ($result['results'] as $mail) {
+            if ($mail['subject'] == $_subject) {
+                $this->_json->deleteMessages($mail['id']);
+            }
+        }
+    }
+    
+    /**
+     * send message and return message array
+     *
+     * @return array
+     */
+    protected function _sendMessage()
+    {
+        $messageToSend = $this->_getMessageData();
+        $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        
+        $inbox = $this->_getFolder();
+        $filter = $this->_getMessageFilter($inbox->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        
+        $message = array(); 
+        foreach ($result['results'] as $mail) {
+            if ($mail['subject'] == $messageToSend['subject']) {
+                $message = $mail;
+            }
+        }
+        $this->assertTrue(! empty($message));
+        
+        return $message;
     }
 }
