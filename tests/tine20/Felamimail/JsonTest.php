@@ -137,13 +137,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
         
+        sleep(10);
+        
         // check if message is in sent folder
         $sent = $this->_getFolder('Sent');
         $filter = $this->_getMessageFilter($sent->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         //print_r($result);
-
-        sleep(5);
         
         $message = array(); 
         foreach ($result['results'] as $mail) {
@@ -339,7 +339,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
         
-        sleep(5);
+        sleep(10);
         
         $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
