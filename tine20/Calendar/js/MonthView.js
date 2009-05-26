@@ -551,6 +551,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             
             this.setActiveEvent(event);
         }
+        
+        this.layoutDayCells();
     },
     
     /**
@@ -643,6 +645,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }, this);
         
         this.ds.each(this.insertEvent, this);
+        this.layoutDayCells();
     },
     
     /**
