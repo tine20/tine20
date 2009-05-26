@@ -512,7 +512,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     layoutDayCell: function(cell, hideOverflow, updateHeader) {
         // clean empty slices
-        while (cell.lastChild.lastChild.innerHTML == '') {
+        while (cell.lastChild.childNodes.length > 1 && cell.lastChild.lastChild.innerHTML == '') {
             Ext.fly(cell.lastChild.lastChild).remove();
         }
         
