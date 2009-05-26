@@ -35,7 +35,8 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
         'is_billable'    => array('filter' => 'Tinebase_Model_Filter_Bool', 'options' => array('fields' => array('timetracker_timesheet.is_billable','ta.is_billable'))),
-        'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        //'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'is_cleared'     => array('custom' => TRUE),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'id'))
     );
     
@@ -84,6 +85,19 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
     public function appendFilterSql($_select, $_backend)
     {
         $this->_appendAclSqlFilter($_select);
+
+        $db = $_backend->getAdapter();
+        foreach ($this->_customData as $customData) {
+            $value = $customData['value'];
+            if ($customData['field'] == 'is_cleared') {
+                $opStatus = $value ? '=' : '<>';
+                $op = $value ? ' OR ' : ' AND ';
+                $_select->where(
+                    $db->quoteInto($customData['field']  . ' = ?', $value) . $op .
+                    $db->quoteInto('ta.status' . $opStatus . ' ?', 'billed')
+                );
+            }
+        }
     }
     
     /**
