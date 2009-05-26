@@ -353,7 +353,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function updateMultiple($_filter, $_data)
     {        
-        $this->_checkFilterACL($_filter);
+        $this->_checkFilterACL($_filter, 'update');
         
         // get only ids
         $ids = $this->_backend->search($_filter, NULL, TRUE);
