@@ -361,6 +361,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // set subject
         $mail->setSubject($_message->subject);
         
+        // set date
+        //$mail->setDate(Zend_Date::now()->get(Zend_Date::RFC_2822));
+        
         // add attachments
         $contentType = 'text/html';
         if (isset($_message->attachments)) {

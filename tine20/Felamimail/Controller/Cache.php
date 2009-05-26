@@ -333,7 +333,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                     'sent'          => $this->_convertDate($message->date),
                     'folder_id'     => $_folderId,
                     'timestamp'     => Zend_Date::now(),
-                    'received'      => $this->_convertDate($value['received']),
+                    'received'      => $this->_convertDate($value['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
                     'size'          => $value['size'],
                     'flags'         => $message->getFlags(),
                 ));
@@ -377,11 +377,12 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      * convert date from sent/received
      *
      * @param string $_dateString
+     * @param string $_format default: 'Thu, 21 Dec 2000 16:01:07 +0200' (Zend_Date::RFC_2822)
      * @return Zend_Date
      * 
      * @todo make this work for all kinds of date formats
      */
-    protected function _convertDate($_dateString)
+    protected function _convertDate($_dateString, $_format = Zend_Date::RFC_2822)
     {
         // strip of timezone information for example: (CEST)
         $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
@@ -397,19 +398,34 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
         } catch (Zend_Date_Exception $e) {
             # Fri,  6 Mar 2009 20:00:36 CET
-            $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT_RECEIVED, 'en_US');
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' DATE_FORMAT');
+            $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
             #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " date header $headerValue => $dateString => $date => " . $date->get(Zend_Date::ISO_8601));
         }
         */
         
-        $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT_RECEIVED, 'en_US');
+        $date = new Zend_Date($dateString, $_format, 'en_US');
         
-        $date->setTimezone('UTC');
+        if ($_format == Felamimail_Model_Message::DATE_FORMAT_RECEIVED) {
+            if (preg_match('/ ([+-]{1})(\d{2})\d{2}$/', $dateString, $matches)) {
+                // add / sub from zend date ?
+                if ($matches[1] == '+') {
+                    $date->subHour($matches[2]);
+                } else {
+                    $date->addHour($matches[2]);
+                }
+                
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
+            }
+        }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_dateString);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $dateString);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $date->toString());
+        /*
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' format: ' . $_format);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' before: ' . $_dateString);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' after: ' . $dateString);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' zend date:' . $date->toString());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' zend date:' . $date->getTimezone());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' zend date:' . $date->get(Zend_Date::GMT_DIFF));
+        */
         
         return $date;
     }
