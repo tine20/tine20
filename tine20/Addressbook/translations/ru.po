@@ -17,6 +17,14 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
+#: Acl/Rights.php:98
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:99
+msgid "Create new shared addressbook folders"
+msgstr ""
+
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -125,7 +133,7 @@ msgstr "Професия"
 msgid "Addressbook"
 msgstr "Записная книжка"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:486
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:521
 msgid "Internal Contacts"
 msgstr "Внутренние контакты"
 
@@ -225,7 +233,7 @@ msgid "Last Name"
 msgstr "Фамилия"
 
 #: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:548
+#: js/EditDialog.js:197 Setup/setup.xml:583
 msgid "Company"
 msgstr "Фирма"
 
@@ -458,11 +466,16 @@ msgstr[0] "Линк"
 msgstr[1] "Линка [%d]"
 msgstr[2] "Линков [%d]"
 
-#: Setup/setup.xml:512
+#: js/SearchCombo.js:36
+#, fuzzy
+msgid "Searching..."
+msgstr "Поиск:"
+
+#: Setup/setup.xml:547
 msgid "Mr"
 msgstr "Мистер"
 
-#: Setup/setup.xml:530
+#: Setup/setup.xml:565
 msgid "Ms"
 msgstr "Женщина"
 
@@ -508,9 +521,6 @@ msgstr "Женщина"
 
 #~ msgid "Filter: "
 #~ msgstr "Фильтр:"
-
-#~ msgid "Search: "
-#~ msgstr "Поиск:"
 
 #~ msgid "Name"
 #~ msgstr "Имя"

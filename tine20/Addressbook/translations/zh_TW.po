@@ -13,6 +13,14 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: Acl/Rights.php:98
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:99
+msgid "Create new shared addressbook folders"
+msgstr ""
+
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -121,7 +129,7 @@ msgstr "職稱"
 msgid "Addressbook"
 msgstr "通訊錄"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:486
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:521
 msgid "Internal Contacts"
 msgstr "分機號碼"
 
@@ -210,7 +218,7 @@ msgid "Last Name"
 msgstr "姓氏"
 
 #: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:548
+#: js/EditDialog.js:197 Setup/setup.xml:583
 msgid "Company"
 msgstr "公司名稱"
 
@@ -437,10 +445,14 @@ msgid "Link"
 msgid_plural "Links [%d]"
 msgstr[0] ""
 
-#: Setup/setup.xml:512
+#: js/SearchCombo.js:36
+msgid "Searching..."
+msgstr ""
+
+#: Setup/setup.xml:547
 msgid "Mr"
 msgstr "先生"
 
-#: Setup/setup.xml:530
+#: Setup/setup.xml:565
 msgid "Ms"
 msgstr "小姐"

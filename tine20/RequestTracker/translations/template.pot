@@ -1,37 +1,77 @@
-#: js/Model.js:42 js/TicketGridPanel.js:40
+#: js/Model.js:42 js/TicketGridPanel.js:43
 msgid "Ticket"
 msgid_plural "Tickets"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TicketGridPanel.js:41
-msgid "Owner"
+#: js/StatusCombo.js:26
+msgid "New"
 msgstr ""
 
-#: js/TicketGridPanel.js:42
-msgid "Queue"
+#: js/StatusCombo.js:27
+msgid "Open"
 msgstr ""
 
-#: js/TicketGridPanel.js:43 js/TicketGridPanel.js:70
+#: js/StatusCombo.js:28
+msgid "Stalled"
+msgstr ""
+
+#: js/StatusCombo.js:29
+msgid "Waiting"
+msgstr ""
+
+#: js/StatusCombo.js:30
+msgid "Pending"
+msgstr ""
+
+#: js/StatusCombo.js:31
+msgid "Resolved"
+msgstr ""
+
+#: js/StatusCombo.js:32
+msgid "Rejected"
+msgstr ""
+
+#: js/StatusCombo.js:33
+msgid "Deleted"
+msgstr ""
+
+#: js/StatusCombo.js:51 js/TicketGridPanel.js:93
 msgid "Status"
 msgstr ""
 
-#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:61
+#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:66
 msgid "Ticket ID"
 msgstr ""
 
-#: js/TicketGridPanel.js:45
-msgid "Description"
+#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:69
+msgid "Queue"
 msgstr ""
 
-#: js/TicketGridPanel.js:64
+#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:75
 msgid "Subject"
 msgstr ""
 
-#: js/TicketGridPanel.js:76
+#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:81
+msgid "Requestors"
+msgstr ""
+
+#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:87
+msgid "Owner"
+msgstr ""
+
+#: js/TicketGridPanel.js:50
+msgid "Description"
+msgstr ""
+
+#: js/TicketGridPanel.js:99
 msgid "Final Priority"
 msgstr ""
 
-#: js/TicketGridPanel.js:82
+#: js/TicketGridPanel.js:105
 msgid "Due"
+msgstr ""
+
+#: js/TreePanel.js:24
+msgid "All Queues"
 msgstr ""

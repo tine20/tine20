@@ -53,11 +53,15 @@ msgstr "移除應用程式"
 msgid "Update application"
 msgstr "更新應用程式"
 
-#: js/ApplicationGridPanel.js:139
+#: js/ApplicationGridPanel.js:143
+msgid "This may take a while"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:162
 msgid "Shit"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:139
+#: js/ApplicationGridPanel.js:162
 msgid "Where are the backup tapes"
 msgstr "磁帶備份位置"
 

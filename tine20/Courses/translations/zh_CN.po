@@ -13,23 +13,27 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/Courses.js:27 Setup/setup.xml:4
-msgid "Courses"
+#: Controller/Course.php:79
+msgid "teacher"
 msgstr ""
 
-#: js/Courses.js:32
-msgid "All Courses"
+#: Controller/Course.php:85
+msgid "Teacher"
 msgstr ""
+
+#: Controller/Course.php:86
+msgid "Teacher Account"
+msgstr ""
+
+#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/CourseGridPanel.js:51
+#: js/Models.js:42
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
 
 #: js/CourseEditDialog.js:34
 msgid "Import course members"
 msgstr ""
-
-#: js/CourseEditDialog.js:135 js/CourseGridPanel.js:51 js/Models.js:42
-#: Frontend/Json.php:241
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] ""
 
 #: js/CourseEditDialog.js:151
 msgid "Course Name"
@@ -95,12 +99,20 @@ msgstr ""
 msgid "Fileserver Access Off"
 msgstr ""
 
-#: js/CourseGridPanel.js:184
+#: js/CourseGridPanel.js:185
 msgid "Failed"
 msgstr ""
 
-#: js/CourseGridPanel.js:184
+#: js/CourseGridPanel.js:186
 msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Courses.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: js/Courses.js:32
+msgid "All Courses"
 msgstr ""
 
 #: js/Models.js:46
@@ -112,15 +124,3 @@ msgstr[0] ""
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] ""
-
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr ""
-
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr ""
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr ""

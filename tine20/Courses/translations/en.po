@@ -1,21 +1,25 @@
-#: js/Courses.js:27 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Courses"
+#: Controller/Course.php:79
+msgid "teacher"
+msgstr "teacher"
 
-#: js/Courses.js:32
-msgid "All Courses"
-msgstr "All Courses"
+#: Controller/Course.php:85
+msgid "Teacher"
+msgstr "Teacher"
 
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
-msgstr "Import course members"
+#: Controller/Course.php:86
+msgid "Teacher Account"
+msgstr "Teacher Account"
 
-#: js/CourseEditDialog.js:135 js/CourseGridPanel.js:51 js/Models.js:42
-#: Frontend/Json.php:241
+#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/CourseGridPanel.js:51
+#: js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Course"
 msgstr[1] "Courses"
+
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr "Import course members"
 
 #: js/CourseEditDialog.js:151
 msgid "Course Name"
@@ -81,13 +85,21 @@ msgstr "Fileserver Access On"
 msgid "Fileserver Access Off"
 msgstr "Fileserver Access Off"
 
-#: js/CourseGridPanel.js:184
+#: js/CourseGridPanel.js:185
 msgid "Failed"
 msgstr "Failed"
 
-#: js/CourseGridPanel.js:184
+#: js/CourseGridPanel.js:186
 msgid "Some error occured while trying to update the courses."
 msgstr "Some error occured while trying to update the courses."
+
+#: js/Courses.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Courses"
+
+#: js/Courses.js:32
+msgid "All Courses"
+msgstr "All Courses"
 
 #: js/Models.js:46
 msgid "record list"
@@ -100,15 +112,3 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Course Type"
 msgstr[1] "Course Types"
-
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr "teacher"
-
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr "Teacher"
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr "Teacher Account"

@@ -1,3 +1,11 @@
+#: Acl/Rights.php:98
+msgid "manage shared folders"
+msgstr "manage shared folders"
+
+#: Acl/Rights.php:99
+msgid "Create new shared addressbook folders"
+msgstr "Create new shared addressbook folders"
+
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -106,7 +114,7 @@ msgstr "Job Title"
 msgid "Addressbook"
 msgstr "Addressbook"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:486
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:521
 msgid "Internal Contacts"
 msgstr "Internal Contacts"
 
@@ -197,7 +205,7 @@ msgid "Last Name"
 msgstr "Last Name"
 
 #: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:548
+#: js/EditDialog.js:197 Setup/setup.xml:583
 msgid "Company"
 msgstr "Company"
 
@@ -425,10 +433,14 @@ msgid_plural "Links [%d]"
 msgstr[0] "Link"
 msgstr[1] "Links [%d]"
 
-#: Setup/setup.xml:512
+#: js/SearchCombo.js:36
+msgid "Searching..."
+msgstr "Searching..."
+
+#: Setup/setup.xml:547
 msgid "Mr"
 msgstr "Mr"
 
-#: Setup/setup.xml:530
+#: Setup/setup.xml:565
 msgid "Ms"
 msgstr "Ms"

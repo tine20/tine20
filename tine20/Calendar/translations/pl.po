@@ -19,6 +19,17 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr ""
 
+#: js/Model.js:58
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:62
+msgid "calendars"
+msgstr ""
+
 #: Setup/setup.xml:4
 msgid "Calendar"
 msgstr ""

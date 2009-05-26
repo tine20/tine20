@@ -12,70 +12,25 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/FelamimailGridDetailsPanel.js:86
-#: js/FelamimailEditDialog.js:175
-#: js/FelamimailGridPanel.js:193
-#: js/FelamimailGridPanel.js:241
-msgid "Subject"
-msgstr "Betreff"
-
-#: js/FelamimailGridDetailsPanel.js:87
-#: js/FelamimailEditDialog.js:163
-#: js/FelamimailGridPanel.js:194
-#: js/FelamimailGridPanel.js:247
-msgid "From"
-msgstr "Von"
-
-#: js/FelamimailGridDetailsPanel.js:148
-#: js/FelamimailEditDialog.js:111
-msgid "Attachments"
-msgstr "Anhänge"
-
-#: js/FelamimailAttachmentGrid.js:109
+#: js/FelamimailAttachmentGrid.js:110
 msgid "Upload Failed"
 msgstr "Hochladen fehlgeschlagen"
 
-#: js/FelamimailAttachmentGrid.js:110
-msgid "Could not upload attachment. Filesize could be too big. Please notify your Administrator."
+#: js/FelamimailAttachmentGrid.js:111
+msgid ""
+"Could not upload attachment. Filesize could be too big. Please notify your "
+"Administrator."
 msgstr "Konnte Datei nicht hochladen. Eventuell war sie zu groß."
 
-#: js/FelamimailAttachmentGrid.js:122
+#: js/FelamimailAttachmentGrid.js:123
 msgid "Add Attachment"
 msgstr "Anhang hinzufügen"
 
-#: js/FelamimailAttachmentGrid.js:130
+#: js/FelamimailAttachmentGrid.js:131
 msgid "Remove Attachment"
 msgstr "Anhang entfernen"
 
-#: js/FelamimailTreePanel.js:98
-msgid "Folder"
-msgstr "Ordner"
-
-#: js/FelamimailTreePanel.js:105
-msgid "Update Cache"
-msgstr "Cache aktualisieren"
-
-#: js/FelamimailTreePanel.js:133
-msgid "Empty Folder"
-msgstr "Ordner leeren"
-
-#: js/FelamimailRecipientGrid.js:92
-#: js/FelamimailRecipientGrid.js:113
-msgid "To:"
-msgstr "To:"
-
-#: js/FelamimailRecipientGrid.js:95
-#: js/FelamimailRecipientGrid.js:114
-msgid "Cc:"
-msgstr "Cc:"
-
-#: js/FelamimailRecipientGrid.js:98
-#: js/FelamimailRecipientGrid.js:115
-msgid "Bcc:"
-msgstr "Bcc:"
-
-#: js/FelamimailEditDialog.js:88
-#: js/FelamimailGridPanel.js:498
+#: js/FelamimailEditDialog.js:88 js/FelamimailGridPanel.js:498
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
@@ -91,18 +46,31 @@ msgstr "Fehler:"
 msgid "Recipients"
 msgstr "Empfänger"
 
-#: js/FelamimailEditDialog.js:116
+#: js/FelamimailEditDialog.js:112 js/FelamimailGridDetailsPanel.js:148
+msgid "Attachments"
+msgstr "Anhänge"
+
+#: js/FelamimailEditDialog.js:118
 msgid "Body"
 msgstr "Nachricht"
 
-#: js/FelamimailEditDialog.js:145
-#: js/Models.js:45
+#: js/FelamimailEditDialog.js:147 js/Models.js:45
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "Nachricht"
 msgstr[1] "Nachrichten"
 
-#: js/FelamimailEditDialog.js:192
+#: js/FelamimailEditDialog.js:165 js/FelamimailGridDetailsPanel.js:87
+#: js/FelamimailGridPanel.js:194 js/FelamimailGridPanel.js:247
+msgid "From"
+msgstr "Von"
+
+#: js/FelamimailEditDialog.js:177 js/FelamimailGridDetailsPanel.js:86
+#: js/FelamimailGridPanel.js:193 js/FelamimailGridPanel.js:241
+msgid "Subject"
+msgstr "Betreff"
+
+#: js/FelamimailEditDialog.js:194
 msgid "Write New Mail"
 msgstr "Neue EMail verfassen"
 
@@ -130,14 +98,12 @@ msgstr "Markieren"
 msgid "Mark Unread"
 msgstr "Ungelesen markieren"
 
-#: js/FelamimailGridPanel.js:149
-#: js/FelamimailGridPanel.js:150
+#: js/FelamimailGridPanel.js:149 js/FelamimailGridPanel.js:150
 #: js/FelamimailGridPanel.js:152
 msgid "Delete"
 msgstr "Löschen"
 
-#: js/FelamimailGridPanel.js:195
-#: js/FelamimailGridPanel.js:253
+#: js/FelamimailGridPanel.js:195 js/FelamimailGridPanel.js:253
 msgid "To"
 msgstr "An"
 
@@ -149,8 +115,7 @@ msgstr "Kopie"
 msgid "Bcc"
 msgstr "Blindkopie"
 
-#: js/FelamimailGridPanel.js:198
-#: js/FelamimailGridPanel.js:268
+#: js/FelamimailGridPanel.js:198 js/FelamimailGridPanel.js:268
 msgid "Received"
 msgstr "Empfangen"
 
@@ -198,8 +163,31 @@ msgstr "Fwd:"
 msgid "Some error occured while trying to update the messages."
 msgstr "Ein Fehler trat beim aktualisieren der Nachrichten auf."
 
-#: js/Models.js:49
-#: js/Models.js:80
+#: js/FelamimailRecipientGrid.js:92 js/FelamimailRecipientGrid.js:113
+msgid "To:"
+msgstr "To:"
+
+#: js/FelamimailRecipientGrid.js:95 js/FelamimailRecipientGrid.js:114
+msgid "Cc:"
+msgstr "Cc:"
+
+#: js/FelamimailRecipientGrid.js:98 js/FelamimailRecipientGrid.js:115
+msgid "Bcc:"
+msgstr "Bcc:"
+
+#: js/FelamimailTreePanel.js:94
+msgid "Folder"
+msgstr "Ordner"
+
+#: js/FelamimailTreePanel.js:101
+msgid "Update Cache"
+msgstr "Cache aktualisieren"
+
+#: js/FelamimailTreePanel.js:129
+msgid "Empty Folder"
+msgstr "Ordner leeren"
+
+#: js/Models.js:49 js/Models.js:80
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Nachrichtenliste"
@@ -214,4 +202,3 @@ msgstr[1] "Konten"
 #: Setup/setup.xml:4
 msgid "Felamimail"
 msgstr "Email"
-

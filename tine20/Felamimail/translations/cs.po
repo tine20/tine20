@@ -13,60 +13,22 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/FelamimailGridDetailsPanel.js:86 js/FelamimailEditDialog.js:175
-#: js/FelamimailGridPanel.js:193 js/FelamimailGridPanel.js:241
-msgid "Subject"
-msgstr ""
-
-#: js/FelamimailGridDetailsPanel.js:87 js/FelamimailEditDialog.js:163
-#: js/FelamimailGridPanel.js:194 js/FelamimailGridPanel.js:247
-msgid "From"
-msgstr ""
-
-#: js/FelamimailGridDetailsPanel.js:148 js/FelamimailEditDialog.js:111
-msgid "Attachments"
-msgstr ""
-
-#: js/FelamimailAttachmentGrid.js:109
+#: js/FelamimailAttachmentGrid.js:110
 msgid "Upload Failed"
 msgstr ""
 
-#: js/FelamimailAttachmentGrid.js:110
+#: js/FelamimailAttachmentGrid.js:111
 msgid ""
 "Could not upload attachment. Filesize could be too big. Please notify your "
 "Administrator."
 msgstr ""
 
-#: js/FelamimailAttachmentGrid.js:122
+#: js/FelamimailAttachmentGrid.js:123
 msgid "Add Attachment"
 msgstr ""
 
-#: js/FelamimailAttachmentGrid.js:130
+#: js/FelamimailAttachmentGrid.js:131
 msgid "Remove Attachment"
-msgstr ""
-
-#: js/FelamimailTreePanel.js:98
-msgid "Folder"
-msgstr ""
-
-#: js/FelamimailTreePanel.js:105
-msgid "Update Cache"
-msgstr ""
-
-#: js/FelamimailTreePanel.js:133
-msgid "Empty Folder"
-msgstr ""
-
-#: js/FelamimailRecipientGrid.js:92 js/FelamimailRecipientGrid.js:113
-msgid "To:"
-msgstr ""
-
-#: js/FelamimailRecipientGrid.js:95 js/FelamimailRecipientGrid.js:114
-msgid "Cc:"
-msgstr ""
-
-#: js/FelamimailRecipientGrid.js:98 js/FelamimailRecipientGrid.js:115
-msgid "Bcc:"
 msgstr ""
 
 #: js/FelamimailEditDialog.js:88 js/FelamimailGridPanel.js:498
@@ -85,18 +47,32 @@ msgstr ""
 msgid "Recipients"
 msgstr ""
 
-#: js/FelamimailEditDialog.js:116
+#: js/FelamimailEditDialog.js:112 js/FelamimailGridDetailsPanel.js:148
+msgid "Attachments"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:118
 msgid "Body"
 msgstr ""
 
-#: js/FelamimailEditDialog.js:145 js/Models.js:45
+#: js/FelamimailEditDialog.js:147 js/Models.js:45
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/FelamimailEditDialog.js:192
+#: js/FelamimailEditDialog.js:165 js/FelamimailGridDetailsPanel.js:87
+#: js/FelamimailGridPanel.js:194 js/FelamimailGridPanel.js:247
+msgid "From"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:177 js/FelamimailGridDetailsPanel.js:86
+#: js/FelamimailGridPanel.js:193 js/FelamimailGridPanel.js:241
+msgid "Subject"
+msgstr ""
+
+#: js/FelamimailEditDialog.js:194
 msgid "Write New Mail"
 msgstr ""
 
@@ -187,6 +163,30 @@ msgstr ""
 
 #: js/FelamimailGridPanel.js:499
 msgid "Some error occured while trying to update the messages."
+msgstr ""
+
+#: js/FelamimailRecipientGrid.js:92 js/FelamimailRecipientGrid.js:113
+msgid "To:"
+msgstr ""
+
+#: js/FelamimailRecipientGrid.js:95 js/FelamimailRecipientGrid.js:114
+msgid "Cc:"
+msgstr ""
+
+#: js/FelamimailRecipientGrid.js:98 js/FelamimailRecipientGrid.js:115
+msgid "Bcc:"
+msgstr ""
+
+#: js/FelamimailTreePanel.js:94
+msgid "Folder"
+msgstr ""
+
+#: js/FelamimailTreePanel.js:101
+msgid "Update Cache"
+msgstr ""
+
+#: js/FelamimailTreePanel.js:129
+msgid "Empty Folder"
 msgstr ""
 
 #: js/Models.js:49 js/Models.js:80

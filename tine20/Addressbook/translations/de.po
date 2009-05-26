@@ -13,6 +13,14 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Acl/Rights.php:98
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:99
+msgid "Create new shared addressbook folders"
+msgstr ""
+
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -121,7 +129,7 @@ msgstr "Berufs-Bezeichnung"
 msgid "Addressbook"
 msgstr "Adressbuch"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:486
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:521
 msgid "Internal Contacts"
 msgstr "Interne Kontakte"
 
@@ -212,7 +220,7 @@ msgid "Last Name"
 msgstr "Nachname"
 
 #: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:548
+#: js/EditDialog.js:197 Setup/setup.xml:583
 msgid "Company"
 msgstr "Firma"
 
@@ -440,11 +448,16 @@ msgid_plural "Links [%d]"
 msgstr[0] "Verknüpfung"
 msgstr[1] "Verknüpfungen [%d]"
 
-#: Setup/setup.xml:512
+#: js/SearchCombo.js:36
+#, fuzzy
+msgid "Searching..."
+msgstr "Suche: "
+
+#: Setup/setup.xml:547
 msgid "Mr"
 msgstr "Herr"
 
-#: Setup/setup.xml:530
+#: Setup/setup.xml:565
 msgid "Ms"
 msgstr "Frau"
 
@@ -488,9 +501,6 @@ msgstr "Frau"
 
 #~ msgid "Filter: "
 #~ msgstr "Filter: "
-
-#~ msgid "Search: "
-#~ msgstr "Suche: "
 
 #~ msgid "History"
 #~ msgstr "Historie"

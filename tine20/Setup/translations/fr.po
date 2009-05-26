@@ -52,12 +52,16 @@ msgstr "désinstaller une application"
 msgid "Update application"
 msgstr "Mettre à jour une application"
 
-#: js/ApplicationGridPanel.js:139
+#: js/ApplicationGridPanel.js:143
+msgid "This may take a while"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:162
 #, fuzzy
 msgid "Shit"
 msgstr "Oups"
 
-#: js/ApplicationGridPanel.js:139
+#: js/ApplicationGridPanel.js:162
 msgid "Where are the backup tapes"
 msgstr "Où sont les bandes de sauvegarde?"
 

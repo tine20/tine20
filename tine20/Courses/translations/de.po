@@ -12,34 +12,34 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Courses.js:27
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Klassen"
+#: Controller/Course.php:79
+msgid "teacher"
+msgstr "lehrer"
 
-#: js/Courses.js:32
-msgid "All Courses"
-msgstr "Alle Klassen"
+#: Controller/Course.php:85
+msgid "Teacher"
+msgstr "Lehrer"
 
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
-msgstr "Klassenmitglieder importieren"
+#: Controller/Course.php:86
+msgid "Teacher Account"
+msgstr "Lehrer Zugang"
 
-#: js/CourseEditDialog.js:135
-#: js/CourseGridPanel.js:51
+#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/CourseGridPanel.js:51
 #: js/Models.js:42
-#: Frontend/Json.php:241
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Klasse"
 msgstr[1] "Klassen"
 
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr "Klassenmitglieder importieren"
+
 #: js/CourseEditDialog.js:151
 msgid "Course Name"
 msgstr "Klassenname"
 
-#: js/CourseEditDialog.js:155
-#: js/CourseEditDialog.js:162
+#: js/CourseEditDialog.js:155 js/CourseEditDialog.js:162
 msgid "Course / School Type"
 msgstr "Schultyp"
 
@@ -47,18 +47,15 @@ msgstr "Schultyp"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/CourseEditDialog.js:179
-#: js/CourseGridPanel.js:78
+#: js/CourseEditDialog.js:179 js/CourseGridPanel.js:78
 msgid "Internet Access"
 msgstr "Internet freigegeben"
 
-#: js/CourseEditDialog.js:185
-#: js/CourseGridPanel.js:85
+#: js/CourseEditDialog.js:185 js/CourseGridPanel.js:85
 msgid "Fileserver Access"
 msgstr "Zugriff auf Fileserver gesperrt"
 
-#: js/CourseEditDialog.js:215
-#: js/CourseEditDialog.js:275
+#: js/CourseEditDialog.js:215 js/CourseEditDialog.js:275
 msgid "Members"
 msgstr "Mitglieder"
 
@@ -102,13 +99,21 @@ msgstr "Fileserver sperren"
 msgid "Fileserver Access Off"
 msgstr "Fileserver freigeben"
 
-#: js/CourseGridPanel.js:184
+#: js/CourseGridPanel.js:185
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/CourseGridPanel.js:184
+#: js/CourseGridPanel.js:186
 msgid "Some error occured while trying to update the courses."
 msgstr "Beim aktualisieren der Klasse(n) trat ein Fehler auf."
+
+#: js/Courses.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Klassen"
+
+#: js/Courses.js:32
+msgid "All Courses"
+msgstr "Alle Klassen"
 
 #: js/Models.js:46
 msgid "record list"
@@ -121,16 +126,3 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Klassentyp"
 msgstr[1] "Klassentypen"
-
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr "lehrer"
-
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr "Lehrer"
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr "Lehrer Zugang"
-

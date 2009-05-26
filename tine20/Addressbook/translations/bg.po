@@ -14,6 +14,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Bookmarks: 23,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
+#: Acl/Rights.php:98
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:99
+msgid "Create new shared addressbook folders"
+msgstr ""
+
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -122,7 +130,7 @@ msgstr "Длъжност"
 msgid "Addressbook"
 msgstr "Адреси"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:486
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:521
 msgid "Internal Contacts"
 msgstr "Международни контакти"
 
@@ -213,7 +221,7 @@ msgid "Last Name"
 msgstr "Фамилия"
 
 #: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:548
+#: js/EditDialog.js:197 Setup/setup.xml:583
 msgid "Company"
 msgstr "Фирма"
 
@@ -441,11 +449,15 @@ msgid_plural "Links [%d]"
 msgstr[0] "Линк"
 msgstr[1] "Линкове"
 
-#: Setup/setup.xml:512
+#: js/SearchCombo.js:36
+msgid "Searching..."
+msgstr ""
+
+#: Setup/setup.xml:547
 msgid "Mr"
 msgstr "Господин"
 
-#: Setup/setup.xml:530
+#: Setup/setup.xml:565
 msgid "Ms"
 msgstr "Госпожа"
 

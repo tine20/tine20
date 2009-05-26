@@ -14,25 +14,29 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
-#: js/Courses.js:27 Setup/setup.xml:4
-msgid "Courses"
+#: Controller/Course.php:79
+msgid "teacher"
 msgstr ""
 
-#: js/Courses.js:32
-msgid "All Courses"
+#: Controller/Course.php:85
+msgid "Teacher"
 msgstr ""
 
-#: js/CourseEditDialog.js:34
-msgid "Import course members"
+#: Controller/Course.php:86
+msgid "Teacher Account"
 msgstr ""
 
-#: js/CourseEditDialog.js:135 js/CourseGridPanel.js:51 js/Models.js:42
-#: Frontend/Json.php:241
+#: Frontend/Json.php:240 js/CourseEditDialog.js:135 js/CourseGridPanel.js:51
+#: js/Models.js:42
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#: js/CourseEditDialog.js:34
+msgid "Import course members"
+msgstr ""
 
 #: js/CourseEditDialog.js:151
 msgid "Course Name"
@@ -98,12 +102,20 @@ msgstr ""
 msgid "Fileserver Access Off"
 msgstr ""
 
-#: js/CourseGridPanel.js:184
+#: js/CourseGridPanel.js:185
 msgid "Failed"
 msgstr ""
 
-#: js/CourseGridPanel.js:184
+#: js/CourseGridPanel.js:186
 msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Courses.js:27 Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: js/Courses.js:32
+msgid "All Courses"
 msgstr ""
 
 #: js/Models.js:46
@@ -119,15 +131,3 @@ msgid_plural "Course Types"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-#: Controller/Course.php:79
-msgid "teacher"
-msgstr ""
-
-#: Controller/Course.php:85
-msgid "Teacher"
-msgstr ""
-
-#: Controller/Course.php:86
-msgid "Teacher Account"
-msgstr ""

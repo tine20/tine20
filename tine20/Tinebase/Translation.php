@@ -42,6 +42,7 @@ class Tinebase_Translation
         //'es',      // Spanish              Holger Rothemund <holger@rothemund.org>
         'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
         //'it',      // Italian              Lidia Panio <lidiapanio@hotmail.com>
+        'ja',      // Japanese             Yuuki Kitamura <ykitamura@clasi-co.jp>
         //'nl',      // Dutch                Joost Venema <post@joostvenema.nl>
         //'pl',      // Polish               Chrisopf Gacki <c.gacki@metaways.de>
         //'pt',      // Portuguese           Holger Rothemund <holger@rothemund.org>

@@ -17,6 +17,14 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
+#: Acl/Rights.php:98
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:99
+msgid "Create new shared addressbook folders"
+msgstr ""
+
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
@@ -125,7 +133,7 @@ msgstr "Povolání"
 msgid "Addressbook"
 msgstr "Adresář"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:486
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:521
 msgid "Internal Contacts"
 msgstr "Interní kontakty"
 
@@ -218,7 +226,7 @@ msgid "Last Name"
 msgstr "Příjmení"
 
 #: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:548
+#: js/EditDialog.js:197 Setup/setup.xml:583
 msgid "Company"
 msgstr "Firma"
 
@@ -447,11 +455,16 @@ msgstr[0] "Odkaz"
 msgstr[1] "Odkazy [%d]"
 msgstr[2] "Odkazů [%d]"
 
-#: Setup/setup.xml:512
+#: js/SearchCombo.js:36
+#, fuzzy
+msgid "Searching..."
+msgstr "Hledat:"
+
+#: Setup/setup.xml:547
 msgid "Mr"
 msgstr "Pan"
 
-#: Setup/setup.xml:530
+#: Setup/setup.xml:565
 msgid "Ms"
 msgstr "Paní"
 
@@ -493,9 +506,6 @@ msgstr "Paní"
 
 #~ msgid "Filter: "
 #~ msgstr "Filtr:"
-
-#~ msgid "Search: "
-#~ msgstr "Hledat:"
 
 #~ msgid "History"
 #~ msgstr "Historie"
