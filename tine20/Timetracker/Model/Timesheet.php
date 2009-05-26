@@ -52,6 +52,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         'is_billable_combined'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_cleared'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'is_cleared_combined'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'cleared_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // custom fields array
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),    

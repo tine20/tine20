@@ -26,6 +26,7 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat
     { name: 'is_billable' },
     { name: 'is_billable_combined' }, // ts & ta is_billable
     { name: 'is_cleared' },
+    { name: 'is_cleared_combined' }, // ts is_cleared & ta status == 'billed'
     { name: 'billed_in' },
     // tine 2.0 notes + tags
     { name: 'notes'},

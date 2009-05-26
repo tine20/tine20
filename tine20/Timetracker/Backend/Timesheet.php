@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Timesheet.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  */
 
@@ -79,12 +79,18 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
             );
             
         } else {
-            $cols = array_merge((array)$_cols, array('is_billable_combined' => '(' . $this->_tableName . '.is_billable*ta.is_billable)'));            
+            $cols = array_merge(
+                (array)$_cols, 
+                array('is_billable_combined'    => '(' . $this->_tableName . '.is_billable*ta.is_billable)'),
+                // ts it is cleared if ts is_cleared or ta status is 'billed'
+                array('is_cleared_combined'     => 
+                    '(' . $this->_tableName . ".is_cleared|(IF(STRCMP(ta.status, 'billed'),0,1)))")
+            );
         }
 
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $cols);
         
-        // join with timeaccounts to get combined is_billable
+        // join with timeaccounts to get combined is_billable / is_cleared
         $select->joinLeft(array('ta' => $this->_tablePrefix . 'timetracker_timeaccount'),
                     $this->_db->quoteIdentifier($this->_tableName . '.timeaccount_id') . ' = ' . $this->_db->quoteIdentifier('ta.id'),
                     array());        

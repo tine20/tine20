@@ -217,7 +217,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
                     'type'      => 'float', 
                     'width'     => '3cm'
                 ),
-                'is_cleared' => array(
+                'is_cleared_combined' => array(
                     'header'    => $this->_translate->_('Cleared'),
                     'type'      => 'float', 
                     'width'     => '3cm'

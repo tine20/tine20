@@ -262,7 +262,8 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             header: this.app.i18n._("Cleared"),
             width: 100,
             sortable: true,
-            dataIndex: 'is_cleared',
+            //dataIndex: 'is_cleared',
+            dataIndex: 'is_cleared_combined',
             renderer: Tine.Tinebase.common.booleanRenderer
         },{
             id: 'billed_in',

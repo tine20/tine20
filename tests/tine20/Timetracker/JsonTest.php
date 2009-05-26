@@ -372,10 +372,10 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to search for Timesheets (with combined is_billable)
+     * try to search for Timesheets (with combined is_billable + cleared)
      *
      */
-    public function testSearchTimesheetsWithCombinedIsBillable()
+    public function testSearchTimesheetsWithCombinedIsBillableAndCleared()
     {
         // create
         $timesheet = $this->_getTimesheet();
@@ -389,6 +389,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // search & check
         $search = $this->_json->searchTimesheets(Zend_Json::encode($this->_getTimesheetFilter()), Zend_Json::encode($this->_getPaging()));
         $this->assertEquals(0, $search['results'][0]['is_billable_combined']);
+        $this->assertEquals(0, $search['results'][0]['is_cleared_combined']);
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals(30, $search['totalsum']);
         $this->assertEquals(0, $search['totalsumbillable']);
