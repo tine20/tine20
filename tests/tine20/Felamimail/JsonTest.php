@@ -143,13 +143,15 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         //print_r($result);
 
+        sleep(5);
+        
         $message = array(); 
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $messageToSend['subject']) {
                 $message = $mail;
             }
         }
-        $this->assertGreaterThan(0, $result['totalcount']);
+        $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
         $this->assertTrue(! empty($message));
         $this->assertEquals($message['subject'],  $messageToSend['subject']);
         $this->assertEquals($message['to'],       $messageToSend['to'][0]);
@@ -336,6 +338,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        
+        sleep(5);
         
         $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
