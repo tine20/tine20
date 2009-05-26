@@ -309,6 +309,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      *
      * @param array $_messages
      * @param string $_folderId
+     * 
+     * @todo get replyTo & inReplyTo
      */
     protected function _addMessages($_messages, $_folderId)
     {
