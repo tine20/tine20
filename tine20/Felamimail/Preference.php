@@ -47,7 +47,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
-            self::USERACCOUNT
+            //self::USERACCOUNT
         );
             
         return $allPrefs;
