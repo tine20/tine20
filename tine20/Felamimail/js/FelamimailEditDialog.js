@@ -8,6 +8,7 @@
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         make account combo work when loading from json
+ * TODO         finish layout work
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -24,7 +25,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     tbarItems: [],
     evalGrants: false,
-    //layout: 'form',
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -113,13 +113,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
-            //fieldLabel: _('Recipients'),
+            fieldLabel: this.app.i18n._('Recipients'),
             record: this.record,
             il8n: this.app.i18n
         });
         
         this.attachmentGrid = new Tine.Felamimail.AttachmentGrid({
-            //fieldLabel: _('Attachments'),
+            fieldLabel: this.app.i18n._('Attachments'),
             record: this.record,
             il8n: this.app.i18n
         });
@@ -128,7 +128,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: this.app.i18n._('Body'),
             name: 'body',
             allowBlank: true,
-            height: 200,
+            anchor: '100%1 100%',
+            //height: 200,
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
@@ -154,56 +155,62 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         return {
-            //title: this.app.i18n._('Message'),
             autoScroll: true,
             border: false,
             frame: true,
             layout: 'border',
-            items: [{
-                region: 'center',
-                xtype: 'columnform',
+            items: [
+            {
+                region: 'north',
+                height: 160,
+                resizable: true,
+                layout: 'form',
                 labelAlign: 'top',
-                formDefaults: {
-                    xtype:'textfield',
+                items: [{
+                    xtype:'reccombo',
+                    name: 'from',
+                    fieldLabel: this.app.i18n._('From'),
+                    displayField: 'user',
                     anchor: '100%',
-                    labelSeparator: '',
-                    columnWidth: 1
-                },
-                items: [[{
-                        xtype:'reccombo',
-                        name: 'from',
-                        fieldLabel: this.app.i18n._('From'),
-                        displayField: 'user',
-                        store: new Ext.data.Store({
-                            fields: Tine.Felamimail.Model.Account,
-                            proxy: Tine.Felamimail.accountBackend,
-                            reader: Tine.Felamimail.accountBackend.getReader(),
-                            remoteSort: true,
-                            sortInfo: {field: 'user', dir: 'ASC'}
-                        })
-                    }, 
-                    this.recipientGrid,
-                    {
-                        fieldLabel: this.app.i18n._('Subject'),
-                        name: 'subject',
-                        allowBlank: false,
-                        enableKeyEvents: true,
-                        listeners: {
-                            scope: this,
-                            // update title on keyup event
-                            'keyup': function(field, e) {
-                                if (! e.isSpecialKey()) {
-                                    this.window.setTitle(
-                                        this.app.i18n._('Compose email:') + ' ' 
-                                        + field.getValue()
-                                    );
-                                }
+                    store: new Ext.data.Store({
+                        fields: Tine.Felamimail.Model.Account,
+                        proxy: Tine.Felamimail.accountBackend,
+                        reader: Tine.Felamimail.accountBackend.getReader(),
+                        remoteSort: true,
+                        sortInfo: {field: 'user', dir: 'ASC'}
+                    })
+                }, 
+                this.recipientGrid, 
+                {
+                    xtype:'textfield',
+                    fieldLabel: this.app.i18n._('Subject'),
+                    name: 'subject',
+                    allowBlank: false,
+                    enableKeyEvents: true,
+                    anchor: '100%',
+                    listeners: {
+                        scope: this,
+                        // update title on keyup event
+                        'keyup': function(field, e) {
+                            if (! e.isSpecialKey()) {
+                                this.window.setTitle(
+                                    this.app.i18n._('Compose email:') + ' ' 
+                                    + field.getValue()
+                                );
                             }
                         }
-                    },
-                    this.htmlEditor,
-                    this.attachmentGrid
-                ]] 
+                    }
+                }]
+            }, {
+                region: 'center',
+                layout: 'form',
+                labelAlign: 'top',
+                items: [this.htmlEditor]
+            }, {
+                region: 'south',
+                layout: 'form',
+                height: 120,
+                items: [this.attachmentGrid]
             }]
         };
     }
@@ -214,7 +221,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
-    //config.title = this.app.i18n._('Compose email: ');
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 550,
