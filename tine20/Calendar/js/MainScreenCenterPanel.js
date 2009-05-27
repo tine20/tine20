@@ -128,6 +128,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             cardPanel.doLayout();
         }
         
+        this.activeView = view;
+        
         // move around changeViewButtons
         var tbar = panel.getTopToolbar();
         var spacerEl = Ext.fly(Ext.DomQuery.selectNode('div[class=ytb-spacer]', tbar.el.dom)).parent();
@@ -138,6 +140,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         panel.getView().updatePeriod({from: this.startDate});
         panel.getStore().load({});
+        //this.updateMiniCal();
     },
     
     updateView: function(which) {
@@ -146,6 +149,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         panel.getView().updatePeriod(period);
         panel.getStore().load({});
+        //this.updateMiniCal();
     },
     
     /**
@@ -207,6 +211,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             view.on('changeView', this.changeView, this);
             view.on('changePeriod', function(period) {
                 this.startDate = period.from;
+                this.updateMiniCal();
             }, this);
             
             this.calendarPanels[which] = new Tine.Calendar.CalendarPanel({
@@ -217,6 +222,26 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         return this.calendarPanels[which];
+    },
+    
+    updateMiniCal: function() {
+        var miniCal = Ext.getCmp('cal-mainscreen-minical');
+        var weekNumbers = [];
+        var period = this.getCalendarPanel(this.activeView).getView().getPeriod();
+        
+        switch (this.activeView) {
+            case 'week' :
+                weekNumbers = [period.from.add(Date.DAY, 1).getWeekOfYear()]
+                break;
+            case 'month' :
+                var startWeek = period.from.add(Date.DAY, 1).getWeekOfYear();
+                var numWeeks = Math.round((period.until.getTime() - period.from.getTime()) / Date.msWEEK);
+                for (var i=0; i<numWeeks; i++) {
+                    weekNumbers.push(startWeek + i);
+                }
+            break;
+        }
+        miniCal.update(this.startDate, true, weekNumbers);
     },
     
     appendViewSelect: function(tbar) {
