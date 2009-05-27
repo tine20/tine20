@@ -243,8 +243,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * - update filter toolbar of grid
      * 
      * @param {} node
-     * 
-     * TODO: make reload of tree nodes work?
      */
     onClick: function(node) {
         node.expand();
@@ -275,7 +273,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.ctxNode = node;
         
         if (! node.attributes.folderNode) {
-            // TODO add/edit/remove account
+            // TODO edit/remove account
             return;
         } else {
             
@@ -376,7 +374,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             allowDrop: true,
             systemFolder: (attr.system_folder == '1'),
             unreadcount: attr.unreadcount
-            //numUnread: 2
             //expandable: (attr.has_children == '1'),
             //allowChildren: (attr.has_children == 1)
             //childNodes: []
