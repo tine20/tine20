@@ -27,6 +27,11 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * @property {Tine.Tinebase.widgets.app.GridPanel}
      */
     grid: null,
+
+    /**
+     * @property {}
+     */
+    record: null,
     
     border: false,
     autoScroll: true,
@@ -72,10 +77,12 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         var count = sm.getCount();
         if (count === 0 || sm.isFilterSelect) {
             this.showDefault(this.body);
+            this.record = null;
         } else if (count === 1) {
-            var record = sm.getSelected();
-            this.updateDetails(record, this.body);
+            this.record = sm.getSelected();
+            this.updateDetails(this.record, this.body);
         } else if (count > 1) {
+            this.record = sm.getSelected();
         	this.showMulti(sm, this.body);
         }
     },
