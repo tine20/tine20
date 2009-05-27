@@ -266,6 +266,29 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return array('status' => 'success');
     }
     
+    /**
+     * returns task prepared for json transport
+     * - overwriten to convert recipients to array
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     */
+    protected function _recordToJson($_record)
+    {
+        if ($_record instanceof Felamimail_Model_Message) {
+            foreach (array('to', 'cc', 'bcc') as $type) {
+                if (! empty($_record->{$type})) {
+                    $exploded = explode(',', $_record->{$type});
+                    $_record->{$type} = $exploded;
+                } else {
+                    $_record->{$type} = array();
+                }
+            }
+        }
+        
+        return parent::_recordToJson($_record);
+    }
+    
     /***************************** accounts funcs *******************************/
     
     /**

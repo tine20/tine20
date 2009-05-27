@@ -10,7 +10,6 @@
  * TODO         improve attachment download
  * TODO         add preference to show mails in html or text
  * TODO         replace 'mailto:' links and email addresses in message body with 'open compose tine mail dialog'
- * TODO         load record again when filter changed
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -62,6 +61,9 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     record.data.flags       = message.data.flags;
                     record.data.headers     = message.data.headers;
                     record.data.attachments = message.data.attachments;
+                    record.data.to          = message.data.to;
+                    record.data.cc          = message.data.cc;
+                    record.data.bcc         = message.data.bcc;
                     
                     this.tpl.overwrite(body, message.data);
                     this.getEl().down('div').down('div').scrollTo('top', 0, false);
@@ -143,7 +145,6 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             
             // TODO add 'download all' button
             // TODO use popup or ajax request here?
-            // TODO show better error message on fail
             showAttachments: function(value) {
                 var result = (value.length > 0) ? '<b>' + _('Attachments') + ':</b> ' : '';
                 var downloadLink = 'index.php?method=Felamimail.downloadAttachment&_messageId=';

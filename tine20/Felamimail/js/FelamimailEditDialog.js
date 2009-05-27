@@ -61,6 +61,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.getForm().loadRecord(this.record);
         //this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         
+        //console.log(this.record);
+        
         this.loadMask.hide();
     },
         
@@ -86,6 +88,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {} response
      * @param {} request
      * 
+     * TODO mark field(s) invalid if for example email is incorrect
      * TODO add exception dialog on critical errors?
      */
     onRequestFailed: function(response, request) {

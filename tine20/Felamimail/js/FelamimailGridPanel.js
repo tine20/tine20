@@ -7,8 +7,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         reset record id of details grid on store reload/update
- * TODO         finish reply all implementation and activate button again
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -30,6 +28,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         enableDragDrop: true,
         ddGroup: 'mailToTreeDDGroup'
     },
+    
+    // other vars
+    detailsPanel: null,
     
     /**
      * Return CSS class to apply to rows depending upon flags
@@ -159,7 +160,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.actions = [
             this.action_write,
             this.action_reply,
-            //this.action_replyAll,
+            this.action_replyAll,
             this.action_forward,
             this.action_flag,
             this.action_markUnread,
@@ -357,8 +358,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} button
      * @param {} event
      * 
-     * TODO add signature text
-     * TODO show headers in 'forwarded' mail
+     * TODO add/get signature text from account config
+     * TODO add attachments on forward
      */
     onEditInNewWindow: function(button, event) {
         var recordData = this.recordClass.getDefaultData();
@@ -370,6 +371,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         ) {
             var selectedRows = this.grid.getSelectionModel().getSelections();
             var selectedRecord = selectedRows[0];
+            //console.log(selectedRecord);
+            
+            if (! selectedRecord.data.headers['content-type']) {
+                // record is not fully loaded -> TODO defer?
+                //this.onEditInNewWindow.defer(500, this, button, event);
+                return;
+            }
             
             recordId = selectedRecord.id;
             recordData.id = recordId;
@@ -378,11 +386,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 ? selectedRecord.get('body')
                 : Ext.util.Format.nl2br(selectedRecord.get('body'));
             
+                
+            recordData.cc = [];
+            recordData.to = [];
             switch (button.actionType) {
                 case 'replyAll':
+                    recordData.cc = selectedRecord.get('cc');
+                    recordData.to = selectedRecord.get('to');
+                    // fallthrough
                 case 'reply':
-                    recordData.to = selectedRecord.get('from');
-                    recordData.body = '<br/>' + recordData.to + ' ' + _('wrote') + ':<br/>'
+                    recordData.to.push(selectedRecord.get('from'));
+                    recordData.body = '<br/>' + selectedRecord.get('from') + ' ' + _('wrote') + ':<br/>'
                         + '<blockquote class="felamimail-body-blockquote">' + body + '</blockquote><br/>';
                     recordData.subject = _('Re: ') + selectedRecord.get('subject');
                     recordData.flags = '\\Answered';
@@ -399,7 +413,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             recordData.body = '<br/>';
         }
         
-        // TODO change signature (get it from account settings)
+        // add signature (get it from account settings)
         var signature = 'Sent with love from the new tine 2.0 email client ...<br/>'
             + 'Please visit <a href="http://tine20.org">http://tine20.org</a>';
         if (signature != '') {
@@ -441,10 +455,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             var method = 'clearFlag';
             var flagClass = 'flag_unread';
         }
-        
-        
-        //console.log(flagged);
-        //console.log(button.flag);
         
         // loop messages and update flags
         var toUpdateIds = [];
@@ -504,6 +514,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }
     },
     
+    /**
+     * called before store queries for data
+     * - overwritten from parent to reset details panel currentId
+     */
+    onStoreBeforeload: function(store, record, operation) {
+        Tine.Felamimail.GridPanel.superclass.onStoreBeforeload.call(this, store, record, operation);
+        
+        this.detailsPanel.currentId = null;
+    },
+        
     /********************************* helper funcs **************************************/
     
     /**

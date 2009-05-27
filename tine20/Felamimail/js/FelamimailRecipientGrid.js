@@ -8,7 +8,6 @@
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         add name to email address for display
- * TODO         add recipients when reply to all
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -40,6 +39,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     border: false,
     deferredRender: false,
     
+    /********************** init **************************/
+    
     /**
      * init
      */
@@ -64,13 +65,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             fields   : ['type', 'address']
         });
         
-        // init recipients (on reply/TODO: reply to all)
-        if (this.record.get('to') && this.record.get('to') != '') {
-            this.store.add(new Ext.data.Record({type: 'to', 'address': this.record.get('to')}));
-            this.record.data.to = [this.record.get('to')];
-        } else {
-            this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
-        }
+        // init recipients (on reply/reply to all)
+        this._addRecipients(this.record.get('to'), 'to');
+        this._addRecipients(this.record.get('cc'), 'cc');
+        
+        this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
+        
         this.store.on('update', this.onUpdateStore, this);
     },
     
@@ -127,6 +127,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         ]);
     },
     
+    /********************** events **************************/
+    
     /**
      * on render event
      * 
@@ -135,6 +137,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * 
      * TODO focus first 'To' address when composing new mail (it isn't working yet :( )
      * TODO don't focus search combo if replying
+     * TODO try afterRender!
      */
     onRender: function(ct, position){
         Tine.Felamimail.RecipientGrid.superclass.onRender.call(this, ct, position);
@@ -172,6 +175,23 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }
             
             store.commitChanges();
+        }
+    },
+    
+    /********************** helper funcs **************************/
+ 
+    /**
+     * add recipients to grid store
+     * 
+     * @param {Array} recipients
+     * @param {String} type
+     * 
+     * TODO get own email address and don't add it to store
+     */
+    _addRecipients: function(recipients, type) {
+        for (var i=0; i<recipients.length; i++) {
+            this.store.add(new Ext.data.Record({type: type, 'address': recipients[i]}));
+            //this.record.data[type].push(recipients[i]);
         }
     }
 });
@@ -240,6 +260,6 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         } */
         this.collapse();
         this.fireEvent('blur', this);
-    }
+    }    
 });
 
