@@ -11,6 +11,7 @@ Date.msSECOND = 1000;
 Date.msMINUTE = 60 * Date.msSECOND;
 Date.msHOUR   = 60 * Date.msMINUTE;
 Date.msDAY    = 24 * Date.msHOUR;
+Date.msWEEK   =  7 * Date.msDAY;
 
 Ext.ns('Tine.Calendar');
 
