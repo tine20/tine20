@@ -114,7 +114,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     changeView: function(view, startDate) {
         if (startDate && Ext.isDate(startDate)) {
-            this.startDate = startDate.clone()
+            this.startDate = startDate.clone();
         }
         
         var panel = this.getCalendarPanel(view);
@@ -168,6 +168,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             var tbar = new Tine.Calendar.PagingToolbar({
                 view: which,
                 store: store,
+                dtStart: this.startDate,
                 listeners: {
                     scope: this,
                     // NOTE: only render the button once for the toolbars

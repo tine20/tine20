@@ -22,22 +22,22 @@ Ext.onReady(function(){
  * @type Tine.Tinebase.widgets.app.MainScreen
  */
 Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
-    /**
-     * @property {Tine.Calendar.MainScreenCenterPanel} mainScreenCenterPanel
-     */
-    mainScreenCenterPanel: null,
     
     /**
      * sets content panel in mainscreen
      */
     setContentPanel: function() {
-        if (! this.mainScreenCenterPanel) {
-            this.mainScreenCenterPanel = new Tine.Calendar.MainScreenCenterPanel({
+        if (! this.contentPanel) {
+            this.contentPanel = new Tine.Calendar.MainScreenCenterPanel({
             
             });
         }
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.mainScreenCenterPanel, true);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.contentPanel, true);
+    },
+    
+    getContentPanel: function() {
+        return this.contentPanel;
     },
     
     /**
@@ -46,7 +46,7 @@ Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     setToolbar: function() {
         if (! this.actionToolbar) {
             this.actionToolbar = new Ext.Toolbar({
-                items: [{
+                items: [/*{
                     selectedView: 'day',
                     selectedViewMultiplier: 1,
                     text: 'day view',
@@ -82,7 +82,7 @@ Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
                     //handler: changeView,
                     enableToggle: true,
                     toggleGroup: 'Calendar_Toolbar_tgViews'
-                }]
+                }*/]
             });
         }
         
@@ -108,7 +108,14 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
             collapsible: true,
             height: 190,
             items: new Ext.DatePicker({
-                plugins: [new Ext.ux.DatePickerWeekPlugin()]
+                plugins: [new Ext.ux.DatePickerWeekPlugin()],
+                listeners: {
+                    scope: this, 
+                    select: function(picker, value, weekNumber) {
+                        var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+                        contentPanel.changeView(weekNumber ? 'week' : 'day', value);
+                    }
+                }
             })
         }];   
         Tine.Calendar.TreePanel.superclass.initComponent.call(this);
