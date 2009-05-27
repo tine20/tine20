@@ -289,6 +289,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         
         switch ($_action) {
             case 'get':
+                // NOTE: free/busy is not a read grant!
+                // @todo: we might need to relay read grants for typical secretary role
+                //        depending on the participants 'system folder' permissions
                 $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_READ)
                             || $_record->organizer == $currentAccountId
                             || in_array($currentAccountId, $_record->attendee->filter('user_type', Calendar_Model_Attendee::USERTYPE_USER)->user_id)
