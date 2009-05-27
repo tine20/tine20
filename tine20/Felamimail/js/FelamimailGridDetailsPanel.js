@@ -43,6 +43,9 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
     },
 
+    /**
+     * add on click event after render
+     */
     afterRender: function() {
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
         
@@ -111,12 +114,12 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 return value;
             },
             
+            // TODO check preference for mail content-type
+            // TODO show image attachments inline
             showBody: function(value, headers) {
                 if (value) {
-                    // TODO check preference
                     
                     if (headers['content-type'] && headers['content-type'].match(/text\/html/)) {
-                        // TODO remove IMG tags?
                         value = Ext.util.Format.stripScripts(value);
                     } else {
                         value = Ext.util.Format.htmlEncode(value);
@@ -130,7 +133,6 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 return value;
             },
             
-            // TODO use this.gridpanel.formatHeaders() from grid (but how?)
             showHeaders: function(value) {
                 if (value) {
                     var result = '';
@@ -141,7 +143,6 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                         }
                     }
                     return result;
-                    //return this.gridpanel.formatHeaders(value, true);
                 } else {
                     return '';
                 }
@@ -162,6 +163,11 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         });
     },
     
+    /**
+     * on click for attachment download
+     * 
+     * @param {} e
+     */
     onClick: function(e) {
         var target = e.getTarget('span[class=tinebase-download-link]');
         if (target) {
