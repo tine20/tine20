@@ -53,8 +53,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         //console.log(this.record);
         
         Tine.Felamimail.RecipientGrid.superclass.initComponent.call(this);
-        
-        //this.on('afterlayout', this.onAfterlayout, this);
     },
     
     /**
@@ -129,30 +127,18 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         ]);
     },
     
-    /********************** events **************************/
-    
     /**
-     * on render event
-     * 
-     * @param {} ct
-     * @param {} position
-     * 
-     * TODO focus first 'To' address when composing new mail (it isn't working yet :( )
-     * TODO don't focus search combo if replying
-     * TODO try afterRender!
+     * start editing after render
      */
-    onAfterlayout: function(ct, position){
-        //Tine.Felamimail.RecipientGrid.superclass.onRender.call(this, ct, position);
+    afterRender: function() {
+        Tine.Felamimail.RecipientGrid.superclass.afterRender.call(this);
         
-        // TODO focus first 'To' row / second column (address)
-        //this.startEditing.defer(1500, this, 0, 1);
-        console.log('after');
-        
-        if (this.store.count() == 1) {
-            console.log('start');
-            this.startEditing(0, 1);
+        if (this.store.getCount() == 1) {
+            this.startEditing.defer(200, this, [0, 1]);
         }
     },
+    
+    /********************** events **************************/
     
     /**
      * store has been updated
