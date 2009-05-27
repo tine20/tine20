@@ -108,6 +108,7 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
             collapsible: true,
             height: 190,
             items: new Ext.DatePicker({
+                id :'cal-mainscreen-minical',
                 plugins: [new Ext.ux.DatePickerWeekPlugin()],
                 listeners: {
                     scope: this, 
