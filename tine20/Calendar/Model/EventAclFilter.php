@@ -36,8 +36,10 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
         // organizer gets all grants implicitly 
         $_select->orWhere($db->quoteIdentifier('organizer') . ' = ?', $currentUserId, Zend_Db::INT_TYPE);
         
-        // participants get read grant implicitly
+        
         if (! in_array(Tinebase_Model_Container::GRANT_EDIT, $this->_requiredGrants)) {
+            
+            // participants get read grant implicitly
             $_select->joinLeft(
                 /* table  */ array('attendee' => $_backend->getTablePrefix() . 'cal_attendee'), 
                 /* on     */ $db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id') . ' AND (' . 
@@ -47,6 +49,10 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
                 /* select */ array());
     
             $_select->orWhere($db->quoteIdentifier('attendee.user_id') . ' IS NOT NULL');
+            
+            // free/busy get limited read grand implicitly
+            // @todo implement some free/busy acl logic
+            $_select->orWhere('1=1');
         }
     }
 }
