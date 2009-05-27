@@ -513,7 +513,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @return {Array} of Ext.Element
      */
     getEventEls: function(event) {
-        if (event.domIds) {
+        if (event && event.domIds) {
             var domEls = [];
             for (var i=0; i<event.domIds.length; i++) {
                 domEls[i] = Ext.get(event.domIds[i]);
@@ -570,13 +570,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }
         }
         
-        this.activeEvent = event;
-        if (event) {
-            var els = this.getEventEls(event);
+        var els = this.getEventEls(event);
+        if (event && els && els.length > 0) {
             for (var i=0; i<els.length; i++) {
                 els[i].addClass('cal-daysviewpanel-event-active');
                 els[i].setStyle({'z-index': 1000});
             }
+            this.activeEvent = event;
         }
     },
     
@@ -1002,6 +1002,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         return dec;
+    },
+    
+    getPeriod: function() {
+        return {
+            from: this.startDate,
+            until: this.startDate.add(Date.DAY, this.numOfDays).add(Date.SECOND, -1)
+        };
     },
     
     /**
