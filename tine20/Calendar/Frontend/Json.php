@@ -34,98 +34,57 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_applicationName = 'Calendar';
     
     /**
-     * @var Calendar_Backend_Sql
+     * Return a single event
+     *
+     * @param   string $id
+     * @return  array record data
      */
-    protected $_backend;
-    
-    public function __construct()
+    public function getEvent($id)
     {
-        $this->_backend = new Calendar_Backend_Sql();
-    }
-
-    public function getEvents( $start, $end, $users, $filters )
-    {
-        //$now = new Zend_Date();
-        //$etime = $now->add(60, Zend_Date::DAY);
-        
-        $events = $this->_backend->getEvents( 
-            new Zend_Date($start,Tinebase_Record_Abstract::ISO8601LONG), 
-            new Zend_Date($end,Tinebase_Record_Abstract::ISO8601LONG), 
-            5, 
-            array() 
-        );
-        $jsonEvents = array();
-        foreach ($events as $event) {
-            $jsonEvents[] = self::date2Iso( $event->toArray() );
-        }
-        //exit;
-        //$events = $this->_backend->getEventById( 5 );
-        //print_r($events->toArray());
-        //$event = $this->_backend->getEventById('5-1192788000');
-        //$event = $this->_backend->getEventById('1');
-        //print_r($event->toArray());
-        //exit;
-        
-        //echo $event->cal_title. '<br>';
-        
-        //$event->cal_title = time();
-        //echo $event->cal_title. '<br>';
-        //$this->_backend->saveEvent($event);
-        
-        //echo 'hallo';
-        //print_r($this->getEventById(5));
-        return array(
-            'results' => $jsonEvents,
-            'totalcount' => count($events),
-        );
-    }
-    
-    public function getEventById( $id )
-    {
-        $event = $this->_backend->getEventById( $id );
-        self::date2Iso($event);
-        return $event->toArray();
-    }
-    
-    public function saveEvent( $event )
-    {
-        
-    }
-    
-    public function deleteEventsById( $events )
-    {
-        
-    }
-    
-    public function getInitialTree()
-    {
-        $treeNodes = array();
-
-        $treeNode = new Tinebase_Ext_Treenode('Calendar', 'mycalendar', 'mycalendar', 'My Calendar', TRUE);
-        $treeNode->cls = 'treemain';
-        $treeNode->jsonMethod = 'Admin.getApplications';
-        $treeNode->dataPanelType = 'applications';
-        $treeNodes[] = $treeNode;
-
-        return $treeNodes;
+        return $this->_get($id, Calendar_Controller_Event::getInstance());
     }
     
     /**
-     * converts all Zend_Dates in an iteratable object
-     * into iso format for json transport
+     * Search for events matching given arguments
      *
-     * @param iteratable $_toConvert
-     * @return iteratable converted $_toConvert
+     * @param string $_filter json encoded
+     * @param string $_paging json encoded
+     * @return array
      */
-    public static function date2Iso( $_toConvert )
+    public function searchEvents($filter, $paging)
     {
-        foreach ($_toConvert as $field => $value) {
-            if ($value instanceof Zend_Date) {
-                $_toConvert[$field] = $value->get(Tinebase_Record_Abstract::ISO8601LONG);
-            } elseif (is_array($value)) {
-                $_toConvert[$field] = self::date2Iso($value);
-            }
-        }
-        return $_toConvert;
+        return $this->_search($filter, $paging, Calendar_Controller_Event::getInstance(), 'Calendar_Model_EventFilter');
+    }
+    
+    /**
+     * creates/updates a event
+     *
+     * @param   $recordData
+     * @return  array created/updated event
+     */
+    public function saveEvent($recordData)
+    {
+        return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event');
+    }
+    
+    /**
+     * deletes existing events
+     *
+     * @param array $_ids 
+     * @return string
+     */
+    public function deleteEvents($ids)
+    {
+        return $this->_delete($ids, Calendar_Controller_Event::getInstance());
+    }
+    
+    /**
+     * Returns registry data of the calendar.
+     *
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        return array();
     }
 }
