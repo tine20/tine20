@@ -371,7 +371,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
                 $part->type = $attachment['type'];
                 $part->filename = $attachment['name'];
-                $part->encoding = Zend_Mime::ENCODING_8BIT;
+                //$part->encoding = Zend_Mime::ENCODING_8BIT;
+                $part->encoding = Zend_Mime::ENCODING_BASE64;
                 $part->disposition = Zend_Mime::ENCODING_BASE64; //?
                 
                 $mail->addAttachment($part);

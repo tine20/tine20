@@ -48,6 +48,8 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      *
      * @param string $messageId
      * @param integer $partId
+     * 
+     * @todo check encoding
      */
     public function downloadAttachment($messageId, $partId)
     {
@@ -77,9 +79,17 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 header("Content-type: " . $headers['content-type']);
                  
                 $content = $part->getContent();
-                if ($headers['content-transfer-encoding'] == 'base64') {
-                    $content = base64_decode($content); 
+                switch ($headers['content-transfer-encoding']) {
+                    case 'base64':
+                        $content = base64_decode($content);
+                        break;
+                    /*
+                    case 'quoted-printable':
+                        $content = quoted_printable_decode($content);
+                        break;
+                    */
                 }
+                $content = quoted_printable_decode($content);
                 echo $content;
             }
         } catch (Exception $e) {
