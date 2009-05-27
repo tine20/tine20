@@ -226,7 +226,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     updateMiniCal: function() {
         var miniCal = Ext.getCmp('cal-mainscreen-minical');
-        var weekNumbers = [];
+        var weekNumbers = null;
         var period = this.getCalendarPanel(this.activeView).getView().getPeriod();
         
         switch (this.activeView) {
@@ -234,6 +234,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 weekNumbers = [period.from.add(Date.DAY, 1).getWeekOfYear()]
                 break;
             case 'month' :
+                weekNumbers = [];
                 var startWeek = period.from.add(Date.DAY, 1).getWeekOfYear();
                 var numWeeks = Math.round((period.until.getTime() - period.from.getTime()) / Date.msWEEK);
                 for (var i=0; i<numWeeks; i++) {
