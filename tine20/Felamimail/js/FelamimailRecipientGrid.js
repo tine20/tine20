@@ -35,7 +35,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     clicksToEdit:1,
     height: 80,
     header: false,
-    frame: true,
+    //frame: true,
     border: false,
     deferredRender: false,
     

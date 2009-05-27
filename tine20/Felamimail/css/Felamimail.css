@@ -78,6 +78,11 @@
 .preview-panel-felamimail-attachments {
 	margin-top: 5px;
     background-color: #e8e8e8;
+    width: 100%;
+}
+
+.preview-panel-felamimail-attachments .tinebase-download-link{
+    /* float: left; */
 }
 
 /***** node classes ******/

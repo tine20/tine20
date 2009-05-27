@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         improve attachment download
  * TODO         add preference to show mails in html or text
  * TODO         replace 'mailto:' links and email addresses in message body with 'open compose tine mail dialog'
  */
@@ -24,6 +23,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     defaultHeight: 300,
     currentId: null,
+    record: null,
     
     /**
      * init
@@ -42,7 +42,13 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         
         Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
     },
+
+    afterRender: function() {
+        Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
         
+        this.body.on('click', this.onClick, this);
+    },
+    
     /**
      * (on) update details
      * 
@@ -83,14 +89,12 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     initTemplate: function() {
         this.tpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
-                //'<tpl for="Body">',
-                        '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.showHeaders(values.headers)]}">',
-                            '<b>' + _('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
-                            '<b>' + _('From') + ':</b> {[this.encode(values.from)]}',
-                        '</div>',
-                        '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments)]}</div>',
-                        '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers)]}</div>',
-                // '</tpl>',
+                '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.showHeaders(values.headers)]}">',
+                    '<b>' + _('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
+                    '<b>' + _('From') + ':</b> {[this.encode(values.from)]}',
+                '</div>',
+                '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments)]}</div>',
+                '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers)]}</div>',
             '</div>',{
             
             encode: function(value) {
@@ -144,22 +148,33 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             },
             
             // TODO add 'download all' button
-            // TODO use popup or ajax request here?
             showAttachments: function(value) {
                 var result = (value.length > 0) ? '<b>' + _('Attachments') + ':</b> ' : '';
-                var downloadLink = 'index.php?method=Felamimail.downloadAttachment&_messageId=';
-                for (var i=0; i < value.length; i++) {
-                    
-                    result += '<a href="' 
-                        + downloadLink + value[i].messageId 
-                        + '&_partId=' + value[i].partId  
-                        + '" ext:qtip="' + Ext.util.Format.htmlEncode(value[i]['content-type']) + '"'
-                        + ' target="_blank"'
-                        + '>' + value[i].filename + '</a> (' + Ext.util.Format.fileSize(value[i].size) + ')';
+                for (var i=0, id; i < value.length; i++) {
+                    id = Ext.id() + ':' + value[i].partId;
+                    result += '<span id="' + id + '" class="tinebase-download-link">' 
+                        + '<i>' + value[i].filename + '</i>' 
+                        + ' (' + Ext.util.Format.fileSize(value[i].size) + ')</span> ';
                 }
                 
                 return result;
             }
         });
+    },
+    
+    onClick: function(e) {
+        var target = e.getTarget('span[class=tinebase-download-link]');
+        if (target) {
+            var partId = target.id.split(':')[1];
+            var downloader = new Ext.ux.file.Download({
+                params: {
+                    requestType: 'HTTP',
+                    method: 'Felamimail.downloadAttachment',
+                    messageId: this.record.id,
+                    partId: partId
+                }
+            });
+            downloader.start();
+        }
     }
 });

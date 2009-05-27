@@ -46,27 +46,44 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * download email attachment
      *
-     * @param string $_messageId
-     * @param integer $_partId
+     * @param string $messageId
+     * @param integer $partId
      */
-    public function downloadAttachment($_messageId, $_partId)
+    public function downloadAttachment($messageId, $partId)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Downloading Attachment ' . $_partId . ' of message with id ' . $_messageId
+            . ' Downloading Attachment ' . $partId . ' of message with id ' . $messageId
         );
         
         // get message part
-        $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageId, $_partId);
-        
-        if ($part !== NULL) {
-            $headers = $part->getHeaders();
+        try {
+            $part = Felamimail_Controller_Message::getInstance()->getMessagePart($messageId, $partId);
             
-            header("Pragma: public");
-            header("Cache-Control: max-age=0");
-            header("Content-Disposition: " . $headers['content-disposition']);
-            header("Content-Description: email attachment");
-            header("Content-type: " . $headers['content-type']); 
-            echo $part->getContent();
+            if ($part !== NULL) {
+                $headers = $part->getHeaders();
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' attachment headers:' . print_r($headers, true)
+                );
+                
+                preg_match('/filename="([a-zA-Z0-9\-\._]+)"/', $headers['content-disposition'], $matches);
+                $filename = $matches[0]; 
+                
+                header("Pragma: public");
+                header("Cache-Control: max-age=0");
+                //header("Content-Disposition: " . $headers['content-disposition']);
+                header('Content-Disposition: attachment; ' . $filename);
+                header("Content-Description: email attachment");
+                header("Content-type: " . $headers['content-type']);
+                 
+                $content = $part->getContent();
+                if ($headers['content-transfer-encoding'] == 'base64') {
+                    $content = base64_decode($content); 
+                }
+                echo $content;
+            }
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $e->getMessage());
         }
         exit;
     }
