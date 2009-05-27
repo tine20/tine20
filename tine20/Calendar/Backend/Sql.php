@@ -119,7 +119,11 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => 'GROUP_CONCAT(' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
         
-        $select->group(array_keys($this->_schema));
+        $groupByCols = array();
+        foreach(array_keys($this->_schema) as $col) {
+            $groupByCols[] = $this->_tableName . '.' . $col;
+        }
+        $select->group($groupByCols);
         
         return $select;
     }
