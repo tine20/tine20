@@ -34,6 +34,7 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
      * @success {Object} root:[recrods], totalcount: number
      */
     searchRecords: function(filter, paging, options) {
+        console.log(filter);
         var records = [];
         for (var id in this.list) {
             records.push(this.recordReader({responseText: this.list[id]}));
@@ -51,6 +52,10 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
      * @success {Ext.data.Record}
      */
     saveRecord: function(record, options) {
+        if (! record.data.id) {
+            record.set('id', Ext.id());
+        }
+        
         this.list[record.data.id] = Ext.util.JSON.encode(record.data);
         
         options.success.defer(500, options.scope, [this.recordReader({responseText: this.list[record.data.id]})]);
