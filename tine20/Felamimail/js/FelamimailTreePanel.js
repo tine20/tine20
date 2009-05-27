@@ -83,7 +83,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.accountStore.each(function(record){
            
             var node = new Ext.tree.AsyncTreeNode({
-                id: '/',
+                id: 'default',
                 record: record,
                 globalname: '',
                 draggable: false,
@@ -175,6 +175,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     },
     
+    /**
+     * @private
+     * 
+     * TODO expand default account inbox
+     */
+    afterRender: function() {
+        Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
+
+        this.expandPath('/root/default/');
+        this.selectPath('/root/default/');
+    },
     
     /**
      * returns a filter plugin to be used in a grid
@@ -187,7 +198,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 getValue: function() {
                 	var node = scope.getSelectionModel().getSelectedNode();
                     return [
-                        {field: 'folder_id',     operator: 'equals', value: (node) ? node.id : '' }
+                        {field: 'folder_id',     operator: 'equals', value: (node) ? node.attributes.folder_id : '' }
                     ];
                 }
             });
@@ -353,12 +364,14 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     createNode: function(attr) {
     	var node = {
-    		id: attr.id,
+    		//id: attr.id,
+            id: attr.localname,
     		leaf: false,
     		text: attr.localname,
             localname: attr.localname,
     		globalname: attr.globalname,
     		account_id: attr.account_id,
+            folder_id: attr.id,
     		folderNode: true,
             allowDrop: true,
             systemFolder: (attr.system_folder == '1'),
