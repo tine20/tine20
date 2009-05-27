@@ -53,6 +53,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         //console.log(this.record);
         
         Tine.Felamimail.RecipientGrid.superclass.initComponent.call(this);
+        
+        //this.on('afterlayout', this.onAfterlayout, this);
     },
     
     /**
@@ -139,12 +141,17 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * TODO don't focus search combo if replying
      * TODO try afterRender!
      */
-    onRender: function(ct, position){
-        Tine.Felamimail.RecipientGrid.superclass.onRender.call(this, ct, position);
+    onAfterlayout: function(ct, position){
+        //Tine.Felamimail.RecipientGrid.superclass.onRender.call(this, ct, position);
         
         // TODO focus first 'To' row / second column (address)
         //this.startEditing.defer(1500, this, 0, 1);
-        //this.startEditing(0, 1);
+        console.log('after');
+        
+        if (this.store.count() == 1) {
+            console.log('start');
+            this.startEditing(0, 1);
+        }
     },
     
     /**
@@ -189,9 +196,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * TODO get own email address and don't add it to store
      */
     _addRecipients: function(recipients, type) {
-        for (var i=0; i<recipients.length; i++) {
-            this.store.add(new Ext.data.Record({type: type, 'address': recipients[i]}));
-            //this.record.data[type].push(recipients[i]);
+        if (recipients) {
+            for (var i=0; i<recipients.length; i++) {
+                this.store.add(new Ext.data.Record({type: type, 'address': recipients[i]}));
+                //this.record.data[type].push(recipients[i]);
+            }
         }
     }
 });
