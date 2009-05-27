@@ -90,5 +90,29 @@ Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     }
 });
 
-Tine.Calendar.TreePanel = Ext.Panel;
+Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
+    border: false,
+    layout: 'border',
+    cls: 'cal-tree',
+    defaults: {
+        border: false
+    },
+    initComponent: function() {
+        this.items = [{
+            region: 'center',
+            html: ''
+        }, {
+            split: true,
+            region: 'south',
+            collapseMode: 'mini',
+            collapsible: true,
+            height: 190,
+            items: new Ext.DatePicker({
+                plugins: [new Ext.ux.DatePickerWeekPlugin()]
+            })
+        }];   
+        Tine.Calendar.TreePanel.superclass.initComponent.call(this);
+    }
+
+});
 

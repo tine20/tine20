@@ -22,6 +22,11 @@
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-month.png) !important;
 }
 
+/**** date picker ****/
+.cal-tree .x-date-picker {
+    border: 0;
+}
+	
 .cal-event-icon {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-list.png) !important;
     background-position: 8px;
