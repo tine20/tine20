@@ -419,6 +419,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $applicationName
      * @param string $filter json encoded
      * @return array
+     * 
+     * @todo    write test
      */
     public function searchPreferencesForApplication($applicationName, $filter)
     {
@@ -426,21 +428,23 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $filter = new Tinebase_Model_PreferenceFilter(array());
         
-        if (!empty($decodedFilter)) {
+        if (! empty($decodedFilter)) {
             $filter->setFromArrayInUsersTimezone($decodedFilter);
         }
         
-        // make sure, appid is set (tinebase appid is default)
-        $tinebaseAppId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
-        $filter->createFilter('application_id', 'equals', $tinebaseAppId);
+        // make sure that appid is set (tinebase appid is default)
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
+        $appFilter = $filter->createFilter('application_id', 'equals', $appId);
+        $filter->addFilter($appFilter);
         
         // make sure account is set in filter
         $userId = Tinebase_Core::getUser()->getId();
-        if (!$filter->isFilterSet('account')) {
-            $filter->createFilter('account', 'equals', array(
+        if (! $filter->isFilterSet('account')) {
+            $accountFilter = $filter->createFilter('account', 'equals', array(
                 'accountId' => $userId, 
                 'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
             ));
+            $filter->addFilter($accountFilter);
         } else {
             // only admins can search for other users prefs
             $accountFilter = $filter->getAclFilter();
@@ -457,6 +461,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // check if application has preference class
         if ($backend = Tinebase_Core::getPreference($applicationName)) {
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
+            
             $paging = new Tinebase_Model_Pagination(array(
                 'dir'       => 'ASC',
                 'sort'      => array('name')
