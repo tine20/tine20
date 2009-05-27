@@ -185,3 +185,11 @@ html, body {
 .grid_row_disabled td{
     /* background-color: '#efb5b5'; */
 }
+
+/******** downloads ***********/
+
+.tinebase-download-link{
+	cursor: pointer;
+	font-decoration: underline;
+	color: blue;
+}
