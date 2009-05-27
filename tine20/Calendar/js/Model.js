@@ -42,7 +42,7 @@ Tine.Calendar.EventArray = Tine.Tinebase.Model.genericFields.concat([
     //{ name: 'exrule' },
     //{ name: 'rdate' },
     { name: 'rrule' },
-    { name: 'is_all_day_event' },
+    { name: 'is_all_day_event', type: 'bool'},
     { name: 'rrule_until', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'originator_tz' }
 ]);
@@ -66,15 +66,17 @@ Tine.Calendar.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.EventArray,
 
 /**
  * default tasks backend
- *
-Tine.Calendar.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
-    appName: 'Calendar',
-    modelName: 'Event',
-    recordClass: Tine.Calendar.Event
-});*/
-
-Tine.Calendar.backend = new Tine.Tinebase.data.MemoryBackend({
-    appName: 'Calendar',
-    modelName: 'Event',
-    recordClass: Tine.Calendar.Event
-});
+ */
+if (Tine.Tinebase.widgets) {
+    Tine.Calendar.backend = new Tine.Tinebase.widgets.app.JsonBackend({
+        appName: 'Calendar',
+        modelName: 'Event',
+        recordClass: Tine.Calendar.Event
+    });
+} else {
+    Tine.Calendar.backend = new Tine.Tinebase.data.MemoryBackend({
+        appName: 'Calendar',
+        modelName: 'Event',
+        recordClass: Tine.Calendar.Event
+    });
+}
