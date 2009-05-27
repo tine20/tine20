@@ -48,8 +48,9 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
         // NOTE "+1" to ensure ISO week!
         var startDate = firstOfMonth.add(Date.DAY, -1*startingPos + 1);
         var wkCells = Ext.DomQuery.select('td[class=x-date-picker-wk]', this.getEl().dom);
-        for (var i=0; i<wkCells.length; i++) {
-            wkCells[i].firstChild.firstChild.firstChild.innerHTML = startDate.add(Date.DAY, i*7).getWeekOfYear();
+        for (var i=0, id; i<wkCells.length; i++) {
+            id = Ext.id() + ':' + startDate.add(Date.DAY, i*7).format('Y-m-d');
+            wkCells[i].firstChild.firstChild.innerHTML = '<span id="' + id + '">' + startDate.add(Date.DAY, i*7).getWeekOfYear() + '</span>';
         }
     },
     
@@ -65,25 +66,32 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
                 this.showNextMonth()
             } 
             
+            // get row again
+            var wktds = Ext.DomQuery.select('td[class=x-date-picker-wk]', this.getEl().dom);
+            for (var i=0; i<wktds.length; i++) {
+                if (wktds[i].firstChild.firstChild.firstChild.innerHTML == weekNumber) {
+                    row = wktds[i].parentNode;
+                    break;
+                }
+            }
+            
+            // set new date value
+            var value = Date.parseDate(row.firstChild.firstChild.firstChild.firstChild.id.split(':')[1], 'Y-m-d');
+            this.setValue(value);
+            
             // clear all selections
-            var dates = Ext.DomQuery.select('td', this.getEl().dom);
+            var innerCal = Ext.DomQuery.selectNode('table[class=x-date-inner]', this.getEl().dom);
+            var dates = Ext.DomQuery.select('td', innerCal);
             for (var i=0; i<dates.length; i++) {
                 Ext.fly(dates[i]).removeClass('x-date-selected');
             }
             
-            // get row again and select all dates in it
-            var wktds = Ext.DomQuery.select('td[class=x-date-picker-wk]', this.getEl().dom);
-            for (var i=0; i<wktds.length; i++) {
-                if (wktds[i].firstChild.firstChild.firstChild.innerHTML == weekNumber) {
-                    break;
-                }
-            }
-            var row = wktds[i].parentNode;
+            // set new selection
             for (var j=1; j<row.childNodes.length; j++) {
                 Ext.fly(row.childNodes[j]).addClass('x-date-selected');
             }
             
-            this.fireEvent("select", this, this.value, true);
+            this.fireEvent("select", this, this.value, weekNumber);
         }
     }
 };
