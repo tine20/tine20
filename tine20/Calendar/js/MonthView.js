@@ -107,7 +107,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.initDragZone();
         this.initDropZone();
         
-        this.updatePeriod({from: this.startDate});
+        this.updatePeriod({from: this.period.from});
         
         if (this.dsLoaded) {
             this.onLoad.apply(this);
