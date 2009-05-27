@@ -15,7 +15,7 @@
 /**
  * backend for tinebase preferences
  *
- * @package     Timetracker
+ * @package     Tinebase
  * @subpackage  Backend
  */
 class Tinebase_Preference extends Tinebase_Preference_Abstract
