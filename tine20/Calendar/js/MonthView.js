@@ -159,7 +159,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @return {Array} of Ext.Element
      */
     getEventEls: function(event) {
-        if (event.domIds) {
+        if (event && event.domIds) {
             var domEls = [];
             for (var i=0; i<event.domIds.length; i++) {
                 domEls[i] = Ext.get(event.domIds[i]);
@@ -792,8 +792,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             }
         }
         
-        this.activeEvent = event;
-        if (event) {
+        
+        
+        var els = this.getEventEls(event);
+        if (event && els && els.length > 0) {
             var els = this.getEventEls(event);
             for (var i=0; i<els.length; i++) {
                 els[i].addClass('cal-monthview-active');
@@ -805,6 +807,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     els[i].setStyle({'color': '#FFFFFF'});
                 }
             }
+            this.activeEvent = event;
         }
     },
     
