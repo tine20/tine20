@@ -169,7 +169,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
     
     /**
-     * returns task prepared for json transport
+     * returns record prepared for json transport
      *
      * @param Tinebase_Record_Interface $_record
      * @return array record data
