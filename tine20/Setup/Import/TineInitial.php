@@ -56,69 +56,6 @@ class Setup_Import_TineInitial
             $configBackend->setConfig($config);
         }
         
-        // add default settings for timezone, default app and locale
-        $timezonePref = new Tinebase_Model_Preference(array(
-            'application_id'    => $tinebaseAppId,
-            'name'              => Tinebase_Preference::TIMEZONE,
-            'value'             => 'Europe/Berlin',
-            'account_id'        => 0,
-            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
-            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
-                <options>
-                    <special>timezone</special>
-                </options>'
-        ));
-        Tinebase_Core::getPreference()->create($timezonePref);
-        $localePref = new Tinebase_Model_Preference(array(
-            'application_id'    => $tinebaseAppId,
-            'name'              => Tinebase_Preference::LOCALE,
-            'value'             => 'auto',
-            'account_id'        => 0,
-            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
-            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
-                <options>
-                    <special>locale</special>
-                </options>'
-        ));
-        Tinebase_Core::getPreference()->create($localePref);
-        $defaultAppPref = new Tinebase_Model_Preference(array(
-            'application_id'    => $tinebaseAppId,
-            'name'              => Tinebase_Preference::DEFAULT_APP,
-            'value'             => 'Addressbook',
-            'account_id'        => 0,
-            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
-            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
-                <options>
-                    <special>' . Tinebase_Preference::DEFAULT_APP . '</special>
-                </options>'
-        ));
-        Tinebase_Core::getPreference()->create($defaultAppPref);
-        
-        $windowStylePref = new Tinebase_Model_Preference(array(
-            'application_id'    => $tinebaseAppId,
-            'name'              => Tinebase_Preference::WINDOW_TYPE,
-            'value'             => 'Browser',
-            'account_id'        => 0,
-            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
-            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
-                <options>
-                    <option>
-                        <label>ExtJs style</label>
-                        <value>Ext</value>
-                    </option>
-                    <option>
-                        <label>Browser style</label>
-                        <value>Browser</value>
-                    </option>
-                </options>'
-        ));
-        Tinebase_Core::getPreference()->create($windowStylePref);
-        
-        
         /***************** admin account, groups and roles ************************/
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial user(tine20admin), groups and roles ...');

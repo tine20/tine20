@@ -419,8 +419,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $applicationName
      * @param string $filter json encoded
      * @return array
-     * 
-     * @todo    write test
      */
     public function searchPreferencesForApplication($applicationName, $filter)
     {
@@ -431,11 +429,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! empty($decodedFilter)) {
             $filter->setFromArrayInUsersTimezone($decodedFilter);
         }
-        
-        // make sure that appid is set (tinebase appid is default)
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
-        $appFilter = $filter->createFilter('application_id', 'equals', $appId);
-        $filter->addFilter($appFilter);
         
         // make sure account is set in filter
         $userId = Tinebase_Core::getUser()->getId();
@@ -462,7 +455,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // check if application has preference class
         if ($backend = Tinebase_Core::getPreference($applicationName)) {
             
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
             
             $paging = new Tinebase_Model_Pagination(array(
                 'dir'       => 'ASC',
@@ -472,6 +465,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             // get single matching preferences for each different pref
             $records = $backend->getMatchingPreferences($allPrefs);
+            
+            // add default prefs if not already in array
+            if (! $filter->isFilterSet('name')) {
+                $missingDefaultPrefs = array_diff($backend->getAllApplicationPreferences(), $records->name);
+                foreach ($missingDefaultPrefs as $prefName) {
+                    $records->addRecord($backend->getPreferenceDefaults($prefName));
+                }
+            }
             
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
             
@@ -520,6 +521,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // only admins are allowed to update app pref defaults/forced prefs
                 if (!Tinebase_Acl_Roles::getInstance()->hasRight($applicationName, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
                     throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preference defaults.');
+                }
+                
+                // create prefs that don't exist in the db
+                foreach($data as $id => $prefData) {
+                    if ($id === 'default') {
+                        $newPref = $backend->getPreferenceDefaults($prefData['name']);
+                        $newPref->value = $prefData['value'];
+                        $newPref->type = $prefData['type'];
+                        unset($newPref->id);
+                        $backend->create($newPref);
+                        
+                        unset($data[$id]);
+                    }
                 }
                 
                 // update default/forced preferences

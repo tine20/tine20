@@ -106,6 +106,47 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     }
     
     /**
+     * get preference defaults if no default is found in the database
+     *
+     * @param string $_preferenceName
+     * @return Tinebase_Model_Preference
+     */
+    public function getPreferenceDefaults($_preferenceName)
+    {
+        $preference = $this->_getDefaultBasePreference($_preferenceName);
+        
+        switch($_preferenceName) {
+            case self::TIMEZONE:
+                $preference->value      = 'Europe/Berlin';
+                break;
+            case self::LOCALE:
+                $preference->value      = 'auto';
+                break;
+            case self::DEFAULT_APP:
+                $preference->value      = 'Addressbook';
+                break;
+            case self::WINDOW_TYPE:
+                $preference->value      = 'Browser';
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>ExtJs style</label>
+                            <value>Ext</value>
+                        </option>
+                        <option>
+                            <label>Browser style</label>
+                            <value>Browser</value>
+                        </option>
+                    </options>';
+                break;
+            default:
+                throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
+        }
+        
+        return $preference;
+    }
+    
+    /**
      * do some call json functions if preferences name match
      * - every app should define its own special handlers
      *

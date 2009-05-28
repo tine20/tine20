@@ -297,7 +297,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                     var item = panel.items.items[j];
                     if (item && item.name) {
                         if (this.adminMode) {
-                            data[panel.appName][item.prefId] = {value: item.getValue()};
+                            data[panel.appName][item.prefId] = {value: item.getValue(), name: item.name};
                             data[panel.appName][item.prefId].type = (Ext.getCmp(item.name + '_writable').getValue() == 1) ? 'default' : 'forced';
                         } else {
                             data[panel.appName][item.name] = {value: item.getValue()};

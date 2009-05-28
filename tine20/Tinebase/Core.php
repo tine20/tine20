@@ -678,7 +678,7 @@ class Tinebase_Core
         
         if ($result === NULL) {
             $prefClassName = $_application . '_Preference';
-            if (@class_exists($prefClassName)) {
+            if (class_exists($prefClassName)) {
                 $result = new $prefClassName();
                 $prefs[$_application] = $result;
                 self::set(self::PREFERENCES, $prefs);

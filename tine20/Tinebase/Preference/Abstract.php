@@ -36,7 +36,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     protected $_modelName = 'Tinebase_Model_Preference';
     
-    /**************************** public functions *********************************/
+    /**************************** public abstract functions *********************************/
     
     /**
      * get all possible application prefs
@@ -54,17 +54,14 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     abstract public function getTranslatedPreferences();
     
     /**
-     * do some call json functions if preferences name match
-     * - every app should define its own special handlers
+     * get preference defaults if no default is found in the database
      *
-     * @param Tinebase_Frontend_Json_Abstract $_jsonFrontend
-     * @param string $name
-     * @param string $value
-     * @param string $appName
+     * @param string $_preferenceName
+     * @return Tinebase_Model_Preference
      */
-    public function doSpecialJsonFrontendActions(Tinebase_Frontend_Json_Abstract $_jsonFrontend, $name, $value, $appName)
-    {
-    }
+    abstract public function getPreferenceDefaults($_preferenceName);
+    
+    /**************************** public interceptior functions *********************************/
     
     /**
      * get interceptor (alias for getValue())
@@ -87,6 +84,21 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if (in_array($_preferenceName, $this->getAllApplicationPreferences())) {
             $this->setValue($_preferenceName, $_value);
         }
+    }
+    
+    /**************************** public functions *********************************/
+    
+    /**
+     * do some call json functions if preferences name match
+     * - every app should define its own special handlers
+     *
+     * @param Tinebase_Frontend_Json_Abstract $_jsonFrontend
+     * @param string $name
+     * @param string $value
+     * @param string $appName
+     */
+    public function doSpecialJsonFrontendActions(Tinebase_Frontend_Json_Abstract $_jsonFrontend, $name, $value, $appName)
+    {
     }
     
     /**
@@ -154,13 +166,16 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $queryResult = $stmt->fetchAll();
         
         if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound("No matching preference for '$_preferenceName' found!");
+            //throw new Tinebase_Exception_NotFound("No matching preference for '$_preferenceName' found!");
+            // try to get default value
+            $pref = $this->getPreferenceDefaults($_preferenceName);
+            
+        } else {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
+            
+            // get the correct result 
+            $pref = $this->_getMatchingPreference($this->_rawDataToRecordSet($queryResult));
         }
-
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
-        
-        // get the correct result 
-        $pref = $this->_getMatchingPreference($this->_rawDataToRecordSet($queryResult));
                 
         $result = $pref->value;
 
@@ -359,12 +374,66 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         // add options from default preference
         if ($result->type !== Tinebase_Model_Preference::TYPE_DEFAULT) {
             $defaults = $_preferences->filter('type', Tinebase_Model_Preference::TYPE_DEFAULT);
-            if (count($defaults) > 0) {
-                $defaultPref = $defaults->getFirstRecord();
+            try {
+                if (count($defaults) > 0) {
+                    $defaultPref = $defaults->getFirstRecord();
+                } else {
+                    $defaultPref = $this->getPreferenceDefaults($result->name);
+                }
                 $result->options = $defaultPref->options;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Preference not found: ' . $result->name);
             }
         }
 
         return $result;
+    }
+
+    /**
+     * return base default preference
+     *
+     * @param string $_preferenceName
+     * @return Tinebase_Model_Preference
+     */
+    protected function _getDefaultBasePreference($_preferenceName)
+    {
+        if (empty($this->_application)) {
+            throw new Tinebase_Exception_UnexpectedValue('No application name set in preference class.');
+        }
+        
+        return new Tinebase_Model_Preference(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
+            'name'              => $_preferenceName,
+            'account_id'        => 0,
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
+            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
+                <options>
+                    <special>' . $_preferenceName . '</special>
+                </options>',
+            'id'                => 'default'
+        ), TRUE);
+    }
+    
+    /**
+     * get the basic select object to fetch records from the database
+     * - overwritten to add application id
+     *  
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {
+        if (empty($this->_application)) {
+            throw new Tinebase_Exception_UnexpectedValue('No application name set in preference class.');
+        }
+        
+        $select = parent::_getSelect($_cols, $_getDeleted);
+        
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId();
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.application_id') . ' = ?', $appId);
+        
+        return $select;
     }
 }

@@ -211,6 +211,20 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * search preferences by application felamimail
+     *
+     */
+    public function testSearchFelamimailPreferences()
+    {
+        // search prefs
+        $result = $this->_instance->searchPreferencesForApplication('Felamimail', '');
+        
+        // check results
+        $this->assertTrue(isset($result['results']));
+        $this->assertGreaterThan(0, $result['totalcount']);
+    }
+
+    /**
      * search preferences by application
      *
      */

@@ -47,7 +47,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
-            //self::USERACCOUNT
+            self::USERACCOUNT
         );
             
         return $allPrefs;
@@ -70,5 +70,29 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         );
         
         return $prefDescriptions;
+    }
+    
+    /**
+     * get preference defaults if no default is found in the database
+     *
+     * @param string $_preferenceName
+     * @return Tinebase_Model_Preference
+     * 
+     * @todo implement yes/no combo options in abstract class
+     */
+    public function getPreferenceDefaults($_preferenceName)
+    {
+        $preference = $this->_getDefaultBasePreference($_preferenceName);
+        
+        switch($_preferenceName) {
+            case self::USERACCOUNT:
+                $preference->value      = 0;
+                //$preference->options    = $this->_getYesNoOptions()
+                break;
+            default:
+                throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
+        }
+        
+        return $preference;
     }
 }

@@ -74,6 +74,20 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetDefaultPreference()
     {
+        // delete default pref first
+        $preferences = $this->_instance->getMultipleByProperty(Tinebase_Preference::TIMEZONE);
+        foreach ($preferences as $preference) {
+            if (
+                $preference->type === Tinebase_Model_Preference::TYPE_DEFAULT 
+                || (
+                    $preference->account_id === Tinebase_Core::getUser()->getId()
+                    && $preference->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+                )
+            ) {
+                $this->_instance->delete($preference);
+            }
+        }
+        
         $prefValue = $this->_instance->getValue(Tinebase_Preference::TIMEZONE);
         
         $this->assertEquals('Europe/Berlin', $prefValue);
@@ -82,6 +96,11 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $prefValue = $this->_instance->{Tinebase_Preference::TIMEZONE};
         
         $this->assertEquals('Europe/Berlin', $prefValue);
+        
+        // restore preferences
+        foreach ($preferences as $preference) {
+            $this->_instance->create($preference);
+        }
     }
     
     /**
