@@ -87,7 +87,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
         switch($_preferenceName) {
             case self::USERACCOUNT:
                 $preference->value      = 0;
-                //$preference->options    = $this->_getYesNoOptions()
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

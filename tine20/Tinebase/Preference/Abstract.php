@@ -20,6 +20,13 @@
  */
 abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstract
 {
+    /**
+     * yes no options
+     *
+     * @staticvar string
+     */
+    const YES_NO_OPTIONS = 'yesnoopt';
+    
     /**************************** backend settings *********************************/
     
     /**
@@ -286,7 +293,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 
                 /****************** timezone options *******************/
                 case Tinebase_Preference::TIMEZONE:
-                    $locale =  Tinebase_Core::get('locale');
+                    $locale =  Tinebase_Core::get(Tinebase_Core::LOCALE);
             
                     $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
                     $availableTimezones = DateTimeZone::listIdentifiers();
@@ -315,6 +322,18 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                              $result[] = array($app->name, $app->name);
                         }
                     }
+                    break;
+
+                /****************** yes / no ********************/
+                case Tinebase_Preference_Abstract::YES_NO_OPTIONS:
+                    $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+                    $question = $locale->getTranslationList('Question');
+                    
+                    list($yes, $dummy) = explode(':', $question['yes']);
+                    list($no, $dummy) = explode(':', $question['no']);
+                    
+                    $result[] = array(0, $no);
+                    $result[] = array(1, $yes);
                     break;
             }
             $_preference->options = $result;
