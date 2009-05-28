@@ -36,12 +36,12 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     /**
      * config values
      */
-    height: 100,
     header: false,
     //frame: true,
     border: false,
     deferredRender: false,
     loadMask: true,
+    autoExpandColumn: 'name',
     
     /**
      * init

@@ -8,6 +8,7 @@
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         add name to email address for display
+ * TODO         disable horizontal scrollbar
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -33,7 +34,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     autoExpandColumn: 'address',
     clicksToEdit:1,
-    height: 80,
     header: false,
     //frame: true,
     border: false,
