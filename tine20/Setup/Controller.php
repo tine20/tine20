@@ -314,12 +314,15 @@ class Setup_Controller
     {
         $result = FALSE;
         
-        // check if applications table exists
-        try {
-            $applicationTable = Setup_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
-        } catch (Zend_Db_Statement_Exception $e) {
-            $result = TRUE;
-        }            
+        // check if applications table exists / only if db available
+        if (Setup_Core::isRegistered(Setup_Core::DB)) {
+            try {
+                $applicationTable = Setup_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
+            } catch (Zend_Db_Statement_Exception $e) {
+                $result = TRUE;
+            }
+        }
+        
         return $result;
     }
     

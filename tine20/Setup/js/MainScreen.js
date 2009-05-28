@@ -63,5 +63,9 @@ Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
         }
         
         Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
+        
+        // disable preferences in main menu
+        var preferences = Ext.getCmp('Tinebase_System_PreferencesButton');
+        preferences.setDisabled(true);
     }
 });
