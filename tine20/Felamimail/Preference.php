@@ -10,7 +10,6 @@
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
  * @todo        add default account settings
- * @todo        add preference 'user email account'
  */
 
 
@@ -77,8 +76,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      *
      * @param string $_preferenceName
      * @return Tinebase_Model_Preference
-     * 
-     * @todo implement yes/no combo options in abstract class
      */
     public function getPreferenceDefaults($_preferenceName)
     {
