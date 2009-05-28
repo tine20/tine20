@@ -441,7 +441,9 @@ class Tinebase_Core
         if (isset($config->database)) {
             $dbConfig = $config->database;
             
-            define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
+            if (! defined('SQL_TABLE_PREFIX')) {
+                define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
+            }
         
             $dbBackend = constant('self::' . strtoupper($dbConfig->get('adapter', self::PDO_MYSQL)));
             
