@@ -120,8 +120,13 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
      * @private
      */
     border: false,
+    split: true,
+    width: 200,
+    collapsible:true,
+    collapseMode: 'mini',
     region: 'south',
     layout: 'fit',
+    autoScroll: true,
     
     /**
      * @private
@@ -157,6 +162,16 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
             
         }, this);
         
+        // limit to max pile height
+        this.on('resize', function() {
+            var appHeaders = Ext.DomQuery.select('div[class^=x-panel-header]', this.el.dom);
+            for (var i=0, height=0; i<appHeaders.length; i++) {
+                height += Ext.fly(appHeaders[i]).getHeight();
+            }
+            if (arguments[2] && arguments[2] > height) {
+                this.setHeight(height);
+            }
+        });
         this.setActiveItem(this.els[this.defaultAppName]);
     },
     
