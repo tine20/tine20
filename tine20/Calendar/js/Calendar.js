@@ -46,43 +46,7 @@ Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     setToolbar: function() {
         if (! this.actionToolbar) {
             this.actionToolbar = new Ext.Toolbar({
-                items: [/*{
-                    selectedView: 'day',
-                    selectedViewMultiplier: 1,
-                    text: 'day view',
-                    iconCls: 'cal-day-view',
-                    xtype: 'tbbtnlockedtoggle',
-                    //handler: changeView,
-                    enableToggle: true,
-                    toggleGroup: 'Calendar_Toolbar_tgViews'
-                }, {
-                    selectedView: 'day',
-                    selectedViewMultiplier: 4,
-                    text: '4 days view',
-                    iconCls: 'cal-upcoming-days-view',
-                    xtype: 'tbbtnlockedtoggle',
-                    //handler: changeView,
-                    enableToggle: true,
-                    toggleGroup: 'Calendar_Toolbar_tgViews'
-                }, {
-                    selectedView: 'day',
-                    selectedViewMultiplier: 7,
-                    text: 'week view',
-                    iconCls: 'cal-week-view',
-                    xtype: 'tbbtnlockedtoggle',
-                    //handler: changeView,
-                    enableToggle: true,
-                    toggleGroup: 'Calendar_Toolbar_tgViews'
-                }, {
-                    selectedView: 'month',
-                    selectedViewMultiplier: 1,
-                    text: 'month view',
-                    iconCls: 'cal-month-view',
-                    xtype: 'tbbtnlockedtoggle',
-                    //handler: changeView,
-                    enableToggle: true,
-                    toggleGroup: 'Calendar_Toolbar_tgViews'
-                }*/]
+                items: []
             });
         }
         
@@ -102,9 +66,7 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
             region: 'center',
             html: ''
         }, {
-            split: true,
             region: 'south',
-            collapseMode: 'mini',
             collapsible: true,
             height: 190,
             items: new Ext.DatePicker({
