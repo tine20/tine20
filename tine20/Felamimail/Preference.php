@@ -24,10 +24,16 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     /**************************** application preferences/settings *****************/
     
     /**
-     * timezone pref const
+     * use tine user credentials for imap connection
      *
      */
     const USERACCOUNT = 'userEmailAccount';
+
+    /**
+     * default email account to use
+     *
+     */
+    //const DEFAULTACCOUNT = 'defaultEmailAccount';
 
     /**
      * application

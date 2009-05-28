@@ -11,6 +11,8 @@
  
 Ext.ns('Tine.Felamimail', 'Tine.Felamimail.Model');
 
+/**************************** message model *******************************/
+
 /**
  * @type {Array}
  * Message model fields
@@ -56,6 +58,13 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create(Tine.Felamimail
     }
 });
 
+Tine.Felamimail.Model.Message.getDefaultData = function() { 
+    return {
+        from: 'default'
+    };
+};
+
+/**************************** account model *******************************/
 /**
  * @type {Array}
  * Account model fields
@@ -89,11 +98,22 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail
     } */
 });
 
+/**
+ * get default data for account
+ * 
+ * @return {Object}
+ * 
+ * TODO add default data from registry
+ */
+/*
 Tine.Felamimail.Model.Message.getDefaultData = function() { 
     return {
-        from: 'default'
+        //from: 'default'
     };
 };
+*/
+
+/**************************** attachment model *******************************/
 
 /**
  * @type {Tine.Tinebase.Message}

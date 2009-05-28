@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         add multiple accounts + change account settings
  * TODO         reload folders (and number of unread messages) every x minutes
  * TODO         add folder model?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
@@ -104,20 +103,33 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     /**
      * init context menu
-     * 
-     * TODO add account context menu
      */
     initContextMenu: function() {
-        /*
-        this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
-            il8n: il8n,
-            nodeName: this.containerName,
-            actions: ['add'],
+        var editAccount = {
+            text: this.app.i18n._('Edit Account'),
+            iconCls: 'FelamimailIconCls',
             scope: this,
-            backend: 'Tinebase_Container',
-            backendModel: 'Container'
+            handler: function() {
+                var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
+                var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
+                    record: record,
+                    listeners: {
+                        scope: this,
+                        'update': function(record) {
+                            // TODO update tree node
+                        }
+                    }
+                });        
+            }
+        };
+        
+        this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
+            nodeName: this.app.i18n._('Account'),
+            actions: [editAccount, 'delete'],
+            scope: this,
+            backend: 'Felamimail',
+            backendModel: 'Account'
         });
-        */
         
         var config = {
             nodeName: this.app.i18n._('Folder'),
@@ -267,14 +279,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {} node
      * @param {} event
      * 
-     * TODO add account context menu
      */
     onContextMenu: function(node, event) {
         this.ctxNode = node;
         
         if (! node.attributes.folderNode) {
-            // TODO edit/remove account
-            return;
+            // edit/remove account
+            this.contextMenuAccount.showAt(event.getXY());
         } else {
             
             if (node.attributes.globalname == 'Trash') {

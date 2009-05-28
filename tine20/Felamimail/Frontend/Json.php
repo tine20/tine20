@@ -99,8 +99,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $folderId the folder id to delete
      * @return array
-     * 
-     * @todo add test
      */
     public function emptyFolder($folderId)
     {
@@ -301,6 +299,40 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $results = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
     }
     
+    /**
+     * get account data
+     *
+     * @param string $id
+     * @return array
+     */
+    public function getAccount($id)
+    {
+        return $this->_get($id, Felamimail_Controller_Account::getInstance());
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  string $recordData
+     * @return array created/updated record
+     */
+    public function saveAccount($recordData)
+    {
+        return $this->_save($recordData, Felamimail_Controller_Account::getInstance(), 'Account');
+    }
+    
+    /**
+     * deletes existing accounts
+     *
+     * @param string $ids
+     * @return string
+     * @return array
+     */
+    public function deleteAccounts($ids)
+    {
+        return array('status' => $this->_delete($ids, Felamimail_Controller_Account::getInstance()));
+    }
+    
     /***************************** other funcs *******************************/
     
 	/**
@@ -308,6 +340,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
+     * 
+     * @todo add default account data from config.inc.php
      */
     public function getRegistryData()
     {

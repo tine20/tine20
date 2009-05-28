@@ -157,6 +157,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             scope: this
         });
         
+        this.action_addAccount = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Add Account'),
+            handler: this.onAddAccount,
+            iconCls: 'action_add',
+            scope: this
+        });
+
         this.actions = [
             this.action_write,
             this.action_reply,
@@ -164,7 +172,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             this.action_forward,
             this.action_flag,
             this.action_markUnread,
-            this.action_deleteRecord
+            this.action_deleteRecord,
+            new Ext.Toolbar.Separator(),
+            this.action_addAccount
         ];
         
         this.actionToolbar = new Ext.Toolbar({
@@ -546,6 +556,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }
     },
         
+    onAddAccount: function(button, event) {
+        var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
+            record: null,
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    // TODO add to tree / registry
+                }
+            }
+        });        
+    },
+    
     /********************************* helper funcs **************************************/
     
     /**
