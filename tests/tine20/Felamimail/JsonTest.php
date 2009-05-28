@@ -137,7 +137,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
         
-        sleep(10);
+        //sleep(10);
         
         // check if message is in sent folder
         $sent = $this->_getFolder('Sent');
@@ -339,7 +339,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
         
-        sleep(10);
+        //sleep(10);
         
         $inbox = $this->_getFolder();
         $filter = $this->_getMessageFilter($inbox->getId());
