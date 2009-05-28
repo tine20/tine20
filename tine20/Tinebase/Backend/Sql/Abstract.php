@@ -98,6 +98,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      *
      * @param integer|Tinebase_Record_Interface $_id
      * @param $_getDeleted get deleted records
+     * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
     public function get($_id, $_getDeleted = FALSE) 
@@ -113,6 +114,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param  mixed  $_value
      * @param  string $_property
      * @param  bool   $_getDeleted
+     * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
     public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
