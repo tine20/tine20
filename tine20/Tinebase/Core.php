@@ -35,6 +35,12 @@ class Tinebase_Core
     const CONFIG = 'configFile';    
 
     /**
+     * constant for locale registry index
+     *
+     */
+    const LOCALE = 'locale';    
+    
+    /**
      * constant for logger registry index
      *
      */
