@@ -118,6 +118,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      */
     protected function _getSpecialOptions($_value)
     {
+        $result = array();
         switch($_value) {
             case self::DEFAULTACCOUNT:
                 // get all user accounts
