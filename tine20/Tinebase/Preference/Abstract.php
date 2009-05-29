@@ -275,9 +275,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * convert options xml string to array
      *
      * @param Tinebase_Model_Preference $_preference
-     * 
-     * @todo add application title translations
-     * @todo add timezone translations?
      */
     public function convertOptionsToArray(Tinebase_Model_Preference $_preference)
     {
@@ -288,55 +285,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $optionsXml = new SimpleXMLElement($_preference->options);
         
         if ($optionsXml->special) {
-            $result = array();
-            switch ($optionsXml->special) {
-                
-                /****************** timezone options *******************/
-                case Tinebase_Preference::TIMEZONE:
-                    $locale =  Tinebase_Core::get(Tinebase_Core::LOCALE);
+            $_preference->options = $this->_getSpecialOptions($optionsXml->special);
             
-                    $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
-                    $availableTimezones = DateTimeZone::listIdentifiers();
-                    /*
-                    foreach ($availableTimezones as $timezone) {
-                        $result[] = array($timezone, array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL);
-                    }
-                    */
-                    $result = $availableTimezones;
-                    break;
-                
-                /****************** locale options ********************/
-                case Tinebase_Preference::LOCALE:
-                    $availableTranslations = Tinebase_Translation::getAvailableTranslations();
-                    foreach ($availableTranslations as $lang) {
-                        $region = (!empty($lang['region'])) ? ' / ' . $lang['region'] : '';
-                        $result[] = array($lang['locale'], $lang['language'] . $region);
-                    }
-                    break;
-                    
-                /****************** application options ********************/
-                case Tinebase_Preference::DEFAULT_APP:
-                    $applications = Tinebase_Application::getInstance()->getApplications();
-                    foreach ($applications as $app) {
-                        if ($app->status == 'enabled') {
-                             $result[] = array($app->name, $app->name);
-                        }
-                    }
-                    break;
-
-                /****************** yes / no ********************/
-                case Tinebase_Preference_Abstract::YES_NO_OPTIONS:
-                    $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-                    $question = $locale->getTranslationList('Question');
-                    
-                    list($yes, $dummy) = explode(':', $question['yes']);
-                    list($no, $dummy) = explode(':', $question['no']);
-                    
-                    $result[] = array(0, $no);
-                    $result[] = array(1, $yes);
-                    break;
-            }
-            $_preference->options = $result;
         } else {
             
             /****************** other options ********************/
@@ -454,5 +404,79 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.application_id') . ' = ?', $appId);
         
         return $select;
+    }
+
+    /**
+     * overwrite this to add more special options for other apps
+     * 
+     * - result array has to have the following format:
+     *  array(
+     *      array('value1', 'label1'),
+     *      array('value2', 'label2'),
+     *      ...
+     *  )
+     *
+     * @param string $_value
+     * @return array
+     * 
+     * @todo add application title translations?
+     * @todo add timezone translations?
+     */
+    protected function _getSpecialOptions($_value)
+    {
+        $result = array();
+
+        switch ($_value) {
+                
+            /****************** timezone options ************************/
+            case Tinebase_Preference::TIMEZONE:
+                $locale =  Tinebase_Core::get(Tinebase_Core::LOCALE);
+        
+                $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
+                $availableTimezones = DateTimeZone::listIdentifiers();
+                //foreach ($availableTimezones as $timezone) {
+                //    $result[] = array($timezone, array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL);
+                //}
+                
+                $result = $availableTimezones;
+                break;
+            
+            /****************** locale options *************************/
+            case Tinebase_Preference::LOCALE:
+                $availableTranslations = Tinebase_Translation::getAvailableTranslations();
+                foreach ($availableTranslations as $lang) {
+                    $region = (!empty($lang['region'])) ? ' / ' . $lang['region'] : '';
+                    $result[] = array($lang['locale'], $lang['language'] . $region);
+                }
+                break;
+                
+            /****************** application options ********************/
+            case Tinebase_Preference::DEFAULT_APP:
+                $applications = Tinebase_Application::getInstance()->getApplications();
+                foreach ($applications as $app) {
+                    if ($app->status == 'enabled') {
+                         $result[] = array($app->name, $app->name);
+                    }
+                }
+                break;
+
+            /****************** yes / no *******************************/
+            case Tinebase_Preference_Abstract::YES_NO_OPTIONS:
+                $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+                $question = $locale->getTranslationList('Question');
+                
+                list($yes, $dummy) = explode(':', $question['yes']);
+                list($no, $dummy) = explode(':', $question['no']);
+                
+                $result[] = array(0, $no);
+                $result[] = array(1, $yes);
+                break;
+                
+            /****************** default *********************************/
+            default:
+                throw new Tinebase_Exception_NotFound('Special option not found.');
+        }        
+        
+        return $result;
     }
 }
