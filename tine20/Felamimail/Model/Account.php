@@ -121,9 +121,10 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
 
     /**
      * to array
-     * @todo don't show password? / only encrypted?
      *
      * @param boolean $_recursive
+     * 
+     * @todo don't show password? / only encrypted?
      */
     public function toArray($_recursive = TRUE)
     {
@@ -132,20 +133,5 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         //$result['password'] = '********';
         
         return $result;
-    }
-    
-    /**
-     * set from array
-     * - init name if not given
-     *
-     * @param array $_data
-     */
-    public function setFromArray(array $_data)
-    {
-        parent::setFromArray($_data);
-
-        if (! $this->name) {
-            $this->name = $this->user . '@' . $this->host;
-        }
     }
 }

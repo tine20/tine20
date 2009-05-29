@@ -159,12 +159,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $defaultAccount->user_id = $userId;
             
             $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
-            $defaultAccount->user = $fullUser->accountLoginName;
-            $defaultAccount->email = $fullUser->accountEmailAddress;
-            
-            $defaultAccount->name = (preg_match('/@/', $fullUser->accountLoginName) > 0) 
-                ? $fullUser->accountLoginName 
-                : $fullUser->accountLoginName . '@' . $defaultAccount->host;
+            $defaultAccount->user   = $fullUser->accountLoginName;
+            $defaultAccount->email  = $fullUser->accountEmailAddress;
+            $defaultAccount->name   = $fullUser->accountFullName;
             
             //$defaultAccount->password = Tinebase_User::getInstance()->
             //$userCred = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
