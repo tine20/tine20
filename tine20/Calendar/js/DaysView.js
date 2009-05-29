@@ -699,7 +699,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (! this.editing) {
             return;
         }
-        
+        this.editing = false;
         
         var summary = field.getValue();
         var event = field.event;
@@ -714,7 +714,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             return;
         }
         
-        
         event.set('summary', summary);
         
         this.ds.suspendEvents();
@@ -724,8 +723,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.unregister(event);
         this.removeEvent(event);
-        
-        this.editing = false;
         
         this.ds.add(event);
         this.fireEvent('addEvent', event);
