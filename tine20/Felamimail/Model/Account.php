@@ -55,7 +55,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
         'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
         'secure_connection'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),

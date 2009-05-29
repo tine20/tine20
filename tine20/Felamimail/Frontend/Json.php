@@ -275,11 +275,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         if ($_record instanceof Felamimail_Model_Message) {
             foreach (array('to', 'cc', 'bcc') as $type) {
-                if (! empty($_record->{$type})) {
-                    $exploded = explode(',', $_record->{$type});
-                    $_record->{$type} = $exploded;
-                } else {
-                    $_record->{$type} = array();
+                if (! is_array($_record->{$type})) {
+                    if (! empty($_record->{$type})) {
+                        $exploded = explode(',', $_record->{$type});
+                        $_record->{$type} = $exploded;
+                    } else {
+                        $_record->{$type} = array();
+                    }
                 }
             }
         }

@@ -136,7 +136,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * 
      * @todo encrypt password
      * @todo get password from user credentials
-     * @todo get default account data from preferences?
+     * @todo get default account data (host, port, ...) from preferences?
      */
     protected function _addDefaultAccount($_accounts)
     {
@@ -160,6 +160,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             
             $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
             $defaultAccount->user = $fullUser->accountLoginName;
+            $defaultAccount->email = $fullUser->accountEmailAddress;
             
             $defaultAccount->name = (preg_match('/@/', $fullUser->accountLoginName) > 0) 
                 ? $fullUser->accountLoginName 

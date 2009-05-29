@@ -73,7 +73,8 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'name' },
     { name: 'user' },
-    { name: 'host' }
+    { name: 'host' },
+    { name: 'email' }
     // TODO add more fields
 ]);
 

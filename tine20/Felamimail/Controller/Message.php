@@ -320,7 +320,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_message
      * 
      * @todo set In-Reply-To header for replies (which message id?)
-     * @todo add mail & name from account settings
      * @todo add smtp host from account settings
      * @todo add name for to/cc/bcc
      * @todo add max attachment size check?
@@ -332,6 +331,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
                 
+        // get account
+        $account = Felamimail_Controller_Account::getInstance()->get($_message->from);
+        
+        // create new mail to send
         $mail = new Tinebase_Mail();
         
         // build mail content
@@ -339,7 +342,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setBodyHtml($this->_addHtmlMarkup($_message->body), 'UTF-8');
         
         // set from
-        $mail->setFrom(Tinebase_Core::getConfig()->imap->user, Tinebase_Core::getConfig()->imap->user);
+        $mail->setFrom($account->email, $account->name);
         
         // add recipients
         if (isset($_message->to)) {

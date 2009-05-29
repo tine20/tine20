@@ -88,7 +88,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 draggable: false,
                 allowDrop: false,
                 expanded: false,
-                text: record.get('name'),
+                text: record.get('email'),
                 qtip: record.get('host'),
                 leaf: false,
                 account_id: record.data.id
