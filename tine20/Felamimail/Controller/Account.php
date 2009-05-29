@@ -85,18 +85,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
         
-        // add account from config.inc.php if available
-        if (isset(Tinebase_Core::getConfig()->imap) && Tinebase_Core::getConfig()->imap->useAsDefault) {
-            try {
-                $defaultAccount = new Felamimail_Model_Account(
-                    Tinebase_Core::getConfig()->imap->toArray()
-                );
-                $defaultAccount->setId('default');
-                $result->addRecord($defaultAccount);
-            } catch (Tinebase_Exception $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $e->getMessage());
-            }
-        }
+        // check preference/config if we should add default account with tine user credentials or from config.inc.php 
+        $this->_addDefaultAccount($result);
         
         return $result;
     }
@@ -137,5 +127,38 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         return $record;    
+    }
+    
+    /**
+     * add default account with tine user credentials or from config.inc.php 
+     *
+     * @param Tinebase_Record_RecordSet $_accounts
+     * 
+     * @todo finish implementation
+     * @todo get default account data from preferences?
+     * @todo encrypt password
+     */
+    protected function _addDefaultAccount($_accounts)
+    {
+        // add account from config.inc.php if available
+        if (isset(Tinebase_Core::getConfig()->imap) && Tinebase_Core::getConfig()->imap->useAsDefault) {
+            try {
+                $defaultAccount = new Felamimail_Model_Account(
+                    Tinebase_Core::getConfig()->imap->toArray()
+                );
+                $defaultAccount->setId('default');
+                $_accounts->addRecord($defaultAccount);
+            } catch (Tinebase_Exception $e) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $e->getMessage());
+            }
+        } else if (count($_accounts) == 0 && Tinebase_Core::getPreference('Felamimail')->userEmailAccount) {
+            $defaultAccount = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray());
+            
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId());
+            $defaultAccount->user = $fullUser->accountLoginName;
+            //$defaultAccount->password = Tinebase_User::getInstance()->
+            //$userCred = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($userCred, true));
+        }
     }
 }
