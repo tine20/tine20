@@ -89,6 +89,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * get imap config array
      *
      * @return array
+     * 
+     * @todo decrypt pwd here?
      */
     public function getImapConfig()
     {
@@ -119,7 +121,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
 
     /**
      * to array
-     * - don't show password
+     * @todo don't show password? / only encrypted?
      *
      * @param boolean $_recursive
      */
@@ -127,7 +129,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     {
         $result = parent::toArray($_recursive);
         
-        unset($result['password']);
+        //$result['password'] = '********';
         
         return $result;
     }

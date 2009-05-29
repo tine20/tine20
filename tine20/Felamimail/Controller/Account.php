@@ -134,9 +134,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Record_RecordSet $_accounts
      * 
-     * @todo finish implementation
-     * @todo get default account data from preferences?
      * @todo encrypt password
+     * @todo get password from user credentials
+     * @todo get default account data from preferences?
      */
     protected function _addDefaultAccount($_accounts)
     {
@@ -151,14 +151,28 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             } catch (Tinebase_Exception $e) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $e->getMessage());
             }
+        // create new account with user credentials (if preference is set)
         } else if (count($_accounts) == 0 && Tinebase_Core::getPreference('Felamimail')->userEmailAccount) {
             $defaultAccount = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray());
             
-            $fullUser = Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId());
+            $userId = $this->_currentAccount->getId();
+            $defaultAccount->user_id = $userId;
+            
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
             $defaultAccount->user = $fullUser->accountLoginName;
+            
+            $defaultAccount->name = (preg_match('/@/', $fullUser->accountLoginName) > 0) 
+                ? $fullUser->accountLoginName 
+                : $fullUser->accountLoginName . '@' . $defaultAccount->host;
+            
             //$defaultAccount->password = Tinebase_User::getInstance()->
             //$userCred = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($userCred, true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($defaultAccount->toArray(), true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $defaultAccount->password);
+            
+            // create new account
+            $defaultAccount = $this->_backend->create($defaultAccount);
+            $_accounts->addRecord($defaultAccount);
         }
     }
 }
