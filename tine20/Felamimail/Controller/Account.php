@@ -9,8 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add default account pref
- * @todo        add acl?
+ * @todo        add/set default account pref
  */
 
 /**
@@ -153,25 +152,51 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         // create new account with user credentials (if preference is set)
         } else if (count($_accounts) == 0 && Tinebase_Core::getPreference('Felamimail')->userEmailAccount) {
-            $defaultAccount = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray());
+            $defaultAccount = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray(), TRUE);
             
             $userId = $this->_currentAccount->getId();
             $defaultAccount->user_id = $userId;
             
             $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
             $defaultAccount->user   = $fullUser->accountLoginName;
-            $defaultAccount->email  = $fullUser->accountEmailAddress;
-            $defaultAccount->name   = $fullUser->accountEmailAddress;
-            $defaultAccount->from   = $fullUser->accountFullName;
             
-            //$defaultAccount->password = Tinebase_User::getInstance()->
-            //$userCred = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($defaultAccount->toArray(), true));
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $defaultAccount->password);
-            
-            // create new account
-            $defaultAccount = $this->_backend->create($defaultAccount);
-            $_accounts->addRecord($defaultAccount);
+            // only create account if email address is set
+            if ($fullUser->accountEmailAddress) {
+                $defaultAccount->email  = $fullUser->accountEmailAddress;
+                $defaultAccount->name   = $fullUser->accountEmailAddress;
+                $defaultAccount->from   = $fullUser->accountFullName;
+                
+                //$defaultAccount->password = Tinebase_User::getInstance()->
+                //$userCred = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($defaultAccount->toArray(), true));
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $defaultAccount->password);
+                
+                // create new account
+                $defaultAccount = $this->_backend->create($defaultAccount);
+                $_accounts->addRecord($defaultAccount);
+            }
+        }
+    }
+
+    /**
+     * Removes accounts where current user has no access to
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
+     */
+    protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
+    {
+        foreach ($_filter->getFilterObjects() as $filter) {
+            if ($filter->getField() === 'user_id') {
+                $userFilter = $filter;
+                $userFilter->setValue($this->_currentAccount->getId());
+            }
+        }
+        
+        if (! $userFilter) {
+            // force a $userFilter filter (ACL)
+            $userFilter = $_filter->createFilter('user_id', 'equals', $this->_currentAccount->getId());
+            $_filter->addFilter($userFilter);
         }
     }
 }
