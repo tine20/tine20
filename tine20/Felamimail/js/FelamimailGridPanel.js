@@ -372,6 +372,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * TODO add attachments on forward
      */
     onEditInNewWindow: function(button, event) {
+        
+        // check if account available first
+        if (Tine.Felamimail.loadAccountStore().getCount() == 0) {
+            // TODO show message
+            return;
+        }
+        
         var recordData = this.recordClass.getDefaultData();
         var recordId = 0;
         
