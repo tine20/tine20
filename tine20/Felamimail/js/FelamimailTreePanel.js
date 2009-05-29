@@ -285,7 +285,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         if (! node.attributes.folderNode) {
             // edit/remove account
-            this.contextMenuAccount.showAt(event.getXY());
+            if (node.attributes.account_id !== 'default') {
+                this.contextMenuAccount.showAt(event.getXY());
+            }
         } else {
             
             if (node.attributes.globalname == 'Trash') {
