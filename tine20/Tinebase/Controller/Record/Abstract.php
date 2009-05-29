@@ -526,6 +526,9 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
+     * 
+     * @todo add type hint again
+     * @todo create filter group if it is NULL
      */
     protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
     {
