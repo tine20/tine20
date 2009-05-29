@@ -7,7 +7,9 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         reload folders (and number of unread messages) every x minutes
+ * TODO         reload folders (and number of unread messages) every x minutes 
+ *              -> via ping or ext.util.delayedtask ?
+ * 
  * TODO         add folder model?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  */
@@ -88,8 +90,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 draggable: false,
                 allowDrop: false,
                 expanded: false,
-                text: record.get('email'),
-                qtip: record.get('host'),
+                text: record.get('name'),
+                qtip: record.get('user') + '@' + record.get('host'),
                 leaf: false,
                 account_id: record.data.id
             });
@@ -146,7 +148,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 Ext.Ajax.request({
                     params: {
                         method: 'Felamimail.refreshFolder',
-                        folderId: this.ctxNode.id
+                        folderId: this.ctxNode.attributes.folder_id
                     },
                     scope: this,
                     success: function(_result, _request){
@@ -174,7 +176,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 Ext.Ajax.request({
                     params: {
                         method: 'Felamimail.emptyFolder',
-                        folderId: this.ctxNode.id
+                        folderId: this.ctxNode.attributes.folder_id
                     },
                     scope: this,
                     success: function(_result, _request){
