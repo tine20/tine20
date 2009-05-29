@@ -71,11 +71,19 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
  */
 Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
+    { name: 'user_id' },
     { name: 'name' },
     { name: 'user' },
     { name: 'host' },
-    { name: 'email' }
-    // TODO add more fields
+    { name: 'email' },
+    { name: 'password' },
+    { name: 'from' },
+    { name: 'port' },
+    { name: 'secure_connection' },
+    { name: 'signature' },
+    { name: 'smtp_port' },
+    { name: 'smtp_hostname' },
+    { name: 'smtp_auth' }
 ]);
 
 /**
