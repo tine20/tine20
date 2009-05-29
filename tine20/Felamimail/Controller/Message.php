@@ -342,7 +342,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setBodyHtml($this->_addHtmlMarkup($_message->body), 'UTF-8');
         
         // set from
-        $mail->setFrom($account->email, $account->name);
+        $mail->setFrom($account->email, $account->from);
         
         // add recipients
         if (isset($_message->to)) {
