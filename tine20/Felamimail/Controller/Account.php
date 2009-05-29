@@ -85,8 +85,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
         
-        //  add account from config.inc.php if available
-        if (isset(Tinebase_Core::getConfig()->imap)) {
+        // add account from config.inc.php if available
+        if (isset(Tinebase_Core::getConfig()->imap) && Tinebase_Core::getConfig()->imap->useAsDefault) {
             try {
                 $defaultAccount = new Felamimail_Model_Account(
                     Tinebase_Core::getConfig()->imap->toArray()
