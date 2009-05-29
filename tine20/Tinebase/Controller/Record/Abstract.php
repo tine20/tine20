@@ -79,6 +79,8 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param bool $_getRelations
      * @param boolean $_onlyIds
      * @return Tinebase_Record_RecordSet|array
+     * 
+     * @todo create filter group if it is NULL to make sure that acl filter is applied correctly ?
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
@@ -528,7 +530,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $_action get|update
      * 
      * @todo add type hint again
-     * @todo create filter group if it is NULL
      */
     protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
     {
