@@ -52,13 +52,15 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'user_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // imap server config
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
+        'secure_connection'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),
+    // user data
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
-        'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
-        'secure_connection'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),
         'signature'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // smtp config
         'smtp_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 25),
