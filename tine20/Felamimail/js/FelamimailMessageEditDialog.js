@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         make account combo work when loading from json / use default account preference
+ * TODO         show account name instead of id in account combo
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -73,6 +73,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
 
+        console.log(this.record);
+        
         this.record.data.attachments = [];
         this.attachmentGrid.store.each(function(record) {
             this.record.data.attachments.push(record.data);
@@ -154,6 +156,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
         
+        var accountStore = Tine.Felamimail.loadAccountStore();
+        
         return {
             autoScroll: true,
             border: false,
@@ -173,11 +177,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     layout: 'form',
                     labelAlign: 'top',
                     items: [{
-                        xtype:'reccombo',
+                        //xtype:'reccombo',
+                        xtype:'combo',
                         name: 'from',
                         fieldLabel: this.app.i18n._('From'),
-                        displayField: 'user',
+                        displayField: 'name',
+                        valueField: 'id',
+                        editable: false,
+                        triggerAction: 'all',
                         anchor: '100%',
+                        store: accountStore
+                        /*
                         store: new Ext.data.Store({
                             fields: Tine.Felamimail.Model.Account,
                             proxy: Tine.Felamimail.accountBackend,
@@ -185,6 +195,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             remoteSort: true,
                             sortInfo: {field: 'user', dir: 'ASC'}
                         })
+                        */
                     }]
                 }, {
                     region: 'center',

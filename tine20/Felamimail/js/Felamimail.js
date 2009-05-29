@@ -62,7 +62,9 @@ Tine.Felamimail.loadAccountStore = function(reload) {
             autoLoad: true,
             id: 'id',
             root: 'results',
-            totalProperty: 'totalcount'            
+            totalProperty: 'totalcount',
+            proxy: Tine.Felamimail.accountBackend,
+            reader: Tine.Felamimail.accountBackend.getReader()
         });
         
         Ext.StoreMgr.add('FelamimailAccountStore', store);
