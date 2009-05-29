@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
- * @todo        add default account settings
+ * @todo        add default account settings ?
  */
 
 
@@ -33,7 +33,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      * default email account to use
      *
      */
-    //const DEFAULTACCOUNT = 'defaultEmailAccount';
+    const DEFAULTACCOUNT = 'defaultEmailAccount';
 
     /**
      * application
@@ -52,7 +52,8 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
-            self::USERACCOUNT
+            self::USERACCOUNT,
+            self::DEFAULTACCOUNT,
         );
             
         return $allPrefs;
@@ -71,6 +72,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::USERACCOUNT  => array(
                 'label'         => $translate->_('User Email Account'),
                 'description'   => $translate->_('Use user credentials for IMAP email account.'),
+            ),
+            self::DEFAULTACCOUNT  => array(
+                'label'         => $translate->_('Default Email Account'),
+                'description'   => $translate->_('The default email account to use when sending mails.'),
             ),
         );
         
@@ -95,10 +100,36 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
+            case self::DEFAULTACCOUNT:
+                $preference->value      = 'default';
+                break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }
         
         return $preference;
+    }
+    
+    /**
+     * get special options
+     *
+     * @param string $_value
+     * @return array
+     */
+    protected function _getSpecialOptions($_value)
+    {
+        switch($_value) {
+            case self::DEFAULTACCOUNT:
+                // get all user accounts
+                $accounts = Felamimail_Controller_Account::getInstance()->search();
+                foreach ($accounts as $account) {
+                    $result[] = array($account->getId(), $account->name);
+                }
+                break;
+            default:
+                $result = parent::_getSpecialOptions($_value);
+        }
+        
+        return $result;
     }
 }

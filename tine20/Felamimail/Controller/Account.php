@@ -82,6 +82,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
+        if ($_filter === NULL) {
+            $_filter = new Felamimail_Model_AccountFilter(array());
+        }
+        
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
         
         // check preference/config if we should add default account with tine user credentials or from config.inc.php 
@@ -174,6 +178,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 // create new account
                 $defaultAccount = $this->_backend->create($defaultAccount);
                 $_accounts->addRecord($defaultAccount);
+                
+                // set as default account preference
+                Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccount->getId();
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created new default account ' . $defaultAccount->name);
             }
         }
     }
@@ -185,7 +194,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param string $_action get|update
      */
     protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
-    {
+    {        
         foreach ($_filter->getFilterObjects() as $filter) {
             if ($filter->getField() === 'user_id') {
                 $userFilter = $filter;
@@ -193,10 +202,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         }
         
-        if (! $userFilter) {
+        if (! isset($userFilter)) {
             // force a $userFilter filter (ACL)
             $userFilter = $_filter->createFilter('user_id', 'equals', $this->_currentAccount->getId());
             $_filter->addFilter($userFilter);
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user_id filter.');
         }
     }
 }
