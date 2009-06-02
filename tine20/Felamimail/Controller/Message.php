@@ -334,6 +334,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // get account
         $account = Felamimail_Controller_Account::getInstance()->get($_message->from);
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), TRUE));
+        
         // create new mail to send
         $mail = new Tinebase_Mail();
         
@@ -342,7 +344,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setBodyHtml($this->_addHtmlMarkup($_message->body), 'UTF-8');
         
         // set from
-        $mail->setFrom($account->email, $account->from);
+        $from = (isset($account->from) && ! empty($account->from)) 
+            ? $account->from 
+            : substr($account->email, 0, strpos($account->email, '@'));
+        $mail->setFrom($account->email, $from);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $account->email . ' : ' . $from);
         
         // add recipients
         if (isset($_message->to)) {
