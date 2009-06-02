@@ -87,7 +87,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
         
-        // check preferencnfig if we should add default account with tine user credentials or from config.inc.php 
+        // check preference / config if we should add default account with tine user credentials or from config.inc.php 
         $this->_addDefaultAccount($result);
         
         return $result;
