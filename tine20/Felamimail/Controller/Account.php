@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add/set default account pref
  */
 
 /**
@@ -88,7 +87,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
         
-        // check preference/config if we should add default account with tine user credentials or from config.inc.php 
+        // check preferencnfig if we should add default account with tine user credentials or from config.inc.php 
         $this->_addDefaultAccount($result);
         
         return $result;
@@ -133,11 +132,84 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * Removes accounts where current user has no access to
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
+     */
+    protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
+    {        
+        foreach ($_filter->getFilterObjects() as $filter) {
+            if ($filter->getField() === 'user_id') {
+                $userFilter = $filter;
+                $userFilter->setValue($this->_currentAccount->getId());
+            }
+        }
+        
+        if (! isset($userFilter)) {
+            // force a $userFilter filter (ACL)
+            $userFilter = $_filter->createFilter('user_id', 'equals', $this->_currentAccount->getId());
+            $_filter->addFilter($userFilter);
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user_id filter.');
+        }
+    }
+
+    /**
+     * inspect creation of one record
+     * - add credentials here
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    {
+        if (! $this->user || ! $this->password) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
+            return;    
+        }
+        
+        $_record->credentials_id = $this->_createCredentials($_record->user, $_record->password);
+    }
+
+    /**
+     * inspect update of one record
+     * - update credentials here
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectUpdate($_record, $_oldRecord)
+    {
+        // get old credentials
+        $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
+        $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        $credentialsBackend->getCachedCredentials($userCredentialCache);
+        
+        $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
+        $credentials->key = substr($userCredentialCache->password, 0, 24);
+        $credentialsBackend->getCachedCredentials($credentials);
+        
+        // check if something changed
+        if (
+                (! empty($_record->user) && $_record->user !== $credentials->username) 
+            ||  (! empty($_record->password) && $_record->password !== $credentials->password)
+        ) {
+            $newPassword = ($_record->password) ? $_record->password : $credentials->password;
+            $newUsername = ($_record->user) ? $_record->user : $credentials->username;
+
+            $_record->credentials_id = $this->_createCredentials($newUsername, $newPassword);
+        }
+    }
+    
+    /******************************** protected funcs *********************************/
+
+    /**
      * add default account with tine user credentials or from config.inc.php 
      *
      * @param Tinebase_Record_RecordSet $_accounts
      * 
-     * @todo encrypt password and save in credentials table (with user)
      * @todo get default account data (host, port, ...) from preferences?
      */
     protected function _addDefaultAccount($_accounts)
@@ -170,15 +242,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $defaultAccount->from   = $fullUser->accountFullName;
                 
                 // get password from credentials cache and create account credentials
-                $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-                Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
-                //$defaultAccount->password = $credentialCache->password;
-                $accountCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(
-                    $userCredentialCache->username,
-                    $userCredentialCache->password,
-                    $userCredentialCache->password
-                );
-                $defaultAccount->credentials_id = $accountCredentials->getId();
+                $defaultAccount->credentials_id = $this->_createCredentials();
 
                 // create new account
                 $defaultAccount = $this->_backend->create($defaultAccount);
@@ -191,28 +255,24 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         }
     }
-
+    
     /**
-     * Removes accounts where current user has no access to
-     * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string $_action get|update
+     * create account credentials and return new credentials id
+     *
+     * @param string $_username
+     * @param string $_password
+     * @return string
      */
-    protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
-    {        
-        foreach ($_filter->getFilterObjects() as $filter) {
-            if ($filter->getField() === 'user_id') {
-                $userFilter = $filter;
-                $userFilter->setValue($this->_currentAccount->getId());
-            }
-        }
-        
-        if (! isset($userFilter)) {
-            // force a $userFilter filter (ACL)
-            $userFilter = $_filter->createFilter('user_id', 'equals', $this->_currentAccount->getId());
-            $_filter->addFilter($userFilter);
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user_id filter.');
-        }
+    protected function _createCredentials($_username = NULL, $_password = NULL)
+    {
+        $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
+
+        $accountCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(
+            ($_username !== NULL) ? $_username : $userCredentialCache->username,
+            ($_password !== NULL) ? $_password : $userCredentialCache->password,
+            $userCredentialCache->password
+        );
+        return $accountCredentials->getId();
     }
 }
