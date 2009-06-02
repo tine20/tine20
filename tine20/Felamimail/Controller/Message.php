@@ -364,37 +364,30 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // set subject
         $mail->setSubject($_message->subject);
         
-        // set date
-        //$mail->setDate(Zend_Date::now()->get(Zend_Date::RFC_2822));
-        
         // add attachments
-        $contentType = 'text/html';
         if (isset($_message->attachments)) {
             foreach ($_message->attachments as $attachment) {
                 $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
                 $part->type = $attachment['type'];
                 $part->filename = $attachment['name'];
-                //$part->encoding = Zend_Mime::ENCODING_8BIT;
                 $part->encoding = Zend_Mime::ENCODING_BASE64;
                 $part->disposition = Zend_Mime::ENCODING_BASE64; //?
                 
                 $mail->addAttachment($part);
-                $contentType = 'multipart/mixed';
             }
         }
         
-        // add headers
-        $mail->addHeader('content-type', $contentType);
-
         // set transport + send mail
         if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
             $smtpConfig = Tinebase_Core::getConfig()->imap->smtp->toArray();
-            $transport = new Zend_Mail_Transport_Smtp($smtpConfig['hostname'], $smtpConfig);
+            $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
             
+            // send message via smtp
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
 
             // save in sent folder (account id is in from property)
-            Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mail->__toString(), 'Sent');
+            $mailAsString = $transport->getHeaders() . Zend_Mime::LINEEND . $transport->getBody();
+            Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mailAsString, 'Sent');
             
             // add reply/forward flags if set
             if (! empty($_message->flags) && 
