@@ -34,14 +34,9 @@
                     <length>256</length>
                 </field>
                 <field>
-                    <name>user</name>
+                    <name>credentials_id</name>
                     <type>text</type>
-                    <length>256</length>
-                </field>
-                <field>
-                    <name>password</name>
-                    <type>text</type>
-                    <length>256</length>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>email</name>
@@ -119,6 +114,17 @@
                     <field>
                         <name>id</name>
                     </field>
+                </index>
+                <index>
+                    <name>account::credentials_id--credentials::id</name>
+                    <field>
+                        <name>credentials_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>credential_cache</table>
+                        <field>id</field>
+                    </reference>
                 </index>
             </declaration>
         </table>

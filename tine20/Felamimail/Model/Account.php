@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        save encrypted password
+ * @todo        update account credentials if user password changed
  * @todo        use enum/array for tls (and more fields?)
  * @todo        add user/pass for smtp or use the imap credentials?
  */
@@ -57,6 +57,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
         'secure_connection'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),
     // user data
+        'credentials_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
@@ -89,15 +90,31 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     
     /**
      * get imap config array
+     * - decrypt pwd/user with user password
      *
      * @return array
-     * 
-     * @todo decrypt pwd here?
      */
     public function getImapConfig()
     {
-        $imapConfigFields = array('host', 'port', 'user', 'password');
+        if (! $this->user || ! $this->password) {
+            
+            if (! $this->credentials_id) {
+                throw new Felamimail_Exception('Could not get IMAP credentials, no credential id given.');
+            }
+            
+            $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
+            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            $credentialsBackend->getCachedCredentials($userCredentialCache);
+            
+            $credentials = $credentialsBackend->get($this->credentials_id);
+            $credentials->key = substr($userCredentialCache->password, 0, 24);
+            $credentialsBackend->getCachedCredentials($credentials);
+            
+            $this->user = $credentials->username;
+            $this->password = $credentials->password;
+        }
         
+        $imapConfigFields = array('host', 'port', 'user', 'password');
         $result = array();
         foreach ($imapConfigFields as $field) {
             $result[$field] = $this->{$field};
@@ -125,14 +142,13 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * to array
      *
      * @param boolean $_recursive
-     * 
-     * @todo don't show password? / only encrypted?
      */
     public function toArray($_recursive = TRUE)
     {
         $result = parent::toArray($_recursive);
-        
-        //$result['password'] = '********';
+
+        // don't show password
+        unset($result['password']);
         
         return $result;
     }

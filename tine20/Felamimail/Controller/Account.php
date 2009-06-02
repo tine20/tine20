@@ -169,10 +169,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $defaultAccount->name   = $fullUser->accountEmailAddress;
                 $defaultAccount->from   = $fullUser->accountFullName;
                 
-                // get password from credentials cache
-                $credentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-                Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($credentialCache);
-                $defaultAccount->password = $credentialCache->password;
+                // get password from credentials cache and create account credentials
+                $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+                Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
+                //$defaultAccount->password = $credentialCache->password;
+                $accountCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(
+                    $userCredentialCache->username,
+                    $userCredentialCache->password,
+                    $userCredentialCache->password
+                );
+                $defaultAccount->credentials_id = $accountCredentials->getId();
 
                 // create new account
                 $defaultAccount = $this->_backend->create($defaultAccount);
