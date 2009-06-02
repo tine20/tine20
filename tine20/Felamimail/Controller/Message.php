@@ -297,8 +297,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 ' Moving ' . count($messages) . ' messages to folder ' . $folder->globalname);
             
             // select source folder
+            $folderBackend  = new Felamimail_Backend_Folder();
             $firstMessage = $messages->getFirstRecord();
             $sourceFolder = $folderBackend->get($firstMessage->folder_id);
+            
             if($imapBackend->getCurrentFolder() != $sourceFolder->globalname) {
                 $imapBackend->selectFolder($sourceFolder->globalname);
             }

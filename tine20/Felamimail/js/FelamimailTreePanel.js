@@ -309,7 +309,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onBeforenodedrop: function(dropEvent) {
         
-        var folderId = dropEvent.target.id;
+        var folderId = dropEvent.target.attributes.folder_id;
         var ids = [];
         
         for (var i=0; i < dropEvent.data.selections.length; i++) {
