@@ -380,7 +380,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 <options>
                     <special>' . $_preferenceName . '</special>
                 </options>',
-            'id'                => 'default'
+            'id'                => 'default' . Tinebase_Record_Abstract::generateUID(33)
         ), TRUE);
     }
     

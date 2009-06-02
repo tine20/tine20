@@ -455,7 +455,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // check if application has preference class
         if ($backend = Tinebase_Core::getPreference($applicationName)) {
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
             
             $paging = new Tinebase_Model_Pagination(array(
                 'dir'       => 'ASC',
@@ -525,7 +525,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 // create prefs that don't exist in the db
                 foreach($data as $id => $prefData) {
-                    if ($id === 'default') {
+                    if (preg_match('/^default/', $id)) {
                         $newPref = $backend->getPreferenceDefaults($prefData['name']);
                         $newPref->value = $prefData['value'];
                         $newPref->type = $prefData['type'];
