@@ -51,14 +51,7 @@ class Timetracker_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function exportTimesheets($_filter, $_format)
     {
-        
-        // quick hack to get particular filters working
         $decodedFilter = Zend_Json::decode($_filter);
-        foreach ($decodedFilter as &$f) {
-            if ($f['field'] == 'id') {
-                $f['field'] = 'timetracker_timesheet.id';
-            }
-        }
         $filter = new Timetracker_Model_TimesheetFilter($decodedFilter);
         
         switch($_format) {
