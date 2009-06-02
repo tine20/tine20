@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        add tests for create/update/delete accounts
  * @todo        add tests for attachments
  * @todo        use testmails from files/ dir
  */
