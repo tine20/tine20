@@ -137,8 +137,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Record_RecordSet $_accounts
      * 
-     * @todo encrypt password
-     * @todo get password from user credentials
+     * @todo encrypt password and save in credentials table (with user)
      * @todo get default account data (host, port, ...) from preferences?
      */
     protected function _addDefaultAccount($_accounts)
@@ -170,11 +169,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $defaultAccount->name   = $fullUser->accountEmailAddress;
                 $defaultAccount->from   = $fullUser->accountFullName;
                 
-                //$defaultAccount->password = Tinebase_User::getInstance()->
-                //$userCred = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($defaultAccount->toArray(), true));
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $defaultAccount->password);
-                
+                // get password from credentials cache
+                $credentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+                Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($credentialCache);
+                $defaultAccount->password = $credentialCache->password;
+
                 // create new account
                 $defaultAccount = $this->_backend->create($defaultAccount);
                 $_accounts->addRecord($defaultAccount);
