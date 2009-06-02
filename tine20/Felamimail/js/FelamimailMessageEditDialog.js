@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         show account name instead of id in account combo
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -60,8 +59,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.getForm().loadRecord(this.record);
         //this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         
-        //console.log(this.record);
-        
         this.loadMask.hide();
     },
         
@@ -73,8 +70,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
 
-        console.log(this.record);
-        
         this.record.data.attachments = [];
         this.attachmentGrid.store.each(function(record) {
             this.record.data.attachments.push(record.data);
