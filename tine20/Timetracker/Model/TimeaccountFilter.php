@@ -57,7 +57,8 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      */
     protected function _setOptions(array $_options)
     {
-        $_options['useTimesheetAcl'] = array_key_exists('useTimesheetAcl', $_options) ? $_options['useTimesheetAcl'] : FALSE;
+        $_options['useTimesheetAcl']    = array_key_exists('useTimesheetAcl', $_options) ? $_options['useTimesheetAcl'] : FALSE;
+        $_options['showClosed']         = array_key_exists('showClosed', $_options)      ? $_options['showClosed']      : FALSE;
         parent::_setOptions($_options);
     }
     
@@ -113,7 +114,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
                 $showClosed = true;
             }
         }
-        if($showClosed){
+        if($showClosed || $this->_options['showClosed']){
             // nothing to filter
         } else {
             $_select->where(Tinebase_Core::getDb()->quoteIdentifier('is_open') . ' = 1');
