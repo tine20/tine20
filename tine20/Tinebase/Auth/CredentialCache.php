@@ -69,13 +69,16 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      *
      * @param  string $_username
      * @param  string $_password
+     * @param  string $_key [optional]
      * @return Tinebase_Model_CredentialCache
      */
-    public function cacheCredentials($_username, $_password)
+    public function cacheCredentials($_username, $_password, $_key = NULL)
     {
+        $key = ($_key !== NULL) ? $_key : Tinebase_Record_Abstract::generateUID();
+        
         $cache = new Tinebase_Model_CredentialCache(array(
             'id'        => Tinebase_Record_Abstract::generateUID(),
-            'key'       => substr(Tinebase_Record_Abstract::generateUID(), 0, 24),
+            'key'       => substr($key, 0, 24),
             'username'  => $_username,
             'password'  => $_password,
             'creation_time' => Zend_Date::now(),
