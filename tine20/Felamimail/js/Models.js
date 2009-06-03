@@ -32,9 +32,6 @@ Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'headers' },
     { name: 'hasAttachment' },
     { name: 'attachments' }
-    // tine 2.0 notes + tags
-    //{ name: 'notes'},
-    //{ name: 'tags' }
 ]);
 
 /**
@@ -117,16 +114,28 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail
  * get default data for account
  * 
  * @return {Object}
- * 
- * TODO add default data from registry
  */
-/*
-Tine.Felamimail.Model.Message.getDefaultData = function() { 
+Tine.Felamimail.Model.Account.getDefaultData = function() { 
+    var defaults = (Tine.Felamimail.registry.get('defaults')) 
+        ? Tine.Felamimail.registry.get('defaults')
+        : {
+            host: '',
+            port: 143,
+            smtp: {
+                hostname: '',
+                port: 25,
+                auth: 'tls'
+            }
+        };
+    
     return {
-        //from: 'default'
+        host: defaults.host,
+        port: defaults.port,
+        smtp_hostname: defaults.smtp.hostname,
+        smtp_auth: defaults.smtp.auth,
+        smtp_port: defaults.smtp.port
     };
 };
-*/
 
 /**************************** attachment model *******************************/
 

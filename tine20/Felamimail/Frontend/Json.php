@@ -342,11 +342,25 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
-     * 
-     * @todo add default account data from config.inc.php
      */
     public function getRegistryData()
     {
-        return array('accounts' => $this->searchAccounts(''));
+        $result = array(
+            'accounts' => $this->searchAccounts(''),
+        );
+        
+        if (isset(Tinebase_Core::getConfig()->imap)) {
+            $defaults = Tinebase_Core::getConfig()->imap->toArray();
+            
+            // remove sensitive data
+            unset($defaults['user']);
+            unset($defaults['password']);
+            unset($defaults['smtp']['username']);
+            unset($defaults['smtp']['password']);
+            
+            $result['defaults'] = $defaults;
+        }
+        
+        return $result; 
     }
 }
