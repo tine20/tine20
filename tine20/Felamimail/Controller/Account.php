@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        split credentials (imap & smtp)
  */
 
 /**
@@ -157,19 +158,24 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
 
     /**
      * inspect creation of one record
-     * - add credentials here
+     * - add credentials and user id here
      * 
      * @param   Tinebase_Record_Interface $_record
      * @return  void
      */
     protected function _inspectCreate(Tinebase_Record_Interface $_record)
     {
-        if (! $this->user || ! $this->password) {
+        // add user id
+        $_record->user_id = $this->_currentAccount->getId();
+        
+        if (! $_record->user || ! $_record->password) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
             return;    
         }
         
+        // add credentials
         $_record->credentials_id = $this->_createCredentials($_record->user, $_record->password);
+        $_record->smtp_credentials_id = $_record->credentials_id;
     }
 
     /**
@@ -200,6 +206,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $newUsername = ($_record->user) ? $_record->user : $credentials->username;
 
             $_record->credentials_id = $this->_createCredentials($newUsername, $newPassword);
+            $_record->smtp_credentials_id = $_record->credentials_id;
         }
     }
     
@@ -265,6 +272,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _createCredentials($_username = NULL, $_password = NULL)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create new account credentials for username ' . $_username);
+        
         $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
         Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
 

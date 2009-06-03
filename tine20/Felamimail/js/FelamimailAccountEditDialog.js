@@ -53,6 +53,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 tabchange: function(panel, tab) {
                     // we need this as workaround as form is not initialized/filled with defaults in inactive tabs :(
+                    // TODO find a better way for that because we can't check validity of 
+                    //    fields in other tabs when they haven't been initialized
                     if (! tab.hasbeenselected) {
                         this.getForm().loadRecord(this.record);
                         tab.hasbeenselected = true;
@@ -154,12 +156,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 items: [[ {
                     fieldLabel: this.app.i18n._('Host'),
-                    name: 'smtp_hostname',
-                    allowBlank: false
+                    name: 'smtp_hostname'
+                    //allowBlank: false
                 }, {
                     fieldLabel: this.app.i18n._('Port'),
                     name: 'smtp_port',
-                    allowBlank: false,
+                    //allowBlank: false,
                     maxLength: 5,
                     xtype:'numberfield'
                 }, {
@@ -170,7 +172,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     lazyRender    : true,
                     editable      : false,
                     mode          : 'local',
-                    forceSelection: true,
+                    //forceSelection: true,
                     value: 'none',
                     xtype: 'combo',
                     store: [
@@ -186,7 +188,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     lazyRender    : true,
                     editable      : false,
                     mode          : 'local',
-                    forceSelection: true,
+                    //forceSelection: true,
                     xtype: 'combo',
                     value: 'login',
                     store: [

@@ -80,27 +80,35 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     initAccounts: function() {
         this.accountStore = Tine.Felamimail.loadAccountStore();
+        this.accountStore.each(this.addAccount, this);
+    },
+    
+    /**
+     * add account record to root node
+     * 
+     * @param {Tine.Felamimail.Model.Account} record
+     * 
+     * @private
+     */
+    addAccount: function(record) {
         
-        this.accountStore.each(function(record){
-           
-            var node = new Ext.tree.AsyncTreeNode({
-                id: 'default',
-                record: record,
-                globalname: '',
-                draggable: false,
-                allowDrop: false,
-                expanded: false,
-                text: record.get('name'),
-                qtip: record.get('user') + '@' + record.get('host'),
-                leaf: false,
-                account_id: record.data.id
-            });
-            
-            //console.log(record);
-            //console.log(node);
-            
-            this.root.appendChild(node);
-        }, this);
+        var node = new Ext.tree.AsyncTreeNode({
+            id: 'default',
+            record: record,
+            globalname: '',
+            draggable: false,
+            allowDrop: false,
+            expanded: false,
+            text: record.get('name'),
+            qtip: record.get('user') + '@' + record.get('host'),
+            leaf: false,
+            account_id: record.data.id
+        });
+        
+        //console.log(record);
+        //console.log(node);
+        
+        this.root.appendChild(node);
     },
     
     /**

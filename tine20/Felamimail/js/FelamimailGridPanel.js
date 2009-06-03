@@ -569,7 +569,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             listeners: {
                 scope: this,
                 'update': function(record) {
-                    // TODO add to tree / registry
+                    var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
+                    
+                    // add to tree / store / registry (?)
+                    var treePanel = this.app.getMainScreen().getTreePanel();
+                    treePanel.addAccount(account);
+                    treePanel.accountStore.add([account]);
                 }
             }
         });        
