@@ -133,6 +133,22 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        $result = parent::create($_record);
+        
+        // set as default account
+        Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $result->getId();
+        
+        return $result;
+    }
+    
+    /**
      * Removes accounts where current user has no access to
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
