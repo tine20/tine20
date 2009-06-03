@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         make default values work
  * TODO         add smtp credentials
  */
  
@@ -46,9 +45,20 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
+            id: 'account-edit-tabpanel',
             border: false,
             plain:true,
             activeTab: 0,
+            listeners: {
+                scope: this,
+                tabchange: function(panel, tab) {
+                    // we need this as workaround as form is not initialized/filled with defaults in inactive tabs :(
+                    if (! tab.hasbeenselected) {
+                        this.getForm().loadRecord(this.record);
+                        tab.hasbeenselected = true;
+                    }
+                }
+            },
             items:[{               
                 title: this.app.i18n._('Account'),
                 autoScroll: true,
