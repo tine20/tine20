@@ -124,7 +124,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     listeners: {
                         scope: this,
                         'update': function(record) {
-                            // TODO update tree node
+                            var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
+                            
+                            // update tree node + store
+                            this.ctxNode.setText(account.get('name'));
+                            this.accountStore.reload();
                         }
                     }
                 });        
