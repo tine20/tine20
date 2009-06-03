@@ -48,8 +48,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return {
             layout: 'accordion',
             animate: true,
-            width: 210,
-            margins: '0 5 0 5',
             border: true,
             items: [{
                 title: this.app.i18n._('Account'),
@@ -151,7 +149,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Port'),
                     name: 'smtp_port',
                     maxLength: 5,
-                    xtype:'numberfield'
+                    xtype:'numberfield',
+                    allowBlank: false
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'smtp_secure_connection',
