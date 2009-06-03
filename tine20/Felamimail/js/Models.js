@@ -86,7 +86,8 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'signature' },
     { name: 'smtp_port' },
     { name: 'smtp_hostname' },
-    { name: 'smtp_auth' }
+    { name: 'smtp_auth' },
+    { name: 'smtp_secure_connection' }
 ]);
 
 /**

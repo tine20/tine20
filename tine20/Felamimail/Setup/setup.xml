@@ -79,6 +79,18 @@
                     <value>plain</value>
                 </field>
                 <field>
+                    <name>smtp_secure_connection</name>
+                    <type>enum</type>
+                    <value>none</value>
+                    <value>TLS</value>
+                    <value>SSL</value>
+                </field>
+                <field>
+                    <name>smtp_credentials_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
                     <name>created_by</name>
                     <type>integer</type>
                 </field>

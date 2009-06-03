@@ -8,6 +8,7 @@
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         make default values work
+ * TODO         add smtp credentials
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -73,33 +74,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     fieldLabel: this.app.i18n._('User Name (From)'),
                     name: 'from'
-                }]]
-            }, {               
-                title: this.app.i18n._('User'),
-                autoScroll: true,
-                border: false,
-                frame: true,
-                xtype: 'columnform',
-                formDefaults: {
-                    xtype:'textfield',
-                    anchor: '90%',
-                    labelSeparator: '',
-                    maxLength: 256,
-                    columnWidth: 1
-                },
-                items: [[ {
-                    fieldLabel: this.app.i18n._('Username'),
-                    name: 'user',
-                    allowBlank: false
-                }, {
-                    fieldLabel: this.app.i18n._('Password'),
-                    name: 'password',
-                    allowBlank: false
                 }, {
                     fieldLabel: this.app.i18n._('Signature'),
                     name: 'signature',
                     xtype: 'textarea',
-                    height: 150
+                    height: 120
                 }]]
             }, {               
                 title: this.app.i18n._('IMAP'),
@@ -140,6 +119,15 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['tls',  _('TLS')],
                         ['ssl',  _('SSL')]
                     ]
+                },{
+                    fieldLabel: this.app.i18n._('Username'),
+                    name: 'user',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('Password'),
+                    name: 'password',
+                    allowBlank: false,
+                    inputType: 'password'
                 }]]
             }, {               
                 title: this.app.i18n._('SMTP'),
@@ -165,6 +153,22 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     maxLength: 5,
                     xtype:'numberfield'
                 }, {
+                    fieldLabel: this.app.i18n._('Secure Connection'),
+                    name: 'smtp_secure_connection',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: 'none',
+                    xtype: 'combo',
+                    store: [
+                        ['none', _('None')],
+                        ['tls',  _('TLS')],
+                        ['ssl',  _('SSL')]
+                    ]
+                }, {
                     fieldLabel: this.app.i18n._('Authentication'),
                     name: 'smtp_auth',
                     typeAhead     : false,
@@ -179,7 +183,16 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['login',  _('Login')],
                         ['plain',  _('Plain')]
                     ]
-                }]]
+                }/*,{
+                    fieldLabel: this.app.i18n._('Username'),
+                    name: 'smtp_user',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('Password'),
+                    name: 'smtp_password',
+                    allowBlank: false,
+                    inputType: 'password'
+                }*/]]
             }]
         };
     }
