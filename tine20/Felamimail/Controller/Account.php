@@ -168,6 +168,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         // add user id
         $_record->user_id = $this->_currentAccount->getId();
         
+        // use the imap host as smtp host if empty
+        if (! $_record->smtp_hostname) {
+            $_record->smtp_hostname = $_record->host;
+        }
+        
         if (! $_record->user || ! $_record->password) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
             return;    
