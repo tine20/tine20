@@ -5,7 +5,7 @@
  * @subpackage  Widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -225,7 +225,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * executed after record got updated from proxy
      */
     onRecordLoad: function() {
-        // interrupt process flow till dialog is rendered
+        // interrupt process flow until dialog is rendered
         if (! this.rendered) {
             this.onRecordLoad.defer(250, this);
             return;
@@ -249,7 +249,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onRecordUpdate: function() {
         var form = this.getForm();
         
-        // merge changes from form into task record
+        // merge changes from form into record
         form.updateRecord(this.record);
     },
     
