@@ -58,7 +58,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'secure_connection'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),
         'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // user data
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
@@ -98,23 +98,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      */
     public function getImapConfig()
     {
-        if (! $this->user || ! $this->password) {
-            
-            if (! $this->credentials_id) {
-                throw new Felamimail_Exception('Could not get IMAP credentials, no credential id given.');
-            }
-            
-            $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-            $credentialsBackend->getCachedCredentials($userCredentialCache);
-            
-            $credentials = $credentialsBackend->get($this->credentials_id);
-            $credentials->key = substr($userCredentialCache->password, 0, 24);
-            $credentialsBackend->getCachedCredentials($credentials);
-            
-            $this->user = $credentials->username;
-            $this->password = $credentials->password;
-        }
+        $this->resolveCredentials(FALSE, TRUE);
         
         $imapConfigFields = array('host', 'port', 'user', 'password');
         $result = array();
@@ -153,5 +137,34 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         unset($result['password']);
         
         return $result;
+    }
+
+    /**
+     * resolve credentials
+     *
+     */
+    public function resolveCredentials($_onlyUsername = TRUE, $_throwException = FALSE)
+    {
+        if (! $this->user || (! $this->password && ! $_onlyUsername)) {
+            
+            if (! $this->credentials_id) {
+                if ($_throwException) {
+                    throw new Felamimail_Exception('Could not get IMAP credentials, no credential id given.');
+                } else {
+                    return;
+                }
+            }
+
+            $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
+            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            $credentialsBackend->getCachedCredentials($userCredentialCache);
+            
+            $credentials = $credentialsBackend->get($this->credentials_id);
+            $credentials->key = substr($userCredentialCache->password, 0, 24);
+            $credentialsBackend->getCachedCredentials($credentials);
+            
+            $this->user = $credentials->username;
+            $this->password = $credentials->password;
+        }
     }
 }
