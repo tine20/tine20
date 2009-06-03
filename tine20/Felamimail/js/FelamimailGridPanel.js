@@ -368,7 +368,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param {} button
      * @param {} event
      * 
-     * TODO add/get signature text from account config
      * TODO add attachments on forward
      */
     onEditInNewWindow: function(button, event) {
@@ -430,11 +429,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             recordData.body = '<br/>';
         }
         
-        // add signature (get it from account settings)
-        var signature = 'Sent with love from the new tine 2.0 email client ...<br/>'
-            + 'Please visit <a href="http://tine20.org">http://tine20.org</a>';
-        if (signature != '') {
-            recordData.body += '<br/><span class="felamimail-body-signature">--<br/>' + signature + '</span>';
+        // add signature (get it from default account settings)
+        if (Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount')) {
+            var signature = this.app.getMainScreen().getTreePanel().accountStore.getById(
+                Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount')
+            ).get('signature');
+            if (signature && signature != '') {
+                recordData.body += '<br/><span class="felamimail-body-signature">--<br/>' + signature + '</span>';
+            }
         }
         
         var record = new this.recordClass(recordData, recordId);
