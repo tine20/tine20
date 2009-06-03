@@ -68,7 +68,7 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
         )),
         'application_id'    => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
         'name'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
-        'value'             => array('presence' => 'required', 'allowEmpty' => FALSE),
+        'value'             => array('presence' => 'required', 'allowEmpty' => TRUE),
         'type'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
             self::TYPE_NORMAL, 
             self::TYPE_DEFAULT, 
