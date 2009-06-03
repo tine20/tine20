@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:TimeaccountFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
+ * @todo        created_by filter should be replaced by a 'responsible/organizer' filter like in tasks
  */
 
 /**
@@ -32,6 +33,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag'),
+        'created_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'showClosed'     => array('custom' => true),
         'isBookable'     => array('custom' => true),
     );

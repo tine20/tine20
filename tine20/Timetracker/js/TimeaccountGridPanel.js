@@ -44,12 +44,15 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
     
     /**
      * initialises filter toolbar
+     * 
+     * TODO created_by filter should be replaced by a 'responsible/organizer' filter like in tasks
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Time Account'),   field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
+                {label: this.app.i18n._('Created By'),     field: 'created_by',  valueType: 'user'},
                 new Tine.Timetracker.TimeAccountStatusGridFilter({
                     field: 'status'
                 }),
