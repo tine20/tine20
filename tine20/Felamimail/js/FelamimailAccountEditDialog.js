@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         finish dialog
+ * TODO         make default values work
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -68,7 +68,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     fieldLabel: this.app.i18n._('User Email'),
                     name: 'email',
-                    allowBlank: false
+                    allowBlank: false,
+                    vtype: 'email'
                 }, {
                     fieldLabel: this.app.i18n._('User Name (From)'),
                     name: 'from'
@@ -96,7 +97,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false
                 }, {
                     fieldLabel: this.app.i18n._('Signature'),
-                    name: 'signature'
+                    name: 'signature',
+                    xtype: 'textarea',
+                    height: 150
                 }]]
             }, {               
                 title: this.app.i18n._('IMAP'),
@@ -118,11 +121,25 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     fieldLabel: this.app.i18n._('Port'),
                     name: 'port',
-                    allowBlank: false
+                    allowBlank: false,
+                    maxLength: 5,
+                    xtype: 'numberfield'
                 }, {
-                    fieldLabel: this.app.i18n._('Connection'),
+                    fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'secure_connection',
-                    allowBlank: false
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: 'none',
+                    xtype: 'combo',
+                    store: [
+                        ['none', _('None')],
+                        ['tls',  _('TLS')],
+                        ['ssl',  _('SSL')]
+                    ]
                 }]]
             }, {               
                 title: this.app.i18n._('SMTP'),
@@ -144,11 +161,24 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     fieldLabel: this.app.i18n._('Port'),
                     name: 'smtp_port',
-                    allowBlank: false
+                    allowBlank: false,
+                    maxLength: 5,
+                    xtype:'numberfield'
                 }, {
                     fieldLabel: this.app.i18n._('Authentication'),
                     name: 'smtp_auth',
-                    allowBlank: false
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    xtype: 'combo',
+                    value: 'login',
+                    store: [
+                        ['login',  _('Login')],
+                        ['plain',  _('Plain')]
+                    ]
                 }]]
             }]
         };
@@ -162,7 +192,7 @@ Tine.Felamimail.AccountEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 400,
-        height: 300,
+        height: 400,
         name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Felamimail.AccountEditDialog',
         contentPanelConstructorConfig: config
