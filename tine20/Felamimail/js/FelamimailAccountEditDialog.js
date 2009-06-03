@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add more input fields
+ * TODO         finish dialog
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -44,26 +44,113 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         return {
-            autoScroll: true,
+            xtype: 'tabpanel',
             border: false,
-            frame: true,
-            xtype: 'columnform',
-            formDefaults: {
-                xtype:'textfield',
-                anchor: '90%',
-                labelSeparator: '',
-                maxLength: 256,
-                columnWidth: 1
-            },
-            items: [[{
-                fieldLabel: this.app.i18n._('Name'),
-                name: 'name',
-                allowBlank: false
-            }, {
-                fieldLabel: this.app.i18n._('Host'),
-                name: 'host',
-                allowBlank: false
-            }]]      
+            plain:true,
+            activeTab: 0,
+            items:[{               
+                title: this.app.i18n._('Account'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '90%',
+                    labelSeparator: '',
+                    maxLength: 256,
+                    columnWidth: 1
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n._('Account Name'),
+                    name: 'name',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('User Email'),
+                    name: 'email',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('User Name (From)'),
+                    name: 'from'
+                }]]
+            }, {               
+                title: this.app.i18n._('User'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '90%',
+                    labelSeparator: '',
+                    maxLength: 256,
+                    columnWidth: 1
+                },
+                items: [[ {
+                    fieldLabel: this.app.i18n._('Username'),
+                    name: 'user',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('Password'),
+                    name: 'password',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('Signature'),
+                    name: 'signature'
+                }]]
+            }, {               
+                title: this.app.i18n._('IMAP'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '90%',
+                    labelSeparator: '',
+                    maxLength: 256,
+                    columnWidth: 1
+                },
+                items: [[ {
+                    fieldLabel: this.app.i18n._('Host'),
+                    name: 'host',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('Port'),
+                    name: 'port',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('Connection'),
+                    name: 'secure_connection',
+                    allowBlank: false
+                }]]
+            }, {               
+                title: this.app.i18n._('SMTP'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '90%',
+                    labelSeparator: '',
+                    maxLength: 256,
+                    columnWidth: 1
+                },
+                items: [[ {
+                    fieldLabel: this.app.i18n._('Host'),
+                    name: 'smtp_hostname',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('Port'),
+                    name: 'smtp_port',
+                    allowBlank: false
+                }, {
+                    fieldLabel: this.app.i18n._('Authentication'),
+                    name: 'smtp_auth',
+                    allowBlank: false
+                }]]
+            }]
         };
     }
 });
