@@ -9,8 +9,6 @@
  *
  * TODO         reload folders (and number of unread messages) every x minutes 
  *              -> via ping or ext.util.delayedtask ?
- * 
- * TODO         add folder model?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  */
  
@@ -93,14 +91,14 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     addAccount: function(record) {
         
         var node = new Ext.tree.AsyncTreeNode({
-            id: 'default',
+            id: record.data.id,
             record: record,
             globalname: '',
             draggable: false,
             allowDrop: false,
             expanded: false,
             text: record.get('name'),
-            qtip: record.get('user') + '@' + record.get('host'),
+            qtip: record.get('host'),
             leaf: false,
             account_id: record.data.id
         });
@@ -199,14 +197,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     /**
      * @private
-     * 
-     * TODO expand default account inbox
      */
     afterRender: function() {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
 
-        this.expandPath('/root/default/');
-        this.selectPath('/root/default/');
+        var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+        this.expandPath('/root/' + defaultAccount + '/');
+        this.selectPath('/root/' + defaultAccount + '/');
     },
     
     /**
