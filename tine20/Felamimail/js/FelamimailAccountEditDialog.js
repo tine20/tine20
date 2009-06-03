@@ -41,27 +41,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
+     * 
+     * TODO use tabpanel?
      */
     getFormItems: function() {
         return {
-            xtype: 'tabpanel',
-            id: 'account-edit-tabpanel',
-            border: false,
-            plain:true,
-            activeTab: 0,
-            listeners: {
-                scope: this,
-                tabchange: function(panel, tab) {
-                    // we need this as workaround as form is not initialized/filled with defaults in inactive tabs :(
-                    // TODO find a better way for that because we can't check validity of 
-                    //    fields in other tabs when they haven't been initialized
-                    if (! tab.hasbeenselected) {
-                        this.getForm().loadRecord(this.record);
-                        tab.hasbeenselected = true;
-                    }
-                }
-            },
-            items:[{               
+            layout: 'accordion',
+            animate: true,
+            width: 210,
+            margins: '0 5 0 5',
+            border: true,
+            items: [{
                 title: this.app.i18n._('Account'),
                 autoScroll: true,
                 border: false,
@@ -138,7 +128,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     fieldLabel: this.app.i18n._('Password'),
                     name: 'password',
-                    allowBlank: false,
+                    emptyText: 'password',
                     inputType: 'password'
                 }]]
             }, {               
@@ -157,11 +147,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: [[ {
                     fieldLabel: this.app.i18n._('Host'),
                     name: 'smtp_hostname'
-                    //allowBlank: false
                 }, {
                     fieldLabel: this.app.i18n._('Port'),
                     name: 'smtp_port',
-                    //allowBlank: false,
                     maxLength: 5,
                     xtype:'numberfield'
                 }, {
@@ -172,7 +160,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     lazyRender    : true,
                     editable      : false,
                     mode          : 'local',
-                    //forceSelection: true,
                     value: 'none',
                     xtype: 'combo',
                     store: [
@@ -188,7 +175,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     lazyRender    : true,
                     editable      : false,
                     mode          : 'local',
-                    //forceSelection: true,
                     xtype: 'combo',
                     value: 'login',
                     store: [
@@ -205,7 +191,28 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false,
                     inputType: 'password'
                 }*/]]
-            }]
+            }]            
+            
+            /*
+            xtype: 'tabpanel',
+            id: 'account-edit-tabpanel',
+            border: false,
+            plain:true,
+            activeTab: 0,
+            listeners: {
+                scope: this,
+                tabchange: function(panel, tab) {
+                    // we need this as workaround as form is not initialized/filled with defaults in inactive tabs :(
+                    // TODO find a better way for that because we can't check validity of 
+                    //    fields in other tabs when they haven't been initialized
+                    if (! tab.hasbeenselected) {
+                        this.getForm().loadRecord(this.record);
+                        tab.hasbeenselected = true;
+                    }
+                }
+            },
+            items:[]
+            */
         };
     }
 });
@@ -217,7 +224,7 @@ Tine.Felamimail.AccountEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 400,
-        height: 400,
+        height: 500,
         name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Felamimail.AccountEditDialog',
         contentPanelConstructorConfig: config
