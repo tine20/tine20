@@ -119,22 +119,20 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail
 Tine.Felamimail.Model.Account.getDefaultData = function() { 
     var defaults = (Tine.Felamimail.registry.get('defaults')) 
         ? Tine.Felamimail.registry.get('defaults')
-        : {
-            host: '',
-            port: 143,
-            smtp: {
-                hostname: '',
-                port: 25,
-                auth: 'tls'
-            }
-        };
+        : {};
     
     return {
-        host: defaults.host,
-        port: defaults.port,
-        smtp_hostname: defaults.smtp.hostname,
-        smtp_auth: defaults.smtp.auth,
-        smtp_port: defaults.smtp.port
+        host: (defaults.host) ? defaults.host : '',
+        port: (defaults.port) ? defaults.port : 143,
+        smtp_hostname: (defaults.smtp.hostname) ? defaults.smtp.hostname : '',
+        smtp_port: (defaults.smtp.port) ? defaults.smtp.port : 25,
+        // TODO remove these later ?
+        name: 'new account',
+        email: 'unittest@tine20.org',
+        user: 'unittest@tine20.org',
+        signature: 'Sent with love from the new tine 2.0 email client ...<br/>'
+            + 'Please visit <a href="http://tine20.org">http://tine20.org</a>',
+        smtp_secure_connection: 'tls'
     };
 };
 
