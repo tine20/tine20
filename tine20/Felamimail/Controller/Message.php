@@ -5,11 +5,10 @@
  * @package     Felamimail
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add acl
  */
 
 /**
@@ -322,7 +321,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_message
      * 
      * @todo set In-Reply-To header for replies (which message id?)
-     * @todo add smtp host from account settings
      * @todo add name for to/cc/bcc
      * @todo add max attachment size check?
      */
@@ -376,15 +374,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $part->type = $attachment['type'];
                 $part->filename = $attachment['name'];
                 $part->encoding = Zend_Mime::ENCODING_BASE64;
-                $part->disposition = Zend_Mime::ENCODING_BASE64; //?
+                $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
                 
                 $mail->addAttachment($part);
             }
         }
         
         // set transport + send mail
-        if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
-            $smtpConfig = Tinebase_Core::getConfig()->imap->smtp->toArray();
+        $smtpConfig = $account->getSmtpConfig();
+        if (! empty($smtpConfig)) {
             $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
             
             // send message via smtp

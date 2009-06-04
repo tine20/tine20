@@ -10,7 +10,6 @@
  * 
  * @todo        update account credentials if user password changed
  * @todo        use enum/array for tls (and more fields?)
- * @todo        add user/pass for smtp or use the imap credentials?
  */
 
 /**
@@ -69,6 +68,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'smtp_auth'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'login'),
         'smtp_secure_connection'=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),
         'smtp_credentials_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'smtp_user'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'smtp_password'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -113,12 +114,26 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      *
      * @return array
      * 
-     * @todo finish
+     * @todo add values from config to empty fields ?
      */
     public function getSmtpConfig()
     {
+        $this->resolveCredentials(FALSE, TRUE, TRUE);
+        
+        // add values from config to empty fields
+        /*
+        if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
+            $smtpConfig = Tinebase_Core::getConfig()->imap->smtp;
+        }
+        */
+        
         $result = array(
-            'host'  => $this->smtp_hostname,
+            'hostname'  => $this->smtp_hostname,
+            'username'  => $this->smtp_user,
+            'password'  => $this->smtp_password,
+            'ssl'       => $this->smtp_secure_connection,
+            'port'      => $this->smtp_port,
+            'auth'      => $this->smtp_auth,        
         );
         
         return $result;
@@ -143,13 +158,15 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * resolve credentials
      *
      */
-    public function resolveCredentials($_onlyUsername = TRUE, $_throwException = FALSE)
+    public function resolveCredentials($_onlyUsername = TRUE, $_throwException = FALSE, $_smtp = FALSE)
     {
         if (! $this->user || (! $this->password && ! $_onlyUsername)) {
             
-            if (! $this->credentials_id) {
+            $fieldname = ($_smtp) ? smtp_credentials_id : credentials_id;
+            
+            if (! $this->{$fieldname}) {
                 if ($_throwException) {
-                    throw new Felamimail_Exception('Could not get IMAP credentials, no credential id given.');
+                    throw new Felamimail_Exception('Could not get credentials, no ' . $fieldname . ' given.');
                 } else {
                     return;
                 }
@@ -159,12 +176,17 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
             $credentialsBackend->getCachedCredentials($userCredentialCache);
             
-            $credentials = $credentialsBackend->get($this->credentials_id);
+            $credentials = $credentialsBackend->get($this->{$fieldname});
             $credentials->key = substr($userCredentialCache->password, 0, 24);
             $credentialsBackend->getCachedCredentials($credentials);
             
-            $this->user = $credentials->username;
-            $this->password = $credentials->password;
+            if ($_smtp) {
+                $this->smtp_user = $credentials->username;
+                $this->smtp_password = $credentials->password;
+            } else {
+                $this->user = $credentials->username;
+                $this->password = $credentials->password;
+            }
         }
     }
 }
