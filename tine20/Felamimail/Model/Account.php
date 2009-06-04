@@ -162,7 +162,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     {
         if (! $this->user || (! $this->password && ! $_onlyUsername)) {
             
-            $fieldname = ($_smtp) ? smtp_credentials_id : credentials_id;
+            $fieldname = ($_smtp) ? 'smtp_credentials_id' : 'credentials_id';
             
             if (! $this->{$fieldname}) {
                 if ($_throwException) {
