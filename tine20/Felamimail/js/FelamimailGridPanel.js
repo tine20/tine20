@@ -236,10 +236,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             dataIndex: 'id',
             hidden: true
         }, {
-            id: 'hasAttachment',
+            id: 'content_type',
             width: 12,
             sortable: true,
-            dataIndex: 'hasAttachment',
+            dataIndex: 'content_type',
             renderer: this.attachmentRenderer
         }, {
             id: 'flags',
@@ -298,7 +298,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @return {string}
      */
     attachmentRenderer: function(value) {
-        return (value == 1) ? '<img class="FelamimailFlagIcon" src="images/oxygen/16x16/actions/attach.png">' : '';
+        return (value.match(/multipart\/mixed/)) ? '<img class="FelamimailFlagIcon" src="images/oxygen/16x16/actions/attach.png">' : '';
     },
     
     /**

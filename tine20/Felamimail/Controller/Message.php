@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        check html purifier config (allow some tags/attributes?)
+ * @todo        add purifier preference?
  */
 
 /**
@@ -166,7 +168,45 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             /********* add body ****************/
             
-            $message->body = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+            // get html body part if multipart/alternative
+            if (! preg_match('/text\/plain/', $message->content_type)) {
+                
+                if (preg_match('/multipart\/alternative/', $message->content_type)) {
+                    // get correct part (html)
+                    $found = FALSE;
+                    $count = 1;
+                    while (! $found && $count <= $imapMessage->countParts()) {
+                        $part = $imapMessage->getPart($count++);
+                        $headers = $part->getHeaders();
+                        if (preg_match('/text\/html/', $headers['content-type'])) {
+                            $body = $part->getContent();
+                            $found = TRUE;
+                        }
+                    }
+                    
+                    if (! $found) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get html body.');
+                        $body = '';
+                    }
+                    
+                } else {
+                    // html text
+                    $body = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+                }
+                
+                // purify
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Purifying html body.');
+                
+                require_once 'HTMLPurifier/HTMLPurifier.auto.php';
+                $purifier = new HTMLPurifier();
+                $body = $purifier->purify($body);
+                
+            } else {
+                // plain text
+                $body = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+            }
+            
+            $message->body = $body;
             
             /********* add header **************/
             
@@ -178,7 +218,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $messageParts = $imapMessage->countParts();
             if ( $messageParts > 1) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get ' 
-                    . $messageParts-1 . ' attachments.'
+                    . ($messageParts-1) . ' attachments.'
                 );
                 $partNumber = 2;
                 while ($partNumber <= $messageParts) {

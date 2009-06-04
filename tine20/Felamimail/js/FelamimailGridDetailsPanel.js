@@ -9,6 +9,7 @@
  *
  * TODO         add preference to show mails in html or text
  * TODO         replace 'mailto:' links and email addresses in message body with 'open compose tine mail dialog'
+ * TODO         replace telephone numbers in emails with 'call contact' link
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -119,7 +120,10 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             showBody: function(value, headers) {
                 if (value) {
                     
-                    if (headers['content-type'] && headers['content-type'].match(/text\/html/)) {
+                    if (headers['content-type']
+                        && (headers['content-type'].match(/text\/html/) || headers['content-type'].match(/multipart\/alternative/))
+                    ) {
+                        // should be already purified ... but just as precaution
                         value = Ext.util.Format.stripScripts(value);
                     } else {
                         value = Ext.util.Format.htmlEncode(value);

@@ -347,7 +347,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                                 $subject = $cachedMessage->subject;
                                 break;
                             case 'hasAttachment':
-                                $cachedMessage->hasAttachment = (preg_match('/multipart\/mixed/', $message->contentType) > 0);
+                                //$cachedMessage->hasAttachment = (preg_match('/multipart\/mixed/', $message->contentType) > 0);
+                                $cachedMessage->content_type = $message->contentType;
                                 break;
                             default:
                                 $cachedMessage->{$field} = $this->_convertAddresses($message->{$field});
