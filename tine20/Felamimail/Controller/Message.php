@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add support for message/rfc822 attachments
  * @todo        check html purifier config (allow some tags/attributes?)
  * @todo        add purifier preference?
  */
@@ -195,11 +196,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
                 
                 // purify
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Purifying html body.');
-                
-                require_once 'HTMLPurifier/HTMLPurifier.auto.php';
-                $purifier = new HTMLPurifier();
-                $body = $purifier->purify($body);
+                $body = $this->_purifyBodyContent($body);
                 
             } else {
                 // plain text
@@ -226,15 +223,24 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
                     $attachment = $part->getHeaders();
                     if (isset($attachment['content-disposition'])) {
-                        preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $attachment['content-disposition'], $matches);
                         
-                        $attachment['filename']     = $matches[1];
+                        if (preg_match('/message\/rfc822/', $attachment['content-type'])) {
+                            // not supported yet
+                            $partNumber++;
+                            continue;
+                        } else {
+                            preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $attachment['content-disposition'], $matches);
+                            $attachment['filename']     = $matches[1];
+                        }
+                        
                         $attachment['partId']       = $partNumber;
                         $attachment['messageId']    = $message->getId();
                         $attachment['accountId']    = $folder->account_id;
                         $attachment['size']         = $part->getSize();
                                             
                         $attachments[] = $attachment; 
+                        
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' adding attachment: ' . print_r($attachment, true));
                     }
                     
                     $partNumber++;
@@ -550,5 +556,29 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             . '</body></html>';
             
         return $result;
+    }
+    
+    /**
+     * use html purifier to remove 'bad' tags/attributes from html body
+     *
+     * @param string $_content
+     * @return string
+     */
+    protected function _purifyBodyContent($_content)
+    {
+        $config = Tinebase_Core::getConfig();
+        $path = ($config->caching && $config->caching->active && $config->caching->path) 
+            ? $config->caching->path : session_save_path();
+
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
+        
+        require_once 'HTMLPurifier/HTMLPurifier.auto.php';
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Cache', 'SerializerPath', $path);
+        
+        $purifier = new HTMLPurifier($config);
+        $content = $purifier->purify($_content);
+        
+        return $content;
     }
 }
