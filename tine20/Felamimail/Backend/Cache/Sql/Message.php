@@ -72,6 +72,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @return Zend_Db_Select
      * 
      * @todo add name (to, cc, bcc)
+     * @todo try to remove deleted messages from result
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
@@ -88,7 +89,17 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                 );
                 $select->group($this->_tableName . '.id');
             }
+            /*
+            if (! $_getDeleted) {
+                $select->where($this->_db->quoteInto(
+                    //$this->_db->quoteIdentifier($this->_tablePrefix . $this->_foreignTables['flags'] . '.flag') . ' != ?',
+                    $this->_db->quoteIdentifier('flags') . ' NOT LIKE ?',
+                    '%\Deleted%'
+                ));
+            }
+            */
         }
+        
         
         return $select;
     }
