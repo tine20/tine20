@@ -9,8 +9,9 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add cleanup routine for deleted (by other clients)/outofdate  folders?
+ * @todo        add cleanup routine for deleted (by other clients)/outofdate folders?
  * @todo        fill cache when subfolders are initialized?
+ * @todo        get delimiter from backend?
  */
 
 /**
@@ -48,8 +49,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * Enter description here...
      * 
      * @staticvar string
-     * @todo get delimiter from backend?
-     * 
      */
     const DELIMITER = '/';
     
@@ -162,8 +161,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_parentFolder
      * @param string $_accountId [optional]
      * @return Felamimail_Model_Folder
-     * 
-     * @todo get delimiter from backend?
      */
     public function create($_folderName, $_parentFolder = '', $_accountId = 'default')
     {
@@ -208,8 +205,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_newFolderName new globalName of folder
      * @param string $_accountId [optional]
      * @return Felamimail_Model_Folder
-     * 
-     * @todo use delimiter?
      */
     public function rename($_newLocalName, $_oldGlobalName, $_accountId = 'default')
     {
@@ -244,7 +239,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      * 
      * @todo delete all subfolders from db first?
-     * @todo get delimiter from backend?
      */
     public function getSubFolders($_folderName = '', $_accountId = 'default')
     {
