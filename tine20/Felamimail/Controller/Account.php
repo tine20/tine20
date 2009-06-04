@@ -28,6 +28,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected $_applicationName = 'Felamimail';
     
     /**
+     * we need this for the searchCount -> set to true if default account has been added
+     *
+     * @var boolean
+     */
+    protected $_addedDefaultAccount = FALSE;
+    
+    /**
      * holdes the instance of the singleton
      *
      * @var Felamimail_Controller_Account
@@ -103,7 +110,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
     {
         $count = parent::searchCount($_filter);        
-        if (isset(Tinebase_Core::getConfig()->imap)) {
+        if ($this->_addedDefaultAccount) {
             $count++;
         }
         return $count;
@@ -251,6 +258,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 );
                 $defaultAccount->setId('default');
                 $_accounts->addRecord($defaultAccount);
+                $this->_addedDefaultAccount = TRUE;
+                
             } catch (Tinebase_Exception $e) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $e->getMessage());
             }
@@ -279,6 +288,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 // create new account
                 $defaultAccount = $this->_backend->create($defaultAccount);
                 $_accounts->addRecord($defaultAccount);
+                $this->_addedDefaultAccount = TRUE;
                 
                 // set as default account preference
                 Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccount->getId();

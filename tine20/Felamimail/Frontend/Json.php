@@ -345,6 +345,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
+     * 
+     * @todo get default account data (host, port, ...) from preferences?
      */
     public function getRegistryData()
     {

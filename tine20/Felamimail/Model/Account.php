@@ -114,7 +114,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      *
      * @return array
      * 
-     * @todo add values from config to empty fields ?
+     * @todo add values from config/preferences to empty fields ?
      */
     public function getSmtpConfig()
     {
