@@ -244,6 +244,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         // add account from config.inc.php if available
         if (isset(Tinebase_Core::getConfig()->imap) && Tinebase_Core::getConfig()->imap->useAsDefault) {
+            
             try {
                 $defaultAccount = new Felamimail_Model_Account(
                     Tinebase_Core::getConfig()->imap->toArray()
@@ -253,9 +254,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             } catch (Tinebase_Exception $e) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $e->getMessage());
             }
+            
         // create new account with user credentials (if preference is set)
         } else if (count($_accounts) == 0 && Tinebase_Core::getPreference('Felamimail')->userEmailAccount) {
-            $defaultAccount = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray(), TRUE);
+            
+            $accountData = (Tinebase_Core::getConfig()->imap) ? Tinebase_Core::getConfig()->imap->toArray() : array();
+            $defaultAccount = new Felamimail_Model_Account($accountData, TRUE);
             
             $userId = $this->_currentAccount->getId();
             $defaultAccount->user_id = $userId;
