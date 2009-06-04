@@ -124,8 +124,8 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
     return {
         host: (defaults.host) ? defaults.host : '',
         port: (defaults.port) ? defaults.port : 143,
-        smtp_hostname: (defaults.smtp.hostname) ? defaults.smtp.hostname : '',
-        smtp_port: (defaults.smtp.port) ? defaults.smtp.port : 25,
+        smtp_hostname: (defaults.smtp && defaults.smtp.hostname) ? defaults.smtp.hostname : '',
+        smtp_port: (defaults.smtp && defaults.smtp.port) ? defaults.smtp.port : 25,
         signature: 'Sent with love from the new tine 2.0 email client ...<br/>'
             + 'Please visit <a href="http://tine20.org">http://tine20.org</a>'
         // some more possible defaults
