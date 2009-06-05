@@ -25,6 +25,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     defaultHeight: 300,
     currentId: null,
     record: null,
+    il8n: null,
     
     /**
      * init
@@ -94,10 +95,11 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         this.tpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.showHeaders(values.headers)]}">',
-                    '<b>' + _('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
-                    '<b>' + _('From') + ':</b> {[this.encode(values.from)]}',
+                    '<b>' + this.il8n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
+                    '<b>' + this.il8n._('From') + ':</b> {[this.encode(values.from)]}',
                 '</div>',
-                '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments)]}</div>',
+                '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
+                    + this.il8n._('Attachments') + '")]}</div>',
                 '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers)]}</div>',
             '</div>',{
             
@@ -153,8 +155,8 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             },
             
             // TODO add 'download all' button
-            showAttachments: function(value) {
-                var result = (value.length > 0) ? '<b>' + _('Attachments') + ':</b> ' : '';
+            showAttachments: function(value, text) {
+                var result = (value.length > 0) ? '<b>' + text + ':</b> ' : '';
                 for (var i=0, id; i < value.length; i++) {
                     id = Ext.id() + ':' + value[i].partId;
                     result += '<span id="' + id + '" class="tinebase-download-link">' 
