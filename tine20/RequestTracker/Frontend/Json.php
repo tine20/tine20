@@ -51,6 +51,8 @@ class RequestTracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $filter
      * @param string $paging
      * @return array
+     * 
+     * @todo show error message in js frontend when Tinebase_Exception_NotFound is catched
      */
     public function searchTickets($filter, $paging)
     {
