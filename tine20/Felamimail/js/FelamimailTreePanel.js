@@ -9,6 +9,9 @@
  *
  * TODO         reload folders (and number of unread messages) every x minutes 
  *              -> via ping or ext.util.delayedtask ?
+ * TODO         show error message when username/password is wrong/missing
+ * TODO         add ctx menu action for 'refreshing' of folders
+ * TODO         refresh folders when account has changed
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  */
  
