@@ -195,6 +195,9 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         // get unread count
         $seenCount = $this->_messageCacheBackend->seenCountByFolderId($_folderId);
         $folder->unreadcount = $messageCount - $seenCount;
+        if ($folder->unreadcount < 0) {
+            $folder->unreadcount = 0;
+        }
         $folder->totalcount = $messageCount;
         
         $folder = $this->_folderBackend->update($folder);        
