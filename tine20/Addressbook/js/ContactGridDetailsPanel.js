@@ -20,11 +20,17 @@ Ext.namespace('Tine.Addressbook');
 Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     il8n: null,
+    felamimail: false,
     
     /**
      * init
      */
     initComponent: function() {
+
+        // check if felamimail is installed and user has run right
+        if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
+            this.felamimail = true;
+        }
 
         // init templates
         this.initTemplate();
@@ -39,7 +45,9 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
     afterRender: function() {
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
         
-        this.body.on('click', this.onClick, this);
+        if (this.felamimail) {
+            this.body.on('click', this.onClick, this);
+        }
     },
     
     /**
@@ -135,7 +143,8 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                             '<span class="preview-panel-symbolcompare">' + this.il8n._('Phone') + '</span>{[this.encode(values.tel_work)]}<br/>',
                             '<span class="preview-panel-symbolcompare">' + this.il8n._('Mobile') + '</span>{[this.encode(values.tel_cell)]}<br/>',
                             '<span class="preview-panel-symbolcompare">' + this.il8n._('Fax') + '</span>{[this.encode(values.tel_fax)]}<br/>',
-                            '<span class="preview-panel-symbolcompare">' + this.il8n._('E-Mail') + '</span><a href="mailto:{[this.encode(values.email)]}">{[this.encode(values.email, "shorttext")]}</a><br/>',
+                            '<span class="preview-panel-symbolcompare">' + this.il8n._('E-Mail') 
+                                + '</span>{[this.getMailLink(values.email, ' + this.felamimail + ')]}<br/>',
                             '<span class="preview-panel-symbolcompare">' + this.il8n._('Web') + '</span><a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url, "shorttext")]}</a><br/>',
                         '</div>',
                     '</div>',
@@ -158,7 +167,8 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                         '<span class="preview-panel-symbolcompare">' + this.il8n._('Phone') + '</span>{[this.encode(values.tel_home)]}<br/>',
                         '<span class="preview-panel-symbolcompare">' + this.il8n._('Mobile') + '</span>{[this.encode(values.tel_cell_private)]}<br/>',
                         '<span class="preview-panel-symbolcompare">' + this.il8n._('Fax') + '</span>{[this.encode(values.tel_fax_home)]}<br/>',
-                        '<span class="preview-panel-symbolcompare">' + this.il8n._('E-Mail') + '</span><a href="mailto:{[this.encode(values.email_home)]}">{[this.encode(values.email_home, "shorttext")]}</a><br/>',
+                        '<span class="preview-panel-symbolcompare">' + this.il8n._('E-Mail') 
+                            + '</span>{[this.getMailLink(values.email_home, ' + this.felamimail + ')]}<br/>',
                         '<span class="preview-panel-symbolcompare">' + this.il8n._('Web') + '</span><a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url_home, "shorttext")]}</a><br/>',
                     '</div>',                
                 '</div>',
@@ -237,6 +247,17 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                         url.ratiomode = 0;
                     }
                     return url;
+                },
+
+                /**
+                 * get email link
+                 */
+                getMailLink: function(email, felamimail) {
+                    var link = (felamimail) ? '#' : 'mailto:' + email;
+                    var id = Ext.id() + ':' + email;
+                    
+                    return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
+                        + Ext.util.Format.ellipsis(email, 18); + '</a>';
                 }
             }
         );
@@ -246,24 +267,26 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
      * on click for compose mail
      * 
      * @param {} e
-     * 
-     * TODO make it work
      */
     onClick: function(e) {
-        /*
-        var target = e.getTarget('span[class=tinebase-download-link]');
+        var target = e.getTarget('a[class=tinebase-email-link]');
         if (target) {
-            var partId = target.id.split(':')[1];
-            var downloader = new Ext.ux.file.Download({
-                params: {
-                    requestType: 'HTTP',
-                    method: 'Felamimail.downloadAttachment',
-                    messageId: this.record.id,
-                    partId: partId
+            var email = target.id.split(':')[1];
+            var defaults = Tine.Felamimail.Model.Message.getDefaultData();
+            defaults.to = [email];
+            
+            var record = new Tine.Felamimail.Model.Message(defaults);
+            var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
+                record: record
+                /*
+                listeners: {
+                    scope: this,
+                    'update': function(record) {
+                        this.store.load({});
+                    }
                 }
+                */
             });
-            downloader.start();
         }
-        */
     }
 });
