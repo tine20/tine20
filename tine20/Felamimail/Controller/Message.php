@@ -540,13 +540,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _purifyBodyContent($_content)
     {
+        $purifierFilename = 'HTMLPurifier' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php'; 
+        if (! file_exists(dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . $purifierFilename) ) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' HTML purifier not found. Mail body could not be purified. Proceed at your own risk!');
+            return $_content;
+        }
+        
         $config = Tinebase_Core::getConfig();
         $path = ($config->caching && $config->caching->active && $config->caching->path) 
             ? $config->caching->path : session_save_path();
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
         
-        require_once 'HTMLPurifier/HTMLPurifier.auto.php';
+        require_once $purifierFilename;
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Cache', 'SerializerPath', $path);
         
