@@ -438,9 +438,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         // add signature (get it from default account settings)
         if (Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount')) {
-            var signature = this.app.getMainScreen().getTreePanel().accountStore.getById(
+            var defaultAccount = this.app.getMainScreen().getTreePanel().accountStore.getById(
                 Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount')
-            ).get('signature');
+            );
+            var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
             if (signature && signature != '') {
                 recordData.body += '<br/><span class="felamimail-body-signature">--<br/>' + signature + '</span>';
             }
