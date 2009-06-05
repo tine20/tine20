@@ -124,7 +124,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
         
         // no paging -> don't do initial cache import
-        if (empty($paging)) {
+        if (empty($paging) || $result['totalcount'] == 0) {
             return $result;
         }
         
