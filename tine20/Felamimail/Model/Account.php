@@ -9,7 +9,6 @@
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
  * @todo        update account credentials if user password changed
- * @todo        use enum/array for tls (and more fields?)
  */
 
 /**
@@ -24,6 +23,24 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      *
      */
     const DEFAULT_ACCOUNT_ID = 'default';
+    
+    /**
+     * secure connection setting for no secure connection
+     *
+     */
+    const SECURE_NONE = 'none';
+
+    /**
+     * secure connection setting for tls
+     *
+     */
+    const SECURE_TLS = 'tls';
+
+    /**
+     * secure connection setting for ssl
+     *
+     */
+    const SECURE_SSL = 'ssl';
     
     /**
      * key in $_validators/$_properties array for the field which 
@@ -54,7 +71,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     // imap server config
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
-        'secure_connection'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),
+        'secure_connection'     => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            Zend_Filter_Input::DEFAULT_VALUE => 'tls',
+            'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
+        ),
         'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -66,7 +87,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'smtp_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 25),
         'smtp_hostname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_auth'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'login'),
-        'smtp_secure_connection'=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'tls'),
+        'smtp_secure_connection'=> array(
+            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            Zend_Filter_Input::DEFAULT_VALUE => 'tls',
+            'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
+        ),
         'smtp_credentials_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'smtp_user'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_password'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -131,10 +156,16 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             'hostname'  => $this->smtp_hostname,
             'username'  => $this->smtp_user,
             'password'  => $this->smtp_password,
-            'ssl'       => $this->smtp_secure_connection,
-            'port'      => $this->smtp_port,
             'auth'      => $this->smtp_auth,        
         );
+        
+        if ($this->smtp_secure_connection && $this->smtp_secure_connection != 'none') {
+            $result['ssl'] = $this->smtp_secure_connection; 
+        }
+
+        if ($this->smtp_port) {
+            $result['port'] = $this->smtp_port; 
+        }
         
         return $result;
     }
