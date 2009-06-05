@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        add support for message/rfc822 attachments
+ * @todo        parse mail body and add <a> to links, telephone numbers and email addresses?
  * @todo        check html purifier config (allow some tags/attributes?)
  */
 
