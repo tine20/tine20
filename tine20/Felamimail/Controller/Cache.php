@@ -123,7 +123,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Select Folder: ' . $backend->getCurrentFolder() 
-            //' Values: ' . print_r($backendFolderValues, TRUE)
+            . ' Values: ' . print_r($backendFolderValues, TRUE)
         );
         
         // remove old \Recent flag from cached messages
