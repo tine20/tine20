@@ -83,6 +83,7 @@ Tine.widgets.tree.ContextMenu = {
             deleteNode: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
+                    console.log(node);
                     Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), config.nodeName, node.text), function(_btn){
                         if ( _btn == 'yes') {
                             Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), config.nodeName , node.text));
@@ -91,12 +92,15 @@ Tine.widgets.tree.ContextMenu = {
                                 method: config.backend + '.delete' + config.backendModel
                             }
                             
-                            // TODO try to generalize this
                             if (config.backendModel == 'Container') {
                                 params.containerId = node.attributes.container.id
                             } else if (config.backendModel == 'Folder') {
                                 params.folder = node.attributes.globalname;
                                 params.accountId = node.attributes.account_id;
+                            } else {
+                                // use default json api style
+                                params.ids = [node.id];
+                                params.method = params.method + 's';
                             }
                             
                             Ext.Ajax.request({
