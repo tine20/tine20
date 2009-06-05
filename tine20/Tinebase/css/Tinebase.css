@@ -193,7 +193,12 @@ html, body {
 	color: blue;
 }
 
-/* TODO try to make that work */
-.tinebase-download-link span:hover{
+span:hover.tinebase-download-link {
+    color: #4444ff;
+}
+
+/******** email ***********/
+
+a:hover.tinebase-email-link {
     color: #4444ff;
 }
