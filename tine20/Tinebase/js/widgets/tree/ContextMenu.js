@@ -34,8 +34,6 @@ Tine.widgets.tree.ContextMenu = {
              * create
              */
             addNode: function() {
-                //console.log('add');
-                //console.log(this.ctxNode);
                 Ext.MessageBox.prompt(String.format(_('New {0}'), config.nodeName), String.format(_('Please enter the name of the new {0}:'), config.nodeName), function(_btn, _text) {
                     if( this.ctxNode && _btn == 'ok') {
                         if (! _text) {
@@ -83,7 +81,6 @@ Tine.widgets.tree.ContextMenu = {
             deleteNode: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
-                    console.log(node);
                     Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), config.nodeName, node.text), function(_btn){
                         if ( _btn == 'yes') {
                             Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), config.nodeName , node.text));
