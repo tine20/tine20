@@ -119,6 +119,12 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             return 0;
         }
         $backendFolderValues = $backend->selectFolder($folder->globalname);
+        
+        // init uidnext if empty
+        if (! isset($backendFolderValues['uidnext'])) {
+            $backendFolderValues['uidnext'] = 1;
+        }
+        
         $messageCount = $backend->countMessages();
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
