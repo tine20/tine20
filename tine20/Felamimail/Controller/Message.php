@@ -11,7 +11,6 @@
  * 
  * @todo        add support for message/rfc822 attachments
  * @todo        check html purifier config (allow some tags/attributes?)
- * @todo        add purifier preference?
  */
 
 /**
@@ -107,7 +106,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo add support for multiple folders
+     * @todo add support for multiple folders?
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
@@ -167,88 +166,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             $imapMessage = $imapBackend->getMessage($message->messageuid);
             
-            /********* add body ****************/
+            // add body
+            $message->body = $this->_getBody($imapMessage, $message->content_type);
             
-            // get html body part if multipart/alternative
-            if (! preg_match('/text\/plain/', $message->content_type)) {
-                
-                if (preg_match('/multipart\/alternative/', $message->content_type)) {
-                    // get correct part (html)
-                    $found = FALSE;
-                    $count = 1;
-                    while (! $found && $count <= $imapMessage->countParts()) {
-                        $part = $imapMessage->getPart($count++);
-                        $headers = $part->getHeaders();
-                        if (preg_match('/text\/html/', $headers['content-type'])) {
-                            $body = $part->getContent();
-                            $found = TRUE;
-                        }
-                    }
-                    
-                    if (! $found) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get html body.');
-                        $body = '';
-                    }
-                    
-                } else {
-                    // html text
-                    $body = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
-                }
-                
-                // purify
-                $body = $this->_purifyBodyContent($body);
-                
-            } else {
-                // plain text
-                $body = $imapMessage->getBody(Zend_Mime::TYPE_TEXT);
-            }
-            
-            $message->body = $body;
-            
-            /********* add header **************/
-            
+            // add header
             $message->headers = $imapMessage->getHeaders();
             
-            /********* add attachments *********/
-            
-            $attachments   = array();
-            $messageParts = $imapMessage->countParts();
-            if ( $messageParts > 1) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get ' 
-                    . ($messageParts-1) . ' attachments.'
-                );
-                $partNumber = 2;
-                while ($partNumber <= $messageParts) {
-                    $part = $imapMessage->getPart($partNumber);
-
-                    $attachment = $part->getHeaders();
-                    if (isset($attachment['content-disposition'])) {
-                        
-                        if (preg_match('/message\/rfc822/', $attachment['content-type'])) {
-                            // not supported yet
-                            $partNumber++;
-                            continue;
-                        } else {
-                            preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $attachment['content-disposition'], $matches);
-                            $attachment['filename']     = $matches[1];
-                        }
-                        
-                        $attachment['partId']       = $partNumber;
-                        $attachment['messageId']    = $message->getId();
-                        $attachment['accountId']    = $folder->account_id;
-                        $attachment['size']         = $part->getSize();
-                                            
-                        $attachments[] = $attachment; 
-                        
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' adding attachment: ' . print_r($attachment, true));
-                    }
-                    
-                    $partNumber++;
-                } 
-            }
-            $message->attachments = $attachments;
-            
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+            // add attachments
+            $message->attachments = $this->_getAttachments($imapMessage, $folder->account_id, $message->getId());
             
             // set \Seen flag
             if (preg_match('/\\Seen/', $message->flags) === 0) {
@@ -256,6 +181,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $this->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN), $folder);
             }
         }
+
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
         return $message;
     }
@@ -559,6 +486,52 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * get message body
+     *
+     * @param Zend_Mail_Message $_imapMessage
+     * @param string $_contentType
+     * @return string
+     */
+    public function _getBody($_imapMessage, $_contentType)
+    {
+        // get html body part if multipart/alternative
+        if (! preg_match('/text\/plain/', $_contentType)) {
+            
+            if (preg_match('/multipart\/alternative/', $_contentType)) {
+                // get correct part (html)
+                $found = FALSE;
+                $count = 1;
+                while (! $found && $count <= $_imapMessage->countParts()) {
+                    $part = $_imapMessage->getPart($count++);
+                    $headers = $part->getHeaders();
+                    if (preg_match('/text\/html/', $headers['content-type'])) {
+                        $body = $part->getContent();
+                        $found = TRUE;
+                    }
+                }
+                
+                if (! $found) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get html body.');
+                    $body = '';
+                }
+                
+            } else {
+                // html text
+                $body = $_imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+            }
+            
+            // purify
+            $body = $this->_purifyBodyContent($body);
+            
+        } else {
+            // plain text
+            $body = $_imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+        }
+        
+        return $body;
+    }
+    
+    /**
      * use html purifier to remove 'bad' tags/attributes from html body
      *
      * @param string $_content
@@ -580,5 +553,56 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $content = $purifier->purify($_content);
         
         return $content;
+    }
+    
+    /**
+     * get attachments of message
+     *
+     * @param Zend_Mail_Message $_imapMessage
+     * @param string $_accountId
+     * @param string $_messageId
+     * @return array
+     * 
+     * @todo make it possible to add message/rfc822 attachments
+     */
+    protected function _getAttachments($_imapMessage, $_accountId, $_messageId)
+    {
+        $attachments = array();
+        $messageParts = $_imapMessage->countParts();
+        if ($messageParts > 1) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get ' 
+                . ($messageParts-1) . ' attachments.'
+            );
+            $partNumber = 2;
+            while ($partNumber <= $messageParts) {
+                $part = $_imapMessage->getPart($partNumber);
+
+                $attachment = $part->getHeaders();
+                if (isset($attachment['content-disposition'])) {
+                    
+                    if (preg_match('/message\/rfc822/', $attachment['content-type'])) {
+                        // not supported yet
+                        $partNumber++;
+                        continue;
+                    } else {
+                        preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $attachment['content-disposition'], $matches);
+                        $attachment['filename']     = $matches[1];
+                    }
+                    
+                    $attachment['partId']       = $partNumber;
+                    $attachment['messageId']    = $_messageId;
+                    $attachment['accountId']    = $_accountId;
+                    $attachment['size']         = $part->getSize();
+                                        
+                    $attachments[] = $attachment; 
+                    
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' adding attachment: ' . print_r($attachment, true));
+                }
+                
+                $partNumber++;
+            } 
+        }
+        
+        return $attachments;
     }
 }
