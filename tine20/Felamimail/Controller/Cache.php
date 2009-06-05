@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add recursive import function
  */
 
 /**
@@ -129,7 +130,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Select Folder: ' . $backend->getCurrentFolder() 
-            . ' Values: ' . print_r($backendFolderValues, TRUE)
+            //. ' Values: ' . print_r($backendFolderValues, TRUE)
         );
         
         // remove old \Recent flag from cached messages
@@ -324,7 +325,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
     protected function _addMessages($_messages, $_folderId)
     {
         // set fields with try / catch blocks
-        $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'hasAttachment');
+        $exceptionFields = array('subject', 'to', 'cc', 'bcc', 'content_type');
         
         // set time limit to infinity for this operation
         set_time_limit(0);
@@ -355,15 +356,14 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                                 $cachedMessage->subject = Felamimail_Message::convertText($message->subject);
                                 $subject = $cachedMessage->subject;
                                 break;
-                            case 'hasAttachment':
-                                //$cachedMessage->hasAttachment = (preg_match('/multipart\/mixed/', $message->contentType) > 0);
+                            case 'content_type':
                                 $cachedMessage->content_type = $message->contentType;
                                 break;
                             default:
                                 $cachedMessage->{$field} = $this->_convertAddresses($message->{$field});
                         }
                     } catch (Zend_Mail_Exception $zme) {
-                        // no 'subject', 'to', 'cc', 'bcc' available
+                        // no 'subject', 'to', 'cc', 'bcc' or content_type available
                     }
                 }
                 
@@ -403,12 +403,11 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             }
             
             try {
-                # Fri,  6 Mar 2009 20:00:36 +0100
+                // Fri,  6 Mar 2009 20:00:36 +0100
                 $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
             } catch (Zend_Date_Exception $e) {
-                # Fri,  6 Mar 2009 20:00:36 CET
+                // Fri,  6 Mar 2009 20:00:36 CET
                 $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
-                #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " date header $headerValue => $dateString => $date => " . $date->get(Zend_Date::ISO_8601));
             }
 
         } else {
@@ -416,6 +415,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             $date = new Zend_Date($_dateString, $_format, 'en_US');
             
             if ($_format == Felamimail_Model_Message::DATE_FORMAT_RECEIVED) {
+                
                 if (preg_match('/ ([+-]{1})(\d{2})\d{2}$/', $_dateString, $matches)) {
                     // add / sub from zend date ?
                     if ($matches[1] == '+') {
