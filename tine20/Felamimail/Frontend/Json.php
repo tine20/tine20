@@ -133,18 +133,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         header("Connection: close");
         
         ob_start();
-        // search & output here
+
+        // output here
         //$result = $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter'); 
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($result, TRUE));
-        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . Zend_Json::encode($result));
         echo Zend_Json::encode($result);
+        
         $size = ob_get_length();
         header("Content-Length: $size");
         ob_end_flush(); // Strange behaviour, will not work
         flush();        
         Zend_Session::writeClose(true);
-        Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
 
         // update rest of cache here
         if ($result['totalcount'] > 0) {
@@ -156,8 +155,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     break;
                 }
             }
+            Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
             Felamimail_Controller_Cache::getInstance()->initialImport($folderId);
         }
+        
+        // don't output anything else ('null' or something like that)
+        die();
     }
     
     /**
