@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
+ * TODO         add preference for sending mails with felamimail or mailto?
  */
  
 Ext.namespace('Tine.Addressbook');
@@ -267,6 +268,8 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
      * on click for compose mail
      * 
      * @param {} e
+     * 
+     * TODO check if account is configured?
      */
     onClick: function(e) {
         var target = e.getTarget('a[class=tinebase-email-link]');
