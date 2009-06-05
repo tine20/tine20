@@ -124,7 +124,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      */
     public function getImapConfig()
     {
-        $this->resolveCredentials(FALSE, TRUE);
+        $this->resolveCredentials(FALSE);
         
         $imapConfigFields = array('host', 'port', 'user', 'password');
         $result = array();
@@ -199,7 +199,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 if ($_throwException) {
                     throw new Felamimail_Exception('Could not get credentials, no ' . $fieldname . ' given.');
                 } else {
-                    return;
+                    return FALSE;
                 }
             }
 
@@ -219,5 +219,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 $this->password = $credentials->password;
             }
         }
+        
+        return TRUE;
     }
 }
