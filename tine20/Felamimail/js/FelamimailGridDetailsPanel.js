@@ -100,7 +100,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 '</div>',
                 '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
                     + this.il8n._('Attachments') + '")]}</div>',
-                '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers)]}</div>',
+                '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers, values.attachments)]}</div>',
             '</div>',{
             
             encode: function(value) {
@@ -119,7 +119,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             
             // TODO check preference for mail content-type
             // TODO show image attachments inline
-            showBody: function(value, headers) {
+            showBody: function(value, headers, attachments) {
                 if (value) {
                     
                     if (headers['content-type']
@@ -133,6 +133,19 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                         value = value.replace(/ /g, '&nbsp;');
                         value = Ext.util.Format.nl2br(value);
                     }
+                    
+                    // add images inline
+                    /*
+                    var inlineAttachments = '';
+                    for (var i=0, id; i < attachments.length; i++) {
+                        console.log(attachments[i]);
+                    }
+                    
+                    if (inlineAttachments != '') {
+                        value = value + '<hr>' + inlineAttachments;
+                    }
+                    */
+                    
                 } else {
                     return '';
                 }

@@ -565,6 +565,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @return array
      * 
      * @todo make it possible to add message/rfc822 attachments
+     * @todo save images as tempfiles to show them inline the mail body
      */
     protected function _getAttachments($_imapMessage, $_accountId, $_messageId)
     {

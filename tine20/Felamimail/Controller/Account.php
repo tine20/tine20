@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        split credentials (imap & smtp)
+ * @todo        reset default account preference if default account has been deleted
  */
 
 /**
