@@ -57,10 +57,20 @@ class RequestTracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter = new RequestTracker_Model_TicketFilter(Zend_Json::decode($filter));
         $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
-        return array(
-            'results'    => $this->_getBackend()->search($filter, $paging)->toArray(),
-            'totalCount' => $this->_getBackend()->searchCount($filter)
-        );
+        try {
+            $result = array(
+                'results'    => $this->_getBackend()->search($filter, $paging)->toArray(),
+                'totalCount' => $this->_getBackend()->searchCount($filter)
+            );
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            $result = array(
+                'results' => array(),
+                'totalcount' => 0
+            );
+        }
+        
+        return $result;
     }
     
     public function getTicket($id)

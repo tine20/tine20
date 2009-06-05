@@ -400,12 +400,15 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
      */
     protected function _connect()
     {
+        if (! $this->_config->rest || $this->_config->rest->url) {
+            throw new Tinebase_Exception_NotFound('Could not connect to RequestTracker: No REST url given!');
+        }
+        
         $config = array(
             'url'       => $this->_config->rest->url,
             'useragent' => 'Tine 2.0 remote client (rv: 0.2)',
             'keepalive' => true
         );
-        
         
         $this->_httpClient = new Zend_Http_Client($this->_config->rest->url, $config);
         $this->_httpClient->setCookieJar();
