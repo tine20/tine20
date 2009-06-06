@@ -33,12 +33,17 @@ class RequestTracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchQueues()
     {
         $response = array();
-        $queues = $this->_getBackend()->getQueues();
-        foreach ($queues as $queue) {
-            $response[] = array(
-                'id'    => $queue,
-                'text'  => $queue,
-            );
+        
+        try {
+            $queues = $this->_getBackend()->getQueues();
+            foreach ($queues as $queue) {
+                $response[] = array(
+                    'id'    => $queue,
+                    'text'  => $queue,
+                );
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
         }
         
         echo Zend_Json::encode($response);
