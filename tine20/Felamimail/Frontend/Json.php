@@ -197,7 +197,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteMessages($ids)
     {
-        return array('status' => $this->_delete($ids, Felamimail_Controller_Message::getInstance()));
+        return $this->_delete($ids, Felamimail_Controller_Message::getInstance());
     }
 
     /**
