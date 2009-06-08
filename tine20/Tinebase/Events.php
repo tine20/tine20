@@ -43,8 +43,8 @@ class Tinebase_Events
         }
         
         // try custom user defined listeners
-        try{ 
-            if (class_exists('CustomEventHooks')) {
+        try { 
+            if (@class_exists('CustomEventHooks')) {
                 $methods = get_class_methods('CustomEventHooks');
                 if (in_array('handleEvents', (array)$methods)) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . ' (' . __LINE__ . ') ' . ' about to process user defined event hook for '. get_class($_eventObject));
