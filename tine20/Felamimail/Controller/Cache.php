@@ -103,6 +103,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      * @return integer number of messages in mailbox (only if cache is incomplete)
      * 
      * @todo write tests for cache handling
+     * @todo make update work for web.de
      */
     public function update($_folderId)
     {
@@ -125,12 +126,17 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         if (! isset($backendFolderValues['uidnext'])) {
             $backendFolderValues['uidnext'] = 1;
         }
-        
+
         $messageCount = $backend->countMessages();
         
+        // check if message count is strange
+        if ($messageCount < $backendFolderValues['exists']) {
+            $messageCount = $backendFolderValues['exists'];
+        }
+
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Select Folder: ' . $backend->getCurrentFolder() 
-            //. ' Values: ' . print_r($backendFolderValues, TRUE)
+            . ' Values: ' . print_r($backendFolderValues, TRUE)
         );
         
         // remove old \Recent flag from cached messages
@@ -306,6 +312,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         // set folder uidnext + uidvalidity to 0 and reset cache status
         $folder = $this->_folderBackend->get($_folderId);
         $folder->uidnext = 0;
+        $folder->totalcount = 0;
+        $folder->unreadcount = 0;
         $folder->uidvalidity = 0;
         $folder->cache_status = 'empty';
         $folder->cache_lowest_uid = 0;
@@ -479,6 +487,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
     protected function _updateInitial($_backend, $_folder, $_backendFolderValues, $_messageCount)
     {
         //$uids = $backend->getUid(1, $backend->countMessages());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting initial ' . $_messageCount .' messages.');
         
         if ($_messageCount > $this->_initialNumber) {
             $bottom = $_messageCount - $this->_initialNumber;
