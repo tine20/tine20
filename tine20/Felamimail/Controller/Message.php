@@ -492,6 +492,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Message $_imapMessage
      * @param string $_contentType
      * @return string
+     * 
+     * @todo add anchor tag to links?
      */
     public function _getBody(Felamimail_Message $_imapMessage, $_contentType)
     {
@@ -502,6 +504,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             // get html
             $body = $_imapMessage->getBody(Zend_Mime::TYPE_HTML);
+            
+            // add anchor tag to links ?
+            //$body = preg_replace('/^(href=")(http:\/\/[a-zA-Z\.0-9]+)[^"]+/', '<a href="$1">$1</a>', $body);
             
             // purify
             $body = $this->_purifyBodyContent($body);
