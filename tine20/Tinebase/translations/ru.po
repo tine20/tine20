@@ -71,20 +71,20 @@ msgstr "Установлено"
 msgid "Activities"
 msgstr "Действия"
 
-#: Frontend/Http.php:280 js/tineInit.js:257
+#: Frontend/Http.php:282 js/tineInit.js:257
 msgid "Authorisation Required"
 msgstr "Регистрация необходима"
 
-#: Frontend/Http.php:281
+#: Frontend/Http.php:283
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: Frontend/Http.php:307 js/ExceptionDialog.js:26
+#: Frontend/Http.php:309 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Frontend/Http.php:308 js/ExceptionDialog.js:51
+#: Frontend/Http.php:310 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла Ошибка, программа закончилась неправильно."
 
@@ -184,42 +184,42 @@ msgstr "вход в систему"
 msgid "Register"
 msgstr "Регистрироваться"
 
-#: js/Login.js:61 js/Login.js:97
+#: js/Login.js:61 js/Login.js:98
 msgid "Please enter your login data"
 msgstr "Пожалуйста введите свои данные входа в систему"
 
-#: js/Login.js:78
+#: js/Login.js:79
 msgid "Username"
 msgstr "Имя пользователя"
 
-#: js/Login.js:85
+#: js/Login.js:86
 msgid "Password"
 msgstr "Пароль"
 
-#: js/Login.js:125
+#: js/Login.js:126
 msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
-#: js/Login.js:125 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:126 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/grid/PersistentFilterPicker.js:125
-#: js/widgets/tree/ContextMenu.js:45 js/widgets/tree/ContextMenu.js:88
-#: js/widgets/tree/ContextMenu.js:139
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Пожалуйста подождите"
 
-#: js/Login.js:137
+#: js/Login.js:138
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
 
-#: js/Login.js:137 js/MainScreen.js:515
+#: js/Login.js:138 js/MainScreen.js:515
 msgid "Please wait!"
 msgstr "Пожалуйста подождите!"
 
-#: js/Login.js:143
+#: js/Login.js:144
 msgid "Login failure"
 msgstr "Регистрация не удалась"
 
-#: js/Login.js:144
+#: js/Login.js:145
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
@@ -316,7 +316,7 @@ msgstr ""
 #: js/MainScreen.js:513 js/widgets/app/GridPanel.js:528
 #: js/widgets/dialog/EditDialog.js:396
 #: js/widgets/grid/PersistentFilterPicker.js:123
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "Подтверждение"
 
@@ -593,13 +593,13 @@ msgstr "Пользователь"
 msgid "Edit {0}"
 msgstr "Обработать {0}"
 
-#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:204
+#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:205
 #, fuzzy
 msgid "Add {0}"
 msgstr "Добавить {0}"
 
 #: js/widgets/app/GridPanel.js:208 js/widgets/app/GridPanel.js:209
-#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:212
+#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:213
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Удалить {0}"
@@ -1176,61 +1176,61 @@ msgstr "Поиск..."
 msgid "Color"
 msgstr "Цвет"
 
-#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:37
 #, fuzzy
 msgid "New {0}"
 msgstr "Новое {0}"
 
-#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:37
 #, fuzzy
 msgid "Please enter the name of the new {0}:"
 msgstr "Пожалуйста введите новое имя {0}:"
 
-#: js/widgets/tree/ContextMenu.js:42
+#: js/widgets/tree/ContextMenu.js:40
 msgid "No {0} added"
 msgstr "{0} Не добавлины"
 
-#: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:136
+#: js/widgets/tree/ContextMenu.js:40 js/widgets/tree/ContextMenu.js:137
 msgid "You have to supply a {0} name!"
 msgstr "Вы должны назвать {0}!"
 
-#: js/widgets/tree/ContextMenu.js:45
+#: js/widgets/tree/ContextMenu.js:43
 #, fuzzy
 msgid "Creating {0}..."
 msgstr "Производ {0}..."
 
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Вы уверены что хотите удалить {0} \"{1}\"?"
 
-#: js/widgets/tree/ContextMenu.js:88
+#: js/widgets/tree/ContextMenu.js:86
 msgid "Deleting {0} \"{1}\""
 msgstr "Удаление {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:130
+#: js/widgets/tree/ContextMenu.js:131
 #, fuzzy
 msgid "Please enter the new name of the {0}:"
 msgstr "Пожалуйста введите новое имя {0}:"
 
-#: js/widgets/tree/ContextMenu.js:136
+#: js/widgets/tree/ContextMenu.js:137
 #, fuzzy
 msgid "Not renamed {0}"
 msgstr "Переименовать {0}"
 
-#: js/widgets/tree/ContextMenu.js:139
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Updating {0} \"{1}\""
 msgstr "Обновление {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:186
+#: js/widgets/tree/ContextMenu.js:187
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Управлять правами {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:220
+#: js/widgets/tree/ContextMenu.js:221
 #, fuzzy
 msgid "Rename {0}"
 msgstr "Переименовать {0}"
 
-#: js/widgets/tree/ContextMenu.js:228
+#: js/widgets/tree/ContextMenu.js:229
 msgid "Manage permissions"
 msgstr "Управлять правами доступа"
 

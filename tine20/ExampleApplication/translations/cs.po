@@ -2,100 +2,105 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-05-31 10:08+0100\n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Czech\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: js/ExampleApplication.js:27
 msgid "ExampleRecords"
-msgstr ""
+msgstr "Ukázkové záznamy"
 
 #: js/ExampleApplication.js:32
 msgid "All ExampleRecords"
-msgstr ""
+msgstr "Všechny ukázkové záznamy"
 
-#: js/ExampleRecordEditDialog.js:59 js/ExampleRecordGridPanel.js:54
+#: js/ExampleRecordEditDialog.js:59
+#: js/ExampleRecordGridPanel.js:54
 #: js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ukázkový záznam"
+msgstr[1] "Ukázkové záznamy"
+msgstr[2] "Ukázkových záznamů"
 
-#: js/ExampleRecordEditDialog.js:75 js/ExampleRecordGridPanel.js:76
+#: js/ExampleRecordEditDialog.js:75
+#: js/ExampleRecordGridPanel.js:76
 msgid "Number"
-msgstr ""
+msgstr "Počet"
 
-#: js/ExampleRecordEditDialog.js:80 js/ExampleRecordGridPanel.js:82
+#: js/ExampleRecordEditDialog.js:80
+#: js/ExampleRecordGridPanel.js:82
 msgid "Title"
-msgstr ""
+msgstr "Název"
 
 #: js/ExampleRecordEditDialog.js:89
 msgid "Unit"
-msgstr ""
+msgstr "Jednotka"
 
 #: js/ExampleRecordEditDialog.js:93
 msgid "Unit Price"
-msgstr ""
+msgstr "Jednotková cena"
 
-#: js/ExampleRecordEditDialog.js:98 js/ExampleRecordGridPanel.js:95
+#: js/ExampleRecordEditDialog.js:98
+#: js/ExampleRecordGridPanel.js:95
 msgid "Budget"
-msgstr ""
+msgstr "Rozpočet"
 
 #: js/ExampleRecordEditDialog.js:102
 msgid "Timesheets are billable"
-msgstr ""
+msgstr "Pracovní výkazy lze účtovat"
 
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:88
+#: js/ExampleRecordEditDialog.js:106
+#: js/ExampleRecordGridPanel.js:88
 msgid "Status"
-msgstr ""
+msgstr "Stav"
 
 #: js/ExampleRecordEditDialog.js:112
 msgid "closed"
-msgstr ""
+msgstr "uzavřený"
 
 #: js/ExampleRecordEditDialog.js:112
 msgid "open"
-msgstr ""
+msgstr "otevřený"
 
 #: js/ExampleRecordEditDialog.js:114
 msgid "Billed"
-msgstr ""
+msgstr "Účtovaný"
 
 #: js/ExampleRecordEditDialog.js:122
 msgid "not yet billed"
-msgstr ""
+msgstr "zatím neúčtovaný"
 
 #: js/ExampleRecordEditDialog.js:123
 msgid "to bill"
-msgstr ""
+msgstr "k účtování"
 
 #: js/ExampleRecordEditDialog.js:124
 msgid "billed"
-msgstr ""
+msgstr "účtovaný"
 
 #: js/ExampleRecordGridPanel.js:55
 msgid "Description"
-msgstr ""
+msgstr "Popis"
 
 #: js/ExampleRecordGridPanel.js:117
 msgid "Show closed"
-msgstr ""
+msgstr "Zobrazit uzavřené"
 
 #: js/Models.js:54
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "výpis záznamů"
+msgstr[1] "výpisy záznamů"
+msgstr[2] "výpisů záznamů"
 
 #: Setup/setup.xml:4
 msgid "ExampleApplication"
-msgstr ""
+msgstr "Ukázková aplikace"
+

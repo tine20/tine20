@@ -49,9 +49,9 @@ msgid "Date"
 msgstr "日期"
 
 #: Export/Ods.php:185 Export/Ods.php:246 js/TimeaccountEditDialog.js:156
-#: js/TimeaccountGridPanel.js:52 js/TimesheetEditDialog.js:167
+#: js/TimeaccountGridPanel.js:54 js/TimesheetEditDialog.js:167
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
-#: js/TimesheetGridPanel.js:394
+#: js/TimesheetGridPanel.js:395
 msgid "Description"
 msgstr "描述"
 
@@ -68,7 +68,7 @@ msgid "Staff Member"
 msgstr "员工成员"
 
 #: Export/Ods.php:209 js/TimesheetEditDialog.js:140
-#: js/TimesheetGridPanel.js:283
+#: js/TimesheetGridPanel.js:284
 msgid "Duration"
 msgstr "期间"
 
@@ -79,16 +79,16 @@ msgid "Cleared"
 msgstr "已清除"
 
 #: Export/Ods.php:236 js/TimeaccountEditDialog.js:85
-#: js/TimeaccountGridPanel.js:72 js/TimesheetGridPanel.js:182
+#: js/TimeaccountGridPanel.js:75 js/TimesheetGridPanel.js:182
 msgid "Number"
 msgstr "号码"
 
 #: Export/Ods.php:241 js/TimeaccountEditDialog.js:90
-#: js/TimeaccountGridPanel.js:78 js/TimesheetGridPanel.js:183
+#: js/TimeaccountGridPanel.js:81 js/TimesheetGridPanel.js:183
 msgid "Title"
 msgstr "头衔"
 
-#: Export/Ods.php:251
+#: Export/Ods.php:251 js/TimeaccountGridPanel.js:55
 #, fuzzy
 msgid "Created By"
 msgstr "已清除于"
@@ -98,7 +98,7 @@ msgid "Creation Date"
 msgstr ""
 
 #: Export/Ods.php:262 js/TimeaccountEditDialog.js:111
-#: js/TimeaccountGridPanel.js:84
+#: js/TimeaccountGridPanel.js:87
 msgid "Status"
 msgstr "状态"
 
@@ -120,25 +120,25 @@ msgstr "{0}"
 msgid "Not a valid time"
 msgstr "不是有效时间"
 
-#: js/Models.js:45 js/TimesheetEditDialog.js:113 js/TimesheetGridPanel.js:180
+#: js/Models.js:46 js/TimesheetEditDialog.js:113 js/TimesheetGridPanel.js:180
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "时间表"
 
-#: js/Models.js:49
+#: js/Models.js:50
 msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] "时间表列表"
 
-#: js/Models.js:106 js/TimeaccountEditDialog.js:69
-#: js/TimeaccountGridPanel.js:51 js/TimeaccountSelect.js:166
+#: js/Models.js:107 js/TimeaccountEditDialog.js:69
+#: js/TimeaccountGridPanel.js:53 js/TimeaccountSelect.js:166
 #: js/TimesheetEditDialog.js:130 js/TimesheetGridPanel.js:182
 #: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:223
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "时间帐户"
 
-#: js/Models.js:110
+#: js/Models.js:111
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "时间帐户列表"
@@ -151,7 +151,7 @@ msgstr "单位"
 msgid "Unit Price"
 msgstr "单价"
 
-#: js/TimeaccountEditDialog.js:108 js/TimeaccountGridPanel.js:91
+#: js/TimeaccountEditDialog.js:108 js/TimeaccountGridPanel.js:94
 msgid "Budget"
 msgstr "预算"
 
@@ -222,24 +222,24 @@ msgstr "管理所有的"
 msgid "Permissions"
 msgstr "许可"
 
-#: js/TimeaccountGridPanel.js:98 js/TimesheetGridPanel.js:58
-#: js/TimesheetGridPanel.js:270
+#: js/TimeaccountGridPanel.js:101 js/TimesheetGridPanel.js:58
+#: js/TimesheetGridPanel.js:271
 msgid "Cleared in"
 msgstr "已清除于"
 
-#: js/TimeaccountGridPanel.js:119 js/TimesheetGridPanel.js:462
+#: js/TimeaccountGridPanel.js:122 js/TimesheetGridPanel.js:463
 msgid "Export"
 msgstr "导出"
 
-#: js/TimeaccountGridPanel.js:128 js/TimesheetGridPanel.js:471
+#: js/TimeaccountGridPanel.js:131 js/TimesheetGridPanel.js:472
 msgid "Export as ODS"
 msgstr "导出 ODS"
 
-#: js/TimeaccountGridPanel.js:135 js/TimesheetGridPanel.js:477
+#: js/TimeaccountGridPanel.js:138 js/TimesheetGridPanel.js:478
 msgid "Export as CSV"
 msgstr "导出 CSV"
 
-#: js/TimeaccountGridPanel.js:146
+#: js/TimeaccountGridPanel.js:149
 msgid "Show closed"
 msgstr "关闭展示"
 
@@ -272,7 +272,7 @@ msgid "Enter description..."
 msgstr "输入描述 ..."
 
 #: js/TimesheetEditDialog.js:177 js/TimesheetGridPanel.js:185
-#: js/TimesheetGridPanel.js:276
+#: js/TimesheetGridPanel.js:277
 msgid "Account"
 msgstr "帐户"
 
@@ -312,31 +312,31 @@ msgstr "开始时间"
 msgid "Time Account closed"
 msgstr "时间帐户关闭"
 
-#: js/TimesheetGridPanel.js:304
+#: js/TimesheetGridPanel.js:305
 msgid "timeframe"
 msgstr "时段"
 
-#: js/TimesheetGridPanel.js:328
+#: js/TimesheetGridPanel.js:329
 msgid "summary"
 msgstr "摘要"
 
-#: js/TimesheetGridPanel.js:331
+#: js/TimesheetGridPanel.js:332
 msgid "Total Timesheets"
 msgstr "全部的时间表"
 
-#: js/TimesheetGridPanel.js:332
+#: js/TimesheetGridPanel.js:333
 msgid "Billable Timesheets"
 msgstr "记帐的时间表"
 
-#: js/TimesheetGridPanel.js:333
+#: js/TimesheetGridPanel.js:334
 msgid "Total Time"
 msgstr "全部时间"
 
-#: js/TimesheetGridPanel.js:334
+#: js/TimesheetGridPanel.js:335
 msgid "Time of Billable Timesheets"
 msgstr "记帐时间表的时间"
 
-#: js/TimesheetGridPanel.js:408
+#: js/TimesheetGridPanel.js:409
 msgid "Detail"
 msgstr ""
 

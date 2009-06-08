@@ -37,7 +37,6 @@ msgid "Report bugs"
 msgstr "Hlásit chyby"
 
 #: Acl/Rights.php:135
-#, fuzzy
 msgid "Report bugs to tine20.org directly when they occur"
 msgstr "Hlásit chyby přímo na tine20.org jakmile k nim dojde"
 
@@ -50,9 +49,8 @@ msgid "Check tine20.org for new versions"
 msgstr "Ověřit dostupnost nových verzí na tine20.org"
 
 #: Export/Ods.php:197
-#, fuzzy
 msgid "Filter"
-msgstr "Nepodařilo se"
+msgstr "Filtr"
 
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
@@ -70,19 +68,19 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Frontend/Http.php:280 js/tineInit.js:257
+#: Frontend/Http.php:282 js/tineInit.js:257
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Frontend/Http.php:281
+#: Frontend/Http.php:283
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:307 js/ExceptionDialog.js:26
+#: Frontend/Http.php:309 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:308 js/ExceptionDialog.js:51
+#: Frontend/Http.php:310 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
@@ -139,7 +137,6 @@ msgstr ""
 "Je možné, že poslední akce, kterou jste provedl(a), neproběhla korektně."
 
 #: js/ExceptionDialog.js:53
-#, fuzzy
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occurred."
@@ -179,42 +176,42 @@ msgstr "Přihlásit"
 msgid "Register"
 msgstr "Registrovat"
 
-#: js/Login.js:61 js/Login.js:97
+#: js/Login.js:61 js/Login.js:98
 msgid "Please enter your login data"
 msgstr "Zadejte prosím Vaše přihlašovací údaje"
 
-#: js/Login.js:78
+#: js/Login.js:79
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: js/Login.js:85
+#: js/Login.js:86
 msgid "Password"
 msgstr "Heslo"
 
-#: js/Login.js:125
+#: js/Login.js:126
 msgid "Logging you in..."
 msgstr "Přihlašuji Vás..."
 
-#: js/Login.js:125 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:126 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/grid/PersistentFilterPicker.js:125
-#: js/widgets/tree/ContextMenu.js:45 js/widgets/tree/ContextMenu.js:88
-#: js/widgets/tree/ContextMenu.js:139
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
-#: js/Login.js:137
+#: js/Login.js:138
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Přihlášení bylo úspěšné. Načítám Tine 2.0..."
 
-#: js/Login.js:137 js/MainScreen.js:515
+#: js/Login.js:138 js/MainScreen.js:515
 msgid "Please wait!"
 msgstr "Čekejte prosím!"
 
-#: js/Login.js:143
+#: js/Login.js:144
 msgid "Login failure"
 msgstr "Chybné přihlášení"
 
-#: js/Login.js:144
+#: js/Login.js:145
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
 
@@ -232,9 +229,8 @@ msgid "User: {0}"
 msgstr "Uživatel: {0}"
 
 #: js/MainScreen.js:195 js/MainScreen.js:363 js/MainScreen.js:378
-#, fuzzy
 msgid "About Tine 2.0"
-msgstr "Odhlásit z Tine 2.0"
+msgstr "O aplikaci Tine 2.0"
 
 #: js/MainScreen.js:201
 msgid "Change password"
@@ -310,7 +306,7 @@ msgstr ""
 #: js/MainScreen.js:513 js/widgets/app/GridPanel.js:528
 #: js/widgets/dialog/EditDialog.js:396
 #: js/widgets/grid/PersistentFilterPicker.js:123
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "Potvrdit"
 
@@ -362,6 +358,8 @@ msgstr ""
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator."
 msgstr ""
+"Kritická chyba: vlastní aktualizace klienta selhala, kontaktujte prosím "
+"svého administrátora."
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
@@ -477,9 +475,8 @@ msgid "Toggle selection"
 msgstr "Invertovat výběr"
 
 #: js/widgets/account/ConfigGrid.js:61
-#, fuzzy
 msgid "Remove account"
-msgstr "odstranit účet"
+msgstr "Odstranit účet"
 
 #: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:166
 msgid "Name"
@@ -580,12 +577,12 @@ msgstr "Uživatel"
 msgid "Edit {0}"
 msgstr "Editovat {0}"
 
-#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:204
+#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:205
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
 #: js/widgets/app/GridPanel.js:208 js/widgets/app/GridPanel.js:209
-#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:212
+#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:213
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Smazat {0}"
@@ -753,38 +750,32 @@ msgid "Do you really want to delete this {0}?"
 msgstr "Opravdu chcete smazat {0}?"
 
 #: js/widgets/dialog/PreferencesDialog.js:137
-#, fuzzy
 msgid "Admin Mode"
-msgstr "Administrace"
+msgstr "Režim administrace"
 
 #: js/widgets/dialog/PreferencesDialog.js:173
-#, fuzzy
 msgid "Applications"
-msgstr "Přihlásit"
+msgstr "Aplikace"
 
 #: js/widgets/dialog/PreferencesDialog.js:200
-#, fuzzy
 msgid "Edit Preferences"
-msgstr "Předvolby"
+msgstr "Editovat předvolby"
 
 #: js/widgets/dialog/PreferencesDialog.js:201
-#, fuzzy
 msgid "Loading ..."
-msgstr "nahrávám nový jazyk..."
+msgstr "Nahrávám ..."
 
 #: js/widgets/dialog/PreferencesDialog.js:278
 msgid "Saving of preferences failed."
-msgstr ""
+msgstr "Uložení předvoleb se nezdařilo."
 
 #: js/widgets/dialog/PreferencesPanel.js:149
-#, fuzzy
 msgid "There are no preferences for this application."
-msgstr "Zatím nejsou žádné uživatelské položky"
+msgstr "Pro tuto aplikaci nejsou žádné předvolby."
 
 #: js/widgets/dialog/PreferencesTreePanel.js:60
-#, fuzzy
 msgid "General Preferences"
-msgstr "Předvolby"
+msgstr "Obecné předvolby"
 
 #: js/widgets/grid/FilterModel.js:129
 msgid "contains"
@@ -1130,55 +1121,55 @@ msgstr "Vyhledávám..."
 msgid "Color"
 msgstr "Barva"
 
-#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:37
 msgid "New {0}"
 msgstr "Nový {0}"
 
-#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:37
 msgid "Please enter the name of the new {0}:"
 msgstr "Zadejte prosím název pro nový(ou/é) {0}:"
 
-#: js/widgets/tree/ContextMenu.js:42
+#: js/widgets/tree/ContextMenu.js:40
 msgid "No {0} added"
 msgstr "Žádný {0} nebyl přidán"
 
-#: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:136
+#: js/widgets/tree/ContextMenu.js:40 js/widgets/tree/ContextMenu.js:137
 msgid "You have to supply a {0} name!"
 msgstr "Musíte zadat název pro {0}!"
 
-#: js/widgets/tree/ContextMenu.js:45
+#: js/widgets/tree/ContextMenu.js:43
 msgid "Creating {0}..."
 msgstr "Vytvářím {0}..."
 
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Opravdu chcete smazat  {0} \"{1}\"?"
 
-#: js/widgets/tree/ContextMenu.js:88
+#: js/widgets/tree/ContextMenu.js:86
 msgid "Deleting {0} \"{1}\""
 msgstr "Mažu {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:130
+#: js/widgets/tree/ContextMenu.js:131
 msgid "Please enter the new name of the {0}:"
 msgstr "Zadejte prosím nový název pro {0}:"
 
-#: js/widgets/tree/ContextMenu.js:136
+#: js/widgets/tree/ContextMenu.js:137
 msgid "Not renamed {0}"
 msgstr "Nepřejmenováno {0}"
 
-#: js/widgets/tree/ContextMenu.js:139
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Updating {0} \"{1}\""
 msgstr "Aktualizuji {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:186
+#: js/widgets/tree/ContextMenu.js:187
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Spravovat oprávnění pro {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:220
+#: js/widgets/tree/ContextMenu.js:221
 msgid "Rename {0}"
 msgstr "Přejmenovat {0}"
 
-#: js/widgets/tree/ContextMenu.js:228
+#: js/widgets/tree/ContextMenu.js:229
 msgid "Manage permissions"
 msgstr "Spravovat oprávnění"
 
@@ -1212,29 +1203,30 @@ msgstr "Časové pásmo"
 
 #: Preference.php:89
 msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr ""
+msgstr "Časové pásmo, ve kterém Tine 2.0 zobrazuje datumy."
 
 #: Preference.php:93
 msgid "The language of the Tine 2.0 GUI."
-msgstr ""
+msgstr "Jazyk uživatelského rozhranní aplikace Tine 2.0."
 
 #: Preference.php:96
-#, fuzzy
 msgid "Default Application"
-msgstr "Přihlásit"
+msgstr "Výchozí aplikace"
 
 #: Preference.php:97
 msgid "The default application to show after login."
-msgstr ""
+msgstr "Výchozí aplikace, která se má zobrazit po přihlášení."
 
 #: Preference.php:100
 msgid "Window Type"
-msgstr ""
+msgstr "Typ okna"
 
 #: Preference.php:101
 msgid ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
 msgstr ""
+"Můžete si vybrat mezi okny ve stylu ExtJs a normálními vyskakovacími okny "
+"webového prohlížeče."
 
 #: Setup/setup.xml:2141
 msgid "note"

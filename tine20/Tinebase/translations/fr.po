@@ -67,19 +67,19 @@ msgstr "Auteur"
 msgid "Activities"
 msgstr "Activités"
 
-#: Frontend/Http.php:280 js/tineInit.js:257
+#: Frontend/Http.php:282 js/tineInit.js:257
 msgid "Authorisation Required"
 msgstr "Authentification requise"
 
-#: Frontend/Http.php:281
+#: Frontend/Http.php:283
 msgid "Your session is not valid. You need to login again."
 msgstr "Votre session n'est pas valide, veuillez vous reconnecter."
 
-#: Frontend/Http.php:307 js/ExceptionDialog.js:26
+#: Frontend/Http.php:309 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr "Fin anormale"
 
-#: Frontend/Http.php:308 js/ExceptionDialog.js:51
+#: Frontend/Http.php:310 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 "Une erreur s'est produite, le programme s'est terminé de façon inattendue"
@@ -170,42 +170,42 @@ msgstr "Login"
 msgid "Register"
 msgstr "Enregistrement"
 
-#: js/Login.js:61 js/Login.js:97
+#: js/Login.js:61 js/Login.js:98
 msgid "Please enter your login data"
 msgstr "Saisissez votre login"
 
-#: js/Login.js:78
+#: js/Login.js:79
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: js/Login.js:85
+#: js/Login.js:86
 msgid "Password"
 msgstr "Mot de passe"
 
-#: js/Login.js:125
+#: js/Login.js:126
 msgid "Logging you in..."
 msgstr "Connexion..."
 
-#: js/Login.js:125 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:126 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/grid/PersistentFilterPicker.js:125
-#: js/widgets/tree/ContextMenu.js:45 js/widgets/tree/ContextMenu.js:88
-#: js/widgets/tree/ContextMenu.js:139
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Veuillez patienter"
 
-#: js/Login.js:137
+#: js/Login.js:138
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Connexion réussie. Chargement de Tine 2.0..."
 
-#: js/Login.js:137 js/MainScreen.js:515
+#: js/Login.js:138 js/MainScreen.js:515
 msgid "Please wait!"
 msgstr "Veuillez patienter!"
 
-#: js/Login.js:143
+#: js/Login.js:144
 msgid "Login failure"
 msgstr "Erreur de connexion"
 
-#: js/Login.js:144
+#: js/Login.js:145
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Erreur de nom d'utilisateur et/ou mot de passe!!!"
 
@@ -301,7 +301,7 @@ msgstr ""
 #: js/MainScreen.js:513 js/widgets/app/GridPanel.js:528
 #: js/widgets/dialog/EditDialog.js:396
 #: js/widgets/grid/PersistentFilterPicker.js:123
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "Confirmer"
 
@@ -573,12 +573,12 @@ msgstr "Utilistateur"
 msgid "Edit {0}"
 msgstr "Éditer {0}"
 
-#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:204
+#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:205
 msgid "Add {0}"
 msgstr "Ajouter {0}"
 
 #: js/widgets/app/GridPanel.js:208 js/widgets/app/GridPanel.js:209
-#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:212
+#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:213
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Supprimer {0}"
@@ -1124,57 +1124,57 @@ msgstr "Recherche"
 msgid "Color"
 msgstr "Couleur"
 
-#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:37
 #, fuzzy
 msgid "New {0}"
 msgstr "Nouveau/Nouvelle {0}"
 
-#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:37
 msgid "Please enter the name of the new {0}:"
 msgstr "Veuillez saisir le nom du nouvel objet {0}:"
 
-#: js/widgets/tree/ContextMenu.js:42
+#: js/widgets/tree/ContextMenu.js:40
 msgid "No {0} added"
 msgstr "aucun(e) {0} ajouté(e)"
 
-#: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:136
+#: js/widgets/tree/ContextMenu.js:40 js/widgets/tree/ContextMenu.js:137
 msgid "You have to supply a {0} name!"
 msgstr "Vous devez mettre un nom de {0}!"
 
-#: js/widgets/tree/ContextMenu.js:45
+#: js/widgets/tree/ContextMenu.js:43
 msgid "Creating {0}..."
 msgstr "Création de {0}..."
 
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Êtes-vous sûr le vouloir supprimer {0} \"{1}\"?"
 
-#: js/widgets/tree/ContextMenu.js:88
+#: js/widgets/tree/ContextMenu.js:86
 msgid "Deleting {0} \"{1}\""
 msgstr "Suppression de {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:130
+#: js/widgets/tree/ContextMenu.js:131
 msgid "Please enter the new name of the {0}:"
 msgstr "Veuillez saisir le nouveau nom de {0}:"
 
-#: js/widgets/tree/ContextMenu.js:136
+#: js/widgets/tree/ContextMenu.js:137
 #, fuzzy
 msgid "Not renamed {0}"
 msgstr "{0} non renommé"
 
-#: js/widgets/tree/ContextMenu.js:139
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Updating {0} \"{1}\""
 msgstr "Mise à jour de {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:186
+#: js/widgets/tree/ContextMenu.js:187
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Gérer les droits de {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:220
+#: js/widgets/tree/ContextMenu.js:221
 msgid "Rename {0}"
 msgstr "Renommer {0}"
 
-#: js/widgets/tree/ContextMenu.js:228
+#: js/widgets/tree/ContextMenu.js:229
 msgid "Manage permissions"
 msgstr "Gérer les droits"
 

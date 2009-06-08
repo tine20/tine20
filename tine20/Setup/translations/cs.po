@@ -2,194 +2,195 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-05-31 12:21+0100\n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Czech\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: js/ApplicationGridPanel.js:37
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: js/ApplicationGridPanel.js:38
 msgid "Enabled"
-msgstr ""
+msgstr "Povoleno"
 
 #: js/ApplicationGridPanel.js:39
 msgid "Order"
-msgstr ""
+msgstr "Pořadí"
 
 #: js/ApplicationGridPanel.js:40
 msgid "Installed Version"
-msgstr ""
+msgstr "Nainstalovaná verze"
 
 #: js/ApplicationGridPanel.js:41
 msgid "Available Version"
-msgstr ""
+msgstr "Dostupná verze"
 
 #: js/ApplicationGridPanel.js:42
 msgid "Status"
-msgstr ""
+msgstr "Stav"
 
 #: js/ApplicationGridPanel.js:43
 msgid "Depends on"
-msgstr ""
+msgstr "Závisí na"
 
-#: js/ApplicationGridPanel.js:49 js/EnvCheckGridPanel.js:169
+#: js/ApplicationGridPanel.js:49
+#: js/EnvCheckGridPanel.js:169
 msgid "Install application"
-msgstr ""
+msgstr "Instalovat aplikaci"
 
 #: js/ApplicationGridPanel.js:58
 msgid "Uninstall application"
-msgstr ""
+msgstr "Odinstalovat aplikaci"
 
 #: js/ApplicationGridPanel.js:67
 msgid "Update application"
-msgstr ""
+msgstr "Aktualizovat aplikaci"
 
 #: js/ApplicationGridPanel.js:143
 msgid "This may take a while"
-msgstr ""
+msgstr "Tato operace může chvíli trvat"
 
 #: js/ApplicationGridPanel.js:162
 msgid "Shit"
-msgstr ""
+msgstr "Zatraceně"
 
 #: js/ApplicationGridPanel.js:162
 msgid "Where are the backup tapes"
-msgstr ""
+msgstr "Kde jsou zálohovací pásky"
 
 #: js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
-msgstr ""
+msgstr "Neplatná konfigurace"
 
 #: js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
+msgstr "Než bude konfigurace uložena, musíte opravit červeně označená pole"
 
 #: js/ConfigManagerGridPanel.js:118
 msgid "Transfering Configuration..."
-msgstr ""
+msgstr "Přesouvám konfiguraci..."
 
 #: js/ConfigManagerGridPanel.js:130
 msgid "Informations"
-msgstr ""
+msgstr "Informace"
 
 #: js/ConfigManagerGridPanel.js:134
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Přihlášení do instalačního programu"
 
 #: js/ConfigManagerGridPanel.js:137
 msgid "Username"
-msgstr ""
+msgstr "Uživatelské jméno"
 
-#: js/ConfigManagerGridPanel.js:141 js/ConfigManagerGridPanel.js:167
+#: js/ConfigManagerGridPanel.js:141
+#: js/ConfigManagerGridPanel.js:167
 msgid "Password"
-msgstr ""
+msgstr "Heslo"
 
-#: js/ConfigManagerGridPanel.js:146 js/ConfigManagerGridPanel.js:159
+#: js/ConfigManagerGridPanel.js:146
+#: js/ConfigManagerGridPanel.js:159
 msgid "Database"
-msgstr ""
+msgstr "Databáze"
 
 #: js/ConfigManagerGridPanel.js:150
 msgid "Adapter"
-msgstr ""
+msgstr "Adaptér"
 
 #: js/ConfigManagerGridPanel.js:155
 msgid "Hostname"
-msgstr ""
+msgstr "Název nebo adresa počítače"
 
 #: js/ConfigManagerGridPanel.js:163
 msgid "User"
-msgstr ""
+msgstr "Uživatel"
 
 #: js/ConfigManagerGridPanel.js:171
 msgid "Prefix"
-msgstr ""
+msgstr "Prefix"
 
 #: js/ConfigManagerGridPanel.js:174
 msgid "Logging"
-msgstr ""
+msgstr "Logování"
 
 #: js/ConfigManagerGridPanel.js:180
 msgid "Filename"
-msgstr ""
+msgstr "Název souboru"
 
 #: js/ConfigManagerGridPanel.js:192
 msgid "Priority"
-msgstr ""
+msgstr "Priorita"
 
 #: js/ConfigManagerGridPanel.js:196
 msgid "Caching"
-msgstr ""
+msgstr "Kešování"
 
 #: js/ConfigManagerGridPanel.js:202
 msgid "Path"
-msgstr ""
+msgstr "Cesta"
 
 #: js/ConfigManagerGridPanel.js:205
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "Životnost (v sekundách)"
 
 #: js/ConfigManagerGridPanel.js:298
 msgid "Check config"
-msgstr ""
+msgstr "Zkontrolovat konfiguraci"
 
 #: js/ConfigManagerGridPanel.js:305
 msgid "Save config"
-msgstr ""
+msgstr "Uložit konfiguraci"
 
 #: js/ConfigManagerGridPanel.js:313
 msgid "Download config file"
-msgstr ""
+msgstr "Stáhnout konfigurační soubor"
 
 #: js/EnvCheckGridPanel.js:69
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Provádím test prostředí"
 
 #: js/EnvCheckGridPanel.js:110
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr ""
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo {1} ve kterém hledáte."
 
 #: js/EnvCheckGridPanel.js:140
 msgid "Check"
-msgstr ""
+msgstr "Kontrola"
 
 #: js/EnvCheckGridPanel.js:141
 msgid "Result"
-msgstr ""
+msgstr "Výsledek"
 
 #: js/EnvCheckGridPanel.js:142
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Run setup tests"
-msgstr ""
+msgstr "Spustit instalační testy"
 
 #: js/Setup.js:29
 msgid "Setup Checks"
-msgstr ""
+msgstr "Instalační kontroly"
 
 #: js/Setup.js:34
 msgid "Config Manager"
-msgstr ""
+msgstr "Správce konfigurace"
 
 #: js/Setup.js:40
 msgid "Application Manager"
-msgstr ""
+msgstr "Správce aplikací"
 
 #: js/Setup.js:129
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Aplikace"
+msgstr[1] "Aplikace"
+msgstr[2] "Aplikací"
+

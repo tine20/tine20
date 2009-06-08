@@ -66,19 +66,19 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: Frontend/Http.php:280 js/tineInit.js:257
+#: Frontend/Http.php:282 js/tineInit.js:257
 msgid "Authorisation Required"
 msgstr "需要認證"
 
-#: Frontend/Http.php:281
+#: Frontend/Http.php:283
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 
-#: Frontend/Http.php:307 js/ExceptionDialog.js:26
+#: Frontend/Http.php:309 js/ExceptionDialog.js:26
 msgid "Abnormal End"
 msgstr ""
 
-#: Frontend/Http.php:308 js/ExceptionDialog.js:51
+#: Frontend/Http.php:310 js/ExceptionDialog.js:51
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
@@ -161,42 +161,42 @@ msgstr "登入"
 msgid "Register"
 msgstr "註冊"
 
-#: js/Login.js:61 js/Login.js:97
+#: js/Login.js:61 js/Login.js:98
 msgid "Please enter your login data"
 msgstr "請輸入登入資料"
 
-#: js/Login.js:78
+#: js/Login.js:79
 msgid "Username"
 msgstr "使用者名稱"
 
-#: js/Login.js:85
+#: js/Login.js:86
 msgid "Password"
 msgstr "密碼"
 
-#: js/Login.js:125
+#: js/Login.js:126
 msgid "Logging you in..."
 msgstr ""
 
-#: js/Login.js:125 js/widgets/container/ContainerGrants.js:34
+#: js/Login.js:126 js/widgets/container/ContainerGrants.js:34
 #: js/widgets/grid/PersistentFilterPicker.js:125
-#: js/widgets/tree/ContextMenu.js:45 js/widgets/tree/ContextMenu.js:88
-#: js/widgets/tree/ContextMenu.js:139
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "請稍後"
 
-#: js/Login.js:137
+#: js/Login.js:138
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "登入成功, 進入Tine 2.0..."
 
-#: js/Login.js:137 js/MainScreen.js:515
+#: js/Login.js:138 js/MainScreen.js:515
 msgid "Please wait!"
 msgstr "請稍後!"
 
-#: js/Login.js:143
+#: js/Login.js:144
 msgid "Login failure"
 msgstr "登入失敗"
 
-#: js/Login.js:144
+#: js/Login.js:145
 msgid "Your username and/or your password are wrong!!!"
 msgstr "使用者名稱 或 密碼錯誤"
 
@@ -290,7 +290,7 @@ msgstr "安裝 Gears 可以改善 Tine 2.0 存取你電腦檔案的效能"
 #: js/MainScreen.js:513 js/widgets/app/GridPanel.js:528
 #: js/widgets/dialog/EditDialog.js:396
 #: js/widgets/grid/PersistentFilterPicker.js:123
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "確認"
 
@@ -553,12 +553,12 @@ msgstr ""
 msgid "Edit {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:204
+#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:205
 msgid "Add {0}"
 msgstr ""
 
 #: js/widgets/app/GridPanel.js:208 js/widgets/app/GridPanel.js:209
-#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:212
+#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:213
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] ""
@@ -1084,55 +1084,55 @@ msgstr "正在搜尋..."
 msgid "Color"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:37
 msgid "New {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:37
 msgid "Please enter the name of the new {0}:"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:42
+#: js/widgets/tree/ContextMenu.js:40
 msgid "No {0} added"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:136
+#: js/widgets/tree/ContextMenu.js:40 js/widgets/tree/ContextMenu.js:137
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:45
+#: js/widgets/tree/ContextMenu.js:43
 msgid "Creating {0}..."
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:88
+#: js/widgets/tree/ContextMenu.js:86
 msgid "Deleting {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:130
+#: js/widgets/tree/ContextMenu.js:131
 msgid "Please enter the new name of the {0}:"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:136
+#: js/widgets/tree/ContextMenu.js:137
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:139
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Updating {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:186
+#: js/widgets/tree/ContextMenu.js:187
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "管理權限 {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:220
+#: js/widgets/tree/ContextMenu.js:221
 msgid "Rename {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:228
+#: js/widgets/tree/ContextMenu.js:229
 msgid "Manage permissions"
 msgstr "管理權限"
 

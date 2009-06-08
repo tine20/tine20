@@ -49,9 +49,9 @@ msgid "Date"
 msgstr "Дата"
 
 #: Export/Ods.php:185 Export/Ods.php:246 js/TimeaccountEditDialog.js:156
-#: js/TimeaccountGridPanel.js:52 js/TimesheetEditDialog.js:167
+#: js/TimeaccountGridPanel.js:54 js/TimesheetEditDialog.js:167
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
-#: js/TimesheetGridPanel.js:394
+#: js/TimesheetGridPanel.js:395
 msgid "Description"
 msgstr "Описание"
 
@@ -68,7 +68,7 @@ msgid "Staff Member"
 msgstr "Сотрудник"
 
 #: Export/Ods.php:209 js/TimesheetEditDialog.js:140
-#: js/TimesheetGridPanel.js:283
+#: js/TimesheetGridPanel.js:284
 msgid "Duration"
 msgstr "Продолжительность"
 
@@ -79,16 +79,16 @@ msgid "Cleared"
 msgstr "Просчитано"
 
 #: Export/Ods.php:236 js/TimeaccountEditDialog.js:85
-#: js/TimeaccountGridPanel.js:72 js/TimesheetGridPanel.js:182
+#: js/TimeaccountGridPanel.js:75 js/TimesheetGridPanel.js:182
 msgid "Number"
 msgstr "Номер"
 
 #: Export/Ods.php:241 js/TimeaccountEditDialog.js:90
-#: js/TimeaccountGridPanel.js:78 js/TimesheetGridPanel.js:183
+#: js/TimeaccountGridPanel.js:81 js/TimesheetGridPanel.js:183
 msgid "Title"
 msgstr "Заголовок"
 
-#: Export/Ods.php:251
+#: Export/Ods.php:251 js/TimeaccountGridPanel.js:55
 #, fuzzy
 msgid "Created By"
 msgstr "Рассчитан в"
@@ -98,7 +98,7 @@ msgid "Creation Date"
 msgstr ""
 
 #: Export/Ods.php:262 js/TimeaccountEditDialog.js:111
-#: js/TimeaccountGridPanel.js:84
+#: js/TimeaccountGridPanel.js:87
 msgid "Status"
 msgstr "Статус"
 
@@ -120,22 +120,22 @@ msgstr "{0}"
 msgid "Not a valid time"
 msgstr "Не действительное время"
 
-#: js/Models.js:45 js/TimesheetEditDialog.js:113 js/TimesheetGridPanel.js:180
+#: js/Models.js:46 js/TimesheetEditDialog.js:113 js/TimesheetGridPanel.js:180
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Часовая запись"
 msgstr[1] "Часовые записи"
 msgstr[2] "Часовых записей"
 
-#: js/Models.js:49
+#: js/Models.js:50
 msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] "Список часовой записи"
 msgstr[1] "Списка часовой записи"
 msgstr[2] "Списков часовой записи"
 
-#: js/Models.js:106 js/TimeaccountEditDialog.js:69
-#: js/TimeaccountGridPanel.js:51 js/TimeaccountSelect.js:166
+#: js/Models.js:107 js/TimeaccountEditDialog.js:69
+#: js/TimeaccountGridPanel.js:53 js/TimeaccountSelect.js:166
 #: js/TimesheetEditDialog.js:130 js/TimesheetGridPanel.js:182
 #: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:223
 msgid "Time Account"
@@ -144,7 +144,7 @@ msgstr[0] "Временный счет"
 msgstr[1] "Временных счета"
 msgstr[2] "Временных счетов"
 
-#: js/Models.js:110
+#: js/Models.js:111
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "Список временного счета"
@@ -159,7 +159,7 @@ msgstr "Часть"
 msgid "Unit Price"
 msgstr "Цена на части"
 
-#: js/TimeaccountEditDialog.js:108 js/TimeaccountGridPanel.js:91
+#: js/TimeaccountEditDialog.js:108 js/TimeaccountGridPanel.js:94
 msgid "Budget"
 msgstr "Budget"
 
@@ -230,24 +230,24 @@ msgstr "Позволяется все"
 msgid "Permissions"
 msgstr "Права доступа"
 
-#: js/TimeaccountGridPanel.js:98 js/TimesheetGridPanel.js:58
-#: js/TimesheetGridPanel.js:270
+#: js/TimeaccountGridPanel.js:101 js/TimesheetGridPanel.js:58
+#: js/TimesheetGridPanel.js:271
 msgid "Cleared in"
 msgstr "Рассчитан в"
 
-#: js/TimeaccountGridPanel.js:119 js/TimesheetGridPanel.js:462
+#: js/TimeaccountGridPanel.js:122 js/TimesheetGridPanel.js:463
 msgid "Export"
 msgstr "Экспорт"
 
-#: js/TimeaccountGridPanel.js:128 js/TimesheetGridPanel.js:471
+#: js/TimeaccountGridPanel.js:131 js/TimesheetGridPanel.js:472
 msgid "Export as ODS"
 msgstr "Экспорт как ODS"
 
-#: js/TimeaccountGridPanel.js:135 js/TimesheetGridPanel.js:477
+#: js/TimeaccountGridPanel.js:138 js/TimesheetGridPanel.js:478
 msgid "Export as CSV"
 msgstr "Экспорт как CSV"
 
-#: js/TimeaccountGridPanel.js:146
+#: js/TimeaccountGridPanel.js:149
 msgid "Show closed"
 msgstr "Показать закрытые"
 
@@ -280,7 +280,7 @@ msgid "Enter description..."
 msgstr "Введите описание..."
 
 #: js/TimesheetEditDialog.js:177 js/TimesheetGridPanel.js:185
-#: js/TimesheetGridPanel.js:276
+#: js/TimesheetGridPanel.js:277
 msgid "Account"
 msgstr "Счет"
 
@@ -320,31 +320,31 @@ msgstr "Время старта"
 msgid "Time Account closed"
 msgstr "счет времени закрыт"
 
-#: js/TimesheetGridPanel.js:304
+#: js/TimesheetGridPanel.js:305
 msgid "timeframe"
 msgstr "Хронометраж"
 
-#: js/TimesheetGridPanel.js:328
+#: js/TimesheetGridPanel.js:329
 msgid "summary"
 msgstr "Содержание"
 
-#: js/TimesheetGridPanel.js:331
+#: js/TimesheetGridPanel.js:332
 msgid "Total Timesheets"
 msgstr "Все записи времени"
 
-#: js/TimesheetGridPanel.js:332
+#: js/TimesheetGridPanel.js:333
 msgid "Billable Timesheets"
 msgstr "Рассчитываемые записи времени"
 
-#: js/TimesheetGridPanel.js:333
+#: js/TimesheetGridPanel.js:334
 msgid "Total Time"
 msgstr "Все время"
 
-#: js/TimesheetGridPanel.js:334
+#: js/TimesheetGridPanel.js:335
 msgid "Time of Billable Timesheets"
 msgstr "Время рассчитываемых записей времени"
 
-#: js/TimesheetGridPanel.js:408
+#: js/TimesheetGridPanel.js:409
 msgid "Detail"
 msgstr ""
 

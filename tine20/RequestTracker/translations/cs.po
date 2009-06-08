@@ -2,92 +2,99 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - RequestTracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-05-31 12:44+0100\n"
+"Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Czech\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/Model.js:42 js/TicketGridPanel.js:43
+#: js/Model.js:42
+#: js/TicketGridPanel.js:43
 msgid "Ticket"
 msgid_plural "Tickets"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Požadavek"
+msgstr[1] "Požadavky"
+msgstr[2] "Požadavků"
 
 #: js/StatusCombo.js:26
 msgid "New"
-msgstr ""
+msgstr "Nový"
 
 #: js/StatusCombo.js:27
 msgid "Open"
-msgstr ""
+msgstr "Otevřené"
 
 #: js/StatusCombo.js:28
 msgid "Stalled"
-msgstr ""
+msgstr "Po termínu"
 
 #: js/StatusCombo.js:29
 msgid "Waiting"
-msgstr ""
+msgstr "Čekající"
 
 #: js/StatusCombo.js:30
 msgid "Pending"
-msgstr ""
+msgstr "Pozastavené"
 
 #: js/StatusCombo.js:31
 msgid "Resolved"
-msgstr ""
+msgstr "Vyřešené"
 
 #: js/StatusCombo.js:32
 msgid "Rejected"
-msgstr ""
+msgstr "Odmítnuté"
 
 #: js/StatusCombo.js:33
 msgid "Deleted"
-msgstr ""
+msgstr "Smazané"
 
-#: js/StatusCombo.js:51 js/TicketGridPanel.js:93
+#: js/StatusCombo.js:51
+#: js/TicketGridPanel.js:93
 msgid "Status"
-msgstr ""
+msgstr "Stav"
 
-#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:66
+#: js/TicketGridPanel.js:44
+#: js/TicketGridPanel.js:66
 msgid "Ticket ID"
-msgstr ""
+msgstr "ID požadavku"
 
-#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:69
+#: js/TicketGridPanel.js:45
+#: js/TicketGridPanel.js:69
 msgid "Queue"
-msgstr ""
+msgstr "Fronta"
 
-#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:75
+#: js/TicketGridPanel.js:46
+#: js/TicketGridPanel.js:75
 msgid "Subject"
-msgstr ""
+msgstr "Předmět"
 
-#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:81
+#: js/TicketGridPanel.js:47
+#: js/TicketGridPanel.js:81
 msgid "Requestors"
-msgstr ""
+msgstr "Žadatelé"
 
-#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:87
+#: js/TicketGridPanel.js:48
+#: js/TicketGridPanel.js:87
 msgid "Owner"
-msgstr ""
+msgstr "Vlastník"
 
 #: js/TicketGridPanel.js:50
 msgid "Description"
-msgstr ""
+msgstr "Popis"
 
 #: js/TicketGridPanel.js:99
 msgid "Final Priority"
-msgstr ""
+msgstr "Priorita"
 
 #: js/TicketGridPanel.js:105
 msgid "Due"
-msgstr ""
+msgstr "Vyřešit do"
 
 #: js/TreePanel.js:24
 msgid "All Queues"
-msgstr ""
+msgstr "Všechny fronty"
+

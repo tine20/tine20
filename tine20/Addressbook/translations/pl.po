@@ -235,8 +235,9 @@ msgstr "Nazwisko"
 msgid "Company"
 msgstr "Firma"
 
-#: js/ContactGrid.js:59 js/ContactGrid.js:103 js/ContactGrid.js:382
-#: js/ContactGrid.js:412 js/EditDialog.js:227
+#: js/ContactGrid.js:59 js/ContactGrid.js:103
+#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
+#: js/EditDialog.js:227
 msgid "Phone"
 msgstr "Telefon"
 
@@ -313,13 +314,13 @@ msgstr "Kod pocztowy (prywatny adres)"
 msgid "Country (private)"
 msgstr "Kraj (prywatny adres)"
 
-#: js/ContactGrid.js:104 js/ContactGrid.js:383 js/ContactGrid.js:413
-#: js/EditDialog.js:232
+#: js/ContactGrid.js:104 js/ContactGridDetailsPanel.js:145
+#: js/ContactGridDetailsPanel.js:169 js/EditDialog.js:232
 msgid "Mobile"
 msgstr "Komórka"
 
-#: js/ContactGrid.js:105 js/ContactGrid.js:384 js/ContactGrid.js:414
-#: js/EditDialog.js:237
+#: js/ContactGrid.js:105 js/ContactGridDetailsPanel.js:146
+#: js/ContactGridDetailsPanel.js:170 js/EditDialog.js:237
 msgid "Fax"
 msgstr "Fax"
 
@@ -348,8 +349,8 @@ msgid "Email (private)"
 msgstr "Email (prywatny)"
 
 # Prüfen
-#: js/ContactGrid.js:112 js/ContactGrid.js:386 js/ContactGrid.js:416
-#: js/EditDialog.js:274
+#: js/ContactGrid.js:112 js/ContactGridDetailsPanel.js:149
+#: js/ContactGridDetailsPanel.js:173 js/EditDialog.js:274
 msgid "Web"
 msgstr "Internet"
 
@@ -405,11 +406,12 @@ msgstr ""
 msgid "Cell private"
 msgstr "Miasto (prywatny adres)"
 
-#: js/ContactGrid.js:313
+#: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
 msgstr "Wybierz kontakt"
 
-#: js/ContactGrid.js:385 js/ContactGrid.js:415 js/EditDialog.js:261
+#: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
+#: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "E-mail"
 
