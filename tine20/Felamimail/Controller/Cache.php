@@ -364,6 +364,11 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                         }
                     } catch (Zend_Mail_Exception $zme) {
                         // no 'subject', 'to', 'cc', 'bcc' or content_type available
+                        if (in_array($field, array('to', 'cc', 'bcc'))) {
+                            $cachedMessage->{$field} = array();
+                        } else {
+                            $cachedMessage->{$field} = '';
+                        }
                     }
                 }
                 
@@ -382,7 +387,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
             }
         }
     }
-    
+   
     /**
      * convert date from sent/received
      *
