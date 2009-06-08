@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
+ * TODO         show attachments and recipients in opened mails 
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -37,7 +38,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * - overwritten to allow initialization from grid/onEditInNewWindow 
      */
     initRecord: function() {
-        this.onRecordLoad();
+        if (this.record.id) {
+            Tine.Felamimail.MessageEditDialog.superclass.initRecord.call(this);
+        } else {
+            this.onRecordLoad();
+        }
     },
     
     /**
@@ -63,7 +68,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
         
     /**
-     * execuded when record gets updated from form
+     * executed when record gets updated from form
      * - add attachments to record here
      * 
      * TODO add recipients here as well?
