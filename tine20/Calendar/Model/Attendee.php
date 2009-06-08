@@ -76,9 +76,10 @@ class Calendar_Model_Attendee extends Tinebase_Record_Abstract
         'user_id'              => array('allowEmpty' => false, 'Int'  ),
         'user_type'            => array('allowEmpty' => true,  'InArray' => array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE)),
         'role'                 => array('allowEmpty' => true,  'InArray' => array(self::ROLE_OPTIONAL, self::ROLE_REQUIRED)),
-        'status'               => array('allowEmpty' => true,  'InArray' => array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED)),
         'quantity'             => array('allowEmpty' => true, 'Int'   ),
+        'status'               => array('allowEmpty' => true,  'InArray' => array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED)),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
+        'displaycontainer_id'  => array('allowEmpty' => true, 'Int'   ),
     );
     
     /**

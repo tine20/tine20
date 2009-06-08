@@ -151,10 +151,15 @@
                     </field>
                 </index>
                 <index>
-                    <name>container_id</name>
+                    <name>cal_events::container_id--container::id</name>
                     <field>
                         <name>container_id</name>
                     </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
                 </index>
                 <index>
                     <name>dtstart</name>
@@ -281,6 +286,12 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>quantity</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>1</default>
+                </field>
+                <field>
                     <name>status</name>
                     <type>enum</type>
                     <value>NEEDS-ACTION</value>
@@ -291,16 +302,14 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>quantity</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <default>1</default>
-                </field>
-                <field>
                     <name>status_authkey</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>displaycontainer_id</name>
+                    <type>integer</type>
                 </field>
                 <index>
                     <name>id</name>
@@ -345,6 +354,17 @@
                     <field>
                         <name>status_authkey</name>
                     </field>
+                </index>
+                <index>
+                    <name>cal_attendee::displaycontainer_id--container::id</name>
+                    <field>
+                        <name>displaycontainer_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
                 </index>
             </declaration>
         </table>
