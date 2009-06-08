@@ -103,7 +103,6 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
      * @return integer number of messages in mailbox (only if cache is incomplete)
      * 
      * @todo write tests for cache handling
-     * @todo make update work for web.de
      */
     public function update($_folderId)
     {
@@ -124,7 +123,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         
         // init uidnext if empty
         if (! isset($backendFolderValues['uidnext'])) {
-            $backendFolderValues['uidnext'] = 1;
+            $backendFolderValues['uidnext'] = $backendFolderValues['exists'];
         }
 
         $messageCount = $backend->countMessages();
@@ -158,7 +157,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                 /********* update *******************************************/
                 
                 // only get messages with $backendFolderValues['uidnext'] > uid > $folder->uidnext
-                $messages = $backend->getSummary($folder->uidnext, $backendFolderValues['uidnext']);
+                $uids = $backend->getUid($folder->uidnext, $backendFolderValues['uidnext']);
+                $messages = $backend->getSummary($uids);                
             }
 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
@@ -269,10 +269,13 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         
         // get the remaining messages from imap backend
         $messageCount = $backend->countMessages();
+        if ($messageCount < $backendFolderValues['exists']) {
+            $messageCount = $backendFolderValues['exists'];
+        }
         $folderCount = $this->_messageCacheBackend->searchCountByFolderId($_folderId);
         
+        // get message headers
         $uids = $backend->getUid(1, $messageCount - $folderCount);
-        //$messages = $backend->getSummary(1, $folder->cache_lowest_uid - 1);
         sort($uids, SORT_NUMERIC);
         $messages = $backend->getSummary(array_reverse($uids));
         
