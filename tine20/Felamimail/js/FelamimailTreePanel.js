@@ -9,6 +9,7 @@
  *
  * TODO         reload folders (and number of unread messages) every x minutes 
  *              -> via ping or ext.util.delayedtask ?
+ * TODO         show credentials dialog if connections failed because of wrong username/password
  * TODO         show error message when username/password is wrong/missing
  * TODO         add ctx menu action for 'refreshing' of folders
  * TODO         refresh folders when account has changed
