@@ -11,6 +11,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        implement events (update credentials if user pw changed, ...)
  */
 
 /**
