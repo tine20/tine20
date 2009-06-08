@@ -489,37 +489,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * get message body
      *
-     * @param Zend_Mail_Message $_imapMessage
+     * @param Felamimail_Message $_imapMessage
      * @param string $_contentType
      * @return string
      */
-    public function _getBody($_imapMessage, $_contentType)
+    public function _getBody(Felamimail_Message $_imapMessage, $_contentType)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting mail body with content type: ' . $_contentType);
+        
         // get html body part if multipart/alternative
         if (! preg_match('/text\/plain/', $_contentType)) {
             
-            if (preg_match('/multipart\/alternative/', $_contentType)) {
-                // get correct part (html)
-                $found = FALSE;
-                $count = 1;
-                while (! $found && $count <= $_imapMessage->countParts()) {
-                    $part = $_imapMessage->getPart($count++);
-                    $headers = $part->getHeaders();
-                    if (preg_match('/text\/html/', $headers['content-type'])) {
-                        $body = $part->getContent();
-                        $found = TRUE;
-                    }
-                }
-                
-                if (! $found) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get html body.');
-                    $body = '';
-                }
-                
-            } else {
-                // html text
-                $body = $_imapMessage->getBody(Zend_Mime::TYPE_TEXT);
-            }
+            // get html
+            $body = $_imapMessage->getBody(Zend_Mime::TYPE_HTML);
             
             // purify
             $body = $this->_purifyBodyContent($body);
