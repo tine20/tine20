@@ -23,7 +23,7 @@ Tine.Login = {
     defaultPassword: '',
     
     loginMethod: 'Tinebase.login',
-    loginLogo: 'images/tine_logo_enjoy.gif',
+    loginLogo: 'images/tine_logo.gif',
     
     
     /**
@@ -69,9 +69,10 @@ Tine.Login = {
                 },
                 items: [{
                     xtype: 'panel',
-                    width: 250,
+                    style: 'padding-left: 174px;',
+                    width: 350,
                     border: false,
-                    html: '<img src="' + this.loginLogo +'" width="250" height="43"/><br /><br />'
+                    html: '<img src="' + this.loginLogo +'" />'
                 }, new Tine.widgets.LangChooser({
                     
                 }), {
