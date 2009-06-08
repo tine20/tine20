@@ -536,7 +536,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         require_once $purifierFilename;
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML', 'DefinitionID', 'purify message body contents'); 
+        $config->set('HTML', 'DefinitionRev', 1);
         $config->set('Cache', 'SerializerPath', $path);
+
+        // add target="_blank" to anchors
+        $def = $config->getHTMLDefinition(true);
+        $a = $def->addBlankElement('a');
+        $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
         
         $purifier = new HTMLPurifier($config);
         $content = $purifier->purify($_content);
