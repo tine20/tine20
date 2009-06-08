@@ -391,8 +391,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     createNode: function(attr) {
     	var node = {
-    		//id: attr.id,
-            id: attr.localname,
+    		id: attr.id,
     		leaf: false,
     		text: attr.localname,
             localname: attr.localname,
