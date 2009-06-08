@@ -232,10 +232,10 @@ Tine.Admin.Applications.Main = function() {
         }); 
         
         var cm_applications = new Ext.grid.ColumnModel([
-            {resizable: true, header: this.translation.gettext('order'),   id: 'order', dataIndex: 'order', width: 50},
-            {resizable: true, header: this.translation.gettext('name'),    id: 'name', dataIndex: 'name'},
-            {resizable: true, header: this.translation.gettext('status'),  id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
-            {resizable: true, header: this.translation.gettext('version'), id: 'version', dataIndex: 'version', width: 70}
+            {resizable: true, header: this.translation.gettext('Order'),   id: 'order', dataIndex: 'order', width: 50},
+            {resizable: true, header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name'},
+            {resizable: true, header: this.translation.gettext('Status'),  id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
+            {resizable: true, header: this.translation.gettext('Version'), id: 'version', dataIndex: 'version', width: 70}
         ]);
         
         cm_applications.defaultSortable = true; // by default columns are sortable
