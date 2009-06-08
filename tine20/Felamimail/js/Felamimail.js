@@ -12,6 +12,22 @@
 Ext.namespace('Tine.Felamimail');
 
 /**
+ * application obj
+ * 
+ * @type Tine.Tinebase.Application
+ */
+Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
+    /**
+     * returns title (Email)
+     * 
+     * @return {String}
+     */
+    getTitle: function() {
+        return this.i18n._('Email');
+    }
+});
+
+/**
  * default mainscreen
  * 
  * @type Tine.Tinebase.widgets.app.MainScreen
