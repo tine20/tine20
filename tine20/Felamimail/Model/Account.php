@@ -131,6 +131,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         foreach ($imapConfigFields as $field) {
             $result[$field] = $this->{$field};
         }
+        
+        if ($this->secure_connection && $this->secure_connection != 'none') {
+            $result['ssl'] = strtoupper($this->secure_connection);
+        }
+        
         return $result;
     }
     
