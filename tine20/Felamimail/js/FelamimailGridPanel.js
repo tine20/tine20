@@ -74,14 +74,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
-        
-        // disabled doubleclick on rows for the moment
-        /*
-        this.grid.on('rowdblclick', function(grid, row, e){
-            console.log('no');
-            //this.onEditInNewWindow.call(this, {actionType: 'edit'});
-        }, this);
-        */
     },
     
     /**
@@ -200,7 +192,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 this.action_markUnread,
                 this.action_deleteRecord
             ]
-            //this.actions.concat(this.contextMenuItems)
         });
         
         // pool together all our actions, so that we can hand them over to our actionUpdater
@@ -408,6 +399,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             ||  button.actionType == 'replyAll'
             ||  button.actionType == 'forward'
         ) {
+            // reply / forward
             var selectedRows = this.grid.getSelectionModel().getSelections();
             var selectedRecord = selectedRows[0];
             
@@ -445,14 +437,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     recordData.flags = 'Passed';
                     break;
             }
+            
         } else if (button.actionType == 'edit') {
             
+            // show existing email
             var selectedRows = this.grid.getSelectionModel().getSelections();
             var selectedRecord = selectedRows[0];
             recordId = selectedRecord.id;
             recordData.id = recordId;
         
         } else {
+            
+            // new email
             recordData.body = '<br/>';
         }
         
