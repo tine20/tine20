@@ -257,8 +257,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if ($result != 1) {
             throw new Tinebase_Exception_NotFound('Unable to update password! account not found in authentication backend.');
         }
-        
-        return $result;
     }
     
     /**

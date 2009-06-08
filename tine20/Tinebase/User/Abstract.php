@@ -184,6 +184,7 @@ abstract class Tinebase_User_Abstract
      * @param string $_loginName
      * @param string $_password
      * @param bool   $_encrypt encrypt password
+     * @return void
      */
     abstract public function setPassword($_loginName, $_password, $_encrypt = TRUE);
     
