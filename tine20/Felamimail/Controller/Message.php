@@ -309,11 +309,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $account = Felamimail_Controller_Account::getInstance()->get($_message->from);
         
         // create new mail to send
-        $mail = new Tinebase_Mail();
+        $mail = new Tinebase_Mail('UTF-8');
         
         // build mail content
-        $mail->setBodyText(strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_message->body)), 'UTF-8');
-        $mail->setBodyHtml($this->_addHtmlMarkup($_message->body), 'UTF-8');
+        $mail->setBodyText(strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_message->body)));
+        $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
         
         // set from
         $from = (isset($account->from) && ! empty($account->from)) 
