@@ -44,6 +44,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     // drag n drop
     enableDrop: true,
     ddGroup: 'mailToTreeDDGroup',
+    border: false,
 	
     /**
      * init
