@@ -587,7 +587,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         $partNumber++;
                         continue;
                     } else {
-                        preg_match("/filename=\"([a-zA-Z0-9\-\._]+)\"/", $attachment['content-disposition'], $matches);
+                        preg_match("/filename=\"*([a-zA-Z0-9\-\._]+)\"*/", $attachment['content-disposition'], $matches);
                         $attachment['filename']     = $matches[1];
                     }
                     

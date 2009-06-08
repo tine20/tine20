@@ -121,9 +121,12 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             // TODO show image attachments inline
             showBody: function(value, headers, attachments) {
                 if (value) {
-                    
+                    console.log(headers);
                     if (headers['content-type']
-                        && (headers['content-type'].match(/text\/html/) || headers['content-type'].match(/multipart\/alternative/))
+                        && (headers['content-type'].match(/text\/html/) 
+                            || headers['content-type'].match(/multipart\/alternative/)
+                            || headers['content-type'].match(/multipart\/signed/)
+                        )
                     ) {
                         // should be already purified ... but just as precaution
                         value = Ext.util.Format.stripScripts(value);
