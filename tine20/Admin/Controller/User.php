@@ -150,9 +150,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param string $_password the new password
      * @param string $_passwordRepeat the new password again
      * @param bool $_mustChange
-     * @return unknown
+     * @return void
      * 
      * @todo add must change pwd info to normal tine user accounts
+     * @todo add Admin_Event_ChangePassword?
      */
     public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat, $_mustChange = FALSE)
     {
@@ -162,7 +163,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             throw new Admin_Exception("Passwords don't match.");
         }
         
-        $result = $this->_userBackend->setPassword($_account->accountLoginName, $_password);
+        $this->_userBackend->setPassword($_account->accountLoginName, $_password);
         
         Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . 
@@ -172,8 +173,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if ($this->_manageSAM) {
             $samResult = $this->_samBackend->setPassword($_account, $_password, TRUE, $_mustChange);
         }
-                
-        return $result;
+        
+        // fire change password event
+        /*
+        $event = new Admin_Event_ChangePassword();
+        $event->userId = $_account->getId();
+        $event->password = $_password;
+        Tinebase_Events::fireEvent($event);
+        */
     }
     
     /**
@@ -223,7 +230,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $account = $this->_userBackend->addUser($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
-        $event = new Admin_Event_AddAccount;
+        $event = new Admin_Event_AddAccount();
         $event->account = $account;
         Tinebase_Events::fireEvent($event);
         
