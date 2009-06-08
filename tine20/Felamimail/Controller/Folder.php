@@ -121,7 +121,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             
             // get folders from db
             $filter = new Felamimail_Model_FolderFilter(array(
-                array('field' => 'parent', 'operator' => 'equals', 'value' => $filterValues['globalname'])
+                array('field' => 'parent',      'operator' => 'equals', 'value' => $filterValues['globalname']),
+                array('field' => 'account_id',  'operator' => 'equals', 'value' => $filterValues['account_id'])
             ));
             $result = $this->_folderBackend->search($filter);
         }
