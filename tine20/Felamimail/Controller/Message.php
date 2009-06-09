@@ -366,6 +366,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
         
+        // add user agent
+        $mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING);
+        
         // set transport + send mail
         $smtpConfig = $account->getSmtpConfig();
         if (! empty($smtpConfig)) {
