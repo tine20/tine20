@@ -101,7 +101,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $results['totalcount']);
         $default = array();
         foreach ($results['results'] as $result) {
-            if ($result['user'] == 'unittest@tine20.org') {
+            if ($result['name'] == 'default') {
                 $default = $result;
             }
         }
