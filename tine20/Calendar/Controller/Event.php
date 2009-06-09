@@ -392,16 +392,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
         $this->_backend->deleteAttendee($diff['toDeleteIds']);
         
+        $calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
+        
         foreach ($attendee as $attender) {
             $attenderId = $attender->getId();
             
             if ($attenderId) {
                 $currentAttender = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
                 
-                $this->_updateAttender($attender, $currentAttender);
+                $this->_updateAttender($attender, $currentAttender, $calendar);
                 
             } else {
-                $this->_createAttender($attender);
+                $this->_createAttender($attender, $calendar);
             }
         }
     }
@@ -410,9 +412,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      * creates a new attender
      * @todo add support for resources
      * 
-     * @param Calendar_Model_Attender $_attender
+     * @param Calendar_Model_Attender  $_attender
+     * @param Tinebase_Model_Container $_calendar
      */
-    protected function _createAttender($_attender) {
+    protected function _createAttender($_attender, $_calendar) {
+        
+        // reset status if user != attender        
         if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP
                 || $_attender->user_id != Tinebase_Core::getUser()->getId()) {
 
@@ -423,7 +428,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         $_attender->status_authkey = Tinebase_Record_Abstract::generateUID();
         
         // attach to display calendar
-        
+        if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_USER || $_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUPMEMBER) {
+            if ($_calendar->type == Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($_attender->user_id, $_calendar, Tinebase_Model_Container::GRANT_ADMIN)) {
+                // if attender has admin grant to personal phisycal container, this phys. cal also gets displ. cal
+                $_attender->displaycontainer_id = $_calendar->getId();
+            } else if ($_attender->displaycontainer_id && $_attender->user_id == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($_attender->user_id, $_attender->displaycontainer_id, Tinebase_Model_Container::GRANT_ADMIN)) {
+                // allow user to set his own displ. cal
+                $_attender->displaycontainer_id = $_attender->displaycontainer_id;
+            } else {
+                $displayCal = Calendar_Controller::getInstance()->getDefaultDisplayCalendar($_attender->user_id);
+                if ($displayCal) {
+                    $_attender->displaycontainer_id = $displayCal->getId();
+                }
+            }
+        }
         
         $this->_backend->createAttendee($_attender);
     }
@@ -432,21 +450,35 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      * updates an attender
      * @todo add support for resources
      * 
-     * @param Calendar_Model_Attender $_attender
-     * @param Calendar_Model_Attender $_currentAttender
+     * @param Calendar_Model_Attender  $_attender
+     * @param Calendar_Model_Attender  $_currentAttender
+     * @param Tinebase_Model_Container $_calendar
      */
-    protected function _updateAttender($_attender, $_currentAttender) {
+    protected function _updateAttender($_attender, $_currentAttender, $_calendar) {
         
+        // reset status if user != attender
         if ($_currentAttender->user_type == Calendar_Model_Attender::USERTYPE_GROUP 
                 || $_currentAttender->user_id != Tinebase_Core::getUser()->getId()) {
 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$_attender->user_type} {$_attender->user_id}");
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$_attender->user_type} {$_attender->user_id}");
             $_attender->status = $_currentAttender->status;
         }
         
         // preserv old authkey
         $_attender->status_authkey = $_currentAttender->status_authkey;
         
+        // update display calendar
+        if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_USER || $_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUPMEMBER) {
+            if ($_calendar->type == Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($_attender->user_id, $_calendar, Tinebase_Model_Container::GRANT_ADMIN)) {
+                // if attender has admin grant to personal phisycal container, this phys. cal also gets displ. cal
+                $_attender->displaycontainer_id = $_calendar->getId();
+            } else if ($_attender->user_id == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($_attender->user_id, $_attender->displaycontainer_id, Tinebase_Model_Container::GRANT_ADMIN)) {
+                // allow user to set his own displ. cal
+                $_attender->displaycontainer_id = $_attender->displaycontainer_id;
+            } else {
+                $_attender->displaycontainer_id = $_currentAttender->displaycontainer_id;
+            }
+        }
         
         $this->_backend->updateAttendee($_attender);
     }
