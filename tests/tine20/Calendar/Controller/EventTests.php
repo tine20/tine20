@@ -142,7 +142,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
-        $event->attendee[0]->user_id = 555;
+        $event->attendee[0]->user_id = Tinebase_User::getInstance()->getUserByLoginName('sclever')->getId();
         $event->attendee[0]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         unset($event->attendee[1]);
         
