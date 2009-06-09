@@ -530,7 +530,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $body = $_imapMessage->getBody(Zend_Mime::TYPE_HTML);
         } 
         
-        // get plain text if body is empty
+        // get plain text if body is empty at this point
         if (empty($body) || $body == 'no text part found') {
         
             // plain text
