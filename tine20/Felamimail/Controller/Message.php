@@ -524,24 +524,24 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting mail body with content type: ' . $_contentType);
         
         // get html body part if multipart/alternative
+        $body = '';
         if (! preg_match('/text\/plain/', $_contentType)) {
-            
             // get html
             $body = $_imapMessage->getBody(Zend_Mime::TYPE_HTML);
-            
-            // purify
-            $body = $this->_purifyBodyContent($body);
-            
-        } else {
+        } 
+        
+        // get plain text if body is empty
+        if (empty($body) || $body == 'no text part found') {
+        
             // plain text
             $body = $_imapMessage->getBody(Zend_Mime::TYPE_TEXT);
 
             // add anchor tag to links
             $body = $this->_replaceUriAndSpaces($body);
-            
-            // purify
-            $body = $this->_purifyBodyContent($body);
         }
+
+        // purify
+        $body = $this->_purifyBodyContent($body);
         
         return $body;
     }
