@@ -376,6 +376,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      * NOTE: This function is executetd in a create/update context. As such the user
      *       has edit/update the event and can do anything besides status setting
      * 
+     * @todo add support for resources
+     * 
      * @param Calendar_Model_Evnet $_event
      */
     protected function _saveAttendee($_event)
@@ -396,9 +398,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             if ($attenderId) {
                 $currentAttender = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
                 
-                if (! (($currentAttender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER 
-                        || $currentAttender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER)
-                        && $currentAttender->user_id == Tinebase_Core::getUser()->getId())) {
+                if ($currentAttender->user_type == Calendar_Model_Attendee::USERTYPE_GROUP 
+                        || $currentAttender->user_id != Tinebase_Core::getUser()->getId()) {
 
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$attender->user_type} {$attender->user_id}");
                     $attender->status = $currentAttender->status;
@@ -408,9 +409,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $this->_backend->updateAttendee($attender);
                 
             } else {
-                if (! (($attender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER 
-                        || $attender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER)
-                        && $attender->user_id == Tinebase_Core::getUser()->getId())) {
+                if ($attender->user_type == Calendar_Model_Attendee::USERTYPE_GROUP
+                        || $attender->user_id != Tinebase_Core::getUser()->getId()) {
 
                     $attender->status = Calendar_Model_Attendee::STATUS_NEEDSACTION;
                 }
@@ -419,6 +419,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $attender->status_authkey = Tinebase_Record_Abstract::generateUID();
                 
                 // attach to display calendar
+                
                 
                 $this->_backend->createAttendee($attender);
             }
