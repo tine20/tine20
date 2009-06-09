@@ -183,32 +183,44 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * test multipart signed mail
      *
-     * @todo finish that
      */
     public function testMultipartSigned()
     {
         $message = $this->_messageTestHelper('multipart_signed.eml');
         
-        /*
         // do checks
-        $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $message->subject);
-        $this->assertEquals('"Robin H. Johnson" <robbat2@gentoo.org>', $message->from);
+        $this->assertEquals('[gentoo-dev] Last rites: dev-php5/pecl-zip', $message->subject);
+        $this->assertEquals('Christian Hoffmann <hoffie@gentoo.org>', $message->from);
         
         $completeMessage = $this->_controller->get($message->getId());
         
-        //print_r($completeMessage->toArray());
         $attachments = $completeMessage->attachments;
+        
+        // do checks
         $this->assertGreaterThan(
             0, 
             count($attachments),
             'attachments not found'
         );
-        $this->assertEquals('multipart/mixed; boundary="0F1p//8PRICkK4MWrobbat28989323553773"', $completeMessage->headers['content-type']);
-        $this->assertEquals('add-removals.1239580800.log', $attachments[0]['filename']);
+        $this->assertEquals('multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary=------------enig43E7BAD372988B39EC5ECE0B', $completeMessage->headers['content-type']);
+        $this->assertEquals('signature.asc', $attachments[0]['filename']);
+        $this->assertEquals('# Christian Hoffmann  (12 Apr 2009)
+# Masked for security (bug 265756), unmaintained upstream (last release
+# two years ago), will be removed in 30 days. Use dev-lang/php with
+# USE=zip as a replacement, which is actively maintained and has more
+# features.
+dev-php5/pecl-zip
 
+<a href="http://bugs.gentoo.org/show_bug.cgi?id=265756" target="_blank">http://bugs.gentoo.org/show_bug.cgi?id=265756</a>
+
+-- 
+Christian Hoffmann
+
+
+', $completeMessage->body);
+        
         // delete message
         $this->_controller->delete($message->getId());
-        */
     }
     
     /********************************* protected helper funcs *************************************/
