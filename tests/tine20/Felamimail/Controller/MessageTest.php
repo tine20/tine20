@@ -76,8 +76,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $folderBackend = new Felamimail_Backend_Folder();
         $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
         
-        // clear cache
+        // clear cache and empty folder
         Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
+        Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
         
         // append message
         $this->_appendMessage('text_plain.eml', 'INBOX');
@@ -109,14 +110,131 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * test multipart alternative mail
      *
-     *  @todo implement
      */
     public function testMultipartAlternative()
     {
+        $message = $this->_messageTestHelper('multipart_alternative.eml');
         
+        // do checks
+        $this->assertEquals('Kondome im Test: Fast schon perfekt', $message->subject);
+        $this->assertEquals('<newsletter@stiftung-warentest.de>', $message->from);
+        
+        $completeMessage = $this->_controller->get($message->getId());
+        
+        //print_r($completeMessage->toArray());
+        $this->assertGreaterThan(
+            0, 
+            preg_match(
+                "/Kondome sind der sicherste Schutz vor dem HI \(Humanes Immundefizienz\)\-Virus\. Absolut zuverlässig, urteilte die Stiftung Warentest schon 2004/", 
+                $completeMessage->body
+            ),
+            'Text not found'
+        );
+        $this->assertGreaterThan(
+            0, 
+            preg_match(
+                '/E\-Mail:     <a href="mailto:email@stiftung\-warentest\.de"/',
+                $completeMessage->body
+            ),
+            'Email not found'
+        );
+        $this->assertGreaterThan(
+            0, 
+            preg_match(
+                "/Sie können Ihr Newsletter-Abonnement selbst konfigurieren \.\.\./",
+                $completeMessage->body
+            ),
+            'encoding not working'
+        );
+        $this->assertEquals('multipart/alternative; boundary="=_m192h4woyec67braywzx"', $completeMessage->headers['content-type']);
+        
+        // delete message
+        $this->_controller->delete($message->getId());
+    }
+    
+    /**
+     * test multipart mixed mail
+     *
+     */
+    public function testMultipartMixed()
+    {
+        $message = $this->_messageTestHelper('multipart_mixed.eml');
+        
+        // do checks
+        $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $message->subject);
+        $this->assertEquals('"Robin H. Johnson" <robbat2@gentoo.org>', $message->from);
+        
+        $completeMessage = $this->_controller->get($message->getId());
+        
+        //print_r($completeMessage->toArray());
+        $attachments = $completeMessage->attachments;
+        $this->assertGreaterThan(
+            0, 
+            count($attachments),
+            'attachments not found'
+        );
+        $this->assertEquals('multipart/mixed; boundary="0F1p//8PRICkK4MWrobbat28989323553773"', $completeMessage->headers['content-type']);
+        $this->assertEquals('add-removals.1239580800.log', $attachments[0]['filename']);
+
+        // delete message
+        $this->_controller->delete($message->getId());
+    }
+
+    /**
+     * test multipart signed mail
+     *
+     * @todo finish that
+     */
+    public function testMultipartSigned()
+    {
+        $message = $this->_messageTestHelper('multipart_signed.eml');
+        
+        /*
+        // do checks
+        $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $message->subject);
+        $this->assertEquals('"Robin H. Johnson" <robbat2@gentoo.org>', $message->from);
+        
+        $completeMessage = $this->_controller->get($message->getId());
+        
+        //print_r($completeMessage->toArray());
+        $attachments = $completeMessage->attachments;
+        $this->assertGreaterThan(
+            0, 
+            count($attachments),
+            'attachments not found'
+        );
+        $this->assertEquals('multipart/mixed; boundary="0F1p//8PRICkK4MWrobbat28989323553773"', $completeMessage->headers['content-type']);
+        $this->assertEquals('add-removals.1239580800.log', $attachments[0]['filename']);
+
+        // delete message
+        $this->_controller->delete($message->getId());
+        */
     }
     
     /********************************* protected helper funcs *************************************/
+    
+    protected function _messageTestHelper($_filename)
+    {
+        // get inbox folder id
+        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+                
+        $this->_appendMessage($_filename, 'INBOX');
+        
+        // get inbox folder id
+        Felamimail_Controller_Folder::getInstance()->getSubFolders();
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folder = $folderBackend->getByBackendAndGlobalName('default', 'INBOX');
+        
+        // search messages in inbox
+        $result = $this->_controller->search($this->_getFilter($folder->getId()));
+        
+        //print_r($result->toArray());
+        
+        // return result
+        return $result->getFirstRecord();        
+    }
     
     /**
      * append message (from given filename) to folder
