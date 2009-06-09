@@ -68,7 +68,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 
         // add account nodes and context menu
         this.initAccounts();
-        this.initContextMenu();
+        this.initContextMenus();
         
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
         
@@ -117,45 +117,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     /**
      * init context menu
      */
-    initContextMenu: function() {
-        var editAccount = {
-            text: this.app.i18n._('Edit Account'),
-            iconCls: 'FelamimailIconCls',
-            scope: this,
-            handler: function() {
-                var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
-                var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
-                    record: record,
-                    listeners: {
-                        scope: this,
-                        'update': function(record) {
-                            var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
-                            
-                            // update tree node + store
-                            this.ctxNode.setText(account.get('name'));
-                            this.accountStore.reload();
-                        }
-                    }
-                });        
-            }
-        };
+    initContextMenus: function() {
         
-        this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
-            nodeName: this.app.i18n._('Account'),
-            actions: [editAccount, 'delete'],
-            scope: this,
-            backend: 'Felamimail',
-            backendModel: 'Account'
-        });
+        this.initAccountContextMenu();
         
-        var config = {
-            nodeName: this.app.i18n._('Folder'),
-            scope: this,
-            backend: 'Felamimail',
-            backendModel: 'Folder'
-        };        
+        /***************** define additional actions *****************/
         
-        var updateCacheConfig = {
+        var updateCacheConfigAction = {
             text: this.app.i18n._('Update Cache'),
             iconCls: 'action_update_cache',
             scope: this,
@@ -173,21 +141,42 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 });
             }
         };
+
+        var reloadFolderAction = {
+            text: this.app.i18n._('Reload Folder'),
+            iconCls: 'x-tbar-loading',
+            scope: this,
+            handler: function() {
+                var tree = this;
+                this.ctxNode.reload(function(node) {
+                    //console.log(node);
+                    node.expand();
+                    node.select();
+                    // update grid
+                    tree.filterPlugin.onFilterChange();
+                });                
+                /*
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Felamimail.refreshFolder',
+                        folderId: this.ctxNode.attributes.folder_id
+                    },
+                    scope: this,
+                    success: function(_result, _request){
+                        // update grid
+                        this.filterPlugin.onFilterChange();
+                    }
+                });
+                */
+            }
+        };
         
-        // system folder ctx menu
-        config.actions = ['add', updateCacheConfig];
-        this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
-        
-        // user folder ctx menu
-        config.actions = ['add', 'rename', updateCacheConfig, 'delete'];
-        this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
-        
-        // trash ctx menu
-        config.actions = ['add', {
+        var emptyFolderAction = {
             text: this.app.i18n._('Empty Folder'),
             iconCls: 'action_folder_emptytrash',
             scope: this,
             handler: function() {
+                this.app.mainScreen.gridPanel.grid.loadMask.show();
                 Ext.Ajax.request({
                     params: {
                         method: 'Felamimail.emptyFolder',
@@ -197,13 +186,85 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     success: function(_result, _request){
                         // update grid
                         this.filterPlugin.onFilterChange();
+                        
+                        // reload tree node
+                        this.ctxNode.reload(function(callback) {
+                            //console.log('reload');
+                        });
                     }
                 });
             }
-        }];
+        };
+
+        /***************** mutual config options *****************/
+        
+        var config = {
+            nodeName: this.app.i18n._('Folder'),
+            scope: this,
+            backend: 'Felamimail',
+            backendModel: 'Folder'
+        };        
+        
+        /***************** system folder ctx menu *****************/
+
+        config.actions = ['add', updateCacheConfigAction, reloadFolderAction];
+        this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
+        
+        /***************** user folder ctx menu *****************/
+
+        config.actions = ['add', 'rename', updateCacheConfigAction, 'delete', reloadFolderAction];
+        this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
+        
+        /***************** trash ctx menu *****************/
+        
+        config.actions = ['add', emptyFolderAction, reloadFolderAction];
         this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     },
     
+    /**
+     * init context menu
+     */
+    initAccountContextMenu: function() {
+        
+        var editAccount = {
+            text: this.app.i18n._('Edit Account'),
+            iconCls: 'FelamimailIconCls',
+            scope: this,
+            handler: function() {
+                var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
+                var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
+                    record: record,
+                    listeners: {
+                        scope: this,
+                        'update': function(record) {
+                            var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
+                            
+                            // update tree node + store
+                            this.ctxNode.setText(account.get('name'));
+                            this.accountStore.reload();
+                            
+                            // reload tree node
+                            this.ctxNode.reload(function(callback) {
+                                //console.log('reload');
+                            });
+                            
+                            // update grid
+                            this.filterPlugin.onFilterChange();
+                        }
+                    }
+                });        
+            }
+        };
+        
+        this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
+            nodeName: this.app.i18n._('Account'),
+            actions: [editAccount, 'delete'],
+            scope: this,
+            backend: 'Felamimail',
+            backendModel: 'Account'
+        });
+    },
+        
     /**
      * @private
      */
