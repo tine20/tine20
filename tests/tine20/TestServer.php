@@ -89,6 +89,8 @@ class TestServer extends Tinebase_Server_Abstract
                 ));
                 $newUser = Tinebase_User::getInstance()->addUser($user);
                 
+                Tinebase_Group::getInstance()->addGroupMember($group, $newUser);
+                
                 // give additional testusers the same password as the primary test account
                 Tinebase_User::getInstance()->setPassword($newUser, Zend_Registry::get('testConfig')->password);
             }
