@@ -161,18 +161,15 @@ class Felamimail_Message extends Zend_Mail_Message
      * @param string $_charset
      * @param string $_content
      * @return string
+     * 
+     * @todo catch iconv errors and try different charsets
      */
     protected function _decode($_charset, $_content)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " iconv() from " . $_charset . " to utf-8.");
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " message body: iconv() from " . $_charset . " to utf-8.");
         
         $result = iconv($_charset, 'utf-8', $_content);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " guessed encoding: " . mb_detect_encoding($_content));
-        
         return $result;
-        
-        //$content = mb_convert_encoding($content, $charset, 'UTF-8');
-        //$content = iconv('LATIN1', 'utf-8', $content);
     }
 }
