@@ -10,7 +10,7 @@
  * @version     $Id$
  * 
  * @todo        add support for message/rfc822 attachments
- * @todo        parse mail body and add <a> to links, telephone numbers and email addresses?
+ * @todo        parse mail body and add <a> to telephone numbers and email addresses?
  * @todo        check html purifier config (allow some tags/attributes?)
  */
 
@@ -515,8 +515,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Message $_imapMessage
      * @param string $_contentType
      * @return string
-     * 
-     * @todo add anchor tag to links?
      */
     public function _getBody(Felamimail_Message $_imapMessage, $_contentType)
     {
@@ -535,8 +533,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // plain text
             $body = $_imapMessage->getBody(Zend_Mime::TYPE_TEXT);
 
-            // add anchor tag to links ?
-            //$body = preg_replace('/(https*:\/\/[^\(^\)]+)/', '<a href="$1">$1</a>', $body);
+            // add anchor tag to links
             $body = $this->_replaceUriAndSpaces($body);
             
             // purify
