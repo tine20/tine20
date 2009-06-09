@@ -35,20 +35,4 @@ class Calendar_Backend_Sql_Attendee extends Tinebase_Backend_Sql_Abstract
      */
     protected $_modelName = 'Calendar_Model_Attendee';
     
-    /**
-     * Creates new entry
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_InvalidArgument
-     * @throws  Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo    remove autoincremental ids later
-     */
-    public function create(Tinebase_Record_Interface $_record) 
-    {
-        $_record->status_authkey = Tinebase_Record_Abstract::generateUID();
-        
-        return parent::create($_record);
-    }
 }

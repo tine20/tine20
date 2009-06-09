@@ -432,12 +432,14 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
     {
         return new Tinebase_Record_RecordSet('Calendar_Model_Attendee', array(
             array(
-                'user_id'   => Tinebase_Core::getUser()->getId(),
-                'role'      => Calendar_Model_Attendee::ROLE_REQUIRED
+                'user_id'        => Tinebase_Core::getUser()->getId(),
+                'role'           => Calendar_Model_Attendee::ROLE_REQUIRED,
+                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
             ),
             array(
-                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type' => Calendar_Model_Attendee::USERTYPE_GROUP
+                'user_id'        => Tinebase_Core::getUser()->accountPrimaryGroup,
+                'user_type'      => Calendar_Model_Attendee::USERTYPE_GROUP,
+                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
             )
         ));
     }

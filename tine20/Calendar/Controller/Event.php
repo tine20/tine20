@@ -401,7 +401,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                         && $currentAttender->user_id == Tinebase_Core::getUser()->getId())) {
 
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$attender->user_type} {$attender->user_id}");
-                    $attendee->status = $currentAttender->status;
+                    $attender->status = $currentAttender->status;
                 }
                 
                 $attender->status_authkey = $currentAttender->status_authkey;
@@ -412,8 +412,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                         || $attender->user_type == Calendar_Model_Attendee::USERTYPE_GROUPMEMBER)
                         && $attender->user_id == Tinebase_Core::getUser()->getId())) {
 
-                    $attendee->status = Calendar_Model_Attendee::STATUS_NEEDSACTION;
+                    $attender->status = Calendar_Model_Attendee::STATUS_NEEDSACTION;
                 }
+                
+                // generate auth key
+                $attender->status_authkey = Tinebase_Record_Abstract::generateUID();
+                
+                // attach to display calendar
+                
                 $this->_backend->createAttendee($attender);
             }
         }
