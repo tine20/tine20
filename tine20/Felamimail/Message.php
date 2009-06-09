@@ -83,14 +83,18 @@ class Felamimail_Message extends Zend_Mail_Message
         
         
         try {
-            $charset        = $part->getHeaderField('content-type', 'charset');
+            $charset = $part->getHeaderField('content-type', 'charset');
         } catch(Zend_Mail_Exception $e) {
+            $charset = '';
+        }
+        
+        if (empty($charset)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no charset header found. assume iso-8859-1");
-            $charset        = 'iso-8859-1';
+            $charset        = 'iso-8859-1';            
         }
         
         if(strtolower($charset) != 'utf-8') {
-            $content = iconv($charset, 'utf-8', $content);
+            $content = $this->_decode($charset, $content);
         }
         
         return $content;
@@ -149,5 +153,26 @@ class Felamimail_Message extends Zend_Mail_Message
         }
         
         return $string;
+    }
+    
+    /**
+     * our own decode (and utf-8 encode) function
+     *
+     * @param string $_charset
+     * @param string $_content
+     * @return string
+     */
+    protected function _decode($_charset, $_content)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " iconv() from " . $_charset . " to utf-8.");
+        
+        $result = iconv($_charset, 'utf-8', $_content);
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " guessed encoding: " . mb_detect_encoding($_content));
+        
+        return $result;
+        
+        //$content = mb_convert_encoding($content, $charset, 'UTF-8');
+        //$content = iconv('LATIN1', 'utf-8', $content);
     }
 }
