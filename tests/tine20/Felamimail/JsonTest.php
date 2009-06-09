@@ -10,7 +10,6 @@
  * 
  * @todo        add tests for create/update/delete accounts
  * @todo        add tests for attachments
- * @todo        use testmails from files/ dir
  */
 
 /**
