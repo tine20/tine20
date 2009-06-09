@@ -243,12 +243,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         return $attendee;
     }
     
-    public function createAttendee(Calendar_Model_Attendee $_attendee)
+    public function createAttendee(Calendar_Model_Attender $_attendee)
     {
         $this->_attendeeBackend->create($_attendee);
     }
     
-    public function updateAttendee(Calendar_Model_Attendee $_attendee)
+    public function updateAttendee(Calendar_Model_Attender $_attendee)
     {
         $this->_attendeeBackend->update($_attendee);
     }

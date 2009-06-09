@@ -294,9 +294,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 //        depending on the participants 'system folder' permissions
                 $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_READ)
                             || $_record->organizer == $currentAccountId
-                            || in_array($currentAccountId, $_record->attendee->filter('user_type', Calendar_Model_Attendee::USERTYPE_USER)->user_id)
+                            || in_array($currentAccountId, $_record->attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)->user_id)
                             || count(array_intersect(
-                                   $_record->attendee->filter('user_type', Calendar_Model_Attendee::USERTYPE_GROUP)->user_id,
+                                   $_record->attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP)->user_id,
                                    Tinebase_Group::getInstance()->getGroupMemberships($currentAccountId)
                                )) > 0;
                 break;
@@ -336,7 +336,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      * NOTE: for recur events we implicitly create an exceptions on demand
      *
      * @param Calendar_Model_Event    $_event
-     * @param Calendar_Model_Attendee $_attendee
+     * @param Calendar_Model_Attender $_attendee
      * @param string                  $_authKey
      */
     public function setAttendeeStatus($_event, $_attendee, $_authKey)
@@ -374,7 +374,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      * saves all attendee of given event
      * 
      * NOTE: This function is executetd in a create/update context. As such the user
-     *       has edit/update the event and can do anything besides status setting
+     *       has edit/update the event and can do anything besides status settings of attendee
      * 
      * @todo add support for resources
      * 
@@ -384,7 +384,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $attendee = $_event->attendee instanceof Tinebase_Record_RecordSet ? 
             $_event->attendee : 
-            new Tinebase_Record_RecordSet('Calendar_Model_Attendee');
+            new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         $attendee->cal_event_id = $_event->getId();
             
         $currentAttendee = $this->_backend->getEventAttendee($_event);
@@ -398,31 +398,56 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             if ($attenderId) {
                 $currentAttender = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
                 
-                if ($currentAttender->user_type == Calendar_Model_Attendee::USERTYPE_GROUP 
-                        || $currentAttender->user_id != Tinebase_Core::getUser()->getId()) {
-
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$attender->user_type} {$attender->user_id}");
-                    $attender->status = $currentAttender->status;
-                }
-                
-                $attender->status_authkey = $currentAttender->status_authkey;
-                $this->_backend->updateAttendee($attender);
+                $this->_updateAttender($attender, $currentAttender);
                 
             } else {
-                if ($attender->user_type == Calendar_Model_Attendee::USERTYPE_GROUP
-                        || $attender->user_id != Tinebase_Core::getUser()->getId()) {
-
-                    $attender->status = Calendar_Model_Attendee::STATUS_NEEDSACTION;
-                }
-                
-                // generate auth key
-                $attender->status_authkey = Tinebase_Record_Abstract::generateUID();
-                
-                // attach to display calendar
-                
-                
-                $this->_backend->createAttendee($attender);
+                $this->_createAttender($attender);
             }
         }
+    }
+    
+    /**
+     * creates a new attender
+     * @todo add support for resources
+     * 
+     * @param Calendar_Model_Attender $_attender
+     */
+    protected function _createAttender($_attender) {
+        if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP
+                || $_attender->user_id != Tinebase_Core::getUser()->getId()) {
+
+            $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+        }
+        
+        // generate auth key
+        $_attender->status_authkey = Tinebase_Record_Abstract::generateUID();
+        
+        // attach to display calendar
+        
+        
+        $this->_backend->createAttendee($_attender);
+    }
+    
+    /**
+     * updates an attender
+     * @todo add support for resources
+     * 
+     * @param Calendar_Model_Attender $_attender
+     * @param Calendar_Model_Attender $_currentAttender
+     */
+    protected function _updateAttender($_attender, $_currentAttender) {
+        
+        if ($_currentAttender->user_type == Calendar_Model_Attender::USERTYPE_GROUP 
+                || $_currentAttender->user_id != Tinebase_Core::getUser()->getId()) {
+
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$_attender->user_type} {$_attender->user_id}");
+            $_attender->status = $_currentAttender->status;
+        }
+        
+        // preserv old authkey
+        $_attender->status_authkey = $_currentAttender->status_authkey;
+        
+        
+        $this->_backend->updateAttendee($_attender);
     }
 }

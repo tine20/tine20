@@ -14,7 +14,7 @@
  *
  * @package Calendar
  */
-class Calendar_Model_Attendee extends Tinebase_Record_Abstract
+class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {
     /**
      * supported user types

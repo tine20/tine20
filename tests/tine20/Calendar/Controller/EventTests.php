@@ -117,10 +117,10 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($updatedEvent->attendee));
         
         sleep(1);
-        $updatedEvent->attendee->getFirstRecord()->role = Calendar_Model_Attendee::ROLE_OPTIONAL;
+        $updatedEvent->attendee->getFirstRecord()->role = Calendar_Model_Attender::ROLE_OPTIONAL;
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
         $this->assertEquals(1, count($secondUpdatedEvent->attendee));
-        $this->assertEquals(Calendar_Model_Attendee::ROLE_OPTIONAL, $secondUpdatedEvent->attendee->getFirstRecord()->role);
+        $this->assertEquals(Calendar_Model_Attender::ROLE_OPTIONAL, $secondUpdatedEvent->attendee->getFirstRecord()->role);
     }
     
     public function testAttendeeAuthKeyPreserv()
@@ -143,15 +143,15 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
         $event->attendee[0]->user_id = 555;
-        $event->attendee[0]->status = Calendar_Model_Attendee::STATUS_ACCEPTED;
+        $event->attendee[0]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         unset($event->attendee[1]);
         
         $persistendEvent = $this->_controller->create($event);
-        $this->assertEquals(Calendar_Model_Attendee::STATUS_NEEDSACTION, $persistendEvent->attendee[0]->status, 'creation of other attedee must not set status');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $persistendEvent->attendee[0]->status, 'creation of other attedee must not set status');
         
-        $persistendEvent->attendee[0]->status = Calendar_Model_Attendee::STATUS_ACCEPTED;
+        $persistendEvent->attendee[0]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         $updatedEvent = $this->_controller->update($persistendEvent);
-        $this->assertEquals(Calendar_Model_Attendee::STATUS_NEEDSACTION, $updatedEvent->attendee[0]->status, 'updateing of other attedee must not set status');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee[0]->status, 'updateing of other attedee must not set status');
     }
     
     public function testSetAttendeeStatus()
@@ -163,11 +163,11 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $persistendEvent = $this->_controller->create($event);
         $attendee = $persistendEvent->attendee[0];
         
-        $attendee->status = Calendar_Model_Attendee::STATUS_DECLINED;
+        $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
         $this->_controller->setAttendeeStatus($persistendEvent, $attendee, $attendee->status_authkey);
         
         $loadedEvent = $this->_controller->get($persistendEvent->getId());
-        $this->assertEquals(Calendar_Model_Attendee::STATUS_DECLINED, $loadedEvent->attendee[0]->status, 'status not set');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $loadedEvent->attendee[0]->status, 'status not set');
         
     }
     
@@ -197,7 +197,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         
         $exception = $recurSet->getFirstRecord();
         $attendee = $exception->attendee[0];
-        $attendee->status = Calendar_Model_Attendee::STATUS_ACCEPTED;
+        $attendee->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         
         $this->_controller->setAttendeeStatus($exception, $attendee, $attendee->status_authkey);
         
@@ -395,14 +395,14 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
     public function testImplicitAttendeeGrants()
     {
         $event = $this->_getEvent();
-        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attendee', array(
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             /*array(
                 'user_id'   => Tinebase_Core::getUser()->getId(),
-                'role'      => Calendar_Model_Attendee::ROLE_REQUIRED
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             ),*/
             array(
                 'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type' => Calendar_Model_Attendee::USERTYPE_GROUP
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP
             )
         ));
         
@@ -510,14 +510,14 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
     
     protected function _getAttendee()
     {
-        return new Tinebase_Record_RecordSet('Calendar_Model_Attendee', array(
+        return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_id'   => Tinebase_Core::getUser()->getId(),
-                'role'      => Calendar_Model_Attendee::ROLE_REQUIRED
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             ),
             array(
                 'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type' => Calendar_Model_Attendee::USERTYPE_GROUP
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP
             )
         ));
     }

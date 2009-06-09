@@ -43,8 +43,8 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
             $_select->joinLeft(
                 /* table  */ array('attendee' => $_backend->getTablePrefix() . 'cal_attendee'), 
                 /* on     */ $db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id') . ' AND (' . 
-                                '( ' . $db->quoteInto($db->quoteIdentifier('attendee.user_type') . ' = ? ',  Calendar_Model_Attendee::USERTYPE_USER) . ' AND ' . $db->quoteInto($db->quoteIdentifier('attendee.user_id') . ' = ? ',  $currentUserId, Zend_Db::INT_TYPE) . ' ) OR ' .
-                                '( ' . $db->quoteInto($db->quoteIdentifier('attendee.user_type') . ' = ? ',  Calendar_Model_Attendee::USERTYPE_GROUP) . ' AND ' . $db->quoteInto($db->quoteIdentifier('attendee.user_id') . ' IN (?) ',  Tinebase_Group::getInstance()->getGroupMemberships($currentUserId), Zend_Db::INT_TYPE) . ' )' .
+                                '( ' . $db->quoteInto($db->quoteIdentifier('attendee.user_type') . ' = ? ',  Calendar_Model_Attender::USERTYPE_USER) . ' AND ' . $db->quoteInto($db->quoteIdentifier('attendee.user_id') . ' = ? ',  $currentUserId, Zend_Db::INT_TYPE) . ' ) OR ' .
+                                '( ' . $db->quoteInto($db->quoteIdentifier('attendee.user_type') . ' = ? ',  Calendar_Model_Attender::USERTYPE_GROUP) . ' AND ' . $db->quoteInto($db->quoteIdentifier('attendee.user_id') . ' IN (?) ',  Tinebase_Group::getInstance()->getGroupMemberships($currentUserId), Zend_Db::INT_TYPE) . ' )' .
                              ')',
                 /* select */ array());
     

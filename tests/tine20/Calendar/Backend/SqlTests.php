@@ -430,15 +430,15 @@ class Calendar_Backend_SqlTests extends PHPUnit_Framework_TestCase
     
     protected function _getAttendee()
     {
-        return new Tinebase_Record_RecordSet('Calendar_Model_Attendee', array(
+        return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_id'        => Tinebase_Core::getUser()->getId(),
-                'role'           => Calendar_Model_Attendee::ROLE_REQUIRED,
+                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status_authkey' => Tinebase_Record_Abstract::generateUID(),
             ),
             array(
                 'user_id'        => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type'      => Calendar_Model_Attendee::USERTYPE_GROUP,
+                'user_type'      => Calendar_Model_Attender::USERTYPE_GROUP,
                 'status_authkey' => Tinebase_Record_Abstract::generateUID(),
             )
         ));

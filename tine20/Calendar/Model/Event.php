@@ -77,7 +77,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'uid'                  => array('allowEmpty' => true          ),
         // ical common fields with multiple appearance
         //'attach'                => array('allowEmpty' => true         ),
-        'attendee'              => array('allowEmpty' => true         ), // RecordSet of Calendar_Model_Attendee
+        'attendee'              => array('allowEmpty' => true         ), // RecordSet of Calendar_Model_Attender
         'tags'                  => array('allowEmpty' => true         ), // originally categories handled by Tinebase_Tags
         'notes'                 => array('allowEmpty' => true         ), // originally comment handled by Tinebase_Notes
         //'contact'               => array('allowEmpty' => true         ),

@@ -33,6 +33,6 @@ class Calendar_Backend_Sql_Attendee extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_modelName = 'Calendar_Model_Attendee';
+    protected $_modelName = 'Calendar_Model_Attender';
     
 }

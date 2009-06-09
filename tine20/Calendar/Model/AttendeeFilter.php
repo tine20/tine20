@@ -16,7 +16,7 @@
  * 
  * @package     Calendar
  */
-class Calendar_Model_AttendeeFilter extends Tinebase_Model_Filter_Abstract 
+class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract 
 {
     /**
      * @var array list of allowed operators
