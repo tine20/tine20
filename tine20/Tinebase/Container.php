@@ -471,13 +471,14 @@ class Tinebase_Container
      * returns the personal container of a given account accessible by a another given account
      *
      * @param   int|Tinebase_Model_User $_accountId
-     * @param   string $_application
+     * @param   string                  $_application
      * @param   int|Tinebase_Model_User $_owner
-     * @param   int $_grant
+     * @param   int                     $_grant
+     * @param   bool                    $_ignoreACL
      * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getPersonalContainer($_accountId, $_application, $_owner, $_grant)
+    public function getPersonalContainer($_accountId, $_application, $_owner, $_grant, $_ignoreACL=false)
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
@@ -498,17 +499,20 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', 'owner.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
             ->where('owner.account_id = ?', $ownerId)
             ->where('owner.account_grant = ?', Tinebase_Model_Container::GRANT_ADMIN)
-            ->where('user.account_grant = ?', $_grant)
-
-            # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
-            ->orWhere('user.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->order(SQL_TABLE_PREFIX . 'container.name');
+            
+        if ($_ignoreACL !== true) {
+            $select->where('user.account_grant = ?', $_grant)
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where("(user.account_id = ? AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_USER . "'", $accountId)
+            ->orWhere("user.account_id IN (?) AND user.account_type = '" . Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP . "'", $groupMemberships)
+            ->orWhere('user.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+        }
             
         //error_log("getContainer:: " . $select->__toString());
 
@@ -529,6 +533,19 @@ class Tinebase_Container
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
         
         return $result;
+    }
+    
+    /**
+     * gets default container of given user for given app
+     *
+     * @todo implement !
+     * 
+     * @param unknown_type $_accountId
+     * @param unknown_type $_applicationId
+     */
+    public function getDefaultContainer($_accountId, $_applicationId)
+    {
+        
     }
     
     /**
