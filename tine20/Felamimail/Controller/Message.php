@@ -297,6 +297,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @todo set In-Reply-To header for replies (which message id?)
      * @todo add name for to/cc/bcc
      * @todo add max attachment size check?
+     * @todo add config setting for 'Sent' folder name
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
@@ -363,8 +364,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
 
             // save in sent folder (account id is in from property)
-            $mailAsString = $transport->getHeaders() . Zend_Mime::LINEEND . $transport->getBody();
-            Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mailAsString, 'Sent');
+            try {
+                $mailAsString = $transport->getHeaders() . Zend_Mime::LINEEND . $transport->getBody();
+                $sentFolder = 'Sent';
+                Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mailAsString, $sentFolder);
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not save sent message in "' . $sentFolder . '".');
+            }
             
             // add reply/forward flags if set
             if (! empty($_message->flags) && 
