@@ -32,8 +32,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchFolders($filter)
     {
-        try {
+        //try {
             $result = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
+            /*
         } catch (Zend_Mail_Storage_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get folders: ' . $zmpe->getMessage());
             $result = array(
@@ -41,10 +42,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'results'    => array(),
                 'status'     => 'failure'
             );
-        }
+        }*/
         
         return $result;
-        //return $results = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
     }
 
     /**

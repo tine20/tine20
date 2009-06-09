@@ -474,6 +474,55 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         }
         
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
+    },
+    
+    /**
+     * request failed
+     * 
+     * @param {} response
+     * @param {} request
+     * 
+     * TODO update password
+     */
+    onRequestFailed: function(response, request) {
+        var responseText = Ext.util.JSON.decode(response.responseText);
+        console.log(responseText);
+
+        if (responseText.msg == 'cannot login, user or password wrong') {
+            Ext.MessageBox.prompt(this.app.i18n._('Enter password'), this.app.i18n._('Please enter your password for this account:'), function(_btn, _text) {
+                if(_btn == 'ok') {
+                    if (! _text) {
+                        Ext.Msg.alert(this.app.i18n._('No password entered.'), this.app.i18n._('You have to enter a password!'));
+                        return;
+                    }
+                    //Ext.MessageBox.wait(this.app.i18n._('Please wait'), this.app.i18n._('Setting new password...' ));
+                    
+                    // TODO get account id and update password
+                    /*
+                    var params = {
+                        method: 'Felamimail_changePassword',
+                        password: _text,
+                        account_id: 
+                    };
+                    
+                    Ext.Ajax.request({
+                        params: params,
+                        scope: this,
+                        success: function(_result, _request){
+                            // TODO update account node
+                            Ext.MessageBox.hide();
+                        }
+                    });
+                    */
+                }
+            }, this);            
+        } else {
+            Ext.MessageBox.alert(
+                this.app.i18n._('Failed to connect'), 
+                this.app.i18n._('Could not connect to account.') 
+                    + ' (' + this.app.i18n._('Error:') + ' ' + responseText.msg + ')'
+            ); 
+        }
     }
 	
 });
