@@ -65,7 +65,21 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
                 break;
         }
     }
-        
+    
+    /**
+     * returns the defualt display calender for given account
+     *
+     * @todo add preference and use this
+     * 
+     * @param  mixed[int|Tinebase_Model_User] $_account   the accountd object
+     * @return Tinebase_Model_Container
+     */
+    public function getDefaultDisplayCalendar($_account)
+    {
+        $calendars = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', $_account, 0, true);
+        return $calendars->getFirstRecord();
+    }
+    
     /**
      * creates the initial folder for new accounts
      *
