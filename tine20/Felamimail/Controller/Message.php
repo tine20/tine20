@@ -193,8 +193,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Record_Interface $_record
      * 
-     * @todo allow to configure Trash folder name (as account option) and if messages should be moved there
-     * @todo always assume that a trash folder exists?
+     * @todo allow to configure if messages should be moved to trash
      */
     protected function _deleteRecord(Tinebase_Record_Interface $_record)
     {
@@ -202,14 +201,26 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         parent::_deleteRecord($_record);
         
         if ($imapBackend = $this->_getBackendAndSelectFolder($_record->folder_id, $folder)) {
+            // get account and trash folder name
+            $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+            $trashFolder = ($account->trash_folder && ! empty($account->trash_folder)) ? $account->trash_folder : 'Trash';
+        
             // remove from server
-            if ($folder->globalname == 'Trash') {
+            if ($folder->globalname == $trashFolder) {
                 // only delete if in Trash
                 $imapBackend->removeMessage($_record->messageuid);
             } else {
                 // move to trash
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" . $_record->subject . "' to Trash.");
-                $imapBackend->moveMessage($_record->messageuid, 'Trash');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" . $_record->subject . "' to $trashFolder.");
+                try {
+                    $imapBackend->moveMessage($_record->messageuid, $trashFolder);
+                } catch (Zend_Mail_Storage_Exception $zmse) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                        . " Trash folder '$trashFolder' does not exist."
+                        . " Deleting message."
+                    );
+                    $imapBackend->removeMessage($_record->messageuid);
+                }
             }
         }
     }
