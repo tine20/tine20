@@ -93,7 +93,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     maxLength: 256,
                     columnWidth: 1
                 },
-                items: [[ {
+                items: [[{
                     fieldLabel: this.app.i18n._('Host'),
                     name: 'host',
                     allowBlank: false
@@ -128,6 +128,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'password',
                     emptyText: 'password',
                     inputType: 'password'
+                }, {
+                    fieldLabel: this.app.i18n._('Sent Folder Name'),
+                    name: 'sent_folder',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Trash Folder Name'),
+                    name: 'trash_folder',
+                    maxLength: 64
                 }]]
             }, {               
                 title: this.app.i18n._('SMTP'),

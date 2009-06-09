@@ -79,6 +79,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'sent_folder'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'trash_folder'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // user data
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),

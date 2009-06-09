@@ -297,17 +297,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @todo set In-Reply-To header for replies (which message id?)
      * @todo add name for to/cc/bcc
      * @todo add max attachment size check?
-     * @todo add config setting for 'Sent' folder name
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
-                
         // get account
         $account = Felamimail_Controller_Account::getInstance()->get($_message->from);
+
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), TRUE));
         
         // create new mail to send
         $mail = new Tinebase_Mail('UTF-8');
@@ -366,8 +366,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // save in sent folder (account id is in from property)
             try {
                 $mailAsString = $transport->getHeaders() . Zend_Mime::LINEEND . $transport->getBody();
-                $sentFolder = 'Sent';
+                $sentFolder = ($account->sent_folder && ! empty($account->sent_folder)) ? $account->sent_folder : 'Sent';
                 Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mailAsString, $sentFolder);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Saved sent message in "' . $sentFolder . '".'
+                );
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                     . ' Could not save sent message in "' . $sentFolder . '".'

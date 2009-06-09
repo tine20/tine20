@@ -83,6 +83,8 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'from' },
     { name: 'port' },
     { name: 'secure_connection' },
+    { name: 'sent_folder' },
+    { name: 'trash_folder' },
     { name: 'signature' },
     { name: 'smtp_port' },
     { name: 'smtp_hostname' },
@@ -127,7 +129,10 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
         smtp_hostname: (defaults.smtp && defaults.smtp.hostname) ? defaults.smtp.hostname : '',
         smtp_port: (defaults.smtp && defaults.smtp.port) ? defaults.smtp.port : 25,
         signature: 'Sent with love from the new tine 2.0 email client ...<br/>'
-            + 'Please visit <a href="http://tine20.org">http://tine20.org</a>'
+            + 'Please visit <a href="http://tine20.org">http://tine20.org</a>',
+        sent_folder: (defaults.sent_folder) ? defaults.sent_folder : 'Sent',
+        trash_folder: (defaults.trash_folder) ? defaults.trash_folder : 'Trash'
+        
         // some more possible defaults
         /*
         name: 'new account',

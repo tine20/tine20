@@ -60,6 +60,16 @@
                     <value>SSL</value>
                 </field>
                 <field>
+                    <name>sent_folder</name>
+                    <type>text</type>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>trash_folder</name>
+                    <type>text</type>
+                    <length>64</length>
+                </field>
+                <field>
                     <name>signature</name>
                     <type>text</type>
                 </field>
