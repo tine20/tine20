@@ -117,7 +117,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 return value;
             },
             
-            // TODO check preference for mail content-type
+            // TODO check preference for mail content-type?
             // TODO show image attachments inline
             showBody: function(value, headers, attachments) {
                 if (value) {
@@ -131,9 +131,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                         // should be already purified ... but just as precaution
                         value = Ext.util.Format.stripScripts(value);
                     } else {
-                        value = Ext.util.Format.htmlEncode(value);
-                        // it should be enough to replace only 2 or more spaces
-                        value = value.replace(/ /g, '&nbsp;');
+                        //value = Ext.util.Format.htmlEncode(value);
                         value = Ext.util.Format.nl2br(value);
                     }
                     

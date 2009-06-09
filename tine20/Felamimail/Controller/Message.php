@@ -528,15 +528,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // get html
             $body = $_imapMessage->getBody(Zend_Mime::TYPE_HTML);
             
-            // add anchor tag to links ?
-            //$body = preg_replace('/^(href=")(http:\/\/[a-zA-Z\.0-9]+)[^"]+/', '<a href="$1">$1</a>', $body);
-            
             // purify
             $body = $this->_purifyBodyContent($body);
             
         } else {
             // plain text
             $body = $_imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+
+            // add anchor tag to links ?
+            //$body = preg_replace('/(https*:\/\/[^\(^\)]+)/', '<a href="$1">$1</a>', $body);
+            $body = $this->_replaceUriAndSpaces($body);
+            
+            // purify
+            $body = $this->_purifyBodyContent($body);
         }
         
         return $body;
@@ -629,5 +633,23 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $attachments;
+    }
+
+    /**
+     * replace uris with links and more than one space with &nbsp;
+     *
+     * @param string $_content
+     * @return string
+     */
+    protected function _replaceUriAndSpaces($_content) 
+    {
+        // uris
+        $pattern = '@(http://|https://|ftp://|mailto:|news:)([^\s<>]+)@';
+        $result = preg_replace($pattern, "<a href=\"\\1\\2\">\\1\\2</a>", $_content);
+        
+        // spaces
+        $result = preg_replace('/( {2,}|^ )/em', 'str_repeat("&nbsp;", strlen("\1"))', $result);
+        
+        return $result;
     }
 }
