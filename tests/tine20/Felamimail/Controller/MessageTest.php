@@ -66,6 +66,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * test search with cache
+     * - test text_plain.eml message
      *
      */
     public function testSearchWithCache()
@@ -78,6 +79,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         // clear cache
         Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
         
+        // append message
+        $this->_appendMessage('text_plain.eml', 'INBOX');
+        
         // search messages in inbox
         $result = $this->_controller->search($this->_getFilter($folder->getId()));
         
@@ -87,7 +91,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $firstMessage = $result->getFirstRecord();
         $this->assertGreaterThan(0, count($result));
         $this->assertEquals($folder->getId(), $firstMessage->folder_id);
-        //$this->assertEquals('testmail', $firstMessage->subject);
+        $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $firstMessage->subject);
         
         // check cache entries
         $cacheBackend = new Felamimail_Backend_Cache_Sql_Message();
@@ -95,12 +99,37 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($folder->getId(), $cachedMessage->folder_id);
         $this->assertEquals(Zend_Date::now()->toString('YYYY-MM-dd'), $cachedMessage->timestamp->toString('YYYY-MM-dd'));
         
+        // delete message
+        $this->_controller->delete($firstMessage->getId());
+        
         // clear cache
         Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
     }
     
+    /**
+     * test multipart alternative mail
+     *
+     *  @todo implement
+     */
+    public function testMultipartAlternative()
+    {
+        
+    }
     
     /********************************* protected helper funcs *************************************/
+    
+    /**
+     * append message (from given filename) to folder
+     *
+     * @param string $_filename
+     * @param string $_folder
+     */
+    protected function _appendMessage($_filename, $_folder)
+    {
+        $mailAsString = file_get_contents(dirname(dirname(__FILE__)) . '/files/' . $_filename);
+        Felamimail_Backend_ImapFactory::factory(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID)
+            ->appendMessage($mailAsString, $_folder);
+    }
     
     /**
      * get message filter
