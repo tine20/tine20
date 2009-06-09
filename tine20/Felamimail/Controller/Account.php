@@ -133,6 +133,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             
             // get account data from config file    
             $record = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray());
+            $record->smtp_hostname = Tinebase_Core::getConfig()->imap->smtp->hostname;
+            $record->smtp_user = Tinebase_Core::getConfig()->imap->smtp->username;
+            $record->smtp_password = Tinebase_Core::getConfig()->imap->smtp->password;
         } else {
             $record = parent::get($_id, $_containerId);
         }
