@@ -369,7 +369,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $sentFolder = 'Sent';
                 Felamimail_Backend_ImapFactory::factory($_message->from)->appendMessage($mailAsString, $sentFolder);
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not save sent message in "' . $sentFolder . '".');
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' Could not save sent message in "' . $sentFolder . '".'
+                    . ' Please check if a folder with this name exists.'
+                );
             }
             
             // add reply/forward flags if set

@@ -124,12 +124,20 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         // init uidnext if empty
         if (! isset($backendFolderValues['uidnext'])) {
             $backendFolderValues['uidnext'] = $backendFolderValues['exists'];
+            $getUidsFirst = TRUE;
+        } else {
+            $getUidsFirst = FALSE;
         }
 
         $messageCount = $backend->countMessages();
         
         // check if message count is strange
         if ($messageCount < $backendFolderValues['exists']) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                . ' Message count strange: countMessages() = ' . $messageCount 
+                . ' / exists = ' . $backendFolderValues['exists']
+            );
+            
             $messageCount = $backendFolderValues['exists'];
         }
 
@@ -157,13 +165,18 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
                 /********* update *******************************************/
                 
                 // only get messages with $backendFolderValues['uidnext'] > uid > $folder->uidnext
-                $uids = $backend->getUid($folder->uidnext, $backendFolderValues['uidnext']);
-                $messages = $backend->getSummary($uids);                
+                if ($getUidsFirst) {
+                    $uids = $backend->getUid($folder->uidnext, $backendFolderValues['uidnext']);
+                    $messages = $backend->getSummary($uids);
+                } else {
+                    $messages = $backend->getSummary($folder->uidnext, $backendFolderValues['uidnext']);
+                }
             }
 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                ' Trying to add ' . count($messages) . ' new messages to cache. Old uidnext: ' . $folder->uidnext .
-                ' New uidnext: ' . $backendFolderValues['uidnext']
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Trying to add ' . count($messages) . ' new messages to cache. Old uidnext: ' . $folder->uidnext
+                . ' New uidnext: ' . $backendFolderValues['uidnext']
+                //. ' uids: ' . print_r($uids, true)
             );
             
             // get message headers and save them in cache db

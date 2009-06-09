@@ -132,8 +132,12 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
         foreach ($result as $folder) {
             if ($folder->cache_status == 'complete') {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get unread count for ' . $folder->globalname);
-                $folder->unreadcount = $folder->totalcount - $messageCacheBackend->seenCountByFolderId($folder->getId());
+                $seenCount = $messageCacheBackend->seenCountByFolderId($folder->getId());
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Get unread count for ' . $folder->globalname
+                    . ': totalcount = ' . $folder->totalcount . ' / seencount = ' . $seenCount
+                );
+                $folder->unreadcount = $folder->totalcount - $seenCount;
             }
         }
         
