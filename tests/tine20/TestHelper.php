@@ -60,6 +60,8 @@ if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
     throw new Exception("Couldn't find config.inc.php! \n");
 }
 
+Zend_Registry::set('testConfig', $config);
+
 $_SERVER['DOCUMENT_ROOT'] = $config->docroot;    
 
 TestServer::getInstance()->initFramework();

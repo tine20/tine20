@@ -54,8 +54,45 @@ class TestServer extends Tinebase_Server_Abstract
     public function initFramework()
     {
         $this->_initFramework();
+        $this->_initTestUsers();
+        
         // set default internal encoding
         ini_set('iconv.internal_encoding', 'utf-8');
+    }
+    
+    /**
+     * inits (adds) some test users
+     *
+     */
+    protected function _initTestUsers() {
+        $personas = array(
+            'jsmith'   => 'John Smith',
+            'sclever'  => 'Susan Clever',
+            'pwulf'    => 'Paul Wulf',
+            'jmcblack' => 'James McBlack',
+            'rwright'  => 'Roberta Wright',
+        );
+        
+        foreach ($personas as $login => $fullName) {
+            $user = Tinebase_User::getInstance()->getUserByLoginName($login);
+            if (! $user->getId()) {
+                list($given, $last) = explode(' ', $fullName);
+                $group = Tinebase_Group::getInstance()->getGroupByName('Users')->getId();
+                $user = new Tinebase_Model_FullUser(array(
+                    'accountLoginName'      => $login,
+                    'accountPrimaryGroup'   => $group,
+                    'accountDisplayName'    => $fullName,
+                    'accountLastName'       => $last,
+                    'accountFirstName'      => $given,
+                    'accountFullName'       => $fullName,
+                    'accountEmailAddress'   => $login . '@tine-publications.co.uk',
+                ));
+                $newUser = Tinebase_User::getInstance()->addUser($user);
+                
+                // give additional testusers the same password as the primary test account
+                Tinebase_User::getInstance()->setPassword($newUser, Zend_Registry::get('testConfig')->password);
+            }
+        }
     }
     
     /**
