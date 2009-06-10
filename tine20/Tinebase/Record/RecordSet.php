@@ -407,7 +407,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function filter($_field, $_value, $_valueIsRegExp = FALSE)
     {
         if (array_key_exists($_field, $this->_indices)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering with indices, expecting fast results ;-)');
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering with indices, expecting fast results ;-)');
             $valueMap = $this->_indices[$_field];
         } else {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering without indices, expecting slow results');
