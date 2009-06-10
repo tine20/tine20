@@ -305,7 +305,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * 
-     * @todo set In-Reply-To header for replies (which message id?)
+     * @todo what has to be set in the 'In-Reply-To' header?
+     * @todo set organization header (add setting to accounts)
      * @todo add name for to/cc/bcc
      * @todo add max attachment size check?
      */
@@ -316,6 +317,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         // get account
         $account = Felamimail_Controller_Account::getInstance()->get($_message->from);
+        
+        // get original message
+        if ($_message->original_id) {
+            $originalMessage = $this->get($_message->original_id);
+        }
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), TRUE));
@@ -332,6 +338,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ? $account->from 
             : substr($account->email, 0, strpos($account->email, '@'));
         $mail->setFrom($account->email, $from);
+        
+        // set in reply to
+        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $originalMessage) {
+            $mail->addHeader('In-Reply-To', $originalMessage->messageuid);
+        }
         
         // add recipients
         if (isset($_message->to)) {
@@ -393,12 +404,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
             
             // add reply/forward flags if set
-            if (! empty($_message->flags) && 
-                ! empty($_message->id) &&
-                ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
+            if (! empty($_message->flags) 
+                && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
+                && $originalMessage
             ) {
-                $message = $this->get($_message->id);
-                $this->addFlags($message, array($_message->flags));
+                $this->addFlags($originalMessage, array($_message->flags));
             }
         }
         

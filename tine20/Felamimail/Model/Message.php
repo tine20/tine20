@@ -48,7 +48,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'original_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
         'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 

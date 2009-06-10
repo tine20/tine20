@@ -410,6 +410,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             }
             
             recordData.id = recordId;
+            recordData.original_id = selectedRecord.id;
             
             var body = (selectedRecord.data.headers['content-type'].match(/text\/html/)) 
                 ? selectedRecord.get('body')
@@ -459,6 +460,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             );
             var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
             if (signature && signature != '') {
+                signature = Ext.util.Format.nl2br(signature);
                 recordData.body += '<br/><span class="felamimail-body-signature">--<br/>' + signature + '</span>';
             }
         }

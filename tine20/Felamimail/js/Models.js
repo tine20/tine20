@@ -31,7 +31,8 @@ Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'body' },
     { name: 'headers' },
     { name: 'content_type' },
-    { name: 'attachments' }
+    { name: 'attachments' },
+    { name: 'original_id' }
 ]);
 
 /**
