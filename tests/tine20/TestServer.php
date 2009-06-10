@@ -87,14 +87,17 @@ class TestServer extends Tinebase_Server_Abstract
                     'accountFullName'       => $fullName,
                     'accountEmailAddress'   => $login . '@tine-publications.co.uk',
                 ));
-                $newUser = Tinebase_User::getInstance()->addUser($user);
+                $user = Tinebase_User::getInstance()->addUser($user);
                 
-                Tinebase_Group::getInstance()->addGroupMember($group, $newUser);
+                Tinebase_Group::getInstance()->addGroupMember($group, $user);
                 
                 // give additional testusers the same password as the primary test account
-                Tinebase_User::getInstance()->setPassword($newUser, Zend_Registry::get('testConfig')->password);
+                Tinebase_User::getInstance()->setPassword($user, Zend_Registry::get('testConfig')->password);
             }
+            $personas[$login] = $user;
         }
+        Zend_Registry::set('personas', $personas);
+        
     }
     
     /**
