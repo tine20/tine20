@@ -554,8 +554,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // purify
         $body = $this->_purifyBodyContent($body);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $body);
-        
         // add anchor to email addresses (remove mailto hrefs first)
         $mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>[^<]*<\/a>/i';
         $body = preg_replace($mailtoPattern, "\\1", $body);
@@ -563,8 +561,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $emailPattern = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
         $body = preg_replace($emailPattern, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $body);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $body);
-         
         return $body;
     }
     
