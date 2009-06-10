@@ -7,12 +7,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         reload folders (and number of unread messages) every x minutes 
+ * TODO         reload folder status (and number of unread messages) every x minutes 
  *              -> via ping or ext.util.delayedtask ?
- * TODO         show credentials dialog if connections failed because of wrong username/password
- * TODO         show error message when username/password is wrong/missing
- * TODO         add ctx menu action for 'refreshing' of folders
- * TODO         refresh folders when account has changed
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  */
  
@@ -304,15 +300,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @param {} change
      * 
-     * TODO make css class update work (use add/remove class?)
      */
     updateUnreadCount: function(change) {
-        //console.log('update unread count: ' + change);
         
         var node = this.getSelectionModel().getSelectedNode();
         node.attributes.unreadcount = Number(node.attributes.unreadcount) + Number(change);
-        
-        //console.log(node.attributes);
         
         if (node.attributes.unreadcount > 0) {
             node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
@@ -492,7 +484,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @param {} response
      * @param {} request
      * 
-     * TODO update password
      */
     onRequestFailed: function(response, request) {
         var responseText = Ext.util.JSON.decode(response.responseText);
@@ -543,11 +534,28 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                 }
             }, this);            
         } else {
+
+            // open standard exception dialog
+            if (! Tine.Tinebase.exceptionDlg) {
+                Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                    height: 300,
+                    exceptionInfo: responseText,
+                    listeners: {
+                        close: function() {
+                            Tine.Tinebase.exceptionDlg = null;
+                        }
+                    }
+                });
+                Tine.Tinebase.exceptionDlg.show();
+            }
+            
+            /*
             Ext.MessageBox.alert(
                 this.app.i18n._('Failed to connect'), 
                 this.app.i18n._('Could not connect to account.') 
                     + ' (' + this.app.i18n._('Error:') + ' ' + responseText.msg + ')'
-            ); 
+            );
+            */ 
         }
     }
 	
