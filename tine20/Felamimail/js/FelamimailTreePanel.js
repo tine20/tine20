@@ -484,11 +484,13 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @param {} response
      * @param {} request
      * 
+     * TODO prompt for username as well
      */
     onRequestFailed: function(response, request) {
         var responseText = Ext.util.JSON.decode(response.responseText);
 
-        if (responseText.msg == 'cannot login, user or password wrong') {
+        if (responseText.msg == 'cannot login, user or password wrong' ||
+            responseText.msg == 'need at least user in params') {
             
             // we need to extend the message box to get a password prompt
             Ext.apply(Ext.MessageBox, {
