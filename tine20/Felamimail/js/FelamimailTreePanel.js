@@ -119,8 +119,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     initContextMenus: function() {
         
-        this.initAccountContextMenu();
-        
         /***************** define additional actions *****************/
         
         var updateCacheConfigAction = {
@@ -219,12 +217,16 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         config.actions = ['add', emptyFolderAction, reloadFolderAction];
         this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
+        
+        /***************** account ctx menu *****************/
+        
+        this.initAccountContextMenu(reloadFolderAction);
     },
     
     /**
      * init context menu
      */
-    initAccountContextMenu: function() {
+    initAccountContextMenu: function(reloadFolderAction) {
         
         var editAccount = {
             text: this.app.i18n._('Edit Account'),
@@ -258,7 +260,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._('Account'),
-            actions: [editAccount, 'delete'],
+            actions: [editAccount, reloadFolderAction, 'delete'],
             scope: this,
             backend: 'Felamimail',
             backendModel: 'Account'
@@ -449,8 +451,14 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @private
      * 
      * TODO try to disable '+' on nodes that don't have children / it looks like that leafs can't be drop targets :(
+     * TODO make translations work here
      */
     createNode: function(attr) {
+        
+        var qtiptext = /*this.app.il8n._(*/'Totalcount' + ': ' + attr.totalcount 
+            + ' / ' + /*this.app.il8n._(*/'Cache' + ': ' + attr.cache_status;
+        //console.log(qtiptext);
+        //console.log(this.app.il8n);
     	var node = {
     		id: attr.id,
     		leaf: false,
@@ -461,6 +469,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             folder_id: attr.id,
     		folderNode: true,
             allowDrop: true,
+            qtip: qtiptext,
             systemFolder: (attr.system_folder == '1'),
             unreadcount: attr.unreadcount
             //expandable: (attr.has_children == '1'),
