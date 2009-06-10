@@ -57,7 +57,8 @@
 }
 
 .flag_deleted td {
-    text-decoration: line-through; 
+    text-decoration: line-through;
+    color: #aaaaaa;
 }
 
 .FelamimailFlagIcon {
