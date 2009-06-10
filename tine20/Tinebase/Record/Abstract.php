@@ -107,6 +107,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @var array list of time fields
      */
     protected $_timeFields = array();
+
+    /**
+     * name of fields that should be ommited from modlog
+     *
+     * @var array list of modlog ommit fields
+     */
+    protected $_modlogOmmitFields = array();
     
     /**
      * save state if data are validated
@@ -846,5 +853,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         $this->setFromArray($recordData);
+    }
+
+    /**
+     * returns modlog ommit fields
+     *
+     * @return array
+     */
+    public function getModlogOmmitFields()
+    {
+        return $this->_modlogOmmitFields;
     }
 }

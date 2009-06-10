@@ -272,6 +272,8 @@ class Tinebase_Timemachine_ModificationLog
      * @param  Tinebase_Record_Abstract $_newRecord record from user data
      * @param  Tinebase_Record_Abstract $_curRecord record from storage
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
+     * 
+     * @todo move more 'toOmmit' fields to record
      */
     public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
     {
@@ -302,6 +304,7 @@ class Tinebase_Timemachine_ModificationLog
             'exdate',
             'attendee'
         ));
+        $toOmmit = array_merge($toOmmit, $_curRecord->getModlogOmmitFields());
         
         foreach ($diffs as $field => $newValue) {
             if(! in_array($field, $toOmmit)) {
