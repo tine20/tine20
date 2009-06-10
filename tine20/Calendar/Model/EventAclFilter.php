@@ -28,31 +28,33 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
      */
     public function appendFilterSql($_select, $_backend)
     {
-        parent::appendFilterSql($_select, $_backend);
         
-        $db = $_backend->getAdapter();
-        $currentUserId = Tinebase_Core::getUser()->getId();
-        
-        // organizer gets all grants implicitly 
-        $_select->orWhere($db->quoteIdentifier('organizer') . ' = ?', $currentUserId, Zend_Db::INT_TYPE);
-        
-        
-        if (! in_array(Tinebase_Model_Container::GRANT_EDIT, $this->_requiredGrants)) {
-            
-            // participants get read grant implicitly
-            $_select->joinLeft(
-                /* table  */ array('attendee' => $_backend->getTablePrefix() . 'cal_attendee'), 
-                /* on     */ $db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id') . ' AND (' . 
-                                '( ' . $db->quoteInto($db->quoteIdentifier('attendee.user_type') . ' = ? ',  Calendar_Model_Attender::USERTYPE_USER) . ' AND ' . $db->quoteInto($db->quoteIdentifier('attendee.user_id') . ' = ? ',  $currentUserId, Zend_Db::INT_TYPE) . ' ) OR ' .
-                                '( ' . $db->quoteInto($db->quoteIdentifier('attendee.user_type') . ' = ? ',  Calendar_Model_Attender::USERTYPE_GROUP) . ' AND ' . $db->quoteInto($db->quoteIdentifier('attendee.user_id') . ' IN (?) ',  Tinebase_Group::getInstance()->getGroupMemberships($currentUserId), Zend_Db::INT_TYPE) . ' )' .
-                             ')',
-                /* select */ array());
-    
-            $_select->orWhere($db->quoteIdentifier('attendee.user_id') . ' IS NOT NULL');
-            
-            // free/busy get limited read grand implicitly
-            // @todo implement some free/busy acl logic
-            $_select->orWhere('1=1');
-        }
+//        parent::appendFilterSql($_select, $_backend);
+//        
+//        $db = $_backend->getAdapter();
+//        $currentUserId = Tinebase_Core::getUser()->getId();
+//        
+//        // organizer gets all grants implicitly 
+//        $_select->orWhere($db->quoteIdentifier('organizer') . ' = ?', $currentUserId, Zend_Db::INT_TYPE);
+//        
+//        
+//        if (! in_array(Tinebase_Model_Container::GRANT_EDIT, $this->_requiredGrants)) {
+//            
+//            // participants get read grant implicitly
+//            $_select->joinLeft(
+//                /* table  */ array('attendee' => $_backend->getTablePrefix() . 'cal_attendee'), 
+//                /* on     */ $db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id') . ' AND (' . 
+//                                '( ' . $db->quoteInto($db->quoteIdentifier('attendee.user_type') . ' = ? ',  Calendar_Model_Attender::USERTYPE_USER) . ' AND ' . $db->quoteInto($db->quoteIdentifier('attendee.user_id') . ' = ? ',  $currentUserId, Zend_Db::INT_TYPE) . ' ) OR ' .
+//                                '( ' . $db->quoteInto($db->quoteIdentifier('attendee.user_type') . ' = ? ',  Calendar_Model_Attender::USERTYPE_GROUP) . ' AND ' . $db->quoteInto($db->quoteIdentifier('attendee.user_id') . ' IN (?) ',  Tinebase_Group::getInstance()->getGroupMemberships($currentUserId), Zend_Db::INT_TYPE) . ' )' .
+//                             ')',
+//                /* select */ array());
+//    
+//            $_select->orWhere($db->quoteIdentifier('attendee.user_id') . ' IS NOT NULL');
+//            
+//            // free/busy get limited read grand implicitly
+//            // @todo implement some free/busy acl logic
+//            //$_select->orWhere('1=1');
+//        }
+
     }
 }
