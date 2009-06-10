@@ -216,7 +216,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // field
         filter.formFields.field = new Ext.form.ComboBox({
             filter: filter,
-            width: 260,
+            width: 240,
             id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
