@@ -76,7 +76,7 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
      */
     public function getDefaultDisplayCalendar($_account)
     {
-        $calendars = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', $_account, 0, true);
+        $calendars = Tinebase_Container::getInstance()->getPersonalContainer($_account, 'Calendar', $_account, 0, true);
         return $calendars->getFirstRecord();
     }
     
