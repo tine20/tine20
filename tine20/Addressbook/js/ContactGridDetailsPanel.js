@@ -278,17 +278,9 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
             var defaults = Tine.Felamimail.Model.Message.getDefaultData();
             defaults.to = [email];
             
-            var record = new Tine.Felamimail.Model.Message(defaults);
+            var record = new Tine.Felamimail.Model.Message(defaults, 0);
             var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
                 record: record
-                /*
-                listeners: {
-                    scope: this,
-                    'update': function(record) {
-                        this.store.load({});
-                    }
-                }
-                */
             });
         }
     }
