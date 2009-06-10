@@ -17,7 +17,7 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felamimail_Controller_Abstract
+class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
 {
     /**
      * application name (is needed in checkRight())
@@ -138,7 +138,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
         if ($messageCount < $backendFolderValues['exists']) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                 . ' Message count strange: countMessages() = ' . $messageCount 
-                //. ' / exists = ' . $backendFolderValues['exists']
+                . ' / exists = ' . $backendFolderValues['exists']
             );
             
             $messageCount = $backendFolderValues['exists'];
@@ -146,7 +146,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract // Felami
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Select Folder: ' . $backend->getCurrentFolder() 
-            . ' Values: ' . print_r($backendFolderValues, TRUE)
+            //. ' Values: ' . print_r($backendFolderValues, TRUE)
         );
         
         // remove old \Recent flag from cached messages
