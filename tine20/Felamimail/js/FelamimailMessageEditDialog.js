@@ -8,6 +8,7 @@
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         show attachments and recipients in opened mails 
+ * TODO         reload signature when account combo changed
  */
  
 Ext.namespace('Tine.Felamimail');
