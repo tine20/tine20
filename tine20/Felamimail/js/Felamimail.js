@@ -88,3 +88,25 @@ Tine.Felamimail.loadAccountStore = function(reload) {
 
     return store;
 };
+
+/**
+ * add signature (get it from default account settings)
+ */
+Tine.Felamimail.getSignature = function(id) {
+        
+    var result = '';
+    
+    if (! id || id == 'default') {
+        id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+    }
+    
+    var defaultAccount = Tine.Felamimail.loadAccountStore().getById(id);
+    var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
+    if (signature && signature != '') {
+        signature = Ext.util.Format.nl2br(signature);
+        result = '<br/><br/><span class="felamimail-body-signature">--<br/>' + signature + '</span>';
+    }
+    
+    return result;
+}
+

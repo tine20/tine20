@@ -228,6 +228,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.Felamimail.GridDetailsPanel({
             gridpanel: this,
+            grid: this,
             il8n: this.app.i18n
         });
     },
@@ -454,17 +455,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             recordData.body = '<br/>';
         }
         
-        // add signature (get it from default account settings)
-        if (Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount')) {
-            var defaultAccount = this.app.getMainScreen().getTreePanel().accountStore.getById(
-                Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount')
-            );
-            var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
-            if (signature && signature != '') {
-                signature = Ext.util.Format.nl2br(signature);
-                recordData.body += '<br/><span class="felamimail-body-signature">--<br/>' + signature + '</span>';
-            }
-        }
+        // add signature
+        recordData.body += Tine.Felamimail.getSignature();
         
         var record = new this.recordClass(recordData, recordId);
         
@@ -631,5 +623,5 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             }
         }        
         return result;
-    }
+    }    
 });
