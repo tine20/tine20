@@ -99,6 +99,10 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      */
     public function getCachedCredentials($_cache)
     {
+        if (! $_cache || $_cache === NULL || ! $_cache instanceof Tinebase_Model_CredentialCache) {
+            throw new Tinebase_Exception_Invalid_Argument('No valid Tinebase_Model_CredentialCache given!');
+        }
+        
         if (! ($_cache->username && $_cache->password)) {
             
             $_cache->setFromArray($this->get($_cache->getId())->toArray());
