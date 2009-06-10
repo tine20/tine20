@@ -527,6 +527,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Message $_imapMessage
      * @param string $_contentType
      * @return string
+     * 
+     * @todo check if we should replace email addresses in all cases (what if they are already in an anchor tag?)
      */
     public function _getBody(Felamimail_Message $_imapMessage, $_contentType)
     {
@@ -551,6 +553,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         // purify
         $body = $this->_purifyBodyContent($body);
+        
+        // add anchor to email addresses
+        $emailPattern = "/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/";
+        $body = preg_replace($emailPattern, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $body);
         
         return $body;
     }
