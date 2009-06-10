@@ -119,6 +119,20 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     );
     
     /**
+     * name of fields that should be ommited from modlog
+     *
+     * @var array list of modlog ommit fields
+     */
+    protected $_modlogOmmitFields = array(
+        'user',
+        'password',
+        'smtp_user',
+        'smtp_password',
+        'credentials_id',
+        'smtp_credentials_id'
+    );
+    
+    /**
      * get imap config array
      * - decrypt pwd/user with user password
      *

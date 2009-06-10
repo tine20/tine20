@@ -241,6 +241,29 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $_record->smtp_credentials_id = $_record->credentials_id;
         }
     }
+
+    /******************************** public funcs ************************************/
+    
+    /**
+     * change account password
+     *
+     * @param string $_accountId
+     * @param string $_password
+     * @return boolean
+     */
+    public function changePassword($_accountId, $_password)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Changing password for account id ' . $_accountId);
+        
+        // get account and set pwd
+        $account = $this->get($_accountId);
+        $account->password = $_password;
+        
+        // update account
+        $this->update($account);
+        
+        return TRUE;
+    }
     
     /******************************** protected funcs *********************************/
 

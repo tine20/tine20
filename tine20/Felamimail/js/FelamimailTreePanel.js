@@ -495,34 +495,50 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     onRequestFailed: function(response, request) {
         var responseText = Ext.util.JSON.decode(response.responseText);
-        console.log(responseText);
 
         if (responseText.msg == 'cannot login, user or password wrong') {
-            Ext.MessageBox.prompt(this.app.i18n._('Enter password'), this.app.i18n._('Please enter your password for this account:'), function(_btn, _text) {
+            
+            // we need to extend the message box to get a password prompt
+            Ext.apply(Ext.MessageBox, {
+                promptPassword: function(){
+                    var d = Ext.MessageBox.getDialog().body.child('.ext-mb-input').dom;
+                    Ext.MessageBox.getDialog().on({
+                        show:{fn:function(){d.type = 'password';},single:true},
+                        hide:{fn:function(){d.type = 'text';},single:true}
+                    });
+                    Ext.MessageBox.prompt.apply(Ext.MessageBox, arguments);
+                }
+            });
+            
+            Ext.MessageBox.promptPassword(this.app.i18n._('Enter password'), this.app.i18n._('Please enter your password for this account:'), function(_btn, _text) {
                 if(_btn == 'ok') {
                     if (! _text) {
                         Ext.Msg.alert(this.app.i18n._('No password entered.'), this.app.i18n._('You have to enter a password!'));
                         return;
                     }
-                    //Ext.MessageBox.wait(this.app.i18n._('Please wait'), this.app.i18n._('Setting new password...' ));
+                    Ext.MessageBox.wait(this.app.i18n._('Please wait'), this.app.i18n._('Setting new password...' ));
                     
-                    // TODO get account id and update password
-                    /*
+                    // get account id and update password
+                    var accountNode = request.argument.node;
+                    var accountId = accountNode.attributes.account_id;
+                    
                     var params = {
-                        method: 'Felamimail_changePassword',
+                        method: 'Felamimail.changeAccountPassword',
                         password: _text,
-                        account_id: 
+                        id: accountId
                     };
                     
                     Ext.Ajax.request({
                         params: params,
                         scope: this,
                         success: function(_result, _request){
-                            // TODO update account node
+                            // update account node
                             Ext.MessageBox.hide();
+                            accountNode.reload(function(callback) {
+                                //console.log('reload');
+                            });
                         }
                     });
-                    */
                 }
             }, this);            
         } else {

@@ -27,22 +27,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $filter
      * @return array
-     * 
-     * @todo show error message in js frontend
      */
     public function searchFolders($filter)
     {
-        //try {
-            $result = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
-            /*
-        } catch (Zend_Mail_Storage_Exception $zmpe) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get folders: ' . $zmpe->getMessage());
-            $result = array(
-                'totalcount' => 0,
-                'results'    => array(),
-                'status'     => 'failure'
-            );
-        }*/
+        $result = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
         
         return $result;
     }
@@ -353,6 +341,20 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteAccounts($ids)
     {
         return array('status' => $this->_delete($ids, Felamimail_Controller_Account::getInstance()));
+    }
+    
+    /**
+     * change account pwd
+     *
+     * @param string $id
+     * @param string $password
+     * @return array
+     */
+    public function changeAccountPassword($id, $password)
+    {
+        $result = Felamimail_Controller_Account::getInstance()->changePassword($id, $password);
+        
+        return array('status' => ($result) ? 'success' : 'failure');
     }
     
     /***************************** other funcs *******************************/
