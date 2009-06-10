@@ -339,7 +339,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setFrom($account->email, $from);
         
         // set in reply to
-        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $originalMessage) {
+        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && isset($originalMessage)) {
             $mail->addHeader('In-Reply-To', $originalMessage->messageuid);
         }
         
@@ -405,7 +405,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // add reply/forward flags if set
             if (! empty($_message->flags) 
                 && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
-                && $originalMessage
+                && isset($originalMessage)
             ) {
                 $this->addFlags($originalMessage, array($_message->flags));
             }
