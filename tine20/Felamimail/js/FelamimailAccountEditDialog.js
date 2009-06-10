@@ -78,9 +78,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Signature'),
                     name: 'signature',
                     xtype: 'textarea',
-                    height: 120
+                    height: 120,
+                    maxLength: 2048
                 }]]
-            }, {               
+            }, {
                 title: this.app.i18n._('IMAP'),
                 autoScroll: true,
                 border: false,
