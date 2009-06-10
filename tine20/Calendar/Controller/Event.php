@@ -417,6 +417,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      */
     protected function _createAttender($_attender, $_calendar) {
         
+        // apply default user_type
+        $_attender->user_type = $_attender->user_type ?  $_attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
+        
         // reset status if user != attender        
         if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP
                 || $_attender->user_id != Tinebase_Core::getUser()->getId()) {
