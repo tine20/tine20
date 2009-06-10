@@ -35,8 +35,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $result = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
         
-        //return $result;
+        return $result;
         
+        /*
         // @todo remove-->
         // don't do initial cache import
         if ($result['totalcount'] == 0) {
@@ -69,6 +70,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // don't output anything else ('null' or something like that)
         die();
         //<--remove
+        */
     }
 
     /**

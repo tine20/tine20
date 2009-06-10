@@ -109,7 +109,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo remove caching here when we have the unread/recent check recursive function
+     * @todo remove caching/counting here when we have the unread/recent check recursive function
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
@@ -132,9 +132,17 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         // @todo remove-->
         $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
-        $cacheController = Felamimail_Controller_Cache::getInstance();
+        //$cacheController = Felamimail_Controller_Cache::getInstance();
         foreach ($result as $folder) {
-            $folder = $cacheController->update($folder);
+            //$folder = $cacheController->update($folder);
+            if ($folder->cache_status == 'complete') {
+                $seenCount = $messageCacheBackend->seenCountByFolderId($folder->getId());
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Get unread count for ' . $folder->globalname
+                    . ': totalcount = ' . $folder->totalcount . ' / seencount = ' . $seenCount
+                );
+                $folder->unreadcount = $folder->totalcount - $seenCount;
+            }
         }
         //<--remove
         
