@@ -93,7 +93,7 @@
  *  each statment has an additional attendee/organizer part 
  *  
  *  This list could be assembled for a given user and a required grant by:
- *  1. get a (display)container_ids user has required grant for
+ *  1. get (display)container_ids user has required grant for
  *      -> NOTE this list might be limited by container a container filter
  *  2. do the following for each container in the list:
  *      2.1 get the admin(s) of the container
