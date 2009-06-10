@@ -288,16 +288,6 @@ Tine.Tinebase.tineInit = {
                 // generic failure -> notify developers / only if no custom exception handler has been defined in options
                 default:
                 if (typeof options.exceptionHandler !== 'function') {
-                    var trace = '';
-                    for (var i=0,j=data.trace.length; i<j; i++) {
-                        trace += (data.trace[i].file ? data.trace[i].file : '[internal function]') +
-                                 (data.trace[i].line ? '(' + data.trace[i].line + ')' : '') + ': ' +
-                                 (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i].type + '</b>' : '') +
-                                 '<b>' + data.trace[i]['function'] + '</b>' +
-                                '(' + ((data.trace[i].args && data.trace[i].args[0]) ? data.trace[i].args[0] : '') + ')<br/>';
-                    }
-                    data.traceHTML = trace;
-                    
                     var windowHeight = 400;
                     if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
                         windowHeight = Ext.getBody().getHeight(true) * 0.7;

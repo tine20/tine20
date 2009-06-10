@@ -23,6 +23,18 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     
     initComponent: function() {
         
+        var trace = '';
+        if (this.exceptionInfo.trace) {
+            for (var i=0,j=this.exceptionInfo.trace.length; i<j; i++) {
+                trace += (this.exceptionInfo.trace[i].file ? this.exceptionInfo.trace[i].file : '[internal function]') +
+                         (this.exceptionInfo.trace[i].line ? '(' + this.exceptionInfo.trace[i].line + ')' : '') + ': ' +
+                         (this.exceptionInfo.trace[i]['class'] ? '<b>' + this.exceptionInfo.trace[i]['class'] + this.exceptionInfo.trace[i].type + '</b>' : '') +
+                         '<b>' + this.exceptionInfo.trace[i]['function'] + '</b>' +
+                        '(' + ((this.exceptionInfo.trace[i].args && this.exceptionInfo.trace[i].args[0]) ? this.exceptionInfo.trace[i].args[0] : '') + ')<br/>';
+            }
+        }
+        this.exceptionInfo.traceHTML = trace;
+        
         this.title = _('Abnormal End');
         this.items = new Ext.FormPanel({
                 id: 'tb-exceptiondialog-frompanel',
