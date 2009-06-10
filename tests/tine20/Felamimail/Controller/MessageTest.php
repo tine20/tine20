@@ -133,7 +133,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(
             0, 
             preg_match(
-                '/E\-Mail:     <a href="mailto:email@stiftung\-warentest\.de"/',
+                //'/E\-Mail:     <a href="mailto:email@stiftung\-warentest\.de"/',
+                '/E\-Mail:     <a href="#" id="123:email@stiftung\-warentest\.de" class="tinebase\-email\-link">email@stiftung\-warentest\.de<\/a>/',
                 $completeMessage->body
             ),
             'Email not found'
