@@ -61,6 +61,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         this.window.setTitle(title);
         
+        if (this.record.id && this.record.get('content_type') && this.record.get('content_type').match(/text\/plain/)) {
+            this.record.data.body = Ext.util.Format.nl2br(this.record.data.body);
+        }
+        
         this.getForm().loadRecord(this.record);
         //this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         
