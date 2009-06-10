@@ -251,7 +251,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      *
      * @param array $_msguids
      * @param string $_folderId
-     * @return boolean success
+     * @return integer number of deleted rows
      */
     public function deleteMessageuidsByFolderId($_msguids, $_folderId)
     {
@@ -264,9 +264,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $_folderId)
         );
         
-        $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
-        
-        return TRUE;
+        return $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
     }
 
     /**

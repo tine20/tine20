@@ -185,8 +185,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         // update grid
                         this.filterPlugin.onFilterChange();
                         
-                        // reload tree node
-                        this.ctxNode.reload(function(callback) {
+                        // TODO do we need that?
+                        // reload parent tree node
+                        this.ctxNode.parentNode.reload(function(callback) {
                             //console.log('reload');
                         });
                     }
@@ -210,7 +211,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         /***************** user folder ctx menu *****************/
 
-        config.actions = ['add', 'rename', updateCacheConfigAction, 'delete', reloadFolderAction];
+        config.actions = ['add', 'rename', updateCacheConfigAction, reloadFolderAction, 'delete'];
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
         /***************** trash ctx menu *****************/

@@ -106,8 +106,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
-     * 
-     * @todo add support for multiple folders?
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
@@ -118,8 +116,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (empty($folderId) || $folderId == '/') {
             $result = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
         } else {
-            // update cache -> set totalcount > 0 only if cache is incomplete
-            $this->_totalcount = $this->_cacheController->update($folderId);
+            // update cache -> set totalcount > 0 (only if cache is incomplete?)
+            $folder = $this->_cacheController->update($folderId);
+            $this->_totalcount = $folder->totalcount;
         
             $result = parent::search($_filter, $_pagination);
         }

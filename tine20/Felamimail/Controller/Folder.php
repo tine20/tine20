@@ -9,9 +9,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add getFolderStatus function that returns unread/recent/.. counters for all folders for one account
  * @todo        add cleanup routine for deleted (by other clients)/outofdate folders?
- * @todo        fill cache when subfolders are initialized?
- * @todo        get delimiter from backend?
  */
 
 /**
@@ -41,14 +40,16 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @var array
      * 
-     * @todo    get these from account settings?
+     * @todo    get these from account settings
      */
     protected $_systemFolders = array('trash', 'inbox', 'drafts', 'junk', 'sent', 'templates');
     
     /**
-     * Enter description here...
+     * folder delimiter/separator
      * 
      * @staticvar string
+     * 
+     * @todo get delimiter from backend?
      */
     const DELIMITER = '/';
     
@@ -107,6 +108,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
+     * 
+     * @todo remove caching here when we have the unread/recent check recursive function
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
@@ -127,19 +130,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $result = $this->_folderBackend->search($filter);
         }
         
-        // get number of unread messages if cache is complete 
-        // @todo replace this later?
+        // @todo remove-->
         $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
+        $cacheController = Felamimail_Controller_Cache::getInstance();
         foreach ($result as $folder) {
-            if ($folder->cache_status == 'complete') {
-                $seenCount = $messageCacheBackend->seenCountByFolderId($folder->getId());
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Get unread count for ' . $folder->globalname
-                    . ': totalcount = ' . $folder->totalcount . ' / seencount = ' . $seenCount
-                );
-                $folder->unreadcount = $folder->totalcount - $seenCount;
-            }
+            $folder = $cacheController->update($folder);
         }
+        //<--remove
         
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
         
@@ -242,8 +239,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_folderName
      * @param string $_accountId [optional]
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
-     * 
-     * @todo delete all subfolders from db first?
      */
     public function getSubFolders($_folderName = '', $_accountId = 'default')
     {
