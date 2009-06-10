@@ -114,10 +114,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $select = parent::_getSelect($_cols, $_getDeleted);
         
+        $this->_appendEffectiveGrantCalculationSql($select);
+        
         $select->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'), 
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
-            /* select */ array('exdate' => 'GROUP_CONCAT(' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
+            /* select */ array('exdate' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
         
         $groupByCols = array();
         foreach(array_keys($this->_schema) as $col) {
@@ -126,6 +128,150 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select->group($groupByCols);
         
         return $select;
+    }
+    
+    /**
+     * appends effective grant calculation to select object
+     *
+     * @param Zend_Db_Select $_select
+     */
+    protected function _appendEffectiveGrantCalculationSql($_select)
+    {
+        $_select->joinLeft(
+            /* table  */ array('groupmemberships' => $this->_tablePrefix . 'group_members'), 
+            /* on     */ $this->_db->quoteInto($this->_db->quoteIdentifier('groupmemberships.account_id') . ' = ?' , Tinebase_Core::getUser()->getId()),
+            /* select */ array());
+        
+        $_select->joinLeft(
+            /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'), 
+            /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),
+            /* select */ array());
+        
+        $_select->joinLeft(
+            /* table  */ array('attendeegroupmemberships' => $this->_tablePrefix . 'group_members'), 
+            /* on     */ $this->_db->quoteIdentifier('attendeegroupmemberships.account_id') . ' = ' . $this->_db->quoteIdentifier('attendee.user_id') . 
+                            ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_USER),
+            /* select */ array());
+        
+        $_select->joinLeft(
+            /* table  */ array('dispgrants' => $this->_tablePrefix . 'container_acl'), 
+            /* on     */ $this->_db->quoteIdentifier('dispgrants.container_id') . ' = ' . $this->_db->quoteIdentifier('attendee.displaycontainer_id') . 
+                           ' AND ' . $this->_getContainGrantCondition('dispgrants', 'groupmemberships'),
+            /* select */ array());
+                
+        $_select->joinLeft(
+            /* table  */ array('physgrants' => $this->_tablePrefix . 'container_acl'), 
+            /* on     */ $this->_db->quoteIdentifier('physgrants.container_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.container_id'),
+            /* select */ array(
+                'readgrant' => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Container::GRANT_READ) . " OR \n" . 
+                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_READ) . " OR \n" .
+                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_READ) . " \n" .
+                 ")",
+                'editgrant' => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Container::GRANT_EDIT) . " OR \n" . 
+                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_EDIT) . " OR \n" .
+                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_EDIT) . " \n" .
+                 ")",
+                'deletegrant' => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Container::GRANT_DELETE) . " OR \n" . 
+                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_DELETE) . " OR \n" .
+                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_DELETE) . " \n" .
+                 ")",
+            ));
+    }
+    
+    
+    /**
+     * returns SQL with container grant condition 
+     *
+     * @param  string                               $_aclTableName
+     * @param  int|array                            $_requiredGrant (defaults none)
+     * @param  Zend_Db_Expr|int|Tinebase_Model_User $_user (defaults current user)
+     * @return string
+     */
+    protected function _getContainGrantCondition($_aclTableName, $_groupMembersTableName, $_requiredGrant=NULL, $_user=NULL )
+    {
+        $quoteTypeIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_type');
+        $quoteIdIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_id');
+        
+        if ($_user instanceof Zend_Db_Expr) {
+            $userExpression = $_user;
+        } else {
+            $accountId = $_user ? Tinebase_Model_User::convertUserIdToInt($_user) : Tinebase_Core::getUser()->getId();
+            $userExpression = new Zend_Db_Expr($this->_db->quote($accountId));
+        }
+        
+        $quoteTypeIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_type');
+        $quoteIdIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_id');
+        
+        $sql = $this->_db->quoteInto(    "($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)  . " AND $quoteIdIdentifier = $userExpression)" .
+               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . ' AND ' . $this->_db->quoteIdentifier("$_groupMembersTableName.account_id") . " = $quoteIdIdentifier" . ')' . 
+               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+        
+        
+        if ($_requiredGrant) {
+            $sql = "($sql) AND " . $this->_db->quoteInto($this->_db->quoteIdentifier($_aclTableName . '.account_grant') . ' IN (?)', (array)$_requiredGrant);
+        }
+        
+        return "($sql)";
+    }
+    
+    /**
+     * returns SQL condition for implicit grants
+     *
+     * @param  int                                   $_requiredGrant
+     * @param  Zend_Db_Expr|int|Tinebase_Model_User  $_user (defaults to current user)
+     * @return string
+     */
+    protected function _getImplicitGrantCondition($_requiredGrant, $_user=NULL)
+    {
+        if ($_user instanceof Zend_Db_Expr) {
+            $userExpression = $_user;
+        } else {
+            $accountId = $_user ? Tinebase_Model_User::convertUserIdToInt($_user) : Tinebase_Core::getUser()->getId();
+            $userExpression = new Zend_Db_Expr($this->_db->quote($accountId));
+        }
+        
+        if (! in_array($_requiredGrant, array(Tinebase_Model_Container::GRANT_READ, Tinebase_Model_Container::GRANT_EDIT))) {
+            return '1=0';
+        }
+        
+        $sql = $this->_db->quoteIdentifier('cal_events.organizer') . " = $userExpression";
+        
+        if ($_requiredGrant == Tinebase_Model_Container::GRANT_READ) {
+            $readCond = $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . 
+                   ' AND ' .  $this->_db->quoteIdentifier('attendee.user_id') . ' = ' . $userExpression;
+            
+            $sql = "($sql) OR ($readCond)";
+        }
+        
+        return "($sql)";
+    }
+    
+    /**
+     * returns SQL for inherited grants
+     *
+     * @param  int $_requiredGrant
+     * @return string
+     */
+    protected function _getInheritedGrantCondition($_requiredGrant)
+    {
+        // current user needs to have grant on display calendar
+        $sql = $this->_getContainGrantCondition('dispgrants', 'groupmemberships', $_requiredGrant);
+        
+        // _AND_ attender(admin) of display calendar needs to have grant on phys calendar
+        // @todo include implicit inherited grants
+        if ($_requiredGrant != Tinebase_Model_Container::GRANT_READ) {
+            $userExpr = new Zend_Db_Expr($this->_db->quoteIdentifier('attendee.user_id'));
+            
+            $attenderPhysGrantCond = $this->_getContainGrantCondition('physgrants', 'attendeegroupmemberships', $_requiredGrant, $userExpr);
+            $attenderImplicitGrantCond = $this->_getImplicitGrantCondition($_requiredGrant, $userExpr);
+            
+            $sql = "($sql) OR ($attenderPhysGrantCond) OR ($attenderImplicitGrantCond)";
+        }
+        
+        return "($sql)";
     }
     
     /**
