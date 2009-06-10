@@ -225,13 +225,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
         $credentialsBackend->getCachedCredentials($userCredentialCache);
         
-        $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
-        $credentials->key = substr($userCredentialCache->password, 0, 24);
-        $credentialsBackend->getCachedCredentials($credentials);
+        if ($_oldRecord->credentials_id) {
+            $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
+            $credentials->key = substr($userCredentialCache->password, 0, 24);
+            $credentialsBackend->getCachedCredentials($credentials);
+        } else {
+            $credentials = new Tinebase_Model_CredentialCache(array(
+                'username'  => '',
+                'password'  => ''
+            ));
+        }
         
         // check if something changed
         if (
-                (! empty($_record->user) && $_record->user !== $credentials->username) 
+                ! $_oldRecord->credentials_id
+            ||  (! empty($_record->user) && $_record->user !== $credentials->username)
             ||  (! empty($_record->password) && $_record->password !== $credentials->password)
         ) {
             $newPassword = ($_record->password) ? $_record->password : $credentials->password;
