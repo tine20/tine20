@@ -215,10 +215,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $message = $this->_sendMessage();
         
-        $replyMessage              = $this->_getMessageData();
-        $replyMessage['flags']     = '\\Answered';
-        $replyMessage['subject']   = 'Re: ' . $message['subject'];
-        $replyMessage['id']        = $message['id'];
+        $replyMessage               = $this->_getMessageData();
+        $replyMessage['flags']      = '\\Answered';
+        $replyMessage['subject']    = 'Re: ' . $message['subject'];
+        $replyMessage['original_id']= $message['id'];
         $returned                   = $this->_json->saveMessage(Zend_Json::encode($replyMessage));
         
         $inbox = $this->_getFolder();
