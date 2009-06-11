@@ -50,7 +50,7 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
         // directly filter for required grant if its other than _only_ GRANT_READ
         if (count($this->_requiredGrants) > 1 || $this->_requiredGrants[0] != Tinebase_Model_Container::GRANT_READ) {
             foreach ($this->_requiredGrants as $grant) {
-                $_select->where($_backend->getAdapter()->quoteIdentifier('grant-' . $grant) . ' = ', 1, Zend_Db::INT_TYPE);
+                $_select->orHaving($_backend->getAdapter()->quoteIdentifier('grant-' . $grant) . ' = 1');
             }
         }
     }
