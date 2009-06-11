@@ -108,11 +108,6 @@ class Tinebase_Model_Filter_FilterGroup
     protected $_options = NULL;
     
     /**
-     * @var Tinebase_Model_Filter_AclFilter
-     */
-    protected $_aclFilter = NULL;
-    
-    /**
      * @var array holds data of all custom filters
      */
     protected $_customData = array();
@@ -189,14 +184,6 @@ class Tinebase_Model_Filter_FilterGroup
      */
     public function addFilter($_filter)
     {
-        if ($_filter->getField() == $this->_aclFilterField || $_filter instanceof Tinebase_Model_Filter_AclFilter) {
-            if (! $this->_aclFilter) {
-                $this->_aclFilter = $_filter;
-            } else {
-                throw new Tinebase_Exception('only one acl filter could be set!');
-            }
-        }
-        
         if (! $_filter instanceof Tinebase_Model_Filter_Abstract) {
             throw new Tinebase_Exception_InvalidArgument('Filters must be of instance Tinebase_Model_Filter_Abstract');
         }
@@ -258,13 +245,33 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
-     * returns acl filter of this group or NULL if not set
-     *
-     * @return Tinebase_Model_Filter_AclFilter
+     * gets aclFilter of this group and optionally cascading subgroups
+     * 
+     * @return array
      */
-    public function getAclFilter()
+    public function getAclFilters()
     {
-        return $this->_aclFilter;
+        $aclFilters = array();
+        
+        foreach ($this->_filterObjects as $object) {
+            if ($object instanceof Tinebase_Model_Filter_AclFilter) {
+                $aclFilters[] = $object;        
+            }
+        }
+        
+        return $aclFilters;
+    }
+    
+    /**
+     * sets the grants this filter needs to assure
+     *
+     * @param array $_grants
+     */
+    public function setRequiredGrants(array $_grants)
+    {
+        foreach ($this->getAclFilters() as $object) {
+            $object->setRequiredGrants($_grants);
+        }
     }
     
     /**
