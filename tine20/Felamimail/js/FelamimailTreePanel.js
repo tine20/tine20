@@ -478,8 +478,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * 
      * @param {} response
      * @param {} request
-     * 
-     * TODO prompt for username as well
      */
     onRequestFailed: function(response, request) {
         var responseText = Ext.util.JSON.decode(response.responseText);
