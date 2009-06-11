@@ -180,13 +180,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     success: function(_result, _request){
                         // update grid
                         this.filterPlugin.onFilterChange();
-                        
-                        // TODO do we need that?
-                        // reload parent tree node
-                        this.ctxNode.parentNode.reload(function(callback) {
-                            //console.log('reload');
-                        });
-                    }
+                    },
+                    timeout: 120000 // 2 minutes
                 });
             }
         };
