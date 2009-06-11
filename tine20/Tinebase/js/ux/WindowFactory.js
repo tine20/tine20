@@ -150,7 +150,10 @@ Ext.ux.WindowFactory.prototype = {
      * brings window to front
      */
     getWindow: function(config) {
-        switch (this.windowType) {
+        
+        var windowType = (config.modal) ? 'Ext' : this.windowType;
+        
+        switch (windowType) {
             case 'Browser' :
                 return this.getBrowserWindow(config);
                 break;
