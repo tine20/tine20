@@ -196,17 +196,9 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      */
     protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup*/ $_filter, $_action = 'get')
     {
-        $timeaccountIdFilter = $_filter->getAclFilter();
-        
-        /*if (! $timeaccountIdFilter) {
-            // force a timeaccount id filter (ACL)
-            $timeaccountIdFilter = $_filter->createFilter('id', 'all', NULL);
-            $_filter->addFilter($timeaccountIdFilter);
-        }*/
-        
         switch ($_action) {
             case 'get':
-                $timeaccountIdFilter->setRequiredGrants(array(
+                $_filter->setRequiredGrants(array(
                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
@@ -214,7 +206,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
                 ));
                 break;
             case 'update':
-                $timeaccountIdFilter->setRequiredGrants(array(
+                $_filter->setRequiredGrants(array(
                     Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
                 ));
                 break;
