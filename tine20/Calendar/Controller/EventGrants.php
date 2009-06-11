@@ -43,21 +43,26 @@
  *            This is required for CRUD actions and done by the controllers 
  *            _checkGrant method.
  *  B: Seach: From the grants perspective this is a multy step process
- *            1. return all events having required grant
- *            2. calculate effective grants, as the client needs to know about 
- *               them, e.g. to activate/deactive edit/delete buttons
+ *            1. limiting the query (mixture of grants and filter)
+ *            2. transform event set (all events user has only free/busy grant 
+ *               for need to be cleaned)
  * 
+ *  NOTE: To empower the client for enabling/disabling of actions based on the 
+ *        grants a user has to an event, we need to compute the "effective GRANT"
+ *        also for read/search operations
+ *                  
  * Case A is not critical, as the amount of data is low and for CRUD operations
  * performace is less important. Case B however is the hard one, as lots of
  * calendars and events may be involved and performance is an issue.
  * 
  * As explained above, in the calendar application, asureing grants for search
- * operation is a multi step process, clutterd over different places:
+ * operation is a multi step process clutterd over different places:
  *  - Calendar_Model_EventAclFilter -> filter for events having required grants
  *  - Calendar_Controller_Event -> getting effective grants and asureing CRUD grants
  * This class bundles the central data and logic needed from the different places.
+ *
  * 
- * 
+ * ---- @todo rework this section: this is solved on SQL time yet ---- 
  * Takeling the search problem generally:
  * 1. Step: filter by required grant (SQL) by combining grant sources:
  *  - free/busy: -> list of all calendars user has free/busy view grant for
