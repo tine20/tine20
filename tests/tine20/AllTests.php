@@ -39,7 +39,7 @@ class AllTests
         $suite->addTest(Erp_AllTests::suite());
         $suite->addTest(Timetracker_AllTests::suite());
         $suite->addTest(Courses_AllTests::suite());
-        //$suite->addTest(Calendar_AllTests::suite());
+        $suite->addTest(Calendar_AllTests::suite());
         
         // only call Felamimail tests if imap is configured in config.inc.php
         if (Tinebase_Core::getConfig()->imap && Tinebase_Core::getConfig()->imap->useAsDefault) {
