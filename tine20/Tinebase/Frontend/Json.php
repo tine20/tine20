@@ -440,7 +440,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter->addFilter($accountFilter);
         } else {
             // only admins can search for other users prefs
-            $accountFilter = $filter->getAclFilter();
+            $accountFilter = $filter->getAccountFilter();
             $accountFilterValue = $accountFilter->getValue(); 
             if ($accountFilterValue['accountId'] != $userId && $accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
                 if (!Tinebase_Acl_Roles::getInstance()->hasRight($applicationName, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {

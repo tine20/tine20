@@ -49,7 +49,7 @@ class Tinebase_Model_PreferenceFilter extends Tinebase_Model_Filter_FilterGroup
      *
      * @return Tinebase_Model_PreferenceAccountFilter
      */
-    public function getAclFilter()
+    public function getAccountFilter()
     {
         return $this->_findFilter('account');
     }
