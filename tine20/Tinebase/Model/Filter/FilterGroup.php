@@ -89,12 +89,6 @@ class Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array();
     
-    /**
-     * @var string fieldName of acl filter
-     */
-    protected $_aclFilterField = NULL;
-    
-    
     /******************************* properties ********************************/
     
     /**
