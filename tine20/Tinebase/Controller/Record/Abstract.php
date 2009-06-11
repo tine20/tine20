@@ -552,9 +552,9 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
     {
         if ($this->_doContainerACLChecks) {
-            $containerFilter = $_filter->getAclFilter();
+            $containerFilters = $_filter->getAclFilters();
             
-            if (! $containerFilter) {
+            if (! $containerFilters) {
                 // force a $containerFilter filter (ACL)
                 $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all', array('applicationName' => $this->_applicationName));
                 $_filter->addFilter($containerFilter);
@@ -563,14 +563,14 @@ abstract class Tinebase_Controller_Record_Abstract
             // do something like that
             switch ($_action) {
                 case 'get':
-                    $containerFilter->setRequiredGrants(array(
+                    $_filter->setRequiredGrants(array(
                         Tinebase_Model_Container::GRANT_READ,
                         Tinebase_Model_Container::GRANT_ADMIN,
                         //Tinebase_Model_Container::GRANT_ANY
                     ));
                     break;
                 case 'update':
-                    $containerFilter->setRequiredGrants(array(
+                    $_filter->setRequiredGrants(array(
                         Tinebase_Model_Container::GRANT_EDIT,
                         Tinebase_Model_Container::GRANT_ADMIN,
                         //Tinebase_Model_Container::GRANT_ANY
