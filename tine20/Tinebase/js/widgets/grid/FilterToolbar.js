@@ -568,7 +568,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         Ext.MessageBox.prompt(_('save filter'), _('Please enter a name for the filter'), function(btn, value) {
             if (btn == 'ok') {
                 if (! value) {
-                    Ext.Msg.alert(String.format(_('Filter not Saved'), this.containerName), String.format(_('You have to supply a name for the filter!'), this.containerName));
+                    Ext.Msg.alert(_('Filter not Saved'), _('You have to supply a name for the filter!'));
+                    return;
+                } else if (value.length > 40) {
+                    Ext.Msg.alert(_('Filter not Saved'), _('You have to supply a shorter name! Names of saved filters can only be up to 40 characters long.'));
                     return;
                 }
                 Ext.Msg.wait(_('Please Wait'), _('Saving filter'));
