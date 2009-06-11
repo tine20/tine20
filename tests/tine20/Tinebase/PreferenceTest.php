@@ -167,6 +167,23 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * test get users with pref function
+     *
+     */
+    public function testGetUsersWithPref()
+    {
+        $this->_instance->{Tinebase_Preference::TIMEZONE} = 'Europe/Nicosia';
+        $userIds = $this->_instance->getUsersWithPref(Tinebase_Preference::TIMEZONE, 'Europe/Berlin');
+        
+        //print_r($userIds);
+        
+        $this->assertTrue(! in_array(Setup_Core::getUser()->getId(), $userIds), 'admin user should have other timezone setting');
+        $this->assertGreaterThan(4, count($userIds), 'too few users found');
+        
+        $this->_instance->{Tinebase_Preference::TIMEZONE} = 'Europe/Berlin';
+    }
+    
     /******************** protected helper funcs ************************/
     
     /**

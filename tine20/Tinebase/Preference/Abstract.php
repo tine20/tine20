@@ -194,21 +194,66 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param array $_limitToUserIds [optional]
      * @return array of user ids
      * 
-     * @todo finish implementation
+     * @todo support group preferences
      */
     public function getUsersWithPref($_preferenceName, $_value, $_limitToUserIds = array())
     {
         $result = array();
         
-        //-- check if value is default or forced setting
-        //$select = $this->_getSelect();
-        //$select->from(
+        // check if value is default or forced setting
+        $select = $this->_getSelect();
+        $filter = new Tinebase_Model_PreferenceFilter(array(
+            array('field'     => 'account',         'operator'  => 'equals', 'value'     => array(
+                'accountId' => 0, 'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
+            ),
+            array('field'     => 'name',            'operator'  => 'equals', 'value'     => $_preferenceName),
+        ));
+        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
         
-        //-- forced: get all users
-        
-        //-- default: remove all users/groups who don't have default
+        if (empty($queryResult)) {
+            // get default pref
+            $pref = $this->getPreferenceDefaults($_preferenceName);
+        } else {
+            // found
+            $pref = new Tinebase_Model_Preference($queryResult[0]);
+        }
 
-        //-- not default: get all users/groups who have the setting
+        if ($pref->value == $_value) {
+
+            if (! empty($_limitToUserIds)) {
+                $result = Tinebase_User::getInstance()->getMultiple($_limitToUserIds)->getArrayOfIds();
+            } else {
+                $result = Tinebase_User::getInstance()->getUsers()->getArrayOfIds();
+            }
+            
+            if ($pref->type == Tinebase_Model_Preference::TYPE_FORCED) {
+                // forced: get all users -> do nothing here
+        
+            } else if ($pref->type == Tinebase_Model_Preference::TYPE_DEFAULT) {
+                // default: remove all users/groups who don't have default
+                $filter = new Tinebase_Model_PreferenceFilter(array(
+                    array('field'   => 'account_type',    'operator'  => 'equals', 'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
+                    array('field'   => 'name',            'operator'  => 'equals', 'value' => $_preferenceName),
+                    array('field'   => 'value',           'operator'  => 'not',    'value' => $_value),
+                ));
+                $accountsWithOtherValues = $this->search($filter)->account_id;
+                $result = array_diff($result, $accountsWithOtherValues);
+            
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue('Preference should be of type "forced" or "default".');
+            }
+            
+        } else {
+            // not default or forced: get all users/groups who have the setting
+            $filter = new Tinebase_Model_PreferenceFilter(array(
+                array('field'   => 'account_type',    'operator'  => 'equals', 'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
+                array('field'   => 'name',            'operator'  => 'equals', 'value' => $_preferenceName),
+                array('field'   => 'value',           'operator'  => 'equals', 'value' => $_value),
+            ));
+            $result = $this->search($filter)->account_id;
+        }
         
         return $result;
     }

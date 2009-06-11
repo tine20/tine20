@@ -42,7 +42,8 @@ class Tinebase_Model_PreferenceFilter extends Tinebase_Model_Filter_FilterGroup
         'account_type'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'type'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-    );    
+        'value'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+    );
     
     /**
      * returns acl filter of this group or NULL if not set
