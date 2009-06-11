@@ -109,6 +109,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/tree/Loader.js',
             'Tinebase/js/widgets/tree/ContextMenu.js',
             'Tinebase/js/widgets/dialog/EditDialog.js',
+            'Tinebase/js/widgets/dialog/CredentialsDialog.js',
             'Tinebase/js/widgets/dialog/PreferencesDialog.js',
             'Tinebase/js/widgets/dialog/PreferencesTreePanel.js',
             'Tinebase/js/widgets/dialog/PreferencesPanel.js',

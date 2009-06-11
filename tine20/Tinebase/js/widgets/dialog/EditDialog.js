@@ -119,9 +119,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         
         // init some translations
-        this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
-        this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
-        
+        if (this.app.i18n && this.recordClass !== null) {
+            this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+            this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
+        }
         
         // init actions
         this.initActions();
@@ -286,7 +287,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transfering {0}...'), this.i18nRecordName)});
-        if (this.recordProxy.isLoading(this.loadRequest)) {
+        if (this.recordProxy !== null && this.recordProxy.isLoading(this.loadRequest)) {
             this.loadMask.show();
         }
     },
