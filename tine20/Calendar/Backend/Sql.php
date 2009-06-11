@@ -178,6 +178,11 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_DELETE) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_DELETE) . " \n" .
                  ")",
+                'grant-' . Tinebase_Model_Container::GRANT_ADMIN => "\n MAX( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Container::GRANT_ADMIN) . " OR \n" . 
+                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_ADMIN) . " OR \n" .
+                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_ADMIN) . " \n" .
+                 ")",
             ));
     }
     
