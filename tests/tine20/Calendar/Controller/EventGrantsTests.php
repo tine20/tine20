@@ -117,16 +117,11 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
             'adminGrant'    => true,
         ))), true);
         
-        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+        $eventIds = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        )), new Tinebase_Model_Pagination(array()), false);
+        )), new Tinebase_Model_Pagination(array()), false, true);
         
-        // only delete events from our testcalendar. (container_id filter also allowes implicts from other calendars)
-        foreach ($events as $event) {
-            if ($event->container_id == $this->_testCalendar->getId()) {
-                $this->_controller->delete($event->getId());
-            }
-        }
+        $this->_controller->delete($eventIds);
         
         Tinebase_Container::getInstance()->deleteContainer($this->_testCalendar, true);
     }
@@ -180,6 +175,99 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $persitentEvent->originator_tz);
         
         return $persitentEvent;
+    }
+    
+    /**
+     * part of generic controller, but needs to be tested somewhere...
+     *
+     */
+    public function testDeleteACL()
+    {
+        $event = $this->_getEvent();
+        $persitentEvent = $this->_controller->create($event);
+        
+        // remove all container grants
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), true);
+        
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->_controller->delete($persitentEvent->getId());
+    }
+    
+    /**
+     * tests implicit READ grants for organizer and participants
+     */
+    public function testImplicitOrganizerGrants()
+    {
+        $event = $this->_getEvent();
+        $event->organizer = Tinebase_Core::getUser()->getId();
+        
+        $persitentEvent = $this->_controller->create($event);
+        
+        // remove all container grants
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), true);
+        
+        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $this->assertEquals($persitentEvent->getId(), $loadedEvent->getId(), 'organizer should have implicit read grant!');
+        
+        $persitentEvent->summary = 'Lunchtime';
+        $updatedEvent = $this->_controller->update($persitentEvent);
+        $this->assertEquals($persitentEvent->summary, $updatedEvent->summary, 'organizer should have implicit edit grant');
+        
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId() + 1),
+        ));
+        
+        $foundEvents = $this->_controller->search($filter, new Tinebase_Model_Pagination());
+        $this->assertGreaterThanOrEqual(1, count($foundEvents), 'organizer should have implicit read rights in search action');
+        
+        $this->_controller->delete($persitentEvent->getId());
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_controller->get($persitentEvent->getId());
+    }
+    
+    /**
+     * this testcase is wrong. the acl filter _always_ includes a container filter by design
+     * if we remove ourselfes all container grants, the implicit grant is not resolveable any more!
+     * 
+     * - an owner free personal container does not occour in real operation!
+     * - if current user is attender and the event is in one of his personal containers, always the container is implied in the acl filter!
+     *
+     */
+    public function testImplicitAttendeeGrants()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_id'   => Tinebase_Core::getUser()->getId(),
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+            ),/*
+            array(
+                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP
+            )*/
+        ));
+        
+        $persitentEvent = $this->_controller->create($event);
+        
+        // remove all container grants
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), true);
+        
+        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $this->assertEquals($persitentEvent->getId(), $loadedEvent->getId(), 'attendee should have implicit read grant');
+
+        // in a group invitation, no displaycontainer_id is set for attendee!
+        // @todo rework group-invitations to directly expand group to attendee
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'specialNode', 'value' => 'all'                   ),
+            array('field' => 'id',           'operator' => 'equals',      'value' => $persitentEvent->getId()),
+            
+        ));
+        $foundEvents = $this->_controller->search($filter, new Tinebase_Model_Pagination());
+        $this->assertGreaterThanOrEqual(1, count($foundEvents), 'attendee should have implicit read rights in search action');
+        
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->_controller->update($persitentEvent);
+        $this->_controller->delete(($persitentEvent->getId()));
     }
     
     /**
