@@ -256,15 +256,18 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * change account password
      *
      * @param string $_accountId
+     * @param string $_username
      * @param string $_password
      * @return boolean
      */
-    public function changePassword($_accountId, $_password)
+    public function changeCredentials($_accountId, $_username, $_password)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Changing password for account id ' . $_accountId);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Changing credentials for account id ' . $_accountId);
         
         // get account and set pwd
         $account = $this->get($_accountId);
+        
+        $account->user = $_username;
         $account->password = $_password;
         
         // update account

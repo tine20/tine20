@@ -382,15 +382,16 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * change account pwd
+     * change account pwd / username
      *
      * @param string $id
+     * @param string $username
      * @param string $password
      * @return array
      */
-    public function changeAccountPassword($id, $password)
+    public function changeCredentials($id, $username, $password)
     {
-        $result = Felamimail_Controller_Account::getInstance()->changePassword($id, $password);
+        $result = Felamimail_Controller_Account::getInstance()->changeCredentials($id, $username, $password);
         
         return array('status' => ($result) ? 'success' : 'failure');
     }

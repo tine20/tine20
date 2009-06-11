@@ -492,49 +492,25 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         if (responseText.msg == 'cannot login, user or password wrong' ||
             responseText.msg == 'need at least user in params') {
             
-            // we need to extend the message box to get a password prompt
-            Ext.apply(Ext.MessageBox, {
-                promptPassword: function(){
-                    var d = Ext.MessageBox.getDialog().body.child('.ext-mb-input').dom;
-                    Ext.MessageBox.getDialog().on({
-                        show:{fn:function(){d.type = 'password';},single:true},
-                        hide:{fn:function(){d.type = 'text';},single:true}
-                    });
-                    Ext.MessageBox.prompt.apply(Ext.MessageBox, arguments);
+            // get account id and update username/password
+            var accountNode = request.argument.node;
+            var accountId = accountNode.attributes.account_id;
+                
+            var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
+                title: String.format(this.app.i18n._('IMAP Credentials for {0}'), accountNode.text),
+                appName: 'Felamimail',
+                credentialsId: accountId,
+                listeners: {
+                    scope: this,
+                    'update': function(data) {
+                        // update account node
+                        accountNode.reload(function(callback) {
+                            //console.log('reload');
+                        });
+                    }
                 }
             });
-            
-            Ext.MessageBox.promptPassword(this.app.i18n._('Enter password'), this.app.i18n._('Please enter your password for this account:'), function(_btn, _text) {
-                if(_btn == 'ok') {
-                    if (! _text) {
-                        Ext.Msg.alert(this.app.i18n._('No password entered.'), this.app.i18n._('You have to enter a password!'));
-                        return;
-                    }
-                    Ext.MessageBox.wait(this.app.i18n._('Please wait'), this.app.i18n._('Setting new password...' ));
-                    
-                    // get account id and update password
-                    var accountNode = request.argument.node;
-                    var accountId = accountNode.attributes.account_id;
-                    
-                    var params = {
-                        method: 'Felamimail.changeAccountPassword',
-                        password: _text,
-                        id: accountId
-                    };
-                    
-                    Ext.Ajax.request({
-                        params: params,
-                        scope: this,
-                        success: function(_result, _request){
-                            // update account node
-                            Ext.MessageBox.hide();
-                            accountNode.reload(function(callback) {
-                                //console.log('reload');
-                            });
-                        }
-                    });
-                }
-            }, this);            
+
         } else {
 
             // open standard exception dialog
