@@ -103,6 +103,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
      * @return Felamimail_Model_Folder
      * 
      * @todo write tests for cache handling
+     * @todo check if more than $_initialNumber new messages arrived even if cache 
+     *       is already complete (-> do initial import again?)
      */
     public function update($_folder, $_recursive = TRUE)
     {
