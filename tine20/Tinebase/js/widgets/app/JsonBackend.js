@@ -138,6 +138,26 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         
         return this.request(options);
     },
+
+    /**
+     * deletes multiple records identified by a filter
+     * 
+     * @param   {Object} filter
+     * @param   {Object} options
+     * @return  {Number} Ext.Ajax transaction id
+     * @success 
+     */
+    deleteRecordsByFilter: function(filter, options) {
+        options = options || {};
+        options.params = options.params || {};
+        options.params.method = this.appName + '.delete' + this.modelName + 'sByFilter';
+        options.params.filter = Ext.util.JSON.encode(filter);
+        
+        // increase timeout as this can take a long time (5 mins)
+        options.timeout = 300000;
+        
+        return this.request(options);
+    },
     
     /**
      * updates multiple records with the same data
@@ -278,6 +298,10 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
                 }
             }
         };
+        
+        if (options.timeout) {
+            requestOptions.timeout = options.timeout;
+        }
         
         if (typeof options.exceptionHandler == 'function') {
             requestOptions.exceptionHandler = function(response) {

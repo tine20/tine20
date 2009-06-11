@@ -52,6 +52,11 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     evalGrants: true,
     /**
+     * @cfg {Bool} filterSelectionDelete
+     * is it allowed to deleteByFilter?
+     */
+    filterSelectionDelete: false,
+    /**
      * @cfg {Object} defaultSortInfo
      */
     defaultSortInfo: {},
@@ -508,7 +513,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * generic delete handler
      */
     onDeleteRecords: function(btn, e) {
-        if (this.grid.getSelectionModel().isFilterSelect) {
+        var sm = this.grid.getSelectionModel();
+        
+        if (sm.isFilterSelect && ! this.filterSelectionDelete) {
             Ext.MessageBox.show({
                 title: _('Not Allowed'), 
                 msg: _('You are not allowed to delete all pages at once'),
@@ -518,7 +525,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             
             return;
         }
-        var records = this.grid.getSelectionModel().getSelections();
+        var records = sm.getSelections();
         
         var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
         var i18nQuestion = this.i18nDeleteQuestion ?
@@ -528,11 +535,15 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
             if(btn == 'yes') {
                 if (! this.deleteMask) {
-                    this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: String.format(_('Deleting {0}'), i18nItems)});
+                    var message = String.format(_('Deleting {0}'), i18nItems)
+                    if (sm.isFilterSelect) {
+                        message = message + _(' ... This may take a long time!');
+                    } 
+                    this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
                 }
                 this.deleteMask.show();
                 
-                this.recordProxy.deleteRecords(records, {
+                var options = {
                     scope: this,
                     success: function() {
                         this.deleteMask.hide();
@@ -542,7 +553,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                         this.deleteMask.hide();
                         Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
                     }
-                });
+                };
+                
+                if (sm.isFilterSelect && this.filterSelectionDelete) {
+                    this.recordProxy.deleteRecordsByFilter(sm.getSelectionFilter(), options);
+                } else {
+                    this.recordProxy.deleteRecords(records, options);
+                }
             }
         }, this);
     }
