@@ -155,14 +155,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $select = $this->_getSelect('*');
         
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(); 
-        
         // build query: ... WHERE (user OR group OR anyone) AND name AND application_id
         $filter = new Tinebase_Model_PreferenceFilter(array(
             array('field'     => 'account',         'operator'  => 'equals', 'value'     => array(
                 'accountId' => $_accountId, 'accountType' => $_accountType)
             ),
-            array('field'     => 'application_id',  'operator'  => 'equals', 'value'     => $appId),
             array('field'     => 'name',            'operator'  => 'equals', 'value'     => $_preferenceName),
         ));
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
@@ -189,6 +186,33 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         return $result;
     }
 
+    /**
+     * get all users who have the preference $_preferenceName = $_value
+     *
+     * @param string $_preferenceName
+     * @param string $_value
+     * @param array $_limitToUserIds [optional]
+     * @return array of user ids
+     * 
+     * @todo finish implementation
+     */
+    public function getUsersWithPref($_preferenceName, $_value, $_limitToUserIds = array())
+    {
+        $result = array();
+        
+        //-- check if value is default or forced setting
+        //$select = $this->_getSelect();
+        //$select->from(
+        
+        //-- forced: get all users
+        
+        //-- default: remove all users/groups who don't have default
+
+        //-- not default: get all users/groups who have the setting
+        
+        return $result;
+    }
+    
     /**
      * set value of preference
      *
@@ -219,15 +243,12 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preferences.');
         }
         
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId();
-        
         // check if already there -> update
         $select = $this->_getSelect('*');
         $select
             ->where($this->_db->quoteIdentifier($this->_tableName . '.account_id')      . ' = ?', $_accountId)
             ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type')    . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.name')            . ' = ?', $_preferenceName)
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.application_id')  . ' = ?', $appId);
+            ->where($this->_db->quoteIdentifier($this->_tableName . '.name')            . ' = ?', $_preferenceName);
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -235,7 +256,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if (!$queryResult) {
             // no preference yet -> create
             $preference = new Tinebase_Model_Preference(array(
-                'application_id'    => $appId,
+                'application_id'    => $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
                 'name'              => $_preferenceName,
                 'value'             => $_value,
                 'account_id'        => $_accountId,
