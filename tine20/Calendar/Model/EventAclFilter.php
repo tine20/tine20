@@ -45,10 +45,15 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
      */
     public function appendFilterSql($_select, $_backend)
     {
-        parent::appendFilterSql($_select, $_backend);
+        $this->_resolve();
         
-        // directly filter for required grant if its other than _only_ GRANT_READ
-        if (count($this->_requiredGrants) > 1 || $this->_requiredGrants[0] != Tinebase_Model_Container::GRANT_READ) {
+        $quotedDisplayContainerIdentifier = $_backend->getAdapter()->quoteIdentifier('attendee.displaycontainer_id');
+        
+        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
+        $_select->orWhere($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
+        
+        // directly filter for required grant is only possible if requiredgrants does not contains GRANT_READ
+        if (! in_array(Tinebase_Model_Container::GRANT_READ, $this->_requiredGrants)) {
             foreach ($this->_requiredGrants as $grant) {
                 $_select->orHaving($_backend->getAdapter()->quoteIdentifier('grant-' . $grant) . ' = 1');
             }
@@ -94,8 +99,8 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
         
         parent::_resolve();
         
-        // we only need to include free/busy if required grant is _only_ GRANT_READ
-        if (count($this->_requiredGrants) != 1 || $this->_requiredGrants[0] != Tinebase_Model_Container::GRANT_READ) {
+        // we only need to include free/busy if required grants contain GRANT_READ
+        if (! in_array(Tinebase_Model_Container::GRANT_READ, $this->_requiredGrants)) {
             return;
         }
         
