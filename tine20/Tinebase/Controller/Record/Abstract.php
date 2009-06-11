@@ -406,6 +406,19 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * delete records by filter
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return  void
+     */
+    public function deleteByFilter(Tinebase_Model_Filter_FilterGroup $_filter)
+    {
+        $ids = $this->search($_filter, NULL, FALSE, TRUE);
+        
+        $this->delete($ids);
+    }
+    
+    /**
      * inspects delete action
      *
      * @param array $_ids

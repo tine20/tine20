@@ -155,7 +155,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param array $_ids 
      * @param Tinebase_Controller_Record_Interface $_controller the record controller
-     * @return string
+     * @return array
      */
     protected function _delete($_ids, Tinebase_Controller_Record_Interface $_controller)
     {
@@ -163,6 +163,23 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $_ids = Zend_Json::decode($_ids);
         }
         $_controller->delete($_ids);
+        return array(
+            'status'    => 'success'
+        );  
+    }
+    
+    /**
+     * deletes existing records by filter
+     *
+     * @param string $_filter json encoded filter
+     * @param Tinebase_Controller_Record_Interface $_controller the record controller
+     * @return array
+     */
+    protected function _deleteByFilter($_filter, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
+    {
+        $filter = new $_filterModel(Zend_Json::decode($_filter));
+        
+        $_controller->deleteByFilter($filter);
         return array(
             'status'    => 'success'
         );  
