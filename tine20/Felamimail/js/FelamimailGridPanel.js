@@ -19,6 +19,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
     recordClass: Tine.Felamimail.Model.Message,
     evalGrants: false,
+    filterSelectionDelete: true,
     
     // grid specific
     defaultSortInfo: {field: 'received', direction: 'DESC'},

@@ -227,6 +227,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * deletes existing messages by filter
+     *
+     * @param string $filter
+     * @return array
+     */
+    public function deleteMessagesByFilter($filter)
+    {
+        return $this->_deleteByFilter($filter, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
+    }
+
+    /**
      * move messsages to folder
      *
      * @param string $ids message ids
