@@ -488,8 +488,8 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     onEditInNewWindow: function(button, event) {
         var record; 
         if (button.actionType == 'edit') {
-            if (this.action_editInNewWindow.isDisabled()) {
-                // if edit action is disabled, we also don't open a new 
+            if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
+                // if edit action is disabled or not available, we also don't open a new window
                 return false;
             }
             var selectedRows = this.grid.getSelectionModel().getSelections();
