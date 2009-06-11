@@ -24,79 +24,134 @@
  *       As such there is no need to compute the effective grants in stage 2
  * 
  * NOTE: If the required grant is other than GRANT_READ, we skip all free/busy 
- *       grants. With this, also stage 2 is obsolete!
+ *       grants. In this case, also stage 2 is not nessesary!
+ * 
  * 
  * @package Calendar
  */
-class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_FilterGroup implements Tinebase_Model_Filter_AclFilter
+class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container 
 {
     /**
-     * @var string application of this filter group
+     * @var array freebusy containers added to query
      */
-    protected $_applicationName = 'Calendar';
+    private $_freebusyContainers = array();
     
     /**
-     * @var array filter model fieldName => definition
-     */
-    protected $_filterModel = array(
-        'container_id'   => array('filter' => 'Tinebase_Model_Container', 'options' => array('applicationName' => 'Calendar')),
-    );
-    
-    /**
-     * @var array one of theese grants must be met
-     */
-    protected $_requiredGrants = array(
-        Tinebase_Model_Container::GRANT_READ
-    );
-    
-    /**
-     * is acl filter resolved?
+     * appends sql to given select statement
      *
-     * @var boolean
-     */
-    protected $_isResolved = FALSE;
-    
-    /**
-     * sets the grants this filter needs to assure
-     *
-     * @param array $_grants
-     */
-    public function setRequiredGrants(array $_grants)
-    {
-        $this->_requiredGrants = $_grants;
-        $this->_isResolved = FALSE;
-    }
-    
-    /**
-     * appends custom filters to a given select object
-     * 
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
-     * @return void
+     * @throws Tinebase_Exception_NotFound
      */
     public function appendFilterSql($_select, $_backend)
     {
+        parent::appendFilterSql($_select, $_backend);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
+        // directly filter for required grant if its other than _only_ GRANT_READ
+        if (count($this->_requiredGrants) > 1 || $this->_requiredGrants[0] != Tinebase_Model_Container::GRANT_READ) {
+            foreach ($this->_requiredGrants as $grant) {
+                $_select->where($_backend->getAdapter()->quoteIdentifier('grant-' . $grant) . ' = ', 1, Zend_Db::INT_TYPE);
+            }
+        }
     }
     
     /**
-     * returns array with the filter settings of this filter group 
+     * stage 2 checks
+     * 
+     * NOTE: depends on all acl filters of group
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup
+     * @param Tinebase_Record_RecordSet
      *
-     * @param  bool $_valueToJson resolve value for json api?
-     * @return array
      */
-    public function toArray($_valueToJson = false)
+    public static function stage2($_filterGroup, $eventSet) 
     {
-        $result = parent::toArray($_valueToJson);
-        
-        foreach ($result as &$filterData) {
-            if ($filterData['field'] == 'id' && $_valueToJson == true && ! empty($filterData['value'])) {
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . print_r($filterData['value'], true));
-                $filterData['value'] = Timetracker_Controller_Timeaccount::getInstance()->get($filterData['value'])->toArray();
+        // pool together all freebusy containers
+        $idFilters = $_filterGroup->getAclFilters();
+        $freebusyContainers = array();
+        foreach ($idFilters as $filter) {
+            if ($filter instanceof Calendar_Model_EventAclFilter) {
+                $freebusyContainers = array_unique(array_merge($freebusyContainers, $filter->getFreebusyContainers()));
             }
         }
         
-        return $result;
+        if (! empty($freebusyContainers)) {
+            // do the actual cleanup
+        }
+    }
+    
+    /**
+     * resolve container ids
+     *
+     * @todo speed up retrival of freebusyContainers for all other users by a single call to container class/table
+     */
+    protected function _resolve()
+    {
+        if ($this->_isResolved) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' already resolved');
+            return;
+        }
+        
+        parent::_resolve();
+        
+        // we only need to include free/busy if required grant is _only_ GRANT_READ
+        if (count($this->_requiredGrants) != 1 || $this->_requiredGrants[0] != Tinebase_Model_Container::GRANT_READ) {
+            return;
+        }
+        
+        switch ($this->_operator) {
+            case 'personalNode':
+                // user always has free/busy for himself
+                if ($this->_value != Tinebase_Core::getUser()->getId() && Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::FREEBUSY, $this->_value)) {
+                    // get all personal containers of user!
+                    $freebusyContainers = Tinebase_Container::getInstance()->getPersonalContainer($this->_value, 'Calendar', $this->_value, 0, true)->getId();
+                }
+                break;
+                
+            case 'specialNode':
+                switch ($this->_value) {
+                    case 'all':
+                    case 'otherUsers':
+                        // the difference between 'all' and 'otherUsers' is, that 'all' also include
+                        // 'personalNode->currUser' and 'spechialNode->shard' 
+                        // in fact, this does not make a difference from the free/busy perspective
+                        
+                        // get all users which have free/busy pref set to yes
+                        $freebusyUsers = Tinebase_Core::getPreference('Calendar')->getUsersWithPref(Calendar_Preference::FREEBUSY, 1);
+                        
+                        // get personal containers for all this users
+                        $freebusyContainers = array();
+                        foreach ($freebusyUsers as $userId) {
+                            $freebusyContainers = array_merge($freebusyContainers, Tinebase_Container::getInstance()->getPersonalContainer($userId, 'Calendar', $userId, 0, true)->getId());
+                        }
+                        break;
+                        
+                    // no need to include free/busy
+                    default:
+                        return;
+                        break;
+                }    
+                break;
+                
+            // no need to include free/busy
+            default:
+                return;
+                break;
+        }
+        
+        if (! empty($freebusyContainers)) {
+            $this->_freebusyContainers = array_diff($freebusyContainers, $this->_containerIds);
+            $this->_containerIds = array_merge($this->_containerIds, $this->_freebusyContainers);
+        }
+    }
+    
+    /**
+     * returns all freebusy container ids this idfilter added to query
+     *
+     * @return array
+     */
+    public function getFreebusyContainers()
+    {
+        return $this->_freebusyContainers;
     }
 }
