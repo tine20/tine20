@@ -65,16 +65,6 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     }
     
     /**
-     * returns acl filter of this group or NULL if not set
-     *
-     * @return Tinebase_Model_Filter_AclFilter
-     */
-    public function getAclFilter()
-    {
-        return $this;
-    }
-    
-    /**
      * sets the grants this filter needs to assure
      *
      * @param array $_grants

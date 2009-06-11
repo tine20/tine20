@@ -61,16 +61,6 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         Timetracker_Model_TimeaccountGrants::BOOK_OWN
     );
     
-/**
-     * returns acl filter of this group or NULL if not set
-     *
-     * @return Tinebase_Model_Filter_AclFilter
-     */
-    public function getAclFilter()
-    {
-        return $this;
-    }
-    
     /**
      * sets the grants this filter needs to assure
      *
