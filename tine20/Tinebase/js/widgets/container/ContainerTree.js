@@ -49,28 +49,23 @@ Tine.widgets.container.TreePanel = function(config) {
 
 Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
  	/**
-     * @cfg {string} appName
-     * name of application
+     * @cfg {string} appName name of application
      */
     appName: '',
 	/**
-     * @cfg {string} itemName
-     * name of containers items
+     * @cfg {bool} allowMultiSelection
      */
-    //itemName: 'item',
+    allowMultiSelection: false,
     /**
-     * @cfg {string} containerName
-     * name of container (singular)
+     * @cfg {string} containerName name of container (singular)
      */
 	containerName: 'container',
     /**
-     * @cfg {string} containerName
-     * name of container (plural)
+     * @cfg {string} containerName name of container (plural)
      */
     containersName: 'containers',
     /**
-     * @cfg {array} extraItems
-     * additional items to display under all
+     * @cfg {array} extraItems additional items to display under all
      */
     extraItems: null,
     /**
@@ -91,7 +86,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var translation = new Locale.Gettext();
         translation.textdomain('Tinebase');
 		
-		Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
+        if (this.allowMultiSelection && ! this.selModel) {
+            this.selModel = new Ext.tree.MultiSelectionModel();
+        }
+        
+        if (this.selModel) {
+            this.allowMultiSelection = typeof this.selModel.getSelectedNodes == 'function';
+        }
+		
+        Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
 		this.addEvents(
             /**
              * @event containeradded
@@ -184,7 +187,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 		
         // apply usefull multi selection rules for multiSelectionModels
         this.on('beforeclick', function(node, e) {
-            if (! typeof node.getOwnerTree().getSelectionModel().getSelectedNodes == 'function') {
+            if (! this.allowMultiSelection) {
                 return;
             }
             
