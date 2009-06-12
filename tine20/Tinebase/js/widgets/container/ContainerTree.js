@@ -182,6 +182,33 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
 		this.initContextMenu();
 		
+        // apply usefull multi selection rules for multiSelectionModels
+        this.on('beforeclick', function(node, e) {
+            if (! typeof node.getOwnerTree().getSelectionModel().getSelectedNodes == 'function') {
+                return;
+            }
+            
+            if (node.isSelected() && node.getOwnerTree().getSelectionModel().getSelectedNodes().length > 1) {
+                node.unselect();
+                return false;
+            }
+            
+            if (node.isExpandable() && node.isExpanded()) {
+                for (var i=0, selected=true; i<node.childNodes.length; i++) {
+                    selected = selected && node.childNodes[i].isSelected();
+                    node.childNodes[i].unselect();
+                }
+                //console.log(selected); // all are selected
+                
+            }
+            
+            while(node = node.parentNode) {
+                if (node.isSelected()) {
+                    node.unselect();
+                }
+            }
+        });
+        
         this.on('click', function(node, e){
             // note: if node is clicked, it is not selected!
             node.getOwnerTree().getSelectionModel().select(node, e, true);
