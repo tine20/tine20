@@ -46,7 +46,7 @@ Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     setToolbar: function() {
         if (! this.actionToolbar) {
             this.actionToolbar = new Ext.Toolbar({
-                items: []
+                items: this.contentPanel.recordActions
             });
         }
         

@@ -23,6 +23,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     layout: 'border',
     
     initComponent: function() {
+        this.recordClass = Tine.Calendar.Event;
+        
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
+        // init some translations
+        this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
+        this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
+        this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
+        this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         
         this.initActions();
         this.initLayout();
@@ -31,6 +40,39 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     initActions: function() {
+        this.action_editInNewWindow = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(_('Edit {0}'), this.i18nRecordName),
+            disabled: true,
+            actionType: 'edit',
+            handler: this.onEditInNewWindow,
+            iconCls: 'action_edit',
+            scope: this
+        });
+        
+        this.action_addInNewWindow = new Ext.Action({
+            requiredGrant: 'addGrant',
+            actionType: 'add',
+            text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
+            handler: this.onEditInNewWindow,
+            iconCls: 'action_add',
+            scope: this
+        });
+        
+        // note: unprecise plural form here, but this is hard to change
+        this.action_deleteRecord = new Ext.Action({
+            requiredGrant: 'deleteGrant',
+            allowMultiple: true,
+            singularText: this.i18nDeleteActionText ? i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            pluralText: this.i18nDeleteActionText ? i18nDeleteActionText[1] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.tranlation,
+            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.tranlation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            handler: this.onDeleteRecords,
+            disabled: true,
+            iconCls: 'action_delete',
+            scope: this
+        });
+        
         this.showDayView = new Ext.Toolbar.Button({
             pressed: this.activeView == 'day',
             text: 'day view',
@@ -63,6 +105,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.showDayView,
             this.showWeekView,
             this.showMonthView
+        ];
+        
+        this.recordActions = [
+            this.action_addInNewWindow,
+            this.action_editInNewWindow,
+            this.action_deleteRecord
         ];
     },
     
@@ -141,6 +189,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         panel.getView().updatePeriod({from: this.startDate});
         panel.getStore().load({});
         //this.updateMiniCal();
+    },
+    
+    onDeleteRecords: function() {
+        
+    },
+    
+    onEditInNewWindow: function() {
+        
     },
     
     updateView: function(which) {
