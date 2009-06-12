@@ -25,10 +25,11 @@ Tine.widgets.VersionCheck = function() {
         }),
         reader: new Ext.data.JsonReader({
             root: 'version'
-        }, ['codename', 'packageString', 'releasedate', 'critical', 'build'])
+        }, ['codeName', 'packageString', 'releaseTime', 'critical', 'build'])
     });
     ds.on('load', function(store, records) {
         var version = records[0];
+        alert('hallo');
         
         var local = Date.parseDate(Tine.Tinebase.registry.get('version').releasetime, Date.patterns.ISO8601Long);
         var latest = Date.parseDate(version.get('releasetime'), Date.patterns.ISO8601Long);
@@ -37,7 +38,7 @@ Tine.widgets.VersionCheck = function() {
             if (version.get('critical') == true) {
                 Ext.MessageBox.show({
                     title: _('New version of Tine 2.0 available'), 
-                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), version.get('codename')) + "\n" +
+                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), version.get('codeName')) + "\n" +
                                  _("It's a critical update and must be installed as soon as possible!"),
                     width: 500,
                     buttons: Ext.Msg.OK,
@@ -46,7 +47,7 @@ Tine.widgets.VersionCheck = function() {
             } else {
                 Ext.MessageBox.show({
                     title: _('New version of Tine 2.0 available'),
-                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), version.get('codename')) + "\n" +
+                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), version.get('codeName')) + "\n" +
                                  _('Please consider updating!'),
                     width: 400,
                     buttons: Ext.Msg.OK,
