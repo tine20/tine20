@@ -23,6 +23,13 @@
 class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * maximum file upload size (in bytes)
+     * 
+     * 2097152 = 2MB
+     */
+    const MAX_ATTACHMENT_SIZE = '2097152';
+    
+    /**
      * imap flags to constants translation
      * @var array
      */
@@ -311,7 +318,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @todo what has to be set in the 'In-Reply-To' header?
      * @todo set organization header (add setting to accounts)
      * @todo add name for to/cc/bcc
-     * @todo add max attachment size check?
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
@@ -369,12 +375,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // add attachments
         if (isset($_message->attachments)) {
+            $size = 0;
             foreach ($_message->attachments as $attachment) {
                 $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
                 $part->type = $attachment['type'];
                 $part->filename = $attachment['name'];
                 $part->encoding = Zend_Mime::ENCODING_BASE64;
                 $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                $size += $attachment['size'];
+                
+                // check size
+                if ($size > self::MAX_ATTACHMENT_SIZE) {
+                    throw new Felamimail_Exception('Allowed attachment size exceeded! Tried to attach ' . $size . ' bytes.');
+                }
                 
                 $mail->addAttachment($part);
             }
