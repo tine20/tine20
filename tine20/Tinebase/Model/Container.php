@@ -15,6 +15,10 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ * 
+ * NOTE: container class is in the transition from int based grants to string based
+ *       grants! In the next refactoring step of container class, int based grants 
+ *       will be replaced
  */
 class Tinebase_Model_Container extends Tinebase_Record_Abstract
 {
@@ -29,30 +33,35 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      *
      */
     const GRANT_READ = 1;
+    const READGRANT = 'readGrant';
 
     /**
      * constant for add grant
      *
      */
     const GRANT_ADD = 2;
+    const ADDGRANT = 'addGrant';
 
     /**
      * constant for edit grant
      *
      */
     const GRANT_EDIT = 4;
+    const EDITGRANT = 'editGrant';
 
     /**
      * constant for delete grant
      *
      */
     const GRANT_DELETE = 8;
+    const DELETEGRANT = 'deleteGrant';
 
     /**
      * constant for admin grant
      *
      */
     const GRANT_ADMIN = 16;
+    const ADMINGRANT = 'adminGrant';
 
     /**
      * constant for all grants
@@ -79,6 +88,19 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      *
      */
     const TYPE_SHARED = 'shared';
+    
+    /**
+     * maps grant constants to names
+     *
+     * @var array
+     */
+    public static $GRANTNAMEMAP = array(
+        self::GRANT_READ    => self::READGRANT,
+        self::GRANT_ADD     => self::ADDGRANT,
+        self::GRANT_EDIT    => self::EDITGRANT,
+        self::GRANT_DELETE  => self::DELETEGRANT,
+        self::GRANT_ADMIN   => self::ADMINGRANT
+    );
     
 	/**
      * key in $_validators/$_properties array for the filed which 
