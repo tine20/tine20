@@ -191,6 +191,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add \Seen flag to msg uid ' . $message->messageuid);
                 $this->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN), $folder);
             }
+            
+            // add the complete imap message object
+            $message->message = $imapMessage;
         }
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
@@ -328,9 +331,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $account = Felamimail_Controller_Account::getInstance()->get($_message->from);
         
         // get original message
-        if ($_message->original_id) {
-            $originalMessage = $this->get($_message->original_id);
-        }
+        $originalMessage = ($_message->original_id) ? $this->get($_message->original_id) : NULL;
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), TRUE));
@@ -349,7 +350,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setFrom($account->email, $from);
         
         // set in reply to
-        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && isset($originalMessage)) {
+        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $originalMessage !== NULL) {
             $mail->addHeader('In-Reply-To', $originalMessage->messageuid);
         }
         
@@ -374,17 +375,33 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setSubject($_message->subject);
         
         // add attachments
+        $this->_addAttachments($mail, $_message, $originalMessage);
+        
+        /*
         if (isset($_message->attachments)) {
             $size = 0;
             foreach ($_message->attachments as $attachment) {
-                $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
-                $part->type = $attachment['type'];
-                $part->filename = $attachment['name'];
+                
+                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+                    // add complete original message as attachment
+                    $part = new Zend_Mime_Part($originalMessage->message->getContent());
+                    
+                    $part->filename = $attachment['name']; // ?
+                    
+                    //$part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                    
+                } else {
+                    // get contents from uploaded files
+                    $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
+                    $part->filename = $attachment['name'];
+                    $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                }
+
                 $part->encoding = Zend_Mime::ENCODING_BASE64;
-                $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
-                $size += $attachment['size'];
+                $part->type = $attachment['type'];
                 
                 // check size
+                $size += $attachment['size'];
                 if ($size > self::MAX_ATTACHMENT_SIZE) {
                     throw new Felamimail_Exception('Allowed attachment size exceeded! Tried to attach ' . $size . ' bytes.');
                 }
@@ -392,6 +409,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $mail->addAttachment($part);
             }
         }
+        */
         
         // add user agent
         $mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING);
@@ -422,7 +440,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // add reply/forward flags if set
             if (! empty($_message->flags) 
                 && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
-                && isset($originalMessage)
+                && $originalMessage !== NULL
             ) {
                 $this->addFlags($originalMessage, array($_message->flags));
             }
@@ -668,6 +686,53 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $attachments;
+    }
+    
+    /**
+     * add attachments to mail
+     *
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
+     */
+    protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
+    {
+        if (isset($_message->attachments)) {
+            $size = 0;
+            foreach ($_message->attachments as $attachment) {
+                
+                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+                    
+                    if ($_originalMessage === NULL) {
+                        throw new Felamimail_Exception('No original message available for forward!');
+                    }
+                    
+                    // add complete original message as attachment
+                    $part = new Zend_Mime_Part($_originalMessage->message->getContent());
+                    
+                    $part->filename = $attachment['name']; // ?
+                    
+                    //$part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                    
+                } else {
+                    // get contents from uploaded files
+                    $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
+                    $part->filename = $attachment['name'];
+                    $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                }
+
+                $part->encoding = Zend_Mime::ENCODING_BASE64;
+                $part->type = $attachment['type'];
+                
+                // check size
+                $size += $attachment['size'];
+                if ($size > self::MAX_ATTACHMENT_SIZE) {
+                    throw new Felamimail_Exception('Allowed attachment size exceeded! Tried to attach ' . $size . ' bytes.');
+                }
+                
+                $_mail->addAttachment($part);
+            }
+        }
     }
 
     /**

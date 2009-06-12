@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         init attachments (on forward)
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -150,14 +149,12 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
         });
         
         // init attachments (on forward)
-        /*
-        if (this.record.get('to') && this.record.get('to') != '') {
-            this.store.add(new Ext.data.Record({type: 'to', 'address': this.record.get('to')}));
-            this.record.data.to = [this.record.get('to')];
-        } else {
-            this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
+        if (this.record.get('attachments')) {
+            var attachments = this.record.get('attachments');
+            for (var i=0; i < attachments.length; i++) {
+                this.store.add(new Ext.data.Record(attachments[i]));
+            }
         }
-        */
     },
     
     /**

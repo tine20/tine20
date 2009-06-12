@@ -384,14 +384,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * 
      * @param {} button
      * @param {} event
-     * 
-     * TODO add attachments on forward
      */
     onEditInNewWindow: function(button, event) {
         
         // check if account available first
         if (Tine.Felamimail.loadAccountStore().getCount() == 0) {
-            // TODO show message
+            // no account -> show message
+            Ext.Msg.alert(this.app.i18n._('Error'), this.app.i18n._('No Account configured'));
             return;
         }
         
@@ -434,9 +433,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     recordData.flags = '\\Answered';
                     break;
                 case 'forward':
-                    recordData.body = '<br/>-----' + _('Original message') + '-----<br/>'
-                        + this.formatHeaders(selectedRecord.get('headers'), false) + '<br/><br/>'
-                        + body + '<br/>';
+                    console.log(selectedRecord);
+                
+                    if (selectedRecord.get('attachments').length > 0) {
+                        // add message/rfc822 attachment if original message has attachments
+                        recordData.attachments = [{
+                            name: this.app.i18n._('Original Message'),
+                            type: 'message/rfc822',
+                            size: selectedRecord.get('size')
+                        }];
+                        recordData.body = '<br/>';
+                    } else {
+                        // only show original message in body if it has no attachments
+                        recordData.body = '<br/>-----' + _('Original message') + '-----<br/>'
+                            + this.formatHeaders(selectedRecord.get('headers'), false) + '<br/><br/>'
+                            + body + '<br/>';
+                    }
                     recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
                     recordData.flags = 'Passed';
                     break;

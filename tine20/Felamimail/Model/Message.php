@@ -9,6 +9,7 @@
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
  * @todo        add flags as consts here?
+ * @todo        add more CONTENT_TYPE_ constants
  */
 
 /**
@@ -24,6 +25,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     const DATE_FORMAT = 'EEE, d MMM YYYY hh:mm:ss zzz';
     const DATE_FORMAT_RECEIVED = 'dd-MMM-YYYY hh:mm:ss zzz';
+    
+    /**
+     * message content type (rfc822)
+     *
+     */
+    const CONTENT_TYPE_MESSAGE_RFC822 = 'message/rfc822';
     
     /**
      * key in $_validators/$_properties array for the field which 
@@ -66,6 +73,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'content_type'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // Felamimail_Message object
+        'message'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

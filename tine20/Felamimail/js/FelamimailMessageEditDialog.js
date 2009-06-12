@@ -66,6 +66,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.record.data.body = Ext.util.Format.nl2br(this.record.data.body);
         }
         
+        //console.log(this.record);
+        
         this.getForm().loadRecord(this.record);
         //this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         
@@ -150,7 +152,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         + '} '
                         + '.felamimail-body-signature {'
                             + 'font-size: 9px;'
-                            + 'color: #bbbbbb;'
+                            + 'color: #aaaaaa;'
                         + '} '
                     + '</style>'
                     + '</head>'
