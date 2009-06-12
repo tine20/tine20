@@ -44,7 +44,13 @@ Tine.Calendar.EventArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'rrule' },
     { name: 'is_all_day_event', type: 'bool'},
     { name: 'rrule_until', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    { name: 'originator_tz' }
+    { name: 'originator_tz' },
+    // grant helper fields
+    {name: 'readGrant'   , type: 'bool'},
+    {name: 'editGrant'   , type: 'bool'},
+    {name: 'deleteGrant' , type: 'bool'},
+    {name: 'editGrant'   , type: 'bool'}
+    
 ]);
 
 /**
