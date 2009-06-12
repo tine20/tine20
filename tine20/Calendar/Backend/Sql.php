@@ -211,7 +211,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $quoteIdIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_id');
         
         $sql = $this->_db->quoteInto(    "($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)  . " AND $quoteIdIdentifier = $userExpression)" .
-               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . ' AND ' . $this->_db->quoteIdentifier("$_groupMembersTableName.account_id") . " = $quoteIdIdentifier" . ')' . 
+               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . ' AND ' . $this->_db->quoteIdentifier("$_groupMembersTableName.group_id") . " = $quoteIdIdentifier" . ')' . 
                $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         
         
