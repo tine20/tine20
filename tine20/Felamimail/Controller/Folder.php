@@ -272,15 +272,15 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . self::DELIMITER);
                     $folders = $imap->getFolders($_folderName, '%');
                     
-                    // remove again if self
-                    if (in_array($_folderName, array_keys($folders))) {
-                        unset($folders[$_folderName]);
-                    }
-                    
                 } catch (Zend_Mail_Storage_Exception $zmse) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
                     $folders = array();
                 }
+            }
+            
+            // remove folder if self
+            if (in_array($_folderName, array_keys($folders))) {
+                unset($folders[$_folderName]);
             }
         }
         
