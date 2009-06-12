@@ -118,7 +118,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         } else {
             // update cache -> set totalcount > 0 (only if cache is incomplete?)
             $folder = $this->_cacheController->update($folderId);
-            $this->_totalcount = $folder->totalcount;
+            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE
+                || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING
+            ) {
+                $this->_totalcount = $folder->totalcount;
+            }
         
             $result = parent::search($_filter, $_pagination);
         }
