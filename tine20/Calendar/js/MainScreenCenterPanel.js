@@ -199,6 +199,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.EventEditDialog.openWindow({});
     },
     
+    refresh: function() {
+        var panel = this.getCalendarPanel(this.activeView);
+        panel.getStore().load({});
+    },
+    
     updateView: function(which) {
         var panel = this.getCalendarPanel(which);
         var period = panel.getTopToolbar().getPeriod();
