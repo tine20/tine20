@@ -185,33 +185,30 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
 		this.initContextMenu();
 		
-        // apply usefull multi selection rules for multiSelectionModels
         this.on('beforeclick', function(node, e) {
-            if (! this.allowMultiSelection) {
-                return;
-            }
-            
-            // toggle selection if its not the last one ;-)
-            if (node.isSelected() && node.getOwnerTree().getSelectionModel().getSelectedNodes().length > 1) {
+            // select clicked node
+            if (! node.isSelected()) {
+                node.getOwnerTree().getSelectionModel().select(node, e, true);
+            } else if (this.allowMultiSelection && node.getOwnerTree().getSelectionModel().getSelectedNodes().length > 1) {
                 node.unselect();
+                this.fireEvent('click', node.getOwnerTree().getSelectionModel().getSelectedNodes()[0], e);
                 return false;
             }
             
-            // recursivly unselect child nodes
-            this.unselectChildNodes(node);
+            // expand (folders) automatically on select
+            node.expand();
             
-            // recursivly unselect parent nodes
-            while(node = node.parentNode) {
-                if (node.isSelected()) {
-                    node.unselect();
+            if ( this.allowMultiSelection) {
+                // recursivly unselect child nodes
+                this.unselectChildNodes(node);
+                
+                // recursivly unselect parent nodes
+                while(node = node.parentNode) {
+                    if (node.isSelected()) {
+                        node.unselect();
+                    }
                 }
             }
-        });
-        
-        this.on('click', function(node, e){
-            // note: if node is clicked, it is not selected!
-            node.getOwnerTree().getSelectionModel().select(node, e, true);
-            node.expand();
         }, this);
         
 	    this.on('contextmenu', function(node, event){
@@ -269,20 +266,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                  * gets value of this container filter
                  */
                 getValue: function() {
-                    var selection =  scope.getSelectionModel()['getSelectedNode' + (scope.allowMultiSelection ? 's' : '')]();
+                    var selection =  scope.allowMultiSelection ? scope.getSelectionModel().getSelectedNodes() : [scope.getSelectionModel().getSelectedNode()];
                     
-                    if (Ext.isArray(selection)) {
-                        var filter = {condition: 'OR', filters: []};
-                        selection.each(function(node) {
-                            console.log(node);
-                        }, this);
-                        //for(var i=0; i<initialTree.length; i++) {
-                        //    treeRoot.appendChild( new Ext.tree.AsyncTreeNode(initialTree[i]) );
-                        //}
-                        //console.log('multiselection');
-                    } else {
-                        return this.node2Filter(selection);
-                    }
+                    var filters = [];
+                    Ext.each(selection, function(node) {
+                        filters.push(this.node2Filter(node));
+                    }, this);
+                    
+                    return filters.length == 1 ? filters[0] : {condition: 'OR', filters: filters};
+                    
                     /*
                     var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
                     return [
