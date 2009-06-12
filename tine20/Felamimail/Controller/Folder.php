@@ -223,7 +223,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         //$globalNameParts = explode(self::DELIMITER, $_oldGlobalName);
         //$folder->localname = array_pop($globalNameParts);
         
-        $newGlobalName = preg_replace("/[_\-a-zA-Z0-9]+$/", $_newLocalName, $_oldGlobalName);
+        $newGlobalName = preg_replace("/[_\-a-zA-Z0-9\.]+$/", $_newLocalName, $_oldGlobalName);
         
         $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
         $imap->renameFolder($_oldGlobalName, $newGlobalName);
@@ -259,13 +259,26 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $folders = $imap->getFolders('', '%');
         } else {
             try {
+                
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . self::DELIMITER);
                 $folders = $imap->getFolders($_folderName . self::DELIMITER, '%');
+                
             } catch (Zend_Mail_Storage_Exception $zmse) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
-                $folders = array();
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage() .' - Trying again ...');
+                
+                // try again without delimiter
+                try {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . self::DELIMITER);
+                    $folders = $imap->getFolders($_folderName, '%');
+                } catch (Zend_Mail_Storage_Exception $zmse) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
+                    $folders = array();
+                }
             }
         }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folders, true));
         
         // do some mapping and save folder in db
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
