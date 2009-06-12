@@ -206,9 +206,11 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             
             // update folder and cache messages again
             if ($_recursive) {
-                $this->clear($folder);
+                $folder = $this->clear($folder);
                 return $this->update($folder, FALSE);
-            }
+            } /* else {
+                return $folder;
+            } */
         }
 
         $folderCount = $this->_messageCacheBackend->searchCountByFolderId($folderId);
@@ -226,9 +228,11 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             
             // update folder and cache messages again (try it only once)
             if ($_recursive) {
-                $this->clear($folder);
+                $folder = $this->clear($folder);
                 return $this->update($folder, FALSE);
-            }
+            } /* else {
+                return $folder;
+            } */
         }
         
         /***************** update folder ************************************/
@@ -341,6 +345,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
      * remove all cached messages for this folder
      *
      * @param string|Felamimail_Model_Folder $_folder
+     * @return Felamimail_Model_Folder
      */
     public function clear($_folder)
     {
@@ -357,7 +362,9 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         $folder->uidvalidity = 0;
         $folder->cache_status = 'empty';
         $folder->cache_lowest_uid = 0;
-        $this->_folderBackend->update($folder);
+        $folder = $this->_folderBackend->update($folder);
+        
+        return $folder;
     }
     
     /***************************** protected funcs *******************************/
