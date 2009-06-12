@@ -167,17 +167,17 @@ class Tinebase_Container
                         'account_id'     => $accountId,
                         'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                         //'account_name'   => 'not used',
-                        'readGrant'      => true,
-                        'addGrant'       => true,
-                        'editGrant'      => true,
-                        'deleteGrant'    => true,
-                        'adminGrant'     => true
+                        Tinebase_Model_Container::READGRANT      => true,
+                        Tinebase_Model_Container::ADDGRANT       => true,
+                        Tinebase_Model_Container::EDITGRANT      => true,
+                        Tinebase_Model_Container::DELETEGRANT    => true,
+                        Tinebase_Model_Container::ADMINGRANT     => true
                     ),            
                     array(
                         'account_id'      => 0,
                         'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                         //'account_name'    => 'not used',
-                        'readGrant'       => true
+                        Tinebase_Model_Container::READGRANT       => true
                     )            
                 ));
             } else {
@@ -187,11 +187,11 @@ class Tinebase_Container
                         'account_id'     => $accountId,
                         'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                         //'account_name'   => 'not used',
-                        'readGrant'      => true,
-                        'addGrant'       => true,
-                        'editGrant'      => true,
-                        'deleteGrant'    => true,
-                        'adminGrant'     => true
+                        Tinebase_Model_Container::READGRANT      => true,
+                        Tinebase_Model_Container::ADDGRANT       => true,
+                        Tinebase_Model_Container::EDITGRANT      => true,
+                        Tinebase_Model_Container::DELETEGRANT    => true,
+                        Tinebase_Model_Container::ADMINGRANT     => true
                     )            
                 ));
             }
@@ -904,23 +904,7 @@ class Tinebase_Container
             $grants = explode(',', $row['account_grants']);
 
             foreach($grants as $grant) {
-                switch($grant) {
-                    case Tinebase_Model_Container::GRANT_READ:
-                        $containerGrant->readGrant = TRUE;
-                        break;
-                    case Tinebase_Model_Container::GRANT_ADD:
-                        $containerGrant->addGrant = TRUE;
-                        break;
-                    case Tinebase_Model_Container::GRANT_EDIT:
-                        $containerGrant->editGrant = TRUE;
-                        break;
-                    case Tinebase_Model_Container::GRANT_DELETE:
-                        $containerGrant->deleteGrant = TRUE;
-                        break;
-                    case Tinebase_Model_Container::GRANT_ADMIN:
-                        $containerGrant->adminGrant = TRUE;
-                        break;
-                }
+                $containerGrant[Tinebase_Model_Container::$GRANTNAMEMAP[$grant]] = TRUE;
             }
 
             $result->addRecord($containerGrant);
@@ -1068,39 +1052,7 @@ class Tinebase_Container
         }
         
         $container = $this->getContainerById($containerId);
-        
-        # @todo find a new solution for this block
-        
-/*        if($container->type === Tinebase_Model_Container::TYPE_PERSONAL) {
-            $currentAccountId = Tinebase_Core::getUser()->getId();
-            // make sure that only the current user has admin rights
-            foreach($_grants as $key => $recordGrants) {
-                $_grants[$key]->adminGrant = false;
-            }
-            
-            if(isset($_grants[$currentAccountId])) {
-                $_grants[$currentAccountId]->readGrant = true;
-                $_grants[$currentAccountId]->addGrant = true;
-                $_grants[$currentAccountId]->editGrant = true;
-                $_grants[$currentAccountId]->deleteGrant = true;
-                $_grants[$currentAccountId]->adminGrant = true;
-            } else {
-                $_grants[$currentAccountId] = new Tinebase_Model_Grants(
-                    array(
-                        'account_id'     => $currentAccountId,
-                        'account_type'   => 'account',
-                        //'account_name'   => 'not used',
-                        'readGrant'      => true,
-                        'addGrant'       => true,
-                        'editGrant'      => true,
-                        'deleteGrant'    => true,
-                        'adminGrant'     => true
-                    ), true);
-            }
-        } */
-        
-        //error_log(print_r($_grants->toArray(), true));
-        
+       
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
@@ -1117,20 +1069,11 @@ class Tinebase_Container
                 if(empty($data['id'])) {
                     $data['id'] = $recordGrants->generateUID();
                 }
-                if($recordGrants->readGrant === true) {
-                    $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Model_Container::GRANT_READ));
-                }
-                if($recordGrants->addGrant === true) {
-                    $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Model_Container::GRANT_ADD));
-                }
-                if($recordGrants->editGrant === true) {
-                    $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Model_Container::GRANT_EDIT));
-                }
-                if($recordGrants->deleteGrant === true) {
-                    $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Model_Container::GRANT_DELETE));
-                }
-                if($recordGrants->adminGrant === true) {
-                    $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Model_Container::GRANT_ADMIN));
+                
+                foreach ($recordGrants as $grantName => $grant) {
+                    if (in_array($grantName, array_values(Tinebase_Model_Container::$GRANTNAMEMAP)) && $grant === true) {
+                        $this->containerAclTable->insert($data + array('account_grant' => array_value($grantName, array_flip(Tinebase_Model_Container::$GRANTNAMEMAP))));
+                    }
                 }
             }
             
@@ -1192,24 +1135,7 @@ class Tinebase_Container
         foreach($_grantsArray as $key => $value) {
             
             $grantValue = (is_array($value)) ? $value['account_grant'] : $value; 
-            
-            switch($grantValue) {
-                case Tinebase_Model_Container::GRANT_READ:
-                    $grants->readGrant = TRUE; 
-                    break;
-                case Tinebase_Model_Container::GRANT_ADD:
-                    $grants->addGrant = TRUE; 
-                    break;
-                case Tinebase_Model_Container::GRANT_EDIT:
-                    $grants->editGrant = TRUE; 
-                    break;
-                case Tinebase_Model_Container::GRANT_DELETE:
-                    $grants->deleteGrant = TRUE; 
-                    break;
-                case Tinebase_Model_Container::GRANT_ADMIN:
-                    $grants->adminGrant = TRUE; 
-                    break;
-            }
+            $grants[Tinebase_Model_Container::$GRANTNAMEMAP[$grantValue]] = TRUE;
         }
         
         return $grants;
