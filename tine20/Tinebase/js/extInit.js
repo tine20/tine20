@@ -18,14 +18,13 @@
 /**
  * create console pseudo object when firebug is disabled/not installed
  */
-if (! ("console" in window) || !("firebug" in console)) {
-    window.console = {
+window.console = window.console || {};
+for (fn in {
+        // maximum possible console functions based on firebug
         log: null , debug: null, info: null, warn: null, error: null, assert: null, dir: null, dirxml: null, group: null,
         groupEnd: null, time: null, timeEnd: null, count: null, trace: null, profile: null, profileEnd: null
-    };
-    for (f in window.console) {
-        window.console[f] = function() {};
-    }
+    }) {
+    window.console[fn] = window.console[fn] || function() {};
 }
 
 /** ------------------------- Gears Initialisation ------------------------- **/
