@@ -54,6 +54,12 @@ Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     }
 });
 
+/**
+ * @class Tine.Calendar.TreePanel
+ * @extends Ext.Panel
+ * 
+ * @todo add d&d support to tree (change calendar)
+ */
 Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     border: false,
     layout: 'border',
