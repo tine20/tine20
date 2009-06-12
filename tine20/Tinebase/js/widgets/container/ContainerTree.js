@@ -187,13 +187,18 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 		this.initContextMenu();
 		
         this.on('beforeclick', function(node, e) {
+            
             // select clicked node
             if (! node.isSelected()) {
-                node.getOwnerTree().getSelectionModel().select(node, e, true);
+                node.getOwnerTree().getSelectionModel().select(node, e, e.ctrlKey);
             } else if (this.allowMultiSelection && node.getOwnerTree().getSelectionModel().getSelectedNodes().length > 1) {
-                node.unselect();
-                this.fireEvent('click', node.getOwnerTree().getSelectionModel().getSelectedNodes()[0], e);
-                return false;
+                if (e.ctrlKey) {
+                    node.unselect();
+                    this.fireEvent('click', node.getOwnerTree().getSelectionModel().getSelectedNodes()[0], e);
+                    return false;
+                } else {
+                    node.select();
+                }
             }
             
             // expand (folders) automatically on select
