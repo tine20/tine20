@@ -96,6 +96,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'is_all_day_event'      => array('allowEmpty' => true         ),
         'rrule_until'           => array('allowEmpty' => true         ),
         'originator_tz'         => array('allowEmpty' => true         ),
+    
+        // grant helper fields
+        Tinebase_Model_Container::READGRANT   => array('allowEmpty' => true),
+        Tinebase_Model_Container::EDITGRANT   => array('allowEmpty' => true),
+        Tinebase_Model_Container::DELETEGRANT => array('allowEmpty' => true),
+        Tinebase_Model_Container::ADMINGRANT  => array('allowEmpty' => true),
     );
     
     /**
