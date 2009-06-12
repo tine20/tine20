@@ -433,7 +433,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     recordData.flags = '\\Answered';
                     break;
                 case 'forward':
-                    console.log(selectedRecord);
+                    //console.log(selectedRecord);
                 
                     if (selectedRecord.get('attachments').length > 0) {
                         // add message/rfc822 attachment if original message has attachments
