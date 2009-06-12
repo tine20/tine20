@@ -55,7 +55,7 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
         // directly filter for required grant is only possible if requiredgrants does not contains GRANT_READ
         if (! in_array(Tinebase_Model_Container::GRANT_READ, $this->_requiredGrants)) {
             foreach ($this->_requiredGrants as $grant) {
-                $_select->orHaving($_backend->getAdapter()->quoteIdentifier('grant-' . $grant) . ' = 1');
+                $_select->orHaving($_backend->getAdapter()->quoteIdentifier(Tinebase_Model_Container::$GRANTNAMEMAP[$grant] . $grant) . ' = 1');
             }
         }
     }
