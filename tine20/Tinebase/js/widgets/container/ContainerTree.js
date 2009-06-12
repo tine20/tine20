@@ -262,12 +262,43 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                  * gets value of this container filter
                  */
                 getValue: function() {
+                    var selection =  scope.getSelectionModel()['getSelectedNode' + (scope.allowMultiSelection ? 's' : '')]();
+                    
+                    if (Ext.isArray(selection)) {
+                        
+                        //console.log('multiselection');
+                    } else {
+                        return this.node2Filter(selection);
+                    }
+                    /*
                     var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
                     return [
                         {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
                         {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
                         {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
                     ];
+                    */
+                },
+                
+                node2Filter: function(node) {
+                    var filter = {field: 'container_id'};
+                    
+                    switch (node.attributes.containerType) {
+                        case 'singleContainer':
+                            filter.operator = 'equals';
+                            filter.value = node.attributes.container.id;
+                            break;
+                        case 'personal':
+                            filter.operator = 'personalNode';
+                            filter.value = node.attributes.owner.accountId;
+                            break;
+                        default:
+                            filter.operator = 'specialNode'
+                            filter.value = node.attributes.containerType;
+                            break;
+                    }
+                    
+                    return filter;
                 },
                 
                 /**
