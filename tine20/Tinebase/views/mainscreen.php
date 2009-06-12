@@ -66,7 +66,10 @@
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/" . $tineBuildPath . "tine-all.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all.js'></script>";
                 break;
-        }?>
+        }
+        
+        if (Tinebase_Core::getConfig()->customMainscreenHeaders) {echo "\n" . Tinebase_Core::getConfig()->customMainscreenHeaders;} ?>
+        
 </head>
 <body>
     <noscript>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></noscript>
