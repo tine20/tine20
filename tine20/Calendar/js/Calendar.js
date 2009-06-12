@@ -81,8 +81,11 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
                         var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
                         contentPanel.changeView(weekNumber ? 'week' : 'day', value);
                     },
-                    render: function() {
-                        //console.log(this);
+                    render: function(picker) {
+                        // fix height of minipicker panel (south panel)
+                        var layout = this.layout;
+                        layout.south.el.setHeight(picker.el.getHeight());
+                        layout.layout();
                     }
                 }
             })
