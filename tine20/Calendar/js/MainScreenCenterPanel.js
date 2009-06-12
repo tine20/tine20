@@ -199,6 +199,21 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.EventEditDialog.openWindow({});
     },
     
+    /**
+     * called before store queries for data
+     */
+    onStoreBeforeload: function(store, options) {
+        options.params = options.params || {};
+        
+        // allways start with an empty filter set!
+        // this is important for paging and sort header!
+        options.params.filter = [];
+        
+        // note, we can't use ne 'normal' plugin approach here, cause we have to deal with n stores
+        var calendarSelectionPlugin = this.app.getMainScreen().getTreePanel().getCalSelector().getFilterPlugin();
+        calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options)
+    },
+    
     refresh: function() {
         var panel = this.getCalendarPanel(this.activeView);
         panel.getStore().load({});
@@ -227,7 +242,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 id: 'id',
                 fields: Tine.Calendar.Event,
                 proxy: Tine.Calendar.backend,
-                reader: new Ext.data.JsonReader({})//, //Tine.Calendar.backend.getReader(),
+                reader: new Ext.data.JsonReader({}), //Tine.Calendar.backend.getReader(),
+                listeners: {
+                    scope: this,
+                    'beforeload': this.onStoreBeforeload
+                }
             });
             
             var tbar = new Tine.Calendar.PagingToolbar({
