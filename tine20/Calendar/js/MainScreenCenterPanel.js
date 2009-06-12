@@ -196,7 +196,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onEditInNewWindow: function() {
-        
+        Tine.Calendar.EventEditDialog.openWindow({});
     },
     
     updateView: function(which) {

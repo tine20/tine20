@@ -34,6 +34,7 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Calendar/js/Calendar.js',
             'Calendar/js/PagingToolbar.js',
             'Calendar/js/MainScreenCenterPanel.js',
+            'Calendar/js/EventEditDialog.js',
         );
     }
     
