@@ -70,10 +70,12 @@
 
 .preview-panel-felamimail {
 	padding: 5px;
+	overflow: 'hidden';
 }
 
 .preview-panel-felamimail-headers {
     background-color: #dddddd;
+    overflow: 'hidden';
 }
 
 .preview-panel-felamimail-attachments {
@@ -84,6 +86,10 @@
 
 .preview-panel-felamimail-attachments .tinebase-download-link{
     /* float: left; */
+}
+
+.preview-panel-felamimail-body {
+    overflow: 'auto';	
 }
 
 /***** node classes ******/
