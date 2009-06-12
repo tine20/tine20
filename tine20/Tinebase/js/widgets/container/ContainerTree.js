@@ -191,20 +191,16 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 return;
             }
             
+            // toggle selection if its not the last one ;-)
             if (node.isSelected() && node.getOwnerTree().getSelectionModel().getSelectedNodes().length > 1) {
                 node.unselect();
                 return false;
             }
             
-            if (node.isExpandable() && node.isExpanded()) {
-                for (var i=0, selected=true; i<node.childNodes.length; i++) {
-                    selected = selected && node.childNodes[i].isSelected();
-                    node.childNodes[i].unselect();
-                }
-                //console.log(selected); // all are selected
-                
-            }
+            // recursivly unselect child nodes
+            this.unselectChildNodes(node);
             
+            // recursivly unselect parent nodes
             while(node = node.parentNode) {
                 if (node.isSelected()) {
                     node.unselect();
@@ -250,6 +246,17 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         }
 	},
     
+    unselectChildNodes: function(node) {
+        if (node.isExpandable() && node.isExpanded()) {
+            for (var i=0; i<node.childNodes.length; i++) {
+                if (node.childNodes[i].isExpandable()) {
+                    this.unselectChildNodes(node.childNodes[i]);
+                }
+                node.childNodes[i].unselect();
+            }
+        }
+    },
+    
     /**
      * returns a filter plugin to be used in a grid
      */
@@ -265,7 +272,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                     var selection =  scope.getSelectionModel()['getSelectedNode' + (scope.allowMultiSelection ? 's' : '')]();
                     
                     if (Ext.isArray(selection)) {
-                        
+                        var filter = {condition: 'OR', filters: []};
+                        selection.each(function(node) {
+                            console.log(node);
+                        }, this);
+                        //for(var i=0; i<initialTree.length; i++) {
+                        //    treeRoot.appendChild( new Ext.tree.AsyncTreeNode(initialTree[i]) );
+                        //}
                         //console.log('multiselection');
                     } else {
                         return this.node2Filter(selection);
