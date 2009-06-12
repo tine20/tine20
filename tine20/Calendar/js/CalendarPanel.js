@@ -71,11 +71,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     onBeforeLoad: function(store, options) {
         options.params = options.params || {};
         
-        // allways start with an empty filter set!
-        // this is important for paging and sort header!
-        options.params.filter = [];
-        
-        options.params.filter.push({field: 'period', operator: 'within', value: this.getView().getPeriod() });
+        var filter = options.params.filter ? options.params.filter : [];
+        filter.push({field: 'period', operator: 'within', value: this.getView().getPeriod() });
     },
     
     onUpdateEvent: function(event) {
