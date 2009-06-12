@@ -327,7 +327,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {} node
      */
     onClick: function(node) {
-        node.expand();
+        
+        if (node.expandable) {
+            console.log('expandable');
+            node.expand();
+        }
         node.select();
         
         if (node.id && node.id != '/') {
@@ -440,10 +444,11 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     /**
      * @private
      * 
-     * TODO try to disable '+' on nodes that don't have children / it looks like that leafs can't be drop targets :(
      * TODO make translations work here
      */
     createNode: function(attr) {
+        
+        //console.log(attr);
         
         var qtiptext = /*this.app.il8n._(*/'Totalcount' + ': ' + attr.totalcount 
             + ' / ' + /*this.app.il8n._(*/'Cache' + ': ' + attr.cache_status;
@@ -461,16 +466,24 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             allowDrop: true,
             qtip: qtiptext,
             systemFolder: (attr.system_folder == '1'),
-            unreadcount: attr.unreadcount
-            //expandable: (attr.has_children == '1'),
-            //allowChildren: (attr.has_children == 1)
-            //childNodes: []
+            unreadcount: attr.unreadcount,
+            
+            // if it has no children, it shouldn't have an expand icon 
+            expandable: attr.has_children,
+            expanded: ! attr.has_children
     	};
+        
+        // if it has no children, it shouldn't have an expand icon 
+        if (! attr.has_children) {
+            node.children = [];
+        }
 
         if (attr.unreadcount > 0) {
             node.text = node.text + ' (' + attr.unreadcount + ')';
             node.cls = 'node_unread';
         }
+        
+        //console.log(node);
         
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
     },
