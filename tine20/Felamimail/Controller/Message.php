@@ -184,7 +184,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message->headers = $imapMessage->getHeaders();
             
             // add attachments
-            $message->attachments = $this->_getAttachments($imapMessage, $folder->account_id, $message->getId());
+            $message->attachments = $this->_getAttachments($imapMessage, $message, $folder->account_id);
             
             // set \Seen flag
             if (preg_match('/\\Seen/', $message->flags) === 0) {
@@ -639,46 +639,79 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * get attachments of message
      *
-     * @param Zend_Mail_Message $_imapMessage
+     * @param Felamimail_Message $_imapMessage
+     * @param Felamimail_Model_Message $_message
      * @param string $_accountId
-     * @param string $_messageId
      * @return array
      * 
-     * @todo make it possible to add message/rfc822 attachments
      * @todo save images as tempfiles to show them inline the mail body
+     * @todo make message/rfc822's work correctly
      */
-    protected function _getAttachments($_imapMessage, $_accountId, $_messageId)
+    protected function _getAttachments(Felamimail_Message $_imapMessage, Felamimail_Model_Message $_message, $_accountId)
     {
         $attachments = array();
         $messageParts = $_imapMessage->countParts();
-        if ($messageParts > 1) {
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Message has ' . $messageParts . ' parts.');
+        
+        if ($_imapMessage->isMultipart()) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get ' 
                 . ($messageParts-1) . ' attachments.'
             );
-            $partNumber = 2;
+            // begin with second part
+            $partNumber = 2; 
             while ($partNumber <= $messageParts) {
                 $part = $_imapMessage->getPart($partNumber);
 
                 $attachment = $part->getHeaders();
-                if (isset($attachment['content-disposition'])) {
                     
-                    if (preg_match('/message\/rfc822/', $attachment['content-type'])) {
-                        // not supported yet
-                        $partNumber++;
-                        continue;
-                    } else {
-                        preg_match("/filename=\"*([a-zA-Z0-9\-\._]+)\"*/", $attachment['content-disposition'], $matches);
-                        $attachment['filename']     = $matches[1];
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $attachment['content-type']);
+                
+                if (preg_match('/message\/rfc822/', $attachment['content-type'])) {
+                    
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($attachment, true));
+                    
+                    $content = $part->getContent();
+                    switch (strtolower($attachment['content-transfer-encoding'])) {
+                        case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
+                            $content = quoted_printable_decode($content);
+                            break;
+                        case Zend_Mime::ENCODING_BASE64:
+                            $content = base64_decode($content);
+                            $content = quoted_printable_decode($content); // ?
+                            break;
                     }
+        
+                    $rfcMessage = new Felamimail_Message(array('raw' => $content));
+                    
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $content);
+                    
+                    // add body
+                    $_message->body = $_message->body . '<br/><hr/><br/>' . $this->_getBody($rfcMessage, $attachment['content-type']); // ?
+        
+                    // add header ?
+                    //$message->headers = $rfcMessage->getHeaders();
+                    
+                    // add attachments
+                    $attachments = array_merge($attachments, $this->_getAttachments($rfcMessage, $_message, $_accountId));
+                    
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding message/rfc822 attachment.');
+                                         
+                } else if (isset($attachment['content-disposition'])) {
+                    preg_match("/filename=\"*([a-zA-Z0-9\-\._]+)\"*/", $attachment['content-disposition'], $matches);
+                    $attachment['filename']     = $matches[1];
                     
                     $attachment['partId']       = $partNumber;
-                    $attachment['messageId']    = $_messageId;
+                    $attachment['messageId']    = $_message->getId();
                     $attachment['accountId']    = $_accountId;
                     $attachment['size']         = $part->getSize();
                                         
                     $attachments[] = $attachment; 
                     
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' adding attachment: ' . print_r($attachment, true));
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, true));
+
+                } else {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Don\'t get attachment of content-type: ' . $attachment['content-type']);
                 }
                 
                 $partNumber++;
