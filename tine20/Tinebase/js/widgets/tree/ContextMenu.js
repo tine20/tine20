@@ -173,7 +173,11 @@ Tine.widgets.tree.ContextMenu = {
                 }
             },
             
-            // TODO  generalize that?
+            /**
+             * manage permissions
+             * 
+             * TODO  generalize that?
+             */
             managePermissions: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
@@ -191,6 +195,22 @@ Tine.widgets.tree.ContextMenu = {
                             grantContainer: node.attributes.container
                         }
                     });
+                }
+            },
+            
+            /**
+             * reload node
+             */
+            reloadNode: function() {
+                if (this.ctxNode) {
+                    var tree = this;
+                    this.ctxNode.reload(function(node) {
+                        //console.log(node);
+                        node.expand();
+                        node.select();
+                        // update grid
+                        tree.filterPlugin.onFilterChange();
+                    });                    
                 }
             }
         }
@@ -229,6 +249,14 @@ Tine.widgets.tree.ContextMenu = {
                         text: _('Manage permissions'),
                         iconCls: 'action_managePermissions',
                         handler: handler.managePermissions,
+                        scope: config.scope
+                    }));
+                    break;
+                case 'reload':
+                    items.push(new Ext.Action({
+                        text: String.format(_('Reload {0}'), config.nodeName),
+                        iconCls: 'x-tbar-loading',
+                        handler: handler.reloadNode,
                         scope: config.scope
                     }));
                     break;
