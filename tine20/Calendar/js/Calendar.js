@@ -64,7 +64,12 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.items = [{
             region: 'center',
-            html: ''
+            items: new Tine.widgets.container.TreePanel({
+                appName: 'Calendar',
+                containerName: Tine.Calendar.Event.getMeta('containerName'),
+                containersName: Tine.Calendar.Event.getMeta('containersName'),
+                allowMultiSelection: true
+            })
         }, {
             region: 'south',
             collapsible: true,
