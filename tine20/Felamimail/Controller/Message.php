@@ -678,7 +678,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                             break;
                         case Zend_Mime::ENCODING_BASE64:
                             $content = base64_decode($content);
-                            $content = quoted_printable_decode($content); // ?
+                            //$content = quoted_printable_decode($content); // ?
                             break;
                     }
         
