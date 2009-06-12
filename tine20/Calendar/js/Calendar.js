@@ -62,15 +62,13 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
         border: false
     },
     initComponent: function() {
-        this.items = [{
+        this.items = [new Tine.widgets.container.TreePanel({
             region: 'center',
-            items: new Tine.widgets.container.TreePanel({
-                appName: 'Calendar',
-                containerName: Tine.Calendar.Event.getMeta('containerName'),
-                containersName: Tine.Calendar.Event.getMeta('containersName'),
-                allowMultiSelection: true
-            })
-        }, {
+            appName: 'Calendar',
+            containerName: Tine.Calendar.Event.getMeta('containerName'),
+            containersName: Tine.Calendar.Event.getMeta('containersName'),
+            allowMultiSelection: true
+        }), {
             region: 'south',
             collapsible: true,
             height: 190,
@@ -82,6 +80,9 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
                     select: function(picker, value, weekNumber) {
                         var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
                         contentPanel.changeView(weekNumber ? 'week' : 'day', value);
+                    },
+                    render: function() {
+                        //console.log(this);
                     }
                 }
             })
