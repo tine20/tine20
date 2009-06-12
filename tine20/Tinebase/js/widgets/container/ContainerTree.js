@@ -71,7 +71,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     /**
      * @cfg {Number} how many chars of the containername to display
      */
-    displayLength: 25,
+    displayLength: 23,
+    
 	// presets
 	iconCls: 'x-new-application',
 	rootVisible: false,
