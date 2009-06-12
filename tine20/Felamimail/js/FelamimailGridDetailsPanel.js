@@ -7,9 +7,10 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add preference to show mails in html or text
- * TODO         replace 'mailto:' links and email addresses in message body with 'open compose tine mail dialog'
+ * TODO         add preference to show mails in html or text?
  * TODO         replace telephone numbers in emails with 'call contact' link
+ * TODO         add 'add sender to contacts'
+ * TODO         make only text body scrollable (headers should be always visible)
  */
  
 Ext.namespace('Tine.Felamimail');
