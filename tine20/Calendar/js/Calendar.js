@@ -61,14 +61,25 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     defaults: {
         border: false
     },
+    
     initComponent: function() {
-        this.items = [new Tine.widgets.container.TreePanel({
+        
+        this.calSelector = new Tine.widgets.container.TreePanel({
             region: 'center',
             appName: 'Calendar',
             containerName: Tine.Calendar.Event.getMeta('containerName'),
             containersName: Tine.Calendar.Event.getMeta('containersName'),
-            allowMultiSelection: true
-        }), {
+            allowMultiSelection: true,
+            listeners: {
+                scope: this,
+                'click': function() {
+                    var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+                    contentPanel.refresh();
+                }
+            }
+        });
+        
+        this.items = [this.calSelector, {
             region: 'south',
             collapsible: true,
             height: 190,
@@ -91,7 +102,10 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
             })
         }];   
         Tine.Calendar.TreePanel.superclass.initComponent.call(this);
+    },
+    
+    getCalSelector: function() {
+        return this.calSelector;
     }
-
 });
 
