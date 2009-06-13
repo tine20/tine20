@@ -15,6 +15,27 @@ Tine.Calendar.MonthView = function(config){
     
     this.addEvents(
         /**
+         * @event click
+         * fired if an event got clicked
+         * @param {Tine.Calendar.Event} event
+         * @param {Ext.EventObject} e
+         */
+        'click',
+        /**
+         * @event contextmenu
+         * fired if an event got contextmenu 
+         * @param {Tine.Calendar.Event} event
+         * @param {Ext.EventObject} e
+         */
+        'contextmenu',
+        /**
+         * @event dblclick
+         * fired if an event got dblclicked
+         * @param {Tine.Calendar.Event} event
+         * @param {Ext.EventObject} e
+         */
+        'dblclick',
+        /**
          * @event changeView
          * fired if user wants to change view
          * @param {String} requested view name
@@ -108,6 +129,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.el.on('mousedown', this.onMouseDown, this);
         this.el.on('dblclick', this.onDblClick, this);
         this.el.on('click', this.onClick, this);
+        this.el.on('contextmenu', this.onContextMenu, this);
         
         this.initDragZone();
         this.initDropZone();
@@ -231,6 +253,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             var parts = target.id.split(':');
             var event = this.ds.getById(parts[1]);
         }
+        
+        return event;
     },
     
     /**
@@ -591,6 +615,12 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.lastClickTime = now;
         /** end distinct click from dblClick **/
         
+        var event = this.getTargetEvent(e);
+        if (event) {
+            this.fireEvent('click', event, e);
+            return;
+        }
+        
         switch(target.className) {
             case 'cal-monthview-dayheader-date':
             case 'cal-monthview-dayheader-more':
@@ -605,10 +635,24 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
     },
     
+    onContextMenu: function(e, target) {
+        var event = this.getTargetEvent(e);
+        if (event) {
+            this.fireEvent('contextmenu', event, e);
+        }
+    },
+    
     onDblClick: function(e, target) {
         this.lastClickTime = new Date().getTime();
         
         e.stopEvent();
+        
+        var event = this.getTargetEvent(e);
+        if (event) {
+            this.fireEvent('dblclick', event, e);
+            return;
+        }
+        
         switch(target.className) {
             case 'cal-monthview-wkcell':
                 var wkIndex = Ext.DomQuery.select('td[class=cal-monthview-wkcell]', this.mainBody.dom).indexOf(target);
