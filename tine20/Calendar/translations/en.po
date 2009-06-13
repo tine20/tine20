@@ -41,9 +41,19 @@ msgid_plural "Events"
 msgstr[0] "Event"
 msgstr[1] "Events"
 
+#: js/Model.js:64
+msgid "Events"
+msgstr "Events"
+
+#: js/Model.js:68 Setup/setup.xml:4
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Calendar"
+msgstr[1] "Calendars"
+
 #: js/Model.js:68
-msgid "calendars"
-msgstr "calendars"
+msgid "Calendars"
+msgstr "Calendars"
 
 #: Preference.php:60
 msgid "Publish Free/Busy Information"
@@ -52,7 +62,3 @@ msgstr "Publish Free/Busy Information"
 #: Preference.php:61
 msgid "Allow all users to view your free/busy information"
 msgstr "Allow all users to view your free/busy information"
-
-#: Setup/setup.xml:4
-msgid "Calendar"
-msgstr "Calendar"

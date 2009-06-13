@@ -56,9 +56,23 @@ msgstr[0] "Událost"
 msgstr[1] "Události"
 msgstr[2] "Událostí"
 
+#: js/Model.js:64
+#, fuzzy
+msgid "Events"
+msgstr "Událost"
+
+#: js/Model.js:68 Setup/setup.xml:4
+#, fuzzy
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Kalendář"
+msgstr[1] "Kalendář"
+msgstr[2] "Kalendář"
+
 #: js/Model.js:68
-msgid "calendars"
-msgstr "kalendáře"
+#, fuzzy
+msgid "Calendars"
+msgstr "Kalendář"
 
 #: Preference.php:60
 msgid "Publish Free/Busy Information"
@@ -68,6 +82,12 @@ msgstr ""
 msgid "Allow all users to view your free/busy information"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "Calendar"
-msgstr "Kalendář"
+#, fuzzy
+#~ msgid "calendar"
+#~ msgid_plural "calendars"
+#~ msgstr[0] "kalendáře"
+#~ msgstr[1] "kalendáře"
+#~ msgstr[2] "kalendáře"
+
+#~ msgid "calendars"
+#~ msgstr "kalendáře"

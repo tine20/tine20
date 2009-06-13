@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-06-13 22:37+0100\n"
+"PO-Revision-Date: 2009-06-13 22:54+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -55,8 +55,21 @@ msgid_plural "Events"
 msgstr[0] "Termin"
 msgstr[1] "Termine"
 
+#: js/Model.js:64
+msgid "Events"
+msgstr "Termine"
+
 #: js/Model.js:68
-msgid "calendars"
+#: Setup/setup.xml:4
+#, fuzzy
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Kalender"
+msgstr[1] "Kalender"
+
+#: js/Model.js:68
+#, fuzzy
+msgid "Calendars"
 msgstr "Kalender"
 
 #: Preference.php:60
@@ -67,17 +80,19 @@ msgstr "Frei/Belegt Informationen veröffentlichen"
 msgid "Allow all users to view your free/busy information"
 msgstr "Erlaubt allen Benutzern das einsehen ihrer Frei/Belegt Informationen"
 
-#: Setup/setup.xml:4
-msgid "Calendar"
-msgstr "Kalender"
-
+#, fuzzy
+#~ msgid "calendar"
+#~ msgid_plural "calendars"
+#~ msgstr[0] "Kalender"
+#~ msgstr[1] "Kalender"
+#~ msgid "calendars"
+#~ msgstr "Kalender"
 #~ msgid "Edit {0}"
 #~ msgstr "{0} Bearbeiten"
-
 #~ msgid "Add {0}"
 #~ msgstr "{0} Hinzufügen"
-
 #~ msgid "Delete {0}"
 #~ msgid_plural "Delete {0}"
 #~ msgstr[0] "{0} Löschen"
 #~ msgstr[1] "{0} Löschen"
+
