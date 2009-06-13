@@ -720,7 +720,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             
             var diff = Math.round((height - rz.originalHeight) * (this.timeGranularity / this.granularityUnitHeights));
             // neglegt diffs due to borders etc.
-            diff = diff - diff %15;
+            diff = Math.round(diff/15) * 15;
             
             var duration = originalDuration + diff;
             
@@ -728,7 +728,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         // don't fire update events on rangeAdd
-        if (! event.isRangeAdd) {
+        if (diff != 0 && ! event.isRangeAdd) {
             this.fireEvent('updateEvent', event);
         }
     },
