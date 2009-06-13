@@ -74,6 +74,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     granularityUnitHeights: 18,
     /**
+     * @cfg {Boolean} denyDragOnMissingEditGrant
+     * deny drag action if edit grant for event is missing
+     */
+    denyDragOnMissingEditGrant: true,
+    /**
      * @property {Ext.data.Store} timeScale
      * store holding timescale 
      */
@@ -282,7 +287,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     var event = this.daysView.ds.getById(parts[1]);
                     
                     // don't allow dragging of dirty events
-                    if (event.dirty) {
+                    // don't allow dragging with missing edit grant
+                    if (event.dirty || (this.daysView.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
                         return;
                     }
                     

@@ -78,6 +78,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     startDay: Ext.DatePicker.prototype.startDay,
     /**
+     * @cfg {Boolean} denyDragOnMissingEditGrant
+     * deny drag action if edit grant for event is missing
+     */
+    denyDragOnMissingEditGrant: true,
+    /**
      * @property {Tine.Calendar.Event} activeEvent
      * @private
      */
@@ -281,6 +286,11 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     var event = this.view.ds.getById(parts[1]);
                     
                     this.view.setActiveEvent(event);
+                    
+                    // don't allow dragging with missing edit grant
+                    if (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant')) {
+                        return false;
+                    }
                     
                     // we need to clone an event with summary in
                     var d = Ext.get(event.domIds[0]).dom.cloneNode(true);
