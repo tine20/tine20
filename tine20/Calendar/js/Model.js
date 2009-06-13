@@ -61,13 +61,13 @@ Tine.Calendar.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.EventArray,
     modelName: 'Event',
     idProperty: 'id',
     titleProperty: 'summary',
-    // ngettext('Event', 'Events', n); gettext('Event');
+    // ngettext('Event', 'Events', n); gettext('Events');
     recordName: 'Event',
     recordsName: 'Events',
     containerProperty: 'container_id',
-    // ngettext('calendar', n); gettext('calendars');
-    containerName: 'calendar',
-    containersName: 'calendars'
+    // ngettext('Calendar', 'Calendars', n); gettext('Calendars');
+    containerName: 'Calendar',
+    containersName: 'Calendars'
 });
 
 /**
