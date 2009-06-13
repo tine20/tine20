@@ -14,10 +14,11 @@
  Ext.namespace('Tine', 'Tine.widgets');
  
  Tine.widgets.ActionUpdater = function(config) {
-    this.initialConfig = {};
-    Ext.apply(this.initialConfig, config);
+    var actions = config.actions || [];
+    delete(config.actions);
     
-    this.addActions(this.initialConfig.actions);
+    Ext.apply(this, config);
+    this.addActions(actions);
  };
  
  Tine.widgets.ActionUpdater.prototype = {
@@ -124,9 +125,11 @@
      * @param {Object} grants
      */
     defaultUpdater: function(action, grants, records) {
-        if (action.requiredGrant) {
+        var requiredGrant = action.requiredGrant ? action.requiredGrant : action.initialConfig.requiredGrant;
+        
+        if (requiredGrant) {
             // TODO: multiple + sigular/plural text
-            action.setDisabled(grants[action.requiredGrant] !== true);
+            action.setDisabled(!grants[requiredGrant]);
         }
     },
     
@@ -150,11 +153,21 @@
      * @return {Object} grantName: sum
      */
     getGrantsSum: function(records) {
-        var grants = {};
+
+        var defaultGrant = records.length == 0 ? false : true;
+        var grants = {
+            addGrant:    defaultGrant,
+            adminGrant:  defaultGrant,
+            deleteGrant: defaultGrant,
+            editGrant:   defaultGrant,
+            readGrant:   defaultGrant
+        };
         
         var recordGrants;
         for (var i=0; i<records.length; i++) {
-            recordGrants = this.containerProperty ? records[i].get(this.containerProperty)[this.grantsProperty] : records[i].get(this.grantsProperty);
+            recordGrants = this.containerProperty ? 
+                records[i].get(this.containerProperty)[this.grantsProperty] : this.grantsProperty ? 
+                records[i].get(this.grantsProperty) : records[i].data;
             
             for (var grant in grants) {
                 if (grants.hasOwnProperty(grant)) {
