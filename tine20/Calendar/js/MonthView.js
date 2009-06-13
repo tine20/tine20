@@ -314,7 +314,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             
             notifyOver : function(dd, e, data) {
                 var target = e.getTarget('td.cal-monthview-daycell', 3);
-                return target ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
+                var event = data.event;
+                
+                return target && event.get('editGrant') ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
             },
             
             notifyDrop : function(dd, e, data) {
@@ -324,10 +326,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 var targetDate = v.dateMesh[v.dayCells.indexOf(target)];
                 
                 if (targetDate) {
-                    var event = data.event;
+                   var event = data.event;
                     
                     var diff = (targetDate.getTime() - event.get('dtstart').clearTime(true).getTime()) / Date.msDAY;
-                    if (! diff) {
+                    if (! diff  || ! event.get('editGrant')) {
                         return false;
                     }
                     
@@ -803,7 +805,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     els[i].setStyle({'background-color': event.color});
                     els[i].setStyle({'color': '#FFFFFF'});
                 } else {
-                    els[i].setStyle({'background-color': this.activeEvent.color});
+                    els[i].setStyle({'background-color': event.color});
                     els[i].setStyle({'color': '#FFFFFF'});
                 }
             }
