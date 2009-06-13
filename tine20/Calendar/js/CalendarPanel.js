@@ -34,6 +34,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         Tine.Calendar.CalendarPanel.superclass.initComponent.call(this);
         
+        this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
+        
         this.autoScroll = false;
         this.autoWidth = false;
         
@@ -42,12 +44,16 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.store.on('beforeload', this.onBeforeLoad, this);
     },
     
-    getView: function() {
-        return this.view;
+    getSelectionModel: function() {
+        return this.selModel;
     },
     
     getStore: function() {
         return this.store;
+    },
+    
+    getView: function() {
+        return this.view;
     },
     
     onAddEvent: function(event) {
