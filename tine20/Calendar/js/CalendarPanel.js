@@ -64,6 +64,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 this.store.remove(event);
                 this.store.add(createdEvent);
                 this.setLoading(false);
+                this.view.getSelectionModel().select(createdEvent);
             }
         });
     },
@@ -85,6 +86,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 this.store.remove(event);
                 this.store.add(updatedEvent);
                 this.setLoading(false);
+                this.view.getSelectionModel().select(updatedEvent);
             }
         });
     },
