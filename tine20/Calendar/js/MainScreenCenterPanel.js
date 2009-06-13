@@ -107,11 +107,21 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.showMonthView
         ];
         
-        this.recordActions = [
+        this.actionToolbarActions = [
             this.action_addInNewWindow,
             this.action_editInNewWindow,
             this.action_deleteRecord
         ];
+        
+        this.recordActions = [
+            this.action_editInNewWindow,
+            this.action_deleteRecord
+        ];
+        this.actionUpdater = new  Tine.widgets.ActionUpdater({
+            actions: this.recordActions,
+            grantsProperty: false,
+            containerProperty: false
+        });
     },
     
     /**
@@ -186,6 +196,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         this['show' + Ext.util.Format.capitalize(view) +  'View'].toggle(true);
         
+        // update actions
+        this.updateEventActions();
+        
+        // update data
         panel.getView().updatePeriod({from: this.startDate});
         panel.getStore().load({});
         //this.updateMiniCal();
@@ -217,6 +231,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     refresh: function() {
         var panel = this.getCalendarPanel(this.activeView);
         panel.getStore().load({});
+    },
+    
+    updateEventActions: function() {
+        var panel = this.getCalendarPanel(this.activeView);
+        var selection = panel.getSelectionModel().getSelectedEvents();
+        
+        this.actionUpdater.updateActions(selection);
     },
     
     updateView: function(which) {
@@ -299,6 +320,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 store: store,
                 view: view
             });
+            
+            this.calendarPanels[which].getSelectionModel().on('selectionchange', this.updateEventActions, this);
         }
         
         return this.calendarPanels[which];
@@ -323,10 +346,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             break;
         }
         miniCal.update(this.startDate, true, weekNumbers);
-    },
-    
-    appendViewSelect: function(tbar) {
-        //tbar.
-        //if (! this.viewSelect)
     }
+    
 });
