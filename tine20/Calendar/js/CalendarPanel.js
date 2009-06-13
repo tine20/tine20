@@ -39,7 +39,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.autoScroll = false;
         this.autoWidth = false;
         
-        this.relayEvents(this.view, ['changeView', 'changePeriod']);
+        this.relayEvents(this.view, ['changeView', 'changePeriod', 'click', 'dblclick', 'contextmenu']);
         
         this.store.on('beforeload', this.onBeforeLoad, this);
     },
@@ -89,6 +89,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             scope: this,
             success: function(updatedEvent) {
                 //console.log('Backend returned updated event -> replace event in view');
+                event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.data.id);
+                
                 this.store.remove(event);
                 this.store.add(updatedEvent);
                 this.setLoading(false);
@@ -160,7 +162,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     processEvent : function(name, event){
-        console.log('Tine.Calendar.CalendarPanel::processEvent "' + name + '" on envent: ' + event.id );
+        //console.log('Tine.Calendar.CalendarPanel::processEvent "' + name + '" on envent: ' + event.id );
     },
     
     /**
