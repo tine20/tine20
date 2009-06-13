@@ -15,6 +15,13 @@ Tine.Calendar.DaysView = function(config){
     
     this.addEvents(
         /**
+         * @event click
+         * fired if an event got clicked
+         * @param {Tine.Calendar.Event} event
+         * @param {Ext.EventObject} e
+         */
+        'click',
+        /**
          * @event changeView
          * fired if user wants to change view
          * @param {String} requested view name
@@ -137,6 +144,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     init: function(calPanel) {
         this.calPanel = calPanel;
+        
+        this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
         
         this.startDate.setHours(0);
         this.startDate.setMinutes(0);
@@ -341,6 +350,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         });
         
         this.initElements();
+        this.selModel.init(this);
     },
     
     /**
@@ -348,6 +358,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     afterRender: function() {
         
+        this.mainWrap.on('click', this.onClick, this);
         this.mainWrap.on('dblclick', this.onDblClick, this);
         this.mainWrap.on('mousedown', this.onMouseDown, this);
         this.mainWrap.on('mouseup', this.onMouseUp, this);
@@ -413,15 +424,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * sets currentlcy active event
      * 
+     * NOTE: active != selected
      * @param {Tine.Calendar.Event} event
      */
     setActiveEvent: function(event) {
         if (this.activeEvent) {
-            this.activeEvent.ui.onSelectedChange(false);
+            //this.activeEvent.ui.onSelectedChange(false);
         }
         
         if (event) {
-            event.ui.onSelectedChange(true);
+            //event.ui.onSelectedChange(true);
             this.activeEvent = event;
         }
     },
@@ -575,6 +587,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
 
         //this.ds.resumeEvents();
         //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
+    },
+    
+    onClick: function(e, target) {
+        var event = this.getTargetEvent(target);
+        if (event) {
+            this.fireEvent('click', event, e);
+        }
     },
     
     /**
