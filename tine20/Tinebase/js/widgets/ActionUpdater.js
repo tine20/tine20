@@ -120,6 +120,8 @@
      * - sets disabled status based on allowMutliple
      * - sets action text (signular/plural text)
      * 
+     * TODO: sigular/plural text
+     * 
      * @param {Ext.Action} action
      * @param {Object} grants
      * @param {Object} grants
@@ -128,7 +130,6 @@
         var nCondition = records.length != 0 && (records.length > 1 ? action.initialConfig.allowMultiple : true);
         
         if (action.initialConfig.requiredGrant) {
-            // TODO: multiple + sigular/plural text
             action.setDisabled(! (grants[action.initialConfig.requiredGrant] && nCondition));
         }
     },
