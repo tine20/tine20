@@ -417,22 +417,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     setActiveEvent: function(event) {
         if (this.activeEvent) {
-            var curEls = this.activeEvent.ui.getEls();
-            for (var i=0; i<curEls.length; i++) {
-                curEls[i].removeClass('cal-daysviewpanel-event-active');
-                curEls[i].setStyle({'z-index': 100});
-            }
+            this.activeEvent.ui.onSelectedChange(false);
         }
         
         if (event) {
-            var els = event.ui.getEls();
-            if (els.length > 0) {
-                for (var i=0; i<els.length; i++) {
-                    els[i].addClass('cal-daysviewpanel-event-active');
-                    els[i].setStyle({'z-index': 1000});
-                }
-                this.activeEvent = event;
-            }
+            event.ui.onSelectedChange(true);
+            this.activeEvent = event;
         }
     },
     

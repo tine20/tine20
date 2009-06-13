@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @note: lot to do here, i just started to move stuff from views here
  */
  
 Ext.ns('Tine.Calendar');
@@ -17,34 +19,27 @@ Tine.Calendar.EventUI = function(event) {
 
 Tine.Calendar.EventUI.prototype = {
     addClass: function(cls) {
-        
+        Ext.each(this.getEls(), function(el){
+            el.addClass(cls);
+        });
     },
     
     blur: function() {
-        
+        Ext.each(this.getEls(), function(el){
+            el.blur();
+        });
     },
     
-    /**
-     * removes a evnet from the dom
-     * @param {Tine.Calendar.Model.Event} event
-     */
-    remove: function() {
-        var eventEls = this.getEls();
-        for (var i=0; i<eventEls.length; i++) {
-            if (eventEls[i] && typeof eventEls[i].remove == 'function') {
-                eventEls[i].remove();
-            }
-        }
-        this.domIds = [];
-    },
+    
     
     focus: function() {
-        
+        Ext.each(this.getEls(), function(el){
+            el.focus();
+        });
     },
     
     /**
      * returns events dom
-     * @param {Tine.Calendar.Model.Event} event
      * @return {Array} of Ext.Element
      */
     getEls: function() {
@@ -62,19 +57,43 @@ Tine.Calendar.EventUI.prototype = {
     onSelectedChange: function(state){
         if(state){
             this.focus();
-            this.addClass("x-tree-selected");
+            this.addClass('cal-daysviewpanel-event-active');
+            this.setStyle({'z-index': 1000});
+            
         }else{
             //this.blur();
-            this.removeClass("x-tree-selected");
+            this.removeClass('cal-daysviewpanel-event-active');
+            this.setStyle({'z-index': 100});
         }
     },
     
+    /**
+     * removes a event from the dom
+     */
+    remove: function() {
+        var eventEls = this.getEls();
+        for (var i=0; i<eventEls.length; i++) {
+            if (eventEls[i] && typeof eventEls[i].remove == 'function') {
+                eventEls[i].remove();
+            }
+        }
+        this.domIds = [];
+    },
+    
     removeClass: function(cls) {
-        
+        Ext.each(this.getEls(), function(el){
+            el.removeClass(cls);
+        });
     },
     
     render: function() {
         
+    },
+    
+    setStyle: function(style) {
+        Ext.each(this.getEls(), function(el){
+            el.setStyle(style);
+        });
     }
     
 };
