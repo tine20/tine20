@@ -443,14 +443,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @param {Tine.Calendar.Event} event
      */
     setActiveEvent: function(event) {
-        if (this.activeEvent) {
-            //this.activeEvent.ui.onSelectedChange(false);
-        }
-        
-        if (event) {
-            //event.ui.onSelectedChange(true);
-            this.activeEvent = event;
-        }
+        this.activeEvent = event || null;
     },
     
     /**
