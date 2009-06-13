@@ -310,7 +310,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     var event = this.daysView.ds.getById(parts[1]);
                     
                     //this.daysView.setActiveEvent(event);
-                    this.daysView.selModel.select(event);
+                    this.daysView.selModel.select(event, e, e.ctrlKey);
                     
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant

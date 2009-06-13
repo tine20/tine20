@@ -304,7 +304,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     var event = this.view.ds.getById(parts[1]);
                     
                     //this.view.setActiveEvent(event);
-                    this.view.selModel.select(event);
+                    this.view.selModel.select(event, e, e.ctrlKey);
                     
                     // don't allow dragging with missing edit grant
                     if (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant')) {
