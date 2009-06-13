@@ -57,12 +57,12 @@ Tine.Calendar.EventUI.prototype = {
     onSelectedChange: function(state){
         if(state){
             this.focus();
-            this.addClass('cal-daysviewpanel-event-active');
+            this.addClass('cal-event-active');
             this.setStyle({'z-index': 1000});
             
         }else{
             //this.blur();
-            this.removeClass('cal-daysviewpanel-event-active');
+            this.removeClass('cal-event-active');
             this.setStyle({'z-index': 100});
         }
     },
@@ -101,6 +101,16 @@ Tine.Calendar.EventUI.prototype = {
 
 
 Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
+    onSelectedChange: function(state){
+        Tine.Calendar.DaysViewEventUI.superclass.onSelectedChange.call(this, state);
+        if(state){
+            this.addClass('cal-daysviewpanel-event-active');
+            
+        }else{
+            this.removeClass('cal-daysviewpanel-event-active');
+        }
+    },
+    
     render: function(view) {
         
         // @todo fetch color from calendar
