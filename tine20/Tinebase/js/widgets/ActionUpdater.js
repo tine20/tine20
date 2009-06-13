@@ -171,7 +171,7 @@
             
             for (var grant in grants) {
                 if (grants.hasOwnProperty(grant)) {
-                    grants[grant] = grants[grant] ? (grants[grant] & recordGrants[grant]) : recordGrants[grant];
+                    grants[grant] = grants[grant] & recordGrants[grant];
                 }
             }
         }
