@@ -451,7 +451,7 @@ Tine.Tinebase.tineInit = {
     onPreferenceChange: function(key, oldValue, newValue) {
         switch (key) {
             case 'windowtype':
-                console.log('hier');
+                //console.log('hier');
                 //break;
             case 'timezone':
             case 'locale':
@@ -508,7 +508,7 @@ Tine.Tinebase.tineInit = {
                             'index.php',
                             'Tinebase/js/Locale/build/' + Tine.Tinebase.registry.get('locale').locale + '-all.js'
                         ];
-                        pkgStore.capture(resources, function(){console.log(arguments)});
+                        pkgStore.capture(resources, function(){/*console.log(arguments)*/});
                     }
                 } else {
                     google.gears.localServer.removeStore('tine20-package-store');
