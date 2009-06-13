@@ -235,6 +235,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 
                 var event = data.event;
                 
+                // we dont support multiple dropping yet
+                data.scope.getSelectionModel().select(event);
+                
                 var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
                 if (target && event.get('editGrant')) {
                     return Math.abs(target.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
@@ -308,9 +311,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 if (eventEl) {
                     var parts = eventEl.id.split(':');
                     var event = this.daysView.ds.getById(parts[1]);
-                    
-                    //this.daysView.setActiveEvent(event);
-                    this.daysView.selModel.select(event, e, e.ctrlKey);
                     
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant

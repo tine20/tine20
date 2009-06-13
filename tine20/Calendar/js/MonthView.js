@@ -303,9 +303,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     var parts = eventEl.id.split(':');
                     var event = this.view.ds.getById(parts[1]);
                     
-                    //this.view.setActiveEvent(event);
-                    this.view.selModel.select(event, e, e.ctrlKey);
-                    
                     // don't allow dragging with missing edit grant
                     if (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant')) {
                         return false;
@@ -345,6 +342,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 var target = e.getTarget('td.cal-monthview-daycell', 3);
                 var event = data.event;
                 
+                // we dont support multiple dropping yet
+                data.scope.getSelectionModel().select(event);
                 return target && event.get('editGrant') ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
             },
             
