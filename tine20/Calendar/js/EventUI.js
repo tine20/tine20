@@ -252,3 +252,23 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         }
     }
 });
+
+Tine.Calendar.MonthViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
+    onSelectedChange: function(state){
+        Tine.Calendar.MonthViewEventUI.superclass.onSelectedChange.call(this, state);
+        if(state){
+            this.addClass('cal-monthview-active');
+            this.setStyle({
+                'background-color': this.color,
+                'color':            '#FFFFFF'
+            });
+            
+        }else{
+            this.removeClass('cal-monthview-active');
+            this.setStyle({
+                'background-color': this.is_all_day_event ? this.bgColor : '',
+                'color':            this.is_all_day_event ? '#000000' : this.color
+            });
+        }
+    }
+});
