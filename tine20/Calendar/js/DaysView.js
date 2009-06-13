@@ -22,6 +22,20 @@ Tine.Calendar.DaysView = function(config){
          */
         'click',
         /**
+         * @event contextmenu
+         * fired if an event got contextmenu 
+         * @param {Tine.Calendar.Event} event
+         * @param {Ext.EventObject} e
+         */
+        'contextmenu',
+        /**
+         * @event dblclick
+         * fired if an event got dblclicked
+         * @param {Tine.Calendar.Event} event
+         * @param {Ext.EventObject} e
+         */
+        'dblclick',
+        /**
          * @event changeView
          * fired if user wants to change view
          * @param {String} requested view name
@@ -360,6 +374,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.mainWrap.on('click', this.onClick, this);
         this.mainWrap.on('dblclick', this.onDblClick, this);
+        this.mainWrap.on('contextmenu', this.onContextMenu, this);
         this.mainWrap.on('mousedown', this.onMouseDown, this);
         this.mainWrap.on('mouseup', this.onMouseUp, this);
         
@@ -596,14 +611,24 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
     },
     
+    onContextMenu: function(e, target) {
+        var event = this.getTargetEvent(target);
+        if (event) {
+            this.fireEvent('contextmenu', event, e);
+        }
+    },
+    
     /**
      * @private
      */
     onDblClick: function(e, target) {
         e.stopEvent();
-        
+        var event = this.getTargetEvent(target);
         var dtStart = this.getTargetDateTime(e);
-        if (dtStart) {
+        
+        if (event) {
+            this.fireEvent('dblclick', event, e);
+        } else if (dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Event({
                 id: newId,
@@ -952,6 +977,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
 
         this.focusEl = new E(this.scroller.dom.childNodes[1]);
         this.focusEl.swallowEvent("click", true);
+        this.focusEl.swallowEvent("dblclick", true);
+        this.focusEl.swallowEvent("contextmenu", true);
     },
     
     getColumnNumber: function(date) {
