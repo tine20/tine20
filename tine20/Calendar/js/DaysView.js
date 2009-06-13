@@ -159,8 +159,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     init: function(calPanel) {
         this.calPanel = calPanel;
         
-        this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
-        
         this.startDate.setHours(0);
         this.startDate.setMinutes(0);
         this.startDate.setSeconds(0);
@@ -365,7 +363,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         });
         
         this.initElements();
-        this.selModel.init(this);
+        this.getSelectionModel().init(this);
     },
     
     /**
@@ -457,7 +455,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     getSelectionModel: function() {
-        return this.selModel;
+        return this.calPanel.getSelectionModel();
     },
     
     /**
@@ -699,7 +697,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         //});
         
         //this.setActiveEvent(event);
-        this.selModel.select(event);
+        this.getSelectionModel().select(event);
     },
     
     /**

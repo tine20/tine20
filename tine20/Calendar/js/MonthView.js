@@ -127,7 +127,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     afterRender: function() {
         this.initElements();
         
-        this.selModel.init(this);
+        this.getSelectionModel().init(this);
         
         this.el.on('mousedown', this.onMouseDown, this);
         this.el.on('dblclick', this.onDblClick, this);
@@ -222,7 +222,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     },
     
     getSelectionModel: function() {
-        return this.selModel;
+        return this.calPanel.selModel;
     },
     
     getTargetDateTime: function(e) {
@@ -255,8 +255,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     init: function(calPanel) {
         this.calPanel = calPanel;
-        
-        this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
         
         this.initData(calPanel.store);
         this.initTemplates();
