@@ -72,9 +72,8 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
         
         this.calSelector = new Tine.widgets.container.TreePanel({
             region: 'center',
-            appName: 'Calendar',
-            containerName: Tine.Calendar.Event.getMeta('containerName'),
-            containersName: Tine.Calendar.Event.getMeta('containersName'),
+            app: Tine.Tinebase.appMgr.get('Calendar'),
+            recordClass: Tine.Calendar.Event,
             allowMultiSelection: true,
             listeners: {
                 scope: this,
