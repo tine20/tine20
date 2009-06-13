@@ -714,7 +714,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var dayWidth = Ext.fly(this.wholeDayArea).getWidth() / this.numOfDays;
             var diff = Math.round((rz.el.getRight() - rz.startPoint[0]) / dayWidth);
             
-            event.set('dtend', event.get('dtend').add(Date.DAY, diff).add(Date.SECOND, -1));
+            if (diff != 0) {
+                event.set('dtend', event.get('dtend').add(Date.DAY, diff).add(Date.SECOND, -1));
+            }
         } else {
             
             var diff = Math.round((height - rz.originalHeight) * (this.timeGranularity / this.granularityUnitHeights));
@@ -723,7 +725,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             
             var duration = originalDuration + diff;
             
-            event.set('dtend', event.get('dtstart').add(Date.MINUTE, duration));
+            if (diff != 0) {
+                event.set('dtend', event.get('dtstart').add(Date.MINUTE, duration));
+            }
         }
         
         // don't fire update events on rangeAdd
