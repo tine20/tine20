@@ -221,6 +221,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         };    
     },
     
+    getSelectionModel: function() {
+        return this.selModel;
+    },
+    
     getTargetDateTime: function(e) {
         var target = e.getTarget('td.cal-monthview-daycell', 3);
         

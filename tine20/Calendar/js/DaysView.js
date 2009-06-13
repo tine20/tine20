@@ -309,7 +309,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     var parts = eventEl.id.split(':');
                     var event = this.daysView.ds.getById(parts[1]);
                     
-                    this.daysView.setActiveEvent(event);
+                    //this.daysView.setActiveEvent(event);
+                    this.daysView.selModel.select(event);
                     
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant
@@ -455,6 +456,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         return this.activeEvent;
     },
     
+    getSelectionModel: function() {
+        return this.selModel;
+    },
+    
     /**
      * creates a new event directly from this view
      * @param {} event
@@ -476,7 +481,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.register(event);
         this.insertEvent(event);
-        this.setActiveEvent(event);
+        //this.setActiveEvent(event);
         this.layout();
         
         //var eventEls = event.ui.getEls();
@@ -693,7 +698,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         //    console.log('move');
         //});
         
-        this.setActiveEvent(event);
+        //this.setActiveEvent(event);
+        this.selModel.select(event);
     },
     
     /**
@@ -803,7 +809,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 this.insertEvent(parallelEvents[j]);
             }
             
-            this.setActiveEvent(event);
+            //this.setActiveEvent(event);
         }
         
         this.layout();
