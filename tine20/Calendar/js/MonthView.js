@@ -303,7 +303,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     var parts = eventEl.id.split(':');
                     var event = this.view.ds.getById(parts[1]);
                     
-                    this.view.setActiveEvent(event);
+                    //this.view.setActiveEvent(event);
+                    this.view.selModel.select(event);
                     
                     // don't allow dragging with missing edit grant
                     if (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant')) {
@@ -483,6 +484,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             
             var posEl = this.getEventSlice(this.dayCells[i].lastChild, pos);
             var eventEl = tmpl.overwrite(posEl, data, true);
+            
+            if (event.dirty) {
+                eventEl.setOpacity(0.5);
+                
+                // the event was selected before
+                event.ui.onSelectedChange(true);
+            }
         }
     },
     

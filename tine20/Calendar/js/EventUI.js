@@ -90,6 +90,12 @@ Tine.Calendar.EventUI.prototype = {
         
     },
     
+    setOpacity: function(v) {
+        Ext.each(this.getEls(), function(el){
+            el.setStyle(v);
+        });
+    },
+    
     setStyle: function(style) {
         Ext.each(this.getEls(), function(el){
             el.setStyle(style);
@@ -146,6 +152,11 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         } else {
             this.renderScrollerEvent(view, parallels, pos);
         }
+        
+        if (this.event.dirty) {
+            // the event was selected before
+            this.onSelectedChange(true);
+        }
     },
     
     renderAllDayEvent: function(view, parallels, pos) {
@@ -181,6 +192,11 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             left: left + 'px',
             top: pos * 18 + 'px'//'1px'
         }, true);
+        
+        if (this.event.dirty) {
+            eventEl.setStyle({'border-style': 'dashed'});
+            eventEl.setOpacity(0.5);
+        }
         
         if (! (this.endColNum > view.numOfDays) && this.event.get('editGrant')) {
             this.resizeable = new Ext.Resizable(eventEl, {
@@ -236,6 +252,11 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 top: top + 'px'
             }, true);
             
+            if (this.event.dirty) {
+                eventEl.setStyle({'border-style': 'dashed'});
+                eventEl.setOpacity(0.5);
+            }
+        
             if (currColNum == this.endColNum && this.event.get('editGrant')) {
                 this.resizeable = new Ext.Resizable(eventEl, {
                     handles: 's',
