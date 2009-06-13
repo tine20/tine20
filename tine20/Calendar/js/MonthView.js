@@ -126,6 +126,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     afterRender: function() {
         this.initElements();
+        
+        this.selModel.init(this);
+        
         this.el.on('mousedown', this.onMouseDown, this);
         this.el.on('dblclick', this.onDblClick, this);
         this.el.on('click', this.onClick, this);
@@ -178,21 +181,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     getDayCellIndex: function(date) {
         return Math.round((date.clearTime(true).getTime() - this.dateMesh[0].getTime())/Date.msDAY);
-    },
-    
-    /**
-     * returns events dom
-     * @param {Tine.Calendar.Model.Event} event
-     * @return {Array} of Ext.Element
-     */
-    getEventEls: function(event) {
-        if (event && event.domIds) {
-            var domEls = [];
-            for (var i=0; i<event.domIds.length; i++) {
-                domEls[i] = Ext.get(event.domIds[i]);
-            }
-            return domEls;
-        }
     },
     
     /**
@@ -264,6 +252,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     init: function(calPanel) {
         this.calPanel = calPanel;
         
+        this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
+        
         this.initData(calPanel.store);
         this.initTemplates();
     },
@@ -317,9 +307,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     }
                     
                     // we need to clone an event with summary in
-                    var d = Ext.get(event.domIds[0]).dom.cloneNode(true);
+                    var d = Ext.get(event.ui.domIds[0]).dom.cloneNode(true);
                     
-                    var width = Ext.fly(eventEl).getWidth() * event.domIds.length;
+                    var width = Ext.fly(eventEl).getWidth() * event.ui.domIds.length;
                     
                     Ext.fly(d).removeClass(['cal-monthview-alldayevent-cropleft', 'cal-monthview-alldayevent-cropright']);
                     Ext.fly(d).setWidth(width);
@@ -437,6 +427,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @param {Tine.Calendar.Event} event
      */
     insertEvent: function(event) {
+        event.ui = new Tine.Calendar.MonthViewEventUI(event);
+        //event.ui.render(this);
+        
         var dtStart = event.get('dtstart');
         var startCellNumber = this.getDayCellIndex(dtStart);
         var dtEnd = event.get('dtend');
@@ -451,28 +444,25 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         var pos = parallels.indexOf(event);
         
         // save some layout info
-        event.is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
-        event.color = '#FD0000';
-        event.bgColor = '#FF9696';
+        event.ui.is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
+        event.ui.color = '#FD0000';
+        event.ui.bgColor = '#FF9696';
         
         var data = {
             startTime: dtStart.format('H:i'),
             summary: event.get('summary'),
-            color: event.color,
-            bgColor: event.bgColor
+            color: event.ui.color,
+            bgColor: event.ui.bgColor
         };
-        
-        //registry for dom ids
-        event.domIds = [];
         
         for (var i=Math.max(startCellNumber, 0); i<=endCellNumber; i++) {
             data.id = Ext.id() + '-event:' + event.get('id');
-            event.domIds.push(data.id);
+            event.ui.domIds.push(data.id);
                 
             var tmpl = this.templates.event;
             data.extraCls = '';
             
-            if (event.is_all_day_event) {
+            if (event.ui.is_all_day_event) {
                 tmpl = this.templates.allDayEvent;
                 data.color = 'black';
                 
@@ -599,6 +589,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     },
     
     onClick: function(e, target) {
+        
+        // send click event anyway
+        var event = this.getTargetEvent(e);
+        if (event) {
+            this.fireEvent('click', event, e);
+            return;
+        }
+        
         /** distinct click from dblClick **/
         var now = new Date().getTime();
         
@@ -614,12 +612,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
         this.lastClickTime = now;
         /** end distinct click from dblClick **/
-        
-        var event = this.getTargetEvent(e);
-        if (event) {
-            this.fireEvent('click', event, e);
-            return;
-        }
         
         switch(target.className) {
             case 'cal-monthview-dayheader-date':
@@ -767,7 +759,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
         
         this.ds.each(function(event) {
-            event.domIds = [];
+            if (event.ui) {
+                event.ui.domIds = [];
+            }
         });
         this.layoutDayCells();
     },
@@ -781,14 +775,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             this.activeEvent = null;
         }
         
-        var eventEls = this.getEventEls(event);
-        if (Ext.isArray(eventEls)) {
-            for (var i=0; i<eventEls.length; i++) {
-                if (eventEls[i]) {
-                    eventEls[i].remove();
-                }
-            }
-            event.domIds = [];
+        if (event.ui) {
+            event.ui.remove();
         }
     },
     
@@ -832,7 +820,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * sets currentlcy active event
      * 
      * @param {Tine.Calendar.Event} event
-     */
+     *
     setActiveEvent: function(event) {
         if (this.activeEvent) {
             var curEls = this.getEventEls(this.activeEvent);
@@ -865,6 +853,17 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             }
             this.activeEvent = event;
         }
+    },
+    */
+    
+    /**
+     * sets currentlcy active event
+     * 
+     * NOTE: active != selected
+     * @param {Tine.Calendar.Event} event
+     */
+    setActiveEvent: function(event) {
+        this.activeEvent = event || null;
     },
     
     updatePeriod: function(period) {
