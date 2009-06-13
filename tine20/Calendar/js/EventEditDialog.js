@@ -34,46 +34,17 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
-    initRecord: Ext.emptyFn,
+    mode: 'local',
     
-    /**
-     * executed when record is loaded
-     */
-    onRecordLoad: function() {
-        Tine.Calendar.EventEditDialog.superclass.onRecordLoad.call(this);
-        this.handleCompletedDate();
-    },
-    
-    /**
-     * handling for the completed field
-     */
-    handleCompletedDate: function() {
-        var status = Tine.Calendar.status.getStatus(this.getForm().findField('status_id').getValue());
-        var completed = this.getForm().findField('completed');
-        
-        if (status.get('status_is_open') == 1) {
-            completed.setValue(null);
-            completed.setDisabled(true);
-        } else {
-            if (! Ext.isDate(completed.getValue())){
-                completed.setValue(new Date());
-            }
-            completed.setDisabled(false);
-        }
-    },
-    
-    getFormItems: function() { 
-        return {
-            html: 'hallo'
-        }
-    },
+    // note: we need up use new action updater here or generally in the widget!
+    evalGrants: false,
     
     /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems2: function() { 
+    getFormItems: function() { 
         return {
             xtype: 'tabpanel',
             border: false,
