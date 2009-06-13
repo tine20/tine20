@@ -44,19 +44,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             requiredGrant: 'readGrant',
             text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(_('Edit {0}'), this.i18nRecordName),
             disabled: true,
-            actionType: 'edit',
-            handler: this.onEditInNewWindow,
-            iconCls: 'action_edit',
-            scope: this
+            handler: this.onEditInNewWindow.createDelegate(this, ["edit"]),
+            iconCls: 'action_edit'
         });
         
         this.action_addInNewWindow = new Ext.Action({
             requiredGrant: 'addGrant',
-            actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
-            handler: this.onEditInNewWindow,
-            iconCls: 'action_add',
-            scope: this
+            handler: this.onEditInNewWindow.createDelegate(this, ["add"]),
+            iconCls: 'action_add'
         });
         
         // note: unprecise plural form here, but this is hard to change
@@ -209,8 +205,36 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
     },
     
-    onEditInNewWindow: function() {
-        Tine.Calendar.EventEditDialog.openWindow({});
+    /**
+     * @param {String} action add|edit
+     */
+    onEditInNewWindow: function(action) {
+        var event = null;
+        
+        if (action == 'edit') {
+            var panel = this.getCalendarPanel(this.activeView);
+            var selection = panel.getSelectionModel().getSelectedEvents();
+            if (Ext.isArray(selection) && selection.length == 1) {
+                event = selection[0];
+            }
+        }
+        
+        if (! event) {
+            event = new Tine.Calendar.Event({}, 0);
+        }
+        
+        Tine.Calendar.EventEditDialog.openWindow({
+            record: event,
+            listeners: {
+                scope: this,
+                update: function(eventJson) {
+                    var updatedEvent = new Tine.Calendar.Event(Ext.util.JSON.decode(eventJson), event.id);
+                    
+                    var panel = this.getCalendarPanel(this.activeView);
+                    panel.onUpdateEvent(updatedEvent);
+                }
+            }
+        });
     },
     
     /**
@@ -314,6 +338,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.startDate = period.from;
                 this.updateMiniCal();
             }, this);
+            
+            view.on('dblclick', this.onEditInNewWindow.createDelegate(this, ["edit"]));
             
             this.calendarPanels[which] = new Tine.Calendar.CalendarPanel({
                 tbar: tbar,
