@@ -178,8 +178,8 @@ msgstr "Session ID"
 msgid "Login Name"
 msgstr "Login Name"
 
-#: js/Admin.js:545 js/Groups.js:196 js/Groups.js:513 js/Roles.js:196
-#: js/SambaMachineGrid.js:86 js/Tags.js:165
+#: js/Admin.js:545 js/Applications.js:236 js/Groups.js:196 js/Groups.js:513
+#: js/Roles.js:196 js/SambaMachineGrid.js:86 js/Tags.js:165
 msgid "Name"
 msgstr "Name"
 
@@ -236,20 +236,16 @@ msgid "No applications to display"
 msgstr "No applications to display"
 
 #: js/Applications.js:235
-msgid "order"
-msgstr "order"
+msgid "Order"
+msgstr "Order"
 
-#: js/Applications.js:236
-msgid "name"
-msgstr "name"
-
-#: js/Applications.js:237
-msgid "status"
-msgstr "status"
+#: js/Applications.js:237 js/UserEditDialog.js:83 js/Users.js:291
+msgid "Status"
+msgstr "Status"
 
 #: js/Applications.js:238
-msgid "version"
-msgstr "version"
+msgid "Version"
+msgstr "Version"
 
 #: js/Groups.js:50
 msgid "Do you really want to delete the selected groups?"
@@ -511,10 +507,6 @@ msgstr "Account"
 #: js/UserEditDialog.js:78
 msgid "First Name"
 msgstr "First Name"
-
-#: js/UserEditDialog.js:83 js/Users.js:291
-msgid "Status"
-msgstr "Status"
 
 #: js/UserEditDialog.js:92
 msgid "Last Name"

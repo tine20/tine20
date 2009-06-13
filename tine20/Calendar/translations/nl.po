@@ -13,19 +13,59 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:82
+#: Controller.php:96
 #, python-format
 msgid "%s's personal calendar"
 msgstr ""
 
-#: js/Model.js:58
+#: js/EventEditDialog.js:72
+msgid "Summary"
+msgstr ""
+
+#: js/EventEditDialog.js:77
+msgid "Due date"
+msgstr ""
+
+#: js/EventEditDialog.js:80
+msgid "Priority"
+msgstr ""
+
+#: js/EventEditDialog.js:83
+msgid "Responsible"
+msgstr ""
+
+#: js/EventEditDialog.js:87
+msgid "Notes"
+msgstr ""
+
+#: js/EventEditDialog.js:88
+msgid "Enter description..."
+msgstr ""
+
+#: js/EventEditDialog.js:93
+msgid "Percentage"
+msgstr ""
+
+#: js/EventEditDialog.js:97
+msgid "Completed"
+msgstr ""
+
+#: js/Model.js:64
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:62
+#: js/Model.js:68
 msgid "calendars"
+msgstr ""
+
+#: Preference.php:60
+msgid "Publish Free/Busy Information"
+msgstr ""
+
+#: Preference.php:61
+msgid "Allow all users to view your free/busy information"
 msgstr ""
 
 #: Setup/setup.xml:4

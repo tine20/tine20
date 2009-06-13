@@ -67,19 +67,19 @@ msgstr "创建者"
 msgid "Activities"
 msgstr "活动"
 
-#: Frontend/Http.php:282 js/tineInit.js:257
+#: Frontend/Http.php:283 js/tineInit.js:257
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Frontend/Http.php:283
+#: Frontend/Http.php:284
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Frontend/Http.php:309 js/ExceptionDialog.js:26
+#: Frontend/Http.php:310 js/ExceptionDialog.js:38
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Frontend/Http.php:310 js/ExceptionDialog.js:51
+#: Frontend/Http.php:311 js/ExceptionDialog.js:63
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -108,23 +108,23 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:430
+#: js/ExceptionDialog.js:46 js/MainScreen.js:430
 #: js/widgets/AccountpickerPanel.js:149
 #: js/widgets/container/ContainerSelect.js:251
-#: js/widgets/dialog/EditDialog.js:161
+#: js/widgets/dialog/EditDialog.js:162
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "取消"
 
-#: js/ExceptionDialog.js:42
+#: js/ExceptionDialog.js:54
 msgid "Send Report"
 msgstr "发送报告"
 
-#: js/ExceptionDialog.js:52
+#: js/ExceptionDialog.js:64
 msgid "The last action you made was potentially not performed correctly."
 msgstr "最后的动作可能没有正确执行"
 
-#: js/ExceptionDialog.js:53
+#: js/ExceptionDialog.js:65
 #, fuzzy
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
@@ -133,27 +133,27 @@ msgstr ""
 "请协助改进本软件并通知供应商，并包含一个关于在哪里有什么错误发生的简短的描"
 "述。"
 
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:561
+#: js/ExceptionDialog.js:71 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
 msgstr "描述"
 
-#: js/ExceptionDialog.js:69
+#: js/ExceptionDialog.js:81
 msgid "Show Details:"
 msgstr "显示细节："
 
-#: js/ExceptionDialog.js:92
+#: js/ExceptionDialog.js:104
 msgid "Sending report..."
 msgstr "正发送报告..."
 
-#: js/ExceptionDialog.js:92
+#: js/ExceptionDialog.js:104
 msgid "Please wait a moment"
 msgstr "请稍等一会儿"
 
-#: js/ExceptionDialog.js:122
+#: js/ExceptionDialog.js:134
 msgid "Transmission Completed"
 msgstr "发送完成"
 
-#: js/ExceptionDialog.js:123
+#: js/ExceptionDialog.js:135
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "报告已经发送，谢谢你的贡献"
 
@@ -169,11 +169,11 @@ msgstr "注册"
 msgid "Please enter your login data"
 msgstr "请输入登录数据"
 
-#: js/Login.js:79
+#: js/Login.js:79 js/widgets/dialog/CredentialsDialog.js:61
 msgid "Username"
 msgstr "用户名"
 
-#: js/Login.js:86
+#: js/Login.js:86 js/widgets/dialog/CredentialsDialog.js:65
 msgid "Password"
 msgstr "密码"
 
@@ -256,7 +256,7 @@ msgstr "重复新密码"
 
 #: js/MainScreen.js:436 js/widgets/AccountpickerPanel.js:141
 #: js/widgets/container/ContainerSelect.js:260
-#: js/widgets/dialog/EditDialog.js:144
+#: js/widgets/dialog/EditDialog.js:145
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "确认"
@@ -291,8 +291,8 @@ msgid ""
 "needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:528
-#: js/widgets/dialog/EditDialog.js:396
+#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:535
+#: js/widgets/dialog/EditDialog.js:399
 #: js/widgets/grid/PersistentFilterPicker.js:123
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
@@ -338,7 +338,7 @@ msgid ""
 "reload and make your changes again."
 msgstr "当你编辑时，有人保存了这条记录。你 ..."
 
-#: js/tineInit.js:504
+#: js/tineInit.js:494
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator."
 msgstr ""
@@ -497,8 +497,8 @@ msgstr "添加一个注释..."
 msgid "Add"
 msgstr "添加"
 
-#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:396
-#: js/widgets/ActivitiesPanel.js:523
+#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:397
+#: js/widgets/ActivitiesPanel.js:524
 msgid "Note"
 msgstr "注释"
 
@@ -522,90 +522,94 @@ msgstr "输入新注释："
 msgid "Add a {0} Note"
 msgstr "添加一个 {0} 注释"
 
-#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:528
+#: js/widgets/ActivitiesPanel.js:395 js/widgets/ActivitiesPanel.js:530
 msgid "Type"
 msgstr "类型"
 
-#: js/widgets/ActivitiesPanel.js:397
+#: js/widgets/ActivitiesPanel.js:398
 msgid "Created By"
 msgstr "创建者"
 
-#: js/widgets/ActivitiesPanel.js:398
+#: js/widgets/ActivitiesPanel.js:399
 msgid "Timestamp"
 msgstr "时间戳"
 
-#: js/widgets/ActivitiesPanel.js:412
+#: js/widgets/ActivitiesPanel.js:413
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "显示历史记录 {0} - {1} of {2}"
 
-#: js/widgets/ActivitiesPanel.js:413
+#: js/widgets/ActivitiesPanel.js:414
 msgid "No history to display"
 msgstr "没有历史要显示"
 
-#: js/widgets/ActivitiesPanel.js:511
+#: js/widgets/ActivitiesPanel.js:512
 msgid "History"
 msgstr "历史"
 
-#: js/widgets/ActivitiesPanel.js:524
+#: js/widgets/ActivitiesPanel.js:525 js/widgets/ActivitiesPanel.js:526
 msgid "Time"
 msgstr "时间"
 
-#: js/widgets/ActivitiesPanel.js:526
+#: js/widgets/ActivitiesPanel.js:528
 msgid "User"
 msgstr "用户"
 
-#: js/widgets/app/GridPanel.js:187
+#: js/widgets/app/GridPanel.js:192
 msgid "Edit {0}"
 msgstr "编辑{0}"
 
-#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:205
+#: js/widgets/app/GridPanel.js:203 js/widgets/tree/ContextMenu.js:225
 msgid "Add {0}"
 msgstr "添加{0}"
 
-#: js/widgets/app/GridPanel.js:208 js/widgets/app/GridPanel.js:209
-#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:213
+#: js/widgets/app/GridPanel.js:213 js/widgets/app/GridPanel.js:214
+#: js/widgets/app/GridPanel.js:216 js/widgets/tree/ContextMenu.js:233
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "删除"
 
-#: js/widgets/app/GridPanel.js:282
+#: js/widgets/app/GridPanel.js:287
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "显示记录 {0} - {1} of {2}"
 
-#: js/widgets/app/GridPanel.js:283
+#: js/widgets/app/GridPanel.js:288
 msgid "No {0} to display"
 msgstr "没有{0}要显示"
 
-#: js/widgets/app/GridPanel.js:304
+#: js/widgets/app/GridPanel.js:309
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr "没有找到 {0}，请修改过滤条件，视图选项或搜索词 {1}"
 
-#: js/widgets/app/GridPanel.js:513
+#: js/widgets/app/GridPanel.js:520
 msgid "Not Allowed"
 msgstr "不允许"
 
-#: js/widgets/app/GridPanel.js:514
+#: js/widgets/app/GridPanel.js:521
 msgid "You are not allowed to delete all pages at once"
 msgstr "你不允许一次地删除所有页面"
 
-#: js/widgets/app/GridPanel.js:526
+#: js/widgets/app/GridPanel.js:533
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "真的想删除选中的记录？"
 
-#: js/widgets/app/GridPanel.js:531 js/widgets/dialog/EditDialog.js:398
+#: js/widgets/app/GridPanel.js:538 js/widgets/dialog/EditDialog.js:401
 msgid "Deleting {0}"
 msgstr "正删除{0}"
 
-#: js/widgets/app/GridPanel.js:543 js/widgets/dialog/EditDialog.js:371
-#: js/widgets/dialog/EditDialog.js:408 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/app/GridPanel.js:540
+msgid " ... This may take a long time!"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:554 js/widgets/dialog/EditDialog.js:374
+#: js/widgets/dialog/EditDialog.js:411 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "失败"
 
-#: js/widgets/app/GridPanel.js:543 js/widgets/dialog/EditDialog.js:408
+#: js/widgets/app/GridPanel.js:554 js/widgets/dialog/EditDialog.js:411
 msgid "Could not delete {0}."
 msgstr "不能删除{0}"
 
@@ -659,19 +663,19 @@ msgstr "共享的"
 msgid "please select a {0}"
 msgstr "请选择一个{0}"
 
-#: js/widgets/container/ContainerTree.js:130
+#: js/widgets/container/ContainerTree.js:134
 msgid "All {0}"
 msgstr "所有{0}"
 
-#: js/widgets/container/ContainerTree.js:135
+#: js/widgets/container/ContainerTree.js:139
 msgid "My {0}"
 msgstr "我的 {0}"
 
-#: js/widgets/container/ContainerTree.js:142
+#: js/widgets/container/ContainerTree.js:146
 msgid "Shared {0}"
 msgstr "共享的{0}"
 
-#: js/widgets/container/ContainerTree.js:150
+#: js/widgets/container/ContainerTree.js:154
 msgid "Other Users {0}"
 msgstr "其它用户{0}"
 
@@ -683,44 +687,46 @@ msgstr "定制字段"
 msgid "There are no custom fields yet"
 msgstr "没有定制字段"
 
-#: js/widgets/dialog/EditDialog.js:153 js/widgets/EditRecord.js:126
-msgid "Apply"
-msgstr "应用"
-
-#: js/widgets/dialog/EditDialog.js:170 js/widgets/EditRecord.js:146
-msgid "delete"
-msgstr "删除"
-
-#: js/widgets/dialog/EditDialog.js:235
-msgid "Add New {0}"
-msgstr "添加新的{0}"
-
-#: js/widgets/dialog/EditDialog.js:237
-msgid "Edit {0} \"{1}\""
-msgstr "编辑{0} \"{1}\""
-
-#: js/widgets/dialog/EditDialog.js:269 js/widgets/EditRecord.js:185
-msgid "Saved in"
-msgstr "保存到"
-
-#: js/widgets/dialog/EditDialog.js:288
-msgid "Transfering {0}..."
-msgstr "正传递{0}..."
-
-#: js/widgets/dialog/EditDialog.js:371
-msgid "Could not save {0}."
-msgstr "不能保存{0}。"
-
-#: js/widgets/dialog/EditDialog.js:388
+#: js/widgets/dialog/CredentialsDialog.js:104
+#: js/widgets/dialog/EditDialog.js:391
 #: js/widgets/dialog/PreferencesDialog.js:278
 msgid "Errors"
 msgstr "错误"
 
-#: js/widgets/dialog/EditDialog.js:388
+#: js/widgets/dialog/CredentialsDialog.js:104
+#: js/widgets/dialog/EditDialog.js:391
 msgid "Please fix the errors noted."
 msgstr "请修改注释的错误。"
 
-#: js/widgets/dialog/EditDialog.js:396
+#: js/widgets/dialog/EditDialog.js:154 js/widgets/EditRecord.js:126
+msgid "Apply"
+msgstr "应用"
+
+#: js/widgets/dialog/EditDialog.js:171 js/widgets/EditRecord.js:146
+msgid "delete"
+msgstr "删除"
+
+#: js/widgets/dialog/EditDialog.js:238
+msgid "Add New {0}"
+msgstr "添加新的{0}"
+
+#: js/widgets/dialog/EditDialog.js:240
+msgid "Edit {0} \"{1}\""
+msgstr "编辑{0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:272 js/widgets/EditRecord.js:185
+msgid "Saved in"
+msgstr "保存到"
+
+#: js/widgets/dialog/EditDialog.js:291
+msgid "Transfering {0}..."
+msgstr "正传递{0}..."
+
+#: js/widgets/dialog/EditDialog.js:374
+msgid "Could not save {0}."
+msgstr "不能保存{0}。"
+
+#: js/widgets/dialog/EditDialog.js:399
 msgid "Do you really want to delete this {0}?"
 msgstr "真的想删除这个{0}？"
 
@@ -906,7 +912,7 @@ msgstr "显示"
 msgid "Please enter a name for the filter"
 msgstr "请输入过滤器的名称"
 
-#: js/widgets/grid/FilterToolbar.js:571
+#: js/widgets/grid/FilterToolbar.js:571 js/widgets/grid/FilterToolbar.js:574
 msgid "Filter not Saved"
 msgstr "过滤器没有保存"
 
@@ -914,12 +920,18 @@ msgstr "过滤器没有保存"
 msgid "You have to supply a name for the filter!"
 msgstr "你需要提供过滤器的名称！"
 
-#: js/widgets/grid/FilterToolbar.js:574 js/widgets/LangChooser.js:72
+#: js/widgets/grid/FilterToolbar.js:574
+msgid ""
+"You have to supply a shorter name! Names of saved filters can only be up to "
+"40 characters long."
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:577 js/widgets/LangChooser.js:72
 #: js/widgets/LangChooser.js:94
 msgid "Please Wait"
 msgstr "请等待"
 
-#: js/widgets/grid/FilterToolbar.js:574
+#: js/widgets/grid/FilterToolbar.js:577
 msgid "Saving filter"
 msgstr "正保存过滤器"
 
@@ -1132,31 +1144,36 @@ msgstr "没有改{0}的名字"
 msgid "Updating {0} \"{1}\""
 msgstr "正在更新{0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:187
+#: js/widgets/tree/ContextMenu.js:191
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "管理 {0} :\"{1}\" 的权限"
 
-#: js/widgets/tree/ContextMenu.js:221
+#: js/widgets/tree/ContextMenu.js:241
 msgid "Rename {0}"
 msgstr "修改{0}的名字"
 
-#: js/widgets/tree/ContextMenu.js:229
+#: js/widgets/tree/ContextMenu.js:249
 msgid "Manage permissions"
 msgstr "管理许可"
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+#: js/widgets/tree/ContextMenu.js:257
+#, fuzzy
+msgid "Reload {0}"
+msgstr "修改{0}的名字"
+
+#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
 msgid "New version of Tine 2.0 available"
 msgstr "Tine 2.0新版本可用"
 
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#: js/widgets/VersionCheck.js:41 js/widgets/VersionCheck.js:50
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Tine 2.0 的  \"{0}\"  版可用。"
 
-#: js/widgets/VersionCheck.js:41
+#: js/widgets/VersionCheck.js:42
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "这是重要的更新，必需尽快安装！"
 
-#: js/widgets/VersionCheck.js:50
+#: js/widgets/VersionCheck.js:51
 msgid "Please consider updating!"
 msgstr "请考虑更新！"
 

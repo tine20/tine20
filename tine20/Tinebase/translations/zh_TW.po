@@ -66,19 +66,19 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: Frontend/Http.php:282 js/tineInit.js:257
+#: Frontend/Http.php:283 js/tineInit.js:257
 msgid "Authorisation Required"
 msgstr "需要認證"
 
-#: Frontend/Http.php:283
+#: Frontend/Http.php:284
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 
-#: Frontend/Http.php:309 js/ExceptionDialog.js:26
+#: Frontend/Http.php:310 js/ExceptionDialog.js:38
 msgid "Abnormal End"
 msgstr ""
 
-#: Frontend/Http.php:310 js/ExceptionDialog.js:51
+#: Frontend/Http.php:311 js/ExceptionDialog.js:63
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
@@ -107,49 +107,49 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "工作清單"
 
-#: js/ExceptionDialog.js:34 js/MainScreen.js:430
+#: js/ExceptionDialog.js:46 js/MainScreen.js:430
 #: js/widgets/AccountpickerPanel.js:149
 #: js/widgets/container/ContainerSelect.js:251
-#: js/widgets/dialog/EditDialog.js:161
+#: js/widgets/dialog/EditDialog.js:162
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "取消"
 
-#: js/ExceptionDialog.js:42
+#: js/ExceptionDialog.js:54
 msgid "Send Report"
 msgstr ""
 
-#: js/ExceptionDialog.js:52
+#: js/ExceptionDialog.js:64
 msgid "The last action you made was potentially not performed correctly."
 msgstr ""
 
-#: js/ExceptionDialog.js:53
+#: js/ExceptionDialog.js:65
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occurred."
 msgstr ""
 
-#: js/ExceptionDialog.js:59 js/widgets/tags/TagsPanel.js:561
+#: js/ExceptionDialog.js:71 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
 msgstr ""
 
-#: js/ExceptionDialog.js:69
+#: js/ExceptionDialog.js:81
 msgid "Show Details:"
 msgstr ""
 
-#: js/ExceptionDialog.js:92
+#: js/ExceptionDialog.js:104
 msgid "Sending report..."
 msgstr ""
 
-#: js/ExceptionDialog.js:92
+#: js/ExceptionDialog.js:104
 msgid "Please wait a moment"
 msgstr "請稍後"
 
-#: js/ExceptionDialog.js:122
+#: js/ExceptionDialog.js:134
 msgid "Transmission Completed"
 msgstr ""
 
-#: js/ExceptionDialog.js:123
+#: js/ExceptionDialog.js:135
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "已送出回報, 感謝你的建議"
 
@@ -165,11 +165,11 @@ msgstr "註冊"
 msgid "Please enter your login data"
 msgstr "請輸入登入資料"
 
-#: js/Login.js:79
+#: js/Login.js:79 js/widgets/dialog/CredentialsDialog.js:61
 msgid "Username"
 msgstr "使用者名稱"
 
-#: js/Login.js:86
+#: js/Login.js:86 js/widgets/dialog/CredentialsDialog.js:65
 msgid "Password"
 msgstr "密碼"
 
@@ -252,7 +252,7 @@ msgstr "確認新密碼"
 
 #: js/MainScreen.js:436 js/widgets/AccountpickerPanel.js:141
 #: js/widgets/container/ContainerSelect.js:260
-#: js/widgets/dialog/EditDialog.js:144
+#: js/widgets/dialog/EditDialog.js:145
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ok"
@@ -287,8 +287,8 @@ msgid ""
 "needed files locally on this computer."
 msgstr "安裝 Gears 可以改善 Tine 2.0 存取你電腦檔案的效能"
 
-#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:528
-#: js/widgets/dialog/EditDialog.js:396
+#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:535
+#: js/widgets/dialog/EditDialog.js:399
 #: js/widgets/grid/PersistentFilterPicker.js:123
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
@@ -334,7 +334,7 @@ msgid ""
 "reload and make your changes again."
 msgstr ""
 
-#: js/tineInit.js:504
+#: js/tineInit.js:494
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator."
 msgstr ""
@@ -492,8 +492,8 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:396
-#: js/widgets/ActivitiesPanel.js:523
+#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:397
+#: js/widgets/ActivitiesPanel.js:524
 msgid "Note"
 msgstr ""
 
@@ -517,90 +517,94 @@ msgstr ""
 msgid "Add a {0} Note"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:394 js/widgets/ActivitiesPanel.js:528
+#: js/widgets/ActivitiesPanel.js:395 js/widgets/ActivitiesPanel.js:530
 msgid "Type"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:397
+#: js/widgets/ActivitiesPanel.js:398
 msgid "Created By"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:398
+#: js/widgets/ActivitiesPanel.js:399
 msgid "Timestamp"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:412
+#: js/widgets/ActivitiesPanel.js:413
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:413
+#: js/widgets/ActivitiesPanel.js:414
 msgid "No history to display"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:511
+#: js/widgets/ActivitiesPanel.js:512
 msgid "History"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:524
+#: js/widgets/ActivitiesPanel.js:525 js/widgets/ActivitiesPanel.js:526
 msgid "Time"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:526
+#: js/widgets/ActivitiesPanel.js:528
 msgid "User"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:187
+#: js/widgets/app/GridPanel.js:192
 msgid "Edit {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:198 js/widgets/tree/ContextMenu.js:205
+#: js/widgets/app/GridPanel.js:203 js/widgets/tree/ContextMenu.js:225
 msgid "Add {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:208 js/widgets/app/GridPanel.js:209
-#: js/widgets/app/GridPanel.js:211 js/widgets/tree/ContextMenu.js:213
+#: js/widgets/app/GridPanel.js:213 js/widgets/app/GridPanel.js:214
+#: js/widgets/app/GridPanel.js:216 js/widgets/tree/ContextMenu.js:233
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] ""
 
-#: js/widgets/app/GridPanel.js:282
+#: js/widgets/app/GridPanel.js:287
 msgid "Displaying records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:283
+#: js/widgets/app/GridPanel.js:288
 msgid "No {0} to display"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:304
+#: js/widgets/app/GridPanel.js:309
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:513
+#: js/widgets/app/GridPanel.js:520
 msgid "Not Allowed"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:514
+#: js/widgets/app/GridPanel.js:521
 msgid "You are not allowed to delete all pages at once"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:526
+#: js/widgets/app/GridPanel.js:533
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] ""
 
-#: js/widgets/app/GridPanel.js:531 js/widgets/dialog/EditDialog.js:398
+#: js/widgets/app/GridPanel.js:538 js/widgets/dialog/EditDialog.js:401
 msgid "Deleting {0}"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:543 js/widgets/dialog/EditDialog.js:371
-#: js/widgets/dialog/EditDialog.js:408 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/app/GridPanel.js:540
+msgid " ... This may take a long time!"
+msgstr ""
+
+#: js/widgets/app/GridPanel.js:554 js/widgets/dialog/EditDialog.js:374
+#: js/widgets/dialog/EditDialog.js:411 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:543 js/widgets/dialog/EditDialog.js:408
+#: js/widgets/app/GridPanel.js:554 js/widgets/dialog/EditDialog.js:411
 msgid "Could not delete {0}."
 msgstr ""
 
@@ -654,19 +658,19 @@ msgstr ""
 msgid "please select a {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:130
+#: js/widgets/container/ContainerTree.js:134
 msgid "All {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:135
+#: js/widgets/container/ContainerTree.js:139
 msgid "My {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:142
+#: js/widgets/container/ContainerTree.js:146
 msgid "Shared {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:150
+#: js/widgets/container/ContainerTree.js:154
 msgid "Other Users {0}"
 msgstr ""
 
@@ -678,44 +682,46 @@ msgstr "自定欄位"
 msgid "There are no custom fields yet"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:153 js/widgets/EditRecord.js:126
-msgid "Apply"
-msgstr "套用"
-
-#: js/widgets/dialog/EditDialog.js:170 js/widgets/EditRecord.js:146
-msgid "delete"
-msgstr "刪除"
-
-#: js/widgets/dialog/EditDialog.js:235
-msgid "Add New {0}"
-msgstr ""
-
-#: js/widgets/dialog/EditDialog.js:237
-msgid "Edit {0} \"{1}\""
-msgstr "編輯 {0} \"{1}\""
-
-#: js/widgets/dialog/EditDialog.js:269 js/widgets/EditRecord.js:185
-msgid "Saved in"
-msgstr ""
-
-#: js/widgets/dialog/EditDialog.js:288
-msgid "Transfering {0}..."
-msgstr ""
-
-#: js/widgets/dialog/EditDialog.js:371
-msgid "Could not save {0}."
-msgstr ""
-
-#: js/widgets/dialog/EditDialog.js:388
+#: js/widgets/dialog/CredentialsDialog.js:104
+#: js/widgets/dialog/EditDialog.js:391
 #: js/widgets/dialog/PreferencesDialog.js:278
 msgid "Errors"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:388
+#: js/widgets/dialog/CredentialsDialog.js:104
+#: js/widgets/dialog/EditDialog.js:391
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:396
+#: js/widgets/dialog/EditDialog.js:154 js/widgets/EditRecord.js:126
+msgid "Apply"
+msgstr "套用"
+
+#: js/widgets/dialog/EditDialog.js:171 js/widgets/EditRecord.js:146
+msgid "delete"
+msgstr "刪除"
+
+#: js/widgets/dialog/EditDialog.js:238
+msgid "Add New {0}"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:240
+msgid "Edit {0} \"{1}\""
+msgstr "編輯 {0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:272 js/widgets/EditRecord.js:185
+msgid "Saved in"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:291
+msgid "Transfering {0}..."
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:374
+msgid "Could not save {0}."
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:399
 msgid "Do you really want to delete this {0}?"
 msgstr "你確定要刪除 {0}?"
 
@@ -898,7 +904,7 @@ msgstr ""
 msgid "Please enter a name for the filter"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:571
+#: js/widgets/grid/FilterToolbar.js:571 js/widgets/grid/FilterToolbar.js:574
 msgid "Filter not Saved"
 msgstr ""
 
@@ -906,12 +912,18 @@ msgstr ""
 msgid "You have to supply a name for the filter!"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:574 js/widgets/LangChooser.js:72
+#: js/widgets/grid/FilterToolbar.js:574
+msgid ""
+"You have to supply a shorter name! Names of saved filters can only be up to "
+"40 characters long."
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:577 js/widgets/LangChooser.js:72
 #: js/widgets/LangChooser.js:94
 msgid "Please Wait"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:574
+#: js/widgets/grid/FilterToolbar.js:577
 msgid "Saving filter"
 msgstr ""
 
@@ -1124,31 +1136,35 @@ msgstr ""
 msgid "Updating {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:187
+#: js/widgets/tree/ContextMenu.js:191
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "管理權限 {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:221
+#: js/widgets/tree/ContextMenu.js:241
 msgid "Rename {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:229
+#: js/widgets/tree/ContextMenu.js:249
 msgid "Manage permissions"
 msgstr "管理權限"
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
-msgid "New version of Tine 2.0 available"
+#: js/widgets/tree/ContextMenu.js:257
+msgid "Reload {0}"
 msgstr ""
 
 #: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+msgid "New version of Tine 2.0 available"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:41 js/widgets/VersionCheck.js:50
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr ""
 
-#: js/widgets/VersionCheck.js:41
+#: js/widgets/VersionCheck.js:42
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:50
+#: js/widgets/VersionCheck.js:51
 msgid "Please consider updating!"
 msgstr ""
 

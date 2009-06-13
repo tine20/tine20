@@ -1,17 +1,57 @@
-#: Controller.php:82
+#: Controller.php:96
 #, python-format
 msgid "%s's personal calendar"
 msgstr "%s's personal calendar"
 
-#: js/Model.js:58
+#: js/EventEditDialog.js:72
+msgid "Summary"
+msgstr "Summary"
+
+#: js/EventEditDialog.js:77
+msgid "Due date"
+msgstr "Due date"
+
+#: js/EventEditDialog.js:80
+msgid "Priority"
+msgstr "Priority"
+
+#: js/EventEditDialog.js:83
+msgid "Responsible"
+msgstr "Responsible"
+
+#: js/EventEditDialog.js:87
+msgid "Notes"
+msgstr "Notes"
+
+#: js/EventEditDialog.js:88
+msgid "Enter description..."
+msgstr "Enter description..."
+
+#: js/EventEditDialog.js:93
+msgid "Percentage"
+msgstr "Percentage"
+
+#: js/EventEditDialog.js:97
+msgid "Completed"
+msgstr "Completed"
+
+#: js/Model.js:64
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Event"
 msgstr[1] "Events"
 
-#: js/Model.js:62
+#: js/Model.js:68
 msgid "calendars"
 msgstr "calendars"
+
+#: Preference.php:60
+msgid "Publish Free/Busy Information"
+msgstr "Publish Free/Busy Information"
+
+#: Preference.php:61
+msgid "Allow all users to view your free/busy information"
+msgstr "Allow all users to view your free/busy information"
 
 #: Setup/setup.xml:4
 msgid "Calendar"

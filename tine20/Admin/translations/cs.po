@@ -199,8 +199,8 @@ msgstr "ID relace"
 msgid "Login Name"
 msgstr "Přihlašovací jméno"
 
-#: js/Admin.js:545 js/Groups.js:196 js/Groups.js:513 js/Roles.js:196
-#: js/SambaMachineGrid.js:86 js/Tags.js:165
+#: js/Admin.js:545 js/Applications.js:236 js/Groups.js:196 js/Groups.js:513
+#: js/Roles.js:196 js/SambaMachineGrid.js:86 js/Tags.js:165
 msgid "Name"
 msgstr "Jméno"
 
@@ -257,19 +257,17 @@ msgid "No applications to display"
 msgstr "Žádné aplikace ke zobrazení"
 
 #: js/Applications.js:235
-msgid "order"
+#, fuzzy
+msgid "Order"
 msgstr "pořadí"
 
-#: js/Applications.js:236
-msgid "name"
-msgstr "název"
-
-#: js/Applications.js:237
-msgid "status"
-msgstr "stav"
+#: js/Applications.js:237 js/UserEditDialog.js:83 js/Users.js:291
+msgid "Status"
+msgstr "Stav"
 
 #: js/Applications.js:238
-msgid "version"
+#, fuzzy
+msgid "Version"
 msgstr "verze"
 
 #: js/Groups.js:50
@@ -534,10 +532,6 @@ msgstr "Účet"
 msgid "First Name"
 msgstr "Křestní jméno"
 
-#: js/UserEditDialog.js:83 js/Users.js:291
-msgid "Status"
-msgstr "Stav"
-
 #: js/UserEditDialog.js:92
 msgid "Last Name"
 msgstr "Příjmení"
@@ -728,6 +722,12 @@ msgid_plural "Samba Users"
 msgstr[0] "Uživatel Samby"
 msgstr[1] "Uživatelé Samby"
 msgstr[2] "Uživatelů Samby"
+
+#~ msgid "name"
+#~ msgstr "název"
+
+#~ msgid "status"
+#~ msgstr "stav"
 
 #~ msgid "Deleting account..."
 #~ msgstr "Mažu účet..."

@@ -196,8 +196,8 @@ msgstr "ID на сесия"
 msgid "Login Name"
 msgstr "Потребителско име"
 
-#: js/Admin.js:545 js/Groups.js:196 js/Groups.js:513 js/Roles.js:196
-#: js/SambaMachineGrid.js:86 js/Tags.js:165
+#: js/Admin.js:545 js/Applications.js:236 js/Groups.js:196 js/Groups.js:513
+#: js/Roles.js:196 js/SambaMachineGrid.js:86 js/Tags.js:165
 msgid "Name"
 msgstr "Име"
 
@@ -254,19 +254,17 @@ msgid "No applications to display"
 msgstr "Няма намерени апликации"
 
 #: js/Applications.js:235
-msgid "order"
+#, fuzzy
+msgid "Order"
 msgstr "последователност"
 
-#: js/Applications.js:236
-msgid "name"
-msgstr "име"
-
-#: js/Applications.js:237
-msgid "status"
-msgstr "статус"
+#: js/Applications.js:237 js/UserEditDialog.js:83 js/Users.js:291
+msgid "Status"
+msgstr "Статус"
 
 #: js/Applications.js:238
-msgid "version"
+#, fuzzy
+msgid "Version"
 msgstr "версия"
 
 #: js/Groups.js:50
@@ -532,10 +530,6 @@ msgstr "Конто  ID"
 msgid "First Name"
 msgstr "Име"
 
-#: js/UserEditDialog.js:83 js/Users.js:291
-msgid "Status"
-msgstr "Статус"
-
 #: js/UserEditDialog.js:92
 msgid "Last Name"
 msgstr "Фамилия"
@@ -732,6 +726,12 @@ msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
 msgstr[1] ""
+
+#~ msgid "name"
+#~ msgstr "име"
+
+#~ msgid "status"
+#~ msgstr "статус"
 
 #~ msgid "Deleting account..."
 #~ msgstr "Изтрива конто..."

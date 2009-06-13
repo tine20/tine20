@@ -191,8 +191,8 @@ msgstr ""
 msgid "Login Name"
 msgstr "登入帳號"
 
-#: js/Admin.js:545 js/Groups.js:196 js/Groups.js:513 js/Roles.js:196
-#: js/SambaMachineGrid.js:86 js/Tags.js:165
+#: js/Admin.js:545 js/Applications.js:236 js/Groups.js:196 js/Groups.js:513
+#: js/Roles.js:196 js/SambaMachineGrid.js:86 js/Tags.js:165
 msgid "Name"
 msgstr "名字"
 
@@ -249,19 +249,16 @@ msgid "No applications to display"
 msgstr "無此應用程式顯示"
 
 #: js/Applications.js:235
-msgid "order"
+msgid "Order"
 msgstr ""
 
-#: js/Applications.js:236
-msgid "name"
-msgstr ""
-
-#: js/Applications.js:237
-msgid "status"
+#: js/Applications.js:237 js/UserEditDialog.js:83 js/Users.js:291
+msgid "Status"
 msgstr "狀態"
 
 #: js/Applications.js:238
-msgid "version"
+#, fuzzy
+msgid "Version"
 msgstr "版本"
 
 #: js/Groups.js:50
@@ -524,10 +521,6 @@ msgstr ""
 msgid "First Name"
 msgstr "名字"
 
-#: js/UserEditDialog.js:83 js/Users.js:291
-msgid "Status"
-msgstr "狀態"
-
 #: js/UserEditDialog.js:92
 msgid "Last Name"
 msgstr "姓氏"
@@ -716,6 +709,9 @@ msgstr "重設密碼"
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
+
+#~ msgid "status"
+#~ msgstr "狀態"
 
 #~ msgid "Deleting account..."
 #~ msgstr "正在刪除帳號中..."

@@ -199,8 +199,8 @@ msgstr "ID sesji"
 msgid "Login Name"
 msgstr "Imię logowania"
 
-#: js/Admin.js:545 js/Groups.js:196 js/Groups.js:513 js/Roles.js:196
-#: js/SambaMachineGrid.js:86 js/Tags.js:165
+#: js/Admin.js:545 js/Applications.js:236 js/Groups.js:196 js/Groups.js:513
+#: js/Roles.js:196 js/SambaMachineGrid.js:86 js/Tags.js:165
 msgid "Name"
 msgstr "Imię"
 
@@ -258,19 +258,17 @@ msgid "No applications to display"
 msgstr "Nie ma aplikacji do pokazania"
 
 #: js/Applications.js:235
-msgid "order"
+#, fuzzy
+msgid "Order"
 msgstr "kolejność"
 
-#: js/Applications.js:236
-msgid "name"
-msgstr "nazwa"
-
-#: js/Applications.js:237
-msgid "status"
-msgstr "status"
+#: js/Applications.js:237 js/UserEditDialog.js:83 js/Users.js:291
+msgid "Status"
+msgstr "Status"
 
 #: js/Applications.js:238
-msgid "version"
+#, fuzzy
+msgid "Version"
 msgstr "wersja"
 
 #: js/Groups.js:50
@@ -543,10 +541,6 @@ msgstr "ID konta"
 msgid "First Name"
 msgstr "Imię"
 
-#: js/UserEditDialog.js:83 js/Users.js:291
-msgid "Status"
-msgstr "Status"
-
 #: js/UserEditDialog.js:92
 msgid "Last Name"
 msgstr "Nazwisko"
@@ -747,6 +741,12 @@ msgid_plural "Samba Users"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#~ msgid "name"
+#~ msgstr "nazwa"
+
+#~ msgid "status"
+#~ msgstr "status"
 
 #~ msgid "Deleting account..."
 #~ msgstr "Wymazywanie konta …"
