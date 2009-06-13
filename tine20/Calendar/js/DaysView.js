@@ -228,6 +228,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 if (targetDate) {
                     var event = data.event;
                     
+                    // deny drop for missing edit grant or no time change
+                    if (! event.get('editGrant') || Math.abs(targetDate.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE) {
+                        return false;
+                    }
+                    
                     event.beginEdit();
                     event.set('dtstart', targetDate);
                     
