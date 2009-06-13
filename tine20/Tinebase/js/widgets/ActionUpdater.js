@@ -125,11 +125,11 @@
      * @param {Object} grants
      */
     defaultUpdater: function(action, grants, records) {
-        var requiredGrant = action.requiredGrant ? action.requiredGrant : action.initialConfig.requiredGrant;
+        var nCondition = records.length != 0 && (records.length > 1 ? action.initialConfig.allowMultiple : true);
         
-        if (requiredGrant) {
+        if (action.initialConfig.requiredGrant) {
             // TODO: multiple + sigular/plural text
-            action.setDisabled(!grants[requiredGrant]);
+            action.setDisabled(! (grants[action.initialConfig.requiredGrant] && nCondition));
         }
     },
     
