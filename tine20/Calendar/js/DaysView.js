@@ -205,9 +205,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 sourceEl.setStyle({'border-style': 'dashed'});
                 sourceEl.setOpacity(0.5);
                 
+                var event = data.event;
+                
                 var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
-                if (target) {
-                    return Math.abs(target.getTime() - data.event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                if (target && event.get('editGrant')) {
+                    return Math.abs(target.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                 }
                 
                 return 'cal-daysviewpanel-event-drop-nodrop';
@@ -225,11 +227,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 
                 if (targetDate) {
                     var event = data.event;
-                    
-                    // deny all day drop on the same day
-                    if (Math.abs(targetDate.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE) {
-                        return false;
-                    }
                     
                     event.beginEdit();
                     event.set('dtstart', targetDate);
@@ -436,7 +433,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 top: pos * 18 + 'px'//'1px'
             }, true);
             
-            if (! (endColNum > this.numOfDays)) {
+            if (! (endColNum > this.numOfDays) && event.get('editGrant')) {
                 event.resizeable = new Ext.Resizable(eventEl, {
                     handles: 'e',
                     disableTrackOver: true,
@@ -490,7 +487,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     top: top + 'px'
                 }, true);
                 
-                if (currColNum == endColNum) {
+                if (currColNum == endColNum && event.get('editGrant')) {
                     event.resizeable = new Ext.Resizable(eventEl, {
                         handles: 's',
                         disableTrackOver: true,
