@@ -117,13 +117,12 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.view.on('addEvent', this.onAddEvent, this);
         this.view.on('updateEvent', this.onUpdateEvent, this);
         
-        //c.on("mousedown", this.onMouseDown, this);
-        //c.on("click", this.onClick, this);
-        //c.on("dblclick", this.onDblClick, this);
-        c.on("contextmenu", this.onContextMenu, this);
-        c.on("keydown", this.onKeyDown, this);
-
-        this.relayEvents(c, ["mousedown","mouseup","mouseover","mouseout","keypress"]);
+        this.view.on("click", this.onClick, this);
+        this.view.on("dblclick", this.onDblClick, this);
+        this.view.on("contextmenu", this.onContextMenu, this);
+        
+        //c.on("keydown", this.onKeyDown, this);
+        //this.relayEvents(c, ["keypress"]);
         
         this.view.render();
     },
@@ -152,94 +151,37 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     /**
      * @private
      */
-    processEvent : function(name, e){
-        this.fireEvent(name, e);
-        var v = this.view;
-        
-        var date = v.getTargetDateTime(e);
-        if (! date) {
-            // fetch event id;
-            var event = v.getTargetEvent(e);
-        }
-        
-        /*
-        if (name == 'dblclick') {
-            if (date) {
-                // add new event
-                this.store.add(new Tine.Calendar.Event({
-                    id: Ext.id(),
-                    dtstart: date,
-                    dtend: date.add(Date.HOUR, date.is_all_day_event ? 24 : 1),
-                    is_all_day_event: date.is_all_day_event
-                }));
-                e.preventDefault();
-            }
-        }
-        */
-        
-        if (name == 'click') {
-            if (event) {
-                //this.view.setActiveEvent(event);
-            }
-        }
-        
-        /*
-        if (name == 'mousedown' && date) {
-            this.store.add(new Tine.Calendar.Event({
-                id: Ext.id(),
-                dtstart: date, 
-                dtend: date.add(Date.MINUTE, 15),
-                is_all_day_event: date.is_all_day_event
-            }));
-        }
-        */
-        
-        /*
-            var row = v.findRowIndex(t);
-            var cell = v.findCellIndex(t);
-            if(row !== false){
-                this.fireEvent("row" + name, this, row, e);
-                if(cell !== false){
-                    this.fireEvent("cell" + name, this, row, cell, e);
-                }
-            }
-        */
-            
+    processEvent : function(name, event){
+        console.log('Tine.Calendar.CalendarPanel::processEvent "' + name + '" on envent: ' + event.id );
     },
     
     /**
      * @private
      */
-    onClick : function(e){
-        this.processEvent("click", e);
+    onClick : function(event, e){
+        this.processEvent("click", event);
     },
 
     /**
      * @private
      */
-    onMouseDown : function(e){
-        this.processEvent("mousedown", e);
+    onContextMenu : function(event, e){
+        this.processEvent("contextmenu", event);
     },
 
     /**
      * @private
      */
-    onContextMenu : function(e, t){
-        this.processEvent("contextmenu", e);
-    },
-
-    /**
-     * @private
-     */
-    onDblClick : function(e){
-        this.processEvent("dblclick", e);
-    },
+    onDblClick : function(event, e){
+        this.processEvent("dblclick", event);
+    }
     
     /**
      * @private
-     */
+     *
     onKeyDown : function(e){
         this.fireEvent("keydown", e);
     }
+    */
     
 });
