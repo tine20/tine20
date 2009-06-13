@@ -29,6 +29,8 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Calendar/js/ParallelEventsRegistry.js',
             'Calendar/js/Model.js',
             'Calendar/js/CalendarPanel.js',
+            'Calendar/js/EventUI.js',
+            'Calendar/js/EventSelectionModel.js',
             'Calendar/js/DaysView.js',
             'Calendar/js/MonthView.js',
             'Calendar/js/Calendar.js',

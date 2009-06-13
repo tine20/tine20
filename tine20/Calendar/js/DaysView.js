@@ -286,16 +286,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     var parts = eventEl.id.split(':');
                     var event = this.daysView.ds.getById(parts[1]);
                     
+                    this.daysView.setActiveEvent(event);
+                    
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant
                     if (event.dirty || (this.daysView.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
                         return;
                     }
                     
-                    this.daysView.setActiveEvent(event);
-                    
                     // we need to clone an event with summary in
-                    var d = Ext.get(event.domIds[0]).dom.cloneNode(true);
+                    var d = Ext.get(event.ui.domIds[0]).dom.cloneNode(true);
                     d.id = Ext.id();
                     
                     if (event.get('is_all_day_event')) { 
@@ -376,158 +376,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @todo Add support vor Events spanning over a day boundary
      */
     insertEvent: function(event) {
-        
-        // @todo fetch color from calendar
-        var color = '#FD0000';
-        
-        var extraCls = '';
-        
-        // lighten up background
-        var r = Math.min(this.hex2dec(color.substring(1,3)) + 150, 255);
-        var g = Math.min(this.hex2dec(color.substring(3,5)) + 150, 255);
-        var b = Math.min(this.hex2dec(color.substring(5,7)) + 150, 255);
-        var bgColor = 'rgb(' + r + ',' + g + ',' + b + ')';
-        
-        var dtStart = event.get('dtstart');
-        var startColNum = this.getColumnNumber(dtStart);
-        var dtEnd = event.get('dtend');//.add(Date.SECOND, -1);
-        var endColNum = this.getColumnNumber(dtEnd);
-        
-        // skip dates not in our diplay range
-        if (endColNum < 0 || startColNum > this.numOfDays-1) {
-            return;
-        }
-        
-        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-        var parallels = registry.getEvents(dtStart, dtEnd);
-        var pos = parallels.indexOf(event);
-        
-        // poperties might be missing on quickAdd
-        event.parallels = event.parallels > 0 ? event.parallels : 1;
-        pos = pos >=0 ? pos : 0;
-                
-        //registry for dom ids
-        event.domIds = [];
-        
-        
-        if (event.get('is_all_day_event')) { 
-            var offsetWidth = Ext.fly(this.wholeDayArea).getWidth();
-            
-            var width = Math.round(offsetWidth * (dtEnd.getTime() - dtStart.getTime()) / (this.numOfDays * Date.msDAY)) -5;
-            var left = Math.round(offsetWidth * (dtStart.getTime() - this.startDate.getTime()) / (this.numOfDays * Date.msDAY));
-            
-            if (startColNum < 0) {
-                width = width - Math.abs(startColNum) * (offsetWidth/this.numOfDays);
-                left = 0;
-                extraCls = extraCls + ' cal-daysviewpanel-event-cropleft';
-            }
-            
-            if (endColNum > this.numOfDays) {
-                width = width - Math.abs(endColNum - this.numOfDays) * (offsetWidth/this.numOfDays);
-                extraCls = extraCls + ' cal-daysviewpanel-event-cropright';
-            }
-            
-            var domId = Ext.id() + '-evnet:' + event.get('id');
-            event.domIds.push(domId);
-            
-            var eventEl = this.templates.wholeDayEvent.insertFirst(this.wholeDayArea, {
-                id: domId,
-                summary: event.get('summary'),
-                startTime: dtStart.format('H:i'),
-                extraCls: extraCls,
-                color: color,
-                bgColor: bgColor,
-                zIndex: 100,
-                width: width  +'px',
-                height: '15px',
-                left: left + 'px',
-                top: pos * 18 + 'px'//'1px'
-            }, true);
-            
-            if (! (endColNum > this.numOfDays) && event.get('editGrant')) {
-                event.resizeable = new Ext.Resizable(eventEl, {
-                    handles: 'e',
-                    disableTrackOver: true,
-                    //dynamic: !!event.isRangeAdd,
-                    widthIncrement: Math.round(offsetWidth / this.numOfDays),
-                    minWidth: Math.round(offsetWidth / this.numOfDays),
-                    listeners: {
-                        scope: this,
-                        resize: this.onEventResize,
-                        beforeresize: this.onBeforeEventResize
-                    }
-                });
-            }
-            
-        } else {
-            
-            for (var currColNum=startColNum; currColNum<=endColNum; currColNum++) {
-                
-                extraCls = '';
-                if (currColNum < 0 || currColNum > this.numOfDays) {
-                    continue;
-                }
-                
-                var top = this.getTimeOffset(dtStart);
-                var height = startColNum == endColNum ? this.getTimeHeight(dtStart, dtEnd) : this.getTimeOffset(dtEnd);
-                
-                if (currColNum != startColNum) {
-                    top = 0;
-                    extraCls = extraCls + ' cal-daysviewpanel-event-croptop';
-                }
-                
-                if (endColNum != currColNum) {
-                    height = this.getTimeHeight(dtStart, dtStart.add(Date.DAY, 1));
-                    extraCls = extraCls + ' cal-daysviewpanel-event-cropbottom';
-                }
-                
-                var domId = Ext.id() + '-evnet:' + event.get('id');
-                event.domIds.push(domId);
-                
-                var eventEl = this.templates.event.append(this.getDateColumnEl(currColNum), {
-                    id: domId,
-                    summary: event.get('summary'),
-                    startTime: dtStart.format('H:i'),
-                    extraCls: extraCls,
-                    color: color,
-                    bgColor: bgColor,
-                    zIndex: 100,
-                    width: Math.round(90 * 1/event.parallels) + '%',
-                    height: height + 'px',
-                    left: Math.round(pos * 90 * 1/event.parallels) + '%',
-                    top: top + 'px'
-                }, true);
-                
-                if (currColNum == endColNum && event.get('editGrant')) {
-                    event.resizeable = new Ext.Resizable(eventEl, {
-                        handles: 's',
-                        disableTrackOver: true,
-                        dynamic: !!event.isRangeAdd,
-                        heightIncrement: this.granularityUnitHeights/2,
-                        listeners: {
-                            scope: this,
-                            resize: this.onEventResize,
-                            beforeresize: this.onBeforeEventResize
-                        }
-                    });
-                }
-            }
-        }
-    },
-    
-    /**
-     * returns events dom
-     * @param {Tine.Calendar.Model.Event} event
-     * @return {Array} of Ext.Element
-     */
-    getEventEls: function(event) {
-        if (event && event.domIds) {
-            var domEls = [];
-            for (var i=0; i<event.domIds.length; i++) {
-                domEls[i] = Ext.get(event.domIds[i]);
-            }
-            return domEls;
-        }
+        event.ui = new Tine.Calendar.DaysViewEventUI(event);
+        event.ui.render(this);
     },
     
     /**
@@ -540,7 +390,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         this.ds.each(function(event) {
-            event.domIds = [];
+            if (event.ui) {
+                event.ui.domIds = [];
+            }
         });
     },
     
@@ -553,14 +405,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.activeEvent = null;
         }
         
-        var eventEls = this.getEventEls(event);
-        if (Ext.isArray(eventEls)) {
-            for (var i=0; i<eventEls.length; i++) {
-                if (eventEls[i] && typeof eventEls[i].remove == 'function') {
-                    eventEls[i].remove();
-                }
-            }
-            event.domIds = [];
+        if (event.ui) {
+            event.ui.remove();
         }
     },
     
@@ -571,20 +417,22 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     setActiveEvent: function(event) {
         if (this.activeEvent) {
-            var curEls = this.getEventEls(this.activeEvent);
+            var curEls = this.activeEvent.ui.getEls();
             for (var i=0; i<curEls.length; i++) {
                 curEls[i].removeClass('cal-daysviewpanel-event-active');
                 curEls[i].setStyle({'z-index': 100});
             }
         }
         
-        var els = this.getEventEls(event);
-        if (event && els && els.length > 0) {
-            for (var i=0; i<els.length; i++) {
-                els[i].addClass('cal-daysviewpanel-event-active');
-                els[i].setStyle({'z-index': 1000});
+        if (event) {
+            var els = event.ui.getEls();
+            if (els.length > 0) {
+                for (var i=0; i<els.length; i++) {
+                    els[i].addClass('cal-daysviewpanel-event-active');
+                    els[i].setStyle({'z-index': 1000});
+                }
+                this.activeEvent = event;
             }
-            this.activeEvent = event;
         }
     },
     
@@ -621,14 +469,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.setActiveEvent(event);
         this.layout();
         
-        //var eventEls = this.getEventEls(event);
+        //var eventEls = event.ui.getEls();
         //eventEls[0].setStyle({'border-style': 'dashed'});
         //eventEls[0].setOpacity(0.5);
         
         // start sizing for range adds
         if (event.isRangeAdd) {
             // don't create events with very small duration
-            event.resizeable.on('resize', function() {
+            event.ui.resizeable.on('resize', function() {
                 if (event.get('is_all_day_event')) {
                     var keep = true;
                 } else {
@@ -643,7 +491,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }, this);
             
             // fix duration when mouse already has been moved
-            event.resizeable.onMouseMove = event.resizeable.onMouseMove.createSequence(function(e, target) {
+            event.ui.resizeable.onMouseMove = event.ui.resizeable.onMouseMove.createSequence(function(e, target) {
                 var eventXY = e.getXY();
                 
                 if (event.get('is_all_day_event')) {
@@ -655,7 +503,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     this.proxy.setHeight(height);
                     this.resizeElement();
                 }
-            }, event.resizeable);
+            }, event.ui.resizeable);
             
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
             
@@ -663,8 +511,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 e.browserEvent = {type: 'mousedown'};
             }
             
-            event.resizeable[rzPos].onMouseDown.call(event.resizeable[rzPos], e);
-            //event.resizeable.startSizing.defer(2000, event.resizeable, [e, event.resizeable[rzPos]]);
+            event.ui.resizeable[rzPos].onMouseDown.call(event.ui.resizeable[rzPos], e);
+            //event.ui.resizeable.startSizing.defer(2000, event.ui.resizeable, [e, event.ui.resizeable[rzPos]]);
         } else {
             this.startEditSummary(event);
         }
@@ -683,7 +531,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     startEditSummary: function(event) {
-        var eventEls = this.getEventEls(event);
+        var eventEls = event.ui.getEls();
         
         var bodyCls = event.get('is_all_day_event') ? 'cal-daysviewpanel-wholedayevent-body' : 'cal-daysviewpanel-event-body';
         new Ext.form.TextField({
@@ -752,7 +600,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 id: newId,
                 dtstart: dtStart, 
                 dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1).add(Date.SECOND, -1),
-                is_all_day_event: dtStart.is_all_day_event
+                is_all_day_event: dtStart.is_all_day_event,
+                editGrant: true
             }, newId);
             
             this.createEvent(e, event);
@@ -777,7 +626,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 id: newId,
                 dtstart: dtStart, 
                 dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, this.timeGranularity/2),
-                is_all_day_event: dtStart.is_all_day_event
+                is_all_day_event: dtStart.is_all_day_event,
+                editGrant: true
             }, newId);
             event.isRangeAdd = true;
             
