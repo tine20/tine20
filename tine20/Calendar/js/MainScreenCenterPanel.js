@@ -220,7 +220,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (! event) {
-            event = new Tine.Calendar.Event({}, 0);
+            event = new Tine.Calendar.Event({
+                container_id: this.app.getMainScreen().getTreePanel().getAddCalendar()
+            }, 0);
         }
         
         Tine.Calendar.EventEditDialog.openWindow({

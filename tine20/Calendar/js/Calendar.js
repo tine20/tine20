@@ -114,6 +114,27 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     
     getCalSelector: function() {
         return this.calSelector;
+    },
+    
+    /**
+     * returns a calendar to take for a add event action
+     * 
+     * @todo add more sophisticated logic
+     * 
+     * @return {Tine.Model.Container}
+     */
+    getAddCalendar: function() {
+        var selections = this.getCalSelector().getSelectionModel().getSelectedNodes();
+        
+        // take first container with add grant
+        Ext.each(selections, function(node){
+            var attr = node.attributes;
+            if (attr.containerType == 'singleContainer' && attr.container.account_grants.addGrant) {
+                return attr.container;
+            }
+        });
+        
+        return Tine.Calendar.registry.get('defaultCalendar');
     }
 });
 
