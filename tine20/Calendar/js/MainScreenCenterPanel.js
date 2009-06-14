@@ -312,7 +312,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         }
                     },
                     change: this.updateView.createDelegate(this, [which]),
-                    refresh: this.refresh.createDelegate(this, true)
+                    refresh: this.refresh.createDelegate(this, [true])
                 }
             });
             

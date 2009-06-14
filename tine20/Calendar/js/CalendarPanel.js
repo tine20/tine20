@@ -29,6 +29,10 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      */
     border: false,
     /**
+     * @cfg {String} loadMaskText
+     */
+    loadMaskText: 'Loading events, please wait...',
+    /**
      * @private
      */
     initComponent: function() {
@@ -42,6 +46,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.relayEvents(this.view, ['changeView', 'changePeriod', 'click', 'dblclick', 'contextmenu']);
         
         this.store.on('beforeload', this.onBeforeLoad, this);
+        this.store.on('load', this.onLoad, this);
     },
     
     getSelectionModel: function() {
@@ -77,6 +82,9 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     
     onBeforeLoad: function(store, options) {
         if (! options.refresh) {
+            if (this.rendered) {
+                this.loadMask.show();
+            }
             this.store.each(this.view.removeEvent, this.view);
         }
         
@@ -84,6 +92,12 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         var filter = options.params.filter ? options.params.filter : [];
         filter.push({field: 'period', operator: 'within', value: this.getView().getPeriod() });
+    },
+    
+    onLoad: function() {
+        if (this.rendered) {
+            this.loadMask.hide();
+        }
     },
     
     onUpdateEvent: function(event) {
@@ -146,6 +160,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      */
     afterRender : function(){
         Tine.Calendar.CalendarPanel.superclass.afterRender.call(this);
+        
+        this.loadMask = new Ext.LoadMask(this.body, {msg: this.loadMaskText});
         this.view.layout();
         this.view.afterRender();
         
