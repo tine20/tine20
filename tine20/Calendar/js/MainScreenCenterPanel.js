@@ -254,7 +254,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     refresh: function() {
         var panel = this.getCalendarPanel(this.activeView);
-        panel.getStore().load({});
+        panel.getStore().load({
+            refresh: true
+        });
     },
     
     updateEventActions: function() {
@@ -309,7 +311,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             }
                         }
                     },
-                    change: this.updateView.createDelegate(this, [which])
+                    change: this.updateView.createDelegate(this, [which]),
+                    refresh: this.refresh
                 }
             });
             

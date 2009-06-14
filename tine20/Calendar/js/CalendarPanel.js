@@ -76,6 +76,10 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     },
     
     onBeforeLoad: function(store, options) {
+        if (! options.refresh) {
+            this.store.each(this.view.removeEvent, this.view);
+        }
+        
         options.params = options.params || {};
         
         var filter = options.params.filter ? options.params.filter : [];

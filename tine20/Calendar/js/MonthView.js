@@ -266,7 +266,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     initData : function(ds){
         if(this.ds){
-            this.ds.un("beforeload", this.onBeforeLoad, this);
             this.ds.un("load", this.onLoad, this);
             //this.ds.un("datachanged", this.onDataChange, this);
             this.ds.un("add", this.onAdd, this);
@@ -275,7 +274,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             //this.ds.un("clear", this.onClear, this);
         }
         if(ds){
-            ds.on("beforeload", this.onBeforeLoad, this);
             ds.on("load", this.onLoad, this);
            // ds.on("datachanged", this.onDataChange, this);
             ds.on("add", this.onAdd, this);
@@ -588,13 +586,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
         
         this.layoutDayCells();
-    },
-    
-    /**
-     * @private
-     */
-    onBeforeLoad: function() {
-        this.ds.each(this.removeEvent, this);
     },
     
     onClick: function(e, target) {

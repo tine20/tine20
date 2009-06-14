@@ -36,7 +36,15 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
              * @param {String} activeView
              * @param {Array} period
              */
-            'change'
+            'change',
+            /**
+             * @event refresh
+             * Fired when user request view freshresh
+             * @param {Tine.Calendar.PagingToolbar} this
+             * @param {String} activeView
+             * @param {Array} period
+             */
+            'refresh'
         );
         if (! Ext.isDate(this.dtStart)) {
             this.dtStart = new Date();
@@ -111,7 +119,7 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
                 this.fireEvent('change', this, this.activeView, this.periodPicker.getPeriod());
                 break;
             case 'refresh':
-                this.fireEvent('change', this, this.activeView, this.periodPicker.getPeriod());
+                this.fireEvent('refresh', this, this.activeView, this.periodPicker.getPeriod());
                 break;
         }
     },
