@@ -23,6 +23,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * give all useraccounts grants to view free/busy of the account this preference is yes
      */
     const FREEBUSY = 'freeBusy';
+    
+    /**
+     * default calendar all newly created/invited events are placed in
+     */
+    const DEFAULTCALENDAR = 'defaultCalendar';
 
 
     /**
@@ -41,6 +46,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = array(
             self::FREEBUSY,
+            //self::DEFAULTCALENDAR
         );
             
         return $allPrefs;
@@ -59,6 +65,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::FREEBUSY  => array(
                 'label'         => $translate->_('Publish Free/Busy Information'),
                 'description'   => $translate->_('Allow all users to view your free/busy information'),
+            ),
+            self::DEFAULTCALENDAR  => array(
+                'label'         => $translate->_('Default Calendar'),
+                'description'   => $translate->_('The defualt calendar for invitations and new events'),
             ),
         );
         
@@ -83,6 +93,19 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
+            /**
+             * @phil: please help!
+             * 1. this should be an non admin pref? or admin could only chose shared?
+             * 2. make it work ;-)
+            case self::DEFAULTCALENDAR:
+                $preference->value      = Calendar_Controller::getInstance()->getDefaultDisplayCalendar(Tinebase_Core::getUser());
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_ADD) . '</special>
+                    </options>';
+                break;
+                break;
+            **/
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }
