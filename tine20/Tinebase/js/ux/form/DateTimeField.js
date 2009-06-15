@@ -22,7 +22,13 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
     },
     */
     clearTime: function() {
-        this.timeField.setValue('00:00');
+        var dateTime = this.getValue();
+        if (Ext.isDate(dateTime)) {
+            this.setValue(this.getValue().clearTime(true));
+        } else {
+            this.timeField.setValue(new Date().clearTime());
+        }
+        
     },
     
     getValue: function() {
