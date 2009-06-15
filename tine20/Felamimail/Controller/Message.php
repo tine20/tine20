@@ -120,15 +120,20 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $filterValues = $this->_extractFilter($_filter);
         $folderId = $filterValues['folder_id'];
         
-        if (empty($folderId) || $folderId == '/') {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filterValues, true));
+        
+        if (empty($filterValues['flags']) && (empty($folderId) || $folderId == '/')) {
             $result = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
         } else {
             // update cache -> set totalcount > 0 (only if cache is incomplete?)
-            $folder = $this->_cacheController->update($folderId);
-            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE
-                || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING
-            ) {
-                $this->_totalcount = $folder->totalcount;
+            if (! empty($folderId)) {
+                $folder = $this->_cacheController->update($folderId);
+                if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE
+                    || $folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING
+                ) {
+                    $this->_totalcount = $folder->totalcount;
+                }
             }
         
             $result = parent::search($_filter, $_pagination);
@@ -510,13 +515,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _extractFilter(Felamimail_Model_MessageFilter $_filter)
     {
-        //$result = array('accountId' => 'default', 'folder' => '');
-        $result = array('folder_id' => '');
+        $result = array('folder_id' => '', 'flags' => '');
         
-        $filters = $_filter->getFilterObjects();
+        $filters = $_filter->toArray();
         foreach($filters as $filter) {
-            if (in_array($filter->getField(), array_keys($result))) {
-                $result[$filter->getField()] = $filter->getValue();
+            if (in_array($filter['field'], array_keys($result))) {
+                $result[$filter['field']] = $filter['value'];
             }
         }
         

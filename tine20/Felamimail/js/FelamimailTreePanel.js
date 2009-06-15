@@ -104,27 +104,33 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             qtip: record.get('host'),
             leaf: false,
             cls: 'node_account',
+            show_marked_folder: (record.get('show_marked_folder')) ? record.get('show_marked_folder') : 0,
             account_id: record.data.id,
             listeners: {
                 scope: this,
                 load: function(node) {
-                    //console.log('loaded ' + node.text);
-                    // add 'intelligent' folders
-                    var markedNode = new Ext.tree.TreeNode({
-                        id: record.data.id + '/marked',
-                        //record: record,
-                        globalname: 'marked',
-                        draggable: false,
-                        allowDrop: false,
-                        expanded: false,
-                        text: 'Marked', //this.app.il8n._('Marked'),
-                        //qtip: this.app.il8n._('Contains marked messages'),
-                        leaf: true,
-                        cls: 'node_marked',
-                        account_id: record.data.id
-                    });
-            
-                    node.appendChild(markedNode);
+                    //console.log(record.get('show_marked_folder'));
+                    console.log(node);
+                    if (node.attributes.show_marked_folder == 1) {
+                        //console.log('loaded ' + node.text);
+                        // add 'intelligent' folders
+                        var markedNode = new Ext.tree.TreeNode({
+                            id: record.data.id + '/marked',
+                            //record: record,
+                            localname: 'marked', //this.app.il8n._('Marked'),
+                            globalname: 'marked',
+                            draggable: false,
+                            allowDrop: false,
+                            expanded: false,
+                            text: 'Marked', //this.app.il8n._('Marked'),
+                            //qtip: this.app.il8n._('Contains marked messages'),
+                            leaf: true,
+                            cls: 'node_marked',
+                            account_id: record.data.id
+                        });
+                
+                        node.appendChild(markedNode);
+                    }
                 }
             }
         });
@@ -238,6 +244,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             
                             // update tree node + store
                             this.ctxNode.setText(account.get('name'));
+                            this.ctxNode.attributes.show_marked_folder = account.get('show_marked_folder');
                             this.accountStore.reload();
                             
                             // reload tree node
@@ -311,11 +318,12 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 	var node = scope.getSelectionModel().getSelectedNode();
                     if (node && node.attributes.globalname == 'marked') {
                         return [
-                            {field: 'flags', operator: 'equals', value: '\\Flagged' }
+                            {field: 'flags',        operator: 'equals', value: '\\Flagged' },
+                            {field: 'account_id',   operator: 'equals', value: node.attributes.account_id }
                         ];
                     } else {
                         return [
-                            {field: 'folder_id', operator: 'equals', value: (node) ? node.attributes.folder_id : '' }
+                            {field: 'folder_id',    operator: 'equals', value: (node) ? node.attributes.folder_id : '' }
                         ];
                     }
                 }

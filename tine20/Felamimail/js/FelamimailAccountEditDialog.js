@@ -116,9 +116,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     value: 'none',
                     xtype: 'combo',
                     store: [
-                        ['none', _('None')],
-                        ['tls',  _('TLS')],
-                        ['ssl',  _('SSL')]
+                        ['none', this.app.i18n._('None')],
+                        ['tls',  this.app.i18n._('TLS')],
+                        ['ssl',  this.app.i18n._('SSL')]
                     ]
                 },{
                     fieldLabel: this.app.i18n._('Username'),
@@ -137,6 +137,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Trash Folder Name'),
                     name: 'trash_folder',
                     maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Show Marked Folder (experimental)'),
+                    name: 'show_marked_folder',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: '0',
+                    xtype: 'combo',
+                    store: [
+                        ['0', this.app.i18n._('No')],
+                        ['1',  this.app.i18n._('Yes')]
+                    ]
                 }]]
             }, {               
                 title: this.app.i18n._('SMTP'),
@@ -171,9 +186,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     value: 'none',
                     xtype: 'combo',
                     store: [
-                        ['none', _('None')],
-                        ['tls',  _('TLS')],
-                        ['ssl',  _('SSL')]
+                        ['none', this.app.i18n._('None')],
+                        ['tls',  this.app.i18n._('TLS')],
+                        ['ssl',  this.app.i18n._('SSL')]
                     ]
                 }, {
                     fieldLabel: this.app.i18n._('Authentication'),
@@ -186,8 +201,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'combo',
                     value: 'login',
                     store: [
-                        ['login',  _('Login')],
-                        ['plain',  _('Plain')]
+                        ['login',  this.app.i18n._('Login')],
+                        ['plain',  this.app.i18n._('Plain')]
                     ]
                 }/*,{
                     fieldLabel: this.app.i18n._('Username'),

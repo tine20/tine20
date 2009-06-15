@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:FolderFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  *
+ * @todo        replace some 'custom' filters with normal filter classes?
  */
 
 /**
@@ -33,6 +34,8 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'to'            => array('custom' => true),
         'cc'            => array('custom' => true),
         'bcc'           => array('custom' => true),
+        'flags'         => array('custom' => true),
+        'account_id'    => array('custom' => true),
     );
 
     /**
@@ -50,19 +53,47 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         $foreignTables = $_backend->getForeignTableNames();
         
         foreach ($this->_customData as $customData) {
-            // add conditions
-            $tablename  = $_backend->getTablePrefix() . $foreignTables[$customData['field']];
-            $fieldName  = $tablename . '.name';
-            $fieldEmail = $tablename . '.email';
-            $value      = '%' . $customData['value'] . '%';
             
-            $_select->joinLeft(
-                $tablename, 
-                $tablename . '.message_id = ' . $_backend->getTableName() . '.id'
-            )->where(
-                $db->quoteInto($fieldName  . ' LIKE ?', $value) . ' OR ' .
-                $db->quoteInto($fieldEmail . ' LIKE ?', $value)
-            );
+            if ($customData['field'] == 'account_id') {
+                // get all folders of account
+                $folderFilter = new Felamimail_Model_FolderFilter(array(
+                    array('field' => 'account_id',  'operator' => 'equals', 'value' => $customData['value'])
+                ));
+                $folderBackend = new Felamimail_Backend_Folder();
+                $folderIds = $folderBackend->search($folderFilter, NULL, TRUE);
+                $_select->where($db->quoteInto(
+                    $db->quoteIdentifier($_backend->getTableName() . '.folder_id') . ' IN (?)', 
+                    $folderIds
+                ));
+                
+            } else {
+                
+                // add conditions
+                $tablename  = $_backend->getTablePrefix() . $foreignTables[$customData['field']];
+                if ($customData['field'] == 'flags') {
+                    $fieldName = 'flag';
+                } else {
+                    $fieldName  = $tablename . '.name';
+                    $fieldEmail = $tablename . '.email';
+
+                    $_select->joinLeft(
+                        $tablename, 
+                        $tablename . '.message_id = ' . $_backend->getTableName() . '.id'
+                    );
+                }
+                
+                // add filter value
+                $value      = '%' . $customData['value'] . '%';
+                                
+                if ($customData['field'] == 'flags') {
+                    $_select->having($db->quoteInto('flags LIKE ?', $value));
+                } else {
+                    $_select->where(
+                        $db->quoteInto($fieldName  . ' LIKE ?', $value) . ' OR ' .
+                        $db->quoteInto($fieldEmail . ' LIKE ?', $value)
+                    );
+                }
+            }
             
             // create text filter
             //$textFilter = new Tinebase_Model_Filter_Text($tablename . '.' . $customData['field'], $customData['operator'], $customData['value']);

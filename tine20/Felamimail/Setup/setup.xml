@@ -70,6 +70,10 @@
                     <length>64</length>
                 </field>
                 <field>
+                    <name>show_marked_folder</name>
+                    <type>boolean</type>
+                </field>
+                <field>
                     <name>signature</name>
                     <type>text</type>
                 </field>
