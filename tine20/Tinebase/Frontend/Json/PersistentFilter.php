@@ -143,6 +143,10 @@ class Tinebase_Frontend_Json_PersistentFilter
             throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this filter.');
         }
         
-        $this->_backend->delete($filterId); 
+        $this->_backend->delete($filterId);
+
+        return array(
+            'status'    => 'success'
+        );
     }
 }
