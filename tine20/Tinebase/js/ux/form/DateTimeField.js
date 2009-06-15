@@ -126,9 +126,9 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     undo: function() {
-        if (this.lastValues.length > 0) {
-            var lastValue = this.lastValues.pop()
-            this.setValue(lastValue, true);
+        if (this.lastValues.length > 1) {
+            this.lastValues.pop();
+            this.setValue(this.lastValues[this.lastValues.length-1], true);
         } else {
             this.reset();
         }
