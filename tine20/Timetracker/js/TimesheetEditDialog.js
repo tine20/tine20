@@ -178,14 +178,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         name: 'account_id'
                     }), {
                         columnWidth: .25,
-                        hideLabel: true,
+                        //hideLabel: false,
                         disabled: true,
                         boxLabel: this.app.i18n._('Billable'),
                         name: 'is_billable',
                         xtype: 'checkbox'
                     }, {
                         columnWidth: .25,
-                        hideLabel: true,
+                        //hideLabel: true,
                         disabled: true,
                         boxLabel: this.app.i18n._('Cleared'),
                         name: 'is_cleared',
