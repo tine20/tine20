@@ -13,7 +13,10 @@ Ext.namespace('Ext.ux', 'Ext.ux.form');
 /**
  * A combination of datefield and timefield
  */
-Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
+Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
+    autoEl: 'div',
+    value: '',
+    
     initComponent: function() {
         Ext.ux.form.DateTimeField.superclass.initComponent.call(this);
         this.lastValues = [];
@@ -30,14 +33,18 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
         
     },
     
+    getName: function() {
+        return this.name;
+    },
+    
     getValue: function() {
-        
-        var date = Ext.ux.form.DateTimeField.superclass.getValue.apply(this, arguments);
+        var date = this.dateField.getValue();
         var time = this.timeField.getValue();
         
         var timeParts = time.split(':');
         
         if (Ext.isDate(date) && timeParts.length >= 2) {
+            date = date.clone();
             date.clearTime();
             date.setHours(timeParts[0]);
             date.setMinutes(timeParts[1]);
@@ -45,38 +52,61 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
         return date;
     },
     
+    
     onRender: function(ct, position) {
         Ext.ux.form.DateTimeField.superclass.onRender.call(this, ct, position);
         
-        this.timeFieldEl = Ext.DomHelper.insertAfter(this.wrap.last(), {dom: 'div', style: {'position': 'absolute', 'top': '0px'}}, true);
-        this.timeField = new Ext.form.TimeField({
-            renderTo: this.timeFieldEl,
+        this.dateField = new Ext.form.DateField({
+            renderTo: ct,
             readOnly: this.readOnly,
             hideTrigger: this.hideTrigger,
             disabled: this.disabled,
-            tabIndex: this.tabIndex == -1 ? this.tabIndex : false
+            tabIndex: this.tabIndex == -1 ? this.tabIndex : false,
+            listeners: {
+                scope: this,
+                change: this.onDateChange
+            }
         });
+        
+        this.timeField = new Ext.form.TimeField({
+            renderTo: ct,
+            readOnly: this.readOnly,
+            hideTrigger: this.hideTrigger,
+            disabled: this.disabled,
+            tabIndex: this.tabIndex == -1 ? this.tabIndex : false,
+            listeners: {
+                scope: this,
+                change: this.onTimeChange
+            }
+        });
+        
+    },
+    
+    onDateChange: function() {
+        var newValue = this.getValue();
+        this.setValue(newValue);
+        this.fireEvent('change', this, newValue, this.lastValues.length > 1 ? this.lastValues[this.lastValues.length-2] : '');
     },
     
     onResize : function(w, h) {
         Ext.ux.form.DateTimeField.superclass.onResize.apply(this, arguments);
         
-        var wrapWidth = this.wrap.getWidth();
-        var totalFieldWidth = wrapWidth - 2*this.trigger.getWidth() - 10;
+        this.dateField.setWidth(w * 0.6 -10);
         
-        var dateFieldWidth = totalFieldWidth * 0.6;
-        var timeFieldWidth = totalFieldWidth * 0.4;
-        
-        this.el.setWidth(dateFieldWidth);
-        this.timeField.getEl().setWidth(timeFieldWidth);
-        
-        this.timeFieldEl.setLeft(dateFieldWidth + this.trigger.getWidth() + 10);
-        this.timeField.wrap.setWidth(timeFieldWidth + this.trigger.getWidth());
+        this.timeField.wrap.setStyle({'position': 'absolute', 'top': '0px'});
+        this.timeField.setWidth(w * 0.4);
+        this.timeField.wrap.setRight(5);
+    },
+    
+    onTimeChange: function() {
+        var newValue = this.getValue();
+        this.setValue(newValue);
+        this.fireEvent('change', this, newValue, this.lastValues.length > 1 ? this.lastValues[this.lastValues.length-2] : '');
     },
     
     setDisabled: function(bool, what) {
         if (what !== 'time') {
-            Ext.ux.form.DateTimeField.superclass.setDisabled.call(this, bool);
+            this.dateField.setDisabled(bool);
         }
         
         if (what !== 'date') {
@@ -84,12 +114,14 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
         }
     },
     
+    setRawValue: Ext.EmptyFn,
+    
     setValue: function(value, skipHistory) {
         if (! skipHistory) {
-            this.lastValues.push(this.getValue());
+            this.lastValues.push(value);
         }
         
-        Ext.ux.form.DateTimeField.superclass.setValue.apply(this, arguments);
+        this.dateField.setValue(value);
         this.timeField.setValue(value);
     },
     
