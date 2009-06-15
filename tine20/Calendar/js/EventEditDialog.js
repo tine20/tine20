@@ -39,6 +39,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     // note: we need up use new action updater here or generally in the widget!
     evalGrants: false,
     
+    afterRender: function() {
+        Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
+        //this.setTabHeight();
+    },
+    
     /**
      * returns dialog
      * 
@@ -53,55 +58,86 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             items:[{
                 title: this.app.i18n.n_('Event', 'Calendar', 1),
-                autoScroll: true,
                 border: false,
                 frame: true,
                 layout: 'border',
                 items: [{
                     region: 'center',
-                    xtype: 'columnform',
-                    labelAlign: 'top',
-                    formDefaults: {
-                        xtype:'textfield',
-                        anchor: '100%',
-                        labelSeparator: '',
-                        columnWidth: .333
-                    },
-                    items: [[{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Summary'),
-                        name: 'summary',
-                        listeners: {render: function(field){field.focus(false, 250);}},
-                        allowBlank: false
-                    }], [ new Ext.ux.form.ClearableDateField({
-                        fieldLabel: this.app.i18n._('Due date'),
-                        name: 'due'
-                    }), new Tine.widgets.Priority.Combo({
-                        fieldLabel: this.app.i18n._('Priority'),
-                        name: 'priority'
-                    }), new Tine.widgets.AccountpickerField({
-                        fieldLabel: this.app.i18n._('Responsible'),
-                        name: 'organizer'
-                    })], [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Notes'),
-                        emptyText: this.app.i18n._('Enter description...'),
-                        name: 'description',
-                        xtype: 'textarea',
-                        height: 200
-                    }], [new Ext.ux.PercentCombo({
-                        fieldLabel: this.app.i18n._('Percentage'),
-                        editable: false,
-                        name: 'percent'
-                    }), new Ext.form.DateField({
-                        fieldLabel: this.app.i18n._('Completed'),
-                        name: 'completed'
-                    })]]
+                    autoScroll: true,
+                    layout: 'hfit',
+                    border: false,
+                    items: [{
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight:true,
+                        title: this.app.i18n._('Event'),
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'side',
+                            labelWidth: 100,
+                            formDefaults: {
+                                xtype:'textfield',
+                                anchor: '100%',
+                                labelSeparator: '',
+                                columnWidth: .5
+                            },
+                            items: [[{
+                                columnWidth: 1,
+                                fieldLabel: this.app.i18n._('Summary'),
+                                name: 'summary',
+                                listeners: {render: function(field){field.focus(false, 250);}},
+                                allowBlank: false
+                            }], [{
+                                columnWidth: 1,
+                                fieldLabel: this.app.i18n._('Location'),
+                                name: 'location'
+                            }], [{
+                                xtype: 'datetimefield',
+                                fieldLabel: this.app.i18n._('Start Time'),
+                                name: 'dtstart'
+                            }, {
+                                xtype: 'combo',
+                                hideLabel: true,
+                                readOnly: true,
+                                hideTrigger: true,
+                                disabled: true,
+                                name: 'originator_tz'
+                            }], [{
+                                xtype: 'datetimefield',
+                                fieldLabel: this.app.i18n._('End Time'),
+                                name: 'dtend'
+                            }, {
+                                xtype: 'checkbox',
+                                hideLabel: true,
+                                boxLabel: this.app.i18n._('whole day'),
+                                name: 'is_all_day_event'
+                            }]]
+                        }]
+                    }, {
+                        xtype: 'tabpanel',
+                        activeTab: 0,
+                        border: true,
+                        height: 235,
+                        form: true,
+                        listeners: {
+                            scope: this,
+                            render: function(p) {this.innerTabPanel = p;},
+                            resize: function(p) {
+                                //console.log(p.container.getHeight());
+                                //console.log(p.getEl().getTop());
+                                //console.log(this.getItemAt(0));
+                            }
+                        },
+                        items: [{
+                            title: this.app.i18n._('Attendee'),
+                            html: 'some attendee'
+                        }]
+                    }]
                 }, {
                     // activities and tags
+                    region: 'east',
                     layout: 'accordion',
                     animate: true,
-                    region: 'east',
                     width: 210,
                     split: true,
                     collapsible: true,
@@ -109,6 +145,25 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
+                        new Ext.Panel({
+                            // @todo generalise!
+                            title: this.app.i18n._('Description'),
+                            iconCls: 'descriptionIcon',
+                            layout: 'form',
+                            labelAlign: 'top',
+                            border: false,
+                            items: [{
+                                style: 'margin-top: -4px; border 0px;',
+                                labelSeparator: '',
+                                xtype:'textarea',
+                                name: 'note',
+                                hideLabel: true,
+                                grow: false,
+                                preventScrollbars:false,
+                                anchor:'100% 100%',
+                                emptyText: this.app.i18n._('Enter description')                            
+                            }]
+                        }),
                         new Tine.widgets.activities.ActivitiesPanel({
                             app: 'Calendar',
                             showAddNoteForm: false,
@@ -128,6 +183,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
+    },
+    
+    setTabHeight: function() {
+        var summaryField = this.getForm().findField('summary');
+        console.log(summaryField);
+        
     }
 });
 
