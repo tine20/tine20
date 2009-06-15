@@ -99,7 +99,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }], [{
                                 xtype: 'datetimefield',
                                 fieldLabel: this.app.i18n._('Start Time'),
-                                //listeners: {scope: this, change: this.onDtStartChange},
+                                listeners: {scope: this, change: this.onDtStartChange},
                                 name: 'dtstart'
                             }, {
                                 xtype: 'combo',
@@ -111,7 +111,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }], [{
                                 xtype: 'datetimefield',
                                 fieldLabel: this.app.i18n._('End Time'),
-                                //listeners: {scope: this, change: this.onDtEndChange},
+                                listeners: {scope: this, change: this.onDtEndChange},
                                 name: 'dtend'
                             }, {
                                 xtype: 'checkbox',
@@ -189,7 +189,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     onAllDayChange: function(checkbox, isChecked) {
         var dtStartField = this.getForm().findField('dtstart');
-        var dtEndField = this.getForm().findField('dtend')
+        var dtEndField = this.getForm().findField('dtend');
         dtStartField.setDisabled(isChecked, 'time');
         dtEndField.setDisabled(isChecked, 'all');
         
@@ -199,6 +199,29 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             dtStartField.undo();
             dtEndField.undo();
+        }
+    },
+    
+    onDtEndChange: function(dtEndField, newValue, oldValue) {
+        var dtStart = this.getForm().findField('dtstart').getValue();
+        if (Ext.isDate(dtStart) && Ext.isDate(newValue)) {
+            var diff = newValue.getTime() - dtStart.getTime();
+            if (diff < 0) {
+                dtEndField.markInvalid(this.app.i18n._('End date must not be before start date'));
+            } else {
+                dtEndField.clearInvalid();
+            }
+        }
+    },
+    
+    onDtStartChange: function(dtStartField, newValue, oldValue) {
+        if (Ext.isDate(newValue) && Ext.isDate(oldValue)) {
+            var diff = newValue.getTime() - oldValue.getTime();
+            var dtEndField = this.getForm().findField('dtend');
+            var dtEnd = dtEndField.getValue();
+            if (Ext.isDate(dtEnd)) {
+                dtEndField.setValue(dtEnd.add(Date.MILLI, diff));
+            }
         }
     },
     
