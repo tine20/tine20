@@ -98,6 +98,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.showHeaders(values.headers)]}">',
                     '<b>' + this.il8n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
                     '<b>' + this.il8n._('From') + ':</b> {[this.encode(values.from)]}',
+                    '{[this.showRecipients(values.headers)]}',
                 '</div>',
                 '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
                     + this.il8n._('Attachments') + '")]}</div>',
@@ -160,7 +161,22 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     for (header in value) {
                         if (value.hasOwnProperty(header)) {
                             result += '<b>' + header + ':</b> ' 
-                                + Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(value[header], 40)) + '<br/>';
+                                + Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(value[header], 140)) + '<br/>';
+                        }
+                    }
+                    return result;
+                } else {
+                    return '';
+                }
+            },
+            
+            showRecipients: function(value) {
+                if (value) {
+                    var result = '';
+                    for (header in value) {
+                        if (value.hasOwnProperty(header) && (header == 'to' || header == 'cc' || header == 'bcc')) {
+                            result += '<br/><b>' + header + ':</b> ' 
+                                + Ext.util.Format.htmlEncode(value[header]);
                         }
                     }
                     return result;
