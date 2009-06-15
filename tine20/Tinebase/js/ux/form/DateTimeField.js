@@ -14,13 +14,12 @@ Ext.namespace('Ext.ux', 'Ext.ux.form');
  * A combination of datefield and timefield
  */
 Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
-    /*
     initComponent: function() {
-        
         Ext.ux.form.DateTimeField.superclass.initComponent.call(this);
+        this.lastValues = [];
         
     },
-    */
+    
     clearTime: function() {
         var dateTime = this.getValue();
         if (Ext.isDate(dateTime)) {
@@ -85,9 +84,22 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
         }
     },
     
-    setValue: function(value) {
+    setValue: function(value, skipHistory) {
+        if (! skipHistory) {
+            this.lastValues.push(this.getValue());
+        }
+        
         Ext.ux.form.DateTimeField.superclass.setValue.apply(this, arguments);
         this.timeField.setValue(value);
+    },
+    
+    undo: function() {
+        if (this.lastValues.length > 0) {
+            var lastValue = this.lastValues.pop()
+            this.setValue(lastValue, true);
+        } else {
+            this.reset();
+        }
     }
 });
 Ext.reg('datetimefield', Ext.ux.form.DateTimeField);
