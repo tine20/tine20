@@ -99,6 +99,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }], [{
                                 xtype: 'datetimefield',
                                 fieldLabel: this.app.i18n._('Start Time'),
+                                //listeners: {scope: this, change: this.onDtStartChange},
                                 name: 'dtstart'
                             }, {
                                 xtype: 'combo',
@@ -110,11 +111,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }], [{
                                 xtype: 'datetimefield',
                                 fieldLabel: this.app.i18n._('End Time'),
+                                //listeners: {scope: this, change: this.onDtEndChange},
                                 name: 'dtend'
                             }, {
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('whole day'),
+                                listeners: {scope: this, check: this.onAllDayChange},
                                 name: 'is_all_day_event'
                             }]]
                         }]
@@ -182,6 +185,21 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
+    },
+    
+    onAllDayChange: function(checkbox, isChecked) {
+        var dtStartField = this.getForm().findField('dtstart');
+        var dtEndField = this.getForm().findField('dtend')
+        dtStartField.setDisabled(isChecked, 'time');
+        dtEndField.setDisabled(isChecked, 'all');
+        
+        if (isChecked) {
+            dtStartField.clearTime();
+            dtEndField.setValue(dtStartField.getValue().add(Date.HOUR, 23).add(Date.MINUTE, 59));
+        } else {
+            dtStartField.undo();
+            dtEndField.undo();
+        }
     },
     
     setTabHeight: function() {
