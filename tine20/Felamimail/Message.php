@@ -50,10 +50,14 @@ class Felamimail_Message extends Zend_Mail_Message
         
         if($this->isMultipart()) {
             foreach (new RecursiveIteratorIterator($this) as $messagePart) {
-                $contentType    = $messagePart->getHeaderField('content-type', 0);
-                if($contentType == $_contentType) {
-                    $part = $messagePart;
-                    break;
+                try {
+                    $contentType    = $messagePart->getHeaderField('content-type', 0);
+                    if($contentType == $_contentType) {
+                        $part = $messagePart;
+                        break;
+                    }
+                } catch (Zend_Mail_Exception $zme) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " No content-type header found.");
                 }
             }
         } else {
