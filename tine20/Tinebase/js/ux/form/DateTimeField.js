@@ -21,6 +21,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
         
     },
     */
+    clearTime: function() {
+        this.timeField.setValue('00:00');
+    },
+    
     getValue: function() {
         
         var date = Ext.ux.form.DateTimeField.superclass.getValue.apply(this, arguments);
@@ -63,6 +67,16 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
         
         this.timeFieldEl.setLeft(dateFieldWidth + this.trigger.getWidth() + 10);
         this.timeField.wrap.setWidth(timeFieldWidth + this.trigger.getWidth());
+    },
+    
+    setDisabled: function(bool, what) {
+        if (what !== 'time') {
+            Ext.ux.form.DateTimeField.superclass.setDisabled.call(this, bool);
+        }
+        
+        if (what !== 'date') {
+            this.timeField.setDisabled(bool);
+        }
     },
     
     setValue: function(value) {
