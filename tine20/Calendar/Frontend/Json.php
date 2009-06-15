@@ -85,9 +85,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $defaultCalendar = Calendar_Controller::getInstance()->getDefaultDisplayCalendar(Tinebase_Core::getUser());
-        $defaultCalendarArray = $defaultCalendar->toArray();
-        $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendar->getId())->toArray();
+        $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValue(Calendar_Preference::DEFAULTCALENDAR);
+        $defaultCalendarArray = Tinebase_Container::getContainerById($defaultCalendarId)->toArray();
+        $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendarId)->toArray();
         
         return array(
             'defaultCalendar' => $defaultCalendarArray

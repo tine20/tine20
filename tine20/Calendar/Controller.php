@@ -58,27 +58,15 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
         
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
-                $this->createPersonalFolder($_eventObject->account);
+                //$this->createPersonalFolder($_eventObject->account);
+                Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $_eventObject->account->getId());
                 break;
             case 'Admin_Event_DeleteAccount':
-                $this->deletePersonalFolder($_eventObject->account);
+                // not a good idea, as it could be the originaters container for invitations
+                // we need to move all contained events first
+                //$this->deletePersonalFolder($_eventObject->account);
                 break;
         }
-    }
-    
-    /**
-     * returns the defualt display calender for given account
-     *
-     * @todo add preference and use this
-     *  -> auto created container should be the prefered
-     * 
-     * @param  mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return Tinebase_Model_Container
-     */
-    public function getDefaultDisplayCalendar($_account)
-    {
-        $calendars = Tinebase_Container::getInstance()->getPersonalContainer($_account, 'Calendar', $_account, 0, true);
-        return $calendars->getFirstRecord();
     }
     
     /**

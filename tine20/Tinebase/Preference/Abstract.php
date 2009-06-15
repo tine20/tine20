@@ -64,9 +64,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * get preference defaults if no default is found in the database
      *
      * @param string $_preferenceName
+     * @param integer $_accountId
+     * @param string $_accountType
      * @return Tinebase_Model_Preference
      */
-    abstract public function getPreferenceDefaults($_preferenceName);
+    abstract public function getPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
     
     /**************************** public interceptior functions *********************************/
     
@@ -172,7 +174,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if (!$queryResult) {
             //throw new Tinebase_Exception_NotFound("No matching preference for '$_preferenceName' found!");
             // try to get default value
-            $pref = $this->getPreferenceDefaults($_preferenceName);
+            $pref = $this->getPreferenceDefaults($_preferenceName, $_accountId, $_accountType);
             
         } else {
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));

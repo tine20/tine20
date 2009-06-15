@@ -439,9 +439,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 // allow user to set his own displ. cal
                 $_attender->displaycontainer_id = $_attender->displaycontainer_id;
             } else {
-                $displayCal = Calendar_Controller::getInstance()->getDefaultDisplayCalendar($_attender->user_id);
-                if ($displayCal) {
-                    $_attender->displaycontainer_id = $displayCal->getId();
+                $displayCalId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $_attender->user_id);
+                if ($displayCalId) {
+                    $_attender->displaycontainer_id = $displayCalId;
                 }
             }
         }

@@ -81,7 +81,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * @param string $_preferenceName
      * @return Tinebase_Model_Preference
      */
-    public function getPreferenceDefaults($_preferenceName)
+    public function getPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
@@ -94,7 +94,9 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::DEFAULTCALENDAR:
-                $preference->value      = Calendar_Controller::getInstance()->getDefaultDisplayCalendar(Tinebase_Core::getUser())->getId();
+                $accountId = $_accountId ? $_accountId : Tinebase_Core::getUser()->getId();
+                $calendars          = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Calendar', $accountId, 0, true);
+                $preference->value  = $calendars->getFirstRecord()->getId();
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
