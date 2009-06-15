@@ -44,7 +44,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
             renderTo: this.timeFieldEl,
             readOnly: this.readOnly,
             hideTrigger: this.hideTrigger,
-            disabled: this.disabled
+            disabled: this.disabled,
+            tabIndex: this.tabIndex == -1 ? this.tabIndex : false
         });
     },
     

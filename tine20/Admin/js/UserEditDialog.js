@@ -77,7 +77,9 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: [[{
                             fieldLabel: this.app.i18n._('First Name'),
                             name: 'accountFirstName',
-                            columnWidth: .666
+                            columnWidth: .666,
+                            listeners: {render: function(field){field.focus(false, 250);}},
+                            tabIndex: 1
                         }, {
                             xtype: 'combo',
                             fieldLabel: this.app.i18n._('Status'),
@@ -92,7 +94,8 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Last Name'),
                             name: 'accountLastName',
                             allowBlank: false,
-                            columnWidth: .666
+                            columnWidth: .666,
+                            tabIndex: 2
                         }, new Ext.ux.form.ClearableDateField({ 
                             fieldLabel: this.app.i18n._('Expires'),
                             name: 'accountExpires',
@@ -101,58 +104,68 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Login Name'),
                             name: 'accountLoginName',
                             allowBlank: false,
-                            columnWidth: .666
+                            columnWidth: .666,
+                            tabIndex: 3
                         }, {
                             xtype: 'datetimefield',
                             fieldLabel: this.app.i18n._('Last login at'),
                             name: 'accountLastLogin',
                             emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in'),
                             hideTrigger: true,
-                            readOnly: true
+                            readOnly: true,
+                            tabIndex: -1
                         }], [{
                             fieldLabel: this.app.i18n._('Password'),
                             name: 'accountPassword',
                             inputType: 'password',
                             emptyText: this.app.i18n._('no password set'),
-                            columnWidth: .666
+                            columnWidth: .666,
+                            tabIndex: 4
                         }, {
                             xtype: 'textfield',
                             fieldLabel: this.app.i18n._('Last login from'),
                             name: 'accountLastLoginfrom',
                             emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in'),
-                            readOnly: true
+                            readOnly: true,
+                            tabIndex: -1
                         }], [{
                             fieldLabel: this.app.i18n._('Password again'),
                             name: 'accountPassword2',
                             inputType: 'password',
                             emptyText: this.app.i18n._('no password set'),
-                            columnWidth: .666
+                            columnWidth: .666,
+                            tabIndex: 5
                         }, {
                             xtype: 'datetimefield',
                             fieldLabel: this.app.i18n._('Password set'),
                             name: 'accountLastPasswordChange',
                             emptyText: this.app.i18n._('never'),
                             hideTrigger: true,
-                            readOnly: true
+                            readOnly: true,
+                            tabIndex: -1
                         }], [new Tine.widgets.group.selectionComboBox({
                             fieldLabel: this.app.i18n._('Primary group'),
                             name: 'accountPrimaryGroup',
                             displayField:'name',
                             valueField:'id',
-                            columnWidth: .666
+                            columnWidth: .666,
+                            tabIndex: 6
                         })], [{
                             vtype: 'email',
                             fieldLabel: this.app.i18n._('Emailaddress'),
                             name: 'accountEmailAddress',
-                            columnWidth: .666
+                            columnWidth: .666,
+                            tabIndex: 7
                         }], [{
                             fieldLabel: this.app.i18n._('Home Directory'),
                             name: 'accountHomeDirectory',
-                            columnWidth: .666
+                            columnWidth: .666,
+                            tabIndex: 8
                         }], [{
                             fieldLabel: this.app.i18n._('Login Shell'),
                             name: 'accountLoginShell',
-                            columnWidth: .666
+                            columnWidth: .666,
+                            tabIndex: 9
                         }]
                     ] 
                 }]
