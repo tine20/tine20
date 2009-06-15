@@ -46,7 +46,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = array(
             self::FREEBUSY,
-            //self::DEFAULTCALENDAR
+            self::DEFAULTCALENDAR
         );
             
         return $allPrefs;
@@ -93,23 +93,38 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
-            /**
-             * @phil: please help!
-             * 1. this should be an non admin pref? or admin could only chose shared?
-             * 2. make it work ;-)
             case self::DEFAULTCALENDAR:
-                $preference->value      = Calendar_Controller::getInstance()->getDefaultDisplayCalendar(Tinebase_Core::getUser());
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_ADD) . '</special>
-                    </options>';
+                $preference->value      = Calendar_Controller::getInstance()->getDefaultDisplayCalendar(Tinebase_Core::getUser())->getId();
                 break;
-                break;
-            **/
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }
         
         return $preference;
+    }
+    
+    /**
+     * get special options
+     *
+     * @param string $_value
+     * @return array
+     */
+    protected function _getSpecialOptions($_value)
+    {
+        $result = array();
+        switch($_value) {
+            case self::DEFAULTCALENDAR:
+                // get all user accounts
+                $calendars = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_ADD);
+                
+                foreach ($calendars as $calendar) {
+                    $result[] = array($calendar->getId(), $calendar->name);
+                }
+                break;
+            default:
+                $result = parent::_getSpecialOptions($_value);
+        }
+        
+        return $result;
     }
 }
