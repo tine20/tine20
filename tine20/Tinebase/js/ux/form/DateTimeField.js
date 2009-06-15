@@ -23,6 +23,11 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         
     },
     
+    clearInvalid: function() {
+        this.dateField.clearInvalid();
+        this.timeField.clearInvalid();
+    },
+    
     clearTime: function() {
         var dateTime = this.getValue();
         if (Ext.isDate(dateTime)) {
@@ -52,6 +57,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         return date;
     },
     
+    markInvalid: function(msg) {
+        this.dateField.markInvalid(msg);
+        this.timeField.markInvalid(msg);
+    },
     
     onRender: function(ct, position) {
         Ext.ux.form.DateTimeField.superclass.onRender.call(this, ct, position);
