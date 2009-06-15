@@ -476,11 +476,12 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         // if it has no children, it shouldn't have an expand icon 
         if (! attr.has_children) {
             node.children = [];
+            node.cls = 'x-tree-node-collapsed';
         }
 
         if (attr.unreadcount > 0) {
             node.text = node.text + ' (' + attr.unreadcount + ')';
-            node.cls = 'node_unread';
+            node.cls = 'node_unread x-tree-node-collapsed';
         }
         
         //console.log(node);
