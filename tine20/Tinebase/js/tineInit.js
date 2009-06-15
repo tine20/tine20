@@ -586,6 +586,6 @@ Tine.Tinebase.tineInit = {
      * Last stage of initialisation, to be done after Tine.onReady!
      */
     onLangFilesLoad: function() {
-        Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
+    //    Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
     }
 };
