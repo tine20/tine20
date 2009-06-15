@@ -11,12 +11,13 @@
 Ext.namespace('Ext.ux', 'Ext.ux.form');
 
 /**
- * A DateTimeField
- * This class simplifies i18n a lot
+ * A combination of datefield and timefield
  */
-Ext.ux.form.DateField = Ext.extend(Ext.form.DateField, {
-    /**
-     * @cfg {string} format @see{Ext.util.Format}
-     */
+Ext.ux.form.DateTimeField = Ext.extend(Ext.form.DateField, {
+    onRender: function(ct, position) {
+        Ext.ux.form.DateTimeField.superclass.onRender.call(this, ct, position);
+        
+        //console.log(ct);
+    }
 });
-Ext.reg('datetimefield', Ext.ux.form.DateField);
+Ext.reg('datetimefield', Ext.ux.form.DateTimeField);
