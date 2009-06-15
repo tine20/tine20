@@ -41,8 +41,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     afterRender: function() {
         Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
-        //this.setTabHeight();
+        
     },
+    
+    onResize: function() {
+        Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
+        this.setTabHeight.defer(100, this);
+    },
+    
     
     /**
      * returns dialog
@@ -63,7 +69,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 layout: 'border',
                 items: [{
                     region: 'center',
-                    autoScroll: true,
                     layout: 'hfit',
                     border: false,
                     items: [{
@@ -119,18 +124,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         border: true,
                         height: 235,
                         form: true,
-                        listeners: {
-                            scope: this,
-                            render: function(p) {this.innerTabPanel = p;},
-                            resize: function(p) {
-                                //console.log(p.container.getHeight());
-                                //console.log(p.getEl().getTop());
-                                //console.log(this.getItemAt(0));
-                            }
-                        },
                         items: [{
                             title: this.app.i18n._('Attendee'),
                             html: 'some attendee'
+                        }, {
+                            title: this.app.i18n._('Options'),
+                            html: 'recurings and alamrs'
                         }]
                     }]
                 }, {
@@ -186,9 +185,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     setTabHeight: function() {
-        var summaryField = this.getForm().findField('summary');
-        console.log(summaryField);
-        
+        var eventTab = this.items.first().items.first();
+        var centerPanel = eventTab.items.first();
+        var tabPanel = centerPanel.items.last();
+        tabPanel.setHeight(centerPanel.getEl().getBottom() - tabPanel.getEl().getTop());
     }
 });
 
