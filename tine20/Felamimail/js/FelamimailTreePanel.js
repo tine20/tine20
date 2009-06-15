@@ -61,13 +61,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             leaf: false,
             id: 'root'
         });
-
+        
         // add account nodes and context menu
         this.initAccounts();
         this.initContextMenus();
         
     	Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
-        
+
     	// add handlers
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
@@ -88,6 +88,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Tine.Felamimail.Model.Account} record
      * 
      * @private
+     * 
+     * TODO make translations work
      */
     addAccount: function(record) {
         
@@ -101,11 +103,35 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             text: record.get('name'),
             qtip: record.get('host'),
             leaf: false,
-            account_id: record.data.id
+            cls: 'node_account',
+            account_id: record.data.id,
+            listeners: {
+                scope: this,
+                load: function(node) {
+                    //console.log('loaded ' + node.text);
+                    // add 'intelligent' folders
+                    var markedNode = new Ext.tree.TreeNode({
+                        id: record.data.id + '/marked',
+                        //record: record,
+                        globalname: 'marked',
+                        draggable: false,
+                        allowDrop: false,
+                        expanded: false,
+                        text: 'Marked', //this.app.il8n._('Marked'),
+                        //qtip: this.app.il8n._('Contains marked messages'),
+                        leaf: true,
+                        cls: 'node_marked',
+                        account_id: record.data.id
+                    });
+            
+                    node.appendChild(markedNode);
+                }
+            }
         });
         
         //console.log(record);
         //console.log(node);
+        //console.log(this.app);
         
         this.root.appendChild(node);
     },
@@ -283,9 +309,15 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
                 getValue: function() {
                 	var node = scope.getSelectionModel().getSelectedNode();
-                    return [
-                        {field: 'folder_id',     operator: 'equals', value: (node) ? node.attributes.folder_id : '' }
-                    ];
+                    if (node && node.attributes.globalname == 'marked') {
+                        return [
+                            {field: 'flags', operator: 'equals', value: '\\Flagged' }
+                        ];
+                    } else {
+                        return [
+                            {field: 'folder_id', operator: 'equals', value: (node) ? node.attributes.folder_id : '' }
+                        ];
+                    }
                 }
             });
         }
@@ -484,6 +516,16 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             node.cls = 'node_unread x-tree-node-collapsed';
         }
         
+        // add special trash node icon
+        if (id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount')) {
+            var defaultAccount = Tine.Felamimail.loadAccountStore().getById(id);
+            if (defaultAccount) {
+                if (defaultAccount.get('trash_folder') == attr.globalname) {
+                    node.cls = 'node_trash';
+                }
+            }
+        }
+        
         //console.log(node);
         
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
@@ -545,5 +587,4 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             */ 
         }
     }
-	
 });
