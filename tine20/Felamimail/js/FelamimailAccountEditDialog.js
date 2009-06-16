@@ -132,44 +132,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'password',
                     emptyText: 'password',
                     inputType: 'password'
-                }, {
-                    fieldLabel: this.app.i18n._('Sent Folder Name'),
-                    name: 'sent_folder',
-                    maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('Trash Folder Name'),
-                    name: 'trash_folder',
-                    maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('Show Marked Folder'),
-                    name: 'show_marked_folder',
-                    typeAhead     : false,
-                    triggerAction : 'all',
-                    lazyRender    : true,
-                    editable      : false,
-                    mode          : 'local',
-                    forceSelection: true,
-                    value: '0',
-                    xtype: 'combo',
-                    store: [
-                        ['0', this.app.i18n._('No')],
-                        ['1',  this.app.i18n._('Yes')]
-                    ]
-                }, {
-                    fieldLabel: this.app.i18n._('Supports "has_children"'),
-                    name: 'has_children_support',
-                    typeAhead     : false,
-                    triggerAction : 'all',
-                    lazyRender    : true,
-                    editable      : false,
-                    mode          : 'local',
-                    forceSelection: true,
-                    value: '0',
-                    xtype: 'combo',
-                    store: [
-                        ['0', this.app.i18n._('No')],
-                        ['1',  this.app.i18n._('Yes')]
-                    ]
                 }]]
             }, {               
                 title: this.app.i18n._('SMTP'),
@@ -232,6 +194,58 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false,
                     inputType: 'password'
                 }*/]]
+            }, {
+                title: this.app.i18n._('Other Settings'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '90%',
+                    labelSeparator: '',
+                    maxLength: 256,
+                    columnWidth: 1
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n._('Sent Folder Name'),
+                    name: 'sent_folder',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Trash Folder Name'),
+                    name: 'trash_folder',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Show Marked Folder'),
+                    name: 'show_marked_folder',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: '0',
+                    xtype: 'combo',
+                    store: [
+                        ['0', this.app.i18n._('No')],
+                        ['1',  this.app.i18n._('Yes')]
+                    ]
+                }, {
+                    fieldLabel: this.app.i18n._('Supports "has_children"'),
+                    name: 'has_children_support',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: '0',
+                    xtype: 'combo',
+                    store: [
+                        ['0', this.app.i18n._('No')],
+                        ['1',  this.app.i18n._('Yes')]
+                    ]
+                }]]
             }]            
             
             /*
