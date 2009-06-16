@@ -78,6 +78,20 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $updatedEventData;
     }
     
+    public function testSearchEvents()
+    {
+        $eventData = $this->testCreateEvent();
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        );
+        
+        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        $resultEventData = $searchResultData['results'][0];
+        
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
+        return $searchResultData;
+    }
     
     public function testUpdateRecurExceptionsFromSeriesOverDstMove()
     {
