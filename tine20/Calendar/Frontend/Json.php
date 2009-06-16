@@ -93,4 +93,18 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultCalendar' => $defaultCalendarArray
         );
     }
+    
+    /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @return array data
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    {
+        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
+        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
+        
+        return parent::_multipleRecordsToJson($_records);;
+    }
 }
