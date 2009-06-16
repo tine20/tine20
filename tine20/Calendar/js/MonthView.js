@@ -683,7 +683,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         // create parallels registry
         this.parallelEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({
             dtStart: this.dateMesh[0], 
-            dtEnd: this.dateMesh[this.dateMesh.length-1].add(Date.DAY, 1).add(Date.SECOND, -1),
+            dtEnd: this.dateMesh[this.dateMesh.length-1].add(Date.DAY, 1)/*.add(Date.SECOND, -1)*/,
             granularity: 60*24
         });
         

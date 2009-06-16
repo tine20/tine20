@@ -125,7 +125,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         // @todo fetch color from calendar
         this.color = '#FD0000';
         
-        var extraCls = '';
+        this.extraCls = '';
         
         // lighten up background
         var r = Math.min(view.hex2dec(this.color.substring(1,3)) + 150, 255);
@@ -135,7 +135,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         
         this.dtStart = this.event.get('dtstart');
         this.startColNum = view.getColumnNumber(this.dtStart);
-        this.dtEnd = this.event.get('dtend');//.add(Date.SECOND, -1);
+        this.dtEnd = this.event.get('dtend');///*.add(Date.SECOND, -1)*/;
         this.endColNum = view.getColumnNumber(this.dtEnd);
         
         // skip dates not in our diplay range
@@ -171,12 +171,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         if (this.startColNum < 0) {
             width = width - Math.abs(this.startColNum) * (offsetWidth/view.numOfDays);
             left = 0;
-            extraCls = extraCls + ' cal-daysviewpanel-this.event-cropleft';
+            this.extraCls = this.extraCls + ' cal-daysviewpanel-this.event-cropleft';
         }
         
         if (this.endColNum > view.numOfDays) {
             width = width - Math.abs(this.endColNum - view.numOfDays) * (offsetWidth/view.numOfDays);
-            extraCls = extraCls + ' cal-daysviewpanel-this.event-cropright';
+            this.extraCls = this.extraCls + ' cal-daysviewpanel-this.event-cropright';
         }
         
         var domId = Ext.id() + '-evnet:' + this.event.get('id');
@@ -186,7 +186,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             id: domId,
             summary: this.event.get('summary'),
             startTime: this.dtStart.format('H:i'),
-            extraCls: extraCls,
+            extraCls: this.extraCls,
             color: this.color,
             bgColor: this.bgColor,
             zIndex: 100,
@@ -220,7 +220,6 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     renderScrollerEvent: function(view, parallels, pos) {
         for (var currColNum=this.startColNum; currColNum<=this.endColNum; currColNum++) {
             
-            extraCls = '';
             if (currColNum < 0 || currColNum > view.numOfDays) {
                 continue;
             }
@@ -230,12 +229,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             
             if (currColNum != this.startColNum) {
                 top = 0;
-                extraCls = extraCls + ' cal-daysviewpanel-this.event-croptop';
+                this.extraCls = this.extraCls + ' cal-daysviewpanel-this.event-croptop';
             }
             
             if (this.endColNum != currColNum) {
                 height = view.getTimeHeight(this.dtStart, this.dtStart.add(Date.DAY, 1));
-                extraCls = extraCls + ' cal-daysviewpanel-this.event-cropbottom';
+                this.extraCls = this.extraCls + ' cal-daysviewpanel-this.event-cropbottom';
             }
             
             var domId = Ext.id() + '-evnet:' + this.event.get('id');
@@ -245,7 +244,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 id: domId,
                 summary: this.event.get('summary'),
                 startTime: this.dtStart.format('H:i'),
-                extraCls: extraCls,
+                extraCls: this.extraCls,
                 color: this.color,
                 bgColor: this.bgColor,
                 zIndex: 100,

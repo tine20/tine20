@@ -260,7 +260,7 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
         var from = Date.parseDate(this.dtStart.format('Y-m-d') + ' 00:00:00', Date.patterns.ISO8601Long);
         return {
             from: from,
-            until: from.add(Date.DAY, 1).add(Date.SECOND, -1)
+            until: from.add(Date.DAY, 1)/*.add(Date.SECOND, -1)*/
         };
     }
 });
@@ -335,7 +335,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         var from = Date.parseDate(this.dtStart.add(Date.DAY, diff).format('Y-m-d') + ' 00:00:00', Date.patterns.ISO8601Long);
         return {
             from: from,
-            until: from.add(Date.DAY, 7).add(Date.SECOND, -1)
+            until: from.add(Date.DAY, 7)/*.add(Date.SECOND, -1)*/
         };
     }
 });
@@ -403,7 +403,7 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
         var from = Date.parseDate(this.dtStart.format('Y-m') + '-01 00:00:00', Date.patterns.ISO8601Long);
         return {
             from: from,
-            until: from.add(Date.MONTH, 1).add(Date.SECOND, -1)
+            until: from.add(Date.MONTH, 1)/*.add(Date.SECOND, -1)*/
         };
     }
 });
