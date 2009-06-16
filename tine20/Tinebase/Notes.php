@@ -242,7 +242,27 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         return $result;          
     }
-
+    
+    /**
+     * get all notes of all given records (calls searchNotes)
+     * 
+     * @todo implement this in one sql query!
+     * 
+     * @param  Tinebase_Record_RecordSet  $_records       the recordSet
+     * @param  string                     $_notesProperty  the property in the record where the notes are in (defaults: 'notes')
+     * @param  string                     $_backend   backend of record
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
+     */
+    public function getMultipleNotesOfRecords($_records, $_notesProperty='notes', $_backend = 'Sql')
+    {
+        $modelName = $_records->getRecordClassName();
+        
+        foreach($_records as $record) {
+            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
+        }
+        
+    }
+    
     /************************** set / add / delete notes ************************/
     
     /**
