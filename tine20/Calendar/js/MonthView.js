@@ -432,7 +432,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         var dtStart = event.get('dtstart');
         var startCellNumber = this.getDayCellIndex(dtStart);
+        
         var dtEnd = event.get('dtend');
+        // 00:00 in users timezone is a spechial case where the user expects
+        // something like 24:00 and not 00:00
+        if (dtEnd.format('H:i') == '00:00') {
+            dtEnd = dtEnd.add(Date.MINUTE, -1);
+        }
         var endCellNumber = this.getDayCellIndex(dtEnd);
         
         // skip out of range events

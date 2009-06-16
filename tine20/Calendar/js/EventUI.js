@@ -162,7 +162,14 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         
         this.dtStart = this.event.get('dtstart');
         this.startColNum = view.getColumnNumber(this.dtStart);
-        this.dtEnd = this.event.get('dtend');///*.add(Date.SECOND, -1)*/;
+        
+        this.dtEnd = this.event.get('dtend');
+        
+        // 00:00 in users timezone is a spechial case where the user expects
+        // something like 24:00 and not 00:00
+        if (this.dtEnd.format('H:i') == '00:00') {
+            this.dtEnd = this.dtEnd.add(Date.MINUTE, -1);
+        }
         this.endColNum = view.getColumnNumber(this.dtEnd);
         
         // skip dates not in our diplay range
