@@ -325,6 +325,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         return this.getTopToolbar();
     },
     
+    isValid: function() {
+        return this.getForm().isValid();
+    },
+    
     /**
      * @private
      */
@@ -346,8 +350,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * generic apply changes handler
      */
     onApplyChanges: function(button, event, closeWindow) {
-        var form = this.getForm();
-        if(form.isValid()) {
+        if(this.isValid()) {
             this.loadMask.show();
             
             this.onRecordUpdate();
