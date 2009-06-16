@@ -281,10 +281,15 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             var domId = Ext.id() + '-evnet:' + this.event.get('id');
             this.domIds.push(domId);
             
+            // minimal height
+            if (height <= 12) {
+                height = 12;
+            }
+            
             var eventEl = view.templates.event.append(view.getDateColumnEl(currColNum), {
                 id: domId,
-                summary: this.event.get('summary'),
-                startTime: this.dtStart.format('H:i'),
+                summary: height >= 24 ? this.event.get('summary') : '',
+                startTime: height >= 24 ? this.dtStart.format('H:i') : this.dtStart.format('H:i') + ' ' +  this.event.get('summary'),
                 extraCls: extraCls,
                 color: this.color,
                 bgColor: this.bgColor,
