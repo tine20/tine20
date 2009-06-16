@@ -76,9 +76,9 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
-        $select = parent::_getSelect($_cols, $_getDeleted);
-
         if ($_cols === '*') {
+            $select = parent::_getSelect($_cols, $_getDeleted);
+            
             // add to/cc/bcc/flags
             foreach ($this->_foreignTables as $field => $tablename) {
                 $fieldName = ($field == 'flags') ? 'flag' : 'email';
@@ -98,8 +98,9 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                 ));
             }
             */
+        } else {
+            $select = parent::_getSelect(array('count' => 'COUNT(DISTINCT ' . $this->_tableName . '.id)', $_getDeleted));
         }
-        
         
         return $select;
     }

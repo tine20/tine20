@@ -76,10 +76,14 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                     $fieldName  = $tablename . '.name';
                     $fieldEmail = $tablename . '.email';
 
-                    $_select->joinLeft(
-                        $tablename, 
-                        $tablename . '.message_id = ' . $_backend->getTableName() . '.id'
-                    );
+                    $columns = $_select->getPart(Zend_Db_Select::COLUMNS);
+                    if (count($columns) == 1 && $columns[0][2] == 'count') {
+                        // only add join for count queries
+                        $_select->joinLeft(
+                            $tablename, 
+                            $tablename . '.message_id = ' . $_backend->getTableName() . '.id'
+                        );
+                    }
                 }
                 
                 // add filter value
@@ -94,10 +98,6 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                     );
                 }
             }
-            
-            // create text filter
-            //$textFilter = new Tinebase_Model_Filter_Text($tablename . '.' . $customData['field'], $customData['operator'], $customData['value']);
-            //$textFilter->appendFilterSql($_select, $_backend);
         }
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
