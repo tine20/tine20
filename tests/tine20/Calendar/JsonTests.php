@@ -57,16 +57,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
-        $this->assertEquals($eventData['summary'], $loadedEventData['summary'], 'failed to create/load event');
+        $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
         
-        // container, assert attendee, tags, relations
-        $this->assertTrue(is_array($loadedEventData['container_id']), 'failed to "resolve" container');
-        $this->assertTrue(is_array($loadedEventData['container_id']['account_grants']), 'failed to "resolve" container account_grants');
-        $this->assertEquals(2, count($loadedEventData['attendee']), 'faild to append attendee');
-        $this->assertEquals(1, count($loadedEventData['tags']), 'faild to append tag');
-        $this->assertEquals(1, count($loadedEventData['notes']), 'faild to create note');
-        
+        return $loadedEventData;
     }
+    
+    public function testUpdteEvent()
+    {
+        $event = new Calendar_Model_Event($this->testCreateEvent(), true);
+        $event->dtstart->addHour(5);
+        $event->dtend->addHour(5);
+        $event->description = 'are you kidding?';
+        
+        $eventData = $event->toArray();
+        unset($eventData['attendee'][1]);
+        
+        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $this->_assertJsonEvent($eventData, $updatedEventData, 'failed to update event');
+        
+        return $updatedEventData;
+    }
+    
     
     public function testUpdateRecurExceptionsFromSeriesOverDstMove()
     {
@@ -76,6 +87,18 @@ class Calendar_JsonTests extends Calendar_TestCase
          * 3. move dtstart from 1 over dst boundary
          * 4. test recurid and exdate by calculating series
          */
+    }
+    
+    protected function _assertJsonEvent($expectedEventData, $eventData, $msg) {
+        $this->assertEquals($expectedEventData['summary'], $eventData['summary'], $msg . ': failed to create/load event');
+        
+        // container, assert attendee, tags, relations
+        $this->assertEquals($expectedEventData['dtstart'], $eventData['dtstart'], $msg . ': dtstart mismatch');
+        $this->assertTrue(is_array($eventData['container_id']), $msg . ': failed to "resolve" container');
+        $this->assertTrue(is_array($eventData['container_id']['account_grants']), $msg . ': failed to "resolve" container account_grants');
+        $this->assertEquals(count($eventData['attendee']), count($expectedEventData['attendee']), $msg . ': faild to append attendee');
+        $this->assertEquals(count($expectedEventData['tags']), count($eventData['tags']), $msg . ': faild to append tag');
+        $this->assertEquals(count($expectedEventData['notes']), count($eventData['notes']), $msg . ': faild to create note');
     }
 }
     
