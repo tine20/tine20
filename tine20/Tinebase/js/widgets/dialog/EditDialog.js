@@ -68,7 +68,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * record in edit process.
      */
     record: null,
-    
+
+    /**
+     * @cfg {String} saveAndCloseButtonText
+     * text of save and close button
+     */
+    saveAndCloseButtonText: '',
+
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -142,14 +148,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     initActions: function() {
         this.action_saveAndClose = new Ext.Action({
             requiredGrant: 'editGrant',
-            text: _('Ok'),
+            text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : _('Ok'),
             minWidth: 70,
             scope: this,
             handler: this.onSaveAndClose,
             iconCls: 'action_saveAndClose'
         });
     
-        this.action_applyChanges =new Ext.Action({
+        this.action_applyChanges = new Ext.Action({
             requiredGrant: 'editGrant',
             text: _('Apply'),
             minWidth: 70,
