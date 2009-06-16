@@ -25,6 +25,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     tbarItems: [],
     evalGrants: false,
+    saveAndCloseButtonText: 'Send', // _('Send')
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
