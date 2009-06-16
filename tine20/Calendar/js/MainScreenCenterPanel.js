@@ -202,6 +202,39 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onDeleteRecords: function() {
+        var panel = this.getCalendarPanel(this.activeView);
+        var selection = panel.getSelectionModel().getSelectedEvents();
+        
+        Ext.each(selection, function(event){
+            event.ui.markDirty();
+        });
+        
+        var i18nQuestion = String.format(this.app.i18n.n_('Do you really want to delete this event?', 'Do you really want to delete the {0} selected events?', selection.length), selection.length);
+        Ext.MessageBox.confirm(Tine.Tinebase.tranlation._hidden('Confirm'), i18nQuestion, function(btn) {
+            if(btn == 'yes') {
+                panel.getTopToolbar().beforeLoad();
+                
+                var options = {
+                    scope: this,
+                    success: function() {
+                        panel.getTopToolbar().onLoad();
+                        Ext.each(selection, function(event){
+                            panel.getStore().remove(event);
+                        });
+                    },
+                    failure: function () {
+                        panel.getTopToolbar().onLoad();
+                        Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), String.format(this.app.i18n.n_('Failed not delete event', 'Failed to delte the {0} evnets', selection.length), selection.length)) 
+                    }
+                };
+                
+                Tine.Calendar.backend.deleteRecords(selection, options);
+            } else {
+                Ext.each(selection, function(event){
+                    event.ui.clearDirty();
+                });
+            }
+        }, this);
         
     },
     
