@@ -15,6 +15,7 @@
  * 
  * 
  * @package     Calendar
+ * @todo: period should filter [start, end[ at the moment its ]start, end[
  */
 class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract 
 {
