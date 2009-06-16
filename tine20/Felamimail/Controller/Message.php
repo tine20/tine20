@@ -758,7 +758,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _replaceUriAndSpaces($_content) 
     {
-        $result = htmlentities($_content);
+        $result = htmlentities($_content, ENT_COMPAT, 'UTF-8');
         
         // uris
         $pattern = '@(http://|https://|ftp://|mailto:|news:)([^\s<>]+)@';
