@@ -274,7 +274,6 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             }
             
             if (this.endColNum != currColNum) {
-                console.log('hier');
                 height = view.getTimeHeight(this.dtStart, this.dtStart.add(Date.DAY, 1));
                 extraCls = extraCls + ' cal-daysviewpanel-event-cropbottom';
             }
