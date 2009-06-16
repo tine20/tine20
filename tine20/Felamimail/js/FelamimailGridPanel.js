@@ -427,7 +427,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     // fallthrough
                 case 'reply':
                     recordData.to.push(selectedRecord.get('from'));
-                    recordData.body = '<br/>' + selectedRecord.get('from') + ' ' + _('wrote') + ':<br/>'
+                    recordData.body = '<br/>' + Ext.util.Format.htmlEncode(selectedRecord.get('from')) + ' ' + _('wrote') + ':<br/>'
                         + '<blockquote class="felamimail-body-blockquote">' + body + '</blockquote><br/>';
                     recordData.subject = _('Re: ') + selectedRecord.get('subject');
                     recordData.flags = '\\Answered';
