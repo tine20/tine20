@@ -197,6 +197,9 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     },
     
     renderAllDayEvent: function(view, parallels, pos) {
+        // lcocal COPY!
+        var extraCls = this.extraCls;
+        
         var offsetWidth = Ext.fly(view.wholeDayArea).getWidth();
         
         var width = Math.round(offsetWidth * (this.dtEnd.getTime() - this.dtStart.getTime()) / (view.numOfDays * Date.msDAY)) -5;
@@ -205,12 +208,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         if (this.startColNum < 0) {
             width = width - Math.abs(this.startColNum) * (offsetWidth/view.numOfDays);
             left = 0;
-            this.extraCls = this.extraCls + ' cal-daysviewpanel-this.event-cropleft';
+            extraCls = extraCls + ' cal-daysviewpanel.event-cropleft';
         }
         
         if (this.endColNum > view.numOfDays) {
             width = width - Math.abs(this.endColNum - view.numOfDays) * (offsetWidth/view.numOfDays);
-            this.extraCls = this.extraCls + ' cal-daysviewpanel-this.event-cropright';
+            extraCls = extraCls + ' cal-daysviewpanel.event-cropright';
         }
         
         var domId = Ext.id() + '-evnet:' + this.event.get('id');
@@ -220,7 +223,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             id: domId,
             summary: this.event.get('summary'),
             startTime: this.dtStart.format('H:i'),
-            extraCls: this.extraCls,
+            extraCls: extraCls,
             color: this.color,
             bgColor: this.bgColor,
             zIndex: 100,
@@ -252,8 +255,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     },
     
     renderScrollerEvent: function(view, parallels, pos) {
+        
         for (var currColNum=this.startColNum; currColNum<=this.endColNum; currColNum++) {
             
+            // lcocal COPY!
+            var extraCls = this.extraCls;
+        
             if (currColNum < 0 || currColNum > view.numOfDays) {
                 continue;
             }
@@ -263,12 +270,13 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             
             if (currColNum != this.startColNum) {
                 top = 0;
-                this.extraCls = this.extraCls + ' cal-daysviewpanel-this.event-croptop';
+                extraCls = extraCls + ' cal-daysviewpanel-event-croptop';
             }
             
             if (this.endColNum != currColNum) {
+                console.log('hier');
                 height = view.getTimeHeight(this.dtStart, this.dtStart.add(Date.DAY, 1));
-                this.extraCls = this.extraCls + ' cal-daysviewpanel-this.event-cropbottom';
+                extraCls = extraCls + ' cal-daysviewpanel-event-cropbottom';
             }
             
             var domId = Ext.id() + '-evnet:' + this.event.get('id');
@@ -278,7 +286,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 id: domId,
                 summary: this.event.get('summary'),
                 startTime: this.dtStart.format('H:i'),
-                extraCls: this.extraCls,
+                extraCls: extraCls,
                 color: this.color,
                 bgColor: this.bgColor,
                 zIndex: 100,
