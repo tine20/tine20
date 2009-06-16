@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
+ * TODO         add 'x' to remove recipient / grid row
  * TODO         add name to email address for display
  * TODO         disable horizontal scrollbar
  */
