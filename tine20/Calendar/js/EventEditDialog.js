@@ -187,6 +187,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
     },
     
+    isValid: function() {
+        var isValid = this.validateDtStart() && this.validateDtEnd();
+        
+        return isValid && Tine.Calendar.EventEditDialog.superclass.isValid.apply(this, arguments);
+    },
+    
     onAllDayChange: function(checkbox, isChecked) {
         var dtStartField = this.getForm().findField('dtstart');
         var dtEndField = this.getForm().findField('dtend');
@@ -203,15 +209,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     onDtEndChange: function(dtEndField, newValue, oldValue) {
-        var dtStart = this.getForm().findField('dtstart').getValue();
-        if (Ext.isDate(dtStart) && Ext.isDate(newValue)) {
-            var diff = newValue.getTime() - dtStart.getTime();
-            if (diff < 0) {
-                dtEndField.markInvalid(this.app.i18n._('End date must not be before start date'));
-            } else {
-                dtEndField.clearInvalid();
-            }
-        }
+        this.validateDtEnd();
     },
     
     onDtStartChange: function(dtStartField, newValue, oldValue) {
@@ -230,6 +228,38 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var centerPanel = eventTab.items.first();
         var tabPanel = centerPanel.items.last();
         tabPanel.setHeight(centerPanel.getEl().getBottom() - tabPanel.getEl().getTop());
+    },
+    
+    validateDtEnd: function() {
+        var dtStart = this.getForm().findField('dtstart').getValue();
+        
+        var dtEndField = this.getForm().findField('dtend');
+        var dtEnd = dtEndField.getValue();
+        
+        if (! Ext.isDate(dtEnd)) {
+            dtEndField.markInvalid(this.app.i18n._('End date is not valid'));
+            return false;
+        } else if (Ext.isDate(dtStart) && dtEnd.getTime() - dtStart.getTime() <= 0) {
+            dtEndField.markInvalid(this.app.i18n._('End date must be after start date'));
+            return false;
+        } else {
+            dtEndField.clearInvalid();
+            return true;
+        }
+    },
+    
+    validateDtStart: function() {
+        var dtStartField = this.getForm().findField('dtstart');
+        var dtStart = dtStartField.getValue();
+        
+        if (! Ext.isDate(dtStart)) {
+            dtStartField.markInvalid(this.app.i18n._('Start date is not valid'));
+            return false;
+        } else {
+            dtStartField.clearInvalid();
+            return true;
+        }
+        
     }
 });
 
