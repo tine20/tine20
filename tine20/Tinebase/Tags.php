@@ -327,6 +327,24 @@ class Tinebase_Tags
     }
     
     /**
+     * Gets tags of a given records where user has the required right to
+     * The tags are stored in the records $_tagsProperty.
+     * 
+     * @todo implement this in one sql query!
+     * 
+     * @param Tinebase_Record_RecordSet  $_records       the recordSet
+     * @param string                     $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
+     * @param string                     $_right         the required right current user must have on the tags
+     * @return Tinebase_Record_RecordSet tags of record
+     */
+    public function getMultipleTagsOfRecords($_records, $_tagsProperty='tags', $_right=Tinebase_Model_TagRight::VIEW_RIGHT)
+    {
+        foreach($_records as $record) {
+            $this->getTagsOfRecord($record, $_tagsProperty, $_right);
+        }
+    }
+    
+    /**
      * sets (attachs and detaches) tags of a record
      * NOTE: Only touches tags the user has use right for
      * NOTE: Non existing personal tags will be created on the fly
