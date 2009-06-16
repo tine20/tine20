@@ -482,7 +482,16 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     createNode: function(attr) {
         
+        var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
+        
         //console.log(attr);
+        
+        // check for account setting
+        attr.has_children = (
+            account 
+            && account.get('has_children_support') 
+            && account.get('has_children_support') == '1'
+        ) ? attr.has_children : true;
         
         var qtiptext = /*this.app.il8n._(*/'Totalcount' + ': ' + attr.totalcount 
             + ' / ' + /*this.app.il8n._(*/'Cache' + ': ' + attr.cache_status;
@@ -517,14 +526,11 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             node.text = node.text + ' (' + attr.unreadcount + ')';
             node.cls = 'node_unread x-tree-node-collapsed';
         }
-        
-        // add special trash node icon
-        if (id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount')) {
-            var defaultAccount = Tine.Felamimail.loadAccountStore().getById(id);
-            if (defaultAccount) {
-                if (defaultAccount.get('trash_folder') == attr.globalname) {
-                    node.cls = 'node_trash';
-                }
+                
+        // show trash icon for trash folder of account
+        if (account) {
+            if (account.get('trash_folder') == attr.globalname) {
+                node.cls = 'node_trash';
             }
         }
         

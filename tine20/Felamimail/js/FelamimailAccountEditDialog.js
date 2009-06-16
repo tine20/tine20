@@ -155,6 +155,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['0', this.app.i18n._('No')],
                         ['1',  this.app.i18n._('Yes')]
                     ]
+                }, {
+                    fieldLabel: this.app.i18n._('Supports "has_children"'),
+                    name: 'has_children_support',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: '0',
+                    xtype: 'combo',
+                    store: [
+                        ['0', this.app.i18n._('No')],
+                        ['1',  this.app.i18n._('Yes')]
+                    ]
                 }]]
             }, {               
                 title: this.app.i18n._('SMTP'),

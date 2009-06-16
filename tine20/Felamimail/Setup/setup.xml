@@ -79,6 +79,10 @@
                     <type>boolean</type>
                 </field>
                 <field>
+                    <name>has_children_support</name>
+                    <type>boolean</type>
+                </field>
+                <field>
                     <name>signature</name>
                     <type>text</type>
                 </field>
