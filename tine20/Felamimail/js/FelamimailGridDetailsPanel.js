@@ -7,10 +7,11 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add preference to show mails in html or text?
  * TODO         replace telephone numbers in emails with 'call contact' link
  * TODO         add 'add sender to contacts'
  * TODO         make only text body scrollable (headers should be always visible)
+ * TODO         don't show headers in tooltip, add collapsed panel or something like that
+ * TODO         add preference to show mails in html or text?
  */
  
 Ext.namespace('Tine.Felamimail');
