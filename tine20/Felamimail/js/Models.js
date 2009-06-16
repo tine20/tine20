@@ -82,6 +82,7 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'email' },
     { name: 'password' },
     { name: 'from' },
+    { name: 'organization' },
     { name: 'port' },
     { name: 'secure_connection' },
     { name: 'sent_folder' },

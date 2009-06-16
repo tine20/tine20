@@ -85,6 +85,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     // user data
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
+        'organization'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
         'signature'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // smtp config
         'smtp_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 25),

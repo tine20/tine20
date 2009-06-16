@@ -75,6 +75,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('User Name (From)'),
                     name: 'from'
                 }, {
+                    fieldLabel: this.app.i18n._('Organization'),
+                    name: 'organization'
+                }, {
                     fieldLabel: this.app.i18n._('Signature'),
                     name: 'signature',
                     xtype: 'textarea',
@@ -138,7 +141,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'trash_folder',
                     maxLength: 64
                 }, {
-                    fieldLabel: this.app.i18n._('Show Marked Folder (experimental)'),
+                    fieldLabel: this.app.i18n._('Show Marked Folder'),
                     name: 'show_marked_folder',
                     typeAhead     : false,
                     triggerAction : 'all',

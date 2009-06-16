@@ -353,7 +353,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ? $account->from 
             : substr($account->email, 0, strpos($account->email, '@'));
         $mail->setFrom($account->email, $from);
-        
+
         // set in reply to
         if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $originalMessage !== NULL) {
             $mail->addHeader('In-Reply-To', $originalMessage->messageuid);
@@ -382,42 +382,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // add attachments
         $this->_addAttachments($mail, $_message, $originalMessage);
         
-        /*
-        if (isset($_message->attachments)) {
-            $size = 0;
-            foreach ($_message->attachments as $attachment) {
-                
-                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
-                    // add complete original message as attachment
-                    $part = new Zend_Mime_Part($originalMessage->message->getContent());
-                    
-                    $part->filename = $attachment['name']; // ?
-                    
-                    //$part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
-                    
-                } else {
-                    // get contents from uploaded files
-                    $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
-                    $part->filename = $attachment['name'];
-                    $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
-                }
-
-                $part->encoding = Zend_Mime::ENCODING_BASE64;
-                $part->type = $attachment['type'];
-                
-                // check size
-                $size += $attachment['size'];
-                if ($size > self::MAX_ATTACHMENT_SIZE) {
-                    throw new Felamimail_Exception('Allowed attachment size exceeded! Tried to attach ' . $size . ' bytes.');
-                }
-                
-                $mail->addAttachment($part);
-            }
-        }
-        */
-        
         // add user agent
         $mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING);
+        
+        // set organization
+        if (isset($account->organization) && ! empty($account->organization)) {
+            $mail->addHeader('Organization', $account->organization);
+        }
         
         // set transport + send mail
         $smtpConfig = $account->getSmtpConfig();
