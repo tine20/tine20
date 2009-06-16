@@ -272,6 +272,39 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
     },
     
+    onKeyDown: function(e) {
+        if (e.ctrlKey) {
+            switch (e.getKey()) {
+                case e.A:
+                    // select only current page
+                    //this.grid.getSelectionModel().selectAll(true);
+                    e.preventDefault();
+                    break;
+                case e.E:
+                    if (!this.action_editInNewWindow.isDisabled()) {
+                        this.onEditInNewWindow('edit');
+                    }
+                    e.preventDefault();
+                    break;
+                case e.N:
+                    if (!this.action_addInNewWindow.isDisabled()) {
+                        this.onEditInNewWindow('add');
+                    }
+                    e.preventDefault();
+                    break;
+                
+            }
+        } else {
+            switch (e.getKey()) {
+                case e.DELETE:
+                    if (! this.action_deleteRecord.isDisabled()) {
+                        this.onDeleteRecords.call(this);
+                    }
+                    break;
+            }
+        }
+    },
+    
     /**
      * called before store queries for data
      */
@@ -386,6 +419,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             });
             
             this.calendarPanels[which].getSelectionModel().on('selectionchange', this.updateEventActions, this);
+            this.calendarPanels[which].on('keydown', this.onKeyDown, this);
         }
         
         return this.calendarPanels[which];

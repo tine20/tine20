@@ -149,7 +149,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.view.on("dblclick", this.onDblClick, this);
         this.view.on("contextmenu", this.onContextMenu, this);
         
-        //c.on("keydown", this.onKeyDown, this);
+        c.on("keydown", this.onKeyDown, this);
         //this.relayEvents(c, ["keypress"]);
         
         this.view.render();
@@ -204,14 +204,13 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      */
     onDblClick : function(event, e){
         this.processEvent("dblclick", event);
-    }
+    },
     
     /**
      * @private
-     *
+     */
     onKeyDown : function(e){
         this.fireEvent("keydown", e);
     }
-    */
     
 });

@@ -700,7 +700,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private
      */
     onMouseDown: function(e, target) {
-        this.el.focus();
+        //this.el.focus();
+        this.mainBody.focus();
         this.unZoom();
     },
     
