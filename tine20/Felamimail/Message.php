@@ -58,6 +58,11 @@ class Felamimail_Message extends Zend_Mail_Message
                     }
                 } catch (Zend_Mail_Exception $zme) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " No content-type header found.");
+                    
+                    if ($_contentType == Zend_Mime::TYPE_TEXT) {
+                        $part = $messagePart;
+                        break;
+                    }
                 }
             }
         } else {

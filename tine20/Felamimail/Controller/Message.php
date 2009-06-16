@@ -548,7 +548,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (! preg_match('/text\/plain/', $_contentType)) {
             // get html
             $body = $_imapMessage->getBody(Zend_Mime::TYPE_HTML);
+
+            // purify
+            $body = $this->_purifyBodyContent($body);
         } 
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         // get plain text if body is empty at this point
         if (empty($body) || $body == 'no text part found') {
@@ -560,8 +565,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $body = $this->_replaceUriAndSpaces($body);
         }
 
-        // purify
-        $body = $this->_purifyBodyContent($body);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         // add anchor to email addresses (remove mailto hrefs first)
         $mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>[^<]*<\/a>/i';
@@ -569,6 +573,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         //$emailPattern = '/(?<!mailto:)([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
         $emailPattern = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
         $body = preg_replace($emailPattern, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $body);
+
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         return $body;
     }
@@ -646,14 +652,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($attachment, true));
                     
                     $content = $part->getContent();
-                    switch (strtolower($attachment['content-transfer-encoding'])) {
-                        case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                            $content = quoted_printable_decode($content);
-                            break;
-                        case Zend_Mime::ENCODING_BASE64:
-                            $content = base64_decode($content);
-                            //$content = quoted_printable_decode($content); // ?
-                            break;
+                    if (isset($attachment['content-transfer-encoding'])) {
+                        switch (strtolower($attachment['content-transfer-encoding'])) {
+                            case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
+                                $content = quoted_printable_decode($content);
+                                break;
+                            case Zend_Mime::ENCODING_BASE64:
+                                $content = base64_decode($content);
+                                //$content = quoted_printable_decode($content); // ?
+                                break;
+                        }
                     }
         
                     $rfcMessage = new Felamimail_Message(array('raw' => $content));
@@ -750,9 +758,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _replaceUriAndSpaces($_content) 
     {
+        $result = htmlentities($_content);
+        
         // uris
         $pattern = '@(http://|https://|ftp://|mailto:|news:)([^\s<>]+)@';
-        $result = preg_replace($pattern, "<a href=\"\\1\\2\">\\1\\2</a>", $_content);
+        $result = preg_replace($pattern, "<a href=\"\\1\\2\">\\1\\2</a>", $result);
         
         // spaces
         $result = preg_replace('/( {2,}|^ )/em', 'str_repeat("&nbsp;", strlen("\1"))', $result);
