@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add support for message/rfc822 attachments
  * @todo        parse mail body and add <a> to telephone numbers and email addresses?
  * @todo        check html purifier config (allow some tags/attributes?)
  */
@@ -624,8 +623,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_accountId
      * @return array
      * 
-     * @todo save images as tempfiles to show them inline the mail body
-     * @todo make message/rfc822's work correctly
+     * @todo save images as tempfiles to show them inline the mail body?
      */
     protected function _getAttachments(Felamimail_Message $_imapMessage, Felamimail_Model_Message $_message, $_accountId)
     {
@@ -659,7 +657,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                                 break;
                             case Zend_Mime::ENCODING_BASE64:
                                 $content = base64_decode($content);
-                                //$content = quoted_printable_decode($content); // ?
                                 break;
                         }
                     }
@@ -671,9 +668,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     // add body
                     $_message->body = $_message->body . '<br/><hr/><br/>' . $this->_getBody($rfcMessage, $attachment['content-type']); // ?
         
-                    // add header ?
-                    //$message->headers = $rfcMessage->getHeaders();
-                    
                     // add attachments
                     $attachments = array_merge($attachments, $this->_getAttachments($rfcMessage, $_message, $_accountId));
                     
@@ -708,6 +702,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Message $_originalMessage
      * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
@@ -723,21 +718,27 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     }
                     
                     // add complete original message as attachment
-                    $part = new Zend_Mime_Part($_originalMessage->message->getContent());
+                    $headers = '';
+                    foreach ($_originalMessage->message->getHeaders() as $key => $value) {
+                        $headers .= "$key: $value" . Zend_Mime::LINEEND;
+                    }
+                    $rawContent = $headers . Zend_Mime::LINEEND . $_originalMessage->message->getContent();
+                    $part = new Zend_Mime_Part($rawContent);
                     
-                    $part->filename = $attachment['name']; // ?
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $rawContent);
                     
-                    //$part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                    $part->disposition = 'attachment; filename="' . $attachment['name'] . '"';
+                    $part->encoding = Zend_Mime::ENCODING_7BIT;
                     
                 } else {
                     // get contents from uploaded files
                     $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
                     $part->filename = $attachment['name'];
                     $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                    $part->encoding = Zend_Mime::ENCODING_BASE64;
                 }
-
-                $part->encoding = Zend_Mime::ENCODING_BASE64;
-                $part->type = $attachment['type'];
+                
+                $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
                 
                 // check size
                 $size += $attachment['size'];

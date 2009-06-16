@@ -438,7 +438,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     if (selectedRecord.get('attachments').length > 0) {
                         // add message/rfc822 attachment if original message has attachments
                         recordData.attachments = [{
-                            name: this.app.i18n._('Original Message'),
+                            //name: this.app.i18n._('Original Message'),
+                            name: Ext.util.Format.ellipsis(selectedRecord.get('subject'), 40),
                             type: 'message/rfc822',
                             size: selectedRecord.get('size')
                         }];
