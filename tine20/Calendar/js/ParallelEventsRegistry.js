@@ -84,8 +84,8 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
         // layout helper
         event.duration = dtEndTs - dtStartTs;
         
-        var startIdx = this.tsToIdx(dtStart);// +1;
-        var endIdx = this.tsToIdx(dtEndTs);// -1;
+        var startIdx = this.tsToIdx(dtStart);
+        var endIdx = this.tsToIdx(dtEndTs);
         
         for (var i=Math.max(startIdx,0); i<=Math.min(endIdx, this.map.length-1); i++) {
             if (! Ext.isArray(this.map[i])) {
@@ -122,7 +122,7 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      */
     getEvents: function(dtStart, dtEnd, sortByDtStart) {
         var dtStartTs = dtStart.getTime();
-        var dtEndTs = dtEnd.getTime();
+        var dtEndTs = dtEnd.getTime() - 1000;
         
         var startIdx = this.tsToIdx(dtStart);
         var endIdx = this.tsToIdx(dtEndTs);
