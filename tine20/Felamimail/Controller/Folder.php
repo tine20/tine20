@@ -294,8 +294,10 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         foreach ($folders as $folderData) {
             try {
                 // decode folder name
-                $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
-                $folderData['globalName'] = mb_convert_encoding($folderData['globalName'], "utf-8", "UTF7-IMAP");
+                if (extension_loaded('mbstring')) {
+                    $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
+                    $folderData['globalName'] = mb_convert_encoding($folderData['globalName'], "utf-8", "UTF7-IMAP");
+                }
                 
                 $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $folderData['globalName']);
                 $folder->is_selectable = ($folderData['isSelectable'] == '1');
