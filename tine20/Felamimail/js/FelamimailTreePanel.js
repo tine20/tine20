@@ -109,8 +109,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             listeners: {
                 scope: this,
                 load: function(node) {
-                    //console.log(record.get('show_marked_folder'));
-                    console.log(node);
                     if (node.attributes.show_marked_folder == 1) {
                         //console.log('loaded ' + node.text);
                         // add 'intelligent' folders
@@ -134,10 +132,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 }
             }
         });
-        
-        //console.log(record);
-        //console.log(node);
-        //console.log(this.app);
         
         this.root.appendChild(node);
     },
