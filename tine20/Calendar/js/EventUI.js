@@ -30,7 +30,11 @@ Tine.Calendar.EventUI.prototype = {
         });
     },
     
-    
+    clearDirty: function() {
+        Ext.each(this.getEls(), function(el) {
+            el.setOpacity(1, 1);
+        });
+    },
     
     focus: function() {
         Ext.each(this.getEls(), function(el){
@@ -55,6 +59,12 @@ Tine.Calendar.EventUI.prototype = {
     
     init: function() {
         
+    },
+    
+    markDirty: function() {
+        Ext.each(this.getEls(), function(el) {
+            el.setOpacity(0.5, 1);
+        });
     },
     
     onSelectedChange: function(state){
@@ -110,6 +120,23 @@ Tine.Calendar.EventUI.prototype = {
 
 
 Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
+    
+    clearDirty: function() {
+        Tine.Calendar.DaysViewEventUI.superclass.clearDirty.call(this);
+        
+        Ext.each(this.getEls(), function(el) {
+            el.setStyle({'border-style': 'solid'});
+        });
+    },
+    
+    markDirty: function() {
+        Tine.Calendar.DaysViewEventUI.superclass.markDirty.call(this);
+        
+        Ext.each(this.getEls(), function(el) {
+            el.setStyle({'border-style': 'dashed'});
+        });
+    },
+    
     onSelectedChange: function(state){
         Tine.Calendar.DaysViewEventUI.superclass.onSelectedChange.call(this, state);
         if(state){
