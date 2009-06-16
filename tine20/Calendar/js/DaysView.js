@@ -261,6 +261,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     }
                     
                     event.beginEdit();
+                    var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
+                    
                     event.set('dtstart', targetDate);
                     
                     if (! event.get('is_all_day_event') && targetDate.is_all_day_event && event.duration < Date.msDAY) {
@@ -270,7 +272,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                         // draged from allDay -> droped to scroller will be resetted to hone hour
                         event.set('dtend', targetDate.add(Date.HOUR, 1));
                     } else {
-                        event.set('dtend', targetDate.add(Date.MILLI, event.duration));
+                        event.set('dtend', targetDate.add(Date.MINUTE, originalDuration));
                     }
                     
                     event.set('is_all_day_event', targetDate.is_all_day_event);
@@ -704,7 +706,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     onEventResize: function(rz, width, height) {
         var event = rz.event;
         
-        var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;//event.duration / Date.msMINUTE;
+        var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
         
         if(event.get('is_all_day_event')) {
             var dayWidth = Ext.fly(this.wholeDayArea).getWidth() / this.numOfDays;
