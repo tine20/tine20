@@ -249,6 +249,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_folderName
      * @param string $_accountId [optional]
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
+     * 
+     * @todo replace mb_convert_encoding with iconv or something like that
      */
     public function getSubFolders($_folderName = '', $_accountId = 'default')
     {
@@ -291,6 +293,10 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         foreach ($folders as $folderData) {
             try {
+                // decode folder name
+                $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
+                $folderData['globalName'] = mb_convert_encoding($folderData['globalName'], "utf-8", "UTF7-IMAP");
+                
                 $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $folderData['globalName']);
                 $folder->is_selectable = ($folderData['isSelectable'] == '1');
                 $folder->has_children = ($folderData['hasChildren'] == '1');
