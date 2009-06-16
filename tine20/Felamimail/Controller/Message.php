@@ -324,7 +324,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_message
      * 
      * @todo what has to be set in the 'In-Reply-To' header?
-     * @todo set organization header (add setting to accounts)
      * @todo add name for to/cc/bcc
      */
     public function sendMessage(Felamimail_Model_Message $_message)
