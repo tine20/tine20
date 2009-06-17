@@ -86,3 +86,28 @@ if (Tine.Tinebase.widgets) {
         recordClass: Tine.Calendar.Model.Event
     });
 }
+
+Tine.Calendar.Model.AttenderArray = [
+    {name: 'id'},
+    {name: 'cal_event_id'},
+    {name: 'user_id'},
+    {name: 'user_type'},
+    {name: 'role'},
+    {name: 'quantity'},
+    {name: 'status'},
+    {name: 'displaycontainer_id'}
+];
+
+Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.AttenderArray, {
+    appName: 'Calendar',
+    modelName: 'Attender',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Attender', 'Attendee', n); gettext('Attendee');
+    recordName: 'Attender',
+    recordsName: 'Attendee',
+    containerProperty: 'cal_event_id',
+    // ngettext('Event', 'Events', n); gettext('Events');
+    containerName: 'Event',
+    containersName: 'Events'
+});
