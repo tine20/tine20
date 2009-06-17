@@ -94,20 +94,20 @@
 
 /***** node classes ******/
 
-.node_unread span {
+.felamimail-node-unread span {
     font-weight: bold;
 }
 
-.node_trash .x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/places/user-trash.png) !important;
+.felamimail-node-trash .x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/user-trash.png);
 }
 
-.node_marked .x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/places/folder-red.png) !important;
+.felamimail-node-marked .x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder-red.png);
 }
 
-.node_account .x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/places/mail-folder-inbox.png) !important;
+.felamimail-node-account .x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/mail-folder-inbox.png);
 }
 
 /***** email composing dialog ******/

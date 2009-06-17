@@ -103,7 +103,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             text: record.get('name'),
             qtip: record.get('host'),
             leaf: false,
-            cls: 'node_account',
+            cls: 'felamimail-node-account',
             show_marked_folder: (record.get('show_marked_folder')) ? record.get('show_marked_folder') : 0,
             account_id: record.data.id,
             listeners: {
@@ -123,7 +123,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             text: 'Marked', //this.app.il8n._('Marked'),
                             //qtip: this.app.il8n._('Contains marked messages'),
                             leaf: true,
-                            cls: 'node_marked',
+                            cls: 'felamimail-node-marked',
                             account_id: record.data.id
                         });
                 
@@ -342,11 +342,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
             if (node.attributes.unreadcount == 1 && change == 1) {
                 // 0 -> 1
-                node.getUI().addClass('node_unread');
+                node.getUI().addClass('felamimail-node-unread');
             }
         } else {
             node.setText(node.attributes.localname);
-            node.getUI().removeClass('node_unread');
+            node.getUI().removeClass('felamimail-node-unread');
         }
     },
     
@@ -524,13 +524,13 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
 
         if (attr.unreadcount > 0) {
             node.text = node.text + ' (' + attr.unreadcount + ')';
-            node.cls = 'node_unread x-tree-node-collapsed';
+            node.cls = 'felamimail-node-unread x-tree-node-collapsed';
         }
                 
         // show trash icon for trash folder of account
         if (account) {
             if (account.get('trash_folder') == attr.globalname) {
-                node.cls = 'node_trash';
+                node.cls = 'felamimail-node-trash';
             }
         }
         
