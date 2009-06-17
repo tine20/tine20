@@ -23,7 +23,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     layout: 'border',
     
     initComponent: function() {
-        this.recordClass = Tine.Calendar.Event;
+        this.recordClass = Tine.Calendar.Model.Event;
         
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
@@ -253,7 +253,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (! event) {
-            event = new Tine.Calendar.Event({
+            event = new Tine.Calendar.Model.Event({
                 container_id: this.app.getMainScreen().getTreePanel().getAddCalendar()
             }, 0);
         }
@@ -263,7 +263,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             listeners: {
                 scope: this,
                 update: function(eventJson) {
-                    var updatedEvent = new Tine.Calendar.Event(Ext.util.JSON.decode(eventJson), event.id);
+                    var updatedEvent = new Tine.Calendar.Model.Event(Ext.util.JSON.decode(eventJson), event.id);
                     
                     var panel = this.getCalendarPanel(this.activeView);
                     panel.onUpdateEvent(updatedEvent);
@@ -355,7 +355,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             var store = new Ext.data.Store({
                 //autoLoad: true,
                 id: 'id',
-                fields: Tine.Calendar.Event,
+                fields: Tine.Calendar.Model.Event,
                 proxy: Tine.Calendar.backend,
                 reader: new Ext.data.JsonReader({}), //Tine.Calendar.backend.getReader(),
                 listeners: {

@@ -7,10 +7,10 @@
  * @version     $Id$
  */
 
-Ext.ns('Tine.Calendar');
+Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
 
 // Event model
-Tine.Calendar.EventArray = Tine.Tinebase.Model.genericFields.concat([
+Tine.Calendar.Model.EventArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'dtend', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'transp' },
@@ -56,7 +56,7 @@ Tine.Calendar.EventArray = Tine.Tinebase.Model.genericFields.concat([
 /**
  * Event record definition
  */
-Tine.Calendar.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.EventArray, {
+Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.EventArray, {
     appName: 'Calendar',
     modelName: 'Event',
     idProperty: 'id',
@@ -77,12 +77,12 @@ if (Tine.Tinebase.widgets) {
     Tine.Calendar.backend = new Tine.Tinebase.widgets.app.JsonBackend({
         appName: 'Calendar',
         modelName: 'Event',
-        recordClass: Tine.Calendar.Event
+        recordClass: Tine.Calendar.Model.Event
     });
 } else {
     Tine.Calendar.backend = new Tine.Tinebase.data.MemoryBackend({
         appName: 'Calendar',
         modelName: 'Event',
-        recordClass: Tine.Calendar.Event
+        recordClass: Tine.Calendar.Model.Event
     });
 }

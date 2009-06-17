@@ -73,7 +73,7 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
         this.calSelector = new Tine.widgets.container.TreePanel({
             region: 'center',
             app: Tine.Tinebase.appMgr.get('Calendar'),
-            recordClass: Tine.Calendar.Event,
+            recordClass: Tine.Calendar.Model.Event,
             allowMultiSelection: true,
             afterRender: Tine.widgets.container.TreePanel.prototype.afterRender.createSequence(function() {
                 this.selectPath('/root/all/user');

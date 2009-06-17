@@ -17,21 +17,21 @@ Tine.Calendar.MonthView = function(config){
         /**
          * @event click
          * fired if an event got clicked
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          * @param {Ext.EventObject} e
          */
         'click',
         /**
          * @event contextmenu
          * fired if an event got contextmenu 
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          * @param {Ext.EventObject} e
          */
         'contextmenu',
         /**
          * @event dblclick
          * fired if an event got dblclicked
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          * @param {Ext.EventObject} e
          */
         'dblclick',
@@ -52,14 +52,14 @@ Tine.Calendar.MonthView = function(config){
          * @event addEvent
          * fired when a new event got inserted
          * 
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          */
         'addEvent',
         /**
          * @event updateEvent
          * fired when an event go resised/moved
          * 
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          */
         'updateEvent'
     );
@@ -104,7 +104,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     denyDragOnMissingEditGrant: true,
     /**
-     * @property {Tine.Calendar.Event} activeEvent
+     * @property {Tine.Calendar.Model.Event} activeEvent
      * @private
      */
     activeEvent: null,
@@ -169,7 +169,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     /**
      * gets currentlcy active event
      * 
-     * @return {Tine.Calendar.Event} event
+     * @return {Tine.Calendar.Model.Event} event
      */
     getActiveEvent: function() {
         return this.activeEvent;
@@ -424,7 +424,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
     /**
      * @private
-     * @param {Tine.Calendar.Event} event
+     * @param {Tine.Calendar.Model.Event} event
      */
     insertEvent: function(event) {
         event.ui = new Tine.Calendar.MonthViewEventUI(event);
@@ -826,7 +826,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     /**
      * sets currentlcy active event
      * 
-     * @param {Tine.Calendar.Event} event
+     * @param {Tine.Calendar.Model.Event} event
      *
     setActiveEvent: function(event) {
         if (this.activeEvent) {
@@ -867,7 +867,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * sets currentlcy active event
      * 
      * NOTE: active != selected
-     * @param {Tine.Calendar.Event} event
+     * @param {Tine.Calendar.Model.Event} event
      */
     setActiveEvent: function(event) {
         this.activeEvent = event || null;

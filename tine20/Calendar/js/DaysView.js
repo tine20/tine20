@@ -17,21 +17,21 @@ Tine.Calendar.DaysView = function(config){
         /**
          * @event click
          * fired if an event got clicked
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          * @param {Ext.EventObject} e
          */
         'click',
         /**
          * @event contextmenu
          * fired if an event got contextmenu 
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          * @param {Ext.EventObject} e
          */
         'contextmenu',
         /**
          * @event dblclick
          * fired if an event got dblclicked
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          * @param {Ext.EventObject} e
          */
         'dblclick',
@@ -52,14 +52,14 @@ Tine.Calendar.DaysView = function(config){
          * @event addEvent
          * fired when a new event got inserted
          * 
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          */
         'addEvent',
         /**
          * @event updateEvent
          * fired when an event go resised/moved
          * 
-         * @param {Tine.Calendar.Event} event
+         * @param {Tine.Calendar.Model.Event} event
          */
         'updateEvent'
     );
@@ -115,7 +115,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     editing: false,
     /**
-     * @property {Tine.Calendar.Event} activeEvent
+     * @property {Tine.Calendar.Model.Event} activeEvent
      * @private
      */
     activeEvent: null,
@@ -439,7 +439,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * sets currentlcy active event
      * 
      * NOTE: active != selected
-     * @param {Tine.Calendar.Event} event
+     * @param {Tine.Calendar.Model.Event} event
      */
     setActiveEvent: function(event) {
         this.activeEvent = event || null;
@@ -448,7 +448,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * gets currentlcy active event
      * 
-     * @return {Tine.Calendar.Event} event
+     * @return {Tine.Calendar.Model.Event} event
      */
     getActiveEvent: function() {
         return this.activeEvent;
@@ -626,7 +626,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.fireEvent('dblclick', event, e);
         } else if (dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
-            var event = new Tine.Calendar.Event({
+            var event = new Tine.Calendar.Model.Event({
                 id: newId,
                 dtstart: dtStart, 
                 dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1)/*.add(Date.SECOND, -1)*/,
@@ -652,7 +652,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var dtStart = this.getTargetDateTime(e);
         if (! this.editing && dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
-            var event = new Tine.Calendar.Event({
+            var event = new Tine.Calendar.Model.Event({
                 id: newId,
                 dtstart: dtStart, 
                 dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24)/*.add(Date.SECOND, -1)*/ : dtStart.add(Date.MINUTE, this.timeGranularity/2),

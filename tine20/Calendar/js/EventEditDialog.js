@@ -29,7 +29,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'EventEditWindow_',
     appName: 'Calendar',
-    recordClass: Tine.Calendar.Event,
+    recordClass: Tine.Calendar.Model.Event,
     recordProxy: Tine.Calendar.backend,
     showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
@@ -38,6 +38,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     // note: we need up use new action updater here or generally in the widget!
     evalGrants: false,
+    
+    /**
+     * @property {Ext.data.Store}
+     */
+    attendeeStore: null,
     
     afterRender: function() {
         Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
@@ -49,6 +54,20 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.setTabHeight.defer(100, this);
     },
     
+    getAttendeeGrid: function() {
+        return {
+            xtype: 'grid',
+            store: this.attendeeStore,
+            columns: [
+                { dataIndex: 'role', width: 100, header: this.app.i18n._('Role') },
+                { dataIndex: 'quantity', width: 50, header: ' ' },
+                { dataIndex: 'user_type', width: 20, header: ' ' },
+                { dataIndex: 'user_id', width: 300, header: this.app.i18n._('Name') },
+                { dtatIndex: 'status', width: 150, header: this.app.i18n._('Status') }
+            ]
+            
+        }
+    },
     
     /**
      * returns dialog
@@ -185,6 +204,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
+    },
+    
+    initComponent: function() {
+        Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
+        
+        this.attendeeStore = new Ext.data.Store({
+            fields: Tine.Calendar.Model.Attender
+        });
     },
     
     isValid: function() {
