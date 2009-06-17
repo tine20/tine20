@@ -8,6 +8,7 @@
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         add flagged/'starred' filter
+ * TODO         add show source code function
  */
  
 Ext.namespace('Tine.Felamimail');
