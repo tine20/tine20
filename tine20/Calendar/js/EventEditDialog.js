@@ -49,6 +49,30 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
     },
     
+    onBeforeAttenderEdit: function(o) {
+        if (o.field == 'status') {
+            // status setting is not always allowed
+            if (! o.record.get('status_authkey')) {
+                o.cancel = true;
+            }
+            return;
+        }
+        
+        if (! this.record.get('editGrant')) {
+            o.cancel = true;
+            return;
+        }
+        
+        // don't allow to set anything besides quantity for persistent attendee
+        if (o.record.get('id')) {
+            o.cancel = true;
+            if (o.field == 'quantity' && o.record.get('user_type') == 'resource') {
+                o.cancel = false;
+            }
+            return;
+        }
+    },
+    
     onResize: function() {
         Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
         this.setTabHeight.defer(100, this);
@@ -56,12 +80,17 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     getAttendeeGrid: function() {
         return {
-            xtype: 'grid',
+            xtype: 'editorgrid',
             store: this.attendeeStore,
             title: this.app.i18n._('Attendee'),
             autoExpandColumn: 'user_id',
+            clicksToEdit: 1,
             plugins: [new Ext.ux.grid.GridViewMenuPlugin({})],
             enableHdMenu: false,
+            listeners: {
+                scope: this,
+                beforeedit: this.onBeforeAttenderEdit
+            },
             columns: [{
                 id: 'role',
                 dataIndex: 'role',
@@ -101,7 +130,23 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 width: 100,
                 sortable: true,
                 header: this.app.i18n._('Status'),
-                renderer: this.renderAttenderStatus.createDelegate(this)
+                renderer: this.renderAttenderStatus.createDelegate(this),
+                editor: new Ext.form.ComboBox({
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    value         : null,
+                    forceSelection: true,
+                    store         : [
+                        ['NEEDS-ACTION', ('No response')],
+                        ['ACCEPTED',     ('Accepted')   ],
+                        ['DECLINED',     ('Declined')   ],
+                        ['TENTATIVE',    ('Tentative')  ]
+                    ]
+                    
+                })
             }]
         }
     },
@@ -293,9 +338,23 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Ext.each(attendee, function(attender) {
                 this.attendeeStore.add(new Tine.Calendar.Model.Attender(attender, attender.id));
             }, this);
+            
+            if (this.record.get('editGrant')) {
+                this.attendeeStore.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 0)]);
+            }
         }
         
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
+    },
+    
+    renderAttenderName: function(name, metadata, attender) {
+        if (name && name.accountDisplayName) {
+            return name.accountDisplayName;
+        }
+    },
+    
+    renderAttenderQuantity: function(quantity, metadata, attender) {
+        return quantity > 1 ? quantity : '';
     },
     
     renderAttenderRole: function(role) {
@@ -312,30 +371,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
     
-    renderAttenderQuantity: function(quantity, metadata, event) {
-        return quantity > 1 ? quantity : '';
-    },
-    
-    renderAttenderType: function(type, metadata, event) {
-        switch (type) {
-            case 'user':
-                metadata.css = 'renderer_accountUserIcon';
-                break;
-            case 'group':
-                metadata.css = 'renderer_accountGroupIcon';
-                break;
-            default:
-                metadata.css = 'cal-attendee-type-' + type;
-                break;
-        }
-        return '';
-    },
-    
-    renderAttenderName: function(name, metadata, event) {
-        return name.accountDisplayName;
-    },
-    
-    renderAttenderStatus: function(status, metadata, event) {
+    renderAttenderStatus: function(status, metadata, attender) {
         switch (status) {
             case 'NEEDS-ACTION':
                 return this.app.i18n._('No response');
@@ -353,7 +389,21 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 return this.app.i18n._hidden(status);
                 break;
         }
-        
+    },
+    
+    renderAttenderType: function(type, metadata, attender) {
+        switch (type) {
+            case 'user':
+                metadata.css = 'renderer_accountUserIcon';
+                break;
+            case 'group':
+                metadata.css = 'renderer_accountGroupIcon';
+                break;
+            default:
+                metadata.css = 'cal-attendee-type-' + type;
+                break;
+        }
+        return '';
     },
     
     setTabHeight: function() {
