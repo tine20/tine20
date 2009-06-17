@@ -547,7 +547,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     scope: this,
                     success: function() {
                         this.deleteMask.hide();
-                        this.store.load({});
+                        this.onAfterDelete();
                     },
                     failure: function () {
                         this.deleteMask.hide();
@@ -562,5 +562,13 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 }
             }
         }, this);
+    },
+    
+    /**
+     * do something after deletion of records
+     * - reload the store
+     */
+    onAfterDelete: function() {
+        this.store.load({});
     }
 });
