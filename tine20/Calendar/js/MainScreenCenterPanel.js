@@ -257,7 +257,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         Tine.Calendar.EventEditDialog.openWindow({
-            record: event,
+            record: Ext.util.JSON.encode(event.data),
             listeners: {
                 scope: this,
                 update: function(eventJson) {
