@@ -280,7 +280,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                 // decode folder name
                 if (extension_loaded('mbstring')) {
                     $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
-                    $folderData['globalName'] = mb_convert_encoding($folderData['globalName'], "utf-8", "UTF7-IMAP");
+                    //$folderData['globalName'] = mb_convert_encoding($folderData['globalName'], "utf-8", "UTF7-IMAP");
                 }
                 
                 $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $folderData['globalName']);
