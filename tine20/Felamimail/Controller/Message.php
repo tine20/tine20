@@ -343,7 +343,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail = new Tinebase_Mail('UTF-8');
         
         // build mail content
-        $mail->setBodyText(strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_message->body)));
+        $mail->setBodyText($this->_removeHtml($_message->body));
         $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
         
         // set from
@@ -767,6 +767,21 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // spaces
         $result = preg_replace('/( {2,}|^ )/em', 'str_repeat("&nbsp;", strlen("\1"))', $result);
+        
+        return $result;
+    }
+    
+    /**
+     * remove all html entities
+     *
+     * @param string $_content
+     * @return string
+     */
+    protected function _removeHtml($_content)
+    {
+        $result = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_content));
+        $result = preg_replace('/\<br(\s*)?\/?\>/i', "\n", $result);
+        $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
         
         return $result;
     }
