@@ -108,8 +108,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo remove caching/counting here when we have and use the updateFolderStatus function
-     * @todo check if seenCountByFolderId is @deprecated 
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
@@ -130,21 +128,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $result = $this->_folderBackend->search($filter);
         }
         
-        // @todo remove-->
-        $messageCacheBackend = new Felamimail_Backend_Cache_Sql_Message();
-        //$cacheController = Felamimail_Controller_Cache::getInstance();
-        foreach ($result as $folder) {
-            //$folder = $cacheController->update($folder);
-            if ($folder->cache_status == 'complete') {
-                $seenCount = $messageCacheBackend->seenCountByFolderId($folder->getId());
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Get unread count for ' . $folder->globalname
-                    . ': totalcount = ' . $folder->totalcount . ' / seencount = ' . $seenCount
-                );
-                $folder->unreadcount = $folder->totalcount - $seenCount;
-            }
-        }
-        //<--remove
+        $result = $this->updateFolderStatus($filterValues['account_id'], $result);
         
         $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
         
@@ -350,18 +334,23 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * get status of all folders of account
      *
      * @param string $_accountId
+     * @param Tinebase_Record_RecordSet $_folders [optional]
      * @return Tinebase_Record_RecordSet with updated folder status
      * 
      * @todo update folders in db?
      * @todo use $messageCacheBackend->seenCountByFolderId if offline/no connection to imap?
      */
-    public function updateFolderStatus($_accountId)
+    public function updateFolderStatus($_accountId, $_folders = NULL)
     {
-        // get all folders of account
-        $filter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'account_id',  'operator' => 'equals', 'value' => $_accountId)
-        ));
-        $folders = $this->_folderBackend->search($filter);
+        if ($_folders === NULL) {
+            // get all folders of account
+            $filter = new Felamimail_Model_FolderFilter(array(
+                array('field' => 'account_id',  'operator' => 'equals', 'value' => $_accountId)
+            ));
+            $folders = $this->_folderBackend->search($filter);
+        } else {
+            $folders = $_folders;
+        }
         
         $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
         
