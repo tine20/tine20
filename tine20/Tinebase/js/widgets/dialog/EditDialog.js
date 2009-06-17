@@ -227,8 +227,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         } else {
             if (! typeof this.record.beginEdit != 'function') {
-                var data = Ext.util.JSON.decode(this.record);
-                this.record = new this.recordClass(data);
+                this.record = this.recordProxy.recordReader({responseText: this.record});
             }
             this.onRecordLoad();
         }
