@@ -139,3 +139,14 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
         status: 'NEEDS-ACTION'
     };
 };
+
+Tine.Calendar.Model.Attender.prototype.getUserId = function() {
+    var user_id = this.get('user_id');
+    if (user_id) {
+        user_id = user_id.data? user_id.data : user_id;
+        user_id = user_id.accountId ? user_id.accountId : user_id;
+        user_id = user_id.account_id ? user_id.account_id : user_id;
+    }
+    
+    return user_id;
+};
