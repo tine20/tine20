@@ -599,6 +599,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }
     },
         
+    /**
+     * add new account button
+     * 
+     * @param {} button
+     * @param {} event
+     */
     onAddAccount: function(button, event) {
         var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
             record: null,
@@ -614,6 +620,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 }
             }
         });        
+    },
+    
+    onAfterDelete: function() {
+        // get update folder status
+        this.app.getMainScreen().getTreePanel().updateFolderStatus(false);
+        this.store.load({});
     },
     
     /********************************* helper funcs **************************************/

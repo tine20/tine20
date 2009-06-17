@@ -134,7 +134,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateFolders()
     {
-        $result = $this->_json->updateFolderStatus('default');
+        $result = $this->_json->updateFolderStatus('default', '');
         $inbox = array();
         foreach ($result as $folder) {
             if ($folder['globalname'] == 'INBOX') {
@@ -150,7 +150,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
         
         // get inbox status again
-        $result = $this->_json->updateFolderStatus('default');
+        $result = $this->_json->updateFolderStatus('default', '');
         $inbox = array();
         foreach ($result as $folder) {
             if ($folder['globalname'] == 'INBOX') {

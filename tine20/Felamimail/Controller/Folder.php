@@ -335,21 +335,32 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @param string $_accountId
      * @param Tinebase_Record_RecordSet $_folders [optional]
+     * @param string $_folderId [optional]
      * @return Tinebase_Record_RecordSet with updated folder status
+     * @throws Felamimail_Exception
      * 
      * @todo update folders in db?
      * @todo use $messageCacheBackend->seenCountByFolderId if offline/no connection to imap?
      */
-    public function updateFolderStatus($_accountId, $_folders = NULL)
+    public function updateFolderStatus($_accountId, $_folders = NULL, $_folderId = NULL)
     {
-        if ($_folders === NULL) {
+        if ($_folders === NULL && ($_folderId === NULL || empty($_folderId))) {
             // get all folders of account
             $filter = new Felamimail_Model_FolderFilter(array(
                 array('field' => 'account_id',  'operator' => 'equals', 'value' => $_accountId)
             ));
             $folders = $this->_folderBackend->search($filter);
         } else {
-            $folders = $_folders;
+            if ($_folderId !== NULL && ! empty($_folderId)) {
+                $folders = new Tinebase_Record_RecordSet(
+                    'Felamimail_Model_Folder', 
+                    array($this->_folderBackend->get($_folderId))
+                );
+            } else if ($_folders !== NULL) {
+                $folders = $_folders;
+            } else {
+                throw new Felamimail_Exception("Wrong params: " . $_folderId);
+            }
         }
         
         $imap = Felamimail_Backend_ImapFactory::factory($_accountId);

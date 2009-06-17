@@ -333,20 +333,63 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {} change
      * 
      */
-    updateUnreadCount: function(change) {
+    updateUnreadCount: function(change, unreadcount) {
         
         var node = this.getSelectionModel().getSelectedNode();
-        node.attributes.unreadcount = Number(node.attributes.unreadcount) + Number(change);
+        if (! change && unreadcount) {
+            change = Number(unreadcount) - Number(node.attributes.unreadcount);
+        }
         
-        if (node.attributes.unreadcount > 0) {
-            node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
-            if (node.attributes.unreadcount == 1 && change == 1) {
-                // 0 -> 1
-                node.getUI().addClass('felamimail-node-unread');
+        if (Number(change) != 0) {
+            node.attributes.unreadcount = Number(node.attributes.unreadcount) + Number(change);
+            
+            if (node.attributes.unreadcount > 0) {
+                node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
+                if (node.attributes.unreadcount == 1 && change == 1) {
+                    // 0 -> 1
+                    node.getUI().addClass('felamimail-node-unread');
+                }
+            } else {
+                node.setText(node.attributes.localname);
+                node.getUI().removeClass('felamimail-node-unread');
             }
-        } else {
-            node.setText(node.attributes.localname);
-            node.getUI().removeClass('felamimail-node-unread');
+        }
+    },
+    
+    /**
+     * update folder status of all visible (?) folders
+     * 
+     * TODO make this work for multiple accounts
+     * TODO make recursive work for delayed task or ping update
+     */
+    updateFolderStatus: function(recursive) {
+        
+        if (recursive) {
+            Ext.Msg.alert('not implemented yet');
+            return;
+        }
+        
+        // get account id
+        var node = this.getSelectionModel().getSelectedNode();
+        var folderId = node.attributes.folder_id;
+        var accountId = node.attributes.account_id;
+        
+        // update folder status
+        if (folderId && accountId) {
+            Ext.Ajax.request({
+                params: {
+                    method: 'Felamimail.updateFolderStatus',
+                    folderId: folderId,
+                    accountId: accountId
+                },
+                scope: this,
+                success: function(_result, _request) {
+                    // update folder counters / class
+                    var folderData = Ext.util.JSON.decode(_result.responseText);
+                    //console.log(folderData);
+                    this.updateUnreadCount(null, folderData[0].unreadcount);
+                }
+            });
         }
     },
     
@@ -363,7 +406,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     onClick: function(node) {
         
         if (node.expandable) {
-            console.log('expandable');
+            //console.log('expandable');
             node.expand();
         }
         node.select();
