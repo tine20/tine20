@@ -226,6 +226,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 this.onRecordLoad();
             }
         } else {
+            if (! typeof this.record.beginEdit != 'function') {
+                var data = Ext.util.JSON.decode(this.record);
+                this.record = new this.recordClass(data);
+            }
             this.onRecordLoad();
         }
     },
