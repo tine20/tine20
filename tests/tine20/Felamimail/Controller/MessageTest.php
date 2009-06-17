@@ -205,7 +205,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals('multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary=------------enig43E7BAD372988B39EC5ECE0B', $completeMessage->headers['content-type']);
         $this->assertEquals('signature.asc', $attachments[0]['filename']);
-        $this->assertEquals('# Christian Hoffmann  (12 Apr 2009)
+        $this->assertEquals('# Christian Hoffmann &lt;<a href="#" id="123:hoffie@gentoo.org" class="tinebase-email-link">hoffie@gentoo.org</a>&gt; (12 Apr 2009)
 # Masked for security (bug 265756), unmaintained upstream (last release
 # two years ago), will be removed in 30 days. Use dev-lang/php with
 # USE=zip as a replacement, which is actively maintained and has more
