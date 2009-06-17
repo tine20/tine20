@@ -72,7 +72,7 @@ Tine.Login = {
                     style: 'padding-left: 174px;',
                     width: 350,
                     border: false,
-                    html: '<img src="' + this.loginLogo +'" />'
+                    html: '<a target="_blank" href="http://www.tine20.org/" border="0"><img src="' + this.loginLogo +'" /></a>'
                 }, new Tine.widgets.LangChooser({
                     
                 }), {
