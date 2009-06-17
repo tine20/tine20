@@ -332,7 +332,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     renderAttenderName: function(name, metadata, event) {
-        return name;
+        return name.accountDisplayName;
     },
     
     renderAttenderStatus: function(status, metadata, event) {
