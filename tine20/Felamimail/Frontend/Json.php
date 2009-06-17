@@ -149,6 +149,19 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
     
+    /**
+     * update folder status
+     *
+     * @param string $accountId
+     * @return array
+     */
+    public function updateFolderStatus($accountId)
+    {
+        $result = Felamimail_Controller_Folder::getInstance()->updateFolderStatus($accountId);
+        
+        return $result->toArray();
+    }
+    
     /***************************** messages funcs *******************************/
     
     /**

@@ -129,6 +129,46 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * testUpdateFolders
+     *
+     */
+    public function testUpdateFolders()
+    {
+        $result = $this->_json->updateFolderStatus('default');
+        $inbox = array();
+        foreach ($result as $folder) {
+            if ($folder['globalname'] == 'INBOX') {
+                $inbox = $folder;
+                break;
+            }
+        }
+        $oldUnreadCount = $inbox['unreadcount'];
+        $oldTotalCount = $inbox['totalcount'];
+        $oldRecentCount = $inbox['recentcount'];
+        
+        $messageToSend = $this->_getMessageData();
+        $message = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
+        
+        // get inbox status again
+        $result = $this->_json->updateFolderStatus('default');
+        $inbox = array();
+        foreach ($result as $folder) {
+            if ($folder['globalname'] == 'INBOX') {
+                $inbox = $folder;
+                break;
+            }
+        }
+        
+        // checks
+        $this->assertEquals($oldUnreadCount+1, $inbox['unreadcount']);
+        $this->assertEquals($oldTotalCount+1, $inbox['totalcount']);
+        $this->assertEquals($oldRecentCount+1, $inbox['recentcount']);
+        
+        // delete message from inbox
+        $this->_deleteMessage($messageToSend['subject']);
+    }
+    
+    /**
      * test search messages
      *
      */

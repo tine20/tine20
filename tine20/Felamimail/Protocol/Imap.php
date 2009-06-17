@@ -175,6 +175,9 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
                 case '[UIDNEXT':
                     $result['uidnext'] = (int)$tokens[2];
                     break;
+                case '[UNSEEN':
+                    $result['unseen'] = (int)$tokens[2];
+                    break;
                 default:
                     // ignore
             }
@@ -183,9 +186,38 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         if ($tokens[0] != 'OK') {
             return false;
         }
+        
         return $result;
     }
 
+    /**
+     * get status of a folder (unseen, recent, ...)
+     * 
+     * @param  string $box which folder to change to or examine
+     * @return bool|array false if error, array with returned information
+     *                    otherwise (messages, recent, unseen)
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function getFolderStatus($box = 'INBOX')
+    {
+        $command = "STATUS";
+        $params = '(MESSAGES RECENT UNSEEN)';
+        $this->sendRequest($command, array($this->escapeString($box), $params), $tag);
+
+        $result = array();
+        while (!$this->readLine($tokens, $tag)) {
+            $result['messages'] = (isset($tokens[2][1])) ? (int)$tokens[2][1] : 0;
+            $result['recent']   = (isset($tokens[2][3])) ? (int)$tokens[2][3] : 0;
+            $result['unseen']   = (isset($tokens[2][5])) ? (int)$tokens[2][5] : 0;
+        }
+
+        if ($tokens[0] != 'OK') {
+            return false;
+        }
+        
+        return $result;
+    }
+    
     /**
      * copy message set from current folder to other folder
      *

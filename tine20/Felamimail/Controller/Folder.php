@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add getFolderStatus function that returns unread/recent/.. counters for all folders for one account
  * @todo        add cleanup routine for deleted (by other clients)/outofdate folders?
  */
 
@@ -109,7 +108,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param bool $_getRelations
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo remove caching/counting here when we have the unread/recent check recursive function
+     * @todo remove caching/counting here when we have and use the updateFolderStatus function
+     * @todo check if seenCountByFolderId is @deprecated 
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
@@ -344,6 +344,37 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             . count($messages) . ' messages from folder with id ' . $_folderId . '.'
         );
         return Felamimail_Controller_Message::getInstance()->delete($messages->getArrayOfIds());
+    }
+    
+    /**
+     * get status of all folders of account
+     *
+     * @param string $_accountId
+     * @return Tinebase_Record_RecordSet with updated folder status
+     * 
+     * @todo update folders in db?
+     * @todo use $messageCacheBackend->seenCountByFolderId if offline/no connection to imap?
+     */
+    public function updateFolderStatus($_accountId)
+    {
+        // get all folders of account
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'account_id',  'operator' => 'equals', 'value' => $_accountId)
+        ));
+        $folders = $this->_folderBackend->search($filter);
+        
+        $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
+        
+        // return status of all folders
+        foreach ($folders as $folder) {
+            $imapFolderStatus = $imap->getFolderStatus($folder->globalname);
+            
+            $folder->unreadcount = (isset($imapFolderStatus['unseen'])) ? $imapFolderStatus['unseen'] : 0;
+            $folder->recentcount = $imapFolderStatus['recent'];
+            $folder->totalcount = $imapFolderStatus['messages'];
+        }
+        
+        return $folders;
     }
     
     /************************************* protected functions *************************************/

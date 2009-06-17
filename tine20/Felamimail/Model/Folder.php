@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
+ * @todo        rename unreadcount -> unseen
  */
 
 /**
@@ -75,7 +76,9 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'system_folder'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'totalcount'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+    // folder status
         'unreadcount'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'recentcount'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // cache/mailbox sync values 
         'uidnext'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'uidvalidity'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),

@@ -137,6 +137,19 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * get folder status
+     * 
+     * @param  Zend_Mail_Storage_Folder|string $globalName global name of folder or instance for subfolder
+     * @return array with folder values
+     */
+    public function getFolderStatus($globalName)
+    {
+        $this->_currentFolder = $globalName;
+        $result = $this->_protocol->getFolderStatus($this->_currentFolder);        
+        return $result;
+    }
+    
+    /**
      * Fetch a message
      *
      * @param int $id number of message
