@@ -71,6 +71,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
             return;
         }
+        
+        if (o.field == 'user_id') {
+            //console.log(this.renderAttenderName(o.value));
+            //o.value = this.renderAttenderName(o.value)
+        }
     },
     
     onResize: function() {
@@ -123,7 +128,23 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 width: 300,
                 sortable: true,
                 header: this.app.i18n._('Name'),
-                renderer: this.renderAttenderName.createDelegate(this)
+                renderer: this.renderAttenderName.createDelegate(this),
+                editor: new Tine.Addressbook.SearchCombo({
+                    setValue: function(name) {
+                        if (name) {
+                            if (typeof name.get == 'function' && name.get('n_fn')) {
+                                name = name.get('n_fn');
+                            } else if (name.accountDisplayName) {
+                                name = name.accountDisplayName;
+                            }
+                        }
+                        Tine.Addressbook.SearchCombo.prototype.setValue.call(this, name);
+                    },
+                    getValue: function() {
+                        return this.selectedRecord;
+                    }
+                })
+                //editor: new Tine.widgets.AccountpickerField({})
             }, {
                 id: 'status',
                 dataIndex: 'status',
@@ -347,9 +368,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
     },
     
-    renderAttenderName: function(name, metadata, attender) {
-        if (name && name.accountDisplayName) {
-            return name.accountDisplayName;
+    renderAttenderName: function(name) {
+        console.log(name);
+        if (name) {
+            if (typeof name.get == 'function' && name.get('n_fn')) {
+                return name.get('n_fn');
+            }
+            if (name.accountDisplayName) {
+                return name.accountDisplayName;
+            }
         }
     },
     
