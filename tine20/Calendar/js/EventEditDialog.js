@@ -60,13 +60,49 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             store: this.attendeeStore,
             title: this.app.i18n._('Attendee'),
             autoExpandColumn: 'user_id',
-            columns: [
-                { id: 'role',      dataIndex: 'role',      width: 70,  sortable: true, header: this.app.i18n._('Role') },
-                { id: 'quantity',  dataIndex: 'quantity',  width: 30,  sortable: true, header: '&#160;', tooltip: this.app.i18n._('Quantity') },
-                { id: 'user_type', dataIndex: 'user_type', width: 30,  sortable: true, header: '&#160;', tooltip: this.app.i18n._('Type') },
-                { id: 'user_id',   dataIndex: 'user_id',   width: 300, sortable: true, header: this.app.i18n._('Name') },
-                { id: 'status',    dataIndex: 'status',    width: 100, sortable: true, header: this.app.i18n._('Status') }
-            ]
+            plugins: [new Ext.ux.grid.GridViewMenuPlugin({})],
+            enableHdMenu: false,
+            columns: [{
+                id: 'role',
+                dataIndex: 'role',
+                width: 70,
+                sortable: true,
+                hidden: true,
+                header: this.app.i18n._('Role'),
+                renderer: this.renderAttenderRole.createDelegate(this)
+            }, {
+                id: 'quantity',
+                dataIndex: 'quantity',
+                width: 40,
+                sortable: true,
+                hidden: true,
+                header: '&#160;',
+                tooltip: this.app.i18n._('Quantity'),
+                renderer: this.renderAttenderQuantity.createDelegate(this)
+            }, {
+                id: 'user_type',
+                dataIndex: 'user_type',
+                width: 20,
+                sortable: true,
+                resizable: false,
+                header: '&#160;',
+                tooltip: this.app.i18n._('Type'),
+                renderer: this.renderAttenderType.createDelegate(this)
+            }, {
+                id: 'user_id',
+                dataIndex: 'user_id',
+                width: 300,
+                sortable: true,
+                header: this.app.i18n._('Name'),
+                renderer: this.renderAttenderName.createDelegate(this)
+            }, {
+                id: 'status',
+                dataIndex: 'status',
+                width: 100,
+                sortable: true,
+                header: this.app.i18n._('Status'),
+                renderer: this.renderAttenderStatus.createDelegate(this)
+            }]
         }
     },
     
@@ -260,6 +296,64 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
+    },
+    
+    renderAttenderRole: function(role) {
+        switch (role) {
+            case 'REQ':
+                return this.app.i18n._('Required');
+                break;
+            case 'OPT':
+                return this.app.i18n._('Optional');
+                break;
+            default:
+                return this.app.i18n._hidden(role);
+                break;
+        }
+    },
+    
+    renderAttenderQuantity: function(quantity, metadata, event) {
+        return quantity > 1 ? quantity : '';
+    },
+    
+    renderAttenderType: function(type, metadata, event) {
+        switch (type) {
+            case 'user':
+                metadata.css = 'renderer_accountUserIcon';
+                break;
+            case 'group':
+                metadata.css = 'renderer_accountGroupIcon';
+                break;
+            default:
+                metadata.css = 'cal-attendee-type-' + type;
+                break;
+        }
+        return '';
+    },
+    
+    renderAttenderName: function(name, metadata, event) {
+        return name;
+    },
+    
+    renderAttenderStatus: function(status, metadata, event) {
+        switch (status) {
+            case 'NEEDS-ACTION':
+                return this.app.i18n._('No response');
+                break;
+            case 'ACCEPTED':
+                return this.app.i18n._('Accepted');
+                break;
+            case 'DECLINED':
+                return this.app.i18n._('Declined');
+                break;
+            case 'TENTATIVE':
+                return this.app.i18n._('Tentative');
+                break;
+            default:
+                return this.app.i18n._hidden(status);
+                break;
+        }
+        
     },
     
     setTabHeight: function() {
