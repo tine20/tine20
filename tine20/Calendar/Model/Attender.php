@@ -101,7 +101,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     {
         
         if ($_name == 'user_id' && is_array($_value)) {
-            $_value = $_value['accountId'];
+            if (array_key_exists('accountId', $_value)) {
+                $_value = $_value['accountId'];
+            } else if (array_key_exists('account_id', $_value)) {
+                $_value = $_value['account_id'];
+            }
         }
         
         parent::__set($_name, $_value);
