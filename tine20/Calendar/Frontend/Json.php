@@ -140,7 +140,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 if (! array_key_exists($type, $typeMap)) {
                     $typeMap[$type] = array();
                 }
-                $typeMap[$type][] = $attendee->$_idProperty;
+                $typeMap[$type][] = $attender->$_idProperty;
             }
         }
         
@@ -148,6 +148,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($typeMap as $type => $ids) {
             switch ($type) {
                 case 'user':
+                    Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
                     $typeMap[$type] = Tinebase_User::getInstance()->getMultiple(array_unique($ids));
                     break;
                 case 'group':
