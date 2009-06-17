@@ -89,4 +89,21 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     protected $_datetimeFields = array();
     
+    /**
+     * sets record related properties
+     * 
+     * @param string _name of property
+     * @param mixed _value of property
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @return void
+     */
+    public function __set($_name, $_value)
+    {
+        
+        if ($_name == 'user_id' && is_array($_value)) {
+            $_value = $_value['accountId'];
+        }
+        
+        parent::__set($_name, $_value);
+    }
 }
