@@ -52,7 +52,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onBeforeAttenderEdit: function(o) {
         if (o.field == 'status') {
             // status setting is not always allowed
-            if (! o.record.get('status_authkey')) {
+            if (!o.record.getUserId() == Tine.Tinebase.registry.get('currentAccount').accountId && !o.record.get('status_authkey')) {
                 o.cancel = true;
             }
             return;
@@ -368,8 +368,24 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
     },
     
+    onRecordUpdate: function() {
+        Tine.Calendar.EventEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+        
+        var attendee = [];
+        this.attendeeStore.each(function(attender) {
+            var user_id = attender.getUserId();
+            if (user_id) {
+                var data = attender.data;
+                data.user_id = user_id;
+                attendee.push(data);
+            }
+        }, this);
+        
+        this.record.set('attendee', '');
+        this.record.set('attendee', attendee);
+    },
+    
     renderAttenderName: function(name) {
-        console.log(name);
         if (name) {
             if (typeof name.get == 'function' && name.get('n_fn')) {
                 return name.get('n_fn');
