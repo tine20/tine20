@@ -191,7 +191,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No need to get new messages, cache is up to date.');
             
             // check if folder is updating at the moment to show correct message number
-            if ($folder->cache_status == 'updating') {
+            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
                 $result = $messageCount;
             }
         }
@@ -267,8 +267,8 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         $folder = $this->_folderBackend->get($_folderId);
         
         // check status first
-        if ($folder->cache_status != 'incomplete') {
-            if ($folder->cache_status == 'updating') {
+        if ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
+            if ($folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
                 if ($folder->timestamp->compare(Zend_Date::now()->subMinute(5)) == -1) {
                     // it seems that the old import process ended (timestamp is older than 5 mins) -> start a new one
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
@@ -301,7 +301,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         $backendFolderValues    = $backend->selectFolder($folder->globalname);
 
         // update folder and add timestamp to folder to check for deadlocks (status = updating & timestamp is older than 5 mins)
-        $folder->cache_status = 'updating';
+        $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
         $folder->timestamp = Zend_Date::now();
         $folder = $this->_folderBackend->update($folder);
         
@@ -332,7 +332,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         
         // update folder
         $folder->totalcount = $messageCount;
-        $folder->cache_status = 'complete';
+        $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
         $folder->cache_lowest_uid = 0;
         $folder = $this->_folderBackend->update($folder);
         
@@ -360,7 +360,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         $folder->totalcount = 0;
         $folder->unreadcount = 0;
         $folder->uidvalidity = 0;
-        $folder->cache_status = 'empty';
+        $folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_EMPTY;
         $folder->cache_lowest_uid = 0;
         $folder = $this->_folderBackend->update($folder);
         
@@ -544,15 +544,15 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         
         if ($_messageCount > $this->_initialNumber) {
             $bottom = $_messageCount - $this->_initialNumber - 1;
-            $_folder->cache_status = 'incomplete';
+            $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
         } else {
             $bottom = 1;
-            $_folder->cache_status = 'complete';
+            $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
         }
         
         $uids = $_backend->getUid($bottom, $_messageCount);
         
-        if ($_folder->cache_status == 'incomplete') {
+        if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
             $_folder->cache_lowest_uid = min($uids); 
         }
         

@@ -84,7 +84,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'uidvalidity'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'cache_status'          => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => 'empty', 
+            Zend_Filter_Input::DEFAULT_VALUE => self::CACHE_STATUS_EMPTY, 
             'InArray' => array(
                 self::CACHE_STATUS_EMPTY, 
                 self::CACHE_STATUS_COMPLETE, 
