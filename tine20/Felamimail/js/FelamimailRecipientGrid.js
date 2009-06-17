@@ -10,6 +10,7 @@
  * TODO         add 'x' to remove recipient / grid row
  * TODO         add name to email address for display
  * TODO         disable horizontal scrollbar
+ * TODO         use 'standard' template for adb search combo with image and both email addresses
  */
  
 Ext.namespace('Tine.Felamimail');
