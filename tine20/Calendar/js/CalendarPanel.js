@@ -107,7 +107,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             scope: this,
             success: function(updatedEvent) {
                 //console.log('Backend returned updated event -> replace event in view');
-                event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.data.id);
+                event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
                 
                 this.store.remove(event);
                 this.store.add(updatedEvent);

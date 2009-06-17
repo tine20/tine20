@@ -261,9 +261,22 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             listeners: {
                 scope: this,
                 update: function(eventJson) {
-                    var updatedEvent = new Tine.Calendar.Model.Event(Ext.util.JSON.decode(eventJson), event.id);
+                    //var updatedEvent = new Tine.Calendar.Model.Event(Ext.util.JSON.decode(eventJson), event.id);
+                    var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
+                    updatedEvent.dirty = true;
                     
                     var panel = this.getCalendarPanel(this.activeView);
+                    var store = panel.getStore();
+                    
+                    event = store.getById(event.id);
+                    if (event) {
+                        store.remove(event);
+                        store.add(updatedEvent);
+                        
+                        //event = store.getById(updatedEvent);
+                        //event.ui.markDirty();
+                    }
+                    
                     panel.onUpdateEvent(updatedEvent);
                 }
             }
