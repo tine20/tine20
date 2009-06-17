@@ -95,6 +95,18 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * returns record prepared for json transport
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     */
+    protected function _recordToJson($_record)
+    {
+        $this->_resolveAttendee($_record->attendee);
+        return parent::_recordToJson($_record);
+    }
+    
+    /**
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
@@ -104,7 +116,54 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
+        $this->_resolveAttendee($_records->attendee);
         
-        return parent::_multipleRecordsToJson($_records);;
+        return parent::_multipleRecordsToJson($_records);
+    }
+    
+    /**
+     * 
+     *
+     * @param array|Tinebase_Record_RecordSet $_attendee 
+     * @param unknown_type $_idProperty
+     * @param unknown_type $_typeProperty
+     */
+    protected function _resolveAttendee($_eventAttendee, $_idProperty='user_id', $_typeProperty='user_type') {
+        $eventAttendee = $_eventAttendee instanceof Tinebase_Record_RecordSet ? array($_eventAttendee) : $_eventAttendee;
+        
+        // build type map 
+        $typeMap = array();
+        
+        foreach ($eventAttendee as $attendee) {
+            foreach ($attendee as $attender) {
+                $type = $attender->$_typeProperty;
+                if (! array_key_exists($type, $typeMap)) {
+                    $typeMap[$type] = array();
+                }
+                $typeMap[$type][] = $attendee->$_idProperty;
+            }
+        }
+        
+        // get all entries
+        foreach ($typeMap as $type => $ids) {
+            switch ($type) {
+                case 'user':
+                    $typeMap[$type] = Tinebase_User::getInstance()->getMultiple(array_unique($ids));
+                    break;
+                case 'group':
+                //    Tinebase_Group::getInstance()->getM
+                default:
+                    throw new Exception("type $type not yet supported");
+                    break;
+            }
+        }
+        
+        // sort entreis in
+        foreach ($eventAttendee as $attendee) {
+            foreach ($attendee as $attender) {
+                $attendeeTypeSet = $typeMap[$attender->$_typeProperty];
+                $attender->$_idProperty = $attendeeTypeSet[$attendeeTypeSet->getIndexById($attender->$_idProperty)];
+            }
+        }
     }
 }
