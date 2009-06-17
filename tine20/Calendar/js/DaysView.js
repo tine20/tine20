@@ -752,6 +752,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onUpdate : function(ds, event){
+        // don't update events while being created
+        if (event.get('id').match(/new/)) {
+            return;
+        }
+        
         // relayout original context
         var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_event')) ? 
             this.parallelWholeDayEventsRegistry : 
