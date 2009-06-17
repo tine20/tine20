@@ -93,6 +93,14 @@ Tine.Tinebase.tineInit = {
             var vp = Ext.getBody().getSize();
             var p = Ext.get('tine-viewport-waitcycle');
             p.moveTo(vp.width/2 - this.splash.width/2, vp.height/2 - this.splash.height/2);
+            
+            var by = Ext.get('tine-viewport-poweredby');
+            if (by) {
+                var bySize = by.getSize();
+                by.setTop(vp.height/2 - bySize.height);
+                by.setLeft(vp.width/2 - bySize.width);
+                by.setStyle({'z-index': 100000})
+            }
         };
         
         this.splash = {
@@ -101,7 +109,7 @@ Tine.Tinebase.tineInit = {
             layout: 'fit',
             width: 16,
             height: 16,
-            html: '<div class="loading-indicator" width="16px" height="16px">&#160;</div>',
+            html: '<div class="loading-indicator" width="16px" height="16px">&#160;</div><div id="tine-viewport-poweredby" class="tine-viewport-poweredby" style="position: absolute;">Powered by: <a target="_blank" href="http://www.tine20.org">Tine 2.0</a></div>',
             listeners: {
                 scope: this,
                 render: centerSplash,
