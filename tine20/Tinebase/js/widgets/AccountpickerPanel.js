@@ -62,7 +62,11 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 		this.onTrigger2Click = function(e) {
             if (! this.disabled) {
                 this.dlg = new Tine.widgets.AccountpickerDialog({
-                    TriggerField: this
+                    TriggerField: this,
+                    listeners: {
+                        scope: this,
+                        close: this.onDlgClose
+                    }
                 });
             }
         };
@@ -75,6 +79,17 @@ Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
     // private
     getValue: function() {
         return this.accountId;
+    },
+    
+    // private: only blur if dialog is closed
+    onBlur: function() {
+        if (!this.dlg) {
+            return Tine.widgets.AccountpickerField.superclass.onBlur.apply(this, arguments);
+        }
+    },
+    
+    onDlgClose: function() {
+        this.dlg = null;
     },
     
     setValue: function (value) {
