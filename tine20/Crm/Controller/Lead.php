@@ -142,6 +142,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @return Crm_Model_Lead
      * 
      * @todo make use of Tinebase_Config possible here
+     * @todo add responsible user even if LDAP backend when we have LDAP contacts
      */
     public function getEmptyLead()
     {
@@ -161,19 +162,23 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         // add creator as RESPONSIBLE (only if user backend isn't LDAP)
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
-            $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_currentAccount->getId());
-            $emptyLead->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
-            $emptyLead->relations->addRecord(new Tinebase_Model_Relation(array(
-                'own_id'                 => 0,
-                'own_model'              => 'Crm_Model_Lead',
-                'own_backend'            => Crm_Backend_Factory::SQL,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model'          => 'Addressbook_Model_Contact',
-                'related_backend'        => Addressbook_Backend_Factory::SQL,
-                'related_id'             => $userContact->getId(),
-                'type'                   => 'RESPONSIBLE',
-                'related_record'         => $userContact->toArray()
-            )));
+            try {
+                $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_currentAccount->getId());
+                $emptyLead->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+                $emptyLead->relations->addRecord(new Tinebase_Model_Relation(array(
+                    'own_id'                 => 0,
+                    'own_model'              => 'Crm_Model_Lead',
+                    'own_backend'            => Crm_Backend_Factory::SQL,
+                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => 'Addressbook_Model_Contact',
+                    'related_backend'        => Addressbook_Backend_Factory::SQL,
+                    'related_id'             => $userContact->getId(),
+                    'type'                   => 'RESPONSIBLE',
+                    'related_record'         => $userContact->toArray()
+                )));
+            } catch (Addressbook_Exception_AccessDenied $aea) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add responsible user: ' . $aea->getMessage());
+            }
         }
         
         return $emptyLead;
@@ -255,7 +260,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             $pdfGenerator->generateLeadPdf($_lead);
             $pdfOutput = $pdfGenerator->render();
         } catch ( Zend_Pdf_Exception $e ) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
             $pdfOutput = NULL;
         }
                 
