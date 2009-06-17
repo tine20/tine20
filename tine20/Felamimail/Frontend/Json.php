@@ -10,7 +10,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add getFolderStatus function that returns unread/recent/.. counters for all folders for one account
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -28,49 +27,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $filter
      * @return array
-     * 
-     * @todo remove caching here when we have the unread/recent check recursive function
      */
     public function searchFolders($filter)
     {
         $result = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
         
         return $result;
-        
-        /*
-        // @todo remove-->
-        // don't do initial cache import
-        if ($result['totalcount'] == 0) {
-            return $result;
-        }
-        
-        // use output buffer
-        ignore_user_abort();
-        header("Connection: close");
-        
-        ob_start();
-
-        // output here
-        echo Zend_Json::encode($result);
-        
-        $size = ob_get_length();
-        header("Content-Length: $size");
-        ob_end_flush(); // Strange behaviour, will not work
-        flush();        
-        Zend_Session::writeClose(true);
-
-        // update rest of cache here
-        if ($result['totalcount'] > 0) {
-            Tinebase_Core::setExecutionLifeTime(600); // 10 minutes
-            foreach ($result['results'] as $result) {
-                Felamimail_Controller_Cache::getInstance()->initialImport($result['id']);
-            }
-        }
-        
-        // don't output anything else ('null' or something like that)
-        die();
-        //<--remove
-        */
     }
 
     /**
