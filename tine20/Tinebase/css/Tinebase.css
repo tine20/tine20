@@ -121,10 +121,20 @@ html, body {
 
 .renderer_accountUserIcon {
     background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
 }
 
 .renderer_accountGroupIcon {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
+
+.renderer_accountContactIcon {
+    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
 }
 
 /* ----- notes ------------------------------------------------------------*/
