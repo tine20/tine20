@@ -133,6 +133,10 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             $data['container_id'] = $data['container_id']['id'];
         }
         
+        if (isset($data['organizer']) && is_array($data['organizer'])) {
+            $data['organizer'] = $data['organizer']['accountId'];
+        }
+        
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
         $this->setFromArray($data);
     }
