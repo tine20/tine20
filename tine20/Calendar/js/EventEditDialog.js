@@ -58,14 +58,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return {
             xtype: 'grid',
             store: this.attendeeStore,
+            title: this.app.i18n._('Attendee'),
+            autoExpandColumn: 'user_id',
             columns: [
-                { dataIndex: 'role', width: 100, header: this.app.i18n._('Role') },
-                { dataIndex: 'quantity', width: 50, header: ' ' },
-                { dataIndex: 'user_type', width: 20, header: ' ' },
-                { dataIndex: 'user_id', width: 300, header: this.app.i18n._('Name') },
-                { dtatIndex: 'status', width: 150, header: this.app.i18n._('Status') }
+                { id: 'role',      dataIndex: 'role',      width: 70,  header: this.app.i18n._('Role') },
+                { id: 'quantity',  dataIndex: 'quantity',  width: 30,  header: '&#160;', tooltip: this.app.i18n._('Quantity') },
+                { id: 'user_type', dataIndex: 'user_type', width: 30,  header: '&#160;', tooltip: this.app.i18n._('Type') },
+                { id: 'user_id',   dataIndex: 'user_id',   width: 300, header: this.app.i18n._('Name') },
+                { id: 'status',    dtatIndex: 'status',    width: 100, header: this.app.i18n._('Status') }
             ]
-            
         }
     },
     
@@ -146,10 +147,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         border: true,
                         height: 235,
                         form: true,
-                        items: [{
-                            title: this.app.i18n._('Attendee'),
-                            html: 'some attendee'
-                        }, {
+                        items: [this.getAttendeeGrid(), {
                             title: this.app.i18n._('Options'),
                             html: 'recurings and alamrs'
                         }]
@@ -207,11 +205,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     initComponent: function() {
-        Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
-        
         this.attendeeStore = new Ext.data.Store({
-            fields: Tine.Calendar.Model.Attender
+            fields: Tine.Calendar.Model.Attender,
+            sortInfo: {fieldName: 'user_id', direction: 'ASC'}
         });
+        
+        Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
     },
     
     isValid: function() {
@@ -248,6 +247,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 dtEndField.setValue(dtEnd.add(Date.MILLI, diff));
             }
         }
+    },
+    
+    onRecordLoad: function() {
+        //console.log(this.record);
+        
+        Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
     },
     
     setTabHeight: function() {
