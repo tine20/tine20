@@ -74,8 +74,16 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar');
     
     var data = {
+        summary: '',
         container_id: app.getMainScreen().getTreePanel().getAddCalendar(),
-        editGrant: true
+        editGrant: true,
+        attendee: [
+            Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                user_type: 'user',
+                user_id: Tine.Tinebase.registry.get('currentAccount').accountId,
+                status: 'ACCEPTED'
+            })
+        ]
     };
     
     return data;
@@ -122,3 +130,12 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Mo
     containerName: 'Event',
     containersName: 'Events'
 });
+
+Tine.Calendar.Model.Attender.getDefaultData = function() {
+    return {
+        user_type: 'user',
+        role: 'REQ',
+        quantity: 1,
+        status: 'NEEDS-ACTION'
+    };
+};
