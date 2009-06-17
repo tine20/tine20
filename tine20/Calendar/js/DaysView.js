@@ -626,13 +626,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.fireEvent('dblclick', event, e);
         } else if (dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
-            var event = new Tine.Calendar.Model.Event({
+            var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1)/*.add(Date.SECOND, -1)*/,
-                is_all_day_event: dtStart.is_all_day_event,
-                editGrant: true
-            }, newId);
+                dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1),
+                is_all_day_event: dtStart.is_all_day_event
+            }), newId);
             
             this.createEvent(e, event);
         } else if (target.className == 'cal-daysviewpanel-dayheader-day'){
@@ -652,13 +651,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var dtStart = this.getTargetDateTime(e);
         if (! this.editing && dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
-            var event = new Tine.Calendar.Model.Event({
+            var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24)/*.add(Date.SECOND, -1)*/ : dtStart.add(Date.MINUTE, this.timeGranularity/2),
-                is_all_day_event: dtStart.is_all_day_event,
-                editGrant: true
-            }, newId);
+                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24) : dtStart.add(Date.MINUTE, this.timeGranularity/2),
+                is_all_day_event: dtStart.is_all_day_event
+            }), newId);
             event.isRangeAdd = true;
             
             e.stopEvent();
@@ -713,7 +711,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var diff = Math.round((rz.el.getRight() - rz.startPoint[0]) / dayWidth);
             
             if (diff != 0) {
-                event.set('dtend', event.get('dtend').add(Date.DAY, diff)/*.add(Date.SECOND, -1)*/);
+                event.set('dtend', event.get('dtend').add(Date.DAY, diff));
             }
         } else {
             
@@ -887,7 +885,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     getPeriod: function() {
         return {
             from: this.startDate,
-            until: this.startDate.add(Date.DAY, this.numOfDays)/*.add(Date.SECOND, -1)*/
+            until: this.startDate.add(Date.DAY, this.numOfDays)
         };
     },
     
@@ -937,7 +935,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     
     getTimeHeight: function(dtStart, dtEnd) {
         var d = this.granularityUnitHeights / this.timeGranularity;
-        //((dtEnd.getTime() - dtStart.getTime()) / Date.msMinute);
         return Math.round(d * ((dtEnd.getTime() - dtStart.getTime()) / Date.msMINUTE));
     },
     

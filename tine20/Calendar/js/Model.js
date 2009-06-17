@@ -70,6 +70,17 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model
     containersName: 'Calendars'
 });
 
+Tine.Calendar.Model.Event.getDefaultData = function() {
+    var app = Tine.Tinebase.appMgr.get('Calendar');
+    
+    var data = {
+        container_id: app.getMainScreen().getTreePanel().getAddCalendar(),
+        editGrant: true
+    };
+    
+    return data;
+};
+
 /**
  * default tasks backend
  */

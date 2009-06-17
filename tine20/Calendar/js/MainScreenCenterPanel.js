@@ -253,9 +253,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (! event) {
-            event = new Tine.Calendar.Model.Event({
-                container_id: this.app.getMainScreen().getTreePanel().getAddCalendar()
-            }, 0);
+            event = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData(), 0);
         }
         
         Tine.Calendar.EventEditDialog.openWindow({
