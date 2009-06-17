@@ -331,12 +331,16 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * update unread count
      * 
      * @param {} change
-     * 
+     * @param {} unreadcount [optional]
+     * @param {} node [optional]
      */
-    updateUnreadCount: function(change, unreadcount) {
+    updateUnreadCount: function(change, unreadcount, node) {
         
-        var node = this.getSelectionModel().getSelectedNode();
-        if (! change && unreadcount) {
+        if (! node) {
+            var node = this.getSelectionModel().getSelectedNode();
+        }
+        
+        if (! change ) {
             change = Number(unreadcount) - Number(node.attributes.unreadcount);
         }
         
@@ -361,16 +365,22 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * TODO make this work for multiple accounts
      * TODO make recursive work for delayed task or ping update
+     * 
+     * @param {} recursive
+     * @param {} node [optional]
      */
-    updateFolderStatus: function(recursive) {
+    updateFolderStatus: function(recursive, node) {
         
         if (recursive) {
             Ext.Msg.alert('not implemented yet');
             return;
         }
         
-        // get account id
-        var node = this.getSelectionModel().getSelectedNode();
+        // get account and folder id
+        if (! node) {
+            node = this.getSelectionModel().getSelectedNode();
+        }
+        
         var folderId = node.attributes.folder_id;
         var accountId = node.attributes.account_id;
         
@@ -387,7 +397,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     // update folder counters / class
                     var folderData = Ext.util.JSON.decode(_result.responseText);
                     //console.log(folderData);
-                    this.updateUnreadCount(null, folderData[0].unreadcount);
+                    this.updateUnreadCount(null, folderData[0].unreadcount, node);
                 }
             });
         }
@@ -457,7 +467,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onBeforenodedrop: function(dropEvent) {
         
-        var folderId = dropEvent.target.attributes.folder_id;
+        var targetFolderId = dropEvent.target.attributes.folder_id;
         var ids = [];
         
         for (var i=0; i < dropEvent.data.selections.length; i++) {
@@ -468,13 +478,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         Ext.Ajax.request({
             params: {
                 method: 'Felamimail.moveMessages',
-                folderId: folderId,
+                folderId: targetFolderId,
                 ids: Ext.util.JSON.encode(ids)
             },
             scope: this,
             success: function(_result, _request){
                 // update grid
                 this.filterPlugin.onFilterChange();
+                
+                // update folder status of both folders
+                this.updateFolderStatus(false, dropEvent.target);
+                this.updateFolderStatus(false);
             }
         });
         
@@ -565,16 +579,16 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             node.cls = 'x-tree-node-collapsed';
         }
 
-        if (attr.unreadcount > 0) {
-            node.text = node.text + ' (' + attr.unreadcount + ')';
-            node.cls = 'felamimail-node-unread x-tree-node-collapsed';
-        }
-                
         // show trash icon for trash folder of account
         if (account) {
             if (account.get('trash_folder') == attr.globalname) {
                 node.cls = 'felamimail-node-trash';
             }
+        }
+
+        if (attr.unreadcount > 0) {
+            node.text = node.text + ' (' + attr.unreadcount + ')';
+            node.cls = node.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
         }
         
         //console.log(node);
