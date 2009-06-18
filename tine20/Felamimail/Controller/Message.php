@@ -177,6 +177,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting message ' . $message->subject);
         
+        // increase timeout to 1 minute
+        Tinebase_Core::setExecutionLifeTime(120);
+        
         if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder)) {
             
             $imapMessage = $imapBackend->getMessage($message->messageuid);

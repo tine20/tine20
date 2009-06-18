@@ -67,6 +67,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         if (record.id !== this.currentId) {                
             this.currentId = record.id;
             Tine.Felamimail.messageBackend.loadRecord(record, {
+                timeout: 120000, // 2 minutes
                 scope: this,
                 success: function(message) {
                     // save more values?
