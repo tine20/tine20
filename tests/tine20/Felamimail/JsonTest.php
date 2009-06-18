@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        add tests for create/update/delete accounts
  * @todo        add tests for attachments
  */
 
@@ -73,6 +72,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
 
     /************************ test functions *********************************/
     
+    /*********************** folder tests ****************************/
+    
     /**
      * test search folders
      *
@@ -87,25 +88,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         foreach ($result['results'] as $folder) {
             $this->assertTrue(in_array($folder['localname'], $expectedFolders));
         }
-    }
-    
-    /**
-     * test search for accounts and check default account from config
-     *
-     */
-    public function testSearchAccounts()
-    {
-        $results = $this->_json->searchAccounts('');
-
-        $this->assertGreaterThan(0, $results['totalcount']);
-        $default = array();
-        foreach ($results['results'] as $result) {
-            if ($result['name'] == 'default') {
-                $default = $result;
-            }
-        }
-        $this->assertTrue(! empty($default));
-        $this->assertEquals(143, $result['port']);
     }
     
     /**
@@ -168,6 +150,59 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_deleteMessage($messageToSend['subject']);
     }
     
+    /*********************** accounts tests **************************/
+    
+    /**
+     * test search for accounts and check default account from config
+     *
+     */
+    public function testSearchAccounts()
+    {
+        $results = $this->_json->searchAccounts('');
+
+        $this->assertGreaterThan(0, $results['totalcount']);
+        $default = array();
+        foreach ($results['results'] as $result) {
+            if ($result['name'] == 'default') {
+                $default = $result;
+            }
+        }
+        $this->assertTrue(! empty($default));
+        $this->assertEquals(143, $result['port']);
+    }
+    
+    /**
+     * test create / get / delete of account
+     *
+     */
+    public function testCreateChangeDeleteAccount() 
+    {
+        // save & resolve
+        $account = $this->_json->saveAccount(Zend_Json::encode($this->_getAccountData()));
+        
+        $accountRecord = new Felamimail_Model_Account($account, TRUE);
+        $accountRecord->resolveCredentials(FALSE);
+        
+        // checks
+        $this->assertEquals(Tinebase_Core::getConfig()->imap->password, $accountRecord->password);
+        $this->assertEquals('mail.metaways.net', $account['host']);
+        
+        // change credentials & resolve
+        $this->_json->changeCredentials($account['id'], $account['user'], 'neuespasswort');
+        $account = $this->_json->getAccount($account['id']);
+        
+        $accountRecord = new Felamimail_Model_Account($account, TRUE);
+        $accountRecord->resolveCredentials(FALSE);
+        
+        // checks
+        $this->assertEquals('neuespasswort', $accountRecord->password);
+        
+        // delete
+        $this->_json->deleteAccounts($account['id']);
+    }
+    
+    /*********************** message tests ****************************/
+    
     /**
      * test search messages
      *
@@ -204,7 +239,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to get a message from imap server (with complete body, attachments, etc)
      *
-     * @todo check for correct charset/encoding
      */
     public function testGetMessage()
     {
@@ -214,7 +248,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_json->getMessage($message['id']);
         
         // check
-        $this->assertGreaterThan(0, preg_match('/aaaaaa/', $message['body']));
+        $this->assertGreaterThan(0, preg_match('/aaaaaä/', $message['body']));
         
         // delete
         $this->_deleteMessage($message['subject']);
@@ -287,11 +321,27 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test move
      * 
-     * @todo implement
      */
     public function testMoveMessage()
     {
+        $message = $this->_sendMessage();
         
+        // move
+        $drafts = $this->_getFolder('Drafts');
+        $this->_json->moveMessages($message['id'], $drafts->getId());
+        
+        $filter = $this->_getMessageFilter($drafts->getId());
+        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+        $movedMessage = array();
+        foreach ($result['results'] as $mail) {
+            if ($mail['subject'] == $message['subject']) {
+                $movedMessage = $mail;
+            }
+        }
+        $this->assertTrue(! empty($movedMessage));
+        
+        // delete
+        $this->_deleteMessage($message['subject'], 'Drafts');
     }
     
     /************************ protected functions ****************************/
@@ -347,9 +397,22 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'from'      => 'default',
             'subject'   => 'test',
             'to'        => array('unittest@tine20.org'),
-            'body'      => 'aaaaaa <br>',
+            'body'      => 'aaaaaä <br>',
             //'flags'     => array('\Answered')
         );
+    }
+
+    /**
+     * get account data
+     *
+     * @return array
+     */
+    protected function _getAccountData()
+    {
+        $account = Tinebase_Core::getConfig()->imap->toArray(); 
+        $account['email'] = $account['user'];
+        
+        return $account;
     }
 
     /**
@@ -357,9 +420,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @param string $_subject
      */
-    protected function _deleteMessage($_subject) 
+    protected function _deleteMessage($_subject, $_folderName = 'INBOX') 
     {
-        $inbox = $this->_getFolder();
+        $inbox = $this->_getFolder($_folderName);
         $filter = $this->_getMessageFilter($inbox->getId());
         $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
         foreach ($result['results'] as $mail) {

@@ -222,8 +222,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $ids message ids
      * @param string $folderId
      * @return array
-     * 
-     * @todo add test
      */
     public function moveMessages($ids, $folderId)
     {
