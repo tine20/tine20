@@ -584,8 +584,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @param  {Array}          loaded records
      * @param  {Array}          load options
      * @return {Void}
-     * 
-     * TODO use new updateFolderStatus function instead of recent count (only update if recent count > 0) 
      */
     onStoreLoad: function(store, records, options) {
         var regexp = new RegExp('\\Recent');
@@ -597,7 +595,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }, this);
         
         if (recentCount > 0) {
-            this.app.getMainScreen().getTreePanel().updateUnreadCount(recentCount);
+            //this.app.getMainScreen().getTreePanel().updateUnreadCount(recentCount);
+            this.app.getMainScreen().getTreePanel().updateFolderStatus(false);
         }
     },
         
