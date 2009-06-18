@@ -44,7 +44,8 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
     {
         $this->_personas = Zend_Registry::get('personas');
         foreach ($this->_personas as $loginName => $user) {
-            $this->_personasDefaultCals[$loginName] = Calendar_Controller::getInstance()->getDefaultDisplayCalendar($user);
+            $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $user->getId());
+            $this->_personasDefaultCals[$loginName] = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
         }
         
         

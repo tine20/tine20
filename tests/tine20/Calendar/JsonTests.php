@@ -111,6 +111,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(is_array($eventData['container_id']), $msg . ': failed to "resolve" container');
         $this->assertTrue(is_array($eventData['container_id']['account_grants']), $msg . ': failed to "resolve" container account_grants');
         $this->assertEquals(count($eventData['attendee']), count($expectedEventData['attendee']), $msg . ': faild to append attendee');
+        $this->assertTrue(is_array($eventData['attendee'][0]['user_id']), $msg . ' failed to resolve attendee user_id');
         $this->assertEquals(count($expectedEventData['tags']), count($eventData['tags']), $msg . ': faild to append tag');
         $this->assertEquals(count($expectedEventData['notes']), count($eventData['notes']), $msg . ': faild to create note');
     }

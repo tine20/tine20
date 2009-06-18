@@ -31,8 +31,18 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
      */
     protected $_testCalendar;
     
+    protected $_personas;
+    
+    protected $_personasDefaultCals = array();
+    
     public function setUp()
     {
+        $this->_personas = Zend_Registry::get('personas');
+        foreach ($this->_personas as $loginName => $user) {
+            $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $user->getId());
+            $this->_personasDefaultCals[$loginName] = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
+        }
+        
         $this->_backend = new Calendar_Backend_Sql();
         
         $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -87,10 +97,17 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
                 'status_authkey' => Tinebase_Record_Abstract::generateUID(),
             ),
             array(
+                'user_id'        => $this->_personas['sclever']->getId(),
+                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+            ),
+            /* no group suppoert yet
+            array(
                 'user_id'        => Tinebase_Core::getUser()->accountPrimaryGroup,
                 'user_type'      => Calendar_Model_Attender::USERTYPE_GROUP,
                 'status_authkey' => Tinebase_Record_Abstract::generateUID(),
             )
+            */
         ));
     }
 }
