@@ -36,6 +36,7 @@ class Calendar_AllTests
         $suite->addTestSuite('Calendar_RruleTests');
         $suite->addTestSuite('Calendar_Backend_SqlTests');
         $suite->addTestSuite('Calendar_Controller_EventTests');
+        $suite->addTestSuite('Calendar_JsonTests');
         return $suite;
     }
 }
