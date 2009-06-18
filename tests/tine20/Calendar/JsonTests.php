@@ -38,6 +38,13 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_uit = new Calendar_Frontend_Json();
     }
     
+    public function testGetRegistryData()
+    {
+        $registryData = $this->_uit->getRegistryData();
+        
+        $this->assertTrue(is_array($registryData['defaultCalendar']['account_grants']));
+    }
+    
     public function testCreateEvent()
     {
         $eventData = $this->_getEvent()->toArray();
@@ -76,6 +83,15 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_assertJsonEvent($eventData, $updatedEventData, 'failed to update event');
         
         return $updatedEventData;
+    }
+    
+    public function testDeleteEvent() {
+        $eventData = $this->testCreateEvent();
+        
+        $this->_uit->deleteEvents(Zend_Json::encode(array($eventData['id'])));
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_uit->getEvent($eventData['id']);
     }
     
     public function testSearchEvents()
