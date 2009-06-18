@@ -33,7 +33,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.store = new Ext.data.SimpleStore({
             fields: Tine.Calendar.Model.AttenderArray,
-            sortInfo: {field: 'user_id', direction: 'ASC'}
+            sortInfo: {field: 'user_id', direction: 'ASC'},
+            listeners: {
+                scope: this,
+                update: this.onStoreUpdate,
+                cellcontextmenu : this.onContextMenu,
+                keydown: this.onKeyDown
+            }
         });
         
         this.on('beforeedit', this.onBeforeAttenderEdit, this);
@@ -78,17 +84,16 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: this.app.i18n._('Name'),
             renderer: this.renderAttenderName.createDelegate(this),
             editor: new Tine.Addressbook.SearchCombo({
-                blurOnSelect: true,/*
-                setValue: function(name) {
-                    if (name) {
-                        if (typeof name.get == 'function' && name.get('n_fn')) {
-                            name = name.get('n_fn');
-                        } else if (name.accountDisplayName) {
-                            name = name.accountDisplayName;
-                        }
-                    }
+                // at the moment we support accounts only
+                internalContactsOnly: true,
+                
+                blurOnSelect: true,
+                selectOnFocus: true,
+                renderAttenderName: this.renderAttenderName,
+                setValue: function(value) {
+                    name = this.renderAttenderName(value) || '';
                     Tine.Addressbook.SearchCombo.prototype.setValue.call(this, name);
-                },*/
+                },
                 getValue: function() {
                     return this.selectedRecord;
                 },
@@ -97,7 +102,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     select: this.onContactSelect
                 }
             })
-            //editor: new Tine.widgets.AccountpickerField({})
         }, {
             id: 'status',
             dataIndex: 'status',
@@ -134,8 +138,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onBeforeAttenderEdit: function(o) {
         if (o.field == 'status') {
             // status setting is not always allowed
-            if (!o.record.getUserId() == Tine.Tinebase.registry.get('currentAccount').accountId && !o.record.get('status_authkey')) {
+            if (!o.record.get('status_authkey')) {
                 o.cancel = true;
+                if (o.record.getUserId() != Tine.Tinebase.registry.get('currentAccount').accountId && ! o.record.id.match(/new/)) {
+                    o.cancel = false;
+                }
             }
             return;
         }
@@ -156,10 +163,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (o.field == 'user_id') {
             // here we are!
-            console.log(this.renderAttenderName(o.value));
-            o.value = this.renderAttenderName(o.value)
         }
     },
+    
+    /**
+     * @private
+     */
     onContactSelect: function(contact) {
         var name = contact;
         
@@ -172,6 +181,33 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
     
+    // NOTE: Ext docu seems to be wrong on arguments here
+    onContextMenu: function(e, target) {
+        var row = this.getView().findRowIndex(target);
+        var attender = this.store.getAt(row);
+        if (attender) {
+            // don't delete 'add' row
+            var attender = this.store.getAt(row);
+            if (! attender.get('user_id')) {
+                return;
+            }
+                        
+            var menu = new Ext.menu.Menu({
+                items: [{
+                    text: this.app.i18n._('Remove Attender'),
+                    iconCls: 'action_delete',
+                    scope: this,
+                    disabled: !this.record.get('editGrant'),
+                    handler: function() {
+                        this.store.removeAt(row);
+                    }
+                    
+                }]
+            });
+            menu.showAt(e.getXY());
+        }
+    },
+    
     onRecordLoad: function(record) {
         this.record = record;
         this.store.removeAll(attendee);
@@ -181,7 +217,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
         
         if (record.get('editGrant')) {
-            this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 0)]);
+            this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
         }
     },
     
@@ -192,13 +228,71 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             var user_id = attender.getUserId();
             if (user_id) {
                 var data = attender.data;
+                
                 data.user_id = user_id;
+                
+                if (data.id && data.id.match(/new/)) {
+                    data.id = 0;
+                }
+                
                 attendee.push(data);
             }
         }, this);
         
         record.set('attendee', '');
         record.set('attendee', attendee);
+    },
+    
+    onStoreUpdate: function(store, updatedAttender) {
+        
+        // check if we need to add a new row
+        var needUpdate = true;
+        this.store.each(function(attender) {
+            var userId = attender.getUserId();
+            //var userType = attender.get('user_type');
+            
+            if (! attender.getUserId()) {
+                needUpdate = false;
+            }
+            
+            if (updatedAttender.getUserId() == userId && updatedAttender.get('user_type') == attender.get('user_type')) {
+                var last = this.store.getAt(this.store.getCount() -1);
+                if (last != attender) {
+                    //duplicate entry
+                    this.getView().focusCell(this.store.indexOf(attender), 2);
+                    this.store.remove.defer(50, this.store, [last]);
+                    needUpdate = true;
+                    return false;
+                }
+            }
+        }, this);
+        
+        if (needUpdate && this.record.get('editGrant')) {
+            this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
+        }
+    },
+    
+    onKeyDown: function(e) {
+        switch(e.getKey()) {
+            
+            case e.DELETE: {
+                if (this.record.get('editGrant')) {
+                    var selection = this.getSelectionModel().getSelectedCell();
+                    
+                    if (selection) {
+                        var row = selection[0];
+                        
+                        // don't delete 'add' row
+                        var attender = this.store.getAt(row);
+                        if (! attender.get('user_id')) {
+                            return;
+                        }
+
+                        this.store.removeAt(row);
+                    }
+                }
+            }
+        }
     },
     
     renderAttenderName: function(name) {
