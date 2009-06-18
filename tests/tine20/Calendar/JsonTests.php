@@ -93,6 +93,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $searchResultData;
     }
     
+    public function testSetAttenderStatus()
+    {
+        $eventData = $this->testCreateEvent();
+        $numAttendee = count($eventData['attendee']);
+        $eventData['attendee'][$numAttendee] = array(
+            'user_id' => $this->_personas['pwulf']->getId(),
+        );
+        
+        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $pwulf = $this->_findAttender($updatedEventData['attendee'], 'pwulf');
+        
+        $updatedEventData['container_id'] = $updatedEventData['container_id']['id'];
+        
+        $pwulf['status'] = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_uit->setAttenderStatus(Zend_Json::encode($updatedEventData), Zend_Json::encode($pwulf), $pwulf['status_authkey']);
+        
+        $loadedEventData = $this->_uit->getEvent($eventData['id']);
+        $loadedPwulf = $this->_findAttender($loadedEventData['attendee'], 'pwulf');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $loadedPwulf['status']);
+    }
+    
     public function testUpdateRecurExceptionsFromSeriesOverDstMove()
     {
         /*
@@ -114,6 +135,23 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(is_array($eventData['attendee'][0]['user_id']), $msg . ' failed to resolve attendee user_id');
         $this->assertEquals(count($expectedEventData['tags']), count($eventData['tags']), $msg . ': faild to append tag');
         $this->assertEquals(count($expectedEventData['notes']), count($eventData['notes']), $msg . ': faild to create note');
+    }
+    
+    protected function _findAttender($attendeeData, $name) {
+        $attenderData = false;
+        $searchedId = $this->_personas[$name]->getId();
+        
+        foreach ($attendeeData as $key => $attender) {
+            if ($attender['user_type'] == Calendar_Model_Attender::USERTYPE_USER) {
+                if (is_array($attender['user_id']) && array_key_exists('accountId', $attender['user_id'])) {
+                    if ($attender['user_id']['accountId'] == $searchedId) {
+                        $attenderData = $attendeeData[$key];
+                    }
+                }
+            }
+        }
+        
+        return $attenderData;
     }
 }
     
