@@ -11,6 +11,7 @@
  * 
  * @todo        parse mail body and add <a> to telephone numbers and email addresses?
  * @todo        check html purifier config (allow some tags/attributes?)
+ * @todo        improve handling of BIG (rfc822) messages (don't read the whole content?)
  */
 
 /**
@@ -427,10 +428,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * get content of a message part
+     * get message part
      *
      * @param string $_id
-     * @param integer $_partId
+     * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
      * @return Zend_Mail_Part|NULL
      */
     public function getMessagePart($_id, $_partId)
@@ -439,8 +440,26 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $message        = parent::get($_id);
         
         if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id)) {
-            $imapMessage            = $imapBackend->getMessage($message->messageuid);
-            $result                 = $imapMessage->getPart($_partId);
+            $result = $imapBackend->getMessage($message->messageuid);
+            
+            $parts = explode('.', $_partId); 
+            
+            while (! empty($parts)) {
+                $headers = $result->getHeaders();
+                $partId = array_shift($parts);
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' getting part ' . $partId . ' of ' . $headers['content-type']
+                    //. print_r($headers, true)
+                );                
+                
+                if (preg_match('/message\/rfc822/', $headers['content-type'])) {
+                    $content = $this->_decodePartContent($result, $headers);
+                    $result = new Felamimail_Message(array('raw' => $content));                    
+                } 
+
+                $result = $result->getPart($partId);
+            }
         }
         
         return $result;
@@ -535,40 +554,43 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * get message body
      *
-     * @param Felamimail_Message $_imapMessage
+     * @param Felamimail_Message|string $_message
      * @param string $_contentType
      * @return string
      * 
      * @todo check if we should replace email addresses in all cases (what if they are already in an anchor tag?)
      */
-    public function _getBody(Felamimail_Message $_imapMessage, $_contentType)
+    public function _getBody($_message, $_contentType)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting mail body with content type: ' . $_contentType);
         
         // get html body part if multipart/alternative
-        $body = '';
         if (! preg_match('/text\/plain/', $_contentType)) {
             // get html
-            $body = $_imapMessage->getBody(Zend_Mime::TYPE_HTML);
+            if ($_message instanceof Felamimail_Message) {
+                $body = $_message->getBody(Zend_Mime::TYPE_HTML);
+            } else {
+                $body = $_message;
+            }
 
             // purify
             $body = $this->_purifyBodyContent($body);
         } 
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
-        
         // get plain text if body is empty at this point
-        if (empty($body) || $body == 'no text part found') {
+        if (! isset($body) || $body == 'no text part found') {
         
             // plain text
-            $body = $_imapMessage->getBody(Zend_Mime::TYPE_TEXT);
+            if ($_message instanceof Felamimail_Message) {
+                $body = $_message->getBody(Zend_Mime::TYPE_TEXT);
+            } else {
+                $body = $_message;
+            }
 
             // add anchor tag to links
             $body = $this->_replaceUriAndSpaces($body);
         }
 
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
-        
         // add anchor to email addresses (remove mailto hrefs first)
         $mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>[^<]*<\/a>/i';
         $body = preg_replace($mailtoPattern, "\\1", $body);
@@ -624,73 +646,89 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Message $_imapMessage
      * @param Felamimail_Model_Message $_message
      * @param string $_accountId
+     * @param string $_partId [optional]
      * @return array
      * 
      * @todo save images as tempfiles to show them inline the mail body?
      */
-    protected function _getAttachments(Felamimail_Message $_imapMessage, Felamimail_Model_Message $_message, $_accountId)
+    protected function _getAttachments(Felamimail_Message $_imapMessage, Felamimail_Model_Message $_message, $_accountId, $_partId = NULL)
     {
         $attachments = array();
         $messageParts = $_imapMessage->countParts();
+        $partNumber = 2;
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Message has ' . $messageParts . ' parts.');
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Message has ' . $messageParts . ' parts.');
         
         if ($_imapMessage->isMultipart()) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get ' 
                 . ($messageParts-1) . ' attachments.'
             );
-            // begin with second part
-            $partNumber = 2; 
             while ($partNumber <= $messageParts) {
-                $part = $_imapMessage->getPart($partNumber);
-
-                $attachment = $part->getHeaders();
-                    
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $attachment['content-type']);
                 
-                if (preg_match('/message\/rfc822/', $attachment['content-type'])) {
+                // init new part id
+                if ($_partId !== NULL) {
+                    $partId = $_partId . '.' . $partNumber;
+                } else {
+                    $partId = $partNumber;
+                }
+                
+                // get next part and headers
+                $part = $_imapMessage->getPart($partNumber);
+                $partHeaders = $part->getHeaders();
                     
-                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($attachment, true));
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $partHeaders['content-type']);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partHeaders, true));
+
+                if (preg_match('/message\/rfc822/', $partHeaders['content-type'])) {
                     
-                    $content = $part->getContent();
-                    if (isset($attachment['content-transfer-encoding'])) {
-                        switch (strtolower($attachment['content-transfer-encoding'])) {
-                            case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                                $content = quoted_printable_decode($content);
-                                break;
-                            case Zend_Mime::ENCODING_BASE64:
-                                $content = base64_decode($content);
-                                break;
-                        }
-                    }
-        
+                    /**************** split message/rfc822 attachment **********************/
+                    
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding message/rfc822 attachment with part id ' . $partId);
+                    
+                    $content = $this->_decodePartContent($part, $partHeaders);
                     $rfcMessage = new Felamimail_Message(array('raw' => $content));
                     
-                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $content);
+                    //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . substr($content, 0, 4096));
                     
                     // add body
-                    $_message->body = $_message->body . '<br/><hr/><br/>' . $this->_getBody($rfcMessage, $attachment['content-type']); // ?
+                    $_message->body = $_message->body . '<br/><hr/><br/>' . $this->_getBody($rfcMessage, $partHeaders['content-type']);
         
                     // add attachments
-                    $attachments = array_merge($attachments, $this->_getAttachments($rfcMessage, $_message, $_accountId));
-                    
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding message/rfc822 attachment.');
+                    $attachments = array_merge($attachments, $this->_getAttachments($rfcMessage, $_message, $_accountId, $partId));
                                          
-                } else if (isset($attachment['content-disposition'])) {
-                    preg_match("/filename=\"*([a-zA-Z0-9\-\._]+)\"*/", $attachment['content-disposition'], $matches);
-                    $attachment['filename']     = $matches[1];
+                } else if (preg_match('/multipart\/mixed/', $partHeaders['content-type'])) {
                     
-                    $attachment['partId']       = $partNumber;
-                    $attachment['messageId']    = $_message->getId();
-                    $attachment['accountId']    = $_accountId;
-                    $attachment['size']         = $part->getSize();
-                                        
-                    $attachments[] = $attachment; 
+                    /**************** split multipart/mixed again **************************/
                     
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, true));
-
+                    $messageSubParts = $part->countParts();
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . ' Getting ' . $messageSubParts .' parts of multipart/mixed message.'
+                    );
+                    
+                    $content = '';
+                    for ($i = 1; $i <= $messageSubParts; $i++) {
+                        
+                        $subPart = $part->getPart($i);
+                        $subPartHeaders = $subPart->getHeaders();
+                        
+                        // @todo add rfc822 attachments here
+                        if (isset($subPartHeaders['content-disposition'])) {
+                            $attachments[] = $this->_getAttachmentDataFromPart($subPart, $partId . '.' . $i, $_accountId, $_message->getId(), $subPartHeaders);
+                            
+                        } else {
+                            $content = $this->_decodePartContent($subPart, $subPartHeaders);
+                            $_message->body = $_message->body . '<br/><hr/><br/>' . $this->_getBody($content, $subPartHeaders['content-type']);
+                        }
+                    }
+                    
+                } else if (isset($partHeaders['content-disposition'])) {
+                    
+                    /**************** add attachment part ***********************************/
+                    
+                    $attachments[] = $this->_getAttachmentDataFromPart($part, $partId, $_accountId, $_message->getId(), $partHeaders);
+                   
                 } else {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Don\'t get attachment of content-type: ' . $attachment['content-type']);
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Don\'t get attachment of content-type: ' . $partHeaders['content-type']);
                 }
                 
                 $partNumber++;
@@ -785,6 +823,67 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $result = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $_content));
         $result = preg_replace('/\<br(\s*)?\/?\>/i', "\n", $result);
         $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
+        
+        return $result;
+    }
+    
+    /**
+     * decode mail part content
+     *
+     * @param Zend_Mail_Part $_part
+     * @param array $_headers
+     * @return string
+     */
+    protected function _decodePartContent(Zend_Mail_Part $_part, $_headers = NULL)
+    {
+        if ($_headers === NULL) {
+            $_headers = $_part->getHeaders();
+        }
+        
+        $result = $_part->getContent();
+        if (isset($_headers['content-transfer-encoding'])) {
+            switch (strtolower($_headers['content-transfer-encoding'])) {
+                case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
+                    $result = quoted_printable_decode($result);
+                    break;
+                case Zend_Mime::ENCODING_BASE64:
+                    $result = base64_decode($result);
+                    break;
+            }
+        }
+        
+        return $result;
+    }
+    
+/**
+     * get attachment data from mail part
+     *
+     * @param Zend_Mail_Part $_part
+     * @param integer|string $_partId
+     * @param string $_accountId
+     * @param string $_messageId
+     * @param array $_headers [optional]
+     * @return array
+     * 
+     */
+    protected function _getAttachmentDataFromPart(Zend_Mail_Part $_part, $_partId, $_accountId, $_messageId, $_headers = NULL)
+    {
+        if ($_headers === NULL) {
+            $_headers = $_part->getHeaders();
+        }
+        
+        $result = array();
+        
+        preg_match(Felamimail_Model_Message::ATTACHMENT_FILENAME_REGEXP, $_headers['content-disposition'], $matches);
+        $result = $_headers;
+        $result['filename']     = $matches[1];
+        
+        $result['partId']       = $_partId;
+        $result['messageId']    = $_messageId;
+        $result['accountId']    = $_accountId;
+        $result['size']         = $_part->getSize();
+                            
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($result, true));
         
         return $result;
     }

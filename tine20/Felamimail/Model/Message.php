@@ -33,6 +33,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     const CONTENT_TYPE_MESSAGE_RFC822 = 'message/rfc822';
     
     /**
+     * attachment filename regexp 
+     *
+     */
+    const ATTACHMENT_FILENAME_REGEXP = "/filename=\"*([a-zA-Z0-9\-\._]+)\"*/";
+    
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 

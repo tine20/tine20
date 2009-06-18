@@ -64,11 +64,11 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $headers = $part->getHeaders();
                 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' attachment headers:' . print_r($headers, true)
+                    . ' Attachment headers:' . print_r($headers, true)
                 );
                 
-                preg_match('/filename="([a-zA-Z0-9\-\._]+)"/', $headers['content-disposition'], $matches);
-                $filename = $matches[0]; 
+                preg_match(Felamimail_Model_Message::ATTACHMENT_FILENAME_REGEXP, $headers['content-disposition'], $matches);
+                $filename = (isset($matches[0])) ? $matches[0] : 'filename'; 
                 
                 header("Pragma: public");
                 header("Cache-Control: max-age=0");
@@ -88,7 +88,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 echo $content;
             }
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $e->getMessage());
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $e->getMessage());
         }
         exit;
     }
