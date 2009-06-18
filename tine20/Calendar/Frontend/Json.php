@@ -64,7 +64,22 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveEvent($recordData)
     {
-        return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event');
+        $eventData = Zend_Json::decode($recordData);
+        if ($eventData['editGrant']) {
+            // if client spoofed editGrant, controller will throw exception
+            return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event');
+        } else {
+            // client may set attendee status data via save request
+            $attendeeData = $eventData['attendee'];
+            foreach ($attendeeData as $attenderData) {
+                if ($attenderData['status_authkey']) {
+                    $this->setAttenderStatus($recordData, Zend_Json::encode($attenderData), $attenderData['status_authkey']);
+                }
+            }
+            
+            return $this->getEvent($eventData['id']);
+        }
+        
     }
     
     /**
@@ -126,7 +141,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _recordToJson($_record)
     {
         $this->_resolveAttendee($_record->attendee);
-        return parent::_recordToJson($_record);
+        $eventData = parent::_recordToJson($_record);
+        
+        $eventData['readGrant']   = $eventData['container_id']['account_grants']['readGrant'];
+        $eventData['editGrant']   = $eventData['container_id']['account_grants']['editGrant'];
+        $eventData['deleteGrant'] = $eventData['container_id']['account_grants']['deleteGrant'];
+        
+        return $eventData;
     }
     
     /**
