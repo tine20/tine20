@@ -119,7 +119,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Kondome im Test: Fast schon perfekt', $message->subject);
         $this->assertEquals('<newsletter@stiftung-warentest.de>', $message->from);
         
-        $completeMessage = $this->_controller->get($message->getId());
+        $completeMessage = $this->_controller->getCompleteMessage($message->getId());
         
         //print_r($completeMessage->toArray());
         $this->assertGreaterThan(
@@ -165,7 +165,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $message->subject);
         $this->assertEquals('"Robin H. Johnson" <robbat2@gentoo.org>', $message->from);
         
-        $completeMessage = $this->_controller->get($message->getId());
+        $completeMessage = $this->_controller->getCompleteMessage($message->getId(), TRUE);
         
         //print_r($completeMessage->toArray());
         $attachments = $completeMessage->attachments;
@@ -193,7 +193,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('[gentoo-dev] Last rites: dev-php5/pecl-zip', $message->subject);
         $this->assertEquals('Christian Hoffmann <hoffie@gentoo.org>', $message->from);
         
-        $completeMessage = $this->_controller->get($message->getId());
+        $completeMessage = $this->_controller->getCompleteMessage($message->getId(), TRUE);
         
         $attachments = $completeMessage->attachments;
         
