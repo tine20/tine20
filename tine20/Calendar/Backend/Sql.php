@@ -273,7 +273,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $attenderPhysGrantCond = $this->_getContainGrantCondition('physgrants', 'attendeegroupmemberships', $_requiredGrant, $userExpr);
             $attenderImplicitGrantCond = $this->_getImplicitGrantCondition($_requiredGrant, $userExpr);
             
-            $sql = "($sql) OR ($attenderPhysGrantCond) OR ($attenderImplicitGrantCond)";
+            $sql = "($sql) AND ($attenderPhysGrantCond) OR ($attenderImplicitGrantCond)";
         }
         
         return "($sql)";
