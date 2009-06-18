@@ -187,7 +187,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getMessage($id)
     {
-        return $this->_get($id, Felamimail_Controller_Message::getInstance());
+        $controller = Felamimail_Controller_Message::getInstance();
+        $message = $controller->getCompleteMessage($id, TRUE, TRUE);
+        
+        return $this->_recordToJson($message);
     }
     
     /**
