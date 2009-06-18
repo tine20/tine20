@@ -711,7 +711,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
             // purify
             $body = $this->_purifyBodyContent($body);
-        } 
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         // get plain text if body is empty at this point
         if (! isset($body) || $body == 'no text part found') {
@@ -727,13 +729,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $body = $this->_replaceUriAndSpaces($body);
         }
 
-        // add anchor to email addresses (remove mailto hrefs first)
-        $mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>[^<]*<\/a>/i';
-        $body = preg_replace($mailtoPattern, "\\1", $body);
-        //$emailPattern = '/(?<!mailto:)([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
-        $emailPattern = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
-        $body = preg_replace($emailPattern, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $body);
-
+        $body = $this->_replaceEmails($body);
+        
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         return $body;
@@ -851,7 +848,27 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         return $result;
     }
-    
+
+    /**
+     * replace emails with links
+     *
+     * @param string $_content
+     * @return string
+     */
+    protected function _replaceEmails($_content) 
+    {
+        // add anchor to email addresses (remove mailto hrefs first)
+        //$mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>[^<]*<\/a>/i';
+        $mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>.*(?!<\/a>)/i';
+        $result = preg_replace($mailtoPattern, "\\1", $_content);
+        
+        //$emailPattern = '/(?<!mailto:)([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
+        $emailPattern = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
+        $result = preg_replace($emailPattern, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $result);
+        
+        return $result;
+    }
+        
     /**
      * remove all html entities
      *
