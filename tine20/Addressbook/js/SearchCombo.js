@@ -29,7 +29,12 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     itemSelector: 'div.search-item',
     store: null,
     minChars: 3,
-
+    
+    /**
+     * @cfg blurOnSelect
+     */
+    blurOnSelect: false,
+    
     /**
      * @property {Ext.data.Record} selectedRecord
      */
@@ -71,6 +76,11 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
         this.selectedRecord = record;
         this.setValue(record.get('n_fn'));
         this.collapse();
+        
+        this.fireEvent('select', this, record);
+        if (this.blurOnSelect) {
+            this.fireEvent('blur', this);
+        }
     },
     
     /**
