@@ -577,7 +577,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         if ($_backendFolderValues['exists'] < $_folderCount) {
             // some messages have been deleted
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Checking for deleted messages.' .
-                ' cached msgs: ' . $folderCount . ' server msgs: ' . $_backendFolderValues['exists']
+                ' cached msgs: ' . $_folderCount . ' server msgs: ' . $_backendFolderValues['exists']
             );
             
             // get cached msguids
