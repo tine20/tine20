@@ -177,6 +177,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     success: function(_result, _request){
                         // update grid
                         this.filterPlugin.onFilterChange();
+                        this.updateUnreadCount(null, 0, this.ctxNode);
                     },
                     timeout: 120000 // 2 minutes
                 });
