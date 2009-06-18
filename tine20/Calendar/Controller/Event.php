@@ -335,11 +335,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      * 
      * NOTE: for recur events we implicitly create an exceptions on demand
      *
-     * @param Calendar_Model_Event    $_event
-     * @param Calendar_Model_Attender $_attendee
-     * @param string                  $_authKey
+     * @param  Calendar_Model_Event    $_event
+     * @param  Calendar_Model_Attender $_attender
+     * @param  string                  $_authKey
+     * @return Calendar_Model_Attender updated attender
      */
-    public function setAttenderStatus($_event, $_attendee, $_authKey)
+    public function setAttenderStatus($_event, $_attender, $_authKey)
     {
         $eventId = $_event->getId();
         if (! $eventId) {
@@ -355,19 +356,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             $event = $this->get($eventId);
         }
         
-        $currentAttendee = $event->attendee[$event->attendee->getIndexById($_attendee->getId())];
-        $currentAttendee->status = $_attendee->status;
+        $currentAttender = $event->attendee[$event->attendee->getIndexById($_attender->getId())];
+        $currentAttender->status = $_attender->status;
         
-        if ($currentAttendee->status_authkey == $_authKey) {
-            $this->_backend->updateAttendee($currentAttendee);
+        if ($currentAttender->status_authkey == $_authKey) {
+            $updatedAttender = $this->_backend->updateAttendee($currentAttender);
             
             // touch event
             $event = $_event->recurid ? $this->_getRecurBaseEvent($_event) : $this->_backend->get($_event->getId());
             $this->_backend->update($event);
         } else {
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttendee->user_type} {$currentAttendee->user_id}");
+            $updatedAttender = $currentAttender;
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttender->user_type} {$currentAttender->user_id}");
         }
+        
+        return $updatedAttender;
     }
     
     /**
