@@ -278,7 +278,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // save each flag in backend, cache db and message record
         if ($imapBackend = $this->_getBackendAndSelectFolder($_message->folder_id, $_folder)) {
-            $imapBackend->addFlags($_message->messageuid, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+            try {
+                $imapBackend->addFlags($_message->messageuid, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' Could not save flags: '
+                    . $zmse->getMessage()
+                );
+            }                
             foreach ($_flags as $flag) {
                 $_message->flags .= ' ' . $flag;
                 $this->_backend->addFlag($_message, $flag);
@@ -429,6 +436,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                     . ' Could not save sent message in "' . $sentFolder . '".'
                     . ' Please check if a folder with this name exists.'
+                    . '(' . $zmpe->getMessage() . ')'
+                );
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' Could not save sent message in "' . $sentFolder . '".'
+                    . ' Please check if a folder with this name exists.'
+                    . '(' . $zmse->getMessage() . ')'
                 );
             }
             
