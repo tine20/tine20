@@ -114,6 +114,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $loadedPwulf['status']);
     }
     
+    public function testSetAttenderStatusViaSaveEvent()
+    {
+        $eventData = $this->testCreateEvent();
+        $eventData['container_id'] = $eventData['container_id']['id'];
+        
+        // should be ok to only test test user
+        $eventData['attendee'][0]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $eventData['summary'] = 'This text must not be saved!';
+        
+        // force attendee saving w.o. event saving  
+        $eventData['editGrant'] = false;
+        
+        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        
+        
+        $loadedEventData = $this->_uit->getEvent($eventData['id']);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $eventData['attendee'][0]['status']);
+        $this->assertNotEquals($eventData['summary'], $loadedEventData['summary'], 'event must not be updated!');
+        
+    }
+    
     public function testUpdateRecurExceptionsFromSeriesOverDstMove()
     {
         /*

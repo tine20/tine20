@@ -83,6 +83,10 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             'container_id' => $this->_testCalendar->getId(),
             'organizer'    => Tinebase_Core::getUser()->getId(),
             'uid'          => Calendar_Model_Event::generateUID(),
+        
+            'readGrant'    => true,
+            'editGrant'    => true,
+            'deleteGrant'  => true,
         ));
         
         
