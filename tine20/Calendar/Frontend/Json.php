@@ -148,7 +148,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($typeMap as $type => $ids) {
             switch ($type) {
                 case 'user':
-                    Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
+                    //Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
                     $typeMap[$type] = Tinebase_User::getInstance()->getMultiple(array_unique($ids));
                     break;
                 case 'group':
