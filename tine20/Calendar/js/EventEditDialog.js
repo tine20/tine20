@@ -9,7 +9,7 @@
  *
  */
  
-Ext.namespace('Tine.Calendar');
+Ext.ns('Tine.Calendar');
 
 /**
  * Calendar Edit Dialog
@@ -39,137 +39,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     // note: we need up use new action updater here or generally in the widget!
     evalGrants: false,
     
-    /**
-     * @property {Ext.data.Store}
-     */
-    attendeeStore: null,
-    
     afterRender: function() {
         Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
         
     },
     
-    onBeforeAttenderEdit: function(o) {
-        if (o.field == 'status') {
-            // status setting is not always allowed
-            if (!o.record.getUserId() == Tine.Tinebase.registry.get('currentAccount').accountId && !o.record.get('status_authkey')) {
-                o.cancel = true;
-            }
-            return;
-        }
-        
-        if (! this.record.get('editGrant')) {
-            o.cancel = true;
-            return;
-        }
-        
-        // don't allow to set anything besides quantity for persistent attendee
-        if (o.record.get('id')) {
-            o.cancel = true;
-            if (o.field == 'quantity' && o.record.get('user_type') == 'resource') {
-                o.cancel = false;
-            }
-            return;
-        }
-        
-        if (o.field == 'user_id') {
-            //console.log(this.renderAttenderName(o.value));
-            //o.value = this.renderAttenderName(o.value)
-        }
-    },
-    
     onResize: function() {
         Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
         this.setTabHeight.defer(100, this);
-    },
-    
-    getAttendeeGrid: function() {
-        return {
-            xtype: 'editorgrid',
-            store: this.attendeeStore,
-            title: this.app.i18n._('Attendee'),
-            autoExpandColumn: 'user_id',
-            clicksToEdit: 1,
-            plugins: [new Ext.ux.grid.GridViewMenuPlugin({})],
-            enableHdMenu: false,
-            listeners: {
-                scope: this,
-                beforeedit: this.onBeforeAttenderEdit
-            },
-            columns: [{
-                id: 'role',
-                dataIndex: 'role',
-                width: 70,
-                sortable: true,
-                hidden: true,
-                header: this.app.i18n._('Role'),
-                renderer: this.renderAttenderRole.createDelegate(this)
-            }, {
-                id: 'quantity',
-                dataIndex: 'quantity',
-                width: 40,
-                sortable: true,
-                hidden: true,
-                header: '&#160;',
-                tooltip: this.app.i18n._('Quantity'),
-                renderer: this.renderAttenderQuantity.createDelegate(this)
-            }, {
-                id: 'user_type',
-                dataIndex: 'user_type',
-                width: 20,
-                sortable: true,
-                resizable: false,
-                header: '&#160;',
-                tooltip: this.app.i18n._('Type'),
-                renderer: this.renderAttenderType.createDelegate(this)
-            }, {
-                id: 'user_id',
-                dataIndex: 'user_id',
-                width: 300,
-                sortable: true,
-                header: this.app.i18n._('Name'),
-                renderer: this.renderAttenderName.createDelegate(this),
-                editor: new Tine.Addressbook.SearchCombo({
-                    setValue: function(name) {
-                        if (name) {
-                            if (typeof name.get == 'function' && name.get('n_fn')) {
-                                name = name.get('n_fn');
-                            } else if (name.accountDisplayName) {
-                                name = name.accountDisplayName;
-                            }
-                        }
-                        Tine.Addressbook.SearchCombo.prototype.setValue.call(this, name);
-                    },
-                    getValue: function() {
-                        return this.selectedRecord;
-                    }
-                })
-                //editor: new Tine.widgets.AccountpickerField({})
-            }, {
-                id: 'status',
-                dataIndex: 'status',
-                width: 100,
-                sortable: true,
-                header: this.app.i18n._('Status'),
-                renderer: this.renderAttenderStatus.createDelegate(this),
-                editor: new Ext.form.ComboBox({
-                    typeAhead     : false,
-                    triggerAction : 'all',
-                    lazyRender    : true,
-                    editable      : false,
-                    mode          : 'local',
-                    value         : null,
-                    forceSelection: true,
-                    store         : [
-                        ['NEEDS-ACTION', ('No response')],
-                        ['ACCEPTED',     ('Accepted')   ],
-                        ['DECLINED',     ('Declined')   ],
-                        ['TENTATIVE',    ('Tentative')  ]
-                    ]
-                    
-                })
-            }]
-        }
     },
     
     /**
@@ -249,7 +126,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         border: true,
                         height: 235,
                         form: true,
-                        items: [this.getAttendeeGrid(), {
+                        items: [this.attendeeGridPanel, {
                             title: this.app.i18n._('Options'),
                             html: 'recurings and alamrs'
                         }]
@@ -307,10 +184,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     initComponent: function() {
-        this.attendeeStore = new Ext.data.SimpleStore({
-            fields: Tine.Calendar.Model.AttenderArray,
-            sortInfo: {field: 'user_id', direction: 'ASC'}
-        });
+        this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({});
+        this.attendeeStore = this.attendeeGridPanel.getStore();
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
     },
@@ -354,15 +229,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordLoad: function() {
         // NOTE: it comes again and again till 
         if (this.rendered) {
-            this.attendeeStore.removeAll(attendee);
-            var attendee = this.record.get('attendee');
-            Ext.each(attendee, function(attender) {
-                this.attendeeStore.add(new Tine.Calendar.Model.Attender(attender, attender.id));
-            }, this);
-            
-            if (this.record.get('editGrant')) {
-                this.attendeeStore.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 0)]);
-            }
+            this.attendeeGridPanel.onRecordLoad(this.record);
         }
         
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
@@ -370,83 +237,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     onRecordUpdate: function() {
         Tine.Calendar.EventEditDialog.superclass.onRecordUpdate.apply(this, arguments);
-        
-        var attendee = [];
-        this.attendeeStore.each(function(attender) {
-            var user_id = attender.getUserId();
-            if (user_id) {
-                var data = attender.data;
-                data.user_id = user_id;
-                attendee.push(data);
-            }
-        }, this);
-        
-        this.record.set('attendee', '');
-        this.record.set('attendee', attendee);
-    },
-    
-    renderAttenderName: function(name) {
-        if (name) {
-            if (typeof name.get == 'function' && name.get('n_fn')) {
-                return name.get('n_fn');
-            }
-            if (name.accountDisplayName) {
-                return name.accountDisplayName;
-            }
-        }
-    },
-    
-    renderAttenderQuantity: function(quantity, metadata, attender) {
-        return quantity > 1 ? quantity : '';
-    },
-    
-    renderAttenderRole: function(role) {
-        switch (role) {
-            case 'REQ':
-                return this.app.i18n._('Required');
-                break;
-            case 'OPT':
-                return this.app.i18n._('Optional');
-                break;
-            default:
-                return this.app.i18n._hidden(role);
-                break;
-        }
-    },
-    
-    renderAttenderStatus: function(status, metadata, attender) {
-        switch (status) {
-            case 'NEEDS-ACTION':
-                return this.app.i18n._('No response');
-                break;
-            case 'ACCEPTED':
-                return this.app.i18n._('Accepted');
-                break;
-            case 'DECLINED':
-                return this.app.i18n._('Declined');
-                break;
-            case 'TENTATIVE':
-                return this.app.i18n._('Tentative');
-                break;
-            default:
-                return this.app.i18n._hidden(status);
-                break;
-        }
-    },
-    
-    renderAttenderType: function(type, metadata, attender) {
-        switch (type) {
-            case 'user':
-                metadata.css = 'renderer_accountUserIcon';
-                break;
-            case 'group':
-                metadata.css = 'renderer_accountGroupIcon';
-                break;
-            default:
-                metadata.css = 'cal-attendee-type-' + type;
-                break;
-        }
-        return '';
+        this.attendeeGridPanel.onRecordUpdate(this.record);
     },
     
     setTabHeight: function() {
