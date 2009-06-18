@@ -31,7 +31,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Calendar',
     recordClass: Tine.Calendar.Model.Event,
     recordProxy: Tine.Calendar.backend,
-    showContainerSelector: true,
+    showContainerSelector: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     mode: 'local',
@@ -42,12 +42,18 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     afterRender: function() {
         Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
         
+        // render calendarSelector
+        var calSelectWidgetFromItems = this.CalendarSelectWidget.getFormItems();
+        this.getForm().add(calSelectWidgetFromItems[0]);
+        this.getForm().add(calSelectWidgetFromItems[1]);
+        this.CalendarSelectWidget.render(this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}}));
     },
     
     onResize: function() {
         Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
         this.setTabHeight.defer(100, this);
     },
+    
     
     /**
      * returns dialog
@@ -192,6 +198,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({});
         this.attendeeStore = this.attendeeGridPanel.getStore();
         
+        this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget({});
+        
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
     },
     
@@ -235,6 +243,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // NOTE: it comes again and again till 
         if (this.rendered) {
             this.attendeeGridPanel.onRecordLoad(this.record);
+            this.CalendarSelectWidget.onRecordLoad(this.record);
         }
         
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
@@ -243,6 +252,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Calendar.EventEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.attendeeGridPanel.onRecordUpdate(this.record);
+        this.CalendarSelectWidget.onRecordUpdate(this.record);
     },
     
     setTabHeight: function() {

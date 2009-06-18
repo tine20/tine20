@@ -22,6 +22,11 @@
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-month.png) !important;
 }
 
+.x-form-field-wrap .cal-invitation-trigger {
+    background-image:url(../../images/cal-invitiationcal-trigger.png);
+    cursor:pointer;
+}
+
 /**** date picker ****/
 .cal-tree .x-date-picker {
     border: 0;
