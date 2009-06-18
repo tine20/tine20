@@ -36,6 +36,11 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     blurOnSelect: false,
     
     /**
+     * @cfg {Boolean} internalContactsOnly
+     */
+    internalContactsOnly: false,
+    
+    /**
      * @property {Ext.data.Record} selectedRecord
      */
     selectedRecord: null,
@@ -60,9 +65,14 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      */
     onBeforeQuery: function(qevent){
         var filter = [
-            {field: 'containerType', operator: 'equals', value: 'all' },
             {field: 'query', operator: 'contains', value: qevent.query }
         ];
+        
+        if (this.internalContactsOnly) {
+            filter.push({field: 'container_id', operator: 'specialNode', value: 'internal' });
+        } else {
+            filter.push({field: 'container_id', operator: 'specialNode', value: 'all' });
+        }
         this.store.baseParams.filter = Ext.util.JSON.encode(filter);
     },
     
