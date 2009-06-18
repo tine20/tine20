@@ -18,7 +18,7 @@
  * @package    Admin
  * @subpackage Samba
  */
-class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract implements Tinebase_Controller_Record_Interface
+class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract implements Tinebase_Controller_Record_Interface, Tinebase_Controller_SearchInterface
 {
     /**
      * @var array
