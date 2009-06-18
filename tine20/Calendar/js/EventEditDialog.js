@@ -127,8 +127,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         height: 235,
                         form: true,
                         items: [this.attendeeGridPanel, {
-                            title: this.app.i18n._('Options'),
+                            title: this.app.i18n._('Recuring'),
+                            disabled: true,
                             html: 'recurings and alamrs'
+                        }, {
+                            title: this.app.i18n._('Alarms'),
+                            disabled: true,
+                            html: ''
                         }]
                     }]
                 }, {
