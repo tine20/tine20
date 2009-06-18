@@ -68,6 +68,20 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * sets attendee status for an attender on the given event
+     * 
+     * NOTE: for recur events we implicitly create an exceptions on demand
+     *
+     * @param JSONstring    $_event
+     * @param JSONstring    $_attendee
+     * @param string        $_authKey
+     */
+    public function setAttenderStatus($_event, $_attendee, $_authKey)
+    {
+        
+    }
+    
+    /**
      * deletes existing events
      *
      * @param array $_ids 

@@ -331,7 +331,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     /****************************** attendee functions ************************/
     
     /**
-     * sets attendee status for a single attendee on the given event
+     * sets attendee status for an attendee on the given event
      * 
      * NOTE: for recur events we implicitly create an exceptions on demand
      *
@@ -339,7 +339,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      * @param Calendar_Model_Attender $_attendee
      * @param string                  $_authKey
      */
-    public function setAttendeeStatus($_event, $_attendee, $_authKey)
+    public function setAttenderStatus($_event, $_attendee, $_authKey)
     {
         $eventId = $_event->getId();
         if (! $eventId) {
