@@ -72,13 +72,22 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * NOTE: for recur events we implicitly create an exceptions on demand
      *
-     * @param JSONstring    $_event
-     * @param JSONstring    $_attendee
-     * @param string        $_authKey
+     * @param  JSONstring    $_event
+     * @param  JSONstring    $_attendee
+     * @param  string        $_authKey
+     * @return array         complete event
      */
     public function setAttenderStatus($_event, $_attendee, $_authKey)
     {
+        $eventData    = is_array($_event) ? $_event : Zend_Json::decode($_event);
+        $attenderData = is_array($_attendee) ? $_attendee : Zend_Json::decode($_attendee);
         
+        $event    = new Calendar_Model_Event($eventData);
+        $attender = new Calendar_Model_Attender($attenderData);
+        
+        Calendar_Controller_Event::getInstance()->setAttenderStatus($event, $attender, $_authKey);
+        
+        return $this->getEvent($event->getId());
     }
     
     /**
