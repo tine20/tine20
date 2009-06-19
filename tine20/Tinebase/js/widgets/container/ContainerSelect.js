@@ -108,6 +108,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         if (! this.hideTrigger2) {
             var t1 = this.trigger.first();
             var t2 = this.trigger.last();
+            this.trigger2 = t2;
             
             t1.on("click", this.onTriggerClick, this, {preventDefault:true});
             t2.on("click", this.onTrigger2Click, this, {preventDefault:true});
@@ -128,11 +129,21 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         var trigger2 = this.trigger.last().last().update(text);
     },
     
-    /*
-    disableContainerPart: function() {
-        
+    setTrigger2Disabled: function(bool) {
+        if (bool) {
+            this.trigger2.setOpacity(0.5);
+            this.trigger2.un("click", this.onTrigger2Click, this, {preventDefault:true});
+        } else {
+            this.trigger2.setOpacity(1);
+            this.trigger2.on("click", this.onTrigger2Click, this, {preventDefault:true});
+        }
     },
-    */
+    
+    getTrigger2: function() {
+        return this.trigger2;
+    },
+    
+    onTrigger2Click: Ext.emptyFn,
     
     // private: only blur if dialog is closed
     onBlur: function() {
@@ -153,9 +164,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             TriggerField: this
         });
     },
-    
-    //onTrigger1Click: Ext.form.ComboBox.prototype.onTriggerClick,
-    onTrigger2Click: Ext.emptyFn,
     
     /**
      * @private
