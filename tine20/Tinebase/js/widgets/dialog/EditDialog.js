@@ -117,7 +117,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
              * @event apply
              * Fired when user pressed apply button
              */
-            'apply'
+            'apply',
+            /**
+             * @event load
+             * Fired when record is loaded
+             */
+            'load'
         );
         
         if (! this.app) {
@@ -249,10 +254,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
         }
         
-        this.getForm().loadRecord(this.record);
-        this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
-        
-        this.loadMask.hide();
+        if (this.fireEvent('load', this) !== false) {
+            this.getForm().loadRecord(this.record);
+            this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
+            
+            this.loadMask.hide();
+        }
     },
     
     /**
