@@ -132,6 +132,27 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
     },
     
     onAlterApplications: function(btn, e) {
+
+        if (btn.actionType == 'uninstall') {
+            // get user confirmation before uninstall
+            Ext.Msg.confirm(this.app.i18n._('uninstall'), this.app.i18n._('Do you really want to uninstall the application(s)?'), function(confirmbtn, value) {
+                console.log(confirmbtn);
+                if (confirmbtn == 'yes') {
+                    this.alterApps(btn.actionType);
+                }
+            }, this);
+        } else {
+            this.alterApps(btn.actionType);
+        }
+    },
+    
+    /**
+     * alter applications
+     * 
+     * @param {} type (uninstall/install/update)
+     */
+    alterApps: function(type) {
+
         var appNames = [];
         var apps = this.selectionModel.getSelections();
         
@@ -142,6 +163,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         var msg = this.app.i18n.n_('Updating Application "{0}".', 'Updating {0} Applications.', appNames.length);
         msg = String.format(msg, appNames.length == 1 ? appNames[0] : appNames.length ) + ' ' + this.app.i18n._('This may take a while');
         
+        
         var longLoadMask = new Ext.LoadMask(this.grid.getEl(), {
             msg: msg,
             removeMask: true
@@ -151,7 +173,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         Ext.Ajax.request({
             scope: this,
             params: {
-                method: 'Setup.' + btn.actionType + 'Applications',
+                method: 'Setup.' + type + 'Applications',
                 applicationNames: Ext.util.JSON.encode(appNames)
             },
             success: function() {
