@@ -75,22 +75,17 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                 } else {
                     $fieldName  = $tablename . '.name';
                     $fieldEmail = $tablename . '.email';
-
-                    $columns = $_select->getPart(Zend_Db_Select::COLUMNS);
-                    if (count($columns) == 1 && $columns[0][2] == 'count') {
-                        // only add join for count queries
-                        $_select->joinLeft(
-                            $tablename, 
-                            $tablename . '.message_id = ' . $_backend->getTableName() . '.id'
-                        );
-                    }
                 }
                 
                 // add filter value
                 $value      = '%' . $customData['value'] . '%';
                                 
                 if ($customData['field'] == 'flags') {
-                    $_select->having($db->quoteInto('flags LIKE ?', $value));
+                    if ($customData['operator'] == 'equals' || $customData['operator'] == 'contains') {
+                        $_select->having($db->quoteInto('flags LIKE ?', $value));
+                    } else {
+                        $_select->having($db->quoteInto('flags NOT LIKE ? OR flags IS NULL', $value));
+                    }
                 } else {
                     $_select->where(
                         $db->quoteInto($fieldName  . ' LIKE ?', $value) . ' OR ' .

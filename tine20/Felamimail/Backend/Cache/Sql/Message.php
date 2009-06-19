@@ -65,6 +65,25 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    {        
+        $select = $this->_getSelect(array('count' => 'COUNT(*)'));
+        $this->_addFilter($select, $_filter);
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
+        $stmt = $this->_db->query($select);
+        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        return count($rows);        
+    }    
+        
+    /**
      * get the basic select object to fetch records from the database
      *  
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
@@ -72,35 +91,32 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @return Zend_Db_Select
      * 
      * @todo add name (to, cc, bcc)
-     * @todo try to remove deleted messages from result
+     * @todo try to remove deleted messages from result?
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
-        if ($_cols === '*') {
-            $select = parent::_getSelect($_cols, $_getDeleted);
-            
-            // add to/cc/bcc/flags
-            foreach ($this->_foreignTables as $field => $tablename) {
-                $fieldName = ($field == 'flags') ? 'flag' : 'email';
-                $select->joinLeft(
-                    $this->_tablePrefix . $tablename, 
-                    $this->_tablePrefix . $tablename . '.message_id = ' . $this->_tableName . '.id', 
-                    array($field => 'GROUP_CONCAT(DISTINCT ' . $this->_tablePrefix . $tablename . '.' . $fieldName . ')')
-                );
-                $select->group($this->_tableName . '.id');
-            }
-            /*
-            if (! $_getDeleted) {
-                $select->where($this->_db->quoteInto(
-                    //$this->_db->quoteIdentifier($this->_tablePrefix . $this->_foreignTables['flags'] . '.flag') . ' != ?',
-                    $this->_db->quoteIdentifier('flags') . ' NOT LIKE ?',
-                    '%\Deleted%'
-                ));
-            }
-            */
-        } else {
-            $select = parent::_getSelect(array('count' => 'COUNT(DISTINCT ' . $this->_tableName . '.id)', $_getDeleted));
+        /*
+        if (! $_getDeleted) {
+            $select->where($this->_db->quoteInto(
+                //$this->_db->quoteIdentifier($this->_tablePrefix . $this->_foreignTables['flags'] . '.flag') . ' != ?',
+                $this->_db->quoteIdentifier('flags') . ' NOT LIKE ?',
+                '%\Deleted%'
+            ));
         }
+        */
+
+        $select = parent::_getSelect($_cols, $_getDeleted);
+        
+        // add to/cc/bcc/flags
+        foreach ($this->_foreignTables as $field => $tablename) {
+            $fieldName = ($field == 'flags') ? 'flag' : 'email';
+            $select->joinLeft(
+                $this->_tablePrefix . $tablename, 
+                $this->_tablePrefix . $tablename . '.message_id = ' . $this->_tableName . '.id', 
+                array($field => 'GROUP_CONCAT(DISTINCT ' . $this->_tablePrefix . $tablename . '.' . $fieldName . ')')
+            );
+        }
+        $select->group($this->_tableName . '.id');
         
         return $select;
     }
