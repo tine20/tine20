@@ -324,7 +324,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             
             // import        
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Initial import: trying to add ' . count($messages) . ' new messages to cache.'
+                . ' Initial import: trying to add ' . count($messages) . ' new messages to cache of folder ' . $folder->localname
                 . ' Beginning with message uid: ' . $uids[0] . ' (from: ' . $from .' to: ' . $to . ')'
             );
             
