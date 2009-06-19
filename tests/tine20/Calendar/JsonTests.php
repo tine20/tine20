@@ -80,6 +80,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         unset($eventData['attendee'][1]);
         
         $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        //print_r($updatedEventData);
         $this->_assertJsonEvent($eventData, $updatedEventData, 'failed to update event');
         
         return $updatedEventData;
@@ -144,7 +145,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
         
-        
         $loadedEventData = $this->_uit->getEvent($eventData['id']);
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $eventData['attendee'][0]['status']);
         $this->assertNotEquals($eventData['summary'], $loadedEventData['summary'], 'event must not be updated!');
@@ -169,7 +169,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(is_array($eventData['container_id']), $msg . ': failed to "resolve" container');
         $this->assertTrue(is_array($eventData['container_id']['account_grants']), $msg . ': failed to "resolve" container account_grants');
         $this->assertEquals(count($eventData['attendee']), count($expectedEventData['attendee']), $msg . ': faild to append attendee');
-        $this->assertTrue(is_array($eventData['attendee'][0]['user_id']), $msg . ' failed to resolve attendee user_id');
+        $this->assertTrue(is_array($eventData['attendee'][0]['user_id']), $msg . ': failed to resolve attendee user_id');
+        // NOTE: due to sorting isshues $eventData['attendee'][0] may be a non resolvable container (due to rights restrictions)
+        $this->assertTrue(is_array($eventData['attendee'][0]['displaycontainer_id']) || (isset($eventData['attendee'][1]) && is_array($eventData['attendee'][1]['displaycontainer_id'])), $msg . ': failed to resolve attendee displaycontainer_id');
         $this->assertEquals(count($expectedEventData['tags']), count($eventData['tags']), $msg . ': faild to append tag');
         $this->assertEquals(count($expectedEventData['notes']), count($eventData['notes']), $msg . ': faild to create note');
     }
