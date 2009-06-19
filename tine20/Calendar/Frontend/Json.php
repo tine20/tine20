@@ -135,6 +135,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns record prepared for json transport
      *
+     * @todo fixme with effective grants!!!
+     * 
      * @param Tinebase_Record_Interface $_record
      * @return array record data
      */
@@ -186,9 +188,11 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 $typeMap[$type][] = $attender->$_idProperty;
             }
+            // resolve displaycontainers
+            Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
         }
         
-        // get all entries
+        // get all $_idProperty entries
         foreach ($typeMap as $type => $ids) {
             switch ($type) {
                 case 'user':
