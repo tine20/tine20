@@ -280,6 +280,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $select = $this->_getSelect(array('count' => 'COUNT(*)'));
         $this->_addFilter($select, $_filter);
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
         $result = $this->_db->fetchOne($select);
         return $result;        
     }    
