@@ -41,12 +41,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     afterRender: function() {
         Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
-        
+        this.CalendarSelectWidget.render(this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}}));
+        /*
         // render calendarSelector
         var calSelectWidgetFromItems = this.CalendarSelectWidget.getFormItems();
-        this.getForm().add(calSelectWidgetFromItems[0]);
-        this.getForm().add(calSelectWidgetFromItems[1]);
+        //this.getForm().add(calSelectWidgetFromItems[0]);
+        //this.getForm().add(calSelectWidgetFromItems[1]);
         this.CalendarSelectWidget.render(this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}}));
+        */
     },
     
     onResize: function() {
@@ -198,7 +200,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({});
         this.attendeeStore = this.attendeeGridPanel.getStore();
         
-        this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget({});
+        this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget(this);
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
     },
