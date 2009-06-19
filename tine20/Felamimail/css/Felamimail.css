@@ -102,8 +102,12 @@
     background-image:url(../../images/oxygen/16x16/places/user-trash.png);
 }
 
-.felamimail-node-marked .x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/places/folder-red.png);
+.felamimail-node-intelligent-marked .x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder-important.png);
+}
+
+.felamimail-node-intelligent-unread .x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder-bookmarks.png);
 }
 
 .felamimail-node-account .x-tree-node-icon {

@@ -120,14 +120,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             text: this.app.i18n._('Marked'),
                             qtip: this.app.i18n._('Contains marked messages'),
                             leaf: true,
-                            cls: 'felamimail-node-marked',
+                            cls: 'felamimail-node-intelligent-marked',
                             account_id: record.data.id
                         });
                 
                         node.appendChild(markedNode);
                     }
                     
-                    /*
                     var unreadNode = new Ext.tree.TreeNode({
                         id: record.data.id + '/unread',
                         localname: 'unread', //this.app.i18n._('Marked'),
@@ -138,12 +137,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         text: this.app.i18n._('Unread'),
                         qtip: this.app.i18n._('Contains unread messages'),
                         leaf: true,
-                        cls: 'felamimail-node-unread',
+                        cls: 'felamimail-node-intelligent-unread',
                         account_id: record.data.id
                     });
             
                     node.appendChild(unreadNode);
-                    */
                 }
             }
         });
@@ -329,6 +327,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                     if (node && node.attributes.globalname == 'marked') {
                         return [
                             {field: 'flags',        operator: 'equals', value: '\\Flagged' },
+                            {field: 'account_id',   operator: 'equals', value: node.attributes.account_id }
+                        ];
+                    } else if (node && node.attributes.globalname == 'unread') {
+                        return [
+                            {field: 'flags',        operator: 'not', value: '\\Seen' },
                             {field: 'account_id',   operator: 'equals', value: node.attributes.account_id }
                         ];
                     } else {
