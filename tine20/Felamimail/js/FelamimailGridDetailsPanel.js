@@ -136,7 +136,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 if (email) {
                     var id = Ext.id() + ':' + email;
                     
-                    var name = value.match(/^"([a-zA-Z\-0-9\._]+)(,*) *([a-zA-Z\-0-9\._]+)/);
+                    var name = value.match(/^"*([a-zA-Z\-0-9\._]+)(,*) *([a-zA-Z\-0-9\._]+)/);
                     var firstname = (name && name[1]) ? name[1] : '';
                     var lastname = (name && name[3]) ? name[3] : '';
                     
@@ -147,8 +147,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     
                     id += ':' + firstname + ':' + lastname;
                     
-                    result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[' 
-                            + addText + ']</span>';
+                    result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
                 }
                 
                 return result;
