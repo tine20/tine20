@@ -106,14 +106,19 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     
     initTrigger : function(){
         if (! this.hideTrigger2) {
-            var trigger1 = this.trigger.first();
-            var trigger2 = this.trigger.last();
+            var t1 = this.trigger.first();
+            var t2 = this.trigger.last();
             
-            trigger1.addClassOnOver('x-form-trigger-over');
-            trigger1.addClassOnClick('x-form-trigger-click');
+            t1.on("click", this.onTriggerClick, this, {preventDefault:true});
+            t2.on("click", this.onTrigger2Click, this, {preventDefault:true});
             
-            trigger2.addClassOnOver('x-form-trigger-over');
-            trigger2.addClassOnClick('x-form-trigger-click');
+            t1.addClassOnOver('x-form-trigger-over');
+            t1.addClassOnClick('x-form-trigger-click');
+            
+            t2.addClassOnOver('x-form-trigger-over');
+            t2.addClassOnClick('x-form-trigger-click');
+            
+            
         } else {
             Tine.widgets.container.selectionComboBox.superclass.initTrigger.call(this);
         }
@@ -122,6 +127,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     setTrigger2Text: function(text) {
         var trigger2 = this.trigger.last().last().update(text);
     },
+    
+    /*
+    disableContainerPart: function() {
+        
+    },
+    */
     
     // private: only blur if dialog is closed
     onBlur: function() {
@@ -143,7 +154,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         });
     },
     
-    onTrigger1Click: Ext.form.ComboBox.prototype.onTriggerClick,
+    //onTrigger1Click: Ext.form.ComboBox.prototype.onTriggerClick,
     onTrigger2Click: Ext.emptyFn,
     
     /**
