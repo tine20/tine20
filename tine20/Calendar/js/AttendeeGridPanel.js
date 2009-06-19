@@ -19,6 +19,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     record: null,
     
     /**
+     * @property {Number}
+     */
+    currentAccountId: null,
+    /**
      * @property {Ext.data.Store}
      */
     attendeeStore: null,
@@ -26,6 +30,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Calendar');
         
+        this.currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
         
         this.title = this.app.i18n._('Attendee');
         this.plugins = this.plugins || [];
@@ -68,6 +73,39 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             tooltip: this.app.i18n._('Quantity'),
             renderer: this.renderAttenderQuantity.createDelegate(this)
         }, {
+            id: 'displaycontainer_id',
+            dataIndex: 'displaycontainer_id',
+            width: 200,
+            sortable: false,
+            header: Tine.Tinebase.tranlation._hidden('Saved in'),
+            tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
+            renderer: this.renderAttenderDispContainer.createDelegate(this),
+            editor: new Tine.widgets.container.selectionComboBox({
+                blurOnSelect: true,
+                selectOnFocus: true,
+                appName: 'Calendar',
+                getValue: function() {
+                    if (this.container) {
+                        // NOTE: the store checks if data changed. If we don't overwrite to string, 
+                        //  the check only sees [Object Object] wich of course never changes...
+                        var container_id = this.container.id;
+                        this.container.toString = function() {return container_id;};
+                    }
+                    return this.container;
+                },
+                listeners: {
+                    scope: this,
+                    select: function(field, newValue) {
+                        // the field is already blured, due to the extra chooser window. We need to change the value per hand
+                        var selection = this.getSelectionModel().getSelectedCell();
+                        if (selection) {
+                            var row = selection[0];
+                            this.store.getAt(row).set('displaycontainer_id', newValue);
+                        }
+                    }
+                }
+            })
+        }, {
             id: 'user_type',
             dataIndex: 'user_type',
             width: 20,
@@ -95,11 +133,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     Tine.Addressbook.SearchCombo.prototype.setValue.call(this, name);
                 },
                 getValue: function() {
+                    if (this.selectedRecord) {
+                        // NOTE: the store checks if data changed. If we don't overwrite to string, 
+                        //  the check only sees [Object Object] wich of course never changes...
+                        var user_id = this.selectedRecord.get('account_id');
+                        this.selectedRecord.toString = function() {return user_id;};
+                    }
                     return this.selectedRecord;
-                },
-                listeners: {
-                    scope: this,
-                    select: this.onContactSelect
                 }
             })
         }, {
@@ -140,9 +180,16 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             // status setting is not always allowed
             if (!o.record.get('status_authkey')) {
                 o.cancel = true;
-                if (o.record.getUserId() != Tine.Tinebase.registry.get('currentAccount').accountId && ! o.record.id.match(/new/)) {
+                if (o.record.getUserId() != this.currentAccountId && ! o.record.id.match(/new/)) {
                     o.cancel = false;
                 }
+            }
+            return;
+        }
+        
+        if (o.field == 'displaycontainer_id') {
+            if (! o.value || ! o.value.account_grants || ! o.value.account_grants.deleteGrant) {
+                o.cancel = true;
             }
             return;
         }
@@ -163,21 +210,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (o.field == 'user_id') {
             // here we are!
-        }
-    },
-    
-    /**
-     * @private
-     */
-    onContactSelect: function(contact) {
-        var name = contact;
-        
-        if (name) {
-            if (typeof name.get == 'function' && name.get('n_fn')) {
-                name = name.get('n_fn');
-            } else if (name.accountDisplayName) {
-                name = name.accountDisplayName;
-            }
         }
     },
     
@@ -243,6 +275,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         record.set('attendee', attendee);
     },
     
+    /**
+     * 
+     * @param {} store
+     * @param {} updatedAttender
+     */
     onStoreUpdate: function(store, updatedAttender) {
         
         // check if we need to add a new row
@@ -259,7 +296,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 var last = this.store.getAt(this.store.getCount() -1);
                 if (last != attender) {
                     //duplicate entry
-                    this.getView().focusCell(this.store.indexOf(attender), 2);
+                    this.getView().focusCell(this.store.indexOf(attender), 3);
                     this.store.remove.defer(50, this.store, [last]);
                     needUpdate = true;
                     return false;
@@ -270,6 +307,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (needUpdate && this.record.get('editGrant')) {
             this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
         }
+        
+        // check if displaycontainer of owner got changed
+        if (updatedAttender.getUserId() == this.currentAccountId && updatedAttender.get('user_type') == 'user') {
+            this.record.set('container_id', '');
+            this.record.set('container_id', updatedAttender.get('displaycontainer_id'));
+        }
+        
     },
     
     onKeyDown: function(e) {
@@ -302,6 +346,20 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
             if (name.accountDisplayName) {
                 return name.accountDisplayName;
+            }
+            return name;
+        }
+    },
+    
+    renderAttenderDispContainer: function(displaycontainer_id, metadata, attender) {
+        metadata.attr = 'style: "overflow: none;"';
+        
+        if (displaycontainer_id) {
+            if (displaycontainer_id.name) {
+                return Ext.util.Format.htmlEncode(displaycontainer_id.name).replace(/ /g,"&nbsp;");
+            } else {
+                metadata.css = 'x-form-empty-field';
+                return this.app.i18n._('No Information');
             }
         }
     },
