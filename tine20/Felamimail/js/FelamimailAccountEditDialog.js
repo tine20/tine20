@@ -41,8 +41,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
-     * 
-     * TODO use tabpanel?
      */
     getFormItems: function() {
         return {
@@ -247,27 +245,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     ]
                 }]]
             }]            
-            
-            /*
-            xtype: 'tabpanel',
-            id: 'account-edit-tabpanel',
-            border: false,
-            plain:true,
-            activeTab: 0,
-            listeners: {
-                scope: this,
-                tabchange: function(panel, tab) {
-                    // we need this as workaround as form is not initialized/filled with defaults in inactive tabs :(
-                    // TODO find a better way for that because we can't check validity of 
-                    //    fields in other tabs when they haven't been initialized
-                    if (! tab.hasbeenselected) {
-                        this.getForm().loadRecord(this.record);
-                        tab.hasbeenselected = true;
-                    }
-                }
-            },
-            items:[]
-            */
         };
     }
 });
