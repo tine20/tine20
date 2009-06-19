@@ -231,7 +231,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.detailsPanel = new Tine.Felamimail.GridDetailsPanel({
             gridpanel: this,
             grid: this,
-            il8n: this.app.i18n
+            i18n: this.app.i18n
         });
     },
     

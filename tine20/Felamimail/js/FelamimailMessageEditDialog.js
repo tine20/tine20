@@ -123,14 +123,14 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
             fieldLabel: this.app.i18n._('Recipients'),
             record: this.record,
-            il8n: this.app.i18n,
+            i18n: this.app.i18n,
             anchor: '100% 90%'
         });
         
         this.attachmentGrid = new Tine.Felamimail.AttachmentGrid({
             fieldLabel: this.app.i18n._('Attachments'),
             record: this.record,
-            il8n: this.app.i18n,
+            i18n: this.app.i18n,
             anchor: '100% 90%'
         });
         

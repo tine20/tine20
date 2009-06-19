@@ -88,8 +88,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Tine.Felamimail.Model.Account} record
      * 
      * @private
-     * 
-     * TODO make translations work
      */
     addAccount: function(record) {
         
@@ -109,19 +107,18 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             listeners: {
                 scope: this,
                 load: function(node) {
+                    
+                    // add 'intelligent' folders
                     if (node.attributes.show_marked_folder == 1) {
-                        //console.log('loaded ' + node.text);
-                        // add 'intelligent' folders
                         var markedNode = new Ext.tree.TreeNode({
                             id: record.data.id + '/marked',
-                            //record: record,
-                            localname: 'marked', //this.app.il8n._('Marked'),
+                            localname: 'marked', //this.app.i18n._('Marked'),
                             globalname: 'marked',
                             draggable: false,
                             allowDrop: false,
                             expanded: false,
-                            text: 'Marked', //this.app.il8n._('Marked'),
-                            //qtip: this.app.il8n._('Contains marked messages'),
+                            text: this.app.i18n._('Marked'),
+                            qtip: this.app.i18n._('Contains marked messages'),
                             leaf: true,
                             cls: 'felamimail-node-marked',
                             account_id: record.data.id
@@ -129,6 +126,24 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 
                         node.appendChild(markedNode);
                     }
+                    
+                    /*
+                    var unreadNode = new Ext.tree.TreeNode({
+                        id: record.data.id + '/unread',
+                        localname: 'unread', //this.app.i18n._('Marked'),
+                        globalname: 'unread',
+                        draggable: false,
+                        allowDrop: false,
+                        expanded: false,
+                        text: this.app.i18n._('Unread'),
+                        qtip: this.app.i18n._('Contains unread messages'),
+                        leaf: true,
+                        cls: 'felamimail-node-unread',
+                        account_id: record.data.id
+                    });
+            
+                    node.appendChild(unreadNode);
+                    */
                 }
             }
         });
@@ -536,7 +551,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     /**
      * @private
      * 
-     * TODO make translations work here
      */
     createNode: function(attr) {
         
@@ -551,11 +565,10 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             && account.get('has_children_support') == '1'
         ) ? attr.has_children : true;
         
-        var qtiptext = /*this.app.il8n._(*/'Totalcount' + ': ' + attr.totalcount 
-            + ' / ' + /*this.app.il8n._(*/'Cache' + ': ' + attr.cache_status;
-        //console.log(qtiptext);
-        //console.log(this.app.il8n);
-    	var node = {
+        var qtiptext = this.app.i18n._('Totalcount') + ': ' + attr.totalcount 
+            + ' / ' + this.app.i18n._('Cache') + ': ' + attr.cache_status;
+
+        var node = {
     		id: attr.id,
     		leaf: false,
     		text: attr.localname,

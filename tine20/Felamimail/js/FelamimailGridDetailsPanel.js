@@ -29,7 +29,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     defaultHeight: 300,
     currentId: null,
     record: null,
-    il8n: null,
+    i18n: null,
     
     /**
      * init
@@ -100,12 +100,12 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         this.tpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.showHeaders(values.headers)]}">',
-                    '<b>' + this.il8n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
-                    '<b>' + this.il8n._('From') + ':</b> {[this.showFrom(values.from, "' + this.il8n._('Add') + '")]}',
+                    '<b>' + this.i18n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
+                    '<b>' + this.i18n._('From') + ':</b> {[this.showFrom(values.from, "' + this.i18n._('Add') + '")]}',
                     '{[this.showRecipients(values.headers)]}',
                 '</div>',
                 '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
-                    + this.il8n._('Attachments') + '")]}</div>',
+                    + this.i18n._('Attachments') + '")]}</div>',
                 '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers, values.attachments)]}</div>',
             '</div>',{
             
