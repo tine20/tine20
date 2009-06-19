@@ -171,8 +171,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     break;
                 }
             }
-            Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
-            Felamimail_Controller_Cache::getInstance()->initialImport($folderId);
+            if (! empty($folderId)) {
+                Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+                Felamimail_Controller_Cache::getInstance()->initialImport($folderId);
+            }
         }
         
         // don't output anything else ('null' or something like that)
