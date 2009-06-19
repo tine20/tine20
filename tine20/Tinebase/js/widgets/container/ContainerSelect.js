@@ -123,6 +123,26 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         var trigger2 = this.trigger.last().last().update(text);
     },
     
+    // private: only blur if dialog is closed
+    onBlur: function() {
+        if (!this.dlg) {
+            return Tine.widgets.container.selectionComboBox.superclass.onBlur.apply(this, arguments);
+        }
+    },
+    
+    /**
+     * @private
+     */
+    onChoseOther: function() {
+        this.collapse();
+        this.dlg = new Tine.widgets.container.selectionDialog({
+            //itemName: this.itemName,
+            containerName: this.containerName,
+            containersName: this.containersName,
+            TriggerField: this
+        });
+    },
+    
     onTrigger1Click: Ext.form.ComboBox.prototype.onTriggerClick,
     onTrigger2Click: Ext.emptyFn,
     
@@ -154,19 +174,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         //if (this.hideTrigger2) {
         //    this.triggers[1].hide();
         //}
-    },
-    
-    /**
-     * @private
-     */
-    onChoseOther: function() {
-        this.collapse();
-        var w = new Tine.widgets.container.selectionDialog({
-            //itemName: this.itemName,
-            containerName: this.containerName,
-            containersName: this.containersName,
-            TriggerField: this
-        });
     },
     
     /**
@@ -348,6 +355,9 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         this.tree.on('dblclick', this.onTreeNoceDblClick, this);
         
         this.win.add(this.tree);
+        
+        // disable onBlur for the moment:
+        
         this.win.show();
     },
     
@@ -391,6 +401,10 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         var  node = this.tree.getSelectionModel().getSelectedNode();
         if (node) {
             this.TriggerField.setValue(node.attributes.container);
+            this.TriggerField.fireEvent('select', this.TriggerField, node.attributes.container);
+            if (this.TriggerField.blurOnSelect) {
+                this.TriggerField.fireEvent('blur', this.TriggerField);
+            }
             this.onClose();
         }
     }
