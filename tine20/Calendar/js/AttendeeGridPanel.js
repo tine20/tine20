@@ -77,6 +77,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             dataIndex: 'displaycontainer_id',
             width: 200,
             sortable: false,
+            hidden: true,
             header: Tine.Tinebase.tranlation._hidden('Saved in'),
             tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
             renderer: this.renderAttenderDispContainer.createDelegate(this),
@@ -177,13 +178,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     onBeforeAttenderEdit: function(o) {
         if (o.field == 'status') {
-            // status setting is not always allowed
-            if (!o.record.get('status_authkey')) {
-                o.cancel = true;
-                if (o.record.getUserId() != this.currentAccountId && ! o.record.id.match(/new/)) {
-                    o.cancel = false;
-                }
-            }
+            // allow status setting if current user has editGrant to displaycontainer
+            var dispContainer = o.record.get('displaycontainer_id');
+            o.cancel = ! (dispContainer && dispContainer.account_grants && dispContainer.account_grants.editGrant);
             return;
         }
         
@@ -348,6 +345,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 return name.accountDisplayName;
             }
             return name;
+            
+        }
+        // add new user:
+        if (arguments[1]) {
+            arguments[1].css = 'x-form-empty-field';
+            return this.app.i18n._('Click here to invite furthor attende');
         }
     },
     
@@ -383,6 +386,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderStatus: function(status, metadata, attender) {
+        if (! attender.get('user_id')) {
+            return '';
+        }
+        
         switch (status) {
             case 'NEEDS-ACTION':
                 return this.app.i18n._('No response');
