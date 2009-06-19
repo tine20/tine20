@@ -31,6 +31,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     record: null,
     i18n: null,
     
+    
     /**
      * init
      */
@@ -99,10 +100,13 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     initTemplate: function() {
         this.tpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
-                '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.showHeaders(values.headers)]}">',
+                '<div class="preview-panel-felamimail-headers">',
                     '<b>' + this.i18n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
-                    '<b>' + this.i18n._('From') + ':</b> {[this.showFrom(values.from, "' + this.i18n._('Add') + '")]}',
+                    '<b>' + this.i18n._('From') + ':</b>',
+                    ' {[this.showFrom(values.from, "' + this.i18n._('Add') + '", "' 
+                        + this.i18n._('Add contact to addressbook') + '")]}',
                     '{[this.showRecipients(values.headers)]}',
+                    '{[this.showHeaders("' + this.i18n._('Show or hide header information') + '")]}',
                 '</div>',
                 '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
                     + this.i18n._('Attachments') + '")]}</div>',
@@ -123,14 +127,14 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 return value;
             },
             
-            showFrom: function(value, addText) {
+            showFrom: function(value, addText, qtip) {
                 var result = this.encode(value);
                 
                 var email = value.match(/[a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4}/);
                 
                 // add link with 'add to contacts'
                 if (email) {
-                    id = Ext.id() + ':' + email;
+                    var id = Ext.id() + ':' + email;
                     
                     var name = value.match(/^"([a-zA-Z\-0-9\._]+)(,*) *([a-zA-Z\-0-9\._]+)/);
                     var firstname = (name && name[1]) ? name[1] : '';
@@ -143,8 +147,8 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     
                     id += ':' + firstname + ':' + lastname;
                     
-                    result += ' <span id="' + id + '" class="tinebase-addtocontacts-link">[' 
-                            + addText + ']</span> ';;
+                    result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[' 
+                            + addText + ']</span>';
                 }
                 
                 return result;
@@ -185,19 +189,9 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 return value;
             },
             
-            showHeaders: function(value) {
-                if (value) {
-                    var result = '';
-                    for (header in value) {
-                        if (value.hasOwnProperty(header)) {
-                            result += '<b>' + header + ':</b> ' 
-                                + Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(value[header], 140)) + '<br/>';
-                        }
-                    }
-                    return result;
-                } else {
-                    return '';
-                }
+            showHeaders: function(qtip) {
+                var result = ' <span ext:qtip="' + qtip + '" id="' + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>';
+                return result;
             },
             
             showRecipients: function(value) {
@@ -238,7 +232,8 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         var selectors = [
             'span[class=tinebase-download-link]',
             'a[class=tinebase-email-link]',
-            'span[class=tinebase-addtocontacts-link]'
+            'span[class=tinebase-addtocontacts-link]',
+            'span[class=tinebase-showheaders-link]'
         ];          
         
         // find the correct target
@@ -301,6 +296,38 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                         }
                     }
                 });
+                
+                break;
+                
+            case 'span[class=tinebase-showheaders-link]':
+                // show headers
+            
+                //console.log(target);
+            
+                var parts = target.id.split(':');
+                var targetId = parts[0];
+                var action = parts[1];
+                
+                var html = '';
+                if (action == 'show') {
+                    var recordHeaders = this.record.get('headers');
+                    
+                    for (header in recordHeaders) {
+                        if (recordHeaders.hasOwnProperty(header) && (header != 'to' || header != 'cc' || header != 'bcc')) {
+                            html += '<br/><b>' + header + ':</b> ' 
+                                + Ext.util.Format.htmlEncode(recordHeaders[header]);
+                        }
+                    }
+                
+                    target.id = targetId + ':' + 'hide';
+                    //target['ext:qtip'] = 'hide';
+                    
+                } else {
+                    html = ' <span ext:qtip="' + this.i18n._('Show or hide header information') + '" id="' 
+                        + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>'
+                }
+                
+                target.innerHTML = html;
                 
                 break;
         }
