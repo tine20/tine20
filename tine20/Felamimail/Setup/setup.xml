@@ -4,7 +4,7 @@
     <!-- gettext('Felamimail') -->   
     <version>0.1</version>
     <order>30</order>
-    <status>disabled</status>
+    <status>enabled</status>
     <depends>
         <application>Addressbook</application>
     </depends>    
