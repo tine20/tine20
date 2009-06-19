@@ -150,13 +150,15 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     },
     
     onCalMapSelect: function(record, index) {
-        this.calCombo.setValue(record.get('calendar'));
-        this.calCombo.setTrigger2Text(String.format(record.get('userName')));
-        
-        this.currentCalMap = record;
-        
-        this.fakeCombo.collapse();
-        this.fakeCombo.fireEvent('select', this.fakeCombo, record, index);
+        if (record && typeof record.get == 'function') {
+            this.calCombo.setValue(record.get('calendar'));
+            this.calCombo.setTrigger2Text(String.format(record.get('userName')));
+            
+            this.currentCalMap = record;
+            
+            this.fakeCombo.collapse();
+            this.fakeCombo.fireEvent('select', this.fakeCombo, record, index);
+        }
     },
     
     onRecordLoad: function(record) {
