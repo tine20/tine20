@@ -156,6 +156,14 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         this.items = Tine.Addressbook.ContactEditDialog.getEditForm(this.contact);
         
         Tine.Addressbook.ContactEditDialog.superclass.initComponent.call(this);
+        
+        this.addEvents(
+            /**
+             * @event load
+             * Fired when record is loaded
+             */
+            'load'
+        )
     },
     
 	onRender: function(ct, position) {
@@ -180,11 +188,13 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
                 (this.contact.get('org_name') ? ' (' + this.contact.get('org_name') + ')' : '')));
         }
         
-        this.getForm().loadRecord(this.contact);
-        this.updateToolbars(this.contact, 'container_id');
-        Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
-
-        Ext.MessageBox.hide();
+        if (this.fireEvent('load', this) !== false) {
+            this.getForm().loadRecord(this.contact);
+            this.updateToolbars(this.contact, 'container_id');
+            Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
+    
+            Ext.MessageBox.hide();
+        }
     },
     
     handlerApplyChanges: function(_button, _event, _closeWindow) {
