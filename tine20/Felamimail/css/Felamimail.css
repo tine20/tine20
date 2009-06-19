@@ -108,6 +108,7 @@
 
 .felamimail-node-intelligent-unread .x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-bookmarks.png);
+    /* background-image:url(../../images/oxygen/16x16/places/mail-folder-sent.png); */
 }
 
 .felamimail-node-account .x-tree-node-icon {
