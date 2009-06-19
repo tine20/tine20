@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * TODO         add unread count to intelligent folders?
  * TODO         reload folder status (and number of unread messages) every x minutes 
  *              -> via ping or ext.util.delayedtask ?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
