@@ -159,25 +159,27 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     }
     
     /**
-     * fill record from json data
+     * sets the record related properties from user generated input.
+     * 
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
-     * @param string $_data json encoded data
-     * @return void
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromJson($_data)
+    public function setFromArray(array $_data)
     {
-        $data = Zend_Json::decode($_data);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-        
-        if (empty($data['geo'])) {
-            $data['geo'] = NULL;
+        if (empty($_data['geo'])) {
+            $_data['geo'] = NULL;
         }
         
-        if (isset($data['container_id']) && is_array($data['container_id'])) {
-            $data['container_id'] = $data['container_id']['id'];
+        if (isset($_data['container_id']) && is_array($_data['container_id'])) {
+            $_data['container_id'] = $_data['container_id']['id'];
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-        $this->setFromArray($data);
+        if (isset($_data['attendee']) && is_array($_data['attendee'])) {
+            $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee']);
+        }
+        
+        parent::setFromArray($_data);
     }
 }
