@@ -22,8 +22,22 @@
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-month.png) !important;
 }
 
-.x-form-field-wrap .cal-invitation-trigger {
-    background-image:url(../../images/cal-invitiationcal-trigger.png);
+
+
+.tw-containerselect-trigger2 .tw-containerselect-trigger2-bg {
+    background:url(../../images/trigger2-bg.gif) repeat-x;
+    width: 150px;
+    cursor:pointer;
+}
+.tw-containerselect-trigger2 {position: relative;}
+.x-form-trigger-over .tw-containerselect-trigger2-bg {background-position: 0 -24px;}
+.x-form-trigger-over .tw-containerselect-trigger2 {background-position: -17px 0;}
+
+.x-form-trigger-click .tw-containerselect-trigger2-bg {background-position: 0 -48px;}
+.x-form-trigger-click .tw-containerselect-trigger2 {background-position: -34px 0;}
+
+.x-form-field-wrap .x-form-arrow-trigger-rectangle {
+    background-image:url(../../images/trigger-rect.gif);
     cursor:pointer;
 }
 
