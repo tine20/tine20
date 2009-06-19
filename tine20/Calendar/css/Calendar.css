@@ -22,8 +22,16 @@
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-month.png) !important;
 }
 
+.cal-calselectwidget-faketriggerwrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
 
 
+/*** container select widget
+ * @todo move to container
+ */
 .tw-containerselect-trigger2 .tw-containerselect-trigger2-bg {
     background:url(../../images/trigger2-bg.gif) repeat-x;
     width: 150px;
