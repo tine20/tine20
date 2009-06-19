@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        parse mail body and add <a> to telephone numbers and email addresses?
+ * @todo        parse mail body and add <a> to telephone numbers?
  * @todo        check html purifier config (allow some tags/attributes?)
  * @todo        improve handling of BIG (rfc822) messages (don't read the whole content?)
  */
@@ -539,8 +539,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $part = $_imapMessage->getPart($partNumber);
                 $partHeaders = $part->getHeaders();
                     
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $partHeaders['content-type']);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partHeaders, true));
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attachment content-type: ' . $partHeaders['content-type']);
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partHeaders, true));
 
                 if (preg_match('/message\/rfc822/', $partHeaders['content-type'])) {
                     
@@ -713,7 +713,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $body = $this->_purifyBodyContent($body);
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         // get plain text if body is empty at this point
         if (! isset($body) || $body == 'no text part found') {
