@@ -22,14 +22,14 @@ Tine.Calendar.CalendarSelectWidget = function(config) {
         id: this.app.appName + 'EditDialogPhysCalSelector',
         fieldLabel: Tine.Tinebase.tranlation._hidden('Saved in'),
         name: 'container_id',
-        width: 300,
+        width: 450,
         name: this.recordClass.getMeta('containerProperty'),
         containerName: this.app.i18n._hidden(this.recordClass.getMeta('containerName')),
         containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
         appName: this.app.appName,
-        hideTrigger1: false,
-        trigger1Class: 'cal-invitation-trigger',
-        onTrigger1Click: this.toggle.createDelegate(this),
+        hideTrigger2: false,
+        trigger2Class: 'cal-invitation-trigger',
+        onTrigger2Click: this.toggle.createDelegate(this),
         
         allowBlank: true // for the moment
     });
@@ -37,14 +37,14 @@ Tine.Calendar.CalendarSelectWidget = function(config) {
     this.dispCalCombo = new Tine.widgets.container.selectionComboBox({
         id: this.app.appName + 'EditDialogDispCalSelector',
         fieldLabel: this.app.i18n._('Show in'),
-        width: 300,
+        width: 450,
         name: this.recordClass.getMeta('containerProperty'),
         containerName: this.app.i18n._hidden(this.recordClass.getMeta('containerName')),
         containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
         appName: this.app.appName,
-        hideTrigger1: false,
+        hideTrigger2: false,
         trigger1Class: 'cal-invitation-trigger',
-        onTrigger1Click: this.toggle.createDelegate(this),
+        onTrigger2Click: this.toggle.createDelegate(this),
         
         allowBlank: true // for the moment
     });
@@ -84,6 +84,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     
     onRecordLoad: function(record) {
         this.record = record;
+        this.dispCalCombo.setTrigger2Text('fuer Cornelius Weiss');
         
     },
     
