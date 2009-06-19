@@ -312,19 +312,24 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         }
         $folderCount = $this->_messageCacheBackend->searchCountByFolderId($_folderId);
         
-        // get message headers
-        $uids = $backend->getUid(1, $messageCount - $folderCount);
-        sort($uids, SORT_NUMERIC);
-        $messages = $backend->getSummary(array_reverse($uids));
-        
-        // import        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Initial import: trying to add ' . count($messages) . ' new messages to cache.'
-            . ' Beginning with message uid: ' . $uids[0]
-        );
-        
-        // get message headers and save them in cache db
-        $this->_addMessages($messages, $_folderId);
+        while (! isset($from) || $from > 1) {
+            // get next 200 message headers
+            $to = $messageCount - $folderCount;
+            $from = ($to > 200) ? $to - 200 : 1;
+            
+            $uids = $backend->getUid($from, $to);
+            sort($uids, SORT_NUMERIC);
+            $messages = $backend->getSummary(array_reverse($uids));
+            
+            // import        
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Initial import: trying to add ' . count($messages) . ' new messages to cache.'
+                . ' Beginning with message uid: ' . $uids[0] . ' (from: ' . $from .' to: ' . $to . ')'
+            );
+            
+            // get message headers and save them in cache db
+            $this->_addMessages($messages, $_folderId);
+        }
         
         // get number of unread messages
         $seenCount = $this->_messageCacheBackend->seenCountByFolderId($_folderId);
