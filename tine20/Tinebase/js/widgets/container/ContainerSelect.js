@@ -50,6 +50,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * name of container (plural)
      */
     containersName: 'containers',
+    /**
+     * @cfg {Boolean} hideTrigger2
+     */
+    hideTrigger2: true,
+    
+    trigger2width: 100,
     
     // private
     allowBlank: false,
@@ -66,6 +72,23 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     initComponent: function(){
+        if (! this.hideTrigger2) {
+            if (this.triggerClass == 'x-form-arrow-trigger') {
+                this.triggerClass = 'x-form-arrow-trigger-rectangle';
+            }
+            
+            this.triggerConfig = {
+                tag:'span', cls:'x-form-twin-triggers', cn:[
+                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.triggerClass},
+                {tag:'span', cls:'tw-containerselect-trigger2', cn:[
+                    {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger tw-containerselect-trigger2-bg"},
+                    {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger tw-containerselect-trigger2"},
+                    {tag: "div", style: {position: 'absolute', top: 0, left: '5px'}}
+                ]}
+            ]};
+            
+        }
+            
         this.store = new Ext.data.SimpleStore({
             id: id,
             fields: Tine.Tinebase.Model.Container
@@ -80,7 +103,29 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.value = this.defaultContainer.name;
         }
     },
-
+    
+    initTrigger : function(){
+        if (! this.hideTrigger2) {
+            var trigger1 = this.trigger.first();
+            var trigger2 = this.trigger.last();
+            
+            trigger1.addClassOnOver('x-form-trigger-over');
+            trigger1.addClassOnClick('x-form-trigger-click');
+            
+            trigger2.addClassOnOver('x-form-trigger-over');
+            trigger2.addClassOnClick('x-form-trigger-click');
+        } else {
+            Tine.widgets.container.selectionComboBox.superclass.initTrigger.call(this);
+        }
+    },
+    
+    setTrigger2Text: function(text) {
+        var trigger2 = this.trigger.last().last().update(text);
+    },
+    
+    onTrigger1Click: Ext.form.ComboBox.prototype.onTriggerClick,
+    onTrigger2Click: Ext.emptyFn,
+    
     /**
      * @private
      */
@@ -105,6 +150,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
                     '<i> (' + (this.container.type == Tine.Tinebase.container.TYPE_PERSONAL ?  _('personal') : _('shared')) + ')</i>'
             }).show();
         }, this);
+        
+        //if (this.hideTrigger2) {
+        //    this.triggers[1].hide();
+        //}
     },
     
     /**
