@@ -212,3 +212,12 @@ span:hover.tinebase-download-link {
 a:hover.tinebase-email-link {
     color: #4444ff;
 }
+
+.tinebase-addtocontacts-link{
+    cursor: pointer;
+    color: blue;
+}
+
+span:hover.tinebase-addtocontacts-link {
+    color: #4444ff;
+}
