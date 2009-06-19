@@ -8,10 +8,12 @@
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
  * TODO         replace telephone numbers in emails with 'call contact' link
- * TODO         add 'add sender to contacts'
  * TODO         make only text body scrollable (headers should be always visible)
  * TODO         don't show headers in tooltip, add collapsed panel or something like that
+ * TODO         show image attachments inline
+ * TODO         add 'download all' button
  * TODO         add preference to show mails in html or text?
+ * 
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -99,7 +101,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-headers" ext:qtip="{[this.showHeaders(values.headers)]}">',
                     '<b>' + this.il8n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
-                    '<b>' + this.il8n._('From') + ':</b> {[this.encode(values.from)]}',
+                    '<b>' + this.il8n._('From') + ':</b> {[this.showFrom(values.from, "' + this.il8n._('Add') + '")]}',
                     '{[this.showRecipients(values.headers)]}',
                 '</div>',
                 '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, "' 
@@ -121,8 +123,34 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 return value;
             },
             
-            // TODO check preference for mail content-type?
-            // TODO show image attachments inline
+            showFrom: function(value, addText) {
+                var result = this.encode(value);
+                
+                var email = value.match(/[a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4}/);
+                
+                // add link with 'add to contacts'
+                if (email) {
+                    id = Ext.id() + ':' + email;
+                    
+                    var name = value.match(/^"([a-zA-Z\-0-9\._]+)(,*) *([a-zA-Z\-0-9\._]+)/);
+                    var firstname = (name && name[1]) ? name[1] : '';
+                    var lastname = (name && name[3]) ? name[3] : '';
+                    
+                    if (name && name[2] == ',') {
+                        firstname = lastname;
+                        lastname = name[1];
+                    }
+                    
+                    id += ':' + firstname + ':' + lastname;
+                    
+                    result += ' <span id="' + id + '" class="tinebase-addtocontacts-link">[' 
+                            + addText + ']</span> ';;
+                }
+                
+                return result;
+            },
+            
+            // -> check preference for mail content-type here
             showBody: function(value, headers, attachments) {
                 if (value) {
                     //console.log(headers);
@@ -187,7 +215,6 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 }
             },
             
-            // TODO add 'download all' button
             showAttachments: function(value, text) {
                 var result = (value.length > 0) ? '<b>' + text + ':</b> ' : '';
                 for (var i=0, id; i < value.length; i++) {
@@ -203,28 +230,44 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     },
     
     /**
-     * on click for attachment download
+     * on click for attachment download / compose dlg / edit contact dlg
      * 
      * @param {} e
      */
     onClick: function(e) {
-        // download attachment
-        var target = e.getTarget('span[class=tinebase-download-link]');
-        if (target) {
-            var partId = target.id.split(':')[1];
-            var downloader = new Ext.ux.file.Download({
-                params: {
-                    requestType: 'HTTP',
-                    method: 'Felamimail.downloadAttachment',
-                    messageId: this.record.id,
-                    partId: partId
-                }
-            });
-            downloader.start();
-        } else {
-            // open email compose dialog
-            var target = e.getTarget('a[class=tinebase-email-link]');
+        var selectors = [
+            'span[class=tinebase-download-link]',
+            'a[class=tinebase-email-link]',
+            'span[class=tinebase-addtocontacts-link]'
+        ];          
+        
+        // find the correct target
+        for (var i=0, target=null, selector=''; i < selectors.length; i++) {
+            target = e.getTarget(selectors[i]);
             if (target) {
+                selector = selectors[i];
+                break;
+            }
+        }
+        
+        switch (selector) {
+            
+            case 'span[class=tinebase-download-link]':
+                // download attachment
+                var partId = target.id.split(':')[1];
+                var downloader = new Ext.ux.file.Download({
+                    params: {
+                        requestType: 'HTTP',
+                        method: 'Felamimail.downloadAttachment',
+                        messageId: this.record.id,
+                        partId: partId
+                    }
+                });
+                downloader.start();
+                break;
+                
+            case 'a[class=tinebase-email-link]':
+                // open compose dlg
                 var email = target.id.split(':')[1];
                 var defaults = Tine.Felamimail.Model.Message.getDefaultData();
                 defaults.to = [email];
@@ -234,7 +277,32 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
                     record: record
                 });
-            }
+                break;
+                
+            case 'span[class=tinebase-addtocontacts-link]':
+                // open edit contact dlg
+            
+                // TODO check for duplicates
+            
+                // check if addressbook app is available
+                if (! Tine.Addressbook || ! Tine.Tinebase.common.hasRight('run', 'Addressbook')) {
+                    return;
+                }
+            
+                var parts = target.id.split(':');
+                
+                var popupWindow = Tine.Addressbook.ContactEditDialog.openWindow({
+                    listeners: {
+                        scope: this,
+                        'load': function(editdlg) {
+                            editdlg.contact.set('email', parts[1]);
+                            editdlg.contact.set('n_given', parts[2]);
+                            editdlg.contact.set('n_family', parts[3]);
+                        }
+                    }
+                });
+                
+                break;
         }
     }
 });
