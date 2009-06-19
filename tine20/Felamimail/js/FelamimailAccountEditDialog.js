@@ -216,8 +216,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'trash_folder',
                     maxLength: 64
                 }, {
-                    fieldLabel: this.app.i18n._('Show Marked Folder'),
-                    name: 'show_marked_folder',
+                    fieldLabel: this.app.i18n._('Show Intelligent Folders'),
+                    name: 'show_intelligent_folders',
                     typeAhead     : false,
                     triggerAction : 'all',
                     lazyRender    : true,

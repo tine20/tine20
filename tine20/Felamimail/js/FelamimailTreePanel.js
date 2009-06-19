@@ -102,14 +102,14 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             qtip: record.get('host'),
             leaf: false,
             cls: 'felamimail-node-account',
-            show_marked_folder: (record.get('show_marked_folder')) ? record.get('show_marked_folder') : 0,
+            show_intelligent_folders: (record.get('show_intelligent_folders')) ? record.get('show_intelligent_folders') : 0,
             account_id: record.data.id,
             listeners: {
                 scope: this,
                 load: function(node) {
                     
                     // add 'intelligent' folders
-                    if (node.attributes.show_marked_folder == 1) {
+                    if (node.attributes.show_intelligent_folders == 1) {
                         var markedNode = new Ext.tree.TreeNode({
                             id: record.data.id + '/marked',
                             localname: 'marked', //this.app.i18n._('Marked'),
@@ -125,23 +125,24 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         });
                 
                         node.appendChild(markedNode);
-                    }
                     
-                    var unreadNode = new Ext.tree.TreeNode({
-                        id: record.data.id + '/unread',
-                        localname: 'unread', //this.app.i18n._('Marked'),
-                        globalname: 'unread',
-                        draggable: false,
-                        allowDrop: false,
-                        expanded: false,
-                        text: this.app.i18n._('Unread'),
-                        qtip: this.app.i18n._('Contains unread messages'),
-                        leaf: true,
-                        cls: 'felamimail-node-intelligent-unread',
-                        account_id: record.data.id
-                    });
-            
-                    node.appendChild(unreadNode);
+                        var unreadNode = new Ext.tree.TreeNode({
+                            id: record.data.id + '/unread',
+                            localname: 'unread', //this.app.i18n._('Marked'),
+                            globalname: 'unread',
+                            draggable: false,
+                            allowDrop: false,
+                            expanded: false,
+                            text: this.app.i18n._('Unread'),
+                            qtip: this.app.i18n._('Contains unread messages'),
+                            leaf: true,
+                            cls: 'felamimail-node-intelligent-unread',
+                            account_id: record.data.id
+                        });
+                
+                        node.appendChild(unreadNode);
+
+                    }
                 }
             }
         });
@@ -252,7 +253,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             
                             // update tree node + store
                             this.ctxNode.setText(account.get('name'));
-                            this.ctxNode.attributes.show_marked_folder = account.get('show_marked_folder');
+                            this.ctxNode.attributes.show_intelligent_folders = account.get('show_intelligent_folders');
                             this.accountStore.reload();
                             
                             // reload tree node
