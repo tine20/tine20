@@ -87,6 +87,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($setcookie) {
             setcookie('TINE20LOCALE', $localeString, time()+60*60*24*30);
         }
+        
+        return array(
+            'success'      => TRUE
+        );
     }
 
     /**
