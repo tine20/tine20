@@ -90,24 +90,29 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     protected $_datetimeFields = array();
     
     /**
-     * sets record related properties
+     * sets the record related properties from user generated input.
      * 
-     * @param string _name of property
-     * @param mixed _value of property
-     * @throws Tinebase_Exception_UnexpectedValue
-     * @return void
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function __set($_name, $_value)
+    public function setFromArray(array $_data)
     {
+        if (isset($_data['displaycontainer_id']) && is_array($_data['displaycontainer_id'])) {
+            $_data['displaycontainer_id'] = $_data['displaycontainer_id']['id'];
+        }
         
-        if ($_name == 'user_id' && is_array($_value)) {
-            if (array_key_exists('accountId', $_value)) {
-                $_value = $_value['accountId'];
-            } else if (array_key_exists('account_id', $_value)) {
-                $_value = $_value['account_id'];
+        // the user_id property might differ, cause accounts and account contacts are allowd
+        if (isset($_data['user_id']) && is_array($_data['user_id'])) {
+            if (array_key_exists('accountId', $_data['user_id'])) {
+                $_data['user_id'] = $_data['user_id']['accountId'];
+            } else if (array_key_exists('account_id', $_data['user_id'])) {
+                $_data['user_id'] = $_data['user_id']['account_id'];
             }
         }
         
-        parent::__set($_name, $_value);
+        parent::setFromArray($_data);
     }
+    
 }
