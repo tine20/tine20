@@ -350,7 +350,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // add new user:
         if (arguments[1]) {
             arguments[1].css = 'x-form-empty-field';
-            return this.app.i18n._('Click here to invite furthor attende');
+            return this.app.i18n._('Click here to invite furthor attende...');
         }
     },
     

@@ -18,6 +18,8 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
     this.app = Tine.Tinebase.appMgr.get('Calendar');
     this.recordClass = Tine.Calendar.Model.Event;
     
+    this.currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
+    
     this.calMapStore = new Ext.data.SimpleStore({
         fields: this.calMapRecord
     });
@@ -25,15 +27,9 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
     this.initTpl();
     
     this.fakeCombo = new Ext.form.ComboBox({
-        typeAhead     : false,
-        triggerAction : 'all',
-        editable      : false,
         mode          : 'local',
-        value         : null,
-        forceSelection: true,
         width         : 450,
         store         : this.calMapStore,
-        //itemSelector  : 'div.list-item',
         tpl           : this.attendeeListTpl,
         onSelect      : this.onCalMapSelect.createDelegate(this)
     });
@@ -58,7 +54,7 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
 Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     
     calMapRecord: Ext.data.Record.create([
-        {name: 'calendar'}, {name: 'user'}, {name: 'calendarName'}, {name: 'userName'}, {name: 'isOriginal'}
+        {name: 'calendar'}, {name: 'user'}, {name: 'userId'}, {name: 'calendarName'}, {name: 'userName'}, {name: 'editGrant'}, {name: 'isOriginal'}
     ]),
     
     /**
@@ -77,7 +73,9 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     /**
      *  builds attendee -> calendar map
      */
-    buildAttendeeCalMapStore: function() {
+    buildCalMapStore: function() {
+        var needEditGrant = true;
+        
         this.calMapStore.removeAll();
         var physCal = this.record.get('container_id');
         
@@ -86,33 +84,35 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
             var user = attender.get('user_id');
             var calendarName = this.EventEditDialog.attendeeGridPanel.renderAttenderDispContainer(calendar, {});
             var userName = this.EventEditDialog.attendeeGridPanel.renderAttenderName(user, {});
-            
             // check if attender is a valid user
             if (userName && attender.get('user_type') == 'user') {
-                
                 // check if container is resoved
                 if (calendar && calendar.name) {
                     // check that calendar is not the physCal
                     if (! (physCal && physCal.name) || physCal.id != calendar.id) {
-                        this.calMapStore.add([new this.calMapRecord({
-                            calendar: calendar, 
-                            user: user,
-                            calendarName: calendarName,
-                            userName: String.format('for {0}', userName),
-                            isOriginal: false
-                        })]);
+                        if (! needEditGrant || calendar.account_grants.editGrant) {
+                            this.calMapStore.add([new this.calMapRecord({
+                                calendar: calendar, 
+                                user: user,
+                                userId: attender.getUserId(),
+                                calendarName: calendarName,
+                                userName: String.format('for {0}', userName),
+                                editGrant: calendar.account_grants.editGrant,
+                                isOriginal: false
+                            })]);
+                        }
                     }
                 }
             }
         }, this);
         
         // finally add physCal if acceptable
-        if (physCal && physCal.name) {
+        if (physCal && physCal.name && (! needEditGrant || physCal.account_grants.editGrant)) {
             this.calMapStore.add([new this.calMapRecord({
                 calendar: physCal, 
-                user: 'Originator',
                 calendarName: physCal.name,
                 userName: this.app.i18n._('Originally'),
+                editGrant: physCal.account_grants.editGrant,
                 isOriginal: true
             })]);
         }
@@ -121,10 +121,10 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     initTpl: function() {
         this.attendeeListTpl = new Ext.XTemplate(
             '<tpl for=".">' +
-                    '<div class="cal-calselectwidget-fakelist-item x-combo-list-item">' +
-                            '<div class="cal-calselectwidget-fakelist-calendar">{calendarName}</div>' +
-                            '<div class="cal-calselectwidget-fakelist-account">{userName}</div>' +
-                    '</div>' +
+                '<div class="cal-calselectwidget-fakelist-item x-combo-list-item">' +
+                    '<div class="cal-calselectwidget-fakelist-calendar">{calendarName}</div>' +
+                    '<div class="cal-calselectwidget-fakelist-account">{userName}</div>' +
+                '</div>' +
             '</tpl>'
         );
     },
@@ -139,12 +139,17 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     
     onRecordLoad: function(record) {
         this.record = record;
-        this.buildAttendeeCalMapStore();
+        this.buildCalMapStore();
         
-        var physCal = record.get('container_id');
-        if (physCal.name) {
-            this.calCombo.setValue(record.get('container_id'));
-            this.calCombo.setTrigger2Text('Originally');
+        if (this.calMapStore.getCount() == 1) {
+            this.onCalMapSelect(this.calMapStore.getAt(0));
+            this.calCombo.setTrigger2Disabled(true);
+        } else {
+            var mine = this.calMapStore.find('userId', this.currentAccountId);
+            var phys = this.calMapStore.find('isOriginal', true);
+            
+            var take = mine > 0 ? mine : phys;
+            this.onCalMapSelect(this.calMapStore.getAt(take));
         }
         
     },
