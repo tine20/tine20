@@ -44,19 +44,27 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
         hideTrigger2: false,
         trigger2Class: 'cal-invitation-trigger',
         onTrigger2Click: this.fakeCombo.onTriggerClick.createDelegate(this.fakeCombo),
-        allowBlank: true
+        allowBlank: true,
+        listeners: {
+            scope: this,
+            select: this.onCalComboSelect
+        }
     });
-    
-    
     
 };
 
 Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     
+    /**
+     * @property {Function} calMapRecord
+     */
     calMapRecord: Ext.data.Record.create([
-        {name: 'calendar'}, {name: 'user'}, {name: 'userId'}, {name: 'calendarName'}, {name: 'userName'}, {name: 'editGrant'}, {name: 'isOriginal'}
+        {name: 'attender'}, {name: 'calendar'}, {name: 'user'}, {name: 'userId'}, {name: 'calendarName'}, {name: 'userName'}, {name: 'editGrant'}, {name: 'isOriginal'}
     ]),
-    
+    /**
+     * @property {Ext.data.Record} currentCalMap
+     */
+    currentCalMap: null,
     /**
      * @property {Tine.Calendar.EventEditDialog}
      */
@@ -92,6 +100,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
                     if (! (physCal && physCal.name) || physCal.id != calendar.id) {
                         if (! needEditGrant || calendar.account_grants.editGrant) {
                             this.calMapStore.add([new this.calMapRecord({
+                                attender: attender,
                                 calendar: calendar, 
                                 user: user,
                                 userId: attender.getUserId(),
@@ -129,9 +138,22 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
         );
     },
     
+    onCalComboSelect: function() {
+        var container = this.calCombo.container;
+        container.toString = function() {return container.id};
+        
+        if (this.currentCalMap.get('isOriginal')) {
+            this.record.set('container_id', container);
+        } else {
+            this.currentCalMap.get('attender').set('displaycontainer_id', container);
+        }
+    },
+    
     onCalMapSelect: function(record, index) {
         this.calCombo.setValue(record.get('calendar'));
         this.calCombo.setTrigger2Text(String.format(record.get('userName')));
+        
+        this.currentCalMap = record;
         
         this.fakeCombo.collapse();
         this.fakeCombo.fireEvent('select', this.fakeCombo, record, index);
@@ -151,7 +173,6 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
             var take = mine > 0 ? mine : phys;
             this.onCalMapSelect(this.calMapStore.getAt(take));
         }
-        
     },
     
     onRecordUpdate: function(record) {
