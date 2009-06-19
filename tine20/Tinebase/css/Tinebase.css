@@ -221,3 +221,12 @@ a:hover.tinebase-email-link {
 span:hover.tinebase-addtocontacts-link {
     color: #4444ff;
 }
+
+.tinebase-showheaders-link{
+    cursor: pointer;
+    color: blue;
+}
+
+span:hover.tinebase-showheaders-link {
+    color: #4444ff;
+}
