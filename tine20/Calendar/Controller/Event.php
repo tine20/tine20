@@ -277,43 +277,24 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
         if (    !$this->_doContainerACLChecks 
-            ||  !$_record->has('container_id') 
             // admin grant includes all others
             ||  $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADMIN)) {
             return TRUE;
         }
 
-        $hasGrant = FALSE;
-        
-        $currentAccountId = $this->_currentAccount->getId();
-        
         switch ($_action) {
             case 'get':
                 // NOTE: free/busy is not a read grant!
-                // @todo: we might need to relay read grants for typical secretary role
-                //        depending on the participants 'system folder' permissions
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_READ)
-                            || $_record->organizer == $currentAccountId
-                            || in_array($currentAccountId, $_record->attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)->user_id)
-                            || count(array_intersect(
-                                   $_record->attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP)->user_id,
-                                   Tinebase_Group::getInstance()->getGroupMemberships($currentAccountId)
-                               )) > 0;
+                $hasGrant = (bool) $_record->readGrant;
                 break;
             case 'create':
                 $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD);
                 break;
             case 'update':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_EDIT)
-                || $_record->organizer == $currentAccountId;
+                $hasGrant = (bool) $_record->editGrant;
                 break;
             case 'delete':
-                $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
-                $hasGrant = ((
-                    $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_DELETE)
-                    || $_record->organizer == $currentAccountId
-                    ) && $container->type != Tinebase_Model_Container::TYPE_INTERNAL
-                );
+                $hasGrant = (bool) $_record->deleteGrant;
                 break;
         }
         
