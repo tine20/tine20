@@ -294,7 +294,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 
                 if (last != attender && last.id.match(/new/)) {
                     //duplicate entry
-                    alert('duplicate entry')
                     this.getView().focusCell(this.store.indexOf(attender), 3);
                     this.store.remove.defer(50, this.store, [last]);
                     needUpdate = true;
