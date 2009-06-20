@@ -70,6 +70,19 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         return $persitentEvent;
     }
     
+    public function testGetEvent()
+    {
+        $persitentEvent = $this->testCreateEvent();
+        $this->assertTrue((bool) $persitentEvent->readGrant);
+        $this->assertTrue((bool) $persitentEvent->editGrant);
+        $this->assertTrue((bool) $persitentEvent->deleteGrant);
+        
+        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $this->assertTrue((bool) $loadedEvent->readGrant);
+        $this->assertTrue((bool) $loadedEvent->editGrant);
+        $this->assertTrue((bool) $loadedEvent->deleteGrant);
+    }
+    
     public function testUpdateEvent()
     {
         $persitentEvent = $this->testCreateEvent();
