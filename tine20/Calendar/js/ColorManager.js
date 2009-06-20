@@ -36,7 +36,8 @@ Tine.Calendar.ColorManager.prototype = {
     ],
     
     getColor: function(event) {
-        var container = event.get('container_id');
+        // hack for container only support
+        var container = typeof event.get == 'function' ? event.get('container_id') : event;
         var container_id = container.id ? container.id : container;
         
         if (! this.colorMap.hasOwnProperty(container_id)) {
@@ -47,5 +48,6 @@ Tine.Calendar.ColorManager.prototype = {
         
         return this.colorSchema[this.colorMap[container_id]];
     }
+    
 };
  
