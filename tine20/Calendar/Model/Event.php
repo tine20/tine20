@@ -74,7 +74,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'organizer'            => array('allowEmpty' => true, 'Int'   ),
         'priority'             => array('allowEmpty' => true, 'Int'   ),
         'status_id'            => array('allowEmpty' => true          ),
-        'summary'              => array('presence' => 'required'      ),
+        'summary'              => array('allowEmpty' => true          ),
         'url'                  => array('allowEmpty' => true          ),
         'uid'                  => array('allowEmpty' => true          ),
         // ical common fields with multiple appearance
@@ -170,6 +170,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
+        // free/busy only cleanup
+        if ((! array_key_exists('readGrant', $_data) || ! (bool) $_data['readGrant']) && (! array_key_exists('editGrant', $_data) || ! (bool) $_data['editGrant'])) {
+            $_data = array_intersect_key($_data, array_flip(array('id', 'dtstart', 'dtend')));
+        }
+        
         if (empty($_data['geo'])) {
             $_data['geo'] = NULL;
         }
