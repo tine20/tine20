@@ -69,18 +69,23 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $loadedEventData;
     }
     
-    public function testUpdteEvent()
+    public function testUpdateEvent()
     {
         $event = new Calendar_Model_Event($this->testCreateEvent(), true);
         $event->dtstart->addHour(5);
         $event->dtend->addHour(5);
         $event->description = 'are you kidding?';
         
+        
         $eventData = $event->toArray();
-        unset($eventData['attendee'][1]);
+        foreach ($eventData['attendee'] as $key => $attenderData) {
+            if ($eventData['attendee'][$key]['user_id']['accountId'] != Tinebase_Core::getUser()->getId()) {
+                unset($eventData['attendee'][$key]);
+            }
+        }
         
         $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
-        //print_r($updatedEventData);
+
         $this->_assertJsonEvent($eventData, $updatedEventData, 'failed to update event');
         
         return $updatedEventData;
@@ -164,6 +169,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     protected function _assertJsonEvent($expectedEventData, $eventData, $msg) {
         $this->assertEquals($expectedEventData['summary'], $eventData['summary'], $msg . ': failed to create/load event');
         
+        // assert effective grants are set
+        $this->assertEquals((bool) $expectedEventData['editGrant'], (bool) $eventData['editGrant'], $msg . ': effective grants mismatch');
         // container, assert attendee, tags, relations
         $this->assertEquals($expectedEventData['dtstart'], $eventData['dtstart'], $msg . ': dtstart mismatch');
         $this->assertTrue(is_array($eventData['container_id']), $msg . ': failed to "resolve" container');
