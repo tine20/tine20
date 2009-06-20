@@ -29,6 +29,8 @@
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
+    const TRANSP_TRANSP        = 'TRANSPARENT';
+    const TRANSP_OPAQUE        = 'OPAQUE';
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -63,14 +65,14 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'seq'                  => array('allowEmpty' => true,  'Int'  ),
         // calendar only fields
         'dtend'                => array('allowEmpty' => true          ),
-        'transp'               => array('allowEmpty' => true          ),
+        'transp'               => array('allowEmpty' => true,  'InArray' => array(self::TRANSP_TRANSP, self::TRANSP_OPAQUE)),
         // ical common fields
         'class_id'             => array('allowEmpty' => true, 'Int'   ),
         'description'          => array('allowEmpty' => true          ),
         'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true          ),
         'organizer'            => array('allowEmpty' => true, 'Int'   ),
-        'priority'             => array('allowEmpty' => true, 'default' => 1),
+        'priority'             => array('allowEmpty' => true, 'Int'   ),
         'status_id'            => array('allowEmpty' => true          ),
         'summary'              => array('presence' => 'required'      ),
         'url'                  => array('allowEmpty' => true          ),
@@ -170,6 +172,18 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         if (empty($_data['geo'])) {
             $_data['geo'] = NULL;
+        }
+        
+        if (empty($_data['class_id'])) {
+            $_data['class_id'] = NULL;
+        }
+        
+        if (empty($_data['priority'])) {
+            $_data['priority'] = NULL;
+        }
+        
+        if (empty($_data['status_id'])) {
+            $_data['status_id'] = NULL;
         }
         
         if (isset($_data['container_id']) && is_array($_data['container_id'])) {
