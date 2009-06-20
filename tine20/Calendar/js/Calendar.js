@@ -14,6 +14,7 @@ Ext.namespace('Tine.Calendar');
  */
 Ext.onReady(function(){
     Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDate() + '.png)');
+    Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
 });
 
 /**
