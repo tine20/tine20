@@ -177,15 +177,21 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $typeMap = array();
         
         foreach ($eventAttendee as $attendee) {
+            // resolve displaycontainers
+            Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
+            
             foreach ($attendee as $attender) {
                 $type = $attender->$_typeProperty;
                 if (! array_key_exists($type, $typeMap)) {
                     $typeMap[$type] = array();
                 }
                 $typeMap[$type][] = $attender->$_idProperty;
+                
+                // remove status_authkey when editGrant for displaycontainer_id is missing
+                if (! is_array($attender->displaycontainer_id) || ! (bool) $attender['displaycontainer_id']['account_grants']['editGrant']) {
+                    $attender->status_authkey = NULL;
+                }
             }
-            // resolve displaycontainers
-            Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
         }
         
         // get all $_idProperty entries
