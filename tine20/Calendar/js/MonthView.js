@@ -451,8 +451,9 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         // save some layout info
         event.ui.is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
-        event.ui.color = '#FD0000';
-        event.ui.bgColor = '#FF9696';
+        event.ui.colorSet = Tine.Calendar.colorMgr.getColor(event);
+        event.ui.color = event.ui.colorSet.color;
+        event.ui.bgColor = event.ui.colorSet.light;
         
         var data = {
             startTime: dtStart.format('H:i'),
