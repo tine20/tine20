@@ -42,13 +42,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     afterRender: function() {
         Tine.Calendar.EventEditDialog.superclass.afterRender.apply(this, arguments);
         this.CalendarSelectWidget.render(this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}}));
-        /*
-        // render calendarSelector
-        var calSelectWidgetFromItems = this.CalendarSelectWidget.getFormItems();
-        //this.getForm().add(calSelectWidgetFromItems[0]);
-        //this.getForm().add(calSelectWidgetFromItems[1]);
-        this.CalendarSelectWidget.render(this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}}));
-        */
     },
     
     onResize: function() {
@@ -98,34 +91,40 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldLabel: this.app.i18n._('Summary'),
                                 name: 'summary',
                                 listeners: {render: function(field){field.focus(false, 250);}},
-                                allowBlank: false
+                                allowBlank: false,
+                                requiredGrant: 'editGrant'
                             }], [{
                                 columnWidth: 1,
                                 fieldLabel: this.app.i18n._('Location'),
-                                name: 'location'
+                                name: 'location',
+                                requiredGrant: 'editGrant'
                             }], [{
                                 xtype: 'datetimefield',
                                 fieldLabel: this.app.i18n._('Start Time'),
                                 listeners: {scope: this, change: this.onDtStartChange},
-                                name: 'dtstart'
+                                name: 'dtstart',
+                                requiredGrant: 'editGrant'
                             }, {
                                 xtype: 'combo',
                                 hideLabel: true,
                                 readOnly: true,
                                 hideTrigger: true,
                                 disabled: true,
-                                name: 'originator_tz'
+                                name: 'originator_tz',
+                                requiredGrant: 'editGrant'
                             }], [{
                                 xtype: 'datetimefield',
                                 fieldLabel: this.app.i18n._('End Time'),
                                 listeners: {scope: this, change: this.onDtEndChange},
-                                name: 'dtend'
+                                name: 'dtend',
+                                requiredGrant: 'editGrant'
                             }, {
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('whole day'),
                                 listeners: {scope: this, check: this.onAllDayChange},
-                                name: 'is_all_day_event'
+                                name: 'is_all_day_event',
+                                requiredGrant: 'editGrant'
                             }]]
                         }]
                     }, {
@@ -172,14 +171,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 grow: false,
                                 preventScrollbars:false,
                                 anchor:'100% 100%',
-                                emptyText: this.app.i18n._('Enter description')                            
+                                emptyText: this.app.i18n._('Enter description'),
+                                requiredGrant: 'editGrant'                           
                             }]
                         }),
                         new Tine.widgets.activities.ActivitiesPanel({
                             app: 'Calendar',
                             showAddNoteForm: false,
                             border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
+                            bodyStyle: 'border:1px solid #B5B8C8;',
                         }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Calendar',
@@ -246,6 +246,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.rendered) {
             this.attendeeGridPanel.onRecordLoad(this.record);
             this.CalendarSelectWidget.onRecordLoad(this.record);
+            
+            // apply grants
+            if (! this.record.get('editGrant')) {
+                this.getForm().items.each(function(f){
+                    if(f.isFormField && f.requiredGrant !== undefined){
+                        f.setDisabled(! this.record.get(f.requiredGrant));
+                    }
+                }, this);
+            }
         }
         
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
