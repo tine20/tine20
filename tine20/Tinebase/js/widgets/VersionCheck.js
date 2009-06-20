@@ -29,7 +29,6 @@ Tine.widgets.VersionCheck = function() {
     });
     ds.on('load', function(store, records) {
         var version = records[0];
-        alert('hallo');
         
         var local = Date.parseDate(Tine.Tinebase.registry.get('version').releasetime, Date.patterns.ISO8601Long);
         var latest = Date.parseDate(version.get('releasetime'), Date.patterns.ISO8601Long);
