@@ -778,6 +778,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @param {Tine.Calendar.Model.Event} event
      */
     removeEvent: function(event) {
+        if (! event) {
+            return;
+        }
+        
         if (event == this.activeEvent) {
             this.activeEvent = null;
         }

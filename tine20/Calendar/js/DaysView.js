@@ -823,6 +823,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onRemove : function(ds, event, index, isUpdate){
+        if (!event || index == -1) {
+            return;
+        }
+        
         if(isUpdate !== true){
             //this.fireEvent("beforeeventremoved", this, index, record);
         }
