@@ -145,10 +145,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_resolveAttendee($_record->attendee);
         $eventData = parent::_recordToJson($_record);
         
-        $eventData['readGrant']   = $eventData['container_id']['account_grants']['readGrant'];
-        $eventData['editGrant']   = $eventData['container_id']['account_grants']['editGrant'];
-        $eventData['deleteGrant'] = $eventData['container_id']['account_grants']['deleteGrant'];
-        
         return $eventData;
     }
     
