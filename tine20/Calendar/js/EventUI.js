@@ -58,7 +58,8 @@ Tine.Calendar.EventUI.prototype = {
     },
     
     init: function() {
-        
+        // shortcut
+        //this.colMgr = Tine.Calendar.colorMgr;
     },
     
     markDirty: function() {
@@ -148,17 +149,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     },
     
     render: function(view) {
-        
-        // @todo fetch color from calendar
-        this.color = '#FD0000';
-        
-        this.extraCls = '';
-        
-        // lighten up background
-        var r = Math.min(view.hex2dec(this.color.substring(1,3)) + 150, 255);
-        var g = Math.min(view.hex2dec(this.color.substring(3,5)) + 150, 255);
-        var b = Math.min(view.hex2dec(this.color.substring(5,7)) + 150, 255);
-        this.bgColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+        this.colorSet = Tine.Calendar.colorMgr.getColor(this.event);
         
         this.dtStart = this.event.get('dtstart');
         this.startColNum = view.getColumnNumber(this.dtStart);
@@ -224,8 +215,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             summary: this.event.get('summary'),
             startTime: this.dtStart.format('H:i'),
             extraCls: extraCls,
-            color: this.color,
-            bgColor: this.bgColor,
+            color: this.colorSet.color,
+            bgColor: this.colorSet.light,
             zIndex: 100,
             width: width  +'px',
             height: '15px',
@@ -291,8 +282,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 summary: height >= 24 ? this.event.get('summary') : '',
                 startTime: height >= 24 ? this.dtStart.format('H:i') : this.dtStart.format('H:i') + ' ' +  this.event.get('summary'),
                 extraCls: extraCls,
-                color: this.color,
-                bgColor: this.bgColor,
+                color: this.colorSet.color,
+                bgColor: this.colorSet.light,
                 zIndex: 100,
                 width: Math.round(90 * 1/parallels) + '%',
                 height: height + 'px',
