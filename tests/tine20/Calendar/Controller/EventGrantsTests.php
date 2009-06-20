@@ -21,6 +21,10 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Calendar_Controller_Event
  * 
+ * @todo:
+ *  - add grants spoofing test from JSON frontend
+ *  - add free/busy cleanup tests
+ * 
  * @package     Calendar
  */
 class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase

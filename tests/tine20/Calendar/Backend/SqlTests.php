@@ -108,6 +108,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-04-02 23:30:00',
@@ -117,6 +118,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-04-06 12:00:00',
@@ -126,6 +128,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-04-10 23:30:00',
@@ -135,6 +138,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-04-11 00:00:00',
@@ -144,6 +148,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-03-27 22:00:00',
@@ -154,6 +159,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-03-27 22:00:00',
@@ -164,6 +170,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-04-03 22:00:00',
@@ -174,6 +181,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-04-03 22:00:00',
@@ -184,6 +192,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             ),
             array(
                 'dtstart'      => '2009-04-11 00:00:00',
@@ -194,6 +203,7 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
                 'container_id' => $this->_testCalendar->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
+                'readGrant'    => true
             )
         ));
         

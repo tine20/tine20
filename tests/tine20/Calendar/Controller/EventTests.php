@@ -182,6 +182,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
             'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
             'container_id'  => $this->_testCalendar->getId(),
+            'editGrant'     => true,
         ));
         $event->attendee = $this->_getAttendee();
         unset($event->attendee[1]);
@@ -254,6 +255,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
             'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
             'container_id'  => $this->_testCalendar->getId(),
+            'editGrant'     => true,
         ));
         
         $persitentEvent = $this->_controller->create($event);
@@ -422,6 +424,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
             'description' => 'Wieslaw Brudzinski: Das Gesetz garantiert zwar die Mittagspause, aber nicht das Mittagessen...',
         
             'container_id' => $this->_testCalendar->getId(),
+            'editGrant'    => true,
         ));
     }
     
