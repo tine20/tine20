@@ -54,12 +54,17 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @cfg {Boolean} hideTrigger2
      */
     hideTrigger2: true,
+    /**
+     * @cfg {String} startNode
+     */
+    startNode: 'all',
     
     trigger2width: 100,
     
     // private
     allowBlank: false,
     triggerAction: 'all',
+    forceAll: true,
     lazyInit: false,
     readOnly:true,
     stateful: true,
@@ -88,13 +93,27 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             ]};
             
         }
-            
-        this.store = new Ext.data.SimpleStore({
-            id: id,
-            fields: Tine.Tinebase.Model.Container
+        
+        // prepare for personalNode remote search (startNode personalOf)
+        this.store = new Ext.data.JsonStore({
+            id: 'id',
+            fields: Tine.Tinebase.Model.Container,
+            baseParams: {
+                method: 'Tinebase_Container.getContainer',
+                application: this.appName,
+                containerType: Tine.Tinebase.container.TYPE_PERSONAL
+            },
+            listeners: {
+                scope: this,
+                beforeload: function(store, options) {
+                    console.log(options);
+                    options.params.owner = this.owner
+                }
+            }
         });
         
-        this.title = String.format(_('Recently used {0}:'), this.containersName);
+        this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(_('choose other {0}...'), this.containerName)}, 'other');
+        //this.title = String.format(_('Recently used {0}:'), this.containersName);
         
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         
@@ -102,6 +121,14 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.container = this.defaultContainer;
             this.value = this.defaultContainer.name;
         }
+        
+        this.on('beforequery', this.onBeforeQuery, this);
+    },
+    
+    onBeforeQuery: function(queryEvent) {
+        // for startNode 'all' we open recents locally
+        queryEvent.query = new Date().getTime();
+        this.mode = this.startNode == 'all' ? 'local' : 'remote';
     },
     
     initTrigger : function(){
@@ -152,6 +179,14 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         }
     },
     
+    onSelect: function(record, index) {
+        if (record == this.otherRecord) {
+            this.onChoseOther();
+        } else {
+            Tine.widgets.container.selectionComboBox.superclass.onSelect.apply(this, arguments);
+        }
+    },
+    
     /**
      * @private
      */
@@ -168,7 +203,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @private
      */
-    onRender: function(ct, position) {
+    onRender2: function(ct, position) {
         Tine.widgets.container.selectionComboBox.superclass.onRender.call(this, ct, position);
         
         var cls = 'x-combo-list';
@@ -206,20 +241,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     setValue: function(container){
-        
         // element which is allready in this.store 
         if (typeof(container) == 'string') {
             container = this.store.getById(container).data;
         }
-        
-        /* complicated
-        // trim length of current container name
-        if (this.container && this.container.name && this.fullContainerName) {
-            this.container.name = this.fullContainerName;
-        }
-        this.fullContainerName = container.name;
-        container.name = Ext.util.Format.htmlEncode(Ext.util.Format.ellipsis(container.name, this.displayLength));
-        */
         
         // dynamically add current container to store if not exists
         if (! this.store.getById(container.id)) {
@@ -227,6 +252,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.store.add(new Tine.Tinebase.Model.Container(container, container.id));
         }
         
+        this.container = container;
         Tine.widgets.container.selectionComboBox.superclass.setValue.call(this, container.id);
         
         if (container.account_grants) {
@@ -236,7 +262,14 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         if(this.qtip) {
             this.qtip.remove();
         }
-    	this.container = container;
+        
+        // make sure 'choose other' is the last item
+        var other = this.store.getById('other');
+        if (other) {
+            this.store.remove(other);
+        }
+        this.store.add(this.otherRecord);
+        
         
         // IE has problems with sate saving. Might be, that our clone function is not working correclty yet.
         if (! Ext.isIE) {
