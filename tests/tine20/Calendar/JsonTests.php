@@ -126,6 +126,10 @@ class Calendar_JsonTests extends Calendar_TestCase
         $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
         $pwulf = $this->_findAttender($updatedEventData['attendee'], 'pwulf');
         
+        // he he, we don't have his authkey, cause json class sorts it out due to rights restrictions.
+        $attendeeBackend = new Calendar_Backend_Sql_Attendee();
+        $pwulf['status_authkey'] = $attendeeBackend->get($pwulf['id'])->status_authkey;
+        
         $updatedEventData['container_id'] = $updatedEventData['container_id']['id'];
         
         $pwulf['status'] = Calendar_Model_Attender::STATUS_ACCEPTED;
