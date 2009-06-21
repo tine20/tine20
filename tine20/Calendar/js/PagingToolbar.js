@@ -76,11 +76,6 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             handler: this.onClick.createDelegate(this, ["prev"])
         });
         this.addSeparator();
-        this.todayBtn = this.addButton({
-            text: Ext.DatePicker.prototype.todayText,
-            iconCls: 'cal-today-action',
-            handler: this.onClick.createDelegate(this, ["today"])
-        });
         this.periodPicker.render();
         this.addSeparator();
         this.nextBtn = this.addButton({
@@ -89,6 +84,11 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             handler: this.onClick.createDelegate(this, ["next"])
         });
         this.addSeparator();
+        this.todayBtn = this.addButton({
+            text: Ext.DatePicker.prototype.todayText,
+            iconCls: 'cal-today-action',
+            handler: this.onClick.createDelegate(this, ["today"])
+        });
         this.loading = this.addButton({
             tooltip: Ext.PagingToolbar.prototype.refreshText,
             iconCls: "x-tbar-loading",
@@ -201,7 +201,7 @@ Tine.Calendar.PagingToolbar.AbstractPeriodPicker = function(config) {
     );
     Tine.Calendar.PagingToolbar.AbstractPeriodPicker.superclass.constructor.call(this);
     
-    this.dtStart = this.tb.dtStart.clone();
+    this.update(this.tb.dtStart);
     this.init();
 };
 Ext.extend(Tine.Calendar.PagingToolbar.AbstractPeriodPicker, Ext.util.Observable, {
@@ -241,7 +241,7 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
     },
     update: function(dtStart) {
         this.dtStart = dtStart.clone();
-        if (this.button.rendered) {
+        if (this.button && this.button.rendered) {
             this.button.setText(dtStart.format(Ext.DatePicker.prototype.format));
         }
     },
@@ -301,8 +301,14 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         
     },
     update: function(dtStart) {
-        this.dtStart = dtStart.clone();
-        if (this.field.rendered) {
+        //recalculate dtstart begin of week 
+        var from = dtStart.add(Date.DAY, -1 * dtStart.getDay());
+        if (Ext.DatePicker.prototype.startDay) {
+            from = from.add(Date.DAY, Ext.DatePicker.prototype.startDay - (dtStart.getDay() == 0 ? 7 : 0));
+        }
+        this.dtStart = from;
+        
+        if (this.field && this.field.rendered) {
             // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
             this.field.setValue(parseInt(dtStart.getWeekOfYear(), 10) + parseInt(dtStart.getDay() < 1 ? 1 : 0, 10));
         }
@@ -328,16 +334,24 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         this.update(this.dtStart);
     },
     getPeriod: function() {
+        return {
+            from: this.dtStart.clone(),
+            until: this.dtStart.add(Date.DAY, 7)
+        };
+    }/*
+    getPeriod: function() {
         // period is the week current startDate is in
         var startDay = Ext.DatePicker.prototype.startDay;
+        console.log(startDay);
         var diff = startDay - this.dtStart.getDay();
+        console.log(diff);
         
         var from = Date.parseDate(this.dtStart.add(Date.DAY, diff).format('Y-m-d') + ' 00:00:00', Date.patterns.ISO8601Long);
         return {
             from: from,
-            until: from.add(Date.DAY, 7)/*.add(Date.SECOND, -1)*/
+            until: from.add(Date.DAY, 7)
         };
-    }
+    }*/
 });
 
 /**
@@ -383,7 +397,7 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
     },
     update: function(dtStart) {
         this.dtStart = dtStart.clone();
-        if (this.button.rendered) {
+        if (this.button && this.button.rendered) {
             var monthName = Ext.DatePicker.prototype.monthNames[dtStart.getMonth()];
             this.button.setText(monthName + dtStart.format(' Y'));
         }
