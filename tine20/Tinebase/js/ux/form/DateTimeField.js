@@ -44,15 +44,14 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     
     getValue: function() {
         var date = this.dateField.getValue();
-        var time = this.timeField.getValue();
+        // this is odd, why doesn't Ext.form.TimeField a Date datatype?
+        var time = Date.parseDate(this.timeField.getValue(), this.timeField.format);
         
-        var timeParts = time.split(':');
-        
-        if (Ext.isDate(date) && timeParts.length >= 2) {
+        if (Ext.isDate(date) && Ext.isDate(time)) {
             date = date.clone();
             date.clearTime();
-            date.setHours(timeParts[0]);
-            date.setMinutes(timeParts[1]);
+            time.getHours();
+            time.getMinutes();
         }
         return date;
     },
@@ -100,10 +99,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     onResize : function(w, h) {
         Ext.ux.form.DateTimeField.superclass.onResize.apply(this, arguments);
         
-        this.dateField.setWidth(w * 0.6 -10);
+        this.dateField.setWidth(w * 0.55 -10);
         
         this.timeField.wrap.setStyle({'position': 'absolute', 'top': '0px'});
-        this.timeField.setWidth(w * 0.4);
+        this.timeField.setWidth(w * 0.45);
         this.timeField.wrap.setRight(5);
     },
     
