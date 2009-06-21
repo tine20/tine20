@@ -36,7 +36,7 @@ class Tinebase_Frontend_Json_Container
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, Tinebase_Model_Container::GRANT_READ);
                 foreach ($containers as $container) {
                     $container->bypassFilters = true;
-                    $container->account_grants = Zend_Json::encode(Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray());
+                    $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
                 }
                 echo Zend_Json::encode($containers->toArray());
                 
@@ -46,7 +46,7 @@ class Tinebase_Frontend_Json_Container
                 $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, Tinebase_Model_Container::GRANT_READ);
                 foreach ($containers as $container) {
                     $container->bypassFilters = true;
-                    $container->account_grants = Zend_Json::encode(Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray());
+                    $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
                 }
                 echo Zend_Json::encode($containers->toArray());
                 
