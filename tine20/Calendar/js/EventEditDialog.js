@@ -166,7 +166,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 style: 'margin-top: -4px; border 0px;',
                                 labelSeparator: '',
                                 xtype:'textarea',
-                                name: 'note',
+                                name: 'description',
                                 hideLabel: true,
                                 grow: false,
                                 preventScrollbars:false,
@@ -179,7 +179,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             app: 'Calendar',
                             showAddNoteForm: false,
                             border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;',
+                            bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Calendar',
