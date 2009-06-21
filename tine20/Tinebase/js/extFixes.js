@@ -16,7 +16,10 @@ if (Ext.isIE8) {
     Ext.DatePicker.prototype.onRender = Ext.DatePicker.prototype.onRender.createSequence(function(ct, position) {
         var wrap = ct.up('div[class="x-layer x-menu x-menu-plain x-date-menu"]');
         var orgWidth = this.el.getWidth();
-        wrap.setWidth.defer(10, wrap, [orgWidth]);
+        if (wrap) {
+            // only wraped in menues
+            wrap.setWidth.defer(10, wrap, [orgWidth]);
+        }
     });
 }
 
