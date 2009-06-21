@@ -47,6 +47,7 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
         allowBlank: true,
         listeners: {
             scope: this,
+            beforequery: this.onBeforeCalComboQuery,
             select: this.onCalComboSelect
         }
     });
@@ -136,6 +137,15 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
                 '</div>' +
             '</tpl>'
         );
+    },
+    
+    onBeforeCalComboQuery: function() {
+        if(this.currentCalMap.get('isOriginal')) {
+            this.calCombo.startNode = 'all';
+        } else {
+            this.calCombo.startNode = 'personalOf';
+            this.calCombo.owner = this.currentCalMap.get('userId');
+        }
     },
     
     onCalComboSelect: function() {
