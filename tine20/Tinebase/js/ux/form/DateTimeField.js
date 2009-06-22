@@ -100,6 +100,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     onResize : function(w, h) {
         Ext.ux.form.DateTimeField.superclass.onResize.apply(this, arguments);
         
+        this.dateField.wrap.setStyle({'position': 'absolute', 'top': '0px'});
         this.dateField.setWidth(w * 0.55 -10);
         
         this.timeField.wrap.setStyle({'position': 'absolute', 'top': '0px'});
