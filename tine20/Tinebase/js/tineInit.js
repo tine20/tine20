@@ -370,6 +370,10 @@ Tine.Tinebase.tineInit = {
         if (errormsg.match(/versioncheck/)) {
             return true;
         }
+        // we don't wanna know fancy FF3.5 crom bugs
+        if (errormsg.match(/chrome/)) {
+            return true;
+        }
         
         var data = {
             msg: 'js exception: ' + errormsg,
