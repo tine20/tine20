@@ -392,7 +392,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     /*failure:  function (result, request) {
                         Ext.MessageBox.alert(_('Failed'), String.format(_('Could not save {0}.'), this.i18nRecordName)); 
                     },*/
-                    exceptionHandler: this.onRequestFailed
+                    exceptionHandler: this.onRequestFailed,
+                    timeout: 150000 // 3 minutes
                 });
             } else {
                 this.onRecordLoad();
