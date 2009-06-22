@@ -52,6 +52,8 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
         }
     });
     
+    this.EventEditDialog.attendeeStore.on('update', this.onAttendeUpdate, this);
+    
 };
 
 Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
@@ -137,6 +139,26 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
                 '</div>' +
             '</tpl>'
         );
+    },
+    
+    onAttendeUpdate: function(store, updatedAttender) {
+        // mhh weired, somtimes a container comes instead of an attender...
+        if (typeof updatedAttender.get('displaycontainer_id').get == 'function') {
+            // check if currently displayed container changed
+            if (updatedAttender.get('displaycontainer_id').get('account_grants').account_id == this.currentCalMap.get('userId')) {
+                //console.log('currently displayed non original changed');
+                this.currentCalMap.set('calendar', '');
+                this.currentCalMap.set('calendar', updatedAttender.get('displaycontainer_id'));
+                //this.calCombo.setValue(updatedAttender.get('displaycontainer_id'));
+                this.calCombo.setRawValue(updatedAttender.get('displaycontainer_id').get('name'));
+            } else if (updatedAttender.getUserId() == this.currentAccountId && updatedAttender.get('user_type') == 'user' && this.currentCalMap.get('isOriginal')) {
+                //console.log('currently displayed original changed');
+                this.currentCalMap.set('calendar', '');
+                this.currentCalMap.set('calendar', updatedAttender.get('displaycontainer_id'));
+                //this.calCombo.setValue(updatedAttender.get('displaycontainer_id'));
+                this.calCombo.setRawValue(updatedAttender.get('displaycontainer_id').get('name'));
+            }
+        }
     },
     
     onBeforeCalComboQuery: function() {

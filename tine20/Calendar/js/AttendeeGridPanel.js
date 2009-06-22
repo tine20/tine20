@@ -81,10 +81,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: Tine.Tinebase.tranlation._hidden('Saved in'),
             tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
             renderer: this.renderAttenderDispContainer.createDelegate(this),
-            editor: new Tine.widgets.container.selectionComboBox({
+            // disable for the moment, as updating calendarSelectWidget is not working in both directions
+            editor2: new Tine.widgets.container.selectionComboBox({
                 blurOnSelect: true,
                 selectOnFocus: true,
                 appName: 'Calendar',
+                startNode: 'personalOf',
                 getValue: function() {
                     if (this.container) {
                         // NOTE: the store checks if data changed. If we don't overwrite to string, 
