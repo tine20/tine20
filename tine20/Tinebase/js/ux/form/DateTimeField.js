@@ -50,9 +50,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         if (Ext.isDate(date) && Ext.isDate(time)) {
             date = date.clone();
             date.clearTime();
-            time.getHours();
-            time.getMinutes();
+            date = date.add(Date.HOUR, time.getHours());
+            date = date.add(Date.MINUTE, time.getMinutes());
         }
+        
         return date;
     },
     
