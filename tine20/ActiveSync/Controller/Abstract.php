@@ -317,10 +317,8 @@ abstract class ActiveSync_Controller_Abstract
      * @param unknown_type $_endTimeStamp
      * @return array
      */
-    public function getChanged($_folderId, $_startTimeStamp, $_endTimeStamp)
+    public function getChanged($_folderId, $_startTimeStamp, $_endTimeStamp = NULL)
     {
-        $fieldName = 'last_modified_time';
-        
         $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof Zend_Date) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
@@ -330,12 +328,15 @@ abstract class ActiveSync_Controller_Abstract
             'operator'  => 'after',
             'value'     => $startTimeStamp
         );
-        $filterArray[] = array(
-            'field'     => 'last_modified_time',
-            'operator'  => 'before',
-            'value'     => $endTimeStamp
-        );
         
+        if($endTimeStamp !== NULL) {
+            $filterArray[] = array(
+                'field'     => 'last_modified_time',
+                'operator'  => 'before',
+                'value'     => $endTimeStamp
+            );
+        }
+
         $filter = new $this->_contentFilterClass($filterArray);
 
         $result = $this->_contentController->search($filter, NULL, false, true);
