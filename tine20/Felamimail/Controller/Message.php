@@ -863,8 +863,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _replaceEmails($_content) 
     {
         // add anchor to email addresses (remove mailto hrefs first)
-        //$mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>[^<]*<\/a>/i';
-        $mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>.*(?!<\/a>)/i';
+        $mailtoPattern = '/<a href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>.*<\/a>/iU';
         $result = preg_replace($mailtoPattern, "\\1", $_content);
         
         //$emailPattern = '/(?<!mailto:)([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
