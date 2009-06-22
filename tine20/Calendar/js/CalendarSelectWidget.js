@@ -52,7 +52,7 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
         }
     });
     
-    this.EventEditDialog.attendeeStore.on('update', this.onAttendeUpdate, this);
+    //this.EventEditDialog.attendeeStore.on('update', this.onAttendeUpdate, this);
     
 };
 
