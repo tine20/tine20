@@ -375,10 +375,10 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $ids list of softwareId's to delete
      * @return array
      */
-    public function deleteSnomSoftware($ids)
+    public function deleteSnomSoftwares($ids)
     {
         return $this->_delete($ids, Voipmanager_Controller_Snom_Software::getInstance());
-    }       
+    }
     
     
     
