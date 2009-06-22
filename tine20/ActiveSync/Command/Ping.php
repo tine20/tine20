@@ -153,7 +153,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                 
                 sleep(self::PING_TIMEOUT);
                 $secondsLeft = $intervalEnd - mktime();
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
+                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
             } while($secondsLeft > 0);
         }
         
