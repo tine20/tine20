@@ -199,12 +199,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         if (this.startColNum < 0) {
             width = width - Math.abs(this.startColNum) * (offsetWidth/view.numOfDays);
             left = 0;
-            extraCls = extraCls + ' cal-daysviewpanel.event-cropleft';
+            extraCls = extraCls + ' cal-daysviewpanel-event-cropleft';
         }
         
         if (this.endColNum > view.numOfDays) {
             width = width - Math.abs(this.endColNum - view.numOfDays) * (offsetWidth/view.numOfDays);
-            extraCls = extraCls + ' cal-daysviewpanel.event-cropright';
+            extraCls = extraCls + ' cal-daysviewpanel-event-cropright';
         }
         
         var domId = Ext.id() + '-evnet:' + this.event.get('id');
