@@ -358,7 +358,7 @@ abstract class ActiveSync_Controller_Abstract
         
         $foundEntries  = $this->_contentController->search($contentFilter, NULL, false, true);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
             
         return $foundEntries;
     }
