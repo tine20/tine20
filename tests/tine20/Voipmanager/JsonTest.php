@@ -577,7 +577,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteSnomPhones(Zend_Json::encode(array($returned['id'])));
         $this->_json->deleteSnomLocations(Zend_Json::encode(array($returned['location_id']['value'])));
         $this->_json->deleteSnomTemplates(Zend_Json::encode(array($returned['template_id']['value'])));
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($phoneTemplate['software_id']['value'])));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($phoneTemplate['software_id']['value'])));
         $this->_json->deleteSnomSettings(Zend_Json::encode(array($phoneTemplate['setting_id']['value'])));
     }
     
@@ -610,7 +610,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteSnomPhones(Zend_Json::encode(array($returned['id'])));
         $this->_json->deleteSnomLocations(Zend_Json::encode(array($returned['location_id'])));
         $this->_json->deleteSnomTemplates(Zend_Json::encode(array($returned['template_id'])));
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($phoneTemplate['software_id']['value'])));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($phoneTemplate['software_id']['value'])));
         $this->_json->deleteSnomSettings(Zend_Json::encode(array($phoneTemplate['setting_id']['value'])));
     }
     
@@ -639,7 +639,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteSnomPhones(Zend_Json::encode(array($returned['id'])));
         $this->_json->deleteSnomLocations(Zend_Json::encode(array($returned['location_id']['value'])));
         $this->_json->deleteSnomTemplates(Zend_Json::encode(array($returned['template_id']['value'])));
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($phoneTemplate['software_id']['value'])));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($phoneTemplate['software_id']['value'])));
         $this->_json->deleteSnomSettings(Zend_Json::encode(array($phoneTemplate['setting_id']['value'])));
     }
     
@@ -693,7 +693,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteSnomTemplates(Zend_Json::encode(array($template_id)));
         $this->_json->deleteSnomLocations(Zend_Json::encode(array($location_id)));
         $this->_json->deleteSnomSettings(Zend_Json::encode(array($settings_id)));
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($software_id)));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($software_id)));
         */
     }
     
@@ -757,7 +757,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->deleteSnomTemplates(Zend_Json::encode(array($template_id)));
         $this->_json->deleteSnomLocations(Zend_Json::encode(array($location_id)));
         $this->_json->deleteSnomSettings(Zend_Json::encode(array($settings_id)));
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($software_id)));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($software_id)));
     }
     
     /**
@@ -893,7 +893,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['description'], $returnedGet['description']);
         
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($returned['id'])));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -912,7 +912,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['description'], $updated['description']);
         $this->assertNotNull($updated['id']);
                 
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($returned['id'])));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
@@ -931,7 +931,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $search['totalcount']);
         
         // cleanup
-        $this->_json->deleteSnomSoftware($snomSoftwareData['id']);
+        $this->_json->deleteSnomSoftwares($snomSoftwareData['id']);
         /***********************************************************************************/
     }
     
@@ -990,7 +990,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test['software_id'], $returnedGet['software_id']['value']);
         
         $this->_json->deleteSnomTemplates(Zend_Json::encode(array($returned['id'])));
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($returned['software_id']['value'])));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($returned['software_id']['value'])));
         $this->_json->deleteSnomSettings(Zend_Json::encode(array($returned['setting_id']['value'])));
     }
     
@@ -1014,7 +1014,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($updated['id']);
         
         $this->_json->deleteSnomTemplates(Zend_Json::encode(array($returned['id'])));
-        $this->_json->deleteSnomSoftware(Zend_Json::encode(array($updated['software_id']['value'])));
+        $this->_json->deleteSnomSoftwares(Zend_Json::encode(array($updated['software_id']['value'])));
         $this->_json->deleteSnomSettings(Zend_Json::encode(array($updated['setting_id']['value'])));
     }
     
@@ -1035,7 +1035,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_json->deleteSnomTemplates($snomTemplateData['id']);
-        $this->_json->deleteSnomSoftware($snomTemplateData['software_id']['value']);
+        $this->_json->deleteSnomSoftwares($snomTemplateData['software_id']['value']);
         $this->_json->deleteSnomSettings($snomTemplateData['setting_id']['value']);
         /***********************************************************************************/
     }
