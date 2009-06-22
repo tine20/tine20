@@ -715,7 +715,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $body = $this->_purifyBodyContent($body);
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         // get plain text if body is empty at this point
         if (! isset($body) || $body == 'no text part found') {
@@ -733,7 +733,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $body = $this->_replaceEmails($body);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         return $body;
     }
