@@ -256,6 +256,12 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     init: function(calPanel) {
         this.calPanel = calPanel;
         
+        // redefine this props in case ext translations got included after this
+        // component
+        this.monthNames = Date.monthNames;
+        this.dayNames   = Date.dayNames;
+        this.startDay   = Ext.DatePicker.prototype.startDay;
+    
         this.initData(calPanel.store);
         this.initTemplates();
     },
