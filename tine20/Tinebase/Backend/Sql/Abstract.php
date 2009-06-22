@@ -127,6 +127,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
                 
         if (!$queryResult) {
             throw new Tinebase_Exception_NotFound($this->_modelName . " record with $_property " . $_value . ' not found!');
