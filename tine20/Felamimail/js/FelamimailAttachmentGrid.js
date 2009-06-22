@@ -72,6 +72,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
 
             var input = _button.detachInputFile();
             var uploader = new Ext.ux.file.Uploader({
+                maxFileSize: 67108864, // 64MB
                 input: input
             });
             uploader.on('uploadcomplete', function(uploader, file){

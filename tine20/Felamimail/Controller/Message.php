@@ -25,9 +25,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * maximum file upload size (in bytes)
      * 
+     * 0 -> max size = memory limit
      * 2097152 = 2MB
      */
-    const MAX_ATTACHMENT_SIZE = '2097152';
+    //const MAX_ATTACHMENT_SIZE = 2097152;
+    const MAX_ATTACHMENT_SIZE = 0;
     
     /**
      * imap flags to constants translation
@@ -713,7 +715,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $body = $this->_purifyBodyContent($body);
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         // get plain text if body is empty at this point
         if (! isset($body) || $body == 'no text part found') {
@@ -731,7 +733,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $body = $this->_replaceEmails($body);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
         return $body;
     }
@@ -783,6 +785,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
     {
+        $maxSize = (self::MAX_ATTACHMENT_SIZE == 0) ? convertToBytes(ini_get('upload_max_filesize')) : self::MAX_ATTACHMENT_SIZE;
+        
         if (isset($_message->attachments)) {
             $size = 0;
             foreach ($_message->attachments as $attachment) {
@@ -820,7 +824,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
                 // check size
                 $size += $attachment['size'];
-                if ($size > self::MAX_ATTACHMENT_SIZE) {
+                if ($size > $maxSize) {
                     throw new Felamimail_Exception('Allowed attachment size exceeded! Tried to attach ' . $size . ' bytes.');
                 }
                 
@@ -841,6 +845,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // uris
         $pattern = '@(http://|https://|ftp://|mailto:|news:)([^\s<>]+)@';
+        //$pattern = '@(http://|https://|ftp://|mailto:|news:)([^\s<>\)]+)@';
         $result = preg_replace($pattern, "<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $result);
         
         // spaces
