@@ -127,14 +127,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                             $folder['serverEntryId'],
                             $syncState->lastsync
                         );
-                        
-                        // get the count of deleted entries or entries available becuase of change permissions
-                        $contentStateBackend  = new ActiveSync_Backend_ContentState();
-                        $allClientEntries = $contentStateBackend->getClientState($this->_device, $folder['folderType'], $folder['serverEntryId']);
-                        $allServerEntries = $dataController->getServerEntries($folder['serverEntryId']);
-
-                        $count += abs(count($allClientEntries) - count($allServerEntries));
-                        
+                                                
                         if($count > 0) {
                             $folderWithChanges[] = array(
                                 'serverEntryId' => $folder['serverEntryId'],
@@ -152,13 +145,19 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                     break;
                 }
                 
+                // another process synchronized data already
+                if($syncState->lastsync > $this->_syncTimeStamp) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " terminate ping process. Some other process updated data already.");
+                    break;
+                }
+                
                 sleep(self::PING_TIMEOUT);
                 $secondsLeft = $intervalEnd - mktime();
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
             } while($secondsLeft > 0);
         }
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " Lifetime: $lifeTime SecondsLeft: $secondsLeft  Status: $status)");
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " Lifetime: $lifeTime SecondsLeft: $secondsLeft Status: $status)");
         
         $ping = $this->_outputDom->documentElement;
         $ping->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Status', $status));
@@ -167,7 +166,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             foreach($folderWithChanges as $changedFolder) {
                 $folder = $folders->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folder', $changedFolder['serverEntryId']));
                 #$folder->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Id', $changedFolder['serverEntryId']));
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_deviceId . " changes in folder: " . $changedFolder['serverEntryId']);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " changes in folder: " . $changedFolder['serverEntryId']);
             }
         }                
     }    
@@ -189,7 +188,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
         
-        $changedEntries     = $_dataController->getChanged($_collectionId, $_lastSyncTimeStamp, $this->_syncTimeStamp);
+        $changedEntries     = $_dataController->getChanged($_collectionId, $_lastSyncTimeStamp);
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
