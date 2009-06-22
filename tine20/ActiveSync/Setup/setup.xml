@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>0.5</version>
+    <version>0.7</version>
     <order>90</order>
     <status>disabled</status>    
     <depends>
@@ -252,6 +252,12 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
+                    <name>collectionid</name>
+                    <type>text</type>
+                    <length>254</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>creation_time</name>
                     <type>datetime</type>
                 </field> 
@@ -263,13 +269,16 @@
                     </field>
                 </index>
                 <index>
-                    <name>device_id--class--contentid</name>
+                    <name>device_id--class--collectionid--contentid</name>
                     <unique>true</unique>
                     <field>
                         <name>device_id</name>
                     </field>
                     <field>
                         <name>class</name>
+                    </field>
+                    <field>
+                        <name>collectionid</name>
                     </field>
                     <field>
                         <name>contentid</name>

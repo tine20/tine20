@@ -143,11 +143,13 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
      * @param string|optional $_counter
      * @return ActiveSync_Model_SyncState
      */
-    public function getSyncState(ActiveSync_Model_Device $_device, $_type, $_counter = NULL)
+    public function getSyncState(ActiveSync_Model_Device $_device, $_class, $_collectionId, $_counter = NULL)
     {
+        $type = $_class . '-' . $_collectionId;
+        
         $syncState = new ActiveSync_Model_SyncState(array(
             'device_id'  => $_device->getId(),
-            'type'      => $_type
+            'type'      => $type
         ));
         
         if($_counter !== NULL) {
@@ -230,12 +232,14 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
         return $device;
     }
     
-    public function validateSyncKey(ActiveSync_Model_Device $_device, $_counter, $_type)
+    public function validateSyncKey(ActiveSync_Model_Device $_device, $_counter, $_class, $_collectionId = NULL)
     {
+        $type = $_collectionId !== NULL ? $_class . '-' . $_collectionId : $_class;
+        
         $syncState = new ActiveSync_Model_SyncState(array(
             'device_id'  => $_device->getId(),
             'counter'   => $_counter,
-            'type'      => $_type
+            'type'      => $type
         ));
                 
         try {
@@ -247,14 +251,16 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
         }
     }
         
-    public function updateSyncKey(ActiveSync_Model_Device $_device, $_counter, $_type, Zend_Date $_timeStamp)
+    public function updateSyncKey(ActiveSync_Model_Device $_device, $_counter, Zend_Date $_timeStamp, $_class, $_collectionId = NULL)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update synckey to ' . $_counter);
+        
+        $type = $_collectionId !== NULL ? $_class . '-' . $_collectionId : $_class;
         
         $syncState = new ActiveSync_Model_SyncState(array(
             'device_id' => $_device->getId(),
             'counter'   => $_counter,
-            'type'      => $_type,
+            'type'      => $type,
             'lastsync'  => $_timeStamp->get(Tinebase_Record_Abstract::ISO8601LONG)
         ));
                 

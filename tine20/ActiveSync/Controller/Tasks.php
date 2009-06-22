@@ -51,18 +51,40 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         #'Rtf'               => 'rtf'
     );
     
-    protected $_folders = array(
-        'tasksroot' => array(
-            'folderId'      => 'tasksroot',
-            'parentId'      => 0,
-            'displayName'   => 'Tasks',
-            'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_TASK
-        )
-    );
-    
+    /**
+     * name of Tine 2.0 backend application
+     * 
+     * @var string
+     */
     protected $_applicationName     = 'Tasks';
     
-    protected $_modelName           = 'Task';    
+    /**
+     * name of Tine 2.0 model to use
+     * 
+     * @var string
+     */
+    protected $_modelName           = 'Task';
+    
+    /**
+     * type of the default folder
+     *
+     * @var int
+     */
+    protected $_defaultFolderType   = ActiveSync_Command_FolderSync::FOLDERTYPE_TASK;
+    
+    /**
+     * type of user created folders
+     *
+     * @var int
+     */
+    protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;
+    
+    /**
+     * name of special folder
+     * 
+     * @var string
+     */
+    protected $_specialFolderName   = 'tasks-root';
     
     public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
     {

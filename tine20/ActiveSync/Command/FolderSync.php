@@ -35,24 +35,59 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
      * some usefull constants for working with the xml files
      *
      */
-    const FOLDERTYPE_INBOX          = 2;
-    const FOLDERTYPE_DRAFTS         = 3;
-    const FOLDERTYPE_WASTEBASKET    = 4;
-    const FOLDERTYPE_SENTMAIL       = 5;
-    const FOLDERTYPE_OUTBOX         = 6;
-    const FOLDERTYPE_TASK           = 7;
-    const FOLDERTYPE_APPOINTMENT    = 8;
-    const FOLDERTYPE_CONTACT        = 9;
-    const FOLDERTYPE_NOTE           = 10;
-    const FOLDERTYPE_JOURNAL        = 11;
-    const FOLDERTYPE_OTHER          = 12;
+    const FOLDERTYPE_GENERIC_USER_CREATED   = 1;
+    const FOLDERTYPE_INBOX                  = 2;
+    const FOLDERTYPE_DRAFTS                 = 3;
+    const FOLDERTYPE_DELETEDITEMS           = 4;
+    const FOLDERTYPE_SENTMAIL               = 5;
+    const FOLDERTYPE_OUTBOX                 = 6;
+    const FOLDERTYPE_TASK                   = 7;
+    const FOLDERTYPE_CALENDAR               = 8;
+    const FOLDERTYPE_CONTACT                = 9;
+    const FOLDERTYPE_NOTE                   = 10;
+    const FOLDERTYPE_JOURNAL                = 11;
+    const FOLDERTYPE_MAIL_USER_CREATED      = 12;
+    const FOLDERTYPE_CALENDAR_USER_CREATED  = 13;
+    const FOLDERTYPE_CONTACT_USER_CREATED   = 14;
+    const FOLDERTYPE_TASK_USER_CREATED      = 15;
+    const FOLDERTYPE_JOURNAL_USER_CREATED   = 16;
+    const FOLDERTYPE_NOTES_USER_CREATED     = 17;
+    const FOLDERTYPE_UNKOWN                 = 18;
     
     protected $_defaultNameSpace    = 'uri:FolderHierarchy';
     protected $_documentElement     = 'FolderSync';
     
-    protected $_classes             = array('Contacts'/*, 'Tasks'*/);
+    protected $_classes             = array('Contacts', 'Tasks'/*, 'Email'*/);
     
     protected $_syncKey;
+    
+    /**
+     * the folderState sql backend
+     *
+     * @var ActiveSync_Backend_FolderState
+     */
+    protected $_folderStateBackend;
+    
+    /**
+     * instance of ActiveSync_Controller
+     *
+     * @var ActiveSync_Controller
+     */
+    protected $_controller;
+    
+    /**
+     * the constructor
+     *
+     * @param ActiveSync_Model_Device $_device
+     */
+    public function __construct(ActiveSync_Model_Device $_device)
+    {
+        parent::__construct($_device);
+        
+        $this->_folderStateBackend   = new ActiveSync_Backend_FolderState();
+        $this->_controller           = ActiveSync_Controller::getInstance();
+
+    }
     
     /**
      * parse FolderSync request
@@ -60,8 +95,6 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
      */
     public function handle()
     {
-        $controller = ActiveSync_Controller::getInstance();
-        
         $xml = simplexml_import_dom($this->_inputDom);
         $this->_syncKey = (int)$xml->SyncKey;
         
@@ -75,39 +108,154 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
      */
     public function getResponse()
     {
-        $controller = ActiveSync_Controller::getInstance();
-        
         $folderSync = $this->_outputDom->documentElement;
         
-        if($this->_syncKey > '0' && $controller->validateSyncKey($this->_device, $this->_syncKey, 'FolderSync') !== true) {
+        if($this->_syncKey > '0' && $this->_controller->validateSyncKey($this->_device, $this->_syncKey, 'FolderSync') !== true) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey");
             $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_INVALID_SYNC_KEY));
         } else {
-            $newSyncKey = $this->_syncKey + 1;
+            $adds = array();
+            $deletes = array();
+            $count = 0;
             
-            $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_SUCCESS));
-            $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $newSyncKey));
-            
-            $changes = $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Changes'));
             if($this->_syncKey == 0) {
-                $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', count($this->_classes)));
                 foreach($this->_classes as $class) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " class: $class");
+                    
+                    $this->_folderStateBackend->resetState($this->_device, $class);
+                    
                     $dataController = ActiveSync_Controller::dataFactory($class, $this->_syncTimeStamp);
-                    foreach($dataController->getFolders() as $folder) {
-                        $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
-                        $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder['folderId']));
-                        $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ParentId', $folder['parentId']));
-                        $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName', $folder['displayName']));
-                        $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder['type']));
+                    foreach($dataController->getFolders() as $folderId => $folder) {
+                        $adds[$class][$folderId] = $folder;
+                        $count++;
                     }
                 }
             } else {
-                $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', 0));
+                // detect added folders
+                foreach($this->_classes as $class) {
+                    $dataController = ActiveSync_Controller::dataFactory($class, $this->_syncTimeStamp);
+                    
+                    $folders = $dataController->getFolders();
+                    $allServerEntries = array_keys($folders);
+                    $allClientEntries = $this->_folderStateBackend->getClientState($this->_device, $class);
+                    
+                    // added entries
+                    $serverDiff = array_diff($allServerEntries, $allClientEntries);
+                    foreach($serverDiff as $folderId) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add $class $folderId");
+                        $adds[$class][$folderId] = $folders[$folderId];
+                        $count++;
+                    }
+                    
+                    // deleted entries
+                    $serverDiff = array_diff($allClientEntries, $allServerEntries);
+                    foreach($serverDiff as $folderId) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " delete $class $folderId");
+                        $deletes[$class][$folderId] = $folderId;
+                        $count++;
+                    }
+                }                
             }
             
-            $controller->updateSyncKey($this->_device, $newSyncKey, 'FolderSync', $this->_syncTimeStamp);
+            if($count > 0) {
+                $newSyncKey = $this->_syncKey + 1;
+            } else {
+                $newSyncKey = $this->_syncKey;
+            }
+            
+            // create xml output
+            $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $newSyncKey));
+            $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_SUCCESS));
+            
+            $changes = $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Changes'));            
+            $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', $count));
+            foreach($adds as $class => $folders) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class");
+                foreach((array)$folders as $folder) {
+                    $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
+                    $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder['folderId']));
+                    $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ParentId', $folder['parentId']));
+                    $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName', $folder['displayName']));
+                    $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder['type']));
+                    
+                    $this->_addFolderState($class, $folder['folderId']);
+                }
+            }
+            
+            foreach($deletes as $class => $folders) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $class");
+                foreach((array)$folders as $folderId) {
+                    $delete = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Delete'));
+                    $delete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folderId));
+                    
+                    $this->_deleteFolderState($class, $folderId);
+                }
+            }
+            
+            $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, 'FolderSync');
         }
         
         parent::getResponse();
     }
+    
+    /**
+     * save folderstate (aka: remember that we have sent the folder to the client)
+     *
+     * @param string $_class the class from the xml
+     * @param string $_folderId the Tine 2.0 id of the folder
+     */
+    protected function _addFolderState($_class, $_folderId)
+    {
+        $folderState = new ActiveSync_Model_FolderState(array(
+            'device_id'     => $this->_device->getId(),
+            'class'         => $_class,
+            'folderid'      => $_folderId,
+            'creation_time' => $this->_syncTimeStamp
+        ));
+        
+        /**
+         * if the entry got added earlier, and there was an error, the entry gets added again
+         * @todo it's better to wrap the whole process into a transation
+         */
+        try {
+            $this->_folderStateBackend->create($folderState);
+        } catch (Zend_Db_Statement_Exception $e) {
+            $this->_deleteFolderState($_class, $_folderId);
+            $this->_folderStateBackend->create($folderState);
+        }
+    }
+    
+    /**
+     * delete folderstate (aka: forget that we have sent the folder to the client)
+     *
+     * @param string $_class the class from the xml
+     * @param string $_contentId the Tine 2.0 id of the folder
+     */
+    protected function _deleteFolderState($_class, $_folderId)
+    {
+        $folderStateFilter = new ActiveSync_Model_FolderStateFilter(array(
+            array(
+                    'field'     => 'device_id',
+                    'operator'  => 'equals',
+                    'value'     => $this->_device->getId()
+            ),
+            array(
+                    'field'     => 'class',
+                    'operator'  => 'equals',
+                    'value'     => $_class
+            ),
+            array(
+                    'field'     => 'folderid',
+                    'operator'  => 'equals',
+                    'value'     => $_folderId
+            )
+        ));
+        $state = $this->_folderStateBackend->search($folderStateFilter, NULL, true);
+        
+        if(count($state) > 0) {
+            $this->_folderStateBackend->delete($state[0]);
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no folderstate found for " . print_r($folderStateFilter->toArray(), true));
+        }
+    }    
 }

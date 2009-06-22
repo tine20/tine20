@@ -142,7 +142,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param unknown_type $_endTimeStamp
      * @return array
      */
-    public function getSince($_field, $_startTimeStamp, $_endTimeStamp)
+    public function getChanged($_field, $_startTimeStamp, $_endTimeStamp)
     {
         return array();
     }

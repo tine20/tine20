@@ -119,13 +119,19 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                     $dataController = ActiveSync_Controller::dataFactory($folder['folderType'], $this->_syncTimeStamp);
                     #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
                     try {
-                        $syncState = $controller->getSyncState($this->_device, $folder['folderType'] . '-' . $folder['serverEntryId']);
-                        $count = $dataController->getItemEstimate($syncState->lastsync);
+                        $syncState = $controller->getSyncState($this->_device, $folder['folderType'], $folder['serverEntryId']);
+                        //$count = $dataController->getItemEstimate($syncState->lastsync);
+                        $count = $this->_getItemEstimate(
+                            $dataController,
+                            $folder['folderType'], 
+                            $folder['serverEntryId'],
+                            $syncState->lastsync
+                        );
                         
                         // get the count of deleted entries or entries available becuase of change permissions
                         $contentStateBackend  = new ActiveSync_Backend_ContentState();
-                        $allClientEntries = $contentStateBackend->getClientState($this->_device, $folder['folderType']);
-                        $allServerEntries = $dataController->getServerEntries();
+                        $allClientEntries = $contentStateBackend->getClientState($this->_device, $folder['folderType'], $folder['serverEntryId']);
+                        $allServerEntries = $dataController->getServerEntries($folder['serverEntryId']);
 
                         $count += abs(count($allClientEntries) - count($allServerEntries));
                         
@@ -173,4 +179,19 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     {
         parent::getResponse();
     }
+    
+    private function _getItemEstimate($_dataController, $_class, $_collectionId, $_lastSyncTimeStamp)
+    {
+        $contentStateBackend  = new ActiveSync_Backend_ContentState();
+        
+        $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_class, $_collectionId);
+        $allServerEntries   = $_dataController->getServerEntries($_collectionId);    
+        $addedEntries       = array_diff($allServerEntries, $allClientEntries);
+        $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
+        
+        $changedEntries     = $_dataController->getChanged($_collectionId, $_lastSyncTimeStamp, $this->_syncTimeStamp);
+        
+        return count($addedEntries) + count($deletedEntries) + count($changedEntries);
+    }
+    
 }

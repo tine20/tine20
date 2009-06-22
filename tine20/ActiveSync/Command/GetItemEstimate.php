@@ -74,13 +74,13 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                 'collectionId'  => $collectionId,
                 'filterType'    => $filterType
             );
-            $this->_collections[$class] = $collectionData;
+            $this->_collections[$class][$collectionId] = $collectionData;
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " synckey is $clientSyncKey class: $class collectionid: $collectionId filtertype: $filterType");
             
-            if($clientSyncKey === 0 || $controller->validateSyncKey($this->_device, $clientSyncKey, $class . '-' . $collectionId) !== true) {
+            if($clientSyncKey === 0 || $controller->validateSyncKey($this->_device, $clientSyncKey, $class, $collectionId) !== true) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey $clientSyncKey provided");
-                $this->_collections[$class]['syncKeyValid'] = false;
+                $this->_collections[$class][$collectionId]['syncKeyValid'] = false;
             }
         }
     }    
@@ -91,67 +91,78 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
         
         $itemEstimate = $this->_outputDom->documentElement;
         
-        foreach($this->_collections as $class => $collectionData) {
-            $response = $itemEstimate->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Response'));
-            
-            if($collectionData['syncKeyValid'] !== true) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey ${collectionData['syncKey']} provided");
-                $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_SYNC_KEY));
-                $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
-                $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
-                $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));  
-                $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));                                              
-            } else {
-                $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_syncTimeStamp);
+        foreach($this->_collections as $class => $collections) {
+            foreach($collections as $collectionId => $collectionData) {
+                $response = $itemEstimate->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Response'));
                 
-                try {
-                    // does the folder exist?
-                    $dataController->getFolder($collectionData['collectionId']);
-                    
-                    $syncState = $controller->getSyncState($this->_device, $collectionData['class'] . '-' . $collectionData['collectionId'], $collectionData['syncKey']);
-                
-                    if($controller->validateSyncKey($this->_device, $collectionData['syncKey'], $collectionData['class'] . '-' . $collectionData['collectionId'])) {
-                        $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_SUCCESS));
-                        $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
-                        if($collectionData['syncKey'] == 1) {
-                            // this is the first sync. in most cases there are data on the server.
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $dataController->getItemEstimate()));
-                        } else {
-                            // this returns only changed or modified entries
-                            $modifiedEntries = $dataController->getItemEstimate($syncState->lastsync, $this->_syncTimeStamp);
-                            
-                            // get the count of deleted entries
-                            $contentStateBackend  = new ActiveSync_Backend_ContentState();
-                            $allClientEntries = $contentStateBackend->getClientState($this->_device, $collectionData['class']);
-                            $allServerEntries = $dataController->getServerEntries();
-                            
-                            // add difference of entries available on the server and entries sent to the server
-                            $modifiedEntries += abs(count($allClientEntries) - count($allServerEntries));
-                            
-                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $modifiedEntries));
-                        }
-                    } else {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey ${collectionData['syncKey']} provided");
-                        $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_SYNC_KEY));
-                        $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));              
-                    }
-                } catch (ActiveSync_Exception_FolderNotFound $e) {
-                    error_log(__METHOD__ . '::' . __LINE__ . " folder not found");
-                    $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_COLLECTION));
+                if($collectionData['syncKeyValid'] !== true) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey ${collectionData['syncKey']} provided");
+                    $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_SYNC_KEY));
                     $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));                
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));              
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));  
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));                                              
+                } else {
+                    $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_syncTimeStamp);
+                    
+                    try {
+                        // does the folder exist?
+                        $dataController->getFolder($collectionData['collectionId']);
+                        
+                        $syncState = $controller->getSyncState($this->_device, $collectionData['class'], $collectionData['collectionId'], $collectionData['syncKey']);
+                    
+                        if($controller->validateSyncKey($this->_device, $collectionData['syncKey'], $collectionData['class'], $collectionData['collectionId'])) {
+                            $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_SUCCESS));
+                            $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
+                            if($collectionData['syncKey'] == 1) {
+                                // this is the first sync. in most cases there are data on the server.
+                                $count = count($dataController->getServerEntries($collectionData['collectionId']));
+                            } else {
+                                $count = $this->_getItemEstimate(
+                                    $dataController,
+                                    $collectionData['class'], 
+                                    $collectionData['collectionId'],
+                                    $syncState->lastsync
+                                );
+                            }
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', $count));
+                        } else {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey ${collectionData['syncKey']} provided");
+                            $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_SYNC_KEY));
+                            $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
+                            $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));              
+                        }
+                    } catch (ActiveSync_Exception_FolderNotFound $e) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " folder not found");
+                        $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_COLLECTION));
+                        $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));                
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));              
+                    }
+                    
                 }
-                
             }
         }
                 
         parent::getResponse();
+    }
+    
+    private function _getItemEstimate($_dataController, $_class, $_collectionId, $_lastSyncTimeStamp)
+    {
+        $contentStateBackend  = new ActiveSync_Backend_ContentState();
+        
+        $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_class, $_collectionId);
+        $allServerEntries   = $_dataController->getServerEntries($_collectionId);    
+        $addedEntries       = array_diff($allServerEntries, $allClientEntries);
+        $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
+        
+        $changedEntries     = $_dataController->getChanged($_collectionId, $_lastSyncTimeStamp, $this->_syncTimeStamp);
+        
+        return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
 }

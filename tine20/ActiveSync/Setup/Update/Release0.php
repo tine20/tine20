@@ -269,5 +269,75 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->createTable($table);
                 
         $this->setApplicationVersion('ActiveSync', '0.5');
-    }    
+    }  
+      
+    /**
+     * add filed to store collectionid
+     * 
+     */    
+    public function update_5()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>collectionid</name>
+                <type>text</type>
+                <length>254</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_content', $declaration);
+        
+        $this->setApplicationVersion('ActiveSync', '0.6');
+    }
+    
+    /**
+     * update unique index
+     * 
+     */    
+    public function update_6()
+    {
+        $this->_backend->dropForeignKey('acsync_content', 'acsync_content::device_id--acsync_device::id');
+        $this->_backend->dropIndex('acsync_content', 'device_id--class--contentid');
+        
+        // add unique key constraint(app_id-name-account_id-account_type)
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>device_id--class--collectionid--contentid</name>
+                <unique>true</unique>
+                <field>
+                    <name>device_id</name>
+                </field>
+                <field>
+                    <name>class</name>
+                </field>
+                <field>
+                    <name>collectionid</name>
+                </field>
+                <field>
+                    <name>contentid</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('acsync_content', $declaration);
+        
+        // add foreign key again
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>acsync_content::device_id--acsync_device::id</name>
+                <field>
+                    <name>device_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>acsync_device</table>
+                    <field>id</field>
+                </reference>
+                <ondelete>cascade</ondelete>
+                <onupdate>cascade</onupdate>
+            </index>
+        ');
+        $this->_backend->addForeignKey('acsync_content', $declaration);   
+                     
+        $this->setApplicationVersion('ActiveSync', '0.7');
+    }
 }

@@ -42,7 +42,49 @@ abstract class ActiveSync_Controller_Abstract
      * @var unknown_type
      */
     protected $_contentController;
-
+    
+    /**
+     * name of Tine 2.0 backend application
+     * 
+     * gets set by the instance of this abstract class
+     *
+     * @var string
+     */
+    protected $_applicationName;
+    
+    /**
+     * name of Tine 2.0 model to use
+     * 
+     * strip of the applicationnamel and "model"
+     * for example "Addressbook_Model_Contacts" becomes "Contacts"
+     *
+     * @var string
+     */
+    protected $_modelName;
+    
+    /**
+     * type of the default folder
+     *
+     * @var int
+     */
+    protected $_defaultFolderType;
+    
+    /**
+     * type of user created folders
+     *
+     * @var int
+     */
+    protected $_folderType;
+    
+    /**
+     * name of special folder
+     * 
+     * get used when the client does not support more that one folder
+     *
+     * @var string
+     */
+    protected $_specialFolderName;
+    
     /**
      * the constructor
      *
@@ -50,9 +92,30 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function __construct(Zend_Date $_syncTimeStamp)
     {
+        if(empty($this->_applicationName)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
+        }
+        
+        if(empty($this->_modelName)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_modelName can not be empty');
+        }
+        
+        if(empty($this->_defaultFolderType)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_defaultFolderType can not be empty');
+        }
+        
+        if(empty($this->_folderType)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_folderType can not be empty');
+        }
+        
+        if(empty($this->_specialFolderName)) {
+            throw new Tinebase_Exception_UnexpectedValue('$this->_specialFolderName can not be empty');
+        }
+        
         $this->_syncTimeStamp = $_syncTimeStamp;
         $this->_contentFilterClass = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
         $this->_contentController = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+        
     }
     
     /**
@@ -62,7 +125,31 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function getFolders()
     {
-        return $this->_folders;
+        $folders = array();
+        
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_READ);
+        foreach ($containers as $container) {
+            $folders[$container->id] = array(
+                'folderId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
+            );
+        }
+        
+        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Container::GRANT_READ);
+        foreach ($containers as $container) {
+            $folders[$container->id] = array(
+                'folderId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => $this->_folderType
+            );
+        }
+        
+        // we ignore the folders of others users for now
+        
+        return $folders;
     }
     
     /**
@@ -73,13 +160,22 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function getFolder($_folderId)
     {
-        foreach($this->_folders as $folder) {
-            if($folder['folderId'] == $_folderId) {
-                return $folder;
-            }
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerById($_folderId);
+        } catch (Tinebase_Exception_NotFound $e) {
+            throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
+        } catch (Tinebase_Exception_InvalidArgument $e) {
+            throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
         }
         
-        throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
+        $folder[$container->id] = array(
+            'folderId'      => $container->id,
+            'parentId'      => 0,
+            'displayName'   => $container->name,
+            'type'          => $this->_folderType
+        );
+
+        return $folder;
     }
     
     /**
@@ -89,7 +185,7 @@ abstract class ActiveSync_Controller_Abstract
      * @param Zend_Date $_endTimeStamp
      * @return int total count of changed items
      */
-    public function getItemEstimate($_startTimeStamp = NULL, $_endTimeStamp = NULL)
+/*    public function getItemEstimate($_startTimeStamp = NULL, $_endTimeStamp = NULL)
     {
         $count = 0;
         $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
@@ -131,7 +227,7 @@ abstract class ActiveSync_Controller_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Count: $count Timestamps: ($startTimeStamp / $endTimeStamp)");
                     
         return $count;
-    }
+    } */
     
     /**
      * add entry from xml data
@@ -140,7 +236,7 @@ abstract class ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
-    public function add($_collectionId, SimpleXMLElement $_data)
+    public function add($_folderId, SimpleXMLElement $_data)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry");
         
@@ -162,9 +258,9 @@ abstract class ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
-    public function change($_collectionId, $_id, SimpleXMLElement $_data)
+    public function change($_folderId, $_id, SimpleXMLElement $_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id");
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_id");
         
         $oldEntry = $this->_contentController->get($_id); 
         
@@ -184,9 +280,9 @@ abstract class ActiveSync_Controller_Abstract
      * @param string $_collectionId
      * @param string $_id
      */
-    public function delete($_collectionId, $_id)
+    public function delete($_folderId, $_id)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ColectionId: $_collectionId Id: $_id");
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ColectionId: $_folderId Id: $_id");
         
         $this->_contentController->delete($_id);
         
@@ -200,9 +296,9 @@ abstract class ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
-    public function search($_collectionId, SimpleXMLElement $_data)
+    public function search($_folderId, SimpleXMLElement $_data)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId");
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId");
         
         $filter = $this->_toTineFilter($_data);
         
@@ -221,37 +317,26 @@ abstract class ActiveSync_Controller_Abstract
      * @param unknown_type $_endTimeStamp
      * @return array
      */
-    public function getSince($_field, $_startTimeStamp, $_endTimeStamp)
+    public function getChanged($_folderId, $_startTimeStamp, $_endTimeStamp)
     {
-        switch($_field) {
-            case 'added':
-                $fieldName = 'creation_time';
-                break;
-            case 'changed':
-                $fieldName = 'last_modified_time';
-                break;
-            case 'deleted':
-                $fieldName = 'deleted_time';
-                break;
-            default:
-                throw new Exception("$_field must be either added, changed or deleted");                
-        }
+        $fieldName = 'last_modified_time';
         
         $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof Zend_Date) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
-        $filter = new $this->_contentFilterClass(array(
-            array(
-                'field'     => $fieldName,
-                'operator'  => 'after',
-                'value'     => $startTimeStamp
-            ),
-            array(
-                'field'     => $fieldName,
-                'operator'  => 'before',
-                'value'     => $endTimeStamp
-            ),
-        ));
+        $filterArray  = $this->_getFolderFilter($_folderId);
+        $filterArray[] = array(
+            'field'     => 'last_modified_time',
+            'operator'  => 'after',
+            'value'     => $startTimeStamp
+        );
+        $filterArray[] = array(
+            'field'     => 'last_modified_time',
+            'operator'  => 'before',
+            'value'     => $endTimeStamp
+        );
+        
+        $filter = new $this->_contentFilterClass($filterArray);
 
         $result = $this->_contentController->search($filter, NULL, false, true);
         
@@ -265,19 +350,38 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function getServerEntries($_folderId)
     {
-        $contentFilter     = new $this->_contentFilterClass(array(
-            array(
-                'field'     => 'containerType',
-                'operator'  => 'equals',
-                'value'     => 'all'
-            )
-        ));
+        $folderFilter  = $this->_getFolderFilter($_folderId);
         
-        $foundEntries      = $this->_contentController->search($contentFilter, NULL, false, true);
+        $contentFilter = new $this->_contentFilterClass($folderFilter);
+        
+        $foundEntries  = $this->_contentController->search($contentFilter, NULL, false, true);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
             
         return $foundEntries;
+    }
+    
+    private function _getFolderFilter($_folderId)
+    {
+        if($_folderId == $this->_specialFolderName) {
+            $folderFilter = array(
+                array(
+                    'field'     => 'container_id',
+                    'operator'  => 'specialNode',
+                    'value'     => 'all'
+                )
+            );        
+        } else {
+            $folderFilter = array(
+                array(
+                    'field'     => 'container_id',
+                    'operator'  => 'equals',
+                    'value'     => $_folderId
+                )
+            );        
+        }
+        
+        return $folderFilter;
     }
     
     abstract protected function _toTineModel(SimpleXMLElement $_data, $_entry = null);

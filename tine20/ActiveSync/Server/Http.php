@@ -27,7 +27,15 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
      */
     public function handle()
     {
-        $this->_initFramework();
+        try {
+            $this->_initFramework();
+        } catch (Zend_Session_Exception $exception) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' invalid session. Delete session cookie.');
+            Zend_Session::expireSessionCookie();
+            header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
+            header('HTTP/1.1 401 Unauthorized');
+            return;
+        }
         
         if(!isset($_SERVER['PHP_AUTH_USER'])) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');

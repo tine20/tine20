@@ -80,25 +80,43 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         #'Rtf'                   => 'rtf',
         'Picture'               => 'jpegphoto'
     );
-    
+        
     /**
-     * list of supported folders
-     * @todo retrieve users real container
-     * @var array
+     * name of Tine 2.0 backend application
+     * 
+     * @var string
      */
-    protected $_folders = array(
-        'contatcsroot' => array(
-            'folderId'      => 'contatcsroot',
-            'parentId'      => 0,
-            'displayName'   => 'Contacts',
-            'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT
-        )
-    );
-    
     protected $_applicationName     = 'Addressbook';
     
+    /**
+     * name of Tine 2.0 model to use
+     * 
+     * @var string
+     */
     protected $_modelName           = 'Contact';
-        
+    
+    /**
+     * type of the default folder
+     *
+     * @var int
+     */
+    protected $_defaultFolderType   = ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT;
+    
+    /**
+     * type of user created folders
+     *
+     * @var int
+     */
+    protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED;
+    
+    /**
+     * name of special folder
+     * 
+     * @var string
+     */
+    protected $_specialFolderName   = 'contacts-root';
+    
+    
     /**
      * append contact to xml parent node
      *

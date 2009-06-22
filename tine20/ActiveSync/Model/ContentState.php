@@ -46,6 +46,7 @@ class ActiveSync_Model_ContentState extends Tinebase_Record_Abstract
         'id'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'device_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'class'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'collectionid'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'contentid'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'creation_time'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
     );
