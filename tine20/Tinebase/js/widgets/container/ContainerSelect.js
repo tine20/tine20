@@ -108,7 +108,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
                 beforeload: function(store, options) {
                     if (! this.owner) {
                         // if owner is not set, take the owner from the record we already have
-                        console.log(this.store.getAt(0).get('account_grants'))
                         options.params.owner = this.store.getAt(0).get('account_grants').account_id;
                     } else {
                         options.params.owner = this.owner
