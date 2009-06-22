@@ -257,6 +257,14 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         }
         
         this.container = container;
+        
+        // make sure 'choose other' is the last item
+        var other = this.store.getById('other');
+        if (other) {
+            this.store.remove(other);
+        }
+        this.store.add(this.otherRecord);
+        
         Tine.widgets.container.selectionComboBox.superclass.setValue.call(this, container.id);
         
         if (container.account_grants) {
@@ -266,14 +274,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         if(this.qtip) {
             this.qtip.remove();
         }
-        
-        // make sure 'choose other' is the last item
-        var other = this.store.getById('other');
-        if (other) {
-            this.store.remove(other);
-        }
-        this.store.add(this.otherRecord);
-        
         
         // IE has problems with sate saving. Might be, that our clone function is not working correclty yet.
         if (! Ext.isIE) {
