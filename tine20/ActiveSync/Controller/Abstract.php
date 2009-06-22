@@ -241,6 +241,7 @@ abstract class ActiveSync_Controller_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry");
         
         $entry = $this->_toTineModel($_data);
+        $entry->container_id = $_folderId;
         $entry->creation_time = $this->_syncTimeStamp;
         
         $entry = $this->_contentController->create($entry);
