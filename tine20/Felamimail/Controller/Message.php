@@ -844,8 +844,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $result = htmlentities($_content, ENT_COMPAT, 'UTF-8');
         
         // uris
-        $pattern = '@(http://|https://|ftp://|mailto:|news:)([^\s<>]+)@';
-        //$pattern = '@(http://|https://|ftp://|mailto:|news:)([^\s<>\)]+)@';
+        $pattern = '@(http://|https://|ftp://|mailto:|news:)([^\s<>\)]+)@';
         $result = preg_replace($pattern, "<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $result);
         
         // spaces
