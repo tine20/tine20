@@ -1053,7 +1053,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
-            if (this.lead && this.lead.get('container_id')) {
+            if (this.lead && this.lead.get('container_id') && this.lead.get('container_id').account_grants) {
                 this.actions.unlinkContact.setDisabled(!this.lead.get('container_id').account_grants.editGrant || rowCount != 1);
             }
             this.actions.editContact.setDisabled(rowCount != 1);
@@ -1187,7 +1187,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
-            if (this.lead && this.lead.get('container_id')) {
+            if (this.lead && this.lead.get('container_id') && this.lead.get('container_id').account_grants) {
                 this.actions.unlinkTask.setDisabled(!this.lead.get('container_id').account_grants.editGrant || rowCount != 1);
             }
             this.actions.editTask.setDisabled(rowCount != 1);
