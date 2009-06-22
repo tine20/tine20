@@ -72,11 +72,14 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
         $uploadedFile = $_FILES['file'];
         
         $path = tempnam(session_save_path(), 'tine_tempfile_');
+        if ($uploadedFile['error'] == UPLOAD_ERR_FORM_SIZE) {
+            throw new Tinebase_Exception('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.');
+        }
         if (!$path) {
             throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam() could not return a valid filename!');
         }
         if (! move_uploaded_file($uploadedFile['tmp_name'], $path)) {
-            throw new Tinebase_Exception_NotFound('No valid upload file found!');
+            throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ' . print_r($uploadedFile, true));
         }
         
         $id = Tinebase_Model_TempFile::generateUID();
