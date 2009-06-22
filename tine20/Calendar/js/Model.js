@@ -88,8 +88,6 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         dtstart = period.from.clearTime(true).add(Date.HOUR, 9);
     }
     
-    
-    
     var data = {
         summary: '',
         dtstart: dtstart,

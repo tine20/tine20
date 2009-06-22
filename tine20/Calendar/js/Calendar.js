@@ -127,15 +127,17 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     getAddCalendar: function() {
         var selections = this.getCalSelector().getSelectionModel().getSelectedNodes();
         
+        var addCalendar = Tine.Calendar.registry.get('defaultCalendar');
         // take first container with add grant
         Ext.each(selections, function(node){
             var attr = node.attributes;
-            if (attr.containerType == 'singleContainer' && attr.container.account_grants.addGrant) {
-                return attr.container;
+            if (attr.containerType == "singleContainer" && attr.container.account_grants.addGrant) {
+                addCalendar = attr.container;
+                return false;
             }
         });
         
-        return Tine.Calendar.registry.get('defaultCalendar');
+        return addCalendar
     }
 });
 
