@@ -137,7 +137,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 continue;
             }
             
-            $dataController = ActiveSync_Controller::dataFactory($class, $this->_syncTimeStamp);
+            $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
             
             // handle incoming data
             
@@ -270,7 +270,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     #}
                     
                     if($collectionData['getChanges'] === true) {
-                        $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_syncTimeStamp);
+                        $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_device, $this->_syncTimeStamp);
                         
                         
                         if($newSyncKey === 1) {

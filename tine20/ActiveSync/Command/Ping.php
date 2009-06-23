@@ -116,7 +116,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             
             do {
                 foreach($folders as $folder) {
-                    $dataController = ActiveSync_Controller::dataFactory($folder['folderType'], $this->_syncTimeStamp);
+                    $dataController = ActiveSync_Controller::dataFactory($folder['folderType'], $this->_device, $this->_syncTimeStamp);
                     #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
                     try {
                         $syncState = $controller->getSyncState($this->_device, $folder['folderType'], $folder['serverEntryId']);

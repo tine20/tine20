@@ -182,11 +182,12 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
      * get user device
      *
      * @param string $_deviceId
-     * @param string $_type
-     * @param string|optional $_counter
+     * @param string $_deviceType
+     * @param string $_userAgent
+     * @param string $_acsVersion
      * @return ActiveSync_Model_Device
      */
-    public function getUserDevice($_deviceId, $_userAgent, $_acsVersion)
+    public function getUserDevice($_deviceId, $_deviceType, $_userAgent, $_acsVersion)
     {
         $deviceFilter = new ActiveSync_Model_DeviceFilter(array(
             array(
@@ -206,19 +207,21 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
         if(count($devices) > 0) {
             // update existing device
             $device = $devices[0];
-            $device->useragent = $_userAgent;
+            $device->useragent  = $_userAgent;
             $device->acsversion = $_acsVersion;
+            $device->devicetype = $_deviceType;
             
             $device = $this->_deviceBackend->update($device);
         } else {
             // create new device
             $device = new ActiveSync_Model_Device(array(
-                'deviceid'  => $_deviceId,
-                'owner_id'  => Tinebase_Core::getUser()->accountId,
-                'policy_id' => 1,
-                'useragent' => $_userAgent,
+                'deviceid'   => $_deviceId,
+                'devicetype' => $_deviceType,
+                'owner_id'   => Tinebase_Core::getUser()->accountId,
+                'policy_id'  => 1,
+                'useragent'  => $_userAgent,
                 'acsversion' => $_acsVersion,
-                'policykey' => ActiveSync_Command_Provision::generatePolicyKey()
+                'policykey'  => ActiveSync_Command_Provision::generatePolicyKey()
             ));
 
             $device = $this->_deviceBackend->create($device);

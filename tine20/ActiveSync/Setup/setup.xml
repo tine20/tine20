@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>0.7</version>
+    <version>0.8</version>
     <order>90</order>
     <status>disabled</status>    
     <depends>
@@ -64,6 +64,12 @@
                 </field>
                 <field>
                     <name>deviceid</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>devicetype</name>
                     <type>text</type>
                     <length>64</length>
                     <notnull>true</notnull>

@@ -119,9 +119,10 @@ abstract class ActiveSync_Controller_Abstract
             throw new Tinebase_Exception_UnexpectedValue('$this->_specialFolderName can not be empty');
         }
         
-        $this->_syncTimeStamp = $_syncTimeStamp;
-        $this->_contentFilterClass = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
-        $this->_contentController = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+        $this->_device              = $_device;
+        $this->_syncTimeStamp       = $_syncTimeStamp;
+        $this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
+        $this->_contentController   = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
         
     }
     
@@ -134,27 +135,12 @@ abstract class ActiveSync_Controller_Abstract
     {
         $folders = array();
         
-        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_READ);
-        foreach ($containers as $container) {
-            $folders[$container->id] = array(
-                'folderId'      => $container->id,
-                'parentId'      => 0,
-                'displayName'   => $container->name,
-                'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
-            );
-        }
-        
-        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Container::GRANT_READ);
-        foreach ($containers as $container) {
-            $folders[$container->id] = array(
-                'folderId'      => $container->id,
-                'parentId'      => 0,
-                'displayName'   => $container->name,
-                'type'          => $this->_folderType
-            );
-        }
-        
-        // we ignore the folders of others users for now
+        $folders[$this->_specialFolderName] = array(
+            'folderId'      => $this->_specialFolderName,
+            'parentId'      => 0,
+            'displayName'   => $this->_applicationName,
+            'type'          => $this->_defaultFolderType
+        );
         
         return $folders;
     }
@@ -167,20 +153,32 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function getFolder($_folderId)
     {
-        try {
-            $container = Tinebase_Container::getInstance()->getContainerById($_folderId);
-        } catch (Tinebase_Exception_NotFound $e) {
-            throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
-        } catch (Tinebase_Exception_InvalidArgument $e) {
-            throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
-        }
+        $folder = array();
         
-        $folder[$container->id] = array(
-            'folderId'      => $container->id,
-            'parentId'      => 0,
-            'displayName'   => $container->name,
-            'type'          => $this->_folderType
-        );
+        if($_folderId == $this->_specialFolderName) {
+            $folder[$this->_specialFolderName] = array(
+                'folderId'      => $this->_specialFolderName,
+                'parentId'      => 0,
+                'displayName'   => $this->_applicationName,
+                'type'          => $this->_defaultFolderType
+            );
+            
+        } else {
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($_folderId);
+            } catch (Tinebase_Exception_NotFound $e) {
+                throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
+            } catch (Tinebase_Exception_InvalidArgument $e) {
+                throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
+            }
+            
+            $folder[$container->id] = array(
+                'folderId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => $this->_folderType
+            );
+        }
 
         return $folder;
     }
@@ -248,9 +246,12 @@ abstract class ActiveSync_Controller_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry");
         
         $entry = $this->_toTineModel($_data);
-        $entry->container_id = $_folderId;
         $entry->creation_time = $this->_syncTimeStamp;
-        
+        // container_id gets set to personal folder in application specific controller if missing
+        if($_folderId != $this->_specialFolderName) {
+            $entry->container_id = $_folderId;
+        }
+            
         $entry = $this->_contentController->create($entry);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added entry id " . $entry->getId());

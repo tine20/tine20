@@ -272,7 +272,7 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
     }  
       
     /**
-     * add filed to store collectionid
+     * add field to store collectionid
      * 
      */    
     public function update_5()
@@ -339,5 +339,24 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->addForeignKey('acsync_content', $declaration);   
                      
         $this->setApplicationVersion('ActiveSync', '0.7');
+    }
+    
+    /**
+     * add field to store devicetype
+     * 
+     */    
+    public function update_7()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>devicetype</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+        
+        $this->setApplicationVersion('ActiveSync', '0.8');
     }
 }

@@ -157,7 +157,54 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             }
         }        
     }
+    
+    /**
+     * return list of supported folders for this backend
+     *
+     * @return array
+     */
+    public function getFolders()
+    {
+        $folders = array();
+
+        // only the IPhone supports multiple folders for contacts currently
+        if(strtolower($this->_device->devicetype) == 'iphone') {
         
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_READ);
+            foreach ($containers as $container) {
+                $folders[$container->id] = array(
+                    'folderId'      => $container->id,
+                    'parentId'      => 0,
+                    'displayName'   => $container->name,
+                    'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
+                );
+            }
+            
+            $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Container::GRANT_READ);
+            foreach ($containers as $container) {
+                $folders[$container->id] = array(
+                    'folderId'      => $container->id,
+                    'parentId'      => 0,
+                    'displayName'   => $container->name,
+                    'type'          => $this->_folderType
+                );
+            }
+
+        } else {
+            
+            $folders[$this->_specialFolderName] = array(
+                'folderId'      => $this->_specialFolderName,
+                'parentId'      => 0,
+                'displayName'   => $this->_applicationName,
+                'type'          => $this->_defaultFolderType
+            );
+            
+        }
+        // we ignore the folders of others users for now
+        
+        return $folders;
+    }
+    
     /**
      * convert contact from xml to Addressbook_Model_Contact
      *

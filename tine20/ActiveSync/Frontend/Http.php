@@ -81,7 +81,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Abstract
         $policyKey = (int)$_SERVER['HTTP_X_MS_POLICYKEY']; 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: $asVersion Command: $_command");
         
-        $device = ActiveSync_Controller::getInstance()->getUserDevice($_deviceId, $userAgent, $asVersion);
+        $device = ActiveSync_Controller::getInstance()->getUserDevice($_deviceId, $_deviceType, $userAgent, $asVersion);
         
         #if($_command != 'Provision' && $_command != 'Ping' && $policyKey != $device->policykey) {
         #    header("HTTP/1.1 449 Retry after sending a PROVISION command");
