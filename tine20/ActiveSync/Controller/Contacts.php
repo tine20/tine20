@@ -219,6 +219,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         } else {
             $contact = new Addressbook_Model_Contact(null, true);
         }
+        unset($contact->jpegphoto);
         
         $xmlData = $_data->children('uri:Contacts');
 
@@ -227,7 +228,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 case 'jpegphoto':
                     // do not change if not set
                     if(isset($xmlData->$fieldName)) {
-                        $contact->$value = base64_decode((string)$xmlData->$fieldName);
+                        if(!empty($xmlData->$fieldName)) {
+                            $contact->jpegphoto = base64_decode((string)$xmlData->$fieldName);
+                        } else {
+                            $contact->jpegphoto = '';
+                        }
                     }
                     break;
                 case 'bday':
