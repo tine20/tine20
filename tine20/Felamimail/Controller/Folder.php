@@ -46,11 +46,9 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     /**
      * folder delimiter/separator
      * 
-     * @staticvar string
-     * 
-     * @todo get delimiter from backend?
+     * @var string
      */
-    const DELIMITER = '/';
+    protected $_delimiter = '/';
     
     /**
      * folder backend
@@ -158,10 +156,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      */
     public function create($_folderName, $_parentFolder = '', $_accountId = 'default')
     {
-        $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
+        $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $imap = Felamimail_Backend_ImapFactory::factory($account);
         $imap->createFolder($_folderName, $_parentFolder);
         
-        $globalname = (empty($_parentFolder)) ? $_folderName : $_parentFolder . self::DELIMITER . $_folderName;
+        $this->_delimiter = $account->delimiter;
+        
+        $globalname = (empty($_parentFolder)) ? $_folderName : $_parentFolder . $this->_delimiter . $_folderName;
         
         // create new folder
         $folder = new Felamimail_Model_Folder(array(
@@ -201,10 +202,12 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_newFolderName new globalName of folder
      * @param string $_accountId [optional]
      * @return Felamimail_Model_Folder
+     * 
+     * @todo use delimiter to explode name?
      */
     public function rename($_newLocalName, $_oldGlobalName, $_accountId = 'default')
     {
-        //$globalNameParts = explode(self::DELIMITER, $_oldGlobalName);
+        //$globalNameParts = explode($this->_delimiter, $_oldGlobalName);
         //$folder->localname = array_pop($globalNameParts);
         
         $newGlobalName = preg_replace("/[_\-a-zA-Z0-9\.]+$/", $_newLocalName, $_oldGlobalName);
@@ -238,7 +241,10 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      */
     public function getSubFolders($_folderName = '', $_accountId = 'default')
     {
-        $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
+        $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $imap = Felamimail_Backend_ImapFactory::factory($account);
+        
+        $this->_delimiter = $account->delimiter;
         
         if(empty($_folderName)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get subfolders of root for backend ' . $_accountId);
@@ -246,8 +252,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         } else {
             try {
                 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . self::DELIMITER);
-                $folders = $imap->getFolders($_folderName . self::DELIMITER, '%');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $this->_delimiter);
+                $folders = $imap->getFolders($_folderName . $this->_delimiter, '%');
                 
             } catch (Zend_Mail_Storage_Exception $zmse) {
                 
@@ -255,7 +261,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                 
                 // try again without delimiter
                 try {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . self::DELIMITER);
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $this->_delimiter);
                     $folders = $imap->getFolders($_folderName, '%');
                     
                 } catch (Zend_Mail_Storage_Exception $zmse) {
@@ -305,6 +311,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             }
             
             $result->addRecord($folder);
+        }
+        
+        // check if delimiter is different
+        if (isset($folderData['delimiter']) && ! empty($folderData['delimiter']) && $folderData['delimiter'] != $account->delimiter) {
+            $account->delimiter = $folderData['delimiter'];
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $folderData['delimiter']);
+            Felamimail_Controller_Account::getInstance()->update($account);
         }
         
         return $result;

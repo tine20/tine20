@@ -32,24 +32,30 @@ class Felamimail_Backend_ImapFactory
     /**
      * factory function to return a selected account/imap backend class
      *
-     * @param   string $_accountId
+     * @param   string|Felamimail_Model_Account $_accountId
      * @return  Felamimail_Backend_Imap
      */
     static public function factory($_accountId)
     {
-        if (!isset(self::$_backends[$_accountId])) {
+        $accountId = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId->getId() : $_accountId;
+        
+        if (!isset(self::$_backends[$accountId])) {
             // get imap config from account
-            $imapConfig = Felamimail_Controller_Account::getInstance()->get($_accountId)->getImapConfig();
+            if ($_accountId instanceof Felamimail_Model_Account) {
+                $imapConfig = $_accountId->getImapConfig();
+            } else {
+                $imapConfig = Felamimail_Controller_Account::getInstance()->get($_accountId)->getImapConfig();
+            }
             
             // we need to instantiate a new imap backend
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Connecting to server ' . $imapConfig['host'] . ':' . $imapConfig['port'] 
                 . ' with username ' . $imapConfig['user']);
             
-            self::$_backends[$_accountId] = new Felamimail_Backend_Imap($imapConfig);
+            self::$_backends[$accountId] = new Felamimail_Backend_Imap($imapConfig);
         }
         
-        $instance = self::$_backends[$_accountId];
+        $instance = self::$_backends[$accountId];
         return $instance;
     }
 }    

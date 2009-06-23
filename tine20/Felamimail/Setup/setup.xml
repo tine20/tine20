@@ -83,6 +83,11 @@
                     <type>boolean</type>
                 </field>
                 <field>
+                    <name>delimiter</name>
+                    <type>text</type>
+                    <length>1</length>
+                </field>
+                <field>
                     <name>signature</name>
                     <type>text</type>
                 </field>
