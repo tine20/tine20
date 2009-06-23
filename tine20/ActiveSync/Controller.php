@@ -115,16 +115,18 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
      * the factory pattern for data controller
      *
      * @param string $_class the class name
+     * @param ActiveSync_Model_Device $_device
+     * @param Zend_Date $_syncTimeStamp
      * @return ActiveSync_Controller_Abstract
      */
-    public static function dataFactory($_class, Zend_Date $_syncTimeStamp) 
+    public static function dataFactory($_class, ActiveSync_Model_Device $_device, Zend_Date $_syncTimeStamp) 
     {
         switch($_class) {
             case 'Contacts':
             case 'Tasks':
             case 'Email':
                 $className = 'ActiveSync_Controller_' . $_class;
-                $backend = new $className($_syncTimeStamp);
+                $backend = new $className($_device, $_syncTimeStamp);
                 break;
                 
             default:

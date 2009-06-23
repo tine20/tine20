@@ -23,6 +23,13 @@
 abstract class ActiveSync_Controller_Abstract
 {
     /**
+     * information about the current device
+     *
+     * @var ActiveSync_Model_Device
+     */
+    protected $_device;
+    
+    /**
      * timestamp to use for all sync requests
      *
      * @var Zend_Date
@@ -90,7 +97,7 @@ abstract class ActiveSync_Controller_Abstract
      *
      * @param Zend_Date $_syncTimeStamp
      */
-    public function __construct(Zend_Date $_syncTimeStamp)
+    public function __construct(ActiveSync_Model_Device $_device, Zend_Date $_syncTimeStamp)
     {
         if(empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
