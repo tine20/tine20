@@ -150,6 +150,36 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * create a new folder
+     *
+     * This method also creates parent folders if necessary. Some mail storages may restrict, which folder
+     * may be used as parent or which chars may be used in the folder name
+     *
+     * @param  string                          $name         global name of folder, local name if $parentFolder is set
+     * @param  string|Zend_Mail_Storage_Folder $parentFolder parent folder for new folder, else root folder is parent
+     * @return null
+     * @throws Zend_Mail_Storage_Exception
+     */
+    public function createFolder($name, $parentFolder = null, $_delimiter = '/')
+    {
+        if ($parentFolder instanceof Zend_Mail_Storage_Folder) {
+            $folder = $parentFolder->getGlobalName() . $_delimiter . $name;
+        } else if ($parentFolder != null) {
+            $folder = $parentFolder . $_delimiter . $name;
+        } else {
+            $folder = $name;
+        }
+
+        if (!$this->_protocol->create($folder)) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot create folder');
+        }
+    }
+    
+    /**
      * Fetch a message
      *
      * @param int $id number of message

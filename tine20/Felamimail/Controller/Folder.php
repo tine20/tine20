@@ -157,10 +157,10 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     public function create($_folderName, $_parentFolder = '', $_accountId = 'default')
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
-        $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $imap->createFolder($_folderName, $_parentFolder);
-        
         $this->_delimiter = $account->delimiter;
+        
+        $imap = Felamimail_Backend_ImapFactory::factory($account);
+        $imap->createFolder($_folderName, $_parentFolder, $this->_delimiter);
         
         $globalname = (empty($_parentFolder)) ? $_folderName : $_parentFolder . $this->_delimiter . $_folderName;
         
