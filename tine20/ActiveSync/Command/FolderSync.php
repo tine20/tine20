@@ -124,7 +124,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
                     
                     $this->_folderStateBackend->resetState($this->_device, $class);
                     
-                    $dataController = ActiveSync_Controller::dataFactory($class, $this->_syncTimeStamp);
+                    $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
                     foreach($dataController->getFolders() as $folderId => $folder) {
                         $adds[$class][$folderId] = $folder;
                         $count++;
@@ -133,7 +133,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             } else {
                 // detect added folders
                 foreach($this->_classes as $class) {
-                    $dataController = ActiveSync_Controller::dataFactory($class, $this->_syncTimeStamp);
+                    $dataController = ActiveSync_Controller::dataFactory($class, $this->_device, $this->_syncTimeStamp);
                     
                     $folders = $dataController->getFolders();
                     $allServerEntries = array_keys($folders);
@@ -164,8 +164,8 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             }
             
             // create xml output
-            $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $newSyncKey));
             $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_SUCCESS));
+            $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $newSyncKey));
             
             $changes = $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Changes'));            
             $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', $count));
