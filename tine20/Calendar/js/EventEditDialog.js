@@ -219,7 +219,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         if (isChecked) {
             dtStartField.clearTime();
-            dtEndField.setValue(dtStartField.getValue().add(Date.HOUR, 23).add(Date.MINUTE, 59));
+            var dtend = dtEndField.getValue()
+            if (Ext.isDate(dtend) && dtend.format('H:i:s') != '23:59:59') {
+                dtEndField.setValue(dtend.clearTime(true).add(Date.HOUR, 24).add(Date.SECOND, -1));
+            }
+            
         } else {
             dtStartField.undo();
             dtEndField.undo();

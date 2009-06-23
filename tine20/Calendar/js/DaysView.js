@@ -626,10 +626,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.fireEvent('dblclick', event, e);
         } else if (dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
+            var dtend = dtStart.add(Date.HOUR, 1);
+            if (dtStart.is_all_day_event) {
+                dtend = dtend.add(Date.HOUR, 23).add(Date.SECOND, -1);
+            }
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.add(Date.HOUR, dtStart.is_all_day_event ? 24 : 1),
+                dtend: dtend,
                 is_all_day_event: dtStart.is_all_day_event
             }), newId);
             
@@ -654,7 +658,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24) : dtStart.add(Date.MINUTE, this.timeGranularity/2),
+                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, this.timeGranularity/2),
                 is_all_day_event: dtStart.is_all_day_event
             }), newId);
             event.isRangeAdd = true;
