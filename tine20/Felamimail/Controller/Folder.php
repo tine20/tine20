@@ -345,6 +345,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     
     /**
      * get status of all folders of account
+     * - use $messageCacheBackend->seenCountByFolderId if offline/no connection to imap
      *
      * @param string $_accountId
      * @param Tinebase_Record_RecordSet $_folders [optional]
@@ -353,7 +354,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @throws Felamimail_Exception
      * 
      * @todo update folders in db?
-     * @todo use $messageCacheBackend->seenCountByFolderId if offline/no connection to imap?
      */
     public function updateFolderStatus($_accountId, $_folders = NULL, $_folderId = NULL)
     {
@@ -365,26 +365,44 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $folders = $this->_folderBackend->search($filter);
         } else {
             if ($_folderId !== NULL && ! empty($_folderId)) {
+                // get single folder
                 $folders = new Tinebase_Record_RecordSet(
                     'Felamimail_Model_Folder', 
                     array($this->_folderBackend->get($_folderId))
                 );
-            } else if ($_folders !== NULL) {
+            } else if ($_folders !== NULL && $_folders instanceof Tinebase_Record_RecordSet) {
+                // recordset was given
                 $folders = $_folders;
             } else {
                 throw new Felamimail_Exception("Wrong params: " . $_folderId);
             }
         }
         
-        $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
+        // try imap connection
+        try {
+            $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No connection to imap server ...');
+            $imap = FALSE;
+        }
         
         // return status of all folders
         foreach ($folders as $folder) {
-            $imapFolderStatus = $imap->getFolderStatus($folder->globalname);
-            
-            $folder->unreadcount = (isset($imapFolderStatus['unseen'])) ? $imapFolderStatus['unseen'] : 0;
-            $folder->recentcount = $imapFolderStatus['recent'];
-            $folder->totalcount = $imapFolderStatus['messages'];
+
+            if ($imap) {
+                $imapFolderStatus = $imap->getFolderStatus($folder->globalname);
+                
+                $folder->unreadcount = (isset($imapFolderStatus['unseen'])) ? $imapFolderStatus['unseen'] : 0;
+                $folder->recentcount = $imapFolderStatus['recent'];
+                $folder->totalcount = $imapFolderStatus['messages'];
+                
+            } else {
+                // count messages even if no imap connection available
+                $cacheBackend = new Felamimail_Backend_Cache_Sql_Message();
+                $folder->totalcount = $cacheBackend->searchCountByFolderId($folder->getId());
+                $seenCount = $cacheBackend->seenCountByFolderId($folder->getId());
+                $folder->unreadcount = $folder->totalcount - $seenCount;
+            }
         }
         
         return $folders;

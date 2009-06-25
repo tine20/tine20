@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        add body of messages of last week (?) to cache?
  */
 
 /**
@@ -313,9 +314,10 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         $folderCount = $this->_messageCacheBackend->searchCountByFolderId($_folderId);
         
         $to = $messageCount - $folderCount;
-        $from = ($to > 200) ? $to - 200 : 1;
         
-        while ($from > 1) {
+        while (! isset($from) || $from > 1) {
+            $from = ($to > 200) ? $to - 200 : 1;
+            
             // get next 200 message headers
             
             $uids = $backend->getUid($from, $to);
@@ -325,14 +327,14 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             // import        
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Initial import: trying to add ' . count($messages) . ' new messages to cache of folder ' . $folder->localname
-                . ' Beginning with message uid: ' . $uids[0] . ' (from: ' . $from .' to: ' . $to . ')'
+                . '. Beginning with message uid: ' . $uids[0] . ' (from: ' . $from .' to: ' . $to . ')'
             );
             
             // get message headers and save them in cache db
             $this->_addMessages($messages, $_folderId);
             
             $to = $from - 1;
-            $from = ($to > 200) ? $to - 200 : 1;
+            //$from = ($to > 200) ? $to - 200 : 1;
         }
         
         // get number of unread messages
