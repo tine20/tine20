@@ -158,16 +158,22 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         $existing = array(); // count() == 0
                     }
                     
-                    if(count($existing) === 0) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " entry not found. adding as new");
-                        $added = $dataController->add($collectionId, $add->ApplicationData);
-                    } else {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found matching entry. reuse existing entry");
-                        // use the first found entry
-                        $added = $existing[0];
+                    try {
+                        if(count($existing) === 0) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " entry not found. adding as new");
+                            $added = $dataController->add($collectionId, $add->ApplicationData);
+                        } else {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found matching entry. reuse existing entry");
+                            // use the first found entry
+                            $added = $existing[0];
+                        }
+                        $this->_collections[$class][$collectionId]['added'][(string)$add->ClientId]['serverId'] = $added->getId(); 
+                        $this->_collections[$class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SUCCESS;
+                        $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $added->getId());
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e);
+                        $this->_collections[$class][$collectionId]['added'][(string)$add->ClientId]['status'] = self::STATUS_SERVER_ERROR;
                     }
-                    $this->_collections[$class][$collectionId]['added'][$added->getId()] = (string)$add->ClientId;
-                    $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $added->getId());
                 }
             }
         
@@ -186,6 +192,10 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     } catch (Tinebase_Exception_NotFound $e) {
                         // entry does not exist anymore, will get deleted automaticly
                         $this->_collections[$class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
+                        // something went wrong while trying to update the entry
+                        $this->_collections[$class][$collectionId]['changed'][$serverId] = self::STATUS_SERVER_ERROR;
                     }
                 }
             }
@@ -256,26 +266,28 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         if($responses === NULL) {
                             $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
                         }
-                        foreach($collectionData['added'] as $serverId => $clientId) {
+                        foreach($collectionData['added'] as $clientId => $entryData) {
                             $add = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
                             $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ClientId', $clientId));
-                            $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                            $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
+                            if(isset($entryData['serverId'])) {
+                                $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $entryData['serverId']));
+                            }
+                            $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $entryData['status']));
                         }
                     }
                     
-                    #// sent reponse for changed entries
-                    #// not really needed
-                    #if(!empty($collectionData['changed'])) {
-                    #    if($responses === NULL) {
-                    #        $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
-                    #    }
-                    #    foreach($collectionData['changed'] as $serverId => $status) {
-                    #        $change = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
-                    #        $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
-                    #        $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
-                    #    }
-                    #}
+                    // sent reponse for changed entries
+                    // not really needed
+                    if(!empty($collectionData['changed'])) {
+                        if($responses === NULL) {
+                            $responses = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Responses'));
+                        }
+                        foreach($collectionData['changed'] as $serverId => $status) {
+                            $change = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Change'));
+                            $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
+                            $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $status));
+                        }
+                    }
                     
                     if($collectionData['getChanges'] === true) {
                         $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_device, $this->_syncTimeStamp);
