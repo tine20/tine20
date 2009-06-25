@@ -116,6 +116,11 @@ cal-monthview-wkcell-header {
     -webkit-border-radius: 8px;
 }
 
+/** todo: add khtml switch **/
+.cal-monthview-alldayevent {
+    -khtml-border-radius: 8px;
+}
+
 .cal-monthview-alldayevent-cropleft {
 	margin-left: 0px;
     border-left-style: none;
@@ -131,6 +136,12 @@ cal-monthview-wkcell-header {
 .ext-safari .cal-monthview-alldayevent-cropleft {
     -webkit-border-top-left-radius: 0px;
     -webkit-border-bottom-left-radius: 0px;
+}
+
+/** todo: add khtml switch **/
+.cal-monthview-alldayevent-cropleft {
+    -khtml-border-top-left-radius: 0px;
+    -khtml-border-bottom-left-radius: 0px;
 }
 
 .cal-monthview-alldayevent-cropright {
@@ -151,6 +162,11 @@ cal-monthview-wkcell-header {
     -webkit-border-bottom-right-radius: 0px;
 }
 
+/** todo: add khtml switch **/
+.cal-monthview-alldayevent-cropright {
+    -khtml-border-top-right-radius: 0px;
+    -khtml-border-bottom-right-radius: 0px;
+}
 
 .cal-monthview-alldayevent-summary {
     white-space: nowrap;

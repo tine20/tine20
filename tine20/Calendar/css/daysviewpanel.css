@@ -169,6 +169,11 @@
     -webkit-border-radius: 8px;
 }
 
+/** todo: add khtml switch **/
+.cal-daysviewpanel-event {
+    -khtml-border-radius: 8px;
+}
+
 .cal-daysviewpanel-event-croptop {
     border-top-style: none;
     border-top-left-radius: 0px;
@@ -185,6 +190,12 @@
     -webkit-border-top-right-radius: 0px;
 }
 
+/** todo: add khtml switch **/
+.cal-daysviewpanel-event-croptop {
+    -khtml-border-top-left-radius: 0px;
+    -khtml-border-top-right-radius: 0px;
+}
+
 .cal-daysviewpanel-event-cropbottom {
     border-bottom-style: none;
     border-bottom-left-radius: 0px;
@@ -199,6 +210,12 @@
 .ext-safari .cal-daysviewpanel-event-cropbottom {
     -webkit-border-bottom-left-radius: 0px;
     -webkit-border-bottom-right-radius: 0px;
+}
+
+/** todo: add khtml switch **/
+.cal-daysviewpanel-event-cropbottom {
+    -khtml-border-bottom-left-radius: 0px;
+    -khtml-border-bottom-right-radius: 0px;
 }
 
 .cal-daysviewpanel-event-drop-nodrop .x-dd-drop-icon {
@@ -234,6 +251,12 @@
     -webkit-border-top-right-radius: 8px;
 }
 
+/** todo: add khtml switch **/
+.cal-daysviewpanel-event-header {
+    -khtml-border-top-left-radius: 8px;
+    -khtml-border-top-right-radius: 8px;
+}
+
 .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
 	display: none;
     border-top-style: none;
@@ -249,6 +272,12 @@
 .ext-safari .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
     -webkit-border-top-left-radius: 0px;
     -webkit-border-top-right-radius: 0px;
+}
+
+/** todo: add khtml switch **/
+.cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
+    -khtml-border-top-left-radius: 0px;
+    -khtml-border-top-right-radius: 0px;
 }
 
 .cal-daysviewpanel-event-header-inner {
@@ -331,6 +360,12 @@
     -webkit-border-bottom-left-radius: 0px;
 }
 
+/** todo: add khtml switch **/
+.cal-daysviewpanel-event-cropleft {
+    -khtml-border-top-left-radius: 0px;
+    -khtml-border-bottom-left-radius: 0px;
+}
+
 .cal-daysviewpanel-event-cropright {
 	background-image: none;
     border-right-style: hidden;
@@ -346,6 +381,12 @@
 .ext-safari .cal-daysviewpanel-event-cropright {
     -webkit-border-top-right-radius: 0px;
     -webkit-border-bottom-right-radius: 0px;
+}
+
+/** todo: add khtml switch **/
+.cal-daysviewpanel-event-cropright {
+    -khtml-border-top-right-radius: 0px;
+    -khtml-border-bottom-right-radius: 0px;
 }
 
 .cal-daysviewpanel-wholedayevent-body .x-form-text {
