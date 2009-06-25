@@ -251,8 +251,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             
             // lcocal COPY!
             var extraCls = this.extraCls;
-        
-            if (currColNum < 0 || currColNum > view.numOfDays) {
+            
+            if (currColNum < 0 || currColNum >= view.numOfDays) {
                 continue;
             }
             
