@@ -53,7 +53,7 @@ try {
         'manifest|m'      => 'Build offline manifest',
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
-        'yui|y'           => 'Path to yuicompressor.jar',
+        'yui|y=s'         => 'Path to yuicompressor.jar',
         'help|h'          => 'Display this help Message',
     ));
     $opts->parse();
