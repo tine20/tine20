@@ -123,6 +123,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
     {
         switch($_class) {
             case 'Contacts':
+            case 'Calendar':
             case 'Tasks':
             case 'Email':
                 $className = 'ActiveSync_Controller_' . $_class;
