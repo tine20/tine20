@@ -178,6 +178,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     } catch (Tinebase_Exception_AccessDenied $e) {
                         $this->_collections[$class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
                         $this->_collections[$class][$collectionId]['forceChange'][$serverId] = $serverId;
+                    } catch (Tinebase_Exception_NotFound $e) {
+                        // entry does not exist anymore, will get deleted automaticly
+                        $this->_collections[$class][$collectionId]['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
                     }
                 }
             }
