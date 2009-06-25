@@ -29,6 +29,11 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     const STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT = 7;
     const STATUS_OBJECT_NOT_FOUND                       = 8;
     const STATUS_USER_ACCOUNT_MAYBE_OUT_OF_DISK_SPACE   = 9;
+    const STATUS_ERROR_SETTING_NOTIFICATION_GUID        = 10;
+    const STATUS_DEVICE_NOT_PROVISIONED_FOR_NOTIFICATIONS = 11;
+    const STATUS_FOLDER_HIERARCHY_HAS_CHANGED           = 12;
+    const STATUS_RESEND_FULL_XML                        = 13;
+    const STATUS_WAIT_INTERVAL_OUT_OF_RANGE             = 14;
     
     const CONFLICT_OVERWRITE_SERVER                     = 0;
     const CONFLICT_OVERWRITE_PIM                        = 1;
