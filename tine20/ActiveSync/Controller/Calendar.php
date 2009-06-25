@@ -21,7 +21,7 @@
  *
  * @package     ActiveSync
  */
-class ActiveSync_Controller_Events extends ActiveSync_Controller_Abstract
+class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
 {
     /**
      * attendee status
@@ -67,11 +67,11 @@ class ActiveSync_Controller_Events extends ActiveSync_Controller_Abstract
      * @var array
      */
     protected $_attendeeStatusMapping = array(
-        self::ATTENDEE_STATUS_UNKNOWN       => Calendar_Model_Attendee::STATUS_NEEDSACTION,
-        self::ATTENDEE_STATUS_TENTATIVE     => Calendar_Model_Attendee::STATUS_TENTATIVE,
-        self::ATTENDEE_STATUS_ACCEPTED      => Calendar_Model_Attendee::STATUS_ACCEPTED,
-        self::ATTENDEE_STATUS_DECLINED      => Calendar_Model_Attendee::STATUS_DECLINED,
-        self::ATTENDEE_STATUS_NOTRESPONDED  => Calendar_Model_Attendee::STATUS_NEEDSACTION
+        self::ATTENDEE_STATUS_UNKNOWN       => Calendar_Model_Attender::STATUS_NEEDSACTION,
+        self::ATTENDEE_STATUS_TENTATIVE     => Calendar_Model_Attender::STATUS_TENTATIVE,
+        self::ATTENDEE_STATUS_ACCEPTED      => Calendar_Model_Attender::STATUS_ACCEPTED,
+        self::ATTENDEE_STATUS_DECLINED      => Calendar_Model_Attender::STATUS_DECLINED,
+        self::ATTENDEE_STATUS_NOTRESPONDED  => Calendar_Model_Attender::STATUS_NEEDSACTION
     );
     
     /**
@@ -81,9 +81,9 @@ class ActiveSync_Controller_Events extends ActiveSync_Controller_Abstract
      * @var array
      */
     protected $_attendeeTypeMapping = array(
-        self::ATTENDEE_TYPE_REQUIRED => Calendar_Model_Attendee::ROLE_REQUIRED,
-        self::ATTENDEE_TYPE_OPTIONAL => Calendar_Model_Attendee::ROLE_OPTIONAL,
-        self::ATTENDEE_TYPE_RESOURCE => Calendar_Model_Attendee::USERTYPE_RESOURCE
+        self::ATTENDEE_TYPE_REQUIRED => Calendar_Model_Attender::ROLE_REQUIRED,
+        self::ATTENDEE_TYPE_OPTIONAL => Calendar_Model_Attender::ROLE_OPTIONAL,
+        self::ATTENDEE_TYPE_RESOURCE => Calendar_Model_Attender::USERTYPE_RESOURCE
     );
     
     /**
@@ -138,13 +138,37 @@ class ActiveSync_Controller_Events extends ActiveSync_Controller_Abstract
         'folderId'      => 'eventsroot',
         'parentId'      => 0,
         'displayName'   => 'Events',
-        'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_APPOINTMENT
+        'type'          => ActiveSync_Command_FolderSync::FOLDERTYPE_CALENDAR
     ));
     
+    /**
+     * name of Tine 2.0 backend application
+     * 
+     * @var string
+     */
     protected $_applicationName     = 'Calendar';
     
+    /**
+     * name of Tine 2.0 model to use
+     * 
+     * @var string
+     */
     protected $_modelName           = 'Event';
-        
+    
+    /**
+     * type of the default folder
+     *
+     * @var int
+     */
+    protected $_defaultFolderType   = ActiveSync_Command_FolderSync::FOLDERTYPE_CALENDAR;
+    
+    /**
+     * type of user created folders
+     *
+     * @var int
+     */
+    protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED;
+    
     /**
      * append contact to xml parent node
      *
@@ -183,39 +207,70 @@ class ActiveSync_Controller_Events extends ActiveSync_Controller_Abstract
     protected function _toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
         if($_entry instanceof Calendar_Model_Event) {
-            $evnet = $_entry;
+            $event = $_entry;
         } else {
-            $evnet = new Calendar_Model_Event(array(), true);
+            $event = new Calendar_Model_Event(array(), true);
         }
         
-        $xmlData = $_data->children('uri:Events');
+        $xmlData = $_data->children('uri:Calendar');
 
         foreach($this->_mapping as $fieldName => $value) {
             switch($value) {
                 case 'bday':
                     if(isset($xmlData->$fieldName)) {
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
-                        $evnet->$value = new Zend_Date($timeStamp, NULL);
+                        $event->$value = new Zend_Date($timeStamp, NULL);
                     } else {
-                        $evnet->$value = null;
+                        $event->$value = null;
                     }
                     break;
                 default:
                     if(isset($xmlData->$fieldName)) {
-                        $evnet->$value = (string)$xmlData->$fieldName;
+                        $event->$value = (string)$xmlData->$fieldName;
                     } else {
-                        $evnet->$value = null;
+                        $event->$value = null;
                     }
                     break;
             }
         }
         
         // contact should be valid now
-        $evnet->isValid();
+        $event->isValid();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " eventData " . print_r($evnet->toArray(), true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
         
-        return $evnet;
+        return $event;
+    }
+    
+    /**
+     * convert contact from xml to Calendar_Model_EventFilter
+     *
+     * @param SimpleXMLElement $_data
+     * @return Addressbook_Model_ContactFilter
+     */
+    protected function _toTineFilter(SimpleXMLElement $_data)
+    {
+        $xmlData = $_data->children('uri:Calendar');
+        
+        $filter = new Calendar_Model_EventFilter(array(
+            array(
+                'field'     => 'containerType',
+                'operator'  => 'equals',
+                'value'     => 'all'
+            )
+        )); 
+    
+        foreach($this->_mapping as $fieldName => $value) {
+            if($filter->has($value)) {
+                $filter->$value = array(
+                    'operator'  => 'equals',
+                    'value'     => (string)$xmlData->$fieldName
+                );
+            }
+        }
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
+        
+        return $filter;
     }
     
 }

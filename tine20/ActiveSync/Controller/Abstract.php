@@ -114,15 +114,16 @@ abstract class ActiveSync_Controller_Abstract
         if(empty($this->_folderType)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_folderType can not be empty');
         }
-        
+                
         if(empty($this->_specialFolderName)) {
-            throw new Tinebase_Exception_UnexpectedValue('$this->_specialFolderName can not be empty');
+            $this->_specialFolderName = strtolower($this->_applicationName) . '-root';
         }
         
         $this->_device              = $_device;
         $this->_syncTimeStamp       = $_syncTimeStamp;
         $this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
         $this->_contentController   = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+        
         
     }
     

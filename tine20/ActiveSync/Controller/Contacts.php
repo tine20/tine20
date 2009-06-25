@@ -108,14 +108,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @var int
      */
     protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED;
-    
-    /**
-     * name of special folder
-     * 
-     * @var string
-     */
-    protected $_specialFolderName   = 'contacts-root';
-    
+        
     
     /**
      * append contact to xml parent node
