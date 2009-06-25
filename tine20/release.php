@@ -53,8 +53,8 @@ try {
         'manifest|m'      => 'Build offline manifest',
         'all|a'           => 'Build all (default)',
         'zend|z'          => 'Build Zend Translation Lists',
-        'yui-s'           => 'Path to yuicompressor.jar',
-        'help'            => 'Display this help Message',
+        'yui|y'           => 'Path to yuicompressor.jar',
+        'help|h'          => 'Display this help Message',
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
