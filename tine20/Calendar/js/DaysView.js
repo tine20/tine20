@@ -470,7 +470,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         // insert event silently into store
-        this.editing = true;
+        this.editing = event;
         this.ds.suspendEvents();
         this.ds.add(event);
         
@@ -540,14 +540,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         registry.unregister(event);
         this.removeEvent(event);
+        
         this.editing = false;
     },
     
     startEditSummary: function(event) {
+        if (event.summaryEditor) {
+            return false;
+        }
+        
         var eventEls = event.ui.getEls();
         
         var bodyCls = event.get('is_all_day_event') ? 'cal-daysviewpanel-wholedayevent-body' : 'cal-daysviewpanel-event-body';
-        new Ext.form.TextField({
+        event.summaryEditor = new Ext.form.TextField({
             event: event,
             renderTo: eventEls[0].down('div[class=' + bodyCls + ']'),
             width: '90%',
@@ -572,6 +577,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         var summary = field.getValue();
         var event = field.event;
+        event.summaryEditor = false;
         
         // abort edit on ESC key
         if (! summary || (e && e.getKey() == e.ESC)) {
@@ -652,6 +658,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.scroller.focus();
         this.mouseDown = true;
         
+        var targetEvent = this.getTargetEvent(target);
+        if (this.editing && (targetEvent != this.editing)) {
+            this.editing.summaryEditor.fireEvent('blur', this.editing.summaryEditor);
+        }
+        
         var dtStart = this.getTargetDateTime(e);
         if (! this.editing && dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
@@ -731,7 +742,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         // don't fire update events on rangeAdd
-        if (diff != 0 && ! event.isRangeAdd) {
+        if (diff != 0 && event != this.editing && ! event.isRangeAdd) {
             this.fireEvent('updateEvent', event);
         }
     },
