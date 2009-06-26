@@ -108,11 +108,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     protected $_mapping = array(
         //'Timezone'          => 'timezone',
-        'AllDayEvent'       => 'is_all_day_evnet',
+        'AllDayEvent'       => 'is_all_day_event',
         //'BusyStatus'        => 'transp',
         //'OrganizerName'     => 'organizer',
         //'OrganizerEmail'    => 'organizer',
-        'DtStamp'           => 'last_modified_time',
+        //'DtStamp'           => 'last_modified_time',  // not used outside from Tine 2.0
         'EndTime'           => 'dtend',
         'Location'          => 'location',
         //'Reminder'          => 'alarms',
@@ -120,7 +120,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         'Subject'           => 'summary',
         'Body'              => 'description',
         'StartTime'         => 'dtstart',
-        'UID'               => 'uid',
+        //'UID'               => 'uid',             // not used outside from Tine 2.0
         //'MeetingStatus'     => 'status_id',
         //'Attendees'         => 'attendee',
         //'Categories'        => 'tags',
@@ -183,14 +183,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         foreach($this->_mapping as $key => $value) {
             if(!empty($data->$value)) {
                 switch($value) {
-                    case 'bday':
-                        // Zend_Date does not have direct milisecond support, and for birthdays we realy don't need it!
-                        $bday = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $bday));
-                        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Birthday " . $bday);
-                        break;
+                    #case 'bday':
+                    #    // Zend_Date does not have direct milisecond support, and for birthdays we realy don't need it!
+                    #    $bday = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
+                    #    $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $bday));
+                    #    #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Birthday " . $bday);
+                    #    break;
                     default:
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $data->$value));
+                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $data->$value));
                         break;
                 }
             }
@@ -216,7 +216,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
 
         foreach($this->_mapping as $fieldName => $value) {
             switch($value) {
-                case 'bday':
+                case 'dtend':
+                case 'dtstart':
+                case 'last_modified_time':
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $fieldName => $value " . (string)$xmlData->$fieldName);
                     if(isset($xmlData->$fieldName)) {
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
                         $event->$value = new Zend_Date($timeStamp, NULL);
@@ -234,7 +237,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
-        // contact should be valid now
+        // event should be valid now
         $event->isValid();
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
@@ -271,6 +274,26 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
         
         return $filter;
+    }
+    
+    /**
+     * converts an iso formated date into a timestamp
+     *
+     * @param  string Zend_Date::ISO8601 representation of a datetime filed
+     * @return int    UNIX Timestamp
+     */
+    protected function _convertISOToTs($_ISO)
+    {
+        $matches = array();
+        
+        preg_match("/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/", $_ISO, $matches);
+
+        if (count($matches) !== 7) {
+            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
+        }
+        
+        list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
+        return  mktime($hour, $minute, $second, $month, $day, $year);
     }
     
 }

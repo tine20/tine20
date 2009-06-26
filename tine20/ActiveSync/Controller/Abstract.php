@@ -394,7 +394,7 @@ abstract class ActiveSync_Controller_Abstract
         
         return $folderFilter;
     }
-    
+        
     abstract protected function _toTineModel(SimpleXMLElement $_data, $_entry = null);
     
     abstract protected function _toTineFilter(SimpleXMLElement $_data);
