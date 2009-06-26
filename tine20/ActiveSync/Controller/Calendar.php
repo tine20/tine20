@@ -183,6 +183,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         foreach($this->_mapping as $key => $value) {
             if(!empty($data->$value)) {
                 switch($value) {
+                    case 'dtend':
+                    case 'dtstart':
+                        $date = $data->$value->toString('yyyyMMddTHHmmss') . 'Z';
+                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $date));
+                        break;
                     #case 'bday':
                     #    // Zend_Date does not have direct milisecond support, and for birthdays we realy don't need it!
                     #    $bday = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
@@ -218,8 +223,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             switch($value) {
                 case 'dtend':
                 case 'dtstart':
-                case 'last_modified_time':
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $fieldName => $value " . (string)$xmlData->$fieldName);
                     if(isset($xmlData->$fieldName)) {
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
                         $event->$value = new Zend_Date($timeStamp, NULL);
