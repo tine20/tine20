@@ -176,24 +176,14 @@ Tine.widgets.tree.ContextMenu = {
             /**
              * manage permissions
              * 
-             * TODO  generalize that?
              */
             managePermissions: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
-                    var window = new Ext.ux.PopupWindow({
-                        url: 'index.php',
-                        name: 'TinebaseManageContainerGrants' + node.attributes.container.id,
-                        layout: 'fit',
-                        modal: true,
-                        width: 700,
-                        height: 450,
+                    var window = Tine.widgets.container.GrantsDialog.openWindow({
                         title: String.format(_('Manage Permissions for {0} "{1}"'), config.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
-                        contentPanelConstructor: 'Tine.widgets.container.grantDialog',
-                        contentPanelConstructorConfig: {
-                            containerName: config.nodeName,
-                            grantContainer: node.attributes.container
-                        }
+                        containerName: config.nodeName,
+                        grantContainer: node.attributes.container
                     });
                 }
             },
@@ -205,7 +195,6 @@ Tine.widgets.tree.ContextMenu = {
                 if (this.ctxNode) {
                     var tree = this;
                     this.ctxNode.reload(function(node) {
-                        //console.log(node);
                         node.expand();
                         node.select();
                         // update grid
