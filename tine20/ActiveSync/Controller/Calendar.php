@@ -128,6 +128,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         //'Exceptions'        => 'exdate',
     );
     
+    protected $_timezoneUnpackString = 'lbias/a64standardName/vstandardYear/vstandardMonth/vstandardDayOfWeek/vstandardDay/vstandardHour/vstandardMinute/vstandardSecond/vstandardMilliseconds/lstandardBias/a64daylightName/vdaylightYear/vdaylightMonth/vdaylightDayOfWeek/vdaylightDay/vdaylightHour/vdaylightMinute/vdaylightSecond/vdaylightMilliseconds/ldaylightBias';
+    
     
     /**
      * list of supported folders
@@ -238,6 +240,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     }
                     break;
             }
+        }
+        
+        if(isset($xmlData->Timezone)) {
+            $timezoneData = unpack($this->_timezoneUnpackString, base64_decode((string)$xmlData->Timezone));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . print_r($timezoneData, true));
         }
         
         // event should be valid now
