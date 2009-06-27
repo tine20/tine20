@@ -174,6 +174,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     /**
      * append contact to xml parent node
      *
+     * @todo handle BusyStatus
+     * @todo handle TimeZone data
      * @param DOMDocument $_xmlDocument
      * @param DOMElement $_xmlNode
      * @param string $_serverId
@@ -207,7 +209,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     /**
      * convert contact from xml to Calendar_Model_Event
      *
-     * @todo handle images
+     * @todo handle BusyStatus
      * @param SimpleXMLElement $_data
      * @return Calendar_Model_Event
      */
