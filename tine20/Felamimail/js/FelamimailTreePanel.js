@@ -73,6 +73,13 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
+        this.on('append', function(tree, node, appendedNode, index) {
+            if (Ext.util.Format.lowercase(appendedNode.attributes.localname) == 'inbox') {
+                appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
+                    appendedNode.fireEvent('click', appendedNode);
+                }, appendedNode.ui);
+            }
+        }, this);
 	},
     
     /**
@@ -313,10 +320,9 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 
         var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         this.expandPath('/root/' + defaultAccount + '/');
-        this.selectPath('/root/' + defaultAccount + '/');
     },
     
-    /**
+   /**
      * returns a filter plugin to be used in a grid
      *
      */
@@ -609,8 +615,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             node.text = node.text + ' (' + attr.unreadcount + ')';
             node.cls = node.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
         }
-        
-        //console.log(node);
         
         return Tine.widgets.grid.PersistentFilterLoader.superclass.createNode.call(this, node);
     },
