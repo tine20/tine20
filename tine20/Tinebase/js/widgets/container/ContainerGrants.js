@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * TODO         use new window handling (and Tine.widgets.dialog.EditDialog) here
  */
 
 Ext.namespace('Tine.widgets', 'Tine.widgets.container');
