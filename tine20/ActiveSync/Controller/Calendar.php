@@ -320,4 +320,40 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         return $timezoneInfo;
     }
+    
+    /**
+     * encode timezone info to activesync
+     * 
+     * @param array $_timezoneInfo
+     * @return string
+     */
+    public function packTimezoneInfo($_timezoneInfo) {
+        
+        $packed = pack(
+            "la64vvvvvvvvla64vvvvvvvvl",
+            $_timezoneInfo["bias"], 
+            $_timezoneInfo["standardName"], 
+            $_timezoneInfo['standardYear'],
+            $_timezoneInfo["standardMonth"], 
+            $_timezoneInfo['standardDayOfWeek'],
+            $_timezoneInfo["standardDay"], 
+            $_timezoneInfo["standardHour"], 
+            $_timezoneInfo["standardMinute"], 
+            $_timezoneInfo['standardSecond'],
+            $_timezoneInfo['standardMilliseconds'],
+            $_timezoneInfo["standardBias"], 
+            $_timezoneInfo["daylightName"], 
+            $_timezoneInfo['daylightYear'],
+            $_timezoneInfo["daylightMonth"], 
+            $_timezoneInfo['daylightDayOfWeek'],
+            $_timezoneInfo["daylightDay"], 
+            $_timezoneInfo["daylightHour"], 
+            $_timezoneInfo["daylightMinute"], 
+            $_timezoneInfo['daylightSecond'],
+            $_timezoneInfo['daylightMilliseconds'],
+            $_timezoneInfo["daylightBias"] 
+        );
+
+        return base64_encode($packed);
+    }
 }
