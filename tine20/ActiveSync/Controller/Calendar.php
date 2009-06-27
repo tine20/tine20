@@ -192,18 +192,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         $date = $data->$value->toString('yyyyMMddTHHmmss') . 'Z';
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $date));
                         break;
-                    #case 'bday':
-                    #    // Zend_Date does not have direct milisecond support, and for birthdays we realy don't need it!
-                    #    $bday = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
-                    #    $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $bday));
-                    #    #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Birthday " . $bday);
-                    #    break;
                     default:
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', $key, $data->$value));
                         break;
                 }
             }
-        }        
+        }   
+        
+        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w=='));
+        //$_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'BusyStatus', 0));
+        //$_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MeetingStatus', 0));
+        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DtStamp', $data->creation_time->toString('yyyyMMddTHHmmss') . 'Z'));
+        //$_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'UID', 'abcd4257776565'));
     }
         
     /**
