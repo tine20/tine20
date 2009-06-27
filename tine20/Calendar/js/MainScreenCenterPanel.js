@@ -224,7 +224,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     },
                     failure: function () {
                         panel.getTopToolbar().onLoad();
-                        Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), String.format(this.app.i18n.n_('Failed not delete event', 'Failed to delte the {0} evnets', selection.length), selection.length)) 
+                        Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), String.format(this.app.i18n.n_('Failed not delete event', 'Failed to delete the {0} events', selection.length), selection.length)) 
                     }
                 };
                 
