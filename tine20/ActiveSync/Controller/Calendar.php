@@ -243,7 +243,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         if(isset($xmlData->Timezone)) {
-            $timezoneData = unpack($this->_timezoneUnpackString, base64_decode((string)$xmlData->Timezone));
+            $timezoneData = $this->unpackTimezoneInfo((string)$xmlData->Timezone);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . print_r($timezoneData, true));
         }
         
@@ -306,4 +306,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         return  mktime($hour, $minute, $second, $month, $day, $year);
     }
     
+    /**
+     * decode timezone info from activesync
+     * 
+     * @param string $_packedTimezoneInfo the packed timezone info
+     * @return array
+     */
+    public function unpackTimezoneInfo($_packedTimezoneInfo)
+    {
+        $timezoneUnpackString = 'lbias/a64standardName/vstandardYear/vstandardMonth/vstandardDayOfWeek/vstandardDay/vstandardHour/vstandardMinute/vstandardSecond/vstandardMilliseconds/lstandardBias/a64daylightName/vdaylightYear/vdaylightMonth/vdaylightDayOfWeek/vdaylightDay/vdaylightHour/vdaylightMinute/vdaylightSecond/vdaylightMilliseconds/ldaylightBias';
+
+        $timezoneInfo = unpack($timezoneUnpackString, base64_decode($_packedTimezoneInfo));
+        
+        return $timezoneInfo;
+    }
 }
