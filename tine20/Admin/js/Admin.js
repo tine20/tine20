@@ -33,7 +33,7 @@ Tine.Admin = function() {
         cls: 'treemain',
         allowDrag: false,
         allowDrop: true,
-        id: 'groupss',
+        id: 'groups',
         icon: false,
         children: [],
         leaf: null,
@@ -87,7 +87,8 @@ Tine.Admin = function() {
         children :[],
         leaf :null,
         expanded :true,
-        dataPanelType :"sharedtags"
+        dataPanelType :"sharedtags",
+        viewRight: 'shared_tags'
     },{
         text :translation.gettext('Roles'),
         cls :"treemain",
@@ -148,7 +149,7 @@ Tine.Admin = function() {
         	var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
         	
         	// check view right
-        	if ( initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view', 'Admin', initialTree[i].viewRight) ) {
+        	if (initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view', 'Admin', initialTree[i].viewRight)) {
                 node.disabled = true;
         	}
         	
@@ -157,7 +158,7 @@ Tine.Admin = function() {
         
         treePanel.on('click', function(_node, _event) {
         	
-        	if ( _node.disabled ) {
+        	if (_node.disabled) {
         		return false;
         	}
         	
@@ -228,7 +229,17 @@ Tine.Admin = function() {
         treePanel.on('beforeexpand', function(_panel) {
             if(_panel.getSelectionModel().getSelectedNode() === null) {
                 _panel.expandPath('/root');
-                _panel.selectPath('/root/applications');
+                // don't open 'applications' if user has no right to manage apps
+                if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'applications')) {
+                    _panel.selectPath('/root/applications');
+                } else {
+                    treeRoot.eachChild(function(node) {
+                        if (Tine.Tinebase.common.hasRight('manage', 'Admin', node.attributes.viewRight)) {
+                            _panel.selectPath('/root/' + node.id);
+                            return;
+                        }
+                    }, this);
+                }
             }
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
@@ -237,7 +248,6 @@ Tine.Admin = function() {
             _event.stopEvent();
             //_node.select();
             //_node.getOwnerTree().fireEvent('click', _node);
-            //console.log(_node.attributes.contextMenuClass);
             /* switch(_node.attributes.contextMenuClass) {
                 case 'ctxMenuContactsTree':
                     ctxMenuContactsTree.showAt(_event.getXY());
@@ -559,7 +569,7 @@ Tine.Admin.AccessLog.Main = function() {
 
             if(rowCount < 1) {
                 _action_delete.setDisabled(true);
-            } else if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'access_log') ) {
+            } else if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'access_log')) {
                 _action_delete.setDisabled(false);
             }
         });
