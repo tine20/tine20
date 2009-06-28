@@ -98,8 +98,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $calendars          = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Calendar', $accountId, 0, true);
                 $preference->value  = $calendars->getFirstRecord()->getId();
                 
-                // make shure we never come back here again ;-)
-                $this->setValueForUser(self::DEFAULTCALENDAR, $preference->value, $accountId);
+                // make sure we never come back here again ;-)
+                $this->setValueForUser(self::DEFAULTCALENDAR, $preference->value, $accountId, TRUE);
                 
                 break;
             default:

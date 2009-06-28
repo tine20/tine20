@@ -279,14 +279,20 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * get value of preference for a user/group
      *
      * @param string $_preferenceName
+     * @param string $_value
      * @param integer $_userId
+     * @param boolean $_ignoreAcl
      * @return string
      */
-    public function setValueForUser($_preferenceName, $_value, $_accountId) 
+    public function setValueForUser($_preferenceName, $_value, $_accountId, $_ignoreAcl = FALSE) 
     {
         // check acl first
         $userId = Tinebase_Core::getUser()->getId();
-        if ($_accountId !== $userId && !Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, $userId, Tinebase_Acl_Rights_Abstract::ADMIN)) {
+        if (
+            $_ignoreAcl !== TRUE 
+            && $_accountId !== $userId 
+            && !Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, $userId, Tinebase_Acl_Rights_Abstract::ADMIN)
+        ) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preferences.');
         }
         
