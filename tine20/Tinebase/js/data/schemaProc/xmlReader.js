@@ -127,11 +127,18 @@ Tine.Tinebase.data.schemaProc.xmlReader = {
                 primary: this.qv('primary', x, false),
                 unique:  this.qv('unique', x, false),
                 foreign: this.qv('foreign', x, false),
-                fields:  this.getValues('name', this.qs('field > name', x)),//this.getFieldDefinitions(this.qs('field', x)),
-                reference: {
-                    
+                fields:  this.getValues('name', this.qs('field:has(name)', x))
+            }
+            
+            x = this.qsn('reference', x);
+            if (x) {
+                idx.reference = {
+                    table: this.qv('table', x),
+                    field: this.qv('field', x),
+                    ondelete: this.qv('ondelete', x, null)
                 }
             }
+            
             idxs.push(idx);
         }
         
@@ -159,5 +166,7 @@ Tine.Tinebase.data.schemaProc.xmlReader = {
         for(var i=0; i<xml.length; i++) {
             v.push(type == 'number' ? this.qn(name, xml[i]) : this.qv(name, xml[i]));
         }
+        
+        return v;
     }
 }

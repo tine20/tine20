@@ -11,19 +11,28 @@
 
 Ext.ns('Tine.Tinebase.data', 'Tine.Tinebase.data.schemaProc');
 
-/**
- * Ext.onReady(function() {
+Ext.onReady(function() {
     Ext.Ajax.request({
         url: '/tt/tine20/Tasks/Setup/setup.xml',
         success: function(response) {
-            var xml = response.responseXML;
-            var schema = Tine.Tinebase.data.schemaProc.xmlReader.getSchema(xml);
-            var stmts = Tine.Tinebase.data.schemaProc.sqlGenerator.getCreateStmts(schema)
-            //console.log(stmts);
+            var db = openDatabase('tine20local', '0.1', 'Tine 2.0 Local Stuff', 1024*1024);
+            
+            
+            db.transaction(function(t) {
+                var xml = response.responseXML;
+                var schema = Tine.Tinebase.data.schemaProc.xmlReader.getSchema(xml);
+                var stmts = Tine.Tinebase.data.schemaProc.sqlGenerator.getCreateStmts(schema);
+                for (var i=0; i<stmts.length; i++) {
+                    console.log(stmts[i]);
+                    t.executeSql(stmts[i]);
+                }
+            }, function() {
+                console.log(arguments[0]);
+            });
         }
     });
 });
- */
+
 
 Tine.Tinebase.data.schemaProc.sqlGenerator = {
     
@@ -38,7 +47,6 @@ Tine.Tinebase.data.schemaProc.sqlGenerator = {
             for(var j=0; j<schema[appIdx].tables.length; j++) {
                 tableDef = schema[appIdx].tables[j];
                 stmt = this.generateCreateStmt(tableDef);
-                console.log(stmt);
                 stmts.push(stmt);
             }
         }
@@ -47,6 +55,8 @@ Tine.Tinebase.data.schemaProc.sqlGenerator = {
     
     /**
      * generates a CREATE TABLE statement
+     * @see {http://www.sqlite.org/lang_createtable.html}
+     * 
      * @param {Object} tableDef
      * @return {String}
      */
@@ -55,11 +65,14 @@ Tine.Tinebase.data.schemaProc.sqlGenerator = {
         for(var i=0; i<tableDef.declaration.fields.length; i++) {
             body.push(this.generateFieldStmt(tableDef.declaration.fields[i]));
         }
-        for(var i=0; i<tableDef.declaration.indices.length; i++) {
-            body.push(this.generateContrainStmt(tableDef.declaration.indices[i]));
+        for(var i=0, cstmt; i<tableDef.declaration.indices.length; i++) {
+            cstmt = this.generateContrainStmt(tableDef.declaration.indices[i]);
+            if (cstmt) {
+                body.push(cstmt);
+            }
         }
         
-        var stmt = "CREATE TABLE " + this.qi(tableDef.name) + " ( \n";
+        var stmt = "CREATE TABLE IF NOT EXISTS" + this.qi(tableDef.name) + " ( \n";
         stmt += body.join(", \n");       
         stmt +=  ")";
 
@@ -98,7 +111,7 @@ Tine.Tinebase.data.schemaProc.sqlGenerator = {
         }
         
         if (d.autoincrement) {
-            f += " AUTOINCREMENT";
+            //f += " AUTOINCREMENT";
         }
         
         if (d['default']) {
@@ -125,9 +138,25 @@ Tine.Tinebase.data.schemaProc.sqlGenerator = {
             // sqlite does not support indices
             return '';
         }
-        //c += d.fields.concat() + ')';
+        c += d.fields.concat() + ')';
         
-        console.log(d);
+        if (d.reference) {
+            c += " REFERENCES " + this.qi(d.reference.table);
+            
+            if (d.reference.field) {
+                c += " (" + this.qi(d.reference.field) + ")";
+            }
+            
+            if (d.reference.ondelete) {
+                c += " ON DELETE " + d.reference.ondelete;
+            }
+            if (d.reference.onupdate) {
+                c += " ON UPDATE " + d.reference.onupdate;
+            }
+            if (d.reference.oninsert) {
+                c += " ON INSERT " + d.reference.oninsert;
+            }
+        }
         return c;
     },
     
