@@ -227,6 +227,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         $this->_outputDom->documentElement->setAttribute('xmlns:Contacts'    , 'uri:Contacts');
         $this->_outputDom->documentElement->setAttribute('xmlns:Tasks'       , 'uri:Tasks');
         $this->_outputDom->documentElement->setAttribute('xmlns:Email'       , 'uri:Email');
+        $this->_outputDom->documentElement->setAttribute('xmlns:Calendar'    , 'uri:Calendar');
         $this->_outputDom->documentElement->setAttribute('xmlns:AirSyncBase' , 'uri:AirSyncBase');
         
         $sync = $this->_outputDom->documentElement;
