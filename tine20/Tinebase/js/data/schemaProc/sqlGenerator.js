@@ -13,7 +13,7 @@ Ext.ns('Tine.Tinebase.data', 'Tine.Tinebase.data.schemaProc');
 
 Ext.onReady(function() {
     Ext.Ajax.request({
-        url: '/tt/tine20/Tasks/Setup/setup.xml',
+        url: '/tt/tine20/Calendar/Setup/setup.xml',
         success: function(response) {
             var db = openDatabase('tine20local', '0.1', 'Tine 2.0 Local Stuff', 1024*1024);
             
@@ -23,7 +23,7 @@ Ext.onReady(function() {
                 var schema = Tine.Tinebase.data.schemaProc.xmlReader.getSchema(xml);
                 var stmts = Tine.Tinebase.data.schemaProc.sqlGenerator.getCreateStmts(schema);
                 for (var i=0; i<stmts.length; i++) {
-                    console.log(stmts[i]);
+                    //console.log(stmts[i]);
                     t.executeSql(stmts[i]);
                 }
             }, function() {
@@ -33,7 +33,10 @@ Ext.onReady(function() {
     });
 });
 
-
+/**
+ * @todo include enum values
+ * 
+ */
 Tine.Tinebase.data.schemaProc.sqlGenerator = {
     
     /**
@@ -115,7 +118,7 @@ Tine.Tinebase.data.schemaProc.sqlGenerator = {
         }
         
         if (d['default']) {
-            f += " DEFAULT " + d['default'];
+            f += " DEFAULT " + this.qi(d['default']);
         }
         
         if (d.notnull) {
