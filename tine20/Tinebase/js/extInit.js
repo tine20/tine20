@@ -18,7 +18,7 @@
 /**
  * create console pseudo object when firebug is disabled/not installed
  */
-window.console = window.console || {};
+if (! window.console) window.console = {};
 for (fn in {
         // maximum possible console functions based on firebug
         log: null , debug: null, info: null, warn: null, error: null, assert: null, dir: null, dirxml: null, group: null,
