@@ -30,7 +30,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
         try {
             $this->_initFramework();
         } catch (Zend_Session_Exception $exception) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' invalid session. Delete session cookie.');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
             Zend_Session::expireSessionCookie();
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
@@ -60,7 +60,8 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
                 }
                 if(Tinebase_Core::getUser()->hasRight('ActiveSync', Tinebase_Acl_Rights::RUN) !== true) {
                     header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-                    header('HTTP/1.1 403 ActiveSync not enabled for account');
+                    header('HTTP/1.1 403 ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
                     return;                            
                 }
                 $syncFrontend->handlePost($_GET['User'], $_GET['DeviceId'], $_GET['DeviceType'], $_GET['Cmd']);
@@ -74,7 +75,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
                 }
                 if(Tinebase_Core::getUser()->hasRight('ActiveSync', Tinebase_Acl_Rights::RUN) !== true) {
                     header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-                    header('HTTP/1.1 403 ActiveSync not enabled for account');
+                    header('HTTP/1.1 403 ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
                     echo "<b>ERROR</b>!<br>ActiveSync is not enabled for account {$_SERVER['PHP_AUTH_USER']}.";
                     return;                            
                 }
