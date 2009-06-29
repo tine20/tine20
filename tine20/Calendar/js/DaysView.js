@@ -234,8 +234,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 // we dont support multiple dropping yet
                 data.scope.getSelectionModel().select(event);
                 
-                var target = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
-                if (target && event.get('editGrant')) {
+                var target = e.getTarget();
+                var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, target);
+                if (targetDateTime && event.get('editGrant')) {
                     return Math.abs(target.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                 }
                 
@@ -250,7 +251,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             notifyDrop : function(dd, e, data) {
                 var v = data.scope;
                 
-                var targetDate = v.getTargetDateTime(e);
+                var target = e.getTarget();
+                var targetDate = v.getTargetDateTime(target);
                 
                 if (targetDate) {
                     var event = data.event;
@@ -473,6 +475,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.editing = event;
         this.ds.suspendEvents();
         this.ds.add(event);
+        this.ds.resumeEvents();
         
         
         // draw event
@@ -626,7 +629,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     onDblClick: function(e, target) {
         e.stopEvent();
         var event = this.getTargetEvent(target);
-        var dtStart = this.getTargetDateTime(e);
+        var dtStart = this.getTargetDateTime(target);
         
         if (event) {
             this.fireEvent('dblclick', event, e);
@@ -663,8 +666,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.editing.summaryEditor.fireEvent('blur', this.editing.summaryEditor);
         }
         
-        var dtStart = this.getTargetDateTime(e);
-        if (! this.editing && dtStart) {
+        var dtStart = this.getTargetDateTime(target);
+        if (dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
@@ -837,7 +840,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * @private
      */
-    onRemove : function(ds, event, index, isUpdate){
+    onRemove : function(ds, event, index, isUpdate) {
         if (!event || index == -1) {
             return;
         }
@@ -916,11 +919,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * get date of a (event) target
      * 
-     * @param {Ext.EventObject} e
+     * @param {dom} target
      * @return {Date}
      */
-    getTargetDateTime: function(e) {
-        var target = e.getTarget();
+    getTargetDateTime: function(target) {
+        //var target = e.getTarget();
         if (target.id.match(/^ext-gen\d+:\d+/)) {
             var parts = target.id.split(':');
             
