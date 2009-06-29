@@ -237,7 +237,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 var target = e.getTarget();
                 var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, target);
                 if (targetDateTime && event.get('editGrant')) {
-                    return Math.abs(target.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                    return Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                 }
                 
                 return 'cal-daysviewpanel-event-drop-nodrop';
@@ -279,6 +279,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     
                     event.set('is_all_day_event', targetDate.is_all_day_event);
                     event.endEdit();
+                    
                     v.fireEvent('updateEvent', event);
                 }
                 
@@ -314,7 +315,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant
-                    if (event.dirty || (this.daysView.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
+                    if (! event || event.dirty || (this.daysView.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
                         return;
                     }
                     
@@ -602,6 +603,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         registry.unregister(event);
         this.removeEvent(event);
         
+        event.dirty = true;
         this.ds.add(event);
         this.fireEvent('addEvent', event);
 
@@ -808,7 +810,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.insertEvent(parallelEvents[j]);
         }
         
-        event.commit(true);
         this.setActiveEvent(this.getActiveEvent());
         this.layout();
     },
