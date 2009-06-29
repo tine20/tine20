@@ -32,7 +32,7 @@
                                 layout: 'fit'
                         }
                     });
-                    Ext.MessageBox.wait('Tine 2.0 needs to be updated.', 'Please wait or contact your administrator');
+                    Ext.MessageBox.wait('Tine 2.0 needs to be updated or is not installed yet.', 'Please wait or contact your administrator');
                     window.setTimeout('location.href = location.href', 20000);
         }); 
     </script>
