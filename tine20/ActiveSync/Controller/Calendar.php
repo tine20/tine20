@@ -268,22 +268,24 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     {
         $xmlData = $_data->children('uri:Calendar');
         
-        $filter = new Calendar_Model_EventFilter(array(
-            array(
-                'field'     => 'containerType',
-                'operator'  => 'equals',
-                'value'     => 'all'
-            )
-        )); 
-    
+        $filterArray[] = array(
+            'field'     => 'containerType',
+            'operator'  => 'equals',
+            'value'     => 'all'
+        ); 
+        
         foreach($this->_mapping as $fieldName => $value) {
-            if($filter->has($value)) {
-                $filter->$value = array(
+            if(isset($xmlData->$fieldName)) {
+                $filterArray[] = array(
+                    'field'     => $value,
                     'operator'  => 'equals',
                     'value'     => (string)$xmlData->$fieldName
                 );
             }
         }
+        
+        $filter = new Calendar_Model_EventFilter($filterArray); 
+    
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
         
         return $filter;

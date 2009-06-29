@@ -270,22 +270,24 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     {
         $xmlData = $_data->children('Contacts');
         
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array(
-                'field'     => 'containerType',
-                'operator'  => 'equals',
-                'value'     => 'all'
-            )
-        )); 
-    
+        $filterArray[] = array(
+            'field'     => 'containerType',
+            'operator'  => 'equals',
+            'value'     => 'all'
+        );
+         
         foreach($this->_mapping as $fieldName => $value) {
-            if($filter->has($value)) {
-                $filter->$value = array(
+            if(isset($xmlData->$fieldName)) {
+                $filterArray[] = array(
+                    'field'     => $value,
                     'operator'  => 'equals',
                     'value'     => (string)$xmlData->$fieldName
                 );
             }
         }
+        
+        $filter = new Addressbook_Model_ContactFilter($filterArray); 
+    
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
         
         return $filter;
