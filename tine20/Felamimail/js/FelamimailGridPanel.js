@@ -379,6 +379,36 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     /**
+     * key down handler
+     * 
+     * @private
+     * @param {} e
+     */
+    onKeyDown: function(e) {
+        if (e.ctrlKey) {
+            switch (e.getKey()) {
+                case e.M:
+                    this.onEditInNewWindow({
+                        actionType: 'add'
+                    }, e);
+                    break;
+                case e.R:
+                    this.onEditInNewWindow({
+                        actionType: 'reply'
+                    }, e);
+                    break;
+                case e.L:
+                    this.onEditInNewWindow({
+                        actionType: 'forward'
+                    }, e);
+                    break;
+            }
+        }
+        
+        Tine.Felamimail.GridPanel.superclass.onKeyDown.call(this, e);
+    },
+    
+    /**
      * generic edit in new window handler
      * - overwritten parent func
      * - action type edit: reply/replyAll/forward
