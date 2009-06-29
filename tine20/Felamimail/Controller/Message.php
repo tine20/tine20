@@ -206,7 +206,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                             . " Trash folder '$trashFolder' does not exist. " 
                             . " Deleting message instead."
                         );
-                        $imapBackend->removeMessage($_record->messageuid);
+                        try {
+                            $imapBackend->removeMessage($_record->messageuid);
+                        } catch (Zend_Mail_Storage_Exception $zmseRemove) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $zmseRemove->getMessage());
+                        }
                     } else {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $zmse->getMessage());
                     }
