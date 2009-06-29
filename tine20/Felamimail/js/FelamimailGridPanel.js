@@ -391,16 +391,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     this.onEditInNewWindow({
                         actionType: 'add'
                     }, e);
+                    e.preventDefault();
                     break;
                 case e.R:
                     this.onEditInNewWindow({
                         actionType: 'reply'
                     }, e);
+                    e.preventDefault();
                     break;
                 case e.L:
                     this.onEditInNewWindow({
                         actionType: 'forward'
                     }, e);
+                    e.preventDefault();
                     break;
             }
         }
