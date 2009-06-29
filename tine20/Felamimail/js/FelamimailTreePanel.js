@@ -111,6 +111,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             leaf: false,
             cls: 'felamimail-node-account',
             show_intelligent_folders: (record.get('show_intelligent_folders')) ? record.get('show_intelligent_folders') : 0,
+            delimiter: record.get('delimiter'),
             account_id: record.data.id,
             listeners: {
                 scope: this,
@@ -473,6 +474,14 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         if (! node.attributes.folderNode) {
             // edit/remove account
             if (node.attributes.account_id !== 'default') {
+                
+                // check account delimiter -> disable 'add folder' if courier imap ('.' delimiter) 
+                this.contextMenuAccount.items.each(function(item) {
+                    if (item.iconCls == 'action_add') {
+                        item.setDisabled(node.attributes.delimiter == '.');
+                    }
+                });
+                
                 this.contextMenuAccount.showAt(event.getXY());
             }
         } else {
