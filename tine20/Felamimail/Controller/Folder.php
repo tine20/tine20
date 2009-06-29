@@ -159,8 +159,10 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $_parentFolder . $this->_delimiter . $_folderName );
+        
         $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $imap->createFolder($_folderName, $_parentFolder, $this->_delimiter);
+        $imap->createFolder($_folderName, (empty($_parentFolder)) ? NULL : $_parentFolder , $this->_delimiter);
         
         $globalname = (empty($_parentFolder)) ? $_folderName : $_parentFolder . $this->_delimiter . $_folderName;
         
