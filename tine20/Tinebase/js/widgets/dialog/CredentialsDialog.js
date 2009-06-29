@@ -8,11 +8,9 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * TODO         add 'submit on enter' option to CredentialsDialog or EditDialog
  */
-Ext.namespace('Tine.widgets');
 
-Ext.namespace('Tine.widgets.dialog');
+Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
 
 /**
  * Generic 'Credentials' dialog
@@ -55,7 +53,15 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
             layout: 'form',
             defaults: {
                 xtype: 'textfield',
-                anchor: '90%'
+                anchor: '90%',
+                listeners: {
+                    scope: this,
+                    specialkey: function(field, event) {
+                        if (event.getKey() == event.ENTER) {
+                            this.onApplyChanges({}, event, true);
+                        }
+                    }
+                }
             },
             items: [{
                 fieldLabel: _('Username'), 
