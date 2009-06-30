@@ -6,9 +6,10 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        make it possible to change default groups
  */
 
 /**
@@ -137,17 +138,26 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * update existing group
      *
      * @param Tinebase_Model_Group $_group
-     * @param array $_groupMembers
-     * 
      * @return Tinebase_Model_Group
      */
     public function update(Tinebase_Model_Group $_group)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
+        // update default user group if name has changed
+        $oldGroup = Tinebase_Group::getInstance()->getGroupById($_group->getId());
+        $defaultGroupConfig = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP);
+        if ($oldGroup->name == $defaultGroupConfig->value && $oldGroup->name != $_group->name) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Updated default group name: ' . $oldGroup->name . ' -> ' . $_group->name
+            );
+            $defaultGroupConfig->value = $_group->name;
+            Tinebase_Config::getInstance()->setConfig($defaultGroupConfig);
+        }
+        
         $group = Tinebase_Group::getInstance()->updateGroup($_group);
         
-        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
+        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group->members);
         
         if ($this->_manageSAM) {
             $samResult = $this->_samBackend->updateGroup($group);
@@ -194,7 +204,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         
         // check default user group / can't delete this group
         $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
-            Tinebase_Config::getInstance()->getConfig('Default User Group')->value
+            Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value
         );
         if (in_array($defaultUserGroup->getId(), $_groupIds)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
