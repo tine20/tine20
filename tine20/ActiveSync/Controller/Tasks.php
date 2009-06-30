@@ -79,13 +79,6 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     protected $_folderType          = ActiveSync_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;
     
-    /**
-     * name of special folder
-     * 
-     * @var string
-     */
-    protected $_specialFolderName   = 'tasks-root';
-    
     public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
     {
         $data = $this->_contentController->get($_serverId);
@@ -96,18 +89,21 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     case 'completed':
                         continue 2;
                         break;
+                        
                     case 'due':
-                        if($_data->$value instanceof Zend_Date) {
-                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $data->$value->getIso()));
+                        if($data->$value instanceof Zend_Date) {
+                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z'));
                             #$_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, '2008-12-30T23:00:00.000Z'));
-                            $_data->$value->setTimezone(Tinebase_Core::get('userTimeZone'));
-                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'DueDate', $data->$value->getIso()));
+                            $data->$value->setTimezone(Tinebase_Core::get('userTimeZone'));
+                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'DueDate', $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z'));
                         }
                         break;
+                        
                     case 'priority':
                         $priority = ($data->$value <= 2) ? $data->$value : 2;
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $priority));
                         break;
+                        
                     default:
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', $key, $data->$value));
                         break;
@@ -118,7 +114,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         // Completed is required
         if($data->completed instanceof Zend_Date) {
             $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'Complete', 1));
-            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'DateCompleted', $data->completed->getIso()));
+            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'DateCompleted', $data->completed->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z'));
         } else {
             $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Tasks', 'Complete', 0));
         }
@@ -153,6 +149,14 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         $task->completed = NULL;
                     }
                     break;
+                case 'due':
+                    if(isset($xmlData->$fieldName)) {
+                        $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
+                        $task->$value = new Zend_Date($timeStamp, NULL);
+                    } else {
+                        $task->$value = null;
+                    }
+                    break;
                 default:
                     if(isset($xmlData->$fieldName)) {
                         $task->$value = (string)$xmlData->$fieldName;
@@ -166,7 +170,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         // contact should be valid now
         $task->isValid();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($task->toArray(), true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taskData " . print_r($task->toArray(), true));
         
         return $task;
     }
@@ -180,25 +184,47 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     protected function _toTineFilter(SimpleXMLElement $_data)
     {
         $xmlData = $_data->children('Tasks');
+                
+        $filterArray[] = array(
+            'field'     => 'containerType',
+            'operator'  => 'equals',
+            'value'     => 'all'
+        ); 
         
-        $filter = new Tasks_Model_TaskFilter(array(
-            array(
-                'field'     => 'containerType',
-                'operator'  => 'equals',
-                'value'     => 'all'
-            )
-        )); 
-            
         foreach($this->_mapping as $fieldName => $value) {
-            if($filter->has($value)) {
-                $filter->$value = array(
+            if(isset($xmlData->$fieldName)) {
+                $filterArray[] = array(
+                    'field'     => $value,
                     'operator'  => 'equals',
                     'value'     => (string)$xmlData->$fieldName
                 );
             }
         }
+        
+        $filter = new Tasks_Model_TaskFilter($filterArray); 
+    
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filter, true));
         
         return $filter;
+    }
+    
+    /**
+     * converts an iso formated date into a timestamp
+     *
+     * @param  string Zend_Date::ISO8601 representation of a datetime filed
+     * @return int    UNIX Timestamp
+     */
+    protected function _convertISOToTs($_ISO)
+    {
+        $matches = array();
+        
+        preg_match("/^(\d{4})-(\d{2})-(\d{2})[T ]{1}(\d{2}):(\d{2}):(\d{2})/", $_ISO, $matches);
+
+        if (count($matches) !== 7) {
+            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
+        }
+        
+        list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
+        return  mktime($hour, $minute, $second, $month, $day, $year);
     }
 }
