@@ -181,8 +181,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             'hostname'  => $this->smtp_hostname,
             'username'  => $this->smtp_user,
             'password'  => $this->smtp_password,
-            'auth'      => $this->smtp_auth,        
         );
+        
+        if ($this->smtp_auth && $this->smtp_auth != 'none') {
+            $result['auth'] = $this->smtp_auth; 
+        }
         
         if ($this->smtp_secure_connection && $this->smtp_secure_connection != 'none') {
             $result['ssl'] = $this->smtp_secure_connection; 

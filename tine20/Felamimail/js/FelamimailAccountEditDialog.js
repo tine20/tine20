@@ -179,8 +179,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'combo',
                     value: 'login',
                     store: [
-                        ['login',  this.app.i18n._('Login')],
-                        ['plain',  this.app.i18n._('Plain')]
+                        ['none',    this.app.i18n._('None')],
+                        ['login',   this.app.i18n._('Login')],
+                        ['plain',   this.app.i18n._('Plain')]
                     ]
                 }/*,{
                     fieldLabel: this.app.i18n._('Username'),
