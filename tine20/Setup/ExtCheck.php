@@ -497,7 +497,7 @@ class Setup_ExtCheck
             if ($value != 'SUCCESS') {
                 
                 if ($key === 'MySQL') {
-                    $message = 'Could not connect to MySql DB (check your connection settings) or ';
+                    $message = 'Could not connect to MySQL DB, version incompatible (' . @mysql_get_server_info() . ') or ';
                 } else {
                     $message = '';
                     $result['success'] = FALSE;
