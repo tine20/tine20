@@ -100,7 +100,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         'wkst'                 => array('allowEmpty' => true, 'InArray' => array(self::WDAY_SUNDAY, self::WDAY_MONDAY, self::WDAY_TUESDAY, self::WDAY_WEDNESDAY, self::WDAY_THURSDAY, self::WDAY_FRIDAY, self::WDAY_SATURDAY)),
         'until'                => array('allowEmpty' => true          ),
         
-        'organizer_tz'          => array('allowEmpty' => true         ),
+        //'organizer_tz'          => array('allowEmpty' => true         ),
     );
     
     /**
