@@ -528,7 +528,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             case Tinebase_Preference::DEFAULT_APP:
                 $applications = Tinebase_Application::getInstance()->getApplications();
                 foreach ($applications as $app) {
-                    if ($app->status == 'enabled') {
+                    if (
+                        $app->status == 'enabled'
+                        && $app->name != 'Tinebase'
+                        && Tinebase_Core::getUser()->hasRight($app->name, Tinebase_Acl_Rights_Abstract::RUN)
+                    ) {
                          $result[] = array($app->name, $app->name);
                     }
                 }
