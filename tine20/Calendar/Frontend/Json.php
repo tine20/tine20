@@ -165,6 +165,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_resolveAttendee($_records->attendee);
         $this->_resolveRrule($_records);
         
+        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+        
         //compute recurset
          $candidates = $_records->filter('rrule', "/^FREQ.*/", TRUE);
          $period = $_filter->getFilter('period');
@@ -175,6 +177,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
              //$_records->merge($recurSet);
              foreach ($recurSet as $event) {
                  $_records->addRecord($event);
+                 $event->setId(Tinebase_Record_Abstract::generateUID());
              }
          }
           
