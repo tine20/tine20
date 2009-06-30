@@ -40,8 +40,8 @@ class Setup_Import_TineInitial
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial config settings ...');
         $configSettings = array(
-            "Default User Group" => "Users",              
-            "Default Admin Group" => "Administrators",
+            Tinebase_Config::DEFAULT_USER_GROUP     => "Users",              
+            Tinebase_Config::DEFAULT_ADMIN_GROUP    => "Administrators",
         );
         
         $configBackend = Tinebase_Config::getInstance();
@@ -65,14 +65,14 @@ class Setup_Import_TineInitial
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
 
         $adminGroup = new Tinebase_Model_Group(array(
-            'name'          => $configSettings["Default Admin Group"],
+            'name'          => $configSettings[Tinebase_Config::DEFAULT_ADMIN_GROUP],
             'description'   => 'Group of administrative accounts'
         ));
         $adminGroup = $groupsBackend->addGroup($adminGroup);
 
         // add the user group
         $userGroup = new Tinebase_Model_Group(array(
-            'name'          => $configSettings["Default User Group"],
+            'name'          => $configSettings[Tinebase_Config::DEFAULT_USER_GROUP],
             'description'   => 'Group of user accounts'
         ));
         $userGroup = $groupsBackend->addGroup($userGroup);

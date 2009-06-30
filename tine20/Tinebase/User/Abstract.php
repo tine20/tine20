@@ -80,7 +80,7 @@ abstract class Tinebase_User_Abstract
         
         if ($_accountClass === 'Tinebase_Model_FullUser') {
             $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
-                Tinebase_Config::getInstance()->getConfig('Default User Group')->value
+                Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value
             );
             $data['accountPrimaryGroup'] = $defaultUserGroup->getId();
         }

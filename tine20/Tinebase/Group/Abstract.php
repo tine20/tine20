@@ -116,7 +116,7 @@ abstract class Tinebase_Group_Abstract
         $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication($tinebase);
         
         //$result = $this->getGroupByName($defaultGroupName);
-        $result = $this->getGroupByName($tinebaseConfig['Default User Group']);
+        $result = $this->getGroupByName($tinebaseConfig[Tinebase_Config::DEFAULT_USER_GROUP]);
         
         return $result;
     }

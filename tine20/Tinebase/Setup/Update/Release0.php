@@ -368,14 +368,14 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         } catch (Tinebase_Exception_NotFound $e) {
             // set default values
             $tinebaseConfig = array(
-                'Default Admin Group'   => 'Administrators',
-                'Default User Group'    => 'Users',
+                Tinebase_Config::DEFAULT_ADMIN_GROUP   => 'Administrators',
+                Tinebase_Config::DEFAULT_USER_GROUP    => 'Users',
             );
         }
         
         // get admin and user groups
-        $adminGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default Admin Group']);
-        $userGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default User Group']);
+        $adminGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig[Tinebase_Config::DEFAULT_ADMIN_GROUP]);
+        $userGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig[Tinebase_Config::DEFAULT_USER_GROUP]);
         
         # add roles and add the groups to the roles
         $adminRole = new Tinebase_Model_Role(array(
@@ -618,13 +618,13 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $configBackend = Tinebase_Config::getInstance();
         $configUserGroupName = new Tinebase_Model_Config(array(
             "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            "name"              => "Default User Group",
+            "name"              => Tinebase_Config::DEFAULT_USER_GROUP,
             "value"             => "Users",              
         ));
         $configBackend->setConfig($configUserGroupName);
         $configAdminGroupName = new Tinebase_Model_Config(array(
             "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            "name"              => "Default Admin Group",
+            "name"              => Tinebase_Config::DEFAULT_ADMIN_GROUP,
             "value"             => "Administrators",              
         ));
         $configBackend->setConfig($configAdminGroupName);
@@ -1601,8 +1601,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication(
             Tinebase_Application::getInstance()->getApplicationByName('Tinebase')
         );
-        $adminGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default Admin Group']);
-        $userGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default User Group']);
+        $adminGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig[Tinebase_Config::DEFAULT_ADMIN_GROUP]);
+        $userGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig[Tinebase_Config::DEFAULT_USER_GROUP]);
         
         Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
             Tinebase_Model_Container::GRANT_READ,
