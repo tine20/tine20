@@ -99,7 +99,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         $records = $_controller->search($filter, $pagination);
         
-        $result = $this->_multipleRecordsToJson($records);
+        $result = $this->_multipleRecordsToJson($records, $filter);
         
         return array(
             'results'       => $result,
@@ -122,6 +122,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $modelClass = $this->_applicationName . "_Model_" . $_modelName;
         $record = new $modelClass(array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "recordData: ". print_r($record->toArray(), true));
         
         $savedRecord = (empty($record->$_identifier)) ? 
             $_controller->create($record): 
@@ -210,11 +212,12 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Model_Filter_FilterGroup
      * @return array data
      * 
      * @todo move that to Tinebase_Record_RecordSet
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {       
         if (count($_records) == 0) {
             return array();
