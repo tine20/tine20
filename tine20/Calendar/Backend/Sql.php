@@ -76,7 +76,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function create(Tinebase_Record_Interface $_record) 
     {
+        
         $this->_setRruleUntil($_record);
+        $_record->rrule = (string) $_record->rrule;
         
         $event = parent::create($_record);
         $this->_saveExdates($_record);
@@ -95,6 +97,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function update(Tinebase_Record_Interface $_record) 
     {
         $this->_setRruleUntil($_record);
+        $_record->rrule = (string) $_record->rrule;
         
         $event = parent::update($_record);
         $this->_saveExdates($_record);

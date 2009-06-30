@@ -196,7 +196,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 
                 // update rrule->until
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting rrule_until');
-                $rrule = Calendar_Model_Rrule::getRruleFromString($_record->rrule);
+                
+                
+                $rrule = $_record->rrule instanceof Calendar_Model_Rrule ? $_record->rrule : Calendar_Model_Rrule::getRruleFromString($_record->rrule);
                 Calendar_Model_Rrule::addUTCDateDstFix($rrule->until, $diff, $_record->originator_tz);
                 $_record->rrule = (string) $rrule;
                 
