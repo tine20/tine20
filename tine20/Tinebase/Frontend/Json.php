@@ -234,8 +234,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter = new Tinebase_Model_NoteFilter(Zend_Json::decode($filter));
         $paging = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
+        $records = Tinebase_Notes::getInstance()->searchNotes($filter, $paging);
+        $result = $this->_multipleRecordsToJson($records);
+        
         return array(
-            'results'       => Tinebase_Notes::getInstance()->searchNotes($filter, $paging)->toArray(),
+            'results'       => $result,
             'totalcount'    => Tinebase_Notes::getInstance()->searchNotesCount($filter)
         );        
     }
