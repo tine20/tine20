@@ -18,26 +18,56 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
-        this.title = this.app.i18n._('Recuring');
+        this.title = this.app.i18n._('Recurrances');
         
-        this.freqCombo = new Ext.form.ComboBox({
+        this.freq = new Ext.form.ComboBox({
             triggerAction : 'all',
-            fieldLabel    : this.app.i18n._('Recurrance'),
+            hideLabel: true,
+            fieldLabel    : this.app.i18n._('Recurrances'),
             value         : false,
             editable      : false,
             mode          : 'local',
             store         : [
-                [false,      this.app.i18n._('None')   ],
+                [false,      this.app.i18n._('Single Event')   ],
                 ['DAILY',    this.app.i18n._('Daily')   ],
                 ['WEEKLY',   this.app.i18n._('Weekly')  ],
                 ['MONTHLY',  this.app.i18n._('Monthly') ],
                 ['YEARLY',   this.app.i18n._('Yearly')  ]
-            ] 
-            
+            ]
+        });
+        
+        this.interval = new Ext.form.TextField({
+            fieldLabel    : this.app.i18n._('interval')
+        });
+        
+        this.wkst = new Ext.form.TextField({
+            fieldLabel    : this.app.i18n._('wkst')
+        });
+        
+        this.byday = new Ext.form.TextField({
+            fieldLabel    : this.app.i18n._('byday')
+        });
+        
+        this.bymonth = new Ext.form.TextField({
+            fieldLabel    : this.app.i18n._('bymonth')
+        });
+        
+        this.bymonthday = new Ext.form.TextField({
+            fieldLabel    : this.app.i18n._('bymonthday')
+        });
+        
+        this.until = new Ext.form.TextField({
+            fieldLabel    : this.app.i18n._('until')
         });
         
         this.items = [
-            this.freqCombo
+            this.freq,
+            this.interval,
+            this.wkst,
+            this.byday,
+            this.bymonth,
+            this.bymonthday,
+            this.until
         ];
         
         Tine.Calendar.RrulePanel.superclass.initComponent.call(this);
@@ -45,11 +75,17 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     
     onRecordLoad: function(record) {
         this.record = record;
-        console.log(this.record.rrule);
+        this.rrule = this.record.get('rrule');
+        
+        for (var part in this.rrule) {
+            if (this.rrule.hasOwnProperty(part) && this[part] && typeof this[part].setValue == 'function') {
+                this[part].setValue(this.rrule[part]);
+            }
+        }
         
     },
     
     onRecordUpdate: function(record) {
-        console.log(this.record.rrule);
+        console.log(this.record.get('rrule'));
     }
 });
