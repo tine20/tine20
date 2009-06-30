@@ -192,7 +192,24 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     {        
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        Tinebase_Group::getInstance()->deleteGroups($_groupIds);
+        // check default user group / can't delete this group
+        $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
+            Tinebase_Config::getInstance()->getConfig('Default User Group')->value
+        );
+        if (in_array($defaultUserGroup->getId(), $_groupIds)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Can\'t delete default group: ' . $defaultUserGroup->name
+            );
+            foreach ($_groupIds as $key => $value) {
+                if ($value == $defaultUserGroup->getId()) {
+                    unset($_groupIds[$key]);
+                }
+            }
+        }
+        
+        if (! empty($_groupIds)) {
+            Tinebase_Group::getInstance()->deleteGroups($_groupIds);
+        }
         
         if ($this->_manageSAM) {
             $this->_samBackend->deleteGroups($_groupIds);
