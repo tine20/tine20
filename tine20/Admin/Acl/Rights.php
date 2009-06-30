@@ -5,11 +5,10 @@
  * @package     Admin
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        add more specific rights
  */
 
 /**
@@ -59,6 +58,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_ROLES = 'manage_roles';
     
     /**
+     * the right to manage roles
+     * @staticvar string
+     */
+    const MANAGE_COMPUTERS = 'manage_computers';
+    
+    /**
      * the right to view roles
      * @staticvar string
      */
@@ -81,6 +86,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const VIEW_ROLES = 'view_roles';
+    
+    /**
+     * the right to manage roles
+     * @staticvar string
+     */
+    const VIEW_COMPUTERS = 'view_computers';
     
     /**
      * holdes the instance of the singleton
@@ -129,7 +140,6 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     public function getAllApplicationRights()
     {
-        
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array (
@@ -137,11 +147,13 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_ACCOUNTS,
             self::MANAGE_APPS, 
             self::MANAGE_SHARED_TAGS,
-            self::MANAGE_ROLES, 
+            self::MANAGE_ROLES,
+            self::MANAGE_COMPUTERS,
             self::VIEW_ACCESS_LOG,
             self::VIEW_ACCOUNTS,
             self::VIEW_APPS, 
-            self::VIEW_ROLES, 
+            self::VIEW_ROLES,
+            self::VIEW_COMPUTERS
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -178,6 +190,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage shared tags'),
                 'description'   => $translate->_('add, delete and edit shared tags'),
             ),
+            self::MANAGE_COMPUTERS => array(
+                'text'          => $translate->_('manage computers'),
+                'description'   => $translate->_('add, delete and edit (samba) computers'),
+            ),
             self::VIEW_ACCESS_LOG   => array(
                 'text'          => $translate->_('view access log'),
                 'description'   => $translate->_('view access log list'),
@@ -193,6 +209,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::VIEW_ROLES  => array(
                 'text'          => $translate->_('view roles'),
                 'description'   => $translate->_('view roles list and details'),
+            ),
+            self::VIEW_COMPUTERS  => array(
+                'text'          => $translate->_('view computers'),
+                'description'   => $translate->_('view computers list and details'),
             ),
         );
         
