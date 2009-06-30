@@ -862,6 +862,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string $_content
      * @return string
+     * 
+     * @todo try to skip email address that are already embedded in an url (such as unsubscription links with ?email=blabla@aha.com) 
      */
     protected function _replaceEmails($_content) 
     {
@@ -870,7 +872,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $result = preg_replace($mailtoPattern, "\\1", $_content);
         
         //$emailPattern = '/(?<!mailto:)([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
-        $emailPattern = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})^\&/i';
+        $emailPattern = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
         $result = preg_replace($emailPattern, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $result);
         
         return $result;
