@@ -567,7 +567,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveSambaMachine($recordData)
     {
-        return $this->_save($recordData, Admin_Controller_SambaMachine::getInstance(), 'SambaMachine', 'accountId');
+        try {
+            $result = $this->_save($recordData, Admin_Controller_SambaMachine::getInstance(), 'SambaMachine', 'accountId'); 
+        } catch (Admin_Exception $ae) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while saving samba machine: ' . $ae->getMessage());
+            $result = array('success' => FALSE);
+        }
+        
+        return $result;
     }
     
     /**
