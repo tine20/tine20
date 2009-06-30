@@ -450,8 +450,12 @@ class Tinebase_Core
             switch($dbBackend) {
                 case self::PDO_MYSQL:
                     $db = Zend_Db::factory('Pdo_Mysql', $dbConfig->toArray());
-                    $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
                     $db->query("SET NAMES UTF8");
+                    try {
+                        $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
+                    } catch (Exception $e) {
+                        self::getLogger()->warn('Faild to set "SET SQL_MODE to STRICT_ALL_TABLES');
+                    }
                     break;
                 case self::PDO_OCI:
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
