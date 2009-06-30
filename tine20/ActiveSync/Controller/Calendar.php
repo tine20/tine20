@@ -198,7 +198,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 }
             }
         }   
-        
+                
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'BusyStatus', 2));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Sensitivity', 2));
@@ -248,6 +248,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         if(isset($xmlData->Timezone)) {
             $timezoneData = $this->unpackTimezoneInfo((string)$xmlData->Timezone);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . print_r($timezoneData, true));
+        }
+        
+        if(isset($xmlData->Attendees)) {
+            foreach($xmlData->Attendees->Attendee as $attendee) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email" . $attendee->Email);
+                // search contact from addressbook using the emailaddress
+                // $attender = new Calendar_Model_Attender($attenderData);
+            }
+        } else {
+            $event->attendee = array();
         }
         
         // event should be valid now
