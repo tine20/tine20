@@ -92,6 +92,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
      */
     public function update(Tinebase_Record_Interface $_record)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "updating event: {$_record->id} ");
         $event = parent::update($_record);
         
         $this->_saveAttendee($_record);
@@ -370,7 +371,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             $_event->attendee : 
             new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         $attendee->cal_event_id = $_event->getId();
-            
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "about to save attendee for event {$_event->id} " .  print_r($attendee->toArray(), true));
+        
         $currentAttendee = $this->_backend->getEventAttendee($_event);
         
         $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
@@ -447,17 +450,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         if ($_currentAttender->user_type == Calendar_Model_Attender::USERTYPE_GROUP 
                 || $_currentAttender->user_id != Tinebase_Core::getUser()->getId()) {
 
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no permissions to update status for {$_attender->user_type} {$_attender->user_id}");
             $_attender->status = $_currentAttender->status;
         }
         
         // preserv old authkey
         $_attender->status_authkey = $_currentAttender->status_authkey;
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r("updating atternder: " . $_attender->toArray(), true));
         // update display calendar
         if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_USER || $_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUPMEMBER) {
             if ($_calendar->type == Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($_attender->user_id, $_calendar, Tinebase_Model_Container::GRANT_ADMIN)) {
-                // if attender has admin grant to personal phisycal container, this phys. cal also gets displ. cal
+                // if attender has admin grant to personal physical container, this phys. cal also gets displ. cal
                 $_attender->displaycontainer_id = $_calendar->getId();
             } else if ($_attender->user_id == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($_attender->user_id, $_attender->displaycontainer_id, Tinebase_Model_Container::GRANT_ADMIN)) {
                 // allow user to set his own displ. cal
