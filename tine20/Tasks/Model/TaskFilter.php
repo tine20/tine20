@@ -32,9 +32,9 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'summary'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'tasks.id')),
-        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Tasks')),
         'showClosed'           => array('custom' => true),
     );
