@@ -332,12 +332,12 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(10, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
         
         $recurSet->setTimezone('America/New_York');
-        $this->assertEquals(13, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
-        $this->assertEquals(13, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        $this->assertEquals(13, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for America/New_York dtstart before DST should be 13');
+        $this->assertEquals(13, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for America/New_York dtstart after DST shoud be 13');
         
         $recurSet->setTimezone('UTC');
-        $this->assertEquals(18, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
-        $this->assertEquals(17, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        $this->assertEquals(18, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart before DST should be 18');
+        $this->assertEquals(17, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart after DST shoud be 17');
     }
     
     public function testMultipleTimezonesOriginatingInArizona()
@@ -363,20 +363,20 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $recurSet->setTimezone('US/Pacific');
-        $this->assertEquals(10, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
-        $this->assertEquals(11, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
+        $this->assertEquals(10, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Pacific dtstart before DST should be 10');
+        $this->assertEquals(11, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Pacific dtstart before DST should be 11');
         
         $recurSet->setTimezone('US/Arizona');
-        $this->assertEquals(11, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
-        $this->assertEquals(11, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        $this->assertEquals(11, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
+        $this->assertEquals(11, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
         
         $recurSet->setTimezone('America/New_York');
-        $this->assertEquals(13, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
-        $this->assertEquals(14, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        $this->assertEquals(13, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 13');
+        $this->assertEquals(14, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 14');
         
         $recurSet->setTimezone('UTC');
-        $this->assertEquals(18, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
-        $this->assertEquals(18, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        $this->assertEquals(18, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart before DST should be 18');
+        $this->assertEquals(18, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart after DST shoud be 18');
     }
     
     /************************** date helper tests ***************************/
