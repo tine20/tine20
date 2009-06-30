@@ -289,6 +289,17 @@ class Tinebase_Model_Filter_FilterGroup
     }
     
     /**
+     * return filter object
+     *
+     * @param string $_field
+     * @return Tinebase_Model_Filter_Abstract
+     */
+    public function getFilter($_filed)
+    {
+        return $this->_findFilter($_filed);
+    }
+    
+    /**
      * returns filter objects
      *
      * @return array
