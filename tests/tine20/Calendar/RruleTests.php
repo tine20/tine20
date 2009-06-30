@@ -301,6 +301,84 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, count($recurSet), 'yearlybyday failed');
     }
     
+    public function testMultipleTimezonesOriginatingInSeatle()
+    {
+        date_default_timezone_set('US/Pacific');
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'conference',
+            'dtstart'       => '2003-03-28 10:00:00',
+            'dtend'         => '2003-03-28 12:00:00',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=FR',
+            'originator_tz' => 'US/Pacific',
+            'editGrant'     => true,
+        ));
+        $event->setTimezone('UTC');
+        date_default_timezone_set('UTC');
+        
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Zend_Date('2003-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2003-04-11 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
+        $recurSet->setTimezone('US/Pacific');
+        $this->assertEquals(10, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
+        $this->assertEquals(10, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
+        
+        $recurSet->setTimezone('US/Arizona');
+        $this->assertEquals(11, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
+        $this->assertEquals(10, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        
+        $recurSet->setTimezone('America/New_York');
+        $this->assertEquals(13, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
+        $this->assertEquals(13, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        
+        $recurSet->setTimezone('UTC');
+        $this->assertEquals(18, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
+        $this->assertEquals(17, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+    }
+    
+    public function testMultipleTimezonesOriginatingInArizona()
+    {
+        date_default_timezone_set('US/Arizona');
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'conference',
+            'dtstart'       => '2003-03-28 11:00:00',
+            'dtend'         => '2003-03-28 13:00:00',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=FR',
+            'originator_tz' => 'US/Arizona',
+            'editGrant'     => true,
+        ));
+        $event->setTimezone('UTC');
+        date_default_timezone_set('UTC');
+        
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Zend_Date('2003-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2003-04-11 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
+        $recurSet->setTimezone('US/Pacific');
+        $this->assertEquals(10, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
+        $this->assertEquals(11, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
+        
+        $recurSet->setTimezone('US/Arizona');
+        $this->assertEquals(11, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
+        $this->assertEquals(11, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        
+        $recurSet->setTimezone('America/New_York');
+        $this->assertEquals(13, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
+        $this->assertEquals(14, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        
+        $recurSet->setTimezone('UTC');
+        $this->assertEquals(18, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
+        $this->assertEquals(18, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+    }
+    
     /************************** date helper tests ***************************/
     
     public function testSkipWday()

@@ -337,6 +337,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $eventLength = clone $_event->dtend;
         $eventLength->sub($_event->dtstart);
         
+        $originatorsOriginalDtstart = clone $_event->dtstart;
+        $originatorsOriginalDtstart->setTimezone($_event->originator_tz);
+        
         while (true) {
             $computationStartDate->addDay($_rrule->interval);
             
@@ -345,7 +348,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             
             $originatorsDtstart = clone $recurEvent->dtstart;
             $originatorsDtstart->setTimezone($_event->originator_tz);
-            $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+            $recurEvent->dtstart->add($originatorsOriginalDtstart->get(Zend_Date::DAYLIGHT) - $originatorsDtstart->get(Zend_Date::DAYLIGHT), Zend_Date::HOUR);
+            //$recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
             
             if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
                 break;
@@ -390,6 +394,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $eventLength = clone $_event->dtend;
         $eventLength->sub($_event->dtstart);
         
+        $originatorsOriginalDtstart = clone $_event->dtstart;
+        $originatorsOriginalDtstart->setTimezone($_event->originator_tz);
+        
         while(true) {
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $_rrule->interval);
             //echo self::array2string($computationStartDateArray) . "\n";
@@ -398,7 +405,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             
             $originatorsDtstart = clone $recurEvent->dtstart;
             $originatorsDtstart->setTimezone($_event->originator_tz);
-            $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+            $recurEvent->dtstart->add($originatorsOriginalDtstart->get(Zend_Date::DAYLIGHT) - $originatorsDtstart->get(Zend_Date::DAYLIGHT), Zend_Date::HOUR);
+            //$recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
             
             // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
             $recurEvent->dtend = clone $recurEvent->dtstart;
@@ -463,6 +471,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             throw new Exception('mal formated rrule byday part: "' . $_rrule->byday . '"');
         }
         
+        $originatorsOriginalDtstart = clone $_event->dtstart;
+        $originatorsOriginalDtstart->setTimezone($_event->originator_tz);
+        
         while(true) {
             $computationStartDate->addMonth($_rrule->interval);
             
@@ -476,7 +487,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             
             $originatorsDtstart = clone $recurEvent->dtstart;
             $originatorsDtstart->setTimezone($_event->originator_tz);
-            $recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+            $recurEvent->dtstart->add($originatorsOriginalDtstart->get(Zend_Date::DAYLIGHT) - $originatorsDtstart->get(Zend_Date::DAYLIGHT), Zend_Date::HOUR);
+            //$recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
             
             // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
             $recurEvent->dtend = clone $recurEvent->dtstart;
