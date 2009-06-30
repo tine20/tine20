@@ -30,6 +30,22 @@ Tine.Calendar.EventSelectionModel = Ext.extend(Ext.tree.MultiSelectionModel, {
         return this.getSelectedNodes();
     },
     
+    /**
+     * Select an event.
+     * 
+     * @param {Tine.Calendar.Model.Event} event The event to select
+     * @param {EventObject} e (optional) An event associated with the selection
+     * @param {Boolean} keepExisting True to retain existing selections
+     * @return {Tine.Calendar.Model.Event} The selected event
+     */
+    select : function(event, e, keepExisting){
+        if (! event.ui) {
+            return event;
+        }
+        
+        Tine.Calendar.EventSelectionModel.superclass.select.apply(this, arguments);
+    },
+    
     onKeyDown: Ext.emptyFn
 });
 
