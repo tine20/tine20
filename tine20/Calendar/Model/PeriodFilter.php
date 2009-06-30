@@ -37,6 +37,26 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     protected $_until = NULL;
     
     /**
+     * returns from datetime
+     *
+     * @return Zend_Date
+     */
+    public function getFrom()
+    {
+        return new Zend_Date($this->_from, Tinebase_Record_Abstract::ISO8601LONG);
+    }
+    
+    /**
+     * returns until datetime
+     *
+     * @return Zend_Date
+     */
+    public function getUntil()
+    {
+        return new Zend_Date($this->_until, Tinebase_Record_Abstract::ISO8601LONG);
+    }
+    
+    /**
      * sets value
      *
      * @param mixed $_value
