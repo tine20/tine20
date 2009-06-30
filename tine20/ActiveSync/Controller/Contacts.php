@@ -125,11 +125,10 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
-                        // Zend_Date does not have direct milisecond support, and for birthdays we realy don't need it!
                         $bday = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $bday));
-                        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Birthday " . $bday);
                         break;
+                        
                     case 'jpegphoto':
                         if(! empty($data->$value)) {
                             try {
@@ -143,6 +142,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                             $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, base64_encode($jpegData)));
                         }
                         break;
+                        
                     default:
                         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $data->$value));
                         break;
