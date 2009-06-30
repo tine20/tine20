@@ -64,12 +64,14 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveEvent($recordData)
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "recordData: '{$recordData}'");
+        
         $eventData = Zend_Json::decode($recordData);
         if ($eventData['editGrant']) {
             // if client spoofed editGrant, controller will throw exception
             return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event');
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "user has no edit grant for event '{$recordData['id']}' we only update attendee status");
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "user has no edit grant for event '{$eventData['id']}' we only update attendee status");
             
             // client may set attendee status data via save request
             $attendeeData = $eventData['attendee'];
@@ -145,8 +147,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _recordToJson($_record)
     {
         $this->_resolveAttendee($_record->attendee);
-        $eventData = parent::_recordToJson($_record);
+        $this->_resolveRrule($_record);
         
+        $eventData = parent::_recordToJson($_record);
         return $eventData;
     }
     
@@ -161,7 +164,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
         $this->_resolveAttendee($_records->attendee);
+        $this->_resolveRrule($_records);
         
+        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
         return parent::_multipleRecordsToJson($_records);
     }
     
@@ -216,6 +221,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             foreach ($attendee as $attender) {
                 $attendeeTypeSet = $typeMap[$attender->$_typeProperty];
                 $attender->$_idProperty = $attendeeTypeSet[$attendeeTypeSet->getIndexById($attender->$_idProperty)];
+            }
+        }
+    }
+    
+    protected function _resolveRrule($_events)
+    {
+        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
+        
+        foreach ($events as $event) {
+            if ($event->rrule) {
+                $event->rrule = Calendar_Model_Rrule::getRruleFromString($event->rrule);
             }
         }
     }
