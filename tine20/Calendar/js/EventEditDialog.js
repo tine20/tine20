@@ -133,11 +133,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         border: true,
                         height: 235,
                         form: true,
-                        items: [this.attendeeGridPanel, {
-                            title: this.app.i18n._('Recuring'),
-                            disabled: true,
-                            html: 'recurings and alamrs'
-                        }, {
+                        items: [
+                            this.attendeeGridPanel,
+                            this.rrulePanel,
+                        {
                             title: this.app.i18n._('Alarms'),
                             disabled: true,
                             html: ''
@@ -198,6 +197,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     initComponent: function() {
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({});
+        this.rrulePanel        = new Tine.Calendar.RrulePanel({});
         this.attendeeStore = this.attendeeGridPanel.getStore();
         
         this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget(this);
@@ -249,6 +249,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // NOTE: it comes again and again till 
         if (this.rendered) {
             this.attendeeGridPanel.onRecordLoad(this.record);
+            this.rrulePanel.onRecordLoad(this.record);
             this.CalendarSelectWidget.onRecordLoad(this.record);
             
             // apply grants
@@ -267,6 +268,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Calendar.EventEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.attendeeGridPanel.onRecordUpdate(this.record);
+        this.rrulePanel.onRecordUpdate(this.record);
         this.CalendarSelectWidget.onRecordUpdate(this.record);
     },
     
