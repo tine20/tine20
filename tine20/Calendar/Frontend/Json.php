@@ -69,6 +69,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // if client spoofed editGrant, controller will throw exception
             return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event');
         } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "user has no edit grant for event '{$recordData['id']}' we only update attendee status");
+            
             // client may set attendee status data via save request
             $attendeeData = $eventData['attendee'];
             foreach ($attendeeData as $attenderData) {
