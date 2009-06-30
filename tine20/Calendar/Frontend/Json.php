@@ -28,8 +28,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     //          $recurSet = Calendar_Model_Rrule::computeRecuranceSet($canditae, $exceptions, $from, $until);
     //          $events->merge($recurSet);
     //      }
-    //
-    // transform whole day events into 00:00:00 to 23:59:59 (also ensure this in AS Frontend!)
+
     
     protected $_applicationName = 'Calendar';
     
@@ -159,13 +158,26 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter)
     {
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
         $this->_resolveAttendee($_records->attendee);
         $this->_resolveRrule($_records);
         
+        //compute recurset
+         $candidates = $_records->filter('rrule', "/^FREQ.*/", TRUE);
+         $period = $_filter->getFilter('period');
+         foreach ($candidates as $candidate) {
+             $exceptions = $_records->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
+             $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $period->getFrom(), $period->getUntil());
+             //Tinebase_Core::getLogger()->debug(print_r($recurSet->toArray(), true));
+             //$_records->merge($recurSet);
+             foreach ($recurSet as $event) {
+                 $_records->addRecord($event);
+             }
+         }
+          
         //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
         return parent::_multipleRecordsToJson($_records);
     }
