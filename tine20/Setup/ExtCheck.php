@@ -316,12 +316,54 @@ class ExtensionList
 }
 
 
+/**
+ * ext check class
+ * 
+ * @package     Setup
+ */
 class Setup_ExtCheck
 {
+    /**
+     * the constructor
+     *
+     * @param string $_file
+     */
+    public function __construct($_file = NULL)
+    {
+        if (isset($_SERVER['SHELL']) || isset($_SERVER['ProgramFiles'])) {
+            // Unix-Shell; Windows-Kommandozeile
+            $this->list = new ExtensionList(new TextTableFactory());
+        } else {
+            $this->list = new ExtensionList(new HTMLTableFactory());
+        }
+
+        /*
+        * fetch local server info
+        */
+        $this->loadedExtensions = get_loaded_extensions();
+
+        $this->values = $this->_getConfiguration($_file);
+    }
+    
+    /**
+     * php extensions
+     *
+     * @var array
+     */
     private $loadedExtensions = array();
 
+    /**
+     * values from extensions xml file
+     *
+     * @var array
+     */
     public $values = array();
 
+    /**
+     * output string
+     *
+     * @var string
+     */
     public $output = '';
     
     /**
@@ -355,8 +397,6 @@ class Setup_ExtCheck
      *
      * @return array with success/failure values for the given attributes
      * 
-     * @todo    move mysql/database version check later 
-     *             -> after the user has given the credentials in the interactive setup
      */
     private function _check()
     {
@@ -522,25 +562,24 @@ class Setup_ExtCheck
     }
 
     /**
-     * the constructor
+     * get single extension data
      *
-     * @param string $_file
+     * @param string $_name
+     * @return array|boolean
      */
-    public function __construct($_file = NULL)
+    public function getExtensionData($_name)
     {
-        if (isset($_SERVER['SHELL']) || isset($_SERVER['ProgramFiles'])) {
-            // Unix-Shell; Windows-Kommandozeile
-            $this->list = new ExtensionList(new TextTableFactory());
-        } else {
-            $this->list = new ExtensionList(new HTMLTableFactory());
+        $result = FALSE;
+        
+        foreach ($this->values as $key => $value) {
+            if ($value['tag'] == 'ENVIROMENT') {
+                if ($value['attributes']['NAME'] == $_name) {
+                    $result = $value['attributes'];
+                } 
+            }
         }
-
-        /*
-        * fetch local server info
-        */
-        $this->loadedExtensions = get_loaded_extensions();
-
-        $this->values = $this->_getConfiguration($_file);
+        
+        return $result;
     }
 }
 

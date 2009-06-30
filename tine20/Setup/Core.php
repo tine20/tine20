@@ -111,6 +111,8 @@ class Setup_Core extends Tinebase_Core
      * initializes the database connection
      *
      * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo try to write to db, if it fails: self::set(Setup_Core::CHECKDB, FALSE);
      */
     public static function setupDatabaseConnection()
     {
@@ -120,15 +122,30 @@ class Setup_Core extends Tinebase_Core
         if (self::configFileExists()) {
             try {
                 parent::setupDatabaseConnection();
-                self::set(Setup_Core::CHECKDB, TRUE);
+                
+                // check (mysql)db server version
+                $ext = new Setup_ExtCheck('Setup/essentials.xml');
+                if ($mysqlRequired = $ext->getExtensionData('MySQL')) {
+                    $dbConfig = Tinebase_Core::getConfig()->database;
+                    $link = @mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
+                    if ($link) {
+                        $serverVersion = @mysql_get_server_info();
+                        if (version_compare($mysqlRequired['VERSION'], $serverVersion, '<')) {
+                            self::set(Setup_Core::CHECKDB, TRUE);
+                        } else {
+                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                                . ' MySQL server version incompatible! ' . $serverVersion
+                                . ' < ' . $mysqlRequired['VERSION']
+                            );
+                        }
+                    }
+                } else {
+                    self::set(Setup_Core::CHECKDB, TRUE);
+                }
             } catch (Zend_Db_Adapter_Exception $zae) {
                 Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zae->getMessage());
             }
         }
-        
-        // @todo try to write to db, if it fails: self::set(Setup_Core::CHECKDB, FALSE);
-        //$dbConfig = Tinebase_Core::getConfig()->database;
-        //$link = @mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);        
     }
     
     /**
