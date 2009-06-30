@@ -78,8 +78,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $to (date format example: 2008-03-31T00:00:00)
      * @param string $filter
      * @param string $paging json encoded pagin data (Tinebase_Model_Pagination)
-     * 
      * @return array with results array & totalcount (int)
+     * 
+     * @todo switch to new api with only filter and paging params
      */
     public function getAccessLogEntries($from, $to, $filter, $paging)
     {
@@ -96,20 +97,18 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $accessLogSet = Admin_Controller_AccessLog::getInstance()->search($filter, $pagination, $fromDateObject, $toDateObject);
         
-        $result['results']    = $accessLogSet->toArray();
-        if (count($result['results']) < $pagination->limit) {
-            $result['totalcount'] = $pagination->start + count($result['results']);
-        } else {
-            $result['totalcount'] = Admin_Controller_AccessLog::getInstance()->searchCount($fromDateObject, $toDateObject, $filter);
-        }
-        
-        foreach ($result['results'] as $key => $value) {
+        $result = $this->_multipleRecordsToJson($accessLogSet);
+
+        foreach ($result as $key => &$value) {
             if (! empty($value['account_id'])) {
-                $result['results'][$key]['accountObject'] = Admin_Controller_User::getInstance()->get($value['account_id'])->toArray();
+                $value['accountObject'] = Admin_Controller_User::getInstance()->get($value['account_id'])->toArray();
             }
         }
         
-        return $result;
+        return array(
+            'results'       => $result,
+            'totalcount'    => Admin_Controller_AccessLog::getInstance()->searchCount($fromDateObject, $toDateObject, $filter),
+        );
     }
     
     /****************************** Applications ******************************/

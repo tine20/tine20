@@ -62,4 +62,14 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
         'account_id'    => array('allowEmpty' => true)
     );
     
+    /**
+     * name of fields containing datetime or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */    
+    protected $_datetimeFields = array(
+        'li',
+        'lo',
+    );
+    
 }
