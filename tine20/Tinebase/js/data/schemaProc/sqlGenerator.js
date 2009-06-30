@@ -11,6 +11,9 @@
 
 Ext.ns('Tine.Tinebase.data', 'Tine.Tinebase.data.schemaProc');
 
+/**
+ * 
+ *
 Ext.onReady(function() {
     Ext.Ajax.request({
         url: '/tt/tine20/Calendar/Setup/setup.xml',
@@ -32,6 +35,8 @@ Ext.onReady(function() {
         }
     });
 });
+*/
+
 
 /**
  * @todo include enum values

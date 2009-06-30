@@ -136,10 +136,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             //'../yui/build/resize/resize-beta-min.js',
             //'../yui/build/imagecropper/imagecropper-beta-min.js',
             // Tinebase
-            'Tinebase/js/data/sync/Ping.js',
+            // NOTE: All the data stuff is going to and extra worker build
+            //'Tinebase/js/data/sync/Ping.js',
+            //'Tinebase/js/data/schemaProc/sqlGenerator.js',
+            //'Tinebase/js/data/schemaProc/xmlReader.js',
             'Tinebase/js/data/Record.js',
             'Tinebase/js/data/AbstractBackend.js',
-            'Tinebase/js/data/MemoryBackend.js',
+            //'Tinebase/js/data/MemoryBackend.js',
             'Tinebase/js/ExceptionDialog.js',
             'Tinebase/js/Container.js',
             'Tinebase/js/Models.js',
