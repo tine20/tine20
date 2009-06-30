@@ -29,10 +29,10 @@ class Tinebase_Config
     const DEFAULT_USER_GROUP = 'Default User Group';
     
     /**
-     * default user group const
+     * default admin group const
      *
      */
-    const DEFAULT_ADMIN_GROUP = 'Default User Group';
+    const DEFAULT_ADMIN_GROUP = 'Default Admin Group';
     
     /**************************** protected vars *********************/
     
