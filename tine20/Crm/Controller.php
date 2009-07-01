@@ -19,7 +19,7 @@
  * @package     Crm
  * @subpackage  Controller
  */
-class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Events_Interface, Tinebase_Container_Interface
+class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface, Tinebase_Container_Interface
 {
     /**
      * the constructor
@@ -68,9 +68,9 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      * 
      * all events get routed through this function
      *
-     * @param Tinebase_Events_Abstract $_eventObject the eventObject
+     * @param Tinebase_Event_Abstract $_eventObject the eventObject
      */
-    public function handleEvents(Tinebase_Events_Abstract $_eventObject)
+    public function handleEvents(Tinebase_Event_Abstract $_eventObject)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         

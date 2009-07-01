@@ -179,7 +179,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $event = new Admin_Event_ChangePassword();
         $event->userId = $_account->getId();
         $event->password = $_password;
-        Tinebase_Events::fireEvent($event);
+        Tinebase_Event::fireEvent($event);
         */
     }
     
@@ -201,7 +201,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $account;
-        Tinebase_Events::fireEvent($event);
+        Tinebase_Event::fireEvent($event);
         
         if ($this->_manageSAM) {
             $samResult = $this->_samBackend->updateUser($_account, $_account->sambaSAM);
@@ -232,7 +232,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $event = new Admin_Event_AddAccount();
         $event->account = $account;
-        Tinebase_Events::fireEvent($event);
+        Tinebase_Event::fireEvent($event);
         
         if ($this->_manageSAM) {
             $samResult = $this->_samBackend->addUser($account, $_account->sambaSAM);

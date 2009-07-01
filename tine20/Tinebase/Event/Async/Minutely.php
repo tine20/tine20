@@ -3,19 +3,19 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Events
+ * @subpackage  Event
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
 
 /**
- * base class for all events
+ * event class for updated account
  *
  * @package     Tinebase
- * @subpackage  Events
+ * @subpackage  Event
  */
-abstract class Tinebase_Events_Abstract
+class Tinebase_Event_Async_Minutely extends Tinebase_Event_Abstract
 {
 }

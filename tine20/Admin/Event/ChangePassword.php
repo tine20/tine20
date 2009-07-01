@@ -14,7 +14,7 @@
  *
  * @package     Admin
  */
-class Admin_Event_ChangePassword extends Tinebase_Events_Abstract
+class Admin_Event_ChangePassword extends Tinebase_Event_Abstract
 {
     /**
      * the user id

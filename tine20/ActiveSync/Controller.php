@@ -22,7 +22,7 @@
  * @package     ActiveSync
  * @subpackage  ActiveSync
  */
-class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tinebase_Events_Interface
+class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface
 {
     /**
      * holdes the instance of the singleton
@@ -81,11 +81,11 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
      * 
      * all events get routed through this function
      *
-     * @param Tinebase_Events_Abstract $_eventObject the eventObject
+     * @param Tinebase_Event_Abstract $_eventObject the eventObject
      * 
      * @todo    write test
      */
-    public function handleEvents(Tinebase_Events_Abstract $_eventObject)
+    public function handleEvents(Tinebase_Event_Abstract $_eventObject)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));        
     }

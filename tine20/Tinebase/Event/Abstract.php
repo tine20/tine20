@@ -2,7 +2,8 @@
 /**
  * Tine 2.0
  *
- * @package     Admin
+ * @package     Tinebase
+ * @subpackage  Event
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -10,16 +11,11 @@
  */
 
 /**
- * event class for added account
+ * base class for all events
  *
- * @package     Admin
+ * @package     Tinebase
+ * @subpackage  Event
  */
-class Admin_Event_AddAccount extends Tinebase_Event_Abstract
+abstract class Tinebase_Event_Abstract
 {
-    /**
-     * the just added account
-     *
-     * @var Tinebase_Model_FullUser
-     */
-    public $account;
 }

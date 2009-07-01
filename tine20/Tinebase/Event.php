@@ -3,7 +3,7 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Events
+ * @subpackage  Event
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -14,16 +14,16 @@
  * class to handle events between the applications
  *
  * @package     Tinebase
- * @subpackage  Events
+ * @subpackage  Event
  */
-class Tinebase_Events
+class Tinebase_Event
 {
     /**
      * calls the handleEvents function in the controller of all enabled applications 
      *
-     * @param Tinebase_Events_Object $_eventObject the event object
+     * @param Tinebase_Event_Object $_eventObject the event object
      */
-    static public function fireEvent(Tinebase_Events_Abstract $_eventObject)
+    static public function fireEvent(Tinebase_Event_Abstract $_eventObject)
     {
         foreach(Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
             try {
@@ -32,7 +32,7 @@ class Tinebase_Events
                 // application has no controller or is not useable at all
                 continue;
             }
-            if($controller instanceof Tinebase_Events_Interface) {
+            if($controller instanceof Tinebase_Event_Interface) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') calling eventhandler of ' . (string) $application);
                 try {
                     $controller->handleEvents($_eventObject);

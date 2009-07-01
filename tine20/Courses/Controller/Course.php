@@ -90,7 +90,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         ));
         
         $event = new Courses_Event_BeforeAddTeacher($account, $record);
-        Tinebase_Events::fireEvent($event);
+        Tinebase_Event::fireEvent($event);
         
         $password = $this->_config->get('teacher_password', $account->accountLoginName);
         $account = Admin_Controller_User::getInstance()->create($account, $password, $password);

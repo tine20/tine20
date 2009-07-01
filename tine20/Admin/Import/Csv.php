@@ -41,7 +41,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
         
         // fire 'before import' event
-        Tinebase_Events::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
+        Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
         

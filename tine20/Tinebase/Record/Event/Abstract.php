@@ -19,7 +19,7 @@
  * @package     Tinebase
  * @subpackage  Record
  */
-class Tinebase_Record_Event_Abstract extends Tinebase_Events_Abstract 
+class Tinebase_Record_Event_Abstract extends Tinebase_Event_Abstract 
 {
     /**
      * hold definition of observable
