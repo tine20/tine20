@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
+ * @todo        make this a singleton / save object in registry?
  */
 
 /**
@@ -61,6 +62,8 @@ class Tinebase_Alarm extends Tinebase_Backend_Sql_Abstract
             ),
         ));
         $alarms = $this->search($filter);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending ' . count($alarms) . ' alarms.');
         
         // loop alarms and call sendAlarm in controllers
         foreach ($alarms as $alarm) {
