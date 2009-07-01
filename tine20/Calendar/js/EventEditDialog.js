@@ -84,7 +84,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 xtype:'textfield',
                                 anchor: '100%',
                                 labelSeparator: '',
-                                columnWidth: .5
+                                columnWidth: .6
                             },
                             items: [[{
                                 columnWidth: 1,
@@ -105,6 +105,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'dtstart',
                                 requiredGrant: 'editGrant'
                             }, {
+                                columnWidth: .4,
                                 xtype: 'combo',
                                 hideLabel: true,
                                 readOnly: true,
@@ -119,6 +120,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'dtend',
                                 requiredGrant: 'editGrant'
                             }, {
+                                columnWidth: .4,
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('whole day'),
@@ -129,7 +131,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                         xtype: 'tabpanel',
-                        activeTab: 0,
+                        activeTab: 1,
                         border: true,
                         height: 235,
                         form: true,
