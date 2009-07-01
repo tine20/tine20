@@ -11,7 +11,7 @@
  * 
  * @todo        parse mail body and add <a> to telephone numbers?
  * @todo        check html purifier config (allow some tags/attributes?)
- * @todo        improve handling of BIG (rfc822) messages (don't read the whole content?)
+ * @todo        improve handling of BIG (rfc822) messages (don't read the whole content?) -> php://temp stream
  */
 
 /**
@@ -786,6 +786,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Message $_originalMessage
      * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
+     * 
+     * @todo use php://temp for BIG attachments / messages
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
     {
