@@ -86,4 +86,20 @@ class Tinebase_Frontend_Cli
         
         return $result;
     }
+
+    /**
+     * trigger async events (for example via cronjob)
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return boolean success
+     */
+    public function triggerAsyncEvents($_opts)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Triggering async events from CLI.');
+        
+        $event = new Tinebase_Event_Async_Minutely();
+        Tinebase_Event::fireEvent($event);
+        
+        return TRUE;
+    }
 }

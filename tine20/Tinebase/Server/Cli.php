@@ -77,7 +77,9 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
 
         $tinebaseServer = new Tinebase_Frontend_Cli();
-        $tinebaseServer->authenticate($opts->username, $opts->password);
+        if ($opts->method !== 'Tinebase.triggerAsyncEvents') {
+            $tinebaseServer->authenticate($opts->username, $opts->password);
+        }
         $result = $tinebaseServer->handle($opts);
 
         //@todo remove cli session path

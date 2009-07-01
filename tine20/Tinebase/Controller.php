@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Controller
+class Tinebase_Controller implements Tinebase_Event_Interface
 {
     /**
      * holds the instance of the singleton
@@ -190,5 +190,24 @@ class Tinebase_Controller
             throw new Tinebase_Exception_UnexpectedValue("$_application returned invalid image.");
         }
         return $image;
+    }
+
+    /**
+     * event handler function
+     * 
+     * all events get routed through this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject the eventObject
+     * 
+     * @todo save state of async events in db (fencing)
+     */
+    public function handleEvents(Tinebase_Event_Abstract $_eventObject)
+    {
+        switch(get_class($_eventObject)) {
+            case 'Tinebase_Event_Async_Minutely':
+                $alarmsBackend = new Tinebase_Alarm();
+                $alarmsBackend->sendPendingAlarms();
+                break;
+        }
     }
 }
