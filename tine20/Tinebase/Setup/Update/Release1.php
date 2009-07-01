@@ -16,6 +16,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
      * update to 1.1
      * - add default app
      *
+     * @deprecated we now have default prefs
      */    
     public function update_0()
     {
@@ -69,5 +70,84 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         Tinebase_Core::getPreference()->create($windowStylePref);
         
         $this->setApplicationVersion('Tinebase', '1.2');
+    }
+
+        /**
+     * update to 1.3
+     * - add alarm table
+     */
+    public function update_2()
+    {
+        $tableDefinition = '
+        <table>
+            <name>alarm</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>alarm_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>sent_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>sent_status</name>
+                    <type>enum</type>
+                    <value>pending</value>
+                    <value>failure</value>
+                    <value>success</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>sent_message</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>options</name>
+                    <type>text</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>record_id-model</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>model</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);
+        
+        $this->setApplicationVersion('Tinebase', '1.3');
     }
 }

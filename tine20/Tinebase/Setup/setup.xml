@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <tables>
         <table>
             <name>applications</name>
@@ -335,9 +335,6 @@
                         <field>id</field>
                     </reference>
                 </index>
-
-
-
             </declaration>
         </table>
         
@@ -2122,6 +2119,71 @@
                         <table>applications</table>
                         <field>id</field>
                     </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>alarm</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>alarm_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>sent_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>sent_status</name>
+                    <type>enum</type>
+                    <value>pending</value>
+                    <value>failure</value>
+                    <value>success</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>sent_message</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>options</name>
+                    <type>text</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>record_id-model</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>model</name>
+                    </field>
                 </index>
             </declaration>
         </table>        
