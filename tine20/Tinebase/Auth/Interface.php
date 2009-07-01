@@ -11,7 +11,7 @@
  */
 
 /**
- * authentication backend factory class
+ * authentication backend interface
  *  
  * @package     Tinebase
  * @subpackage  Auth
