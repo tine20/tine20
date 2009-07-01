@@ -37,7 +37,10 @@ class Tinebase_Event
                 try {
                     $controller->handleEvents($_eventObject);
                 } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') ' . (string) $application . ' threw an exception.');
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') ' 
+                        . (string) $application . ' threw an exception: '
+                        . $e->getMessage()
+                    );
                 }
             }
         }
