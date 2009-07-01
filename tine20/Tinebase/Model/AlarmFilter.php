@@ -12,7 +12,7 @@
  */
 
 /**
- *  preference filter filter class
+ *  alarm filter class
  * 
  * @package     Tinebase
  * @subpackage  Filter 
