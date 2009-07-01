@@ -11,7 +11,6 @@
  * 
  */
 
-
 /**
  * backend for alarms / reminder messages
  *
@@ -36,4 +35,41 @@ class Tinebase_Alarm extends Tinebase_Backend_Sql_Abstract
      */
     protected $_modelName = 'Tinebase_Model_Alarm';
     
+    /**************************** public funcs *************************************/
+    
+    /**
+     * send pending alarms
+     *
+     * @return void
+     * 
+     * @todo sort alarms (by model/...)?
+     * @todo what to do about Tinebase_Model_Alarm::STATUS_FAILURE alarms?
+     */
+    public function sendPendingAlarms()
+    {
+        // get all pending alarms
+        $filter = new Tinebase_Model_AlarmFilter(array(
+            array(
+                'field'     => 'alarm_time', 
+                'operator'  => 'before', 
+                'value'     => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+            ),
+            array(
+                'field'     => 'sent_status', 
+                'operator'  => 'equals', 
+                'value'     => Tinebase_Model_Alarm::STATUS_PENDING // STATUS_FAILURE?
+            ),
+        ));
+        $alarms = $this->search($filter);
+        
+        // loop alarms and call sendAlarm in controllers
+        foreach ($alarms as $alarm) {
+            list($appName, $i, $itemName) = explode('_', $alarm->model);
+            $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+            
+            if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
+                $appController->sendAlarm($alarm);
+            }
+        }
+    }
 }
