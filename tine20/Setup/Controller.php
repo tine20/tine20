@@ -505,24 +505,29 @@ class Setup_Controller
      * install list of applications
      *
      * @param array $_applications list of application names
+     * @todo remove deprecated code
      */
     public function installApplications($_applications)
     {
         // check requirements for initial install / add required apps to list
         if (! $this->_isInstalled('Tinebase')) {
+            
+            /*
+             * @deprecated
             if (! in_array('Tinebase', $_applications)) {
                 // Tinebase has to be installed
-                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Tinebase has to be installed first.'); 
+                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Tinebase has to be installed first (adding it to list).'); 
                 return FALSE;
             }
+            */
     
-            $minimumRequirements = array('Addressbook', 'Admin');
+            $minimumRequirements = array('Tinebase', 'Addressbook', 'Admin');
             
             foreach ($minimumRequirements as $requiredApp) {
                 if (!in_array($requiredApp, $_applications) && !$this->_isInstalled($requiredApp)) {
                     // Addressbook has to be installed with Tinebase for initial data (user contact)
                     Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                        . ' ' . $requiredApp . ' has to be installed with Tinebase (adding it to list).'
+                        . ' ' . $requiredApp . ' has to be installed first (adding it to list).'
                     ); 
                     $_applications[] = $requiredApp;
                 }
