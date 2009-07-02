@@ -131,7 +131,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                         xtype: 'tabpanel',
-                        activeTab: 1,
+                        deferredRender: false,
+                        activeTab: 0,
                         border: true,
                         height: 235,
                         form: true,

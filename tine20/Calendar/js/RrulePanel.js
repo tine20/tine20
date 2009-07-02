@@ -155,8 +155,6 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.ruleCards.layout.setActiveItem(this[freq + 'card']);
         this.ruleCards.layout.layout();
         this.activeRuleCard = this[freq + 'card'];
-        this.activeRuleCard.layout.layout();
-        
     },
     
     onRecordLoad: function(record) {
@@ -217,18 +215,20 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             this.items = [];
         }
         
-        this.items = [{
-            layout: 'column',
-            items: [{
-                width: 70,
-                html: this.intervalBeforeString
-            },
-                this.interval,
-            {
-                style: 'padding-top: 2px;',
-                html: this.intervalAfterString
-            }]
-        }].concat(this.items);
+        if (this.freq != 'YEARLY') {
+            this.items = [{
+                layout: 'column',
+                items: [{
+                    width: 70,
+                    html: this.intervalBeforeString
+                },
+                    this.interval,
+                {
+                    style: 'padding-top: 2px;',
+                    html: this.intervalAfterString
+                }]
+            }].concat(this.items);
+        }
         
         Tine.Calendar.RrulePanel.AbstractCard.superclass.initComponent.call(this);
     },
@@ -310,7 +310,6 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
 Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.AbstractCard, {
     
     freq: 'MONTHLY',
-    //height: 60,
     
     getRule: function() {
         var rrule = Tine.Calendar.RrulePanel.MONTHLYcard.superclass.getRule.call(this);
@@ -396,7 +395,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
         });
         
         this.items = [{
-            html: '<div style="padding-top: 5px; padding-left: 10px">' +
+            html: '<div style="padding-top: 5px; padding-left: 5px">' +
                     '<div style="position: relative;">' +
                         '<table><tr>' +
                             '<td style="position: relative;" width="60" id="' + this.idPrefix + 'bydayradio"></td>' +
@@ -483,11 +482,198 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
     
     freq: 'YEARLY',
     
+    getRule: function() {
+        var rrule = Tine.Calendar.RrulePanel.MONTHLYcard.superclass.getRule.call(this);
+        
+        if (this.bydayRadio.checked) {
+            rrule.byday = this.wkNumber.getValue() + this.wkDay.getValue();
+        } else {
+            rrule.bymonthday = this.bymonthdayday.getValue();
+        }
+        
+        rrule.bymonth = this.bymonth.getValue();
+        return rrule;
+    },
+    
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
         this.intervalAfterString = this.app.i18n._('. Year');
         
+        this.idPrefix = Ext.id();
+        
+        this.bydayRadio = new Ext.form.Radio({
+            hideLabel: true,
+            boxLabel: this.app.i18n._('at the'), 
+            name: this.idPrefix + 'byRadioGroup', 
+            inputValue: 'BYDAY',
+            listeners: {
+                check: this.onByRadioCheck.createDelegate(this)
+            }
+        });
+
+        this.wkNumber = new Ext.form.ComboBox({
+            width: 80,
+            listWidth: 80,
+            triggerAction : 'all',
+            hideLabel     : true,
+            value         : 1,
+            editable      : false,
+            mode          : 'local',
+            disabled      : true,
+            store         : [
+                [1,  this.app.i18n._('first')  ],
+                [2,  this.app.i18n._('second') ],
+                [3,  this.app.i18n._('third')  ],
+                [4,  this.app.i18n._('fourth') ],
+                [5,  this.app.i18n._('fifth')  ],
+                [-1, this.app.i18n._('last')   ]
+            ]
+        });
+        
+        var wkdayItems = [];
+        for (var i=0,d; i<7; i++) {
+            d = (i+Ext.DatePicker.prototype.startDay)%7
+            Tine.Calendar.RrulePanel.prototype.wkdays[d];
+            wkdayItems.push([Tine.Calendar.RrulePanel.prototype.wkdays[d], Date.dayNames[d]]);
+        }
+        
+        this.wkDay = new Ext.form.ComboBox({
+            width: 100,
+            listWidth: 100,
+            triggerAction : 'all',
+            hideLabel     : true,
+            value         : Tine.Calendar.RrulePanel.prototype.wkdays[Ext.DatePicker.prototype.startDay],
+            editable      : false,
+            mode          : 'local',
+            store         : wkdayItems,
+            disabled      : true
+        });
+        
+        this.bymonthdayRadio = new Ext.form.Radio({
+            hideLabel: true,
+            boxLabel: this.app.i18n._('at the'), 
+            name: this.idPrefix + 'byRadioGroup', 
+            inputValue: 'BYMONTHDAY',
+            checked: true,
+            listeners: {
+                check: this.onByRadioCheck.createDelegate(this)
+            }
+        });
+        
+        this.bymonthdayday = new Ext.form.NumberField({
+            hideLabel: true,
+            width: 40,
+            value: 1
+        });
+        
+        var monthItems = [];
+        for (var i=0; i<Date.monthNames.length; i++) {
+            monthItems.push([i+1, Date.monthNames[i]]);
+        }
+        
+        this.bymonth = new Ext.form.ComboBox({
+            width: 100,
+            listWidth: 100,
+            triggerAction : 'all',
+            hideLabel     : true,
+            value         : 1,
+            editable      : false,
+            mode          : 'local',
+            store         : monthItems
+        });
+        
+        this.items = [{
+            html: '<div style="padding-top: 5px;">' +
+                    '<div style="position: relative;">' +
+                        '<table><tr>' +
+                            '<td style="position: relative;" width="65" id="' + this.idPrefix + 'bydayradio"></td>' +
+                            '<td width="110" id="' + this.idPrefix + 'bydaywknumber"></td>' +
+                            '<td width="110" id="' + this.idPrefix + 'bydaywkday"></td>' +
+                            //'<td style="padding-left: 10px">' + this.app.i18n._('of') + '</td>' +
+                        '</tr></table>' +
+                    '</div>' +
+                    '<div style="position: relative;">' +
+                        '<table><tr>' +
+                            '<td width="65" id="' + this.idPrefix + 'bymonthdayradio"></td>' +
+                            '<td width="40" id="' + this.idPrefix + 'bymonthdayday"></td>' +
+                            '<td>.</td>' +
+                         '</tr></table>' +
+                    '</div>' +
+                    '<div style="position: relative;">' +
+                        '<table><tr>' +
+                            '<td width="48" style="padding-left: 17px">' + this.app.i18n._('of') + '</td>' +
+                            '<td width="100" id="' + this.idPrefix + 'bymonth"></td>' +
+                         '</tr></table>' +
+                    '</div>' +
+                '</div>',
+            listeners: {
+                scope: this,
+                render: this.onByRender
+            }
+        }];
         Tine.Calendar.RrulePanel.YEARLYcard.superclass.initComponent.call(this);
+    },
+    
+    onByRadioCheck: function(radio, checked) {
+        switch(radio.inputValue) {
+            case 'BYDAY':
+                this.bymonthdayday.setDisabled(checked);
+                break;
+            case 'BYMONTHDAY':
+                this.wkNumber.setDisabled(checked);
+                this.wkDay.setDisabled(checked);
+                break;
+        }
+    },
+    
+    onByRender: function() {
+        var bybayradioel = Ext.get(this.idPrefix + 'bydayradio');
+        var bybaywknumberel = Ext.get(this.idPrefix + 'bydaywknumber');
+        var bybaywkdayel = Ext.get(this.idPrefix + 'bydaywkday');
+        
+        var bymonthdayradioel = Ext.get(this.idPrefix + 'bymonthdayradio');
+        var bymonthdaydayel = Ext.get(this.idPrefix + 'bymonthdayday');
+
+        var bymonthel = Ext.get(this.idPrefix + 'bymonth');
+        
+        if (! (bybayradioel && bymonthdayradioel)) {
+            return this.onByRender.defer(100, this, arguments);
+        }
+        
+        this.bydayRadio.render(bybayradioel);
+        this.wkNumber.render(bybaywknumberel);
+        this.wkDay.render(bybaywkdayel);
+        
+        this.bymonthdayRadio.render(bymonthdayradioel);
+        this.bymonthdayday.render(bymonthdaydayel);
+        
+        this.bymonth.render(bymonthel);
+    },
+    
+    setRule: function(rrule) {
+        Tine.Calendar.RrulePanel.MONTHLYcard.superclass.setRule.call(this, rrule);
+        
+        if (rrule.byday) {
+            this.bydayRadio.setValue(true);
+            this.bymonthdayRadio.setValue(false);
+            this.onByRadioCheck(this.bydayRadio, true);
+            this.onByRadioCheck(this.bymonthdayRadio, false);
+            
+            var parts = rrule.byday.match(/([\-\d]{1,2})([A-Z]{2})/);
+            this.wkNumber.setValue(parts[1]);
+            this.wkDay.setValue(parts[2]);
+            
+        } else {
+            this.bydayRadio.setValue(false);
+            this.bymonthdayRadio.setValue(true);
+            this.onByRadioCheck(this.bydayRadio, false);
+            this.onByRadioCheck(this.bymonthdayRadio, true);
+            
+            this.bymonthdayday.setValue(rrule.bymonthday);
+        }
+        
+        this.bymonth.setValue(rrule.bymonth);
+
     }
 });
