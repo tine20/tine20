@@ -147,6 +147,11 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);
+        Tinebase_Application::getInstance()->addApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
+            'alarm', 
+            1
+        );
         
         $this->setApplicationVersion('Tinebase', '1.3');
     }
@@ -205,6 +210,11 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);
+        Tinebase_Application::getInstance()->addApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
+            'async_job', 
+            1
+        );
         
         $this->setApplicationVersion('Tinebase', '1.4');
     }
