@@ -33,10 +33,14 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         };
         
         this.NONEcard = new Ext.Panel({
-            setRule: Ext.emptyFn,
-            getRule: Ext.emtpyFn,
+            freq: 'NONE',
             html: this.app.i18n._('No recuring rule defined')
         });
+        this.NONEcard.setRule = Ext.emptyFn;
+        this.NONEcard.fillDefaults = Ext.emptyFn;
+        this.NONEcard.getRule = function() {
+            return null;
+        }
         
         this.DAILYcard = new Tine.Calendar.RrulePanel.DAILYcard({});
         this.WEEKLYcard = new Tine.Calendar.RrulePanel.WEEKLYcard({});
@@ -114,6 +118,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     onFreqChange: function(freq) {
         this.ruleCards.layout.setActiveItem(this[freq + 'card']);
         this.ruleCards.layout.layout();
+        console.log(freq);
         this.activeRuleCard = this[freq + 'card'];
     },
     
@@ -121,13 +126,39 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.record = record;
         this.rrule = this.record.get('rrule');
         
-        var freqBtn = Ext.getCmp(this.idPrefix + 'tglbtn' + this.rrule.freq) || Ext.getCmp(this.idPrefix + 'tglbtnNONE');
+        var freq = this.rrule && this.rrule.freq ? this.rrule.freq : 'NONE';
+        
+        var freqBtn = Ext.getCmp(this.idPrefix + 'tglbtn' + freq);
         freqBtn.toggle(true);
         
-        this.activeRuleCard = this[this.rrule.freq + 'card'] || this.NONEcard;
+        this.activeRuleCard = this[freq + 'card'];
         this.ruleCards.layout.setActiveItem(this.activeRuleCard);
         
         this.activeRuleCard.setRule(this.rrule);
+        
+        if (freq == 'NONE') {
+            var dtstart = this.record.get('dtstart');
+            if (Ext.isDate(dtstart)) {
+                var byday      = Tine.Calendar.RrulePanel.prototype.wkdays[dtstart.format('w')];
+                var bymonthday = dtstart.format('j');
+                var bymonth    = dtstart.format('n');
+                
+                this.WEEKLYcard.setRule({
+                    interval: 1,
+                    byday: byday
+                });
+                this.MONTHLYcard.setRule({
+                    interval: 1,
+                    byday: '1' + byday,
+                    bymonthday: bymonthday
+                });
+                this.YEARLYcard.setRule({
+                    byday: '1' + byday,
+                    bymonthday: bymonthday,
+                    bymonth: bymonth
+                });
+            }
+        }
     },
     
     onRecordUpdate: function(record) {
@@ -477,7 +508,9 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
             this.wkNumber.setValue(parts[1]);
             this.wkDay.setValue(parts[2]);
             
-        } else {
+        }
+        
+        if (rrule.bymonthday) {
             this.bydayRadio.setValue(false);
             this.bymonthdayRadio.setValue(true);
             this.onByRadioCheck(this.bydayRadio, false);
@@ -679,7 +712,9 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
             this.wkNumber.setValue(parts[1]);
             this.wkDay.setValue(parts[2]);
             
-        } else {
+        }
+        
+        if (rrule.bymonthday) {
             this.bydayRadio.setValue(false);
             this.bymonthdayRadio.setValue(true);
             this.onByRadioCheck(this.bydayRadio, false);
