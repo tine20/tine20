@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2183,6 +2183,50 @@
                     </field>
                     <field>
                         <name>model</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>        
+        <table>
+            <name>async_job</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>start_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>end_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>status</name>
+                    <type>enum</type>
+                    <value>running</value>
+                    <value>failure</value>
+                    <value>success</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>message</name>
+                    <type>text</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
                     </field>
                 </index>
             </declaration>

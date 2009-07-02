@@ -203,10 +203,23 @@ class Tinebase_Controller implements Tinebase_Event_Interface
      */
     public function handleEvents(Tinebase_Event_Abstract $_eventObject)
     {
-        switch(get_class($_eventObject)) {
+        $eventName = get_class($_eventObject);
+        switch($eventName) {
             case 'Tinebase_Event_Async_Minutely':
-                $alarmsBackend = new Tinebase_Alarm();
-                $alarmsBackend->sendPendingAlarms();
+                
+                $asyncJobBackend = new Tinebase_AsyncJob();
+                
+                // check if already running
+                if (! $asyncJobBackend->jobIsRunning($eventName)) {
+                
+                    $job = $asyncJobBackend->startJob($eventName);
+                    
+                    $alarmsBackend = new Tinebase_Alarm();
+                    $alarmsBackend->sendPendingAlarms();
+                    
+                    // save new status
+                    $job = $asyncJobBackend->finishJob($job);
+                }
                 break;
         }
     }
