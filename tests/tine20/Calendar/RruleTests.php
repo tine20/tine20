@@ -245,7 +245,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
                 'summary'       => 'two monthly last wendsday exception',
                 'dtstart'       => '2009-06-24 15:00:00',
                 'dtend'         => '2009-06-24 16:00:00',
-                'recurid'       => $event->uid . '-' . '2009-06-24 14:00:00',
+                'recurid'       => $event->uid . '-' . '2009-06-24 15:00:00',
                 'editGrant'     => true,
             )
         ));
@@ -253,10 +253,11 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $from = new Zend_Date('2009-02-01 15:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2009-12-31 14:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
         $this->assertEquals(3, count($recurSet), 'backward skip failed');
-        $this->assertEquals('2009-08-26 14:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2009-10-28 15:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2009-12-30 15:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-08-26 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-10-28 16:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-12-30 16:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     public function testCalcYearlyByMonthDay()
