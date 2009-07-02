@@ -252,8 +252,8 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
             'dtstart'       => '2009-03-25 18:00:00',
             'dtend'         => '2009-03-25 18:30:00',
             'originator_tz' => 'Europe/Berlin',
-            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
-            'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-02 17:30:00',
+            'exdate'        => '2009-03-27 18:00:00,2009-03-31 17:00:00',
             'container_id'  => $this->_testCalendar->getId(),
             'editGrant'     => true,
         ));
@@ -262,28 +262,39 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $from = new Zend_Date('2009-03-26 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-04-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persitentEvent, $exceptions, $from, $until);
+        $until = new Zend_Date('2009-04-03 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persitentEvent, $exceptions, $from, $until); // 9 days
         
-        $exceptionBeforeDstBoundary = clone $recurSet[1];
+        // skip 27(exception), 31(exception), 03(until)
+        $this->assertEquals(6, count($recurSet));
+        
+        
+        $exceptionBeforeDstBoundary = clone $recurSet[1]; // 26. 
         $persistentExceptionBeforeDstBoundary = $this->_controller->createRecurException($exceptionBeforeDstBoundary);
         
-        $exceptionAfterDstBoundary = clone $recurSet[2];
+        $exceptionAfterDstBoundary = clone $recurSet[5]; // 02.
         $persistentExceptionAfterDstBoundary = $this->_controller->createRecurException($exceptionAfterDstBoundary);
         
-        $persitentEvent->dtstart->addDay(5);
+        $persitentEvent->dtstart->addDay(5); //30.
         $persitentEvent->dtend->addDay(5);
+        $from->addDay(5); //31
+        $until->addDay(5); //08
+        
+        // NOTE: with this, also until, and exceptions get moved, but not the persistent exceptions
         $updatedPersistenEvent = $this->_controller->update($persitentEvent);
         
         $persistentEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
             array('field' => 'uid', 'operator' => 'equals', 'value' => $persitentEvent->uid)
         )));
-        
+        // we don't 'see' the persistent exception from 26/
+        $this->assertEquals(2, count($persistentEvents));
+                
         $exceptions = $persistentEvents->filter('recurid', "/^{$persitentEvent->uid}-.*/", TRUE);
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($updatedPersistenEvent, $exceptions, $from->addDay(5), $until->addDay(5));
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($updatedPersistenEvent, $exceptions, $from, $until);
         
-        $this->assertEquals(2, count($recurSet));
+        // skip 31(exception), and 8 (until)
+        $this->assertEquals(7, count($recurSet));
     }
     
     public function testUpdateImplicitDeleteRcuringExceptions()
