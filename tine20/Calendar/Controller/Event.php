@@ -14,7 +14,7 @@
  * 
  * @package Calendar
  */
-class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
+class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract implements Tinebase_Controller_Alarm_Interface
 {
     // todo in this controller:
     //
@@ -258,11 +258,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $_ids = array_merge($_ids, $exceptionIds);
             }
             
-            // deletetd persistent recur instances must be added to exdate of the baseEvent
+            // deleted persistent recur instances must be added to exdate of the baseEvent
             if (! empty($event->recurid)) {
                 $this->createRecurException($event, true);
             }
         }
+        
+        $this->_deleteAlarmsForIds($_ids);
         
         return array_unique($_ids);
     }
@@ -402,47 +404,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * saves alarm of given event
-     * 
-     * @param Calendar_Model_Event $_event
-     * 
-     * @todo get current alarms of event and delete diffs
-     */
-    protected function _saveAlarms($_event)
-    {
-        $alarms = $_event->alarms instanceof Tinebase_Record_RecordSet ? 
-            $_event->alarms : 
-            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . " About to save " . count($alarms) . " alarms for event {$_event->id} " 
-            //.  print_r($alarms->toArray(), true)
-        );
-        
-        /*
-        $currentAlarms = $this->_backend->getEventAttendee($_event);
-        $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
-        $this->_backend->deleteAttendee($diff['toDeleteIds']);
-        */
-        
-        //$calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
-        
-        foreach ($alarms as $alarm) {
-            $id = $alarm->getId();
-            
-            /*
-            if ($id) {
-                $currentAlarm = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
-                $this->_updateAttender($attender, $currentAttender, $calendar);
-                
-            } else {
-                $this->_createAttender($attender, $calendar);
-            }
-            */
-        }
-    }
-    
-    /**
      * creates a new attender
      * @todo add support for resources
      * 
@@ -518,5 +479,78 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         }
         
         $this->_backend->updateAttendee($_attender);
+    }
+    
+    /****************************** alarm functions ************************/
+    
+    /**
+     * sendAlarm - send an alarm and update alarm status/sent_time/...
+     *
+     * @param  Tinebase_Model_Alarm $_alarm
+     * @return Tinebase_Model_Alarm
+     * 
+     * @todo implement
+     */
+    public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
+        );
+    }
+
+    /**
+     * saves alarm of given event
+     * 
+     * @param Calendar_Model_Event $_event
+     * 
+     * @todo make creation of alarms work
+     * @todo get current alarms of event and delete diffs
+     */
+    protected function _saveAlarms($_event)
+    {
+        $alarms = $_event->alarms instanceof Tinebase_Record_RecordSet ? 
+            $_event->alarms : 
+            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " About to save " . count($alarms) . " alarms for event {$_event->id} " 
+            //.  print_r($alarms->toArray(), true)
+        );
+        
+        /*
+        $currentAlarms = $this->_backend->getEventAttendee($_event);
+        $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
+        $this->_backend->deleteAttendee($diff['toDeleteIds']);
+        */
+        
+        //$calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
+        
+        foreach ($alarms as $alarm) {
+            $id = $alarm->getId();
+            
+            /*
+            if ($id) {
+                $currentAlarm = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
+                $this->_updateAttender($attender, $currentAttender, $calendar);
+                
+            } else {
+                $this->_createAttender($attender, $calendar);
+            }
+            */
+        }
+    }
+
+    /**
+     * delete alarms for events
+     *
+     * @param array $_eventIds
+     * 
+     * @todo implement
+     */
+    protected function _deleteAlarmsForIds($_eventIds)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " Deleting alarms for events " . print_r($_eventIds, TRUE)
+        );
     }
 }
