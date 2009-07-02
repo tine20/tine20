@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        use const for type (set in constructor)
+ * @todo        remove 'abstract' keyword to allow objects of this class?
  */
 
 /**
