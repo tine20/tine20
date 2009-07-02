@@ -233,7 +233,18 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
 
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-            $credentialsBackend->getCachedCredentials($userCredentialCache);
+            
+            if ($userCredentialCache !== NULL) {
+                $credentialsBackend->getCachedCredentials($userCredentialCache);
+            } else {
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
+                    . ' Something went wrong with the CredentialsCache / use given username/password instead.'
+                );
+                $userCredentialCache = new Tinebase_Model_CredentialCache(array(
+                    'username' => $this->user,
+                    'password' => $this->password,
+                ));
+            }
             
             $credentials = $credentialsBackend->get($this->{$fieldname});
             $credentials->key = substr($userCredentialCache->password, 0, 24);

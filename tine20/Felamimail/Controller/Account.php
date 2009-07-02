@@ -223,7 +223,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         // get old credentials
         $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
         $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-        $credentialsBackend->getCachedCredentials($userCredentialCache);
+        
+        if ($userCredentialCache !== NULL) {
+                $credentialsBackend->getCachedCredentials($userCredentialCache);
+        } else {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
+                . ' Something went wrong with the CredentialsCache / use given username/password instead.'
+            );
+            return;
+        }
         
         if ($_oldRecord->credentials_id) {
             $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
@@ -347,14 +355,25 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create new account credentials for username ' . $_username);
         
-        $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-        Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
+            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
+        } else {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
+                . ' Something went wrong with the CredentialsCache / use given username/password instead.'
+            );
+            $userCredentialCache = new Tinebase_Model_CredentialCache(array(
+                'username' => $_username,
+                'password' => $_password,
+            ));
+        }
 
         $accountCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(
             ($_username !== NULL) ? $_username : $userCredentialCache->username,
             ($_password !== NULL) ? $_password : $userCredentialCache->password,
             $userCredentialCache->password
         );
+        
         return $accountCredentials->getId();
     }
 }
