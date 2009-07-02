@@ -238,7 +238,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             success: function(_result, _request){
                                 var nodeData = Ext.util.JSON.decode(_result.responseText);
                                 var newNode = this.loader.createNode(nodeData);
-                                console.log(nodeData);
                                 parentNode.appendChild(newNode);
                                 Ext.MessageBox.hide();
                             }
@@ -472,7 +471,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onContextMenu: function(node, event) {
         this.ctxNode = node;
-        console.log(node);
         
         if (! node.attributes.folderNode) {
             // edit/remove account
@@ -480,7 +478,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 
                 // check account personal namespace -> disable 'add folder' if namespace is other than root 
                 this.contextMenuAccount.items.each(function(item) {
-                    console.log(item);
                     if (item.iconCls == 'action_add') {
                         item.setDisabled(node.attributes.ns_personal != '');
                     }
