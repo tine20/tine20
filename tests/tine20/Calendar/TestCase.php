@@ -77,7 +77,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             'summary'     => 'Wakeup',
             'dtstart'     => '2009-03-25 06:00:00',
             'dtend'       => '2009-03-25 06:15:00',
-            'description' => 'Earyly to bed and early to rise, makes a men helthy, welthy and wise',
+            'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise',
             'attendee'    => $this->_getAttendee(),
         
             'container_id' => $this->_testCalendar->getId(),
@@ -88,8 +88,19 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             'editGrant'    => true,
             'deleteGrant'  => true,
         ));
+    }
+
+    /**
+     * returns a simple event
+     *
+     * @return Calendar_Model_Event
+     */
+    protected function _getEventWithAlarm()
+    {
+        $event = $this->_getEvent();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
-        
+        return $event;
     }
     
     protected function _getAttendee()

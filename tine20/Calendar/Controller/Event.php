@@ -79,6 +79,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         $event = parent::create($_record);
         
         $this->_saveAttendee($_record);
+        $this->_saveAlarms($_record);
+        
         return $this->get($event->getId());
     }
     
@@ -96,6 +98,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
         $event = parent::update($_record);
         
         $this->_saveAttendee($_record);
+        $this->_saveAlarms($_record);
+        
         return $this->get($event->getId());
     }
     
@@ -360,12 +364,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
     /**
      * saves all attendee of given event
      * 
-     * NOTE: This function is executetd in a create/update context. As such the user
+     * NOTE: This function is executed in a create/update context. As such the user
      *       has edit/update the event and can do anything besides status settings of attendee
      * 
      * @todo add support for resources
      * 
-     * @param Calendar_Model_Evnet $_event
+     * @param Calendar_Model_Event $_event
      */
     protected function _saveAttendee($_event)
     {
@@ -374,7 +378,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         $attendee->cal_event_id = $_event->getId();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "about to save attendee for event {$_event->id} " .  print_r($attendee->toArray(), true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} " .  print_r($attendee->toArray(), true));
         
         $currentAttendee = $this->_backend->getEventAttendee($_event);
         
@@ -394,6 +398,47 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract
             } else {
                 $this->_createAttender($attender, $calendar);
             }
+        }
+    }
+
+    /**
+     * saves alarm of given event
+     * 
+     * @param Calendar_Model_Event $_event
+     * 
+     * @todo get current alarms of event and delete diffs
+     */
+    protected function _saveAlarms($_event)
+    {
+        $alarms = $_event->alarms instanceof Tinebase_Record_RecordSet ? 
+            $_event->alarms : 
+            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " About to save " . count($alarms) . " alarms for event {$_event->id} " 
+            //.  print_r($alarms->toArray(), true)
+        );
+        
+        /*
+        $currentAlarms = $this->_backend->getEventAttendee($_event);
+        $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
+        $this->_backend->deleteAttendee($diff['toDeleteIds']);
+        */
+        
+        //$calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
+        
+        foreach ($alarms as $alarm) {
+            $id = $alarm->getId();
+            
+            /*
+            if ($id) {
+                $currentAlarm = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
+                $this->_updateAttender($attender, $currentAttender, $calendar);
+                
+            } else {
+                $this->_createAttender($attender, $calendar);
+            }
+            */
         }
     }
     

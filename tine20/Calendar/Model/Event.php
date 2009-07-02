@@ -80,6 +80,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         // ical common fields with multiple appearance
         //'attach'                => array('allowEmpty' => true         ),
         'attendee'              => array('allowEmpty' => true         ), // RecordSet of Calendar_Model_Attender
+        'alarms'                => array('allowEmpty' => true         ), // RecordSet of Tinebase_Model_Alarm
         'tags'                  => array('allowEmpty' => true         ), // originally categories handled by Tinebase_Tags
         'notes'                 => array('allowEmpty' => true         ), // originally comment handled by Tinebase_Notes
         //'contact'               => array('allowEmpty' => true         ),
@@ -201,6 +202,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         if (isset($_data['rrule']) && is_array($_data['rrule'])) {
             $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule']);
+        }
+        
+        if (isset($_data['alarms']) && is_array($_data['alarms'])) {
+            $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms']);
         }
         
         parent::setFromArray($_data);
