@@ -299,6 +299,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function updateCapabilities($_account, $_imapBackend = NULL, $_delimiter = NULL)
     {
+        // don't do this for default account
+        $accountId = $_account->getId(); 
+        if (empty($accountId) || $accountId == Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
+            return $_account;
+        }
+        
         if ($_imapBackend === NULL) {
             $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
         }
