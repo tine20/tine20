@@ -507,7 +507,7 @@ class Setup_Controller
      * @param array $_applications list of application names
      * @todo remove deprecated code
      */
-    public function installApplications($_applications)
+    public function installApplications(&$_applications)
     {
         // check requirements for initial install / add required apps to list
         if (! $this->_isInstalled('Tinebase')) {
