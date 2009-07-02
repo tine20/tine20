@@ -22,10 +22,9 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     
     layout: 'form',
     frame: true,
-   
     
     initComponent: function() {
-        this.app= Tine.Tinebase.appMgr.get('Calendar');
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
         
         this.title = this.app.i18n._('Recurrances');
 
@@ -34,13 +33,11 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         };
         
         this.NONEcard = new Ext.Panel({
-            listeners: {
-                scope: this,
-                show: function(p) {Ext.getCmp(this.idPrefix + 'untilPicker').hide();},
-                hide: function(p) {Ext.getCmp(this.idPrefix + 'untilPicker').show();}
-                
-            }
+            setRule: Ext.emptyFn,
+            getRule: Ext.emtpyFn,
+            html: this.app.i18n._('No recuring rule defined')
         });
+        
         this.DAILYcard = new Tine.Calendar.RrulePanel.DAILYcard({});
         this.WEEKLYcard = new Tine.Calendar.RrulePanel.WEEKLYcard({});
         this.MONTHLYcard = new Tine.Calendar.RrulePanel.MONTHLYcard({});
@@ -58,28 +55,6 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             ]
         });
 
-        
-        this.until = new Ext.ux.form.ClearableDateField({
-            width: 100,
-            emptyText: this.app.i18n._('never')
-            //style: 'padding-left: 5px;'
-        });
-        
-        /*
-        this.untilCombo = new Ext.form.ComboBox({
-            triggerAction : 'all',
-            width: 70,
-            hideLabel: true,
-            value         : false,
-            editable      : false,
-            mode          : 'local',
-            store         : [
-                [false,   this.app.i18n._('Forever')  ],
-                ['at',    this.app.i18n._('at')     ]
-            ]
-        });
-        */
-        
         this.idPrefix = Ext.id();
         
         this.items = [{
@@ -129,23 +104,8 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             layout: 'form',
             style: 'padding-left: 10px;',
             items: [
-                this.ruleCards, {
-                id: this.idPrefix + 'untilPicker',
-                hideMode: 'visibility',
-                style: 'padding-top: 5px;',
-                layout: 'column',
-                items: [{
-                    width: 70,
-                    html: this.app.i18n._('Ends')
-                },
-                    /*this.untilCombo,
-                {
-                    width: 5,
-                    html: '&nbsp;'
-                },*/
-                    this.until
-                ]
-            }]
+                this.ruleCards
+            ]
         }];
         
         Tine.Calendar.RrulePanel.superclass.initComponent.call(this);
@@ -164,18 +124,14 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         var freqBtn = Ext.getCmp(this.idPrefix + 'tglbtn' + this.rrule.freq) || Ext.getCmp(this.idPrefix + 'tglbtnNONE');
         freqBtn.toggle(true);
         
-        this.activeRuleCard = this[this.rrule.freq + 'card'];
+        this.activeRuleCard = this[this.rrule.freq + 'card'] || this.NONEcard;
         this.ruleCards.layout.setActiveItem(this.activeRuleCard);
         
-        
         this.activeRuleCard.setRule(this.rrule);
-        this.until.setValue(Date.parseDate(this.rrule.until, Date.patterns.ISO8601Long));
     },
     
     onRecordUpdate: function(record) {
         var rrule = this.activeRuleCard.getRule();
-        var until = this.until.getValue();
-        rrule.until = Ext.isDate(until) ? until.format(Date.patterns.ISO8601Long) : null;
         
         record.set('rrule', '');
         record.set('rrule', rrule);
@@ -188,10 +144,17 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     labelAlign: 'side',
     autoHeight: true,
     
+    afterRender: function() {
+        Tine.Calendar.RrulePanel.AbstractCard.superclass.afterRender.apply(this, arguments);
+        this.renderUntil();
+    },
+    
     getRule: function() {
+        var until = this.until.getValue();
         var rrule = {
-            freq: this.freq,
-            interval: this.interval.getValue()
+            freq    : this.freq,
+            interval: this.interval.getValue(),
+            until   : Ext.isDate(until) ? until.format(Date.patterns.ISO8601Long) : null
         };
         
         return rrule;
@@ -199,6 +162,28 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
+        this.untilId = Ext.id();
+        
+        this.until = new Ext.form.DateField({
+            width: 100,
+            emptyText: this.app.i18n._('forever')
+        });
+        
+        /*
+        this.untilCombo = new Ext.form.ComboBox({
+            triggerAction : 'all',
+            width: 70,
+            hideLabel: true,
+            value         : false,
+            editable      : false,
+            mode          : 'local',
+            store         : [
+                [false,   this.app.i18n._('Forever')  ],
+                ['at',    this.app.i18n._('at')     ]
+            ]
+        });
+        */
         
         if (! this.intervalBeforeString) {
             this.intervalBeforeString = this.app.i18n._('Every');
@@ -230,11 +215,36 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             }].concat(this.items);
         }
         
+        this.items = this.items.concat({
+            layout: 'column',
+            style: 'padding-top: 5px;',
+            items: [{
+                width: 70,
+                html: this.app.i18n._('Until')
+            }, {
+                html: '<div id="' + this.untilId + '" />'
+            }]
+                
+        });
+        
         Tine.Calendar.RrulePanel.AbstractCard.superclass.initComponent.call(this);
+    },
+    
+    renderUntil: function() {
+        var untilEl = Ext.get(this.untilId);
+        if (! untilEl) {
+            return this.renderUntil.defer(250, this);
+        } else {
+            this.until.render(untilEl);
+            this.until.setWidth(100);
+            this.until.wrap.setWidth(117);
+        }
     },
     
     setRule: function(rrule) {
         this.interval.setValue(rrule.interval);
+        var date = Date.parseDate(rrule.until, Date.patterns.ISO8601Long);
+        this.until.value = date;
     }
 });
 
@@ -399,7 +409,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
                     '<div style="position: relative;">' +
                         '<table><tr>' +
                             '<td style="position: relative;" width="60" id="' + this.idPrefix + 'bydayradio"></td>' +
-                            '<td width="110" id="' + this.idPrefix + 'bydaywknumber"></td>' +
+                            '<td width="100" id="' + this.idPrefix + 'bydaywknumber"></td>' +
                             '<td width="110" id="' + this.idPrefix + 'bydaywkday"></td>' +
                         '</tr></table>' +
                     '</div>' +
@@ -446,7 +456,9 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
         
         this.bydayRadio.render(bybayradioel);
         this.wkNumber.render(bybaywknumberel);
+        this.wkNumber.wrap.setWidth(80);
         this.wkDay.render(bybaywkdayel);
+        this.wkDay.wrap.setWidth(100);
         
         this.bymonthdayRadio.render(bymonthdayradioel);
         this.bymonthdayday.render(bymonthdaydayel);
@@ -588,7 +600,7 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
                     '<div style="position: relative;">' +
                         '<table><tr>' +
                             '<td style="position: relative;" width="65" id="' + this.idPrefix + 'bydayradio"></td>' +
-                            '<td width="110" id="' + this.idPrefix + 'bydaywknumber"></td>' +
+                            '<td width="100" id="' + this.idPrefix + 'bydaywknumber"></td>' +
                             '<td width="110" id="' + this.idPrefix + 'bydaywkday"></td>' +
                             //'<td style="padding-left: 10px">' + this.app.i18n._('of') + '</td>' +
                         '</tr></table>' +
@@ -643,12 +655,15 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         
         this.bydayRadio.render(bybayradioel);
         this.wkNumber.render(bybaywknumberel);
+        this.wkNumber.wrap.setWidth(80);
         this.wkDay.render(bybaywkdayel);
+        this.wkDay.wrap.setWidth(100);
         
         this.bymonthdayRadio.render(bymonthdayradioel);
         this.bymonthdayday.render(bymonthdaydayel);
         
         this.bymonth.render(bymonthel);
+        this.bymonth.wrap.setWidth(100);
     },
     
     setRule: function(rrule) {
