@@ -354,7 +354,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getFolderFilter()
     {
         return array(array(
-            'field' => 'globalName', 'operator' => 'equals', 'value' => ''
+            'field' => 'globalname', 'operator' => 'equals', 'value' => ''
         ));
     }
 
