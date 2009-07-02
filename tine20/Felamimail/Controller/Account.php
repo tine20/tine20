@@ -148,6 +148,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
+     * 
+     * @todo do we really want to add new account as default account pref?
      */
     public function create(Tinebase_Record_Interface $_record)
     {
@@ -155,6 +157,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // set as default account
         Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $result->getId();
+        
+        // update account capabilities
+        $result = $this->updateCapabilities($result);
         
         return $result;
     }
@@ -282,6 +287,48 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->update($account);
         
         return TRUE;
+    }
+    
+    /**
+     * get imap server capabilities and save delimiter / personal namespace in account
+     *
+     * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Backend_Imap $_imapBackend
+     * @param string $_delimiter
+     * @return Felamimail_Model_Account
+     */
+    public function updateCapabilities($_account, $_imapBackend = NULL, $_delimiter = NULL)
+    {
+        if ($_imapBackend === NULL) {
+            $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
+        }
+        
+        // get imap server capabilities and save delimiter / personal namespace in account
+        $capabilities = $_imapBackend->getCapabilityAndNamespace();
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
+        
+        if (isset($capabilities['namespace'])) {
+            $_account->delimiter     = $capabilities['namespace']['personal']['delimiter'];
+            $_account->ns_personal   = (! empty($capabilities['namespace']['personal'])) ? $capabilities['namespace']['personal']['name']: '';
+            $_account->ns_other      = (! empty($capabilities['namespace']['other']))    ? $capabilities['namespace']['other']['name']   : '';
+            $_account->ns_shared     = (! empty($capabilities['namespace']['shared']))   ? $capabilities['namespace']['shared']['name']  : '';
+            
+            if ($_account->ns_personal == 'NIL') {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
+            } else {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
+            }
+            
+        } else if ($_delimiter !== NULL) {
+            // get delimiter from params
+            if ($_delimiter != $_account->delimiter) {
+                $_account->delimiter = $_delimiter;
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $_delimiter);
+            }
+        }
+        
+        return $this->update($_account);
     }
     
     /******************************** protected funcs *********************************/

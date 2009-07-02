@@ -2,7 +2,7 @@
 <application>
     <name>Felamimail</name>
     <!-- gettext('Felamimail') -->   
-    <version>0.2</version>
+    <version>0.3</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -11,7 +11,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -86,6 +86,21 @@
                     <name>delimiter</name>
                     <type>text</type>
                     <length>1</length>
+                </field>
+                <field>
+                    <name>ns_personal</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>ns_other</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>ns_shared</name>
+                    <type>text</type>
+                    <length>256</length>
                 </field>
                 <field>
                     <name>signature</name>

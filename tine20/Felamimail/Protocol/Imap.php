@@ -151,7 +151,6 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
      * @param  string $box which folder to change to or examine
      * @return bool|array false if error, array with returned information
      *                    otherwise (flags, exists, recent, uidvalidity)
-     * @throws Zend_Mail_Protocol_Exception
      */
     public function examineOrSelect($command = 'EXAMINE', $box = 'INBOX')
     {
@@ -190,6 +189,44 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         return $result;
     }
 
+    /**
+     * get server namespace
+     * 
+     * @return bool|array false if error, array with returned namespace information
+     */
+    public function getNamespace()
+    {
+        $this->sendRequest('NAMESPACE', array(), $tag);
+
+        $result = array();
+        while (!$this->readLine($tokens, $tag)) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($tokens, TRUE));
+            
+            $nsNames = array('personal', 'other', 'shared');
+            $index = 0;
+            
+            foreach ($tokens as $token) {
+                if (is_array($token)) {
+                    $result[$nsNames[$index]] = array(
+                        'name' => preg_replace('/"/', '', $token[0][0]), 
+                        'delimiter' => preg_replace('/"/', '', $token[0][1]),
+                    );
+                } else if ($token == 'NIL') {
+                    $result[$nsNames[$index]] = array('name' => 'NIL');
+                } else {
+                    continue;
+                }
+                $index++;
+            }
+        }
+
+        if ($tokens[0] != 'OK') {
+            return false;
+        }
+        
+        return $result;
+    }
+    
     /**
      * get status of a folder (unseen, recent, ...)
      * 

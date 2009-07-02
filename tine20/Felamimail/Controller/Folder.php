@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        add cleanup routine for deleted (by other clients)/outofdate folders?
+ * @todo        use other/shared namespaces
  */
 
 /**
@@ -249,8 +250,16 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $this->_delimiter = $account->delimiter;
         
         if(empty($_folderName)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get subfolders of root for backend ' . $_accountId);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get subfolders of root for backend ' . $_accountId);
             $folders = $imap->getFolders('', '%');
+            
+            // get imap server capabilities and save delimiter / personal namespace in account
+            Felamimail_Controller_Account::getInstance()->updateCapabilities(
+                $account, 
+                $imap, 
+                (! empty($folders) && isset($folders[0]['delimiter']) && ! empty($folders[0]['delimiter'])) ? $folders[0]['delimiter'] : NULL
+            );
+            
         } else {
             try {
                 
@@ -313,13 +322,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             }
             
             $result->addRecord($folder);
-        }
-        
-        // check if delimiter is different
-        if (isset($folderData['delimiter']) && ! empty($folderData['delimiter']) && $folderData['delimiter'] != $account->delimiter) {
-            $account->delimiter = $folderData['delimiter'];
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $folderData['delimiter']);
-            Felamimail_Controller_Account::getInstance()->update($account);
         }
         
         return $result;

@@ -33,4 +33,27 @@ class Felamimail_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Felamimail', '0.2');
         $this->setTableVersion('felamimail_account', '2');
     }
+
+    /**
+     * update function 2
+     * - add namespaces for accounts
+     *
+     */    
+    public function update_2()
+    {
+        $newFields = array('ns_personal', 'ns_other', 'ns_shared');
+        
+        foreach ($newFields as $field) {
+            $field = '<field>
+                <name>' . $field . '</name>
+                <type>text</type>
+                <length>256</length>
+            </field>';
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('felamimail_account', $declaration);
+        }
+        
+        $this->setApplicationVersion('Felamimail', '0.3');
+        $this->setTableVersion('felamimail_account', '3');
+    }
 }

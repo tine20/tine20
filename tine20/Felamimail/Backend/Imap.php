@@ -432,4 +432,18 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             throw new Zend_Mail_Storage_Exception('cannot copy message, does the folder exist?');
         }
     }
+    
+    public function getCapabilityAndNamespace()
+    {
+        $capabilities = $this->_protocol->capability();
+        
+        $result = array('capabilities' => $capabilities);
+        if (in_array('NAMESPACE', $capabilities)) {
+            if ($namespace = $this->_protocol->getNamespace()) {
+                $result['namespace'] = $namespace;
+            }
+        }
+        
+        return $result;
+    }
 }

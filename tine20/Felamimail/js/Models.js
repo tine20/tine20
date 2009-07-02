@@ -90,6 +90,7 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'show_intelligent_folders' },
     { name: 'has_children_support' },
     { name: 'delimiter' },
+    { name: 'ns_personal' },
     { name: 'signature' },
     { name: 'smtp_port' },
     { name: 'smtp_hostname' },

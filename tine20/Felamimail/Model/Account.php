@@ -84,6 +84,10 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'show_intelligent_folders'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'has_children_support'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '/'),
+    // namespaces
+        'ns_personal'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'ns_other'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'ns_shared'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // user data
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),

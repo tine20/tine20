@@ -112,6 +112,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             cls: 'felamimail-node-account',
             show_intelligent_folders: (record.get('show_intelligent_folders')) ? record.get('show_intelligent_folders') : 0,
             delimiter: record.get('delimiter'),
+            ns_personal: record.get('ns_personal'),
             account_id: record.data.id,
             listeners: {
                 scope: this,
@@ -212,6 +213,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             text: this.app.i18n._('Add Folder'),
             iconCls: 'action_add',
             scope: this,
+            disabled: true,
             handler: function() {
                 Ext.MessageBox.prompt(String.format(_('New {0}'), this.app.i18n._('Folder')), String.format(_('Please enter the name of the new {0}:'), this.app.i18n._('Folder')), function(_btn, _text) {
                     if( this.ctxNode && _btn == 'ok') {
@@ -470,15 +472,17 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onContextMenu: function(node, event) {
         this.ctxNode = node;
+        console.log(node);
         
         if (! node.attributes.folderNode) {
             // edit/remove account
             if (node.attributes.account_id !== 'default') {
                 
-                // check account delimiter -> disable 'add folder' if courier imap ('.' delimiter) 
+                // check account personal namespace -> disable 'add folder' if namespace is other than root 
                 this.contextMenuAccount.items.each(function(item) {
+                    console.log(item);
                     if (item.iconCls == 'action_add') {
-                        item.setDisabled(node.attributes.delimiter == '.');
+                        item.setDisabled(node.attributes.ns_personal != '');
                     }
                 });
                 
