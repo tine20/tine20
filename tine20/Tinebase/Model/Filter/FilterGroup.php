@@ -154,7 +154,7 @@ class Tinebase_Model_Filter_FilterGroup
                 if (empty($fieldModel)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' skipping filter (no filter model defined) ' . print_r($filterData, true));
                 
-                } elseif (array_key_exists('filter', $fieldModel)) {
+                } elseif (array_key_exists('filter', $fieldModel) && isset($filterData['value'])) {
                     // create a 'single' filter
                     $this->addFilter($this->createFilter($filterData['field'], $filterData['operator'], $filterData['value']));
                 
