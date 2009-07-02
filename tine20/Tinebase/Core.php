@@ -366,11 +366,12 @@ class Tinebase_Core
      */
     public static function setupUserCredentialCache()
     {
-        if (isset ($_COOKIE['usercredentialcache'])) {
+        if (isset($_COOKIE['usercredentialcache']) && ! empty($_COOKIE['usercredentialcache'])) {
             $cacheId = Zend_Json::decode(base64_decode($_COOKIE['usercredentialcache']));
             if (is_array($cacheId)) {
                 self::set(self::USERCREDENTIALCACHE, new Tinebase_Model_CredentialCache($cacheId));
-                $cache = self::get(self::USERCREDENTIALCACHE);
+            } else {
+                self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / could not set CC.');
             }
         }
     }

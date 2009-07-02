@@ -279,7 +279,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function login($username, $password)
     {
-        if (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {
+        // try to login user
+        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === TRUE); 
+        
+        if ($success) {
             $response = array(
 				'success'       => TRUE,
                 'account'       => Tinebase_Core::getUser()->getPublicUser()->toArray(),
@@ -290,11 +293,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
                 $cacheId = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE)->getCacheId();
                 setcookie('usercredentialcache', base64_encode(Zend_Json::encode($cacheId)));
+            } else {
+                self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
+                $success = FALSE;
             }
         
-        } else {
+        }
+
+        if (! $success) {
             
+            // reset credentials cache
             setcookie('usercredentialcache');
+            
             $response = array(
 				'success'      => FALSE,
 				'errorMessage' => "Wrong username or password!"
