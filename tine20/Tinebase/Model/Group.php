@@ -26,7 +26,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'id'            => 'Digits',
+        'id'            => 'StringTrim',
         'name'          => 'StringTrim',
         'description'   => 'StringTrim',
     );
@@ -39,7 +39,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'            => array('Digits', Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'          => array('presence' => 'required'),
         'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'members'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),

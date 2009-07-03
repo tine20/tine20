@@ -32,7 +32,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'accountId'             => 'Digits',
+        'accountId'             => 'StringTrim',
         //'accountLoginName'    => 'StringTrim',
         'accountDisplayName'    => 'StringTrim',
         'accountLastName'       => 'StringTrim',
@@ -48,7 +48,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'accountId'             => array('Digits', 'presence' => 'required'),
+        'accountId'             => array('presence' => 'required'),
         //'accountLoginName'    => array('presence' => 'required'),
         'accountDisplayName'    => array('presence' => 'required'),
         'accountLastName'       => array('presence' => 'required'),
