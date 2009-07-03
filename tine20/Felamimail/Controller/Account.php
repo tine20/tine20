@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        split credentials (imap & smtp)
+ * @todo        make it possible to switch back to smtp creds = imap creds even if extra smtp creds have been created
  * @todo        reset default account preference if default account has been deleted
  */
 
@@ -210,9 +210,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             return;    
         }
         
-        // add credentials
+        // add imap & smtp credentials
         $_record->credentials_id = $this->_createCredentials($_record->user, $_record->password);
-        $_record->smtp_credentials_id = $_record->credentials_id;
+        if ($_record->smtp_user && $_record->smtp_password) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
+            $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
+        } else {
+            $_record->smtp_credentials_id = $_record->credentials_id;
+        }
     }
 
     /**
@@ -251,7 +256,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // check if something changed
         if (
-                ! $_oldRecord->credentials_id
+            ! $_oldRecord->credentials_id
             ||  (! empty($_record->user) && $_record->user !== $credentials->username)
             ||  (! empty($_record->password) && $_record->password !== $credentials->password)
         ) {
@@ -259,6 +264,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $newUsername = ($_record->user) ? $_record->user : $credentials->username;
 
             $_record->credentials_id = $this->_createCredentials($newUsername, $newPassword);
+            $imapCredentialsChanged = TRUE;
+        } else {
+            $imapCredentialsChanged = FALSE;
+        }
+        
+        if ($_record->smtp_user && $_record->smtp_password) {
+            // create extra smtp credentials
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
+            $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
+            
+        } else if (
+            $imapCredentialsChanged 
+            && (! $_record->smtp_credentials_id || $_record->smtp_credentials_id == $_oldRecord->credentials_id)
+        ) {
+            // use imap credentials for smtp auth as well
             $_record->smtp_credentials_id = $_record->credentials_id;
         }
     }

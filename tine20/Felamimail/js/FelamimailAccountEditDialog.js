@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add smtp credentials
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -183,16 +182,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['login',   this.app.i18n._('Login')],
                         ['plain',   this.app.i18n._('Plain')]
                     ]
-                }/*,{
-                    fieldLabel: this.app.i18n._('Username'),
-                    name: 'smtp_user',
-                    allowBlank: false
+                },{
+                    fieldLabel: this.app.i18n._('Username (optional)'),
+                    name: 'smtp_user'
                 }, {
-                    fieldLabel: this.app.i18n._('Password'),
+                    fieldLabel: this.app.i18n._('Password (optional)'),
                     name: 'smtp_password',
-                    allowBlank: false,
                     inputType: 'password'
-                }*/]]
+                }]]
             }, {
                 title: this.app.i18n._('Other Settings'),
                 autoScroll: true,
