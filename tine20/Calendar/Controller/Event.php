@@ -84,6 +84,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * deletes a recur series
+     *
+     * @param  Calendar_Model_Event $_recurInstance
+     * @return void
+     */
+    public function deleteRecurSeries($_recurInstance)
+    {
+        $baseEvent = $this->_getRecurBaseEvent($_recurInstance);
+        $this->delete($baseEvent->getId());
+    }
+    
+    /**
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
@@ -139,6 +151,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return $this->update($newBaseEvent);
         } else {
             // attendee handling only
+            if ($_recurInstance->attendee instanceof Tinebase_Record_RecordSet) {
+                foreach ($_recurInstance->attendee as $attender) {
+                    if ($attender->status_authkey) {
+                        $this->setAttenderStatus($baseEvent, $attender, $attender->status_authkey);
+                    }
+                }
+            }
         }
         
     }

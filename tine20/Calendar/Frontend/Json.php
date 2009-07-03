@@ -55,12 +55,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes a recur series
      *
-     * @param  JSONstring $event
+     * @param  JSONstring $eventData
      * @return void
      */
-    public function deleteRecurSeries($event)
+    public function deleteRecurSeries($eventData)
     {
+        $event = new Calendar_Model_Event(array(), TRUE);
+        $event->setFromJsonInUsersTimezone($eventData);
         
+        Calendar_Controller_Event::getInstance()->deleteRecurSeries($event);
+        return;
     }
     
     /**

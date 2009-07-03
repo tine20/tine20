@@ -323,6 +323,36 @@ class Calendar_JsonTests extends Calendar_TestCase
          */
     }
     
+    public function testDeleteRecurSeries()
+    {
+        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        
+        $persistentException = $recurSet[1];
+        $persistentException['summary'] = 'go sleeping';
+        
+        // create persistent exception
+        $this->_uit->createRecurException(Zend_Json::encode($persistentException));
+        
+        // delete recurseries 
+        $someRecurInstance = $persistentException = $recurSet[2];
+        $this->_uit->deleteRecurSeries(Zend_Json::encode($someRecurInstance));
+        
+        $from = $recurSet[0]['dtstart'];
+        $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $until->addWeek(5)->addHour(10);
+        $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+        );
+        
+        
+        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        
+        $this->assertEquals(0, count($searchResultData['results']));
+    }
+    
     protected function _assertJsonEvent($expectedEventData, $eventData, $msg) {
         $this->assertEquals($expectedEventData['summary'], $eventData['summary'], $msg . ': failed to create/load event');
         
