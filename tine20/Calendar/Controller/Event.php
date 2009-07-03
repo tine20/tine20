@@ -182,7 +182,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         $baseEvent = $this->_getRecurBaseEvent($_event);
-                
+        
         if (! $_deleteInstance) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating persistent exception for: '{$_event->recurid}'");
             
@@ -204,8 +204,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return $this->create($_event);
             
         } else {
-            
-            
             $exdate = new Zend_Date(substr($_event->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
             
             if ($_deleteAllFollowing) {

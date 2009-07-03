@@ -26,15 +26,15 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * NOTE: deleting persistent exceptions is done via a normal delte action
      *       and handled in the controller
      * 
-     * @param  Calendar_Model_Event  $eventData
-     * @param  bool                  $deleteInstance
-     * @param  bool                  $deleteAllFollowing
-     * @return Calendar_Model_Event  exception Event | updated baseEvent
+     * @param  JSONstring  $recordData
+     * @param  bool        $deleteInstance
+     * @param  bool        $deleteAllFollowing
+     * @return array       exception Event | updated baseEvent
      */
-    public function createRecurException($eventData, $deleteInstance = FALSE, $deleteAllFollowing = FALSE)
+    public function createRecurException($recordData, $deleteInstance, $deleteAllFollowing)
     {
         $event = new Calendar_Model_Event(array(), TRUE);
-        $event->setFromJsonInUsersTimezone($eventData);
+        $event->setFromJsonInUsersTimezone($recordData);
         
         $returnEvent = Calendar_Controller_Event::getInstance()->createRecurException($event, $deleteInstance, $deleteAllFollowing);
         
@@ -55,13 +55,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes a recur series
      *
-     * @param  JSONstring $eventData
+     * @param  JSONstring $recordData
      * @return void
      */
-    public function deleteRecurSeries($eventData)
+    public function deleteRecurSeries($recordData)
     {
         $event = new Calendar_Model_Event(array(), TRUE);
-        $event->setFromJsonInUsersTimezone($eventData);
+        $event->setFromJsonInUsersTimezone($recordData);
         
         Calendar_Controller_Event::getInstance()->deleteRecurSeries($event);
         return;
@@ -162,14 +162,14 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * updated a recur series
      *
-     * @param  JSONstring $eventData
+     * @param  JSONstring $recordData
      * @noparamyet  JSONstring $returnPeriod NOTE IMPLMENTED YET
      * @return array 
      */
-    public function updateRecurSeries($eventData/*, $returnPeriod*/)
+    public function updateRecurSeries($recordData/*, $returnPeriod*/)
     {
         $recurInstance = new Calendar_Model_Event(array(), TRUE);
-        $recurInstance->setFromJsonInUsersTimezone($eventData);
+        $recurInstance->setFromJsonInUsersTimezone($recordData);
         
         $baseEvent = Calendar_Controller_Event::getInstance()->updateRecurSeries($recurInstance);
         
@@ -211,6 +211,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         //compute recurset
          $candidates = $_records->filter('rrule', "/^FREQ.*/", TRUE);
          $period = $_filter->getFilter('period');
+         
+         $fakeId = microtime();
          foreach ($candidates as $candidate) {
              $exceptions = $_records->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
              $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $period->getFrom(), $period->getUntil());
@@ -218,7 +220,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
              //$_records->merge($recurSet);
              foreach ($recurSet as $event) {
                  $_records->addRecord($event);
-                 $event->setId(Tinebase_Record_Abstract::generateUID());
+                 $event->setId('fakeid' . $candidate->uid . $fakeId++);
              }
          }
           
