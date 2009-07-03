@@ -3,38 +3,56 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Backend
+ * @subpackage  Alarm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
- * @todo        make this a real controller + singleton (create extra sql backend)
+ * @todo        add deleteAlarmsOfRecord() function
  */
 
 /**
- * backend for alarms / reminder messages
+ * controller for alarms / reminder messages
  *
  * @package     Tinebase
- * @subpackage  Backend
+ * @subpackage  Alarm
  */
-class Tinebase_Alarm extends Tinebase_Backend_Sql_Abstract
+class Tinebase_Alarm
 {
-    /**************************** backend settings *********************************/
+    /**
+     * @var Tinebase_Alarm_Backend
+     */
+    protected $_backend;
     
     /**
-     * Table name without prefix
+     * holdes the instance of the singleton
      *
-     * @var string
+     * @var Tinebase_Alarm
      */
-    protected $_tableName = 'alarm';
+    private static $instance = NULL;
     
     /**
-     * Model name
+     * the constructor
      *
-     * @var string
      */
-    protected $_modelName = 'Tinebase_Model_Alarm';
+    private function __construct()
+    {
+        $this->_backend = new Tinebase_Alarm_Backend();
+    }
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Tinebase_Alarm
+     */
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Tinebase_Alarm();
+        }
+        return self::$instance;
+    }
     
     /**************************** public funcs *************************************/
     
@@ -61,7 +79,7 @@ class Tinebase_Alarm extends Tinebase_Backend_Sql_Abstract
                 'value'     => Tinebase_Model_Alarm::STATUS_PENDING // STATUS_FAILURE?
             ),
         ));
-        $alarms = $this->search($filter);
+        $alarms = $this->_backend->search($filter);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending ' . count($alarms) . ' alarms.');
         
@@ -74,5 +92,16 @@ class Tinebase_Alarm extends Tinebase_Backend_Sql_Abstract
                 $appController->sendAlarm($alarm);
             }
         }
+    }
+    
+    /**
+     * create new alarm
+     *
+     * @param Tinebase_Model_Alarm $_alarm
+     * @return Tinebase_Model_Alarm
+     */
+    public function create(Tinebase_Model_Alarm $_alarm)
+    {
+        return $this->_backend->create($_alarm);
     }
 }

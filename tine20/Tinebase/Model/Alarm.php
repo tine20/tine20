@@ -58,11 +58,11 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                => array('allowEmpty' => TRUE),
-        'record_id'         => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
-        'model'             => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
+        'record_id'         => array('presence' => 'required', 'Alnum'),
+        'model'             => array('presence' => 'required'),
         'alarm_time'        => array('presence' => 'required'),
-        'sent_time'         => array('presence' => 'required'),
-        'sent_status'       => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
+        'sent_time'         => array('allowEmpty' => TRUE),
+        'sent_status'       => array('presence' => 'required', 'InArray' => array(
             self::STATUS_PENDING, 
             self::STATUS_FAILURE, 
             self::STATUS_SUCCESS,

@@ -214,8 +214,7 @@ class Tinebase_Controller implements Tinebase_Event_Interface
                 
                     $job = $asyncJobBackend->startJob($eventName);
                     
-                    $alarmsBackend = new Tinebase_Alarm();
-                    $alarmsBackend->sendPendingAlarms();
+                    Tinebase_Alarm::getInstance()->sendPendingAlarms();
                     
                     // save new status
                     $job = $asyncJobBackend->finishJob($job);

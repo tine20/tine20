@@ -3,38 +3,55 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Backend
+ * @subpackage  AsyncJob
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
- * @todo        make this a real controller + singleton (create extra sql backend)
  */
 
 /**
- * backend for async event management
+ * controller for async event management
  *
  * @package     Tinebase
- * @subpackage  Backend
+ * @subpackage  AsyncJob
  */
-class Tinebase_AsyncJob extends Tinebase_Backend_Sql_Abstract
+class Tinebase_AsyncJob
 {
-    /**************************** backend settings *********************************/
+    /**
+     * @var Tinebase_AsyncJob_Backend
+     */
+    protected $_backend;
     
     /**
-     * Table name without prefix
+     * holdes the instance of the singleton
      *
-     * @var string
+     * @var Tinebase_AsyncJob
      */
-    protected $_tableName = 'async_job';
+    private static $instance = NULL;
     
     /**
-     * Model name
+     * the constructor
      *
-     * @var string
      */
-    protected $_modelName = 'Tinebase_Model_AsyncJob';
+    private function __construct()
+    {
+        $this->_backend = new Tinebase_AsyncJob_Backend();
+    }
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Tinebase_AsyncJob
+     */
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Tinebase_AsyncJob();
+        }
+        return self::$instance;
+    }
     
     /**************************** public functions *********************************/
     
@@ -48,15 +65,22 @@ class Tinebase_AsyncJob extends Tinebase_Backend_Sql_Abstract
      */
     public function jobIsRunning($_name)
     {
-        $select = $this->_db->select();
-        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', Tinebase_Model_AsyncJob::STATUS_RUNNING));
+        // get all pending alarms
+        $filter = new Tinebase_Model_AlarmFilter(array(
+            array(
+                'field'     => 'name', 
+                'operator'  => 'equals', 
+                'value'     => $_name
+            ),
+            array(
+                'field'     => 'status', 
+                'operator'  => 'equals', 
+                'value'     => Tinebase_Model_AsyncJob::STATUS_RUNNING
+            ),
+        ));
+        $jobCount = $this->_backend->searchCount($filter);
         
-        $stmt = $this->_db->query($select);
-        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $result = (count($rows) > 0);
+        $result = ($jobCount > 0);
         return $result;
     }
 
@@ -69,7 +93,7 @@ class Tinebase_AsyncJob extends Tinebase_Backend_Sql_Abstract
     public function startJob($_name)
     {
         try {
-            $db = $this->_db;
+            $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             $job = new Tinebase_Model_AsyncJob(array(
@@ -77,7 +101,7 @@ class Tinebase_AsyncJob extends Tinebase_Backend_Sql_Abstract
                 'start_time'        => Zend_Date::now(),
                 'status'            => Tinebase_Model_AsyncJob::STATUS_RUNNING
             ));
-            $result = $this->create($job);
+            $result = $this->_backend->create($job);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
@@ -98,12 +122,12 @@ class Tinebase_AsyncJob extends Tinebase_Backend_Sql_Abstract
     public function finishJob(Tinebase_Model_AsyncJob $_asyncJob)
     {
         try {
-            $db = $this->_db;
+            $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             $_asyncJob->end_time = Zend_Date::now();
             $_asyncJob->status = Tinebase_Model_AsyncJob::STATUS_SUCCESS;
-            $result = $this->update($_asyncJob);
+            $result = $this->_backend->update($_asyncJob);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
