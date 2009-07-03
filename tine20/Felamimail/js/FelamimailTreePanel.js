@@ -346,7 +346,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         ];
                     } else {
                         return [
-                            {field: 'folder_id',    operator: 'equals', value: (node) ? node.attributes.folder_id : '' }
+                            {field: 'folder_id',    operator: 'equals', value: (node && node.attributes.folder_id) ? node.attributes.folder_id : '' }
                         ];
                     }
                 }
