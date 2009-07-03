@@ -232,6 +232,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     self::skipWday($baseEvent->dtstart, $recurWeekDay, 1, TRUE);
                     self::skipWday($baseEvent->dtend,   $recurWeekDay, 1, TRUE);
                     
+                    if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
+                        $recurSet->addRecord($baseEvent);
+                    }
+                    
                     self::_computeRecurDaily($baseEvent, $dailyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 }
                 break;

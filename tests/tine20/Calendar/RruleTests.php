@@ -131,6 +131,11 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(5, count($recurSet), '2013-06 has 5 sundays');
         
+        $from = new Zend_Date('1979-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('1979-06-20 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(2, count($recurSet), 'test the first sunday (1979-06-10)');
+        
         // period boudaries in the middle of the recur events
         $from = new Zend_Date('2009-04-05 17:30:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2009-04-12 17:30:00', Tinebase_Record_Abstract::ISO8601LONG);
@@ -144,6 +149,13 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'odd interval failed');
     }
+    
+    /*
+    public function testCalcWeeklyMultipleDays()
+    {
+        
+    }
+    */
     
     public function testCalcMonthlyByMonthDay()
     {
