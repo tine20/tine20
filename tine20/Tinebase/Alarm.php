@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
- * @todo        add deleteAlarmsOfRecord() function
  */
 
 /**
@@ -129,6 +128,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      * 
      * @param  string $_model model to get alarms for
      * @param  string|array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_recordId record id(s) to get alarms for
+     * @param  boolean $_onlyIds
      * @return Tinebase_Record_RecordSet|array of Tinebase_Model_Alarm|ids
      * 
      * @todo add backend?
@@ -142,7 +142,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             $_recordId = $_recordId->getId();
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' id:" . print_r((array)$_recordId, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' id:" . print_r((array)$_recordId, true));
     
         $filter = new Tinebase_Model_AlarmFilter(array(
             array(
