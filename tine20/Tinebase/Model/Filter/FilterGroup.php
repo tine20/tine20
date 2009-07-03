@@ -154,7 +154,7 @@ class Tinebase_Model_Filter_FilterGroup
                 if (empty($fieldModel)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' skipping filter (no filter model defined) ' . print_r($filterData, true));
                 
-                } elseif (array_key_exists('filter', $fieldModel) && isset($filterData['value'])) {
+                } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $filterData)) {
                     // create a 'single' filter
                     $this->addFilter($this->createFilter($filterData['field'], $filterData['operator'], $filterData['value']));
                 
@@ -163,7 +163,12 @@ class Tinebase_Model_Filter_FilterGroup
                     $this->_customData[] = $filterData;
                 
                 } else {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem)' . print_r($filterData, true));
+                    try {
+                        throw new Exception('skipping filter (filter syntax problem)');
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                    }
+                    
                 }
             }
         }
