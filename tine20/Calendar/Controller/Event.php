@@ -548,7 +548,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /****************************** alarm functions ************************/
     
     /**
-     * sendAlarm - send an alarm
+     * send an alarm
      *
      * @param  Tinebase_Model_Alarm $_alarm
      * @return void
@@ -590,6 +590,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param Calendar_Model_Event $_event
      * @return Tinebase_Record_RecordSet
+     * 
+     * @todo move this to abstract record controller
      */
     protected function _saveAlarms($_event)
     {
@@ -633,6 +635,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * delete alarms for events
      *
      * @param array $_eventIds
+     * 
+     * @todo move this to abstract record controller
      */
     protected function _deleteAlarmsForIds($_eventIds)
     {
