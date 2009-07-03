@@ -188,6 +188,131 @@ class Calendar_JsonTests extends Calendar_TestCase
         
     }
     
+    public function testCreateRecurEvent()
+    {
+        $eventData = $this->testCreateEvent();
+        $eventData['rrule'] = array(
+            'freq'     => 'WEEKLY',
+            'interval' => 1,
+            'byday'    => 'WE'
+        );
+        
+        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        $this->assertTrue(is_array($updatedEventData['rrule']));
+
+        return $updatedEventData;
+    }
+    
+    public function testSearchRecuringIncludes()
+    {
+        $recurEvent = $this->testCreateRecurEvent();
+        
+        $from = $recurEvent['dtstart'];
+        $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $until->addWeek(5)->addHour(10);
+        $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+        );
+        
+        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        
+        $this->assertEquals(6, count($searchResultData['results']));
+        
+        return $searchResultData;
+    }
+    
+    public function testCreateRecurException()
+    {
+        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        
+        $persistentException = $recurSet[1];
+        $persistentException['summary'] = 'go sleeping';
+        
+        // create persistent exception
+        $this->_uit->createRecurException(Zend_Json::encode($persistentException));
+        
+        // create exception date
+        $this->_uit->createRecurException(Zend_Json::encode($recurSet[2]), TRUE);
+        
+        // delete all following (including this)
+        $this->_uit->createRecurException(Zend_Json::encode($recurSet[4]), TRUE, TRUE);
+        
+        $from = $recurSet[0]['dtstart'];
+        $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $until->addWeek(5)->addHour(10);
+        $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+        );
+        
+        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        
+        // we deleted one and cropped
+        $this->assertEquals(3, count($searchResultData['results']));
+        
+        $summaryMap = array();
+        foreach ($searchResultData['results'] as $event) {
+            $summaryMap[$event['dtstart']] = $event['summary'];
+        }
+        $this->assertTrue(array_key_exists('2009-04-01 06:00:00', $summaryMap));
+        $this->assertEquals($persistentException['summary'], $summaryMap['2009-04-01 06:00:00']);
+    }
+    
+    public function testUpdateRecurSeries()
+    {
+        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        
+        $persistentException = $recurSet[1];
+        $persistentException['summary'] = 'go sleeping';
+        $persistentException['dtstart'] = '2009-04-01 20:00:00';
+        $persistentException['dtend']   = '2009-04-01 20:30:00';
+        
+        // create persistent exception
+        $this->_uit->createRecurException(Zend_Json::encode($persistentException));
+        
+        // update recurseries 
+        $someRecurInstance = $persistentException = $recurSet[2];
+        $someRecurInstance['summary'] = 'go fishing';
+        $someRecurInstance['dtstart'] = '2009-04-08 10:00:00';
+        $someRecurInstance['dtend']   = '2009-04-08 12:30:00';
+        
+        $this->_uit->updateRecurSeries(Zend_Json::encode($someRecurInstance));
+        
+        $from = $recurSet[0]['dtstart'];
+        $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $until->addWeek(5)->addHour(10);
+        $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+        );
+        
+        
+        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        
+        $this->assertEquals(6, count($searchResultData['results']));
+        
+        $summaryMap = array();
+        foreach ($searchResultData['results'] as $event) {
+            $summaryMap[$event['dtstart']] = $event['summary'];
+        }
+        
+        $this->assertTrue(array_key_exists('2009-04-01 20:00:00', $summaryMap));
+        $this->assertEquals('go sleeping', $summaryMap['2009-04-01 20:00:00']);
+        
+        $fishings = array_keys($summaryMap, 'go fishing');
+        $this->assertEquals(5, count($fishings));
+        foreach($fishings as $dtstart) {
+            $this->assertEquals('10:00:00', substr($dtstart, -8));
+        }
+    }
+    
     public function testUpdateRecurExceptionsFromSeriesOverDstMove()
     {
         /*
