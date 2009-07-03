@@ -268,8 +268,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         // skip 27(exception), 31(exception), 03(until)
         $this->assertEquals(6, count($recurSet));
         
-        
-        $exceptionBeforeDstBoundary = clone $recurSet[1]; // 26. 
+        $exceptionBeforeDstBoundary = clone $recurSet[1]; // 28. 
         $persistentExceptionBeforeDstBoundary = $this->_controller->createRecurException($exceptionBeforeDstBoundary);
         
         $exceptionAfterDstBoundary = clone $recurSet[5]; // 02.
@@ -287,7 +286,9 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
             array('field' => 'uid', 'operator' => 'equals', 'value' => $persitentEvent->uid)
         )));
-        // we don't 'see' the persistent exception from 26/
+        
+        //print_r($persistentEvents->toArray());
+        // we don't 'see' the persistent exception from 28/
         $this->assertEquals(2, count($persistentEvents));
                 
         $exceptions = $persistentEvents->filter('recurid', "/^{$persitentEvent->uid}-.*/", TRUE);
