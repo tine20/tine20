@@ -233,4 +233,25 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', '4');
         $this->setApplicationVersion('Addressbook', '0.6');
     }
+    
+    /**
+     * rename column owner to container_id in addressbook table
+     * 
+     */    
+    public function update_6()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>account_id</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>');
+        
+        $this->_backend->alterCol('addressbook', $declaration, 'account_id');
+        
+        $this->setTableVersion('addressbook', '5');
+        $this->setApplicationVersion('Addressbook', '0.7');
+    }
+    
 }
