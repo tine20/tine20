@@ -210,7 +210,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " shorten rrule_until for: '{$_event->recurid}'");
                 
                 $rrule = Calendar_Model_Rrule::getRruleFromString($baseEvent->rrule);
-                $rrule->until = $exdate->addHour(-1);
+                $rrule->until = $exdate->addDay(-1);
                 
                 $baseEvent->rrule = (string) $rrule;
             } else {
