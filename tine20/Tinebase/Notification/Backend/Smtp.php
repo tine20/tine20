@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Notification
  */
-class Tinebase_Notification_Backend_Smtp
+class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interface
 {
     /**
      * the from address
