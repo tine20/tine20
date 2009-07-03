@@ -104,7 +104,12 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
             
             if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
-                $appController->sendAlarm($alarm);
+                if ($appController->sendAlarm($alarm)) {
+                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
+                } else {
+                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
+                }
+                $this->update($alarm);
             }
         }
     }

@@ -490,7 +490,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * sendAlarm - send an alarm and update alarm status/sent_time/...
      *
      * @param  Tinebase_Model_Alarm $_alarm
-     * @return Tinebase_Model_Alarm
+     * @return boolean
      * 
      * @todo implement
      */
@@ -499,6 +499,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
         );
+        
+        return TRUE;
     }
 
     /**
@@ -506,7 +508,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param Calendar_Model_Event $_event
      * @return Tinebase_Record_RecordSet
-     * 
      */
     protected function _saveAlarms($_event)
     {
@@ -527,14 +528,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $diff = $currentAlarms->getMigration($alarms->getArrayOfIds());
         Tinebase_Alarm::getInstance()->delete($diff['toDeleteIds']);
         
+        // create / update alarms
         foreach ($alarms as $alarm) {
             $id = $alarm->getId();
             
             if ($id) {
-                //$currentAlarm = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
-                //$currentAlarm->alarm_time = $alarm->alarm_time;
-                //$currentAlarm->options = 
-                
                 $alarm = Tinebase_Alarm::getInstance()->update($alarm);
                 
             } else {

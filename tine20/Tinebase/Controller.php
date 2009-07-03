@@ -207,17 +207,14 @@ class Tinebase_Controller implements Tinebase_Event_Interface
         switch($eventName) {
             case 'Tinebase_Event_Async_Minutely':
                 
-                $asyncJobBackend = new Tinebase_AsyncJob();
-                
                 // check if already running
-                if (! $asyncJobBackend->jobIsRunning($eventName)) {
+                if (! Tinebase_AsyncJob::getInstance()->jobIsRunning($eventName)) {
                 
-                    $job = $asyncJobBackend->startJob($eventName);
-                    
+                    $job = Tinebase_AsyncJob::getInstance()->startJob($eventName);
                     Tinebase_Alarm::getInstance()->sendPendingAlarms();
                     
                     // save new status
-                    $job = $asyncJobBackend->finishJob($job);
+                    $job = Tinebase_AsyncJob::getInstance()->finishJob($job);
                 }
                 break;
         }

@@ -66,7 +66,7 @@ class Tinebase_AsyncJob
     public function jobIsRunning($_name)
     {
         // get all pending alarms
-        $filter = new Tinebase_Model_AlarmFilter(array(
+        $filter = new Tinebase_Model_AsyncJobFilter(array(
             array(
                 'field'     => 'name', 
                 'operator'  => 'equals', 
