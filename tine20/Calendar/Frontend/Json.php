@@ -16,21 +16,51 @@
 class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     // todos :
-    //
-    // add fn deleteRecurSeries($_uid) cause we don't nessesaryly have the id of the series in the client 
-    //
     // ensure rrule_until has dtstart timepart (fix for ext datepicker)
-    //
-    // add handling to compute recurset
-    //      $candidates = $events->filter('rrule', "/^FREQ.*/", TRUE)
-    //      foreach ($candidates as $candidate) {
-    //          $exceptions = $events->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
-    //          $recurSet = Calendar_Model_Rrule::computeRecuranceSet($canditae, $exceptions, $from, $until);
-    //          $events->merge($recurSet);
-    //      }
-
     
     protected $_applicationName = 'Calendar';
+    
+    /**
+     * creates an exception instance of a recuring evnet
+     *
+     * NOTE: deleting persistent exceptions is done via a normal delte action
+     *       and handled in the controller
+     * 
+     * @param  Calendar_Model_Event  $_eventData
+     * @param  bool                  $_deleteInstance
+     * @return Calendar_Model_Event  exception Event | updated baseEvent
+     */
+    public function createRecurException($_eventData, $_deleteInstance = FALSE, $_deleteAllFollowing = FALSE)
+    {
+        //$eventArray = Zend_Json::decode($_eventData);
+        $event = new Calendar_Model_Event(array(), TRUE);
+        $event->setFromJsonInUsersTimezone($_eventData);
+        
+        $returnEvent = Calendar_Controller_Event::getInstance()->createRecurException($event, $_deleteInstance, $_deleteAllFollowing);
+        
+        return $this->getEvent($returnEvent->getId());
+    }
+    
+    /**
+     * deletes existing events
+     *
+     * @param array $_ids 
+     * @return string
+     */
+    public function deleteEvents($ids)
+    {
+        return $this->_delete($ids, Calendar_Controller_Event::getInstance());
+    }
+    
+    /**
+     * deletes a recur series
+     *
+     * @param  JSONstring $event
+     * @return void
+     */
+    public function deleteRecurSeries($event) {
+        
+    }
     
     /**
      * Return a single event
@@ -41,6 +71,22 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getEvent($id)
     {
         return $this->_get($id, Calendar_Controller_Event::getInstance());
+    }
+    
+    /**
+     * Returns registry data of the calendar.
+     *
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValue(Calendar_Preference::DEFAULTCALENDAR);
+        $defaultCalendarArray = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId)->toArray();
+        $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendarId)->toArray();
+        
+        return array(
+            'defaultCalendar' => $defaultCalendarArray
+        );
     }
     
     /**
@@ -86,6 +132,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * saves a recur series
+     *
+     * @param  JSONstring $event
+     * @return void
+     */
+    public function saveRecurSeries($event) {
+        
+    }
+    
+    /**
      * sets attendee status for an attender on the given event
      * 
      * NOTE: for recur events we implicitly create an exceptions on demand
@@ -106,33 +162,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Calendar_Controller_Event::getInstance()->setAttenderStatus($event, $attender, $_authKey);
         
         return $this->getEvent($event->getId());
-    }
-    
-    /**
-     * deletes existing events
-     *
-     * @param array $_ids 
-     * @return string
-     */
-    public function deleteEvents($ids)
-    {
-        return $this->_delete($ids, Calendar_Controller_Event::getInstance());
-    }
-    
-    /**
-     * Returns registry data of the calendar.
-     *
-     * @return mixed array 'variable name' => 'data'
-     */
-    public function getRegistryData()
-    {
-        $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValue(Calendar_Preference::DEFAULTCALENDAR);
-        $defaultCalendarArray = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId)->toArray();
-        $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendarId)->toArray();
-        
-        return array(
-            'defaultCalendar' => $defaultCalendarArray
-        );
     }
     
     /**
