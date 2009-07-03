@@ -77,7 +77,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             scope: this,
             success: function(createdEvent) {
                 if (createdEvent.isRecurBase()) {
-                    this.store.load({});
+                    this.store.load({refresh: true});
                 } else {
                     this.store.remove(event);
                     this.store.add(createdEvent);
@@ -126,7 +126,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 success: function(updatedEvent) {
                     //console.log('Backend returned updated event -> replace event in view');
                     if (updatedEvent.isRecurBase()) {
-                        this.store.load({});
+                        this.store.load({refresh: true});
                     } else {
                         event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
                         

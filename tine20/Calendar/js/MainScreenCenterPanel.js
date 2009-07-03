@@ -269,7 +269,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             var options = {
                                 scope: this,
                                 success: function() {
-                                    panel.getStore().load({});
+                                    this.refresh(true);
                                 },
                                 failure: function () {
                                     panel.getTopToolbar().onLoad();
@@ -290,7 +290,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             var options = {
                                 scope: this,
                                 success: function() {
-                                    panel.getStore().load({});
+                                    this.refresh(true);
                                 },
                                 failure: function () {
                                     panel.getTopToolbar().onLoad();
