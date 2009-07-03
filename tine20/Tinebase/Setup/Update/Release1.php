@@ -218,4 +218,107 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '1.4');
     }
+    
+    /**
+     * update to 1.4
+     * - add async events table
+     */
+    public function update_4()
+    {
+        /*
+         * drop old indexes
+         */
+        $this->_backend->dropForeignKey('accounts',      'accounts::primary_group_id--groups::id');
+        $this->_backend->dropForeignKey('group_members', 'group_members::account_id--accounts::id');
+        $this->_backend->dropForeignKey('group_members', 'group_members::group_id--groups::id');        
+        /*
+         * update column definition
+         */
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('accounts', $declaration, 'id');
+        $this->_backend->alterCol('groups', $declaration, 'id');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>primary_group_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('accounts', $declaration, 'primary_group_id');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>group_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('group_members', $declaration, 'group_id');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>account_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('group_members', $declaration, 'account_id');
+        
+        /*
+         * readd foreign keys
+         */        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>accounts::primary_group_id--groups::id</name>
+                <field>
+                    <name>primary_group_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>groups</table>
+                    <field>id</field>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>group_members::group_id--groups::id</name>
+                <field>
+                    <name>group_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>groups</table>
+                    <field>id</field>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('group_members', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>group_members::account_id--accounts::id</name>
+                <field>
+                    <name>account_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>accounts</table>
+                    <field>id</field>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('group_members', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '1.5');
+    }
 }
