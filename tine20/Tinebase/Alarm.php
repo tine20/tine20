@@ -109,6 +109,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 } else {
                     $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
                 }
+                $alarm->sent_time = Zend_Date::now();
                 $this->update($alarm);
             }
         }
