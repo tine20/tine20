@@ -162,6 +162,11 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     onRecordUpdate: function(record) {
         var rrule = this.activeRuleCard.getRule();
         
+        if (! this.rrule && rrule) {
+            // mark as new rule to avoid series confirm dlg
+            rrule.newrule = true;
+        }
+        
         record.set('rrule', '');
         record.set('rrule', rrule);
     }
