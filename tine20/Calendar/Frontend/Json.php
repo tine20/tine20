@@ -163,7 +163,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * updated a recur series
      *
      * @param  JSONstring $eventData
-     * @param  JSONstring $returnPeriod NOTE IMPLMENTED YET
+     * @noparamyet  JSONstring $returnPeriod NOTE IMPLMENTED YET
      * @return array 
      */
     public function updateRecurSeries($eventData/*, $returnPeriod*/)
