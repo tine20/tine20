@@ -31,10 +31,24 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
      */
     protected $_testCalendar;
     
+    /**
+     * personas
+     *
+     * @var array
+     */
     protected $_personas;
     
+    /**
+     * persona calendars
+     *
+     * @var array
+     */
     protected $_personasDefaultCals = array();
     
+    /**
+     * set up tests
+     *
+     */
     public function setUp()
     {
         $this->_personas = Zend_Registry::get('personas');
@@ -53,6 +67,10 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
         ), true));
     }
     
+    /**
+     * tear down tests
+     *
+     */
     public function tearDown()
     {
         $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
@@ -115,6 +133,11 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
         return $event;
     }
     
+    /**
+     * get test attendee
+     *
+     * @return Tinebase_Record_RecordSet
+     */
     protected function _getAttendee()
     {
         return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
