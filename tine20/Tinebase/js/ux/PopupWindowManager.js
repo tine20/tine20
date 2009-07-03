@@ -213,11 +213,17 @@ Ext.ux.PopupWindowGroup.MainWindowName = 'MainWindow';
  */
 Ext.ux.PopupWindowGroup.getMainWindow = function() {
     var w = window;
-    while ( w.name != Ext.ux.PopupWindowGroup.MainWindowName) {
-        w = w.opener;
-        if (! w) {
-            return false;
+    try {
+        while ( w.name != Ext.ux.PopupWindowGroup.MainWindowName) {
+            w = w.opener;
+            if (! w) {
+                return false;
+            }
         }
+    } catch (e) {
+        // lets reuse this window
+        w.NamedNodeMap = Ext.ux.PopupWindowGroup.MainWindowName;
+        return false;
     }
     return w;
 };
