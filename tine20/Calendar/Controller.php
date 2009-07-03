@@ -17,7 +17,7 @@
 class Calendar_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface, Tinebase_Container_Interface
 {
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Calendar_Controller
      */

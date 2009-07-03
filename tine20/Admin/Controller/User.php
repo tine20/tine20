@@ -64,7 +64,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     }
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Admin_Controller_User
      */

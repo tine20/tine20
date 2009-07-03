@@ -40,7 +40,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
     protected $_doContainerACLChecks = FALSE;
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Alarm
      */

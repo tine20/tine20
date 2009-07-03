@@ -72,7 +72,7 @@ class Tinebase_User_Registration
     }
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_User_Sql
      */

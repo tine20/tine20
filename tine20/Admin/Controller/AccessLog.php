@@ -20,7 +20,7 @@
 class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Admin_Controller_AccessLog
      */

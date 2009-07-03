@@ -72,7 +72,7 @@ class Tinebase_Timemachine_ModificationLog
     );
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Timemachine_ModificationLog
      */

@@ -48,7 +48,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Crm_Controller_Lead
      */

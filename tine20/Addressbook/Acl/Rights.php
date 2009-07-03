@@ -28,7 +28,7 @@
 class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Addressbook_Acl_Rights
      */

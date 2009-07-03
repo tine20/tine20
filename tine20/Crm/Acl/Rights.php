@@ -35,7 +35,7 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_LEADS = 'manage_leads';
         
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Crm_Acl_Rights
      */

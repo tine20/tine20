@@ -58,7 +58,7 @@ class Tinebase_Config
     protected $_db = NULL;
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Config
      */

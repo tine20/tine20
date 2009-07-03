@@ -39,7 +39,7 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     }
             
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Voipmanager_Controller_Asterisk_SipPeer
      */

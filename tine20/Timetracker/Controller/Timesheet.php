@@ -48,7 +48,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     );
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Timetracker_Controller_Timesheet
      */

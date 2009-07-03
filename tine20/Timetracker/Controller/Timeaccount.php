@@ -33,7 +33,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
     }    
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Timetracker_Controller_Timeaccount
      */

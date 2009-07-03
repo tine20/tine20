@@ -58,7 +58,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const ACCOUNT_TYPE_GROUP    = 'group';
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Acl_Rights
      */

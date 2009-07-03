@@ -57,7 +57,7 @@ class Tinebase_Container
     private function __clone() {}
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Container
      */

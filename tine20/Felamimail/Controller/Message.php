@@ -56,7 +56,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected $_applicationName = 'Felamimail';
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Felamimail_Controller_Message
      */

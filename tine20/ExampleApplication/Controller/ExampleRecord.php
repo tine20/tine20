@@ -35,7 +35,7 @@ class ExampleApplication_Controller_ExampleRecord extends Tinebase_Controller_Re
     }    
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var ExampleApplication_Controller_ExampleRecord
      */

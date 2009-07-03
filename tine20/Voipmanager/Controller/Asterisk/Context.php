@@ -38,7 +38,7 @@ class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abs
     }
             
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Voipmanager_Controller_Asterisk_Context
      */

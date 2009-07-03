@@ -47,7 +47,7 @@ class Phone_Backend_Asterisk
     private function __clone() {}
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Phone_Backend_Asterisk
      */

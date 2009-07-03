@@ -34,7 +34,7 @@ class Tinebase_Tags
     }
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Tags
      */

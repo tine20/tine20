@@ -32,7 +32,7 @@ class Erp_Controller_Contract extends Tinebase_Controller_Record_Abstract
     }    
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Erp_Controller_Contract
      */

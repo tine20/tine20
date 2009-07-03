@@ -41,7 +41,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
     }
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Crm_Controller
      */

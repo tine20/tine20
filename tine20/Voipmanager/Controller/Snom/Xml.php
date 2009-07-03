@@ -44,7 +44,7 @@ class Voipmanager_Controller_Snom_Xml extends Voipmanager_Controller_Abstract
     }
             
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Voipmanager_Controller_Snom_Xml
      */

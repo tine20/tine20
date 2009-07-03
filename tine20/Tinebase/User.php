@@ -35,7 +35,7 @@ class Tinebase_User
     private function __clone() {}
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_User_Interface
      */

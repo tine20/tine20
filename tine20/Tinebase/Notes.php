@@ -55,7 +55,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     }
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Notes
      */

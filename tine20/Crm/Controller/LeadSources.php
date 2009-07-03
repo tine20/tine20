@@ -40,7 +40,7 @@ class Crm_Controller_LeadSources extends Tinebase_Controller_Abstract
     }
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Crm_Controller_LeadSources
      */

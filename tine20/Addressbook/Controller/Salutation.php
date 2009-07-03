@@ -28,7 +28,7 @@ class Addressbook_Controller_Salutation extends Tinebase_Controller_Abstract
     protected $_backend;
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Addressbook_Controller_Salutation
      */

@@ -41,7 +41,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Addressbook_Controller_Contact
      */

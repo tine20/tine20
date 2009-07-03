@@ -38,7 +38,7 @@ class Voipmanager_Controller_Snom_PhoneSettings extends Voipmanager_Controller_A
     }
             
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Voipmanager_Controller_Snom_PhoneSettings
      */

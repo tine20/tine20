@@ -26,7 +26,7 @@ class Tinebase_Relations
      */
     protected $_backend;
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Relations
      */

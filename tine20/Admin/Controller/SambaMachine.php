@@ -31,7 +31,7 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
 	protected $_backend = NULL;
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Admin_Controller_SambaMachine
      */

@@ -94,7 +94,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const VIEW_COMPUTERS = 'view_computers';
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Admin_Acl_Rights
      */

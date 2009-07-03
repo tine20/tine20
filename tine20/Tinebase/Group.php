@@ -36,7 +36,7 @@ class Tinebase_Group
     private function __clone() {}
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Group
      */

@@ -38,7 +38,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     protected static $_credentialcacheid = NULL;
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Auth_CredentialCache
      */

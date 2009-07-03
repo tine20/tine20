@@ -25,7 +25,7 @@
 class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface
 {
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var ActiveSync_Controller
      */

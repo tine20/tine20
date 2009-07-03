@@ -75,7 +75,7 @@ class Tinebase_Application
     }
 
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_Application
      */

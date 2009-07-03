@@ -29,7 +29,7 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_TIMEACCOUNTS = 'manage_timeaccounts';
         
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Timetracker_Acl_Rights
      */

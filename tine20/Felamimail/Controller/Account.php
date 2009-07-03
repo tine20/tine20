@@ -36,7 +36,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected $_addedDefaultAccount = FALSE;
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Felamimail_Controller_Account
      */

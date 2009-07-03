@@ -42,7 +42,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     }    
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Courses_Controller_Course
      */

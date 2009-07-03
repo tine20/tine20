@@ -31,7 +31,7 @@ class Tinebase_AsyncJob
     const MINUTES_TILL_FAILURE = 10;
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_AsyncJob
      */

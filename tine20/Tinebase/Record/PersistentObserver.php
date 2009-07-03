@@ -27,7 +27,7 @@ class Tinebase_Record_PersistentObserver
 	 */
 	protected $_db;
 	
-	/* holdes the instance of the singleton
+	/* holds the instance of the singleton
      *
      * @var Tinebase_Record_PersistentObserver
      */

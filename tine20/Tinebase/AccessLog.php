@@ -22,7 +22,7 @@ class Tinebase_AccessLog
     protected $_db;
     
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Tinebase_AccessLog
      */
