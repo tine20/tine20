@@ -104,4 +104,36 @@ class Tinebase_Alarm
     {
         return $this->_backend->create($_alarm);
     }
+    
+    /**
+     * get all alarms of a given record
+     * 
+     * @param  string       $_model     own model to get relations for
+     * @param  string|array $_id        own id to get relations for
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Alarm
+     * 
+     * @todo add backend?
+     * @todo add grants?
+     */
+    public function getAlarmsOfRecord($_model, $_id)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' ids:" . print_r((array)$_id, true));
+    
+        $filter = new Tinebase_Model_AlarmFilter(array(
+            array(
+                'field'     => 'model', 
+                'operator'  => 'equals', 
+                'value'     => $_model
+            ),
+            array(
+                'field'     => 'record_id', 
+                'operator'  => 'equals', 
+                'value'     => $_id
+            ),
+        ));
+        $result = $this->_backend->search($filter);
+            
+        return $result;
+    }
+    
 }
