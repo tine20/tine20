@@ -69,13 +69,21 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             event.set('id', '');
         }
         
+        if (event.isRecurBase()) {
+            this.loadMask.show();
+        }
+        
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(createdEvent) {
-                this.store.remove(event);
-                this.store.add(createdEvent);
-                this.setLoading(false);
-                this.view.getSelectionModel().select(createdEvent);
+                if (createdEvent.isRecurBase()) {
+                    this.store.load({});
+                } else {
+                    this.store.remove(event);
+                    this.store.add(createdEvent);
+                    this.setLoading(false);
+                    this.view.getSelectionModel().select(createdEvent);
+                }
             }
         });
     },
@@ -103,18 +111,33 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     onUpdateEvent: function(event) {
         this.setLoading(true);
         //console.log('A existing event has been updated -> call backend saveRecord');
-        Tine.Calendar.backend.saveRecord(event, {
-            scope: this,
-            success: function(updatedEvent) {
-                //console.log('Backend returned updated event -> replace event in view');
-                event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
+        
+        if (event.isRecurBase()) {
+            this.loadMask.show();
+        }
+        
+        if (event.isRecurInstance()) {
+            Tine.Calendar.backend.createRecurException(event, false, false, {
                 
-                this.store.remove(event);
-                this.store.add(updatedEvent);
-                this.setLoading(false);
-                this.view.getSelectionModel().select(updatedEvent);
-            }
-        });
+            });
+        } else {
+            Tine.Calendar.backend.saveRecord(event, {
+                scope: this,
+                success: function(updatedEvent) {
+                    //console.log('Backend returned updated event -> replace event in view');
+                    if (updatedEvent.isRecurBase()) {
+                        this.store.load({});
+                    } else {
+                        event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
+                        
+                        this.store.remove(event);
+                        this.store.add(updatedEvent);
+                        this.setLoading(false);
+                        this.view.getSelectionModel().select(updatedEvent);
+                    }
+                }
+            });
+        }
     },
     
     setLoading: function(bool) {
