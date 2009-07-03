@@ -305,6 +305,9 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         }, this);
         
         rrule.byday = bydayArray.join();
+        if (! rrule.byday) {
+            rrule.byday = this.byDayValue;
+        }
         return rrule;
     },
     
@@ -337,12 +340,16 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
     setRule: function(rrule) {
         Tine.Calendar.RrulePanel.WEEKLYcard.superclass.setRule.call(this, rrule);
         
-        var bydayArray = rrule.byday.split(',');
-        this.byday.items.each(function(cb) {
-            if (bydayArray.indexOf(cb.name) != -1) {
-                cb.setValue(true);
-            }
-        }, this);
+        if (rrule.byday) {
+            this.byDayValue = rrule.byday;
+            
+            var bydayArray = rrule.byday.split(',');
+            this.byday.items.each(function(cb) {
+                if (bydayArray.indexOf(cb.name) != -1) {
+                    cb.setValue(true);
+                }
+            }, this);
+        }
     }
 });
 
