@@ -268,15 +268,15 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         if ($_accountId instanceof Tinebase_Model_User) {
             if (empty($_accountId->accountId)) {
-                throw new Tinebase_Exception_NotFound('no accountId set');
+                throw new Tinebase_Exception_NotFound('accountId can not be empty');
             }
-            $accountId = (int) $_accountId->accountId;
+            $accountId = (string) $_accountId->accountId;
         } else {
-            $accountId = (int) $_accountId;
+            $accountId = (string) $_accountId;
         }
         
-        if ($accountId === 0) {
-            throw new Tinebase_Exception_NotFound('accountId can not be 0');
+        if (empty($accountId)) {
+            throw new Tinebase_Exception_NotFound('accountId can not be empty');
         }
         
         return $accountId;

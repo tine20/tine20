@@ -64,15 +64,15 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     {
         if($_groupId instanceof Tinebase_Model_Group) {
             if(empty($_groupId->id)) {
-                throw new Tinebase_Exception_InvalidArgument('No group id set.');
+                throw new Tinebase_Exception_InvalidArgument('groupId can not be empty');
             }
-            $groupId = (int) $_groupId->id;
+            $groupId = (string) $_groupId->id;
         } else {
-            $groupId = (int) $_groupId;
+            $groupId = (string) $_groupId;
         }
         
-        if($groupId === 0) {
-            throw new Tinebase_Exception_InvalidArgument('Group id can not be 0.');
+        if(empty($groupId)) {
+            throw new Tinebase_Exception_InvalidArgument('groupId can not be empty');
         }
         
         return $groupId;
