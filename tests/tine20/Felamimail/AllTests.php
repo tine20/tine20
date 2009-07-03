@@ -42,7 +42,7 @@ class Felamimail_AllTests
         $suite->addTestSuite('Felamimail_JsonTest');
         $suite->addTestSuite('Felamimail_Controller_FolderTest');
         $suite->addTestSuite('Felamimail_Controller_MessageTest');
-        //$suite->addTestSuite('Felamimail_MessageTest');
+        $suite->addTestSuite('Felamimail_Controller_AccountTest');
         return $suite;
     }
 }
