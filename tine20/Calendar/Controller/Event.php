@@ -507,7 +507,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Calendar_Model_Event $_event
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo get current alarms of event and delete diffs / update alarms
      */
     protected function _saveAlarms($_event)
     {
@@ -524,20 +523,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             //.  print_r($alarms->toArray(), true)
         );
         
-        /*
-        $currentAlarms = $this->_backend->getEventAttendee($_event);
-        $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
-        $this->_backend->deleteAttendee($diff['toDeleteIds']);
-        */
-        
-        //$calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
+        $currentAlarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $_event->id);
+        $diff = $currentAlarms->getMigration($alarms->getArrayOfIds());
+        Tinebase_Alarm::getInstance()->delete($diff['toDeleteIds']);
         
         foreach ($alarms as $alarm) {
             $id = $alarm->getId();
             
             if ($id) {
                 //$currentAlarm = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
-                //$this->_updateAttender($attender, $currentAttender, $calendar);
+                //$currentAlarm->alarm_time = $alarm->alarm_time;
+                //$currentAlarm->options = 
+                
+                $alarm = Tinebase_Alarm::getInstance()->update($alarm);
                 
             } else {
                 $alarm->record_id = $_event->getId();
@@ -555,13 +553,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * delete alarms for events
      *
      * @param array $_eventIds
-     * 
-     * @todo implement
      */
     protected function _deleteAlarmsForIds($_eventIds)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . " Deleting alarms for events " . print_r($_eventIds, TRUE)
         );
+        
+        Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord($this->_modelName, $_eventIds);
     }
 }

@@ -59,6 +59,9 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         )), new Tinebase_Model_Pagination(array()));
         
+        // delete alarms
+        Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord('Calendar_Model_Event', $events->getArrayOfIds());
+        
         foreach ($events as $event) {
             $this->_backend->delete($event->getId());
         }
@@ -94,11 +97,20 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
      * returns a simple event
      *
      * @return Calendar_Model_Event
+     * 
+     * @todo add options?
      */
     protected function _getEventWithAlarm()
     {
         $event = $this->_getEvent();
-        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            array(
+                'model'             => 'Calendar_Model_Event',
+                'alarm_time'        => Zend_Date::now(),
+                'sent_status'       => Tinebase_Model_Alarm::STATUS_PENDING, 
+                'options'           => ''
+            ),
+        ), TRUE);
         
         return $event;
     }

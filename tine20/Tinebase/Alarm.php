@@ -18,12 +18,26 @@
  * @package     Tinebase
  * @subpackage  Alarm
  */
-class Tinebase_Alarm
+class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
 {
     /**
      * @var Tinebase_Alarm_Backend
      */
     protected $_backend;
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Tinebase_Model_Alarm';
+    
+    /**
+     * check for container ACLs?
+     *
+     * @var boolean
+     */
+    protected $_doContainerACLChecks = FALSE;
     
     /**
      * holdes the instance of the singleton
@@ -61,6 +75,7 @@ class Tinebase_Alarm
      *
      * @return void
      * 
+     * @todo update alarms (Tinebase_Model_Alarm::STATUS_SUCCESS)
      * @todo sort alarms (by model/...)?
      * @todo what to do about Tinebase_Model_Alarm::STATUS_FAILURE alarms?
      */
@@ -95,29 +110,24 @@ class Tinebase_Alarm
     }
     
     /**
-     * create new alarm
-     *
-     * @param Tinebase_Model_Alarm $_alarm
-     * @return Tinebase_Model_Alarm
-     */
-    public function create(Tinebase_Model_Alarm $_alarm)
-    {
-        return $this->_backend->create($_alarm);
-    }
-    
-    /**
      * get all alarms of a given record
      * 
-     * @param  string       $_model     own model to get relations for
-     * @param  string|array $_id        own id to get relations for
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_Alarm
+     * @param  string $_model model to get alarms for
+     * @param  string|array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_recordId record id(s) to get alarms for
+     * @return Tinebase_Record_RecordSet|array of Tinebase_Model_Alarm|ids
      * 
      * @todo add backend?
      * @todo add grants?
      */
-    public function getAlarmsOfRecord($_model, $_id)
+    public function getAlarmsOfRecord($_model, $_recordId, $_onlyIds = FALSE)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' ids:" . print_r((array)$_id, true));
+        if ($_recordId instanceof Tinebase_Record_RecordSet) {
+            $_recordId = $_recordId->getArrayOfIds();
+        } else if ($_recordId instanceof Tinebase_Record_Interface) {
+            $_recordId = $_recordId->getId();
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' id:" . print_r((array)$_recordId, true));
     
         $filter = new Tinebase_Model_AlarmFilter(array(
             array(
@@ -127,13 +137,25 @@ class Tinebase_Alarm
             ),
             array(
                 'field'     => 'record_id', 
-                'operator'  => 'equals', 
-                'value'     => $_id
+                'operator'  => 'in', 
+                'value'     => (array)$_recordId
             ),
         ));
-        $result = $this->_backend->search($filter);
+        $result = $this->_backend->search($filter, NULL, $_onlyIds);
             
         return $result;
     }
     
+    /**
+     * delete all alarms of a given record(s)
+     *
+     * @param string $_model
+     * @param string|array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_recordId
+     * @return void
+     */
+    public function deleteAlarmsOfRecord($_model, $_recordId)
+    {
+        $ids = $this->getAlarmsOfRecord($_model, $_recordId, TRUE);
+        $this->delete($ids);
+    }
 }

@@ -78,24 +78,17 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         $eventData = $this->_getEventWithAlarm()->toArray();
         
-        /*
-        $tag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
-            'name' => 'phpunit-' . substr(Tinebase_Record_Abstract::generateUID(), 0, 10),
-            'type' => Tinebase_Model_Tag::TYPE_PERSONAL
-        )));
-        $eventData['tags'] = array($tag->toArray());
-        
-        $note = new Tinebase_Model_Note(array(
-            'note'         => 'very important note!',
-            'note_type_id' => Tinebase_Notes::getInstance()->getNoteTypes()->getFirstRecord()->getId(),
-        ));
-        $eventData['notes'] = array($note->toArray());
-        
         $persistentEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
-        $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
-        */
+        //print_r($loadedEventData);
+        
+        // check if alarms are created / returned
+        $this->assertGreaterThan(0, count($loadedEventData['alarms']));
+        $this->assertEquals('Calendar_Model_Event', $loadedEventData['alarms'][0]['model']);
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEventData['alarms'][0]['sent_status']);
+        
+        //-- try to send alarm
     }
     
     public function testUpdateEvent()
