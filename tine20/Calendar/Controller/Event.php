@@ -103,6 +103,47 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * updates a recur series
+     *
+     * @param Calendar_Model_Event $_recurInstance
+     * @return Calendar_Model_Event
+     */
+    public function updateRecurSeries($_recurInstance)
+    {
+        $baseEvent = $this->_getRecurBaseEvent($_recurInstance);
+        
+        if ($baseEvent->editGrant) {
+            // compute time diff
+            $instancesOriginalDtStart = new Zend_Date(substr($_recurInstance->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
+            $dtstartDiff = clone $_recurInstance->dtstart;
+            $dtstartDiff->sub($instancesOriginalDtStart);
+            
+            $instancesEventDuration = clone $_recurInstance->dtend;
+            $instancesEventDuration->sub($_recurInstance->dtstart);
+            
+            // replace baseEvent with adopted instance
+            $newBaseEvent = clone $_recurInstance;
+            
+            $newBaseEvent->setId($baseEvent->getId());
+            unset($newBaseEvent->recurid);
+            
+            $newBaseEvent->dtstart     = clone $baseEvent->dtstart;
+            $newBaseEvent->dtstart->add($dtstartDiff);
+            
+            $newBaseEvent->dtend       = clone $newBaseEvent->dtstart;
+            $newBaseEvent->dtend->add($instancesEventDuration);
+            
+            $newBaseEvent->rrule       = $baseEvent->rrule;
+            $newBaseEvent->exdate      = $baseEvent->exdate;
+            
+            return $this->update($newBaseEvent);
+        } else {
+            // attendee handling only
+        }
+        
+    }
+    
+    /**
      * creates an exception instance of a recuring evnet
      *
      * NOTE: deleting persistent exceptions is done via a normal delte action
@@ -224,8 +265,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 
                 $rrule = $_record->rrule instanceof Calendar_Model_Rrule ? $_record->rrule : Calendar_Model_Rrule::getRruleFromString($_record->rrule);
-                Calendar_Model_Rrule::addUTCDateDstFix($rrule->until, $diff, $_record->originator_tz);
-                $_record->rrule = (string) $rrule;
+                if ($rrule->until instanceof Zend_Date) {
+                    Calendar_Model_Rrule::addUTCDateDstFix($rrule->until, $diff, $_record->originator_tz);
+                    $_record->rrule = (string) $rrule;
+                }
                 
                 // update exdate(s)
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($_record->exdate) . ' exdate(s)');
