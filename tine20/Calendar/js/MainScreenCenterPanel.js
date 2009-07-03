@@ -241,7 +241,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         if(btn == 'yes') {
                             panel.loadMask.show();
                             this.onDeleteRecordsConfirmNonRecur(panel, selection);
-                            panel.getStore().load({});
+                            this.refresh(true);
                         } else {
                             this.onDeleteRecordsConfirmFail(panel, selection);
                         }

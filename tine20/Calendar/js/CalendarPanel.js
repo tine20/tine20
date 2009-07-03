@@ -38,6 +38,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         Tine.Calendar.CalendarPanel.superclass.initComponent.call(this);
         
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
         this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
         
         this.autoScroll = false;
@@ -116,28 +118,101 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             this.loadMask.show();
         }
         
-        if (event.isRecurInstance()) {
-            Tine.Calendar.backend.createRecurException(event, false, false, {
-                
-            });
-        } else {
-            Tine.Calendar.backend.saveRecord(event, {
-                scope: this,
-                success: function(updatedEvent) {
-                    //console.log('Backend returned updated event -> replace event in view');
-                    if (updatedEvent.isRecurBase()) {
+        if (event.isRecurBase()) {
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Confirm Update of Series'),
+                this.app.i18n._('Do you realy want to update all events of this recuring event series?'),
+                function(btn) {
+                    if(btn == 'yes') {
+                        this.loadMask.show();
+                        this.onUpdateEventAction(event);
                         this.store.load({refresh: true});
                     } else {
-                        event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
-                        
-                        this.store.remove(event);
-                        this.store.add(updatedEvent);
-                        this.setLoading(false);
-                        this.view.getSelectionModel().select(updatedEvent);
+                        this.loadMask.show();
+                        this.store.load({refresh: true});
                     }
-                }
+                }, this
+            );
+        } else if (event.isRecurInstance()) {
+            this.updateeMethodWin = new Ext.Window({
+                modal: true,
+                title: this.app.i18n._('Update Event'),
+                html:  this.app.i18n._('Do you want to update the whole series, or just this event'),
+                buttons: [{
+                    text: this.app.i18n._('Update nothing'),
+                    scope: this,
+                    handler: function() {
+                        this.loadMask.show();
+                        this.store.load({refresh: true});
+                        this.updateeMethodWin.close();
+                    }
+                }, {
+                    text: this.app.i18n._('Update whole series'),
+                    scope: this,
+                    handler: function() {
+                        this.loadMask.show();
+                        
+                        var options = {
+                            scope: this,
+                            success: function() {
+                                this.store.load({refresh: true});
+                            },
+                            failure: function () {
+                                this.loadMask.hide();;
+                                Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), this.app.i18n._('Failed not update recurring event series')); 
+                            }
+                        };
+                        
+                        Tine.Calendar.backend.updateRecurSeries(event, options);
+                        this.updateeMethodWin.close();
+                    }
+                }, {
+                    text: this.app.i18n._('Update this event only'),
+                    scope: this,
+                    handler: function() {
+                        var options = {
+                            scope: this,
+                            success: function(updatedEvent) {
+                                event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
+                    
+                                this.store.remove(event);
+                                this.store.add(updatedEvent);
+                                this.setLoading(false);
+                                this.view.getSelectionModel().select(updatedEvent);
+                            },
+                            failure: function () {
+                                Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), this.app.i18n._('Failed not update event')); 
+                            }
+                        };
+                        
+                        Tine.Calendar.backend.createRecurException(event, false, false, options);
+                        this.updateeMethodWin.close();
+                    }
+                }]
             });
+            this.updateeMethodWin.show();
+        } else {
+            this.onUpdateEventAction(event);
         }
+    },
+    
+    onUpdateEventAction: function(event) {
+        Tine.Calendar.backend.saveRecord(event, {
+            scope: this,
+            success: function(updatedEvent) {
+                //console.log('Backend returned updated event -> replace event in view');
+                if (updatedEvent.isRecurBase()) {
+                    this.store.load({refresh: true});
+                } else {
+                    event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
+                    
+                    this.store.remove(event);
+                    this.store.add(updatedEvent);
+                    this.setLoading(false);
+                    this.view.getSelectionModel().select(updatedEvent);
+                }
+            }
+        });
     },
     
     setLoading: function(bool) {
