@@ -29,7 +29,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'folder_id'     => array('filter' => 'Tinebase_Model_Filter_Id'), 
         'subject'       => array('filter' => 'Tinebase_Model_Filter_Text'), 
         'from'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'received'      => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'received'      => array('filter' => 'Tinebase_Model_Filter_DateTime'),
     // custom filters
         'to'            => array('custom' => true),
         'cc'            => array('custom' => true),
