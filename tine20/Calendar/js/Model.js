@@ -67,7 +67,16 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model
     containerProperty: 'container_id',
     // ngettext('Calendar', 'Calendars', n); gettext('Calendars');
     containerName: 'Calendar',
-    containersName: 'Calendars'
+    containersName: 'Calendars',
+    isRecurInstance: function() {
+        return this.id && this.id.match(/^fakeid/);
+    },
+    isRecurBase: function() {
+        return !!this.get('rrule');
+    },
+    isRecurException: function() {
+        return !!this.get('recurid') && !( this.idProperty && this.id.match(/^fakeid/));
+    }
 });
 
 /**
@@ -107,11 +116,55 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     return data;
 };
 
+Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, {
+    
+    createRecurException: function(event, deleteInstance, deleteAllFollowing, options) {
+        options = options || {};
+        options.params = options.params || {};
+        options.beforeSuccess = function(response) {
+            return [this.recordReader(response)];
+        };
+        
+        var p = options.params;
+        p.method = this.appName + '.createRecurException';
+        p.recordData = Ext.util.JSON.encode(event.data);
+        p.deleteInstance = deleteInstance ? 1 : 0;
+        p.deleteAllFollowing = deleteAllFollowing ? 1 : 0;
+        
+        return this.request(options);
+    },
+    
+    deleteRecurSeries: function(event, options) {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        p.method = this.appName + '.deleteRecurSeries';
+        p.recordData = Ext.util.JSON.encode(event.data);
+        
+        return this.request(options);
+    },
+    
+    updateRecurSeries: function(event, options) {
+        options = options || {};
+        options.params = options.params || {};
+        options.beforeSuccess = function(response) {
+            return [this.recordReader(response)];
+        };
+        
+        var p = options.params;
+        p.method = this.appName + '.updateRecurSeries';
+        p.recordData = Ext.util.JSON.encode(event.data);
+        
+        return this.request(options);
+    }
+});
+
 /**
- * default tasks backend
+ * default event backend
  */
 if (Tine.Tinebase.widgets) {
-    Tine.Calendar.backend = new Tine.Tinebase.widgets.app.JsonBackend({
+    Tine.Calendar.backend = new Tine.Calendar.Model.EventJsonBackend({
         appName: 'Calendar',
         modelName: 'Event',
         recordClass: Tine.Calendar.Model.Event
