@@ -294,7 +294,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $cacheId = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE)->getCacheId();
                 setcookie('usercredentialcache', base64_encode(Zend_Json::encode($cacheId)));
             } else {
-                self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
                 $success = FALSE;
             }
         
@@ -425,6 +425,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $registryData['Tinebase'] = $this->getRegistryData();
         }
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dieing to avoid servers success property to be part of the registry.');
         die(Zend_Json::encode($registryData));
     }
 
