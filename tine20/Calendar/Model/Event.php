@@ -205,7 +205,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
         
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {
-            $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms']);
+            $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE);
         }
         
         parent::setFromArray($_data);

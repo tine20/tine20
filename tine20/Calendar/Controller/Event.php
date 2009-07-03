@@ -21,7 +21,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     // add free time search
     // add group attendee handling
     // add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
-    // handle alarms -> generic approach
     
     /**
      * @var Calendar_Controller_Event
@@ -506,9 +505,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * saves alarm of given event
      * 
      * @param Calendar_Model_Event $_event
+     * @return Tinebase_Record_RecordSet
      * 
-     * @todo make creation of alarms work
-     * @todo get current alarms of event and delete diffs
+     * @todo get current alarms of event and delete diffs / update alarms
      */
     protected function _saveAlarms($_event)
     {
@@ -516,6 +515,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_event->alarms : 
             new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
+        if (count($alarms) == 0) {
+            // no alarms
+            return $alarms;
+        }
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . " About to save " . count($alarms) . " alarms for event {$_event->id} " 
             //.  print_r($alarms->toArray(), true)
@@ -532,16 +535,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         foreach ($alarms as $alarm) {
             $id = $alarm->getId();
             
-            /*
             if ($id) {
-                $currentAlarm = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
-                $this->_updateAttender($attender, $currentAttender, $calendar);
+                //$currentAlarm = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
+                //$this->_updateAttender($attender, $currentAttender, $calendar);
                 
             } else {
-                $this->_createAttender($attender, $calendar);
+                $alarm->record_id = $_event->getId();
+                if (! $alarm->model) {
+                    $alarm->model = 'Calendar_Model_Event';
+                }
+                $alarm = Tinebase_Alarm::getInstance()->create($alarm);
             }
-            */
         }
+        
+        return $alarms;
     }
 
     /**
