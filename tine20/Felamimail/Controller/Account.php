@@ -329,7 +329,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         // don't update default account
-        if (! $_account->id || $accountId == Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
+        if (! $_account->id || $_account->id == Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
             $result = $_account;
         } else {
             $result = $this->update($_account);
