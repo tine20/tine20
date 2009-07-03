@@ -198,8 +198,6 @@ class Tinebase_Controller implements Tinebase_Event_Interface
      * all events get routed through this function
      *
      * @param Tinebase_Event_Abstract $_eventObject the eventObject
-     * 
-     * @todo save state of async events in db (fencing)
      */
     public function handleEvents(Tinebase_Event_Abstract $_eventObject)
     {
@@ -209,12 +207,22 @@ class Tinebase_Controller implements Tinebase_Event_Interface
                 
                 // check if already running
                 if (! Tinebase_AsyncJob::getInstance()->jobIsRunning($eventName)) {
+                    
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No ' . $eventName . ' is running. Starting new one.');
                 
                     $job = Tinebase_AsyncJob::getInstance()->startJob($eventName);
-                    Tinebase_Alarm::getInstance()->sendPendingAlarms();
+                    try {
+                        Tinebase_Alarm::getInstance()->sendPendingAlarms();
+                        
+                        // save new status 'success'
+                        $job = Tinebase_AsyncJob::getInstance()->finishJob($job);
+                    } catch (Exception $e) {
+                        // save new status 'failure'
+                        $job = Tinebase_AsyncJob::getInstance()->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE, $e->getMessage());
+                    }
                     
-                    // save new status
-                    $job = Tinebase_AsyncJob::getInstance()->finishJob($job);
+                } else {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' is already running. Skipping event.');
                 }
                 break;
         }

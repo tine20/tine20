@@ -505,12 +505,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /****************************** alarm functions ************************/
     
     /**
-     * sendAlarm - send an alarm and update alarm status/sent_time/...
+     * sendAlarm - send an alarm
      *
      * @param  Tinebase_Model_Alarm $_alarm
-     * @return boolean
+     * @return void
      * 
-     * @todo implement
+     * @todo throw exception on error
+     * @todo finish sending of alarms (get/resolve sender/recipient)
+     * @todo add more event data to message body
      */
     public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
     {
@@ -518,7 +520,26 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
         );
         
-        return TRUE;
+        $event = $this->get($_alarm->record_id);
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
+        
+        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
+        
+        // create message
+        $messageSubject = $translate->_('Notification for Event ' . $event->summary);
+        $messageBody = $translate->_('Event description:<br/>' . $event->description);
+        
+        $notificationsBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
+        
+        // loop recipients
+        foreach ($event->attendee as $attender) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($attender->toArray(), TRUE));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending alarm to user id ' . print_r($attender->user_id, TRUE));
+            
+            //-- send message
+            //$notificationsBackend->send($organizer, $attender, $messageSubject, $messageBody);
+        }
     }
 
     /**

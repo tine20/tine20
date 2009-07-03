@@ -74,6 +74,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      * send pending alarms
      *
      * @return void
+     * @throws Tinebase_Exception
      * 
      * @todo update alarms (Tinebase_Model_Alarm::STATUS_SUCCESS)
      * @todo sort alarms (by model/...)?
@@ -104,13 +105,21 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
             
             if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
-                if ($appController->sendAlarm($alarm)) {
-                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
-                } else {
-                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
-                }
+                
                 $alarm->sent_time = Zend_Date::now();
-                $this->update($alarm);
+                
+                try {
+                    $appController->sendAlarm($alarm);
+                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
+                    $this->update($alarm);
+                    
+                } catch (Tinebase_Exception $te) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+                    $alarm->sent_message = $te->getMessage();
+                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
+                    $this->update($alarm);
+                    throw $te;
+                }
             }
         }
     }

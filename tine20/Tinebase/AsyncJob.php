@@ -25,6 +25,12 @@ class Tinebase_AsyncJob
     protected $_backend;
     
     /**
+     * minutes till job is declared 'failed'
+     *
+     */
+    const MINUTES_TILL_FAILURE = 10;
+    
+    /**
      * holdes the instance of the singleton
      *
      * @var Tinebase_AsyncJob
@@ -60,8 +66,6 @@ class Tinebase_AsyncJob
      *
      * @param string $_name
      * @return boolean
-     * 
-     * @todo check if job is running for a long time -> set status to Tinebase_Model_AsyncJob::STATUS_FAILURE
      */
     public function jobIsRunning($_name)
     {
@@ -78,9 +82,23 @@ class Tinebase_AsyncJob
                 'value'     => Tinebase_Model_AsyncJob::STATUS_RUNNING
             ),
         ));
-        $jobCount = $this->_backend->searchCount($filter);
+        $jobs = $this->_backend->search($filter);
         
-        $result = ($jobCount > 0);
+        $result = (count($jobs) > 0);
+        
+        // check if job is running for a long time -> set status to Tinebase_Model_AsyncJob::STATUS_FAILURE
+        if ($result) {
+            $job = $jobs->getFirstRecord();
+            
+            if ($job->start_time->compare(Zend_Date::now()->subMinute(self::MINUTES_TILL_FAILURE)) == -1) {
+                // it seems that the old job ended (start time is older than MINUTES_TILL_FAILURE mins) -> start a new one
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Old ' . $_name . ' job is running too long. Finishing it now.');
+                
+                $this->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE);
+                $result = FALSE;
+            }
+        }
+        
         return $result;
     }
 
@@ -117,16 +135,22 @@ class Tinebase_AsyncJob
      * finish job
      *
      * @param Tinebase_Model_AsyncJob $_asyncJob
+     * @param string $_status
+     * @param string $_message
      * @return Tinebase_Model_AsyncJob
      */
-    public function finishJob(Tinebase_Model_AsyncJob $_asyncJob)
+    public function finishJob(Tinebase_Model_AsyncJob $_asyncJob, $_status = Tinebase_Model_AsyncJob::STATUS_SUCCESS, $_message = NULL)
     {
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             $_asyncJob->end_time = Zend_Date::now();
-            $_asyncJob->status = Tinebase_Model_AsyncJob::STATUS_SUCCESS;
+            $_asyncJob->status = $_status;
+            if ($_message !== NULL) {
+                $_asyncJob->message = $_message;
+            }
+            
             $result = $this->_backend->update($_asyncJob);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
