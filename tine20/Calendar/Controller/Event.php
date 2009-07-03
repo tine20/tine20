@@ -110,9 +110,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param  Calendar_Model_Event  $_event
      * @param  bool                  $_deleteInstance
+     * @param  bool                  $_deleteAllFollowing (technically croppes rrule_until)
      * @return Calendar_Model_Event  exception Event | updated baseEvent
      */
-    public function createRecurException($_event, $_deleteInstance = FALSE)
+    public function createRecurException($_event, $_deleteInstance = FALSE, $_deleteAllFollowing = FALSE)
     {
         // NOTE: recurd is computed by rrule recur computations and therefore is already
         //       part of the event.
@@ -129,8 +130,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             unset($_event->rrule);
             unset($_event->exdate);
             
-            $_event->attendee->setId(NULL);
-            $_event->notes->setId(NULL);
+            if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
+                $_event->attendee->setId(NULL);
+            }
+            
+            if ($_event->notes instanceof Tinebase_Record_RecordSet) {
+                $_event->notes->setId(NULL);
+            }
             
             // we need to touch the recur base event, so that sync action find the updates
             $this->_backend->update($baseEvent);
@@ -138,15 +144,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return $this->create($_event);
             
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleting recur instance: '{$_event->recurid}'");
+            
             
             $exdate = new Zend_Date(substr($_event->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
-            if (is_array($baseEvent->exdate)) {
-                $exdates = $baseEvent->exdate;
-                array_push($exdates, $exdate);
-                $baseEvent->exdate = $exdates;
+            
+            if ($_deleteAllFollowing) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " shorten rrule_until for: '{$_event->recurid}'");
+                
+                $rrule = Calendar_Model_Rrule::getRruleFromString($baseEvent->rrule);
+                $rrule->until = $exdate->addHour(-1);
+                
+                $baseEvent->rrule = (string) $rrule;
             } else {
-                $baseEvent->exdate = array($exdate);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleting recur instance: '{$_event->recurid}'");
+                
+                if (is_array($baseEvent->exdate)) {
+                    $exdates = $baseEvent->exdate;
+                    array_push($exdates, $exdate);
+                    $baseEvent->exdate = $exdates;
+                } else {
+                    $baseEvent->exdate = array($exdate);
+                }
             }
             
             return $this->update($baseEvent);
