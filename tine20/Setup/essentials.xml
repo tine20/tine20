@@ -15,5 +15,6 @@
         <extension name="SimpleXML" />
         <extension name="ctype" />
         <extension name="dom" />
+        <extension name="mcrypt" />
 	</extensions>	
 </essential>	
