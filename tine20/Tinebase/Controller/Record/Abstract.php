@@ -139,16 +139,19 @@ abstract class Tinebase_Controller_Record_Abstract
             
             $this->_checkGrant($record, 'get');
             
-            // get tags / notes / relations
+            // get tags / notes / relations / alarms
             if ($record->has('tags')) {
                 Tinebase_Tags::getInstance()->getTagsOfRecord($record);
-            }            
+            }
             if ($record->has('notes')) {
                 $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
-            }        
+            }
             if ($record->has('relations')) {
                 $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
-            }            
+            }
+            if ($record->has('alarms')) {
+                $record->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $record->getId());
+            }
         }
         
         return $record;    
