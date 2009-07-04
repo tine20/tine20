@@ -29,8 +29,8 @@ class Tinebase_Model_PersistentObserver extends Tinebase_Record_Abstract
     protected $_application = 'Tinebase';
 	
     protected $_validators = array(
-        'identifier'             => array('allowEmpty' => true, 'Int' ),
-        'created_by'             => array('allowEmpty' => true,  'Int' ),
+        'identifier'             => array('allowEmpty' => true, 'Int'  ),
+        'created_by'             => array('allowEmpty' => true,        ),
         'creation_time'          => array('allowEmpty' => true         ),
         'last_modified_by'       => array('allowEmpty' => true         ),
         'last_modified_time'     => array('allowEmpty' => true         ),
