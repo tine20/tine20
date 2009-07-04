@@ -21,6 +21,173 @@
  
 abstract class Tinebase_User_Abstract
 {
+
+    /**
+     * des encryption
+     */
+    const ENCRYPT_DES = 'des';
+    
+    /**
+     * blowfish crypt encryption
+     */
+    const ENCRYPT_BLOWFISH_CRYPT = 'blowfish_crypt';
+    
+    /**
+     * md5 crypt encryption
+     */
+    const ENCRYPT_MD5_CRYPT = 'md5_crypt';
+    
+    /**
+     * ext crypt encryption
+     */
+    const ENCRYPT_EXT_CRYPT = 'ext_crypt';
+    
+    /**
+     * md5 encryption
+     */
+    const ENCRYPT_MD5 = 'md5';
+    
+    /**
+     * smd5 encryption
+     */
+    const ENCRYPT_SMD5 = 'smd5';
+
+    /**
+     * sha encryption
+     */
+    const ENCRYPT_SHA = 'sha';
+    
+    /**
+     * ssha encryption
+     */
+    const ENCRYPT_SSHA = 'ssha';
+    
+    /**
+     * ntpassword encryption
+     */
+    const ENCRYPT_NTPASSWORD = 'ntpassword';
+    
+    /**
+     * no encryption
+     */
+    const ENCRYPT_PLAIN = 'plain';
+    
+    /**
+     * returns all supported password encryptions types
+     *
+     * @return array
+     */
+    public static function getSupportedEncryptionTypes()
+    {
+        return array(
+            self::ENCRYPT_BLOWFISH_CRYPT,
+            self::ENCRYPT_EXT_CRYPT,
+            self::ENCRYPT_DES,
+            self::ENCRYPT_MD5,
+            self::ENCRYPT_MD5_CRYPT,
+            self::ENCRYPT_PLAIN,
+            self::ENCRYPT_SHA,
+            self::ENCRYPT_SMD5,
+            self::ENCRYPT_SSHA,
+            self::ENCRYPT_NTPASSWORD
+        );
+    }
+    
+    /**
+     * encryptes password
+     *
+     * @param string $_password
+     * @param string $_method
+     */
+    public static function encryptPassword($_password, $_method)
+    {
+        switch (strtolower($_method)) {
+            case self::ENCRYPT_BLOWFISH_CRYPT:
+                if(@defined('CRYPT_BLOWFISH') && CRYPT_BLOWFISH == 1) {
+                    $salt = '$2$' . self::getRandomString(13);
+                    $password = '{CRYPT}' . crypt($_password, $salt);
+                }
+                break;
+                
+            case self::ENCRYPT_EXT_CRYPT:
+                if(@defined('CRYPT_EXT_DES') && CRYPT_EXT_DES == 1) {
+                    $salt = self::getRandomString(9);
+                    $password = '{CRYPT}' . crypt($_password, $salt);
+                }
+                break;
+                
+            case self::ENCRYPT_MD5:
+                $password = '{MD5}' . base64_encode(pack("H*", md5($_password)));
+                break;
+                
+            case self::ENCRYPT_MD5_CRYPT:
+                if(@defined('CRYPT_MD5') && CRYPT_MD5 == 1) {
+                    $salt = '$1$' . self::getRandomString(9);
+                    $password = '{CRYPT}' . crypt($_password, $salt);
+                }
+                break;
+                
+            case self::ENCRYPT_PLAIN:
+                $password = $_password;
+                break;
+                
+            case self::ENCRYPT_SHA:
+                if(function_exists('mhash')) {
+                    $password = '{SHA}' . base64_encode(mhash(MHASH_SHA1, $_password));
+                }
+                break;
+                
+            case self::ENCRYPT_SMD5:
+                if(function_exists('mhash')) {
+                    $salt = self::getRandomString(8);
+                    $hash = mhash(MHASH_MD5, $_password . $salt);
+                    $password = '{SMD5}' . base64_encode($hash . $salt);
+                }
+                break;
+                
+            case self::ENCRYPT_SSHA:
+                if(function_exists('mhash')) {
+                    $salt = self::getRandomString(8);
+                    $hash = mhash(MHASH_SHA1, $_password . $salt);
+                    $password = '{SSHA}' . base64_encode($hash . $salt);
+                }
+                break;
+                
+            default:
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " using default password encryption method " . self::ENCRYPT_DES);
+                // fall through
+            case self::ENCRYPT_DES:
+                $salt = self::getRandomString(2);
+                $password  = '{CRYPT}'. crypt($_password, $salt);
+                break;
+            
+        }
+        
+        if (! $password) {
+            throw new Tinebase_Exception_NotImplemented("$_method is not supported by your php version");
+        }
+        
+        return $password;
+    }
+    
+    /**
+     * generates a randomstrings of given length
+     *
+     * @param int $_length
+     */
+    public static function getRandomString($_length)
+    {
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        
+        $randomString = '';
+        for ($i=0; $i<(int)$_length; $i++) {
+            $randomString .= $chars[mt_rand(1, strlen($chars)) -1];
+        }
+        
+        return $randomString;
+    }
+    
+    
     /**
      * get list of users
      *
@@ -145,7 +312,14 @@ abstract class Tinebase_User_Abstract
      */
     public function userNameExists($_username)
     {
-        return (bool)$this->getUserByLoginName($_username)->getId();
+        try {
+            $this->getUserByLoginName($_username)->getId();
+        } catch (Tinebase_Exception_NotFound $e) {
+            // username not found
+            return false;
+        }
+        
+        return true;
     }
     
     /******************* abstract functions *********************/
