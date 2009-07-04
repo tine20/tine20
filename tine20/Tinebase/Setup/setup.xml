@@ -247,7 +247,8 @@
                 </field>
                 <field>
                     <name>primary_group_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <index>
