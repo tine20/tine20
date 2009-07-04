@@ -2,7 +2,7 @@
 <application>
     <name>Felamimail</name>
     <!-- gettext('Felamimail') -->   
-    <version>0.3</version>
+    <version>0.4</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -11,7 +11,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -21,7 +21,8 @@
                 </field>
                 <field>
                     <name>user_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>name</name>
@@ -136,7 +137,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -144,7 +146,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -157,7 +160,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
@@ -191,7 +195,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>

@@ -56,4 +56,50 @@ class Felamimail_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Felamimail', '0.3');
         $this->setTableVersion('felamimail_account', '3');
     }
+    
+    /**
+     * change all fields which store account ids from integer to string
+     * 
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>created_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('felamimail_account', $declaration, 'created_by');
+        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('felamimail_account', $declaration, 'last_modified_by');
+        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('felamimail_account', $declaration, 'deleted_by');
+        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>user_id</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('felamimail_account', $declaration, 'user_id');
+        
+        $this->setTableVersion('felamimail_account', 4);
+        $this->setTableVersion('felamimail_folder', 2);
+        $this->setApplicationVersion('Felamimail', '0.4');
+    }
 }
