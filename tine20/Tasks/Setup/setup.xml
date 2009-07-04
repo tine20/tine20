@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tasks</name>
-    <version>0.1</version>
+    <version>0.2</version>
     <order>30</order>
     <depends>
         <application>Admin</application>
@@ -24,7 +24,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -32,7 +33,8 @@
                 </field>            
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -45,7 +47,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
@@ -78,8 +81,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -88,7 +91,8 @@
                 </field>            
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -102,7 +106,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
@@ -157,7 +162,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -165,7 +171,8 @@
                 </field>            
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -178,7 +185,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                
                 <field>
@@ -217,7 +225,8 @@
                 </field>            
                     <field>
                     <name>organizer</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>priority</name>

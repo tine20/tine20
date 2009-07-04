@@ -39,7 +39,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     protected $_validators = array(
         // tine record fields
         'container_id'         => array('allowEmpty' => true,  'Int' ),
-        'created_by'           => array('allowEmpty' => true,  'Int' ),
+        'created_by'           => array('allowEmpty' => true,        ),
         'creation_time'        => array('allowEmpty' => true         ),
         'last_modified_by'     => array('allowEmpty' => true         ),
         'last_modified_time'   => array('allowEmpty' => true         ),
@@ -56,7 +56,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'description'          => array('allowEmpty' => true         ),
         'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true         ),
-        'organizer'            => array('allowEmpty' => true, 'Int'  ),
+        'organizer'            => array('allowEmpty' => true,        ),
         'priority'             => array('allowEmpty' => true, 'default' => 1),
         'status_id'            => array('allowEmpty' => true         ),
         'summary'              => array('presence' => 'required'     ),
