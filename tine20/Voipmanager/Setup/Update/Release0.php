@@ -411,4 +411,21 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Voipmanager', '0.25');
     }
+    /**
+     * change all fields which store account ids from integer to string
+     * 
+     */
+    public function update_25()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>account_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('snom_phones_acl', $declaration, 'account_id');
+        
+        $this->setApplicationVersion('Voipmanager', '0.26');
+    }
 }

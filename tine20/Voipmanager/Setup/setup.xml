@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>0.25</version>
+    <version>0.26</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -1399,7 +1399,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
