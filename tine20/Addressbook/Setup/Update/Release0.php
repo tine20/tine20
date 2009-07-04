@@ -323,6 +323,6 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
             </field>');
         $this->_backend->alterCol('addressbook', $declaration, 'deleted_by');
                 
-        $this->setApplicationVersion('Tinebase', '0.9');
+        $this->setApplicationVersion('Addressbook', '0.9');
     }
 }
