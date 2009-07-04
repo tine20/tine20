@@ -136,6 +136,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         } else if (event.isRecurInstance()) {
             this.updateeMethodWin = new Ext.Window({
                 modal: true,
+                closable: false,
                 title: this.app.i18n._('Update Event'),
                 html:  this.app.i18n._('Do you want to update the whole series, or just this event'),
                 buttons: [{
