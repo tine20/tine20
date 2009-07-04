@@ -292,4 +292,37 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '0.8');
     }
+    
+    /**
+     * change all fields which store account ids from integer to string
+     * 
+     */
+    public function update_8()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>created_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration, 'created_by');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration, 'last_modified_by');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration, 'deleted_by');
+                
+        $this->setApplicationVersion('Tinebase', '0.9');
+    }
 }
