@@ -113,8 +113,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         // add account for group / role member tests
-        $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
-        if ($user->accountDisplayName == $translate->_('unknown')) {
+        try {
+            $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
+        } catch (Tinebase_Exception_NotFound $e) {
             Tinebase_User::getInstance()->addUser($this->objects['user']);
         }
         
@@ -159,11 +160,13 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $id = 12334567;
         
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
         // add account for group / role member tests
         $user = Tinebase_User::getInstance()->getUserById($id);
         
-        $this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
-        $this->assertEquals($id, $user->accountId);
+        #$this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
+        #$this->assertEquals($id, $user->accountId);
     }
 
     /**
@@ -175,11 +178,13 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $loginName = 'something';
         
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
         // add account for group / role member tests
         $user = Tinebase_User::getInstance()->getUserByLoginName($loginName);
         
-        $this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
-        $this->assertEquals(0, $user->accountId);
+        #$this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
+        #$this->assertEquals(0, $user->accountId);
     }
 
     /**

@@ -50,7 +50,39 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-
+        $this->objects['initialGroup'] = new Tinebase_Model_Group(array(
+            'id'            => 'test-controller-group',
+            'name'          => 'tine20phpunit',
+            'description'   => 'initial group'
+        )); 
+        
+        $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
+            'id'            => 'test-controller-group',
+            'name'          => 'tine20phpunit updated',
+            'description'   => 'updated group'
+        ));
+         
+        $this->objects['initialAccount'] = new Tinebase_Model_FullUser(array(
+            'accountId'             => 'dflkjgldfgdfgd',
+            'accountLoginName'      => 'tine20phpunit',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
+        )); 
+        
+        $this->objects['updatedAccount'] = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'tine20phpunit-updated',
+            'accountStatus'         => 'disabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+            'accountLastName'       => 'Tine 2.0 Updated',
+            'accountFirstName'      => 'PHPUnit Updated',
+            'accountEmailAddress'   => 'phpunit@tine20.org'
+        ));         
+        
         return;
         
     }
@@ -67,14 +99,66 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to add an account
+     *
+     */
+    public function testAddAccount()
+    {
+        $account = Admin_Controller_User::getInstance()->create($this->objects['initialAccount'], 'lars', 'lars');
+        $this->assertTrue(!empty($account->accountId));
+        //$this->assertTrue($this->objects['initialAccount']->accountId != $account->accountId);
+        $this->assertEquals($this->objects['initialAccount']->accountLoginName, $account->accountLoginName);
+        
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->accountId);
+        $this->assertTrue(!empty($contact->creation_time));
+    }
+    
+    /**
+     * try to get all accounts containing phpunit in there name
+     *
+     */
+    public function testGetAccounts()
+    {
+        $accounts = Admin_Controller_User::getInstance()->searchFullUsers($this->objects['initialAccount']['accountLoginName']);
+                
+        $this->assertEquals(1, count($accounts));
+    }
+    
+    /**
+     * try to delete an accout
+     *
+     */
+    public function testDeleteAccount()
+    {
+        $accounts = Admin_Controller_User::getInstance()->searchFullUsers($this->objects['initialAccount']['accountLoginName']);
+        
+        Admin_Controller_User::getInstance()->delete($accounts->getArrayOfIds());
+        
+        $accounts = Admin_Controller_User::getInstance()->searchFullUsers($this->objects['initialAccount']['accountLoginName']);
+
+        $this->assertEquals(0, count($accounts));
+    }
+
+    /**
+     * try to add a group
+     *
+     */
+    public function testAddGroup()
+    {
+        $group = Admin_Controller_Group::getInstance()->create($this->objects['initialGroup']);
+        
+        $this->assertEquals($this->objects['initialGroup']->id, $group->id);
+    }
+    
+    /**
      * try to get all groups
      *
      */
     public function testGetGroups()
     {        
-        $groups = Admin_Controller_Group::getInstance()->search(NULL, 'id', 'ASC', 0, 10);
+        $groups = Admin_Controller_Group::getInstance()->search($this->objects['initialGroup']->name);
         
-        $this->assertGreaterThan(0, sizeof($groups));
+        $this->assertEquals(1, count($groups));
     }    
 
     /**
@@ -83,12 +167,28 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroup()
     {                
-        $group = Admin_Controller_Group::getInstance()->get(Tinebase_Group::getInstance()->getGroupByName('Users')->getId());
+        $groups = Admin_Controller_Group::getInstance()->search($this->objects['initialGroup']->name);
         
-        $this->assertEquals('Users', $group->name);
+        $group = Admin_Controller_Group::getInstance()->get($groups[0]->getId());
+        
+        $this->assertEquals($this->objects['initialGroup']->name, $group->name);
     }    
 
- 
+    /**
+     * try to delete a group
+     *
+     */
+    public function testDeleteGroups()
+    {
+        $groups = Admin_Controller_Group::getInstance()->search($this->objects['initialGroup']->name);
+        
+        Admin_Controller_Group::getInstance()->delete($groups->getArrayOfIds());
+
+        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
+
+        $group = Admin_Controller_Group::getInstance()->get($groups[0]->getId());
+    }
+    
 }		
 	
 
