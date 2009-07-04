@@ -175,7 +175,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function createRecurException($_event, $_deleteInstance = FALSE, $_deleteAllFollowing = FALSE)
     {
-        // NOTE: recurd is computed by rrule recur computations and therefore is already
+        // NOTE: recurid is computed by rrule recur computations and therefore is already
         //       part of the event.
         if (empty($_event->recurid)) {
             throw new Exception('recurid must be present to create exceptions!');
