@@ -157,4 +157,40 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setTableVersion('metacrm_lead', '3');
         $this->setApplicationVersion('Crm', '0.4');
     }
+    
+    /**
+     * change all fields which store account ids from integer to string
+     * 
+     */
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>created_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('metacrm_lead', $declaration, 'created_by');
+        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('metacrm_lead', $declaration, 'last_modified_by');
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('metacrm_lead', $declaration, 'deleted_by');
+
+        
+        $this->setApplicationVersion('Crm', '0.5');
+    }
 }

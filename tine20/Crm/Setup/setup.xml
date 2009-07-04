@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>0.4</version>
+    <version>0.5</version>
     <order>20</order>
     <depends>
         <application>Admin</application>
@@ -175,7 +175,8 @@
                 </field>
                <field>
                     <name>created_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -183,7 +184,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -196,7 +198,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
