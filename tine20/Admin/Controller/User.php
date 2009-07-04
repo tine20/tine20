@@ -94,7 +94,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_FullUser
      */
-    public function searchFullUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    public function searchFullUsers($_filter, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
@@ -226,6 +226,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     public function create(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
+        
+        // avoid forging accountId, get's created in backend
+        unset($_account->accountId);
         
         $account = $this->_userBackend->addUser($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
