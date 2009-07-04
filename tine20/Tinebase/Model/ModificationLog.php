@@ -45,7 +45,7 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
         'record_type'          => array('allowEmpty' => true                                     ),
         'record_backend'       => array('presence' => 'required', 'allowEmpty' => false          ),
         'modification_time'    => array('presence' => 'required', 'allowEmpty' => false          ),
-        'modification_account' => array('presence' => 'required', 'allowEmpty' => false, 'Int'   ),
+        'modification_account' => array('presence' => 'required', 'allowEmpty' => false,         ),
         'modified_attribute'   => array('presence' => 'required', 'allowEmpty' => false          ),
         'old_value'            => array('allowEmpty' => true                                     ),
         'new_value'            => array('allowEmpty' => true                                     ),
