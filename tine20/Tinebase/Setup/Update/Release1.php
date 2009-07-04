@@ -321,4 +321,136 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '1.5');
     }
+    
+    /**
+     * update to 1.5
+     * - change all fields which store account id's to string type
+     */
+    public function update_5()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>created_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('roles', $declaration, 'created_by');
+        $this->_backend->alterCol('record_persistentobserver', $declaration, 'created_by');
+        $this->_backend->alterCol('tags', $declaration, 'created_by');
+        $this->_backend->alterCol('notes', $declaration, 'created_by');
+        $this->_backend->alterCol('filter', $declaration, 'created_by');
+        $this->_backend->alterCol('importexport_definitions', $declaration, 'created_by');
+        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>created_by</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('relations', $declaration, 'created_by');
+
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('roles', $declaration, 'last_modified_by');
+        $this->_backend->alterCol('tags', $declaration, 'last_modified_by');
+        $this->_backend->alterCol('notes', $declaration, 'last_modified_by');
+        $this->_backend->alterCol('filter', $declaration, 'last_modified_by');
+        $this->_backend->alterCol('importexport_definitions', $declaration, 'last_modified_by');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('record_persistentobserver', $declaration, 'last_modified_by');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('relations', $declaration, 'last_modified_by');
+        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('record_persistentobserver', $declaration, 'deleted_by');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('relations', $declaration, 'deleted_by');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('tags', $declaration, 'deleted_by');
+        $this->_backend->alterCol('notes', $declaration, 'deleted_by');
+        $this->_backend->alterCol('filter', $declaration, 'deleted_by');
+        $this->_backend->alterCol('importexport_definitions', $declaration, 'deleted_by');
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>modification_account</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('timemachine_modlog', $declaration, 'modification_account');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>owner</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('tags', $declaration, 'owner');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>account_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('role_accounts', $declaration, 'account_id');
+        $this->_backend->alterCol('access_log', $declaration, 'account_id');
+        $this->_backend->alterCol('preferences', $declaration, 'account_id');
+        $this->_backend->alterCol('filter', $declaration, 'account_id');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>account_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('container_acl', $declaration, 'account_id');
+        $this->_backend->alterCol('tags_acl', $declaration, 'account_id');
+        
+        $this->setApplicationVersion('Tinebase', '1.6');
+    }
 }

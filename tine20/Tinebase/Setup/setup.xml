@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>1.5</version>
+    <version>1.6</version>
     <tables>
         <table>
             <name>applications</name>
@@ -535,7 +535,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -628,8 +629,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -684,7 +685,8 @@
                 </field>                  
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -693,7 +695,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -709,7 +712,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>            
                 <field>
@@ -823,7 +827,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -833,7 +838,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -849,7 +855,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>            
                 <field>
@@ -939,7 +946,8 @@
                 </field>
                 <field>
                     <name>modification_account</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1010,7 +1018,8 @@
                 </field>
                 <field>
                     <name>owner</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>name</name>
@@ -1036,7 +1045,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -1044,7 +1054,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -1058,7 +1069,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
@@ -1106,7 +1118,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1298,7 +1311,8 @@
                 </field>                
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -1306,7 +1320,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -1429,8 +1444,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 
@@ -1602,8 +1617,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -1856,7 +1871,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -1864,7 +1880,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -1878,7 +1895,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
@@ -1922,8 +1940,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -1955,7 +1973,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -1963,7 +1982,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -1976,7 +1996,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
@@ -2067,7 +2088,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -2075,7 +2097,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -2088,7 +2111,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
