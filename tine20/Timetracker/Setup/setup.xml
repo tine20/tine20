@@ -2,7 +2,7 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>0.4</version>
+    <version>0.5</version>
     <order>60</order>
     <status>enabled</status>
     <depends>
@@ -86,7 +86,8 @@
                 </field>                                
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -94,7 +95,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -107,7 +109,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
@@ -157,7 +160,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -204,7 +208,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -212,7 +217,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -225,7 +231,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
