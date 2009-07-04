@@ -37,8 +37,8 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_GroupTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_GroupTest');
+            PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
     /**
@@ -50,13 +50,13 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objects['initialGroup'] = new Tinebase_Model_Group(array(
-            'id'            => 12,
+            'id'            => 'test-group-lkfdshew7fdfwo8efw',
             'name'          => 'tine20phpunit',
             'description'   => 'initial group'
         )); 
         
         $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
-            'id'            => 12,
+            'id'            => 'test-group-lkfdshew7fdfwo8efw',
             'name'          => 'tine20phpunit updated',
             'description'   => 'updated group'
         )); 
@@ -67,38 +67,38 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         )); 
 
         $this->objects['account1'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 10,
+            'accountId'             => 'test-account-dsjdsud8hjd10',
             'accountLoginName'      => 'tine20phpunit1',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->id,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
         $this->objects['account2'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 11,
+            'accountId'             => 'test-account-dsjdsud8hjd11',
             'accountLoginName'      => 'tine20phpunit2',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->id,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0 2',
             'accountFirstName'      => 'PHPUnit 2',
             'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
 
         $this->objects['account3'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 12,
+            'accountId'             => 'test-account-dsjdsud8hjd12',
             'accountLoginName'      => 'tine20phpunit3',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->id,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0 3',
             'accountFirstName'      => 'PHPUnit 3',
             'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
-        
+
         // add accounts for group member tests
         try {
         	Tinebase_User::getInstance()->getUserById($this->objects['account1']->accountId) ;
@@ -244,7 +244,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteGroup()
     {
-        Tinebase_Group::getInstance()->deleteGroup($this->objects['initialGroup']);
+        Tinebase_Group::getInstance()->deleteGroups($this->objects['initialGroup']);
 
         $this->setExpectedException('Exception');
 

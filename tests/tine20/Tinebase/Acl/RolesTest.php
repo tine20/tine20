@@ -73,8 +73,9 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         // add account for group / role member tests
-        $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
-        if ($user->accountDisplayName == $translate->_('unknown')) {
+        try {
+            $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
+        } catch (Tinebase_Exception_NotFound $e) {
             $user = Tinebase_User::getInstance()->addUser($this->objects['user']);
             Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
         }

@@ -109,7 +109,7 @@ class Tinebase_User_RegistrationTest extends PHPUnit_Framework_TestCase
     {
 
     	// don't send mail
-    	$result = Tinebase_User_Registration::getInstance()->registerUser ( $this->userData, false );
+    	$result = Tinebase_User_Registration::getInstance()->registerUser( $this->userData, false );
     	
     	// check account
     	$account = Tinebase_User::getInstance()->getFullUserByLoginName( $this->userData['accountLoginName'] );

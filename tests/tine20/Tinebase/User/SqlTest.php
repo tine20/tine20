@@ -208,10 +208,10 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     public function testDeleteAccount()
     {
         $this->_backend->deleteUser($this->objects['initialAccount']);
-        $account = $this->_backend->getUserById($this->objects['initialAccount'], 'Tinebase_Model_FullUser');
         
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
-        $this->assertEquals($translate->_('unknown'), $account->accountDisplayName);
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        $account = $this->_backend->getUserById($this->objects['initialAccount'], 'Tinebase_Model_FullUser');        
     }
 }		
 	
