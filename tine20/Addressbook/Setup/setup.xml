@@ -20,7 +20,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>adr_one_countryname</name>

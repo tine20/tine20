@@ -255,11 +255,22 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
     }
     
     /**
-     * rename column owner to container_id in addressbook table
+     * the formeer update had the wrong field length
+     * added foreign key to accounts table
      * 
      */    
     public function update_7()
     {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>account_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        
+        $this->_backend->alterCol('addressbook', $declaration, 'account_id');
+        
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
                 <name>addressbook::account_id--accounts::id</name>
