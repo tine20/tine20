@@ -193,24 +193,17 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             throw new Tinebase_Exception_Record_Validation('invalid group object');
         }
         
+        if(!isset($_group->id)) {
+            $groupId = $_group->generateUID();
+            $_group->setId($groupId);
+        }
+        
         $data = $_group->toArray();
         
-        if(empty($data['id'])) {
-            unset($data['id']);
-        }
         unset($data['members']);
         
-        $groupId = $this->groupsTable->insert($data);
-        
-        if ($groupId === NULL) {
-            $groupId = $this->groupsTable->getAdapter()->lastSequenceId(substr(SQL_TABLE_PREFIX . 'groups', 0, 26) . '_seq');
-        }
-        
-        
-        if(!isset($data['id'])) {
-            $_group->id = $groupId;
-        }
-        
+        $this->groupsTable->insert($data);
+                
         return $_group;
     }
     

@@ -67,7 +67,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         $this->_validators = array(
-            'accountId'             => array('Digits', 'allowEmpty' => true),
+            'accountId'             => array('allowEmpty' => true),
             'accountLoginName'      => array('presence' => 'required'),
             'accountLastLogin'      => array('allowEmpty' => true),
             'accountLastLoginfrom'  => array('allowEmpty' => true),
