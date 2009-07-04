@@ -64,13 +64,13 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         'type'                   => array('presence' => 'required', 'allowEmpty' => false),
         'remark'                 => array('allowEmpty' => true          ), // freeform field for manual relations
         'related_record'         => array('allowEmpty' => true          ), // property to store 'resolved' relation record
-        'created_by'             => array('allowEmpty' => true,  'Int'  ),
+        'created_by'             => array('allowEmpty' => true,         ),
         'creation_time'          => array('allowEmpty' => true          ),
-        'last_modified_by'       => array('allowEmpty' => true,  'Int'  ),
+        'last_modified_by'       => array('allowEmpty' => true,         ),
         'last_modified_time'     => array('allowEmpty' => true          ),
         'is_deleted'             => array('allowEmpty' => true          ),
         'deleted_time'           => array('allowEmpty' => true          ),
-        'deleted_by'             => array('allowEmpty' => true,  'Int'  ),
+        'deleted_by'             => array('allowEmpty' => true,         ),
 	);
 	/**
 	 * fields containing datetime data
