@@ -254,4 +254,31 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Addressbook', '0.7');
     }
     
+    /**
+     * rename column owner to container_id in addressbook table
+     * 
+     */    
+    public function update_7()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>addressbook::account_id--accounts::id</name>
+                <field>
+                    <name>account_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>accounts</table>
+                    <field>id</field>
+                </reference>
+                <onupdate>cascade</onupdate>
+                <ondelete>cascade</ondelete>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('addressbook', $declaration);
+        
+        $this->setTableVersion('addressbook', '6');
+        
+        $this->setApplicationVersion('Addressbook', '0.8');
+    }
 }
