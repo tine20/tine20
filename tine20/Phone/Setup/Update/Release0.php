@@ -200,4 +200,23 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Phone', '0.6');
     }
+    
+    /**
+     * change all fields which store account ids from integer to string
+     * 
+     */
+    public function update_6()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>account_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('phone_extensions', $declaration, 'account_id');
+        
+        $this->setTableVersion('phone_extensions', 2);
+        $this->setApplicationVersion('Phone', '0.7');
+    }
 }

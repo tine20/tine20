@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Phone</name>
-    <version>0.6</version>
+    <version>0.7</version>
     <order>11</order>
     <depends>
         <application>Admin</application>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>phone_extensions</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -19,7 +19,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
