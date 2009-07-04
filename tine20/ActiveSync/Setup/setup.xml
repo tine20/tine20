@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>0.8</version>
+    <version>0.9</version>
     <order>90</order>
-    <status>disabled</status>    
     <depends>
         <application>Addressbook</application>
         <application>Tasks</application>
@@ -82,7 +81,8 @@
                 </field>
                 <field>
                     <name>owner_id</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

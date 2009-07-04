@@ -359,4 +359,22 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '0.8');
     }
+    
+    /**
+     * change all fields which store account ids from integer to string
+     * 
+     */
+    public function update_8()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>owner_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('acsync_device', $declaration, 'owner_id');
+        
+        $this->setApplicationVersion('ActiveSync', '0.9');
+    }
 }
