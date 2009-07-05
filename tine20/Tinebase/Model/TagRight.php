@@ -57,7 +57,7 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
             Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, 
             Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
         ), 'presence' => 'required', 'allowEmpty' => false),
-        'account_id'   => array('Alnum', 'presence' => 'required', 'allowEmpty' => false),
+        'account_id'   => array('presence' => 'required', 'allowEmpty' => false),
         'view_right'   => array('presence' => 'required', 'default' => false, 'InArray' => array(true, false), 'allowEmpty' => true),
         'use_right'    => array('presence' => 'required', 'default' => false, 'InArray' => array(true, false), 'allowEmpty' => true),
     );

@@ -60,7 +60,7 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                => array('allowEmpty' => TRUE),
-        'account_id'        => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
+        'account_id'        => array('presence' => 'required', 'allowEmpty' => FALSE,),
         'account_type'      => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
             Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 
             Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, 
