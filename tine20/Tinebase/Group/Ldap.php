@@ -26,12 +26,26 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected $_ldap;
     
     /**
+     * the sql group backend
+     * 
+     * @var Tinebase_Group_Sql
+     */
+    protected $_sql;
+    
+    /**
      * ldap config options
      *
      * @var array
      */
     protected $_options;
     
+    /**
+     * name of the ldap attribute which identifies a group uniquely
+     * for example gidNumber, entryUUID, objectGUID
+     * @var string
+     */
+    protected $_uuidAttribute = 'entryUUID';
+            
     /**
      * the constructor
      *
@@ -42,6 +56,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         $this->_ldap = new Tinebase_Ldap($_options);
         $this->_ldap->bind();
+        
+        $this->_sql = new Tinebase_Group_Sql();
     }
         
     /**
@@ -53,6 +69,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      */
     public function getGroupMemberships($_accountId)
     {
+        return $this->_sql->getGroupMemberships($_accountId);
+        
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
         $cacheId = 'getLdapGroupMemberships' . (($_accountId instanceof Tinebase_Model_FullUser) ? $_accountId->getId() : $_accountId);
         $result = $cache->load($cacheId);
@@ -189,31 +207,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
-    {        
-        if(!empty($_filter)) {
-            $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
-            $filter = "(&(objectclass=posixgroup)(|(cn=$searchString)))";
-        } else {
-            $filter = 'objectclass=posixgroup';
-        }
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
-        
-        $groups = $this->_ldap->fetchAll($this->_options['groupsDn'], $filter, array('cn','description','gidnumber'), 'cn');
-        
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
-        
-        foreach($groups as $group) {
-            $groupObject = new Tinebase_Model_Group(array(
-                'id'            => $group['gidnumber'][0],
-                'name'          => $group['cn'][0],
-                'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
-            ));
-            
-            $result->addRecord($groupObject);
-        }
-        
-        return $result;
+    {
+        return $this->_sql->getGroups($_filter, $_sort, $_dir, $_start, $_limit);        
     }
 
     /**
@@ -408,6 +403,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($data, true));
         $this->_ldap->insert($dn, $data);
         
+        $groupId = $this->_ldap->fetch($dn, 'objectclass=*', $this->_uuidAttribute);
+        
+        var_dump($groupId);
+        
         return $this->getGroupById($gidNumber);
     }
     
@@ -583,5 +582,82 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         }
         
         return $gidNumber;
+    }
+    
+    public function importGroups()
+    {
+        #if(!empty($_filter)) {
+        #    $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
+        #    $filter = "(&(objectclass=posixgroup)(|(cn=$searchString)))";
+        #} else {
+            $filter = 'objectclass=posixgroup';
+        #}
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        
+        $groups = $this->_ldap->fetchAll($this->_options['groupsDn'], $filter, array('cn', 'description', $this->_uuidAttribute), 'cn');
+        
+        foreach($groups as $group) {
+            $groupObject = new Tinebase_Model_Group(array(
+                'id'            => $group[strtolower($this->_uuidAttribute)][0],
+                'name'          => $group['cn'][0],
+                'description'   => isset($group['description'][0]) ? $group['description'][0] : null
+            )); 
+
+            try {
+                $group = $this->_sql->getGroupById($groupObject->getId());
+                $this->_sql->updateGroup($groupObject);
+            } catch (Tinebase_Exception_Record_NotDefined $e) {
+                $this->_sql->addGroup($groupObject);
+            }
+        }
+    }
+    
+    public function importGroupMembers()
+    {
+        $groups = $this->getGroups();
+        
+        foreach($groups as $group) {
+            $groupId = Tinebase_Model_Group::convertGroupIdToInt($group);     
+
+            try {
+                $groupMembers = $this->_ldap->fetch($this->_options['groupsDn'], $this->_uuidAttribute . '=' . $groupId, array('member', 'memberuid'));
+            } catch (Exception $e) {
+                // group not found => nothing to import
+                continue;
+            }
+            
+            if(isset($groupMembers['member'])) {
+                unset($groupMembers['member']['count']);
+                foreach($groupMembers['member'] as $dn) {
+                    try {
+                        $accountData = $this->_ldap->fetchDn($dn, 'objectclass=*', array('uidnumber'));
+                        $memberId = Tinebase_User::getInstance()->resolveLdapUIdNumber($accountData['uidnumber'][0]);
+                    } catch (Exception $e) {
+                        // ignore ldap errors
+                    }
+                    $this->_sql->addGroupMember($groupId, $memberId);
+                }
+            } else {
+                unset($groupMembers['memberuid']['count']);
+                foreach((array)$groupMembers['memberuid'] as $loginName) {
+                    $account = Tinebase_User::getInstance()->getUserByLoginName($loginName);
+                    $memberId = $account->getId();
+                    
+                    $this->_sql->addGroupMember($groupId, $memberId);
+                }
+            }
+        }        
+    }
+    
+    public function resolveLdapGIdNumber($_gidNumber)
+    {
+        if(strtolower($this->_uuidAttribute) == 'gidnumber') {
+            return $_gidNumber;
+        }
+        
+        $groupId = $this->_ldap->fetch($this->_options['groupsDn'], 'gidnumber=' . $_gidNumber, array($this->_uuidAttribute));
+        
+        return $groupId[strtolower($this->_uuidAttribute)][0];
     }
 }

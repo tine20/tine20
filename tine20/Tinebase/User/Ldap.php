@@ -17,78 +17,30 @@
  * @subpackage  User
  */
 class Tinebase_User_Ldap extends Tinebase_User_Abstract
-{
-    /**
-     * des encryption
-     */
-    const ENCRYPT_DES = 'des';
-    
-    /**
-     * blowfish crypt encryption
-     */
-    const ENCRYPT_BLOWFISH_CRYPT = 'blowfish_crypt';
-    
-    /**
-     * md5 crypt encryption
-     */
-    const ENCRYPT_MD5_CRYPT = 'md5_crypt';
-    
-    /**
-     * ext crypt encryption
-     */
-    const ENCRYPT_EXT_CRYPT = 'ext_crypt';
-    
-    /**
-     * md5 encryption
-     */
-    const ENCRYPT_MD5 = 'md5';
-    
-    /**
-     * smd5 encryption
-     */
-    const ENCRYPT_SMD5 = 'smd5';
-
-    /**
-     * sha encryption
-     */
-    const ENCRYPT_SHA = 'sha';
-    
-    /**
-     * ssha encryption
-     */
-    const ENCRYPT_SSHA = 'ssha';
-    
-    /**
-     * no encryption
-     */
-    const ENCRYPT_PLAIN = 'plain';
-    
+{    
     /**
      * @var array
      */
     protected $_options = array();
-
-    /**
-     * the constructor
-     *
-     * @param  array $options Options used in connecting, binding, etc.
-     */
-    public function __construct(array $_options) 
-    {
-        $this->_options = $_options;
-
-        if (isset($this->_options['requiredObjectClass'])) {
-            $this->_requiredObjectClass = (array)$this->_options['requiredObjectClass'];
-        }
-
-        $this->_backend = new Tinebase_Ldap($_options);
-        $this->_backend->bind();
-    }
-   
+    
     /**
      * @var Tinebase_Ldap
      */
     protected $_backend = NULL;
+
+    /**
+     * the sql user backend
+     * 
+     * @var Tinebase_User_Sql
+     */
+    protected $_sql;
+    
+    /**
+     * name of the ldap attribute which identifies a group uniquely
+     * for example uidNumber, entryUUID, objectGUID
+     * @var string
+     */
+    protected $_uuidAttribute = 'entryUUID';
     
     /**
      * direct mapping
@@ -123,24 +75,39 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     );
     
     /**
-     * returns all supported password encryptions types
+     * the basic ldap filter (for example the objectclass)
      *
-     * @return array
+     * @var string
      */
-    public static function getSupportedEncryptionTypes()
+    protected $_baseFilter      = 'objectclass=posixaccount';
+    
+    /**
+     * the query filter for the ldap search (for example uid=%s)
+     *
+     * @var string
+     */
+    protected $_queryFilter     = '|(uid=%s)(cn=%s)(sn=%s)(givenName=%s)';
+        
+    /**
+     * the constructor
+     *
+     * @param  array $options Options used in connecting, binding, etc.
+     */
+    public function __construct(array $_options) 
     {
-        return array(
-            self::ENCRYPT_BLOWFISH_CRYPT,
-            self::ENCRYPT_EXT_CRYPT,
-            self::ENCRYPT_DES,
-            self::ENCRYPT_MD5,
-            self::ENCRYPT_MD5_CRYPT,
-            self::ENCRYPT_PLAIN,
-            self::ENCRYPT_SHA,
-            self::ENCRYPT_SMD5,
-            self::ENCRYPT_SSHA
-        );
-    }
+        $this->_options = $_options;
+
+        if (isset($this->_options['requiredObjectClass'])) {
+            $this->_requiredObjectClass = (array)$this->_options['requiredObjectClass'];
+        }
+        
+        $this->_rowNameMapping['accountId'] = strtolower($this->_uuidAttribute);
+        
+        $this->_backend = new Tinebase_Ldap($_options);
+        $this->_backend->bind();
+        
+        $this->_sql = new Tinebase_User_Sql();
+    }   
     
     /**
      * get list of users
@@ -153,14 +120,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * @param string $_accountClass the type of subclass for the Tinebase_Record_RecordSet to return
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
      */
-    public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, 
-        $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
+    public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
     {        
         if (!empty($_filter)) {
             $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
-            $filter = "(&(objectclass=posixaccount)(|(uid=$searchString)(cn=$searchString)(sn=$searchString)(givenName=$searchString)))";
+            $filter = "(&($this->_baseFilter)(" . sprintf($this->_queryFilter, $_filter) . "))";
         } else {
-            $filter = 'objectclass=posixaccount';
+            $filter = $this->_baseFilter;
         }
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
         
@@ -175,16 +141,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_Model_User')
     {
-        $loginName = Zend_Ldap::filterEscape($_loginName);
-        
-        try {
-            $account = $this->_backend->fetch($this->_options['userDn'], 'uid=' . $loginName);
-            $result = $this->_ldap2User($account, $_accountClass);
-        } catch (Tinebase_Exception_NotFound $enf) {
-            $result = $this->getNonExistentUser($_accountClass);
-        }
-        
-        return $result;
+        return $this->_sql->getUserByLoginName($_loginName, $_accountClass);
     }
     
     /**
@@ -195,9 +152,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
     {
+        return $this->_sql->getUserById($_accountId, $_accountClass);
+        
         try {
             $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-            $account = $this->_backend->fetch($this->_options['userDn'], 'uidnumber=' . $accountId);
+            $filter = "(&($this->_baseFilter)({$this->_rowNameMapping['accountId']}=$accountId))";
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ldap filter: " . $filter);
+            $account = $this->_backend->fetch($this->_options['userDn'], $filter);
             $result = $this->_ldap2User($account, $_accountClass);
         } catch (Tinebase_Exception_NotFound $enf) {
             $result = $this->getNonExistentUser($_accountClass, $accountId);
@@ -239,7 +200,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $metaData = $this->_getMetaData($user);
         
         $encryptionType = $this->_options['pwEncType'];
-        $userpassword = $_encrypt ? self::encryptPassword($_password, $encryptionType) : $_password;
+        $userpassword = $_encrypt ? Tinebase_User_Abstract::encryptPassword($_password, $encryptionType) : $_password;
         $ldapData = array(
             'userpassword'     => $userpassword,
             'shadowlastchange' => Zend_Date::now()->getTimestamp()
@@ -249,96 +210,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_backend->update($metaData['dn'], $ldapData);
-    }
-    
-    /**
-     * encryptes password
-     *
-     * @param string $_password
-     * @param string $_method
-     */
-    public static function encryptPassword($_password, $_method)
-    {
-        switch (strtolower($_method)) {
-            case self::ENCRYPT_BLOWFISH_CRYPT:
-                if(@defined('CRYPT_BLOWFISH') && CRYPT_BLOWFISH == 1) {
-                    $salt = '$2$' . self::getRandomString(13);
-                    $password = '{CRYPT}' . crypt($_password, $salt);
-                }
-                break;
-                
-            case self::ENCRYPT_EXT_CRYPT:
-                if(@defined('CRYPT_EXT_DES') && CRYPT_EXT_DES == 1) {
-                    $salt = self::getRandomString(9);
-                    $password = '{CRYPT}' . crypt($_password, $salt);
-                }
-                break;
-                
-            case self::ENCRYPT_MD5:
-                $password = '{MD5}' . base64_encode(pack("H*", md5($_password)));
-                break;
-                
-            case self::ENCRYPT_MD5_CRYPT:
-                if(@defined('CRYPT_MD5') && CRYPT_MD5 == 1) {
-                    $salt = '$1$' . self::getRandomString(9);
-                    $password = '{CRYPT}' . crypt($_password, $salt);
-                }
-                break;
-                
-            case self::ENCRYPT_PLAIN:
-                $password = $_password;
-                break;
-            case self::ENCRYPT_SHA:
-                if(function_exists('mhash')) {
-                    $password = '{SHA}' . base64_encode(mhash(MHASH_SHA1, $_password));
-                }
-                break;
-                
-            case self::ENCRYPT_SMD5:
-                if(function_exists('mhash')) {
-                    $salt = self::getRandomString(8);
-                    $hash = mhash(MHASH_MD5, $_password . $salt);
-                    $password = '{SMD5}' . base64_encode($hash . $salt);
-                }
-                break;
-            case self::ENCRYPT_SSHA:
-                if(function_exists('mhash')) {
-                    $salt = self::getRandomString(8);
-                    $hash = mhash(MHASH_SHA1, $_password . $salt);
-                    $password = '{SSHA}' . base64_encode($hash . $salt);
-                }
-                break;
-            default:
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " using default password encryption method " . self::ENCRYPT_DES);
-            case self::ENCRYPT_DES:
-                $salt = self::getRandomString(2);
-                $password  = '{CRYPT}'. crypt($_password, $salt);
-                break;
-            
-        }
-        
-        if (! $password) {
-            throw new Tinebase_Exception_NotImplemented("$_method is not supported by your php version");
-        }
-        
-        return $password;
-    }
-    
-    /**
-     * generates a randomstrings of given length
-     *
-     * @param int $_length
-     */
-    public static function getRandomString($_length)
-    {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        
-        $randomString = '';
-        for ($i=0; $i<(int)$_length; $i++) {
-            $randomString .= $chars[mt_rand(1, strlen($chars)) -1];
-        }
-        
-        return $randomString;
     }
     
     /**
@@ -479,9 +350,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $idFilter = '';
         foreach ($ids as $id) {
-            $idFilter .= "(uidnumber=$id)";
+            $idFilter .= "($this->_rowNameMapping['accountId']=$id)";
         }
-        $filter = "(&(objectclass=posixaccount)(|$idFilter))";
+        $filter = "(&($this->_baseFilter)(|$idFilter))";
         
         $result = $this->_getUsersFromBackend($filter, 'Tinebase_Model_User');
 		
@@ -507,7 +378,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         try {
             $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-            $account = $this->_backend->fetch($this->_options['userDn'], 'uidnumber=' . $accountId, array('objectclass'));
+            $account = $this->_backend->fetch($this->_options['userDn'], "$this->_rowNameMapping['accountId']=" . $accountId, array('objectclass'));
             $metaData['dn'] = $account['dn'];
             
             $metaData['objectClass'] = $account['objectclass'];
@@ -613,6 +484,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
                         break;
                     case 'accountStatus':
                         break;
+                    case 'accountPrimaryGroup':
+                        $accountArray[$keyMapping] = Tinebase_Group::getInstance()->resolveLdapGIdNumber($value[0]);
+                        break;
                     default: 
                         $accountArray[$keyMapping] = $value[0];
                         break;
@@ -663,4 +537,40 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         return $ldapData;
     }
     
+    public function importUsers()
+    {
+        $sqlGroupBackend = new Tinebase_Group_Sql();
+        
+        if (!empty($_filter)) {
+            $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
+            $filter = "(&($this->_baseFilter)(" . sprintf($this->_queryFilter, $_filter) . "))";
+        } else {
+            $filter = $this->_baseFilter;
+        }
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        
+        $users = $this->_getUsersFromBackend($filter, 'Tinebase_Model_FullUser');
+        
+        foreach($users as $user) {
+            try {
+                $sqluser = $this->_sql->getUserById($user->getId());
+                $this->_sql->updateUser($user);
+            } catch (Tinebase_Exception_NotFound $e) {
+                $this->_sql->addUser($user);
+            }
+            $sqlGroupBackend->addGroupMember($user->accountPrimaryGroup, $user);
+        }
+        
+    }
+    
+    public function resolveLdapUIdNumber($_uidNumber)
+    {
+        if(strtolower($this->_uuidAttribute) == 'uidnumber') {
+            return $_uidNumber;
+        }
+        
+        $userId = $this->_backend->fetch($this->_options['userDn'], 'uidnumber=' . $_uidNumber, array($this->_uuidAttribute));
+        
+        return $userId[strtolower($this->_uuidAttribute)][0];
+    }
 }
