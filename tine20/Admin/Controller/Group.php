@@ -87,7 +87,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
-    public function search($filter, $sort, $dir, $start, $limit)
+    public function search($filter = NULL, $sort = 'name', $dir = 'ASC', $start = NULL, $limit = NULL)
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
@@ -120,6 +120,9 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function create(Tinebase_Model_Group $_group)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
+        
+        // avoid forging group id, get's created in backend
+        unset($_group->id);
         
         $group = Tinebase_Group::getInstance()->addGroup($_group);
         
