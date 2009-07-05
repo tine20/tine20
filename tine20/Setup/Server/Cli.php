@@ -36,7 +36,8 @@ class Setup_Server_Cli extends Setup_Server_Abstract
                 'install-s'             => 'Install applications [All] or comma separated list',              
                 'update-s'              => 'Update applications [All] or comma separated list',             
                 'uninstall-s'           => 'Uninstall application [All] or comma separated list',
-                'list-s'           => 'List installed applications'
+                'list-s'                => 'List installed applications',
+                'import_accounts'       => 'Import user and groups from ldap'
                 #'username'             => 'Username [required]',              
                 #'password'             => 'Password [required]',              
             ));
@@ -46,7 +47,7 @@ class Setup_Server_Cli extends Setup_Server_Abstract
             exit;
         }
 
-        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list))) {
+        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list) && empty($opts->import_accounts))) {
             echo $opts->getUsageMessage();
             exit;
         }
