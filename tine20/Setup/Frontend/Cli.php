@@ -53,6 +53,8 @@ class Setup_Frontend_Cli
             $this->_uninstall($_opts);
         } elseif(isset($_opts->list)) {
             $this->_listInstalled();
+        } elseif(isset($_opts->import_accounts)) {
+            $this->_importAccounts($_opts);
         }
     }
     
@@ -85,11 +87,20 @@ class Setup_Frontend_Cli
         $controller->installApplications($applications);
         
         if(in_array('Tinebase', $applications)) {
-            $import = new Setup_Import_TineInitial();
-            //$import = new Setup_Import_Egw14();
+            $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
+            
+            switch(ucfirst($authType)) {
+                case Tinebase_Auth_Factory::SQL:
+                    $import = new Setup_Import_TineInitial();
+                    break;
+                case Tinebase_Auth_Factory::LDAP:
+                    $import = new Setup_Import_TineInitialLdap();
+                    break;
+                //$import = new Setup_Import_Egw14();
+            }
             $import->import();
         }
-
+        
         echo "Successfully installed " . count($applications) . " applications.\n";        
     }
 
@@ -179,5 +190,22 @@ class Setup_Frontend_Cli
         foreach($applications as $application) {
             echo "* $application\n";
         }
+    }
+    
+    /**
+     * import accounts from ldap
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _importAccounts(Zend_Console_Getopt $_opts)
+    {
+        // import groups
+        Tinebase_Group::getInstance()->importGroups();
+        
+        // import users
+        Tinebase_User::getInstance()->importUsers();
+        
+        // import group memberships
+        Tinebase_Group::getInstance()->importGroupMembers();
     }
 }

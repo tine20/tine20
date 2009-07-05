@@ -93,8 +93,17 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             $this->_controller->installApplications($decodedNames);
     
             if(in_array('Tinebase', $decodedNames)) {
-                $import = new Setup_Import_TineInitial();
-                //$import = new Setup_Import_Egw14();
+                $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
+                
+                switch(ucfirst($authType)) {
+                    case Tinebase_Auth_Factory::SQL:
+                        $import = new Setup_Import_TineInitial();
+                        break;
+                    case Tinebase_Auth_Factory::LDAP:
+                        $import = new Setup_Import_TineInitialLdap();
+                        break;
+                    //$import = new Setup_Import_Egw14();
+                }
                 $import->import();
             }
             

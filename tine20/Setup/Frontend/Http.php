@@ -138,10 +138,18 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $controller->installApplications(array_keys($applications));
             
             if(array_key_exists('Tinebase', $applications)) {
-                $import = new Setup_Import_TineInitial();
+                $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
+                
+                switch(ucfirst($authType)) {
+                    case Tinebase_Auth_Factory::SQL:
+                        $import = new Setup_Import_TineInitial();
+                        break;
+                    case Tinebase_Auth_Factory::LDAP:
+                        $import = new Setup_Import_TineInitialLdap();
+                        break;
+                    //$import = new Setup_Import_Egw14();
+                }
                 $import->import();
-                //$import = new Setup_Import_Egw14();
-                //$import->import();
             }
             
             echo "Successfully installed " . count($applications) . " applications.<br/>";   
