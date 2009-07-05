@@ -2,14 +2,14 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>0.1</version>
+    <version>0.2</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -23,7 +23,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -31,7 +32,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -44,7 +46,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
@@ -87,7 +90,8 @@
                 </field>            
                     <field>
                     <name>organizer</name>
-                    <type>integer</type>
+	                <type>text</type>
+	                <length>40</length>
                 </field>
                 <field>
                     <name>priority</name>
