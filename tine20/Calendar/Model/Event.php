@@ -55,7 +55,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         // tine record fields
         'id'                   => array('allowEmpty' => true,  'Alnum'),
         'container_id'         => array('allowEmpty' => true,  'Int'  ),
-        'created_by'           => array('allowEmpty' => true,  'Int'  ),
+        'created_by'           => array('allowEmpty' => true,         ),
         'creation_time'        => array('allowEmpty' => true          ),
         'last_modified_by'     => array('allowEmpty' => true          ),
         'last_modified_time'   => array('allowEmpty' => true          ),
@@ -71,7 +71,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'description'          => array('allowEmpty' => true          ),
         'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true          ),
-        'organizer'            => array('allowEmpty' => true, 'Int'   ),
+        'organizer'            => array('allowEmpty' => true,         ),
         'priority'             => array('allowEmpty' => true, 'Int'   ),
         'status_id'            => array('allowEmpty' => true          ),
         'summary'              => array('allowEmpty' => true          ),
