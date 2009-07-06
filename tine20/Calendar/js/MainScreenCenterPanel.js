@@ -250,9 +250,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             } else {
                 this.deleteMethodWin = new Ext.Window({
                     modal: true,
+                    cls: 'x-window-dlg',
                     closable: false,
                     title: this.app.i18n._('Delete Event'),
-                    html:  this.app.i18n._('Do you want to delete the whole series, this and all future events of this series, or just this event'),
+                    html: '<div class="ext-mb-icon ext-mb-question"></div>' +
+                          '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
+                              this.app.i18n._('Do you want to delete the whole series, this and all future events of this series, or just this event') +
+                          '<br /><div class="ext-mb-fix-cursor"></div></div>',
+                    //html:  this.app.i18n._('Do you want to delete the whole series, this and all future events of this series, or just this event'),
                     buttons: [{
                         text: this.app.i18n._('Delete nothing'),
                         scope: this,
