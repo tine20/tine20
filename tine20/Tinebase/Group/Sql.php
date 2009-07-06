@@ -193,6 +193,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             throw new Tinebase_Exception_Record_Validation('invalid group object');
         }
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Creating new group ' . $_group->name 
+            //. print_r($_group->toArray(), true)
+        );
+        
         if(!isset($_group->id)) {
             $groupId = $_group->generateUID();
             $_group->setId($groupId);
