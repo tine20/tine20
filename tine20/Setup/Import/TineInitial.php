@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        move this to Tinebase_Setup_Import ?
  */
 
 /**
@@ -27,12 +26,12 @@ class Setup_Import_TineInitial
     {
         /***************** initial config/preference settings ************************/
         
-        $this->_setDefaultGroups('Users', 'Administrators');
-
+        $configSettings = $this->_setDefaultGroups('Users', 'Administrators');
         
         /***************** create initial user and groups ************************/
         
-        $this->_createInitialAccounts('tine20admin', 'lars', 'Tine 2.0', 'Admin Account');
+        list($userGroup, $adminGroup) = $this->_createInitialGroups($configSettings);
+        $this->_createInitialAdminAccount('tine20admin', 'lars', 'Tine 2.0', 'Admin Account', $userGroup, $adminGroup);
         
         $this->initialLoad();
     }
@@ -41,6 +40,7 @@ class Setup_Import_TineInitial
      * fill the Database with default values and initialise admin account 
      *
      * @todo split this function in smaller subs
+     * @todo add all new installed apps to roles (not only in initial install)
      */    
     public function initialLoad()
     {
@@ -173,6 +173,13 @@ class Setup_Import_TineInitial
         }
     }
     
+    /**
+     * set default group names in config
+     *
+     * @param string $_userGroup
+     * @param string $_adminGroup
+     * @return array initial config settings
+     */
     protected function _setDefaultGroups($_userGroup, $_adminGroup)
     {
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial config settings ...');
@@ -192,29 +199,53 @@ class Setup_Import_TineInitial
             ));            
             $configBackend->setConfig($config);
         }
+        
+        return $configSettings;
     }
     
-    protected function _createInitialAccounts($_loginName, $_password, $_firstname, $_lastname)
+    /**
+     * create initial groups
+     *
+     * @param array $_initialConfig
+     * @return array with initial groups (user, admin)
+     */
+    protected function _createInitialGroups($_initialConfig)
     {
-        /***************** admin account, groups and roles ************************/
-        
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial user(' . $_loginName . '), groups and roles ...');
-        
         // add the admin group
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
 
         $adminGroup = new Tinebase_Model_Group(array(
-            'name'          => $configSettings[Tinebase_Config::DEFAULT_ADMIN_GROUP],
+            'name'          => $_initialConfig[Tinebase_Config::DEFAULT_ADMIN_GROUP],
             'description'   => 'Group of administrative accounts'
         ));
         $adminGroup = $groupsBackend->addGroup($adminGroup);
 
         // add the user group
         $userGroup = new Tinebase_Model_Group(array(
-            'name'          => $configSettings[Tinebase_Config::DEFAULT_USER_GROUP],
+            'name'          => $_initialConfig[Tinebase_Config::DEFAULT_USER_GROUP],
             'description'   => 'Group of user accounts'
         ));
         $userGroup = $groupsBackend->addGroup($userGroup);
+        
+        return array(
+            $userGroup,
+            $adminGroup,
+        );
+    }
+    
+    /**
+     * create initial admin account
+     *
+     * @param string $_loginName
+     * @param string $_password
+     * @param string $_firstname
+     * @param string $_lastname
+     * @param Tinebase_Model_Group $_initialUserGroup
+     * @param Tinebase_Model_Group $_initialAdminGroup
+     */
+    protected function _createInitialAdminAccount($_loginName, $_password, $_firstname, $_lastname, $_initialUserGroup, $_initialAdminGroup)
+    {
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_loginName . ')');
 
         // add the admin account
         $accountsBackend = Tinebase_User::factory(Tinebase_User::SQL);
@@ -222,7 +253,7 @@ class Setup_Import_TineInitial
         $account = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $_loginName,
             'accountStatus'         => 'enabled',
-            'accountPrimaryGroup'   => $userGroup->getId(),
+            'accountPrimaryGroup'   => $_initialUserGroup->getId(),
             'accountLastName'       => $_lastname,
             'accountDisplayName'    => $_lastname . ', ' . $_firstname,
             'accountFirstName'      => $_firstname,
@@ -234,12 +265,11 @@ class Setup_Import_TineInitial
 
         Tinebase_Core::set('currentAccount', $account);
 
-        // set the password for the tine20admin account
+        // set the password for the account
         Tinebase_User::getInstance()->setPassword($_loginName, $_password, $_password);
 
         // add the admin account to all groups
-        Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
-        Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
-        
+        Tinebase_Group::getInstance()->addGroupMember($_initialAdminGroup, $account);
+        Tinebase_Group::getInstance()->addGroupMember($_initialUserGroup, $account);
     }
 }
