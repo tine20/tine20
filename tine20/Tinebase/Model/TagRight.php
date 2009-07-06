@@ -89,11 +89,11 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
         $currentAccountId = Tinebase_Core::getUser()->getId();
         $currentGroupIds = Tinebase_Group::getInstance()->getGroupMemberships($currentAccountId);
         $groupCondition = ( !empty($currentGroupIds) ) ? ' OR (' . $db->quoteInto('acl.account_type = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . 
-            ' AND ' . $db->quoteInto('acl.account_id IN (?)', $currentGroupIds, Zend_Db::INT_TYPE) . ' )' : '';
+            ' AND ' . $db->quoteInto('acl.account_id IN (?)', $currentGroupIds) . ' )' : '';
         
         $where = $db->quoteInto($db->quoteIdentifier('acl.account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) . ' OR (' .
             $db->quoteInto('acl.account_type = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) . ' AND ' . 
-            $db->quoteInto('acl.account_id = ?', $currentAccountId, Zend_Db::INT_TYPE) . ' ) ' .
+            $db->quoteInto('acl.account_id = ?', $currentAccountId) . ' ) ' .
             $groupCondition;
         
         $_select->join(array('acl' => SQL_TABLE_PREFIX . 'tags_acl'), $_idProperty . ' = acl.tag_id', array() )
