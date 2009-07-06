@@ -105,11 +105,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function update(Tinebase_Record_Interface $_record)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "updating event: {$_record->id} ");
-        $event = parent::update($_record);
-        
-        $this->_saveAttendee($_record);
-        $this->_saveAlarms($_record);
+        $event = $this->get($_record->getId());
+        if ($event->editGrant) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "updating event: {$_record->id} ");
+            $event = parent::update($_record);
+            
+            $this->_saveAttendee($_record);
+            $this->_saveAlarms($_record);
+        } else if ($_recurInstance->attendee instanceof Tinebase_Record_RecordSet) {
+            foreach ($_recurInstance->attendee as $attender) {
+                if ($attender->status_authkey) {
+                    $this->attenderStatusUpdate($event, $attender, $attender->status_authkey);
+                }
+            }
+        }
         
         return $this->get($event->getId());
     }
@@ -124,42 +133,30 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $baseEvent = $this->_getRecurBaseEvent($_recurInstance);
         
-        if ($baseEvent->editGrant) {
-            // compute time diff
-            $instancesOriginalDtStart = new Zend_Date(substr($_recurInstance->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
-            $dtstartDiff = clone $_recurInstance->dtstart;
-            $dtstartDiff->sub($instancesOriginalDtStart);
-            
-            $instancesEventDuration = clone $_recurInstance->dtend;
-            $instancesEventDuration->sub($_recurInstance->dtstart);
-            
-            // replace baseEvent with adopted instance
-            $newBaseEvent = clone $_recurInstance;
-            
-            $newBaseEvent->setId($baseEvent->getId());
-            unset($newBaseEvent->recurid);
-            
-            $newBaseEvent->dtstart     = clone $baseEvent->dtstart;
-            $newBaseEvent->dtstart->add($dtstartDiff);
-            
-            $newBaseEvent->dtend       = clone $newBaseEvent->dtstart;
-            $newBaseEvent->dtend->add($instancesEventDuration);
-            
-            $newBaseEvent->rrule       = $baseEvent->rrule;
-            $newBaseEvent->exdate      = $baseEvent->exdate;
-            
-            return $this->update($newBaseEvent);
-        } else {
-            // attendee handling only
-            if ($_recurInstance->attendee instanceof Tinebase_Record_RecordSet) {
-                foreach ($_recurInstance->attendee as $attender) {
-                    if ($attender->status_authkey) {
-                        $this->setAttenderStatus($baseEvent, $attender, $attender->status_authkey);
-                    }
-                }
-            }
-        }
+        // compute time diff
+        $instancesOriginalDtStart = new Zend_Date(substr($_recurInstance->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
+        $dtstartDiff = clone $_recurInstance->dtstart;
+        $dtstartDiff->sub($instancesOriginalDtStart);
         
+        $instancesEventDuration = clone $_recurInstance->dtend;
+        $instancesEventDuration->sub($_recurInstance->dtstart);
+        
+        // replace baseEvent with adopted instance
+        $newBaseEvent = clone $_recurInstance;
+        
+        $newBaseEvent->setId($baseEvent->getId());
+        unset($newBaseEvent->recurid);
+        
+        $newBaseEvent->dtstart     = clone $baseEvent->dtstart;
+        $newBaseEvent->dtstart->add($dtstartDiff);
+        
+        $newBaseEvent->dtend       = clone $newBaseEvent->dtstart;
+        $newBaseEvent->dtend->add($instancesEventDuration);
+        
+        $newBaseEvent->rrule       = $baseEvent->rrule;
+        $newBaseEvent->exdate      = $baseEvent->exdate;
+        
+        return $this->update($newBaseEvent);
     }
     
     /**
@@ -175,13 +172,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function createRecurException($_event, $_deleteInstance = FALSE, $_deleteAllFollowing = FALSE)
     {
-        // NOTE: recurid is computed by rrule recur computations and therefore is already
-        //       part of the event.
+        // NOTE: recurid is computed by rrule recur computations and therefore is already part of the event.
         if (empty($_event->recurid)) {
             throw new Exception('recurid must be present to create exceptions!');
         }
         
         $baseEvent = $this->_getRecurBaseEvent($_event);
+        
+        if ($this->_doContainerACLChecks && !$baseEvent->editGrant) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: '{$baseEvent->getId()}'. Only creating exception for attendee status");
+            if ($_recurInstance->attendee instanceof Tinebase_Record_RecordSet) {
+                foreach ($_event->attendee as $attender) {
+                    if ($attender->status_authkey) {
+                        $this->attenderStatusUpdate($event, $attender, $attender->status_authkey);
+                    }
+                }
+            }
+        }
         
         if (! $_deleteInstance) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating persistent exception for: '{$_event->recurid}'");
@@ -410,7 +417,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Calendar_Model_Attender $_attender
      * @param  string                  $_authKey
      * @return Calendar_Model_Attender updated attender
-     */
+     *
     public function setAttenderStatus($_event, $_attender, $_authKey)
     {
         $eventId = $_event->getId();
@@ -442,7 +449,125 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         return $updatedAttender;
+    }*/
+    
+    /**
+     * creates an attender status exception of a recuring event series
+     * 
+     * NOTE: Recur exceptions are implicitly created
+     *
+     * @param  Calendar_Model_Event    $_recurInstance
+     * @param  Calendar_Model_Attender $_attender
+     * @param  string                  $_authKey
+     * @return Calendar_Model_Attender updated attender
+     */
+    public function attenderStatusCreateRecurException($_recurInstance, $_attender, $_authKey)
+    {
+        try {
+            $db = $this->_backend->getAdapter();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            
+            $baseEvent = $this->_getRecurBaseEvent($_recurInstance);
+            
+            // NOTE: recurid is computed by rrule recur computations and therefore is already part of the event.
+            if (empty($_recurInstance->recurid)) {
+                throw new Exception('recurid must be present to create exceptions!');
+            }
+            
+            // check if this intance takes place
+            if (in_array($_recurInstance->recurid, $baseEvent->exdate)) {
+                throw new Tinebase_Exception_AccessDenied('Event instance is deleted and may not be recreated via status setting!');
+            }
+            
+            try {
+                // check if we already have a persistent exception for this event
+                $eventInsance = $this->_backend->getByProperty($_event->recurid, $_property = 'recurid');
+            } catch (Exception $e) {
+                // otherwise create it implicilty
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating recur exception for a exceptional attendee status");
+                $this->_doContainerACLChecks = FALSE;
+                // NOTE: the user might have no edit grants, so let's be carefull
+                $diff = clone $baseEvent->dtend;
+                $diff->sub($_recurInstance->dtstart);
+                
+                $baseEvent->dtstart = new Zend_Date(substr($_recurInstance->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
+                $baseEvent->dtend   = clone $baseEvent->dtstart;
+                $baseEvent->dtend->add($diff);
+                
+                $baseEvent->recurid = $_recurInstance->recurid;
+                
+                $eventInsance = $this->createRecurException($_recurInstance);
+                $this->_doContainerACLChecks = TRUE;
+            }
+            
+            $updatedAttender = $this->attenderStatusUpdate($eventInsance, $_attender, $_authKey);
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
+        }
+        
+        return $updatedAttender;
     }
+    
+    /**
+     * updates an attender status for a complete recuring event series
+     * 
+     * @param  Calendar_Model_Event    $_recurInstance
+     * @param  Calendar_Model_Attender $_attender
+     * @param  string                  $_authKey
+     * @return Calendar_Model_Attender updated attender
+     */
+    public function attenderStatusUpdateRecurSeries($_recurInstance, $_attender, $_authKey)
+    {
+        $baseEvent = $this->_getRecurBaseEvent($_recurInstance);
+        
+        return $this->attenderStatusUpdate($baseEvent, $_attender, $_authKey);
+    }
+    
+    /**
+     * updates an attender status of a event
+     * 
+     * @param  Calendar_Model_Event    $_event
+     * @param  Calendar_Model_Attender $_attender
+     * @param  string                  $_authKey
+     * @return Calendar_Model_Attender updated attender
+     */
+    public function attenderStatusUpdate($_event, $_attender, $_authKey)
+    {
+        try {
+            $db = $this->_backend->getAdapter();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            
+            $event = $this->get($_event->getId());
+            
+            $currentAttender = $event->attendee[$event->attendee->getIndexById($_attender->getId())];
+            $currentAttender->status = $_attender->status;
+            
+            if ($currentAttender->status_authkey == $_authKey) {
+                $updatedAttender = $this->_backend->updateAttendee($currentAttender);
+                
+                // touch event
+                $event->last_modified_time = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+                $event->last_modified_by = Tinebase_Core::getUser()->getId();
+                $event->seq = (int)$_event->seq + 1;
+                
+                $this->_backend->update($event);
+            } else {
+                $updatedAttender = $currentAttender;
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttender->user_type} {$currentAttender->user_id}");
+            }
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
+        }
+        
+        return $updatedAttender;
+    }
+    
     
     /**
      * saves all attendee of given event
