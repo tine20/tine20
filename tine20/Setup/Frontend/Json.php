@@ -93,7 +93,11 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             $this->_controller->installApplications($decodedNames);
     
             if(in_array('Tinebase', $decodedNames)) {
-                $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
+                if (isset(Tinebase_Core::getConfig()->authentication)) {
+                    $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
+                } else {
+                    $authType = Tinebase_Auth_Factory::SQL;
+                }
                 
                 switch(ucfirst($authType)) {
                     case Tinebase_Auth_Factory::SQL:
