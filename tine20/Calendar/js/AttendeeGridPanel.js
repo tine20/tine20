@@ -161,10 +161,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 value         : null,
                 forceSelection: true,
                 store         : [
-                    ['NEEDS-ACTION', ('No response')],
-                    ['ACCEPTED',     ('Accepted')   ],
-                    ['DECLINED',     ('Declined')   ],
-                    ['TENTATIVE',    ('Tentative')  ]
+                    ['NEEDS-ACTION', this.app.i18n._('No response')],
+                    ['ACCEPTED',     this.app.i18n._('Accepted')   ],
+                    ['DECLINED',     this.app.i18n._('Declined')   ],
+                    ['TENTATIVE',    this.app.i18n._('Tentative')  ]
                 ], 
                 listeners: {
                     scope: this,
