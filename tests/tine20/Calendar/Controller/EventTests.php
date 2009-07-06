@@ -137,7 +137,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         }
     }
     
-    public function testAttendeeStatusViaSave()
+    public function testAttendeeStatusPreservViaSave()
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
@@ -163,14 +163,14 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $attendee = $persistendEvent->attendee[0];
         
         $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
-        $this->_controller->setAttenderStatus($persistendEvent, $attendee, $attendee->status_authkey);
+        $this->_controller->attenderStatusUpdate($persistendEvent, $attendee, $attendee->status_authkey);
         
         $loadedEvent = $this->_controller->get($persistendEvent->getId());
         $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $loadedEvent->attendee[0]->status, 'status not set');
         
     }
     
-    public function testSetAttendeeStatusImplicitRecurException()
+    public function testSetAttendeeStatusRecurException()
     {
         // note: 2009-03-29 Europe/Berlin switched to DST
         $event = new Calendar_Model_Event(array(
@@ -199,7 +199,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $attendee = $exception->attendee[0];
         $attendee->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         
-        $this->_controller->setAttenderStatus($exception, $attendee, $attendee->status_authkey);
+        $this->_controller->attenderStatusCreateRecurException($exception, $attendee, $attendee->status_authkey);
         
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
