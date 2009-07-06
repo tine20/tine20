@@ -20,62 +20,62 @@ msgstr "リードの管理"
 msgid "add, edit and delete leads"
 msgstr "リードの追加、編集と削除"
 
-#: Controller/Lead.php:230
+#: Controller/Lead.php:235
 msgid "State"
 msgstr "ステート"
 
-#: Controller/Lead.php:231 js/Crm.js:1040
+#: Controller/Lead.php:236 js/Crm.js:1040
 msgid "Type"
 msgstr "タイプ"
 
-#: Controller/Lead.php:232
+#: Controller/Lead.php:237
 msgid "Source"
 msgstr "ソース"
 
-#: Controller/Lead.php:233 Export/Pdf.php:92 js/LeadEditDialog.js:112
+#: Controller/Lead.php:238 Export/Pdf.php:92 js/LeadEditDialog.js:112
 msgid "Start"
 msgstr "開始"
 
-#: Controller/Lead.php:234
+#: Controller/Lead.php:239
 msgid "Scheduled end"
 msgstr "計画終了"
 
-#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:125
+#: Controller/Lead.php:240 Export/Pdf.php:95 js/LeadEditDialog.js:125
 msgid "End"
 msgstr "終了"
 
-#: Controller/Lead.php:236 Export/Pdf.php:86 js/Crm.js:299 js/Crm.js:347
+#: Controller/Lead.php:241 Export/Pdf.php:86 js/Crm.js:299 js/Crm.js:347
 msgid "Turnover"
 msgstr "取引高"
 
-#: Controller/Lead.php:237 Export/Pdf.php:89 js/Crm.js:298 js/Crm.js:346
+#: Controller/Lead.php:242 Export/Pdf.php:89 js/Crm.js:298 js/Crm.js:346
 #: js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr "確度"
 
-#: Controller/Lead.php:238
+#: Controller/Lead.php:243
 msgid "Folder"
 msgstr "フォルダー"
 
-#: Controller/Lead.php:239
+#: Controller/Lead.php:244
 msgid "Updated by"
 msgstr "更新者"
 
-#: Controller/Lead.php:240
+#: Controller/Lead.php:245
 msgid "Updated Fields:"
 msgstr "更新フィールド："
 
-#: Controller/Lead.php:241
+#: Controller/Lead.php:246
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s 変更 %s から %s　に."
 
-#: Controller/Lead.php:247
+#: Controller/Lead.php:252
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "リード%s は変更されました"
 
-#: Controller/Lead.php:249
+#: Controller/Lead.php:254
 #, python-format
 msgid "Lead %s has been creaded"
 msgstr "リード　%s が作成されました"
@@ -448,54 +448,54 @@ msgstr "説明を入力してください"
 msgid "Expected turnover"
 msgstr "概算売上見積"
 
-#: Setup/setup.xml:367
+#: Setup/setup.xml:370
 msgid "telephone"
 msgstr "電話番号"
 
-#: Setup/setup.xml:381
+#: Setup/setup.xml:384
 msgid "email"
 msgstr "Eメール"
 
-#: Setup/setup.xml:395
+#: Setup/setup.xml:398
 msgid "website"
 msgstr "ウェブサイト"
 
-#: Setup/setup.xml:409
+#: Setup/setup.xml:412
 msgid "fair"
 msgstr "フェア"
 
-#: Setup/setup.xml:423
+#: Setup/setup.xml:426
 msgid "customer"
 msgstr "顧客"
 
-#: Setup/setup.xml:437
+#: Setup/setup.xml:440
 msgid "partner"
 msgstr "パートナ"
 
-#: Setup/setup.xml:451
+#: Setup/setup.xml:454
 msgid "reseller"
 msgstr "リセラー"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:468
 msgid "open"
 msgstr "オープン"
 
-#: Setup/setup.xml:483
+#: Setup/setup.xml:486
 msgid "contacted"
 msgstr "コンタクト済"
 
-#: Setup/setup.xml:501
+#: Setup/setup.xml:504
 msgid "waiting for feedback"
 msgstr "フィードバック待ち"
 
-#: Setup/setup.xml:519
+#: Setup/setup.xml:522
 msgid "quote sent"
 msgstr "見積送付済"
 
-#: Setup/setup.xml:537
+#: Setup/setup.xml:540
 msgid "accepted"
 msgstr "受注"
 
-#: Setup/setup.xml:559
+#: Setup/setup.xml:562
 msgid "lost"
 msgstr "失注"

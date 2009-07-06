@@ -53,6 +53,6 @@ msgid_plural "contracts lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Setup/setup.xml:160
+#: Setup/setup.xml:164
 msgid "Shared Contracts"
 msgstr ""

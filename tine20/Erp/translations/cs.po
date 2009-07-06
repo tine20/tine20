@@ -54,6 +54,6 @@ msgstr[0] "seznam kontraktů"
 msgstr[1] "seznamy kontraktů"
 msgstr[2] "seznamů kontraktů"
 
-#: Setup/setup.xml:160
+#: Setup/setup.xml:164
 msgid "Shared Contracts"
 msgstr "Sdílené kontrakty"

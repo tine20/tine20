@@ -55,6 +55,6 @@ msgstr[0] "Список договоров"
 msgstr[1] "Списки договоров"
 msgstr[2] "Списков договоров"
 
-#: Setup/setup.xml:160
+#: Setup/setup.xml:164
 msgid "Shared Contracts"
 msgstr "Общие договоры"

@@ -56,6 +56,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: Setup/setup.xml:160
+#: Setup/setup.xml:164
 msgid "Shared Contracts"
 msgstr ""

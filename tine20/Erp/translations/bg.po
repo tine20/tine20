@@ -52,6 +52,6 @@ msgid_plural "contracts lists"
 msgstr[0] "списък на договори"
 msgstr[1] "списъка на договори"
 
-#: Setup/setup.xml:160
+#: Setup/setup.xml:164
 msgid "Shared Contracts"
 msgstr "Общи договори"

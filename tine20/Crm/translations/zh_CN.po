@@ -21,62 +21,62 @@ msgstr "管理线索"
 msgid "add, edit and delete leads"
 msgstr "添加、编辑和删除线索"
 
-#: Controller/Lead.php:230
+#: Controller/Lead.php:235
 msgid "State"
 msgstr "情形"
 
-#: Controller/Lead.php:231 js/Crm.js:1040
+#: Controller/Lead.php:236 js/Crm.js:1040
 msgid "Type"
 msgstr "类型"
 
-#: Controller/Lead.php:232
+#: Controller/Lead.php:237
 msgid "Source"
 msgstr "源"
 
-#: Controller/Lead.php:233 Export/Pdf.php:92 js/LeadEditDialog.js:112
+#: Controller/Lead.php:238 Export/Pdf.php:92 js/LeadEditDialog.js:112
 msgid "Start"
 msgstr "开始"
 
-#: Controller/Lead.php:234
+#: Controller/Lead.php:239
 msgid "Scheduled end"
 msgstr "预订结束"
 
-#: Controller/Lead.php:235 Export/Pdf.php:95 js/LeadEditDialog.js:125
+#: Controller/Lead.php:240 Export/Pdf.php:95 js/LeadEditDialog.js:125
 msgid "End"
 msgstr "结束"
 
-#: Controller/Lead.php:236 Export/Pdf.php:86 js/Crm.js:299 js/Crm.js:347
+#: Controller/Lead.php:241 Export/Pdf.php:86 js/Crm.js:299 js/Crm.js:347
 msgid "Turnover"
 msgstr "周转"
 
-#: Controller/Lead.php:237 Export/Pdf.php:89 js/Crm.js:298 js/Crm.js:346
+#: Controller/Lead.php:242 Export/Pdf.php:89 js/Crm.js:298 js/Crm.js:346
 #: js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr "可能性"
 
-#: Controller/Lead.php:238
+#: Controller/Lead.php:243
 msgid "Folder"
 msgstr "文件夹"
 
-#: Controller/Lead.php:239
+#: Controller/Lead.php:244
 msgid "Updated by"
 msgstr "更新者"
 
-#: Controller/Lead.php:240
+#: Controller/Lead.php:245
 msgid "Updated Fields:"
 msgstr "更新的字段："
 
-#: Controller/Lead.php:241
+#: Controller/Lead.php:246
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s 是从 %s 修改到 %s."
 
-#: Controller/Lead.php:247
+#: Controller/Lead.php:252
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "线索 %s 已经被更新"
 
-#: Controller/Lead.php:249
+#: Controller/Lead.php:254
 #, python-format
 msgid "Lead %s has been creaded"
 msgstr "线索 %s 已经被生成"
@@ -449,55 +449,55 @@ msgstr "输入描述"
 msgid "Expected turnover"
 msgstr "期望的周转"
 
-#: Setup/setup.xml:367
+#: Setup/setup.xml:370
 msgid "telephone"
 msgstr "电话"
 
-#: Setup/setup.xml:381
+#: Setup/setup.xml:384
 msgid "email"
 msgstr "电子邮件"
 
-#: Setup/setup.xml:395
+#: Setup/setup.xml:398
 msgid "website"
 msgstr "网址"
 
-#: Setup/setup.xml:409
+#: Setup/setup.xml:412
 msgid "fair"
 msgstr "展览会"
 
-#: Setup/setup.xml:423
+#: Setup/setup.xml:426
 msgid "customer"
 msgstr "客户"
 
-#: Setup/setup.xml:437
+#: Setup/setup.xml:440
 msgid "partner"
 msgstr "伙伴"
 
-#: Setup/setup.xml:451
+#: Setup/setup.xml:454
 msgid "reseller"
 msgstr "零售商"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:468
 msgid "open"
 msgstr "打开"
 
-#: Setup/setup.xml:483
+#: Setup/setup.xml:486
 msgid "contacted"
 msgstr "联系过的"
 
-#: Setup/setup.xml:501
+#: Setup/setup.xml:504
 msgid "waiting for feedback"
 msgstr "等待反馈"
 
-#: Setup/setup.xml:519
+#: Setup/setup.xml:522
 msgid "quote sent"
 msgstr "报价已发送"
 
-#: Setup/setup.xml:537
+#: Setup/setup.xml:540
 msgid "accepted"
 msgstr "已接受"
 
-#: Setup/setup.xml:559
+#: Setup/setup.xml:562
 msgid "lost"
 msgstr "失去"
 

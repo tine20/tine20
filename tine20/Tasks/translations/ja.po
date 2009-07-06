@@ -82,11 +82,11 @@ msgstr "パーセント"
 msgid "Creation Time"
 msgstr "作成時間"
 
-#: js/GridPanel.js:208
+#: js/GridPanel.js:210
 msgid "Show closed"
 msgstr "クローズされたものの表示"
 
-#: js/Status.js:45 Setup/setup.xml:434
+#: js/Status.js:45 Setup/setup.xml:443
 msgid "IN-PROCESS"
 msgstr "進行中"
 
@@ -108,14 +108,14 @@ msgstr[0] "ToDoリスト"
 msgid "to do lists"
 msgstr "ToDoリスト"
 
-#: Setup/setup.xml:390
+#: Setup/setup.xml:399
 msgid "NEEDS-ACTION"
 msgstr "要アクション"
 
-#: Setup/setup.xml:412
+#: Setup/setup.xml:421
 msgid "COMPLETED"
 msgstr "完了"
 
-#: Setup/setup.xml:456
+#: Setup/setup.xml:465
 msgid "CANCELLED"
 msgstr "キャンセル"

@@ -1,3 +1,18 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Setup\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
 #: js/ApplicationGridPanel.js:37
 msgid "Name"
 msgstr "Name"
@@ -38,15 +53,23 @@ msgstr "Uninstall application"
 msgid "Update application"
 msgstr "Update application"
 
-#: js/ApplicationGridPanel.js:143
+#: js/ApplicationGridPanel.js:138
+msgid "uninstall"
+msgstr "uninstall"
+
+#: js/ApplicationGridPanel.js:138
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Do you really want to uninstall the application(s)?"
+
+#: js/ApplicationGridPanel.js:164
 msgid "This may take a while"
 msgstr "This may take a while"
 
-#: js/ApplicationGridPanel.js:162
+#: js/ApplicationGridPanel.js:184
 msgid "Shit"
 msgstr "Shit"
 
-#: js/ApplicationGridPanel.js:162
+#: js/ApplicationGridPanel.js:184
 msgid "Where are the backup tapes"
 msgstr "Where are the backup tapes"
 

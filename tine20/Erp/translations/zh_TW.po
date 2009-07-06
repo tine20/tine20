@@ -13,8 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/ContractEditDialog.js:86
-#: js/ContractGridPanel.js:93
+#: js/ContractEditDialog.js:86 js/ContractGridPanel.js:93
 msgid "Title"
 msgstr "標題"
 
@@ -52,7 +51,6 @@ msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "合約清單"
 
-#: Setup/setup.xml:160
+#: Setup/setup.xml:164
 msgid "Shared Contracts"
 msgstr "已分享的合約"
-

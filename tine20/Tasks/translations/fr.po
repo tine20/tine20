@@ -84,12 +84,12 @@ msgstr "Pourcent"
 msgid "Creation Time"
 msgstr "Date de création"
 
-#: js/GridPanel.js:208
+#: js/GridPanel.js:210
 #, fuzzy
 msgid "Show closed"
 msgstr "Afficher terminées"
 
-#: js/Status.js:45 Setup/setup.xml:434
+#: js/Status.js:45 Setup/setup.xml:443
 msgid "IN-PROCESS"
 msgstr "EN-COURS"
 
@@ -113,14 +113,14 @@ msgstr[1] "listes \"à faire\""
 msgid "to do lists"
 msgstr "listes \"à faire\""
 
-#: Setup/setup.xml:390
+#: Setup/setup.xml:399
 msgid "NEEDS-ACTION"
 msgstr "ACTION-REQUISE"
 
-#: Setup/setup.xml:412
+#: Setup/setup.xml:421
 msgid "COMPLETED"
 msgstr "TERMINE"
 
-#: Setup/setup.xml:456
+#: Setup/setup.xml:465
 msgid "CANCELLED"
 msgstr "ANNULE"

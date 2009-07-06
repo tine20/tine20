@@ -88,11 +88,11 @@ msgstr "Procent"
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:208
+#: js/GridPanel.js:210
 msgid "Show closed"
 msgstr "Pokaż zamknięte"
 
-#: js/Status.js:45 Setup/setup.xml:434
+#: js/Status.js:45 Setup/setup.xml:443
 msgid "IN-PROCESS"
 msgstr "W PRZETWARZANIU"
 
@@ -121,15 +121,15 @@ msgstr[2] "Lista to do"
 msgid "to do lists"
 msgstr "Listy to do"
 
-#: Setup/setup.xml:390
+#: Setup/setup.xml:399
 msgid "NEEDS-ACTION"
 msgstr "KONIECZNOŚĆ-DZIAŁANIA"
 
-#: Setup/setup.xml:412
+#: Setup/setup.xml:421
 msgid "COMPLETED"
 msgstr "ZAKOŃCZONY"
 
-#: Setup/setup.xml:456
+#: Setup/setup.xml:465
 msgid "CANCELLED"
 msgstr "ODWOŁANY "
 

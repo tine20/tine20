@@ -128,7 +128,7 @@ msgstr "役職"
 msgid "Addressbook"
 msgstr "アドレス帳"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:521
+#: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:538
 msgid "Internal Contacts"
 msgstr "内部コンタクト"
 
@@ -136,7 +136,7 @@ msgstr "内部コンタクト"
 msgid "contacts"
 msgstr "コンタクト"
 
-#: js/Addressbook.js:140 js/Addressbook.js:458
+#: js/Addressbook.js:140 js/Addressbook.js:468
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "アドレス帳"
@@ -145,64 +145,64 @@ msgstr[0] "アドレス帳"
 msgid "export as pdf"
 msgstr "PDFにエキスポートする"
 
-#: js/Addressbook.js:163
+#: js/Addressbook.js:171
 msgid "Loading Contact..."
 msgstr "コンタクトのロード中..."
 
-#: js/Addressbook.js:163
+#: js/Addressbook.js:171
 msgid "Please Wait"
 msgstr "お待ちください"
 
-#: js/Addressbook.js:177
+#: js/Addressbook.js:185
 msgid "Add new contact"
 msgstr "新しいコンタクトの追加"
 
-#: js/Addressbook.js:179
+#: js/Addressbook.js:187
 msgid "Edit Contact \"{0}\""
 msgstr "コンタクトの編集 \"{0}\""
 
-#: js/Addressbook.js:202
+#: js/Addressbook.js:212
 msgid "Please wait a moment..."
 msgstr "しばらくお待ちください"
 
-#: js/Addressbook.js:202
+#: js/Addressbook.js:212
 msgid "Saving Contact"
 msgstr "コンタクトの保存"
 
-#: js/Addressbook.js:227 js/Addressbook.js:252
+#: js/Addressbook.js:237 js/Addressbook.js:262
 msgid "Failed"
 msgstr "失敗"
 
-#: js/Addressbook.js:227
+#: js/Addressbook.js:237
 msgid "Could not save contact."
 msgstr "コンタクトを保存できませんでした"
 
-#: js/Addressbook.js:233
+#: js/Addressbook.js:243
 msgid "Errors"
 msgstr "エラー"
 
-#: js/Addressbook.js:233
+#: js/Addressbook.js:243
 msgid "Please fix the errors noted."
 msgstr "エラーを訂正してください"
 
-#: js/Addressbook.js:246
+#: js/Addressbook.js:256
 msgid "Deleting contact..."
 msgstr "コンタクトを削除しています..."
 
-#: js/Addressbook.js:252
+#: js/Addressbook.js:262
 msgid "Some error occured while trying to delete the contact."
 msgstr "削除中に問題が発生しました"
 
-#: js/Addressbook.js:454
+#: js/Addressbook.js:464
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "コンタクト"
 
-#: js/Addressbook.js:454
+#: js/Addressbook.js:464
 msgid "Contacts"
 msgstr "コンタクト"
 
-#: js/Addressbook.js:458
+#: js/Addressbook.js:468
 msgid "addressbooks"
 msgstr "アドレス帳"
 
@@ -217,7 +217,7 @@ msgid "Last Name"
 msgstr "名"
 
 #: js/ContactGrid.js:58 js/ContactGrid.js:87 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:583
+#: js/EditDialog.js:197 Setup/setup.xml:600
 msgid "Company"
 msgstr "会社"
 
@@ -446,14 +446,14 @@ msgid "Link"
 msgid_plural "Links [%d]"
 msgstr[0] "リンク[%d]"
 
-#: js/SearchCombo.js:36
+#: js/SearchCombo.js:51
 msgid "Searching..."
 msgstr ""
 
-#: Setup/setup.xml:547
+#: Setup/setup.xml:564
 msgid "Mr"
 msgstr "ミスター"
 
-#: Setup/setup.xml:565
+#: Setup/setup.xml:582
 msgid "Ms"
 msgstr "ミス"

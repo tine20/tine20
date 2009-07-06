@@ -1,47 +1,215 @@
-#: Controller.php:96
+#: Controller/Event.php:590
+msgid "Notification for Event "
+msgstr ""
+
+#: Controller/Event.php:591
+msgid "Event description:<br/>"
+msgstr ""
+
+#: Controller.php:85
 #, python-format
 msgid "%s's personal calendar"
 msgstr ""
 
-#: js/EventEditDialog.js:72
-msgid "Summary"
+#: js/AttendeeGridPanel.js:35 js/Model.js:196
+msgid "Attendee"
 msgstr ""
 
-#: js/EventEditDialog.js:77
-msgid "Due date"
+#: js/AttendeeGridPanel.js:64
+msgid "Role"
 msgstr ""
 
-#: js/EventEditDialog.js:80
-msgid "Priority"
+#: js/AttendeeGridPanel.js:73
+msgid "Quantity"
 msgstr ""
 
-#: js/EventEditDialog.js:83
-msgid "Responsible"
+#: js/AttendeeGridPanel.js:82
+msgid "This is the calendar where the attender has saved this event in"
 msgstr ""
 
-#: js/EventEditDialog.js:87
-msgid "Notes"
+#: js/AttendeeGridPanel.js:118
+msgid "Type"
 msgstr ""
 
-#: js/EventEditDialog.js:88
-msgid "Enter description..."
+#: js/AttendeeGridPanel.js:125
+msgid "Name"
 msgstr ""
 
-#: js/EventEditDialog.js:93
-msgid "Percentage"
+#: js/AttendeeGridPanel.js:153
+msgid "Status"
 msgstr ""
 
-#: js/EventEditDialog.js:97
-msgid "Completed"
+#: js/AttendeeGridPanel.js:228
+msgid "Remove Attender"
 msgstr ""
 
-#: js/Model.js:64
+#: js/AttendeeGridPanel.js:356
+msgid "Click here to invite another attender..."
+msgstr ""
+
+#: js/AttendeeGridPanel.js:368
+msgid "No Information"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:380
+msgid "Required"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:383
+msgid "Optional"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:398
+msgid "No response"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:401
+msgid "Accepted"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:404
+msgid "Declined"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:407
+msgid "Tentative"
+msgstr ""
+
+#: js/CalendarPanel.js:123
+msgid "Confirm Update of Series"
+msgstr ""
+
+#: js/CalendarPanel.js:124
+msgid "Do you realy want to update all events of this recuring event series?"
+msgstr ""
+
+#: js/CalendarPanel.js:140
+msgid "Update Event"
+msgstr ""
+
+#: js/CalendarPanel.js:141
+msgid "Do you want to update the whole series, or just this event"
+msgstr ""
+
+#: js/CalendarPanel.js:143
+msgid "Update nothing"
+msgstr ""
+
+#: js/CalendarPanel.js:151
+msgid "Update whole series"
+msgstr ""
+
+#: js/CalendarPanel.js:163
+msgid "Failed not update recurring event series"
+msgstr ""
+
+#: js/CalendarPanel.js:171
+msgid "Update this event only"
+msgstr ""
+
+#: js/CalendarPanel.js:185
+msgid "Failed not update event"
+msgstr ""
+
+#: js/CalendarSelectWidget.js:126
+msgid "Originally"
+msgstr ""
+
+#: js/EventEditDialog.js:78 js/Model.js:64 js/Model.js:200
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:64
+#: js/EventEditDialog.js:91
+msgid "Summary"
+msgstr ""
+
+#: js/EventEditDialog.js:98
+msgid "Location"
+msgstr ""
+
+#: js/EventEditDialog.js:103
+msgid "Start Time"
+msgstr ""
+
+#: js/EventEditDialog.js:118
+msgid "End Time"
+msgstr ""
+
+#: js/EventEditDialog.js:126
+msgid "whole day"
+msgstr ""
+
+#: js/EventEditDialog.js:143
+msgid "Alarms"
+msgstr ""
+
+#: js/EventEditDialog.js:162
+msgid "Description"
+msgstr ""
+
+#: js/EventEditDialog.js:176
+msgid "Enter description"
+msgstr ""
+
+#: js/EventEditDialog.js:292
+msgid "End date is not valid"
+msgstr ""
+
+#: js/EventEditDialog.js:295
+msgid "End date must be after start date"
+msgstr ""
+
+#: js/EventEditDialog.js:308
+msgid "Start date is not valid"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:223
+msgid "Please Change Selection"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:224
+msgid ""
+"Your selection contains recuring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:238
+msgid "Confirm Deletion of Series"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:239
+msgid "Do you realy want to delete all events of this recuring event series?"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:254
+msgid "Delete Event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:255
+msgid ""
+"Do you want to delete the whole series, this and all future events of this "
+"series, or just this event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:257
+msgid "Delete nothing"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:264
+msgid "Delete whole series"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:285
+msgid "Delete this and all future events"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:306
+msgid "Delete this event only"
+msgstr ""
+
+#: js/Model.js:64 js/Model.js:200
 msgid "Events"
 msgstr ""
 
@@ -55,10 +223,121 @@ msgstr[1] ""
 msgid "Calendars"
 msgstr ""
 
-#: Preference.php:60
+#: js/Model.js:196
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/RrulePanel.js:29
+msgid "Recurrances"
+msgstr ""
+
+#: js/RrulePanel.js:37
+msgid "No recuring rule defined"
+msgstr ""
+
+#: js/RrulePanel.js:74
+msgid "None"
+msgstr ""
+
+#: js/RrulePanel.js:81
+msgid "Daily"
+msgstr ""
+
+#: js/RrulePanel.js:88
+msgid "Weekly"
+msgstr ""
+
+#: js/RrulePanel.js:95
+msgid "Monthly"
+msgstr ""
+
+#: js/RrulePanel.js:102
+msgid "Yearly"
+msgstr ""
+
+#: js/RrulePanel.js:215
+msgid "forever"
+msgstr ""
+
+#: js/RrulePanel.js:227
+msgid "Forever"
+msgstr ""
+
+#: js/RrulePanel.js:228
+msgid "at"
+msgstr ""
+
+#: js/RrulePanel.js:234
+msgid "Every"
+msgstr ""
+
+#: js/RrulePanel.js:269
+msgid "Until"
+msgstr ""
+
+#: js/RrulePanel.js:304
+msgid ". Day"
+msgstr ""
+
+#: js/RrulePanel.js:334
+msgid ". Week at"
+msgstr ""
+
+#: js/RrulePanel.js:393
+msgid ". Month"
+msgstr ""
+
+#: js/RrulePanel.js:399 js/RrulePanel.js:449 js/RrulePanel.js:580
+#: js/RrulePanel.js:631
+msgid "at the"
+msgstr ""
+
+#: js/RrulePanel.js:418 js/RrulePanel.js:599
+msgid "first"
+msgstr ""
+
+#: js/RrulePanel.js:419 js/RrulePanel.js:600
+msgid "second"
+msgstr ""
+
+#: js/RrulePanel.js:420 js/RrulePanel.js:601
+msgid "third"
+msgstr ""
+
+#: js/RrulePanel.js:421 js/RrulePanel.js:602
+msgid "fourth"
+msgstr ""
+
+#: js/RrulePanel.js:422 js/RrulePanel.js:603
+msgid "fifth"
+msgstr ""
+
+#: js/RrulePanel.js:423 js/RrulePanel.js:604
+msgid "last"
+msgstr ""
+
+#: js/RrulePanel.js:573
+msgid ". Year"
+msgstr ""
+
+#: js/RrulePanel.js:671 js/RrulePanel.js:683
+msgid "of"
+msgstr ""
+
+#: Preference.php:66
 msgid "Publish Free/Busy Information"
 msgstr ""
 
-#: Preference.php:61
+#: Preference.php:67
 msgid "Allow all users to view your free/busy information"
+msgstr ""
+
+#: Preference.php:70
+msgid "Default Calendar"
+msgstr ""
+
+#: Preference.php:71
+msgid "The defualt calendar for invitations and new events"
 msgstr ""

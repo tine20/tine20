@@ -51,7 +51,7 @@ msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "联系人列表"
 
-#: Setup/setup.xml:160
+#: Setup/setup.xml:164
 msgid "Shared Contracts"
 msgstr "共享的联系人"
 

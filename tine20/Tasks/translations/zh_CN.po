@@ -83,11 +83,11 @@ msgstr "百分比"
 msgid "Creation Time"
 msgstr "创建时间"
 
-#: js/GridPanel.js:208
+#: js/GridPanel.js:210
 msgid "Show closed"
 msgstr "显示关闭的"
 
-#: js/Status.js:45 Setup/setup.xml:434
+#: js/Status.js:45 Setup/setup.xml:443
 msgid "IN-PROCESS"
 msgstr "正在处理"
 
@@ -109,15 +109,15 @@ msgstr[0] "要做的事项列表"
 msgid "to do lists"
 msgstr "to do 列表"
 
-#: Setup/setup.xml:390
+#: Setup/setup.xml:399
 msgid "NEEDS-ACTION"
 msgstr "需要执行"
 
-#: Setup/setup.xml:412
+#: Setup/setup.xml:421
 msgid "COMPLETED"
 msgstr "完成"
 
-#: Setup/setup.xml:456
+#: Setup/setup.xml:465
 msgid "CANCELLED"
 msgstr "取消了"
 

@@ -40,8 +40,7 @@ msgstr "Stav"
 msgid "Depends on"
 msgstr "Závisí na"
 
-#: js/ApplicationGridPanel.js:49
-#: js/EnvCheckGridPanel.js:169
+#: js/ApplicationGridPanel.js:49 js/EnvCheckGridPanel.js:169
 msgid "Install application"
 msgstr "Instalovat aplikaci"
 
@@ -53,15 +52,23 @@ msgstr "Odinstalovat aplikaci"
 msgid "Update application"
 msgstr "Aktualizovat aplikaci"
 
-#: js/ApplicationGridPanel.js:143
+#: js/ApplicationGridPanel.js:138
+msgid "uninstall"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:138
+msgid "Do you really want to uninstall the application(s)?"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:164
 msgid "This may take a while"
 msgstr "Tato operace může chvíli trvat"
 
-#: js/ApplicationGridPanel.js:162
+#: js/ApplicationGridPanel.js:184
 msgid "Shit"
 msgstr "Zatraceně"
 
-#: js/ApplicationGridPanel.js:162
+#: js/ApplicationGridPanel.js:184
 msgid "Where are the backup tapes"
 msgstr "Kde jsou zálohovací pásky"
 
@@ -89,13 +96,11 @@ msgstr "Přihlášení do instalačního programu"
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: js/ConfigManagerGridPanel.js:141
-#: js/ConfigManagerGridPanel.js:167
+#: js/ConfigManagerGridPanel.js:141 js/ConfigManagerGridPanel.js:167
 msgid "Password"
 msgstr "Heslo"
 
-#: js/ConfigManagerGridPanel.js:146
-#: js/ConfigManagerGridPanel.js:159
+#: js/ConfigManagerGridPanel.js:146 js/ConfigManagerGridPanel.js:159
 msgid "Database"
 msgstr "Databáze"
 
@@ -156,8 +161,12 @@ msgid "Performing Environment Checks..."
 msgstr "Provádím test prostředí"
 
 #: js/EnvCheckGridPanel.js:110
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo {1} ve kterém hledáte."
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
+msgstr ""
+"Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo "
+"{1} ve kterém hledáte."
 
 #: js/EnvCheckGridPanel.js:140
 msgid "Check"
@@ -193,4 +202,3 @@ msgid_plural "Applications"
 msgstr[0] "Aplikace"
 msgstr[1] "Aplikace"
 msgstr[2] "Aplikací"
-

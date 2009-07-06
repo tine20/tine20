@@ -12,82 +12,102 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
-#: Acl/Rights.php:162
+#: Acl/Rights.php:174
 msgid "manage access log"
 msgstr "アクセスログの管理"
 
-#: Acl/Rights.php:163
+#: Acl/Rights.php:175
 msgid "delete access log entries"
 msgstr "アクセスログエントリの削除"
 
-#: Acl/Rights.php:166
+#: Acl/Rights.php:178
 msgid "manage accounts"
 msgstr "アカウントの管理"
 
-#: Acl/Rights.php:167
+#: Acl/Rights.php:179
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr ""
 "グループとユーザの追加と編集、グループにメンバーの追加、ユーザパスワードの変"
 "更"
 
-#: Acl/Rights.php:170
+#: Acl/Rights.php:182
 msgid "manage applications"
 msgstr "アプリケーションの管理"
 
-#: Acl/Rights.php:171
+#: Acl/Rights.php:183
 msgid "enable and disable applications, edit application settings"
 msgstr "アプリケーションの有効無効、アプリケーション設定の編集"
 
-#: Acl/Rights.php:174
+#: Acl/Rights.php:186
 msgid "manage roles"
 msgstr "役割の管理"
 
-#: Acl/Rights.php:175
+#: Acl/Rights.php:187
 msgid ""
 "add and edit roles, add new members to roles, add application rights to roles"
 msgstr ""
 "ロールの追加と編集、メンバーにロールの新規追加、アプリケーション権限のロール"
 "への付与"
 
-#: Acl/Rights.php:178
+#: Acl/Rights.php:190
 msgid "manage shared tags"
 msgstr "共有タグの管理"
 
-#: Acl/Rights.php:179
+#: Acl/Rights.php:191
 msgid "add, delete and edit shared tags"
 msgstr "共有タグの追加、削除と編集"
 
-#: Acl/Rights.php:182
+#: Acl/Rights.php:194
+#, fuzzy
+msgid "manage computers"
+msgstr "アカウントの管理"
+
+#: Acl/Rights.php:195
+#, fuzzy
+msgid "add, delete and edit (samba) computers"
+msgstr "共有タグの追加、削除と編集"
+
+#: Acl/Rights.php:198
 msgid "view access log"
 msgstr "アクセスログの閲覧"
 
-#: Acl/Rights.php:183
+#: Acl/Rights.php:199
 msgid "view access log list"
 msgstr "アクセスログ一覧の閲覧"
 
-#: Acl/Rights.php:186
+#: Acl/Rights.php:202
 msgid "view accounts"
 msgstr "アカウントの閲覧"
 
-#: Acl/Rights.php:187
+#: Acl/Rights.php:203
 msgid "view accounts list and details"
 msgstr "アカウント一覧と詳細の閲覧"
 
-#: Acl/Rights.php:190
+#: Acl/Rights.php:206
 msgid "view applications"
 msgstr "アプリケーションの閲覧"
 
-#: Acl/Rights.php:191
+#: Acl/Rights.php:207
 msgid "view applications list and details"
 msgstr "アプリケーションの一覧と詳細の閲覧"
 
-#: Acl/Rights.php:194
+#: Acl/Rights.php:210
 msgid "view roles"
 msgstr "役割の閲覧"
 
-#: Acl/Rights.php:195
+#: Acl/Rights.php:211
 msgid "view roles list and details"
 msgstr "役割の一覧と詳細の閲覧"
+
+#: Acl/Rights.php:214
+#, fuzzy
+msgid "view computers"
+msgstr "アカウントの閲覧"
+
+#: Acl/Rights.php:215
+#, fuzzy
+msgid "view computers list and details"
+msgstr "アカウント一覧と詳細の閲覧"
 
 #: js/Admin.js:20 js/Users.js:482
 #, fuzzy
@@ -115,152 +135,152 @@ msgstr "アクセスログ"
 msgid "Shared Tags"
 msgstr "共有タグ"
 
-#: js/Admin.js:92
+#: js/Admin.js:93
 msgid "Roles"
 msgstr "役割"
 
-#: js/Admin.js:127
+#: js/Admin.js:128
 msgid "Admin"
 msgstr "管理者"
 
-#: js/Admin.js:268 js/Groups.js:50 js/Roles.js:47 js/Tags.js:41
+#: js/Admin.js:278 js/Groups.js:50 js/Roles.js:47 js/Tags.js:41
 #: js/Users.js:183
 msgid "Confirm"
 msgstr "確認"
 
-#: js/Admin.js:268
+#: js/Admin.js:278
 msgid "Do you really want to delete the selected access log entries?"
 msgstr "本当に選択したアクセスログエントリを削除しますか？"
 
-#: js/Admin.js:383
+#: js/Admin.js:393
 msgid "delete entry"
 msgstr "エントリの削除"
 
-#: js/Admin.js:384
+#: js/Admin.js:394
 msgid "select all"
 msgstr "全て選択"
 
-#: js/Admin.js:389 js/Applications.js:148 js/Groups.js:131 js/Roles.js:131
+#: js/Admin.js:399 js/Applications.js:149 js/Groups.js:131 js/Roles.js:131
 #: js/Tags.js:103 js/Users.js:221
 msgid "enter searchfilter"
 msgstr "サーチフィルタの入力"
 
-#: js/Admin.js:419
+#: js/Admin.js:429
 msgid "Display from:"
 msgstr "表示："
 
-#: js/Admin.js:423
+#: js/Admin.js:433
 msgid "to:"
 msgstr "ＴＯ："
 
-#: js/Admin.js:428 js/Applications.js:165 js/Groups.js:151 js/Roles.js:151
+#: js/Admin.js:438 js/Applications.js:166 js/Groups.js:151 js/Roles.js:151
 #: js/Tags.js:123 js/Users.js:237
 msgid "Search:"
 msgstr "検索："
 
-#: js/Admin.js:501
+#: js/Admin.js:511
 msgid "invalid password"
 msgstr "パスワードが違います"
 
-#: js/Admin.js:505
+#: js/Admin.js:515
 msgid "ambiguous username"
 msgstr "あいまいなユーザ名"
 
-#: js/Admin.js:509
+#: js/Admin.js:519
 msgid "user not found"
 msgstr "ユーザが見つかりません"
 
-#: js/Admin.js:513
+#: js/Admin.js:523
 msgid "failure"
 msgstr "失敗"
 
-#: js/Admin.js:517
+#: js/Admin.js:527
 msgid "success"
 msgstr "性向"
 
-#: js/Admin.js:538
+#: js/Admin.js:548
 msgid "Displaying access log entries {0} - {1} of {2}"
 msgstr "アクセスログエントリの表示 {0} - {1} 件中 {2}"
 
-#: js/Admin.js:539
+#: js/Admin.js:549
 msgid "No access log entries to display"
 msgstr "表示するアクセスログエントリがありません"
 
-#: js/Admin.js:543
+#: js/Admin.js:553
 msgid "Session ID"
 msgstr "セッションＩＤ"
 
-#: js/Admin.js:544 js/UserEditDialog.js:101
+#: js/Admin.js:554 js/UserEditDialog.js:104
 msgid "Login Name"
 msgstr "ログイン名"
 
-#: js/Admin.js:545 js/Applications.js:236 js/Groups.js:196 js/Groups.js:513
+#: js/Admin.js:555 js/Applications.js:237 js/Groups.js:196 js/Groups.js:513
 #: js/Roles.js:196 js/SambaMachineGrid.js:86 js/Tags.js:165
 msgid "Name"
 msgstr "名前"
 
-#: js/Admin.js:546
+#: js/Admin.js:556
 msgid "IP Address"
 msgstr "ＩＰアドレス"
 
-#: js/Admin.js:547
+#: js/Admin.js:557
 msgid "Login Time"
 msgstr "ログイン時間"
 
-#: js/Admin.js:548
+#: js/Admin.js:558
 msgid "Logout Time"
 msgstr "ログアウト時間"
 
-#: js/Admin.js:549
+#: js/Admin.js:559
 msgid "Account ID"
 msgstr "アカウントＩＤ"
 
-#: js/Admin.js:550
+#: js/Admin.js:560
 msgid "Result"
 msgstr "結果"
 
-#: js/Applications.js:141
+#: js/Applications.js:142
 msgid "enable application"
 msgstr "有効なアプリケーション"
 
-#: js/Applications.js:142
+#: js/Applications.js:143
 msgid "disable application"
 msgstr "無効なアプリケーション"
 
-#: js/Applications.js:143
+#: js/Applications.js:144
 msgid "settings"
 msgstr "設定"
 
-#: js/Applications.js:194 js/UserEditDialog.js:89
+#: js/Applications.js:195 js/UserEditDialog.js:91
 msgid "disabled"
 msgstr "無効"
 
-#: js/Applications.js:197 js/UserEditDialog.js:89
+#: js/Applications.js:198 js/UserEditDialog.js:91
 msgid "enabled"
 msgstr "有効"
 
-#: js/Applications.js:201
+#: js/Applications.js:202
 msgid "unknown status ({0})"
 msgstr "不明なステータス ({0})"
 
-#: js/Applications.js:230
+#: js/Applications.js:231
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "アプリケーションの表示 {0} - {1} 件中 {2}"
 
-#: js/Applications.js:231
+#: js/Applications.js:232
 msgid "No applications to display"
 msgstr "表示するアプリケーションがありません"
 
-#: js/Applications.js:235
+#: js/Applications.js:236
 #, fuzzy
 msgid "Order"
 msgstr "オーダー"
 
-#: js/Applications.js:237 js/UserEditDialog.js:83 js/Users.js:291
+#: js/Applications.js:238 js/UserEditDialog.js:85 js/Users.js:291
 msgid "Status"
 msgstr "ステータス"
 
-#: js/Applications.js:238
+#: js/Applications.js:239
 #, fuzzy
 msgid "Version"
 msgstr "バージョン"
@@ -525,115 +545,115 @@ msgstr ""
 msgid "First Name"
 msgstr "名"
 
-#: js/UserEditDialog.js:92
+#: js/UserEditDialog.js:94
 msgid "Last Name"
 msgstr "姓"
 
-#: js/UserEditDialog.js:97 js/Users.js:300
+#: js/UserEditDialog.js:100 js/Users.js:300
 msgid "Expires"
 msgstr "期間"
 
-#: js/UserEditDialog.js:99 js/UserEditDialog.js:134 js/UserEditDialog.js:202
+#: js/UserEditDialog.js:102 js/UserEditDialog.js:142 js/UserEditDialog.js:215
 msgid "never"
 msgstr "未"
 
-#: js/UserEditDialog.js:107 js/Users.js:297
+#: js/UserEditDialog.js:111 js/Users.js:297
 msgid "Last login at"
 msgstr "前回のログイン"
 
-#: js/UserEditDialog.js:109 js/UserEditDialog.js:122
+#: js/UserEditDialog.js:113 js/UserEditDialog.js:128
 msgid "don't know"
 msgstr ""
 
-#: js/UserEditDialog.js:109 js/UserEditDialog.js:122 js/UserEditDialog.js:180
+#: js/UserEditDialog.js:113 js/UserEditDialog.js:128 js/UserEditDialog.js:193
 msgid "never logged in"
 msgstr "ログインしていません"
 
-#: js/UserEditDialog.js:113
+#: js/UserEditDialog.js:118
 msgid "Password"
 msgstr "パスワード"
 
-#: js/UserEditDialog.js:116 js/UserEditDialog.js:128
+#: js/UserEditDialog.js:121 js/UserEditDialog.js:135
 msgid "no password set"
 msgstr "パスワードが設定されていません"
 
-#: js/UserEditDialog.js:120 js/Users.js:298
+#: js/UserEditDialog.js:126 js/Users.js:298
 msgid "Last login from"
 msgstr "前回のログイン（From)"
 
-#: js/UserEditDialog.js:125
+#: js/UserEditDialog.js:132
 msgid "Password again"
 msgstr "もう一度パスワードを入力してください"
 
-#: js/UserEditDialog.js:132
+#: js/UserEditDialog.js:140
 msgid "Password set"
 msgstr "パスワード設定"
 
-#: js/UserEditDialog.js:138
+#: js/UserEditDialog.js:147
 msgid "Primary group"
 msgstr "プライマリーグループ"
 
-#: js/UserEditDialog.js:145
+#: js/UserEditDialog.js:155
 msgid "Emailaddress"
 msgstr "Eメールアドレス"
 
-#: js/UserEditDialog.js:149
+#: js/UserEditDialog.js:160
 msgid "Home Directory"
 msgstr ""
 
-#: js/UserEditDialog.js:153
+#: js/UserEditDialog.js:165
 msgid "Login Shell"
 msgstr ""
 
-#: js/UserEditDialog.js:160
+#: js/UserEditDialog.js:173
 msgid "Fileserver"
 msgstr ""
 
-#: js/UserEditDialog.js:173
+#: js/UserEditDialog.js:186
 msgid "Home Drive"
 msgstr ""
 
-#: js/UserEditDialog.js:178
+#: js/UserEditDialog.js:191
 msgid "Logon Time"
 msgstr ""
 
-#: js/UserEditDialog.js:184
+#: js/UserEditDialog.js:197
 msgid "Home Path"
 msgstr ""
 
-#: js/UserEditDialog.js:189
+#: js/UserEditDialog.js:202
 msgid "Logoff Time"
 msgstr ""
 
-#: js/UserEditDialog.js:191
+#: js/UserEditDialog.js:204
 msgid "never logged off"
 msgstr ""
 
-#: js/UserEditDialog.js:195
+#: js/UserEditDialog.js:208
 msgid "Profile Path"
 msgstr ""
 
-#: js/UserEditDialog.js:200
+#: js/UserEditDialog.js:213
 msgid "Password Last Set"
 msgstr ""
 
-#: js/UserEditDialog.js:206
+#: js/UserEditDialog.js:219
 msgid "Logon Script"
 msgstr ""
 
-#: js/UserEditDialog.js:210
+#: js/UserEditDialog.js:223
 msgid "Password Can Change"
 msgstr ""
 
-#: js/UserEditDialog.js:212 js/UserEditDialog.js:216 js/UserEditDialog.js:220
+#: js/UserEditDialog.js:225 js/UserEditDialog.js:229 js/UserEditDialog.js:233
 msgid "not set"
 msgstr ""
 
-#: js/UserEditDialog.js:214
+#: js/UserEditDialog.js:227
 msgid "Password Must Change"
 msgstr ""
 
-#: js/UserEditDialog.js:218
+#: js/UserEditDialog.js:231
 msgid "Kick Off Time"
 msgstr ""
 
