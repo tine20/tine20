@@ -244,7 +244,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.store.removeAll(attendee);
         var attendee = record.get('attendee');
         Ext.each(attendee, function(attender) {
-            this.store.add(new Tine.Calendar.Model.Attender(attender, attender.id));
+            var record = new Tine.Calendar.Model.Attender(attender, attender.id);
+            this.store.add(record);
+            
+            if (attender.displaycontainer_id.id == this.record.get('container_id').id) {
+                this.eventOriginator = record;
+            }
         }, this);
         
         if (record.get('editGrant')) {
@@ -309,11 +314,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         // check if displaycontainer of owner got changed
-        if (updatedAttender.getUserId() == this.currentAccountId && updatedAttender.get('user_type') == 'user') {
+        if (updatedAttender == this.eventOriginator) {
             this.record.set('container_id', '');
             this.record.set('container_id', updatedAttender.get('displaycontainer_id'));
         }
-        
     },
     
     onKeyDown: function(e) {
