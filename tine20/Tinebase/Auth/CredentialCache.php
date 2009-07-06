@@ -120,14 +120,11 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      */
     protected function _encrypt($_cache)
     {
-        //$ciphers = mcrypt_list_algorithms();
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($ciphers, true));
+        $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
+        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 16));
         
-        //$td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
-        //mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, /*8*/ 16));
-        
-        $td = mcrypt_module_open(MCRYPT_TRIPLEDES, '', 'cbc', '');
-        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 8));
+        #$td = mcrypt_module_open(MCRYPT_TRIPLEDES, '', 'cbc', '');
+        #mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 8));
         
         $data = array_merge($_cache->toArray(), array(
             'username' => $_cache->username,
@@ -149,8 +146,11 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     {
         $encryptedData = base64_decode($_cache->cache);
         
-        $td = mcrypt_module_open('tripledes', '', 'cbc', '');
-        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 8));
+        $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
+        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 16));
+        
+        #$td = mcrypt_module_open(MCRYPT_TRIPLEDES, '', 'cbc', '');
+        #mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 8));
         
         $cacheData = Zend_Json::decode(trim(mdecrypt_generic($td, $encryptedData)));
         
