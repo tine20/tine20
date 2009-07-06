@@ -17,6 +17,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     // todos :
     // ensure rrule_until has dtstart timepart (fix for ext datepicker)
+    //  --> lets do this in js
     
     protected $_applicationName = 'Calendar';
     
