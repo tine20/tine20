@@ -275,6 +275,33 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
         $this->_controller->delete(($persitentEvent->getId()));
     }
     
+    public function testSetAttendeeStatusViaSaveEvent()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        unset($event->attendee[1]);
+        
+        print_r($event->toArray());
+        
+        /*
+        $eventData = $this->testCreateEvent();
+        $eventData['container_id'] = $eventData['container_id']['id'];
+        
+        // should be ok to only test test user
+        $eventData['attendee'][0]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $eventData['summary'] = 'This text must not be saved!';
+        
+        // force attendee saving w.o. event saving  
+        $eventData['editGrant'] = false;
+        
+        $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        
+        $loadedEventData = $this->_uit->getEvent($eventData['id']);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $eventData['attendee'][0]['status']);
+        $this->assertNotEquals($eventData['summary'], $loadedEventData['summary'], 'event must not be updated!');
+        */
+    }
+    
     /**
      * returns a simple event
      *
