@@ -309,9 +309,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     {
         $clone = clone $_event;
         $clone->setId(NULL);
-        unset($clone->exdate);
-        unset($clone->rrule);
-        unset($clone->rrule_until);
+        //unset($clone->exdate);
+        //unset($clone->rrule);
+        //unset($clone->rrule_until);
         
         return $clone;
     }

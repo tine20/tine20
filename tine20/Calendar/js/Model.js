@@ -72,7 +72,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model
         return this.id && this.id.match(/^fakeid/);
     },
     isRecurBase: function() {
-        return !!this.get('rrule');
+        return !!this.get('rrule') && !this.get('recurid');
     },
     isRecurException: function() {
         return !!this.get('recurid') && !( this.idProperty && this.id.match(/^fakeid/));
