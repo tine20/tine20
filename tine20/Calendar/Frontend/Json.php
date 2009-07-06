@@ -123,26 +123,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveEvent($recordData)
     {
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "recordData: '{$recordData}'");
-        
-        $eventData = Zend_Json::decode($recordData);
-        if ($eventData['editGrant']) {
-            // if client spoofed editGrant, controller will throw exception
-            return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event');
-        } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "user has no edit grant for event '{$eventData['id']}' we only update attendee status");
-            
-            // client may set attendee status data via save request
-            $attendeeData = $eventData['attendee'];
-            foreach ($attendeeData as $attenderData) {
-                if ($attenderData['status_authkey']) {
-                    $this->setAttenderStatus($recordData, Zend_Json::encode($attenderData), $attenderData['status_authkey']);
-                }
-            }
-            
-            return $this->getEvent($eventData['id']);
-        }
-        
+        return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event');
     }
     
     /**
@@ -163,7 +144,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $event    = new Calendar_Model_Event($eventData);
         $attender = new Calendar_Model_Attender($attenderData);
         
-        Calendar_Controller_Event::getInstance()->setAttenderStatus($event, $attender, $_authKey);
+        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $attender, $_authKey);
         
         return $this->getEvent($event->getId());
     }
