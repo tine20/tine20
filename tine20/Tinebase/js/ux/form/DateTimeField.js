@@ -66,7 +66,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         Ext.ux.form.DateTimeField.superclass.onRender.call(this, ct, position);
         
         this.dateField = new Ext.form.DateField({
-            renderTo: ct,
+            renderTo: this.el,
             readOnly: this.readOnly,
             hideTrigger: this.hideTrigger,
             disabled: this.disabled,
@@ -78,7 +78,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         });
         
         this.timeField = new Ext.form.TimeField({
-            renderTo: ct,
+            renderTo: this.el,
             readOnly: this.readOnly,
             hideTrigger: this.hideTrigger,
             disabled: this.disabled,
@@ -100,12 +100,14 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     onResize : function(w, h) {
         Ext.ux.form.DateTimeField.superclass.onResize.apply(this, arguments);
         
-        this.dateField.wrap.setStyle({'position': 'absolute', 'top': '0px'});
-        this.dateField.setWidth(w * 0.55 -10);
+        this.el.setHeight(15);
         
-        this.timeField.wrap.setStyle({'position': 'absolute', 'top': '0px'});
+        this.dateField.wrap.setStyle({'position': 'absolute'});
+        this.dateField.setWidth(w * 0.55 -5);
+        
+        this.timeField.wrap.setStyle({'position': 'absolute'});
         this.timeField.setWidth(w * 0.45);
-        this.timeField.wrap.setRight(5);
+        this.timeField.wrap.setRight(0);
     },
     
     onTimeChange: function() {
