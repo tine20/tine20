@@ -442,6 +442,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * @todo implement this!
+    public function diff($_recordSet)
+    {
+        return array();
+    }
+    */
+    
+    /**
      * sorts this recordset
      *
      * @param string $_field
