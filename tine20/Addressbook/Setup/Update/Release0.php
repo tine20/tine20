@@ -325,4 +325,34 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
                 
         $this->setApplicationVersion('Addressbook', '0.9');
     }
+    
+    /**
+     * change all fields which store account ids from integer to string
+     * 
+     */
+    public function update_9()
+    {
+        $this->_backend->dropForeignKey('addressbook', 'addressbook::account_id--accounts::id');
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>addressbook::account_id--accounts::id</name>
+                <field>
+                    <name>account_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>accounts</table>
+                    <field>id</field>
+                    <onupdate>cascade</onupdate>
+                    <ondelete>cascade</ondelete>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('addressbook', $declaration);
+        
+        $this->setTableVersion('addressbook', '7');
+        
+        $this->setApplicationVersion('Addressbook', '0.10');
+    }
 }
