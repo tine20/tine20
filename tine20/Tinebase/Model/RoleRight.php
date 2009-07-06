@@ -59,9 +59,9 @@ class Tinebase_Model_RoleRight extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
     {
         $this->_validators = array(
-            'id'                => array('allowEmpty' => true),
+            'id'                => array('allowEmpty' => TRUE),
             'application_id'    => array('Alnum', 'presence' => 'required'),
-            'account_id'        => array('presence' => 'required', 'allowEmpty' => true),
+            'account_id'        => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => 0),
             'account_type'      => array(
                 new Zend_Validate_InArray(array(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)) 
             ),

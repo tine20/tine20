@@ -38,7 +38,7 @@ class Tinebase_Model_PreferenceFilter extends Tinebase_Model_Filter_FilterGroup
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'value'))),
         'application_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
         'account'        => array('filter' => 'Tinebase_Model_PreferenceAccountFilter'),
-        'account_id'     => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'account_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
         'account_type'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'type'           => array('filter' => 'Tinebase_Model_Filter_Text'),

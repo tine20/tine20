@@ -52,7 +52,7 @@ class Voipmanager_Model_Snom_PhoneRight extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'snom_phone_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'account_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'account_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, 'presence' => 'required'),
         'account_type'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
     
         'account_name'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
