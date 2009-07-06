@@ -232,10 +232,10 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentException['summary'] = 'go sleeping';
         
         // create persistent exception
-        $this->_uit->createRecurException(Zend_Json::encode($persistentException));
+        $this->_uit->createRecurException(Zend_Json::encode($persistentException), FALSE, FALSE);
         
         // create exception date
-        $this->_uit->createRecurException(Zend_Json::encode($recurSet[2]), TRUE);
+        $this->_uit->createRecurException(Zend_Json::encode($recurSet[2]), TRUE, FALSE);
         
         // delete all following (including this)
         $this->_uit->createRecurException(Zend_Json::encode($recurSet[4]), TRUE, TRUE);
@@ -273,7 +273,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentException['dtend']   = '2009-04-01 20:30:00';
         
         // create persistent exception
-        $this->_uit->createRecurException(Zend_Json::encode($persistentException));
+        $this->_uit->createRecurException(Zend_Json::encode($persistentException), FALSE, FALSE);
         
         // update recurseries 
         $someRecurInstance = $persistentException = $recurSet[2];
@@ -281,7 +281,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $someRecurInstance['dtstart'] = '2009-04-08 10:00:00';
         $someRecurInstance['dtend']   = '2009-04-08 12:30:00';
         
-        $this->_uit->updateRecurSeries(Zend_Json::encode($someRecurInstance));
+        $this->_uit->updateRecurSeries(Zend_Json::encode($someRecurInstance), FALSE, FALSE);
         
         $from = $recurSet[0]['dtstart'];
         $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
@@ -331,7 +331,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentException['summary'] = 'go sleeping';
         
         // create persistent exception
-        $this->_uit->createRecurException(Zend_Json::encode($persistentException));
+        $this->_uit->createRecurException(Zend_Json::encode($persistentException), FALSE, FALSE);
         
         // delete recurseries 
         $someRecurInstance = $persistentException = $recurSet[2];
