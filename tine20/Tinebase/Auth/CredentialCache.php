@@ -115,14 +115,19 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      *
      * @param  Tinebase_Model_CredentialCache $_cache
      * @return void
+     * 
+     * @todo check which cipher to use for encryption
      */
     protected function _encrypt($_cache)
     {
-        $chipers = mcrypt_list_algorithms();
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($chipers, true));
+        //$ciphers = mcrypt_list_algorithms();
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($ciphers, true));
         
-        $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
-        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, /*8*/ 16));
+        //$td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
+        //mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, /*8*/ 16));
+        
+        $td = mcrypt_module_open(MCRYPT_TRIPLEDES, '', 'cbc', '');
+        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 8));
         
         $data = array_merge($_cache->toArray(), array(
             'username' => $_cache->username,
