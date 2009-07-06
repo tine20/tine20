@@ -112,8 +112,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $this->_saveAttendee($_record);
             $this->_saveAlarms($_record);
-        } else if ($_recurInstance->attendee instanceof Tinebase_Record_RecordSet) {
-            foreach ($_recurInstance->attendee as $attender) {
+        } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
+            foreach ($_record->attendee as $attender) {
                 if ($attender->status_authkey) {
                     $this->attenderStatusUpdate($event, $attender, $attender->status_authkey);
                 }
@@ -181,7 +181,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($this->_doContainerACLChecks && !$baseEvent->editGrant) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: '{$baseEvent->getId()}'. Only creating exception for attendee status");
-            if ($_recurInstance->attendee instanceof Tinebase_Record_RecordSet) {
+            if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
                 foreach ($_event->attendee as $attender) {
                     if ($attender->status_authkey) {
                         $this->attenderStatusUpdate($event, $attender, $attender->status_authkey);
