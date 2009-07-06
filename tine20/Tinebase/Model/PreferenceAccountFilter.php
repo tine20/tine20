@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        generalize this
  */
 
 /**
@@ -59,7 +60,7 @@ class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstr
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if ($this->_accountId === 0) {
+        if ($this->_accountId === '0') {
             // get anyones preferences
             $field = $_backend->getAdapter()->quoteIdentifier(
                 $_backend->getTableName() . '.account_type'
@@ -72,10 +73,13 @@ class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstr
                    array('field' => 'account_id',   'operator' => 'equals',  'value' => $this->_accountId),
                    array('field' => 'account_type', 'operator' => 'equals',  'value' => $this->_accountType)
                 )),
+                array('field' => 'account_type', 'operator' => 'equals',  'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE),
+                /*
                 array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
-                   array('field' => 'account_id',   'operator' => 'equals',  'value' => '0'),
+                   //array('field' => 'account_id',   'operator' => 'equals',  'value' => '0'),
                    array('field' => 'account_type', 'operator' => 'equals',  'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE),
-                )),            
+                )),
+                */            
             );
             
             // add groups if accountType is user

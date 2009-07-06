@@ -136,7 +136,6 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
     /**
      * test forced preference
      *
-     * @todo remove user pref as well?
      */
     public function testForcedPreference()
     {
@@ -145,7 +144,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
             'name'              => $forcedPrefName,
             'value'             => 'forced value',
-            'account_id'        => 0,
+            'account_id'        => '0',
             'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
             'type'              => Tinebase_Model_Preference::TYPE_FORCED
         ));
@@ -160,11 +159,6 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_instance->delete($forcedPref);
-        $filter = $this->_getPreferenceFilter();
-        $userPrefs = $this->_instance->search($filter);
-        foreach($userPrefs->filter('name', $forcedPrefName) as $userPref) {
-            $this->_instance->delete($userPref->getId());
-        }
     }
 
     /**

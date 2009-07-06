@@ -121,14 +121,14 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function getValue($_preferenceName, $_default = NULL)
     {
-        $accountId = (Tinebase_Core::isRegistered(Tinebase_Core::USER)) ? Tinebase_Core::getUser()->getId() : 0; 
+        $accountId = (Tinebase_Core::isRegistered(Tinebase_Core::USER)) ? Tinebase_Core::getUser()->getId() : '0'; 
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference"' . $_preferenceName . '" for account id ' . $accountId);
         
         try {
             $result = $this->getValueForUser(
                 $_preferenceName, $accountId, 
-                ($accountId === 0) 
+                ($accountId === '0') 
                     ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
                     : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
             ); 
@@ -167,7 +167,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         ));
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -207,7 +207,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $select = $this->_getSelect();
         $filter = new Tinebase_Model_PreferenceFilter(array(
             array('field'     => 'account',         'operator'  => 'equals', 'value'     => array(
-                'accountId' => 0, 'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
+                'accountId' => '0', 'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
             ),
             array('field'     => 'name',            'operator'  => 'equals', 'value'     => $_preferenceName),
         ));
@@ -269,7 +269,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function setValue($_preferenceName, $_value)
     {
-        $accountId = (Tinebase_Core::isRegistered(Tinebase_Core::USER)) ? Tinebase_Core::getUser()->getId() : 0; 
+        $accountId = (Tinebase_Core::isRegistered(Tinebase_Core::USER)) ? Tinebase_Core::getUser()->getId() : '0'; 
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set ' . $_preferenceName . ' for user ' . $accountId . ':' . $_value);
         
