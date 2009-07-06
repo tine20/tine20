@@ -149,6 +149,8 @@ class Setup_Controller
      * 
      * @param Tinebase_Record_RecordSet $_applications
      * @return  array   messages
+     * 
+     * @todo update tinebase first!
      */
     public function updateApplications(Tinebase_Record_RecordSet $_applications)
     {
@@ -236,7 +238,9 @@ class Setup_Controller
         
         switch(version_compare($_application->version, $setupXml->version)) {
             case -1:
-                $messages[] = "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")";
+                $message = "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")";
+                $messages[] = $message;
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $message);
 
                 list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
         
@@ -257,6 +261,10 @@ class Setup_Controller
                             $db = Setup_Core::getDb();
                             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
                         
+                            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                                . ' Updating ' . $_application->name . ' - ' . $functionName
+                            );
+                            
                             $update->$functionName();
                         
                             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -277,6 +285,7 @@ class Setup_Controller
                 break; 
                 
             case 0:
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No update needed for ' . $_application->name);
                 break;
                 
             case 1:
