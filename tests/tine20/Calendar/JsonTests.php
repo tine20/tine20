@@ -107,13 +107,13 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $eventData = $event->toArray();
         foreach ($eventData['attendee'] as $key => $attenderData) {
-            if ($eventData['attendee'][$key]['user_id']['accountId'] != Tinebase_Core::getUser()->getId()) {
+            if ($eventData['attendee'][$key]['user_id'] != Tinebase_Core::getUser()->getId()) {
                 unset($eventData['attendee'][$key]);
             }
         }
         
         $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
-
+        
         $this->_assertJsonEvent($eventData, $updatedEventData, 'failed to update event');
         
         return $updatedEventData;
@@ -362,6 +362,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals($expectedEventData['dtstart'], $eventData['dtstart'], $msg . ': dtstart mismatch');
         $this->assertTrue(is_array($eventData['container_id']), $msg . ': failed to "resolve" container');
         $this->assertTrue(is_array($eventData['container_id']['account_grants']), $msg . ': failed to "resolve" container account_grants');
+        $this->assertGreaterThan(0, count($eventData['attendee']));
         $this->assertEquals(count($eventData['attendee']), count($expectedEventData['attendee']), $msg . ': faild to append attendee');
         $this->assertTrue(is_array($eventData['attendee'][0]['user_id']), $msg . ': failed to resolve attendee user_id');
         // NOTE: due to sorting isshues $eventData['attendee'][0] may be a non resolvable container (due to rights restrictions)
