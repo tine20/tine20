@@ -30,8 +30,8 @@ class Setup_Import_TineInitial
         
         /***************** create initial user and groups ************************/
         
-        list($userGroup, $adminGroup) = $this->_createInitialGroups($configSettings);
-        $this->_createInitialAdminAccount('tine20admin', 'lars', 'Tine 2.0', 'Admin Account', $userGroup, $adminGroup);
+        $this->_createInitialGroups();
+        $this->_createInitialAdminAccount('tine20admin', 'lars', 'Tine 2.0', 'Admin Account');
         
         $this->initialLoad();
     }
@@ -178,7 +178,6 @@ class Setup_Import_TineInitial
      *
      * @param string $_userGroup
      * @param string $_adminGroup
-     * @return array initial config settings
      */
     protected function _setDefaultGroups($_userGroup, $_adminGroup)
     {
@@ -199,38 +198,29 @@ class Setup_Import_TineInitial
             ));            
             $configBackend->setConfig($config);
         }
-        
-        return $configSettings;
     }
     
     /**
      * create initial groups
      *
-     * @param array $_initialConfig
-     * @return array with initial groups (user, admin)
      */
-    protected function _createInitialGroups($_initialConfig)
+    protected function _createInitialGroups()
     {
         // add the admin group
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
 
         $adminGroup = new Tinebase_Model_Group(array(
-            'name'          => $_initialConfig[Tinebase_Config::DEFAULT_ADMIN_GROUP],
+            'name'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value,
             'description'   => 'Group of administrative accounts'
         ));
         $adminGroup = $groupsBackend->addGroup($adminGroup);
 
         // add the user group
         $userGroup = new Tinebase_Model_Group(array(
-            'name'          => $_initialConfig[Tinebase_Config::DEFAULT_USER_GROUP],
+            'name'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value,
             'description'   => 'Group of user accounts'
         ));
         $userGroup = $groupsBackend->addGroup($userGroup);
-        
-        return array(
-            $userGroup,
-            $adminGroup,
-        );
     }
     
     /**
@@ -240,11 +230,14 @@ class Setup_Import_TineInitial
      * @param string $_password
      * @param string $_firstname
      * @param string $_lastname
-     * @param Tinebase_Model_Group $_initialUserGroup
-     * @param Tinebase_Model_Group $_initialAdminGroup
      */
-    protected function _createInitialAdminAccount($_loginName, $_password, $_firstname, $_lastname, $_initialUserGroup, $_initialAdminGroup)
+    protected function _createInitialAdminAccount($_loginName, $_password, $_firstname, $_lastname)
     {
+        // get admin & user groups
+        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
+        $adminGroup = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value);
+        $userGroup  = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value);
+        
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_loginName . ')');
 
         // add the admin account
@@ -253,7 +246,7 @@ class Setup_Import_TineInitial
         $account = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $_loginName,
             'accountStatus'         => 'enabled',
-            'accountPrimaryGroup'   => $_initialUserGroup->getId(),
+            'accountPrimaryGroup'   => $userGroup->getId(),
             'accountLastName'       => $_lastname,
             'accountDisplayName'    => $_lastname . ', ' . $_firstname,
             'accountFirstName'      => $_firstname,
@@ -269,7 +262,7 @@ class Setup_Import_TineInitial
         Tinebase_User::getInstance()->setPassword($_loginName, $_password, $_password);
 
         // add the admin account to all groups
-        Tinebase_Group::getInstance()->addGroupMember($_initialAdminGroup, $account);
-        Tinebase_Group::getInstance()->addGroupMember($_initialUserGroup, $account);
+        Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
+        Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
     }
 }
