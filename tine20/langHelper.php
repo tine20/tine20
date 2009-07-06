@@ -198,8 +198,10 @@ function potmerge($_verbose)
         if ($_verbose) {
            echo "creating en.po from template.po\n";
         }
+        generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/en.po",  $_verbose);
+        $enHeader = file_get_contents("$translationPath/en.po");
         `cd $translationPath
-         msgen -o en.po template.pot $msgDebug`;
+         msgen template.pot >> en.po $msgDebug`;
          
         foreach ($langs as $langCode) {
             $poFile = "$translationPath/$langCode.po";
@@ -469,7 +471,9 @@ msgstr ""
 "X-Poedit-Language: ' . $_languageName . '\n"
 "X-Poedit-Country: ' . strtoupper($_regionName) . '\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: ' . $_pluralForm . '\n"';
+"Plural-Forms: ' . $_pluralForm . '\n"
+
+';
             
     if ($_verbose) {
         echo "  Writing $_languageName po header for $_appName \n";
