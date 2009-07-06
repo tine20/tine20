@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-06-13 22:54+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-07-06 14:38+0100\n"
+"Last-Translator: Anne Wieland <to@anne-wieland.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,120 +14,120 @@ msgstr ""
 
 #: Controller/Event.php:590
 msgid "Notification for Event "
-msgstr ""
+msgstr "Terminbenachrichtigung"
 
 #: Controller/Event.php:591
 msgid "Event description:<br/>"
-msgstr ""
+msgstr "Terminbeschreibung:<br/>"
 
 #: Controller.php:85
 #, python-format
 msgid "%s's personal calendar"
-msgstr "%s's persönlicher Kalender"
+msgstr "%ss persönlicher Kalender"
 
 #: js/AttendeeGridPanel.js:35 js/Model.js:196
 msgid "Attendee"
-msgstr ""
+msgstr "Teilnehmende"
 
 #: js/AttendeeGridPanel.js:64
 msgid "Role"
-msgstr ""
+msgstr "Rolle"
 
 #: js/AttendeeGridPanel.js:73
 msgid "Quantity"
-msgstr ""
+msgstr "Anzahl"
 
 #: js/AttendeeGridPanel.js:82
 msgid "This is the calendar where the attender has saved this event in"
-msgstr ""
+msgstr "In diesem Kalender wurde der Termin vom Teilnehmer gespeichert."
 
 #: js/AttendeeGridPanel.js:118
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: js/AttendeeGridPanel.js:125
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: js/AttendeeGridPanel.js:153
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/AttendeeGridPanel.js:228
 msgid "Remove Attender"
-msgstr ""
+msgstr "Teilnehmer/in entfernen"
 
 #: js/AttendeeGridPanel.js:356
 msgid "Click here to invite another attender..."
-msgstr ""
+msgstr "Klicken Sie hier, um neue Teilnehmer einzuladen..."
 
 #: js/AttendeeGridPanel.js:368
 msgid "No Information"
-msgstr ""
+msgstr "Keine Angabe"
 
 #: js/AttendeeGridPanel.js:380
 msgid "Required"
-msgstr ""
+msgstr "Erforderlich"
 
 #: js/AttendeeGridPanel.js:383
 msgid "Optional"
-msgstr ""
+msgstr "Freiwillig"
 
 #: js/AttendeeGridPanel.js:398
 msgid "No response"
-msgstr ""
+msgstr "Keine Antwort"
 
 #: js/AttendeeGridPanel.js:401
 msgid "Accepted"
-msgstr ""
+msgstr "Angenommen"
 
 #: js/AttendeeGridPanel.js:404
 msgid "Declined"
-msgstr ""
+msgstr "Abgesagt"
 
 #: js/AttendeeGridPanel.js:407
 msgid "Tentative"
-msgstr ""
+msgstr "Vielleicht"
 
 #: js/CalendarPanel.js:123
 msgid "Confirm Update of Series"
-msgstr ""
+msgstr "Bestätigung der "
 
 #: js/CalendarPanel.js:124
 msgid "Do you realy want to update all events of this recuring event series?"
-msgstr ""
+msgstr "Möchten Sie wirklich alle Termine dieser Reihe aktualisieren?"
 
 #: js/CalendarPanel.js:140
 msgid "Update Event"
-msgstr ""
+msgstr "Termin aktualisieren"
 
 #: js/CalendarPanel.js:141
 msgid "Do you want to update the whole series, or just this event"
-msgstr ""
+msgstr "Möchten Sie die ganze Reihe oder nur diesen Termin aktualisieren?"
 
 #: js/CalendarPanel.js:143
 msgid "Update nothing"
-msgstr ""
+msgstr "Nichts aktualisieren"
 
 #: js/CalendarPanel.js:151
 msgid "Update whole series"
-msgstr ""
+msgstr "Die ganze Reihe aktualisieren"
 
 #: js/CalendarPanel.js:163
 msgid "Failed not update recurring event series"
-msgstr ""
+msgstr "Aktualisierung der Terminreihe ist fehlgeschlagen."
 
 #: js/CalendarPanel.js:171
 msgid "Update this event only"
-msgstr ""
+msgstr "Nur diesen Termin aktualisieren"
 
 #: js/CalendarPanel.js:185
 msgid "Failed not update event"
-msgstr ""
+msgstr "Aktualisierung des Termins ist fehlgeschlagen"
 
 #: js/CalendarSelectWidget.js:126
 msgid "Originally"
-msgstr ""
+msgstr "Ursprungskalender"
 
 #: js/EventEditDialog.js:78 js/Model.js:64 js/Model.js:200
 msgid "Event"
@@ -141,64 +141,65 @@ msgstr "Zusammenfassung"
 
 #: js/EventEditDialog.js:98
 msgid "Location"
-msgstr ""
+msgstr "Ort"
 
 #: js/EventEditDialog.js:103
 msgid "Start Time"
-msgstr ""
+msgstr "Beginn"
 
 #: js/EventEditDialog.js:118
 msgid "End Time"
-msgstr ""
+msgstr "Ende"
 
 #: js/EventEditDialog.js:126
 msgid "whole day"
-msgstr ""
+msgstr "ganztägig"
 
 #: js/EventEditDialog.js:143
 msgid "Alarms"
-msgstr ""
+msgstr "Erinnerungen"
 
 #: js/EventEditDialog.js:162
 msgid "Description"
-msgstr ""
+msgstr "Beschreibung"
 
 #: js/EventEditDialog.js:176
 msgid "Enter description"
-msgstr ""
+msgstr "Bitte geben Sie eine Beschreibung an."
 
 #: js/EventEditDialog.js:292
 msgid "End date is not valid"
-msgstr ""
+msgstr "Endzeitpunkt ist ungültig."
 
 #: js/EventEditDialog.js:295
 msgid "End date must be after start date"
-msgstr ""
+msgstr "Der Endzeitpunkt muss nach dem Zeitpunkt des Beginns liegen"
 
 #: js/EventEditDialog.js:308
 msgid "Start date is not valid"
-msgstr ""
+msgstr "Zeitpunkt den Beginns ist ungültig."
 
 #: js/MainScreenCenterPanel.js:223
 msgid "Please Change Selection"
-msgstr ""
+msgstr "Bitte ändern Sie Ihre Auswahl."
 
 #: js/MainScreenCenterPanel.js:224
 msgid ""
 "Your selection contains recuring events. Recuring events must be deleted "
 "seperatly!"
 msgstr ""
+"Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht "
+"werden!"
 
 #: js/MainScreenCenterPanel.js:238
 msgid "Confirm Deletion of Series"
-msgstr ""
+msgstr "Löschen einer Terminreihe"
 
 #: js/MainScreenCenterPanel.js:239
 msgid "Do you realy want to delete all events of this recuring event series?"
-msgstr ""
+msgstr "Möchten Sie wirklich alle Termine dieser Reihe löschen?"
 
 #: js/MainScreenCenterPanel.js:254
-#, fuzzy
 msgid "Delete Event"
 msgstr "{0} Löschen"
 
@@ -207,84 +208,84 @@ msgid ""
 "Do you want to delete the whole series, this and all future events of this "
 "series, or just this event"
 msgstr ""
+"Möchten Sie die komplette Reihe, nur diesen und alle zukünftigen Termine, "
+"oder nur diesen Termin löschen?"
 
 #: js/MainScreenCenterPanel.js:257
 msgid "Delete nothing"
-msgstr ""
+msgstr "Nichts löschen"
 
 #: js/MainScreenCenterPanel.js:264
 msgid "Delete whole series"
-msgstr ""
+msgstr "Komplette Reihe löschen"
 
 #: js/MainScreenCenterPanel.js:285
 msgid "Delete this and all future events"
-msgstr ""
+msgstr "Diesen und alle zukünftigen Termine löschen"
 
 #: js/MainScreenCenterPanel.js:306
 msgid "Delete this event only"
-msgstr ""
+msgstr "Nur diesen Termin löschen"
 
 #: js/Model.js:64 js/Model.js:200
 msgid "Events"
 msgstr "Termine"
 
 #: js/Model.js:68 Setup/setup.xml:4
-#, fuzzy
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalender"
 msgstr[1] "Kalender"
 
 #: js/Model.js:68
-#, fuzzy
 msgid "Calendars"
 msgstr "Kalender"
 
 #: js/Model.js:196
 msgid "Attender"
 msgid_plural "Attendee"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Teilnehmer/in"
+msgstr[1] "Teilnehmende"
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
-msgstr ""
+msgstr "Wiederholungen"
 
 #: js/RrulePanel.js:37
 msgid "No recuring rule defined"
-msgstr ""
+msgstr "Ohne Wiederholung"
 
 #: js/RrulePanel.js:74
 msgid "None"
-msgstr ""
+msgstr "Einmalig"
 
 #: js/RrulePanel.js:81
 msgid "Daily"
-msgstr ""
+msgstr "Täglich"
 
 #: js/RrulePanel.js:88
 msgid "Weekly"
-msgstr ""
+msgstr "Wöchentlich"
 
 #: js/RrulePanel.js:95
 msgid "Monthly"
-msgstr ""
+msgstr "Monatlich"
 
 #: js/RrulePanel.js:102
 msgid "Yearly"
-msgstr ""
+msgstr "Jährlich"
 
 #: js/RrulePanel.js:215
 msgid "forever"
-msgstr ""
+msgstr "unendlich"
 
 #: js/RrulePanel.js:227
 msgid "Forever"
-msgstr ""
+msgstr "Unendlich"
 
 #: js/RrulePanel.js:228
 msgid "at"
-msgstr ""
+msgstr "am"
 
 #: js/RrulePanel.js:234
 #, fuzzy
@@ -293,64 +294,64 @@ msgstr "Termin"
 
 #: js/RrulePanel.js:269
 msgid "Until"
-msgstr ""
+msgstr "Bis"
 
 #: js/RrulePanel.js:304
 msgid ". Day"
-msgstr ""
+msgstr ". Tag"
 
 #: js/RrulePanel.js:334
 msgid ". Week at"
-msgstr ""
+msgstr ". Woche am"
 
 #: js/RrulePanel.js:393
 msgid ". Month"
-msgstr ""
+msgstr ". Monat"
 
 #: js/RrulePanel.js:399 js/RrulePanel.js:449 js/RrulePanel.js:580
 #: js/RrulePanel.js:631
 msgid "at the"
-msgstr ""
+msgstr "am"
 
 #: js/RrulePanel.js:418 js/RrulePanel.js:599
 msgid "first"
-msgstr ""
+msgstr "ersten"
 
 #: js/RrulePanel.js:419 js/RrulePanel.js:600
 msgid "second"
-msgstr ""
+msgstr "zweiten"
 
 #: js/RrulePanel.js:420 js/RrulePanel.js:601
 msgid "third"
-msgstr ""
+msgstr "dritten"
 
 #: js/RrulePanel.js:421 js/RrulePanel.js:602
 msgid "fourth"
-msgstr ""
+msgstr "vierten"
 
 #: js/RrulePanel.js:422 js/RrulePanel.js:603
 msgid "fifth"
-msgstr ""
+msgstr "fünften"
 
 #: js/RrulePanel.js:423 js/RrulePanel.js:604
 msgid "last"
-msgstr ""
+msgstr "letzten"
 
 #: js/RrulePanel.js:573
 msgid ". Year"
-msgstr ""
+msgstr ". Jahr"
 
 #: js/RrulePanel.js:671 js/RrulePanel.js:683
 msgid "of"
-msgstr ""
+msgstr " "
 
 #: Preference.php:66
 msgid "Publish Free/Busy Information"
-msgstr "Frei/Belegt Informationen veröffentlichen"
+msgstr "Frei/Belegt-Informationen veröffentlichen"
 
 #: Preference.php:67
 msgid "Allow all users to view your free/busy information"
-msgstr "Erlaubt allen Benutzern das einsehen ihrer Frei/Belegt Informationen"
+msgstr "Erlaubt allen Benutzern das Einsehen ihrer Frei/Belegt-Informationen"
 
 #: Preference.php:70
 #, fuzzy
@@ -359,7 +360,7 @@ msgstr "Kalender"
 
 #: Preference.php:71
 msgid "The defualt calendar for invitations and new events"
-msgstr ""
+msgstr "Der Standard-Kalender für Einladungen und neue Termine"
 
 #, fuzzy
 #~ msgid "calendar"
