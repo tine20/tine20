@@ -118,13 +118,20 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     onFreqChange: function(freq) {
         this.ruleCards.layout.setActiveItem(this[freq + 'card']);
         this.ruleCards.layout.layout();
-        console.log(freq);
         this.activeRuleCard = this[freq + 'card'];
     },
     
     onRecordLoad: function(record) {
         this.record = record;
+        
+        if (! this.record.get('editGrant')) {
+            this.items.each(function(item) {
+                item.setDisabled(true);
+            }, this);
+        }
+        
         this.rrule = this.record.get('rrule');
+        //Ext.MessageBox.alert('fuck firebug', Ext.util.JSON.encode(this.rrule));
         
         var dtstart = this.record.get('dtstart');
         if (Ext.isDate(dtstart)) {
@@ -203,8 +210,9 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         this.untilId = Ext.id();
         
         this.until = new Ext.form.DateField({
-            width: 100,
-            emptyText: this.app.i18n._('forever')
+            requiredGrant : 'editGrant',
+            width         : 100,
+            emptyText     : this.app.i18n._('forever')
         });
         
         /*
@@ -227,6 +235,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         }
         
         this.interval = new Ext.form.NumberField({
+            requiredGrant : 'editGrant',
             style         : 'text-align:right;',
             fieldLabel    : this.intervalBeforeString,
             value         : 1,
@@ -335,6 +344,7 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         }
         
         this.byday = new Ext.form.CheckboxGroup({
+            requiredGrant : 'editGrant',
             style: 'padding-top: 5px; padding-left: 10px',
             hideLabel: true,
             items: bydayItems
@@ -396,6 +406,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
         });
 
         this.wkNumber = new Ext.form.ComboBox({
+            requiredGrant : 'editGrant',
             width: 80,
             listWidth: 80,
             triggerAction : 'all',
@@ -421,8 +432,9 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
         }
         
         this.wkDay = new Ext.form.ComboBox({
-            width: 100,
-            listWidth: 100,
+            requiredGrant : 'editGrant',
+            width         : 100,
+            listWidth     : 100,
             triggerAction : 'all',
             hideLabel     : true,
             value         : Tine.Calendar.RrulePanel.prototype.wkdays[Ext.DatePicker.prototype.startDay],
@@ -432,20 +444,22 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
         });
         
         this.bymonthdayRadio = new Ext.form.Radio({
-            hideLabel: true,
-            boxLabel: this.app.i18n._('at the'), 
-            name: this.idPrefix + 'byRadioGroup', 
-            inputValue: 'BYMONTHDAY',
-            listeners: {
+            requiredGrant : 'editGrant',
+            hideLabel     : true,
+            boxLabel      : this.app.i18n._('at the'), 
+            name          : this.idPrefix + 'byRadioGroup', 
+            inputValue    : 'BYMONTHDAY',
+            listeners     : {
                 check: this.onByRadioCheck.createDelegate(this)
             }
         });
         
         this.bymonthdayday = new Ext.form.NumberField({
-            hideLabel: true,
-            width: 40,
-            value: 1,
-            disabled: true
+            requiredGrant : 'editGrant',
+            hideLabel     : true,
+            width         : 40,
+            value         : 1,
+            disabled      : true
         });
         
         this.items = [{
@@ -561,18 +575,20 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         this.idPrefix = Ext.id();
         
         this.bydayRadio = new Ext.form.Radio({
-            hideLabel: true,
-            boxLabel: this.app.i18n._('at the'), 
-            name: this.idPrefix + 'byRadioGroup', 
-            inputValue: 'BYDAY',
-            listeners: {
+            requiredGrant : 'editGrant',
+            hideLabel     : true,
+            boxLabel      : this.app.i18n._('at the'), 
+            name          : this.idPrefix + 'byRadioGroup', 
+            inputValue    : 'BYDAY',
+            listeners     : {
                 check: this.onByRadioCheck.createDelegate(this)
             }
         });
 
         this.wkNumber = new Ext.form.ComboBox({
-            width: 80,
-            listWidth: 80,
+            requiredGrant : 'editGrant',
+            width         : 80,
+            listWidth     : 80,
             triggerAction : 'all',
             hideLabel     : true,
             value         : 1,
@@ -597,8 +613,9 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         }
         
         this.wkDay = new Ext.form.ComboBox({
-            width: 100,
-            listWidth: 100,
+            requiredGrant : 'editGrant',
+            width         : 100,
+            listWidth     : 100,
             triggerAction : 'all',
             hideLabel     : true,
             value         : Tine.Calendar.RrulePanel.prototype.wkdays[Ext.DatePicker.prototype.startDay],
@@ -609,20 +626,22 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         });
         
         this.bymonthdayRadio = new Ext.form.Radio({
-            hideLabel: true,
-            boxLabel: this.app.i18n._('at the'), 
-            name: this.idPrefix + 'byRadioGroup', 
-            inputValue: 'BYMONTHDAY',
-            checked: true,
-            listeners: {
+            requiredGrant : 'editGrant',
+            hideLabel     : true,
+            boxLabel      : this.app.i18n._('at the'), 
+            name          : this.idPrefix + 'byRadioGroup', 
+            inputValue    : 'BYMONTHDAY',
+            checked       : true,
+            listeners     : {
                 check: this.onByRadioCheck.createDelegate(this)
             }
         });
         
         this.bymonthdayday = new Ext.form.NumberField({
-            hideLabel: true,
-            width: 40,
-            value: 1
+            requiredGrant : 'editGrant',
+            hideLabel     : true,
+            width         : 40,
+            value         : 1
         });
         
         var monthItems = [];
@@ -631,8 +650,9 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         }
         
         this.bymonth = new Ext.form.ComboBox({
-            width: 100,
-            listWidth: 100,
+            requiredGrant : 'editGrant',
+            width         : 100,
+            listWidth     : 100,
             triggerAction : 'all',
             hideLabel     : true,
             value         : 1,
