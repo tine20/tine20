@@ -75,7 +75,7 @@
  *  - if all of them are already included by container and implicit source, we 
  *    can skip the complex inherited grants
  *  - if after all no grant is given, the user has only the grant to view free/
- *    busy information. The controller whipes off all information but dtstart, 
+ *    busy information. The controller wipes off all information but dtstart, 
  *    dtend and the attendee the user has at least free/busy grants for
  * 
  * Takeling the inherited grants problem in search operations:

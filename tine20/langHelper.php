@@ -35,7 +35,7 @@ try {
     array(
         'verbose|v'       => 'Output messages',
         'clean|c'         => 'Cleanup all tmp files',
-        'whipe|w'         => 'whipe all local translations',
+        'wipe|w'         => 'wipe all local translations',
         'update|u'        => 'Update lang files (shortcut for --pot --potmerge --mo --clean)',
         'package'         => 'Create a translation package',
         'pot'             => '(re) generate xgettext po template files',
@@ -56,7 +56,7 @@ try {
    exit;
 }
 
-if ($opts->whipe) {
+if ($opts->wipe) {
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         if ($_verbose) {
             echo "Processing $appName po files \n";
