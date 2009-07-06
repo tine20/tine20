@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-07-06 14:38+0100\n"
-"Last-Translator: Anne Wieland <to@anne-wieland.de>\n"
+"PO-Revision-Date: 2009-07-06 23:00+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +25,8 @@ msgstr "Terminbeschreibung:<br/>"
 msgid "%s's personal calendar"
 msgstr "%ss persönlicher Kalender"
 
-#: js/AttendeeGridPanel.js:35 js/Model.js:196
+#: js/AttendeeGridPanel.js:35
+#: js/Model.js:196
 msgid "Attendee"
 msgstr "Teilnehmende"
 
@@ -129,7 +130,9 @@ msgstr "Aktualisierung des Termins ist fehlgeschlagen"
 msgid "Originally"
 msgstr "Ursprungskalender"
 
-#: js/EventEditDialog.js:78 js/Model.js:64 js/Model.js:200
+#: js/EventEditDialog.js:78
+#: js/Model.js:64
+#: js/Model.js:200
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Termin"
@@ -184,12 +187,8 @@ msgid "Please Change Selection"
 msgstr "Bitte ändern Sie Ihre Auswahl."
 
 #: js/MainScreenCenterPanel.js:224
-msgid ""
-"Your selection contains recuring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht "
-"werden!"
+msgid "Your selection contains recuring events. Recuring events must be deleted seperatly!"
+msgstr "Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht werden!"
 
 #: js/MainScreenCenterPanel.js:238
 msgid "Confirm Deletion of Series"
@@ -201,15 +200,11 @@ msgstr "Möchten Sie wirklich alle Termine dieser Reihe löschen?"
 
 #: js/MainScreenCenterPanel.js:254
 msgid "Delete Event"
-msgstr "{0} Löschen"
+msgstr "Termin Löschen"
 
 #: js/MainScreenCenterPanel.js:255
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Möchten Sie die komplette Reihe, nur diesen und alle zukünftigen Termine, "
-"oder nur diesen Termin löschen?"
+msgid "Do you want to delete the whole series, this and all future events of this series, or just this event"
+msgstr "Möchten Sie die komplette Reihe, nur diesen und alle zukünftigen Termine, oder nur diesen Termin löschen?"
 
 #: js/MainScreenCenterPanel.js:257
 msgid "Delete nothing"
@@ -227,11 +222,13 @@ msgstr "Diesen und alle zukünftigen Termine löschen"
 msgid "Delete this event only"
 msgstr "Nur diesen Termin löschen"
 
-#: js/Model.js:64 js/Model.js:200
+#: js/Model.js:64
+#: js/Model.js:200
 msgid "Events"
 msgstr "Termine"
 
-#: js/Model.js:68 Setup/setup.xml:4
+#: js/Model.js:68
+#: Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalender"
@@ -288,9 +285,8 @@ msgid "at"
 msgstr "am"
 
 #: js/RrulePanel.js:234
-#, fuzzy
 msgid "Every"
-msgstr "Termin"
+msgstr "Jeden"
 
 #: js/RrulePanel.js:269
 msgid "Until"
@@ -308,32 +304,40 @@ msgstr ". Woche am"
 msgid ". Month"
 msgstr ". Monat"
 
-#: js/RrulePanel.js:399 js/RrulePanel.js:449 js/RrulePanel.js:580
+#: js/RrulePanel.js:399
+#: js/RrulePanel.js:449
+#: js/RrulePanel.js:580
 #: js/RrulePanel.js:631
 msgid "at the"
 msgstr "am"
 
-#: js/RrulePanel.js:418 js/RrulePanel.js:599
+#: js/RrulePanel.js:418
+#: js/RrulePanel.js:599
 msgid "first"
 msgstr "ersten"
 
-#: js/RrulePanel.js:419 js/RrulePanel.js:600
+#: js/RrulePanel.js:419
+#: js/RrulePanel.js:600
 msgid "second"
 msgstr "zweiten"
 
-#: js/RrulePanel.js:420 js/RrulePanel.js:601
+#: js/RrulePanel.js:420
+#: js/RrulePanel.js:601
 msgid "third"
 msgstr "dritten"
 
-#: js/RrulePanel.js:421 js/RrulePanel.js:602
+#: js/RrulePanel.js:421
+#: js/RrulePanel.js:602
 msgid "fourth"
 msgstr "vierten"
 
-#: js/RrulePanel.js:422 js/RrulePanel.js:603
+#: js/RrulePanel.js:422
+#: js/RrulePanel.js:603
 msgid "fifth"
 msgstr "fünften"
 
-#: js/RrulePanel.js:423 js/RrulePanel.js:604
+#: js/RrulePanel.js:423
+#: js/RrulePanel.js:604
 msgid "last"
 msgstr "letzten"
 
@@ -341,7 +345,8 @@ msgstr "letzten"
 msgid ". Year"
 msgstr ". Jahr"
 
-#: js/RrulePanel.js:671 js/RrulePanel.js:683
+#: js/RrulePanel.js:671
+#: js/RrulePanel.js:683
 msgid "of"
 msgstr " "
 
@@ -354,9 +359,8 @@ msgid "Allow all users to view your free/busy information"
 msgstr "Erlaubt allen Benutzern das Einsehen ihrer Frei/Belegt-Informationen"
 
 #: Preference.php:70
-#, fuzzy
 msgid "Default Calendar"
-msgstr "Kalender"
+msgstr "Standard Kalender"
 
 #: Preference.php:71
 msgid "The defualt calendar for invitations and new events"
@@ -367,12 +371,10 @@ msgstr "Der Standard-Kalender für Einladungen und neue Termine"
 #~ msgid_plural "calendars"
 #~ msgstr[0] "Kalender"
 #~ msgstr[1] "Kalender"
-
 #~ msgid "calendars"
 #~ msgstr "Kalender"
-
 #~ msgid "Edit {0}"
 #~ msgstr "{0} Bearbeiten"
-
 #~ msgid "Add {0}"
 #~ msgstr "{0} Hinzufügen"
+
