@@ -123,7 +123,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $accountId = (Tinebase_Core::isRegistered(Tinebase_Core::USER)) ? Tinebase_Core::getUser()->getId() : '0'; 
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference"' . $_preferenceName . '" for account id ' . $accountId);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference "' . $_preferenceName . '" for account id ' . $accountId);
         
         try {
             $result = $this->getValueForUser(
@@ -372,6 +372,25 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             //$result['totalcount'] = count($result['results']);
             $_preference->options = $result;
         }
+    }
+
+    /**
+     * delete user preference by name
+     *
+     * @param string $_preferenceName
+     * @return void
+     */
+    public function deleteUserPref($_preferenceName)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting pref ' . $_preferenceName);
+        
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name')           . ' = ?', $_preferenceName),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_id')     . ' = ?', Tinebase_Core::getUser()->getId()),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_type')   . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+        );
+        
+        $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
     }
     
     /**************************** protected functions *********************************/
