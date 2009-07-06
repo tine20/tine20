@@ -742,10 +742,15 @@ class Tinebase_Container
      * delete container if user has the required right
      *
      * @param   int|Tinebase_Model_Container $_containerId
+     * @param   boolean $_ignoreAcl
+     * @param   boolean $_tryAgain
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_InvalidArgument
+     * 
+     * @todo make delete work even if some records remain in container to delete -> move them to personal container first
+     * @todo use getDefaultContainer?
      */
-    public function deleteContainer($_containerId, $_ignoreAcl = FALSE)
+    public function deleteContainer($_containerId, $_ignoreAcl = FALSE, $_tryAgain = TRUE)
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
@@ -760,15 +765,60 @@ class Tinebase_Container
             }
         }        
         
-        $where = array(
-            $this->containerTable->getAdapter()->quoteInto('container_id = ?', $containerId)
-        );
-        $this->containerAclTable->delete($where);
-        
-        $where = array(
-            $this->containerTable->getAdapter()->quoteInto('id = ?', $containerId)
-        );
-        $this->containerTable->delete($where);
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+            
+            $where = array(
+                $this->containerTable->getAdapter()->quoteInto('container_id = ?', $containerId)
+            );
+            $this->containerAclTable->delete($where);
+            
+            $where = array(
+                $this->containerTable->getAdapter()->quoteInto('id = ?', $containerId)
+            );
+            $this->containerTable->delete($where);
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            
+            /*
+            // some sql exception -> move all contained objects to next available personal container and try again to delete container
+            $app = Tinebase_Application::getApplicationById($container->application_id);
+            if ($_tryAgain && $_ignoreAcl !== TRUE) {
+                
+                // get personal containers
+                $personalContainers = $this->getPersonalContainer(
+                    Tinebase_Core::getUser(),
+                    $app->name,
+                    $container->owner,
+                    Tinebase_Model_Container::GRANT_ADD
+                );
+                
+                //-- determine first matching personal container (or create new one)
+                // $personalContainer = 
+                
+                //-- move all records to personal container
+                
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' Moving all records from container ' . $containerId . ' to personal container ' . $personalContainer->getId()
+                );
+                
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                throw $zdse;
+            }
+            */
+
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+            throw $zdse;
+            
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            throw $e;
+        }
         
         $this->_removeFromCache($containerId);
     }
