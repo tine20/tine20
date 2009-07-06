@@ -77,7 +77,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($course['description'], $courseData['description']);
         $this->assertEquals($course['type'], $courseData['type']['value']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $courseData['created_by'], 'Created by has not been set.');
-        $this->assertGreaterThan(0, $courseData['group_id']);
+        $this->assertTrue(! empty($courseData['group_id']));
         $this->assertGreaterThan(0, count($courseData['members']));
         
         // cleanup

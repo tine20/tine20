@@ -2,7 +2,7 @@
 <application>
     <name>Courses</name>
     <!-- gettext('Courses') -->   
-    <version>0.2</version>
+    <version>0.3</version>
     <order>50</order>
     <status>disabled</status>
     <depends>
@@ -12,7 +12,7 @@
     <tables>
         <table>
             <name>courses</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -22,7 +22,8 @@
                 </field>
                 <field>
                     <name>group_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -47,7 +48,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -55,7 +57,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -68,7 +71,8 @@
                 </field>
                 <field>
                     <name>deleted_by</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>deleted_time</name>
