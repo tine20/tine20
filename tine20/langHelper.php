@@ -35,6 +35,7 @@ try {
     array(
         'verbose|v'       => 'Output messages',
         'clean|c'         => 'Cleanup all tmp files',
+        'whipe|w'         => 'whipe all local translations',
         'update|u'        => 'Update lang files (shortcut for --pot --potmerge --mo --clean)',
         'package'         => 'Create a translation package',
         'pot'             => '(re) generate xgettext po template files',
@@ -53,6 +54,17 @@ try {
 } catch (Zend_Console_Getopt_Exception $e) {
    echo $e->getUsageMessage();
    exit;
+}
+
+if ($opts->whipe) {
+    foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+        if ($_verbose) {
+            echo "Processing $appName po files \n";
+        }
+        
+        `cd $translationPath 
+        rm *`;
+    }
 }
 
 if (count($opts->toArray()) === 0  || $opts->h) {
