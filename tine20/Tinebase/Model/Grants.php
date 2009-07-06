@@ -57,7 +57,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     {
         $this->_validators = array(
             'id'          => array('Alnum', 'allowEmpty' => TRUE),
-            'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => 0),
+            'account_id'   => array('presence' => 'required', 'allowEmpty' => FALSE, 'default' => '0'),
             'account_type' => array('presence' => 'required', 'InArray' => array(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP)),
             //'account_name' => array('allowEmpty' => TRUE),
             'readGrant'   => array(

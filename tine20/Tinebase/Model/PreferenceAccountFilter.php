@@ -73,7 +73,7 @@ class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstr
                    array('field' => 'account_type', 'operator' => 'equals',  'value' => $this->_accountType)
                 )),
                 array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
-                   array('field' => 'account_id',   'operator' => 'equals',  'value' => 0),
+                   array('field' => 'account_id',   'operator' => 'equals',  'value' => '0'),
                    array('field' => 'account_type', 'operator' => 'equals',  'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE),
                 )),            
             );
