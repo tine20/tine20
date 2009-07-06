@@ -3,7 +3,7 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
- * @subpackage  Record
+ * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -25,11 +25,18 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * sql user backend
+     * sql group backend
      *
      * @var Tinebase_Group_Sql
      */
-    protected $_backend = NULL;
+    protected $_backendSQL = NULL;
+    
+    /**
+     * ldap group backend
+     *
+     * @var Tinebase_Group_LDAP
+     */
+    protected $_backendLDAP = NULL;
     
     /**
      * @var array test objects
