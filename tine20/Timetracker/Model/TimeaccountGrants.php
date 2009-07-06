@@ -101,7 +101,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     {
         $this->_validators = array(
             'id'          => array('Alnum', 'allowEmpty' => TRUE),
-            'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => 0),
+            'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
             'account_type' => array('presence' => 'required', 'InArray' => array(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP)),
         
             'book_own'   => array(
