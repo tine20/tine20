@@ -247,7 +247,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             var record = new Tine.Calendar.Model.Attender(attender, attender.id);
             this.store.add(record);
             
-            if (attender.displaycontainer_id.id == this.record.get('container_id').id) {
+            if (attender.displaycontainer_id  && this.record.get('container_id') && attender.displaycontainer_id.id == this.record.get('container_id').id) {
                 this.eventOriginator = record;
             }
         }, this);
