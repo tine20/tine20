@@ -52,6 +52,6 @@ class Calendar_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->alterCol('cal_events', $declaration, 'organizer');
         
         $this->setTableVersion('cal_events', 2);
-        $this->setApplicationVersion('Tasks', '0.2');
+        $this->setApplicationVersion('Calendar', '0.2');
     }
 }
