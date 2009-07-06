@@ -122,7 +122,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($chipers, true));
         
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
-        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 8));
+        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, /*8*/ 16));
         
         $data = array_merge($_cache->toArray(), array(
             'username' => $_cache->username,
