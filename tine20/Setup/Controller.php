@@ -149,8 +149,6 @@ class Setup_Controller
      * 
      * @param Tinebase_Record_RecordSet $_applications
      * @return  array   messages
-     * 
-     * @todo update tinebase first!
      */
     public function updateApplications(Tinebase_Record_RecordSet $_applications)
     {
@@ -168,9 +166,23 @@ class Setup_Controller
         }
 
         $messages = array();
-        for($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
-            foreach($_applications as $application) {
-                if($application->getMajorVersion() <= $majorVersion) {
+        
+        // update tinebase first
+        $tinebase = $_applications->filter('name', 'Tinebase')->getFirstRecord();
+        if (! empty($tinebase)) {
+            unset($_applications[$_applications->getIndexById($tinebase->getId())]);
+        
+            for ($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
+                if ($tinebase->getMajorVersion() <= $majorVersion) {
+                    $messages += $this->updateApplication($tinebase, $majorVersion);
+                }
+            }
+        }
+            
+        // update the rest
+        for ($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
+            foreach ($_applications as $application) {
+                if ($application->getMajorVersion() <= $majorVersion) {
                     $messages += $this->updateApplication($application, $majorVersion);
                 }
             }
@@ -226,8 +238,8 @@ class Setup_Controller
     /**
      * update installed application
      *
-     * @param   string    $_name application name
-     * @param   string    $_updateTo version to update to (example: 1.17)
+     * @param   Tinebase_Model_Application    $_application
+     * @param   string    $_majorVersion
      * @return  array   messages
      * @throws  Setup_Exception if current app version is too high
      */
