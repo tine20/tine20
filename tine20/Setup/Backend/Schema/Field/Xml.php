@@ -166,7 +166,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                     if(isset($_declaration->unsigned)) {
                         $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
                     } else {
-                        $this->unsigned = false;
+                        $this->unsigned = true;
                     }
                 }
                 break;
@@ -224,7 +224,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 if(isset($_declaration->unsigned)) {
                     $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
                 } else {
-                    $this->unsigned = false;
+                    $this->unsigned = true;
                 }
 
                 break;
