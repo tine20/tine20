@@ -425,7 +425,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $registryData['Tinebase'] = $this->getRegistryData();
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dieing to avoid servers success property to be part of the registry.');
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dying to avoid servers success property to be part of the registry.');
         die(Zend_Json::encode($registryData));
     }
 
