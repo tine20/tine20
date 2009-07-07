@@ -35,8 +35,6 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
      */
     protected function _setField($_declaration)
     {
-        error_log(__METHOD__ . " " . print_r($_declaration, true));
-        error_log(__METHOD__ . " " . print_r($this, true));
         $this->name = (string)$_declaration->name;
         $this->type = (string)$_declaration->type;
 
