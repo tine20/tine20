@@ -72,7 +72,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
     /**
      * return all groups an account is member of
-     * - this function caches its result (with cache tag 'ldap')
      *
      * @param mixed $_accountId the account as integer or Tinebase_Model_User
      * @return array
@@ -85,9 +84,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * get list of groupmembers 
      *
-     * @param   int $_groupId
+     * @param   string $_groupId
      * @return  array with account ids
-     * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupMembers($_groupId)
     {
@@ -99,7 +97,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      *
      * @param   string $_name
      * @return  Tinebase_Model_Group
-     * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupByName($_name)
     {        
@@ -109,15 +106,20 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * get group by id
      *
-     * @param string $_name
+     * @param string $_groupId the group id
      * @return Tinebase_Model_Group
-     * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupById($_groupId)
     {   
         return $this->_sql->getGroupById($_groupId);
     }
-    
+
+    /**
+     * get group by id directly from ldap
+     * 
+     * @param $_groupId
+     * @return Tinebase_Model_Group
+     */
     protected function _getGroupById($_groupId)
     {   
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
@@ -155,7 +157,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * replace all current groupmembers with the new groupmembers list
      *
-     * @param int $_groupId
+     * @param string $_groupId
      * @param array $_groupMembers array of ids
      * @return unknown
      */
@@ -180,9 +182,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         if ($this->_options['useRfc2307bis']) {
             if(!empty($memberDn)) {
-                $data['member'] = $memberDn;
+                $data['member'] = $memberDn; // array of dn's
             } else {
-                $data['member'] = $groupDn;
+                $data['member'] = $groupDn; // singöe dn
             }
         }
         
@@ -191,16 +193,15 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         $this->_ldap->updateProperty($metaData['dn'], $data);
         
-        
         $this->_sql->setGroupMembers($_groupId, $_groupMembers);
     }
         
     /**
      * add a new groupmember to the group
      *
-     * @param int $_groupId
-     * @param int $_accountId
-     * @return unknown
+     * @param string $_groupId
+     * @param mixed $_accountId string or user object
+     * @return void
      */
     public function addGroupMember($_groupId, $_accountId) 
     {
@@ -263,10 +264,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     }
 
     /**
-     * remove one groupmember from the group
+     * remove one member from the group
      *
-     * @param int $_groupId
-     * @param int $_accountId
+     * @param string $_groupId
+     * @param mixed $_accountId
      * @return void
      */
     public function removeGroupMember($_groupId, $_accountId) 
@@ -315,8 +316,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * create a new group
      *
-     * @param string $_groupName
-     * @return unknown
+     * @param Tinebase_Model_Group $_group
+     * @return Tinebase_Model_Group
      */
     public function addGroup(Tinebase_Model_Group $_group) 
     {
@@ -360,7 +361,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * updates an existing group
      *
-     * @param Tinebase_Model_Group $_account
+     * @param Tinebase_Model_Group $_group
      * @return Tinebase_Model_Group
      */
     public function updateGroup(Tinebase_Model_Group $_group) 
@@ -385,10 +386,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     }
 
     /**
-     * remove groups
+     * delete one or more groups
      *
      * @param mixed $_groupId
-     * 
+     * @return void
      */
     public function deleteGroups($_groupId) 
     {
@@ -412,9 +413,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     }
     
     /**
-     * get an existing dn
+     * get dn of an existing group
      *
-     * @param  int         $_groupId
+     * @param  string $_groupId
      * @return string 
      */
     protected function _getDn($_groupId)
@@ -427,7 +428,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * returns ldap metadata of given group
      *
-     * @param  int         $_groupId
+     * @param  string $_groupId
      */
     protected function _getMetaData($_groupId)
     {
@@ -489,7 +490,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * returns a single account dn
      *
-     * @param int $_accountId
+     * @param string $_accountId
      * @return string
      */
     protected function _getAccountMetaData($_accountId)
@@ -498,7 +499,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     }
     
     /**
-     * generates a new dn
+     * generates a new dn for a group
      *
      * @param  Tinebase_Model_Group $_group
      * @return string
@@ -539,6 +540,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         return $gidNumber;
     }
     
+    /**
+     * import groups from ldap to sql 
+     * 
+     * @return void
+     */
     public function importGroups()
     {
         #if(!empty($_filter)) {
@@ -568,6 +574,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         }
     }
     
+    /**
+     * import groupmembers from ldap to sql
+     * 
+     * @return void
+     */
     public function importGroupMembers()
     {
         $groups = $this->getGroups();
@@ -605,6 +616,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         }        
     }
     
+    /**
+     * resolve gidnumber to UUID(for example entryUUID) attribute
+     * 
+     * @param int $_gidNumber the gidnumber
+     * @return string 
+     */
     public function resolveGIdNumberToUUId($_gidNumber)
     {
         if(strtolower($this->_groupUUIDAttribute) == 'gidnumber') {
@@ -616,6 +633,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         return $groupId[strtolower($this->_groupUUIDAttribute)][0];
     }
     
+    /**
+     * resolve UUID(for example entryUUID) to gidnumber
+     * 
+     * @param string $_uuid
+     * @return string
+     */
     public function resolveUUIdToGIdNumber($_uuid)
     {
         if(strtolower($this->_groupUUIDAttribute) == 'gidnumber') {
