@@ -280,7 +280,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $user = $this->getFullUserByLoginName($_loginName);
         $metaData = $this->_getMetaData($user);
         
-        $encryptionType = $this->_options['pwEncType'];
+        $encryptionType = isset($this->_options['pwEncType']) ? $this->_options['pwEncType'] : Tinebase_User_Abstract::ENCRYPT_SSHA;
         $userpassword = $_encrypt ? Tinebase_User_Abstract::encryptPassword($_password, $encryptionType) : $_password;
         $ldapData = array(
             'userpassword'     => $userpassword,
