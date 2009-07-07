@@ -54,6 +54,20 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected $_userUUIDAttribute;
     
     /**
+     * the basic group ldap filter (for example the objectclass)
+     *
+     * @var string
+     */
+    protected $_groupBaseFilter      = 'objectclass=posixgroup';
+    
+    /**
+     * the basic user ldap filter (for example the objectclass)
+     *
+     * @var string
+     */
+    protected $_userBaseFilter      = 'objectclass=posixaccount';
+    
+    /**
      * the constructor
      *
      * @param  array $options Options used in connecting, binding, etc.
@@ -63,6 +77,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         $this->_userUUIDAttribute  = isset($_options['userUUIDAttribute'])  ? strtolower($_options['userUUIDAttribute'])  : 'entryuuid';
         $this->_groupUUIDAttribute = isset($_options['groupUUIDAttribute']) ? strtolower($_options['groupUUIDAttribute']) : 'entryuuid';
+        $this->_userBaseFilter     = isset($_options['userFilter'])         ? $_options['userFilter']         : 'objectclass=posixaccount';
+        $this->_groupBaseFilter    = isset($_options['groupFilter'])        ? $_options['groupFilter']        : 'objectclass=posixgroup';
         
         $this->_ldap = new Tinebase_Ldap($_options);
         $this->_ldap->bind();
@@ -597,12 +613,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
                 unset($groupMembers['member']['count']);
                 foreach($groupMembers['member'] as $dn) {
                     try {
-                        $accountData = $this->_ldap->fetchDn($dn, 'objectclass=posixaccount', array('uidnumber'));
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' read ldap data for dn: ' . $dn);
+                        $accountData = $this->_ldap->fetchDn($dn, $this->_userBaseFilter, array('uidnumber'));
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ldap data returned: ' . print_r($accountData, true));
                         $memberId = Tinebase_User::getInstance()->resolveLdapUIdNumber($accountData['uidnumber'][0]);
+                        
+                        // add account to sql backend
+                        $this->_sql->addGroupMember($groupId, $memberId);
                     } catch (Exception $e) {
                         // ignore ldap errors
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' user not found: ' . $e->getMessage());
                     }
-                    $this->_sql->addGroupMember($groupId, $memberId);
                 }
             } elseif(isset($groupMembers['memberuid'])) {
                 unset($groupMembers['memberuid']['count']);
