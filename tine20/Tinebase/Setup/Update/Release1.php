@@ -587,7 +587,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
     }
     
     /**
-     * update to nothing
+     * update to 1.10
      * - fix for signed / unsigned problem
      */
     public function update_9()
@@ -601,5 +601,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
             </field>
         ');
         $this->_backend->alterCol('addressbook', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '1.10');
     }
 }
