@@ -17,24 +17,75 @@ Ext.ns('Tine.Calendar');
  * @param {Object} config
  */
 Tine.Calendar.ColorManager = function(config) {
-   Ext.apply(this, config);
-   
-   this.colorMap = {};
-   
+    Ext.apply(this, config);
+    
+    this.colorMap = {};
+
+    // allthough we don't extend component as we have nothing to render, we borrow quite some stuff from it
+    this.id = this.stateId;
+    Ext.ComponentMgr.register(this);
+    
+    this.addEvents(
+        /**
+         * @event beforestaterestore
+         * Fires before the state of this colormanager is restored. Return false to stop the restore.
+         * @param {Tine.Calendar.ColorManager} this
+         * @param {Object} state The hash of state values
+         */
+        'beforestaterestore',
+        /**
+         * @event staterestore
+         * Fires after the state of tthis colormanager is restored.
+         * @param {Tine.Calendar.ColorManager} this
+         * @param {Object} state The hash of state values
+         */
+        'staterestore',
+        /**
+         * @event beforestatesave
+         * Fires before the state of this colormanager is saved to the configured state provider. Return false to stop the save.
+         * @param {Tine.Calendar.ColorManager} this
+         * @param {Object} state The hash of state values
+         */
+        'beforestatesave',
+        /**
+         * @event statesave
+         * Fires after the state of this colormanager is saved to the configured state provider.
+         * @param {Tine.Calendar.ColorManager} this
+         * @param {Object} state The hash of state values
+         */
+        'statesave'
+    );
+    
+    if (this.stateful) {
+        this.initState();
+    }
    
 };
 
-Tine.Calendar.ColorManager.prototype = {
+Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
     /**
      * @cfg {String} schemaName
      */
     schemaName: 'standard',
     
     /**
+     * @cfg {String} stateId
+     */
+    stateId: 'cal-color-mgr-containers',
+    
+    /**
+     * @cfg {Boolean} stateful
+     */
+    stateful: true,
+    
+    /**
      * @property {Object} colorMap
      */
     colorMap: null,
     
+    /**
+     * @property {Number} colorSchemataPointer
+     */
     colorSchemataPointer: 0,
     
     /**
@@ -48,7 +99,7 @@ Tine.Calendar.ColorManager.prototype = {
     colorPalette: Ext.ColorPalette.prototype.colors,
     
     /**
-     * $property {Array} colorSchemata
+     * @property {Array} colorSchemata
      * color palette from Ext.ColorPalette
      */
     colorSchemata : [
@@ -124,6 +175,7 @@ Tine.Calendar.ColorManager.prototype = {
             if (this.colorSchemata[cpi].color && !this.inUse(this.colorPalette[cpi])) {
                 this.colorSchemataPointer = cpi;
                 this.colorMap[item] = this.colorSchemataPointer;
+                this.saveState();
                 //console.log('assigned color ' + this.colorMap[item] + ' to item ' + item);
                 
                 return this.colorSchemata[this.colorSchemataPointer];
@@ -145,7 +197,21 @@ Tine.Calendar.ColorManager.prototype = {
         }
         //console.log(color + 'is not in use yet');
         return false;
+    },
+    
+    /*** state handling ***/
+    initState:       Ext.Component.prototype.initState,
+    getStateId:      Ext.Component.prototype.getStateId,
+    //initStateEvents: Ext.Component.prototype.initState,
+    applyState:      Ext.Component.prototype.applyState,
+    saveState:       Ext.Component.prototype.saveState,
+    getState:        function() {
+        return {
+            colorMap            : this.colorMap,
+            colorSchemataPointer: this.colorSchemataPointer
+        };
     }
     
-};
- 
+    
+    
+});
