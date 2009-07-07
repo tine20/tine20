@@ -376,6 +376,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'userApplications' => Tinebase_Core::getUser()->getApplications()->toArray(),
                 'NoteTypes'        => $this->getNoteTypes(),
                 'CountryList'      => $this->getCountryList(),
+                'stateInfo'        => Tinebase_State::getInstance()->loadStateInfo(),
                 'changepw'         => (isset(Tinebase_Core::getConfig()->accounts)
                                         && isset(Tinebase_Core::getConfig()->accounts->changepw))
                                             ? Tinebase_Core::getConfig()->accounts->changepw
@@ -421,13 +422,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
-            
-            // add state info
-            $stateInfo = Tinebase_State::getInstance()->loadStateInfo();
-            if ($stateInfo) {
-                $registryData['stateInfo'] = $stateInfo;
-            }
-            
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
