@@ -94,12 +94,22 @@ Tine.Calendar.ColorManager.prototype = {
         /*"FFFFFF" :*/ {}
     ],
     
+    // hack for container only support
     getColor: function(event) {
-        // hack for container only support
-        var container = typeof event.get == 'function' ? event.get('container_id') : event;
-        var container_id = container.id ? container.id : container;
+        var container = null;
         
-        return this.getColorSchema(container_id);
+        if (typeof event.get != 'function') {
+            // tree comes with containers only
+            container = event;
+        } else {
+            container = event.get('container_id');
+            if (! container || !container.type || container.type != 'shared') {
+                container = event.getDisplayContainer();
+            }
+        }
+        
+        var container_id = container.id ? container.id : container;
+        return container ? this.getColorSchema(container_id) : this.gray;
     },
     
     getColorSchema: function(item) {
@@ -117,7 +127,6 @@ Tine.Calendar.ColorManager.prototype = {
                 //console.log('assigned color ' + this.colorMap[item] + ' to item ' + item);
                 
                 return this.colorSchemata[this.colorSchemataPointer];
-                
             }
         }
 
