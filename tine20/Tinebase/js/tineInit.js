@@ -426,7 +426,6 @@ Tine.Tinebase.tineInit = {
                                                 }
                                             }
                                             prefs.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
-                                            //prefs.on('replace', function() {console.log('buh');});
                                             Tine[app].registry.add(key, prefs);
                                         } else {
                                             Tine[app].registry.add(key, appData[key]);
@@ -437,6 +436,15 @@ Tine.Tinebase.tineInit = {
                         }
                     }
                     
+                    // update window factory window type (required after login)
+                    if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
+                        var windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
+                        
+                        if (Tine.WindowFactory && Tine.WindowFactory.windowType != windowType) {
+                            Tine.WindowFactory.windowType = windowType;
+                        }
+                    }
+
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
             });
@@ -543,7 +551,7 @@ Tine.Tinebase.tineInit = {
         var windowType = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('windowtype')) 
             ? Tine.Tinebase.registry.get('preferences').get('windowtype') 
             : 'Browser';
-
+            
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
         });
