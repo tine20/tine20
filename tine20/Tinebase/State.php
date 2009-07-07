@@ -81,7 +81,7 @@ class Tinebase_State
     /**
      * load state data
      *
-     * @return array|boolean
+     * @return array
      */
     public function loadStateInfo()
     {
@@ -91,7 +91,7 @@ class Tinebase_State
             $state = $this->_backend->getByProperty($userId, 'user_id');
             $result = Zend_Json::decode($state->data);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $result = FALSE;
+            $result = array();
         }
         
         return $result;
