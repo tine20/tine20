@@ -141,31 +141,6 @@ class Tinebase_Container
                     break;
             }
         }
-        /*
-        $data = array(
-            'name'              => $_container->name,
-            'type'              => $_container->type,
-            'backend'           => $_container->backend,
-            'application_id'    => $_container->application_id
-        );
-        
-        $containerId = $_container->getId();
-        
-        if($containerId === NULL) {
-            $containerId = $this->containerTable->insert($data);
-            if ($containerId === NULL) {
-                $containerId = $this->containerTable->getAdapter()->lastSequenceId(substr(SQL_TABLE_PREFIX . 'container', 0, 26) . '_seq');
-            }
-        } else {
-            $data['id'] = $containerId;
-            $this->containerTable->insert($data);
-        }
-        
-        if($containerId < 1) {
-            throw new Tinebase_Exception_UnexpectedValue('$containerId can not be 0');
-        }
-        $container = $this->getContainerById($containerId);
-        */
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
         $container = $this->_backend->create($_container);
@@ -179,7 +154,6 @@ class Tinebase_Container
                     array(
                         'account_id'     => $accountId,
                         'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                        //'account_name'   => 'not used',
                         Tinebase_Model_Container::READGRANT      => true,
                         Tinebase_Model_Container::ADDGRANT       => true,
                         Tinebase_Model_Container::EDITGRANT      => true,
@@ -187,9 +161,8 @@ class Tinebase_Container
                         Tinebase_Model_Container::ADMINGRANT     => true
                     ),            
                     array(
-                        'account_id'      => 0,
+                        'account_id'      => '0',
                         'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                        //'account_name'    => 'not used',
                         Tinebase_Model_Container::READGRANT       => true
                     )            
                 ));
@@ -199,7 +172,6 @@ class Tinebase_Container
                     array(
                         'account_id'     => $accountId,
                         'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                        //'account_name'   => 'not used',
                         Tinebase_Model_Container::READGRANT      => true,
                         Tinebase_Model_Container::ADDGRANT       => true,
                         Tinebase_Model_Container::EDITGRANT      => true,
@@ -778,59 +750,25 @@ class Tinebase_Container
         $this->_removeFromCache($containerId);
         
         /*
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
-            $where = array(
-                $this->containerTable->getAdapter()->quoteInto('container_id = ?', $containerId)
-            );
-            $this->containerAclTable->delete($where);
-            
-            $where = array(
-                $this->containerTable->getAdapter()->quoteInto('id = ?', $containerId)
-            );
-            $this->containerTable->delete($where);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Zend_Db_Statement_Exception $zdse) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            
-            // some sql exception -> move all contained objects to next available personal container and try again to delete container
-            $app = Tinebase_Application::getApplicationById($container->application_id);
-            if ($_tryAgain && $_ignoreAcl !== TRUE) {
-                
-                // get personal containers
-                $personalContainers = $this->getPersonalContainer(
-                    Tinebase_Core::getUser(),
-                    $app->name,
-                    $container->owner,
-                    Tinebase_Model_Container::GRANT_ADD
-                );
-                
-                //-- determine first matching personal container (or create new one)
-                // $personalContainer = 
-                
-                //-- move all records to personal container
-                
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                    . ' Moving all records from container ' . $containerId . ' to personal container ' . $personalContainer->getId()
-                );
-                
-            } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
-                throw $zdse;
-            }
+        // move all contained objects to next available personal container and try again to delete container
+        $app = Tinebase_Application::getApplicationById($container->application_id);
 
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
-            throw $zdse;
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            throw $e;
-        }
-
+        // get personal containers
+        $personalContainers = $this->getPersonalContainer(
+            Tinebase_Core::getUser(),
+            $app->name,
+            $container->owner,
+            Tinebase_Model_Container::GRANT_ADD
+        );
+        
+        //-- determine first matching personal container (or create new one)
+        // $personalContainer = 
+        
+        //-- move all records to personal container
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Moving all records from container ' . $containerId . ' to personal container ' . $personalContainer->getId()
+        );
         */
     }
     
