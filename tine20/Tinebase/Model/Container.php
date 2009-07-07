@@ -141,8 +141,27 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'type'              => array('InArray' => array(self::TYPE_INTERNAL, self::TYPE_PERSONAL, self::TYPE_SHARED)),
         'backend'           => array('presence' => 'required'),
         'application_id'    => array('Alnum', 'presence' => 'required'),
-        'account_grants'    => array('allowEmpty' => true, /*'presence' => 'required'*/)
+        'account_grants'    => array('allowEmpty' => true, /*'presence' => 'required'*/),
+    // modlog fields
+        'created_by'             => array('allowEmpty' => true),
+        'creation_time'          => array('allowEmpty' => true),
+        'last_modified_by'       => array('allowEmpty' => true),
+        'last_modified_time'     => array('allowEmpty' => true),
+        'is_deleted'             => array('allowEmpty' => true),
+        'deleted_time'           => array('allowEmpty' => true),
+        'deleted_by'             => array('allowEmpty' => true),    
     );
+    
+    /**
+     * datetime fields
+     *
+     * @var array
+     */
+    protected $_datetimeFields = array(
+        'creation_time',
+        'last_modified_time',
+        'deleted_time',
+    );    
     
     /**
      * converts a int, string or Tinebase_Model_Container to a containerid

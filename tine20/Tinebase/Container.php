@@ -5,11 +5,13 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
  * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage
+ * @todo        move (or replace from) functions to backend
+ * @todo        switch containers to hash ids
  */
 
 /**
@@ -41,6 +43,13 @@ class Tinebase_Container
      * @var Zend_Db_Table_Abstract
      */
     protected $containerAclTable;
+    
+    /**
+     * container backend class
+     *
+     * @var Tinebase_Container_Backend
+     */
+    protected $_backend;
 
     /**
      * the constructor
@@ -49,6 +58,7 @@ class Tinebase_Container
         $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
         $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
         $this->_db = Tinebase_Core::getDb();
+        $this->_backend = new Tinebase_Container_Backend();
     }
     /**
      * don't clone. Use the singleton.
@@ -131,7 +141,7 @@ class Tinebase_Container
                     break;
             }
         }
-        
+        /*
         $data = array(
             'name'              => $_container->name,
             'type'              => $_container->type,
@@ -154,8 +164,11 @@ class Tinebase_Container
         if($containerId < 1) {
             throw new Tinebase_Exception_UnexpectedValue('$containerId can not be 0');
         }
-        
         $container = $this->getContainerById($containerId);
+        */
+        
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
+        $container = $this->_backend->create($_container);
         
         if($_grants === NULL) {
             if($container->type === Tinebase_Model_Container::TYPE_SHARED) {
@@ -199,7 +212,7 @@ class Tinebase_Container
             $grants = $_grants;
         }
         
-        $this->setGrants($containerId, $grants, TRUE);
+        $this->setGrants($container->getId(), $grants, TRUE);
         
         return $container;
     }
@@ -305,6 +318,7 @@ class Tinebase_Container
                 )
                 ->where($tableContainer . '.' . $colApplicationId . ' = ?', $applicationId)
                 ->where($tableContainerAcl . '.' . $colAccountGrant . ' = ?', $_grant)
+                ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
                 
                 # beware of the extra parenthesis of the next 3 rows
                 ->where('(' . $tableContainerAcl . '.' . $colAccountId . ' = ? AND ' . 
@@ -358,7 +372,6 @@ class Tinebase_Container
      * return a container by containerId
      * - cache the results because this function is called very often
      *
-     * @todo    move acl check to another place
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
@@ -368,29 +381,13 @@ class Tinebase_Container
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         // load from cache
-        try {
-            $cache = Tinebase_Core::get('cache');
-            $result = $cache->load('getContainerById' . $containerId);
-            $nocache = FALSE;
-        } catch (Zend_Exception $ze) {
-            // no cache available (in setup for example)
-            $result = FALSE;
-            $nocache = TRUE;
-        }
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $result = $cache->load('getContainerById' . $containerId);
 
         if(!$result) {
-                
-            $row = $this->containerTable->find($containerId)->current();
-            
-            if($row === NULL) {
-                throw new Tinebase_Exception_NotFound('Container not found.');
-            }
-            
-            $result = new Tinebase_Model_Container($row->toArray());
-            
-            if (!$nocache) {
-                $cache->save($result, 'getContainerById' . $containerId);
-            }
+            $result = $this->_backend->get($containerId);
+
+            $cache->save($result, 'getContainerById' . $containerId);
         }
         
         return $result;
@@ -404,8 +401,6 @@ class Tinebase_Container
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo move acl check to another place
      */
     public function getContainerByName($_application, $_containerName, $_type)
     {
@@ -417,16 +412,20 @@ class Tinebase_Container
         $colName = $this->containerTable->getAdapter()->quoteIdentifier('name');
         $colType = $this->containerTable->getAdapter()->quoteIdentifier('type');
         $colApplicationId = $this->containerTable->getAdapter()->quoteIdentifier('application_id');
+        $colIsDeleted = $this->containerTable->getAdapter()->quoteIdentifier('is_deleted');
         
-        $select  = $this->containerTable->select()
+        $select = $this->containerTable->select()
             ->where($colName . ' = ?', $_containerName)
             ->where($colType . ' = ?', $_type)
-            ->where($colApplicationId . ' = ?', $applicationId);
+            ->where($colApplicationId . ' = ?', $applicationId)
+            ->where($colIsDeleted . ' = 0');
 
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
         $row = $this->containerTable->fetchRow($select);
         
-        if($row === NULL) {
-            throw new Tinebase_Exception_NotFound('Container not found.');
+        if ($row === NULL) {
+            throw new Tinebase_Exception_NotFound('Container ' . $_containerName . ' not found.');
         }
         
         $result = new Tinebase_Model_Container($row->toArray());
@@ -502,6 +501,8 @@ class Tinebase_Container
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
+            
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->order(SQL_TABLE_PREFIX . 'container.name');
             
@@ -582,6 +583,8 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_SHARED)
             ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
+            
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->order(SQL_TABLE_PREFIX . 'container.name');
             
@@ -628,6 +631,8 @@ class Tinebase_Container
             ->where('user.account_grant = ?', $_grant)
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
+            
             ->order(SQL_TABLE_PREFIX . 'container.name')
             ->group('owner.account_id');
             
@@ -687,6 +692,8 @@ class Tinebase_Container
             ->where('user.account_grant = ?', $_grant)
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
+            
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->order(SQL_TABLE_PREFIX . 'container.name');
             
@@ -747,24 +754,30 @@ class Tinebase_Container
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_InvalidArgument
      * 
-     * @todo make delete work even if some records remain in container to delete -> move them to personal container first
-     * @todo use getDefaultContainer?
+     * @todo move records in deleted container to personal container?
      */
     public function deleteContainer($_containerId, $_ignoreAcl = FALSE, $_tryAgain = TRUE)
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
         
         if($_ignoreAcl !== TRUE) {
             if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Container::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to delete container denied.');
             }
             
-            $container = $this->getContainerById($containerId);
             if($container->type !== Tinebase_Model_Container::TYPE_PERSONAL and $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
                 throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
             }
         }        
         
+        //$this->_backend->delete($containerId);
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($container, 'delete', $container);
+        $this->_backend->update($container);
+        
+        $this->_removeFromCache($containerId);
+        
+        /*
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
@@ -783,7 +796,6 @@ class Tinebase_Container
         } catch (Zend_Db_Statement_Exception $zdse) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             
-            /*
             // some sql exception -> move all contained objects to next available personal container and try again to delete container
             $app = Tinebase_Application::getApplicationById($container->application_id);
             if ($_tryAgain && $_ignoreAcl !== TRUE) {
@@ -809,7 +821,6 @@ class Tinebase_Container
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
                 throw $zdse;
             }
-            */
 
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
             throw $zdse;
@@ -819,8 +830,8 @@ class Tinebase_Container
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
             throw $e;
         }
-        
-        $this->_removeFromCache($containerId);
+
+        */
     }
     
     /**
@@ -896,7 +907,8 @@ class Tinebase_Container
                 ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
                 
                 ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $grant)
-                ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId);
+                ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
+                ;
                         
             //error_log("getContainer:: " . $select->__toString());
     
@@ -1059,6 +1071,7 @@ class Tinebase_Container
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
 
             ->where(SQL_TABLE_PREFIX . 'container.id IN (?)', array_keys($containers))
+            
             ->group(SQL_TABLE_PREFIX . 'container.id');
 
         $stmt = $this->_db->query($select);

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -24,6 +24,12 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * unit under test (UIT)
+     * @var Tinebase_Preference
+     */
+    protected $_instance;
+
     /**
      * @var array test objects
      */
@@ -49,14 +55,15 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-       $this->objects['initialContainer'] = new Tinebase_Model_Container(array(
-            'id'                => 123,
+        $this->_instance = Tinebase_Container::getInstance();
+        
+        $this->objects['initialContainer'] = $this->_instance->addContainer(new Tinebase_Model_Container(array(
             'name'              => 'tine20phpunit',
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             //'account_grants'    => 'Tine 2.0',
-        ));
+        )));
 
         $this->objects['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
             array(
@@ -93,28 +100,20 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+        try {
+	        $this->_instance->deleteContainer($this->objects['initialContainer']);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // do nothing
+        }
     }
     
-    /**
-     * try to add an account
-     *
-     */
-    public function testAddContainer()
-    {
-        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer'], $this->objects['grants']);
-        
-        $this->assertType('Tinebase_Model_Container', $container);
-        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-    }
-        
     /**
      * try to get container by id
      *
      */
     public function testGetContainerById()
     {
-        $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
+        $container = $this->_instance->getContainerById($this->objects['initialContainer']);
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
@@ -126,7 +125,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContainerByName()
     {
-        $container = Tinebase_Container::getInstance()->getContainerByName(
+        $container = $this->_instance->getContainerByName(
             'Addressbook',
             $this->objects['initialContainer']->name,
             $this->objects['initialContainer']->type
@@ -143,7 +142,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetContainerName()
     {
-        $container = Tinebase_Container::getInstance()->setContainerName($this->objects['initialContainer'], 'renamed container');
+        $container = $this->_instance->setContainerName($this->objects['initialContainer'], 'renamed container');
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals('renamed container', $container->name);
@@ -155,11 +154,31 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteContainer()
     {
-        Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
+        $this->_instance->deleteContainer($this->objects['initialContainer']);
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
+        $container = $this->_instance->getContainerById($this->objects['initialContainer']);
+    }
+    
+    /**
+     * try to delete an existing container with a contact 
+     */
+    public function testDeleteContainerWithContact()
+    {
+        // add contact to container
+        $contact = new Addressbook_Model_Contact(array(
+            'n_family'              => 'Tester',
+            'container_id'          => $this->objects['initialContainer']->getId()
+        ));
+        $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         
-        $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
+        // delete container
+        $this->_instance->deleteContainer($this->objects['initialContainer']);
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $container = $this->_instance->getContainerById($this->objects['initialContainer']);
+        
+        Addressbook_Controller_Contact::getInstance()->delete($contact->getId());
     }
     
     /**
@@ -168,13 +187,10 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGrantsOfContainer()
     {
-        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer'], $this->objects['grants']);
-        
-        $this->assertType('Tinebase_Model_Container', $container);
-        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
+        $this->assertTrue($this->_instance->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
 
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']);
+        $grants = $this->_instance->getGrantsOfContainer($this->objects['initialContainer']);
+        
         $this->assertType('Tinebase_Record_RecordSet', $grants);
 
         $grants = $grants->toArray();
@@ -184,11 +200,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($grants[0]["deleteGrant"]);
         $this->assertTrue($grants[0]["adminGrant"]);
                 
-        Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
+        $this->_instance->deleteContainer($this->objects['initialContainer']);
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
+        $container = $this->_instance->getContainerById($this->objects['initialContainer']);
     }
     
     /**
@@ -197,25 +213,16 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGrantsOfAccount()
     {
-        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer'], $this->objects['grants']);
-        
-        $this->assertType('Tinebase_Model_Container', $container);
-        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
+        $this->assertTrue($this->_instance->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
 
-        $grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
+        $grants = $this->_instance->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
+        
         $this->assertType('Tinebase_Model_Grants', $grants);
         $this->assertTrue($grants->readGrant);
         $this->assertTrue($grants->addGrant);
         $this->assertTrue($grants->editGrant);
         $this->assertTrue($grants->deleteGrant);
         $this->assertTrue($grants->adminGrant);
-                
-        Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
-        
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        
-        $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
     }
     
     /**
@@ -224,11 +231,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetGrants()
     {
-        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer'], $this->objects['grants']);
-        
-        $this->assertType('Tinebase_Model_Container', $container);
-        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-
         $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
         $newGrants->addRecord(
             new Tinebase_Model_Grants(
@@ -244,7 +246,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
              ))
          );
         
-        $grants = Tinebase_Container::getInstance()->setGrants($this->objects['initialContainer'], $newGrants);
+        $grants = $this->_instance->setGrants($this->objects['initialContainer'], $newGrants);
         $this->assertType('Tinebase_Record_RecordSet', $grants);
 
         $grants = $grants->toArray();
@@ -253,12 +255,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($grants[0]["editGrant"]);
         $this->assertTrue($grants[0]["deleteGrant"]);
         $this->assertTrue($grants[0]["adminGrant"]);
-                
-        Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
-        
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        
-        $container = Tinebase_Container::getInstance()->getContainerById($this->objects['initialContainer']);
     }
     
     /**
@@ -267,7 +263,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInternalContainer()
     {
-        $container = Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
+        $container = $this->_instance->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals(Tinebase_Model_Container::TYPE_INTERNAL, $container->type);
@@ -279,7 +275,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetOtherUsers()
     {
-        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Model_Container::GRANT_READ);
+        $otherUsers = $this->_instance->getOtherUsers(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Model_Container::GRANT_READ);
         
         $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
     }
@@ -290,17 +286,11 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContainerByAcl()
     {
-        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer'], $this->objects['grants']);
+        $this->assertTrue($this->_instance->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
 
-        $this->assertType('Tinebase_Model_Container', $container);
-        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
-        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Model_Container::GRANT_READ));
-
-        $readableContainer = Tinebase_Container::getInstance()->getContainerByAcl(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Model_Container::GRANT_READ);
+        $readableContainer = $this->_instance->getContainerByAcl(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Model_Container::GRANT_READ);
         $this->assertType('Tinebase_Record_RecordSet', $readableContainer);
         $this->assertTrue(count($readableContainer) >= 2);
-
-        Tinebase_Container::getInstance()->deleteContainer($container);
     }
     
     /**
@@ -314,14 +304,13 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $records = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         $records->addRecord($contact);
         
-        $grants = Tinebase_Container::getInstance()->getGrantsOfRecords($records, $userId, 'container_id');
+        $grants = $this->_instance->getGrantsOfRecords($records, $userId, 'container_id');
         
         $this->assertTrue(is_array($records[0]['container_id']));
         $this->assertGreaterThan(0, count($records[0]['container_id']['account_grants']));
         $this->assertEquals('internal', $records[0]['container_id']['type']);
     }
 }		
-	
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_ContainerTest::main') {
     Tinebase_ContainerTest::main();
