@@ -20,7 +20,7 @@ Tine.Calendar.ColorManager = function(config) {
     Ext.apply(this, config);
     
     this.colorMap = {};
-
+    
     // allthough we don't extend component as we have nothing to render, we borrow quite some stuff from it
     this.id = this.stateId;
     Ext.ComponentMgr.register(this);
