@@ -82,11 +82,18 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     );
     
     /**
-     * the basic ldap filter (for example the objectclass)
+     * the basic group ldap filter (for example the objectclass)
      *
      * @var string
      */
-    protected $_baseFilter      = 'objectclass=posixaccount';
+    protected $_groupBaseFilter      = 'objectclass=posixgroup';
+    
+    /**
+     * the basic user ldap filter (for example the objectclass)
+     *
+     * @var string
+     */
+    protected $_userBaseFilter      = 'objectclass=posixaccount';
     
     /**
      * the query filter for the ldap search (for example uid=%s)
@@ -110,6 +117,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $this->_userUUIDAttribute  = isset($_options['userUUIDAttribute'])  ? $_options['userUUIDAttribute']  : 'entryUUID';
         $this->_groupUUIDAttribute = isset($_options['groupUUIDAttribute']) ? $_options['groupUUIDAttribute'] : 'entryUUID';
+        $this->_userBaseFilter     = isset($_options['userFilter'])         ? $_options['userFilter']         : 'objectclass=posixaccount';
+        $this->_groupBaseFilter    = isset($_options['groupFilter'])        ? $_options['groupFilter']        : 'objectclass=posixgroup';
         
         $this->_rowNameMapping['accountId'] = strtolower($this->_userUUIDAttribute);
         
@@ -150,9 +159,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {        
         if (!empty($_filter)) {
             $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
-            $filter = "(&($this->_baseFilter)(" . sprintf($this->_queryFilter, $_filter) . "))";
+            $filter = "(&($this->_userBaseFilter)(" . sprintf($this->_queryFilter, $_filter) . "))";
         } else {
-            $filter = $this->_baseFilter;
+            $filter = $this->_userBaseFilter;
         }
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
         
@@ -193,7 +202,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $loginName = Zend_Ldap::filterEscape($_loginName);
         
         #try {
-            $filter = "(&($this->_baseFilter)({$this->_rowNameMapping['accountLoginName']}=$loginName))";
+            $filter = "(&($this->_userBaseFilter)({$this->_rowNameMapping['accountLoginName']}=$loginName))";
             $account = $this->_backend->fetch($this->_options['userDn'], $filter, array_values($this->_rowNameMapping));
             $result = $this->_ldap2User($account, $_accountClass);
         #} catch (Tinebase_Exception_NotFound $enf) {
@@ -236,7 +245,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         #try {
             $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-            $filter = "(&($this->_baseFilter)({$this->_rowNameMapping['accountId']}=$accountId))";
+            $filter = "(&($this->_userBaseFilter)({$this->_rowNameMapping['accountId']}=$accountId))";
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " ldap filter: " . $filter);
             $account = $this->_backend->fetch($this->_options['userDn'], $filter, array_values($this->_rowNameMapping));
             $result = $this->_ldap2User($account, $_accountClass);
@@ -480,13 +489,16 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      */
     public function getMultiple($_ids) 
     {
+        return $this->_sql->getMultiple($_ids);
+        
+        // old ldap code
         $ids = is_array($_ids) ? $_ids : (array) $_ids;
         
         $idFilter = '';
         foreach ($ids as $id) {
             $idFilter .= "($this->_rowNameMapping['accountId']=$id)";
         }
-        $filter = "(&($this->_baseFilter)(|$idFilter))";
+        $filter = "(&($this->_userBaseFilter)(|$idFilter))";
         
         $result = $this->_getUsersFromBackend($filter, 'Tinebase_Model_User');
 		
@@ -678,17 +690,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $sqlGroupBackend = new Tinebase_Group_Sql();
         
-        if (!empty($_filter)) {
-            $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
-            $filter = "(&($this->_baseFilter)(" . sprintf($this->_queryFilter, $_filter) . "))";
-        } else {
-            $filter = $this->_baseFilter;
-        }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ');
         
-        $users = $this->_getUsersFromBackend($filter, 'Tinebase_Model_FullUser');
+        $users = $this->_getUsersFromBackend($this->_userBaseFilter, 'Tinebase_Model_FullUser');
         
         foreach($users as $user) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' user: ' . print_r($user->toArray(), true));
             try {
                 $sqluser = $this->_sql->getUserById($user->getId());
                 $this->_sql->updateUser($user);
