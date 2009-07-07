@@ -348,51 +348,69 @@ Tine.Tinebase.tineInit = {
      * @todo   make this working in safari
      * @return {string}
      */
-    getFormattedMessage: function(args) {
-        var lines = ["The following error has occured:"];
-        if (args[0] instanceof Error) { // Error object thrown in try...catch
-            var err = args[0];
-            lines[lines.length] = "Message: (" + err.name + ") " + err.message;
-            lines[lines.length] = "Error number: " + (err.number & 0xFFFF); //Apply binary arithmetic for IE number, firefox returns message string in element array element 0
-            lines[lines.length] = "Description: " + err.description;
-        } else if ((args.length == 3) && (typeof(args[2]) == "number")) { // Check the signature for a match with an unhandled exception
-            lines[lines.length] = "Message: " + args[0];
-            lines[lines.length] = "URL: " + args[1];
-            lines[lines.length] = "Line Number: " + args[2];
-        } else {
-            lines = ["An unknown error has occured."]; // purposely rebuild lines
-            lines[lines.length] = "The following information may be useful:";
-            for (var x = 0; x < args.length; x++) {
-                lines[lines.length] = Ext.encode(args[x]);
-            }
-        }
-        return lines.join("\n");
-    },
-    
-    globalErrorHandler: function() {
+    getNormalisedError: function() {
+        var error = {
+            name       : 'unknown error',
+            message    : 'unknown',
+            number     : 'unknown',
+            description: 'unknown',
+            url        : 'unknown',
+            line       : 'unknown'
+        };
         
-        // NOTE: Arguments is not a real Array
+        // NOTE: Arguments is not always a real Array
         var args = [];
         for (var i=0; i<arguments.length; i++) {
             args[i] = arguments[i];
-            
-            
         }
         
-        var errormsg = Tine.Tinebase.tineInit.getFormattedMessage(args);
+        console.log(args);
+        //var lines = ["The following JS error has occured:"];
+        if (args[0] instanceof Error) { // Error object thrown in try...catch
+            error.name        = args[0].name;
+            error.message     = args[0].message;
+            error.number      = args[0].number & 0xFFFF; //Apply binary arithmetic for IE number, firefox returns message string in element array element 0
+            error.description = args[0].description;
+            
+        } else if ((args.length == 3) && (typeof(args[2]) == "number")) { // Check the signature for a match with an unhandled exception
+            error.name    = 'catchable exception'
+            error.message = args[0];
+            error.url     = args[1];
+            error.line    = args[2];
+        } else {
+            error.message     = "An unknown JS error has occured.";
+            error.description = 'The following information may be useful:' + "\n";
+            for (var x = 0; x < args.length; x++) {
+                error.description += (Ext.encode(args[x]) + "\n");
+            }
+        }
+        return error;
+    },
+    
+    globalErrorHandler: function() {
+        var error = Tine.Tinebase.tineInit.getNormalisedError.apply(this, arguments);
         
+        var traceHtml = '<table>';
+        for (p in error) {
+            if (error.hasOwnProperty(p)) {
+                traceHtml += '<tr><td><b>' + p + '</b></td><td>' + error[p] + '</td></tr>'
+            }
+        }
+        traceHtml += '</table>'
+        
+        console.log(traceHtml);
         // check for spechial cases we don't want to handle
-        if (errormsg.match(/versioncheck/)) {
+        if (traceHtml.match(/versioncheck/)) {
             return true;
         }
         // we don't wanna know fancy FF3.5 crom bugs
-        if (errormsg.match(/chrome/)) {
+        if (traceHtml.match(/chrome/)) {
             return true;
         }
         
         var data = {
-            msg: 'js exception: ' + errormsg,
-            traceHTML: errormsg.replace(/\n/g, "<br />").replace(/\t/g, " &nbsp; &nbsp;")
+            msg: 'js exception: ' + error.message,
+            traceHTML: traceHtml
         };
         
         var windowHeight = 400;
