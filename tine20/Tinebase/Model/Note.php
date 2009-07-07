@@ -70,6 +70,11 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
         'deleted_by'             => array('allowEmpty' => true),
     );
     
+    /**
+     * datetime fields
+     *
+     * @var array
+     */
     protected $_datetimeFields = array(
         'creation_time',
         'last_modified_time',
