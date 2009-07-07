@@ -114,7 +114,6 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
                 this.store.add(stateRecord);
             }, this);
         }
-        console.log(this.store.data.items[0]);
         this.store.hasChanges = false;
     },
     
