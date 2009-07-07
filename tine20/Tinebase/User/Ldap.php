@@ -37,10 +37,17 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     
     /**
      * name of the ldap attribute which identifies a group uniquely
+     * for example gidNumber, entryUUID, objectGUID
+     * @var string
+     */
+    protected $_groupUUIDAttribute;
+    
+    /**
+     * name of the ldap attribute which identifies a user uniquely
      * for example uidNumber, entryUUID, objectGUID
      * @var string
      */
-    protected $_uuidAttribute = 'entryUUID';
+    protected $_userUUIDAttribute;
     
     /**
      * direct mapping
@@ -101,7 +108,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $this->_requiredObjectClass = (array)$this->_options['requiredObjectClass'];
         }
         
-        $this->_rowNameMapping['accountId'] = strtolower($this->_uuidAttribute);
+        $this->_userUUIDAttribute  = isset($_options['userUUIDAttribute'])  ? $_options['userUUIDAttribute']  : 'entryUUID';
+        $this->_groupUUIDAttribute = isset($_options['groupUUIDAttribute']) ? $_options['groupUUIDAttribute'] : 'entryUUID';
+        
+        $this->_rowNameMapping['accountId'] = strtolower($this->_userUUIDAttribute);
         
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
@@ -383,7 +393,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
         
         // no need to update this attribute, it's not allowed to change and even might not be updateable
-        unset($ldapData[strtolower($this->_uuidAttribute)]);
+        unset($ldapData[strtolower($this->_userUUIDAttribute)]);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
@@ -403,9 +413,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' added user with dn: ' . $dn);
         
-        $userId = $this->_backend->fetch($dn, 'objectclass=*', array($this->_uuidAttribute));
+        $userId = $this->_backend->fetch($dn, 'objectclass=*', array($this->_userUUIDAttribute));
         
-        $userId = $userId[strtolower($this->_uuidAttribute)][0];
+        $userId = $userId[strtolower($this->_userUUIDAttribute)][0];
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' new userid: ' . $userId);
         
@@ -444,8 +454,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         
-        $this->_backend->delete($metaData['dn']);
+        // delete user in sql backend first (foreign keys)
         $this->_sql->deleteUser($_accountId);
+        
+        $this->_backend->delete($metaData['dn']);
     }
 
     /**
@@ -690,12 +702,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     
     public function resolveLdapUIdNumber($_uidNumber)
     {
-        if(strtolower($this->_uuidAttribute) == 'uidnumber') {
+        if(strtolower($this->_userUUIDAttribute) == 'uidnumber') {
             return $_uidNumber;
         }
         
-        $userId = $this->_backend->fetch($this->_options['userDn'], 'uidnumber=' . $_uidNumber, array($this->_uuidAttribute));
+        $userId = $this->_backend->fetch($this->_options['userDn'], 'uidnumber=' . $_uidNumber, array($this->_userUUIDAttribute));
         
-        return $userId[strtolower($this->_uuidAttribute)][0];
+        return $userId[strtolower($this->_userUUIDAttribute)][0];
     }
 }
