@@ -364,7 +364,6 @@ Tine.Tinebase.tineInit = {
             args[i] = arguments[i];
         }
         
-        console.log(args);
         //var lines = ["The following JS error has occured:"];
         if (args[0] instanceof Error) { // Error object thrown in try...catch
             error.name        = args[0].name;
@@ -398,7 +397,6 @@ Tine.Tinebase.tineInit = {
         }
         traceHtml += '</table>'
         
-        console.log(traceHtml);
         // check for spechial cases we don't want to handle
         if (traceHtml.match(/versioncheck/)) {
             return true;
