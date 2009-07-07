@@ -585,4 +585,21 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Tinebase', '1.9');
     }
+    
+    /**
+     * update to nothing
+     * - fix for signed / unsigned problem
+     */
+    public function update_9()
+    {
+        // fix for signed / unsigned problem
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>integer</type>
+                <autoincrement>true</autoincrement>
+            </field>
+        ');
+        $this->_backend->alterCol('addressbook', $declaration);
+    }
 }

@@ -2222,6 +2222,16 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         // have a second db connection with default charset
         $orgDb = Zend_Db::factory('Pdo_Mysql', $config->database->toArray());
         
+        // fix for signed / unsigned problem
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>integer</type>
+                <autoincrement>true</autoincrement>
+            </field>
+        ');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
         /** addressbook: store image in separat table **/
         $tableDefinition = '
             <table>
@@ -2255,7 +2265,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                             <field>id</field>
                             <ondelete>CASCADE</ondelete>
                         </reference>
-                        <ondelete>cascade</ondelete>
                     </index>
                 </declaration>
             </table>
@@ -2358,5 +2367,22 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setTableVersion('tags', '2');
         $this->setApplicationVersion('Tinebase', '1.0');
+    }
+    
+    /**
+     * update to nothing
+     * - fix for signed / unsigned problem
+     */
+    public function update_29()
+    {
+        // fix for signed / unsigned problem
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>integer</type>
+                <autoincrement>true</autoincrement>
+            </field>
+        ');
+        $this->_backend->alterCol('addressbook', $declaration);
     }
 }
