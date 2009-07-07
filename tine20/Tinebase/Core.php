@@ -569,7 +569,7 @@ class Tinebase_Core
      * function to initialize the smtp connection
      *
      */
-/*    public static function setupMailer()
+    public static function setupMailer()
     {
         $config = self::getConfig();
         
@@ -584,7 +584,7 @@ class Tinebase_Core
         
         $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());
         Zend_Mail::setDefaultTransport($transport);
-    }*/
+    }
     
     /**
      * set php execution life (max) time
