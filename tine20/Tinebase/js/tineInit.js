@@ -18,12 +18,11 @@ Ext.onReady(function() {
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initErrorHandler();
     Tine.Tinebase.tineInit.initRegistry();
-    Tine.Tinebase.tineInit.initState();
-    
     var waitForInits = function() {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
             waitForInits.defer(100);
         } else {
+            Tine.Tinebase.tineInit.initState();
             Tine.Tinebase.tineInit.initWindowMgr();
             Tine.Tinebase.tineInit.onLangFilesLoad();
             Tine.Tinebase.tineInit.checkSelfUpdate();
@@ -222,13 +221,13 @@ Tine.Tinebase.tineInit = {
                 if (stateStore.hasChanges) {
                     var stateInfo = [];
                     stateStore.each(function(stateRecord) {
-                        stateInfo.push(Ext.util.JSON.encode(stateRecord.data));
+                        stateInfo.push(stateRecord.data);
                     }, this);
                     
                     // mark changes as saved
                     stateStore.hasChanges = false;
                     
-                    options.params.stateInfo = stateInfo;
+                    options.params.stateInfo = Ext.util.JSON.encode(stateInfo);
                 }
             }
         });
@@ -607,7 +606,8 @@ Tine.Tinebase.tineInit = {
         Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
         if (window.isMainWindow) {
             // fill store from registry / initial data
-            // Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
+            var stateInfo = Tine.Tinebase.registry.get('stateInfo');
+            Ext.state.Manager.getProvider().loadStateData(stateInfo);
         } else {
             // take main windows store
             Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainWindow().Ext.state.Manager.getProvider().getStateStore());
