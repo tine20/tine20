@@ -592,19 +592,19 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
                 // group not found => nothing to import
                 continue;
             }
-            
+
             if(isset($groupMembers['member'])) {
                 unset($groupMembers['member']['count']);
                 foreach($groupMembers['member'] as $dn) {
                     try {
-                        $accountData = $this->_ldap->fetchDn($dn, 'objectclass=*', array('uidnumber'));
+                        $accountData = $this->_ldap->fetchDn($dn, 'objectclass=posixaccount', array('uidnumber'));
                         $memberId = Tinebase_User::getInstance()->resolveLdapUIdNumber($accountData['uidnumber'][0]);
                     } catch (Exception $e) {
                         // ignore ldap errors
                     }
                     $this->_sql->addGroupMember($groupId, $memberId);
                 }
-            } else {
+            } elseif(isset($groupMembers['memberuid'])) {
                 unset($groupMembers['memberuid']['count']);
                 foreach((array)$groupMembers['memberuid'] as $loginName) {
                     $account = Tinebase_User::getInstance()->getUserByLoginName($loginName);
