@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        make fonts customizable
  * @todo        add page layout (orientation landscape to styles
  * @todo        move configs to importexport definitions
  */
