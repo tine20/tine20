@@ -2355,6 +2355,16 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     {
         $this->validateTableVersion('tags', '1');        
         
+        // fix for signed / unsigned problem
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>integer</type>
+                <autoincrement>true</autoincrement>
+            </field>
+        ');
+        $this->_backend->alterCol('addressbook', $declaration);
+        
         $declaration = new Setup_Backend_Schema_Field_Xml('
         <field>
             <name>name</name>
@@ -2367,22 +2377,5 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setTableVersion('tags', '2');
         $this->setApplicationVersion('Tinebase', '1.0');
-    }
-    
-    /**
-     * update to nothing
-     * - fix for signed / unsigned problem
-     */
-    public function update_29()
-    {
-        // fix for signed / unsigned problem
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-            <field>
-                <name>id</name>
-                <type>integer</type>
-                <autoincrement>true</autoincrement>
-            </field>
-        ');
-        $this->_backend->alterCol('addressbook', $declaration);
     }
 }
