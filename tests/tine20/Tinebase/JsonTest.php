@@ -335,6 +335,27 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_Core::getPreference()->delete($pref);
     }
     
+    /**
+     * save state and load it with registry data
+     *
+     * @todo save old state and recover it after the test
+     */
+    public function testSaveAndGetState()
+    {
+        $testData = array(
+            'bla'   => 'blubb',
+            'zzing' => 'zzang'
+        );
+        
+        Tinebase_State::getInstance()->saveStateInfo(Zend_Json::encode($testData));
+        
+        $stateInfo = Tinebase_State::getInstance()->loadStateInfo();
+        
+        $this->assertEquals($testData, $stateInfo);
+        
+        //$registryData = $this->_instance->getAllRegistryData();
+    }
+    
     /******************** protected helper funcs ************************/
     
     /**

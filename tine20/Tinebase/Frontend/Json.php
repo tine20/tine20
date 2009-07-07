@@ -421,6 +421,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
+            
+            // add state info
+            if ($stateInfo = Tinebase_State::getInstance()->loadStateInfo()) {
+                $registryData['stateInfo'] = $stateInfo;
+            }
+            
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }

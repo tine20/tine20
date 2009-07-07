@@ -78,7 +78,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 if ($_REQUEST['stateInfo']) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save clients appended stateInfo ... ");
                     // save state info here (and return in with getAllRegistryData)
-                    $this->_saveStateInfo($_REQUEST['stateInfo']);
+                    Tinebase_State::getInstance()->saveStateInfo($_REQUEST['stateInfo']);
                 }
                 
                 $applicationParts = explode('.', $_REQUEST['method']);
@@ -118,31 +118,5 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         }
          
         $server->handle($_REQUEST);
-    }
-    
-    /**
-     * save state data
-     *
-     * @param JSONstring $_stateData
-     * 
-     * @todo move this to State controller?
-     */
-    protected function _saveStateInfo($_stateData)
-    {
-        $userId = Tinebase_Core::getUser()->getId();
-        $stateBackend = new Tinebase_State_Backend();
-        
-        try {
-            $stateRecord = $stateBackend->getByProperty($userId, 'user_id');
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $stateRecord = new Tinebase_Model_State(array(
-                'user_id'   => $userId,
-                'data'      => $_stateData
-            ));
-            $stateBackend->create($stateRecord);
-        }
-        
-        $stateRecord->data = $_stateData;
-        $stateBackend->update($stateRecord);
     }
 }

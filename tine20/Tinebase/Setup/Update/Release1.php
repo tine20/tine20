@@ -524,28 +524,13 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>name</name>
+                    <name>user_id</name>
                     <type>text</type>
-                    <length>256</length>
-                </field>
-                <field>
-                    <name>start_time</name>
-                    <type>datetime</type>
-                </field> 
-                <field>
-                    <name>end_time</name>
-                    <type>datetime</type>
-                </field> 
-                <field>
-                    <name>status</name>
-                    <type>enum</type>
-                    <value>running</value>
-                    <value>failure</value>
-                    <value>success</value>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>message</name>
+                    <name>data</name>
                     <type>text</type>
                 </field>
                 <index>
@@ -553,6 +538,13 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
                     <primary>true</primary>
                     <field>
                         <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>user_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>user_id</name>
                     </field>
                 </index>
             </declaration>
