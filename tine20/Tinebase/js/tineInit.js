@@ -221,7 +221,11 @@ Tine.Tinebase.tineInit = {
                 if (stateStore.hasChanges) {
                     var stateInfo = [];
                     stateStore.each(function(stateRecord) {
-                        stateInfo.push(stateRecord.data);
+                        // only save color manager state
+                        // all other stuff needs rethinking
+                        if (stateRecord.get('name') == 'cal-color-mgr-containers') {
+                            stateInfo.push(stateRecord.data);
+                        }
                     }, this);
                     
                     // mark changes as saved
