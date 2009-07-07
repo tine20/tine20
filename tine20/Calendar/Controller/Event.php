@@ -154,7 +154,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $newBaseEvent->dtend       = clone $newBaseEvent->dtstart;
         $newBaseEvent->dtend->add($instancesEventDuration);
         
-        $newBaseEvent->rrule       = $baseEvent->rrule;
         $newBaseEvent->exdate      = $baseEvent->exdate;
         
         return $this->update($newBaseEvent);
