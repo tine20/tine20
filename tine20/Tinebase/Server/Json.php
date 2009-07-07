@@ -75,7 +75,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             if (Zend_Auth::getInstance()->hasIdentity()) {
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
                 
-                if ($_REQUEST['stateInfo']) {
+                if (array_key_exists('stateInfo', $_REQUEST) && ! empty($_REQUEST['stateInfo'])) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save clients appended stateInfo ... ");
                     // save state info here (and return in with getAllRegistryData)
                     Tinebase_State::getInstance()->saveStateInfo($_REQUEST['stateInfo']);
