@@ -323,7 +323,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 1.5
+     * update to 1.6
      * - change all fields which store account id's to string type
      */
     public function update_5()
@@ -452,5 +452,62 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         $this->_backend->alterCol('tags_acl', $declaration, 'account_id');
         
         $this->setApplicationVersion('Tinebase', '1.6');
+    }
+
+    /**
+     * update to 1.7
+     * - add modlog info to container table
+     */
+    public function update_6()
+    {
+        $this->validateTableVersion('container', '1');        
+
+        $newFields = array(
+            '<field>
+                <name>created_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>',
+            '<field>
+                <name>creation_time</name>
+                <type>datetime</type>
+                <notnull>true</notnull>
+            </field>',
+            '<field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>',
+            '<field>
+                <name>last_modified_time</name>
+                <type>datetime</type>
+                <notnull>true</notnull>
+            </field>',
+            '<field>
+                <name>is_deleted</name>
+                <type>boolean</type>
+                <notnull>true</notnull>
+                <default>false</default>
+            </field>',
+            '<field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>',            
+            '<field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+            </field>'
+        );
+
+        foreach ($newFields as $field) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('container', $declaration);
+        }
+
+        $this->setTableVersion('container', '2');
+        $this->setApplicationVersion('Tinebase', '1.7');
     }
 }
