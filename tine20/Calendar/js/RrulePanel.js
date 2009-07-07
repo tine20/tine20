@@ -191,14 +191,20 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     },
     
     getRule: function() {
-        //var until = this.until.getValue();
         var until = this.until.getRawValue();
+        until = until ? Date.parseDate(until, this.until.format) : null;
+        
+        
+        if (Ext.isDate(until)) {
+            // make sure, last recurance is included
+            until = until.clearTime(true).add(Date.HOUR, 24).add(Date.SECOND, -1).format(Date.patterns.ISO8601Long);
+        }
         
         var rrule = {
             freq    : this.freq,
             interval: this.interval.getValue(),
             //until   : Ext.isDate(until) ? until.format(Date.patterns.ISO8601Long) : null
-            until   : until ? Date.parseDate(until, this.until.format).format(Date.patterns.ISO8601Long) : null
+            until   : until
         };
         
         return rrule;
