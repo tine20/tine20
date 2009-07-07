@@ -561,15 +561,18 @@ Tine.Tinebase.tineInit = {
             // if no selfupdate is needed we store langfile and index.php in manifest
             if (window.google && google.gears && google.gears.localServer) {
                 if (serverVersion.buildType == 'RELEASE') {
-                    if (! google.gears.localServer.openStore('tine20-package-store')) {
-                        var pkgStore = google.gears.localServer.createStore('tine20-package-store');
-                        var resources = [
-                            '',
-                            'index.php',
-                            'Tinebase/js/Locale/build/' + Tine.Tinebase.registry.get('locale').locale + '-all.js'
-                        ];
-                        pkgStore.capture(resources, function(){/*console.log(arguments)*/});
-                    }
+                    var pkgStore = google.gears.localServer.createStore('tine20-package-store');
+                    var resources = [
+                        '',
+                        'index.php',
+                        'Tinebase/js/Locale/build/' + Tine.Tinebase.registry.get('locale').locale + '-all.js'
+                    ];
+                    
+                    Ext.each(resources, function(resource) {
+                        if (! pkgStore.isCaptured(resource)) {
+                            pkgStore.capture(resources, function(){/*console.log(arguments)*/});
+                        }
+                    }, this);
                 } else {
                     google.gears.localServer.removeStore('tine20-package-store');
                 }
