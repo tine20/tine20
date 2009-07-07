@@ -423,7 +423,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             
             // add state info
-            if ($stateInfo = Tinebase_State::getInstance()->loadStateInfo()) {
+            $stateInfo = Tinebase_State::getInstance()->loadStateInfo();
+            if ($stateInfo) {
                 $registryData['stateInfo'] = $stateInfo;
             }
             
