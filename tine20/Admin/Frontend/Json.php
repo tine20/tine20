@@ -95,7 +95,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $toDateObject = new Zend_Date($to, Tinebase_Record_Abstract::ISO8601LONG);
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
         
-        $accessLogSet = Admin_Controller_AccessLog::getInstance()->search($filter, $pagination, $fromDateObject, $toDateObject);
+        $accessLogSet = Admin_Controller_AccessLog::getInstance()->search_($filter, $pagination, $fromDateObject, $toDateObject);
         
         $result = $this->_multipleRecordsToJson($accessLogSet);
 
@@ -107,7 +107,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return array(
             'results'       => $result,
-            'totalcount'    => Admin_Controller_AccessLog::getInstance()->searchCount($fromDateObject, $toDateObject, $filter),
+            'totalcount'    => Admin_Controller_AccessLog::getInstance()->searchCount_($fromDateObject, $toDateObject, $filter),
         );
     }
     

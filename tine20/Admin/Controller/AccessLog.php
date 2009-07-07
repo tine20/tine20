@@ -69,8 +69,10 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
      * @param int $_start
      * @param int $_limit
      * @return Tinebase_RecordSet_AccessLog set of matching access log entries
+     * 
+     * @todo replace with search (use the same fn signature first)
      */
-    public function search($_filter = NULL, $_pagination = NULL, $_from = NULL, $_to = NULL)
+    public function search_($_filter = NULL, $_pagination = NULL, $_from = NULL, $_to = NULL)
     {
         $this->checkRight('VIEW_ACCESS_LOG');        
         
@@ -87,10 +89,11 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
      * @param Zend_Date $_from the date from which to fetch the access log entries from
      * @param Zend_Date $_to the date to which to fetch the access log entries to
      * @param string $_filter OPTIONAL search parameter
-     * 
      * @return int
+     * 
+     * @todo replace with searchCount (use the same fn signature first)
      */
-    public function searchCount($_from, $_to, $_filter)
+    public function searchCount_($_from, $_to, $_filter)
     {
         return Tinebase_AccessLog::getInstance()->getTotalCount($_from, $_to, $_filter);
     }
@@ -98,12 +101,12 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
     /**
      * delete access log entries
      *
-     * @param   array $_logIds list of logIds to delete
+     * @param   array $_ids list of logIds to delete
      */
-    public function delete($_logIds)
+    public function delete($_ids)
     {
         $this->checkRight('MANAGE_ACCESS_LOG');        
         
-        Tinebase_AccessLog::getInstance()->deleteEntries($_logIds);
+        Tinebase_AccessLog::getInstance()->deleteEntries($_ids);
     }    
 }
