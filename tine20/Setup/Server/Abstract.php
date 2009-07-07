@@ -48,7 +48,8 @@ abstract class Setup_Server_Abstract
         
         Setup_Core::setupUserLocale();
         
-        Setup_Core::setupCache();
+        // don't use cache for setup. It breaks when we need to run setup multiple times
+        //Setup_Core::setupCache();
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
