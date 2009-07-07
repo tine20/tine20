@@ -22,7 +22,7 @@ Ext.ux.state.JsonProvider = function(config) {
     if (! this.record) {
         this.record = Ext.data.Record.create([
             { name: 'name' },
-            { name: 'value' }
+            { name: 'value'}
         ]);
     }
     
@@ -104,6 +104,18 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
                  //console.info('Ext.ux.state.JsonProvider::set Attempt to set state of the non stateful component: "' + name + '"');
             }
         }
+    },
+    
+    loadStateData: function(stateInfo) {
+        this.store.removeAll();
+        if (Ext.isArray(stateInfo)) {
+            Ext.each(stateInfo, function(recordData) {
+                var stateRecord = new this.record(recordData, recordData.name);
+                this.store.add(stateRecord);
+            }, this);
+        }
+        console.log(this.store.data.items[0]);
+        this.store.hasChanges = false;
     },
     
     /**
