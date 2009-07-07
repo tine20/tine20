@@ -161,6 +161,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $recurInstance = new Calendar_Model_Event(array(), TRUE);
         $recurInstance->setFromJsonInUsersTimezone($recordData);
         
+        //Tinebase_Core::getLogger()->debug(print_r($recurInstance->toArray(), true));
+        
         $baseEvent = Calendar_Controller_Event::getInstance()->updateRecurSeries($recurInstance);
         
         return $this->getEvent($baseEvent->getId());
