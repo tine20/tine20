@@ -118,8 +118,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
+        
         // remove old members
-        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' = ?', $_groupId);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' = ?', $groupId);
         $this->groupMembersTable->delete($where);
         
         // add new members
