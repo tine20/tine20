@@ -206,4 +206,14 @@ class Setup_Core extends Tinebase_Core
         
         self::set(self::SESSION, $session);
     }
+    
+    /**
+     * setup the cache and add it to zend registry
+     *
+     */
+    public static function setupCache()
+    {
+        // disable caching for setup
+        parent::setupCache(false);
+    }
 }

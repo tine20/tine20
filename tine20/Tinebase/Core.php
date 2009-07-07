@@ -311,13 +311,15 @@ class Tinebase_Core
     /**
      * setup the cache and add it to zend registry
      *
+     * @param bool $_enabled diabled cache regradles what's configured in config.inc.php
      */
-    public static function setupCache()
+    public static function setupCache($_enabled = true)
     {
         $config = self::getConfig();        
         
         // create zend cache
-        if ($config->caching && $config->caching->active) {
+        if ($_enabled === true && $config->caching && $config->caching->active) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache enabled');
             $frontendOptions = array(
                 'cache_id_prefix' => SQL_TABLE_PREFIX,
                 'lifetime' => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
@@ -342,6 +344,7 @@ class Tinebase_Core
                 break;
             }
         } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
@@ -566,7 +569,7 @@ class Tinebase_Core
      * function to initialize the smtp connection
      *
      */
-    public static function setupMailer()
+/*    public static function setupMailer()
     {
         $config = self::getConfig();
         
@@ -581,7 +584,7 @@ class Tinebase_Core
         
         $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());
         Zend_Mail::setDefaultTransport($transport);
-    }
+    }*/
     
     /**
      * set php execution life (max) time
