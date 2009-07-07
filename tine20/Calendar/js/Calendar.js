@@ -14,7 +14,7 @@ Ext.namespace('Tine.Calendar');
  */
 Ext.onReady(function(){
     Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDate() + '.png)');
-    Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
+    
 });
 
 /**
@@ -22,7 +22,14 @@ Ext.onReady(function(){
  * 
  * @type Tine.Tinebase.widgets.app.MainScreen
  */
-Tine.Calendar.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
+Tine.Calendar.MainScreen = function(config) {
+    Ext.apply(this, config);
+    Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
+    
+    Tine.Calendar.MainScreen.superclass.constructor.call(this);
+}
+
+Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
     
     /**
      * sets content panel in mainscreen
