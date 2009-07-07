@@ -215,6 +215,22 @@ Tine.Tinebase.tineInit = {
             
             options.headers = options.headers ? options.headers : {};
             options.headers['X-Tine20-Request-Type'] = options.headers['X-Tine20-Request-Type'] || 'JSON';
+            
+            // append updated state info if state has changes
+            if (typeof Ext.state.Manager.getProvider().getStateStore == 'function') {
+                var stateStore = Ext.state.Manager.getProvider().getStateStore();
+                if (stateStore.hasChanges) {
+                    var stateInfo = [];
+                    stateStore.each(function(stateRecord) {
+                        stateInfo.push(Ext.util.JSON.encode(stateRecord.data));
+                    }, this);
+                    
+                    // mark changes as saved
+                    stateStore.hasChanges = false;
+                    
+                    options.params.stateInfo = stateInfo;
+                }
+            }
         });
         
         /**
