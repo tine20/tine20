@@ -76,6 +76,26 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model
     },
     isRecurException: function() {
         return !!this.get('recurid') && !( this.idProperty && this.id.match(/^fakeid/));
+    },
+    /**
+     * returns displaycontainer with orignialcontainer as fallback
+     * @return {Array}
+     */
+    getDisplayContainer: function() {
+        var displayContainer = this.get('container_id');
+        var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
+        
+        Ext.each(this.get('attendee'), function(attender) {
+            var user_id = attender.user_id ? attender.user_id.accountId ? attender.user_id.accountId : attender.user_id : null;
+            if (attender.user_type && attender.user_type == 'user' && user_id == currentAccountId) {
+                if (attender.displaycontainer_id) {
+                    displayContainer = attender.displaycontainer_id;
+                }
+                return false;
+            }
+        }, this);
+        
+        return displayContainer;
     }
 });
 
