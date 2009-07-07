@@ -30,7 +30,13 @@ Ext.ux.state.JsonProvider = function(config) {
         this.store = new Ext.data.SimpleStore({
             fields: this.record,
             id: 'name',
-            data: []
+            data: [],
+            listeners: {
+                scope: this,
+                add: this.onStateStoreUpdate,
+                remove: this.onStateStoreUpdate,
+                update: this.onStateStoreUpdate
+            }
         });
     }
 };
@@ -145,5 +151,9 @@ Ext.extend(Ext.ux.state.JsonProvider, Ext.state.Provider, {
                 break;
         }
         return clone;
+    },
+    
+    onStateStoreUpdate: function(store) {
+        store.hasChanges = true;
     }
 });
