@@ -220,8 +220,8 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 1.4
-     * - add async events table
+     * update to 1.5
+     * - account ids are strings now 
      */
     public function update_4()
     {
@@ -504,5 +504,68 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
 
         $this->setTableVersion('container', '2');
         $this->setApplicationVersion('Tinebase', '1.7');
+    }
+
+    /**
+     * update to 1.8
+     * - add state data table
+     */
+    public function update_7()
+    {
+        $tableDefinition = '
+        <table>
+            <name>state</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>
+                <field>
+                    <name>start_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>end_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>status</name>
+                    <type>enum</type>
+                    <value>running</value>
+                    <value>failure</value>
+                    <value>success</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>message</name>
+                    <type>text</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);
+        Tinebase_Application::getInstance()->addApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
+            'state', 
+            1
+        );
+        
+        $this->setApplicationVersion('Tinebase', '1.8');
     }
 }

@@ -46,7 +46,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 'Tinebase.getTranslations',
                 'Tinebase.setLocale'
             );
-            // check json key for all methods but some exceptoins
+            // check json key for all methods but some exceptions
             if ( !(in_array($_POST['method'], $anonymnousMethods) || preg_match('/Tinebase_UserRegistration/', $_POST['method']))  
                     && $_POST['jsonKey'] != Tinebase_Core::get('jsonKey') ) {
     
@@ -77,7 +77,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 
                 if ($_REQUEST['stateInfo']) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " about to save clients appended stateInfo");
-                    
+                    // @todo save state info here (and return in with getAllRegistryData)
                 }
                 
                 $applicationParts = explode('.', $_REQUEST['method']);
