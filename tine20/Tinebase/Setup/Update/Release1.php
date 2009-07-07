@@ -505,7 +505,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         $this->setTableVersion('container', '2');
         $this->setApplicationVersion('Tinebase', '1.7');
     }
-
+    
     /**
      * update to 1.8
      * - add state data table
@@ -567,5 +567,30 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         );
         
         $this->setApplicationVersion('Tinebase', '1.8');
+    }
+    
+    /**
+     * update to 1.9
+     * - set UUID type for existing ldap backends to uidnumber and gidnumber
+     */
+    public function update_8()
+    {
+        $configBackend = Tinebase_Config::getInstance();
+        $tinebaseAppId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        
+        $configSettings = array(
+            'groupUUIDAttribute' => 'gidnumber',              
+            'userUUIDAttribute'  => 'uidnumber'
+        );
+        
+        foreach ($configSettings as $name => $value) {
+            $config = new Tinebase_Model_Config(array(
+                "application_id"    => $tinebaseAppId,
+                "name"              => $name,
+                "value"             => $value,              
+            ));            
+            $configBackend->setConfig($config);
+        }
+        $this->setApplicationVersion('Tinebase', '1.9');
     }
 }
