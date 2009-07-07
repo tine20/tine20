@@ -35,8 +35,10 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
      */
     protected function _setField($_declaration)
     {
-        $this->name = $_declaration->name;
-        $this->type = $_declaration->type;
+        error_log(__METHOD__ . " " . print_r($_declaration, true));
+        error_log(__METHOD__ . " " . print_r($this, true));
+        $this->name = (string)$_declaration->name;
+        $this->type = (string)$_declaration->type;
 
         if(!empty($_declaration->comment)) {
             $this->comment = $_declaration->comment;
@@ -186,11 +188,6 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                         $this->default = (double) $_declaration->default;
                     }
                 }
-                if(isset($_declaration->unsigned)) {
-                    $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
-                } else {
-                    $this->unsigned = false;
-                }
 
                 break;
             
@@ -201,11 +198,6 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                     } else {
                         $this->default = (float) $_declaration->default;
                     }
-                }
-                if(isset($_declaration->unsigned)) {
-                    $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
-                } else {
-                    $this->unsigned = false;
                 }
 
                 break;
@@ -227,14 +219,14 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
          * set signed / unsigned
          */        
         switch ($this->type) {
-            case 'tinyint':
-            case 'integer':
+            #case 'tinyint':
+            #case 'integer':
             case 'double':
             case 'float':
                 if(isset($_declaration->unsigned)) {
                     $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
                 } else {
-                    $this->unsigned = true;
+                    $this->unsigned = false;
                 }
 
                 break;
