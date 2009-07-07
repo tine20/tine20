@@ -32,8 +32,9 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                          '<b>' + this.exceptionInfo.trace[i]['function'] + '</b>' +
                         '(' + ((this.exceptionInfo.trace[i].args && this.exceptionInfo.trace[i].args[0]) ? this.exceptionInfo.trace[i].args[0] : '') + ')<br/>';
             }
+            
+            this.exceptionInfo.traceHTML = trace;
         }
-        this.exceptionInfo.traceHTML = trace;
         
         this.title = _('Abnormal End');
         this.items = new Ext.FormPanel({
@@ -132,7 +133,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     showTransmissionCompleted: function() {
         Ext.MessageBox.show({
             title: _('Transmission Completed'),
-            msg: _('Your report has been sent. Thanks for your contribution'),
+            msg: _('Your report has been sent. Thanks for your contribution' + '<br /><b>' + _('Please restart your browser now!') + '</b>'),
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.INFO
         });
