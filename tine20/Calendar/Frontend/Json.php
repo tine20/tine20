@@ -15,10 +15,6 @@
  */
 class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
-    // todos :
-    // ensure rrule_until has dtstart timepart (fix for ext datepicker)
-    //  --> lets do this in js
-    
     protected $_applicationName = 'Calendar';
     
     /**
@@ -171,8 +167,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns record prepared for json transport
      *
-     * @todo fixme with effective grants!!!
-     * 
      * @param Tinebase_Record_Interface $_record
      * @return array record data
      */
@@ -221,7 +215,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * 
+     * resolves given attendee for json representation
      *
      * @param array|Tinebase_Record_RecordSet $_attendee 
      * @param unknown_type $_idProperty
@@ -275,6 +269,11 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
     }
     
+    /**
+     * resolves rrule of given event
+     *
+     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
+     */
     protected function _resolveRrule($_events)
     {
         $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
