@@ -509,7 +509,13 @@ Tine.Tinebase.tineInit = {
                 //break;
             case 'timezone':
             case 'locale':
-                // reload mainscreen (only if timezone or locale have changed
+                if (window.google && google.gears && google.gears.localServer) {
+                    var pkgStore = google.gears.localServer.openStore('tine20-package-store');
+                    if (pkgStore) {
+                        google.gears.localServer.removeStore('tine20-package-store');
+                    }
+                }
+                // reload mainscreen (only if timezone or locale have changed)
                 window.location = window.location.href.replace(/#+.*/, '');
                 break;
         }
