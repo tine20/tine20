@@ -19,10 +19,16 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     plain: true,
     closeAction: 'close',
     autoScroll: true,
+    releaseMode: true,
     
     
     initComponent: function() {
+        this.currentAccount = Tine.Tinebase.registry.get('currentAccount');
         
+        if(Tine.Tinebase.registry.get('version').buildType != 'RELEASE') {
+            this.releaseMode = false;
+            this.width = 800;
+        }
         var trace = '';
         if (this.exceptionInfo.trace) {
             for (var i=0,j=this.exceptionInfo.trace.length; i<j; i++) {
@@ -67,19 +73,34 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                           '</div>'
                 }, {
                     id: 'tb-exceptiondialog-description',
-                    height: 200,
+                    height: 60,
                     xtype: 'textarea',
                     fieldLabel: _('Description'),
                     name: 'description',
                     anchor: '95%',
                     readOnly: false
                 }, {
+                    xtype: 'fieldset',
+                    id: 'tb-exceptiondialog-send-contact',
+                    anchor: '95%',
+                    title: _('Send Contact Information'),
+                    autoHeight: true,
+                    checkboxToggle: true,
+                    items: [{
+                        id: 'tb-exceptiondialog-contact',
+                        xtype: 'textfield',
+                        hideLabel: true,
+                        anchor: '100%',
+                        name: 'contact',
+                        value: this.currentAccount.accountFullName + ' ' + this.currentAccount.accountEmailAddress
+                    }]
+                }, {
                     xtype: 'panel',
                     width: '95%',
                     layout: 'form',
                     collapsible: true,
-                    collapsed: true,
-                    title: _('Show Details:'),
+                    collapsed: this.releaseMode,
+                    title: _('Details:'),
                     defaults: {
                         xtype: 'textfield',
                         readOnly: true,
@@ -112,6 +133,20 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
            clientVersion: Tine.clientVersion,
            serverVersion: Tine.Tinebase.registry.get('version')
         };
+        
+        // tinebase version
+        Ext.each(Tine.Tinebase.registry.get('userApplications'), function(app) {
+            if (app.name == 'Tinebase') {
+                info.tinebaseVersion = app;
+                return false;
+            }
+        }, this);
+        
+        // append contact?
+        if (! Ext.getCmp('tb-exceptiondialog-send-contact').collapsed) {
+            info.contact = Ext.getCmp('tb-exceptiondialog-contact').getValue();
+        }
+        
         // NOTE:  - we have about 80 chars overhead (url, paramnames etc) in each request
         //        - 1024 chars are expected to be pass client/server limits savely => 940
         //        - base64 means about 30% overhead => 600 
@@ -133,7 +168,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     showTransmissionCompleted: function() {
         Ext.MessageBox.show({
             title: _('Transmission Completed'),
-            msg: _('Your report has been sent. Thanks for your contribution' + '<br /><b>' + _('Please restart your browser now!') + '</b>'),
+            msg: _('Your report has been sent. Thanks for your contribution') + '<br /><b>' + _('Please restart your browser now!') + '</b>',
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.INFO
         });
