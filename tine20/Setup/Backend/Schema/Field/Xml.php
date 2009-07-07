@@ -163,11 +163,11 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                             $this->default = (int) $_declaration->default;
                         }
                     }
-                    if(isset($_declaration->unsigned)) {
-                        $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
-                    } else {
-                        $this->unsigned = true;
-                    }
+                    #if(isset($_declaration->unsigned)) {
+                    #    $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
+                    #} else {
+                    #    $this->unsigned = true;
+                    #}
                 }
                 break;
             
@@ -217,8 +217,8 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
          * set signed / unsigned
          */        
         switch ($this->type) {
-            #case 'tinyint':
-            #case 'integer':
+            case 'tinyint':
+            case 'integer':
             case 'double':
             case 'float':
                 if(isset($_declaration->unsigned)) {
