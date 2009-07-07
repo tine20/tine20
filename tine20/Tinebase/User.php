@@ -70,7 +70,9 @@ class Tinebase_User
     {
         switch($_backendType) {
             case self::LDAP:
-                $options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
+                $options                       = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
+                $options['groupUUIDAttribute'] = Tinebase_Config::getInstance()->getConfig('groupUUIDAttribute', null, 'entryUUID');
+                $options['userUUIDAttribute']  = Tinebase_Config::getInstance()->getConfig('userUUIDAttribute', null, 'entryUUID');
                 
                 $result = new Tinebase_User_Ldap($options);
                 break;
