@@ -618,6 +618,26 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
+     * Fetches all accounts from backend matching the given filter
+     *
+     * @param string $_filter
+     * @param string $_accountClass
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getContactFromBackend(Tinebase_Model_FullUser $_user)
+    {
+        $userData = $this->_getMetaData($_user);
+        
+        $userData = $this->_backend->fetch($userData['dn'], 'objectclass=*');
+        
+        $contact = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL)->getByUserId($_user->getId());
+        
+        $this->_ldap2Contact($userData, $contact);
+        
+        return $contact;
+    }
+    
+    /**
      * Returns a user obj with raw data from ldap
      *
      * @param array $_userData
@@ -657,6 +677,55 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         $accountObject = new $_accountClass($accountArray);
         
         return $accountObject;
+    }
+    
+    /**
+     * Returns a contact object with raw data from ldap
+     *
+     * @param array $_userData
+     * @param string $_accountClass
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _ldap2Contact($_userData, $_contact)
+    {
+        $rowNameMapping = array(
+            'bday'                  => 'birthdate',
+            'tel_cell'              => 'mobile',
+            'tel_work'              => 'telephonenumber',
+            'tel_home'              => 'homephone',
+            'tel_fax'               => 'facsimiletelephonenumber',
+            'org_name'              => 'o',
+            'org_unit'              => 'ou',
+            'email_home'            => 'mozillasecondemail',
+            'jpegphoto'             => 'jpegphoto',
+            'adr_two_locality'      => 'mozillahomelocalityname',
+            'adr_two_postalcode'    => 'mozillahomepostalcode',
+            'adr_two_region'        => 'mozillahomestate',
+            'adr_two_street'        => 'mozillahomestreet',
+            'adr_one_region'        => 'l',
+            'adr_one_postalcode'    => 'postalcode',
+            'adr_one_street'        => 'street',
+            'adr_one_region'        => 'st',
+        );
+        
+        foreach ($_userData as $key => $value) {
+            if (is_int($key)) {
+                continue;
+            }
+
+            $keyMapping = array_search($key, $rowNameMapping);
+            
+            if ($keyMapping !== FALSE) {
+                switch($keyMapping) {
+                    case 'bday':
+                        $_contact->$keyMapping = new Zend_Date($value[0], 'yyyy-MM-dd');
+                        break;
+                    default: 
+                        $_contact->$keyMapping = $value[0];
+                        break;
+                }
+            }
+        }        
     }
     
     /**
@@ -717,7 +786,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
                 $this->_sql->addUser($user);
             }
             $sqlGroupBackend->addGroupMember($user->accountPrimaryGroup, $user);
+            
+            // import contactdata(phone, address, fax, birthday. photo)
+            $contact = $this->_getContactFromBackend($user);
+            Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL)->update($contact);
         }
+        
         
     }
     
