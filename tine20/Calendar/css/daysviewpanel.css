@@ -44,6 +44,7 @@
     font-weight:normal;
     line-height:normal;
     white-space:nowrap;
+    overflow: hidden;
 }
 
 .cal-daysviewpanel-dayheader-day-wrap {

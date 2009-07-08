@@ -1043,7 +1043,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var vh = csize.height - (hdHeight);
 
         this.scroller.setSize(vw, vh);
-        this.innerHd.style.width = (vw)+'px';
+        this.innerHd.style.width = (vw + 2)+'px';
     },
     
     layoutWholeDayHeader: function() {
