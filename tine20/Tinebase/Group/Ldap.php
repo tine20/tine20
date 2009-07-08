@@ -538,6 +538,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     protected function _generateGidNumber()
     {
         $allGidNumbers = array();
+        $gidNumber = null;
+        
         foreach ($this->_ldap->fetchAll($this->_options['groupsDn'], 'objectclass=posixgroup', array('gidnumber')) as $groupData) {
             $allGidNumbers[] = $groupData['gidnumber'][0];
         }
@@ -549,7 +551,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             $gidNumber =  $this->_options['minGroupId'];
         } elseif ($allGidNumbers[$numGroups-1] < $this->_options['maxGroupId']) {
             $gidNumber = ++$allGidNumbers[$numGroups-1];
-        } else {
+        } elseif(count($allGidNumbers) < ($this->_options['maxGroupId'] - $this->_options['minGroupId'])) {
+            // maybe there is a gap
+            for($i = $this->_options['minGroupId']; $i <= $this->_options['maxGroupId']; $i++) {
+                if(!in_array($i, $allGidNumbers)) {
+                    $gidNumber = $i;
+                    break;
+                }
+            }
+        }
+        
+        if($gidNumber === NULL) {
             throw new Tinebase_Exception_NotImplemented('Max Group Id is reached');
         }
         
@@ -622,7 +634,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
                         $this->_sql->addGroupMember($groupId, $memberId);
                     } catch (Exception $e) {
                         // ignore ldap errors
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' user not found: ' . $e->getMessage());
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' user not found: ' . $e->getMessage());
                     }
                 }
             } elseif(isset($groupMembers['memberuid'])) {

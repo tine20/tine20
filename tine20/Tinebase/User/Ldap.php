@@ -564,6 +564,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     protected function _generateUidNumber()
     {
         $allUidNumbers = array();
+        $uidNumber = null;
+        
         foreach ($this->_backend->fetchAll($this->_options['userDn'], 'objectclass=posixAccount', array('uidnumber')) as $userData) {
             $allUidNumbers[] = $userData['uidnumber'][0];
         }
@@ -575,7 +577,17 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $uidNumber = $this->_options['minUserId'];
         } elseif ($allUidNumbers[$numUsers-1] < $this->_options['maxUserId']) {
             $uidNumber = ++$allUidNumbers[$numUsers-1];
-        } else {
+        } elseif(count($allUidNumbers) < ($this->_options['maxUserId'] - $this->_options['minUserId'])) {
+            // maybe there is a gap
+            for($i = $this->_options['minUserId']; $i <= $this->_options['maxUserId']; $i++) {
+                if(!in_array($i, $allUidNumbers)) {
+                    $uidNumber = $i;
+                    break;
+                }
+            }
+        }
+        
+        if($uidNumber === NULL) {
             throw new Tinebase_Exception_NotImplemented('Max User Id is reached');
         }
         
