@@ -625,10 +625,11 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         
         // check if ldap backend is enabled
         if($groupBackend instanceof Tinebase_Group_Ldap) {
-            // empty suer and group tables
+            // empty user and group tables
             $this->_db->delete(SQL_TABLE_PREFIX . 'group_members');
             $this->_db->delete(SQL_TABLE_PREFIX . 'accounts');
             $this->_db->delete(SQL_TABLE_PREFIX . 'groups');
+            $this->_db->delete(SQL_TABLE_PREFIX . 'addressbook', array('account_id IS NOT NULL'));
                         
             // import groups from ldap
             Tinebase_Group::getInstance()->importGroups();
@@ -653,18 +654,18 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         // check if ldap backend is enabled
         if($groupBackend instanceof Tinebase_Group_Ldap) {
             // empty suer and group tables
-            $this->_db->delete(SQL_TABLE_PREFIX . 'group_members');
-            $this->_db->delete(SQL_TABLE_PREFIX . 'accounts');
-            $this->_db->delete(SQL_TABLE_PREFIX . 'groups');
+            #$this->_db->delete(SQL_TABLE_PREFIX . 'group_members');
+            #$this->_db->delete(SQL_TABLE_PREFIX . 'accounts');
+            #$this->_db->delete(SQL_TABLE_PREFIX . 'groups');
                         
             // import groups from ldap
-            Tinebase_Group::getInstance()->importGroups();
+            #Tinebase_Group::getInstance()->importGroups();
             
             // import users from ldap
             Tinebase_User::getInstance()->importUsers();
             
             // import group memberships from ldap
-            Tinebase_Group::getInstance()->importGroupMembers();            
+            #Tinebase_Group::getInstance()->importGroupMembers();            
         }
         
         $this->setApplicationVersion('Tinebase', '1.12');
