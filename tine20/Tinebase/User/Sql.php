@@ -590,12 +590,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_User', $queryResult);
         
+        /*
         // add unknown users if not found in database
         foreach($_id as $id) {
             if (!isset($result[$result->getIndexById($id)])) {
                 $result->addRecord($this->getNonExistentUser('Tinebase_Model_User', $id));
             }
         }
+        */
         
         return $result;
     }

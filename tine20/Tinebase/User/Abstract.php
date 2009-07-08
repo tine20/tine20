@@ -304,6 +304,57 @@ abstract class Tinebase_User_Abstract
     }
     
     /**
+     * resolves users of given record
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string|array             $_userProperties
+     * @param bool                     $_addNonExistingUsers
+     * @return void
+     */
+    public function resolveUsers(Tinebase_Record_Abstract $_record, $_userProperties, $_addNonExistingUsers = FALSE)
+    {
+    	$recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_Abstract', $_record);
+    	$this->resolveMultipleUsers($recordSet, $_userProperties, $_addNonExistingUsers);
+    }
+    
+    /**
+     * resolves users of given record
+     * 
+     * @param Tinebase_Record_RecordSet $_records
+     * @param string|array              $_userProperties
+     * @param bool                      $_addNonExistingUsers
+     * @return void
+     */
+    public function resolveMultipleUsers(Tinebase_Record_RecordSet $_records, $_userProperties, $_addNonExistingUsers = FALSE)
+    {
+    	$userIds = array();
+        foreach ((array)$_userProperties as $property) {
+            $userIds = array_merge($userIds, $_records->$property);
+        }
+        
+        $users = $this->getMultiple(array_unique($userIds));
+        $nonExistingUser = $this->getNonExistentUser();
+        
+        foreach ($_records as $record) {
+            foreach ((array)$_userProperties as $property) {
+            	if ($record->$property) {
+            	    $idx = $users->getIndexById($record->$property);
+            	    
+            	    $user = $idx ? $users[$idx] : NULL;
+            	    
+            	    if (!$user && $_addNonExistingUsers) {
+            	        $user = $nonExistingUser;
+            	    }
+            	    
+            	    if ($user) {
+            	        $record->$property = $user;
+            	    }
+            	}
+            }
+        }
+    }
+    
+    /**
      * checks if username already exists
      *
      * @param   string  $_username

@@ -502,12 +502,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         $result = $this->_getUsersFromBackend($filter, 'Tinebase_Model_User');
 		
+        /*
         // add unknown users if not found in database
         foreach($ids as $id) {
             if (!isset($result[$result->getIndexById($id)])) {
                 $result->addRecord($this->getNonExistentUser('Tinebase_Model_User', $id));
             }
         }
+        */
 		
 		return $result;
     }
