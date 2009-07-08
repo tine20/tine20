@@ -64,10 +64,10 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testReadGrantByContainerAnyone()
     {
-    	$persistentEvent = $this->_createEventInPersonasCalendar('jsmith', 'jsmith', 'jsmith');
-    	
-    	$loadedEvent = $this->_uit->get($persistentEvent->getId());
-    	$this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $persistentEvent = $this->_createEventInPersonasCalendar('jsmith', 'jsmith', 'jsmith');
+        
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
     }
     
     /**
@@ -76,8 +76,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testReadGrantByContainerUser()
     {
-    	$persistentEvent = $this->_createEventInPersonasCalendar('sclever', 'sclever', 'sclever');
-    	
+        $persistentEvent = $this->_createEventInPersonasCalendar('sclever', 'sclever', 'sclever');
+        
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
     }
@@ -88,8 +88,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testReadGrantByContainerGroup()
     {
-    	$persistentEvent = $this->_createEventInPersonasCalendar('jmcblack', 'jmcblack', 'jmcblack');
-    	
+        $persistentEvent = $this->_createEventInPersonasCalendar('jmcblack', 'jmcblack', 'jmcblack');
+        
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
     }
@@ -112,18 +112,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testReadGrantByAttender()
     {
-    	$persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', NULL);
-    	
-    	/*
-        $event = $this->_getEvent();
-        unset($event->attendee[1]);
-        $persistentEvent = $this->_uit->create($event);
-        
-        // we need to adopt conainer through backend, to bypass rights control
-        $persistentEvent->container_id = $this->_personasDefaultCals['rwright']->getId();
-        $persistentEvent->organizer = $this->_personas['rwright']->getId();
-        $this->_backend->update($persistentEvent);
-        */
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', NULL);
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
@@ -135,8 +124,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testReadGrantByOrganizer()
     {
-    	$persistentEvent = $this->_createEventInPersonasCalendar('rwright', NULL, 'rwright');
-    	
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', NULL, 'rwright');
+        
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
     }
@@ -147,8 +136,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testReadGrantByInheritedAttendeeContainerGrants()
     {
-    	$persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'sclever');
-    	
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'sclever');
+        
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
     }
@@ -309,12 +298,12 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     
     protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL)
     {
-    	$calendarId  = $this->_personasDefaultCals[$_calendarPersona]->getId();
+        $calendarId  = $this->_personasDefaultCals[$_calendarPersona]->getId();
         $organizerId = $_organizerPersona ? $this->_personas[$_organizerPersona]->getId() : Tinebase_Core::getUser()->getId();
         $attenderId  = $_attenderPersona ? $this->_personas[$_attenderPersona]->getId() : Tinebase_Core::getUser()->getId();
         
-    	$event = $this->_getEvent();
-    	$event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_id'        => $attenderId,
                 'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
@@ -443,8 +432,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     protected function cleanupTestCalendars()
     {
-    	foreach ($this->_personasDefaultCals as $loginName => $calendar) {
-    		Tinebase_Container::getInstance()->setGrants($calendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        foreach ($this->_personasDefaultCals as $loginName => $calendar) {
+            Tinebase_Container::getInstance()->setGrants($calendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
 	            'account_id'    => $this->_personas[$loginName]->getId(),
 	            'account_type'  => 'user',
 	            'readGrant'     => true,
@@ -454,7 +443,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
 	            'adminGrant'    => true,
 	        ))), true);
 	        
-	    	$events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+	        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
 	            array('field' => 'container_id', 'operator' => 'equals', 'value' => $calendar->getId()),
 	        )), new Tinebase_Model_Pagination(array()));
 	        
