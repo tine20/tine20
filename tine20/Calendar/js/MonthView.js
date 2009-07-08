@@ -382,10 +382,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     initElements: function() {
         var E = Ext.Element;
 
-        var el = this.calPanel.body.dom.firstChild;
-        var cs = el.childNodes;
-
-        this.el = new E(el);
+        this.focusEl = new E(this.calPanel.body.dom.firstChild);
+        this.el = new E(this.calPanel.body.dom.lastChild);
         
         this.mainHd = new E(this.el.dom.firstChild);
         this.mainBody = new E(this.el.dom.lastChild);
@@ -713,7 +711,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @private
      */
     onMouseDown: function(e, target) {
-        //this.el.focus();
+        this.focusEl.focus();
         this.mainBody.focus();
         this.unZoom();
     },
@@ -800,6 +798,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     
     render: function() {
         var m = [
+             '<a href="#" class="cal-monthviewpanel-focus" tabIndex="-1"></a>',
              '<table class="cal-monthview-inner" cellspacing="0"><thead><tr class="cal-monthview-inner-header" height="23px">',
              "<th class='cal-monthview-wkcell-header'><span >", this.calWeekString, "</span></th>"
          ];
@@ -824,7 +823,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                     '<div class="cal-monthview-daybody"><div class="cal-monthview-eventslice" /></div>' +
                 '</td>';
         }
-        m.push('</tr></tbody></table></td></tr>');
+        m.push('</tr></tbody></table>');
+        
                 
         var el = this.calPanel.body.dom;
         el.className = "cal-monthview";
