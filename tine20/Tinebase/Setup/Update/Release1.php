@@ -641,4 +641,32 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Tinebase', '1.11');
     }
+    
+    /**
+     * update to 1.12
+     * - import accounts from ldap to sql again if needed
+     */
+    public function update_11()
+    {
+        $groupBackend = Tinebase_Group::getInstance();
+        
+        // check if ldap backend is enabled
+        if($groupBackend instanceof Tinebase_Group_Ldap) {
+            // empty suer and group tables
+            $this->_db->delete(SQL_TABLE_PREFIX . 'group_members');
+            $this->_db->delete(SQL_TABLE_PREFIX . 'accounts');
+            $this->_db->delete(SQL_TABLE_PREFIX . 'groups');
+                        
+            // import groups from ldap
+            Tinebase_Group::getInstance()->importGroups();
+            
+            // import users from ldap
+            Tinebase_User::getInstance()->importUsers();
+            
+            // import group memberships from ldap
+            Tinebase_Group::getInstance()->importGroupMembers();            
+        }
+        
+        $this->setApplicationVersion('Tinebase', '1.12');
+    }
 }
