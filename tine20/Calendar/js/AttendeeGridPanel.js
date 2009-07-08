@@ -346,12 +346,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     renderAttenderName: function(name) {
         if (name) {
             if (typeof name.get == 'function' && name.get('n_fn')) {
-                return name.get('n_fn');
+                return Ext.util.Format.htmlEncode(name.get('n_fn'));
             }
             if (name.accountDisplayName) {
-                return name.accountDisplayName;
+                return Ext.util.Format.htmlEncode(name.accountDisplayName);
             }
-            return name;
+            return Ext.util.Format.htmlEncode(name);
             
         }
         // add new user:
@@ -387,7 +387,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 return this.app.i18n._('Optional');
                 break;
             default:
-                return this.app.i18n._hidden(role);
+                return Ext.util.Format.htmlEncode(this.app.i18n._hidden(role));
                 break;
         }
     },
@@ -411,7 +411,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 return this.app.i18n._('Tentative');
                 break;
             default:
-                return this.app.i18n._hidden(status);
+                return Ext.util.Format.htmlEncode(this.app.i18n._hidden(status));
                 break;
         }
     },
