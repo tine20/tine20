@@ -663,7 +663,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onMouseDown: function(e, target) {
-        this.scroller.focus();
+        this.focusEl.focus();
         this.mouseDown = true;
         
         var targetEvent = this.getTargetEvent(target);
@@ -994,7 +994,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.dayCols = this.mainBody.dom.firstChild.lastChild.childNodes;
 
-        this.focusEl = new E(this.scroller.dom.childNodes[1]);
+        this.focusEl = new E(this.el.dom.lastChild);
         this.focusEl.swallowEvent("click", true);
         this.focusEl.swallowEvent("dblclick", true);
         this.focusEl.swallowEvent("contextmenu", true);
@@ -1179,10 +1179,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             '<div class="cal-daysviewpanel" hidefocus="true">',
                 '<div class="cal-daysviewpanel-viewport">',
                     '<div class="cal-daysviewpanel-header"><div class="cal-daysviewpanel-header-inner"><div class="cal-daysviewpanel-header-offset">{header}</div></div><div class="x-clear"></div></div>',
-                    '<div class="cal-daysviewpanel-scroller"><div class="cal-daysviewpanel-body">{body}</div><a href="#" class="cal-daysviewpanel-focus" tabIndex="-1"></a></div>',
+                    '<div class="cal-daysviewpanel-scroller"><div class="cal-daysviewpanel-body">{body}</div></div>',
                 '</div>',
-                //'<div class="cal-daysviewpanel-resize-marker">&#160;</div>',
-                //'<div class="cal-daysviewpanel-resize-proxy">&#160;</div>',
+                '<a href="#" class="cal-daysviewpanel-focus" tabIndex="-1"></a>',
             '</div>'
         );
         
