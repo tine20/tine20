@@ -22,115 +22,142 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * Test class for Calendar_Controller_Event
  * 
  * @todo:
- *  - add grants spoofing test from JSON frontend
  *  - add free/busy cleanup tests
  * 
  * @package     Calendar
  */
-class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
+class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
 {
     
     /**
      * @var Calendar_Controller_Event controller unter test
      */
-    protected $_controller;
-    
-    /**
-     * @var Tinebase_Model_Container
-     */
-    protected $_testCalendar;
-    
-    protected $_personas;
-    
-    protected $_personasDefaultCals = array();
+    protected $_uit;
     
     public function setUp()
     {
-        $this->_personas = Zend_Registry::get('personas');
-        foreach ($this->_personas as $loginName => $user) {
-            $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $user->getId());
-            $this->_personasDefaultCals[$loginName] = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
-        }
+        parent::setUp();
         
+        /**
+         * set up personas personal container grants:
+         * 
+         *  jsmith:    anyone readGrant, addGrant, editGrant, deleteGrant
+         *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant
+         *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
+         *  jmcblack:  prim group of testuser readGrant
+         *  rwright:   nothing
+         */
+        $this->_setupTestCalendars();
         
-        $this->_controller = Calendar_Controller_Event::getInstance();
-        
-        // test calendar for test user
-        $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'PHPUnit test calendar',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'        => 'sometype',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
-        ), true));
-        
-        // anyone has GRANT_READ on default cal. of jsmith
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jsmith'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['jsmith']->getId(),
-            'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => true,
-        ), array(
-            'account_id'    => 0,
-            'account_type'  => 'anyone',
-            'readGrant'     => true,
-            'addGrant'      => false,
-            'editGrant'     => false,
-            'deleteGrant'   => false,
-            'adminGrant'    => false,
-        ))), true);
-        
-        // test user has GRANT_READ on default cal. of pwulf
-        // sclever has GRANT_READ,GRANT_UPDATE and GRANT_DELETE on default cal. of pwulf (secritary)
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['pwulf'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['pwulf']->getId(),
-            'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => true,
-        ),array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => false,
-            'editGrant'     => false,
-            'deleteGrant'   => false,
-            'adminGrant'    => false,
-        ), array(
-            'account_id'    => $this->_personas['sclever']->getId(),
-            'account_type'  => 'user',
-            'readGrant'     => true,
-            'addGrant'      => true,
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => false,
-        ))), true);
+        $this->_uit = Calendar_Controller_Event::getInstance();
     }
     
     public function tearDown()
     {
-        // we need to have some rights to delete all events via controller ;-)
-        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'account_type'  => 'user',
-            'editGrant'     => true,
-            'deleteGrant'   => true,
-            'adminGrant'    => true,
-        ))), true);
-        
-        $eventIds = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        )), new Tinebase_Model_Pagination(array()), false, true);
-        
-        $this->_controller->delete($eventIds);
-        
-        Tinebase_Container::getInstance()->deleteContainer($this->_testCalendar, true);
+        parent::tearDown();
+        $this->cleanupTestCalendars();
     }
     
+    /**
+     * reads an event of the personal calendar of jsmith
+     *  -> anyone has readGrant
+     */
+    public function testReadGrantByContainerAnyone()
+    {
+    	$persistentEvent = $this->_createEventInPersonasCalendar('jsmith', 'jsmith', 'jsmith');
+    	
+    	$loadedEvent = $this->_uit->get($persistentEvent->getId());
+    	$this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+    }
+    
+    /**
+     * reads an event of the personal calendar of sclever
+     *  -> test user has readGrant
+     */
+    public function testReadGrantByContainerUser()
+    {
+    	$persistentEvent = $this->_createEventInPersonasCalendar('sclever', 'sclever', 'sclever');
+    	
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+    }
+    
+    /**
+     * reads an event of the personal calendar of jmcblack
+     *  -> default group of testuser has readGrant
+     */
+    public function testReadGrantByContainerGroup()
+    {
+    	$persistentEvent = $this->_createEventInPersonasCalendar('jmcblack', 'jmcblack', 'jmcblack');
+    	
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+    }
+    
+    /**
+     * try to read an event of the personal calendar of rwright
+     *  -> no access
+     */
+    public function testReadGrantByContainerFail()
+    {
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
+        
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+    }
+    
+    /**
+     * reads an event of the personal calendar of rwight
+     *  -> test user is attender
+     */
+    public function testReadGrantByAttender()
+    {
+    	$persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', NULL);
+    	
+    	/*
+        $event = $this->_getEvent();
+        unset($event->attendee[1]);
+        $persistentEvent = $this->_uit->create($event);
+        
+        // we need to adopt conainer through backend, to bypass rights control
+        $persistentEvent->container_id = $this->_personasDefaultCals['rwright']->getId();
+        $persistentEvent->organizer = $this->_personas['rwright']->getId();
+        $this->_backend->update($persistentEvent);
+        */
+        
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+    }
+    
+    /**
+     * reads an event of the personal calendar of rwright
+     *  -> set testuser to organizer!
+     */
+    public function testReadGrantByOrganizer()
+    {
+    	$persistentEvent = $this->_createEventInPersonasCalendar('rwright', NULL, 'rwright');
+    	
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+    }
+    
+    /**
+     * reads an event of the personal calendar of rwright
+     *  -> sclever is attender -> testuser has readGrant for scelver
+     */
+    public function testReadGrantByInheritedAttendeeContainerGrants()
+    {
+    	$persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'sclever');
+    	
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+    }
+    
+    
+    /**
+     * 
+     * @return unknown_type
+     *
     public function testCreateEvent()
     {
         $event = $this->_getEvent();
@@ -145,47 +172,18 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
         ));
         $persitentEvent = $this->_controller->create($event);
         
-//        $db = Tinebase_Core::getDb();
-//        $_backend = new Calendar_Backend_Sql();
-//        $_select = $_backend->getTestSelect();
-//        
-//        $_select->joinLeft(
-//                /* table  */ array('attendee' => $_backend->getTablePrefix() . 'cal_attendee'), 
-//                /* on     */ $db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $db->quoteIdentifier('cal_events.id'));//,
-//                ///* select */ array());
-//        
-//        $_select->joinLeft(
-//                /* table  */ array('dispgrants' => $_backend->getTablePrefix() . 'container_acl'), 
-//                /* on     */ $db->quoteIdentifier('dispgrants.container_id') . ' = ' . $db->quoteIdentifier('attendee.displaycontainer_id') . 
-//                               ' AND ' . self::getContainGrantCondition('dispgrants'));
-//                ///* select */ array());
-//                
-//        $_select->joinLeft(
-//                /* table  */ array('physgrants' => $_backend->getTablePrefix() . 'container_acl'), 
-//                /* on     */ $db->quoteIdentifier('physgrants.container_id') . ' = ' . $db->quoteIdentifier('cal_events.container_id'));//,
-//                ///* select */ array());
-//                
-//        
-//                
-//        echo $_select;
-//        die();
-        
-//        $stmt = $db->query($_select);
-        //print_r($stmt->fetchAll());
-        
-        //self::getContainGrantCondition('disgrants', Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_READ);
-        
         $this->assertEquals($event->description, $persitentEvent->description);
         $this->assertTrue($event->dtstart->equals($persitentEvent->dtstart));
         $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $persitentEvent->originator_tz);
         
         return $persitentEvent;
     }
+    */
     
     /**
      * part of generic controller, but needs to be tested somewhere...
      *
-     */
+     *
     public function testDeleteACL()
     {
         $event = $this->_getEvent();
@@ -197,10 +195,11 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_AccessDenied');
         $this->_controller->delete($persitentEvent->getId());
     }
+    */
     
     /**
      * tests implicit READ grants for organizer and participants
-     */
+     *
     public function testImplicitOrganizerGrants()
     {
         $event = $this->_getEvent();
@@ -229,6 +228,7 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persitentEvent->getId());
     }
+    */
     
     /**
      * this testcase is wrong. the acl filter _always_ includes a container filter by design
@@ -237,7 +237,7 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
      * - an owner free personal container does not occour in real operation!
      * - if current user is attender and the event is in one of his personal containers, always the container is implied in the acl filter!
      *
-     */
+     *
     public function testImplicitAttendeeGrants()
     {
         $event = $this->_getEvent();
@@ -245,11 +245,11 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
             array(
                 'user_id'   => Tinebase_Core::getUser()->getId(),
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-            ),/*
-            array(
-                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP
-            )*/
+            ),
+            //array(
+            //    'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
+            //    'user_type' => Calendar_Model_Attender::USERTYPE_GROUP
+            //)
         ));
         
         $persitentEvent = $this->_controller->create($event);
@@ -274,7 +274,13 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
         $this->_controller->update($persitentEvent);
         $this->_controller->delete(($persitentEvent->getId()));
     }
+    */
     
+    
+    /**
+     * 
+     * @return unknown_type
+     *
     public function testSetAttendeeStatusViaSaveEvent()
     {
         $event = $this->_getEvent();
@@ -283,7 +289,6 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
         
         print_r($event->toArray());
         
-        /*
         $eventData = $this->testCreateEvent();
         $eventData['container_id'] = $eventData['container_id']['id'];
         
@@ -299,46 +304,169 @@ class Calendar_Controller_EventGrantsTests extends PHPUnit_Framework_TestCase
         $loadedEventData = $this->_uit->getEvent($eventData['id']);
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $eventData['attendee'][0]['status']);
         $this->assertNotEquals($eventData['summary'], $loadedEventData['summary'], 'event must not be updated!');
-        */
+    }
+    */
+    
+    protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL)
+    {
+    	$calendarId  = $this->_personasDefaultCals[$_calendarPersona]->getId();
+        $organizerId = $_organizerPersona ? $this->_personas[$_organizerPersona]->getId() : Tinebase_Core::getUser()->getId();
+        $attenderId  = $_attenderPersona ? $this->_personas[$_attenderPersona]->getId() : Tinebase_Core::getUser()->getId();
+        
+    	$event = $this->_getEvent();
+    	$event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_id'        => $attenderId,
+                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+            )
+        ));
+        $persistentEvent = $this->_uit->create($event);
+        
+        // we need to adopt conainer through backend, to bypass rights control
+        $persistentEvent->container_id = $calendarId;
+        $persistentEvent->organizer = $organizerId;
+        $this->_backend->update($persistentEvent);
+        
+        return $persistentEvent;
     }
     
     /**
-     * returns a simple event
-     *
-     * @return Calendar_Model_Event
+     * set up personas personal container grants:
+     * 
+     *  jsmith:    anyone readGrant, addGrant, editGrant, deleteGrant
+     *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant
+     *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
+     *  jmcblack:  prim group of testuser readGrant
+     *  rwright:   nothing
      */
-    protected function _getEvent()
+    protected function _setupTestCalendars()
     {
-        return new Calendar_Model_Event(array(
-            'summary'     => 'Mittagspause',
-            'dtstart'     => '2009-04-06 13:00:00',
-            'dtend'       => '2009-04-06 13:30:00',
-            'description' => 'Wieslaw Brudzinski: Das Gesetz garantiert zwar die Mittagspause, aber nicht das Mittagessen...',
+        // jsmith:     anyone readGrant, addGrant, editGrant, deleteGrant
+        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jsmith'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['jsmith']->getId(),
+            'account_type'  => 'user',
+            'readGrant'     => true,
+            'addGrant'      => true,
+            'editGrant'     => true,
+            'deleteGrant'   => true,
+            'adminGrant'    => true,
+        ), array(
+            'account_id'    => 0,
+            'account_type'  => 'anyone',
+            'readGrant'     => true,
+            'addGrant'      => true,
+            'editGrant'     => true,
+            'deleteGrant'   => true,
+            'adminGrant'    => false,
+        ))), true);
         
-            'container_id' => $this->_testCalendar->getId(),
-        ));
+        // pwulf:      anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant
+        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['pwulf'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['pwulf']->getId(),
+            'account_type'  => 'user',
+            'readGrant'     => true,
+            'addGrant'      => true,
+            'editGrant'     => true,
+            'deleteGrant'   => true,
+            'adminGrant'    => true,
+        ), array(
+            'account_id'    => 0,
+            'account_type'  => 'anyone',
+            'readGrant'     => true,
+            'addGrant'      => false,
+            'editGrant'     => false,
+            'deleteGrant'   => false,
+            'adminGrant'    => false,
+        ), array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            'readGrant'     => true,
+            'addGrant'      => true,
+            'editGrant'     => true,
+            'deleteGrant'   => true,
+            'adminGrant'    => false,
+        ))), true);
+        
+        // sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
+        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            'readGrant'     => true,
+            'addGrant'      => true,
+            'editGrant'     => true,
+            'deleteGrant'   => true,
+            'adminGrant'    => true,
+        ),array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'readGrant'     => true,
+            'addGrant'      => true,
+            'editGrant'     => true,
+            'deleteGrant'   => true,
+            'adminGrant'    => false,
+        ))), true);
+        
+        // jmacblack: prim group of testuser readGrant
+        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jmcblack'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['jmcblack']->getId(),
+            'account_type'  => 'user',
+            'readGrant'     => true,
+            'addGrant'      => true,
+            'editGrant'     => true,
+            'deleteGrant'   => true,
+            'adminGrant'    => true,
+        ),array(
+            'account_id'    => Tinebase_Core::getUser()->accountPrimaryGroup,
+            'account_type'  => 'group',
+            'readGrant'     => true,
+            'addGrant'      => false,
+            'editGrant'     => false,
+            'deleteGrant'   => false,
+            'adminGrant'    => false,
+        ))), true);
+        
+        // rwright:   nothing
+        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['rwright'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['rwright']->getId(),
+            'account_type'  => 'user',
+            'readGrant'     => true,
+            'addGrant'      => true,
+            'editGrant'     => true,
+            'deleteGrant'   => true,
+            'adminGrant'    => true,
+        ))), true);
     }
     
-    protected function _getAttendee()
+    /**
+     * resets all grants of personas calendars and deletes events from it
+     */
+    protected function cleanupTestCalendars()
     {
-        return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array(
-                'user_id'   => Tinebase_Core::getUser()->getId(),
-                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-            ),
-            array(
-                'user_id'   => Tinebase_User::getInstance()->getUserByLoginName('sclever')->getId(),
-            ),
-            array(
-                'user_id'   => Tinebase_User::getInstance()->getUserByLoginName('sclever')->getId(),
-            ),
-            array(
-                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP
-            )
-        ));
+    	foreach ($this->_personasDefaultCals as $loginName => $calendar) {
+    		Tinebase_Container::getInstance()->setGrants($calendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+	            'account_id'    => $this->_personas[$loginName]->getId(),
+	            'account_type'  => 'user',
+	            'readGrant'     => true,
+	            'addGrant'      => true,
+	            'editGrant'     => true,
+	            'deleteGrant'   => true,
+	            'adminGrant'    => true,
+	        ))), true);
+	        
+	    	$events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+	            array('field' => 'container_id', 'operator' => 'equals', 'value' => $calendar->getId()),
+	        )), new Tinebase_Model_Pagination(array()));
+	        
+	        // delete alarms
+	        Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord('Calendar_Model_Event', $events->getArrayOfIds());
+	        
+	        // delete events
+	        foreach ($events as $event) {
+	            $this->_backend->delete($event->getId());
+	        }
+    	}
     }
-    
 }
     
 
