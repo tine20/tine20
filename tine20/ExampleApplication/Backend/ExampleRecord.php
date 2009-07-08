@@ -24,7 +24,7 @@ class ExampleApplication_Backend_ExampleRecord extends Tinebase_Backend_Sql_Abst
      *
      * @var string
      */
-    protected $_tableName = 'application_record';
+    protected $_tableName = 'example_application_record';
     
     /**
      * Model name

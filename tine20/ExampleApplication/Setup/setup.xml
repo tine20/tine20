@@ -7,7 +7,7 @@
     <status>disabled</status>
     <tables>
         <table>
-            <name>application_record</name>
+            <name>example_application_record</name>
             <version>1</version>
             <declaration>
                 <field>
