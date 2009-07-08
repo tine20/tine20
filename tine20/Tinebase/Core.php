@@ -418,7 +418,7 @@ class Tinebase_Core
         define('TINE20_CODENAME',      getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
         define('TINE20_RELEASETIME',   'none');
-
+                
         $session = new Zend_Session_Namespace('tinebase');
         
         if (!isset($session->jsonKey)) {
