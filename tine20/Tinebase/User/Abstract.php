@@ -313,7 +313,7 @@ abstract class Tinebase_User_Abstract
      */
     public function resolveUsers(Tinebase_Record_Abstract $_record, $_userProperties, $_addNonExistingUsers = FALSE)
     {
-    	$recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_Abstract', $_record);
+    	$recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_Abstract', array($_record));
     	$this->resolveMultipleUsers($recordSet, $_userProperties, $_addNonExistingUsers);
     }
     
@@ -339,8 +339,7 @@ abstract class Tinebase_User_Abstract
             foreach ((array)$_userProperties as $property) {
             	if ($record->$property) {
             	    $idx = $users->getIndexById($record->$property);
-            	    
-            	    $user = $idx ? $users[$idx] : NULL;
+            	    $user = $idx !== false ? $users[$idx] : NULL;
             	    
             	    if (!$user && $_addNonExistingUsers) {
             	        $user = $nonExistingUser;

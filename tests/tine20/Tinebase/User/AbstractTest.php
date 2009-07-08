@@ -30,6 +30,11 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
      * @var Tinebase_User_Abstract
      */
     protected $_uit = NULL;
+    
+    /**
+     * @var array test objects
+     */
+    protected $_objects = array();
 
     /**
      * Runs the test methods of this class.
@@ -62,6 +67,7 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+    	$this->_deleteDummyUsers();
     }
     
     /**
@@ -99,5 +105,87 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
         Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($outCache);
         $this->assertEquals('username', $outCache->username);
         $this->assertEquals('secret', $outCache->password);
+    }
+        
+    public function testResolveUsersWithOneField()
+    {
+        $this->_createAndStoreDummyUsers(1);
+               
+        // test resolveUsers with one record and one field
+        $dummyUser = $this->_objects[0];
+        $dummyRecord = new Tinebase_Record_DummyRecord(array('test_1' => $dummyUser->getId()), true);
+
+        $this->assertFalse($dummyRecord->test_1 instanceof Tinebase_Model_User);
+        $this->_uit->resolveUsers($dummyRecord, 'test_1');
+        $this->assertTrue($dummyRecord->test_1 instanceof Tinebase_Model_User);
+     }
+     
+     public function testResolveUsersWithMultipleFields()
+     {
+        $this->_createAndStoreDummyUsers(2);
+        $dummyRecord = new Tinebase_Record_DummyRecord(array('test_1' => $this->_objects[0]->getId(), 'test_2' => $this->_objects[1]->getId()), true);
+
+        $this->_uit->resolveUsers($dummyRecord, array('test_1', 'test_2'));
+        $this->assertTrue($dummyRecord->test_1 instanceof Tinebase_Model_User);
+        $this->assertTrue($dummyRecord->test_2 instanceof Tinebase_Model_User);
+        $this->assertNotEquals($dummyRecord->test_1->getId(), $dummyRecord->test_2->getId());
+     }
+     
+    public function testResolveMultipleUsersWithMultipleFields()
+    {
+        $this->_createAndStoreDummyUsers(3);
+               
+        $dummyRecordSet = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $dummyRecordSet->addRecord(new Tinebase_Record_DummyRecord(array('test_1' => $this->_objects[0]->getId(), 'test_2' => $this->_objects[1]->getId()), true));
+        $dummyRecordSet->addRecord(new Tinebase_Record_DummyRecord(array('test_1' => $this->_objects[0]->getId()), true));
+        $this->_uit->resolveMultipleUsers($dummyRecordSet, array('test_1', 'test_2'));
+        $this->assertTrue($dummyRecordSet[0]->test_1 instanceof Tinebase_Model_User);
+        $this->assertEquals($dummyRecordSet[0]->test_1->getId(), $this->_objects[0]->getId());
+        $this->assertTrue($dummyRecordSet[0]->test_2 instanceof Tinebase_Model_User);
+        $this->assertTrue($dummyRecordSet[1]->test_1 instanceof Tinebase_Model_User);
+        $this->assertNull($dummyRecordSet[1]->test_2);
+    }
+
+    public function testResolveUserWithNonExistentUser()
+    {
+    	$dummyId = Tinebase_Record_Abstract::generateUID();
+
+        $dummyRecord = new Tinebase_Record_DummyRecord(array('test_1' => $dummyId), true);
+
+        //test without option "addNonExistentUsers"
+        $this->_uit->resolveUsers($dummyRecord, 'test_1', false);
+        $this->assertFalse($dummyRecord->test_1 instanceof Tinebase_Model_User);
+        $this->assertEquals($dummyRecord->test_1, $dummyId);
+        
+        //test with option "addNonExistentUsers"
+        $dummyRecord = new Tinebase_Record_DummyRecord(array('test_1' => $dummyId), true);
+
+        $this->_uit->resolveUsers($dummyRecord, 'test_1', true);
+        $this->assertTrue($dummyRecord->test_1 instanceof Tinebase_Model_User);
+        $this->assertEquals($dummyRecord->test_1->accountFirstName, $this->_uit->getNonExistentUser()->accountFirstName);
+    }
+    
+    protected function _createAndStoreDummyUsers($count)
+    {
+        for ($i=0; $i<$count; $i++) {
+            $dummyUser = new Tinebase_Model_FullUser(array(
+                'accountLoginName'      => 'dummy_'.$i,
+                'accountStatus'         => 'enabled',
+                'accountExpires'        => NULL,
+                'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+                'accountLastName'       => 'Dummy',
+                'accountFirstName'      => 'No.'.$i,
+                'accountEmailAddress'   => 'phpunit@metaways.de'
+            ));
+            $this->_uit->addUser($dummyUser);
+            $this->_objects[] = $dummyUser; 
+        }
+    }
+    
+    protected function _deleteDummyUsers()
+    {
+        foreach ($this->_objects as $object) {
+            $this->_uit->deleteUser($object->getId());
+        }
     }
 }       
