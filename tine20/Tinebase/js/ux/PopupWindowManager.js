@@ -222,7 +222,7 @@ Ext.ux.PopupWindowGroup.getMainWindow = function() {
         }
     } catch (e) {
         // lets reuse this window
-        w.NamedNodeMap = Ext.ux.PopupWindowGroup.MainWindowName;
+        w.name = Ext.ux.PopupWindowGroup.MainWindowName;
         return false;
     }
     return w;
