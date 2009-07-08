@@ -2232,7 +2232,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         ');
         $this->_backend->alterCol('addressbook', $declaration);
         
-        /** addressbook: store image in separat table **/
+        /** addressbook: store image in separate table **/
         $tableDefinition = '
             <table>
                 <name>addressbook_image</name>
@@ -2326,6 +2326,9 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
             
             // the actual charset conversion is done by the db.
             foreach ($tables as $tableName) {
+                
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Converting table ' . $tableName);
+                
                 //$this->_db->query("SET character_set_client = '$originalCharset'");
                 
                 $select = $orgDb->select()->from($tableName);
@@ -2335,7 +2338,26 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 //$this->_db->query("SET character_set_client = 'utf8'");
                 
                 foreach ($result as $row) {
-                    $this->_db->insert($tableName, $row);
+                    try {
+                        $this->_db->insert($tableName, $row);
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                        
+                        // try to convert strings if failure
+                        if (preg_match('/(description|title|note)/', $zdse->getMessage(), $match)) {
+                            $field = $match[1];
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                . ' Converting field ' . $field 
+                                . ((array_key_exists('id', $row)) ? ' of record ' . $row['id'] : '') 
+                                //. ' value: ' . $row[$field]
+                            );
+                            $row[$field] = utf8_encode($row[$field]);
+                            $this->_db->insert($tableName, $row);
+                        } else {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not convert field');
+                            throw $zdse;
+                        }
+                    }
                 }
             
                 
