@@ -378,7 +378,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if (    !$this->_doContainerACLChecks 
             // admin grant includes all others
-            ||  $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADMIN)) {
+            ||  ($_record->container_id && $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADMIN))) {
             return TRUE;
         }
 
