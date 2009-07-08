@@ -186,9 +186,10 @@ function concatJs(array $_files, $_filename)
         if (file_exists("$tine20path/$filename")) {
             fwrite($jsDebug, '// file: ' . "$tine20path/$filename" . "\n");
             $jsContent = file_get_contents("$tine20path/$filename");
-            $jsContent = preg_replace('/Tine\.clientVersion\.codeName.*;/i',  "Tine.clientVersion.codeName = '$revisionInfo';", $jsContent);
-            $jsContent = preg_replace('/Tine\.clientVersion\.buildType.*;/i', "Tine.clientVersion.buildType = 'DEBUG';", $jsContent);
-            $jsContent = preg_replace('/Tine\.clientVersion\.buildDate.*;/i', "Tine.clientVersion.buildDate = '" . Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG) . "';", $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.codeName.*;/i',      "Tine.clientVersion.codeName = '$revisionInfo';", $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.buildType.*;/i',     "Tine.clientVersion.buildType = 'DEBUG';", $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.buildDate.*;/i',     "Tine.clientVersion.buildDate = '" . Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG) . "';", $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.packageString.*;/i', "Tine.clientVersion.packageString = 'none';", $jsContent);
             //$jsContent = preg_replace('/\$.*Build:.*\$/i', $build, $jsContent);
             fwrite($jsDebug, $jsContent . "\n");
         }
