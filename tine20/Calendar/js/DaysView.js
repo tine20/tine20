@@ -567,31 +567,33 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     field.focus(true, 100);
                 },
                 blur: this.endEditSummary,
-                specialkey: this.endEditSummary
+                specialkey: this.endEditSummary/*,
+                keydown: this.endEditSummary*/
             }
             
         });
     },
     
     endEditSummary: function(field, e) {
+    	var event   = field.event;
+    	var summary = field.getValue();
+    	
         if (! this.editing) {
             return;
-        }
-        this.editing = false;
-        
-        var summary = field.getValue();
-        var event = field.event;
-        event.summaryEditor = false;
-        
-        // abort edit on ESC key
-        if (! summary || (e && e.getKey() == e.ESC)) {
-            return this.abortCreateEvent(event);
         }
         
         // only commit edit on Enter & blur
         if (e && e.getKey() != e.ENTER) {
             return;
         }
+        
+        // abort edit on ESC key
+        if (! summary || (e && e.getKey() == e.ESC)) {
+            return this.abortCreateEvent(event);
+        }
+        
+        this.editing = false;
+        event.summaryEditor = false;
         
         event.set('summary', summary);
         
@@ -649,6 +651,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             }), newId);
             
             this.createEvent(e, event);
+            event.dirty = true;
         } else if (target.className == 'cal-daysviewpanel-dayheader-day'){
             var dayHeaders = Ext.DomQuery.select('div[class=cal-daysviewpanel-dayheader-day]', this.innerHd);
             var date = this.startDate.add(Date.DAY, dayHeaders.indexOf(target));
