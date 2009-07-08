@@ -397,7 +397,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = array(
             'login_name'        => $_account->accountLoginName,
             'status'            => $_account->accountStatus,
-            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getTimestamp() : NULL),
+            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
             'primary_group_id'  => $_account->accountPrimaryGroup,
             'home_dir'          => $_account->accountHomeDirectory,
             'login_shell'       => $_account->accountLoginShell,
