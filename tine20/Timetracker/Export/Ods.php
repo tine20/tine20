@@ -37,7 +37,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      *
      * @var array
      */
-    protected $_specialFields = array('timeaccount', 'account');
+    protected $_specialFields = array('timeaccount', 'account_id', 'created_by');
     
     /**
      * export timesheets to Ods file
@@ -55,9 +55,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         $timeaccountIds = $timesheets->timeaccount_id;
         $this->_resolvedRecords['timeaccounts'] = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
         
-        // resolve accounts
-        $accountIds = $timesheets->account_id;
-        $this->_resolvedRecords['accounts'] = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+        Tinebase_User::getInstance()->resolveMultipleUsers($timesheets, 'account_id', true);
         
         // build export table
         $table = $this->getBody()->appendTable('Timesheets');        
@@ -85,9 +83,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
         $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->search($_filter);
         $lastCell = count($timeaccounts) + $this->_firstRow - 1;
         
-        // resolve accounts
-        $accountIds = $timeaccounts->created_by;
-        $this->_resolvedRecords['accounts'] = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+        Tinebase_User::getInstance()->resolveMultipleUsers($timeaccounts, 'created_by', true);
         
         // build export table
         $table = $this->getBody()->appendTable($this->_translate->_('Timesheets'));        
@@ -201,7 +197,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
                 ),
                 'account_id' => array(
                     'header'    => $this->_translate->_('Staff Member'),
-                    'type'      => 'account', 
+                    'type'      => 'account_id', 
                     'field'     => 'accountDisplayName', 
                     'width'     => '4cm'
                 ),
@@ -249,7 +245,7 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
                 ),
                 'created_by' => array(
                     'header'    => $this->_translate->_('Created By'),
-                    'type'      => 'account', 
+                    'type'      => 'created_by', 
                     'field'     => 'accountDisplayName', 
                     'width'     => '4cm'
                 ),
@@ -300,8 +296,9 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
             case 'timeaccount':
                 $value = $this->_resolvedRecords['timeaccounts'][$this->_resolvedRecords['timeaccounts']->getIndexById($_record->timeaccount_id)]->$_param['field'];
                 break;
-            case 'account':
-                $value = $this->_resolvedRecords['accounts'][$this->_resolvedRecords['accounts']->getIndexById($_record->$key)]->$_param['field'];
+            case 'account_id':
+            case 'created_by':
+                $value = $_record->$_param['type']->$_param['field'];
                 break;
         }        
         return $value;
