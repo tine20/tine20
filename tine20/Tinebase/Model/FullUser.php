@@ -83,6 +83,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountHomeDirectory'  => array('allowEmpty' => true),
             'accountLoginShell'     => array('allowEmpty' => true),
             'sambaSAM'              => array('allowEmpty' => true),
+            'contact_id'            => array('allowEmpty' => true),
         );
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);

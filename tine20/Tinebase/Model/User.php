@@ -54,7 +54,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'accountLastName'       => array('presence' => 'required'),
         'accountFirstName'      => array('allowEmpty' => true),
         'accountFullName'       => array('presence' => 'required'),
-    
+        'contact_id'            => array('allowEmpty' => true),
     );
     
     /**
