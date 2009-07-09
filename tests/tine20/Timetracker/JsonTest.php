@@ -404,7 +404,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      * try to export Timesheets
      * - this is no real json test
      * 
-     * @todo move that to separate export test
+     * @todo move that to separate export test?
      */
     public function testExportTimesheetsCsv()
     {
@@ -431,8 +431,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      * try to export Timesheets (as ods)
      * - this is no real json test
      * 
-     * @todo move that to separate export test
      * @todo check custom fields
+     * @todo move that to separate export test?
      */
     public function testExportTimesheetsOds()
     {
@@ -462,7 +462,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      * try to export Timeaccounts (as ods)
      * - this is no real json test
      * 
-     * @todo move that to separate export test
+     * @todo check if user is correctly resolved
+     * @todo move that to separate export test?
      */
     public function testExportTimeaccountsOds()
     {
