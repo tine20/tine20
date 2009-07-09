@@ -61,7 +61,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $_record['timeaccount_id'] = $_record['timeaccount_id'] ? $this->_timeaccountController->get($_record['timeaccount_id']) : $_record['timeaccount_id'];
                 $_record['timeaccount_id']['account_grants'] = Timetracker_Model_TimeaccountGrants::getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_record['timeaccount_id']);
                 $_record['timeaccount_id']['account_grants'] = $this->getTimesheetGrantsByTimeaccountGrants($_record['timeaccount_id']['account_grants'], $_record['account_id']);
-                $_record['account_id'] = $_record['account_id'] ? Tinebase_User::getInstance()->getUserById($_record['account_id']) : $_record['account_id'];
+                Tinebase_User::getInstance()->resolveUsers($_record, 'account_id');
                 
                 $recordArray = parent::_recordToJson($_record);
                 break;
