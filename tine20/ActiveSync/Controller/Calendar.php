@@ -232,17 +232,34 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek)));
                     }
                     break;
+                case Calendar_Model_Rrule::FREQ_YEARLY:
+                    if(!empty($rrule->bymonthday)) {
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_YEARLY));
+                        
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfMonth', $rrule->bymonthday));
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MonthOfYear', $rrule->bymonth));
+                    } else {
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_YEARLY_DAYN));
+
+                        $weekOfMonth = (int) substr($rrule->byday, 0, -2);
+                        $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth; 
+                        $dayOfWeek   = substr($rrule->byday, -2);
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'WeekOfMonth', $weekOfMonth));
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek)));
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MonthOfYear', $rrule->bymonth));
+                    }
+                    break;
             }
-            $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
+            
+            if ($rrule->freq != Calendar_Model_Rrule::FREQ_YEARLY) {
+                $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
+            }
             
             if($rrule->until instanceof Zend_Date) {
                 $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Until', $rrule->until->toString('yyyyMMddTHHmmss') . 'Z'));
             }
-            
+                        
             //Occurences
-            //WeekOfMonth
-            //MonthOfYear
-            //DayOfMonth
         }
                 
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
