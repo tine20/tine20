@@ -123,13 +123,13 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _recordToJson($_task)
     {
         $_task->setTimezone($this->_userTimezone);
+        Tinebase_User::getInstance()->resolveUsers($_task, 'organizer', true);
         $_task->bypassFilters = true;
         $taskArray = $_task->toArray();
         
         $taskArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray();
         $taskArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_task->container_id)->toArray();
         
-        $taskArray['organizer'] = $taskArray['organizer'] ? Tinebase_User::getInstance()->getUserById($taskArray['organizer'])->toArray() : $taskArray['organizer'];
         return $taskArray;
     }
     

@@ -156,38 +156,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
     }
-    
-    /**
-     * test get status
-     *
-     */
-    public function testGetStatus()
-    {
-        $task = $this->_getTask();
-        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
-        $status = $this->_backend->getAllStatus();
-        
-        $this->assertGreaterThan(0, count($status));
-        $this->assertNotEquals('', $status[0]['status_name']);
-        
-        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
-    }
-    
-    /**
-     * test get registry data
-     *
-     */
-    public function testGetRegistryData()
-    {
-        $task = $this->_getTask();
-        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
-        $regData = $this->_backend->getRegistryData();
-        
-        $this->assertGreaterThan(0, count($regData['AllStatus']));
-        $this->assertNotEquals('', $regData['AllStatus'][0]['status_name']);
-        
-        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
-    }
 
     /**
      * test delete organizer of task (and then search task and retrieve single task) 
@@ -225,16 +193,43 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($tasks['results'][0]['organizer']['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName);
 
         // test get single task - organizer is deleted
-        try {
-            $task = $this->_backend->getTask($taskId);
-        }
-        catch (Tinebase_Exception_NotFound $expected) {
-          //cleanup test data
-          $this->_backend->deleteTasks(Zend_Json::encode(array($taskId)));
-          return;
-        }
+        $task = $this->_backend->getTask($taskId);
+        $this->assertEquals($task['organizer']['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName);
         
-        $this->fail('Expected Tinebase_Exception_NotFound exception');
+        //Cleanup test objects
+        $this->_backend->deleteTasks(Zend_Json::encode(array($taskId)));
+    }
+    
+    /**
+     * test get status
+     *
+     */
+    public function testGetStatus()
+    {
+        $task = $this->_getTask();
+        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $status = $this->_backend->getAllStatus();
+        
+        $this->assertGreaterThan(0, count($status));
+        $this->assertNotEquals('', $status[0]['status_name']);
+        
+        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
+    }
+    
+    /**
+     * test get registry data
+     *
+     */
+    public function testGetRegistryData()
+    {
+        $task = $this->_getTask();
+        $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $regData = $this->_backend->getRegistryData();
+        
+        $this->assertGreaterThan(0, count($regData['AllStatus']));
+        $this->assertNotEquals('', $regData['AllStatus'][0]['status_name']);
+        
+        $this->_backend->deleteTasks(Zend_Json::encode(array($returned['id'])));
     }
     
     /**
