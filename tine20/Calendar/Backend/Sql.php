@@ -190,11 +190,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_DELETE) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_DELETE) . " \n" .
                  ")",
-                Tinebase_Model_Container::ADMINGRANT => "\n MAX( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', Tinebase_Model_Container::GRANT_ADMIN) . " OR \n" . 
-                    '  /* implicit  */' . $this->_getImplicitGrantCondition(Tinebase_Model_Container::GRANT_ADMIN) . " OR \n" .
-                    '  /* inherited */' . $this->_getInheritedGrantCondition(Tinebase_Model_Container::GRANT_ADMIN) . " \n" .
-                 ")",
             ));
     }
     
@@ -280,9 +275,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $userExpr = new Zend_Db_Expr($this->_db->quoteIdentifier('attendeecontacts.account_id'));
             
             $attenderPhysGrantCond = $this->_getContainGrantCondition('physgrants', 'attendeegroupmemberships', $_requiredGrant, $userExpr);
-            $attenderImplicitGrantCond = $this->_getImplicitGrantCondition($_requiredGrant, $userExpr);
+            // NOTE: this condition is weak! Not some attendee must have implicit grant.
+            //       -> an attender we have reqired grants for his diplay cal must have implicit grants
+            //$attenderImplicitGrantCond = $this->_getImplicitGrantCondition($_requiredGrant, $userExpr);
             
-            $sql = "($sql) AND ($attenderPhysGrantCond) OR ($attenderImplicitGrantCond)";
+            //$sql = "($sql) AND ($attenderPhysGrantCond) OR ($attenderImplicitGrantCond)";
+            $sql = "($sql) AND ($attenderPhysGrantCond)";
         }
         
         return "($sql)";

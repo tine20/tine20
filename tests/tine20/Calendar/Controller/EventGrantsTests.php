@@ -45,7 +45,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
          *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant
          *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
          *  jmcblack:  prim group of testuser readGrant
-         *  rwright:   nothing
+         *  rwright:   sclever has readGrant and editGrant
          */
         $this->_setupTestCalendars();
         
@@ -60,38 +60,44 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     
     /**
      * reads an event of the personal calendar of jsmith
-     *  -> anyone has readGrant
+     *  -> anyone has readGrant, editGrant and deleteGrant
      */
-    public function testReadGrantByContainerAnyone()
+    public function testGrantsByContainerAnyone()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('jsmith', 'jsmith', 'jsmith');
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->editGrant);
+        $this->assertTrue((bool)$loadedEvent->deleteGrant);
     }
     
     /**
      * reads an event of the personal calendar of sclever
-     *  -> test user has readGrant
+     *  -> test user has readGrant, editGrant and deleteGrant
      */
-    public function testReadGrantByContainerUser()
+    public function testGrantsByContainerUser()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('sclever', 'sclever', 'sclever');
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->editGrant);
+        $this->assertTrue((bool)$loadedEvent->deleteGrant);
     }
     
     /**
      * reads an event of the personal calendar of jmcblack
      *  -> default group of testuser has readGrant
      */
-    public function testReadGrantByContainerGroup()
+    public function testGrantsByContainerGroup()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('jmcblack', 'jmcblack', 'jmcblack');
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertFalse((bool)$loadedEvent->editGrant);
+        $this->assertFalse((bool)$loadedEvent->deleteGrant);
     }
     
     /**
@@ -108,38 +114,44 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     
     /**
      * reads an event of the personal calendar of rwight
-     *  -> test user is attender
+     *  -> test user is attender with implicit readGrant
      */
-    public function testReadGrantByAttender()
+    public function testGrantsByAttender()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', NULL);
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertFalse((bool)$loadedEvent->editGrant);
+        $this->assertFalse((bool)$loadedEvent->deleteGrant);
     }
     
     /**
      * reads an event of the personal calendar of rwright
-     *  -> set testuser to organizer!
+     *  -> set testuser to organizer! -> implicit readGrand and editGrant
      */
-    public function testReadGrantByOrganizer()
+    public function testGrantsByOrganizer()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', NULL, 'rwright');
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->editGrant);
+        $this->assertFalse((bool)$loadedEvent->deleteGrant);
     }
     
     /**
      * reads an event of the personal calendar of rwright
      *  -> sclever is attender -> testuser has readGrant for scelver
      */
-    public function testReadGrantByInheritedAttendeeContainerGrants()
+    public function testGrantsByInheritedAttendeeContainerGrants()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'sclever');
         
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
+        $this->assertTrue((bool)$loadedEvent->editGrant);
+        $this->assertFalse((bool)$loadedEvent->deleteGrant);
     }
     
     
@@ -186,84 +198,6 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     }
     */
     
-    /**
-     * tests implicit READ grants for organizer and participants
-     *
-    public function testImplicitOrganizerGrants()
-    {
-        $event = $this->_getEvent();
-        $event->organizer = Tinebase_Core::getUser()->getId();
-        
-        $persitentEvent = $this->_controller->create($event);
-        
-        // remove all container grants
-        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), true);
-        
-        $loadedEvent = $this->_controller->get($persitentEvent->getId());
-        $this->assertEquals($persitentEvent->getId(), $loadedEvent->getId(), 'organizer should have implicit read grant!');
-        
-        $persitentEvent->summary = 'Lunchtime';
-        $updatedEvent = $this->_controller->update($persitentEvent);
-        $this->assertEquals($persitentEvent->summary, $updatedEvent->summary, 'organizer should have implicit edit grant');
-        
-        $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId() + 1),
-        ));
-        
-        $foundEvents = $this->_controller->search($filter, new Tinebase_Model_Pagination());
-        $this->assertGreaterThanOrEqual(1, count($foundEvents), 'organizer should have implicit read rights in search action');
-        
-        $this->_controller->delete($persitentEvent->getId());
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        $this->_controller->get($persitentEvent->getId());
-    }
-    */
-    
-    /**
-     * this testcase is wrong. the acl filter _always_ includes a container filter by design
-     * if we remove ourselfes all container grants, the implicit grant is not resolveable any more!
-     * 
-     * - an owner free personal container does not occour in real operation!
-     * - if current user is attender and the event is in one of his personal containers, always the container is implied in the acl filter!
-     *
-     *
-    public function testImplicitAttendeeGrants()
-    {
-        $event = $this->_getEvent();
-        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array(
-                'user_id'   => Tinebase_Core::getUser()->getId(),
-                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-            ),
-            //array(
-            //    'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
-            //    'user_type' => Calendar_Model_Attender::USERTYPE_GROUP
-            //)
-        ));
-        
-        $persitentEvent = $this->_controller->create($event);
-        
-        // remove all container grants
-        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), true);
-        
-        $loadedEvent = $this->_controller->get($persitentEvent->getId());
-        $this->assertEquals($persitentEvent->getId(), $loadedEvent->getId(), 'attendee should have implicit read grant');
-
-        // in a group invitation, no displaycontainer_id is set for attendee!
-        // @todo rework group-invitations to directly expand group to attendee
-        $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'specialNode', 'value' => 'all'                   ),
-            array('field' => 'id',           'operator' => 'equals',      'value' => $persitentEvent->getId()),
-            
-        ));
-        $foundEvents = $this->_controller->search($filter, new Tinebase_Model_Pagination());
-        $this->assertGreaterThanOrEqual(1, count($foundEvents), 'attendee should have implicit read rights in search action');
-        
-        $this->setExpectedException('Tinebase_Exception_AccessDenied');
-        $this->_controller->update($persitentEvent);
-        $this->_controller->delete(($persitentEvent->getId()));
-    }
-    */
     
     
     /**
@@ -327,7 +261,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant
      *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant
      *  jmcblack:  prim group of testuser readGrant
-     *  rwright:   nothing
+     *  rwright:   sclever has readGrant and editGrant
      */
     protected function _setupTestCalendars()
     {
@@ -424,6 +358,14 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             'editGrant'     => true,
             'deleteGrant'   => true,
             'adminGrant'    => true,
+        ), array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            'readGrant'     => true,
+            'addGrant'      => false,
+            'editGrant'     => true,
+            'deleteGrant'   => false,
+            'adminGrant'    => false,
         ))), true);
     }
     
