@@ -39,13 +39,11 @@ class Timetracker_Export_Csv extends Tinebase_Export_Csv
         $timeaccountIds = $timesheets->timeaccount_id;
         $timeaccounts = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
         
-        // resolve accounts
-        $accountIds = $timesheets->account_id;
-        $accounts = Tinebase_User::getInstance()->getMultiple(array_unique(array_values($accountIds)));
+        Tinebase_User::getInstance()->resolveMultipleUsers($timesheets, 'account_id', true);
         
         foreach ($timesheets as $timesheet) {
             $timesheet->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($timesheet->timeaccount_id)]->title;
-            $timesheet->account_id = $accounts[$accounts->getIndexById($timesheet->account_id)]->accountDisplayName;
+            $timesheet->account_id = $timesheet->account_id->accountDisplayName;
         }
                 
         $filename = parent::exportRecords($timesheets);
