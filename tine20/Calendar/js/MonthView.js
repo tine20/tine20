@@ -24,7 +24,6 @@ Tine.Calendar.MonthView = function(config){
         /**
          * @event contextmenu
          * fired if an event got contextmenu 
-         * @param {Tine.Calendar.Model.Event} event
          * @param {Ext.EventObject} e
          */
         'contextmenu',
@@ -638,11 +637,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
     },
     
-    onContextMenu: function(e, target) {
-        var event = this.getTargetEvent(e);
-        if (event) {
-            this.fireEvent('contextmenu', event, e);
-        }
+    onContextMenu: function(e) {
+        this.fireEvent('contextmenu', e);
     },
     
     onDblClick: function(e, target) {

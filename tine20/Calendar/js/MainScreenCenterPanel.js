@@ -201,8 +201,32 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         //this.updateMiniCal();
     },
     
-    onContextMenu: function() {
+    onContextMenu: function(e) {
+        var view = this.getCalendarPanel(this.activeView).getView();
+        var event = view.getTargetEvent(e);
+        var datetime = view.getTargetDateTime(e);
         
+        var addAction;
+        if (datetime || event) {
+            var dtStart = datetime || event.get('dtstart').clone();
+            
+            addAction = {
+                text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.tranlation._hidden('Add {0}'), this.i18nRecordName),
+                handler: this.onEditInNewWindow.createDelegate(this, ["add", dtStart]),
+                iconCls: 'action_add'
+            };
+        } else {
+            addAction = this.action_addInNewWindow;
+        }
+        
+        if (event) {
+            view.getSelectionModel().select(event, e, e.ctrlKey);
+        }
+           
+        var ctxMenu = new Ext.menu.Menu({
+            items: this.recordActions.concat(addAction)
+        });
+        ctxMenu.showAt(e.getXY());
     },
     
     onDeleteRecords: function() {
@@ -381,7 +405,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     /**
      * @param {String} action add|edit
      */
-    onEditInNewWindow: function(action) {
+    onEditInNewWindow: function(action, dtStart) {
         var event = null;
         
         if (action == 'edit') {
@@ -394,6 +418,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         if (! event) {
             event = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData(), 0);
+            if (Ext.isDate(dtStart)) {
+                event.set('dtstart', dtStart);
+                event.set('dtend', dtStart.add(Date.HOUR, 1));
+            }
         }
         
         Tine.Calendar.EventEditDialog.openWindow({

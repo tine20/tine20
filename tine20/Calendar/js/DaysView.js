@@ -618,10 +618,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     onContextMenu: function(e) {
-        var event = this.getTargetEvent(e);
-        if (event) {
-            this.fireEvent('contextmenu', event, e);
-        }
+        this.fireEvent('contextmenu', e);
     },
     
     /**
