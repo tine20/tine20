@@ -24,7 +24,6 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     
     initComponent: function() {
         this.currentAccount = Tine.Tinebase.registry.get('currentAccount');
-        console.log(Tine.Tinebase.registry);
         
         // check if we have the version in registry (is not the case in the setup)
         if(! Tine.Tinebase.registry.get('version') || Tine.Tinebase.registry.get('version').buildType != 'RELEASE') {
