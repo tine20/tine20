@@ -15,12 +15,17 @@ Ext.ux.DatePickerWeekPlugin = function(config) {
 };
 
 Ext.ux.DatePickerWeekPlugin.prototype = {
+    /**
+     * @cfg {String} weekHeaderString
+     */
+    weekHeaderString: 'WK',
     
     init: function(picker) {
         picker.onRender = picker.onRender.createSequence(this.onRender, picker);
         picker.update = picker.update.createSequence(this.update, picker);
         picker.handleDateClick = picker.handleDateClick.createSequence(this.handleDateClick, picker);
         picker.showMonthPicker = picker.showMonthPicker.createInterceptor(this.inspectMonthPickerClick, picker);
+        picker.weekHeaderString = this.weekHeaderString;
         
         picker.getRowEl = this.getRowEl.createDelegate(picker);
         picker.selectWeek = this.selectWeek.createDelegate(picker);
@@ -31,7 +36,7 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
         var innerCal = Ext.DomQuery.selectNode('table[class=x-date-inner]', this.getEl().dom);
         var trs = Ext.DomQuery.select('tr', innerCal);
         for (var i=0; i<trs.length; i++) {
-            Ext.DomHelper.insertFirst(trs[i], i==0 ? '<th >WK</th>' : '<td class="x-date-picker-wk"><a class="x-date-date" tabindex="1" hidefocus="on" href="#"><em><span>'+ i +'</span></em></td>');
+            Ext.DomHelper.insertFirst(trs[i], i==0 ? '<th >' + this.weekHeaderString + '</th>' : '<td class="x-date-picker-wk"><a class="x-date-date" tabindex="1" hidefocus="on" href="#"><em><span>'+ i +'</span></em></td>');
         }
         
         // update again;
