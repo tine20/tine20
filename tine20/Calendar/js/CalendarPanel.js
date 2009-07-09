@@ -30,6 +30,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     border: false,
     /**
      * @cfg {String} loadMaskText
+     * _('Loading events, please wait...')
      */
     loadMaskText: 'Loading events, please wait...',
     /**
@@ -39,6 +40,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.CalendarPanel.superclass.initComponent.call(this);
         
         this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
+        this.loadMaskText = this.app.i18n._hidden(this.loadMaskText);
         
         this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
         

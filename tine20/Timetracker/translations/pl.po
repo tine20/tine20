@@ -22,92 +22,92 @@ msgstr ""
 msgid "Add, edit and delete timeaccounts"
 msgstr ""
 
-#: Export/Ods.php:93 js/Timetracker.js:28
+#: Export/Ods.php:89 js/Timetracker.js:28
 msgid "Timesheets"
 msgstr ""
 
-#: Export/Ods.php:120
+#: Export/Ods.php:116
 msgid "Total Sum"
 msgstr ""
 
-#: Export/Ods.php:137
+#: Export/Ods.php:133
 msgid "Not billable"
 msgstr ""
 
-#: Export/Ods.php:145 Export/Ods.php:216 Export/Ods.php:268
+#: Export/Ods.php:141 Export/Ods.php:212 Export/Ods.php:264
 #: js/TimesheetEditDialog.js:183 js/TimesheetGridPanel.js:48
 #: js/TimesheetGridPanel.js:188 js/TimesheetGridPanel.js:254
 msgid "Billable"
 msgstr ""
 
-#: Export/Ods.php:153
+#: Export/Ods.php:149
 msgid "Total"
 msgstr ""
 
-#: Export/Ods.php:180 js/TimesheetEditDialog.js:145
+#: Export/Ods.php:176 js/TimesheetEditDialog.js:145
 #: js/TimesheetGridPanel.js:186 js/TimesheetGridPanel.js:208
 msgid "Date"
 msgstr ""
 
-#: Export/Ods.php:185 Export/Ods.php:246 js/TimeaccountEditDialog.js:156
+#: Export/Ods.php:181 Export/Ods.php:242 js/TimeaccountEditDialog.js:156
 #: js/TimeaccountGridPanel.js:54 js/TimesheetEditDialog.js:167
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
 #: js/TimesheetGridPanel.js:395
 msgid "Description"
 msgstr ""
 
-#: Export/Ods.php:190
+#: Export/Ods.php:186
 msgid "Timeaccount Number"
 msgstr ""
 
-#: Export/Ods.php:196
+#: Export/Ods.php:192
 msgid "Timeaccount"
 msgstr ""
 
-#: Export/Ods.php:203
+#: Export/Ods.php:199
 msgid "Staff Member"
 msgstr ""
 
-#: Export/Ods.php:209 js/TimesheetEditDialog.js:140
+#: Export/Ods.php:205 js/TimesheetEditDialog.js:140
 #: js/TimesheetGridPanel.js:284
 msgid "Duration"
 msgstr ""
 
-#: Export/Ods.php:221 js/TimesheetEditDialog.js:190
+#: Export/Ods.php:217 js/TimesheetEditDialog.js:190
 #: js/TimesheetGridPanel.js:53 js/TimesheetGridPanel.js:189
 #: js/TimesheetGridPanel.js:262
 msgid "Cleared"
 msgstr ""
 
-#: Export/Ods.php:236 js/TimeaccountEditDialog.js:85
+#: Export/Ods.php:232 js/TimeaccountEditDialog.js:85
 #: js/TimeaccountGridPanel.js:75 js/TimesheetGridPanel.js:182
 msgid "Number"
 msgstr ""
 
-#: Export/Ods.php:241 js/TimeaccountEditDialog.js:90
+#: Export/Ods.php:237 js/TimeaccountEditDialog.js:90
 #: js/TimeaccountGridPanel.js:81 js/TimesheetGridPanel.js:183
 msgid "Title"
 msgstr ""
 
-#: Export/Ods.php:251 js/TimeaccountGridPanel.js:55
+#: Export/Ods.php:247 js/TimeaccountGridPanel.js:55
 msgid "Created By"
 msgstr ""
 
-#: Export/Ods.php:257
+#: Export/Ods.php:253
 msgid "Creation Date"
 msgstr ""
 
-#: Export/Ods.php:262 js/TimeaccountEditDialog.js:111
+#: Export/Ods.php:258 js/TimeaccountEditDialog.js:111
 #: js/TimeaccountGridPanel.js:87
 msgid "Status"
 msgstr ""
 
-#: Export/Ods.php:273 js/TimeaccountEditDialog.js:134
+#: Export/Ods.php:269 js/TimeaccountEditDialog.js:134
 #: js/TimesheetEditDialog.js:201
 msgid "Cleared In"
 msgstr ""
 
-#: Export/Ods.php:278
+#: Export/Ods.php:274
 msgid "Open"
 msgstr ""
 

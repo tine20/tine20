@@ -48,7 +48,7 @@ msgstr "Zkontrolovat verzi"
 msgid "Check tine20.org for new versions"
 msgstr "Ověřit dostupnost nových verzí na tine20.org"
 
-#: Export/Ods.php:197
+#: Export/Ods.php:198
 msgid "Filter"
 msgstr "Filtr"
 
@@ -68,7 +68,7 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Frontend/Http.php:286 js/tineInit.js:264
+#: Frontend/Http.php:286 js/tineInit.js:283
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
@@ -76,11 +76,11 @@ msgstr "Je vyžadována autorizace"
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:313 js/ExceptionDialog.js:38
+#: Frontend/Http.php:313 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:314 js/ExceptionDialog.js:63
+#: Frontend/Http.php:314 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
@@ -119,7 +119,7 @@ msgstr[0] "seznam úkolů"
 msgstr[1] "seznamy úkolů"
 msgstr[2] "seznamů úkolů"
 
-#: js/ExceptionDialog.js:46 js/MainScreen.js:430
+#: js/ExceptionDialog.js:54 js/MainScreen.js:430
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:363
 #: js/widgets/dialog/EditDialog.js:173
@@ -127,16 +127,16 @@ msgstr[2] "seznamů úkolů"
 msgid "Cancel"
 msgstr "Storno"
 
-#: js/ExceptionDialog.js:54
+#: js/ExceptionDialog.js:62
 msgid "Send Report"
 msgstr "Odeslat hlášení"
 
-#: js/ExceptionDialog.js:64
+#: js/ExceptionDialog.js:72
 msgid "The last action you made was potentially not performed correctly."
 msgstr ""
 "Je možné, že poslední akce, kterou jste provedl(a), neproběhla korektně."
 
-#: js/ExceptionDialog.js:65
+#: js/ExceptionDialog.js:73
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occurred."
@@ -144,29 +144,39 @@ msgstr ""
 "Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
 "uveďte stručný popis to co jste dělal(a), když došlo k chybě."
 
-#: js/ExceptionDialog.js:71 js/widgets/tags/TagsPanel.js:561
+#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
 msgstr "Popis"
 
-#: js/ExceptionDialog.js:81
-msgid "Show Details:"
-msgstr "Zobrazit detaily:"
+#: js/ExceptionDialog.js:87
+msgid "Send Contact Information"
+msgstr ""
 
 #: js/ExceptionDialog.js:104
+#, fuzzy
+msgid "Details:"
+msgstr "Zobrazit detaily:"
+
+#: js/ExceptionDialog.js:127
 msgid "Sending report..."
 msgstr "Odesílám hlášení..."
 
-#: js/ExceptionDialog.js:104
+#: js/ExceptionDialog.js:127
 msgid "Please wait a moment"
 msgstr "Počkejte prosím okamžik"
 
-#: js/ExceptionDialog.js:134
+#: js/ExceptionDialog.js:171
 msgid "Transmission Completed"
 msgstr "Přenos dokončen"
 
-#: js/ExceptionDialog.js:135
+#: js/ExceptionDialog.js:172
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "Vaše hlášení bylo odesláno. Děkujeme za Vaši spolupráci."
+
+#: js/ExceptionDialog.js:172
+#, fuzzy
+msgid "Please restart your browser now!"
+msgstr "Zadejte prosím Vaše přihlašovací údaje"
 
 #: js/Login.js:40
 msgid "Login"
@@ -318,11 +328,11 @@ msgstr "Určitě se chcete odhlásit?"
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
-#: js/tineInit.js:247
+#: js/tineInit.js:266
 msgid "Connection lost, please check your network!"
 msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
 
-#: js/tineInit.js:255
+#: js/tineInit.js:274
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -330,23 +340,23 @@ msgstr ""
 "Server neodpověděl na Váš požadavek. Zkontrolujte prosím své síťové "
 "připojení nebo kontaktujte administrátora."
 
-#: js/tineInit.js:265
+#: js/tineInit.js:284
 msgid "Your session timed out. You need to login again."
 msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
 
-#: js/tineInit.js:278
+#: js/tineInit.js:297
 msgid "Insufficient Rights"
 msgstr "Nedostatečná oprávnění"
 
-#: js/tineInit.js:279
+#: js/tineInit.js:298
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Lituji, nemáte oprávnění k této akci."
 
-#: js/tineInit.js:288
+#: js/tineInit.js:307
 msgid "Concurrent Updates"
 msgstr "Kolidující aktualizace"
 
-#: js/tineInit.js:289
+#: js/tineInit.js:308
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -354,7 +364,7 @@ msgstr ""
 "Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musíte záznam "
 "znovu načíst a opětovně provést Vaše změny."
 
-#: js/tineInit.js:505
+#: js/tineInit.js:554
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator."
 msgstr ""
@@ -516,12 +526,12 @@ msgstr "Přidat poznámku..."
 msgid "Add"
 msgstr "Přidat"
 
-#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:397
-#: js/widgets/ActivitiesPanel.js:524
+#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:393
+#: js/widgets/ActivitiesPanel.js:520
 msgid "Note"
 msgstr "Poznámka"
 
-#: js/widgets/ActivitiesPanel.js:166 js/widgets/ActivitiesPanel.js:323
+#: js/widgets/ActivitiesPanel.js:166 js/widgets/ActivitiesPanel.js:319
 msgid "Add new note"
 msgstr "Přidat novou poznámku"
 
@@ -529,7 +539,7 @@ msgstr "Přidat novou poznámku"
 msgid "Notes"
 msgstr "Poznámky"
 
-#: js/widgets/ActivitiesPanel.js:261 js/widgets/ActivitiesPanel.js:322
+#: js/widgets/ActivitiesPanel.js:261 js/widgets/ActivitiesPanel.js:318
 msgid "Add Note"
 msgstr "Přidat poznámku"
 
@@ -537,39 +547,39 @@ msgstr "Přidat poznámku"
 msgid "Enter new note:"
 msgstr "Zadejte novou poznámku:"
 
-#: js/widgets/ActivitiesPanel.js:309
+#: js/widgets/ActivitiesPanel.js:305
 msgid "Add a {0} Note"
 msgstr "Přidat {0} poznámku..."
 
-#: js/widgets/ActivitiesPanel.js:395 js/widgets/ActivitiesPanel.js:530
+#: js/widgets/ActivitiesPanel.js:391 js/widgets/ActivitiesPanel.js:526
 msgid "Type"
 msgstr "Typ"
 
-#: js/widgets/ActivitiesPanel.js:398
+#: js/widgets/ActivitiesPanel.js:394
 msgid "Created By"
 msgstr "Vytvořil(a)"
 
-#: js/widgets/ActivitiesPanel.js:399
+#: js/widgets/ActivitiesPanel.js:395
 msgid "Timestamp"
 msgstr "Časové razítko"
 
-#: js/widgets/ActivitiesPanel.js:413
+#: js/widgets/ActivitiesPanel.js:409
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Zobrazuji záznamy historie {0} - {1} z {2}"
 
-#: js/widgets/ActivitiesPanel.js:414
+#: js/widgets/ActivitiesPanel.js:410
 msgid "No history to display"
 msgstr "Žádná historie ke zobrazení"
 
-#: js/widgets/ActivitiesPanel.js:512
+#: js/widgets/ActivitiesPanel.js:508
 msgid "History"
 msgstr "Historie"
 
-#: js/widgets/ActivitiesPanel.js:525 js/widgets/ActivitiesPanel.js:526
+#: js/widgets/ActivitiesPanel.js:521 js/widgets/ActivitiesPanel.js:522
 msgid "Time"
 msgstr "Čas"
 
-#: js/widgets/ActivitiesPanel.js:528
+#: js/widgets/ActivitiesPanel.js:524
 msgid "User"
 msgstr "Uživatel"
 
@@ -1250,43 +1260,43 @@ msgstr ""
 "Můžete si vybrat mezi okny ve stylu ExtJs a normálními vyskakovacími okny "
 "webového prohlížeče."
 
-#: Setup/setup.xml:2276
+#: Setup/setup.xml:2344
 msgid "note"
 msgstr "poznámka"
 
-#: Setup/setup.xml:2281
+#: Setup/setup.xml:2349
 msgid "default note type"
 msgstr "výchozí typ poznámky"
 
-#: Setup/setup.xml:2307
+#: Setup/setup.xml:2375
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:2312
+#: Setup/setup.xml:2380
 msgid "telephone call"
 msgstr "telefonní hovor"
 
-#: Setup/setup.xml:2338
+#: Setup/setup.xml:2406
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2343
+#: Setup/setup.xml:2411
 msgid "email contact"
 msgstr "emailový kontakt"
 
-#: Setup/setup.xml:2369
+#: Setup/setup.xml:2437
 msgid "created"
 msgstr "vytvořeno"
 
-#: Setup/setup.xml:2374
+#: Setup/setup.xml:2442
 msgid "record created"
 msgstr "záznam byl vytvořen"
 
-#: Setup/setup.xml:2400
+#: Setup/setup.xml:2468
 msgid "changed"
 msgstr "změněno"
 
-#: Setup/setup.xml:2405
+#: Setup/setup.xml:2473
 msgid "record changed"
 msgstr "záznam byl změněn"
 

@@ -71,7 +71,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         this.showDayView = new Ext.Toolbar.Button({
             pressed: this.activeView == 'day',
-            text: 'day view',
+            text: this.app.i18n._('Day'),
             iconCls: 'cal-day-view',
             xtype: 'tbbtnlockedtoggle',
             handler: this.changeView.createDelegate(this, ["day"]),
@@ -80,7 +80,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
         this.showWeekView = new Ext.Toolbar.Button({
             pressed: this.activeView == 'week',
-            text: 'week view',
+            text: this.app.i18n._('Week'),
             iconCls: 'cal-week-view',
             xtype: 'tbbtnlockedtoggle',
             handler: this.changeView.createDelegate(this, ["week"]),
@@ -89,7 +89,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
         this.showMonthView = new Ext.Toolbar.Button({
             pressed: this.activeView == 'month',
-            text: 'month view',
+            text: this.app.i18n._('Month'),
             iconCls: 'cal-month-view',
             xtype: 'tbbtnlockedtoggle',
             handler: this.changeView.createDelegate(this, ["month"]),

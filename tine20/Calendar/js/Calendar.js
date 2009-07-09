@@ -18,6 +18,15 @@ Ext.onReady(function(){
 });
 
 /**
+ * Calendar Application
+ */
+Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
+    getTitle: function() {
+        return this.i18n.ngettext('Calendar', 'Calendars', 1);
+    }
+});
+
+/**
  * default mainscreen
  * 
  * @type Tine.Tinebase.widgets.app.MainScreen

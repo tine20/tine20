@@ -60,16 +60,16 @@ msgstr ""
 msgid "Do you really want to uninstall the application(s)?"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:164
+#: js/ApplicationGridPanel.js:163
 msgid "This may take a while"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:184
+#: js/ApplicationGridPanel.js:183
 #, fuzzy
 msgid "Shit"
 msgstr "Oups"
 
-#: js/ApplicationGridPanel.js:184
+#: js/ApplicationGridPanel.js:183
 msgid "Where are the backup tapes"
 msgstr "Où sont les bandes de sauvegarde?"
 

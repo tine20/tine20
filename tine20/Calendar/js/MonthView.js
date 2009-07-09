@@ -72,14 +72,17 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     startDate: new Date().clearTime(),
     /**
      * @cfg {String} newEventSummary
+     * _('New Event')
      */
     newEventSummary: 'New Event',
     /**
      * @cfg {String} calWeekString
+     * _('WK')
      */
     calWeekString: 'WK',
     /**
      * @cfg String moreString
+     * _('{0} more...')
      */
     moreString: '{0} more...',
     /**
@@ -255,8 +258,12 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     init: function(calPanel) {
         this.calPanel = calPanel;
         
-        // redefine this props in case ext translations got included after this
-        // component
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+        this.newEventSummary =  this.app.i18n._hidden(this.newEventSummary);
+        this.calWeekString   =  this.app.i18n._hidden(this.calWeekString);
+        this.moreString      =  this.app.i18n._hidden(this.moreString);
+        
+        // redefine this props in case ext translations got included after this component
         this.monthNames = Date.monthNames;
         this.dayNames   = Date.dayNames;
         this.startDay   = Ext.DatePicker.prototype.startDay;

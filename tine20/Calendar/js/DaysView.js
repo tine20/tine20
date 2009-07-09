@@ -77,12 +77,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     numOfDays: 4,
     /**
      * @cfg {String} newEventSummary
+     * _('New Event')
      */
     newEventSummary: 'New Event',
     /**
      * @cfg {String} dayFormatString
+     * _('{0} the {1}. of {2}')
      */
-    dayFormatString: 'D, jS \\o\\f F',
+    dayFormatString: '{0} the {1}. of {2}',
     /**
      * @cfg {Number} timeGranularity
      * granularity of timegrid in minutes
@@ -157,6 +159,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     init: function(calPanel) {
         this.calPanel = calPanel;
+        
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
+        this.newEventSummary      =  this.app.i18n._hidden(this.newEventSummary);
+        this.dayFormatString      =  this.app.i18n._hidden(this.dayFormatString);
         
         this.startDate.setHours(0);
         this.startDate.setMinutes(0);
@@ -1064,9 +1071,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var html = '';
         var width = 100/this.numOfDays;
         
-        for (var i=0; i<this.numOfDays; i++) {
+        for (var i=0, date; i<this.numOfDays; i++) {
+            day = this.startDate.add(Date.DAY, i);
             html += this.templates.dayHeader.applyTemplate({
-                day: this.startDate.add(Date.DAY, i).format(this.dayFormatString),
+                day: String.format(this.dayFormatString, day.format('l'), day.format('j'), day.format('F')),
                 height: this.granularityUnitHeights,
                 width: width + '%',
                 left: i * width + '%'
@@ -1088,7 +1096,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             
             headerEl = Ext.fly(dayHeaders[i]);
             
-            headerEl.update(date.format(this.dayFormatString));
+            headerEl.update(String.format(this.dayFormatString, date.format('l'), date.format('j'), date.format('F')));
             headerEl.parent()[(isToDay ? 'add' : 'remove') + 'Class']('cal-daysviewpanel-dayheader-today');
             Ext.fly(this.dayCols[i])[(isToDay ? 'add' : 'remove') + 'Class']('cal-daysviewpanel-body-daycolumn-today');
         }

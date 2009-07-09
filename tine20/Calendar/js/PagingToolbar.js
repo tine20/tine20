@@ -273,7 +273,7 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
 Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingToolbar.AbstractPeriodPicker, {
     init: function() {
         this.label = new Ext.form.Label({
-            text: 'week',
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Week'),
             style: 'padding-right: 3px'
             //hidden: this.tb.activeView != 'week'
         });
