@@ -999,6 +999,10 @@ class Tinebase_Container
             }
         }
         
+        if (empty($containers)) {
+        	return;
+        }
+        
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
