@@ -236,7 +236,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             foreach ($attendee as $attender) {
                 $type = $attender->$_typeProperty;
                 if ($type === 'user') {
-                	$tinebaseUser->resolveUsers($attender, $_idProperty);
+                	$tinebaseUser->resolveUsers($attender, $_idProperty, true);
                 }
                 
                 // remove status_authkey when editGrant for displaycontainer_id is missing
