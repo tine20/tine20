@@ -154,7 +154,13 @@ class Tinebase_Frontend_Json_Container
         foreach($result['results'] as &$value) {
             switch($value['account_type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                    $value['account_name'] = Tinebase_User::getInstance()->getUserById($value['account_id'])->toArray();
+                	try {
+                		$account = Tinebase_User::getInstance()->getUserById($value['account_id']);
+                	}
+		            catch (Tinebase_Exception_NotFound $e) {
+		                $account = Tinebase_User::getInstance()->getNonExistentUser();
+		            }
+                    $value['account_name'] = $account->toArray();
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                     $value['account_name'] = Tinebase_Group::getInstance()->getGroupById($value['account_id'])->toArray();

@@ -18,7 +18,7 @@
  */
 class Tinebase_Model_Note extends Tinebase_Record_Abstract
 {
-	/**
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -79,7 +79,7 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
         'creation_time',
         'last_modified_time',
         'deleted_time',
-    );    
+    );
     
     /**
      * returns array with record related properties
@@ -95,7 +95,15 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
         
         // get creator
         if ($this->created_by && $_resolveCreator) {
-            $creator = Tinebase_User::getInstance()->getUserById($this->created_by); 
+            //resolve creator; return default NonExistentUser-Object if creator cannot be resolved =>
+            //@todo perhaps we should add a "getNonExistentUserIfNotExists" parameter to Tinebase_User::getUserById 
+        	try {
+                $creator = Tinebase_User::getInstance()->getUserById($this->created_by);
+            }
+            catch (Tinebase_Exception_NotFound $e) {
+                $creator = Tinebase_User::getInstance()->getNonExistentUser();
+            }
+             
             $result['created_by'] = $creator->accountDisplayName; 
         }
         
