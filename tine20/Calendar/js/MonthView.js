@@ -888,7 +888,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.toDay = new Date().clearTime();
         this.startDate = period.from;
         this.calcDateMesh();
-
+        
+        var tbar = this.calPanel.getTopToolbar();
+        if (tbar) {
+            tbar.periodPicker.update(this.startDate);
+            this.startDate = tbar.periodPicker.getPeriod().from;
+        }
+        
         // update dates and bg colors
         var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-date]', this.mainBody.dom);
         for(var i=0; i<this.dateMesh.length; i++) {

@@ -361,28 +361,30 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
  */
 Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingToolbar.AbstractPeriodPicker, {
     init: function() {
+        this.dateMenu = new Ext.menu.DateMenu({
+            hideMonthPicker: Ext.DatePicker.prototype.hideMonthPicker.createSequence(function() {
+                if (this.monthPickerActive) {
+                    this.monthPickerActive = false;
+                    
+                    this.value = this.activeDate;
+                    this.fireEvent('select', this, this.value);
+                }
+            }),
+            listeners: {
+                scope: this,
+                select: function(field) {
+                    if (typeof(field.getValue) == 'function') {
+                        this.update(field.getValue());
+                        this.fireEvent('change', this, 'month', this.getPeriod());
+                    }
+                }
+            }
+        });
+        
         this.button = new Ext.Button({
             text: Ext.DatePicker.prototype.monthNames[this.tb.dtStart.getMonth()] + this.tb.dtStart.format(' Y'),
             //hidden: this.tb.activeView != 'month',
-            menu: new Ext.menu.DateMenu({
-                hideMonthPicker: Ext.DatePicker.prototype.hideMonthPicker.createSequence(function() {
-                    if (this.monthPickerActive) {
-                        this.monthPickerActive = false;
-                        
-                        this.value = this.activeDate;
-                        this.fireEvent('select', this, this.value);
-                    }
-                }),
-                listeners: {
-                    scope: this,
-                    select: function(field) {
-                        if (typeof(field.getValue) == 'function') {
-                            this.update(field.getValue());
-                            this.fireEvent('change', this, 'month', this.getPeriod());
-                        }
-                    }
-                }
-            }),
+            menu: this.dateMenu,
             listeners: {
                 scope: this,
                 menushow: function(btn, menu) {
@@ -400,6 +402,7 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
         if (this.button && this.button.rendered) {
             var monthName = Ext.DatePicker.prototype.monthNames[dtStart.getMonth()];
             this.button.setText(monthName + dtStart.format(' Y'));
+            this.dateMenu.picker.setValue(dtStart);
         }
     },
     render: function() {

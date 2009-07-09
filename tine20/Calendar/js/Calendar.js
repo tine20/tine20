@@ -101,7 +101,16 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
             height: 190,
             items: new Ext.DatePicker({
                 id :'cal-mainscreen-minical',
-                plugins: [new Ext.ux.DatePickerWeekPlugin()],
+                plugins: [new Ext.ux.DatePickerWeekPlugin({
+                    inspectMonthPickerClick: function(btn, e) {
+                        if (e.getTarget().id) {
+                            var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+                            contentPanel.changeView('month', this.activeDate);
+                            
+                            return false;
+                        }
+                    }
+                })],
                 listeners: {
                     scope: this, 
                     select: function(picker, value, weekNumber) {
