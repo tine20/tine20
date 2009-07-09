@@ -225,7 +225,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
                     'accountLastName'       => $this->rowNameMapping['accountLastName'],
                     'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress'],
-                    'contact_id'            => 'contact_id'
+                    'contact_id'            => 'id'
                 )
             );
                 
