@@ -216,6 +216,22 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_WEEKLY));
                     $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfWeek', $this->_convertDayToBitMask($rrule->byday)));
                     break;
+                    
+                case Calendar_Model_Rrule::FREQ_MONTHLY:
+                    if(!empty($rrule->bymonthday)) {
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_MONTHLY));
+
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfMonth', $rrule->bymonthday));
+                    } else {
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_MONTHLY_DAYN));
+
+                        $weekOfMonth = (int) substr($rrule->byday, 0, -2);
+                        $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth; 
+                        $dayOfWeek   = substr($rrule->byday, -2);
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'WeekOfMonth', $weekOfMonth));
+                        $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfWeek',   $this->_convertDayToBitMask($dayOfWeek)));
+                    }
+                    break;
             }
             $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
             
