@@ -154,6 +154,29 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->assertFalse((bool)$loadedEvent->deleteGrant);
     }
     
+    /**
+     * try to get/search event of rwright
+     *  -> testuser has not Grants, but freebusy
+     */
+    public function testFreeBusy()
+    {
+    	Tinebase_Core::getPreference('Calendar')->setValueForUser(Calendar_Preference::FREEBUSY, 1, $this->_personas['rwright']->getId(), TRUE);
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
+        
+        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
+        )));
+        
+        $event = $events->getFirstRecord();
+        $this->assertTrue(empty($event->summary), 'event with freebusy only is not cleaned up');
+        $this->assertFalse((bool)$event->readGrant);
+        $this->assertFalse((bool)$event->editGrant);
+        $this->assertFalse((bool)$event->deleteGrant);
+        
+        // direct get of freebusy only events is not allowed
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+    }
     
     /**
      * 
