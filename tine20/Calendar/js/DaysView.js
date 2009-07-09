@@ -579,13 +579,17 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             return;
         }
         
+        // abort edit on ESC key
+        if (e && e.getKey() == e.ESC) {
+            return this.abortCreateEvent(event);
+        }
+        
         // only commit edit on Enter & blur
         if (e && e.getKey() != e.ENTER) {
             return;
         }
         
-        // abort edit on ESC key
-        if (! summary || (e && e.getKey() == e.ESC)) {
+        if (! summary) {
             return this.abortCreateEvent(event);
         }
         
@@ -657,7 +661,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onMouseDown: function(e) {
-        this.focusEl.focus();
+        if (! this.editing) {
+            this.focusEl.focus();
+        }
         this.mouseDown = true;
         
         var targetEvent = this.getTargetEvent(e);
