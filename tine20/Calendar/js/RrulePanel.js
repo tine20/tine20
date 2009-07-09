@@ -425,7 +425,6 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
                 [2,  this.app.i18n._('second') ],
                 [3,  this.app.i18n._('third')  ],
                 [4,  this.app.i18n._('fourth') ],
-                [5,  this.app.i18n._('fifth')  ],
                 [-1, this.app.i18n._('last')   ]
             ]
         });
@@ -606,7 +605,6 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
                 [2,  this.app.i18n._('second') ],
                 [3,  this.app.i18n._('third')  ],
                 [4,  this.app.i18n._('fourth') ],
-                [5,  this.app.i18n._('fifth')  ],
                 [-1, this.app.i18n._('last')   ]
             ]
         });
