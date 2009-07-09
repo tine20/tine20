@@ -91,7 +91,7 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
     /**
      * @property {Object} gray
      */
-    gray: {color: '#808080', light: '#EDEDED', text: '#FFFFFF', lightText: '#FFFFFF'},
+    gray: {color: '#808080', light: '#EDEDED', text: '#808080', lightText: '#FFFFFF'},
     
     /**
      * @property {Array} colorPalette

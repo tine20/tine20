@@ -23,8 +23,7 @@
  *       event rows in SQL (at the moment by the sql backend class.)
  *       As such there is no need to compute the effective grants in stage 2
  * 
- * NOTE: If the required grant is other than GRANT_READ, we skip all free/busy 
- *       grants. In this case, also stage 2 is not nessesary!
+ * NOTE: stage 2 is implcitly done in the models setFromArray
  * 
  * 
  * @package Calendar
@@ -57,31 +56,6 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
             foreach ($this->_requiredGrants as $grant) {
                 $_select->orHaving($_backend->getAdapter()->quoteIdentifier(Tinebase_Model_Container::$GRANTNAMEMAP[$grant] . $grant) . ' = 1');
             }
-        }
-    }
-    
-    /**
-     * stage 2 checks
-     * 
-     * NOTE: depends on all acl filters of group
-     * 
-     * @param Tinebase_Model_Filter_FilterGroup
-     * @param Tinebase_Record_RecordSet
-     *
-     */
-    public static function stage2($_filterGroup, $eventSet) 
-    {
-        // pool together all freebusy containers
-        $idFilters = $_filterGroup->getAclFilters();
-        $freebusyContainers = array();
-        foreach ($idFilters as $filter) {
-            if ($filter instanceof Calendar_Model_EventAclFilter) {
-                $freebusyContainers = array_unique(array_merge($freebusyContainers, $filter->getFreebusyContainers()));
-            }
-        }
-        
-        if (! empty($freebusyContainers)) {
-            // do the actual cleanup
         }
     }
     
