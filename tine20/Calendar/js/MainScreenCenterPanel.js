@@ -209,7 +209,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var addAction;
         if (datetime || event) {
             var dtStart = datetime || event.get('dtstart').clone();
-            
+            if (dtStart.format('H:i') == '00:00') {
+                dtStart = dtStart.add(Date.HOUR, 9);
+            }
             addAction = {
                 text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.tranlation._hidden('Add {0}'), this.i18nRecordName),
                 handler: this.onEditInNewWindow.createDelegate(this, ["add", dtStart]),
