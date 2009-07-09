@@ -253,7 +253,6 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Mo
                 return user_id.account_id;
             }
             
-            console.log(user_id);
             throw new Error('Tine.Calendar.Model.Attender::getUserAccountId unexpected user_id');
             
         }

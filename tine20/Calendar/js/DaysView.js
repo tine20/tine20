@@ -1011,7 +1011,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     checkWholeDayEls: function() {
         var freeIdxs = [];
         for (var i=0; i<this.wholeDayArea.childNodes.length-1; i++) {
-            console.log(this.wholeDayArea.childNodes[i]);
             if(this.wholeDayArea.childNodes[i].childNodes.length === 1) {
                 freeIdxs.push(i);
             }

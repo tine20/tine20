@@ -201,6 +201,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         //this.updateMiniCal();
     },
     
+    onContextMenu: function() {
+        
+    },
+    
     onDeleteRecords: function() {
         var panel = this.getCalendarPanel(this.activeView);
         var selection = panel.getSelectionModel().getSelectedEvents();
@@ -557,6 +561,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }, this);
             
             view.on('dblclick', this.onEditInNewWindow.createDelegate(this, ["edit"]));
+            view.on('contextmenu', this.onContextMenu, this);
             
             this.calendarPanels[which] = new Tine.Calendar.CalendarPanel({
                 tbar: tbar,
