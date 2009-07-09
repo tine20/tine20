@@ -24,7 +24,6 @@ Tine.Calendar.DaysView = function(config){
         /**
          * @event contextmenu
          * fired if an event got contextmenu 
-         * @param {Tine.Calendar.Model.Event} event
          * @param {Ext.EventObject} e
          */
         'contextmenu',
@@ -234,8 +233,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 // we dont support multiple dropping yet
                 data.scope.getSelectionModel().select(event);
                 
-                var target = e.getTarget();
-                var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, target);
+                var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
                 if (targetDateTime && event.get('editGrant')) {
                     return Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                 }
@@ -251,8 +249,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             notifyDrop : function(dd, e, data) {
                 var v = data.scope;
                 
-                var target = e.getTarget();
-                var targetDate = v.getTargetDateTime(target);
+                var targetDate = v.getTargetDateTime(e);
                 
                 if (targetDate) {
                     var event = data.event;
@@ -613,15 +610,15 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
     },
     
-    onClick: function(e, target) {
-        var event = this.getTargetEvent(target);
+    onClick: function(e) {
+        var event = this.getTargetEvent(e);
         if (event) {
             this.fireEvent('click', event, e);
         }
     },
     
-    onContextMenu: function(e, target) {
-        var event = this.getTargetEvent(target);
+    onContextMenu: function(e) {
+        var event = this.getTargetEvent(e);
         if (event) {
             this.fireEvent('contextmenu', event, e);
         }
@@ -632,8 +629,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     onDblClick: function(e, target) {
         e.stopEvent();
-        var event = this.getTargetEvent(target);
-        var dtStart = this.getTargetDateTime(target);
+        var event = this.getTargetEvent(e);
+        var dtStart = this.getTargetDateTime(e);
         
         if (event) {
             this.fireEvent('dblclick', event, e);
@@ -662,16 +659,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * @private
      */
-    onMouseDown: function(e, target) {
+    onMouseDown: function(e) {
         this.focusEl.focus();
         this.mouseDown = true;
         
-        var targetEvent = this.getTargetEvent(target);
+        var targetEvent = this.getTargetEvent(e);
         if (this.editing && (targetEvent != this.editing)) {
             this.editing.summaryEditor.fireEvent('blur', this.editing.summaryEditor);
         }
         
-        var dtStart = this.getTargetDateTime(target);
+        var dtStart = this.getTargetDateTime(e);
         if (dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
@@ -923,11 +920,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * get date of a (event) target
      * 
-     * @param {dom} target
+     * @param {Ext.EventObject} e
      * @return {Date}
      */
-    getTargetDateTime: function(target) {
-        //var target = e.getTarget();
+    getTargetDateTime: function(e) {
+        var target = e.getTarget();
         if (target.id.match(/^ext-gen\d+:\d+/)) {
             var parts = target.id.split(':');
             
@@ -946,10 +943,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * gets event el of target
      * 
-     * @param {dom} target
+     * @param {Ext.EventObject} e
      * @return {Tine.Calendar.Model.Event}
      */
-    getTargetEvent: function(target) {
+    getTargetEvent: function(e) {
+        var target = e.getTarget();
         var el = Ext.fly(target);
         if (el.hasClass('cal-daysviewpanel-event') || (el = el.up('[class^=cal-daysviewpanel-event]', 10))) {
             var parts = el.dom.id.split(':');
