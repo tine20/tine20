@@ -107,6 +107,8 @@ class Tinebase_Frontend_Cli
      * fix encoding of imported records
      *
      * @param Zend_Console_Getopt $_opts
+     * 
+     * @deprecated remove that after release of 2009/07
      */
     public function fixEncoding($_opts)
     {
@@ -201,6 +203,8 @@ class Tinebase_Frontend_Cli
      * @param Tinebase_Record_Interface $_record
      * @param array $_fields
      * @param Tinebase_Backend_Sql_Abstract $_backend
+     * 
+     * @deprecated remove that after release of 2009/07
      */
     protected function _update($_record, $_fields, $_backend)
     {
