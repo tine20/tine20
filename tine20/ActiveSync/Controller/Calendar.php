@@ -184,6 +184,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     {
         $data = $this->_contentController->get($_serverId);
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar data " . print_r($data->toArray(), true));
+        
         foreach($this->_mapping as $key => $value) {
             if(!empty($data->$value)) {
                 switch($value) {
@@ -198,6 +200,34 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 }
             }
         }   
+        
+        if(!empty($data->rrule)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar rrule " . $data->rrule);
+            $rrule = Calendar_Model_Rrule::getRruleFromString($data->rrule);
+            
+            $recurrence = $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Recurrence'));
+            // required fields
+            switch($rrule->freq) {
+                case Calendar_Model_Rrule::FREQ_DAILY:
+                    $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_DAILY));
+                    break;
+                    
+                case Calendar_Model_Rrule::FREQ_WEEKLY:
+                    $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Type', self::RECUR_TYPE_WEEKLY));
+                    $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DayOfWeek', $this->_convertDayToBitMask($rrule->byday)));
+                    break;
+            }
+            $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
+            
+            if($rrule->until instanceof Zend_Date) {
+                $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Until', $rrule->until->toString('yyyyMMddTHHmmss') . 'Z'));
+            }
+            
+            //Occurences
+            //WeekOfMonth
+            //MonthOfYear
+            //DayOfMonth
+        }
                 
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'BusyStatus', 2));
@@ -205,6 +235,34 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         //$_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MeetingStatus', 0));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DtStamp', $data->creation_time->toString('yyyyMMddTHHmmss') . 'Z'));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'UID', $data->getId()));
+    }
+    
+    /**
+     * convert string of days (TU,TH) to bitmask used by ActiveSync
+     *  
+     * @param $_days
+     * @return int
+     */
+    protected function _convertDayToBitMask($_days)
+    {
+        $dayValues = array(
+            Calendar_Model_Rrule::WDAY_SUNDAY       => self::RECUR_DOW_SUNDAY,
+            Calendar_Model_Rrule::WDAY_MONDAY       => self::RECUR_DOW_MONDAY,
+            Calendar_Model_Rrule::WDAY_TUESDAY      => self::RECUR_DOW_TUESDAY,
+            Calendar_Model_Rrule::WDAY_WEDNESDAY    => self::RECUR_DOW_WEDNESDAY,
+            Calendar_Model_Rrule::WDAY_THURSDAY     => self::RECUR_DOW_THURSDAY,
+            Calendar_Model_Rrule::WDAY_FRIDAY       => self::RECUR_DOW_FRIDAY,
+            Calendar_Model_Rrule::WDAY_SATURDAY     => self::RECUR_DOW_SATURDAY
+        );
+        $daysArray = explode(',', $_days);
+        
+        $result = 0;
+        
+        foreach($daysArray as $dayString) {
+            $result = $result + $dayValues[$dayString];
+        }
+        
+        return $result;
     }
         
     /**
