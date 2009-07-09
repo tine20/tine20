@@ -773,7 +773,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         $sqlGroupBackend = new Tinebase_Group_Sql();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ');
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ');
         
         $users = $this->_getUsersFromBackend($this->_userBaseFilter, 'Tinebase_Model_FullUser');
         
