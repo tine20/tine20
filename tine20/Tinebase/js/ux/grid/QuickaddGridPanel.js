@@ -54,6 +54,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initComponent: function(){
+        
+        this.idPrefix = Ext.id();
+        
         Ext.ux.grid.QuickaddGridPanel.superclass.initComponent.call(this);
         this.addEvents(
             /**
@@ -97,7 +100,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         Ext.each(this.getVisibleCols(), function(item){
             if (item.quickaddField) {
-                item.quickaddField.render('new-' + item.id);
+                item.quickaddField.render(this.idPrefix + item.id);
                 item.quickaddField.setDisabled(item.id != this.quickaddMandatory);
                 item.quickaddField.on(this.quickaddHandlers);
             }
@@ -167,7 +170,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         var newRows = '';
     	Ext.each(this.getVisibleCols(), function(item){
-    	    newRows += '<td><div class="x-small-editor" id="new-' + item.id + '"></div></td>';
+    	    newRows += '<td><div class="x-small-editor" id="' + this.idPrefix + item.id + '"></div></td>';
     	}, this);
         
     	ts.header = new Ext.Template(
