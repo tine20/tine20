@@ -238,9 +238,9 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         }
                         
                         // get due date
-                        if ( !empty($task->due) ) {
-                            $dueDate = new Zend_Date ( $task->due, ISO8601LONG );                 
-                            $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale')) );
+                        if (! empty($task->due)) {
+                            $dueDate = new Zend_Date($task->due, Tinebase_Record_Abstract::ISO8601LONG);                 
+                            $linkedObjects[] = array($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale')) );
                         }    
                         
                         // get task priority
