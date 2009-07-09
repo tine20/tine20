@@ -117,10 +117,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
         // because of the wrong type that is not catched by the block below)
         if ( $row === false ) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' FIXME!!!! Why was the exception commented out?????');
             throw new Tinebase_Exception_NotFound("User $_loginName not found.");
-             //$account = $this->getNonExistentUser($_accountClass);
-             
         } else {
             try {
                 $account = new $_accountClass();
@@ -162,10 +159,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' FIXME!!!! Why was the exception commented out?????');
-            throw new Tinebase_Exception_NotFound('User with id ' . $accountId . ' not found.');
-            //$account = $this->getNonExistentUser($_accountClass, $accountId);
-            
+            throw new Tinebase_Exception_NotFound('User with id ' . $accountId . ' not found.');           
         } else {
             try {
                 $account = new $_accountClass();
