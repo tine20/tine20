@@ -272,17 +272,13 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         
         /**
          * on add note
-         * - add note to activities panel & grid
+         * - add note to activities panel
          */
         onNoteAdd: function(_text, _typeId) {
             if (_text && _typeId) {
                 notesStore = Ext.StoreMgr.lookup('NotesStore');
                 var newNote = new Tine.Tinebase.Model.Note({note_type_id: _typeId, note: _text});
                 notesStore.insert(0, newNote);     
-                
-                // add note to activities grid
-                var gridStore = Ext.getCmp('Activities_Grid').getStore();
-                gridStore.insert(0, newNote);                
             }
         }
     },
@@ -337,7 +333,7 @@ Ext.reg('widget-activitiesaddbutton', Tine.widgets.activities.ActivitiesAddButto
 /**
  * Class for a activities tab with notes/activities grid
  * 
- * TODO add more filters to filter toolbar / make date filter work like other date filters
+ * TODO add more filters to filter toolbar
  */
 Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 
@@ -416,7 +412,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Activities_Grid',
+            id: 'Activities_Gridy',
             store: this.store,
             cm: columnModel,
             tbar: pagingToolbar,     
