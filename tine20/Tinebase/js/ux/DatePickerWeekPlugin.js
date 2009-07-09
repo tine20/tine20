@@ -20,6 +20,7 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
         picker.onRender = picker.onRender.createSequence(this.onRender, picker);
         picker.update = picker.update.createSequence(this.update, picker);
         picker.handleDateClick = picker.handleDateClick.createSequence(this.handleDateClick, picker);
+        picker.showMonthPicker = picker.showMonthPicker.createInterceptor(this.inspectMonthPickerClick, picker);
         
         picker.getRowEl = this.getRowEl.createDelegate(picker);
         picker.selectWeek = this.selectWeek.createDelegate(picker);
@@ -118,6 +119,12 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
             Ext.fly(dates[i]).removeClass('x-date-selected');
         }
     },
+    
+    /**
+     * inspects month picker onClick event method
+     * return false to cancle original onClick handler
+     */
+    inspectMonthPickerClick: Ext.emptyFn,
     
     selectWeek: function(rowEl) {
         if (rowEl) {
