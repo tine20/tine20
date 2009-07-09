@@ -23,7 +23,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * 
  * @package     Calendar
  */
-class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
+class Calendar_Controller_EventTests extends Calendar_TestCase
 {
     
     /**
@@ -38,24 +38,9 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
+    	parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
-        $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'PHPUnit test calendar',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'        => 'sometype',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
-        ), true));
-    }
-    
-    public function tearDown()
-    {
-        $eventIds = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        )), new Tinebase_Model_Pagination(array()), false, true);
-        
-        $this->_controller->delete($eventIds);
-        
-        Tinebase_Container::getInstance()->deleteContainer($this->_testCalendar, true);
+
     }
     
     public function testCreateEvent()
@@ -153,7 +138,7 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee[0]->status, 'updateing of other attedee must not set status');
     }
     
-    public function testSetAttendeeStatus()
+    public function testAttendeeSetStatus()
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
@@ -170,7 +155,28 @@ class Calendar_Controller_EventTests extends PHPUnit_Framework_TestCase
         
     }
     
-    public function testSetAttendeeStatusRecurException()
+    public function testAttendeeDisplaycontainerContact()
+    {
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+           'n_given'  => 'phpunit',
+           'n_family' => 'cal attender'
+        )));
+         
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => $contact->getId(),
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+            ),
+        ));
+        $persitentEvent = $this->_controller->create($event);
+        $attender = $persitentEvent->attendee[0];
+        
+        $this->assertTrue(empty($attender->displaycontainer_id), 'displaycontainer_id must not be set for contacts');
+    }
+    
+    public function testAttendeeSetStatusRecurException()
     {
         // note: 2009-03-29 Europe/Berlin switched to DST
         $event = new Calendar_Model_Event(array(

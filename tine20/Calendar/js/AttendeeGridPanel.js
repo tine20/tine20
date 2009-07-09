@@ -126,7 +126,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             renderer: this.renderAttenderName.createDelegate(this),
             editor: new Tine.Addressbook.SearchCombo({
                 // at the moment we support accounts only
-                internalContactsOnly: true,
+                //internalContactsOnly: true,
                 
                 blurOnSelect: true,
                 selectOnFocus: true,
@@ -139,7 +139,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     if (this.selectedRecord) {
                         // NOTE: the store checks if data changed. If we don't overwrite to string, 
                         //  the check only sees [Object Object] wich of course never changes...
-                        var user_id = this.selectedRecord.get('account_id');
+                        var user_id = this.selectedRecord.get('id');
                         this.selectedRecord.toString = function() {return user_id;};
                     }
                     return this.selectedRecord;
@@ -256,22 +256,17 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
         }
     },
-    
-    onRecordUpdate: function(record) {
         
+    onRecordUpdate: function(record) {
         var attendee = [];
         this.store.each(function(attender) {
-            var user_id = attender.getUserId();
-            if (user_id) {
-                var data = attender.data;
-                
-                data.user_id = user_id;
-                
-                if (data.id && data.id.match(/new/)) {
-                    data.id = 0;
+            var user_id = attender.get('user_id');
+            if (user_id && user_id.id) {
+                if (typeof user_id.get == 'function') {
+                    attender.data.user_id = user_id.data;
                 }
                 
-                attendee.push(data);
+               attendee.push(attender.data);
             }
         }, this);
         
@@ -285,18 +280,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} updatedAttender
      */
     onStoreUpdate: function(store, updatedAttender) {
-        
         // check if we need to add a new row
         var needUpdate = true;
         this.store.each(function(attender) {
-            var userId = attender.getUserId();
-            //var userType = attender.get('user_type');
-            
-            if (! attender.getUserId()) {
+            if (! attender.get('user_id')) {
                 needUpdate = false;
             }
-            
-            if (updatedAttender.getUserId() == userId && updatedAttender.get('user_type') == attender.get('user_type')) {
+            if (updatedAttender.getUserId() == attender.getUserId() && updatedAttender.get('user_type') == attender.get('user_type')) {
                 var last = this.store.getAt(this.store.getCount() -1);
                 
                 if (last != attender && last.id.match(/new/)) {
@@ -307,6 +297,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     return false;
                 }
             }
+            
         }, this);
         
         if (needUpdate && this.record.get('editGrant')) {
@@ -347,6 +338,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (name) {
             if (typeof name.get == 'function' && name.get('n_fn')) {
                 return Ext.util.Format.htmlEncode(name.get('n_fn'));
+            }
+            if (name.n_fn) {
+                return Ext.util.Format.htmlEncode(name.n_fn);
             }
             if (name.accountDisplayName) {
                 return Ext.util.Format.htmlEncode(name.accountDisplayName);

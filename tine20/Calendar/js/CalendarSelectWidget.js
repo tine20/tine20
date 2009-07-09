@@ -62,7 +62,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
      * @property {Function} calMapRecord
      */
     calMapRecord: Ext.data.Record.create([
-        {name: 'attender'}, {name: 'calendar'}, {name: 'user'}, {name: 'userId'}, {name: 'calendarName'}, {name: 'userName'}, {name: 'editGrant'}, {name: 'isOriginal'}
+        {name: 'attender'}, {name: 'calendar'}, {name: 'user'}, {name: 'userAccountId'}, {name: 'calendarName'}, {name: 'userName'}, {name: 'editGrant'}, {name: 'isOriginal'}
     ]),
     /**
      * @property {Ext.data.Record} currentCalMap
@@ -93,10 +93,12 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
         this.EventEditDialog.attendeeStore.each(function(attender){
             var calendar = attender.get('displaycontainer_id');
             var user = attender.get('user_id');
+            var userAccountId = attender.getUserAccountId();
             var calendarName = this.EventEditDialog.attendeeGridPanel.renderAttenderDispContainer(calendar, {});
             var userName = this.EventEditDialog.attendeeGridPanel.renderAttenderName(user, {});
-            // check if attender is a valid user
-            if (userName && attender.get('user_type') == 'user') {
+            
+            // check if attender is a user which is/has an useraccount
+            if (userAccountId && userName) {
                 // check if container is resoved
                 if (calendar && calendar.name) {
                     // check that calendar is not the physCal
@@ -106,7 +108,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
                                 attender: attender,
                                 calendar: calendar, 
                                 user: user,
-                                userId: attender.getUserId(),
+                                userAccountId: userAccountId,
                                 calendarName: calendarName,
                                 userName: String.format('for {0}', userName),
                                 editGrant: calendar.account_grants.editGrant,
@@ -142,21 +144,26 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     },
     
     onAttendeUpdate: function(store, updatedAttender) {
-        // mhh weired, somtimes a container comes instead of an attender...
-        if (typeof updatedAttender.get('displaycontainer_id').get == 'function') {
-            // check if currently displayed container changed
-            if (updatedAttender.get('displaycontainer_id').get('account_grants').account_id == this.currentCalMap.get('userId')) {
-                //console.log('currently displayed non original changed');
-                this.currentCalMap.set('calendar', '');
-                this.currentCalMap.set('calendar', updatedAttender.get('displaycontainer_id'));
-                //this.calCombo.setValue(updatedAttender.get('displaycontainer_id'));
-                this.calCombo.setRawValue(updatedAttender.get('displaycontainer_id').get('name'));
-            } else if (updatedAttender.getUserId() == this.currentAccountId && updatedAttender.get('user_type') == 'user' && this.currentCalMap.get('isOriginal')) {
-                //console.log('currently displayed original changed');
-                this.currentCalMap.set('calendar', '');
-                this.currentCalMap.set('calendar', updatedAttender.get('displaycontainer_id'));
-                //this.calCombo.setValue(updatedAttender.get('displaycontainer_id'));
-                this.calCombo.setRawValue(updatedAttender.get('displaycontainer_id').get('name'));
+        var userAccountId = attender.getUserAccountId();
+        
+        // we are only interested in attenders wich are/have a user account
+        if (userAccountId) {
+            // mhh weired, somtimes a container comes instead of an attender...
+            if (typeof updatedAttender.get('displaycontainer_id').get == 'function') {
+                // check if currently displayed container changed
+                if (updatedAttender.get('displaycontainer_id').get('account_grants').account_id == this.currentCalMap.get('userAccountId')) {
+                    //console.log('currently displayed non original changed');
+                    this.currentCalMap.set('calendar', '');
+                    this.currentCalMap.set('calendar', updatedAttender.get('displaycontainer_id'));
+                    //this.calCombo.setValue(updatedAttender.get('displaycontainer_id'));
+                    this.calCombo.setRawValue(updatedAttender.get('displaycontainer_id').get('name'));
+                } else if (userAccountId == this.currentAccountId && updatedAttender.get('user_type') == 'user' && this.currentCalMap.get('isOriginal')) {
+                    //console.log('currently displayed original changed');
+                    this.currentCalMap.set('calendar', '');
+                    this.currentCalMap.set('calendar', updatedAttender.get('displaycontainer_id'));
+                    //this.calCombo.setValue(updatedAttender.get('displaycontainer_id'));
+                    this.calCombo.setRawValue(updatedAttender.get('displaycontainer_id').get('name'));
+                }
             }
         }
     },
@@ -166,7 +173,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
             this.calCombo.startNode = 'all';
         } else {
             this.calCombo.startNode = 'personalOf';
-            this.calCombo.owner = this.currentCalMap.get('userId');
+            this.calCombo.owner = this.currentCalMap.get('userAccountId');
         }
     },
     
@@ -201,7 +208,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
             this.onCalMapSelect(this.calMapStore.getAt(0));
             this.calCombo.setTrigger2Disabled(true);
         } else {
-            var mine = this.calMapStore.find('userId', this.currentAccountId);
+            var mine = this.calMapStore.find('userAccountId', this.currentAccountId);
             var phys = this.calMapStore.find('isOriginal', true);
             
             var take = mine > 0 ? mine : phys;

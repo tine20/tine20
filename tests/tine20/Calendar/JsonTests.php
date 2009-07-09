@@ -107,7 +107,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $eventData = $event->toArray();
         foreach ($eventData['attendee'] as $key => $attenderData) {
-            if ($eventData['attendee'][$key]['user_id'] != Tinebase_Core::getUser()->getId()) {
+            if ($eventData['attendee'][$key]['user_id'] != $this->_testUserContact->getId()) {
                 unset($eventData['attendee'][$key]);
             }
         }
@@ -148,7 +148,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData = $this->testCreateEvent();
         $numAttendee = count($eventData['attendee']);
         $eventData['attendee'][$numAttendee] = array(
-            'user_id' => $this->_personas['pwulf']->getId(),
+            'user_id' => $this->_personasContacts['pwulf']->getId(),
         );
         
         $updatedEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
@@ -353,12 +353,12 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     protected function _findAttender($attendeeData, $name) {
         $attenderData = false;
-        $searchedId = $this->_personas[$name]->getId();
+        $searchedId = $this->_personasContacts[$name]->getId();
         
         foreach ($attendeeData as $key => $attender) {
             if ($attender['user_type'] == Calendar_Model_Attender::USERTYPE_USER) {
-                if (is_array($attender['user_id']) && array_key_exists('accountId', $attender['user_id'])) {
-                    if ($attender['user_id']['accountId'] == $searchedId) {
+                if (is_array($attender['user_id']) && array_key_exists('id', $attender['user_id'])) {
+                    if ($attender['user_id']['id'] == $searchedId) {
                         $attenderData = $attendeeData[$key];
                     }
                 }

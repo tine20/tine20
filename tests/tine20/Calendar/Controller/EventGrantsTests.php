@@ -299,8 +299,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL)
     {
         $calendarId  = $this->_personasDefaultCals[$_calendarPersona]->getId();
-        $organizerId = $_organizerPersona ? $this->_personas[$_organizerPersona]->getId() : Tinebase_Core::getUser()->getId();
-        $attenderId  = $_attenderPersona ? $this->_personas[$_attenderPersona]->getId() : Tinebase_Core::getUser()->getId();
+        $organizerId = $_organizerPersona ? $this->_personasContacts[$_organizerPersona]->getId() : $this->_testUserContact->getId();
+        $attenderId  = $_attenderPersona ? $this->_personasContacts[$_attenderPersona]->getId() : $this->_testUserContact->getId();
         
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(

@@ -33,7 +33,8 @@ Tine.Tinebase.Model.User = Ext.data.Record.create([
     { name: 'accountDisplayName' },
     { name: 'accountLastName' },
     { name: 'accountFirstName' },
-    { name: 'accountFullName' }
+    { name: 'accountFullName' },
+    { name: 'contact_id' }
 ]);
 
 /**

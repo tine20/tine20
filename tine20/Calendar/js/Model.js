@@ -68,6 +68,8 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model
     // ngettext('Calendar', 'Calendars', n); gettext('Calendars');
     containerName: 'Calendar',
     containersName: 'Calendars',
+    
+    
     isRecurInstance: function() {
         return this.id && this.id.match(/^fakeid/);
     },
@@ -219,7 +221,79 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Mo
     containerProperty: 'cal_event_id',
     // ngettext('Event', 'Events', n); gettext('Events');
     containerName: 'Event',
-    containersName: 'Events'
+    containersName: 'Events',
+    
+    /**
+     * returns account_id if attender is/has a user account
+     * 
+     * @return {String}
+     */
+    getUserAccountId: function() {
+        var user_type = this.get('user_type');
+        if (user_type == 'user' || user_type == 'groupmember') {
+            var user_id = this.get('user_id');
+            if (! user_id) {
+                return null;
+            }
+            
+            // we expect user_id to be a user or contact object or record
+            if (typeof user_id.get == 'function') {
+                if (user_id.get('contact_id')) {
+                    // user_id is a account record
+                    return user_id.get('accountId');
+                } else {
+                    // user_id is a contact record
+                    return user_id.get('account_id');
+                }
+            } else if (user_id.hasOwnProperty('contact_id')) {
+                // user_id contains account data
+                return user_id.accountId;
+            } else if (user_id.hasOwnProperty('account_id')) {
+                // user_id contains contact data
+                return user_id.account_id;
+            }
+            
+            console.log(user_id);
+            throw new Error('Tine.Calendar.Model.Attender::getUserAccountId unexpected user_id');
+            
+        }
+        return null;
+    },
+    
+    /**
+     * returns id of attender of any kind
+     */
+    getUserId: function() {
+        var user_id = this.get('user_id');
+        if (! user_id) {
+            return null;
+        }
+        
+        var userData = (typeof user_id.get == 'function') ? user_id.data : user_id;
+        
+        if (!userData) {
+            return null;
+        }
+        
+        if (typeof userData != 'object') {
+            return userData;
+        }
+        
+        switch (this.get('user_type')) {
+            case 'user':
+                if (userData.hasOwnProperty('contact_id')) {
+                    // userData contains account
+                    return userData.contact_id;
+                } else if (userData.hasOwnProperty('account_id')) {
+                    // userData contains contact
+                    return userData.id;
+                }
+                break;
+            default:
+                return userData.id
+                break;
+        }
+    }
 });
 
 Tine.Calendar.Model.Attender.getDefaultData = function() {
@@ -229,15 +303,4 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
         quantity: 1,
         status: 'NEEDS-ACTION'
     };
-};
-
-Tine.Calendar.Model.Attender.prototype.getUserId = function() {
-    var user_id = this.get('user_id');
-    if (user_id) {
-        user_id = user_id.data? user_id.data : user_id;
-        user_id = user_id.accountId ? user_id.accountId : user_id;
-        user_id = user_id.account_id ? user_id.account_id : user_id;
-    }
-    
-    return user_id;
 };

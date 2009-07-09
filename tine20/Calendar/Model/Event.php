@@ -196,6 +196,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_data['container_id'] = $_data['container_id']['id'];
         }
         
+        if (isset($_data['organizer']) && is_array($_data['organizer'])) {
+            $_data['organizer'] = $_data['organizer']['id'];
+        }
+        
         if (isset($_data['attendee']) && is_array($_data['attendee'])) {
             $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee']);
         }

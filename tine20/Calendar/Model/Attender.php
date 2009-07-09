@@ -90,6 +90,21 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     protected $_datetimeFields = array();
     
     /**
+     * returns accountId of this attender if present
+     * 
+     * @return string
+     */
+    public function getUserAccountId()
+    {
+        if (! in_array($this->user_type, array(self::USERTYPE_USER, self::USERTYPE_GROUPMEMBER))) {
+            return NULL;
+        }
+        
+        $contact = Addressbook_Controller_Contact::getInstance()->get($this->user_id);
+        return $contact->account_id ? $contact->account_id : NULL;
+    }
+    
+    /**
      * sets the record related properties from user generated input.
      * 
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
@@ -103,12 +118,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $_data['displaycontainer_id'] = $_data['displaycontainer_id']['id'];
         }
         
-        // the user_id property might differ, cause accounts and account contacts are allowd
         if (isset($_data['user_id']) && is_array($_data['user_id'])) {
             if (array_key_exists('accountId', $_data['user_id'])) {
-                $_data['user_id'] = $_data['user_id']['accountId'];
-            } else if (array_key_exists('account_id', $_data['user_id'])) {
-                $_data['user_id'] = $_data['user_id']['account_id'];
+            	// NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
+                $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'])->getId();
+            } else if (array_key_exists('bday', $_data['user_id'])) {
+                $_data['user_id'] = $_data['user_id']['id'];
             }
         }
         

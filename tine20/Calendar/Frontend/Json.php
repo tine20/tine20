@@ -227,17 +227,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // build type map 
         $typeMap = array();
         
-        $tinebaseUser = Tinebase_User::getInstance();
-        
         foreach ($eventAttendee as $attendee) {
             // resolve displaycontainers
             Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
             
             foreach ($attendee as $attender) {
                 $type = $attender->$_typeProperty;
-                if ($type === 'user') {
-                	$tinebaseUser->resolveUsers($attender, $_idProperty, true);
+                if (! array_key_exists($type, $typeMap)) {
+                    $typeMap[$type] = array();
                 }
+                $typeMap[$type][] = $attender->$_idProperty;
                 
                 // remove status_authkey when editGrant for displaycontainer_id is missing
                 if (! is_array($attender->displaycontainer_id) || ! (bool) $attender['displaycontainer_id']['account_grants']['editGrant']) {
@@ -245,7 +244,29 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
         }
-
+        
+        // get all $_idProperty entries
+        foreach ($typeMap as $type => $ids) {
+            switch ($type) {
+                case 'user':
+                    //Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
+                    $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids));
+                    break;
+                case 'group':
+                //    Tinebase_Group::getInstance()->getM
+                default:
+                    throw new Exception("type $type not yet supported");
+                    break;
+            }
+        }
+        
+        // sort entreis in
+        foreach ($eventAttendee as $attendee) {
+            foreach ($attendee as $attender) {
+                $attendeeTypeSet = $typeMap[$attender->$_typeProperty];
+                $attender->$_idProperty = $attendeeTypeSet[$attendeeTypeSet->getIndexById($attender->$_idProperty)];
+            }
+        }
     }
     
     /**

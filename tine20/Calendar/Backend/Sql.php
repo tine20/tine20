@@ -150,14 +150,19 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* select */ array());
         
         $_select->joinLeft(
-            /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'), 
+            /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'),
             /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),
             /* select */ array());
         
         $_select->joinLeft(
-            /* table  */ array('attendeegroupmemberships' => $this->_tablePrefix . 'group_members'), 
-            /* on     */ $this->_db->quoteIdentifier('attendeegroupmemberships.account_id') . ' = ' . $this->_db->quoteIdentifier('attendee.user_id') . 
+            /* table  */ array('attendeecontacts' => $this->_tablePrefix . 'addressbook'), 
+            /* on     */ $this->_db->quoteIdentifier('attendeecontacts.id') . ' = ' . $this->_db->quoteIdentifier('attendee.user_id') . 
                             ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_USER),
+            /* select */ array());
+        
+        $_select->joinLeft(
+            /* table  */ array('attendeegroupmemberships' => $this->_tablePrefix . 'group_members'), 
+            /* on     */ $this->_db->quoteIdentifier('attendeegroupmemberships.account_id') . ' = ' . $this->_db->quoteIdentifier('attendeecontacts.account_id'),
             /* select */ array());
         
         $_select->joinLeft(
@@ -214,9 +219,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $userExpression = new Zend_Db_Expr($this->_db->quote($accountId));
         }
         
-        $quoteTypeIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_type');
-        $quoteIdIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_id');
-        
         $sql = $this->_db->quoteInto(    "($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)  . " AND $quoteIdIdentifier = $userExpression)" .
                $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . ' AND ' . $this->_db->quoteIdentifier("$_groupMembersTableName.group_id") . " = $quoteIdIdentifier" . ')' . 
                $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
@@ -253,7 +255,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         if ($_requiredGrant == Tinebase_Model_Container::GRANT_READ) {
             $readCond = $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . 
-                   ' AND ' .  $this->_db->quoteIdentifier('attendee.user_id') . ' = ' . $userExpression;
+                   ' AND ' .  $this->_db->quoteIdentifier('attendeecontacts.account_id') . ' = ' . $userExpression;
             
             $sql = "($sql) OR ($readCond)";
         }
@@ -275,7 +277,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         // _AND_ attender(admin) of display calendar needs to have grant on phys calendar
         // @todo include implicit inherited grants
         if ($_requiredGrant != Tinebase_Model_Container::GRANT_READ) {
-            $userExpr = new Zend_Db_Expr($this->_db->quoteIdentifier('attendee.user_id'));
+            $userExpr = new Zend_Db_Expr($this->_db->quoteIdentifier('attendeecontacts.account_id'));
             
             $attenderPhysGrantCond = $this->_getContainGrantCondition('physgrants', 'attendeegroupmemberships', $_requiredGrant, $userExpr);
             $attenderImplicitGrantCond = $this->_getImplicitGrantCondition($_requiredGrant, $userExpr);
