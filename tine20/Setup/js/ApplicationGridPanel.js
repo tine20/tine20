@@ -136,7 +136,6 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         if (btn.actionType == 'uninstall') {
             // get user confirmation before uninstall
             Ext.Msg.confirm(this.app.i18n._('uninstall'), this.app.i18n._('Do you really want to uninstall the application(s)?'), function(confirmbtn, value) {
-                console.log(confirmbtn);
                 if (confirmbtn == 'yes') {
                     this.alterApps(btn.actionType);
                 }
