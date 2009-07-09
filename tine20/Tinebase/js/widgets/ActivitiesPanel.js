@@ -412,7 +412,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Activities_Gridy',
+            id: 'Activities_Grid',
             store: this.store,
             cm: columnModel,
             tbar: pagingToolbar,     
