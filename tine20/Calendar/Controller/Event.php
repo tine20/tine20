@@ -274,10 +274,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
+     * 
+     * @todo    update alarms if dtstart of an event changes?
      */
     protected function _inspectUpdate($_record, $_oldRecord)
     {
-        // if dtstart of an event changes, we update the originator_tz
+        // if dtstart of an event changes, we update the originator_tz and alarm times
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
             $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
@@ -315,6 +317,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $this->_backend->update($exception);
                 }
             }
+            
+            //$this->_updateAlarms($_record);
         }
         
         // delete recur exceptions if update is not longer a recur series
@@ -757,70 +761,5 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             //-- send message
             //$notificationsBackend->send($organizer, $attender, $messageSubject, $messageBody);
         }
-    }
-
-    /**
-     * saves alarm of given event
-     * 
-     * @param Calendar_Model_Event $_event
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @todo move this to abstract record controller
-     */
-    protected function _saveAlarms($_event)
-    {
-        $alarms = $_event->alarms instanceof Tinebase_Record_RecordSet ? 
-            $_event->alarms : 
-            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-        
-        if (count($alarms) == 0) {
-            // no alarms
-            return $alarms;
-        }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . " About to save " . count($alarms) . " alarms for event {$_event->id} " 
-            //.  print_r($alarms->toArray(), true)
-        );
-        
-        $currentAlarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $_event->id);
-        $diff = $currentAlarms->getMigration($alarms->getArrayOfIds());
-        Tinebase_Alarm::getInstance()->delete($diff['toDeleteIds']);
-        
-        // create / update alarms
-        foreach ($alarms as $alarm) {
-            $id = $alarm->getId();
-            
-            if ($id) {
-                $alarm = Tinebase_Alarm::getInstance()->update($alarm);
-                
-            } else {
-                $alarm->record_id = $_event->getId();
-                if (! $alarm->model) {
-                    $alarm->model = 'Calendar_Model_Event';
-                }
-                if (! $alarm->alarm_time) {
-                    $alarm->setTime($_event->dtstart);
-                }
-                $alarm = Tinebase_Alarm::getInstance()->create($alarm);
-            }
-        }
-        
-        return $alarms;
-    }
-
-    /**
-     * delete alarms for events
-     *
-     * @param array $_eventIds
-     * 
-     * @todo move this to abstract record controller
-     */
-    protected function _deleteAlarmsForIds($_eventIds)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . " Deleting alarms for events " . print_r($_eventIds, TRUE)
-        );
-        
-        Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord($this->_modelName, $_eventIds);
     }
 }
