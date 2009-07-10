@@ -267,13 +267,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     break;
             }
             
-            #if ($rrule->freq != Calendar_Model_Rrule::FREQ_YEARLY) {
-            #    $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
-            #}
-            if ($rrule->freq == Calendar_Model_Rrule::FREQ_YEARLY) {
-                $rrule->interval = 1;
+            if ($rrule->freq != Calendar_Model_Rrule::FREQ_YEARLY) {
+                $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
             }
-            $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
             
             if($rrule->until instanceof Zend_Date) {
                 $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Until', $rrule->until->toString('yyyyMMddTHHmmss') . 'Z'));
@@ -302,7 +298,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         $result = 0;
         
-        foreach($this->_recurDayMapping as $dayString) {
+        foreach($daysArray as $dayString) {
             $result = $result + $this->_recurDayMapping[$dayString];
         }
         
