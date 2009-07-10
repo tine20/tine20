@@ -302,7 +302,7 @@ abstract class ActiveSync_Controller_Abstract
     /**
      * search for existing entry
      *
-     * @param unknown_type $_collectionId
+     * @param unknown_type $_forlderId
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
