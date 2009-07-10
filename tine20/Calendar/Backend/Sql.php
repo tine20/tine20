@@ -231,28 +231,24 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * returns SQL condition for implicit grants
      *
-     * @param  int                                   $_requiredGrant
-     * @param  Zend_Db_Expr|int|Tinebase_Model_User  $_user (defaults to current user)
+     * @param  int                      $_requiredGrant
+     * @param  Tinebase_Model_User  $_user (defaults to current user)
      * @return string
      */
     protected function _getImplicitGrantCondition($_requiredGrant, $_user=NULL)
     {
-        if ($_user instanceof Zend_Db_Expr) {
-            $userExpression = $_user;
-        } else {
-            $accountId = $_user ? Tinebase_Model_User::convertUserIdToInt($_user) : Tinebase_Core::getUser()->getId();
-            $userExpression = new Zend_Db_Expr($this->_db->quote($accountId));
-        }
+        $accountId = $_user ? $_user->getId() : Tinebase_Core::getUser()->getId();
+        $contactId = $_user ? $user->contact_id : Tinebase_Core::getUser()->contact_id;
         
         if (! in_array($_requiredGrant, array(Tinebase_Model_Container::GRANT_READ, Tinebase_Model_Container::GRANT_EDIT))) {
             return '1=0';
         }
         
-        $sql = $this->_db->quoteIdentifier('cal_events.organizer') . " = $userExpression";
+        $sql = $this->_db->quoteIdentifier('cal_events.organizer') . " = " . $this->_db->quote($contactId);
         
         if ($_requiredGrant == Tinebase_Model_Container::GRANT_READ) {
             $readCond = $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . 
-                   ' AND ' .  $this->_db->quoteIdentifier('attendeecontacts.account_id') . ' = ' . $userExpression;
+                   ' AND ' .  $this->_db->quoteIdentifier('attendeecontacts.account_id') . ' = ' . $this->_db->quote($accountId);
             
             $sql = "($sql) OR ($readCond)";
         }
