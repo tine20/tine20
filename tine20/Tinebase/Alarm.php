@@ -214,7 +214,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         Tinebase_Alarm::getInstance()->delete($diff['toDeleteIds']);
         
         // create / update alarms
-        foreach ($alarms as &$alarm) {
+        foreach ($alarms as $alarm) {
             $id = $alarm->getId();
             
             if ($id) {
@@ -233,12 +233,6 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 }
                 $alarm = Tinebase_Alarm::getInstance()->create($alarm);
             }
-            
-            /*
-            if ($_record->has('dtstart')) {
-                $alarm->setMinutesBefore($_record->dtstart);
-            }
-            */
         }
         
         $_record->alarms = $alarms;
