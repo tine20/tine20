@@ -90,7 +90,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      */
     public function setTime(Zend_Date $_date)
     {
-        if (! isset($this->minutes_before)/* || empty($this->minutes_before)*/) {
+        if (! isset($this->minutes_before)) {
             throw new Tinebase_Exception_Record_Validation('minutes_before is needed to set the alarm_time!');
         }
         

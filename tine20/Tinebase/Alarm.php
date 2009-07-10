@@ -218,7 +218,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             $id = $alarm->getId();
             
             if ($id) {
-                if ($_record->has('dtstart')) {
+                if ($_record->has('dtstart') && $_record->minutes_before) {
                     $alarm->setTime($_record->dtstart);
                 }
                 $alarm = Tinebase_Alarm::getInstance()->update($alarm);
