@@ -64,6 +64,8 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'adr_two_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_two_postalcode'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_two_locality'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'email'                => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'email_home'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag'),
         //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
