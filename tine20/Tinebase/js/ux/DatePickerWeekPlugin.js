@@ -36,7 +36,7 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
         var innerCal = Ext.DomQuery.selectNode('table[class=x-date-inner]', this.getEl().dom);
         var trs = Ext.DomQuery.select('tr', innerCal);
         for (var i=0; i<trs.length; i++) {
-            Ext.DomHelper.insertFirst(trs[i], i==0 ? '<th >' + this.weekHeaderString + '</th>' : '<td class="x-date-picker-wk"><a class="x-date-date" tabindex="1" hidefocus="on" href="#"><em><span>'+ i +'</span></em></td>');
+            Ext.DomHelper.insertFirst(trs[i], i==0 ? '<th class="x-date-picker-wk-hd">' + this.weekHeaderString + '</th>' : '<td class="x-date-picker-wk"><a class="x-date-date" tabindex="1" hidefocus="on" href="#"><em><span>'+ i +'</span></em></td>');
         }
         
         // update again;
