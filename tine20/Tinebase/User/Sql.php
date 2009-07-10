@@ -144,13 +144,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
     {
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' FIXME!!!! Why was the exception commented out?????');
-        //try {
-            $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        //} catch (Tinebase_Exception_NotFound $enf) {
-        //    $result = $this->getNonExistentUser($_accountClass, $accountId);
-        //    return $result;
-        //}
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $select = $this->_getUserSelectObject()
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.id') . ' = ?', $accountId));
