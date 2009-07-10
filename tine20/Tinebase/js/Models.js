@@ -193,3 +193,20 @@ Tine.Tinebase.Model.Preference = Ext.data.Record.create([
     {name: 'description'    },
     {name: 'options'        }
 ]);
+
+/**
+ * Model of an alarm
+ * 
+ * @constructor {Ext.data.Record}
+ */
+Tine.Tinebase.Model.Alarm = Ext.data.Record.create([
+    {name: 'id'             },
+    {name: 'record_id'      },
+    {name: 'model'          },
+    {name: 'alarm_time'     },
+    {name: 'minutes_before' },
+    {name: 'sent_time'      },
+    {name: 'sent_status'    },
+    {name: 'sent_message'   },
+    {name: 'options'        }
+]);

@@ -199,12 +199,20 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
         $_record->bypassFilters = true;
+        
+        // add alarms
+        if ($_record->has('alarms')) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get alarms for record ... ');
+            Tinebase_Alarm::getInstance()->getAlarmsOfRecord(get_class($_record), $_record, FALSE, TRUE);
+        }
+        
         $recordArray = $_record->toArray();
 
         if ($_record->has('container_id')) {
             $recordArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($_record->container_id)->toArray();
             $recordArray['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
         }
+
         return $recordArray;
     }
 
@@ -230,6 +238,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
         
+        // add alarms
         if ($_records[0]->has('alarms')) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get alarms for multiple records ... ');
             Tinebase_Alarm::getInstance()->getAlarmsOfRecord($_records->getRecordClassName(), $_records, FALSE, TRUE);

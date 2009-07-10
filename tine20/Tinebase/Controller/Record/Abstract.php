@@ -605,47 +605,10 @@ abstract class Tinebase_Controller_Record_Abstract
      * saves alarm of given record
      * 
      * @param Tinebase_Record_Abstract $_event
-     * @return Tinebase_Record_RecordSet
      */
     protected function _saveAlarms(Tinebase_Record_Abstract $_record)
     {
-        $alarms = $_record->alarms instanceof Tinebase_Record_RecordSet ? 
-            $_record->alarms : 
-            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-        
-        if (count($alarms) == 0) {
-            // no alarms
-            return $alarms;
-        }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . " About to save " . count($alarms) . " alarms for event {$_record->id} " 
-            //.  print_r($alarms->toArray(), true)
-        );
-        
-        $currentAlarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $_record->id);
-        $diff = $currentAlarms->getMigration($alarms->getArrayOfIds());
-        Tinebase_Alarm::getInstance()->delete($diff['toDeleteIds']);
-        
-        // create / update alarms
-        foreach ($alarms as $alarm) {
-            $id = $alarm->getId();
-            
-            if ($id) {
-                $alarm = Tinebase_Alarm::getInstance()->update($alarm);
-                
-            } else {
-                $alarm->record_id = $_record->getId();
-                if (! $alarm->model) {
-                    $alarm->model = $this->_modelName;
-                }
-                if (! $alarm->alarm_time && $_record->has('dtstart')) {
-                    $alarm->setTime($_record->dtstart);
-                }
-                $alarm = Tinebase_Alarm::getInstance()->create($alarm);
-            }
-        }
-        
-        return $alarms;
+        return Tinebase_Alarm::getInstance()->saveAlarmsOfRecord($this->_modelName, $_record);
     }
 
     /**

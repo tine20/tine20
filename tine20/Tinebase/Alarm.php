@@ -168,14 +168,80 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 $result->addIndices(array('record_id'));
                 foreach ($_recordId as $record) {
                     $record->alarms = $result->filter('record_id', $record->getId());
+                    
+                    // calc minutes_before
+                    if ($record->has('dtstart')) {
+                        $record->alarms->setMinutesBefore($record->dtstart);
+                    }
                 }
                 
             } else if ($_recordId instanceof Tinebase_Record_Interface) {
                 $_recordId->alarms = $result;
+
+                // calc minutes_before
+                if ($_recordId->has('dtstart')) {
+                    $_recordId->alarms->setMinutesBefore($_recordId->dtstart);
+                }
             }
         }
         
         return $result;
+    }
+    
+    /**
+     * save alarms of record
+     *
+     * @param string $_model
+     * @param Tinebase_Record_Abstract $_record
+     */
+    public function saveAlarmsOfRecord($_model, Tinebase_Record_Abstract $_record)
+    {
+        $alarms = $_record->alarms instanceof Tinebase_Record_RecordSet ? 
+            $_record->alarms : 
+            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        
+        if (count($alarms) == 0) {
+            // no alarms
+            return $alarms;
+        }
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " About to save " . count($alarms) . " alarms for event {$_record->id} " 
+            //.  print_r($alarms->toArray(), true)
+        );
+        
+        $currentAlarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($_model, $_record->id);
+        $diff = $currentAlarms->getMigration($alarms->getArrayOfIds());
+        Tinebase_Alarm::getInstance()->delete($diff['toDeleteIds']);
+        
+        // create / update alarms
+        foreach ($alarms as &$alarm) {
+            $id = $alarm->getId();
+            
+            if ($id) {
+                if ($_record->has('dtstart')) {
+                    $alarm->setTime($_record->dtstart);
+                }
+                $alarm = Tinebase_Alarm::getInstance()->update($alarm);
+                
+            } else {
+                $alarm->record_id = $_record->getId();
+                if (! $alarm->model) {
+                    $alarm->model = $_model;
+                }
+                if ($_record->has('dtstart') && ! $alarm->alarm_time) {
+                    $alarm->setTime($_record->dtstart);
+                }
+                $alarm = Tinebase_Alarm::getInstance()->create($alarm);
+            }
+            
+            /*
+            if ($_record->has('dtstart')) {
+                $alarm->setMinutesBefore($_record->dtstart);
+            }
+            */
+        }
+        
+        $_record->alarms = $alarms;
     }
     
     /**
