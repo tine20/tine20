@@ -173,6 +173,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	   'Tinebase/css/ux/ConnectionStatus.css',
     	   'Tinebase/css/ux/Wizard.css',
     	   'Tinebase/css/ux/Percentage.css',
+    	   'Tinebase/css/ux/DatePickerWeekPlugin.css',
     	   'Tinebase/css/ux/grid/QuickaddGridPanel.css',
     	   'Tinebase/css/ux/grid/IconTextField.css',
     	   'Tinebase/css/ux/grid/PagingToolbar.css',
