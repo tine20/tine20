@@ -798,6 +798,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if (! $alarm->model) {
                     $alarm->model = 'Calendar_Model_Event';
                 }
+                if (! $alarm->alarm_time) {
+                    $alarm->setTime($_event->dtstart);
+                }
                 $alarm = Tinebase_Alarm::getInstance()->create($alarm);
             }
         }

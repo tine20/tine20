@@ -61,12 +61,13 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
         'record_id'         => array('presence' => 'required', 'Alnum'),
         'model'             => array('presence' => 'required'),
         'alarm_time'        => array('presence' => 'required'),
+        'minutes_before'    => array('allowEmpty' => TRUE),
         'sent_time'         => array('allowEmpty' => TRUE),
         'sent_status'       => array('presence' => 'required', 'InArray' => array(
             self::STATUS_PENDING, 
             self::STATUS_FAILURE, 
             self::STATUS_SUCCESS,
-        )),
+        ), Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_PENDING),
         'sent_message'      => array('allowEmpty' => TRUE),
     // xml field with app/model specific options
         'options'           => array('allowEmpty' => TRUE),
@@ -81,4 +82,32 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
         'alarm_time',
         'sent_time',
     );
+    
+    /**
+     * set alarm time depending on another date with minutes_before
+     *
+     * @param Zend_Date $_date
+     */
+    public function setTime(Zend_Date $_date)
+    {
+        if (! isset($this->minutes_before)/* || empty($this->minutes_before)*/) {
+            throw new Tinebase_Exception_Record_Validation('minutes_before is needed to set the alarm_time!');
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calculating alarm_time ...');
+        
+        $this->alarm_time = $_date->subMinute($this->minutes_before);
+    }
+
+    /**
+     * set minutes_before depending on another date with alarm_time
+     *
+     * @param Zend_Date $_date
+     * 
+     * @todo compare dates to make sure $_date > $this->alarm_time
+     */
+    public function setMinutesBefore(Zend_Date $_date)
+    {
+        $this->minutes_before = $_date->subDate($this->alarm_time)->getMinute();
+    }
 }

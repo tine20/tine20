@@ -142,10 +142,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
         $event = $this->_getEvent();
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
             array(
-                'model'             => 'Calendar_Model_Event',
-                'alarm_time'        => Zend_Date::now(),
-                'sent_status'       => Tinebase_Model_Alarm::STATUS_PENDING, 
-                'options'           => ''
+                'minutes_before'    => 0
             ),
         ), TRUE);
         
