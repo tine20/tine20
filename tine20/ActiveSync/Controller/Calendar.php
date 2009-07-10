@@ -277,6 +277,25 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         
             //Occurences
         }
+        
+        if(count($data->attendee) > 0) {
+            $addressbook = Addressbook_Controller_Contact::getInstance();
+            
+            $attendees = null;
+            
+            foreach($data->attendee as $attenderObject) {
+                $contact = $addressbook->get($attenderObject->user_id);
+                
+                if (!empty($contact->email) || !empty($contact->email_home)) {
+                    if($attendees === null) {
+                        $attendees = $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendees'));
+                    }
+                    $attendee = $attendees->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendee'));
+                    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Name', $contact->n_fileas));
+                    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Email', !empty($contact->email) ? $contact->email : $contact->email_home));
+                }
+            }
+        }
                 
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'BusyStatus', 2));
