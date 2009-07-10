@@ -78,7 +78,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $event = parent::create($_record);
         
         $this->_saveAttendee($_record);
-        $this->_saveAlarms($_record);
         
         return $this->get($event->getId());
     }
@@ -111,7 +110,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $event = parent::update($_record);
             
             $this->_saveAttendee($_record);
-            $this->_saveAlarms($_record);
         } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
             foreach ($_record->attendee as $attender) {

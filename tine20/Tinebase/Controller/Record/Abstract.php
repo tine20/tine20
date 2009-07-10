@@ -227,7 +227,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_inspectCreate($_record);
             $record = $this->_backend->create($_record);
             
-            // set relations / tags / notes
+            // set relations / tags / notes / alarms
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
             }                    
@@ -241,6 +241,10 @@ abstract class Tinebase_Controller_Record_Abstract
                     Tinebase_Notes::getInstance()->setNotesOfRecord($record);
                 }
                 Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'created');                
+            }
+            if ($record->has('alarms') && isset($_record->alarms)) {
+                $record->alarms = $_record->alarms;
+                $this->_saveAlarms($record);
             }
             
             if ($this->_sendNotifications) {
@@ -309,7 +313,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_inspectUpdate($_record, $currentRecord);
             $record = $this->_backend->update($_record);
     
-            // set relations & tags & notes
+            // set relations / tags / notes / alarms
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
                 Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $record->getId(), $_record->relations);
             }        
@@ -321,7 +325,10 @@ abstract class Tinebase_Controller_Record_Abstract
                     Tinebase_Notes::getInstance()->setNotesOfRecord($_record);
                 }
                 Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'changed', $currentMods);
-            }        
+            }
+            if ($record->has('alarms') && isset($_record->alarms)) {
+                $this->_saveAlarms($_record);
+            }
             
             // send notifications
             if ($this->_sendNotifications && $record->has('created_by') && count($currentMods) > 0) {
