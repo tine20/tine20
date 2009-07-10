@@ -48,7 +48,7 @@
  *     array('condition' => 'OR', 'filters' => array(
  *         'field' => 'created_by',  'operator' => 'equals', 'value' => 2,
  *         'field' => 'modified_by', 'operator' => 'equals', 'value' => 2
- *     ),
+ *     )),
  *     array('field' => 'container_id', 'operator' => 'in', 'value' => array(2,4,6,7)
  *     array('field' => 'foreign_id',  'operator' => 'AND', value => array(
  *         array('field' => 'foreignfieldname',  'operator' => 'contains', 'value' => 'test'),
