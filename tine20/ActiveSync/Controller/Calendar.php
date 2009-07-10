@@ -503,6 +503,37 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     }
     
     /**
+     * get id's of all contacts available on the server
+     *
+     * @return array
+     */
+    public function getServerEntries($_folderId)
+    {
+    	// NOTE: $folderFilter is an array containing filterdata for one container filter 
+        $folderFilter  = $this->_getFolderFilter($_folderId);
+        
+        // add period filter
+        $folderFilter[] = array(
+            'field'    => 'period',
+            'operator' => 'within',
+            'value'    => array(
+                'from'  => '2009-07-01 00:00:00',
+                'until' => '2009-09-30 23:59:59'
+        ));
+        
+        // exclude recur exceptions
+        $folderFilter[] = array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL);
+        
+        $contentFilter = new $this->_contentFilterClass($folderFilter);
+        
+        $foundEntries  = $this->_contentController->search($contentFilter, NULL, false, true);
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
+            
+        return $foundEntries;
+    }
+    
+    /**
      * decode timezone info from activesync
      * 
      * @param string $_packedTimezoneInfo the packed timezone info
