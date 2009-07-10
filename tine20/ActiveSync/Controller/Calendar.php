@@ -416,11 +416,21 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     break;
                      
                 case self::RECUR_TYPE_YEARLY:
-                    $rrule->freq = Calendar_Model_Rrule::FREQ_YEARLY;
+                    $rrule->freq       = Calendar_Model_Rrule::FREQ_YEARLY;
+                    $rrule->bymonth    = (int)$xmlData->Recurrence->MonthOfYear;
+                    $rrule->bymonthday = (int)$xmlData->Recurrence->DayOfMonth;
                     break;
                      
                 case self::RECUR_TYPE_YEARLY_DAYN:
-                    $rrule->freq = Calendar_Model_Rrule::FREQ_YEARLY;
+                    $rrule->freq    = Calendar_Model_Rrule::FREQ_YEARLY;
+                    $rrule->bymonth = (int)$xmlData->Recurrence->MonthOfYear;
+                    
+                    $week = (int)$xmlData->Recurrence->WeekOfMonth;
+                    $day  = (int)$xmlData->Recurrence->DayOfWeek;
+                    $byDay  = $week == 5 ? -1 : $week;
+                    $byDay .= $this->_convertBitMaskToDay($day);
+                    
+                    $rrule->byday = $byDay;
                     break; 
             }
             $rrule->interval = isset($xmlData->Recurrence->Interval) ? (int)$xmlData->Recurrence->Interval : 1;
