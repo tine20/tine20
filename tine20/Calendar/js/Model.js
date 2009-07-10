@@ -28,6 +28,7 @@ Tine.Calendar.Model.EventArray = Tine.Tinebase.Model.genericFields.concat([
     // ical common fields with multiple appearance
     //{ name: 'attach' },
     { name: 'attendee' },
+    { name: 'alarms'},
     { name: 'tags' },
     { name: 'notes'},
     //{ name: 'contact' },

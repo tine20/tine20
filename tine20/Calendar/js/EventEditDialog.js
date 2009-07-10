@@ -251,6 +251,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.rendered) {
             this.attendeeGridPanel.onRecordLoad(this.record);
             this.rrulePanel.onRecordLoad(this.record);
+            this.alarmPanel.onRecordLoad(this.record);
             this.CalendarSelectWidget.onRecordLoad(this.record);
             
             // apply grants
@@ -270,6 +271,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Calendar.EventEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.attendeeGridPanel.onRecordUpdate(this.record);
         this.rrulePanel.onRecordUpdate(this.record);
+        this.alarmPanel.onRecordUpdate(this.record);
         this.CalendarSelectWidget.onRecordUpdate(this.record);
     },
     

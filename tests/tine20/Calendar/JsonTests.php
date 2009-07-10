@@ -87,6 +87,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertGreaterThan(0, count($loadedEventData['alarms']));
         $this->assertEquals('Calendar_Model_Event', $loadedEventData['alarms'][0]['model']);
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEventData['alarms'][0]['sent_status']);
+        $this->assertTrue(array_key_exists('minutes_before', $loadedEventData['alarms'][0]), 'minutes_before is missing');
         
         // try to send alarm
         $event = new Tinebase_Event_Async_Minutely();
@@ -160,8 +161,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($persistentEventData, $resultEventData, 'failed to search event with alarm');
-        
-        //print_r($resultEventData);
     }
     
     
@@ -372,16 +371,19 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(is_array($eventData['container_id']), $msg . ': failed to "resolve" container');
         $this->assertTrue(is_array($eventData['container_id']['account_grants']), $msg . ': failed to "resolve" container account_grants');
         $this->assertGreaterThan(0, count($eventData['attendee']));
-        $this->assertEquals(count($eventData['attendee']), count($expectedEventData['attendee']), $msg . ': faild to append attendee');
+        $this->assertEquals(count($eventData['attendee']), count($expectedEventData['attendee']), $msg . ': failed to append attendee');
         $this->assertTrue(is_array($eventData['attendee'][0]['user_id']), $msg . ': failed to resolve attendee user_id');
         // NOTE: due to sorting isshues $eventData['attendee'][0] may be a non resolvable container (due to rights restrictions)
         $this->assertTrue(is_array($eventData['attendee'][0]['displaycontainer_id']) || (isset($eventData['attendee'][1]) && is_array($eventData['attendee'][1]['displaycontainer_id'])), $msg . ': failed to resolve attendee displaycontainer_id');
-        $this->assertEquals(count($expectedEventData['tags']), count($eventData['tags']), $msg . ': faild to append tag');
-        $this->assertEquals(count($expectedEventData['notes']), count($eventData['notes']), $msg . ': faild to create note');
+        $this->assertEquals(count($expectedEventData['tags']), count($eventData['tags']), $msg . ': failed to append tag');
+        $this->assertEquals(count($expectedEventData['notes']), count($eventData['notes']), $msg . ': failed to create note');
         
         if (array_key_exists('alarms', $expectedEventData)) {
-            $this->assertTrue(array_key_exists('alarms', $eventData), ': faild to create alarms');
-            $this->assertEquals(count($expectedEventData['alarms']), count($eventData['alarms']), $msg . ': faild to create correct number of alarms');
+            $this->assertTrue(array_key_exists('alarms', $eventData), ': failed to create alarms');
+            $this->assertEquals(count($expectedEventData['alarms']), count($eventData['alarms']), $msg . ': failed to create correct number of alarms');
+            if (count($expectedEventData['alarms']) > 0) {
+                $this->assertTrue(array_key_exists('minutes_before', $eventData['alarms'][0]));
+            }
         }
     }
     
