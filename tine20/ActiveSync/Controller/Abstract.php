@@ -372,7 +372,7 @@ abstract class ActiveSync_Controller_Abstract
         return $foundEntries;
     }
     
-    private function _getFolderFilter($_folderId)
+    protected function _getFolderFilter($_folderId)
     {
         if($_folderId == $this->_specialFolderName) {
             $folderFilter = array(
