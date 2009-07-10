@@ -251,9 +251,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     break;
             }
             
-            if ($rrule->freq != Calendar_Model_Rrule::FREQ_YEARLY) {
-                $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
+            #if ($rrule->freq != Calendar_Model_Rrule::FREQ_YEARLY) {
+            #    $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
+            #}
+            if ($rrule->freq == Calendar_Model_Rrule::FREQ_YEARLY) {
+                $rrule->interval = 1;
             }
+            $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Interval', $rrule->interval));
             
             if($rrule->until instanceof Zend_Date) {
                 $recurrence->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Until', $rrule->until->toString('yyyyMMddTHHmmss') . 'Z'));
@@ -336,11 +340,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
+        // decode timezone data
         if(isset($xmlData->Timezone)) {
             $timezoneData = $this->unpackTimezoneInfo((string)$xmlData->Timezone);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . print_r($timezoneData, true));
         }
         
+        // handle attendees
         if(isset($xmlData->Attendees)) {
             foreach($xmlData->Attendees->Attendee as $attendee) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email" . $attendee->Email);
@@ -349,6 +355,48 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         } else {
             $event->attendee = array();
+        }
+        
+        // handle recurrence
+        if(isset($xmlData->Recurrence) && isset($xmlData->Recurrence->Type)) {
+            $rrule = new Calendar_Model_Rrule($rruleArray);
+            
+            switch((int)$xmlData->Recurrence->Type) {
+                case self::RECUR_TYPE_DAILY:
+                    $rrule->freq = Calendar_Model_Rrule::FREQ_DAILY;
+                    break; 
+                    
+                case self::RECUR_TYPE_WEEKLY:
+                    $rrule->freq = Calendar_Model_Rrule::FREQ_WEEKLY;
+                    //byday
+                    break;
+                     
+                case self::RECUR_TYPE_MONTHLY:
+                    $rrule->freq = Calendar_Model_Rrule::FREQ_MONTHLY;
+                    break;
+                     
+                case self::RECUR_TYPE_MONTHLY_DAYN:
+                    $rrule->freq = Calendar_Model_Rrule::FREQ_MONTHLY;
+                    break;
+                     
+                case self::RECUR_TYPE_YEARLY:
+                    $rrule->freq = Calendar_Model_Rrule::FREQ_YEARLY;
+                    break;
+                     
+                case self::RECUR_TYPE_YEARLY_DAYN:
+                    $rrule->freq = Calendar_Model_Rrule::FREQ_YEARLY;
+                    break; 
+            }
+            $rrule->interval = isset($xmlData->Recurrence->Interval) ? (int)$xmlData->Recurrence->Interval : 1;
+            
+            if(isset($xmlData->Recurrence->Until)) {
+                $timeStamp = $this->_convertISOToTs((string)$xmlData->Recurrence->Until);
+                $rrule->until = new Zend_Date($timeStamp, NULL);
+            } else {
+                $rrule->until = null;
+            }            
+            
+            $event->rrule = $rrule;
         }
         
         // event should be valid now
