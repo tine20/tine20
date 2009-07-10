@@ -142,6 +142,28 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         return $searchResultData;
     }
+
+    /**
+     * search event with alarm
+     *
+     */
+    public function testSearchEventsWithAlarm()
+    {
+        $eventData = $this->_getEventWithAlarm()->toArray();
+        $persistentEventData = $this->_uit->saveEvent(Zend_Json::encode($eventData));
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        );
+        
+        $searchResultData = $this->_uit->searchEvents(Zend_Json::encode($filter), Zend_Json::encode(array()));
+        $resultEventData = $searchResultData['results'][0];
+        
+        $this->_assertJsonEvent($persistentEventData, $resultEventData, 'failed to search event with alarm');
+        
+        //print_r($resultEventData);
+    }
+    
     
     public function testSetAttenderStatus()
     {
@@ -333,6 +355,13 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(0, count($searchResultData['results']));
     }
     
+    /**
+     * compare expected event data with test event
+     *
+     * @param array $expectedEventData
+     * @param array $eventData
+     * @param string $msg
+     */
     protected function _assertJsonEvent($expectedEventData, $eventData, $msg) {
         $this->assertEquals($expectedEventData['summary'], $eventData['summary'], $msg . ': failed to create/load event');
         
@@ -349,6 +378,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(is_array($eventData['attendee'][0]['displaycontainer_id']) || (isset($eventData['attendee'][1]) && is_array($eventData['attendee'][1]['displaycontainer_id'])), $msg . ': failed to resolve attendee displaycontainer_id');
         $this->assertEquals(count($expectedEventData['tags']), count($eventData['tags']), $msg . ': faild to append tag');
         $this->assertEquals(count($expectedEventData['notes']), count($eventData['notes']), $msg . ': faild to create note');
+        
+        if (array_key_exists('alarms', $expectedEventData)) {
+            $this->assertTrue(array_key_exists('alarms', $eventData), ': faild to create alarms');
+            $this->assertEquals(count($expectedEventData['alarms']), count($eventData['alarms']), $msg . ': faild to create correct number of alarms');
+        }
     }
     
     protected function _findAttender($attendeeData, $name) {

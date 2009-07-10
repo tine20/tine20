@@ -230,6 +230,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
         
+        if ($_records[0]->has('alarms')) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get alarms for multiple records ... ');
+            Tinebase_Alarm::getInstance()->getAlarmsOfRecord($_records->getRecordClassName(), $_records, FALSE, TRUE);
+        }
+        
         $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
         $_records->convertDates = true;
         

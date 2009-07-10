@@ -129,20 +129,22 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      * @param  string $_model model to get alarms for
      * @param  string|array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_recordId record id(s) to get alarms for
      * @param  boolean $_onlyIds
+     * @param  boolean $_resolve
      * @return Tinebase_Record_RecordSet|array of Tinebase_Model_Alarm|ids
      * 
-     * @todo add backend?
      * @todo add grants?
      */
-    public function getAlarmsOfRecord($_model, $_recordId, $_onlyIds = FALSE)
+    public function getAlarmsOfRecord($_model, $_recordId, $_onlyIds = FALSE, $_resolve = FALSE)
     {
         if ($_recordId instanceof Tinebase_Record_RecordSet) {
-            $_recordId = $_recordId->getArrayOfIds();
+            $recordId = $_recordId->getArrayOfIds();
         } else if ($_recordId instanceof Tinebase_Record_Interface) {
-            $_recordId = $_recordId->getId();
+            $recordId = $_recordId->getId();
+        } else {
+            $recordId = $_recordId;
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' id:" . print_r((array)$_recordId, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' id:" . print_r((array)$recordId, true));
     
         $filter = new Tinebase_Model_AlarmFilter(array(
             array(
@@ -153,11 +155,26 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             array(
                 'field'     => 'record_id', 
                 'operator'  => 'in', 
-                'value'     => (array)$_recordId
+                'value'     => (array)$recordId
             ),
         ));
         $result = $this->_backend->search($filter, NULL, $_onlyIds);
-            
+
+        if ($_resolve) {
+            if ($_recordId instanceof Tinebase_Record_RecordSet) {
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
+                
+                $result->addIndices(array('record_id'));
+                foreach ($_recordId as $record) {
+                    $record->alarms = $result->filter('record_id', $record->getId());
+                }
+                
+            } else if ($_recordId instanceof Tinebase_Record_Interface) {
+                $_recordId->alarms = $result;
+            }
+        }
+        
         return $result;
     }
     
