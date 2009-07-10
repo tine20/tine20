@@ -72,7 +72,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     /**
      * test create event with alarm
      *
-     * @todo finish implementation
+     * @todo add testUpdateEventWithAlarm
      */
     public function testCreateEventWithAlarm()
     {
