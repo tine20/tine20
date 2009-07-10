@@ -52,11 +52,11 @@ class Felamimail_Message extends Zend_Mail_Message
             foreach (new RecursiveIteratorIterator($this) as $messagePart) {
                 try {
                     $contentType    = $messagePart->getHeaderField('content-type', 0);
-                    if(strtolower($contentType) == $_contentType) {
+                    if(strtolower($contentType) == strtolower($_contentType)) {
                         $part = $messagePart;
                         break;
                     } else {
-                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_contentType != $contentType");
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_contentType != $contentType");
                     }
                     
                 } catch (Zend_Mail_Exception $zme) {
