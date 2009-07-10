@@ -150,13 +150,6 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($recurSet), 'odd interval failed');
     }
     
-    /*
-    public function testCalcWeeklyMultipleDays()
-    {
-        
-    }
-    */
-    
     public function testCalcMonthlyByMonthDay()
     {
         $event = new Calendar_Model_Event(array(
@@ -188,7 +181,6 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2009-01-05 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-03-05 15:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-04-05 14:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
-        //$this->assertEquals('2009-04-06 14:00:00', $recurSet[3]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals(3, count($recurSet));
         
         // lets also cover the case when recurevent start during calcualtion period:
@@ -217,13 +209,15 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $until = new Zend_Date('2009-11-05 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'odd interval failed');
+        $this->assertEquals('2009-01-05 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-11-05 15:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         
     }
     
     /**
      * test dtstart of base event is not dtstart of first recur instance
      */
-    public function testCalcMonthlyByMonthDayStart()
+    public function t2estCalcMonthlyByMonthDayStart()
     {
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
@@ -329,10 +323,37 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     {
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'yearly by day',
+            'dtstart'       => '2009-07-10 10:00:00',
+            'dtend'         => '2009-07-10 11:00:00',
+            'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=7;BYMONTHDAY=10',
+            'originator_tz' => 'Europe/Berlin',
+            'editGrant'     => true,
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Zend_Date('2010-06-08 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2010-07-31 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(1, count($recurSet));
+        $this->assertEquals('2010-07-10 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        $from = new Zend_Date('2010-06-10 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2010-07-31 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(1, count($recurSet));
+        $this->assertEquals('2010-07-10 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
+    public function testCalcYearlyByMonthDayLeapYear()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'yearly 29.feb',
             'dtstart'       => '2008-02-29 08:00:00',
             'dtend'         => '2008-02-29 10:00:00',
-            'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=2',
+            'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=2;BYMONTHDAY=29',
             'originator_tz' => 'Europe/Berlin',
             'editGrant'     => true,
         ));

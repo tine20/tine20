@@ -252,26 +252,20 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
                 
             case self::FREQ_YEARLY:
-                $computitionEvent = clone $_event;
-                $computitionEvent->dtstart->setMonth($rrule->bymonth);
+                //$computitionEvent = clone $_event;
+                //$computitionEvent->dtstart->setMonth($rrule->bymonth);
                 
                 $yearlyrrule = clone $rrule;
                 $yearlyrrule->freq = self::FREQ_MONTHLY;
                 $yearlyrrule->interval = 12;
                 
-                //$yearlyrrule->byday = $rrule->byday ? $rrule->byday : NULL;
-                //$yearlyrrule->bymonthday = $rrule->byday ? NULL : $_event->getDay();
-                
-                if (! $rrule->byday) {
-                    unset($yearlyrrule->byday);
-                    $yearlyrrule->bymonthday = $_event->dtstart->get(Zend_Date::DAY);
-                    
-                    self::_computeRecurMonthlyByMonthDay($computitionEvent, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                if ($rrule->byday) {
+                	self::_computeRecurMonthlyByDay($_event, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 } else {
-                    unset($yearlyrrule->bymonthday);
-                    
-                    self::_computeRecurMonthlyByDay($computitionEvent, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                	$yearlyrrule->bymonthday = $yearlyrrule->bymonthday ? $yearlyrrule->bymonthday : $_event->dtstart->get(Zend_Date::DAY);
+                	self::_computeRecurMonthlyByMonthDay($_event, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 }
+
                 break;
                 
         }
@@ -399,6 +393,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($_event->dtstart->isEarlier($_from)) {
             $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
+            // NOTE: $computationOffsetMonth must be multiple of interval!
+            $computationOffsetMonth = floor($computationOffsetMonth/$_rrule->interval) * $_rrule->interval;
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth - $_rrule->interval);
         }
         
@@ -472,6 +468,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         // if dtstart is before $_from, we compute the offset where to start our calculations
         if ($_event->dtstart->isEarlier($_from)) {
             $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
+            // NOTE: $computationOffsetMonth must be multiple of interval!
+            $computationOffsetMonth = floor($computationOffsetMonth/$_rrule->interval) * $_rrule->interval;
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth - $_rrule->interval);
             //echo self::array2string($computationStartDateArray);
         }
