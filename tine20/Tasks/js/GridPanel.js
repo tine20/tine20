@@ -42,6 +42,14 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         Tine.Tasks.GridPanel.superclass.initComponent.call(this);
         
+        //this.grid.on('afteredit', function() {
+            //alert('hier');
+        //});
+        
+        // the editGrids onEditComplete calls the focusCell after a edit operation
+        // this leads to a 'flicker' effect we dont want!
+        this.grid.view.focusCell = Ext.emptyFn;
+        
         // legacy
         this.initGridEvents();
     },
@@ -125,7 +133,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }, {
             id: 'due',
             header: this.app.i18n._("Due Date"),
-            width: 55,
+            width: 60,
             sortable: true,
             dataIndex: 'due',
             renderer: Tine.Tinebase.common.dateRenderer,
