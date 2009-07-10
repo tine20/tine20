@@ -223,6 +223,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         if (event) {
             view.getSelectionModel().select(event, e, e.ctrlKey);
+        } else {
+            view.getSelectionModel().clearSelections();
         }
            
         var ctxMenu = new Ext.menu.Menu({
