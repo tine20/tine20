@@ -132,6 +132,16 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.initGrid();
         
         this.initLayout();
+        
+        // for some reason IE looses split height when outer layout is layouted
+        if (Ext.isIE6 || Ext.isIE7) {
+            this.on('show', function() {
+                if (this.layout.rendered) {
+                    var height = this.detailsPanel.getSize().height;
+                    this.layout.south.split.setCurrentSize(height);
+                }
+            }, this);
+        }
 
         Tine.Tinebase.widgets.app.GridPanel.superclass.initComponent.call(this);
     },
@@ -178,9 +188,8 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 }
             }, this);
         }
-        
-        
     },
+    
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
      * 
