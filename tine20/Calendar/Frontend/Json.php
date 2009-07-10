@@ -202,8 +202,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
          foreach ($candidates as $candidate) {
              $exceptions = $_records->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
              $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $period->getFrom(), $period->getUntil());
-             //Tinebase_Core::getLogger()->debug(print_r($recurSet->toArray(), true));
-             //$_records->merge($recurSet);
              foreach ($recurSet as $event) {
                  $_records->addRecord($event);
                  $event->setId('fakeid' . $candidate->uid . $fakeId++);
