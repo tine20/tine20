@@ -75,3 +75,8 @@
 .x-tab-strip span.x-tab-strip-text {
     padding:3px 0pt;
 }
+
+.ext-ie .x-form-twin-triggers {
+    padding-top: 6px;
+    padding-left: 0;
+}
