@@ -63,7 +63,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             activeTab: 0,
             border: false,
             items:[{
-                title: this.app.i18n.n_('Event', 'Calendar', 1),
+                title: this.app.i18n.n_('Event', 'Events', 1),
                 border: false,
                 frame: true,
                 layout: 'border',
