@@ -369,10 +369,12 @@ class Tinebase_Model_Filter_FilterGroup
         $result = FALSE;
         
         foreach ($this->_filterObjects as $object) {
-            if ($object->getField() == $_field) {
-                $result = TRUE;
-                break;
-            }
+        	if ($object instanceof Tinebase_Model_Filter_Abstract) {
+	            if ($object->getField() == $_field) {
+	                $result = TRUE;
+	                break;
+	            }
+        	}
         }
         
         return $result;
@@ -400,9 +402,11 @@ class Tinebase_Model_Filter_FilterGroup
     protected function _findFilter($_field)
     {
         foreach ($this->_filterObjects as $object) {
-            if ($object->getField() == $_field) {
-                return $object;        
-            }
+        	if ($object instanceof Tinebase_Model_Filter_Abstract) {
+	            if ($object->getField() == $_field) {
+	                return $object;        
+	            }
+        	}
         }
         
         return NULL;
@@ -416,9 +420,11 @@ class Tinebase_Model_Filter_FilterGroup
     protected function _removeFilter($_field)
     {
         foreach ($this->_filterObjects as $key => $object) {
-            if ($object->getField() == $_field) {
-                unset($this->_filterObjects[$key]);
-            }
+        	if ($object instanceof Tinebase_Model_Filter_Abstract) {
+	            if ($object->getField() == $_field) {
+	                unset($this->_filterObjects[$key]);
+	            }
+        	}
         }
     }
 }
