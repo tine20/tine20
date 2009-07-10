@@ -254,6 +254,10 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                  * get email link
                  */
                 getMailLink: function(email, felamimail) {
+                    if (! email) {
+                        return '';
+                    }
+                    
                     var link = (felamimail) ? '#' : 'mailto:' + email;
                     var id = Ext.id() + ':' + email;
                     
