@@ -61,8 +61,8 @@ Tine.Addressbook.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
 Tine.Addressbook.TreePanel = function(config) {
     Ext.apply(this, config);
     
-    var accountBackend = Tine.Tinebase.registry.get('accountBackend');
-    if (accountBackend == 'Sql') {
+    //var accountBackend = Tine.Tinebase.registry.get('accountBackend');
+    //if (accountBackend == 'Sql') {
        this.extraItems = [{
             text: Tine.Tinebase.appMgr.get('Addressbook').i18n._("Internal Contacts"),
             cls: "file",
@@ -72,7 +72,7 @@ Tine.Addressbook.TreePanel = function(config) {
             leaf: false,
             expanded: true
         }];
-    }
+    //}
     
     this.id = 'Addressbook_Tree',
     this.recordClass = Tine.Addressbook.Model.Contact;
