@@ -103,11 +103,18 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      * set minutes_before depending on another date with alarm_time
      *
      * @param Zend_Date $_date
-     * 
-     * @todo compare dates to make sure $_date > $this->alarm_time
      */
     public function setMinutesBefore(Zend_Date $_date)
     {
-        $this->minutes_before = $_date->subDate($this->alarm_time)->getMinute();
+        $dtStartTS = $_date->getTimestamp();
+        $alarmTimeTS = $this->alarm_time->getTimestamp();
+        
+        if ($dtStartTS < $alarmTimeTS) {
+            $this->minutes_before = 0;
+        } else {
+            $this->minutes_before = ($dtStartTS - $alarmTimeTS) / 60;
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' result: ' . $this->minutes_before);
     }
 }
