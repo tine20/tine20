@@ -387,6 +387,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         // NOTE: non existing dates will be discarded (e.g. 31. Feb.)
         //       for correct computations we deal with virtual dates, represented as arrays
         $computationStartDateArray = self::date2array($_event->dtstart);
+        // adopt startdate if rrule monthday != dtstart monthday
+        // in this case, the first instance is not the base event!
+        if ($_rrule->bymonthday != $computationStartDateArray['day']) {
+            $computationStartDateArray['day'] = $_rrule->bymonthday;
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, -1 * $_rrule->interval);
+        }
+        
         $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
         
         // if dtstart is before $_from, we compute the offset where to start our calculations
@@ -453,6 +460,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     public static function _computeRecurMonthlyByDay($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
     {
         $computationStartDateArray = self::date2array($_event->dtstart);
+        // if period contains base events dtstart, we let computation start one intervall to early to catch
+        // the cases when dtstart of base event not equals the first instance. If it fits, we filter the additional 
+        // instance out later
+        if ($_event->dtstart->isLater($_from) && $_event->dtstart->isEarlier($_until)) {
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, -1 * $_rrule->interval);
+        }
+        
         $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
         
         // if dtstart is before $_from, we compute the offset where to start our calculations
@@ -506,6 +520,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             // skip events ending before our period.
             // NOTE: such events could be included, cause our offset only calcs months and not seconds
             if ($_from->compare($recurEvent->dtend) >= 0) {
+                continue;
+            }
+            
+            // skip if event equal baseevent
+            if ($_event->dtstart->equals($recurEvent->dtstart)) {
                 continue;
             }
             
