@@ -397,11 +397,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 case self::RECUR_TYPE_WEEKLY:
                     $rrule->freq = Calendar_Model_Rrule::FREQ_WEEKLY;
                     $rrule->byday = $this->_convertBitMaskToDay((int)$xmlData->Recurrence->DayOfWeek);
-                    //byday
                     break;
                      
                 case self::RECUR_TYPE_MONTHLY:
                     $rrule->freq = Calendar_Model_Rrule::FREQ_MONTHLY;
+                    $rrule->bymonthday = (int)$xmlData->Recurrence->DayOfMonth;
                     break;
                      
                 case self::RECUR_TYPE_MONTHLY_DAYN:
