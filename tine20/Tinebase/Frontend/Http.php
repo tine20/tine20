@@ -101,6 +101,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/AccountpickerPanel.js',
             'Tinebase/js/widgets/account/PickerPanel.js',
             'Tinebase/js/widgets/account/ConfigGrid.js',
+            'Tinebase/js/widgets/dialog/AlarmPanel.js',
             'Tinebase/js/widgets/dialog/EditDialog.js',
             'Tinebase/js/widgets/dialog/CredentialsDialog.js',
             'Tinebase/js/widgets/dialog/PreferencesDialog.js',

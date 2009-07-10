@@ -139,11 +139,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [
                             this.attendeeGridPanel,
                             this.rrulePanel,
-                        {
-                            title: this.app.i18n._('Alarms'),
-                            disabled: true,
-                            html: ''
-                        }]
+                            this.alarmPanel
+                        ]
                     }]
                 }, {
                     // activities and tags
@@ -200,7 +197,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     initComponent: function() {
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({});
-        this.rrulePanel        = new Tine.Calendar.RrulePanel({});
+        this.rrulePanel = new Tine.Calendar.RrulePanel({});
+        this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});         
         this.attendeeStore = this.attendeeGridPanel.getStore();
         
         this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget(this);
