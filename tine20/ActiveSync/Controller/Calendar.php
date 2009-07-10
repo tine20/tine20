@@ -102,6 +102,22 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     );
     
     /**
+     * mapping of weekdays
+     * 
+     * NOTE: ActiveSync uses a bitmask
+     * @var array
+     */
+    protected $_recurDayMapping = array(
+        Calendar_Model_Rrule::WDAY_SUNDAY       => self::RECUR_DOW_SUNDAY,
+        Calendar_Model_Rrule::WDAY_MONDAY       => self::RECUR_DOW_MONDAY,
+        Calendar_Model_Rrule::WDAY_TUESDAY      => self::RECUR_DOW_TUESDAY,
+        Calendar_Model_Rrule::WDAY_WEDNESDAY    => self::RECUR_DOW_WEDNESDAY,
+        Calendar_Model_Rrule::WDAY_THURSDAY     => self::RECUR_DOW_THURSDAY,
+        Calendar_Model_Rrule::WDAY_FRIDAY       => self::RECUR_DOW_FRIDAY,
+        Calendar_Model_Rrule::WDAY_SATURDAY     => self::RECUR_DOW_SATURDAY
+    );
+    
+    /**
      * trivial mapping
      *
      * @var array
@@ -282,26 +298,38 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     protected function _convertDayToBitMask($_days)
     {
-        $dayValues = array(
-            Calendar_Model_Rrule::WDAY_SUNDAY       => self::RECUR_DOW_SUNDAY,
-            Calendar_Model_Rrule::WDAY_MONDAY       => self::RECUR_DOW_MONDAY,
-            Calendar_Model_Rrule::WDAY_TUESDAY      => self::RECUR_DOW_TUESDAY,
-            Calendar_Model_Rrule::WDAY_WEDNESDAY    => self::RECUR_DOW_WEDNESDAY,
-            Calendar_Model_Rrule::WDAY_THURSDAY     => self::RECUR_DOW_THURSDAY,
-            Calendar_Model_Rrule::WDAY_FRIDAY       => self::RECUR_DOW_FRIDAY,
-            Calendar_Model_Rrule::WDAY_SATURDAY     => self::RECUR_DOW_SATURDAY
-        );
         $daysArray = explode(',', $_days);
         
         $result = 0;
         
-        foreach($daysArray as $dayString) {
-            $result = $result + $dayValues[$dayString];
+        foreach($this->_recurDayMapping as $dayString) {
+            $result = $result + $this->_recurDayMapping[$dayString];
         }
         
         return $result;
     }
+    
+    /**
+     * convert bitmask used by ActiveSync to string of days (TU,TH) 
+     *  
+     * @param int $_days
+     * @return string
+     */
+    protected function _convertBitMaskToDay($_days)
+    {
+        $daysArray = array();
         
+        for($bitmask = 1; $bitmask <= self::RECUR_DOW_SATURDAY; $bitmask = $bitmask << 1) {
+            $dayMatch = $_days & $bitmask;
+            if($dayMatch === $bitmask) {
+                $daysArray[] = array_search($bitmask, $this->_recurDayMapping);
+            }
+        }
+        $result = implode(',', $daysArray);
+        
+        return $result;
+    }
+    
     /**
      * convert contact from xml to Calendar_Model_Event
      *
@@ -359,7 +387,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         // handle recurrence
         if(isset($xmlData->Recurrence) && isset($xmlData->Recurrence->Type)) {
-            $rrule = new Calendar_Model_Rrule($rruleArray);
+            $rrule = new Calendar_Model_Rrule();
             
             switch((int)$xmlData->Recurrence->Type) {
                 case self::RECUR_TYPE_DAILY:
@@ -368,6 +396,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     
                 case self::RECUR_TYPE_WEEKLY:
                     $rrule->freq = Calendar_Model_Rrule::FREQ_WEEKLY;
+                    $rrule->byday = $this->_convertBitMaskToDay((int)$xmlData->Recurrence->DayOfWeek);
                     //byday
                     break;
                      
