@@ -126,7 +126,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
-        $event->attendee[0]->user_id = Tinebase_User::getInstance()->getUserByLoginName('sclever')->getId();
+        $event->attendee[0]->user_id = Tinebase_User::getInstance()->getUserByLoginName('sclever')->contact_id;
         $event->attendee[0]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         unset($event->attendee[1]);
         
@@ -452,7 +452,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
-                'user_id'   => Tinebase_Core::getUser()->getId(),
+                'user_id'   => Tinebase_Core::getUser()->contact_id,
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             ),
             array(
