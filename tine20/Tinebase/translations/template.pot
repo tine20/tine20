@@ -50,19 +50,19 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: Frontend/Http.php:286 js/tineInit.js:283
+#: Frontend/Http.php:287 js/tineInit.js:283
 msgid "Authorisation Required"
 msgstr ""
 
-#: Frontend/Http.php:287
+#: Frontend/Http.php:288
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 
-#: Frontend/Http.php:313 js/ExceptionDialog.js:46
+#: Frontend/Http.php:314 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr ""
 
-#: Frontend/Http.php:314 js/ExceptionDialog.js:71
+#: Frontend/Http.php:315 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
@@ -679,6 +679,10 @@ msgstr ""
 
 #: js/widgets/customfields/CustomfieldsPanel.js:68
 msgid "There are no custom fields yet"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:39
+msgid "Alarms"
 msgstr ""
 
 #: js/widgets/dialog/CredentialsDialog.js:110

@@ -96,6 +96,10 @@ msgid_plural "Calendars"
 msgstr[0] "Calendar"
 msgstr[1] "Calendars"
 
+#: js/Calendar.js:114 js/MonthView.js:80
+msgid "WK"
+msgstr "WK"
+
 #: js/CalendarPanel.js:33
 msgid "Loading events, please wait..."
 msgstr "Loading events, please wait..."
@@ -174,27 +178,23 @@ msgstr "End Time"
 msgid "whole day"
 msgstr "whole day"
 
-#: js/EventEditDialog.js:143
-msgid "Alarms"
-msgstr "Alarms"
-
-#: js/EventEditDialog.js:162
+#: js/EventEditDialog.js:159
 msgid "Description"
 msgstr "Description"
 
-#: js/EventEditDialog.js:176
+#: js/EventEditDialog.js:173
 msgid "Enter description"
 msgstr "Enter description"
 
-#: js/EventEditDialog.js:292
+#: js/EventEditDialog.js:290
 msgid "End date is not valid"
 msgstr "End date is not valid"
 
-#: js/EventEditDialog.js:295
+#: js/EventEditDialog.js:293
 msgid "End date must be after start date"
 msgstr "End date must be after start date"
 
-#: js/EventEditDialog.js:308
+#: js/EventEditDialog.js:306
 msgid "Start date is not valid"
 msgstr "Start date is not valid"
 
@@ -271,10 +271,6 @@ msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Attender"
 msgstr[1] "Attendee"
-
-#: js/MonthView.js:80
-msgid "WK"
-msgstr "WK"
 
 #: js/MonthView.js:85
 msgid "{0} more..."
