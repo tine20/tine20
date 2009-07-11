@@ -60,7 +60,7 @@ Tine.widgets.group.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * 
      */
     setValue: function(group) {
-        if (isNaN(group) && ! group.data) {
+        if (group.hasOwnProperty('id') && typeof group.get != 'function') {
             group = new Tine.Tinebase.Model.Group(group, group.id);
         } else {
             group = this.store.getById(group);
