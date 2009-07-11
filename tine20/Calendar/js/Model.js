@@ -254,7 +254,8 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Mo
                 return user_id.account_id;
             }
             
-            throw new Error('Tine.Calendar.Model.Attender::getUserAccountId unexpected user_id');
+            // this might happen if contact resolved, due to right restrictions
+            return user_id;
             
         }
         return null;

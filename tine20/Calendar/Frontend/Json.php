@@ -262,7 +262,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
                 $attendeeTypeSet = $typeMap[$attender->$_typeProperty];
-                $attender->$_idProperty = $attendeeTypeSet[$attendeeTypeSet->getIndexById($attender->$_idProperty)];
+                $idx = $attendeeTypeSet->getIndexById($attender->$_idProperty);
+                if ($idx !== false) {
+                    $attender->$_idProperty = $attendeeTypeSet[$idx];
+                }
             }
         }
     }

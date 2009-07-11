@@ -261,7 +261,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var attendee = [];
         this.store.each(function(attender) {
             var user_id = attender.get('user_id');
-            if (user_id && user_id.id) {
+            if (user_id/* && user_id.id*/) {
                 if (typeof user_id.get == 'function') {
                     attender.data.user_id = user_id.data;
                 }
@@ -345,7 +345,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (name.accountDisplayName) {
                 return Ext.util.Format.htmlEncode(name.accountDisplayName);
             }
-            return Ext.util.Format.htmlEncode(name);
+            // NOTE: this fn gets also called from other scopes
+            return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
             
         }
         // add new user:
