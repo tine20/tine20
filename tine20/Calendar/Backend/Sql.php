@@ -109,7 +109,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $this->_saveExdates($_record);
         //$this->_saveAttendee($_record);
         
-        return $this->get($event->getId());
+        return $this->get($event->getId(), TRUE);
     }
     
     /**

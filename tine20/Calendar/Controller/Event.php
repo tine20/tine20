@@ -22,6 +22,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     // add group attendee handling
     // add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
     
+	/**
+     * @var boolean
+     * 
+     * just set is_delete=1 if record is going to be deleted
+     */
+    protected $_purgeRecords = FALSE;
+    
     /**
      * @var Calendar_Controller_Event
      */
