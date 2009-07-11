@@ -64,6 +64,7 @@ class Tinebase_Timemachine_ModificationLog
     protected $_metaProperties = array(
         'created_by',
         'creation_time',
+        'seq',
         'last_modified_by',
         'last_modified_time',
         'is_deleted',
