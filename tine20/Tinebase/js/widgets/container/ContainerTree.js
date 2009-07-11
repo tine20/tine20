@@ -448,7 +448,6 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
      * @private
      */
  	createNode: function(attr) {
-        
 		// map attributes from Tinebase_Container to attrs from library/ExtJS
 		if (attr.name) {
             if (!attr.account_grants.account_id){
@@ -483,6 +482,10 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
                 append: function(tree, node, appendedNode, index) {
                     if (appendedNode.attributes.containerType == 'singleContainer') {
                         var container = appendedNode.attributes.container;
+                        // dynamically initialize colorMgr if needed
+                        if (! Tine.Calendar.colorMgr) {
+                            Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
+                        }
                         var colorSet = Tine.Calendar.colorMgr.getColor(container);
                         appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
                             //Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&bull;&nbsp', style: {color: colorSet.color}})
