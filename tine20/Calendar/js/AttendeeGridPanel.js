@@ -142,7 +142,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         var user_id = this.selectedRecord.get('id');
                         this.selectedRecord.toString = function() {return user_id;};
                     }
-                    return this.selectedRecord;
+                    var value = this.selectedRecord;
+                    this.selectedRecord = null;
+                    return value;
                 }
             })
         }, {
@@ -208,6 +210,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         if (o.field == 'user_id') {
+            if (o.record.get('user_id')) {
+                o.cancel = true;
+            }
             // here we are!
         }
     },
@@ -258,6 +263,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
         
     onRecordUpdate: function(record) {
+        this.stopEditing(false);
+        
         var attendee = [];
         this.store.each(function(attender) {
             var user_id = attender.get('user_id');
@@ -301,7 +308,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
         
         if (needUpdate && this.record.get('editGrant')) {
-            this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
+            var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
+            newAttender.isFluentAdd = true;
+            this.store.add([newAttender]);
         }
         
         // check if displaycontainer of owner got changed
@@ -352,6 +361,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // add new user:
         if (arguments[1]) {
             arguments[1].css = 'x-form-empty-field';
+            if (arguments[2] && arguments[2].isFluentAdd) {
+                arguments[2].isFluentAdd = false;
+                this.startEditing.defer(50, this, [arguments[3], arguments[4]]);
+            }
             return this.app.i18n._('Click here to invite another attender...');
         }
     },
