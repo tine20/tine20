@@ -202,5 +202,5 @@ msgid_plural "Applications"
 msgstr[0] "Anwendung"
 msgstr[1] "Anwendungen"
 
-#~ msgid "Version"
-#~ msgstr "Version"
+msgid "Version"
+msgstr "Version"

@@ -18,7 +18,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "Tâches personnelles de %s"
 
-#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
+#: js/EditDialog.js:113 js/GridPanel.js:64 js/GridPanel.js:123
 msgid "Summary"
 msgstr "Résumé"
 
@@ -26,11 +26,11 @@ msgstr "Résumé"
 msgid "Due date"
 msgstr "Date de fin"
 
-#: js/EditDialog.js:121 js/GridPanel.js:136
+#: js/EditDialog.js:121 js/GridPanel.js:144
 msgid "Priority"
 msgstr "Priorité"
 
-#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
+#: js/EditDialog.js:124 js/GridPanel.js:66 js/GridPanel.js:196
 msgid "Responsible"
 msgstr "Responsable"
 
@@ -46,7 +46,7 @@ msgstr "Saisissez une description..."
 msgid "Percentage"
 msgstr "Pourcentage"
 
-#: js/EditDialog.js:138 js/GridPanel.js:165
+#: js/EditDialog.js:138 js/GridPanel.js:173
 msgid "Status"
 msgstr "Statut"
 
@@ -60,31 +60,31 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer la tâche sélectionnée?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
 
-#: js/GridPanel.js:57 js/GridPanel.js:127
+#: js/GridPanel.js:65 js/GridPanel.js:135
 msgid "Due Date"
 msgstr "Date de fin"
 
-#: js/GridPanel.js:79
+#: js/GridPanel.js:87
 msgid "Failed"
 msgstr "Échoué"
 
-#: js/GridPanel.js:79
+#: js/GridPanel.js:87
 msgid "Could not save task."
 msgstr "Erreur de sauvegarde."
 
-#: js/GridPanel.js:123
+#: js/GridPanel.js:131
 msgid "Add a task..."
 msgstr "Créer tâche"
 
-#: js/GridPanel.js:151
+#: js/GridPanel.js:159
 msgid "Percent"
 msgstr "Pourcent"
 
-#: js/GridPanel.js:180
+#: js/GridPanel.js:188
 msgid "Creation Time"
 msgstr "Date de création"
 
-#: js/GridPanel.js:210
+#: js/GridPanel.js:218
 #, fuzzy
 msgid "Show closed"
 msgstr "Afficher terminées"

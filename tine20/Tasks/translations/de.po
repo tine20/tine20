@@ -18,7 +18,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%ss persönliche Aufgaben"
 
-#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
+#: js/EditDialog.js:113 js/GridPanel.js:64 js/GridPanel.js:123
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -26,11 +26,11 @@ msgstr "Beschreibung"
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/EditDialog.js:121 js/GridPanel.js:136
+#: js/EditDialog.js:121 js/GridPanel.js:144
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
+#: js/EditDialog.js:124 js/GridPanel.js:66 js/GridPanel.js:196
 msgid "Responsible"
 msgstr "Verantwortlich"
 
@@ -46,7 +46,7 @@ msgstr "Beschreibung eingeben..."
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/EditDialog.js:138 js/GridPanel.js:165
+#: js/EditDialog.js:138 js/GridPanel.js:173
 msgid "Status"
 msgstr "Status"
 
@@ -60,31 +60,31 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/GridPanel.js:57 js/GridPanel.js:127
+#: js/GridPanel.js:65 js/GridPanel.js:135
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/GridPanel.js:79
+#: js/GridPanel.js:87
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/GridPanel.js:79
+#: js/GridPanel.js:87
 msgid "Could not save task."
 msgstr "Konnte Aufgabe nicht speichern."
 
-#: js/GridPanel.js:123
+#: js/GridPanel.js:131
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/GridPanel.js:151
+#: js/GridPanel.js:159
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/GridPanel.js:180
+#: js/GridPanel.js:188
 msgid "Creation Time"
 msgstr "Angelegt am"
 
-#: js/GridPanel.js:210
+#: js/GridPanel.js:218
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
@@ -124,83 +124,83 @@ msgstr "ERLEDIGT"
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
 
-#~ msgid "to to list"
-#~ msgstr "Aufgabenliste"
+msgid "to to list"
+msgstr "Aufgabenliste"
 
 #, fuzzy
-#~ msgid "Tasks) "
-#~ msgstr "Aufgabe"
+msgid "Tasks) "
+msgstr "Aufgabe"
 
-#~ msgid "Could not delete task(s)."
-#~ msgstr "Konnte Aufgabe(n) nicht löschen."
+msgid "Could not delete task(s)."
+msgstr "Konnte Aufgabe(n) nicht löschen."
 
-#~ msgid "Edit task"
-#~ msgstr "Aufgabe bearbeiten"
+msgid "Edit task"
+msgstr "Aufgabe bearbeiten"
 
-#~ msgid "Add task"
-#~ msgstr "Aufgabe hinzufügen"
+msgid "Add task"
+msgstr "Aufgabe hinzufügen"
 
-#~ msgid "Delete task"
-#~ msgid_plural "Delete tasks"
-#~ msgstr[0] "Aufgabe löschen"
-#~ msgstr[1] "Aufgaben löschen"
+msgid "Delete task"
+msgid_plural "Delete tasks"
+msgstr[0] "Aufgabe löschen"
+msgstr[1] "Aufgaben löschen"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "Suchfilter eingeben"
+msgid "Enter searchfilter"
+msgstr "Suchfilter eingeben"
 
-#~ msgid "Search:"
-#~ msgstr "Suchen nach:"
+msgid "Search:"
+msgstr "Suchen nach:"
 
-#~ msgid "Displaying tasks {0} - {1} of {2}"
-#~ msgstr "Zeige Aufgabe {0} - {1} von {2}"
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr "Zeige Aufgabe {0} - {1} von {2}"
 
-#~ msgid "No tasks to display"
-#~ msgstr "Keine Aufgaben vorhanden"
+msgid "No tasks to display"
+msgstr "Keine Aufgaben vorhanden"
 
-#~ msgid "No Tasks to display"
-#~ msgstr "Keine Aufgaben vorhanden"
+msgid "No Tasks to display"
+msgstr "Keine Aufgaben vorhanden"
 
-#~ msgid "Loading Task..."
-#~ msgstr "lade Task..."
+msgid "Loading Task..."
+msgstr "lade Task..."
 
-#~ msgid "Please Wait"
-#~ msgstr "Bitte warten"
+msgid "Please Wait"
+msgstr "Bitte warten"
 
-#~ msgid "Add New Task"
-#~ msgstr "Neuen Task erstellen"
+msgid "Add New Task"
+msgstr "Neuen Task erstellen"
 
-#~ msgid "Edit Task \"{0}\""
-#~ msgstr "Task \"{0}\" bearbeiten"
+msgid "Edit Task \"{0}\""
+msgstr "Task \"{0}\" bearbeiten"
 
-#~ msgid "Please wait"
-#~ msgstr "Bitte warten"
+msgid "Please wait"
+msgstr "Bitte warten"
 
-#~ msgid "Saving Task"
-#~ msgstr "Aufgabe speichern"
+msgid "Saving Task"
+msgstr "Aufgabe speichern"
 
-#~ msgid "Errors"
-#~ msgstr "Fehler"
+msgid "Errors"
+msgstr "Fehler"
 
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Bitte beheben Sie die angezeigten Fehler."
+msgid "Please fix the errors noted."
+msgstr "Bitte beheben Sie die angezeigten Fehler."
 
-#~ msgid "Confirm"
-#~ msgstr "Bestätigen"
+msgid "Confirm"
+msgstr "Bestätigen"
 
-#~ msgid "Do you really want to delete this task?"
-#~ msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
+msgid "Do you really want to delete this task?"
+msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 
-#~ msgid "Please wait a moment..."
-#~ msgstr "Einen Moment noch..."
+msgid "Please wait a moment..."
+msgstr "Einen Moment noch..."
 
-#~ msgid "Enter short name..."
-#~ msgstr "Kurzbezeichnung eingeben..."
+msgid "Enter short name..."
+msgstr "Kurzbezeichnung eingeben..."
 
-#~ msgid "Saved in"
-#~ msgstr "Gespeichert in"
+msgid "Saved in"
+msgstr "Gespeichert in"
 
-#~ msgid "Folder"
-#~ msgstr "Ordner"
+msgid "Folder"
+msgstr "Ordner"
 
-#~ msgid "Delete tasks"
-#~ msgstr "Aufgaben löschen"
+msgid "Delete tasks"
+msgstr "Aufgaben löschen"

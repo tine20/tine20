@@ -22,7 +22,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s's личные задания"
 
-#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
+#: js/EditDialog.js:113 js/GridPanel.js:64 js/GridPanel.js:123
 msgid "Summary"
 msgstr "Содержание"
 
@@ -30,11 +30,11 @@ msgstr "Содержание"
 msgid "Due date"
 msgstr "Число истечения срока"
 
-#: js/EditDialog.js:121 js/GridPanel.js:136
+#: js/EditDialog.js:121 js/GridPanel.js:144
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
+#: js/EditDialog.js:124 js/GridPanel.js:66 js/GridPanel.js:196
 msgid "Responsible"
 msgstr "Ответственный"
 
@@ -50,7 +50,7 @@ msgstr "Введите описание..."
 msgid "Percentage"
 msgstr "Подтвердить"
 
-#: js/EditDialog.js:138 js/GridPanel.js:165
+#: js/EditDialog.js:138 js/GridPanel.js:173
 msgid "Status"
 msgstr "Статус"
 
@@ -66,31 +66,31 @@ msgstr[0] "Вы уверены что хотите удалить выбранн
 msgstr[1] "Вы уверены что хотите удалить выбранные задания"
 msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
 
-#: js/GridPanel.js:57 js/GridPanel.js:127
+#: js/GridPanel.js:65 js/GridPanel.js:135
 msgid "Due Date"
 msgstr "Число истечения срока"
 
-#: js/GridPanel.js:79
+#: js/GridPanel.js:87
 msgid "Failed"
 msgstr "Неудача"
 
-#: js/GridPanel.js:79
+#: js/GridPanel.js:87
 msgid "Could not save task."
 msgstr "Задание не смогла быть сохранино"
 
-#: js/GridPanel.js:123
+#: js/GridPanel.js:131
 msgid "Add a task..."
 msgstr "Добавить задание..."
 
-#: js/GridPanel.js:151
+#: js/GridPanel.js:159
 msgid "Percent"
 msgstr "Процент"
 
-#: js/GridPanel.js:180
+#: js/GridPanel.js:188
 msgid "Creation Time"
 msgstr "Время Создания"
 
-#: js/GridPanel.js:210
+#: js/GridPanel.js:218
 msgid "Show closed"
 msgstr "Показ закрылся"
 

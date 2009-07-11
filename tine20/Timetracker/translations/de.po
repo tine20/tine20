@@ -357,17 +357,17 @@ msgstr "Alle Zeitkonten"
 msgid "Timetracker"
 msgstr "Zeiterfassung"
 
-#~ msgid "Filter"
-#~ msgstr "Filter"
+msgid "Filter"
+msgstr "Filter"
 
-#~ msgid "Times could be added"
-#~ msgstr "Zeiten können addiert werden"
+msgid "Times could be added"
+msgstr "Zeiten können addiert werden"
 
-#~ msgid "Duplicate"
-#~ msgstr "Duplikat"
+msgid "Duplicate"
+msgstr "Duplikat"
 
-#~ msgid "Time account"
-#~ msgstr "Zeitkonto"
+msgid "Time account"
+msgstr "Zeitkonto"
 
-#~ msgid "Implementation"
-#~ msgstr "Umsetzung"
+msgid "Implementation"
+msgstr "Umsetzung"

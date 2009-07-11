@@ -71,20 +71,20 @@ msgstr "Установлено"
 msgid "Activities"
 msgstr "Действия"
 
-#: Frontend/Http.php:287 js/tineInit.js:283
+#: Frontend/Http.php:288 js/tineInit.js:283
 msgid "Authorisation Required"
 msgstr "Регистрация необходима"
 
-#: Frontend/Http.php:288
+#: Frontend/Http.php:289
 #, fuzzy
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего заседания истекло. Вам нужно зарегистрироваться снова. "
 
-#: Frontend/Http.php:314 js/ExceptionDialog.js:46
+#: Frontend/Http.php:315 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Frontend/Http.php:315 js/ExceptionDialog.js:71
+#: Frontend/Http.php:316 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла Ошибка, программа закончилась неправильно."
 
@@ -323,7 +323,7 @@ msgstr ""
 "Инсталляция Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
 "local на компьютере."
 
-#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:535
+#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:544
 #: js/widgets/dialog/EditDialog.js:419
 #: js/widgets/grid/PersistentFilterPicker.js:123
 #: js/widgets/tree/ContextMenu.js:84
@@ -599,34 +599,34 @@ msgstr "Время"
 msgid "User"
 msgstr "Пользователь"
 
-#: js/widgets/app/GridPanel.js:192
+#: js/widgets/app/GridPanel.js:201
 msgid "Edit {0}"
 msgstr "Обработать {0}"
 
-#: js/widgets/app/GridPanel.js:203 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:212 js/widgets/tree/ContextMenu.js:214
 #, fuzzy
 msgid "Add {0}"
 msgstr "Добавить {0}"
 
-#: js/widgets/app/GridPanel.js:213 js/widgets/app/GridPanel.js:214
-#: js/widgets/app/GridPanel.js:216
+#: js/widgets/app/GridPanel.js:222 js/widgets/app/GridPanel.js:223
+#: js/widgets/app/GridPanel.js:225
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Удалить {0}"
 msgstr[1] "Удалить {0}"
 msgstr[2] "Удалить {0}"
 
-#: js/widgets/app/GridPanel.js:287
+#: js/widgets/app/GridPanel.js:296
 #, fuzzy
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Показываю действия {0} - {1} of {2}"
 
-#: js/widgets/app/GridPanel.js:288
+#: js/widgets/app/GridPanel.js:297
 #, fuzzy
 msgid "No {0} to display"
 msgstr "Никаких тэгов в наличии не имеется"
 
-#: js/widgets/app/GridPanel.js:309
+#: js/widgets/app/GridPanel.js:318
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -634,15 +634,15 @@ msgstr ""
 "Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
 "фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
 
-#: js/widgets/app/GridPanel.js:520
+#: js/widgets/app/GridPanel.js:529
 msgid "Not Allowed"
 msgstr "Не Позволенно"
 
-#: js/widgets/app/GridPanel.js:521
+#: js/widgets/app/GridPanel.js:530
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вам не позволяется удалить все страницы сразу"
 
-#: js/widgets/app/GridPanel.js:533
+#: js/widgets/app/GridPanel.js:542
 #, fuzzy
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
@@ -650,21 +650,21 @@ msgstr[0] "Вы уверены что хотите удалить"
 msgstr[1] "Вы уверены что хотите удалить"
 msgstr[2] "Вы уверены что хотите удалить"
 
-#: js/widgets/app/GridPanel.js:538 js/widgets/dialog/EditDialog.js:421
+#: js/widgets/app/GridPanel.js:547 js/widgets/dialog/EditDialog.js:421
 msgid "Deleting {0}"
 msgstr "Тэг удаляется  {0}"
 
-#: js/widgets/app/GridPanel.js:540
+#: js/widgets/app/GridPanel.js:549
 msgid " ... This may take a long time!"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:554 js/widgets/dialog/EditDialog.js:393
+#: js/widgets/app/GridPanel.js:563 js/widgets/dialog/EditDialog.js:393
 #: js/widgets/dialog/EditDialog.js:431 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Неудалось"
 
-#: js/widgets/app/GridPanel.js:554 js/widgets/dialog/EditDialog.js:431
+#: js/widgets/app/GridPanel.js:563 js/widgets/dialog/EditDialog.js:431
 msgid "Could not delete {0}."
 msgstr "Не смог удалить тэг(и).  {0}."
 
@@ -750,9 +750,43 @@ msgstr "Дополнительные поля"
 msgid "There are no custom fields yet"
 msgstr "Пока дополнительные поля не имеются "
 
-#: js/widgets/dialog/AlarmPanel.js:39
+#: js/widgets/dialog/AlarmPanel.js:35
 msgid "Alarms"
 msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:46
+msgid "Send Alarm"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:56
+#, fuzzy
+msgid "None"
+msgstr "Примечание"
+
+#: js/widgets/dialog/AlarmPanel.js:57
+#, fuzzy
+msgid "15 minutes before"
+msgstr "существует"
+
+#: js/widgets/dialog/AlarmPanel.js:58
+#, fuzzy
+msgid "30 minutes before"
+msgstr "существует"
+
+#: js/widgets/dialog/AlarmPanel.js:59
+#, fuzzy
+msgid "1 hour before"
+msgstr "существует"
+
+#: js/widgets/dialog/AlarmPanel.js:60
+#, fuzzy
+msgid "2 hours before"
+msgstr "существует"
+
+#: js/widgets/dialog/AlarmPanel.js:61
+#, fuzzy
+msgid "1 day before"
+msgstr "существует"
 
 #: js/widgets/dialog/CredentialsDialog.js:110
 #: js/widgets/dialog/EditDialog.js:411

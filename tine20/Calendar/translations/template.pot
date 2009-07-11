@@ -1,8 +1,8 @@
-#: Controller/Event.php:747
+#: Controller/Event.php:749
 msgid "Notification for Event "
 msgstr ""
 
-#: Controller/Event.php:748
+#: Controller/Event.php:750
 msgid "Event description:<br/>"
 msgstr ""
 
@@ -11,7 +11,7 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:35 js/Model.js:218
+#: js/AttendeeGridPanel.js:35 js/Model.js:219
 msgid "Attendee"
 msgstr ""
 
@@ -35,47 +35,47 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:153
+#: js/AttendeeGridPanel.js:155
 msgid "Status"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:164 js/AttendeeGridPanel.js:396
+#: js/AttendeeGridPanel.js:166 js/AttendeeGridPanel.js:416
 msgid "No response"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:165 js/AttendeeGridPanel.js:399
+#: js/AttendeeGridPanel.js:167 js/AttendeeGridPanel.js:419
 msgid "Accepted"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:166 js/AttendeeGridPanel.js:402
+#: js/AttendeeGridPanel.js:168 js/AttendeeGridPanel.js:422
 msgid "Declined"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:167 js/AttendeeGridPanel.js:405
+#: js/AttendeeGridPanel.js:169 js/AttendeeGridPanel.js:425
 msgid "Tentative"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:228
+#: js/AttendeeGridPanel.js:233
 msgid "Remove Attender"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:354
-msgid "Click here to invite another attender..."
-msgstr ""
-
-#: js/AttendeeGridPanel.js:366
+#: js/AttendeeGridPanel.js:358 js/AttendeeGridPanel.js:380
 msgid "No Information"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:378
+#: js/AttendeeGridPanel.js:368
+msgid "Click here to invite another attender..."
+msgstr ""
+
+#: js/AttendeeGridPanel.js:392
 msgid "Required"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:381
+#: js/AttendeeGridPanel.js:395
 msgid "Optional"
 msgstr ""
 
-#: js/Calendar.js:25 js/Model.js:68 Setup/setup.xml:4
+#: js/Calendar.js:25 js/Model.js:69 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] ""
@@ -137,7 +137,7 @@ msgstr ""
 msgid "{0} the {1}. of {2}"
 msgstr ""
 
-#: js/EventEditDialog.js:78 js/Model.js:64 js/Model.js:222
+#: js/EventEditDialog.js:78 js/Model.js:65 js/Model.js:223
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] ""
@@ -171,15 +171,15 @@ msgstr ""
 msgid "Enter description"
 msgstr ""
 
-#: js/EventEditDialog.js:290
+#: js/EventEditDialog.js:292
 msgid "End date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:293
+#: js/EventEditDialog.js:295
 msgid "End date must be after start date"
 msgstr ""
 
-#: js/EventEditDialog.js:306
+#: js/EventEditDialog.js:308
 msgid "Start date is not valid"
 msgstr ""
 
@@ -195,59 +195,59 @@ msgstr ""
 msgid "Month"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:253
+#: js/MainScreenCenterPanel.js:255
 msgid "Please Change Selection"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:254
+#: js/MainScreenCenterPanel.js:256
 msgid ""
 "Your selection contains recuring events. Recuring events must be deleted "
 "seperatly!"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:268
+#: js/MainScreenCenterPanel.js:270
 msgid "Confirm Deletion of Series"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:269
+#: js/MainScreenCenterPanel.js:271
 msgid "Do you realy want to delete all events of this recuring event series?"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:285
+#: js/MainScreenCenterPanel.js:287
 msgid "Delete Event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:288 js/MainScreenCenterPanel.js:290
+#: js/MainScreenCenterPanel.js:290 js/MainScreenCenterPanel.js:292
 msgid ""
 "Do you want to delete the whole series, this and all future events of this "
 "series, or just this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:292
+#: js/MainScreenCenterPanel.js:294
 msgid "Delete nothing"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:299
+#: js/MainScreenCenterPanel.js:301
 msgid "Delete whole series"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:320
+#: js/MainScreenCenterPanel.js:322
 msgid "Delete this and all future events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:341
+#: js/MainScreenCenterPanel.js:343
 msgid "Delete this event only"
 msgstr ""
 
-#: js/Model.js:64 js/Model.js:222
+#: js/Model.js:65 js/Model.js:223
 msgid "Events"
 msgstr ""
 
-#: js/Model.js:68
+#: js/Model.js:69
 msgid "Calendars"
 msgstr ""
 
-#: js/Model.js:218
+#: js/Model.js:219
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] ""

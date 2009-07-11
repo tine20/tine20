@@ -17,7 +17,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s のパーソナルタスク"
 
-#: js/EditDialog.js:113 js/GridPanel.js:56 js/GridPanel.js:115
+#: js/EditDialog.js:113 js/GridPanel.js:64 js/GridPanel.js:123
 msgid "Summary"
 msgstr "サマリー"
 
@@ -25,11 +25,11 @@ msgstr "サマリー"
 msgid "Due date"
 msgstr "期日"
 
-#: js/EditDialog.js:121 js/GridPanel.js:136
+#: js/EditDialog.js:121 js/GridPanel.js:144
 msgid "Priority"
 msgstr "重要度"
 
-#: js/EditDialog.js:124 js/GridPanel.js:58 js/GridPanel.js:188
+#: js/EditDialog.js:124 js/GridPanel.js:66 js/GridPanel.js:196
 msgid "Responsible"
 msgstr "責任担当"
 
@@ -45,7 +45,7 @@ msgstr "説明を入力してください..."
 msgid "Percentage"
 msgstr "割合"
 
-#: js/EditDialog.js:138 js/GridPanel.js:165
+#: js/EditDialog.js:138 js/GridPanel.js:173
 msgid "Status"
 msgstr "ステータス"
 
@@ -58,31 +58,31 @@ msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "選択されたタスクを本当に削除しますか？"
 
-#: js/GridPanel.js:57 js/GridPanel.js:127
+#: js/GridPanel.js:65 js/GridPanel.js:135
 msgid "Due Date"
 msgstr "期日"
 
-#: js/GridPanel.js:79
+#: js/GridPanel.js:87
 msgid "Failed"
 msgstr "失敗"
 
-#: js/GridPanel.js:79
+#: js/GridPanel.js:87
 msgid "Could not save task."
 msgstr "タスクの保存に失敗しました"
 
-#: js/GridPanel.js:123
+#: js/GridPanel.js:131
 msgid "Add a task..."
 msgstr "タスクを追加しています..."
 
-#: js/GridPanel.js:151
+#: js/GridPanel.js:159
 msgid "Percent"
 msgstr "パーセント"
 
-#: js/GridPanel.js:180
+#: js/GridPanel.js:188
 msgid "Creation Time"
 msgstr "作成時間"
 
-#: js/GridPanel.js:210
+#: js/GridPanel.js:218
 msgid "Show closed"
 msgstr "クローズされたものの表示"
 
