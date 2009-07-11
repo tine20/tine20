@@ -293,6 +293,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $attendee = $attendees->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendee'));
                     $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Name', $contact->n_fileas));
                     $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Email', !empty($contact->email) ? $contact->email : $contact->email_home));
+                    #if(version_compare($this->_device->acsversion, '12.0', '>=') === true) {
+                    #    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeType', array_search($attenderObject->role, $this->_attendeeTypeMapping)));
+                    #    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeStatus', array_search($attenderObject->status, $this->_attendeeStatusMapping)));
+                    #}
                 }
             }
         }
@@ -390,11 +394,101 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         // handle attendees
+        $addressbook = Addressbook_Controller_Contact::getInstance();
+        
+        if(! $event->attendee instanceof Tinebase_Record_RecordSet) {
+            $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+        
+        // new event, add current user as participant
+        if($event->getId() == null) {
+            $contactId = Tinebase_Core::getUser()->contact_id;
+            $newAttender = new Calendar_Model_Attender(array(
+                'user_id'   => $contactId,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+            ));
+            $event->attendee->addRecord($newAttender);
+        }
+        
         if(isset($xmlData->Attendees)) {
             foreach($xmlData->Attendees->Attendee as $attendee) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email" . $attendee->Email);
+
                 // search contact from addressbook using the emailaddress
-                // $attender = new Calendar_Model_Attender($attenderData);
+                $filterArray = array(
+                    array(
+                        'field'     => 'containerType',
+                        'operator'  => 'equals',
+                        'value'     => 'all'
+                    ),
+                    array('condition' => 'OR', 'filters' => array(
+                        array(
+                            'field'     => 'email',
+                            'operator'  => 'equals',
+                            'value'     => (string)$attendee->Email
+                        ),
+                        array(
+                            'field'     => 'email_home',
+                            'operator'  => 'equals',
+                            'value'     => (string)$attendee->Email
+                        ),
+                    )),
+                );
+                                 
+                #$contacts = $addressbook->search(new Addressbook_Model_ContactFilter($filterArray), null, true);
+                $contacts = $addressbook->search(new Addressbook_Model_ContactFilter($filterArray));
+                
+                if(count($contacts) > 0) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
+                    $contactId = $contacts->getFirstRecord()->getId();
+                } else {
+                    $contactData = array(
+                        'note'        => 'added by syncronisation',
+                        'email'       => (string)$attendee->Email,
+                        'n_family'    => (string)$attendee->Name,
+                    );
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
+                    $contact = new Addressbook_Model_Contact($contactData);
+                    $contactId = $addressbook->create($contact)->getId();
+                }
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactId " . $contactId);
+                
+                // find out if the contact_id is already attending the event
+                $matchingAttendee = $event->attendee
+                    ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
+                    ->filter('user_id', $contactId);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . count($matchingAttendee));
+                
+                if(count($matchingAttendee) == 0) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee not found, adding as new");
+                    $newAttender = new Calendar_Model_Attender(array(
+                        'user_id'   => $contactId,
+                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    ));
+                    if(isset($attendee->AttendeeType)) {
+                        $newAttender->role = $this->_attendeeTypeMapping[(int)$attendee->AttendeeType];
+                    } else {
+                        $newAttender->role = Calendar_Model_Attender::ROLE_REQUIRED;
+                    }
+                    if(isset($attendee->AttendeeStatus)) {
+                        $newAttender->status = $this->_attendeeStatusMapping[(int)$attendee->AttendeeStatus];
+                    } else {
+                        $newAttender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                    }
+                    
+                    $event->attendee->addRecord($newAttender);
+                } else {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
+                    $currentAttendee = $matchingAttendee->getFirstRecord();
+                    if(isset($attendee->AttendeeType)) {
+                        $currentAttendee->role = $this->_attendeeTypeMapping[(int)$attendee->AttendeeType];
+                    }
+                    if(isset($attendee->AttendeeStatus)) {
+                        $newAttender->status = $this->_attendeeStatusMapping[(int)$attendee->AttendeeStatus];
+                    }
+                }
             }
         } else {
             $event->attendee = array();
