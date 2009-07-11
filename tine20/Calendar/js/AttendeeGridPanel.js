@@ -370,7 +370,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderDispContainer: function(displaycontainer_id, metadata, attender) {
-        metadata.attr = 'style: "overflow: none;"';
+        metadata.attr = 'style = "overflow: none;"';
         
         if (displaycontainer_id) {
             if (displaycontainer_id.name) {
@@ -403,6 +403,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     renderAttenderStatus: function(status, metadata, attender) {
         if (! attender.get('user_id')) {
             return '';
+        }
+        
+        if (attender.get('displaycontainer_id')) {
+            metadata.attr = 'style = "cursor:pointer;"';
+        } else {
+            metadata.css = 'x-form-empty-field';
         }
         
         switch (status) {
