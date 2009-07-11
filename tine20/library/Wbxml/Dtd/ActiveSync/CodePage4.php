@@ -60,7 +60,7 @@ class Wbxml_Dtd_ActiveSync_CodePage4 extends Wbxml_Dtd_ActiveSync_Abstract
         'Subject'                 => 0x26,
         'StartTime'               => 0x27,
         'UID'                     => 0x28,
-        'Attendee_Status'         => 0x29,
-        'Attendee_Type'           => 0x2a
+        'AttendeeStatus'          => 0x29,
+        'AttendeeType'            => 0x2a
     );
 }
