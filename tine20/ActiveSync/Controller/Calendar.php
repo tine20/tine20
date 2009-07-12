@@ -67,7 +67,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @var array
      */
     protected $_attendeeStatusMapping = array(
-        self::ATTENDEE_STATUS_UNKNOWN       => Calendar_Model_Attender::STATUS_NEEDSACTION,
+        //self::ATTENDEE_STATUS_UNKNOWN       => Calendar_Model_Attender::STATUS_NEEDSACTION,
         self::ATTENDEE_STATUS_TENTATIVE     => Calendar_Model_Attender::STATUS_TENTATIVE,
         self::ATTENDEE_STATUS_ACCEPTED      => Calendar_Model_Attender::STATUS_ACCEPTED,
         self::ATTENDEE_STATUS_DECLINED      => Calendar_Model_Attender::STATUS_DECLINED,
@@ -293,14 +293,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $attendee = $attendees->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Attendee'));
                     $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Name', $contact->n_fileas));
                     $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Email', !empty($contact->email) ? $contact->email : $contact->email_home));
-                    #if(version_compare($this->_device->acsversion, '12.0', '>=') === true) {
-                    #    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeType', array_search($attenderObject->role, $this->_attendeeTypeMapping)));
-                    #    $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeStatus', array_search($attenderObject->status, $this->_attendeeStatusMapping)));
-                    #}
+                    if(version_compare($this->_device->acsversion, '12.0', '>=') === true) {
+                        $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeType', array_search($attenderObject->role, $this->_attendeeTypeMapping)));
+                        $attendee->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'AttendeeStatus', array_search($attenderObject->status, $this->_attendeeStatusMapping)));
+                    }
                 }
             }
         }
                 
+        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MeetingStatus', 1));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'BusyStatus', 2));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Sensitivity', 0));
@@ -413,6 +414,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         if(isset($xmlData->Attendees)) {
+            $newAttendee = array();
+            
             foreach($xmlData->Attendees->Attendee as $attendee) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email" . $attendee->Email);
 
@@ -453,6 +456,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $contact = new Addressbook_Model_Contact($contactData);
                     $contactId = $addressbook->create($contact)->getId();
                 }
+                $newAttendee[$contactId] = $contactId;
+                
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactId " . $contactId);
                 
                 // find out if the contact_id is already attending the event
@@ -488,6 +493,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     if(isset($attendee->AttendeeStatus)) {
                         $newAttender->status = $this->_attendeeStatusMapping[(int)$attendee->AttendeeStatus];
                     }
+                }
+            }
+            
+            foreach($event->attendee as $index => $attender) {
+                if(!isset($newAttendee[$attender->user_id])) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removed attender from event " . $attender->user_id);
+                    unset($event->attendee[$index]);
                 }
             }
         } else {
