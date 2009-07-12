@@ -203,7 +203,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
             )
         ));
         
-        $devices = $this->_deviceBackend->search($deviceFilter);
+        $devices = $this->searchDevice($deviceFilter);
         
         if(count($devices) > 0) {
             // update existing device
@@ -212,7 +212,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
             $device->acsversion = $_acsVersion;
             $device->devicetype = $_deviceType;
             
-            $device = $this->_deviceBackend->update($device);
+            $device = $this->updateDevice($device);
         } else {
             // create new device
             $device = new ActiveSync_Model_Device(array(
@@ -225,19 +225,51 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
                 'policykey'  => ActiveSync_Command_Provision::generatePolicyKey()
             ));
 
-            $device = $this->_deviceBackend->create($device);
+            $device = $this->createDevice($device);
         }
         
         return $device;
     }
     
+    /**
+     * update device information
+     * 
+     * @param ActiveSync_Model_Device $_device
+     * @return ActiveSync_Model_Device
+     */
     public function updateDevice(ActiveSync_Model_Device $_device)
     {
+        $_device->acsversion = $this->getAcsVersionFromUserAgent($_device->useragent, $_device->acsversion);
+        
         $device = $this->_deviceBackend->update($_device);
         
         return $device;
     }
     
+    /**
+     * store device information
+     * 
+     * @param ActiveSync_Model_Device $_device
+     * @return ActiveSync_Model_Device
+     */
+    public function createDevice(ActiveSync_Model_Device $_device)
+    {
+        $_device->acsversion = $this->getAcsVersionFromUserAgent($_device->useragent, $_device->acsversion);;
+        
+        $device = $this->_deviceBackend->create($_device);
+        
+        return $device;
+    }
+    
+    /**
+     * validate sync key
+     * 
+     * @param ActiveSync_Model_Device $_device
+     * @param $_counter
+     * @param $_class
+     * @param $_collectionId
+     * @return boolean
+     */
     public function validateSyncKey(ActiveSync_Model_Device $_device, $_counter, $_class, $_collectionId = NULL)
     {
         $type = $_collectionId !== NULL ? $_class . '-' . $_collectionId : $_class;
@@ -257,6 +289,16 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
         }
     }
         
+    /**
+     * update sync key
+     * 
+     * @param ActiveSync_Model_Device $_device
+     * @param Zend_Date $_counter
+     * @param $_timeStamp
+     * @param $_class
+     * @param $_collectionId
+     * @return void
+     */
     public function updateSyncKey(ActiveSync_Model_Device $_device, $_counter, Zend_Date $_timeStamp, $_class, $_collectionId = NULL)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update synckey to ' . $_counter);
@@ -281,5 +323,31 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
             // add new syncState
             $this->_syncStateBackend->create($syncState);
         }
+    }
+    
+    /**
+     * 
+     * @param string $_userAgent the useragent string of the device
+     * @return unknown_type
+     */
+    public function getAcsVersionFromUserAgent($_userAgent, $_defaultVersion = '2.5')
+    {
+        $acsVersion = $_defaultVersion;
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' useragent string ' . $_userAgent);
+        
+        if(preg_match('/^MSFT-PPC\/(\d\.\d)\./', $_userAgent, $matches) === 1) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' matches ' . print_r($matches, true));
+            switch($matches[1]) {
+                case '5.1':
+                    $acsVersion = '2.5';
+                    break;
+                case '5.2':
+                    $acsVersion = '12.0';
+                    break;
+            }
+        }
+        
+        return $acsVersion;
     }
 }
