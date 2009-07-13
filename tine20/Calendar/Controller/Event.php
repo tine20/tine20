@@ -735,8 +735,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @return void
      * 
      * @todo throw exception on error
-     * @todo finish sending of alarms (get/resolve sender/recipient)
-     * @todo add more event data to message body
+     * @todo make sending alarms to groups work
+     * @todo use html mail template for body
      */
     public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
     {
@@ -746,23 +746,39 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $event = $this->get($_alarm->record_id);
         
+        if ($event->organizer) {
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+            $organizer = Tinebase_User::getInstance()->getFullUserById($organizerContact->account_id);
+        } else {
+            // use creator as organizer
+            $organizer = Tinebase_User::getInstance()->getFullUserById($event->created_by);
+        }
+        
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
         
         $translate = Tinebase_Translation::getTranslation($this->_applicationName);
         
         // create message
         $messageSubject = $translate->_('Notification for Event ' . $event->summary);
-        $messageBody = $translate->_('Event description:<br/>' . $event->description);
+        //$messageBody = $translate->_('Event description:<br/>' . $event->description);
+        $messageBody = print_r($event->toArray(), TRUE);
         
         $notificationsBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
         
         // loop recipients
         foreach ($event->attendee as $attender) {
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($attender->toArray(), TRUE));
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending alarm to user id ' . print_r($attender->user_id, TRUE));
             
-            //-- send message
-            //$notificationsBackend->send($organizer, $attender, $messageSubject, $messageBody);
+            if ($attender->user_type == Calendar_Model_Attender::USERTYPE_USER) {
+                //$user = Tinebase_User::getInstance()->getUserById($attender->user_id);
+                $contact = Addressbook_Controller_Contact::getInstance()->get($attender->user_id);
+
+                // send message
+                if ($contact->email) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending alarm email to ' . $contact->email);
+                    $notificationsBackend->send($organizer, $contact, $messageSubject, $messageBody);
+                }
+            }
         }
     }
 }
