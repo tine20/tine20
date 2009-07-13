@@ -603,7 +603,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 foreach ($_records as $record) {
                     // convert options xml to array
-                    Tinebase_Core::getPreference($app->name)->convertOptionsToArray($record);
+                    $preference = Tinebase_Core::getPreference($app->name);
+                    if ($preference) {
+                        $preference->convertOptionsToArray($record);
+                    } else {
+                        throw new Tinebase_Exception_NotFound('No preference class found for app ' . $app->name);
+                    }
                 }
                 break;
         }
