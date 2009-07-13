@@ -279,8 +279,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
-     * 
-     * @todo    update alarms if dtstart of an event changes?
      */
     protected function _inspectUpdate($_record, $_oldRecord)
     {
