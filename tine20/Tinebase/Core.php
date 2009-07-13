@@ -405,7 +405,8 @@ class Tinebase_Core
         ini_set('session.gc_maxlifetime', $maxLifeTime);
         
         // set the session save path
-        $sessionSavepath = $config->get('session.save_path', ini_get('session.save_path') . '/tine20_sessions');
+        $defaultPath = (! empty(ini_get('session.save_path'))) ? ini_get('session.save_path') . '/tine20_sessions' : '/tmp/tine20_sessions';
+        $sessionSavepath = $config->get('session.save_path', $defaultPath);
         if(ini_set('session.save_path', $sessionSavepath) !== false) { 
             if (!is_dir($sessionSavepath)) { 
                 mkdir($sessionSavepath, 0700); 
