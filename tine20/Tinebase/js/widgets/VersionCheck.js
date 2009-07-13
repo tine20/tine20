@@ -28,6 +28,10 @@ Tine.widgets.VersionCheck = function() {
         }, ['codeName', 'packageString', 'releaseTime', 'critical', 'build'])
     });
     ds.on('load', function(store, records) {
+        if (! Tine.Tinebase.registry.get('version')) {
+            return false;
+        }
+        
         var version = records[0];
         
         var local = Date.parseDate(Tine.Tinebase.registry.get('version').releasetime, Date.patterns.ISO8601Long);

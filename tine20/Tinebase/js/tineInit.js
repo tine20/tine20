@@ -525,6 +525,10 @@ Tine.Tinebase.tineInit = {
      * check if selfupdate is needed
      */
     checkSelfUpdate: function() {
+        if (! Tine.Tinebase.registry.get('version')) {
+            return false;
+        }        
+        
         var needSelfUpdate, serverVersion = Tine.Tinebase.registry.get('version'), clientVersion = Tine.clientVersion;
         if (clientVersion.codeName.match(/^\$HeadURL/)) {
             return;

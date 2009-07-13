@@ -132,7 +132,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
            msg: this.exceptionInfo,
            description: Ext.getCmp('tb-exceptiondialog-description').getValue(),
            clientVersion: Tine.clientVersion,
-           serverVersion: Tine.Tinebase.registry.get('version')
+           serverVersion: (Tine.Tinebase.registry.get('version')) ? Tine.Tinebase.registry.get('version') : {}
         };
         
         // tinebase version
