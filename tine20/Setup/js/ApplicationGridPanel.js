@@ -103,14 +103,11 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
      * @param {} ct
      * @param {} position
      * 
-     * TODO: select all rows and display modal box with 'install all apps' button
      */
     onRender: function(ct, position) {
         Tine.Setup.ApplicationGridPanel.superclass.onRender.call(this, ct, position);
 
-        //this.selectionModel.selectAll.defer(500, this);
-        //this.selectionModel.selectAll();
-        //console.log(this.selectionModel);
+        this.selectApps.defer(1000, this);
     },
     
     onSelectionChange: function(sm) {
@@ -142,6 +139,37 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             }, this);
         } else {
             this.alterApps(btn.actionType);
+        }
+    },
+    
+    /**
+     * select all installable or updateable apps
+     */
+    selectApps: function() {
+        console.log(this.selectionModel);
+        
+        var installable = [];
+        var updateable = [];
+        var firstInstall = true;
+        
+        this.store.each(function(record) {
+            if (record.get('install_status') == 'updateable') {
+                updateable.push(record);
+                firstInstall = false;
+            } else if (record.get('install_status') == 'uninstalled' 
+                && record.get('name').match(/Tinebase|Admin|Calendar|Addressbook|Tasks|Felamimail/)
+            ) {
+                installable.push(record);
+            } else if (record.get('install_status') == 'uptodate'){
+                firstInstall = false;
+            }
+            //console.log(record);
+        }, this);
+        
+        if (firstInstall) {
+            this.selectionModel.selectRecords(installable);
+        } else {
+            this.selectionModel.selectRecords(updateable);
         }
     },
     
