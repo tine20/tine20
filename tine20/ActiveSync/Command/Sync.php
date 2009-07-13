@@ -61,6 +61,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     protected $_contentStateBackend;
     
     /**
+     * the folderState sql backend
+     *
+     * @var ActiveSync_Backend_FolderState
+     */
+    protected $_folderStateBackend;
+    
+    /**
      * total count of items in all collections
      *
      * @var integer
@@ -94,6 +101,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
         parent::__construct($_device);
         
         $this->_contentStateBackend  = new ActiveSync_Backend_ContentState();
+        $this->_folderStateBackend   = new ActiveSync_Backend_FolderState();
         $this->_session              = new Zend_Session_Namespace('moreData');
         $this->_controller           = ActiveSync_Controller::getInstance();
         // continue sync / MoreAvailable sent in previous repsonse
@@ -132,7 +140,8 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 'changed'       => array(),
                 'deleted'       => array(),
                 'forceAdd'      => array(),
-                'forceChange'   => array()
+                'forceChange'   => array(),
+                'filterType'    => isset($xmlCollection->Options) && isset($xmlCollection->Options->FilterType) ? (int)$xmlCollection->Options->FilterType : 0
             );
             $this->_collections[$class][$collectionId] = $collectionData;
             
@@ -296,7 +305,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         
                         if($newSyncKey === 1) {
                             // all entries available
-                            $serverAdds    = $dataController->getServerEntries($collectionData['collectionId']);
+                            $serverAdds    = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
                             $serverChanges = array();
                             $serverDeletes = array();
                         } else {
@@ -311,7 +320,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 #$serverAdds = $dataController->getSince('added', $syncState->lastsync, $this->_syncTimeStamp);
                                 
                                 $allClientEntries = $this->_contentStateBackend->getClientState($this->_device, $collectionData['class'], $collectionData['collectionId']);
-                                $allServerEntries = $dataController->getServerEntries($collectionData['collectionId']);
+                                $allServerEntries = $dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']);
                                 
                                 // add entries
                                 $serverDiff = array_diff($allServerEntries, $allClientEntries);
@@ -424,6 +433,28 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 // increment sync timestamp by 1 second
                 $this->_syncTimeStamp->add('1', Zend_Date::SECOND);
                 $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, $collectionData['class'], $collectionData['collectionId']);
+                
+                // store current filter type
+                $filter = new ActiveSync_Model_FolderStateFilter(array(
+                    array(
+                        'field'     => 'device_id',
+                        'operator'  => 'equals',
+                        'value'     => $this->_device->getId(),
+                    ),
+                    array(
+                        'field'     => 'class',
+                        'operator'  => 'equals',
+                        'value'     => $collectionData['class'],
+                    ),
+                    array(
+                        'field'     => 'folderid',
+                        'operator'  => 'equals',
+                        'value'     => $collectionData['collectionId']
+                    )
+                ));
+                $folderState = $this->_folderStateBackend->search($filter)->getFirstRecord();
+                $folderState->lastfiltertype = $collectionData['filterType'];
+                $this->_folderStateBackend->update($folderState);
             }
         }
         

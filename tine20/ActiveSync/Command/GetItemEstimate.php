@@ -46,6 +46,13 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
     protected $_collections = array();
     
     /**
+     * the folderState sql backend
+     *
+     * @var ActiveSync_Backend_FolderState
+     */
+    protected $_folderStateBackend;
+    
+    /**
      * process the XML file and add, change, delete or fetches data 
      *
      * @todo can we get rid of LIBXML_NOWARNING
@@ -54,6 +61,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
     public function handle()
     {
         $controller = ActiveSync_Controller::getInstance();
+        $this->_folderStateBackend   = new ActiveSync_Backend_FolderState();
         
         $xml = new SimpleXMLElement($this->_inputDom->saveXML(), LIBXML_NOWARNING);
         #$xml = simplexml_import_dom($this->_inputDom);
@@ -65,7 +73,7 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
             // fetch values from a different namespace
             $airSyncValues  = $xmlCollection->children('uri:AirSync');
             $clientSyncKey  = (string)$airSyncValues->SyncKey;
-            $filterType     = (string)$airSyncValues->FilterType;
+            $filterType     = isset($airSyncValues->FilterType) ? (int)$airSyncValues->FilterType : 0;
             
             $collectionData = array(
                 'syncKey'       => $clientSyncKey,
@@ -118,12 +126,11 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                             $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));
                             if($collectionData['syncKey'] == 1) {
                                 // this is the first sync. in most cases there are data on the server.
-                                $count = count($dataController->getServerEntries($collectionData['collectionId']));
+                                $count = count($dataController->getServerEntries($collectionData['collectionId'], $collectionData['filterType']));
                             } else {
                                 $count = $this->_getItemEstimate(
                                     $dataController,
-                                    $collectionData['class'], 
-                                    $collectionData['collectionId'],
+                                    $collectionData,
                                     $syncState->lastsync
                                 );
                             }
@@ -146,22 +153,52 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                     }
                     
                 }
+                
+                // store current filter type
+                $filter = new ActiveSync_Model_FolderStateFilter(array(
+                    array(
+                        'field'     => 'device_id',
+                        'operator'  => 'equals',
+                        'value'     => $this->_device->getId(),
+                    ),
+                    array(
+                        'field'     => 'class',
+                        'operator'  => 'equals',
+                        'value'     => $collectionData['class'],
+                    ),
+                    array(
+                        'field'     => 'folderid',
+                        'operator'  => 'equals',
+                        'value'     => $collectionData['collectionId']
+                    )
+                ));
+                $folderState = $this->_folderStateBackend->search($filter)->getFirstRecord();
+                $folderState->lastfiltertype = $collectionData['filterType'];
+                $this->_folderStateBackend->update($folderState);
             }
         }
                 
         parent::getResponse();
     }
-    
-    private function _getItemEstimate($_dataController, $_class, $_collectionId, $_lastSyncTimeStamp)
+
+    /**
+     * return number of chnaged entries
+     * 
+     * @param $_dataController
+     * @param array $_collectionData
+     * @param $_lastSyncTimeStamp
+     * @return int number of changed entries
+     */
+    private function _getItemEstimate($_dataController, $_collectionData, $_lastSyncTimeStamp)
     {
         $contentStateBackend  = new ActiveSync_Backend_ContentState();
         
-        $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_class, $_collectionId);
-        $allServerEntries   = $_dataController->getServerEntries($_collectionId);    
+        $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_collectionData['class'], $_collectionData['collectionId']);
+        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $_collectionData['filterType']);    
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
         
-        $changedEntries     = $_dataController->getChanged($_collectionId, $_lastSyncTimeStamp, $this->_syncTimeStamp);
+        $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_lastSyncTimeStamp, $this->_syncTimeStamp);
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }

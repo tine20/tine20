@@ -123,8 +123,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                         //$count = $dataController->getItemEstimate($syncState->lastsync);
                         $count = $this->_getItemEstimate(
                             $dataController,
-                            $folder['folderType'], 
-                            $folder['serverEntryId'],
+                            $folder,
                             $syncState->lastsync
                         );
                                                 
@@ -179,16 +178,44 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         parent::getResponse();
     }
     
-    private function _getItemEstimate($_dataController, $_class, $_collectionId, $_lastSyncTimeStamp)
+    /**
+     * return number of chnaged entries
+     * 
+     * @param $_dataController
+     * @param array $_collectionData
+     * @param $_lastSyncTimeStamp
+     * @return int number of changed entries
+     */
+    private function _getItemEstimate($_dataController, $_collectionData, $_lastSyncTimeStamp)
     {
         $contentStateBackend  = new ActiveSync_Backend_ContentState();
+        $folderStateBackend   = new ActiveSync_Backend_FolderState();
+        // get current filterType
+        $filter = new ActiveSync_Model_FolderStateFilter(array(
+            array(
+                'field'     => 'device_id',
+                'operator'  => 'equals',
+                'value'     => $this->_device->getId(),
+            ),
+            array(
+                'field'     => 'class',
+                'operator'  => 'equals',
+                'value'     => $collectionData['class'],
+            ),
+            array(
+                'field'     => 'folderid',
+                'operator'  => 'equals',
+                'value'     => $collectionData['collectionId']
+            )
+        ));
+        $folderState = $this->folderStateBackend->search($filter)->getFirstRecord();
         
-        $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_class, $_collectionId);
-        $allServerEntries   = $_dataController->getServerEntries($_collectionId);    
+        $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_collectionData['class'], $_collectionData['collectionId']);
+        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $folderState->filtertype);    
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
         
-        $changedEntries     = $_dataController->getChanged($_collectionId, $_lastSyncTimeStamp);
+        $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_lastSyncTimeStamp, $this->_syncTimeStamp);
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
