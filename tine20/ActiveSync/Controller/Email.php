@@ -263,7 +263,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      *
      * @return array
      */
-    public function getServerEntries($_folderId)
+    public function getServerEntries($_folderId, $_filterType)
     {
         $foundEntries = $this->_messageController->getUid($_folderId, 1, INF);
                 
