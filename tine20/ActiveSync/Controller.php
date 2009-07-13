@@ -334,19 +334,19 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
     {
         $acsVersion = $_defaultVersion;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' useragent string ' . $_userAgent);
+        // skip that for now
         
-        if(preg_match('/^MSFT-PPC\/(\d\.\d)\./', $_userAgent, $matches) === 1) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' matches ' . print_r($matches, true));
-            switch($matches[1]) {
-                case '5.1':
-                    $acsVersion = '2.5';
-                    break;
-                case '5.2':
-                    $acsVersion = '12.0';
-                    break;
-            }
-        }
+        #if(preg_match('/^MSFT-PPC\/(\d\.\d)\./', $_userAgent, $matches) === 1) {
+        #    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' matches ' . print_r($matches, true));
+        #    switch($matches[1]) {
+        #        case '5.1':
+        #            $acsVersion = '2.5';
+        #            break;
+        #        case '5.2':
+        #            $acsVersion = '12.0';
+        #            break;
+        #    }
+        #}
         
         return $acsVersion;
     }
