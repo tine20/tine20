@@ -61,6 +61,27 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     const RECUR_DOW_SATURDAY    = 64;
     
     /**
+     * filter types
+     */
+    const FILTER_NOTHING        = 0;
+    const FILTER_2_WEEKS_BACK   = 4;
+    const FILTER_1_MONTH_BACK   = 5;
+    const FILTER_3_MONTHS_BACK  = 6;
+    const FILTER_6_MONTHS_BACK  = 7;
+    
+    /**
+     * available filters
+     * 
+     * @var array
+     */
+    protected $_filterArray = array(
+        self::FILTER_2_WEEKS_BACK,
+        self::FILTER_1_MONTH_BACK,
+        self::FILTER_3_MONTHS_BACK,
+        self::FILTER_6_MONTHS_BACK
+    );
+    
+    /**
      * mapping of attendee status
      *
      * NOTE: not surjektive
@@ -632,22 +653,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      *
      * @return array
      */
-    public function getServerEntries($_folderId)
+/*    public function getServerEntries($_folderId, $_filterType)
     {
     	// NOTE: $folderFilter is an array containing filterdata for one container filter 
-        $folderFilter  = $this->_getFolderFilter($_folderId);
+        $folderFilter  = $this->_getFolderFilter($_folderId, $_filterType);
         
-        // add period filter
-        $folderFilter[] = array(
-            'field'    => 'period',
-            'operator' => 'within',
-            'value'    => array(
-                'from'  => '2009-07-01 00:00:00',
-                'until' => '2009-09-30 23:59:59'
-        ));
-        
-        // exclude recur exceptions
-        $folderFilter[] = array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL);
         
         $contentFilter = new $this->_contentFilterClass($folderFilter);
         
@@ -656,8 +666,54 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
             
         return $foundEntries;
-    }
+    } */
     
+    /**
+     * return contentfilter class
+     * 
+     * @param $_folderFilter
+     * @param $_filterType
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getContentFilter($_folderFilter, $_filterType)
+    {
+        $folderFilter = $_folderFilter;
+        
+        // exclude recur exceptions
+        $folderFilter[] = array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL);
+        
+        if(in_array($_filterType, $this->_filterArray)) {
+            switch($_filterType) {
+                case self::FILTER_2_WEEKS_BACK:
+                    $from = Zend_Date::now()->subWeek(2);
+                    break;
+                case self::FILTER_1_MONTH_BACK:
+                    $from = Zend_Date::now()->subMonth(2);
+                    break;
+                case self::FILTER_3_MONTHS_BACK:
+                    $from = Zend_Date::now()->subMonth(3);
+                    break;
+                case self::FILTER_6_MONTHS_BACK:
+                    $from = Zend_Date::now()->subMonth(6);
+                    break;
+            }
+            // add period filter
+            $folderFilter[] = array(
+                'field'    => 'period',
+                'operator' => 'within',
+                'value'    => array(
+                    'from'  => $from,
+                    'until' => '2999-09-30 23:59:59'
+            ));
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " content filter $from " . print_r($folderFilter, true));
+        
+        $contentFilter = parent::_getContentFilter($_folderFilter, $_filterType);
+        
+        return $contentFilter;
+    }
+        
     /**
      * decode timezone info from activesync
      * 
