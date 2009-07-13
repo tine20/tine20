@@ -165,8 +165,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         //'Exceptions'        => 'exdate',
     );
     
-    protected $_timezoneUnpackString = 'lbias/a64standardName/vstandardYear/vstandardMonth/vstandardDayOfWeek/vstandardDay/vstandardHour/vstandardMinute/vstandardSecond/vstandardMilliseconds/lstandardBias/a64daylightName/vdaylightYear/vdaylightMonth/vdaylightDayOfWeek/vdaylightDay/vdaylightHour/vdaylightMinute/vdaylightSecond/vdaylightMilliseconds/ldaylightBias';
-    
     
     /**
      * list of supported folders
@@ -723,11 +721,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     public function unpackTimezoneInfo($_packedTimezoneInfo)
     {
-        $timezoneUnpackString = 'lbias/a64standardName/vstandardYear/vstandardMonth/vstandardDayOfWeek/vstandardDay/vstandardHour/vstandardMinute/vstandardSecond/vstandardMilliseconds/lstandardBias/a64daylightName/vdaylightYear/vdaylightMonth/vdaylightDayOfWeek/vdaylightDay/vdaylightHour/vdaylightMinute/vdaylightSecond/vdaylightMilliseconds/ldaylightBias';
-
-        $timezoneInfo = unpack($timezoneUnpackString, base64_decode($_packedTimezoneInfo));
-        
-        return $timezoneInfo;
+    	return ActiveSync_TimezoneGuesser::unpackTimezoneInfo($_packedTimezoneInfo);
     }
     
     /**
@@ -736,33 +730,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @param array $_timezoneInfo
      * @return string
      */
-    public function packTimezoneInfo($_timezoneInfo) {
-        
-        $packed = pack(
-            "la64vvvvvvvvla64vvvvvvvvl",
-            $_timezoneInfo["bias"], 
-            $_timezoneInfo["standardName"], 
-            $_timezoneInfo['standardYear'],
-            $_timezoneInfo["standardMonth"], 
-            $_timezoneInfo['standardDayOfWeek'],
-            $_timezoneInfo["standardDay"], 
-            $_timezoneInfo["standardHour"], 
-            $_timezoneInfo["standardMinute"], 
-            $_timezoneInfo['standardSecond'],
-            $_timezoneInfo['standardMilliseconds'],
-            $_timezoneInfo["standardBias"], 
-            $_timezoneInfo["daylightName"], 
-            $_timezoneInfo['daylightYear'],
-            $_timezoneInfo["daylightMonth"], 
-            $_timezoneInfo['daylightDayOfWeek'],
-            $_timezoneInfo["daylightDay"], 
-            $_timezoneInfo["daylightHour"], 
-            $_timezoneInfo["daylightMinute"], 
-            $_timezoneInfo['daylightSecond'],
-            $_timezoneInfo['daylightMilliseconds'],
-            $_timezoneInfo["daylightBias"] 
-        );
-
-        return base64_encode($packed);
+    public function packTimezoneInfo($_timezoneInfo) 
+    {
+        return ActiveSync_TimezoneGuesser::packTimezoneInfo($_timezoneInfo);
     }
 }
