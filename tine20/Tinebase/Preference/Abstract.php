@@ -406,12 +406,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     protected function _getMatchingPreference(Tinebase_Record_RecordSet $_preferences)
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_preferences->toArray(), TRUE));
+        $_preferences->addIndices(array('type', 'account_type'));
         
         if (count($_preferences) == 1) {
             $result = $_preferences->getFirstRecord();
         } else {
-            $_preferences->addIndices(array('type', 'account_type'));
-            
             // check forced
             $forced = $_preferences->filter('type', Tinebase_Model_Preference::TYPE_FORCED);
             if (count($forced) > 0) {
