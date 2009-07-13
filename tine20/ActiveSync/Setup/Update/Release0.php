@@ -377,4 +377,71 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '0.9');
     }
+    
+    /**
+     * make some fields not null and add new field to stor last FilterType
+     * 
+     */
+    public function update_9()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_folder', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>device_id</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_folder', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>class</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_folder', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>folderid</name>
+                <type>text</type>
+                <length>254</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_folder', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>creation_time</name>
+                <type>datetime</type>
+                <notnull>true</notnull>
+            </field> 
+        ');
+        $this->_backend->alterCol('acsync_folder', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>lastfiltertype</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_folder', $declaration);
+        
+        $this->setApplicationVersion('ActiveSync', '0.10');
+    }
 }
