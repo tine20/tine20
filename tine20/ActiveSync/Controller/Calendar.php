@@ -697,19 +697,20 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $from = Zend_Date::now()->subMonth(6);
                     break;
             }
+            $to = Zend_Date::now()->addYear(10);
             // add period filter
             $folderFilter[] = array(
                 'field'    => 'period',
                 'operator' => 'within',
                 'value'    => array(
                     'from'  => $from,
-                    'until' => '2999-09-30 23:59:59'
+                    'until' => $to
             ));
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " content filter $from " . print_r($folderFilter, true));
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " content filter $from " . print_r($folderFilter, true));
         
-        $contentFilter = parent::_getContentFilter($_folderFilter, $_filterType);
+        $contentFilter = parent::_getContentFilter($folderFilter, $_filterType);
         
         return $contentFilter;
     }
