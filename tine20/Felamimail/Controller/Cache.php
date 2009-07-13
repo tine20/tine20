@@ -456,6 +456,11 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                     ' Failed to create cache entry for msg ' . $uid . ' | ' . $subject .
                     '. Error: ' . $zdse->getMessage()
                 );
+            } catch (Zend_Date_Exception $zde) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                    ' Could not parse message ' . $uid . ' | ' . $subject .
+                    '. Error: ' . $zde->getMessage()
+                );
             }
         }
     }
