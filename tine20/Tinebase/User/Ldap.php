@@ -769,11 +769,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         return $ldapData;
     }
     
+    /**
+     * import users from ldap
+     *
+     */
     public function importUsers()
     {
         $sqlGroupBackend = new Tinebase_Group_Sql();
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ');
         
         $users = $this->_getUsersFromBackend($this->_userBaseFilter, 'Tinebase_Model_FullUser');
         
@@ -783,7 +785,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
                 $sqluser = $this->_sql->getUserById($user->getId());
                 $this->_sql->updateUser($user);
             } catch (Tinebase_Exception_NotFound $e) {
-                $this->_sql->addUser($user);
+                try {
+                    $this->_sql->addUser($user);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add user - ' . $zdse->getMessage());
+                    continue;
+                }
             }
             $sqlGroupBackend->addGroupMember($user->accountPrimaryGroup, $user);
             
@@ -791,8 +798,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $contact = $this->_getContactFromBackend($user);
             Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL)->update($contact);
         }
-        
-        
     }
     
     public function resolveLdapUIdNumber($_uidNumber)

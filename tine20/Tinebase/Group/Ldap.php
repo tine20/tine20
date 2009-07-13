@@ -593,8 +593,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
                 'description'   => isset($group['description'][0]) ? $group['description'][0] : null
             )); 
 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
+            
             try {
-                $group = $this->_sql->getGroupById($groupObject->getId());
+                //$group = $this->_sql->getGroupById($groupObject->getId());
+                $group = $this->_sql->getGroupByName($groupObject->name);
                 $this->_sql->updateGroup($groupObject);
             } catch (Tinebase_Exception_Record_NotDefined $e) {
                 $this->_sql->addGroup($groupObject);
