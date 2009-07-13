@@ -146,7 +146,6 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
      * select all installable or updateable apps
      */
     selectApps: function() {
-        console.log(this.selectionModel);
         
         var installable = [];
         var updateable = [];
@@ -163,7 +162,6 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             } else if (record.get('install_status') == 'uptodate'){
                 firstInstall = false;
             }
-            //console.log(record);
         }, this);
         
         if (firstInstall) {
