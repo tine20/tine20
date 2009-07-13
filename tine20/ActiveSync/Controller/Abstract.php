@@ -357,21 +357,41 @@ abstract class ActiveSync_Controller_Abstract
     /**
      * get id's of all contacts available on the server
      *
+     * @param string $_folderId
+     * @param int $_filterType
      * @return array
      */
-    public function getServerEntries($_folderId)
+    public function getServerEntries($_folderId, $_filterType)
     {
         $folderFilter  = $this->_getFolderFilter($_folderId);
         
-        $contentFilter = new $this->_contentFilterClass($folderFilter);
+        $contentFilter = $this->_getContentFilter($folderFilter, $_filterType);
         
         $foundEntries  = $this->_contentController->search($contentFilter, NULL, false, true);
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found " . count($foundEntries) . ' entries');
-            
         return $foundEntries;
     }
+
+    /**
+     * return contentfilter class
+     * 
+     * @param array $_folderFilter
+     * @param int $_filterType
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getContentFilter($_folderFilter, $_filterType)
+    {
+        $contentFilter = new $this->_contentFilterClass($_folderFilter);
+        
+        return $contentFilter;
+    }
     
+    /**
+     * return folder filter
+     * 
+     * @param $_folderId
+     * @return array
+     */
     protected function _getFolderFilter($_folderId)
     {
         if($_folderId == $this->_specialFolderName) {
