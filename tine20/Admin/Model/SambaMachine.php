@@ -43,7 +43,7 @@ class Admin_Model_SambaMachine extends Tinebase_Record_Abstract
     );
 
     protected $_validators = array(
-        'accountId'             => array('Digits', 'allowEmpty' => true),
+        'accountId'             => array('allowEmpty' => true),
         'accountLoginName'      => array('presence' => 'required'),
         'accountLastName'       => array('allowEmpty' => true),
         'accountFullName'       => array('allowEmpty' => true),
