@@ -638,6 +638,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
         if (count($matches) == 7) {
             list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
+            // NOTE: PHP5 timestamp support is 32 bit and ends on 2038-01-19 03:14:07
+            if ($year >= 2038) {
+            	$date = new Zend_Date($_ISO, self::ISO8601LONG);
+            	return $date->getTimestamp();
+            }
             return  mktime($hour, $minute, $second, $month, $day, $year);
         }
     }
