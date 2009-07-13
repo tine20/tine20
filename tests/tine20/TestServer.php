@@ -87,7 +87,8 @@ class TestServer extends Tinebase_Server_Abstract
                     'accountLastName'       => $last,
                     'accountFirstName'      => $given,
                     'accountFullName'       => $fullName,
-                    'accountEmailAddress'   => $login . '@tine-publications.co.uk',
+                    //'accountEmailAddress'   => $login . '@tine-publications.co.uk',
+                    'accountEmailAddress'   => 'unittest@tine20.org',
                 ));
                 $user = Tinebase_User::getInstance()->addUser($user);
                 
