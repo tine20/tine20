@@ -188,6 +188,10 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
      */
     private function _getItemEstimate($_dataController, $_collectionData, $_lastSyncTimeStamp)
     {
+        // hack to have the same variable names all over the place
+        $_collectionData['class']        = $_collectionData['folderType'];
+        $_collectionData['collectionId'] = $_collectionData['serverEntryId'];
+        
         $contentStateBackend  = new ActiveSync_Backend_ContentState();
         $folderStateBackend   = new ActiveSync_Backend_FolderState();
         // get current filterType
@@ -200,18 +204,18 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             array(
                 'field'     => 'class',
                 'operator'  => 'equals',
-                'value'     => $collectionData['class'],
+                'value'     => $_collectionData['class'],
             ),
             array(
                 'field'     => 'folderid',
                 'operator'  => 'equals',
-                'value'     => $collectionData['collectionId']
+                'value'     => $_collectionData['collectionId']
             )
         ));
-        $folderState = $this->folderStateBackend->search($filter)->getFirstRecord();
+        $folderState = $folderStateBackend->search($filter)->getFirstRecord();
         
         $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_collectionData['class'], $_collectionData['collectionId']);
-        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $folderState->filtertype);    
+        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $folderState->lastfiltertype);    
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
         
