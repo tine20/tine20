@@ -97,6 +97,9 @@ class Tinebase_Frontend_Cli
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Triggering async events from CLI.');
         
+        $user = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+        
         $event = new Tinebase_Event_Async_Minutely();
         Tinebase_Event::fireEvent($event);
         
