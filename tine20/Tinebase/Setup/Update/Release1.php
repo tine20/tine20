@@ -330,6 +330,15 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
+                <name>name</name>
+                <type>text</type>
+                <length>100</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('preferences', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
                 <name>created_by</name>
                 <type>text</type>
                 <length>40</length>
@@ -670,4 +679,23 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '1.12');
     }
+    
+    /**
+     * update to 1.13
+     * - change the lenght of the name field to 100, because index gets to long on some MySQL versions
+     */
+    public function update_12()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>name</name>
+                <type>text</type>
+                <length>100</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('preferences', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '1.13');
+    }
+        
 }
