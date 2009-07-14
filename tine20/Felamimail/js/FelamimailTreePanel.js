@@ -546,15 +546,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     method: 'Felamimail.searchFolders',
 
     /**
-     * @private
-     */
-    initComponent: function() {
-        this.filter = [];
-        
-        Tine.Felamimail.TreeLoader.superclass.initComponent.call(this);
-    },
-    
-    /**
      * request data
      * 
      * @param {} node
