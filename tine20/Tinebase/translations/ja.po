@@ -1315,19 +1315,3 @@ msgstr "変更されました"
 msgid "record changed"
 msgstr "レコードが変更されました"
 
-#~ msgid "Report bugs to tine20.org directly when they occour"
-#~ msgstr "発生したバグをtine20.orgに直接伝える"
-
-#~ msgid ""
-#~ "Please help improving this software and notify the vendor. Include a "
-#~ "brief description of what you where doing when the error occoured."
-#~ msgstr ""
-#~ "問題が発生しました。このソフトウェアを改良するため、ベンダーに通知してくだ"
-#~ "さい。 その際には何がどのようにおきたかの関する簡単な説明を含めてくださ"
-#~ "い。"
-
-#~ msgid "Timezone: {0}"
-#~ msgstr "タイムゾーン: {0}"
-
-#~ msgid "remove account"
-#~ msgstr "アカウントの削除"

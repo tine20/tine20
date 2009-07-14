@@ -1348,10 +1348,3 @@ msgstr ""
 msgid "record changed"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Preference description"
-#~ msgstr "Preferencje"
-
-#, fuzzy
-#~ msgid "Timezone: {0}"
-#~ msgstr "Strefa czasowa: {0}"

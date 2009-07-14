@@ -1354,20 +1354,4 @@ msgstr "mis à jour"
 msgid "record changed"
 msgstr "enregistrement mis à jour"
 
-#, fuzzy
-#~ msgid "Preference description"
-#~ msgstr "Veuillez saisir une nouvelle description:"
 
-#~ msgid "Timezone: {0}"
-#~ msgstr "Fuseau horaire: {0}"
-
-#~ msgid ""
-#~ "Please help improving this software and notify the vendor. Include a "
-#~ "brief description of what you where doing when the error occoured."
-#~ msgstr ""
-#~ "S'il vous plait, aidez-nous à améliorer ce programme et informez les "
-#~ "créateurs. Décrivez brièvement ce qui vous faisiez quand l'erreur s'est "
-#~ "produite."
-
-#~ msgid "remove account"
-#~ msgstr "supprimer le compte"

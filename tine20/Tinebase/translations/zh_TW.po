@@ -1304,9 +1304,3 @@ msgstr ""
 msgid "record changed"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Preference description"
-#~ msgstr "偏好設定"
-
-#~ msgid "Timezone: {0}"
-#~ msgstr "目前時區"
