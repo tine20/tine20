@@ -237,16 +237,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function updateMultipleTimesheets($filter, $values)
     {
-        // quick hack to get particular filters working
-        $decodedFilter = Zend_Json::decode($filter);
-        foreach ($decodedFilter as &$f) {
-            if ($f['field'] == 'id') {
-                $f['field'] = 'timetracker_timesheet.id';
-            }
-        }
-        $filter = Zend_Json::encode($decodedFilter);
-        
-        Tinebase_Core::getLogger()->debug(print_r($filter, true));        
         return $this->_updateMultiple($filter, $values, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter');
     }
     
