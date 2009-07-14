@@ -19,4 +19,11 @@
  */
 class Tinebase_Exception_NotFound extends Tinebase_Exception
 {
+    
+    public function __construct($_message, $_code) {
+    	$message = $_message ? $_message : 'Requested data could not be found';
+    	$code    = $_code    ? $_code    : 404;
+    	
+    	parent::__construct($message, $code);
+    }
 }

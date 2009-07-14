@@ -19,5 +19,10 @@
  */
 class Tinebase_Exception_AccessDenied extends Tinebase_Exception
 {
-    protected $code = 403;
+    public function __construct($_message, $_code) {
+        $message = $_message ? $_message : 'Access Denied';
+        $code    = $_code    ? $_code    : 403;
+        
+        parent::__construct($message, $code);
+    }
 }
