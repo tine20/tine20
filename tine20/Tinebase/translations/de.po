@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2009-07-13 13:59+0100\n"
-"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2009-07-14 12:11+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1375,116 +1375,93 @@ msgstr "Interne Kontakte"
 msgid "contacts"
 msgstr "Kontakte"
 
-#, fuzzy
 msgid "Do you really want to delete the selected contact?"
 msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Möchten Sie {0} \"{0}\" wirklich löschen?"
-msgstr[1] "Möchten Sie {0} \"{0}\" wirklich löschen?"
+msgstr[0] "Möchten Sie den ausgewählten Kontakt wirklich löschen?"
+msgstr[1] "Möchten Sie die ausgewählten Kontakte wirklich löschen?"
 
 msgid "Deleting contact..."
 msgid_plural "Deleting contacts..."
 msgstr[0] "Lösche Kontakt..."
 msgstr[1] "Lösche Kontakte..."
 
-#, fuzzy
 msgid "add contact"
-msgstr "Email Kontakt"
+msgstr "Kontakt hinzufügen"
 
-#, fuzzy
 msgid "edit contact"
-msgstr "Email Kontakt"
+msgstr "Kontakt bearbeiten"
 
-#, fuzzy
 msgid "delete contact"
 msgid_plural "delete contacts"
-msgstr[0] "Email Kontakt"
-msgstr[1] "Email Kontakt"
+msgstr[0] "Kontakt löschen"
+msgstr[1] "Kontakte löschen"
 
-#, fuzzy
 msgid "call contact"
-msgstr "Email Kontakt"
+msgstr "Kontakt anrufen"
 
-#, fuzzy
 msgid "Contact"
-msgstr "Email Kontakt"
+msgstr "Kontakt"
 
-#, fuzzy
 msgid "Last Name"
-msgstr "Name"
+msgstr "Nachname"
 
-#, fuzzy
 msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+msgstr "Die Kontakte {0} - {1} von {2} weden angezeigt"
 
-#, fuzzy
 msgid "No contacts to display"
-msgstr "Keine Notizen vorhanden"
+msgstr "Keine Kontakte zur Anzeige vorhanden"
 
 #, fuzzy
 msgid "Full Name"
 msgstr "Name"
 
-#, fuzzy
 msgid "Display Name"
-msgstr "Nachname"
+msgstr "Angezeigter Name"
 
 #, fuzzy
 msgid "Email"
 msgstr "Email"
 
-#, fuzzy
 msgid "Select contact"
-msgstr "Email Kontakt"
+msgstr "Kontakt auswählen"
 
-#, fuzzy
 msgid "addressbook"
-msgstr "Email-Adresse"
+msgstr "Adressbuch"
 
-#, fuzzy
 msgid "Loading Contact..."
-msgstr "Sie werden angemeldet..."
+msgstr "Lade Kontakt..."
 
-#, fuzzy
 msgid "Add new contact"
-msgstr "Neue Notiz hinzufügen"
+msgstr "Neuen Kontakt hinzufügen"
 
-#, fuzzy
 msgid "Saving Contact"
-msgstr "Email Kontakt"
+msgstr "Kontakt wird gespeichert"
 
-#, fuzzy
 msgid "Could not save contact."
-msgstr "Konnte Tag nicht erzeugen."
+msgstr "Konnte Kontakt nicht speichern."
 
-#, fuzzy
 msgid "Title"
-msgstr "Zeit"
+msgstr "Titel"
 
-#, fuzzy
 msgid "Link"
 msgid_plural "Links [%d]"
-msgstr[0] "Anmelden"
-msgstr[1] "Anmelden"
+msgstr[0] "Verknüpfung"
+msgstr[1] "Verknüpfungen"
 
-#, fuzzy
 msgid "Shared Tags"
-msgstr "Gemeinsame {0}"
+msgstr "Gemeinsame Tags"
 
-#, fuzzy
 msgid "Do you really want to delete the selected access log entries?"
-msgstr "Möchten Sie {0} \"{0}\" wirklich löschen?"
+msgstr "Möchten Sie die ausgewählten Zugriffs-Log Einträge wirklich löschen?"
 
-#, fuzzy
 msgid "delete entry"
-msgstr "löschen"
+msgstr "Eintrag löschen"
 
-#, fuzzy
 msgid "Search:"
-msgstr "Suchen"
+msgstr "Suche:"
 
-#, fuzzy
 msgid "invalid password"
-msgstr "Altes Passwort"
+msgstr "Ungültiges Passwort"
 
 #, fuzzy
 msgid "failure"
@@ -1494,161 +1471,122 @@ msgstr "Fehler"
 msgid "success"
 msgstr "Erfolg"
 
-#, fuzzy
 msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+msgstr "Die Zugriffs-Log einträge {0} - {1} von {2} werden angezeigt"
 
-#, fuzzy
 msgid "No access log entries to display"
-msgstr "Keine Notizen vorhanden"
+msgstr "Keine Zugriffs-Log einträge zum Anzeigen vorhanden"
 
-#, fuzzy
 msgid "Login Name"
 msgstr "Benutzername"
 
-#, fuzzy
 msgid "Login Time"
-msgstr "Benutzername"
+msgstr "Anmeldezeitpunkt"
 
-#, fuzzy
 msgid "Logout Time"
-msgstr "Abmelden"
+msgstr "Abmeldezeitpunkt"
 
-#, fuzzy
 msgid "Account ID"
-msgstr "Benutzername: {0}"
+msgstr "BenutzerId"
 
-#, fuzzy
 msgid "settings"
-msgstr "Lege an"
+msgstr "Einstellungen"
 
-#, fuzzy
 msgid "enabled"
-msgstr "Fehlgeschlagen"
+msgstr "Aktiviert"
 
-#, fuzzy
 msgid "Displaying application {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+msgstr "Die Anwendungen {0} - {1} von {2} werden angezeigt"
 
-#, fuzzy
 msgid "No applications to display"
-msgstr "Keine Tags vorhanden"
+msgstr "Keine Anwendungen zum Anzeigen vorhanden"
 
-#, fuzzy
 msgid "order"
-msgstr "Ordner"
+msgstr "Reihenfolge"
 
-#, fuzzy
 msgid "name"
-msgstr "Umbenennen"
+msgstr "Name"
 
-#, fuzzy
 msgid "version"
-msgstr "Version prüfen"
+msgstr "Version"
 
-#, fuzzy
 msgid "Set new password"
-msgstr "Wiederholung neues Passwort"
+msgstr "Neues Passwort setzten"
 
-#, fuzzy
 msgid "Please enter the new password:"
-msgstr "Bitte geben Sie einen Namen ein für "
+msgstr "Bitte geben Sie das neue Passwort ein:"
 
-#, fuzzy
 msgid "Do you really want to delete the selected account(s)?"
-msgstr "Möchten Sie {0} \"{0}\" wirklich löschen?"
+msgstr "Möchten Sie die ausgewählten Benutzerkonten wirklich löschen?"
 
-#, fuzzy
 msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+msgstr "Die Benutzerkonten {0} - {1} von {2} werden angezeigt"
 
-#, fuzzy
 msgid "No accounts to display"
-msgstr "Keine Notizen vorhanden"
+msgstr "Keine Benutzerkonten zum Anzeigen vorhanden"
 
-#, fuzzy
 msgid "Displayname"
-msgstr "Nachname"
+msgstr "Anzeigename"
 
-#, fuzzy
 msgid "Loginname"
 msgstr "Benutzername"
 
-#, fuzzy
 msgid "Last name"
-msgstr "Tag Name"
-
-#, fuzzy
-msgid "First name"
 msgstr "Nachname"
 
-#, fuzzy
+msgid "First name"
+msgstr "Vorname"
+
 msgid "Password changed"
-msgstr "Eintrag geändert"
+msgstr "Letzte Passwort Änderung"
 
-#, fuzzy
 msgid "edit account"
-msgstr "Zugang Hinzufügen"
+msgstr "Benutzerkonto bearbeiten"
 
-#, fuzzy
 msgid "delete account"
-msgstr "Zugang Hinzufügen"
+msgstr "Benutzerkonto löschen"
 
-#, fuzzy
 msgid "enable account"
-msgstr "Zugang Hinzufügen"
+msgstr "Benutzerkonto aktiviern"
 
-#, fuzzy
 msgid "disable account"
-msgstr "Zugang Hinzufügen"
+msgstr "Benutzerkonto deaktivieren"
 
-#, fuzzy
 msgid "reset password"
-msgstr "Neues Passwort"
+msgstr "Passwort zurücksetzten"
 
-#, fuzzy
 msgid "Deleting account..."
-msgstr "Lösche Tag"
+msgstr "Benutzerkonto wird gelöscht..."
 
-#, fuzzy
 msgid "Could not save user account."
-msgstr "Konnte Tag nicht erzeugen."
+msgstr "Konnte Benuterkonto nicht abspeichern."
 
-#, fuzzy
 msgid "no password set"
-msgstr "Passwort ändern"
+msgstr "Passwort ist nicht gesetzt"
 
-#, fuzzy
 msgid "Password again"
-msgstr "Passwort"
+msgstr "Passwort wiederholung"
 
-#, fuzzy
 msgid "Password set"
-msgstr "Passwort"
+msgstr "Passwort wurde gesetzt"
 
-#, fuzzy
 msgid "Add New User Account"
-msgstr "Neuen persönlichen Tag hinzufügen"
+msgstr "Neues Benutzerkonto  hinzufügen"
 
-#, fuzzy
 msgid "Do you really want to delete the selected groups?"
-msgstr "Möchten Sie {0} \"{0}\" wirklich löschen?"
+msgstr "Möchten Sie die ausgewählten Gruppen wirklich löschen?"
 
-#, fuzzy
 msgid "Deleting group(s)..."
-msgstr "Lösche Tag"
+msgstr "Gruppen werden gelöscht..."
 
-#, fuzzy
 msgid "add group"
-msgstr "Zugang Hinzufügen"
+msgstr "Benutzergruppe hinzufügen"
 
-#, fuzzy
 msgid "delete group"
-msgstr "löschen"
+msgstr "Benutzergruppe löschen"
 
-#, fuzzy
 msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+msgstr "Benutzergruppen {0} - {1} von {2} werden angezeigt"
 
 #, fuzzy
 msgid "No groups to display"
