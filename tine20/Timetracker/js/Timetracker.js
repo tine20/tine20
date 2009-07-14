@@ -14,9 +14,10 @@ Ext.namespace('Tine.Timetracker');
 
 Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
     
+    filter: [{field: 'model', operator: 'equals', value: 'Timetracker_Model_Timesheet'}],
+    
     // quick hack to get filter saving grid working
     //recordClass: Tine.Timetracker.Model.Timesheet,
-    
     initComponent: function() {
         this.filterMountId = 'Timesheet';
         

@@ -13,6 +13,8 @@ Ext.namespace('Tine.ExampleApplication');
 
 Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
     
+    filter: [{field: 'model', operator: 'equals', value: 'ExampleApplication_Model_ExampleRecord'}],
+    
     // quick hack to get filter saving grid working
     //recordClass: Tine.ExampleApplication.Model.ExampleRecord,
     

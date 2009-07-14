@@ -42,7 +42,8 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
      */
     initComponent: function() {
         this.loader = new Tine.widgets.grid.PersistentFilterLoader({
-            app: this.app
+            app: this.app,
+            filter: this.filter
         });
         
         if (! this.root) {
@@ -149,19 +150,6 @@ Tine.widgets.grid.PersistentFilterPicker = Ext.extend(Ext.tree.TreePanel, {
 Tine.widgets.grid.PersistentFilterLoader = Ext.extend(Tine.widgets.tree.Loader, {
 
 	method: 'Tinebase_PersistentFilter.search',
-
-    /**
-     * @private
-     */
-    initComponent: function() {
-        var gridPanel = this.app.getMainScreen().getContentPanel();
-    	var model = gridPanel.store.reader.recordType.getMeta('appName') + '_Model_' + gridPanel.store.reader.recordType.getMeta('modelName') + 'Filter';
-        this.filter = [
-            {field: 'model', operator: 'equals', value: model}
-        ];
-        
-        Tine.widgets.grid.PersistentFilterLoader.superclass.initComponent.call(this);
-    },
 	
 	/**
      * @private

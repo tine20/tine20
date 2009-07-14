@@ -84,7 +84,10 @@ Tine.Addressbook.FilterPanel = function(config) {
     Ext.apply(this, config);
     Tine.Addressbook.FilterPanel.superclass.constructor.call(this);
 };
-Ext.extend(Tine.Addressbook.FilterPanel, Tine.widgets.grid.PersistentFilterPicker);
+
+Ext.extend(Tine.Addressbook.FilterPanel, Tine.widgets.grid.PersistentFilterPicker, {
+    filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_Contact'}]
+});
 
 /**************************** edit dialog **********************************/
 
