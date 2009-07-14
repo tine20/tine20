@@ -214,8 +214,14 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         ));
         $folderState = $folderStateBackend->search($filter)->getFirstRecord();
         
+        if($folderState instanceof ActiveSync_Model_FolderState) {
+            $filterType = $folderState->lastfiltertype;
+        } else {
+            $filterType = 0;
+        }
+
         $allClientEntries   = $contentStateBackend->getClientState($this->_device, $_collectionData['class'], $_collectionData['collectionId']);
-        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $folderState->lastfiltertype);    
+        $allServerEntries   = $_dataController->getServerEntries($_collectionData['collectionId'], $filterType);    
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
         
