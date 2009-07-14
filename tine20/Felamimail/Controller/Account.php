@@ -322,7 +322,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if ($_imapBackend === NULL) {
             try {
                 $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
-            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            } catch (Zend_Mail_Storage_Exception $zmpe) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No connection to imap server ...');
                 return $_account;
             }
