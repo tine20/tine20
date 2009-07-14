@@ -287,9 +287,10 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             'setupChecks'      => $this->envCheck(),
             'configData'       => $this->loadConfig(),
             'version'          => array(
-                'codename'      => TINE20SETUP_CODENAME,
+                'buildType'     => TINE20SETUP_BUILDTYPE,
+                'codeName'      => TINE20SETUP_CODENAME,
                 'packageString' => TINE20SETUP_PACKAGESTRING,
-                'releasetime'   => TINE20SETUP_RELEASETIME
+                'releaseTime'   => TINE20SETUP_RELEASETIME
             ),
         );
         
