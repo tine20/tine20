@@ -17,6 +17,7 @@
  * @package     Addressbook
  * @subpackage  Exception
  */
-class Addressbook_Exception_AccessDenied extends Addressbook_Exception
+class Addressbook_Exception_AccessDenied extends Tinebase_Exception_AccessDenied
 {
+    
 }
