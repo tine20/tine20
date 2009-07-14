@@ -442,6 +442,3 @@ class ActiveSync_TimezoneGuesser {
     }
 	
 }
-
-?>
-
