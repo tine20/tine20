@@ -289,6 +289,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onStoreUpdate: function(store, updatedAttender) {
         // check if we need to add a new row
         var needUpdate = true;
+        var isDuplicate = false;
+        
         this.store.each(function(attender) {
             if (! attender.get('user_id')) {
                 needUpdate = false;
@@ -298,16 +300,19 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 
                 if (last != attender && last.id.match(/new/)) {
                     //duplicate entry
-                    this.getView().focusCell(this.store.indexOf(attender), 3);
-                    this.store.remove.defer(50, this.store, [last]);
-                    needUpdate = true;
+                    var row = this.getView().getRow(this.store.indexOf(attender));
+                    Ext.fly(row).highlight();
+                    isDuplicate = true;
                     return false;
                 }
             }
             
         }, this);
         
-        if (needUpdate && this.record.get('editGrant')) {
+        if (isDuplicate) {
+            updatedAttender.reject();
+            updatedAttender.isFluentAdd = true;
+        } else if (needUpdate && this.record.get('editGrant')) {
             var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
             newAttender.isFluentAdd = true;
             this.store.add([newAttender]);
