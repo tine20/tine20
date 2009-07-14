@@ -50,6 +50,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
                 
         if (!$queryResult) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Could not fetch row with id $_fileId from temp_files table.");

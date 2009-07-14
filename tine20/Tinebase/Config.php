@@ -247,6 +247,7 @@ class Tinebase_Config
             ->where($this->_db->quoteIdentifier('id') . ' = ?', $_customFieldId);
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
                 
         if (!$queryResult) {
             throw new Tinebase_Exception_NotFound('Tinebase_Model_CustomField record with id ' . $_customFieldId . ' not found!');

@@ -306,6 +306,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
                 
         if (!$queryResult) {
             // no preference yet -> create

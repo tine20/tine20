@@ -49,6 +49,7 @@ class Erp_Backend_Number extends Tinebase_Backend_Sql_Abstract
         $select->where($this->_db->quoteIdentifier('type') . ' = ?', $_type);
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
                 
         if (!$queryResult) {
             // create new number circle

@@ -147,7 +147,8 @@ class Tinebase_Application
     
             $stmt = $this->_db->query($select);
             $queryResult = $stmt->fetch();
-                    
+            $stmt->closeCursor();
+            
             if (!$queryResult) {
                 throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
             }
