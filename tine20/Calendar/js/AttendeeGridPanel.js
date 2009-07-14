@@ -295,16 +295,15 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (! attender.get('user_id')) {
                 needUpdate = false;
             }
-            if (updatedAttender.getUserId() == attender.getUserId() && updatedAttender.get('user_type') == attender.get('user_type')) {
-                var last = this.store.getAt(this.store.getCount() -1);
-                
-                if (last != attender && last.id.match(/new/)) {
-                    //duplicate entry
-                    var row = this.getView().getRow(this.store.indexOf(attender));
-                    Ext.fly(row).highlight();
-                    isDuplicate = true;
-                    return false;
-                }
+            
+            // detect duplicate entry
+            if (updatedAttender.getUserId() == attender.getUserId()
+                    && updatedAttender.get('user_type') == attender.get('user_type')
+                    && updatedAttender != attender) {
+                var row = this.getView().getRow(this.store.indexOf(attender));
+                Ext.fly(row).highlight();
+                isDuplicate = true;
+                return false;
             }
             
         }, this);
