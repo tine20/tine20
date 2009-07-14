@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-07-14 12:54+0100\n"
+"PO-Revision-Date: 2009-07-14 15:09+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -286,7 +286,7 @@ msgstr[1] "Teilnehmende"
 
 #: js/MonthView.js:85
 msgid "{0} more..."
-msgstr "{1} weitere..."
+msgstr "{0} weitere..."
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
