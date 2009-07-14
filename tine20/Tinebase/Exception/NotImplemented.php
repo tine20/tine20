@@ -19,10 +19,7 @@
  */
 class Tinebase_Exception_NotImplemented extends Tinebase_Exception
 {
-    public function __construct($_message, $_code) {
-        $message = $_message ? $_message : 'Access Denied';
-        $code    = $_code    ? $_code    : 501;
-        
-        parent::__construct($message, $code);
+    public function __construct($_message, $_code=501) {
+        parent::__construct($_message, $_code);
     }
 }
