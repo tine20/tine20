@@ -105,6 +105,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 }
             }
             
+            $server->handle($_REQUEST);
+            
         } catch (Exception $exception) {
             
             // handle all kind of session exceptions as 'Not Authorised'
@@ -112,11 +114,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
             }
             
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " got exception code" . $exception->getCode());
             $server = new Zend_Json_Server();
             $server->fault($exception, $exception->getCode());
             exit;
         }
-         
-        $server->handle($_REQUEST);
     }
 }
