@@ -444,4 +444,21 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '0.10');
     }
+    
+    /**
+     * make pingfolder a blob, as it contains serialized data
+     * 
+     */
+    public function update_10()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>pingfolder</name>
+                <type>blob</type>
+            </field>
+        ');
+        $this->_backend->alterCol('acsync_device', $declaration);
+        
+        $this->setApplicationVersion('ActiveSync', '0.11');
+    }
 }

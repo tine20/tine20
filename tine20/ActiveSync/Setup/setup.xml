@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>0.10</version>
+    <version>0.11</version>
     <order>90</order>
     <depends>
         <application>Addressbook</application>
@@ -116,9 +116,7 @@
                 </field>
                 <field>
                     <name>pingfolder</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
+                    <type>blob</type>
                 </field>
                 <field>
                     <name>model</name>
