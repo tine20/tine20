@@ -307,7 +307,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // create new folder
                 $folder = new Felamimail_Model_Folder(array(
-                    'localname'     => $folderData['localName'],
+                    'localname'     => (! empty($folderData['localName'])) ? $folderData['localName'] : $folderData['globalName'],
                     'globalname'    => $folderData['globalName'],
                     'is_selectable' => ($folderData['isSelectable'] == '1'),
                     'has_children'  => ($folderData['hasChildren'] == '1'),
