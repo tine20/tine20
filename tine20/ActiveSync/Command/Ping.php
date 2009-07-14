@@ -40,7 +40,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     
     protected $_changesDetected = false;
     
-    const PING_TIMEOUT = 5;
+    const PING_TIMEOUT = 10;
     
     /**
      * Enter description here...
@@ -225,8 +225,8 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
         
-        $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_lastSyncTimeStamp, $this->_syncTimeStamp);
-        
+        $changedEntries     = $_dataController->getChanged($_collectionData['collectionId'], $_lastSyncTimeStamp);
+        #Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " changed entries: {$_collectionData['collectionId']} " . count($changedEntries));
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
     
