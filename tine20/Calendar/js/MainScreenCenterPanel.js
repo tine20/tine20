@@ -369,7 +369,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         // else
-        var i18nQuestion = String.format(this.app.i18n.n_('Do you really want to delete this event?', 'Do you really want to delete the {0} selected events?', selection.length), selection.length);
+        var i18nQuestion = String.format(this.app.i18n.ngettext('Do you really want to delete this event?', 'Do you really want to delete the {0} selected events?', selection.length), selection.length);
         Ext.MessageBox.confirm(Tine.Tinebase.tranlation._hidden('Confirm'), i18nQuestion, function(btn) {
             if(btn == 'yes') {
                 this.onDeleteRecordsConfirmNonRecur(panel, selection);
