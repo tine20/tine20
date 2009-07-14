@@ -404,7 +404,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 
                 // get password from credentials cache and create account credentials
                 $defaultAccount->credentials_id = $this->_createCredentials();
+                $defaultAccount->smtp_credentials_id = $defaultAccount->credentials_id;
 
+                // add smtp server settings
+                if (Tinebase_Core::getConfig()->imap->smtp) {
+                    $defaultAccount->smtp_port              = Tinebase_Core::getConfig()->imap->smtp->port;
+                    $defaultAccount->smtp_hostname          = Tinebase_Core::getConfig()->imap->smtp->hostname;
+                    $defaultAccount->smtp_auth              = Tinebase_Core::getConfig()->imap->smtp->auth;
+                    $defaultAccount->smtp_secure_connection = Tinebase_Core::getConfig()->imap->smtp->ssl;             
+                }
+                
                 // create new account
                 $defaultAccount = $this->_backend->create($defaultAccount);
                 $_accounts->addRecord($defaultAccount);
