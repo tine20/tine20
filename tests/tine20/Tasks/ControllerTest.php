@@ -227,7 +227,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
     /**
      * test if non resolvable concurrency problem gets detected
      *
-     * */
+     */
     public function testConcurrencyFail()
     {
         $utask = $this->testUpdateTask();
@@ -238,6 +238,20 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         $conflictTask->summary = 'Non resolvable conflict';
         $this->setExpectedException('Tinebase_Timemachine_Exception_ConcurrencyConflict');
         $this->_controller->update($conflictTask);
+    }
+    
+    /**
+     * 2009-07-14 concurrency management on newly created records 
+     */
+    public function testConcurrencyFromCreatedTask()
+    {
+    	$utask = $this->testUpdateTask();
+    	sleep(1);
+    	
+    	$ctask = clone $this->_persistantTestTask1;
+    	$ctask->description = 'testConcurrencyFromCreatedTask';
+    	
+    	$u2task = $this->_controller->update($ctask);
     }
 }
 

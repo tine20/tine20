@@ -228,7 +228,12 @@ class Tinebase_Timemachine_ModificationLog
         
         $resolved = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         
-        if($_curRecord->last_modified_time instanceof Zend_Date && ! $_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
+        // handle concurrent updates on unmodified records
+        if (! $_newRecord->last_modified_time instanceof Zend_Date){
+        	$_newRecord->last_modified_time = clone $_newRecord->creation_time;
+        }
+        
+        if($_curRecord->last_modified_time instanceof Zend_Date && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  concurrent updates: current record last updated '" .
                 $_curRecord->last_modified_time . "' where record to be updated was last updated '" . $_newRecord->last_modified_time . "'");
             
