@@ -38,7 +38,7 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
         //id: this.app.appName + 'EditDialogPhysCalSelector',
         fieldLabel: Tine.Tinebase.tranlation._hidden('Saved in'),
         width: 450,
-        containerName: this.app.i18n._hidden(this.recordClass.getMeta('containerName')),
+        containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
         containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
         appName: this.app.appName,
         hideTrigger2: false,
