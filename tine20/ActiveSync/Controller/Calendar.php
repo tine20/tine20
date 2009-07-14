@@ -456,7 +456,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $newAttendee = array();
             
             foreach($xmlData->Attendees->Attendee as $attendee) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email" . $attendee->Email);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->Email);
 
                 // search contact from addressbook using the emailaddress
                 $filterArray = array(
