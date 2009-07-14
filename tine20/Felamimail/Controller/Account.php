@@ -320,7 +320,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     public function updateCapabilities($_account, $_imapBackend = NULL, $_delimiter = NULL)
     {
         if ($_imapBackend === NULL) {
-            $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
+            try {
+                $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No connection to imap server ...');
+                return $_account;
+            }
         }
         
         // get imap server capabilities and save delimiter / personal namespace in account
