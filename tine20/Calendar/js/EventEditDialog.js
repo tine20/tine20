@@ -75,7 +75,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype: 'fieldset',
                         layout: 'hfit',
                         autoHeight:true,
-                        title: this.app.i18n._('Event'),
+                        title: this.app.i18n.n_('Event', 'Events', 1),
                         items: [{
                             xtype: 'columnform',
                             labelAlign: 'side',
