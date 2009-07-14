@@ -297,7 +297,7 @@ class Tinebase_Acl_Roles
     public function createRole(Tinebase_Model_Role $_role)
     {
         $data = $_role->toArray();
-        if(Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+        if(is_object(Tinebase_Core::getUser())) {
             $data['created_by'] = Tinebase_Core::getUser()->getId();
         }
         $data['creation_time'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
