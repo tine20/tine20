@@ -164,18 +164,19 @@ class Setup_Controller
                 $biggestMajorVersion = $application->getMajorVersion();
             }
         }
-
+        
         $messages = array();
         
-        // update tinebase first
+        // update tinebase first (to biggest major version)
         $tinebase = $_applications->filter('name', 'Tinebase')->getFirstRecord();
         if (! empty($tinebase)) {
             unset($_applications[$_applications->getIndexById($tinebase->getId())]);
         
-            for ($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
-                if ($tinebase->getMajorVersion() <= $majorVersion) {
-                    $messages += $this->updateApplication($tinebase, $majorVersion);
-                }
+            list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
+            
+            for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
+                $messages += $this->updateApplication($tinebase, $majorVersion);
             }
         }
             
@@ -293,6 +294,10 @@ class Setup_Controller
                 }
                 
                 $messages[] = "<strong> Updated " . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor . "</strong>";
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor);
+                
+                // update version to next major
+                $_application->version = ($_majorVersion +1) . '.0';
                 
                 break; 
                 
