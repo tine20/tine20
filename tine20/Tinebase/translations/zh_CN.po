@@ -108,7 +108,7 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
 
-#: js/ExceptionDialog.js:54 js/MainScreen.js:430
+#: js/ExceptionDialog.js:54 js/MainScreen.js:436
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:363
 #: js/widgets/dialog/EditDialog.js:173
@@ -202,7 +202,7 @@ msgstr "请等待"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "登录成功，正加载 Tine 2.0 ..."
 
-#: js/Login.js:138 js/MainScreen.js:515
+#: js/Login.js:138 js/MainScreen.js:521
 msgid "Please wait!"
 msgstr "请等待！"
 
@@ -227,7 +227,7 @@ msgstr "参考"
 msgid "User: {0}"
 msgstr "用户：{0}"
 
-#: js/MainScreen.js:195 js/MainScreen.js:363 js/MainScreen.js:378
+#: js/MainScreen.js:195 js/MainScreen.js:369 js/MainScreen.js:384
 #, fuzzy
 msgid "About Tine 2.0"
 msgstr "从 Tine 2.0 登出"
@@ -248,71 +248,71 @@ msgstr "登出"
 msgid "Logout from Tine 2.0"
 msgstr "从 Tine 2.0 登出"
 
-#: js/MainScreen.js:394
+#: js/MainScreen.js:400
 msgid "Change Password For \"{0}\""
 msgstr "为 \"{0}\"修改密码"
 
-#: js/MainScreen.js:418
+#: js/MainScreen.js:424
 msgid "Old Password"
 msgstr "旧密码"
 
-#: js/MainScreen.js:422
+#: js/MainScreen.js:428
 msgid "New Password"
 msgstr "新密码"
 
-#: js/MainScreen.js:426
+#: js/MainScreen.js:432
 msgid "Repeat new Password"
 msgstr "重复新密码"
 
-#: js/MainScreen.js:436 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:442 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:372
 #: js/widgets/dialog/EditDialog.js:156
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "确认"
 
-#: js/MainScreen.js:445
+#: js/MainScreen.js:451
 msgid "Please Wait!"
 msgstr "请等待"
 
-#: js/MainScreen.js:446
+#: js/MainScreen.js:452
 msgid "changing password..."
 msgstr "修改密码..."
 
-#: js/MainScreen.js:457
+#: js/MainScreen.js:463
 msgid "Success"
 msgstr "成功"
 
-#: js/MainScreen.js:458
+#: js/MainScreen.js:464
 msgid "Your password has been changed."
 msgstr "你的密码已经被修改"
 
-#: js/MainScreen.js:464 js/MainScreen.js:474
+#: js/MainScreen.js:470 js/MainScreen.js:480
 msgid "Failure"
 msgstr "失败"
 
-#: js/MainScreen.js:475
+#: js/MainScreen.js:481
 msgid "The new passwords mismatch, please correct them."
 msgstr "新密码不匹配，请纠正"
 
-#: js/MainScreen.js:493
+#: js/MainScreen.js:499
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:544
+#: js/MainScreen.js:519 js/widgets/app/GridPanel.js:544
 #: js/widgets/dialog/EditDialog.js:419
 #: js/widgets/grid/PersistentFilterPicker.js:123
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "确认"
 
-#: js/MainScreen.js:513
+#: js/MainScreen.js:519
 msgid "Are you sure you want to logout?"
 msgstr "确实想登出？"
 
-#: js/MainScreen.js:515
+#: js/MainScreen.js:521
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
@@ -339,16 +339,28 @@ msgid "Sorry, you are not permitted to perform this action"
 msgstr "对不起，你不允许执行该动作"
 
 #: js/tineInit.js:307
+#, fuzzy
+msgid "Not Found"
+msgstr "不允许"
+
+#: js/tineInit.js:308
+msgid ""
+"Sorry, your requested could not be completed because the required data could "
+"not be found. In most cases this means that someone already deleted the "
+"data. Please refresh your current view."
+msgstr ""
+
+#: js/tineInit.js:317
 msgid "Concurrent Updates"
 msgstr "同时更新"
 
-#: js/tineInit.js:308
+#: js/tineInit.js:318
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr "当你编辑时，有人保存了这条记录。你 ..."
 
-#: js/tineInit.js:554
+#: js/tineInit.js:568
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator."
 msgstr ""
@@ -1218,19 +1230,19 @@ msgstr "管理许可"
 msgid "Reload {0}"
 msgstr "修改{0}的名字"
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
 msgid "New version of Tine 2.0 available"
 msgstr "Tine 2.0新版本可用"
 
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Tine 2.0 的  \"{0}\"  版可用。"
 
-#: js/widgets/VersionCheck.js:41
+#: js/widgets/VersionCheck.js:45
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "这是重要的更新，必需尽快安装！"
 
-#: js/widgets/VersionCheck.js:50
+#: js/widgets/VersionCheck.js:54
 msgid "Please consider updating!"
 msgstr "请考虑更新！"
 

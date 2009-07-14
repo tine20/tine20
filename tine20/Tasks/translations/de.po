@@ -124,83 +124,83 @@ msgstr "ERLEDIGT"
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
 
-msgid "to to list"
-msgstr "Aufgabenliste"
+#~ msgid "to to list"
+#~ msgstr "Aufgabenliste"
 
 #, fuzzy
-msgid "Tasks) "
-msgstr "Aufgabe"
+#~ msgid "Tasks) "
+#~ msgstr "Aufgabe"
 
-msgid "Could not delete task(s)."
-msgstr "Konnte Aufgabe(n) nicht löschen."
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Konnte Aufgabe(n) nicht löschen."
 
-msgid "Edit task"
-msgstr "Aufgabe bearbeiten"
+#~ msgid "Edit task"
+#~ msgstr "Aufgabe bearbeiten"
 
-msgid "Add task"
-msgstr "Aufgabe hinzufügen"
+#~ msgid "Add task"
+#~ msgstr "Aufgabe hinzufügen"
 
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "Aufgabe löschen"
-msgstr[1] "Aufgaben löschen"
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "Aufgabe löschen"
+#~ msgstr[1] "Aufgaben löschen"
 
-msgid "Enter searchfilter"
-msgstr "Suchfilter eingeben"
+#~ msgid "Enter searchfilter"
+#~ msgstr "Suchfilter eingeben"
 
-msgid "Search:"
-msgstr "Suchen nach:"
+#~ msgid "Search:"
+#~ msgstr "Suchen nach:"
 
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Zeige Aufgabe {0} - {1} von {2}"
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Zeige Aufgabe {0} - {1} von {2}"
 
-msgid "No tasks to display"
-msgstr "Keine Aufgaben vorhanden"
+#~ msgid "No tasks to display"
+#~ msgstr "Keine Aufgaben vorhanden"
 
-msgid "No Tasks to display"
-msgstr "Keine Aufgaben vorhanden"
+#~ msgid "No Tasks to display"
+#~ msgstr "Keine Aufgaben vorhanden"
 
-msgid "Loading Task..."
-msgstr "lade Task..."
+#~ msgid "Loading Task..."
+#~ msgstr "lade Task..."
 
-msgid "Please Wait"
-msgstr "Bitte warten"
+#~ msgid "Please Wait"
+#~ msgstr "Bitte warten"
 
-msgid "Add New Task"
-msgstr "Neuen Task erstellen"
+#~ msgid "Add New Task"
+#~ msgstr "Neuen Task erstellen"
 
-msgid "Edit Task \"{0}\""
-msgstr "Task \"{0}\" bearbeiten"
+#~ msgid "Edit Task \"{0}\""
+#~ msgstr "Task \"{0}\" bearbeiten"
 
-msgid "Please wait"
-msgstr "Bitte warten"
+#~ msgid "Please wait"
+#~ msgstr "Bitte warten"
 
-msgid "Saving Task"
-msgstr "Aufgabe speichern"
+#~ msgid "Saving Task"
+#~ msgstr "Aufgabe speichern"
 
-msgid "Errors"
-msgstr "Fehler"
+#~ msgid "Errors"
+#~ msgstr "Fehler"
 
-msgid "Please fix the errors noted."
-msgstr "Bitte beheben Sie die angezeigten Fehler."
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Bitte beheben Sie die angezeigten Fehler."
 
-msgid "Confirm"
-msgstr "Bestätigen"
+#~ msgid "Confirm"
+#~ msgstr "Bestätigen"
 
-msgid "Do you really want to delete this task?"
-msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
+#~ msgid "Do you really want to delete this task?"
+#~ msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 
-msgid "Please wait a moment..."
-msgstr "Einen Moment noch..."
+#~ msgid "Please wait a moment..."
+#~ msgstr "Einen Moment noch..."
 
-msgid "Enter short name..."
-msgstr "Kurzbezeichnung eingeben..."
+#~ msgid "Enter short name..."
+#~ msgstr "Kurzbezeichnung eingeben..."
 
-msgid "Saved in"
-msgstr "Gespeichert in"
+#~ msgid "Saved in"
+#~ msgstr "Gespeichert in"
 
-msgid "Folder"
-msgstr "Ordner"
+#~ msgid "Folder"
+#~ msgstr "Ordner"
 
-msgid "Delete tasks"
-msgstr "Aufgaben löschen"
+#~ msgid "Delete tasks"
+#~ msgstr "Aufgaben löschen"

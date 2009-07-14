@@ -124,7 +124,7 @@ msgstr[0] "Список заданий"
 msgstr[1] "Списока заданий"
 msgstr[2] "Списоков заданий"
 
-#: js/ExceptionDialog.js:54 js/MainScreen.js:430
+#: js/ExceptionDialog.js:54 js/MainScreen.js:436
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:363
 #: js/widgets/dialog/EditDialog.js:173
@@ -221,7 +221,7 @@ msgstr "Пожалуйста подождите"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
 
-#: js/Login.js:138 js/MainScreen.js:515
+#: js/Login.js:138 js/MainScreen.js:521
 msgid "Please wait!"
 msgstr "Пожалуйста подождите!"
 
@@ -246,7 +246,7 @@ msgstr "Предпочтение"
 msgid "User: {0}"
 msgstr "Пользователь: {0}"
 
-#: js/MainScreen.js:195 js/MainScreen.js:363 js/MainScreen.js:378
+#: js/MainScreen.js:195 js/MainScreen.js:369 js/MainScreen.js:384
 #, fuzzy
 msgid "About Tine 2.0"
 msgstr "Выход из Tine 2.0"
@@ -267,55 +267,55 @@ msgstr "Выход"
 msgid "Logout from Tine 2.0"
 msgstr "Выход из Tine 2.0"
 
-#: js/MainScreen.js:394
+#: js/MainScreen.js:400
 #, fuzzy
 msgid "Change Password For \"{0}\""
 msgstr "Изменить пароль для \"{0}\""
 
-#: js/MainScreen.js:418
+#: js/MainScreen.js:424
 msgid "Old Password"
 msgstr "Старый пароль"
 
-#: js/MainScreen.js:422
+#: js/MainScreen.js:428
 msgid "New Password"
 msgstr "Новый пароль"
 
-#: js/MainScreen.js:426
+#: js/MainScreen.js:432
 msgid "Repeat new Password"
 msgstr "Повторите новый пароль"
 
-#: js/MainScreen.js:436 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:442 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:372
 #: js/widgets/dialog/EditDialog.js:156
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ок"
 
-#: js/MainScreen.js:445
+#: js/MainScreen.js:451
 msgid "Please Wait!"
 msgstr "Пожалуйста подождите!"
 
-#: js/MainScreen.js:446
+#: js/MainScreen.js:452
 msgid "changing password..."
 msgstr "Пароль изменяется"
 
-#: js/MainScreen.js:457
+#: js/MainScreen.js:463
 msgid "Success"
 msgstr "Успех"
 
-#: js/MainScreen.js:458
+#: js/MainScreen.js:464
 msgid "Your password has been changed."
 msgstr "Ваш пароль  изменен."
 
-#: js/MainScreen.js:464 js/MainScreen.js:474
+#: js/MainScreen.js:470 js/MainScreen.js:480
 msgid "Failure"
 msgstr "Провал "
 
-#: js/MainScreen.js:475
+#: js/MainScreen.js:481
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новие пароли не соответствуют, пожалуйста исправьте их."
 
-#: js/MainScreen.js:493
+#: js/MainScreen.js:499
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -323,18 +323,18 @@ msgstr ""
 "Инсталляция Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
 "local на компьютере."
 
-#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:544
+#: js/MainScreen.js:519 js/widgets/app/GridPanel.js:544
 #: js/widgets/dialog/EditDialog.js:419
 #: js/widgets/grid/PersistentFilterPicker.js:123
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "Подтверждение"
 
-#: js/MainScreen.js:513
+#: js/MainScreen.js:519
 msgid "Are you sure you want to logout?"
 msgstr "Вы уверены что хотите покинуть программу?"
 
-#: js/MainScreen.js:515
+#: js/MainScreen.js:521
 msgid "Logging you out..."
 msgstr "выключаю программу..."
 
@@ -363,10 +363,22 @@ msgid "Sorry, you are not permitted to perform this action"
 msgstr "К сожалению Вам не позволяется выполнить это действие"
 
 #: js/tineInit.js:307
+#, fuzzy
+msgid "Not Found"
+msgstr "Не Позволенно"
+
+#: js/tineInit.js:308
+msgid ""
+"Sorry, your requested could not be completed because the required data could "
+"not be found. In most cases this means that someone already deleted the "
+"data. Please refresh your current view."
+msgstr ""
+
+#: js/tineInit.js:317
 msgid "Concurrent Updates"
 msgstr "Параллельные Обновления"
 
-#: js/tineInit.js:308
+#: js/tineInit.js:318
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -374,7 +386,7 @@ msgstr ""
 "Вовремя того как вы Обрабатывали эту запись, она выла изменена кем то "
 "другим. Вам нужно обновить и сделать обработку снова."
 
-#: js/tineInit.js:554
+#: js/tineInit.js:568
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator."
 msgstr ""
@@ -1308,20 +1320,20 @@ msgstr "Управлять правами доступа"
 msgid "Reload {0}"
 msgstr "Переименовать {0}"
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
 msgid "New version of Tine 2.0 available"
 msgstr "Новая версия Tine 2.0 доступна"
 
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
 #, fuzzy
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Версия \"{0}\" Tine 2.0 доступна."
 
-#: js/widgets/VersionCheck.js:41
+#: js/widgets/VersionCheck.js:45
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Эта важная обновление должна быть как можно быстрее установлено!"
 
-#: js/widgets/VersionCheck.js:50
+#: js/widgets/VersionCheck.js:54
 #, fuzzy
 msgid "Please consider updating!"
 msgstr "Пожалуйста рассмотрите обновление!"

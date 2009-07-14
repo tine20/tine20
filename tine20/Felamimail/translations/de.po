@@ -441,5 +441,5 @@ msgstr "Das Standard Email Konto für das Versenden von Emails."
 msgid "Felamimail"
 msgstr "Email"
 
-msgid "Write New Mail"
-msgstr "Neue EMail verfassen"
+#~ msgid "Write New Mail"
+#~ msgstr "Neue EMail verfassen"

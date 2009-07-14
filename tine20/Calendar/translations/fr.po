@@ -13,11 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: Controller/Event.php:749
+#: Controller/Event.php:762
 msgid "Notification for Event "
 msgstr ""
 
-#: Controller/Event.php:750
+#: Controller/Event.php:763
 msgid "Event description:<br/>"
 msgstr ""
 
@@ -152,12 +152,6 @@ msgstr ""
 msgid "{0} the {1}. of {2}"
 msgstr ""
 
-#: js/EventEditDialog.js:78 js/Model.js:65 js/Model.js:223
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/EventEditDialog.js:91
 msgid "Summary"
 msgstr ""
@@ -253,6 +247,18 @@ msgstr ""
 #: js/MainScreenCenterPanel.js:343
 msgid "Delete this event only"
 msgstr ""
+
+#: js/MainScreenCenterPanel.js:372
+msgid "Do you really want to delete this event?"
+msgid_plural "Do you really want to delete the {0} selected events?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:65 js/Model.js:223
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Model.js:65 js/Model.js:223
 msgid "Events"

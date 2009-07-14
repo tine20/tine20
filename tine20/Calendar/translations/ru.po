@@ -14,11 +14,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: Controller/Event.php:749
+#: Controller/Event.php:762
 msgid "Notification for Event "
 msgstr ""
 
-#: Controller/Event.php:750
+#: Controller/Event.php:763
 msgid "Event description:<br/>"
 msgstr ""
 
@@ -154,13 +154,6 @@ msgstr ""
 msgid "{0} the {1}. of {2}"
 msgstr ""
 
-#: js/EventEditDialog.js:78 js/Model.js:65 js/Model.js:223
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
 #: js/EventEditDialog.js:91
 msgid "Summary"
 msgstr ""
@@ -256,6 +249,20 @@ msgstr ""
 #: js/MainScreenCenterPanel.js:343
 msgid "Delete this event only"
 msgstr ""
+
+#: js/MainScreenCenterPanel.js:372
+msgid "Do you really want to delete this event?"
+msgid_plural "Do you really want to delete the {0} selected events?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:65 js/Model.js:223
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: js/Model.js:65 js/Model.js:223
 msgid "Events"

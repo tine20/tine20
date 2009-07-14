@@ -53,23 +53,23 @@ msgstr "移除應用程式"
 msgid "Update application"
 msgstr "更新應用程式"
 
-#: js/ApplicationGridPanel.js:138
+#: js/ApplicationGridPanel.js:135
 msgid "uninstall"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:138
+#: js/ApplicationGridPanel.js:135
 msgid "Do you really want to uninstall the application(s)?"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:163
+#: js/ApplicationGridPanel.js:189
 msgid "This may take a while"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:183
+#: js/ApplicationGridPanel.js:209
 msgid "Shit"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:183
+#: js/ApplicationGridPanel.js:209
 msgid "Where are the backup tapes"
 msgstr "磁帶備份位置"
 

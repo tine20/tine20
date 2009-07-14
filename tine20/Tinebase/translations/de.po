@@ -28,7 +28,8 @@ msgstr "Ausführen"
 
 #: Acl/Rights/Abstract.php:70
 msgid "run right description"
-msgstr "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
+msgstr ""
+"Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
 
 #: Acl/Rights.php:134
 msgid "Report bugs"
@@ -50,8 +51,7 @@ msgstr "Bitte prüfen Sie tine20.org auf neue Versionen"
 msgid "Filter"
 msgstr "Filter"
 
-#: Export/Pdf.php:206
-#: js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
 msgstr "Tags"
 
@@ -67,8 +67,7 @@ msgstr "Angelegt von"
 msgid "Activities"
 msgstr "Aktivitäten"
 
-#: Frontend/Http.php:288
-#: js/tineInit.js:283
+#: Frontend/Http.php:288 js/tineInit.js:283
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
@@ -76,13 +75,11 @@ msgstr "Anmeldung erforderlich"
 msgid "Your session is not valid. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: Frontend/Http.php:315
-#: js/ExceptionDialog.js:46
+#: Frontend/Http.php:315 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: Frontend/Http.php:316
-#: js/ExceptionDialog.js:71
+#: Frontend/Http.php:316 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
 
@@ -116,13 +113,11 @@ msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
 msgstr[1] "Aufgabenlisten"
 
-#: js/ExceptionDialog.js:54
-#: js/MainScreen.js:430
+#: js/ExceptionDialog.js:54 js/MainScreen.js:436
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:363
 #: js/widgets/dialog/EditDialog.js:173
-#: js/widgets/dialog/PreferencesDialog.js:129
-#: js/widgets/EditRecord.js:136
+#: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -135,11 +130,15 @@ msgid "The last action you made was potentially not performed correctly."
 msgstr "Ihre letzte Aktion wurde möglicherweise nicht korrekt ausgeführt."
 
 #: js/ExceptionDialog.js:73
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
-msgstr "Mit dem Senden eines Fehlerberichtes helfen Sie mit, die Software zu verbessern. Bitte beschreiben Sie, was genau Sie gemacht haben, bevor der Fehler aufgetreten ist. "
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occurred."
+msgstr ""
+"Mit dem Senden eines Fehlerberichtes helfen Sie mit, die Software zu "
+"verbessern. Bitte beschreiben Sie, was genau Sie gemacht haben, bevor der "
+"Fehler aufgetreten ist. "
 
-#: js/ExceptionDialog.js:79
-#: js/widgets/tags/TagsPanel.js:561
+#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -179,18 +178,15 @@ msgstr "Anmelden"
 msgid "Register"
 msgstr "Registrieren"
 
-#: js/Login.js:61
-#: js/Login.js:98
+#: js/Login.js:61 js/Login.js:98
 msgid "Please enter your login data"
 msgstr "Bitte geben sie ihre Anmeldedaten ein"
 
-#: js/Login.js:79
-#: js/widgets/dialog/CredentialsDialog.js:67
+#: js/Login.js:79 js/widgets/dialog/CredentialsDialog.js:67
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/Login.js:86
-#: js/widgets/dialog/CredentialsDialog.js:71
+#: js/Login.js:86 js/widgets/dialog/CredentialsDialog.js:71
 msgid "Password"
 msgstr "Passwort"
 
@@ -198,11 +194,9 @@ msgstr "Passwort"
 msgid "Logging you in..."
 msgstr "Sie werden angemeldet..."
 
-#: js/Login.js:126
-#: js/widgets/container/GrantsDialog.js:136
+#: js/Login.js:126 js/widgets/container/GrantsDialog.js:136
 #: js/widgets/grid/PersistentFilterPicker.js:125
-#: js/widgets/tree/ContextMenu.js:43
-#: js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Bitte warten"
@@ -211,8 +205,7 @@ msgstr "Bitte warten"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "Anmeldung erfolgreich. Tine 2.0 wird geladen..."
 
-#: js/Login.js:138
-#: js/MainScreen.js:515
+#: js/Login.js:138 js/MainScreen.js:521
 msgid "Please wait!"
 msgstr "Bitte warten!"
 
@@ -224,13 +217,11 @@ msgstr "Anmeldung fehlgeschlagen"
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ihre Benutzername und Passwort Kombination ist falsch!"
 
-#: js/MainScreen.js:55
-#: js/widgets/container/GrantsDialog.js:110
+#: js/MainScreen.js:55 js/widgets/container/GrantsDialog.js:110
 msgid "Admin"
 msgstr "Admin"
 
-#: js/MainScreen.js:62
-#: js/MainScreen.js:215
+#: js/MainScreen.js:62 js/MainScreen.js:215
 #: js/widgets/dialog/PreferencesPanel.js:36
 msgid "Preferences"
 msgstr "Einstellungen"
@@ -239,9 +230,7 @@ msgstr "Einstellungen"
 msgid "User: {0}"
 msgstr "Benutzer: {0}"
 
-#: js/MainScreen.js:195
-#: js/MainScreen.js:363
-#: js/MainScreen.js:378
+#: js/MainScreen.js:195 js/MainScreen.js:369 js/MainScreen.js:384
 msgid "About Tine 2.0"
 msgstr "Über Tine 2.0"
 
@@ -261,73 +250,75 @@ msgstr "Abmelden"
 msgid "Logout from Tine 2.0"
 msgstr "Tine 2.0 Sitzung Beenden"
 
-#: js/MainScreen.js:394
+#: js/MainScreen.js:400
 msgid "Change Password For \"{0}\""
 msgstr "Passwort für \"{0}\" ändern"
 
-#: js/MainScreen.js:418
+#: js/MainScreen.js:424
 msgid "Old Password"
 msgstr "Altes Passwort"
 
-#: js/MainScreen.js:422
+#: js/MainScreen.js:428
 msgid "New Password"
 msgstr "Neues Passwort"
 
-#: js/MainScreen.js:426
+#: js/MainScreen.js:432
 msgid "Repeat new Password"
 msgstr "Wiederholung neues Passwort"
 
-#: js/MainScreen.js:436
-#: js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:442 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:372
 #: js/widgets/dialog/EditDialog.js:156
-#: js/widgets/dialog/PreferencesDialog.js:121
-#: js/widgets/EditRecord.js:115
+#: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:445
+#: js/MainScreen.js:451
 msgid "Please Wait!"
 msgstr "Bitte warten!"
 
-#: js/MainScreen.js:446
+#: js/MainScreen.js:452
 msgid "changing password..."
 msgstr "Passwort wird geändert..."
 
-#: js/MainScreen.js:457
+#: js/MainScreen.js:463
 msgid "Success"
 msgstr "Erfolg"
 
-#: js/MainScreen.js:458
+#: js/MainScreen.js:464
 msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert"
 
-#: js/MainScreen.js:464
-#: js/MainScreen.js:474
+#: js/MainScreen.js:470 js/MainScreen.js:480
 msgid "Failure"
 msgstr "Fehler"
 
-#: js/MainScreen.js:475
+#: js/MainScreen.js:481
 msgid "The new passwords mismatch, please correct them."
-msgstr "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die Eingabe."
+msgstr ""
+"Die neuen Passwörter stimmen nicht überein. Bitte wiederholen sie die "
+"Eingabe."
 
-#: js/MainScreen.js:493
-msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
-msgstr "Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen indem alle benötigten Dateien local auf dem Computer gespeichert werden."
+#: js/MainScreen.js:499
+msgid ""
+"Installing Gears will improve the performance of Tine 2.0 by caching all "
+"needed files locally on this computer."
+msgstr ""
+"Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
+"indem alle benötigten Dateien local auf dem Computer gespeichert werden."
 
-#: js/MainScreen.js:513
-#: js/widgets/app/GridPanel.js:544
+#: js/MainScreen.js:519 js/widgets/app/GridPanel.js:544
 #: js/widgets/dialog/EditDialog.js:419
 #: js/widgets/grid/PersistentFilterPicker.js:123
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: js/MainScreen.js:513
+#: js/MainScreen.js:519
 msgid "Are you sure you want to logout?"
 msgstr "Wollen sie sich wirklich Abmelden?"
 
-#: js/MainScreen.js:515
+#: js/MainScreen.js:521
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
@@ -336,8 +327,12 @@ msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
 
 #: js/tineInit.js:274
-msgid "The server did not respond to your request. Please check your network or contact your administrator."
-msgstr "Der Server konnte leider auf Ihre Anfrage nicht antworten. Bitte überprüfen Sie Ihr Netzwerk oder kontaktieren Sie Ihren Administrator."
+msgid ""
+"The server did not respond to your request. Please check your network or "
+"contact your administrator."
+msgstr ""
+"Der Server konnte leider auf Ihre Anfrage nicht antworten. Bitte überprüfen "
+"Sie Ihr Netzwerk oder kontaktieren Sie Ihren Administrator."
 
 #: js/tineInit.js:284
 msgid "Your session timed out. You need to login again."
@@ -352,16 +347,35 @@ msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sie sind nicht berechtigt diese Aktion auszuführen"
 
 #: js/tineInit.js:307
+#, fuzzy
+msgid "Not Found"
+msgstr "Mangelnde Erlaubnis"
+
+#: js/tineInit.js:308
+msgid ""
+"Sorry, your requested could not be completed because the required data could "
+"not be found. In most cases this means that someone already deleted the "
+"data. Please refresh your current view."
+msgstr ""
+
+#: js/tineInit.js:317
 msgid "Concurrent Updates"
 msgstr "Passende Updates"
 
-#: js/tineInit.js:308
-msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
-msgstr "Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. Sie müssen aktualisieren und die Änderungen erneut durchführen."
+#: js/tineInit.js:318
+msgid ""
+"Someone else saved this record while you where editing the data. You need to "
+"reload and make your changes again."
+msgstr ""
+"Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. "
+"Sie müssen aktualisieren und die Änderungen erneut durchführen."
 
-#: js/tineInit.js:554
-msgid "Fatal Error: Client self-update failed, please contact your administrator."
-msgstr "Fataler Fehler: Client-Update fehlgeschlagen. Bitte kontaktieren Sie Ihren Administrator."
+#: js/tineInit.js:568
+msgid ""
+"Fatal Error: Client self-update failed, please contact your administrator."
+msgstr ""
+"Fataler Fehler: Client-Update fehlgeschlagen. Bitte kontaktieren Sie Ihren "
+"Administrator."
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
@@ -388,8 +402,12 @@ msgid "Congratulations!"
 msgstr "Herzlichen Glückwunsch!"
 
 #: js/UserRegistration.js:167
-msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
-msgstr "Sie haben alle benötigten Informationen eingegeben. Wenn Sie nun den Fertig Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr ""
+"Sie haben alle benötigten Informationen eingegeben. Wenn Sie nun den Fertig "
+"Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
 
 #: js/ux/ConnectionStatus.js:52
 msgid "online"
@@ -399,12 +417,8 @@ msgstr "online"
 msgid "offline"
 msgstr "offline"
 
-#: js/ux/ConnectionStatus.js:54
-#: User/Abstract.php:241
-#: User/Abstract.php:242
-#: User/Abstract.php:243
-#: User/Abstract.php:244
-#: User/Abstract.php:245
+#: js/ux/ConnectionStatus.js:54 User/Abstract.php:241 User/Abstract.php:242
+#: User/Abstract.php:243 User/Abstract.php:244 User/Abstract.php:245
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -430,14 +444,15 @@ msgstr "Fehler beim Hochladen"
 
 #: js/ux/form/ImageField.js:147
 msgid "Could not upload image. Please notify your Administrator"
-msgstr "Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren Administrator"
+msgstr ""
+"Das Bild konnte nicht Hochgeladen werden. Bitte informieren sie ihren "
+"Administrator"
 
 #: js/ux/form/ImageField.js:159
 msgid "Change Image"
 msgstr "Bild ändern"
 
-#: js/ux/form/ImageField.js:183
-#: js/ux/form/ImageField.js:201
+#: js/ux/form/ImageField.js:183 js/ux/form/ImageField.js:201
 msgid "Crop Image"
 msgstr "Bild zuschneiden"
 
@@ -451,7 +466,9 @@ msgstr "Fehler bei Bildverarbeitung"
 
 #: js/ux/form/ImageField.js:235
 msgid "Could not load image. Please notify your Administrator"
-msgstr "Das Bild konnte nicht geladen werden. Bitte informieren sie ihren Administrator"
+msgstr ""
+"Das Bild konnte nicht geladen werden. Bitte informieren sie ihren "
+"Administrator"
 
 #: js/ux/form/RecordsComboBox.js:27
 msgid "Software Version"
@@ -481,8 +498,7 @@ msgstr "Auswahl umkehren"
 msgid "Remove account"
 msgstr "Benutzer löschen"
 
-#: js/widgets/account/ConfigGrid.js:85
-#: js/widgets/account/PickerPanel.js:166
+#: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:166
 msgid "Name"
 msgstr "Name"
 
@@ -490,20 +506,16 @@ msgstr "Name"
 msgid "add account"
 msgstr "Benutzer hinzufügen"
 
-#: js/widgets/account/PickerPanel.js:177
-#: js/widgets/GridPicker.js:389
+#: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
 msgstr "Suchfilter eingeben"
 
-#: js/widgets/account/PickerPanel.js:221
-#: js/widgets/GridPicker.js:410
+#: js/widgets/account/PickerPanel.js:221 js/widgets/GridPicker.js:410
 msgid "Search"
 msgstr "Suchen"
 
-#: js/widgets/account/PickerPanel.js:257
-#: js/widgets/account/PickerPanel.js:258
-#: js/widgets/GridPicker.js:448
-#: js/widgets/GridPicker.js:449
+#: js/widgets/account/PickerPanel.js:257 js/widgets/account/PickerPanel.js:258
+#: js/widgets/GridPicker.js:448 js/widgets/GridPicker.js:449
 msgid "Browse"
 msgstr "Blättern"
 
@@ -519,20 +531,17 @@ msgstr "Bitte wählen Sie einen Benutzer"
 msgid "Add a Note..."
 msgstr "Notiz hinzufügen"
 
-#: js/widgets/ActivitiesPanel.js:153
-#: js/widgets/ActivitiesPanel.js:165
+#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:165
 #: js/widgets/container/GrantsDialog.js:92
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: js/widgets/ActivitiesPanel.js:153
-#: js/widgets/ActivitiesPanel.js:393
+#: js/widgets/ActivitiesPanel.js:153 js/widgets/ActivitiesPanel.js:393
 #: js/widgets/ActivitiesPanel.js:520
 msgid "Note"
 msgstr "Notiz"
 
-#: js/widgets/ActivitiesPanel.js:166
-#: js/widgets/ActivitiesPanel.js:319
+#: js/widgets/ActivitiesPanel.js:166 js/widgets/ActivitiesPanel.js:319
 msgid "Add new note"
 msgstr "Neue Notiz hinzufügen"
 
@@ -540,8 +549,7 @@ msgstr "Neue Notiz hinzufügen"
 msgid "Notes"
 msgstr "Notizen"
 
-#: js/widgets/ActivitiesPanel.js:261
-#: js/widgets/ActivitiesPanel.js:318
+#: js/widgets/ActivitiesPanel.js:261 js/widgets/ActivitiesPanel.js:318
 msgid "Add Note"
 msgstr "Notiz hinzufügen"
 
@@ -553,8 +561,7 @@ msgstr "Neue Notiz eingeben:"
 msgid "Add a {0} Note"
 msgstr "{0} Notiz hinzufügen"
 
-#: js/widgets/ActivitiesPanel.js:391
-#: js/widgets/ActivitiesPanel.js:526
+#: js/widgets/ActivitiesPanel.js:391 js/widgets/ActivitiesPanel.js:526
 msgid "Type"
 msgstr "Typ"
 
@@ -578,8 +585,7 @@ msgstr "Keine Historie vorhanden"
 msgid "History"
 msgstr "Historie"
 
-#: js/widgets/ActivitiesPanel.js:521
-#: js/widgets/ActivitiesPanel.js:522
+#: js/widgets/ActivitiesPanel.js:521 js/widgets/ActivitiesPanel.js:522
 msgid "Time"
 msgstr "Zeit"
 
@@ -591,13 +597,11 @@ msgstr "Benutzer"
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
-#: js/widgets/app/GridPanel.js:212
-#: js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:212 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "{0} hinzufügen"
 
-#: js/widgets/app/GridPanel.js:222
-#: js/widgets/app/GridPanel.js:223
+#: js/widgets/app/GridPanel.js:222 js/widgets/app/GridPanel.js:223
 #: js/widgets/app/GridPanel.js:225
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
@@ -613,8 +617,12 @@ msgid "No {0} to display"
 msgstr "Keine {0} gefunden"
 
 #: js/widgets/app/GridPanel.js:318
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Keine {0} gefunden. Versuchen Sie die Suchkriterien, Anzeigeoptionen oder {1} in denen Sie suchen zu ändern."
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
+msgstr ""
+"Keine {0} gefunden. Versuchen Sie die Suchkriterien, Anzeigeoptionen oder "
+"{1} in denen Sie suchen zu ändern."
 
 #: js/widgets/app/GridPanel.js:529
 msgid "Not Allowed"
@@ -630,8 +638,7 @@ msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Möchten sie den ausgewählten Eintrag wirklich löschen?"
 msgstr[1] "Möchten Sie die ausgewählten Einträge wirklich löschen?"
 
-#: js/widgets/app/GridPanel.js:547
-#: js/widgets/dialog/EditDialog.js:421
+#: js/widgets/app/GridPanel.js:547 js/widgets/dialog/EditDialog.js:421
 msgid "Deleting {0}"
 msgstr "Lösche {0}"
 
@@ -639,17 +646,13 @@ msgstr "Lösche {0}"
 msgid " ... This may take a long time!"
 msgstr "... Das kann eine ganze Weile dauern!"
 
-#: js/widgets/app/GridPanel.js:563
-#: js/widgets/dialog/EditDialog.js:393
-#: js/widgets/dialog/EditDialog.js:431
-#: js/widgets/tags/TagsPanel.js:255
-#: js/widgets/tags/TagsPanel.js:364
-#: js/widgets/tags/TagsPanel.js:397
+#: js/widgets/app/GridPanel.js:563 js/widgets/dialog/EditDialog.js:393
+#: js/widgets/dialog/EditDialog.js:431 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/widgets/app/GridPanel.js:563
-#: js/widgets/dialog/EditDialog.js:431
+#: js/widgets/app/GridPanel.js:563 js/widgets/dialog/EditDialog.js:431
 msgid "Could not delete {0}."
 msgstr "Konnte {0} nicht löschen."
 
@@ -667,8 +670,7 @@ msgid "Recently used {0}:"
 msgstr "Kürzlich genutzte {0}:"
 
 #: js/widgets/container/ContainerSelect.js:228
-#: js/widgets/tags/TagsPanel.js:109
-#: js/widgets/tags/TagsPanel.js:411
+#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:411
 #: js/widgets/tags/TagsPanel.js:415
 msgid "personal"
 msgstr "Persönlich"
@@ -772,13 +774,11 @@ msgstr "Fehler"
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben sie die gekennzeichneten Fehler"
 
-#: js/widgets/dialog/EditDialog.js:165
-#: js/widgets/EditRecord.js:126
+#: js/widgets/dialog/EditDialog.js:165 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "Anwenden"
 
-#: js/widgets/dialog/EditDialog.js:182
-#: js/widgets/EditRecord.js:146
+#: js/widgets/dialog/EditDialog.js:182 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "Löschen"
 
@@ -790,8 +790,7 @@ msgstr "Neuen {0} hinzufügen"
 msgid "Edit {0} \"{1}\""
 msgstr "{0} \"{1}\" bearbeiten"
 
-#: js/widgets/dialog/EditDialog.js:288
-#: js/widgets/EditRecord.js:185
+#: js/widgets/dialog/EditDialog.js:288 js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "Gespeichert in"
 
@@ -959,8 +958,7 @@ msgstr "Alle Filter zurücksetzen"
 msgid "start search"
 msgstr "Suche starten"
 
-#: js/widgets/grid/FilterToolbar.js:140
-#: js/widgets/grid/FilterToolbar.js:568
+#: js/widgets/grid/FilterToolbar.js:140 js/widgets/grid/FilterToolbar.js:568
 msgid "save filter"
 msgstr "Filter speichern"
 
@@ -984,8 +982,7 @@ msgstr "Zeige"
 msgid "Please enter a name for the filter"
 msgstr "Bitte den Namen für den Filter eingeben"
 
-#: js/widgets/grid/FilterToolbar.js:571
-#: js/widgets/grid/FilterToolbar.js:574
+#: js/widgets/grid/FilterToolbar.js:571 js/widgets/grid/FilterToolbar.js:574
 msgid "Filter not Saved"
 msgstr "Filter nicht gespeichert"
 
@@ -994,13 +991,15 @@ msgid "You have to supply a name for the filter!"
 msgstr "Sie sollten einen Namen für den Filter angeben!"
 
 #: js/widgets/grid/FilterToolbar.js:574
-msgid "You have to supply a shorter name! Names of saved filters can only be up to 40 characters long."
-msgstr "Sie müssen einen kürzeren Namen eingeben! Der Name eines gespeicherten Filters darf maximal 40 Zeichen lang sein."
+msgid ""
+"You have to supply a shorter name! Names of saved filters can only be up to "
+"40 characters long."
+msgstr ""
+"Sie müssen einen kürzeren Namen eingeben! Der Name eines gespeicherten "
+"Filters darf maximal 40 Zeichen lang sein."
 
-#: js/widgets/grid/FilterToolbar.js:577
-#: js/widgets/LangChooser.js:72
-#: js/widgets/LangChooser.js:94
-#: js/widgets/TimezoneChooser.js:74
+#: js/widgets/grid/FilterToolbar.js:577 js/widgets/LangChooser.js:72
+#: js/widgets/LangChooser.js:94 js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "Bitte Warten"
 
@@ -1032,8 +1031,7 @@ msgstr "Eintrag löschen"
 msgid "Please Select a Group"
 msgstr "Bitte wählen sie eine Gruppe aus"
 
-#: js/widgets/LangChooser.js:40
-#: Preference.php:92
+#: js/widgets/LangChooser.js:40 Preference.php:92
 msgid "Language"
 msgstr "Sprache"
 
@@ -1099,8 +1097,7 @@ msgstr[1] "Tags entfernen"
 msgid "Edit tag"
 msgstr "Tag bearbeiten"
 
-#: js/widgets/tags/TagsPanel.js:169
-#: js/widgets/tags/TagsPanel.js:174
+#: js/widgets/tags/TagsPanel.js:169 js/widgets/tags/TagsPanel.js:174
 msgid "Rename Tag"
 msgstr "Tag umbenennen"
 
@@ -1139,8 +1136,10 @@ msgstr[1] "Ausgewählte Tags wirklich löschen?"
 #: js/widgets/tags/TagsPanel.js:235
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
-msgstr[1] "Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
+msgstr[0] ""
+"Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
+msgstr[1] ""
+"Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
 
 #: js/widgets/tags/TagsPanel.js:239
 msgid "Please wait a moment..."
@@ -1156,13 +1155,11 @@ msgstr[1] "Lösche Tags"
 msgid "Could not delete Tag(s)."
 msgstr "Konnte Tag(s) nicht löschen."
 
-#: js/widgets/tags/TagsPanel.js:316
-#: js/widgets/tags/TagsPanel.js:378
+#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
 msgid "Notice"
 msgstr "Beachten Sie"
 
-#: js/widgets/tags/TagsPanel.js:317
-#: js/widgets/tags/TagsPanel.js:379
+#: js/widgets/tags/TagsPanel.js:317 js/widgets/tags/TagsPanel.js:379
 msgid "The minimum tag length is three."
 msgstr "Ein Tag muss mindestens aus 3 Zeichen bestehen."
 
@@ -1174,8 +1171,7 @@ msgstr "Konnte Tag nicht erzeugen."
 msgid "Could not update tag."
 msgstr "Konnte Tag nicht aktualisieren."
 
-#: js/widgets/tags/TagsPanel.js:430
-#: js/widgets/tags/TagsPanel.js:488
+#: js/widgets/tags/TagsPanel.js:430 js/widgets/tags/TagsPanel.js:488
 msgid "Enter tag name"
 msgstr "Tag-Name eingegeben"
 
@@ -1187,8 +1183,7 @@ msgstr "Suche ..."
 msgid "Color"
 msgstr "Farbe"
 
-#: js/widgets/TimezoneChooser.js:34
-#: Preference.php:88
+#: js/widgets/TimezoneChooser.js:34 Preference.php:88
 msgid "Timezone"
 msgstr "Zeitzone"
 
@@ -1208,8 +1203,7 @@ msgstr "Bitte den Namen für neue {0} eingeben:"
 msgid "No {0} added"
 msgstr "Kein {0} hinzugefügt"
 
-#: js/widgets/tree/ContextMenu.js:40
-#: js/widgets/tree/ContextMenu.js:137
+#: js/widgets/tree/ContextMenu.js:40 js/widgets/tree/ContextMenu.js:137
 msgid "You have to supply a {0} name!"
 msgstr "Sie sollten einen Namen für {0} angeben!"
 
@@ -1253,21 +1247,19 @@ msgstr "Zugriffsrechte bearbeiten"
 msgid "Reload {0}"
 msgstr "{0} neu laden"
 
-#: js/widgets/VersionCheck.js:39
-#: js/widgets/VersionCheck.js:48
+#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
 msgid "New version of Tine 2.0 available"
 msgstr "Eine neue Version von Tine 2.0 ist verfügbar."
 
-#: js/widgets/VersionCheck.js:40
-#: js/widgets/VersionCheck.js:49
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Die Version \"{0}\" von Tine 2.0 ist verfügbar."
 
-#: js/widgets/VersionCheck.js:41
+#: js/widgets/VersionCheck.js:45
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Dieses wichtige Update sollte umgehend installiert werden!"
 
-#: js/widgets/VersionCheck.js:50
+#: js/widgets/VersionCheck.js:54
 msgid "Please consider updating!"
 msgstr "Bitte bestätigen Sie das Update!"
 
@@ -1300,8 +1292,10 @@ msgid "Window Type"
 msgstr "Fenstertyp"
 
 #: Preference.php:101
-msgid "You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr "Sie können zwischen Extjs-Fenstern oder normalen Browserfenstern wählen."
+msgid ""
+"You can choose between ExtJs style windows or normal Browser popup windows."
+msgstr ""
+"Sie können zwischen Extjs-Fenstern oder normalen Browserfenstern wählen."
 
 #: Setup/setup.xml:2344
 msgid "note"
@@ -1343,878 +1337,881 @@ msgstr "geändert"
 msgid "record changed"
 msgstr "Eintrag geändert"
 
-msgid "Preference description"
-msgstr "Einstellungsbeschreibung"
+#~ msgid "Preference description"
+#~ msgstr "Einstellungsbeschreibung"
 
-msgid "Timezone: {0}"
-msgstr "Zeitzone: {0}"
+#~ msgid "Timezone: {0}"
+#~ msgstr "Zeitzone: {0}"
 
-msgid "none"
-msgstr "keine"
+#~ msgid "none"
+#~ msgstr "keine"
 
-msgid "Recent Activities"
-msgstr "Letzte Aktivitäten"
+#~ msgid "Recent Activities"
+#~ msgstr "Letzte Aktivitäten"
 
-msgid "Displaying notes {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying notes {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
-msgid "No notes to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No notes to display"
+#~ msgstr "Keine Notizen vorhanden"
 
-msgid "Saving {0}"
-msgstr "Speichere {0}"
+#~ msgid "Saving {0}"
+#~ msgstr "Speichere {0}"
 
-msgid "Do you really want to delete the selected {0}"
-msgid_plural "Do you really want to delete the selected {0}"
-msgstr[0] "Möchten sie die ausgewähle {0} wirklich löschen?"
-msgstr[1] "Möchten sie die ausgewählen {0} wirklich löschen?"
+#~ msgid "Do you really want to delete the selected {0}"
+#~ msgid_plural "Do you really want to delete the selected {0}"
+#~ msgstr[0] "Möchten sie die ausgewähle {0} wirklich löschen?"
+#~ msgstr[1] "Möchten sie die ausgewählen {0} wirklich löschen?"
 
-msgid "Internal Contacts"
-msgstr "Interne Kontakte"
+#~ msgid "Internal Contacts"
+#~ msgstr "Interne Kontakte"
 
-msgid "contacts"
-msgstr "Kontakte"
+#~ msgid "contacts"
+#~ msgstr "Kontakte"
 
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Möchten Sie den ausgewählten Kontakt wirklich löschen?"
-msgstr[1] "Möchten Sie die ausgewählten Kontakte wirklich löschen?"
+#~ msgid "Do you really want to delete the selected contact?"
+#~ msgid_plural "Do you really want to delete the selected contacts?"
+#~ msgstr[0] "Möchten Sie den ausgewählten Kontakt wirklich löschen?"
+#~ msgstr[1] "Möchten Sie die ausgewählten Kontakte wirklich löschen?"
 
-msgid "Deleting contact..."
-msgid_plural "Deleting contacts..."
-msgstr[0] "Lösche Kontakt..."
-msgstr[1] "Lösche Kontakte..."
+#~ msgid "Deleting contact..."
+#~ msgid_plural "Deleting contacts..."
+#~ msgstr[0] "Lösche Kontakt..."
+#~ msgstr[1] "Lösche Kontakte..."
 
-msgid "add contact"
-msgstr "Kontakt hinzufügen"
+#~ msgid "add contact"
+#~ msgstr "Kontakt hinzufügen"
 
-msgid "edit contact"
-msgstr "Kontakt bearbeiten"
+#~ msgid "edit contact"
+#~ msgstr "Kontakt bearbeiten"
 
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "Kontakt löschen"
-msgstr[1] "Kontakte löschen"
+#~ msgid "delete contact"
+#~ msgid_plural "delete contacts"
+#~ msgstr[0] "Kontakt löschen"
+#~ msgstr[1] "Kontakte löschen"
 
-msgid "call contact"
-msgstr "Kontakt anrufen"
+#~ msgid "call contact"
+#~ msgstr "Kontakt anrufen"
 
-msgid "Contact"
-msgstr "Kontakt"
+#~ msgid "Contact"
+#~ msgstr "Kontakt"
 
-msgid "Last Name"
-msgstr "Nachname"
+#~ msgid "Last Name"
+#~ msgstr "Nachname"
 
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Die Kontakte {0} - {1} von {2} weden angezeigt"
+#~ msgid "Displaying contacts {0} - {1} of {2}"
+#~ msgstr "Die Kontakte {0} - {1} von {2} weden angezeigt"
 
-msgid "No contacts to display"
-msgstr "Keine Kontakte zur Anzeige vorhanden"
+#~ msgid "No contacts to display"
+#~ msgstr "Keine Kontakte zur Anzeige vorhanden"
 
 #, fuzzy
-msgid "Full Name"
-msgstr "Name"
+#~ msgid "Full Name"
+#~ msgstr "Name"
 
-msgid "Display Name"
-msgstr "Angezeigter Name"
+#~ msgid "Display Name"
+#~ msgstr "Angezeigter Name"
 
 #, fuzzy
-msgid "Email"
-msgstr "Email"
+#~ msgid "Email"
+#~ msgstr "Email"
 
-msgid "Select contact"
-msgstr "Kontakt auswählen"
+#~ msgid "Select contact"
+#~ msgstr "Kontakt auswählen"
 
-msgid "addressbook"
-msgstr "Adressbuch"
+#~ msgid "addressbook"
+#~ msgstr "Adressbuch"
 
-msgid "Loading Contact..."
-msgstr "Lade Kontakt..."
+#~ msgid "Loading Contact..."
+#~ msgstr "Lade Kontakt..."
 
-msgid "Add new contact"
-msgstr "Neuen Kontakt hinzufügen"
+#~ msgid "Add new contact"
+#~ msgstr "Neuen Kontakt hinzufügen"
 
-msgid "Saving Contact"
-msgstr "Kontakt wird gespeichert"
+#~ msgid "Saving Contact"
+#~ msgstr "Kontakt wird gespeichert"
 
-msgid "Could not save contact."
-msgstr "Konnte Kontakt nicht speichern."
+#~ msgid "Could not save contact."
+#~ msgstr "Konnte Kontakt nicht speichern."
 
-msgid "Title"
-msgstr "Titel"
+#~ msgid "Title"
+#~ msgstr "Titel"
 
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Verknüpfung"
-msgstr[1] "Verknüpfungen"
+#~ msgid "Link"
+#~ msgid_plural "Links [%d]"
+#~ msgstr[0] "Verknüpfung"
+#~ msgstr[1] "Verknüpfungen"
 
-msgid "Shared Tags"
-msgstr "Gemeinsame Tags"
+#~ msgid "Shared Tags"
+#~ msgstr "Gemeinsame Tags"
 
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Möchten Sie die ausgewählten Zugriffs-Log Einträge wirklich löschen?"
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr ""
+#~ "Möchten Sie die ausgewählten Zugriffs-Log Einträge wirklich löschen?"
 
-msgid "delete entry"
-msgstr "Eintrag löschen"
+#~ msgid "delete entry"
+#~ msgstr "Eintrag löschen"
 
-msgid "Search:"
-msgstr "Suche:"
+#~ msgid "Search:"
+#~ msgstr "Suche:"
 
-msgid "invalid password"
-msgstr "Ungültiges Passwort"
+#~ msgid "invalid password"
+#~ msgstr "Ungültiges Passwort"
 
 #, fuzzy
-msgid "failure"
-msgstr "Fehler"
+#~ msgid "failure"
+#~ msgstr "Fehler"
 
 #, fuzzy
-msgid "success"
-msgstr "Erfolg"
+#~ msgid "success"
+#~ msgstr "Erfolg"
 
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Die Zugriffs-Log einträge {0} - {1} von {2} werden angezeigt"
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Die Zugriffs-Log einträge {0} - {1} von {2} werden angezeigt"
 
-msgid "No access log entries to display"
-msgstr "Keine Zugriffs-Log einträge zum Anzeigen vorhanden"
+#~ msgid "No access log entries to display"
+#~ msgstr "Keine Zugriffs-Log einträge zum Anzeigen vorhanden"
 
-msgid "Login Name"
-msgstr "Benutzername"
+#~ msgid "Login Name"
+#~ msgstr "Benutzername"
 
-msgid "Login Time"
-msgstr "Anmeldezeitpunkt"
+#~ msgid "Login Time"
+#~ msgstr "Anmeldezeitpunkt"
 
-msgid "Logout Time"
-msgstr "Abmeldezeitpunkt"
+#~ msgid "Logout Time"
+#~ msgstr "Abmeldezeitpunkt"
 
-msgid "Account ID"
-msgstr "BenutzerId"
+#~ msgid "Account ID"
+#~ msgstr "BenutzerId"
 
-msgid "settings"
-msgstr "Einstellungen"
+#~ msgid "settings"
+#~ msgstr "Einstellungen"
 
-msgid "enabled"
-msgstr "Aktiviert"
+#~ msgid "enabled"
+#~ msgstr "Aktiviert"
 
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Die Anwendungen {0} - {1} von {2} werden angezeigt"
+#~ msgid "Displaying application {0} - {1} of {2}"
+#~ msgstr "Die Anwendungen {0} - {1} von {2} werden angezeigt"
 
-msgid "No applications to display"
-msgstr "Keine Anwendungen zum Anzeigen vorhanden"
+#~ msgid "No applications to display"
+#~ msgstr "Keine Anwendungen zum Anzeigen vorhanden"
 
-msgid "order"
-msgstr "Reihenfolge"
+#~ msgid "order"
+#~ msgstr "Reihenfolge"
 
-msgid "name"
-msgstr "Name"
+#~ msgid "name"
+#~ msgstr "Name"
 
-msgid "version"
-msgstr "Version"
+#~ msgid "version"
+#~ msgstr "Version"
 
-msgid "Set new password"
-msgstr "Neues Passwort setzten"
+#~ msgid "Set new password"
+#~ msgstr "Neues Passwort setzten"
 
-msgid "Please enter the new password:"
-msgstr "Bitte geben Sie das neue Passwort ein:"
+#~ msgid "Please enter the new password:"
+#~ msgstr "Bitte geben Sie das neue Passwort ein:"
 
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Möchten Sie die ausgewählten Benutzerkonten wirklich löschen?"
+#~ msgid "Do you really want to delete the selected account(s)?"
+#~ msgstr "Möchten Sie die ausgewählten Benutzerkonten wirklich löschen?"
 
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Die Benutzerkonten {0} - {1} von {2} werden angezeigt"
+#~ msgid "Displaying accounts {0} - {1} of {2}"
+#~ msgstr "Die Benutzerkonten {0} - {1} von {2} werden angezeigt"
 
-msgid "No accounts to display"
-msgstr "Keine Benutzerkonten zum Anzeigen vorhanden"
+#~ msgid "No accounts to display"
+#~ msgstr "Keine Benutzerkonten zum Anzeigen vorhanden"
 
-msgid "Displayname"
-msgstr "Anzeigename"
+#~ msgid "Displayname"
+#~ msgstr "Anzeigename"
 
-msgid "Loginname"
-msgstr "Benutzername"
+#~ msgid "Loginname"
+#~ msgstr "Benutzername"
 
-msgid "Last name"
-msgstr "Nachname"
+#~ msgid "Last name"
+#~ msgstr "Nachname"
 
-msgid "First name"
-msgstr "Vorname"
+#~ msgid "First name"
+#~ msgstr "Vorname"
 
-msgid "Password changed"
-msgstr "Letzte Passwort Änderung"
+#~ msgid "Password changed"
+#~ msgstr "Letzte Passwort Änderung"
 
-msgid "edit account"
-msgstr "Benutzerkonto bearbeiten"
+#~ msgid "edit account"
+#~ msgstr "Benutzerkonto bearbeiten"
 
-msgid "delete account"
-msgstr "Benutzerkonto löschen"
+#~ msgid "delete account"
+#~ msgstr "Benutzerkonto löschen"
 
-msgid "enable account"
-msgstr "Benutzerkonto aktiviern"
+#~ msgid "enable account"
+#~ msgstr "Benutzerkonto aktiviern"
 
-msgid "disable account"
-msgstr "Benutzerkonto deaktivieren"
+#~ msgid "disable account"
+#~ msgstr "Benutzerkonto deaktivieren"
 
-msgid "reset password"
-msgstr "Passwort zurücksetzten"
+#~ msgid "reset password"
+#~ msgstr "Passwort zurücksetzten"
 
-msgid "Deleting account..."
-msgstr "Benutzerkonto wird gelöscht..."
+#~ msgid "Deleting account..."
+#~ msgstr "Benutzerkonto wird gelöscht..."
 
-msgid "Could not save user account."
-msgstr "Konnte Benuterkonto nicht abspeichern."
+#~ msgid "Could not save user account."
+#~ msgstr "Konnte Benuterkonto nicht abspeichern."
 
-msgid "no password set"
-msgstr "Passwort ist nicht gesetzt"
+#~ msgid "no password set"
+#~ msgstr "Passwort ist nicht gesetzt"
 
-msgid "Password again"
-msgstr "Passwort wiederholung"
+#~ msgid "Password again"
+#~ msgstr "Passwort wiederholung"
 
-msgid "Password set"
-msgstr "Passwort wurde gesetzt"
+#~ msgid "Password set"
+#~ msgstr "Passwort wurde gesetzt"
 
-msgid "Add New User Account"
-msgstr "Neues Benutzerkonto  hinzufügen"
+#~ msgid "Add New User Account"
+#~ msgstr "Neues Benutzerkonto  hinzufügen"
 
-msgid "Do you really want to delete the selected groups?"
-msgstr "Möchten Sie die ausgewählten Gruppen wirklich löschen?"
+#~ msgid "Do you really want to delete the selected groups?"
+#~ msgstr "Möchten Sie die ausgewählten Gruppen wirklich löschen?"
 
-msgid "Deleting group(s)..."
-msgstr "Gruppen werden gelöscht..."
+#~ msgid "Deleting group(s)..."
+#~ msgstr "Gruppen werden gelöscht..."
 
-msgid "add group"
-msgstr "Benutzergruppe hinzufügen"
+#~ msgid "add group"
+#~ msgstr "Benutzergruppe hinzufügen"
 
-msgid "delete group"
-msgstr "Benutzergruppe löschen"
+#~ msgid "delete group"
+#~ msgstr "Benutzergruppe löschen"
 
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Benutzergruppen {0} - {1} von {2} werden angezeigt"
+#~ msgid "Displaying groups {0} - {1} of {2}"
+#~ msgstr "Benutzergruppen {0} - {1} von {2} werden angezeigt"
 
 #, fuzzy
-msgid "No groups to display"
-msgstr "Keine Tags vorhanden"
+#~ msgid "No groups to display"
+#~ msgstr "Keine Tags vorhanden"
 
 #, fuzzy
-msgid "Updating Memberships"
-msgstr "Berechtiungen werden gesichert"
+#~ msgid "Updating Memberships"
+#~ msgstr "Berechtiungen werden gesichert"
 
 #, fuzzy
-msgid "Could not save group."
-msgstr "Konnte Tag nicht erzeugen."
+#~ msgid "Could not save group."
+#~ msgstr "Konnte Tag nicht erzeugen."
 
 #, fuzzy
-msgid "Deleting group..."
-msgstr "Lösche Tag"
+#~ msgid "Deleting group..."
+#~ msgstr "Lösche Tag"
 
 #, fuzzy
-msgid "Group Name"
-msgstr "Bild zuschneiden"
+#~ msgid "Group Name"
+#~ msgstr "Bild zuschneiden"
 
 #, fuzzy
-msgid "Add new group"
-msgstr "Neue Notiz hinzufügen"
+#~ msgid "Add new group"
+#~ msgstr "Neue Notiz hinzufügen"
 
 #, fuzzy
-msgid "Do you really want to delete the selected tags?"
-msgstr "Möchten Sie {0} \"{0}\" wirklich löschen?"
+#~ msgid "Do you really want to delete the selected tags?"
+#~ msgstr "Möchten Sie {0} \"{0}\" wirklich löschen?"
 
 #, fuzzy
-msgid "Deleting tag(s)..."
-msgstr "Lösche Tag"
+#~ msgid "Deleting tag(s)..."
+#~ msgstr "Lösche Tag"
 
 #, fuzzy
-msgid "add tag"
-msgstr "Tag bearbeiten"
+#~ msgid "add tag"
+#~ msgstr "Tag bearbeiten"
 
 #, fuzzy
-msgid "edit tag"
-msgstr "Tag bearbeiten"
+#~ msgid "edit tag"
+#~ msgstr "Tag bearbeiten"
 
 #, fuzzy
-msgid "delete tag"
-msgstr "Tag löschen"
+#~ msgid "delete tag"
+#~ msgstr "Tag löschen"
 
 #, fuzzy
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying tags {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No tags to display"
-msgstr "Keine Tags vorhanden"
+#~ msgid "No tags to display"
+#~ msgstr "Keine Tags vorhanden"
 
 #, fuzzy
-msgid "Deleting tag..."
-msgstr "Lösche Tag"
+#~ msgid "Deleting tag..."
+#~ msgstr "Lösche Tag"
 
 #, fuzzy
-msgid "Use"
-msgstr "Benutzer"
+#~ msgid "Use"
+#~ msgstr "Benutzer"
 
 #, fuzzy
-msgid "Tag Name"
-msgstr "Tag Name"
+#~ msgid "Tag Name"
+#~ msgstr "Tag Name"
 
 #, fuzzy
-msgid "Edit Tag \"{0}\""
-msgstr "Tag bearbeiten"
+#~ msgid "Edit Tag \"{0}\""
+#~ msgstr "Tag bearbeiten"
 
 #, fuzzy
-msgid "Deleting role(s)..."
-msgstr "Einrichten {0}..."
+#~ msgid "Deleting role(s)..."
+#~ msgstr "Einrichten {0}..."
 
 #, fuzzy
-msgid "add role"
-msgstr "Notiz hinzufügen"
+#~ msgid "add role"
+#~ msgstr "Notiz hinzufügen"
 
 #, fuzzy
-msgid "delete role"
-msgstr "löschen"
+#~ msgid "delete role"
+#~ msgstr "löschen"
 
 #, fuzzy
-msgid "No roles to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No roles to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #, fuzzy
-msgid "Could not save role."
-msgstr "Konnte Tag nicht erzeugen."
+#~ msgid "Could not save role."
+#~ msgstr "Konnte Tag nicht erzeugen."
 
 #, fuzzy
-msgid "Deleting role..."
-msgstr "Lösche"
+#~ msgid "Deleting role..."
+#~ msgstr "Lösche"
 
 #, fuzzy
-msgid "Role Name"
-msgstr "Umbenennen"
+#~ msgid "Role Name"
+#~ msgstr "Umbenennen"
 
 #, fuzzy
-msgid "Loading Role..."
-msgstr "Laden"
+#~ msgid "Loading Role..."
+#~ msgstr "Laden"
 
 #, fuzzy
-msgid "Add New Role"
-msgstr "Neue Notiz hinzufügen"
+#~ msgid "Add New Role"
+#~ msgstr "Neue Notiz hinzufügen"
 
 #, fuzzy
-msgid "Are you sure you want to delete this lead?"
-msgstr "Wollen sie sich wirklich Abmelden?"
+#~ msgid "Are you sure you want to delete this lead?"
+#~ msgstr "Wollen sie sich wirklich Abmelden?"
 
 #, fuzzy
-msgid "Deleting lead"
-msgstr "Lösche Tag"
+#~ msgid "Deleting lead"
+#~ msgstr "Lösche Tag"
 
 #, fuzzy
-msgid "Enter searchfilter"
-msgstr "suchfilter eingeben"
+#~ msgid "Enter searchfilter"
+#~ msgstr "suchfilter eingeben"
 
 #, fuzzy
-msgid "Show details"
-msgstr "Details anzeigen:"
+#~ msgid "Show details"
+#~ msgstr "Details anzeigen:"
 
 #, fuzzy
-msgid "Displaying leads {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying leads {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "Lead name"
-msgstr "Tag Name"
+#~ msgid "Lead name"
+#~ msgstr "Tag Name"
 
 #, fuzzy
-msgid "Add lead"
-msgstr "Notiz hinzufügen"
+#~ msgid "Add lead"
+#~ msgstr "Notiz hinzufügen"
 
 #, fuzzy
-msgid "Add new lead"
-msgstr "Neue Notiz hinzufügen"
+#~ msgid "Add new lead"
+#~ msgstr "Neue Notiz hinzufügen"
 
 #, fuzzy
-msgid "Edit lead"
-msgstr "Tag bearbeiten"
+#~ msgid "Edit lead"
+#~ msgstr "Tag bearbeiten"
 
 #, fuzzy
-msgid "Delete lead"
-msgid_plural "Delete leads"
-msgstr[0] "Tag löschen"
-msgstr[1] "Tags löschen"
+#~ msgid "Delete lead"
+#~ msgid_plural "Delete leads"
+#~ msgstr[0] "Tag löschen"
+#~ msgstr[1] "Tags löschen"
 
 #, fuzzy
-msgid "Delete selected leads"
-msgstr "Ausgewählten Tag wirklich löschen?"
+#~ msgid "Delete selected leads"
+#~ msgstr "Ausgewählten Tag wirklich löschen?"
 
 #, fuzzy
-msgid "Export as PDF"
-msgstr "Export Datum"
+#~ msgid "Export as PDF"
+#~ msgstr "Export Datum"
 
 #, fuzzy
-msgid "Add task"
-msgstr "{0} hinzufügen"
+#~ msgid "Add task"
+#~ msgstr "{0} hinzufügen"
 
 #, fuzzy
-msgid "Cellphone"
-msgstr "Telefon"
+#~ msgid "Cellphone"
+#~ msgstr "Telefon"
 
 #, fuzzy
-msgid "Search Contacts"
-msgstr "Email Kontakt"
+#~ msgid "Search Contacts"
+#~ msgstr "Email Kontakt"
 
 #, fuzzy
-msgid "Could not save lead."
-msgstr "Konnte Tag nicht erzeugen."
+#~ msgid "Could not save lead."
+#~ msgstr "Konnte Tag nicht erzeugen."
 
 #, fuzzy
-msgid "Address"
-msgstr "Email-Adresse"
+#~ msgid "Address"
+#~ msgstr "Email-Adresse"
 
 #, fuzzy
-msgid "Add a task..."
-msgstr "Notiz hinzufügen"
+#~ msgid "Add a task..."
+#~ msgstr "Notiz hinzufügen"
 
 #, fuzzy
-msgid "Add a product..."
-msgstr "Notiz hinzufügen"
+#~ msgid "Add a product..."
+#~ msgstr "Notiz hinzufügen"
 
 #, fuzzy
-msgid "No Tasks to display"
-msgstr "Keine Tags vorhanden"
+#~ msgid "No Tasks to display"
+#~ msgstr "Keine Tags vorhanden"
 
 #, fuzzy
-msgid "Add new customer contact"
-msgstr "Neuen persönlichen Tag hinzufügen"
+#~ msgid "Add new customer contact"
+#~ msgstr "Neuen persönlichen Tag hinzufügen"
 
 #, fuzzy
-msgid "Add contact"
-msgstr "Email Kontakt"
+#~ msgid "Add contact"
+#~ msgstr "Email Kontakt"
 
 #, fuzzy
-msgid "Edit contact"
-msgstr "Email Kontakt"
+#~ msgid "Edit contact"
+#~ msgstr "Email Kontakt"
 
 #, fuzzy
-msgid "Unlink contact"
-msgstr "Email Kontakt"
+#~ msgid "Unlink contact"
+#~ msgstr "Email Kontakt"
 
 #, fuzzy
-msgid "Add new task"
-msgstr "Neue Notiz hinzufügen"
+#~ msgid "Add new task"
+#~ msgstr "Neue Notiz hinzufügen"
 
 #, fuzzy
-msgid "Edit task"
-msgstr "Tag bearbeiten"
+#~ msgid "Edit task"
+#~ msgstr "Tag bearbeiten"
 
 #, fuzzy
-msgid "Remove selected tasks"
-msgstr "Bitte {0} auswählen"
+#~ msgid "Remove selected tasks"
+#~ msgstr "Bitte {0} auswählen"
 
 #, fuzzy
-msgid "Remove products"
-msgstr "eintrag löschen"
+#~ msgid "Remove products"
+#~ msgstr "eintrag löschen"
 
 #, fuzzy
-msgid "Leads"
-msgstr "Lesen"
+#~ msgid "Leads"
+#~ msgstr "Lesen"
 
 #, fuzzy
-msgid "Contacts"
-msgstr "enthält"
+#~ msgid "Contacts"
+#~ msgstr "enthält"
 
 #, fuzzy
-msgid "Loading Lead..."
-msgstr "Laden"
+#~ msgid "Loading Lead..."
+#~ msgstr "Laden"
 
 #, fuzzy
-msgid "Add New Lead"
-msgstr "Neue Notiz hinzufügen"
+#~ msgid "Add New Lead"
+#~ msgstr "Neue Notiz hinzufügen"
 
 #, fuzzy
-msgid "Enter short name"
-msgstr "Tag-Name eingegeben"
+#~ msgid "Enter short name"
+#~ msgstr "Tag-Name eingegeben"
 
 #, fuzzy
-msgid "End"
-msgstr "und"
+#~ msgid "End"
+#~ msgstr "und"
 
 #, fuzzy
-msgid "folder"
-msgstr "Ordner"
+#~ msgid "folder"
+#~ msgstr "Ordner"
 
 #, fuzzy
-msgid "Number"
-msgstr "Name"
+#~ msgid "Number"
+#~ msgstr "Name"
 
 #, fuzzy
-msgid "Line"
-msgstr "Anmelden"
+#~ msgid "Line"
+#~ msgstr "Anmelden"
 
 #, fuzzy
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying calls {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No calls to display"
-msgstr "Keine Tags vorhanden"
+#~ msgid "No calls to display"
+#~ msgstr "Keine Tags vorhanden"
 
 #, fuzzy
-msgid "Duration"
-msgstr "Beschreibung"
+#~ msgid "Duration"
+#~ msgstr "Beschreibung"
 
 #, fuzzy
-msgid "Direction"
-msgstr "Beschreibung"
+#~ msgid "Direction"
+#~ msgstr "Beschreibung"
 
 #, fuzzy
-msgid "Source"
-msgstr "Erfolg"
+#~ msgid "Source"
+#~ msgstr "Erfolg"
 
 #, fuzzy
-msgid "Destination"
-msgstr "Beschreibung"
+#~ msgid "Destination"
+#~ msgstr "Beschreibung"
 
 #, fuzzy
-msgid "Could not delete task(s)."
-msgstr "Konnte Tag(s) nicht löschen."
+#~ msgid "Could not delete task(s)."
+#~ msgstr "Konnte Tag(s) nicht löschen."
 
 #, fuzzy
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "{0} löschen"
-msgstr[1] "{0} löschen"
+#~ msgid "Delete task"
+#~ msgid_plural "Delete tasks"
+#~ msgstr[0] "{0} löschen"
+#~ msgstr[1] "{0} löschen"
 
 #, fuzzy
-msgid "Could not save task."
-msgstr "Konnte Tag nicht erzeugen."
+#~ msgid "Could not save task."
+#~ msgstr "Konnte Tag nicht erzeugen."
 
 #, fuzzy
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying tasks {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No tasks to display"
-msgstr "Keine Tags vorhanden"
+#~ msgid "No tasks to display"
+#~ msgstr "Keine Tags vorhanden"
 
 #, fuzzy
-msgid "Loading Task..."
-msgstr "Laden"
+#~ msgid "Loading Task..."
+#~ msgstr "Laden"
 
 #, fuzzy
-msgid "Add New Task"
-msgstr "Neuen persönlichen Tag hinzufügen"
+#~ msgid "Add New Task"
+#~ msgstr "Neuen persönlichen Tag hinzufügen"
 
 #, fuzzy
-msgid "Enter short name..."
-msgstr "Tag-Name eingegeben"
+#~ msgid "Enter short name..."
+#~ msgstr "Tag-Name eingegeben"
 
 #, fuzzy
-msgid "Enter description..."
-msgstr "Beschreibung editieren"
+#~ msgid "Enter description..."
+#~ msgstr "Beschreibung editieren"
 
 #, fuzzy
-msgid "add software"
-msgstr "Notiz hinzufügen"
+#~ msgid "add software"
+#~ msgstr "Notiz hinzufügen"
 
 #, fuzzy
-msgid "delete software"
-msgstr "Diesen Filter löschen"
+#~ msgid "delete software"
+#~ msgstr "Diesen Filter löschen"
 
 #, fuzzy
-msgid "Search: "
-msgstr "Suchen"
+#~ msgid "Search: "
+#~ msgstr "Suchen"
 
 #, fuzzy
-msgid "Displaying software {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying software {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "add template"
-msgstr "neuen Filter hinzufügen"
+#~ msgid "add template"
+#~ msgstr "neuen Filter hinzufügen"
 
 #, fuzzy
-msgid "edit template"
-msgstr "Bild ändern"
+#~ msgid "edit template"
+#~ msgstr "Bild ändern"
 
 #, fuzzy
-msgid "delete template"
-msgstr "Bild löschen"
+#~ msgid "delete template"
+#~ msgstr "Bild löschen"
 
 #, fuzzy
-msgid "Displaying template {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying template {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No template to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No template to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #, fuzzy
-msgid "Settings"
-msgstr "Lege an"
+#~ msgid "Settings"
+#~ msgstr "Lege an"
 
 #, fuzzy
-msgid "add phone"
-msgstr "Zugang Hinzufügen"
+#~ msgid "add phone"
+#~ msgstr "Zugang Hinzufügen"
 
 #, fuzzy
-msgid "edit phone"
-msgstr "Telefon"
+#~ msgid "edit phone"
+#~ msgstr "Telefon"
 
 #, fuzzy
-msgid "delete phone"
-msgstr "Telefon"
+#~ msgid "delete phone"
+#~ msgstr "Telefon"
 
 #, fuzzy
-msgid "Displaying phones {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying phones {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No phones to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No phones to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #, fuzzy
-msgid "MAC address"
-msgstr "Email-Adresse"
+#~ msgid "MAC address"
+#~ msgstr "Email-Adresse"
 
 #, fuzzy
-msgid "description"
-msgstr "Beschreibung"
+#~ msgid "description"
+#~ msgstr "Beschreibung"
 
 #, fuzzy
-msgid "current model"
-msgstr "Passende Updates"
+#~ msgid "current model"
+#~ msgstr "Passende Updates"
 
 #, fuzzy
-msgid "Current IP Address"
-msgstr "Passende Updates"
+#~ msgid "Current IP Address"
+#~ msgstr "Passende Updates"
 
 #, fuzzy
-msgid "time"
-msgstr "Zeit"
+#~ msgid "time"
+#~ msgstr "Zeit"
 
 #, fuzzy
-msgid "Users"
-msgstr "Benutzer"
+#~ msgid "Users"
+#~ msgstr "Benutzer"
 
 #, fuzzy
-msgid "web_language"
-msgstr "Sprache"
+#~ msgid "web_language"
+#~ msgstr "Sprache"
 
 #, fuzzy
-msgid "language"
-msgstr "Sprache"
+#~ msgid "language"
+#~ msgstr "Sprache"
 
 #, fuzzy
-msgid "number + name"
-msgstr "Tag-Name eingegeben"
+#~ msgid "number + name"
+#~ msgstr "Tag-Name eingegeben"
 
 #, fuzzy
-msgid "off"
-msgstr "offline"
+#~ msgid "off"
+#~ msgstr "offline"
 
 #, fuzzy
-msgid "add location"
-msgstr "Zugang Hinzufügen"
+#~ msgid "add location"
+#~ msgstr "Zugang Hinzufügen"
 
 #, fuzzy
-msgid "edit location"
-msgstr "Beschreibung editieren"
+#~ msgid "edit location"
+#~ msgstr "Beschreibung editieren"
 
 #, fuzzy
-msgid "Displaying location {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying location {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No location to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No location to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #, fuzzy
-msgid "Update Policy"
-msgstr "Aktualisiere"
+#~ msgid "Update Policy"
+#~ msgstr "Aktualisiere"
 
 #, fuzzy
-msgid "HTTP User"
-msgstr "Benutzer"
+#~ msgid "HTTP User"
+#~ msgstr "Benutzer"
 
 #, fuzzy
-msgid "Admin Mode Password"
-msgstr "Altes Passwort"
+#~ msgid "Admin Mode Password"
+#~ msgstr "Altes Passwort"
 
 #, fuzzy
-msgid "HTTP Password"
-msgstr "Passwort"
+#~ msgid "HTTP Password"
+#~ msgstr "Passwort"
 
 #, fuzzy
-msgid "edit setting"
-msgstr "Tag bearbeiten"
+#~ msgid "edit setting"
+#~ msgstr "Tag bearbeiten"
 
 #, fuzzy
-msgid "delete setting"
-msgstr "Lösche"
+#~ msgid "delete setting"
+#~ msgstr "Lösche"
 
 #, fuzzy
-msgid "Displaying settings {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying settings {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No settings to display"
-msgstr "Keine Tags vorhanden"
+#~ msgid "No settings to display"
+#~ msgstr "Keine Tags vorhanden"
 
 #, fuzzy
-msgid "delete sipPeer"
-msgstr "Diesen Filter löschen"
+#~ msgid "delete sipPeer"
+#~ msgstr "Diesen Filter löschen"
 
 #, fuzzy
-msgid "Displaying sipPeers {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying sipPeers {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No sipPeers to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No sipPeers to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #, fuzzy
-msgid "account code"
-msgstr "Zugang Hinzufügen"
+#~ msgid "account code"
+#~ msgstr "Zugang Hinzufügen"
 
 #, fuzzy
-msgid "default ip"
-msgstr "default note type"
+#~ msgid "default ip"
+#~ msgstr "default note type"
 
 #, fuzzy
-msgid "full contact"
-msgstr "Email Kontakt"
+#~ msgid "full contact"
+#~ msgstr "Email Kontakt"
 
 #, fuzzy
-msgid "mailbox"
-msgstr "Email"
+#~ msgid "mailbox"
+#~ msgstr "Email"
 
 #, fuzzy
-msgid "secret"
-msgstr "erstellt"
+#~ msgid "secret"
+#~ msgstr "erstellt"
 
 #, fuzzy
-msgid "type"
-msgstr "Typ"
+#~ msgid "type"
+#~ msgstr "Typ"
 
 #, fuzzy
-msgid "username"
-msgstr "Benutzername"
+#~ msgid "username"
+#~ msgstr "Benutzername"
 
 #, fuzzy
-msgid "ip address"
-msgstr "Email-Adresse"
+#~ msgid "ip address"
+#~ msgstr "Email-Adresse"
 
 #, fuzzy
-msgid "Secret"
-msgstr "erstellt"
+#~ msgid "Secret"
+#~ msgstr "erstellt"
 
 #, fuzzy
-msgid "From User"
-msgstr "Benutzer"
+#~ msgid "From User"
+#~ msgstr "Benutzer"
 
 #, fuzzy
-msgid "Full Contact"
-msgstr "Email Kontakt"
+#~ msgid "Full Contact"
+#~ msgstr "Email Kontakt"
 
 #, fuzzy
-msgid "Set Var"
-msgstr "Suchen"
+#~ msgid "Set Var"
+#~ msgstr "Suchen"
 
 #, fuzzy
-msgid "Auth User"
-msgstr "Benutzer"
+#~ msgid "Auth User"
+#~ msgstr "Benutzer"
 
 #, fuzzy
-msgid "add context"
-msgstr "Zugang Hinzufügen"
+#~ msgid "add context"
+#~ msgstr "Zugang Hinzufügen"
 
 #, fuzzy
-msgid "edit context"
-msgstr "Email Kontakt"
+#~ msgid "edit context"
+#~ msgstr "Email Kontakt"
 
 #, fuzzy
-msgid "delete context"
-msgstr "löschen"
+#~ msgid "delete context"
+#~ msgstr "löschen"
 
 #, fuzzy
-msgid "Displaying context {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying context {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No context to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No context to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #, fuzzy
-msgid "Displaying voicemail {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying voicemail {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No voicemail to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No voicemail to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #, fuzzy
-msgid "operator"
-msgstr "Wählen sie einen Operator"
+#~ msgid "operator"
+#~ msgstr "Wählen sie einen Operator"
 
 #, fuzzy
-msgid "forcename"
-msgstr "Umbenennen"
+#~ msgid "forcename"
+#~ msgstr "Umbenennen"
 
 #, fuzzy
-msgid "add meetme"
-msgstr "löschen"
+#~ msgid "add meetme"
+#~ msgstr "löschen"
 
 #, fuzzy
-msgid "delete meetme"
-msgstr "Bild löschen"
+#~ msgid "delete meetme"
+#~ msgstr "Bild löschen"
 
 #, fuzzy
-msgid "Displaying meetme {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying meetme {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No meetme to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No meetme to display"
+#~ msgstr "Keine Notizen vorhanden"
 
 #, fuzzy
-msgid "adminpin"
-msgstr "admin"
+#~ msgid "adminpin"
+#~ msgstr "admin"
 
 #, fuzzy
-msgid "Displaying myphones {0} - {1} of {2}"
-msgstr "Zeige Akivität {0} - {1} von {2}"
+#~ msgid "Displaying myphones {0} - {1} of {2}"
+#~ msgstr "Zeige Akivität {0} - {1} von {2}"
 
 #, fuzzy
-msgid "No myphones to display"
-msgstr "Keine Notizen vorhanden"
+#~ msgid "No myphones to display"
+#~ msgstr "Keine Notizen vorhanden"
 
-msgid "please select a container"
-msgstr "Bitte wählen sie einen Kontainer"
+#~ msgid "please select a container"
+#~ msgstr "Bitte wählen sie einen Kontainer"
 
-msgid "There Where Errors"
-msgstr "Es sind fehler aufgetreten"
+#~ msgid "There Where Errors"
+#~ msgstr "Es sind fehler aufgetreten"
 
-msgid "New"
-msgstr "Neu"
+#~ msgid "New"
+#~ msgstr "Neu"
 
-msgid "Do you really want to delete the"
-msgstr "Wirklich löschen:"
+#~ msgid "Do you really want to delete the"
+#~ msgstr "Wirklich löschen:"
 
-msgid "Save"
-msgstr "Speichern"
+#~ msgid "Save"
+#~ msgstr "Speichern"
 
-msgid "Close"
-msgstr "Schließen"
+#~ msgid "Close"
+#~ msgstr "Schließen"
 
-msgid "My"
-msgstr "Meine"
+#~ msgid "My"
+#~ msgstr "Meine"
 
-msgid "Language: "
-msgstr "Sprache:"
+#~ msgid "Language: "
+#~ msgstr "Sprache:"
 
-msgid "The selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Der ausgewählte Tag wird gelöscht und bei allen Einträgen entfernt"
-msgstr[1] "Die ausgewählten Tags werden gelöscht und bei allen Einträgen entfernt"
+#~ msgid "The selected tag will be deleted and disapear for all entries"
+#~ msgid_plural ""
+#~ "The selected tags will be removed and disapear for all entries"
+#~ msgstr[0] ""
+#~ "Der ausgewählte Tag wird gelöscht und bei allen Einträgen entfernt"
+#~ msgstr[1] ""
+#~ "Die ausgewählten Tags werden gelöscht und bei allen Einträgen entfernt"
 
-msgid "Note Type..."
-msgstr "Notiztyp"
+#~ msgid "Note Type..."
+#~ msgstr "Notiztyp"
 
-msgid "manage shared tags"
-msgstr "Shared Tags bearbeiten"
+#~ msgid "manage shared tags"
+#~ msgstr "Shared Tags bearbeiten"
 
-msgid "manage shared tags right description"
-msgstr "Erlaubt das Ändern/Hinzufügen/Löschen von Shared Tags"
-
+#~ msgid "manage shared tags right description"
+#~ msgstr "Erlaubt das Ändern/Hinzufügen/Löschen von Shared Tags"

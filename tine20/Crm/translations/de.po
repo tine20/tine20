@@ -503,53 +503,53 @@ msgstr "akzeptiert"
 msgid "lost"
 msgstr "verloren"
 
-msgid "folder"
-msgstr "Ordner"
+#~ msgid "folder"
+#~ msgstr "Ordner"
 
-msgid "Enter searchfilter"
-msgstr "Suchfilter eingeben"
+#~ msgid "Enter searchfilter"
+#~ msgstr "Suchfilter eingeben"
 
-msgid "leadstate"
-msgstr "Status"
+#~ msgid "leadstate"
+#~ msgstr "Status"
 
-msgid "Search Contacts"
-msgstr "Kontakte suchen"
+#~ msgid "Search Contacts"
+#~ msgstr "Kontakte suchen"
 
-msgid "Add existing contact"
-msgstr "Existierenden Kontakt hinzufügen"
+#~ msgid "Add existing contact"
+#~ msgstr "Existierenden Kontakt hinzufügen"
 
-msgid "Add existing contact to lead"
-msgstr "Existierenden Kontakt hinzufügen"
+#~ msgid "Add existing contact to lead"
+#~ msgstr "Existierenden Kontakt hinzufügen"
 
-msgid "Add contact"
-msgstr "Kontakt hinzufügen"
+#~ msgid "Add contact"
+#~ msgstr "Kontakt hinzufügen"
 
-msgid "Organisation"
-msgstr "Organisation"
+#~ msgid "Organisation"
+#~ msgstr "Organisation"
 
-msgid "Lead updated"
-msgstr "Hinweis aktualisiert"
+#~ msgid "Lead updated"
+#~ msgstr "Hinweis aktualisiert"
 
-msgid "Lead added"
-msgstr "Hinweis hinzugefügt"
+#~ msgid "Lead added"
+#~ msgstr "Hinweis hinzugefügt"
 
-msgid "Add responsible"
-msgstr "Verantwortlichen hinzufügen"
+#~ msgid "Add responsible"
+#~ msgstr "Verantwortlichen hinzufügen"
 
-msgid "Add new responsible contact"
-msgstr "Neuen Verantwortlichen hinzufügen"
+#~ msgid "Add new responsible contact"
+#~ msgstr "Neuen Verantwortlichen hinzufügen"
 
-msgid "Add customer"
-msgstr "Kunden hinzufügen"
+#~ msgid "Add customer"
+#~ msgstr "Kunden hinzufügen"
 
-msgid "Add partner"
-msgstr "Partner hinzufügen"
+#~ msgid "Add partner"
+#~ msgstr "Partner hinzufügen"
 
-msgid "Add new partner contact"
-msgstr "Neuen Partner hinzufügen"
+#~ msgid "Add new partner contact"
+#~ msgstr "Neuen Partner hinzufügen"
 
-msgid "History"
-msgstr "Aktivitäten"
+#~ msgid "History"
+#~ msgstr "Aktivitäten"
 
-msgid "Could not save task."
-msgstr "Aufgabe konnte nicht gespeichert werden."
+#~ msgid "Could not save task."
+#~ msgstr "Aufgabe konnte nicht gespeichert werden."

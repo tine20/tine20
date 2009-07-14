@@ -111,7 +111,7 @@ msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ExceptionDialog.js:54 js/MainScreen.js:430
+#: js/ExceptionDialog.js:54 js/MainScreen.js:436
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:363
 #: js/widgets/dialog/EditDialog.js:173
@@ -200,7 +200,7 @@ msgstr ""
 msgid "Login successful. Loading Tine 2.0..."
 msgstr ""
 
-#: js/Login.js:138 js/MainScreen.js:515
+#: js/Login.js:138 js/MainScreen.js:521
 msgid "Please wait!"
 msgstr ""
 
@@ -225,7 +225,7 @@ msgstr ""
 msgid "User: {0}"
 msgstr ""
 
-#: js/MainScreen.js:195 js/MainScreen.js:363 js/MainScreen.js:378
+#: js/MainScreen.js:195 js/MainScreen.js:369 js/MainScreen.js:384
 msgid "About Tine 2.0"
 msgstr ""
 
@@ -245,71 +245,71 @@ msgstr ""
 msgid "Logout from Tine 2.0"
 msgstr ""
 
-#: js/MainScreen.js:394
+#: js/MainScreen.js:400
 msgid "Change Password For \"{0}\""
 msgstr ""
 
-#: js/MainScreen.js:418
+#: js/MainScreen.js:424
 msgid "Old Password"
 msgstr ""
 
-#: js/MainScreen.js:422
+#: js/MainScreen.js:428
 msgid "New Password"
 msgstr ""
 
-#: js/MainScreen.js:426
+#: js/MainScreen.js:432
 msgid "Repeat new Password"
 msgstr ""
 
-#: js/MainScreen.js:436 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:442 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:372
 #: js/widgets/dialog/EditDialog.js:156
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr ""
 
-#: js/MainScreen.js:445
+#: js/MainScreen.js:451
 msgid "Please Wait!"
 msgstr ""
 
-#: js/MainScreen.js:446
+#: js/MainScreen.js:452
 msgid "changing password..."
 msgstr ""
 
-#: js/MainScreen.js:457
+#: js/MainScreen.js:463
 msgid "Success"
 msgstr ""
 
-#: js/MainScreen.js:458
+#: js/MainScreen.js:464
 msgid "Your password has been changed."
 msgstr ""
 
-#: js/MainScreen.js:464 js/MainScreen.js:474
+#: js/MainScreen.js:470 js/MainScreen.js:480
 msgid "Failure"
 msgstr ""
 
-#: js/MainScreen.js:475
+#: js/MainScreen.js:481
 msgid "The new passwords mismatch, please correct them."
 msgstr ""
 
-#: js/MainScreen.js:493
+#: js/MainScreen.js:499
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 msgstr ""
 
-#: js/MainScreen.js:513 js/widgets/app/GridPanel.js:544
+#: js/MainScreen.js:519 js/widgets/app/GridPanel.js:544
 #: js/widgets/dialog/EditDialog.js:419
 #: js/widgets/grid/PersistentFilterPicker.js:123
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr ""
 
-#: js/MainScreen.js:513
+#: js/MainScreen.js:519
 msgid "Are you sure you want to logout?"
 msgstr ""
 
-#: js/MainScreen.js:515
+#: js/MainScreen.js:521
 msgid "Logging you out..."
 msgstr ""
 
@@ -336,16 +336,27 @@ msgid "Sorry, you are not permitted to perform this action"
 msgstr ""
 
 #: js/tineInit.js:307
-msgid "Concurrent Updates"
+msgid "Not Found"
 msgstr ""
 
 #: js/tineInit.js:308
+msgid ""
+"Sorry, your requested could not be completed because the required data could "
+"not be found. In most cases this means that someone already deleted the "
+"data. Please refresh your current view."
+msgstr ""
+
+#: js/tineInit.js:317
+msgid "Concurrent Updates"
+msgstr ""
+
+#: js/tineInit.js:318
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr ""
 
-#: js/tineInit.js:554
+#: js/tineInit.js:568
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator."
 msgstr ""
@@ -1208,19 +1219,19 @@ msgstr ""
 msgid "Reload {0}"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:39 js/widgets/VersionCheck.js:48
+#: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
 msgid "New version of Tine 2.0 available"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:40 js/widgets/VersionCheck.js:49
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr ""
 
-#: js/widgets/VersionCheck.js:41
+#: js/widgets/VersionCheck.js:45
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:50
+#: js/widgets/VersionCheck.js:54
 msgid "Please consider updating!"
 msgstr ""
 
