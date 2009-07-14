@@ -240,6 +240,7 @@ class Tinebase_Export_Ods extends OpenDocument_Document
             // @todo remove that when getMultiple() fetches the custom fields as well
             if (isset($_config['customFields']) && $_config['customFields']) {
                 $record = $recordBackend->get($record->getId());
+                Tinebase_User::getInstance()->resolveUsers($record, 'account_id');
             }
             
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
