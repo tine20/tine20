@@ -149,8 +149,8 @@ msgid "New Event"
 msgstr "New Event"
 
 #: js/DaysView.js:85
-msgid "{0} the {1}. of {2}"
-msgstr "{0} the {1}. of {2}"
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, the {1}. of {2}"
 
 #: js/EventEditDialog.js:91
 msgid "Summary"

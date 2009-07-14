@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-07-14 12:26+0100\n"
+"PO-Revision-Date: 2009-07-14 12:54+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -159,8 +159,8 @@ msgid "New Event"
 msgstr "Neuer Termin"
 
 #: js/DaysView.js:85
-msgid "{0} the {1}. of {2}"
-msgstr "{0} der {1}. {2}"
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, der {1}. {2}"
 
 #: js/EventEditDialog.js:91
 msgid "Summary"
