@@ -667,18 +667,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     } */
     
     /**
-     * return contentfilter class
+     * return contentfilter array
      * 
-     * @param $_folderFilter
      * @param $_filterType
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    protected function _getContentFilter($_folderFilter, $_filterType)
+    protected function _getContentFilter($_filterType)
     {
-        $folderFilter = $_folderFilter;
-        
         // exclude recur exceptions
-        $folderFilter[] = array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL);
+        $filterArray[] = array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL);
         
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
@@ -695,9 +692,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $from = Zend_Date::now()->subMonth(6);
                     break;
             }
+            // next 10 years
             $to = Zend_Date::now()->addYear(10);
             // add period filter
-            $folderFilter[] = array(
+            $filterArray[] = array(
                 'field'    => 'period',
                 'operator' => 'within',
                 'value'    => array(
@@ -706,11 +704,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             ));
         }
         
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " content filter $from " . print_r($folderFilter, true));
-        
-        $contentFilter = parent::_getContentFilter($folderFilter, $_filterType);
-        
-        return $contentFilter;
+        return $filterArray;
     }
         
     /**
@@ -733,5 +727,42 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     public function packTimezoneInfo($_timezoneInfo) 
     {
         return ActiveSync_TimezoneGuesser::packTimezoneInfo($_timezoneInfo);
+    }
+        
+    /**
+     * return list of supported folders for this backend
+     *
+     * @return array
+     */
+    public function getFolders()
+    {
+        $folders = array();
+
+        // only the IPhone supports multiple folders for calendars currently
+        if(strtolower($this->_device->devicetype) == 'iphone') {
+        
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Container::GRANT_READ);
+            foreach ($containers as $container) {
+                $folders[$container->id] = array(
+                    'folderId'      => $container->id,
+                    'parentId'      => 0,
+                    'displayName'   => $container->name,
+                    'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
+                );
+            }
+            
+        } else {
+            
+            $folders[$this->_specialFolderName] = array(
+                'folderId'      => $this->_specialFolderName,
+                'parentId'      => 0,
+                'displayName'   => $this->_applicationName,
+                'type'          => $this->_defaultFolderType
+            );
+            
+        }
+        // we ignore the folders of others users for now
+        
+        return $folders;
     }
 }

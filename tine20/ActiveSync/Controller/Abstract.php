@@ -329,16 +329,18 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function getChanged($_folderId, $_startTimeStamp, $_endTimeStamp = NULL)
     {
+        $filterArray   = $this->_getFolderFilter($_folderId);
+        $filterArray   = array_merge($filterArray, $this->_getContentFilter(0));
+        
+        
         $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof Zend_Date) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
-        $filterArray  = $this->_getFolderFilter($_folderId);
         $filterArray[] = array(
             'field'     => 'last_modified_time',
             'operator'  => 'after',
             'value'     => $startTimeStamp
         );
-        
         if($endTimeStamp !== NULL) {
             $filterArray[] = array(
                 'field'     => 'last_modified_time',
@@ -346,7 +348,10 @@ abstract class ActiveSync_Controller_Abstract
                 'value'     => $endTimeStamp
             );
         }
-
+        
+        
+        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter:  " . print_r($filterArray, true));
+        
         $filter = new $this->_contentFilterClass($filterArray);
 
         $result = $this->_contentController->search($filter, NULL, false, true);
@@ -363,27 +368,25 @@ abstract class ActiveSync_Controller_Abstract
      */
     public function getServerEntries($_folderId, $_filterType)
     {
-        $folderFilter  = $this->_getFolderFilter($_folderId);
+        $filterArray  = $this->_getFolderFilter($_folderId);
+        $filterArray  = array_merge($filterArray, $this->_getContentFilter($_filterType));
         
-        $contentFilter = $this->_getContentFilter($folderFilter, $_filterType);
+        $filter = new $this->_contentFilterClass($filterArray);
         
-        $foundEntries  = $this->_contentController->search($contentFilter, NULL, false, true);
+        $result      = $this->_contentController->search($filter, NULL, false, true);
         
-        return $foundEntries;
+        return $result;
     }
 
     /**
-     * return contentfilter class
+     * return contentfilter array
      * 
-     * @param array $_folderFilter
      * @param int $_filterType
-     * @return Tinebase_Model_Filter_FilterGroup
+     * @return array
      */
-    protected function _getContentFilter($_folderFilter, $_filterType)
+    protected function _getContentFilter($_filterType)
     {
-        $contentFilter = new $this->_contentFilterClass($_folderFilter);
-        
-        return $contentFilter;
+        return array();
     }
     
     /**
