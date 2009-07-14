@@ -82,9 +82,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     newEventSummary: 'New Event',
     /**
      * @cfg {String} dayFormatString
-     * _('{0} the {1}. of {2}')
+     * _('{0}, the {1}. of {2}')
      */
-    dayFormatString: '{0} the {1}. of {2}',
+    dayFormatString: '{0}, the {1}. of {2}',
     /**
      * @cfg {Number} timeGranularity
      * granularity of timegrid in minutes
