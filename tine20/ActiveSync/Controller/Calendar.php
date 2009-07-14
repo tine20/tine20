@@ -234,7 +234,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         break;
                 }
             }
-        }   
+        }
+           
+        if(!empty($data->alarms)) {
+            $alarm = $data->alarms->getFirstRecord();
+            if($alarm instanceof Tinebase_Model_Alarm) {
+                $start = $data->dtstart;
+                $reminder = $alarm->alarm_time;
+                $reminderMinutes = ($start->getTimestamp() - $reminder->getTimestamp()) / 60;
+                $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Reminder', $reminderMinutes));
+            }
+        }
+                
         
         if(!empty($data->rrule)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar rrule " . $data->rrule);
@@ -319,7 +330,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 }
             }
         }
-                
+        
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MeetingStatus', 1));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'BusyStatus', 2));
