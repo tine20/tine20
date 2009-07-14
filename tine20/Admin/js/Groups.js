@@ -192,7 +192,7 @@ Tine.Admin.Groups.Main = {
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 10 },
+            { resizable: true, id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 10, hidden: true },
             { resizable: true, id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
             { resizable: true, id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' }
         ]);
