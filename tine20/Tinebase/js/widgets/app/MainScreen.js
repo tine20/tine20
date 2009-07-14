@@ -86,7 +86,10 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
         }
         
         if (this.filterPanel) {
-            var containersName = this.app.i18n.n_hidden(this.treePanel.recordClass.getMeta('containerName'), this.treePanel.recordClass.getMeta('containersName'), 50);
+            var containersName = 'not found';
+            if (this.treePanel.recordClass) {
+                var containersName = this.app.i18n.n_hidden(this.treePanel.recordClass.getMeta('containerName'), this.treePanel.recordClass.getMeta('containersName'), 50);
+            }
             
             this.leftTabPanel = new Ext.TabPanel({
                 border: false,
