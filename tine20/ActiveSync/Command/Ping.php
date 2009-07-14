@@ -79,7 +79,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             
             if(isset($xml->Folders->Folder)) {
                 foreach ($xml->Folders->Folder as $folderXml) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " folderType: " . print_r($folderXml, true));
+                    #Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " folderType: " . print_r($folderXml, true));
                     #$folderBackend = $this->_backend->factory((string)$folderXml->Class);
                     try {
                         // does the folder exist?
