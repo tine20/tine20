@@ -270,33 +270,31 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2009-07-20 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
-    /* postpone
     public function testCalcMonthlyByMonthDayStartAllDay()
     {
     	$event = new Calendar_Model_Event(array(
             'uid'             => Tinebase_Record_Abstract::generateUID(),
             'summary'         => 'testCalcMonthlyByDayStart',
-            'dtstart'         => '2009-07-10 00:00:00',
-            'dtend'           => '2009-07-10 23:59:59',
+            'dtstart'         => '2009-07-14 22:00:00',
+            'dtend'           => '2009-07-15 21:59:00',
     	    'is_all_day_event' => true,
-            'rrule'           => 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=20',
+            'rrule'           => 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=15',
             'originator_tz'   => 'Europe/Berlin',
             'editGrant'       => true,
         ));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-07-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-08-31 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Zend_Date('2009-06-28 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-09-06 21:59:59', Tinebase_Record_Abstract::ISO8601LONG);
         
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
-        print_r($recurSet->toArray());
-        //$this->assertEquals(2, count($recurSet));
-        //$this->assertEquals('2009-07-20 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals(1, count($recurSet));
+        $this->assertEquals('2009-08-14 22:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-08-15 21:59:00', $recurSet[0]->dtend->get(Tinebase_Record_Abstract::ISO8601LONG));
         
     }
-    */
     
     public function testCalcMonthlyByDay()
     {

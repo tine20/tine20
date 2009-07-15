@@ -389,9 +389,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     protected static function _computeRecurMonthlyByMonthDay($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
     {
+    	$eventInOrganizerTZ = clone $_event;
+    	$eventInOrganizerTZ->setTimezone($_event->originator_tz);
+    	
         // NOTE: non existing dates will be discarded (e.g. 31. Feb.)
         //       for correct computations we deal with virtual dates, represented as arrays
-        $computationStartDateArray = self::date2array($_event->dtstart);
+        $computationStartDateArray = self::date2array($eventInOrganizerTZ->dtstart);
         // adopt startdate if rrule monthday != dtstart monthday
         // in this case, the first instance is not the base event!
         if ($_rrule->bymonthday != $computationStartDateArray['day']) {
@@ -402,33 +405,28 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
         
         // if dtstart is before $_from, we compute the offset where to start our calculations
-        if ($_event->dtstart->isEarlier($_from)) {
-            $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
+        if ($eventInOrganizerTZ->dtstart->isEarlier($_from)) {
+            $computationOffsetMonth = self::getMonthDiff($eventInOrganizerTZ->dtend, $_from);
             // NOTE: $computationOffsetMonth must be multiple of interval!
             $computationOffsetMonth = floor($computationOffsetMonth/$_rrule->interval) * $_rrule->interval;
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth - $_rrule->interval);
         }
         
-        $eventLength = clone $_event->dtend;
-        $eventLength->sub($_event->dtstart);
+        $eventLength = clone $eventInOrganizerTZ->dtend;
+        $eventLength->sub($eventInOrganizerTZ->dtstart);
         
-        $originatorsOriginalDtstart = clone $_event->dtstart;
-        $originatorsOriginalDtstart->setTimezone($_event->originator_tz);
+        $originatorsOriginalDtstart = clone $eventInOrganizerTZ->dtstart;
         
         while(true) {
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $_rrule->interval);
-            //echo self::array2string($computationStartDateArray) . "\n";
-            $recurEvent = self::cloneEvent($_event);
-            $recurEvent->dtstart = self::array2date($computationStartDateArray);
-            
-            $originatorsDtstart = clone $recurEvent->dtstart;
-            $originatorsDtstart->setTimezone($_event->originator_tz);
-            $recurEvent->dtstart->add($originatorsOriginalDtstart->get(Zend_Date::DAYLIGHT) - $originatorsDtstart->get(Zend_Date::DAYLIGHT), Zend_Date::HOUR);
-            //$recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
+            $recurEvent = self::cloneEvent($eventInOrganizerTZ);
+            $recurEvent->dtstart = self::array2date($computationStartDateArray, $eventInOrganizerTZ->originator_tz);
             
             // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
             $recurEvent->dtend = clone $recurEvent->dtstart;
             $recurEvent->dtend->add($eventLength);
+            
+            $recurEvent->setTimezone('UTC');
             
             // skip non existing dates
             if (! Zend_Date::isDate(self::array2string($computationStartDateArray), Tinebase_Record_Abstract::ISO8601LONG)) {
@@ -610,11 +608,16 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * converts date array to Zend_Date
      *
      * @param  array $_dateArray
+     * @param  string $_timezone
      * @return Zend_Date
      */
-    public static function array2date(array $_dateArray)
+    public static function array2date(array $_dateArray, $_timezone='UTC')
     {
-            return new Zend_Date(mktime($_dateArray['hour'], $_dateArray['minute'], $_dateArray['second'], $_dateArray['month'], $_dateArray['day'], $_dateArray['year']), Zend_Date::TIMESTAMP);
+    	date_default_timezone_set($_timezone);
+        $date = new Zend_Date(mktime($_dateArray['hour'], $_dateArray['minute'], $_dateArray['second'], $_dateArray['month'], $_dateArray['day'], $_dateArray['year']), Zend_Date::TIMESTAMP);
+        date_default_timezone_set('UTC');
+        
+        return $date;
     }
     
     /**
