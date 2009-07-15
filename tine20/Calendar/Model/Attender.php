@@ -162,7 +162,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * @param  Calendar_Model_Event $_event
      * @param  iteratable           $_emails
      * @param  bool                 $_ImplicitAddMissingContacts
-     * @return Calendar_Model_Attender
+     * @return Tinebase_Record_RecordSet
      */
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_ImplicitAddMissingContacts = TRUE)
     {
@@ -250,7 +250,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             	
             	$contactId = NULL;
             }
+            
+            // finally add to attendee
+            $currentAttendee->addRecord(new Calendar_Model_Attender(array(
+                'user_id'   => $contactId,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            )));
         }
+        
+        return $currentAttendee;
     }
     
     /**
