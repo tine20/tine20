@@ -427,11 +427,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             #$event->alarms = array($alarm);
         }
         
-        // decode timezone data
-        if(isset($xmlData->Timezone)) {
-            $timezoneData = $this->unpackTimezoneInfo((string)$xmlData->Timezone);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . print_r($timezoneData, true));
-        }
+//@todo get timezone from ActiveSync_TimezoneGuesser
+//        // decode timezone data
+//        if(isset($xmlData->Timezone)) {
+//            $timezoneData = $this->unpackTimezoneInfo((string)$xmlData->Timezone);
+//            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . print_r($timezoneData, true));
+//        }
         
         // handle attendees
         $addressbook = Addressbook_Controller_Contact::getInstance();
@@ -725,28 +726,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         return $filterArray;
-    }
-        
-    /**
-     * decode timezone info from activesync
-     * 
-     * @param string $_packedTimezoneInfo the packed timezone info
-     * @return array
-     */
-    public function unpackTimezoneInfo($_packedTimezoneInfo)
-    {
-    	return ActiveSync_TimezoneGuesser::unpackTimezoneInfo($_packedTimezoneInfo);
-    }
-    
-    /**
-     * encode timezone info to activesync
-     * 
-     * @param array $_timezoneInfo
-     * @return string
-     */
-    public function packTimezoneInfo($_timezoneInfo) 
-    {
-        return ActiveSync_TimezoneGuesser::packTimezoneInfo($_timezoneInfo);
     }
         
     /**

@@ -15,11 +15,12 @@
 class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
 {
 	
+	protected $_uit = null;
+	
 	protected $_fixtures = array(
-           2009 => array(
                'Europe/Berlin' => array(                                                                                                                            
                     'bias' => -60,
-                    'standardName' => null,
+                    'standardName' => '',
                     'standardYear' => 0,
                     'standardMonth' => 10,
                     'standardDayOfWeek' => 0,
@@ -29,7 +30,7 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
                     'standardSecond' => 0,
                     'standardMilliseconds' => 0,
                     'standardBias' => 0,
-                    'daylightName' => null,
+                    'daylightName' => '',
                     'daylightYear' => 0,
                     'daylightMonth' => 3,
                     'daylightDayOfWeek' => 0,
@@ -42,7 +43,7 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
                ),
                'Europe/Berlin' => array( //fake test with standardYear and daylightYear => will evaluate the specified year when guessing the timezone
                     'bias' => -60,
-                    'standardName' => null,
+                    'standardName' => '',
                     'standardYear' => 2009, 
                     'standardMonth' => 10,
                     'standardDayOfWeek' => 0,
@@ -52,7 +53,7 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
                     'standardSecond' => 0,
                     'standardMilliseconds' => 0,
                     'standardBias' => 0,
-                    'daylightName' => null,
+                    'daylightName' => '',
                     'daylightYear' => 2009,
                     'daylightMonth' => 3,
                     'daylightDayOfWeek' => 0,
@@ -63,32 +64,9 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
                     'daylightMilliseconds' => 0,
                     'daylightBias' => -60                                                         
                ),
-//             'Asia/Tehran' => array(
-//                  'bias' => -210,
-//                    'standardName' => null,
-//                    'standardYear' => 0,
-//                    'standardMonth' => 9,
-//                    'standardDayOfWeek' => 2,
-//                    'standardDay' => 4,
-//                    'standardHour' => 2,
-//                    'standardMinute' => 0,
-//                    'standardSecond' => 0,
-//                    'standardMilliseconds' => 0,
-//                    'standardBias' => 0,
-//                    'daylightName' => null,
-//                    'daylightYear' => 0,
-//                    'daylightMonth' => 3,
-//                    'daylightDayOfWeek' => 0,
-//                    'daylightDay' => 1,
-//                    'daylightHour' => 2,
-//                    'daylightMinute' => 0,
-//                    'daylightSecond' => 0,
-//                    'daylightMilliseconds' => 0,
-//                    'daylightBias' => -60   
-//             ),
                'US/Arizona' => array(
                     'bias' => 420,
-                    'standardName' => null,
+                    'standardName' => '',
                     'standardYear' => 0,
                     'standardMonth' => 0,
                     'standardDayOfWeek' => 0,
@@ -98,7 +76,7 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
                     'standardSecond' => 0,
                     'standardMilliseconds' => 0,
                     'standardBias' => 0,
-                    'daylightName' => null,
+                    'daylightName' => '',
                     'daylightYear' => 0,
                     'daylightMonth' => 0,
                     'daylightDayOfWeek' => 0,
@@ -108,31 +86,6 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
                     'daylightSecond' => 0,
                     'daylightMilliseconds' => 0,
                     'daylightBias' => 0  
-               )
-           ),
-           2010 => array(
-               'Europe/Berlin' => array(                                                                                                                            
-                    'bias' => -60,
-                    'standardName' => null,
-                    'standardYear' => 0,
-                    'standardMonth' => 10,
-                    'standardDayOfWeek' => 0,
-                    'standardDay' => 5,
-                    'standardHour' => 3,
-                    'standardMinute' => 0,
-                    'standardSecond' => 0,
-                    'standardMilliseconds' => 0,
-                    'standardBias' => 0,
-                    'daylightName' => null,
-                    'daylightYear' => 0,
-                    'daylightMonth' => 3,
-                    'daylightDayOfWeek' => 0,
-                    'daylightDay' => 5,
-                    'daylightHour' => 2,
-                    'daylightMinute' => 0,
-                    'daylightSecond' => 0,
-                    'daylightMilliseconds' => 0,
-                    'daylightBias' => -60                                                         
                ),
 //             'Asia/Tehran' => array(
 //                  'bias' => -210,
@@ -157,54 +110,41 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
 //                    'daylightMilliseconds' => 0,
 //                    'daylightBias' => -60   
 //             ),
-               'US/Arizona' => array(
-                    'bias' => 420,
-                    'standardName' => null,
-                    'standardYear' => 0,
-                    'standardMonth' => 0,
-                    'standardDayOfWeek' => 0,
-                    'standardDay' => 0,
-                    'standardHour' => 0,
-                    'standardMinute' => 0,
-                    'standardSecond' => 0,
-                    'standardMilliseconds' => 0,
-                    'standardBias' => 0,
-                    'daylightName' => null,
-                    'daylightYear' => 0,
-                    'daylightMonth' => 0,
-                    'daylightDayOfWeek' => 0,
-                    'daylightDay' => 0,
-                    'daylightHour' => 0,
-                    'daylightMinute' => 0,
-                    'daylightSecond' => 0,
-                    'daylightMilliseconds' => 0,
-                    'daylightBias' => 0  
-               )
-           )
         );
         
-    protected $_datesToTest = array(
-       '%d-01-01',
-       '%d-12-31',
-    );
+    protected $_packedFixtrues = array(
+        'Europe/Berlin' => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==',
+        'US/Arizona'    => 'pAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
+//        'Asia/Baghdad' => 'TP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAABAAMAAAAAAAAAxP///w==',
+//        'Asia/Tehran' => 'Lv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAAgAEAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAABAAIAAAAAAAAAxP///w==',
+//        'America/Sao_Paulo' => 'tAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAADAAIAAAAAAAAAxP///w==',
+         );
     
     public function setUp()
     {
-    	$this->uit = new ActiveSync_TimezoneGuesser();
+    	$this->_uit = new ActiveSync_TimezoneGuesser();
+    }
+        
+    public function testGetPackedStringForTimezone()
+    {
+         foreach ($this->_packedFixtrues as $timezoneIdentifier => $packedString) {
+            $this->assertEquals($packedString, $this->_uit->getPackedTimezoneInfoForTimezone($timezoneIdentifier), "Testing for timezone $timezoneIdentifier");
+        }
+    }
+    
+    public function testCachedResults()
+    {
+    	$this->_uit->setCache(Tinebase_Core::get('cache'));
+    	$this->testActiveSyncTimezoneGuesser();
+    	$this->testGetPackedStringForTimezone();
+    	$this->_uit->setCache(null);
     }
 
     public function testActiveSyncTimezoneGuesser()
     {       
-        foreach ($this->_fixtures as $year => $timezonesToTest) {
-            foreach ($timezonesToTest as $timezoneIdentifier => $offsets) {
-                foreach ($this->_datesToTest as $dateToTest) {
-                    $dateToTest = sprintf($dateToTest, $year);
-                    $this->uit->reset($offsets, $dateToTest);
-                    $this->assertContains($timezoneIdentifier, $this->uit->guessTimezones(), "Testing date $dateToTest");
-                }
-            }
-        }
-        
+        foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
+            $this->assertContains($timezoneIdentifier, $this->_uit->getTimezonesForOffsets($offsets));
+        }        
     }
     
     public function testInvalidArgumentException()
@@ -235,32 +175,22 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
                         'daylightBias' => 0
                    );
 
-        $this->uit->reset(null, $offsets);
+        $this->_uit->getTimezonesForOffsets($offsets);
 
     }
 
     public function testActiveSyncTimezoneGuesserWithPackedStrings()
-    {
-        $packedFixtrues = array(
-               'Europe/Berlin' => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==',
-//               'Asia/Baghdad' => 'TP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAABAAMAAAAAAAAAxP///w==',
-//               'Asia/Tehran' => 'Lv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAAgAEAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAABAAIAAAAAAAAAxP///w==',
-//               'America/Sao_Paulo' => 'tAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAADAAIAAAAAAAAAxP///w==',
-           );
-        
-        foreach ($packedFixtrues as $timezoneIdentifier => $packedOffsets) {
-            $this->uit->reset($packedOffsets);
-            $this->assertContains($timezoneIdentifier, $this->uit->guessTimezones());
+    {       
+        foreach ($this->_packedFixtrues as $timezoneIdentifier => $packedTimezoneInfo) {
+            $this->assertContains($timezoneIdentifier, $this->_uit->getTimezonesForPackedTimezoneInfo($packedTimezoneInfo));
         }
     }
     
     public function testActiveSyncTimezoneGuesserWithExpectedTimezoneOption()
     {
-        $timezonesToTest = $this->_fixtures[2009];
-        foreach ($timezonesToTest as $timezoneIdentifier => $offsets) {
-            $this->uit->reset($offsets);
-            $this->uit->setExpectedTimezone($timezoneIdentifier);
-            $matchedTimezones = $this->uit->guessTimezones();
+        foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
+            $this->_uit->setExpectedTimezone($timezoneIdentifier);
+            $matchedTimezones = $this->_uit->getTimezonesForOffsets($offsets);
             $this->assertContains($timezoneIdentifier, $matchedTimezones);
             $this->assertEquals($timezoneIdentifier, $matchedTimezones[0]);
         }
@@ -292,11 +222,9 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
 	                    'daylightBias' => 8
                    );
 
-        $this->uit->reset($offsets);
-        $matchedTimezones = $this->uit->guessTimezones();
+        $matchedTimezones = $this->_uit->getTimezonesForOffsets($offsets);
         $this->assertTrue(is_array($matchedTimezones));
         $this->assertTrue(count($matchedTimezones) === 0);
     }
-    
+
 }
-?>

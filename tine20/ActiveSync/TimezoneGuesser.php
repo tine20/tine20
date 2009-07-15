@@ -80,23 +80,8 @@ class ActiveSync_TimezoneGuesser {
      * @param String | int      $_startDate * @param string | array $_offsets [{@see _setStartDate()}]
      * @return unknown_type
      */
-	public function __construct($_offsets = null, $_startDate = null)
+	public function __construct()
 	{
-		$this->reset($_offsets, $_startDate);
-	}
-	
-	/**
-	 * Set object properties {@see $_offsets} and {@see $_startDate}.
-	 * 
-     * @param String | array    $_offsets [{@see _setOffsets()}] 
-     * @param String | int      $_startDate 
-	 * @return void
-	 */
-	public function reset($_offsets = null, $_startDate = null)
-	{
-		$this->_setOffsets($_offsets);
-		$this->_setStartDate($_startDate);
-		$this->_setDefaultStartDateIfEmpty();
 	}
 	
 	/**
@@ -119,185 +104,23 @@ class ActiveSync_TimezoneGuesser {
     public function setCache($_value) {
         $this->_cache = $_value;
     }
-    
+	
     /**
-     * Validate and set offsets
+     * Unpacks {@param $_packedTimezoneInfo} using {@see unpackTimezoneInfo} and then
+     * calls {@see getTimezonesForOffsets} with the unpacked timezone info
      * 
-     * @param array|string $_value [if a string is provided then it will be unpacked using {@see unpackTimezoneInfo}]
+     * @param String $_packedTimezoneInfo
+     * @return array
      * 
-     * @return unknown_type
      */
-    protected function _setOffsets($_value)
+    public function getTimezonesForPackedTimezoneInfo($_packedTimezoneInfo)
     {
-    	if (is_string($_value)) {
-    		$_value = self::unpackTimezoneInfo($_value);
-    	}
-    	
-        //validate $_value
-        if ((!empty($_value['standardMonth']) || !empty($_value['standardDay']) || !empty($_value['daylightMonth']) || !empty($_value['daylightDay'])) &&
-            (empty($_value['standardMonth']) || empty($_value['standardDay']) || empty($_value['daylightMonth']) || empty($_value['daylightDay']))       
-            ) {
-              throw new Tinebase_Exception_InvalidArgument('It is not possible not set standard offsets without setting daylight offsets and vice versa');
-        }
-
-        $this->_offsets = $_value;
+    	$offsets = $this->_unpackTimezoneInfo($_packedTimezoneInfo);
+    	return $this->getTimezonesForOffsets($offsets);
     }
     
     /**
-     * Parse and set object property {@see $_startDate}
-     * 
-     * @param String | int      $_startDate
-     * @return void
-     */
-    protected function _setStartDate($_startDate)
-    {
-        if (empty($_startDate)) {
-            $this->_startDate = null;
-            return;
-        }
-
-        $startDateParsed = array();
-        if (is_string($_startDate)) {
-            $startDateParsed['string'] = $_startDate;
-            $startDateParsed['ts']     = strtotime($_startDate);
-        } elseif (is_int($_startDate)) {
-            $startDateParsed['ts']     = $_startDate;
-            $startDateParsed['string'] = strftime('%F', $_startDate);
-        }
-        else {
-            throw new Tinebase_Exception_InvalidArgument('$startDate Parameter should be either a Timestamp or a Datestring parseable by strtotime.');
-        }
-        $startDateParsed['object'] = new DateTime($startDateParsed['string']);
-        
-        $startDateParsed = array_merge($startDateParsed, getdate($startDateParsed['ts']));
-        
-        $this->_startDate = $startDateParsed;
-    }
-    
-    /**
-     * Set default value for object property {@see $_startdate} if it is not set yet.
-     * Tries to guewss the correct startDate depending on object property {@see $_offsets} and
-     * falls back to current date. 
-     *  
-     * @return void
-     */
-    protected function _setDefaultStartDateIfEmpty()
-    {
-    	if (!empty($this->_startDate)) {
-    		return;
-    	}
-    	
-    	if (!empty($this->_offsets['standardYear'])) {
-    		$this->_setStartDate($this->_offsets['standardYear'].'-01-01');
-    	}
-    	else {
-    		$this->_setStartDate(time());
-    	}
-    }
-	
-    /**
-     * Returns true if {@param $_value} equals object property {@see $_expectedTimezone}
-     * 
-     * @param String $_value
-     * @return bool
-     */
-	protected function _isExpectedTimezone($_value)
-	{
-	    if ($_value === $this->_expectedTimezone) {
-	       return true;
-	   }
-    }
-
-    /**
-     * Print out log messages
-     * 
-     * @todo allow to set a Logger object and use that object instead of this pretty dull log method
-     *   
-     * @param String $_message
-     * @param int $_level
-     * @return void
-     */
-	protected function _log($_message, $_level = 7)
-	{
-       if ($_level <= $this->_logLevel) {
-            echo "\n$_message";			
-       }
-    }
-	
-    /**
-     * Check if the given {@param $_timezone} matches the {@see $_offsets}
-     * without checking the daylight saving time transitions
-     * 
-     * @param DateTimeZone $_timezone
-     * @return void
-     */
-	protected function _checkTimezoneWithoutDST(DateTimeZone $_timezone)
-	{
-        if (empty($this->_offsets)) {
-            throw new Tinebase_Exception('Missing object property _offsets');
-        }
-
-		$this->_log(__FUNCTION__.' - '.$_timezone->getName(), 7);
-		$bias = ($_timezone->getOffset($this->_startDate['object'])/60)*-1;
-        if ($bias == $this->_offsets['bias']) {
-            return true;
-        }
-		return false;        
-	}
-
-    /**
-     * Check if the given {@param $_timezone} matches the {@see $_offsets}
-     * and also evaluate the daylight saving time transitions for this timezone.
-     * 
-     * @param DateTimeZone $_timezone
-     * @return void
-     */
-	protected function _checkTimezoneWithDST(DateTimeZone $_timezone) 
-	{
-        if (empty($this->_offsets)) {
-            throw new Tinebase_Exception('Missing object property _offsets');
-        }
-        
-        $this->_log(__FUNCTION__.': '.$_timezone->getName(), 7);
-        //@todo Since php version 3.3 getTransitions accepts optional start and end parameters.
-        //      Using them would probably result in a performance gain.
-        $transitions = $_timezone->getTransitions();
-        if(count($transitions) > 1) {
-	        if (empty($this->_offsets['standardYear'])) {
-	        	//DST changes every year with the the same rules so we only have to check one transition
-	        	//we check the last transition because sometimes the timezone transition behaviour changed over the time
-	        	$this->_log(__FUNCTION__.': Check transitionregardless of the specified reference year', 7);
-	        	
-	            $lastTransition = $transitions[count($transitions)-1];
-	          	$daylightTransition = $lastTransition['isdst'] ? $lastTransition : $transitions[count($transitions)-2];
-	            $standardTransition = $lastTransition['isdst'] ? $transitions[count($transitions)-2] : $lastTransition;
-	            return $this->_checkTransition($standardTransition, $daylightTransition);
-	        }
-	        else {
-	        	//The specified offsets for DST change are only valid for the reference year given with {@see $this->_startDate}
-	        	$this->_log(__FUNCTION__.': Check transition regarding the specified reference year', 7);
-		        foreach ($transitions as $index => $transition) {
-			        if (strftime('%Y', $transition['ts']) == $this->_startDate['year']) {
-			            if (isset($transitions[$index+1]) && strftime('%Y', $transition['ts']) == strftime('%Y', $transitions[$index+1]['ts'])) {
-			                $daylightTransition = $transition['isdst'] ? $transition : $transitions[$index+1];
-			                $standardTransition = $transition['isdst'] ? $transitions[$index+1] : $transition;
-				            if ($this->_checkTransition($standardTransition, $daylightTransition)) {
-	                            return true;       
-	                        }
-			            } else {
-			                $this->_log(__FUNCTION__.": ##### Skipping timezone {$_timezone->getName()}", 7);
-			            }
-			        }
-		        }        	
-	        }
-        }
-        
-        return false;
-    }                  
-	
-    /**
-     * Returns an array of timezones that match to the object properties
-     * {@see $_offsets} and {@see $_startDate}
+     * Returns an array of timezones that match to the {@param $_offsets}
      * 
      * If {@see $_expectedTimezone} is set then the method will terminate as soon
      * as the expected timezone has matched and the expected timezone will be the 
@@ -305,11 +128,19 @@ class ActiveSync_TimezoneGuesser {
      * 
      * @return array
      */
-	public function guessTimezones()
+	public function getTimezonesForOffsets($_offsets)
 	{
+		$this->_setOffsets($_offsets);
+		$this->_setDefaultStartDateIfEmpty();
+		
+        $cacheId = $this->_getCacheId(array(__FUNCTION__));        
+        if ($this->_cache && false !== ($matchingTimezones = $this->_cache->load($cacheId)))
+        {
+        	return $matchingTimezones;
+        }
+        
         $matchingTimezones = array();
         $checkWithoutDST = empty($this->_offsets['daylightMonth']);
-        
 	    foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
 	    	$this->_log("Parsing timezone $timezoneIdentifier", 7);
 	    	$timezone = new DateTimeZone($timezoneIdentifier);
@@ -324,9 +155,112 @@ class ActiveSync_TimezoneGuesser {
 	    	}
 	    }
 	    $this->_log('Matching timezones for '.print_r($this->_offsets, true) . ': ' . print_r($matchingTimezones, true), 5);
+	    if ($this->_cache) {
+	    	$this->_cache->save($matchingTimezones, $cacheId);
+	    }
+	    
 	    return $matchingTimezones;
 	}
 	
+	/**
+	 * Return packed string for given {@param $_timezone}
+	 * @param String               $_timezone
+	 * @param String | int | null  $_startDate
+	 * @return String
+	 */
+	public function getPackedTimezoneInfoForTimezone($_timezone, $_startDate = null)
+	{
+		$offsets = $this->getOffsetsForTimezone($_timezone, $_startDate);
+		return $this->_packTimezoneInfo($offsets);
+	}
+	
+	public function getOffsetsForTimezone($_timezone, $_startDate = null)
+	{
+        $this->_setStartDate($_startDate);
+        
+	    $cacheId = $this->_getCacheId(array(__FUNCTION__, $_timezone));        
+        if ($this->_cache && false !== ($offsets = $this->_cache->load($cacheId)))
+        {
+            return $offsets;
+        }
+        
+        $offsets = array(
+            'bias' => 0,
+            'standardName' => '',
+            'standardYear' => 0,
+            'standardMonth' => 0,
+            'standardDayOfWeek' => 0,
+            'standardDay' => 0,
+            'standardHour' => 0,
+            'standardMinute' => 0,
+            'standardSecond' => 0,
+            'standardMilliseconds' => 0,
+            'standardBias' => 0,
+            'daylightName' => '',
+            'daylightYear' => 0,
+            'daylightMonth' => 0,
+            'daylightDayOfWeek' => 0,
+            'daylightDay' => 0,
+            'daylightHour' => 0,
+            'daylightMinute' => 0,
+            'daylightSecond' => 0,
+            'daylightMilliseconds' => 0,
+            'daylightBias' => 0                                                         
+        );
+
+        $timezone = new DateTimeZone($_timezone);
+        list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($timezone, $this->_startDate['year']);
+        
+        if ($standardTransition) {
+	        $offsets['bias'] = $standardTransition['offset']/60*-1;
+	        if ($daylightTransition) {          
+	            $offsets = $this->_generateOffsetsForTransition($offsets, $standardTransition, 'standard');
+	            $offsets = $this->_generateOffsetsForTransition($offsets, $daylightTransition, 'daylight');
+	            $offsets['standardHour']    += $daylightTransition['offset']/3600;
+	            $offsets['daylightHour']    += $standardTransition['offset']/3600;
+	            
+	            //@todo how do we get the standardBias (is usually 0)?
+	            //$offsets['standardBias'] = ...
+	            
+	            $offsets['daylightBias'] = ($daylightTransition['offset'] - $standardTransition['offset'])/60*-1;
+	        }	
+        }
+        
+	    if ($this->_cache) {
+            $this->_cache->save($offsets, $cacheId);
+        }
+
+        return $offsets;
+	}
+
+	
+	/**
+	 * 
+	 * 
+	 * @param array $_offsets
+	 * @param array $_transition
+	 * @param String $_type
+	 * @return array
+	 */
+	protected function _generateOffsetsForTransition(Array $_offsets, Array $_transition, $_type) 
+	{
+	    $transitionDateParsed = getdate($_transition['ts']);
+            
+        $_offsets[$_type . 'Month']      = $transitionDateParsed['mon'];
+        $_offsets[$_type . 'DayOfWeek']  = $transitionDateParsed['wday'];
+        $_offsets[$_type . 'Minute']     = $transitionDateParsed['minutes'];
+        $_offsets[$_type . 'Hour']       = $transitionDateParsed['hours'];
+        
+        for ($i=5; $i>0; $i--) {
+            if ($this->_isNthOcurrenceOfWeekdayInMonth($_transition['ts'], $i)) {
+                $_offsets[$_type . 'Day'] = $i;
+                break;
+            };
+        }
+        
+        return $_offsets;
+	}
+
     /**
      * Test if the weekday of the given {@param $timestamp} is the {@param $_occurence}th occurence of this weekday within its month.
      * 
@@ -363,7 +297,11 @@ class ActiveSync_TimezoneGuesser {
      */
     protected function _checkTransition($_standardTransition, $_daylightTransition)
     {
-        $this->_log(__FUNCTION__.': Check regardless of the specified year', 7);
+        if (empty($_standardTransition) || empty($_daylightTransition)) {
+        	$this->_log(__FUNCTION__ . ': One of the parameters $_standardTransition/$_daylightTransition is missing');
+        	return false;
+        }
+
         $standardBias = ($_standardTransition['offset']/60)*-1;
             
         //check each condition in a single if statement and break the chain when one condition is not met - for performance reasons            
@@ -396,7 +334,7 @@ class ActiveSync_TimezoneGuesser {
      * @param string $_packedTimezoneInfo the packed timezone info
      * @return array
      */
-    public static function unpackTimezoneInfo($_packedTimezoneInfo)
+    protected function _unpackTimezoneInfo($_packedTimezoneInfo)
     {
         $timezoneUnpackString = 'lbias/a64standardName/vstandardYear/vstandardMonth/vstandardDayOfWeek/vstandardDay/vstandardHour/vstandardMinute/vstandardSecond/vstandardMilliseconds/lstandardBias/a64daylightName/vdaylightYear/vdaylightMonth/vdaylightDayOfWeek/vdaylightDay/vdaylightHour/vdaylightMinute/vdaylightSecond/vdaylightMilliseconds/ldaylightBias';
 
@@ -411,7 +349,7 @@ class ActiveSync_TimezoneGuesser {
      * @param array $_timezoneInfo
      * @return string
      */
-    public static function packTimezoneInfo($_timezoneInfo) {
+    protected function _packTimezoneInfo($_timezoneInfo) {
         
         $packed = pack(
             "la64vvvvvvvvla64vvvvvvvvl",
@@ -439,6 +377,182 @@ class ActiveSync_TimezoneGuesser {
         );
 
         return base64_encode($packed);
+    }
+    
+    /**
+     * Validate and set offsets
+     * 
+     * @param array|string $_value [if a string is provided then it will be unpacked using {@see unpackTimezoneInfo}]
+     * 
+     * @return unknown_type
+     */
+    protected function _setOffsets($_value)
+    {       
+        //validate $_value
+        if ((!empty($_value['standardMonth']) || !empty($_value['standardDay']) || !empty($_value['daylightMonth']) || !empty($_value['daylightDay'])) &&
+            (empty($_value['standardMonth']) || empty($_value['standardDay']) || empty($_value['daylightMonth']) || empty($_value['daylightDay']))       
+            ) {
+              throw new Tinebase_Exception_InvalidArgument('It is not possible not set standard offsets without setting daylight offsets and vice versa');
+        }
+
+        $this->_offsets = $_value;
+    }
+    
+    /**
+     * Parse and set object property {@see $_startDate}
+     * 
+     * @param String | int      $_startDate
+     * @return void
+     */
+    protected function _setStartDate($_startDate)
+    {
+        if (empty($_startDate)) {
+            $this->_setDefaultStartDateIfEmpty();
+            return;
+        }
+
+        $startDateParsed = array();
+        if (is_string($_startDate)) {
+            $startDateParsed['string'] = $_startDate;
+            $startDateParsed['ts']     = strtotime($_startDate);
+        } elseif (is_int($_startDate)) {
+            $startDateParsed['ts']     = $_startDate;
+            $startDateParsed['string'] = strftime('%F', $_startDate);
+        }
+        else {
+            throw new Tinebase_Exception_InvalidArgument('$startDate Parameter should be either a Timestamp or a Datestring parseable by strtotime.');
+        }
+        $startDateParsed['object'] = new DateTime($startDateParsed['string']);
+        
+        $startDateParsed = array_merge($startDateParsed, getdate($startDateParsed['ts']));
+        
+        $this->_startDate = $startDateParsed;
+    }
+    
+    /**
+     * Set default value for object property {@see $_startdate} if it is not set yet.
+     * Tries to guewss the correct startDate depending on object property {@see $_offsets} and
+     * falls back to current date. 
+     *  
+     * @return void
+     */
+    protected function _setDefaultStartDateIfEmpty()
+    {
+        if (!empty($this->_startDate)) {
+            return;
+        }
+        
+        if (!empty($this->_offsets['standardYear'])) {
+            $this->_setStartDate($this->_offsets['standardYear'].'-01-01');
+        }
+        else {
+            $this->_setStartDate(time());
+        }
+    }
+    
+    /**
+     * Returns true if {@param $_value} equals object property {@see $_expectedTimezone}
+     * 
+     * @param String $_value
+     * @return bool
+     */
+    protected function _isExpectedTimezone($_value)
+    {
+        if ($_value === $this->_expectedTimezone) {
+           return true;
+       }
+    }
+
+    /**
+     * Print out log messages
+     * 
+     * @todo allow to set a Logger object and use that object instead of this pretty dull log method
+     *   
+     * @param String $_message
+     * @param int $_level
+     * @return void
+     */
+    protected function _log($_message, $_level = 7)
+    {
+       if ($_level <= $this->_logLevel) {
+            echo "\n$_message";         
+       }
+    }
+    
+    /**
+     * Check if the given {@param $_timezone} matches the {@see $_offsets}
+     * without checking the daylight saving time transitions
+     * 
+     * @param DateTimeZone $_timezone
+     * @return void
+     */
+    protected function _checkTimezoneWithoutDST(DateTimeZone $_timezone)
+    {
+        if (empty($this->_offsets)) {
+            throw new Tinebase_Exception('Missing object property _offsets');
+        }
+
+        $this->_log(__FUNCTION__.' - '.$_timezone->getName(), 7);
+        $bias = ($_timezone->getOffset($this->_startDate['object'])/60)*-1;
+        if ($bias == $this->_offsets['bias']) {
+            return true;
+        }
+        return false;        
+    }
+
+    /**
+     * Check if the given {@param $_timezone} matches the {@see $_offsets}
+     * and also evaluate the daylight saving time transitions for this timezone.
+     * 
+     * @param DateTimeZone $_timezone
+     * @return void
+     */
+    protected function _checkTimezoneWithDST(DateTimeZone $_timezone) 
+    {
+        list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($_timezone, $this->_startDate['year']);
+        return $this->_checkTransition($standardTransition, $daylightTransition);
+    }
+    
+    /**
+     * Returns the standard and daylight transitions for the given {@param $_timezone}
+     * and {@param $_year}.
+     * 
+     * @param $_timezone
+     * @param $_startDate
+     * @return Array
+     */
+    protected function _getTransitionsForTimezoneAndYear($_timezone, $_year)
+    {
+        $standardTransition = null;
+        $daylightTransition = null;
+        
+        //@todo Since php version 3.3 getTransitions accepts optional start and end parameters.
+        //      Using them would probably result in a performance gain.
+        $transitions = $_timezone->getTransitions();
+        $index = 0; //we need to access index counter outside of the foreach loop
+        $transition = array(); //we need to access the transition counter outside of the foreach loop
+        foreach ($transitions as $index => $transition) {
+            if (strftime('%Y', $transition['ts']) == $_year) {
+                if (isset($transitions[$index+1]) && strftime('%Y', $transition['ts']) == strftime('%Y', $transitions[$index+1]['ts'])) {
+                    $daylightTransition = $transition['isdst'] ? $transition : $transitions[$index+1];
+                    $standardTransition = $transition['isdst'] ? $transitions[$index+1] : $transition;
+                } else {
+                    $daylightTransition = $transition['isdst'] ? $transition : null;
+                    $standardTransition = $transition['isdst'] ? null : $transition;
+                }
+                break;
+            }
+            elseif ($index == count($transitions) -1) {
+                $standardTransition = $transition;
+            }
+        }
+         
+        return array($standardTransition, $daylightTransition);
+    }
+    
+    protected function _getCacheId($additionlIdParams = array())
+    {
+        return 'ActiveSync_TimezoneGuesser_' . md5(serialize(array($additionlIdParams, $this->_expectedTimezone, $this->_offsets, $this->_startDate)));
     }
 	
 }
