@@ -60,7 +60,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             case 'Timetracker_Model_Timesheet':
                 $_record['timeaccount_id'] = $_record['timeaccount_id'] ? $this->_timeaccountController->get($_record['timeaccount_id']) : $_record['timeaccount_id'];
                 $_record['timeaccount_id']['account_grants'] = Timetracker_Model_TimeaccountGrants::getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_record['timeaccount_id']);
-                $_record['timeaccount_id']['account_grants'] = $this->getTimesheetGrantsByTimeaccountGrants($_record['timeaccount_id']['account_grants'], $_record['account_id']);
+                $_record['timeaccount_id']['account_grants'] = $this->_resolveTimesheetGrantsByTimeaccountGrants($_record['timeaccount_id']['account_grants'], $_record['account_id']);
                 Tinebase_User::getInstance()->resolveUsers($_record, 'account_id');
                 
                 $recordArray = parent::_recordToJson($_record);
@@ -101,6 +101,8 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array data
      * 
      * @todo move that to Tinebase_Record_RecordSet
+     * @todo check if we can remove Timetracker_Model_TimeaccountGrants::getGrantsOfRecords 
+     *       / it seems to be obsolete/redundant because of _resolveTimesheetGrantsByTimeaccountGrants()
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
     {
@@ -113,19 +115,22 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // resolve timeaccounts
                 $timeaccountIds = $_records->timeaccount_id;
                 $timeaccounts = $this->_timeaccountController->getMultiple(array_unique(array_values($timeaccountIds)));
+                
+                // this is possibly @deprecated / obsolete
                 Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
+                
                 Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'account_id', true);
                                
                 foreach ($_records as $record) {
                     $record->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($record->timeaccount_id)];
-                    $record->timeaccount_id->account_grants = $this->getTimesheetGrantsByTimeaccountGrants($record->timeaccount_id->account_grants, $record->account_id);
+                    $record->timeaccount_id->account_grants = $this->_resolveTimesheetGrantsByTimeaccountGrants($record->timeaccount_id->account_grants, $record->account_id);
                 }
                 
                 break;
             case 'Timetracker_Model_Timeaccount':
                 // resolve timeaccounts grants
-                Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
-                $this->getTimeaccountGrantsByTimeaccountGrants($_records);
+                //Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
+                $this->_resolveTimeaccountGrants($_records);
                 //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
                 break;
         }
@@ -145,7 +150,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  int    $timesheetOwnerId
      * @return array
      */
-    protected function getTimesheetGrantsByTimeaccountGrants($timeaccountGrantsArray, $timesheetOwnerId)
+    protected function _resolveTimesheetGrantsByTimeaccountGrants($timeaccountGrantsArray, $timesheetOwnerId)
     {
         $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
         $currentUserId = Tinebase_Core::getUser()->getId();
@@ -156,16 +161,17 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $timeaccountGrantsArray['editGrant']   = $modifyGrant;
         $timeaccountGrantsArray['deleteGrant'] = $modifyGrant;
         
-        
         return $timeaccountGrantsArray;
     }
     
     /**
      * calculate effective ta grants so the client doesn't need to calculate them
      *
-     * @param  array  $TimeaccountGrantsArray
+     * @param  array  $_timesaccounts
+     * 
+     * @todo remove obsolete code
      */
-    protected function getTimeaccountGrantsByTimeaccountGrants(Tinebase_Record_RecordSet $_timesaccounts)
+    protected function _resolveTimeaccountGrants(Tinebase_Record_RecordSet $_timesaccounts)
     {
          $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
          foreach ($_timesaccounts as $timeaccount) {
@@ -177,11 +183,17 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
              $timeaccountGrantsArray['deleteGrant'] = $modifyGrant;
              $timeaccount->account_grants = $timeaccountGrantsArray;
              
-             // also move the grants into the container_id prpoerty, as the clients expects records to 
+             // also move the grants into the container_id property, as the clients expects records to 
              // be contained in some kind of container where it searches the grants in
-             $containerId = $timeaccount->container_id;
-             $containerId['account_grants'] = $timeaccountGrantsArray;
-             $timeaccount->container_id = $containerId;
+             
+             // obsolete code
+             //$containerId = $timeaccount->container_id;
+             //$containerId['account_grants'] = $timeaccountGrantsArray;
+             //$timeaccount->container_id = $containerId;
+             
+             $timeaccount->container_id = array(
+                'account_grants' => $timeaccountGrantsArray
+             );
          }
     }
 
