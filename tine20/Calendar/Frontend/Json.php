@@ -172,7 +172,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _recordToJson($_record)
     {
-        $this->_resolveAttendee($_record->attendee);
+    	Calendar_Model_Attender::resolveAttendee($_record->attendee);
         $this->_resolveRrule($_record);
         
         $eventData = parent::_recordToJson($_record);
@@ -189,7 +189,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
-        $this->_resolveAttendee($_records->attendee);
+        Calendar_Model_Attender::resolveAttendee($_records->attendee);
         $this->_resolveRrule($_records);
         
         //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
@@ -210,64 +210,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
           
         //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
         return parent::_multipleRecordsToJson($_records);
-    }
-    
-    /**
-     * resolves given attendee for json representation
-     *
-     * @param array|Tinebase_Record_RecordSet $_attendee 
-     * @param unknown_type $_idProperty
-     * @param unknown_type $_typeProperty
-     */
-    protected function _resolveAttendee($_eventAttendee, $_idProperty='user_id', $_typeProperty='user_type') {
-        $eventAttendee = $_eventAttendee instanceof Tinebase_Record_RecordSet ? array($_eventAttendee) : $_eventAttendee;
-        
-        // build type map 
-        $typeMap = array();
-        
-        foreach ($eventAttendee as $attendee) {
-            // resolve displaycontainers
-            Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
-            
-            foreach ($attendee as $attender) {
-                $type = $attender->$_typeProperty;
-                if (! array_key_exists($type, $typeMap)) {
-                    $typeMap[$type] = array();
-                }
-                $typeMap[$type][] = $attender->$_idProperty;
-                
-                // remove status_authkey when editGrant for displaycontainer_id is missing
-                if (! is_array($attender->displaycontainer_id) || ! (bool) $attender['displaycontainer_id']['account_grants']['editGrant']) {
-                    $attender->status_authkey = NULL;
-                }
-            }
-        }
-        
-        // get all $_idProperty entries
-        foreach ($typeMap as $type => $ids) {
-            switch ($type) {
-                case 'user':
-                    //Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
-                    $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids));
-                    break;
-                case 'group':
-                //    Tinebase_Group::getInstance()->getM
-                default:
-                    throw new Exception("type $type not yet supported");
-                    break;
-            }
-        }
-        
-        // sort entreis in
-        foreach ($eventAttendee as $attendee) {
-            foreach ($attendee as $attender) {
-                $attendeeTypeSet = $typeMap[$attender->$_typeProperty];
-                $idx = $attendeeTypeSet->getIndexById($attender->$_idProperty);
-                if ($idx !== false) {
-                    $attender->$_idProperty = $attendeeTypeSet[$idx];
-                }
-            }
-        }
     }
     
     /**
