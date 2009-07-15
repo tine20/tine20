@@ -96,6 +96,9 @@ class Felamimail_Message extends Zend_Mail_Message
         
         try {
             $charset = $part->getHeaderField('content-type', 'charset');
+            // remove specialchars, spaces and quotes from charset string
+            $charset = trim(htmlspecialchars_decode(strtolower($charset)), "\x22\x27\x20");
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " header charset: " . $charset);
         } catch(Zend_Mail_Exception $e) {
             $charset = '';
         }
@@ -105,7 +108,7 @@ class Felamimail_Message extends Zend_Mail_Message
             $charset        = 'iso-8859-1';            
         }
         
-        if(strtolower($charset) != 'utf-8') {
+        if($charset != 'utf-8') {
             $content = $this->_decode($charset, $content);
         }
         
