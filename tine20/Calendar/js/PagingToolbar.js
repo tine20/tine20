@@ -382,6 +382,7 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
         });
         
         this.button = new Ext.Button({
+            minWidth: 130,
             text: Ext.DatePicker.prototype.monthNames[this.tb.dtStart.getMonth()] + this.tb.dtStart.format(' Y'),
             //hidden: this.tb.activeView != 'month',
             menu: this.dateMenu,
