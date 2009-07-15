@@ -226,11 +226,19 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $dailyrrule->freq = self::FREQ_DAILY;
                 $dailyrrule->interval = 7 * $rrule->interval;
                 
+                $eventLength = clone $_event->dtend;
+                $eventLength->sub($_event->dtstart);
+                
                 foreach (explode(',', $rrule->byday) as $recurWeekDay) {
                     $baseEvent = clone $_event;
                     
+                    // NOTE: skipping must be done in organizer_tz
+                    $baseEvent->dtstart->setTimezone($_event->originator_tz);
                     self::skipWday($baseEvent->dtstart, $recurWeekDay, 1, TRUE);
-                    self::skipWday($baseEvent->dtend,   $recurWeekDay, 1, TRUE);
+                    $baseEvent->dtstart->setTimezone('UTC');
+                    
+                    $baseEvent->dtend = clone($baseEvent->dtstart);
+                    $baseEvent->dtend->add($eventLength);
                     
                     if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
                     	$baseEvent->recurid = $baseEvent->uid . '-' . $baseEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
