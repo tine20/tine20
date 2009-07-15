@@ -101,10 +101,15 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         foreach ($result as $key => &$value) {
             if (! empty($value['account_id'])) {
-                $value['accountObject'] = Admin_Controller_User::getInstance()->get($value['account_id'])->toArray();
+            	try {
+            		$accountObject = Admin_Controller_User::getInstance()->get($value['account_id'])->toArray();
+            	} catch (Tinebase_Exception_NotFound $e) {
+            		$accountObject = Tinebase_User::getInstance()->getNonExistentUser();
+            	}
+                $value['accountObject'] = $accountObject;
             }
         }
-        
+
         return array(
             'results'       => $result,
             'totalcount'    => Admin_Controller_AccessLog::getInstance()->searchCount_($fromDateObject, $toDateObject, $filter),

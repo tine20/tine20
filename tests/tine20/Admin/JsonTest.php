@@ -348,14 +348,52 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $to = new Zend_Date ();
         
         $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), NULL, '{"sort":"li","dir":"DESC","start":0,"limit":50}');
-        
         //print_r($accessLogs);
       
         // check total count
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
         $this->assertGreaterThan(0, $accessLogs['totalcount']);
-    }    
+    }
+    
+    /**
+     * try to get all access log entries
+     *
+     */
+    public function testGetAccessLogsWithDeletedUser()
+    {
+    	$username = 'admin_json_test';
+    	$user = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => $username,
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'Admin Json Test',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
+        ));
+        $user = Tinebase_User::getInstance()->addUser($user);
+        Tinebase_AccessLog::getInstance()->addLoginEntry('test_session_id', $username, '127.0.0.1', Zend_Auth_Result::SUCCESS, $user->getId());
+                
+    	Tinebase_User::getInstance()->deleteUser($user->getId());
+    	
+        $from = new Zend_Date ();
+        $from->sub('02:00:00',Zend_Date::TIMES);
+        $to = new Zend_Date ();
+        
+        $accessLogs = $this->_backend->getAccessLogEntries($from->get(Tinebase_Record_Abstract::ISO8601LONG), $to->get(Tinebase_Record_Abstract::ISO8601LONG), NULL, '{"sort":"li","dir":"DESC","start":0,"limit":50}');
 
+        // check total count
+        $this->assertGreaterThan(0, sizeof($accessLogs['results']));
+        $this->assertGreaterThan(0, $accessLogs['totalcount']);
+        
+        $testLogEntry = $accessLogs['results'][0];
+        // check nonExistentUser
+        $this->assertEquals(Tinebase_User::getInstance()->getNonExistentUser(), $testLogEntry['accountObject']);
+        
+        // cleanup
+        $this->_backend->deleteAccessLogEntries(Zend_Json::encode(array($testLogEntry['id'])));
+    }    
+    
     /**
      * try to delete access log entries
      *
