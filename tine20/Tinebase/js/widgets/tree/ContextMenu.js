@@ -106,7 +106,7 @@ Tine.widgets.tree.ContextMenu = {
                                 success: function(_result, _request){
                                     if(node.isSelected()) {
                                         this.getSelectionModel().select(node.parentNode);
-                                        this.fireEvent('click', node.parentNode);
+                                        this.fireEvent('click', node.parentNode, Ext.EventObject.setEvent());
                                     }
                                     node.remove();
                                     if (config.backendModel == 'Container') {
