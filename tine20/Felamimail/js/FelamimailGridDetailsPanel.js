@@ -13,6 +13,7 @@
  * TODO         show image attachments inline
  * TODO         add 'download all' button
  * TODO         add preference to show mails in html or text?
+ * TODO         'from' to contact: check for duplicates
  * 
  */
  
@@ -136,7 +137,9 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 if (email) {
                     var id = Ext.id() + ':' + email;
                     
-                    var name = value.match(/^"*([a-z\-0-9\._]+)(,*) *([a-z\-0-9\._]+)/i);
+                    //var name = value.match(/^"*([a-z\-0-9\._]+)(,*) *([a-z\-0-9\._]+)/i);
+                    var name = value.match(/^"*([^,^ ]+)(,*) *([^"]+)/i);
+                    
                     var firstname = (name && name[1]) ? name[1] : '';
                     var lastname = (name && name[3]) ? name[3] : '';
                     
@@ -145,7 +148,8 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                         lastname = name[1];
                     }
                     
-                    id += ':' + firstname + ':' + lastname;
+                    id += Ext.util.Format.htmlEncode(':' + firstname + ':' + lastname);
+                    
                     
                     result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
                 }
@@ -276,14 +280,13 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             case 'span[class=tinebase-addtocontacts-link]':
                 // open edit contact dlg
             
-                // TODO check for duplicates
-            
                 // check if addressbook app is available
                 if (! Tine.Addressbook || ! Tine.Tinebase.common.hasRight('run', 'Addressbook')) {
                     return;
                 }
             
-                var parts = target.id.split(':');
+                var id = Ext.util.Format.htmlDecode(target.id);
+                var parts = id.split(':');
                 
                 var popupWindow = Tine.Addressbook.ContactEditDialog.openWindow({
                     listeners: {
@@ -300,8 +303,6 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 
             case 'span[class=tinebase-showheaders-link]':
                 // show headers
-            
-                //console.log(target);
             
                 var parts = target.id.split(':');
                 var targetId = parts[0];
