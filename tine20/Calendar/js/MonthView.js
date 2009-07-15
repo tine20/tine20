@@ -164,7 +164,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             }
             d = d.add(Date.DAY, 7);
         }
-
+        
         this.dateMesh = mesh;
     },
     
@@ -525,7 +525,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             Ext.get(hdCels[i]).setWidth((vw-50)/7);
         }
         
-        var rowHeight = ((csize.height - hsize.height - 2) / (this.dateMesh.length > 35 ? 6 : 5)) - 1;
+        var rowHeight = ((csize.height - hsize.height - 2) / Math.ceil(this.dateMesh.length/7));
 
         var calRows = this.mainBody.dom.childNodes;
         for (var i=0; i<calRows.length; i++) {
