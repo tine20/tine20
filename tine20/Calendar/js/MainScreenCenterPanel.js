@@ -202,6 +202,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onContextMenu: function(e) {
+        e.stopEvent();
+        
         var view = this.getCalendarPanel(this.activeView).getView();
         var event = view.getTargetEvent(e);
         var datetime = view.getTargetDateTime(e);
