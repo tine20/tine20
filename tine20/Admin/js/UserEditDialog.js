@@ -247,7 +247,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (form.findField('accountPassword').getValue() != form.findField('accountPassword2').getValue()) {
             form.markInvalid([{
                 id: 'accountPassword2',
-                msg: _("Passwords don't match")
+                msg: this.app.i18n._("Passwords don't match")
             }]);
             return false;
         }
