@@ -230,8 +230,8 @@ Tine.Admin = function() {
             if(_panel.getSelectionModel().getSelectedNode() === null) {
                 _panel.expandPath('/root');
                 // don't open 'applications' if user has no right to manage apps
-                if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'applications')) {
-                    _panel.selectPath('/root/applications');
+                if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts')) {
+                    _panel.selectPath('/root/accounts');
                 } else {
                     treeRoot.eachChild(function(node) {
                         if (Tine.Tinebase.common.hasRight('manage', 'Admin', node.attributes.viewRight)) {

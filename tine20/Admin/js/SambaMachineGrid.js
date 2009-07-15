@@ -80,7 +80,8 @@ Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPane
             header: this.app.i18n._("ID"),
             width: 100,
             sortable: true,
-            dataIndex: 'accountId'
+            dataIndex: 'accountId',
+            hidden: true
         },{
             id: 'accountLoginName',
             header: this.app.i18n._("Name"),
