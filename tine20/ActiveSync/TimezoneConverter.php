@@ -13,13 +13,16 @@
  */
 
 /**
- * ActiveSync Timezone Guesser
+ * ActiveSync Timezone Converter
  * 
  * Guesses timezones (e.g. "Europe/Berlin") matching to given 
- * offsets relative to Coordinated UNiversal Time UTC
+ * offsets relative to Coordinated Universal Time UTC.
+ * 
+ * Or generates offsets relative to Coordinated Universal Time UTC for a given timezone
  * 
  * @example
- * $timezoneGuesser = new ActiveSync_TimezoneGuesser(array(                                                                                                                            
+ * $timezoneGuesser = new ActiveSync_TimezoneGuesser();
+ * $matchingTimezones = $timezoneGuesser->getTimezonesForOffsets(array(                                                                                                                            
  *    'bias' => -60,
  *    'standardName' => null,
  *    'standardYear' => 0,
@@ -42,13 +45,12 @@
  *    'daylightMilliseconds' => 0,
  *    'daylightBias' => -60                                                         
  *	));
- *	$matchingTimezones = $timezoneGuesser->guessTimezones();
  *
  *  This will return an array containing all the timezones belonging to 
  *  CEST/CET (UTC/GMT +2 hours), including "Europe/Berlin"
  * 
  */
-class ActiveSync_TimezoneGuesser {
+class ActiveSync_TimezoneConverter {
 
 	protected $_startDate          = array();
 	protected $_offsets            = array();
@@ -62,9 +64,7 @@ class ActiveSync_TimezoneGuesser {
 	 * @var String
 	 */
 	protected $_expectedTimezone = null;
-	
-	protected $_logLevel = 0;
-    
+	    
 	/**
 	 * If set then the timezone guessing results will be cached.
 	 * This is strongly recommended for performance reasons.
@@ -142,7 +142,6 @@ class ActiveSync_TimezoneGuesser {
         $matchingTimezones = array();
         $checkWithoutDST = empty($this->_offsets['daylightMonth']);
 	    foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
-	    	$this->_log("Parsing timezone $timezoneIdentifier", 7);
 	    	$timezone = new DateTimeZone($timezoneIdentifier);
 	    	if (($checkWithoutDST && $this->_checkTimezoneWithoutDST($timezone)) || 
 	    	   (!$checkWithoutDST && $this->_checkTimezoneWithDST($timezone))) {
@@ -154,7 +153,6 @@ class ActiveSync_TimezoneGuesser {
                 }
 	    	}
 	    }
-	    $this->_log('Matching timezones for '.print_r($this->_offsets, true) . ': ' . print_r($matchingTimezones, true), 5);
 	    if ($this->_cache) {
 	    	$this->_cache->save($matchingTimezones, $cacheId);
 	    }
@@ -271,7 +269,6 @@ class ActiveSync_TimezoneGuesser {
     protected function _isNthOcurrenceOfWeekdayInMonth($_timestamp, $_occurence)
     {
        $original = new Zend_Date($_timestamp, 'UTC');
-       $this->_log(__FUNCTION__.": Check if weekday of $original is the {$_occurence}th occurence in its month", 7);
        $modified = clone($original);
        if ($_occurence == 5) {
         $modified->addWeek(1);
@@ -298,7 +295,6 @@ class ActiveSync_TimezoneGuesser {
     protected function _checkTransition($_standardTransition, $_daylightTransition)
     {
         if (empty($_standardTransition) || empty($_daylightTransition)) {
-        	$this->_log(__FUNCTION__ . ': One of the parameters $_standardTransition/$_daylightTransition is missing');
         	return false;
         }
 
@@ -313,8 +309,6 @@ class ActiveSync_TimezoneGuesser {
                 $standardParsed = getdate($_standardTransition['ts']);
                 $daylightParsed = getdate($_daylightTransition['ts']);
 
-                $this->_log('$daylightParsed: '.print_r($daylightParsed, 1), 7);
-                $this->_log('offsets: '.print_r($this->_offsets, 1), 7);
                 if ($standardParsed['mon'] == $this->_offsets['standardMonth'] && 
                     $daylightParsed['mon'] == $this->_offsets['daylightMonth'] &&
                     $standardParsed['wday'] == $this->_offsets['standardDayOfWeek'] &&
@@ -462,22 +456,6 @@ class ActiveSync_TimezoneGuesser {
            return true;
        }
     }
-
-    /**
-     * Print out log messages
-     * 
-     * @todo allow to set a Logger object and use that object instead of this pretty dull log method
-     *   
-     * @param String $_message
-     * @param int $_level
-     * @return void
-     */
-    protected function _log($_message, $_level = 7)
-    {
-       if ($_level <= $this->_logLevel) {
-            echo "\n$_message";         
-       }
-    }
     
     /**
      * Check if the given {@param $_timezone} matches the {@see $_offsets}
@@ -492,7 +470,6 @@ class ActiveSync_TimezoneGuesser {
             throw new Tinebase_Exception('Missing object property _offsets');
         }
 
-        $this->_log(__FUNCTION__.' - '.$_timezone->getName(), 7);
         $bias = ($_timezone->getOffset($this->_startDate['object'])/60)*-1;
         if ($bias == $this->_offsets['bias']) {
             return true;

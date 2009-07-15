@@ -12,7 +12,7 @@
  * @version     $Id$
  */
 
-class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
+class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
 {
 	
 	protected $_uit = null;
@@ -122,7 +122,7 @@ class ActiveSync_TimezoneGuesserTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	$this->_uit = new ActiveSync_TimezoneGuesser();
+    	$this->_uit = new ActiveSync_TimezoneConverter();
     }
         
     public function testGetPackedStringForTimezone()
