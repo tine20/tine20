@@ -472,7 +472,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             bgColor: event.ui.bgColor
         };
         
-        for (var i=Math.max(startCellNumber, 0); i<=endCellNumber; i++) {
+        for (var i=Math.max(startCellNumber, 0); i<=Math.min(endCellNumber, this.dayCells.length-1) ; i++) {
             data.id = Ext.id() + '-event:' + event.get('id');
             event.ui.domIds.push(data.id);
                 
