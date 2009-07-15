@@ -95,7 +95,13 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         var allApps = Tine.Tinebase.appMgr.getAll();
         
         if (! Tine.Tinebase.appMgr.get(this.defaultAppName)) {
-            this.defaultAppName = allApps.first().appName;
+            var firstApp = allApps.first();
+            if (firstApp) {
+                this.defaultAppName = firstApp.appName;
+            } else {
+                Ext.Msg.alert(_('Sorry'), _('There are no applications enabled for you. Please contact your administrator.'));
+            }
+            
         }
         this.appPicker = new Tine.Tinebase.AppPicker({
             apps: allApps,
