@@ -38,11 +38,11 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.samRecord = Tine.Admin.samUserBackend.recordReader(response);
         this.getForm().loadRecord(this.samRecord);
         
-        Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordLoad.call(this);
+        Tine.Admin.Users.EditDialog.superclass.onRecordLoad.call(this);
     },
     
     onRecordUpdate: function() {
-        Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordUpdate.call(this);
+        Tine.Admin.Users.EditDialog.superclass.onRecordUpdate.call(this);
         
         var form = this.getForm();
         form.updateRecord(this.samRecord);
@@ -234,6 +234,25 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 })]]
             }]
         };
+    },
+
+    /**
+     * checks if form is valid
+     * 
+     * @return {Boolean}
+     */
+    isValid: function() {
+        // check if passwords match
+        var form = this.getForm();
+        if (form.findField('accountPassword').getValue() != form.findField('accountPassword2').getValue()) {
+            form.markInvalid([{
+                id: 'accountPassword2',
+                msg: _("Passwords don't match")
+            }]);
+            return false;
+        }
+        
+        return Tine.Admin.Users.EditDialog.superclass.isValid.call(this);
     }
 });
 
