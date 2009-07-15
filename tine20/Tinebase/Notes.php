@@ -280,17 +280,18 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $backend = ucfirst(strtolower($_backend));        
         
         $currentNotesIds = $this->getNotesOfRecord($model, $_record->getId(), $backend)->getArrayOfIds();
+        $notes = $_record->$_notesProperty;
                 
-        if ($_record[$_notesProperty] instanceOf Tinebase_Record_RecordSet) {
-            $notesToSet = $_record[$_notesProperty];
+        if ($notes instanceOf Tinebase_Record_RecordSet) {
+            $notesToSet = $notes;
         } else {
-            if (count($_record[$_notesProperty]) > 0 && $_record[$_notesProperty][0] instanceOf Tinebase_Record_Abstract) {
+            if (count($notes) > 0 && $notes[0] instanceOf Tinebase_Record_Abstract) {
                 // array of notes records given
-                $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $_record[$_notesProperty]);
+                $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $notes);
             } else {
                 // array of arrays given
                 $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
-                foreach($_record[$_notesProperty] as $noteData) {
+                foreach($notes as $noteData) {
                     if (!empty($noteData)) {
                         $noteArray = (!is_array($noteData)) ? array('note' => $noteData) : $noteData;
                         if (!isset($noteArray['note_type_id'])) {
@@ -302,6 +303,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                         $notesToSet->addRecord($note);
                     }
                 }
+                
             }
         }
         
