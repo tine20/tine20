@@ -30,6 +30,9 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         //this.initDetailsPanel();
         
         Tine.Setup.ApplicationGridPanel.superclass.initComponent.call(this);
+        
+        // activate local sort
+        this.store.remoteSort = false;
     },
     
     getColumns: function() {
