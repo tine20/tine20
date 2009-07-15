@@ -322,8 +322,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if ($_imapBackend === NULL) {
             try {
                 $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
-            } catch (Zend_Mail_Storage_Exception $zmpe) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No connection to imap server ...');
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' Wrong user credentials ... '
+                    . '(' . $zmse->getMessage() . ')'
+                );
+                return $_account;
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' No connection to imap server ...'
+                    . '(' . $zmpe->getMessage() . ')'
+                );
                 return $_account;
             }
         }
