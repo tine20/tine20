@@ -252,6 +252,7 @@ class Setup_Controller
         switch(version_compare($_application->version, $setupXml->version)) {
             case -1:
                 $message = "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")";
+                
                 $messages[] = $message;
                 Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $message);
 
@@ -294,10 +295,11 @@ class Setup_Controller
                 }
                 
                 $messages[] = "<strong> Updated " . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor . "</strong>";
-                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor);
                 
-                // update version to next major
-                $_application->version = ($_majorVersion +1) . '.0';
+                // update app version 
+                $updatedApp = Tinebase_Application::getInstance()->getApplicationById($_application->getId());
+                $_application->version = $updatedApp->version;
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " .  $_application->version);
                 
                 break; 
                 
@@ -306,7 +308,9 @@ class Setup_Controller
                 break;
                 
             case 1:
-                throw new Setup_Exception('Current application version is higher than version from setup.xml');
+                throw new Setup_Exception('Current application version is higher than version from setup.xml: '
+                    . $_application->version . ' > ' . $setupXml->version
+                );
                 break;
         }
         
