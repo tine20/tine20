@@ -229,8 +229,17 @@ class Tinebase_Timemachine_ModificationLog
         $resolved = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         
         // handle concurrent updates on unmodified records
-        if (! $_newRecord->last_modified_time instanceof Zend_Date){
-        	$_newRecord->last_modified_time = clone $_newRecord->creation_time;
+        if (! $_newRecord->last_modified_time instanceof Zend_Date) {
+            
+            if ($_newRecord->creation_time instanceof Zend_Date) {
+                $_newRecord->last_modified_time = clone $_newRecord->creation_time;    
+            } else {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Something went wrong! No creation_time was set in record: ' 
+                    . print_r($_newRecord->toArray(), TRUE)
+                );
+                return $resolved;
+            }
         }
         
         if($_curRecord->last_modified_time instanceof Zend_Date && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
