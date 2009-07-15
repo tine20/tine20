@@ -123,6 +123,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
     	$this->_uit = new ActiveSync_TimezoneConverter();
+    	$this->_uit->setLogger(Tinebase_Core::getLogger());
     }
         
     public function testGetPackedStringForTimezone()
