@@ -146,6 +146,17 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     );
     
     /**
+     * returns prefered email address of given contact
+     * 
+     * @return string
+     */
+    public function getPreferedEmailAddress()
+    {
+        // prefer work mail over private mail till we have prefs for this
+        return $this->email ? $this->email : $this->email_home;
+    }
+    
+    /**
      * sets the record related properties from user generated input.
      * 
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
