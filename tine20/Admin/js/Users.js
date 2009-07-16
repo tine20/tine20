@@ -201,10 +201,11 @@ Tine.Admin.Users.Main = function() {
                         },
                         failure: function(result, request){
                             Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the account(s).'));
-                        }
+                        },
+                        scope: this
                     });
                 }
-            });
+            }, this);
         },
 
         actionEnable: null,
