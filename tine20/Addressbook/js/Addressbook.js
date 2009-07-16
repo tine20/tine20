@@ -86,7 +86,7 @@ Tine.Addressbook.FilterPanel = function(config) {
 };
 
 Ext.extend(Tine.Addressbook.FilterPanel, Tine.widgets.grid.PersistentFilterPicker, {
-    filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_Contact'}]
+    filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}]
 });
 
 /**************************** edit dialog **********************************/

@@ -30,7 +30,7 @@ Tine.Tasks.FilterPanel = function(config) {
 };
 
 Ext.extend(Tine.Tasks.FilterPanel, Tine.widgets.grid.PersistentFilterPicker, {
-    filter: [{field: 'model', operator: 'equals', value: 'Tasks_Model_Task'}]
+    filter: [{field: 'model', operator: 'equals', value: 'Tasks_Model_TaskFilter'}]
 });
 
 // Task model

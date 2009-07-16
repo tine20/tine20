@@ -13,7 +13,7 @@ Ext.namespace('Tine.Courses');
 
 Tine.Courses.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
     
-    filter: [{field: 'model', operator: 'equals', value: 'Courses_Model_Course'}],
+    filter: [{field: 'model', operator: 'equals', value: 'Courses_Model_CourseFilter'}],
 
     // quick hack to get filter saving grid working
     //recordClass: Tine.Courses.Model.Course,
