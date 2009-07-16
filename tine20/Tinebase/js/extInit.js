@@ -30,17 +30,16 @@ for (fn in {
 /** ------------------------- Gears Initialisation ------------------------- **/
 if (window.google && google.gears) {
     var permission = google.gears.factory.getPermission('Tine 2.0', 'images/oxygen/32x32/actions/dialog-information.png', 'Tine 2.0 detected that gears is installed on your computer. Permitting Tine 2.0 to store information on your computer, will increase speed of the software.');
-    
     if (permission) {
         try {
             google.gears.localServer = google.gears.factory.create('beta.localserver');
-            
             google.gears.localServer.store = google.gears.localServer.createManagedStore('tine20-store');
             google.gears.localServer.store.manifestUrl = 'Tinebase/js/tine20-manifest.js';
+            google.gears.localServer.store.checkForUpdate();
             
             if (google.gears.localServer.store.updateStatus == 3) {
                 console.info('gears localserver store failure: ' + google.gears.localServer.store.lastErrorMessage);
-                google.gears.localServer.store.checkForUpdate();
+                google.gears.localServer.removeManagedStore('tine20-store');
             }
         } catch (e) {
             console.info("can't initialize gears: " + e);
