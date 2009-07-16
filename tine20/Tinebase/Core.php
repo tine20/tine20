@@ -354,7 +354,20 @@ class Tinebase_Core
         }    
 
         // getting a Zend_Cache_Core object
-        $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
+        try {
+            $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
+        } catch (Zend_Cache_Exception $e) {
+        	if ('File' === $backendType && !is_dir($backendOptions['cache_dir'])) {
+        		// create cache directory and re-try
+        		if (mkdir($backendOptions['cache_dir'], 0770, true)) {
+        			self::setupCache($_enabled);
+        			return;
+        	   }
+            }
+
+            throw $e;
+        }
+        
         
         // some important caches
         Zend_Date::setOptions(array('cache' => $cache));
