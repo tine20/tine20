@@ -11,6 +11,7 @@
  * TODO         reload folder status (and number of unread messages) every x minutes 
  *              -> via ping or ext.util.delayedtask ?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
+ * TODO         make inbox/drafts/templates configurable in account
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -607,13 +608,33 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             node.cls = 'x-tree-node-collapsed';
         }
 
-        // show trash icon for trash folder of account
+        // show standard folders icons 
         if (account) {
             if (account.get('trash_folder') == attr.globalname) {
-                node.cls = 'felamimail-node-trash';
+                if (attr.totalcount > 0) {
+                    node.cls = 'felamimail-node-trash-full';
+                } else {
+                    node.cls = 'felamimail-node-trash';
+                }
+            }
+            if (account.get('sent_folder') == attr.globalname) {
+                node.cls = 'felamimail-node-sent';
             }
         }
+        if ('INBOX' == attr.globalname) {
+            node.cls = 'felamimail-node-inbox';
+        }
+        if ('Drafts' == attr.globalname) {
+            node.cls = 'felamimail-node-drafts';
+        }
+        if ('Templates' == attr.globalname) {
+            node.cls = 'felamimail-node-templates';
+        }
+        if ('Junk' == attr.globalname) {
+            node.cls = 'felamimail-node-junk';
+        }
 
+        // add unread class to node
         if (attr.unreadcount > 0) {
             node.text = node.text + ' (' + attr.unreadcount + ')';
             node.cls = node.cls + ' felamimail-node-unread'; // x-tree-node-collapsed';
