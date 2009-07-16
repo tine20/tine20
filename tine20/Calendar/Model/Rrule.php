@@ -428,6 +428,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             
             $recurEvent->setTimezone('UTC');
             
+            if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
+                break;
+            }
+            
             // skip non existing dates
             if (! Zend_Date::isDate(self::array2string($computationStartDateArray), Tinebase_Record_Abstract::ISO8601LONG)) {
                 continue;
@@ -437,10 +441,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             // NOTE: such events could be included, cause our offset only calcs months and not seconds
             if ($_from->compare($recurEvent->dtend) >= 0) {
                 continue;
-            }
-            
-            if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
-                break;
             }
             
             $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
