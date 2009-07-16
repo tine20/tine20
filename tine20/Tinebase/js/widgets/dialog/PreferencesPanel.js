@@ -8,7 +8,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add pref description to input fields
+ * TODO         add pref description to input fields
+ * TODO         add icons from apps
  */
 
 Ext.namespace('Tine.widgets');
