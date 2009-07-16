@@ -89,8 +89,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'totalcount'  => 0
         );
         
-        // debug params
-        
         $fromDateObject = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
         $toDateObject = new Zend_Date($to, Tinebase_Record_Abstract::ISO8601LONG);
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
@@ -104,7 +102,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             	try {
             		$accountObject = Admin_Controller_User::getInstance()->get($value['account_id'])->toArray();
             	} catch (Tinebase_Exception_NotFound $e) {
-            		$accountObject = Tinebase_User::getInstance()->getNonExistentUser();
+            		$accountObject = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
             	}
                 $value['accountObject'] = $accountObject;
             }
