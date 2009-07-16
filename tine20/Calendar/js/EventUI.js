@@ -246,6 +246,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     },
     
     renderScrollerEvent: function(view, parallels, pos) {
+        var scrollerHeight = view.granularityUnitHeights * ((24 * 60)/view.timeGranularity);
         
         for (var currColNum=this.startColNum; currColNum<=this.endColNum; currColNum++) {
             
@@ -277,10 +278,15 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 height = 12;
             }
             
+            // minimal top
+            if (top > scrollerHeight -12) {
+                top = scrollerHeight -12;
+            }
+            
             var eventEl = view.templates.event.append(view.getDateColumnEl(currColNum), {
                 id: domId,
                 summary: height >= 24 ? this.event.get('summary') : '',
-                startTime: height >= 24 ? this.dtStart.format('H:i') : this.dtStart.format('H:i') + ' ' +  this.event.get('summary'),
+                startTime: (height >= 24 && top <= scrollerHeight-24) ? this.dtStart.format('H:i') : this.dtStart.format('H:i') + ' ' +  this.event.get('summary'),
                 extraCls: extraCls,
                 color: this.colorSet.color,
                 bgColor: this.colorSet.light,
