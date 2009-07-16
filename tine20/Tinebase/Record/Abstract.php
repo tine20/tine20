@@ -171,8 +171,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     
     /**
      * recursivly clone properties
-     *
-     * NOTE: array of dates are not yet cloned (todo?)
      */
     public function __clone()
     {
@@ -180,7 +178,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         {
             if (is_object($value)) {
                 $this->_properties[$name] = clone $value;
+            } else if (is_array($value)) {
+                foreach ($value as $arrKey => $arrValue) {
+                	if (is_object($arrValue)) {
+                	    $value[$arrKey] = clone $arrValue;
+                    }
+                }
             }
+            
+            
         }
     }
     
