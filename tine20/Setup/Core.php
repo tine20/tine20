@@ -124,7 +124,7 @@ class Setup_Core extends Tinebase_Core
                 parent::setupDatabaseConnection();
                 
                 // check (mysql)db server version
-                $ext = new Setup_ExtCheck('Setup/essentials.xml');
+                $ext = new Setup_ExtCheck(dirname(__FILE__) . '/essentials.xml');
                 if ($mysqlRequired = $ext->getExtensionData('MySQL')) {
                     $dbConfig = Tinebase_Core::getConfig()->database;
                     $link = @mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
@@ -209,9 +209,11 @@ class Setup_Core extends Tinebase_Core
     
     /**
      * setup the cache and add it to zend registry
+     * 
+     * Ignores {@param $_enabled} and always sets it to false
      *
      */
-    public static function setupCache()
+    public static function setupCache($_enabled = true)
     {
         // disable caching for setup
         parent::setupCache(false);
