@@ -22,7 +22,7 @@
  * - add the constant to the $addRights in getAllApplicationRights() function
  * . add getText identifier in getTranslatedRightDescriptions() function
  * 
- * @package     Tinebase
+ * @package     Addressbook
  * @subpackage  Acl
  */
 class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
@@ -95,7 +95,7 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $rightDescriptions = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
-                'text'          => $translate->_('manage shared folders'),
+                'text'          => $translate->_('manage shared addressbooks'),
                 'description'   => $translate->_('Create new shared addressbook folders'),
             ),
         );

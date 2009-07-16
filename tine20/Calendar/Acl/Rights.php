@@ -2,42 +2,26 @@
 /**
  * Tine 2.0
  * 
- * @package     Crm
+ * @package     Calendar
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
- * 
- * @todo        add more specific rights
  */
 
 /**
- * this class handles the rights for the crm application
+ * this class handles the rights for the Calendar application
  * 
- * a right is always specific to an application and not to a record
- * examples for rights are: admin, run
- * 
- * to add a new right you have to do these 3 steps:
- * - add a constant for the right
- * - add the constant to the $addRights in getAllApplicationRights() function
- * . add getText identifier in getTranslatedRightDescriptions() function
- * 
- * @package     Tinebase
+ * @package     Calendar
  * @subpackage  Acl
  */
-class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
+class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
-   /**
-     * the right to manage leads
-     * @staticvar string
-     */
-    const MANAGE_LEADS = 'manage_leads';
-        
     /**
      * holds the instance of the singleton
      *
-     * @var Crm_Acl_Rights
+     * @var Calendar_Acl_Rights
      */
     private static $_instance = NULL;
     
@@ -62,12 +46,12 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     /**
      * the singleton pattern
      *
-     * @return Crm_Acl_Rights
+     * @return Calendar_Acl_Rights
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Acl_Rights;
+            self::$_instance = new Calendar_Acl_Rights;
         }
         
         return self::$_instance;
@@ -83,8 +67,7 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $allRights = parent::getAllApplicationRights();
         
-        $addRights = array ( 
-            self::MANAGE_LEADS,
+        $addRights = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
         );
         $allRights = array_merge($allRights, $addRights);
@@ -99,16 +82,12 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     private function getTranslatedRightDescriptions()
     {
-        $translate = Tinebase_Translation::getTranslation('Crm');
+        $translate = Tinebase_Translation::getTranslation('Calendar');
         
         $rightDescriptions = array(
-            self::MANAGE_LEADS  => array(
-                'text'          => $translate->_('manage leads'),
-                'description'   => $translate->_('add, edit and delete leads'),
-            ),
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
-                'text'          => $translate->_('manage shared lead folders'),
-                'description'   => $translate->_('Create new shared lead folders'),
+                'text'          => $translate->_('manage shared calendars'),
+                'description'   => $translate->_('Create new shared calendars'),
             ),
         );
         
@@ -133,5 +112,4 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 
         return $result;
     }
-    
 }
