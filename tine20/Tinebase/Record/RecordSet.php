@@ -454,13 +454,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param string $_field
      * @param string $_direction
+     * @param int $_flags sort flags for asort/arsort
      */
-    public function sort($_field, $_direction)
+    public function sort($_field, $_direction, $_flags = SORT_REGULAR)
     {
         $offsetToSortFieldMap = $this->__get($_field);
         
         $fn = $_direction == 'ASC' ? 'asort' : 'arsort';
-        $fn($offsetToSortFieldMap);
+        $fn($offsetToSortFieldMap, $_flags);
         
         // tmp records
         $oldListOfRecords = $this->_listOfRecords;
@@ -477,8 +478,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $this->addRecord($oldListOfRecords[$oldOffset]);
         }
     }
-    
-   /**
+        
+    /**
      * translate all member records of this set
      * 
      */
