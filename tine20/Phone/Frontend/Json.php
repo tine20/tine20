@@ -30,13 +30,13 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function dialNumber($number, $phoneId, $lineId)
     {
-        $result = array(
-            'success'   => TRUE
-        );
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Dialing number $number with $phoneId (line $lineId)");
         
         Phone_Controller::getInstance()->dialNumber($number, $phoneId, $lineId);
         
-        return $result;
+        return array(
+            'success'   => TRUE
+        );
     }
     
     /**
