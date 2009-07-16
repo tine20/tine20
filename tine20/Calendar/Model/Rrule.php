@@ -462,32 +462,34 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @param Tinebase_Record_RecordSet $_recurSet
      * @return void
      */
-    public static function _computeRecurMonthlyByDay($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
+    protected static function _computeRecurMonthlyByDay($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
     {
-        $computationStartDateArray = self::date2array($_event->dtstart);
+    	$eventInOrganizerTZ = clone $_event;
+        $eventInOrganizerTZ->setTimezone($_event->originator_tz);
+        
+        $computationStartDateArray = self::date2array($eventInOrganizerTZ->dtstart);
+        
         // if period contains base events dtstart, we let computation start one intervall to early to catch
         // the cases when dtstart of base event not equals the first instance. If it fits, we filter the additional 
         // instance out later
-        if ($_event->dtstart->isLater($_from) && $_event->dtstart->isEarlier($_until)) {
+        if ($eventInOrganizerTZ->dtstart->isLater($_from) && $eventInOrganizerTZ->dtstart->isEarlier($_until)) {
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, -1 * $_rrule->interval);
         }
         
         $computationEndDate   = ($_rrule->until instanceof Zend_Date && $_until->isLater($_rrule->until)) ? $_rrule->until : $_until;
         
         // if dtstart is before $_from, we compute the offset where to start our calculations
-        if ($_event->dtstart->isEarlier($_from)) {
-            $computationOffsetMonth = self::getMonthDiff($_event->dtend, $_from);
+        if ($eventInOrganizerTZ->dtstart->isEarlier($_from)) {
+            $computationOffsetMonth = self::getMonthDiff($eventInOrganizerTZ->dtend, $_from);
             // NOTE: $computationOffsetMonth must be multiple of interval!
             $computationOffsetMonth = floor($computationOffsetMonth/$_rrule->interval) * $_rrule->interval;
             $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $computationOffsetMonth - $_rrule->interval);
-            //echo self::array2string($computationStartDateArray);
         }
         
-        $eventLength = clone $_event->dtend;
-        $eventLength->sub($_event->dtstart);
+        $eventLength = clone $eventInOrganizerTZ->dtend;
+        $eventLength->sub($eventInOrganizerTZ->dtstart);
         
         $computationStartDateArray['day'] = 1;
-        $computationStartDate = self::array2date($computationStartDateArray);
         
         $byDayInterval = (int) substr($_rrule->byday, 0, -2);
         $byDayWeekday  = substr($_rrule->byday, -2);
@@ -496,28 +498,28 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             throw new Exception('mal formated rrule byday part: "' . $_rrule->byday . '"');
         }
         
-        $originatorsOriginalDtstart = clone $_event->dtstart;
-        $originatorsOriginalDtstart->setTimezone($_event->originator_tz);
-        
         while(true) {
-            $computationStartDate->addMonth($_rrule->interval);
+            $computationStartDateArray = self::addMonthIngnoringDay($computationStartDateArray, $_rrule->interval);
+            $computationStartDate = self::array2date($computationStartDateArray, $eventInOrganizerTZ->originator_tz);
             
-            $recurEvent = self::cloneEvent($_event);
+            $recurEvent = self::cloneEvent($eventInOrganizerTZ);
             $recurEvent->dtstart = clone $computationStartDate;
             
             if ($byDayInterval < 0) {
-                $recurEvent->dtstart->addMonth(1)->subDay(1);
+            	$recurEvent->dtstart = self::array2date(self::addMonthIngnoringDay($computationStartDateArray, 1), $eventInOrganizerTZ->originator_tz);
+                $recurEvent->dtstart->subDay(1);
             }
             self::skipWday($recurEvent->dtstart, $byDayWeekday, $byDayInterval, TRUE);
-            
-            $originatorsDtstart = clone $recurEvent->dtstart;
-            $originatorsDtstart->setTimezone($_event->originator_tz);
-            $recurEvent->dtstart->add($originatorsOriginalDtstart->get(Zend_Date::DAYLIGHT) - $originatorsDtstart->get(Zend_Date::DAYLIGHT), Zend_Date::HOUR);
-            //$recurEvent->dtstart->sub($originatorsDtstart->get(Zend_Date::DAYLIGHT) ? 1 : 0, Zend_Date::HOUR);
             
             // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
             $recurEvent->dtend = clone $recurEvent->dtstart;
             $recurEvent->dtend->add($eventLength);
+            
+            $recurEvent->setTimezone('UTC');
+            
+            if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
+                break;
+            }
             
             // skip non existing dates
             if ($computationStartDate->get(Zend_Date::MONTH) != $recurEvent->dtstart->get(Zend_Date::MONTH)) {
@@ -531,12 +533,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             }
             
             // skip if event equal baseevent
-            if ($_event->dtstart->equals($recurEvent->dtstart)) {
+            if ($eventInOrganizerTZ->dtstart->equals($recurEvent->dtstart)) {
                 continue;
-            }
-            
-            if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
-                break;
             }
             
             $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);

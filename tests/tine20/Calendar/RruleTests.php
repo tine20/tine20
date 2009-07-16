@@ -274,7 +274,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     {
     	$event = new Calendar_Model_Event(array(
             'uid'             => Tinebase_Record_Abstract::generateUID(),
-            'summary'         => 'testCalcMonthlyByDayStart',
+            'summary'         => 'testCalcMonthlyByMonthDayStartAllDay',
             'dtstart'         => '2009-07-14 22:00:00',
             'dtend'           => '2009-07-15 21:59:00',
     	    'is_all_day_event' => true,
@@ -287,13 +287,20 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $from = new Zend_Date('2009-06-28 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
         $until = new Zend_Date('2009-09-06 21:59:59', Tinebase_Record_Abstract::ISO8601LONG);
-        
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(1, count($recurSet));
         $this->assertEquals('2009-08-14 22:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-08-15 21:59:00', $recurSet[0]->dtend->get(Tinebase_Record_Abstract::ISO8601LONG));
+
+        // test switch from DST to NO DST
+        $from = new Zend_Date('2009-11-30 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-12-31 21:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
+        $this->assertEquals(1, count($recurSet));
+        $this->assertEquals('2009-12-14 23:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-12-15 22:59:00', $recurSet[0]->dtend->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     public function testCalcMonthlyByDay()
@@ -316,7 +323,10 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($recurSet), 'forward skip failed');
         $this->assertEquals('2009-02-22 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-07-26 14:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
-        
+    }
+    
+    public function testCalcMonthlyByDayBackwardSkip()
+    {
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'two monthly last wendsday',
@@ -373,6 +383,31 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         //print_r($recurSet->toArray());
         $this->assertEquals(2, count($recurSet));
         $this->assertEquals('2009-07-31 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
+    public function testCalcMonthlyByDayStartAllDay()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'             => Tinebase_Record_Abstract::generateUID(),
+            'summary'         => 'testCalcMonthlyByDayStartAllDay',
+            'dtstart'         => '2009-07-21 22:00:00',
+            'dtend'           => '2009-07-22 21:59:00',
+            'is_all_day_event' => true,
+            'rrule'           => 'FREQ=MONTHLY;INTERVAL=1;BYDAY=4WE',
+            'originator_tz'   => 'Europe/Berlin',
+            'editGrant'       => true,
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Zend_Date('2009-06-28 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-09-06 21:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
+        $this->assertEquals(1, count($recurSet));
+        $this->assertEquals('2009-08-25 22:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2009-08-26 21:59:00', $recurSet[0]->dtend->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     public function testCalcYearlyByMonthDay()
