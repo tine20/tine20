@@ -69,7 +69,13 @@ Locale.Gettext.prototype.dcgettext = function (domain, msgid, category) {
 
 Locale.Gettext.prototype.dcngettext = function (domain, msgid, msgid_plural, n, category) {
   var msg = this.getmsg(domain, category);
-  return (msg.get(msgid, msgid_plural) || [msgid, msgid_plural])[msg.plural(n)];
+  
+  if (msg) {
+    return (msg.get(msgid, msgid_plural) || [msgid, msgid_plural])[msg.plural(n)];
+  } else {
+    // fallback if cataloge is not available
+    return n > 1 ? msgid_plural : msgid;
+  }
 };
 
 Locale.Gettext.prototype.dgettext = function (domain, msgid) {
