@@ -240,7 +240,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_accountId [optional]
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      * 
-     * @todo replace mb_convert_encoding with iconv or something like that
      */
     public function getSubFolders($_folderName = '', $_accountId = 'default')
     {
@@ -249,6 +248,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         $this->_delimiter = $account->delimiter;
         
+        // try to get subfolders of $_folderName
         if(empty($_folderName)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get subfolders of root for backend ' . $_accountId);
             $folders = $imap->getFolders('', '%');
@@ -289,44 +289,12 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folders, true));
         
-        // do some mapping and save folder in db
-        $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
-        
-        foreach ($folders as $folderData) {
-            try {
-                // decode folder name
-                if (extension_loaded('mbstring')) {
-                    $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
-                    //$folderData['globalName'] = mb_convert_encoding($folderData['globalName'], "utf-8", "UTF7-IMAP");
-                }
-                
-                $folder = $this->_folderBackend->getByBackendAndGlobalName($_accountId, $folderData['globalName']);
-                $folder->is_selectable = ($folderData['isSelectable'] == '1');
-                $folder->has_children = ($folderData['hasChildren'] == '1');
-                
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // create new folder
-                $folder = new Felamimail_Model_Folder(array(
-                    'localname'     => (! empty($folderData['localName'])) ? $folderData['localName'] : $folderData['globalName'],
-                    'globalname'    => $folderData['globalName'],
-                    'is_selectable' => ($folderData['isSelectable'] == '1'),
-                    'has_children'  => ($folderData['hasChildren'] == '1'),
-                    'account_id'    => $_accountId,
-                    'timestamp'     => Zend_Date::now(),
-                    'user_id'       => $this->_currentAccount->getId(),
-                    'parent'        => $_folderName,
-                    'system_folder' => in_array(strtolower($folderData['localName']), $this->_systemFolders)
-                ));
-                
-                $folder = $this->_folderBackend->create($folder);
-            }
-            
-            $result->addRecord($folder);
-        }
+        // get folder record set and sort it
+        $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
+        $this->_sortFolders($result);
         
         return $result;
-    }
-    
+    }    
     /**
      * delete all messages in one folder
      *
@@ -439,5 +407,68 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         return $result;
+    }
+
+    /**
+     * create new folders or get existing folders from db and return record set
+     *
+     * @param array $_folders
+     * @param Felamimail_Model_Account $_account
+     * @param string $_parentFolder
+     * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
+     * 
+     * @todo replace mb_convert_encoding with iconv or something like that
+     * @todo update $this->_systemFolders with configured folders from account for sorting here? 
+     */
+    protected function _getOrCreateFolders(array $_folders, $_account, $_parentFolder)
+    {
+        $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
+        
+        //-- get configured account standard folders here 
+        
+        // do some mapping and save folder in db (if it doesn't exist
+        foreach ($_folders as $folderData) {
+            try {
+                // decode folder name
+                if (extension_loaded('mbstring')) {
+                    $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
+                }
+                
+                $folder = $this->_folderBackend->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
+                $folder->is_selectable = ($folderData['isSelectable'] == '1');
+                $folder->has_children = ($folderData['hasChildren'] == '1');
+                
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // create new folder
+                $folder = new Felamimail_Model_Folder(array(
+                    'localname'     => (! empty($folderData['localName'])) ? $folderData['localName'] : $folderData['globalName'],
+                    'globalname'    => $folderData['globalName'],
+                    'is_selectable' => ($folderData['isSelectable'] == '1'),
+                    'has_children'  => ($folderData['hasChildren'] == '1'),
+                    'account_id'    => $_account->getId(),
+                    'timestamp'     => Zend_Date::now(),
+                    'user_id'       => $this->_currentAccount->getId(),
+                    'parent'        => $_parentFolder,
+                    'system_folder' => in_array(strtolower($folderData['localName']), $this->_systemFolders)
+                ));
+                
+                $folder = $this->_folderBackend->create($folder);
+            }
+            
+            $result->addRecord($folder);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * sort folder record set
+     * - begin with INBOX + other standard folders, add other folders
+     *
+     * @param Tinebase_Record_RecordSet $_folders
+     */
+    protected function _sortFolders(Tinebase_Record_RecordSet $_folders)
+    {
+        //$sortedFolders = 
     }
 }
