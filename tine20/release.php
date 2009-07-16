@@ -159,6 +159,7 @@ function concatCss(array $_files, $_filename)
         if (file_exists("$tine20path/$filename")) {
             $cssContent = file_get_contents("$tine20path/$filename");
             $cssContent = preg_replace('/(\.\.\/){3,}images/i', '../../images', $cssContent);
+            $cssContent = preg_replace('/(\.\.\/){3,}library/i', '../../library', $cssContent);
             fwrite($cssDebug, $cssContent . "\n");
         }
     }
@@ -271,8 +272,12 @@ if ($opts->a || $opts->m) {
     exec("cd $tine20path; ls images/* | grep images/ | egrep '\.png|\.gif|\.jpg'", $baseImages);
     $files = array_merge($files, $baseImages);
     
-    $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all.css');
+    $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
     preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
+    $files = array_merge($files, $matches[1]);
+    
+    $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
+    preg_match_all('/url\(..\/..\/(library.*)\)/U', $tineCSS, $matches);
     $files = array_merge($files, $matches[1]);
         
     $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
