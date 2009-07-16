@@ -22,7 +22,15 @@ Tine.Admin.Tags.Main = {
          * onclick handler for addBtn
          */
         addTag: function(_button, _event) {
-            Tine.Admin.Tags.EditDialog.openWindow({tag: null});
+            Tine.Admin.Tags.EditDialog.openWindow({
+                tag: null,
+                listeners: {
+                    scope: this,
+                    'update': function(record) {
+                        this.reload();
+                    }
+                }
+            });
         },
 
         /**
@@ -30,9 +38,16 @@ Tine.Admin.Tags.Main = {
          */
         editTag: function(_button, _event) {
             var selectedRows = Ext.getCmp('AdminTagsGrid').getSelectionModel().getSelections();
-            Tine.Admin.Tags.EditDialog.openWindow({tag: selectedRows[0]});
+            Tine.Admin.Tags.EditDialog.openWindow({ 
+                tag: selectedRows[0],
+                listeners: {
+                    scope: this,
+                    'update': function(record) {
+                        this.reload();
+                    }
+                }
+            });
         },
-
         
         /**
          * onclick handler for deleteBtn
@@ -61,7 +76,7 @@ Tine.Admin.Tags.Main = {
                         }
                     });
                 }
-            });
+            }, this);
         }    
     },
     
@@ -231,7 +246,15 @@ Tine.Admin.Tags.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            Tine.Admin.Tags.EditDialog.openWindow({tag: record});
+            Tine.Admin.Tags.EditDialog.openWindow({
+                tag: record,
+                listeners: {
+                    scope: this,
+                    'update': function(record) {
+                        this.reload();
+                    }
+                }
+            });
         }, this);
 
         // add the grid to the layout
@@ -294,7 +317,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var form = this.getForm();
         
         if(form.isValid()) {
-            Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Memberships'));
+            Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Tag'));
             
             var tag = this.tag;
             
@@ -327,14 +350,15 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     tagData: Ext.util.JSON.encode(tag.data)
                 },
                 success: function(response) {
-                    if(window.opener.Tine.Admin.Tags) {
-                        window.opener.Tine.Admin.Tags.Main.reload();
-                    }
+                    //if(this.window.opener.Tine.Admin.Tags) {
+                    //    this.window.opener.Tine.Admin.Tags.Main.reload();
+                    //}
+                    this.fireEvent('update', Ext.util.JSON.encode(this.tag.data));
+                    Ext.MessageBox.hide();
                     if(_closeWindow === true) {
-                        window.close();
+                        this.window.close();
                     } else {
                         this.onRecordLoad(response);
-                        Ext.MessageBox.hide();
                     }
                 },
                 failure: function ( result, request) { 
@@ -347,29 +371,6 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
     },
 
-    handlerDeleteTag: function(_button, _event) {
-        var tagIds = Ext.util.JSON.encode([this.tag.id]);
-            
-        Ext.Ajax.request({
-            url: 'index.php',
-            params: {
-                method: 'Admin.deleteTags', 
-                tagIds: tagIds
-            },
-            text: this.translation.gettext('Deleting tag...'),
-            success: function(_result, _request) {
-                if(window.opener.Tine.Admin.Tags) {
-                    window.opener.Tine.Admin.Tags.Main.reload();
-                }
-                window.close();
-            }/*,
-            failure: function ( result, request) { 
-                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the tag.'); 
-            }*/
-        });                           
-    },
-        
-     
     /**
      * function updateRecord
      */
