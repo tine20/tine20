@@ -44,7 +44,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         'is_billable'    => array('filter' => 'Tinebase_Model_Filter_Bool', 'options' => array('fields' => array('timetracker_timesheet.is_billable','ta.is_billable'))),
         //'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'is_cleared'     => array('custom' => TRUE),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'id'))
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'timetracker_timesheet.id'))
     );
     
     /**

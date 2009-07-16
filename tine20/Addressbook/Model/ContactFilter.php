@@ -67,7 +67,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'email'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'email_home'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag'),
+        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'addressbook.id')),
         //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),

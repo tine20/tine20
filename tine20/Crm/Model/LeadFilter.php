@@ -35,7 +35,7 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('lead_name', 'description'))),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'lead_name'      => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag'),
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'metacrm_lead.id')),
         'probability'    => array('filter' => 'Tinebase_Model_Filter_Int'),
         'turnover'       => array('filter' => 'Tinebase_Model_Filter_Int'),
         'leadstate_id'   => array('filter' => 'Tinebase_Model_Filter_Int'),
