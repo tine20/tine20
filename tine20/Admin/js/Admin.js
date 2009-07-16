@@ -296,7 +296,7 @@ Tine.Admin.AccessLog.Main = function() {
                     callback : function(_options, _success, _response) {
                         if(_success === true) {
                         	var result = Ext.util.JSON.decode(_response.responseText);
-                        	if(result.success === true) {
+                        	if(result.status == 'success') {
                                 Ext.getCmp('gridAdminAccessLog').getStore().reload();
                         	}
                         }
