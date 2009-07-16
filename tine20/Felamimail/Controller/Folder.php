@@ -291,7 +291,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         // get folder record set and sort it
         $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
-        $result = $this->_sortFolders($result);
+        $result = $this->_sortFolders($result, $_folderName);
         
         return $result;
     }    
@@ -463,50 +463,36 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     
     /**
      * sort folder record set
-     * - begin with INBOX + other standard folders, add other folders
+     * - begin with INBOX + other standard/system folders, add other folders
      *
      * @param Tinebase_Record_RecordSet $_folders
+     * @param string $_parentFolder
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo make sort case sensitive
-     * @todo finish that
      * @todo write test
      */
-    protected function _sortFolders(Tinebase_Record_RecordSet $_folders)
+    protected function _sortFolders(Tinebase_Record_RecordSet $_folders, $_parentFolder)
     {
         $sortedFolders = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         
-        /*
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Sorting folders ...'
-            . print_r($_folders->globalname, TRUE)
-        );
-        */
-        
-        $_folders->sort('localname', 'ASC', SORT_STRING);
+        $_folders->sort('localname', 'ASC', 'natcasesort');
         $_folders->addIndices(array('globalname'));
         
-        foreach ($this->_systemFolders as $systemFolderName) {
-            $folders = $_folders->filter('globalname', strtolower($systemFolderName));
-            if (count($folders) > 0) {
-                $sortedFolders->addRecord($folders->getFirstRecord());
+        // only add system folders to root level
+        if (empty($_parentFolder)) {
+            foreach ($this->_systemFolders as $systemFolderName) {
+                $folders = $_folders->filter('globalname', '/' . $systemFolderName . '/i', TRUE);
+                if (count($folders) > 0) {
+                    $sortedFolders->addRecord($folders->getFirstRecord());
+                }
             }
         }
         
-        // add the rest
         foreach ($_folders as $folder) {
-            if (! in_array($folder->globalname, $this->_systemFolders)) {
-            //if (! in_array($folder->localname, $this->_systemFolders)) {
+            if (! empty($_parentFolder) || ! in_array(strtolower($folder->localname), $this->_systemFolders)) {
                 $sortedFolders->addRecord($folder);
             }
         }
-        
-        /*
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Sorted folders ...'
-            . print_r($sortedFolders->globalname, TRUE)
-        );
-        */
         
         return $sortedFolders;
     }
