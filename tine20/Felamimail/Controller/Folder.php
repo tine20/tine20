@@ -11,6 +11,7 @@
  * 
  * @todo        add cleanup routine for deleted (by other clients)/outofdate folders?
  * @todo        use other/shared namespaces
+ * @todo        translate standard folder names
  */
 
 /**
@@ -40,9 +41,9 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @var array
      * 
-     * @todo    get these from account settings
+     * @todo    update these from account settings
      */
-    protected $_systemFolders = array('trash', 'inbox', 'drafts', 'junk', 'sent', 'templates');
+    protected $_systemFolders = array('inbox', 'drafts', 'sent', 'templates', 'junk', 'trash');
     
     /**
      * folder delimiter/separator
@@ -239,7 +240,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_folderName
      * @param string $_accountId [optional]
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
-     * 
      */
     public function getSubFolders($_folderName = '', $_accountId = 'default')
     {
@@ -291,7 +291,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         // get folder record set and sort it
         $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
-        $this->_sortFolders($result);
+        $result = $this->_sortFolders($result);
         
         return $result;
     }    
@@ -466,9 +466,48 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * - begin with INBOX + other standard folders, add other folders
      *
      * @param Tinebase_Record_RecordSet $_folders
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo make sort case sensitive
+     * @todo finish that
+     * @todo write test
      */
     protected function _sortFolders(Tinebase_Record_RecordSet $_folders)
     {
-        //$sortedFolders = 
+        $sortedFolders = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
+        
+        /*
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Sorting folders ...'
+            . print_r($_folders->globalname, TRUE)
+        );
+        */
+        
+        $_folders->sort('localname', 'ASC', SORT_STRING);
+        $_folders->addIndices(array('globalname'));
+        
+        foreach ($this->_systemFolders as $systemFolderName) {
+            $folders = $_folders->filter('globalname', strtolower($systemFolderName));
+            if (count($folders) > 0) {
+                $sortedFolders->addRecord($folders->getFirstRecord());
+            }
+        }
+        
+        // add the rest
+        foreach ($_folders as $folder) {
+            if (! in_array($folder->globalname, $this->_systemFolders)) {
+            //if (! in_array($folder->localname, $this->_systemFolders)) {
+                $sortedFolders->addRecord($folder);
+            }
+        }
+        
+        /*
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Sorted folders ...'
+            . print_r($sortedFolders->globalname, TRUE)
+        );
+        */
+        
+        return $sortedFolders;
     }
 }
