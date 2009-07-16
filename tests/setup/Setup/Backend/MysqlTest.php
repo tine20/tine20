@@ -49,8 +49,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = Setup_Backend_Factory::factory(Setup_Backend_Factory::SQL);
-        
+        $this->_backend = Setup_Backend_Factory::factory('Mysql');
     }
 
     /**
@@ -63,6 +62,32 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     {
     
     }
+    /**
+     * Perform some insignificant string format manipulations (add/remove Whitespace).
+     * This is needed because the format of the return values of the tested methods 
+     * has changed over time and might change again someday.
+     * 
+     * @param String $_value
+     * @return String
+     */
+    protected function _fixFieldDeclarationString($_value) {
+        $return = trim($_value);
+        $return = str_replace('  ', ' ', $return);
+        return '  ' . $return;
+    }
+
+    /**
+     * Perform some insignificant string format manipulations (add/remove Whitespace).
+     * This is needed because the format of the return values of the tested methods 
+     * has changed over time and might change again someday.
+     * 
+     * @param String $_value
+     * @return String
+     */
+    protected function _fixIndexDeclarationString($_value) {
+        $return = trim($_value);
+        return '  ' . $return;
+    }
 
     public function testStringToMysqlFieldStatement_001() 
     {
@@ -74,9 +99,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                 <unsigned>true</unsigned>
             </field>";
             
-        $statement = "`id` int(11)  unsigned  auto_increment";    
+        $statement = $this->_fixFieldDeclarationString("`id` int(11) unsigned NOT NULL auto_increment");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }
     
@@ -85,12 +110,14 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $string ="
             <field>
                 <name>id</name>
+                <type>integer</type>
                 <autoincrement>true</autoincrement>
             </field>";
             
-        $statement = "`id` int(11)  unsigned  auto_increment";    
+        $statement = $this->_fixFieldDeclarationString("`id` int(11) unsigned NOT NULL auto_increment");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }
     
@@ -104,9 +131,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = "`name` varchar(25)  NOT NULL ";    
+        $statement = $this->_fixFieldDeclarationString("`name` varchar(25) NOT NULL");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }
     
@@ -121,9 +148,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = "`status` enum('enabled','disabled')  NOT NULL ";    
+        $statement = $this->_fixFieldDeclarationString("`status` enum('enabled','disabled') NOT NULL");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }            
     
@@ -138,9 +165,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = "`order` int(11)  unsigned  NOT NULL ";    
+        $statement = $this->_fixFieldDeclarationString("`order` int(11)  unsigned  NOT NULL");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }        
     
@@ -153,9 +180,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <type>datetime</type>
                 </field>";
             
-        $statement = "`last_login` datetime ";    
+        $statement = $this->_fixFieldDeclarationString("`last_login` datetime ");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }    
     
@@ -169,9 +196,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <default>false</default>
                 </field>";
             
-        $statement = "`email_sent` tinyint default '0'";    
+        $statement = $this->_fixFieldDeclarationString("`email_sent` tinyint(4) unsigned default 0");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }    
     
@@ -185,9 +212,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <notnull>false</notnull>
                 </field>";
             
-        $statement = "`account_id` int(11)  unsigned ";    
+        $statement = $this->_fixFieldDeclarationString("`account_id` int(11)  unsigned ");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }    
     
@@ -200,9 +227,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = "`last_modified_time` datetime  NOT NULL ";    
+        $statement = $this->_fixFieldDeclarationString("`last_modified_time` datetime  NOT NULL ");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }    
     
@@ -216,9 +243,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <default>false</default>
                 </field>";
             
-        $statement = "`is_deleted` tinyint default '0' NOT NULL ";    
+        $statement = $this->_fixFieldDeclarationString("`is_deleted` tinyint(4) unsigned NOT NULL default 0");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }    
     
@@ -230,9 +257,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <type>clob</type>
                 </field>";
             
-        $statement = "`new_value` text ";    
+        $statement = $this->_fixFieldDeclarationString("`new_value` text ");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }        
     
@@ -244,9 +271,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <type>integer</type>
                 </field>";
             
-        $statement = "`created_by` int(11)  unsigned ";    
+        $statement = $this->_fixFieldDeclarationString("`created_by` int(11)  unsigned ");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }    
     
@@ -259,9 +286,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <comment>comment</comment>
                 </field>";
             
-        $statement = "`account_id` int(11)  unsigned COMMENT 'comment'";    
+        $statement = $this->_fixFieldDeclarationString("`account_id` int(11)  unsigned COMMENT 'comment'");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }
     
@@ -273,9 +300,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <type>blob</type>
                 </field>";
             
-        $statement = "`jpegphoto` longblob ";    
+        $statement = $this->_fixFieldDeclarationString("`jpegphoto` longblob ");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }    
     
@@ -289,9 +316,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <length>4</length>
                 </field>";
             
-        $statement = "`private` tinyint(4)  unsigned default '0'";    
+        $statement = $this->_fixFieldDeclarationString("`private` tinyint(4)  unsigned default 0");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }
     
@@ -304,28 +331,12 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = "`created` datetime  NOT NULL ";    
+        $statement = $this->_fixFieldDeclarationString("`created` datetime  NOT NULL ");
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }        
-    
-    public function testStringToMysqlFieldStatement_017() 
-    {
-        $string ="
-               <field>
-                    <name>price</name>
-                    <type>decimal</type>
-                    <value>12,2</value>
-                    <default>0</default>
-                </field>";
-            
-        $statement = "`price` decimal (12,2)default '0'";    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
-    }
-    
+
     public function testStringToMysqlFieldStatement_018() 
     {
         $string ="
@@ -336,9 +347,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <default>1</default>
                 </field>";
             
-        $statement = "`leadtype_translate` tinyint(4)  unsigned default '1'";    
+        $statement = $this->_fixFieldDeclarationString("`leadtype_translate` tinyint(4)  unsigned default 1");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }    
     
@@ -351,9 +362,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <length>24</length>
                 </field>";
             
-        $statement = "`bigint` bigint(24)  unsigned ";    
+        $statement = $this->_fixFieldDeclarationString("`bigint` bigint(24)  unsigned ");    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
     }        
     
@@ -366,7 +377,6 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     {
         $string ="
                 <index>
-                    <name>leadtype_id</name>
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
@@ -374,9 +384,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     </field>
                 </index>";
             
-        $statement = " PRIMARY KEY `leadtype_id` (`id`) ";    
+        $statement = $this->_fixIndexDeclarationString("  PRIMARY KEY  (`id`)");    
         
-        $index = Setup_Backend_Schema_Index_Factory::factory('String', $string);
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
     }        
     
@@ -384,7 +394,6 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     {
         $string ="
                 <index>
-                    <name>name-application_id</name>
                     <primary>true</primary>
                     <field>
                         <name>name</name>
@@ -394,9 +403,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     </field>
                 </index>";
             
-        $statement = " PRIMARY KEY `name-application_id` (`name`,`application_id`) ";    
+        $statement = $this->_fixIndexDeclarationString("  PRIMARY KEY  (`name`,`application_id`)");    
         
-        $index = Setup_Backend_Schema_Index_Factory::factory('String', $string);
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
     }        
 
@@ -414,9 +423,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     </field>
                 </index> ";
             
-        $statement = " UNIQUE KEY `group_id-account_id` (`group_id`,`account_id`) ";    
+        $statement = $this->_fixIndexDeclarationString(" UNIQUE KEY `group_id-account_id` (`group_id`,`account_id`) ");    
         
-        $index = Setup_Backend_Schema_Index_Factory::factory('String', $string);
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
     }        
     
@@ -436,9 +445,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     </field>
                 </index>";
             
-        $statement = " KEY `id-account_type-account_id` (`container_id`,`account_type`,`account_id`) ";    
+        $statement = $this->_fixIndexDeclarationString(" KEY `id-account_type-account_id` (`container_id`,`account_type`,`account_id`) ");    
         
-        $index = Setup_Backend_Schema_Index_Factory::factory('String', $string);
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
     }    
     
@@ -460,9 +469,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     </reference>
                 </index>";
             
-        $statement = "CONSTRAINT `" . SQL_TABLE_PREFIX . "container_id` FOREIGN KEY(`container_id`) REFERENCES `" . SQL_TABLE_PREFIX . "container` (`id`) ";    
+        $statement = $this->_fixIndexDeclarationString("CONSTRAINT `" . SQL_TABLE_PREFIX . "container_id` FOREIGN KEY (`container_id`) REFERENCES `" . SQL_TABLE_PREFIX . "container` (`id`) ");    
         
-        $index = Setup_Backend_Schema_Index_Factory::factory('String', $string);
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($index));
     }        
     
@@ -481,17 +490,14 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     </reference>
                 </index>";
             
-        $statement = "CONSTRAINT `" . SQL_TABLE_PREFIX . "container_id` FOREIGN KEY(`container_id`) REFERENCES `" . SQL_TABLE_PREFIX . "container` (`id`) ";    
+        $statement = $this->_fixIndexDeclarationString("CONSTRAINT `" . SQL_TABLE_PREFIX . "container_id` FOREIGN KEY (`container_id`) REFERENCES `" . SQL_TABLE_PREFIX . "container` (`id`) ");    
         
-        $index = Setup_Backend_Schema_Index_Factory::factory('String', $string);
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($index));
     }        
         
 }        
-     
-
-            
-                 
+                
                  
                 
                 
