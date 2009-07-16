@@ -19,6 +19,7 @@ Tine.Admin = function() {
     var _getInitialTree = function(translation) { return [{
         text: translation.gettext('User'),
         cls: 'treemain',
+        iconCls: 'admin-node-user',
         allowDrag: false,
         allowDrop: true,
         id: 'accounts',
@@ -31,6 +32,7 @@ Tine.Admin = function() {
     },{
         text: translation.gettext('Groups'),
         cls: 'treemain',
+        iconCls: 'admin-node-groups',
         allowDrag: false,
         allowDrop: true,
         id: 'groups',
@@ -43,6 +45,7 @@ Tine.Admin = function() {
     },{
         text: translation.gettext('Computers'),
         cls: 'treemain',
+        iconCls: 'admin-node-computers',
         allowDrag: false,
         allowDrop: true,
         id: 'computers',
@@ -55,6 +58,7 @@ Tine.Admin = function() {
     },{
         text: translation.gettext('Applications'),
 		cls: "treemain",
+        iconCls: 'admin-node-applications',
 		allowDrag: false,
 		allowDrop: true,
 		id: "applications",
@@ -67,6 +71,7 @@ Tine.Admin = function() {
 	},{
 		text : translation.gettext('Access Log'),
 		cls :"treemain",
+        iconCls: 'admin-node-accesslog',
 		allowDrag :false,
 		allowDrop :true,
 		id :"accesslog",

@@ -28,6 +28,25 @@
     background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
 }
 
+.admin-node-accesslog {
+    background-image:url(../../images/oxygen/16x16/actions/view-process-own.png) !important;
+}
+
+.admin-node-user {
+    background-image:url(../../images/oxygen/16x16/places/user-identity.png) !important;
+}
+
+.admin-node-groups {
+    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
+}
+
+.admin-node-computers {
+    background-image:url(../../images/oxygen/16x16/places/network-local.png) !important;
+}
+
+.admin-node-applications {
+    background-image:url(../../images/oxygen/16x16/places/user-desktop.png) !important;
+}
 
 .x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-roles, 
 .x-tree-node-expanded .x-tree-node-icon.x-tree-node-leaf-roles, 
