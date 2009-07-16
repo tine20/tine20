@@ -100,8 +100,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             return NULL;
         }
         
-        $contact = Addressbook_Controller_Contact::getInstance()->get($this->user_id);
-        return $contact->account_id ? $contact->account_id : NULL;
+        try {
+	        $contact = Addressbook_Controller_Contact::getInstance()->get($this->user_id);
+	        return $contact->account_id ? $contact->account_id : NULL;
+        } catch (Exception $e) {
+        	return NULL;
+        }
     }
     
     /**
