@@ -120,7 +120,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 load: function(node) {
                     
                     // add 'intelligent' folders
-                    if (node.attributes.show_intelligent_folders == 1) {
+                    if (node.attributes.show_intelligent_folders == 1/* || node.attributes.show_intelligent_folders == '1'*/) {
                         var markedNode = new Ext.tree.TreeNode({
                             id: record.data.id + '/marked',
                             localname: 'marked', //this.app.i18n._('Marked'),
@@ -152,7 +152,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                         });
                 
                         node.appendChild(unreadNode);
-
                     }
                 }
             }
@@ -658,6 +657,9 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             // get account id and update username/password
             var accountNode = request.argument.node;
             var accountId = accountNode.attributes.account_id;
+            
+            // remove intelligent folders
+            accountNode.attributes.show_intelligent_folders = 0;
                 
             var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
                 title: String.format(this.app.i18n._('IMAP Credentials for {0}'), accountNode.text),
@@ -668,8 +670,9 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                     scope: this,
                     'update': function(data) {
                         // update account node
+                        var account = Tine.Felamimail.loadAccountStore().getById(accountNode.attributes.account_id);
+                        accountNode.attributes.show_intelligent_folders = account.get('show_intelligent_folders');
                         accountNode.reload(function(callback) {
-                            //console.log('reload');
                         });
                     }
                 }
