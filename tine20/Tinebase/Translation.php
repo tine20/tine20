@@ -20,6 +20,13 @@
  */
 class Tinebase_Translation
 {
+	/**
+	 * Layzy loading for {@see getCountryList()}
+	 * 
+	 * @var array
+	 */
+	protected static $_countryLists = array();
+	
     /**
      * array with translations for applications 
      * - is used in getTranslations to save already initialized translations
@@ -98,22 +105,24 @@ class Tinebase_Translation
      */
     public static function getCountryList()
     {
-        $locale = Tinebase_Core::get('locale');
+    	$locale = Tinebase_Core::get('locale');
+    	$language = $locale->getLanguage();
+    	
+    	//try lazy loading of translated country list
+    	if (empty(self::$_countryLists[$language])) {
+	        $countries = $locale->getCountryTranslationList();
+	        asort($countries);
+	        foreach($countries as $shortName => $translatedName) {
+	            $results[] = array(
+	                'shortName'         => $shortName, 
+	                'translatedName'    => $translatedName
+	            );
+	        }
+	
+	        self::$_countryLists[$language] = $results;
+    	}
 
-        $countries = $locale->getCountryTranslationList();
-        asort($countries);
-        foreach($countries as $shortName => $translatedName) {
-            $results[] = array(
-                'shortName'         => $shortName, 
-                'translatedName'    => $translatedName
-            );
-        }
-
-        $result = array(
-            'results'   => $results
-        );
-
-        return $result;
+    	return array('results' => self::$_countryLists[$language]);
     }
     
     /**
