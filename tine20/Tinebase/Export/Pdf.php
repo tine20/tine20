@@ -426,12 +426,14 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	 * @param  int $_yPos
      * @param  int $_page page number (optional)
      * @throws Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo don't use mb_check_encoding
 	 */
 	protected function _writeText($_string, $_xPos, $_yPos, $_page = NULL) {
 	
 	    $page = ($_page !== NULL) ? $_page : $this->_pageNumber;
 	    
-	    if (mb_check_encoding($_string, $this->_encoding)) {	
+	    if (! extension_loaded('mbstring') || mb_check_encoding($_string, $this->_encoding)) {	
 
 	        //echo $_string;
 	        
