@@ -92,6 +92,31 @@ class Tinebase_Translation
     }
     
     /**
+     * get list of translated country names
+     *
+     * @return array list of countrys
+     */
+    public static function getCountryList()
+    {
+        $locale = Tinebase_Core::get('locale');
+
+        $countries = $locale->getCountryTranslationList();
+        asort($countries);
+        foreach($countries as $shortName => $translatedName) {
+            $results[] = array(
+                'shortName'         => $shortName, 
+                'translatedName'    => $translatedName
+            );
+        }
+
+        $result = array(
+            'results'   => $results
+        );
+
+        return $result;
+    }
+    
+    /**
      * gets a supported locale
      *
      * @param   string $_localeString
