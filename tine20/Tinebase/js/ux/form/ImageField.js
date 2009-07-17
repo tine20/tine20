@@ -139,6 +139,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.buttonCt.mask(_('Loading'), 'x-mask-loading');
         uploader.upload();
         
+        if (this.ctxMenu) {
+            this.ctxMenu.hide();
+        }
     },
     /**
      * @private
@@ -158,6 +161,8 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         var upload = new Ext.menu.Item({
             text: _('Change Image'),
             iconCls: 'action_uploadImage',
+            handler: this.onFileSelect,
+            scope: this,
             plugins: [new Ext.ux.file.BrowsePlugin({})]
         });
         /*
@@ -214,10 +219,27 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                     this.setValue('');
                 }
                 
+            },{
+                text: _('Show Original Image'),
+                iconCls: 'action_originalImage',
+                disabled: this.imageSrc == this.defaultImage,
+                scope: this,
+                handler: this.downloadImage
+                
             }]
         });
         this.ctxMenu.showAt(e.getXY());
     },
+    
+    downloadImage: function() {
+        var url = Ext.apply(this.imageSrc, {
+            height: -1,
+            width: -1
+        }).toString();
+        
+        Tine.Tinebase.common.openWindow('showImage', url, 800, 600);
+    },
+    
     updateImage: function() {
         // only update when new image differs from current
         if(this.imageCt.dom.src.substr(-1 * this.imageSrc.length) != this.imageSrc) {
