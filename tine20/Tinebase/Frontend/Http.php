@@ -442,7 +442,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	    $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
     	}
     	
-    	Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
+    	if ($width != -1 && $height != -1) {
+    	   Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
+    	}
     	
     	header('Content-Type: '. $image->mime);
     	die($image->blob);
