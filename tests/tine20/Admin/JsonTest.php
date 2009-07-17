@@ -361,18 +361,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccessLogsWithDeletedUser()
     {
-    	$username = 'admin_json_test';
-    	$user = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => $username,
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'Admin Json Test',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
-        ));
-        $user = Tinebase_User::getInstance()->addUser($user);
-        Tinebase_AccessLog::getInstance()->addLoginEntry('test_session_id', $username, '127.0.0.1', Zend_Auth_Result::SUCCESS, $user->getId());
+    	$user = $this->objects['user'];
+
+        Tinebase_AccessLog::getInstance()->addLoginEntry('test_session_id', $user->accountLoginName, '127.0.0.1', Zend_Auth_Result::SUCCESS, $user->getId());
                 
     	Tinebase_User::getInstance()->deleteUser($user->getId());
     	
@@ -388,7 +379,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $testLogEntry = $accessLogs['results'][0];
         // check nonExistentUser
-        $this->assertEquals(Tinebase_User::getInstance()->getNonExistentUser(), $testLogEntry['accountObject']);
+        $this->assertEquals(Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName, $testLogEntry['accountObject']['accountDisplayName']);
         
         // cleanup
         $this->_backend->deleteAccessLogEntries(Zend_Json::encode(array($testLogEntry['id'])));
