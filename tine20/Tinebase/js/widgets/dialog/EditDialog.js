@@ -278,6 +278,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onRender : function(ct, position){
         Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
         
+        // generalized keybord nav for edit dlgs
+        var nav = new Ext.KeyNav(this.el, {
+            "enter" : function(e){
+                if (e.ctrlKey) {
+                    this.onSaveAndClose();
+                }
+            }
+            scope : this
+        });
+
         // recalculate height, as autoHeight fails for Ext.Window ;-(
         this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
         
