@@ -284,7 +284,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 if (e.ctrlKey) {
                     this.onSaveAndClose();
                 }
-            }
+            },
             scope : this
         });
 
