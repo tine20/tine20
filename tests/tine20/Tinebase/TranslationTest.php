@@ -37,7 +37,8 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        
+    	//Some tests may have changed the User Locale => restore defaults
+        Tinebase_Core::setupUserLocale();
     }
     
     /**
@@ -84,6 +85,30 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue((bool)preg_match("/Locale\.prototype\.TranslationLists/", $jsTranslations), 'generic translations are missing');
         $this->assertTrue((bool)preg_match("/Ext\.UpdateManager\.defaults\.indicatorText/", $jsTranslations), 'ext translations are missing');
         $this->assertTrue((bool)preg_match("/Locale\.Gettext\.prototype\._msgs\['\.\/LC_MESSAGES\/Tinebase'\]/", $jsTranslations), 'tine translations are missing');
+    }
+    
+    public function testGetCountryNameByRegionCode()
+    {
+        Tinebase_Core::setupUserLocale('de_DE');
+        $this->assertEquals('Deutschland', Tinebase_Translation::getCountryNameByRegionCode('DE'));
+        $this->assertEquals('Vereinigte Staaten', Tinebase_Translation::getCountryNameByRegionCode('US'));
+        $this->assertNull(Tinebase_Translation::getCountryNameByRegionCode('XX'));
+        
+        Tinebase_Core::setupUserLocale('en_US');
+        $this->assertEquals('Germany', Tinebase_Translation::getCountryNameByRegionCode('DE'));
+        $this->assertEquals('United States', Tinebase_Translation::getCountryNameByRegionCode('US'));
+    }
+    
+    public function testGetRegionCodeByCountryName()
+    {
+        Tinebase_Core::setupUserLocale('de_DE');
+        $this->assertEquals('DE', Tinebase_Translation::getRegionCodeByCountryName('Deutschland'));
+        $this->assertEquals('US', Tinebase_Translation::getRegionCodeByCountryName('Vereinigte Staaten'));
+        $this->assertNull(Tinebase_Translation::getRegionCodeByCountryName('XX'));
+        
+        Tinebase_Core::setupUserLocale('en_US');
+        $this->assertEquals('DE', Tinebase_Translation::getRegionCodeByCountryName('Germany'));
+        $this->assertEquals('US', Tinebase_Translation::getRegionCodeByCountryName('United States'));
     }
 }
 

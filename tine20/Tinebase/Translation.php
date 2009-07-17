@@ -117,6 +117,42 @@ class Tinebase_Translation
     }
     
     /**
+     * Get translated country name for a given ISO {@param $_regionCode}
+     * 
+     * @param String $regionCode [e.g. DE, US etc.]
+     * @return String | null [e.g. Germany, United States etc.]
+     */
+    public static function getCountryNameByRegionCode($_regionCode)
+    {
+    	$countries = self::getCountryList();
+    	foreach($countries['results'] as $country) {
+    		if ($country['shortName'] === $_regionCode) {
+    			return $country['translatedName'];
+    		}
+    	} 
+
+    	return null;
+    }
+    
+    /**
+     * Get translated country name for a given ISO {@param $_regionCode}
+     * 
+     * @param String $regionCode [e.g. DE, US etc.]
+     * @return String | null [e.g. Germany, United States etc.]
+     */
+    public static function getRegionCodeByCountryName($_countryName)
+    {
+        $countries = self::getCountryList();
+        foreach($countries['results'] as $country) {
+            if ($country['translatedName'] === $_countryName) {
+                return $country['shortName'];
+            }
+        } 
+
+        return null;
+    }
+    
+    /**
      * gets a supported locale
      *
      * @param   string $_localeString

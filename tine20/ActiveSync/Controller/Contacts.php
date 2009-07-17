@@ -115,6 +115,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      *
      * @param DOMDocument $_xmlDocument
      * @param DOMElement $_xmlNode
+     * @param $_folderId
      * @param string $_serverId
      */
     public function appendXML(DOMDocument $_xmlDocument, DOMElement $_xmlNode, $_folderId, $_serverId)
@@ -122,11 +123,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         $data = $this->_contentController->get($_serverId);
         
         foreach($this->_mapping as $key => $value) {
+        	$nodeContent = '';
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
-                        $bday = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $bday));
+                    	$nodeContent = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';;                       
                         break;
                         
                     case 'jpegphoto':
@@ -135,18 +136,25 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $data->getId());
                                 $image->resize(120, 160, Tinebase_Model_Image::RATIOMODE_PRESERVANDCROP);
                                 $jpegData = $image->getBlob('image/jpeg');
+                                $nodeContent = base64_encode($jpegData);
                             } catch (Exception $e) {
                                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to convert image " . $e);
                             }
 
-                            $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, base64_encode($jpegData)));
+                            
                         }
                         break;
                         
+                    case 'adr_one_countryname':
+                    case 'adr_two_countryname':
+                    	$nodeContent = Tinebase_Translation::getCountryNameByRegionCode($data->$value);
+                    	break;
+                        
                     default:
-                        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $data->$value));
+                        $nodeContent = $data->$value;
                         break;
                 }
+                $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Contacts', $key, $nodeContent));
             }
         }        
     }
@@ -236,6 +244,12 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $contact->$value = null;
                     }
                     break;
+                    
+                case 'adr_one_countryname':
+                case 'adr_two_countryname':
+                    $contact->$value = Tinebase_Translation::getRegionCodeByCountryName((string)$xmlData->$fieldName);
+                    break;
+                    
                 default:
                     if(isset($xmlData->$fieldName)) {
                         $contact->$value = (string)$xmlData->$fieldName;
