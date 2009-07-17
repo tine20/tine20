@@ -244,13 +244,13 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         
         // set stores
         this.phoneStore = Tine.Phone.loadPhoneStore();
-        this.setLineStore(this.phoneStore.getAt(0).id);
+        
+        //this.setLineStore(this.phoneStore.getAt(0).id);
+        this.setLineStore(null);
         
         /***************** form fields *****************/
         
-        this.items = [new Tine.widgets.customfields.CustomfieldsCombo(
-
-            {
+        this.items = [new Tine.widgets.customfields.CustomfieldsCombo({
                 fieldLabel: this.translation._('Phone'),
                 store: this.phoneStore,
                 mode: 'local',
@@ -268,6 +268,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 	
                     // reload lines combo on change
                     select: function(combo, newValue, oldValue){
+                        //console.log('set line store for ' + newValue.data.id);
                         this.setLineStore(newValue.data.id);
                     }
                 }
@@ -305,7 +306,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
             iconCls: 'action_DialNumber',
             handler : function(){   
                 var form = this.getForm();
-
+                
                 if (form.isValid()) {
                     Ext.Ajax.request({
                         url: 'index.php',
@@ -356,7 +357,12 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         var lineCombo = this.getForm().findField('lineId'); 
         
         // select first combo values
-		if(!phoneCombo.getState()) { phoneCombo.setValue(this.phoneStore.getAt(0).id); }
+		if(! phoneCombo.getState()) {
+            phoneCombo.setValue(this.phoneStore.getAt(0).id);
+        } else {
+            // update line store again (we need this, because it is changed when dlg is opened the second time)
+            this.setLineStore(phoneCombo.getValue());
+        }
         this.getForm().findField('lineId').setValue(this.linesStore.getAt(0).id);
     },
     
@@ -365,14 +371,23 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
      */
     setLineStore: function(phoneId) {
     	
-    	//console.log('set lines for ' + phoneId);
-    	
     	if (this.linesStore == null) {
     	   this.linesStore = new Ext.data.Store({});
     	} else {
     		// empty store
     		this.linesStore.removeAll();
     	}
+        
+    	var form = this.getForm();
+        
+        if (phoneId == null) {
+            if (form) {
+                phoneId = form.findField('phoneId').getValue();
+            } else {
+                // get first phone
+                phoneId = this.phoneStore.getAt(0).id;
+            }
+        }
     	
     	var phone = this.phoneStore.getById(phoneId);
     	for(var i=0; i<phone.data.lines.length; i++) {
@@ -381,9 +396,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
     	}
     	
         // disable lineCombo if only 1 line available
-    	var form = this.getForm();
     	if (form) {
-    		//console.log(this.linesStore.getCount());
             var lineCombo = form.findField('lineId'); 
             lineCombo.setDisabled((this.linesStore.getCount() <= 1));
             
