@@ -80,6 +80,9 @@ html, body {
 .action_cropImage {
 	background-image:url(../../images/oxygen/16x16/actions/select-rectangular.png) !important;
 }
+.action_originalImage {
+    background-image:url(../../images/oxygen/16x16/mimetypes/image-jpeg2000.png) !important;
+}
 .action_export {
     background-image:url(../../images/oxygen/16x16/actions/view-sort-descending.png) !important;
 }	
