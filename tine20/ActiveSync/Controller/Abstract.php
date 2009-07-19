@@ -248,6 +248,7 @@ abstract class ActiveSync_Controller_Abstract
         
         $entry = $this->_toTineModel($_data);
         $entry->creation_time = $this->_syncTimeStamp;
+        $entry->created_by = Tinebase_Core::getUser()->getId();
         // container_id gets set to personal folder in application specific controller if missing
         if($_folderId != $this->_specialFolderName) {
             $entry->container_id = $_folderId;
