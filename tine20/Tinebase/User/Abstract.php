@@ -333,7 +333,7 @@ abstract class Tinebase_User_Abstract
                 $userIds = array_merge($userIds, $_records->$property);
             }
         }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  userids: ' . print_r(array_unique($userIds), true));
+        
         $users = $this->getMultiple(array_unique($userIds));
         $nonExistingUser = $this->getNonExistentUser();
         
