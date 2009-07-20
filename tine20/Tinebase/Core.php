@@ -588,16 +588,16 @@ class Tinebase_Core
     {
         $config = self::getConfig();
         
-        if (isset($config->mail)) {
-            $mailConfig = $config->mail;
+        if (isset($config->smtp)) {
+            $mailConfig = $config->smtp;
         } else {
             $mailConfig = new Zend_Config(array(
-                'smtpserver' => 'localhost', 
+                'hostname' => 'localhost', 
                 'port' => 25
            ));
         }
         
-        $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());
+        $transport = new Zend_Mail_Transport_Smtp($mailConfig->hostname,  $mailConfig->toArray());
         Zend_Mail::setDefaultTransport($transport);
     }
     

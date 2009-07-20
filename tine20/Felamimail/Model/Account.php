@@ -167,25 +167,29 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * get smtp config
      *
      * @return array
-     * 
-     * @todo add values from config/preferences to empty fields ?
      */
     public function getSmtpConfig()
     {
         $this->resolveCredentials(FALSE, TRUE, TRUE);
         
         // add values from config to empty fields
-        /*
-        if (isset(Tinebase_Core::getConfig()->imap->smtp)) {
-            $smtpConfig = Tinebase_Core::getConfig()->imap->smtp;
+        if (isset(Tinebase_Core::getConfig()->smtp)) {
+            $result = Tinebase_Core::getConfig()->smtp->toArray();
+        } else {
+            $result = array();
         }
-        */
         
-        $result = array(
-            'hostname'  => $this->smtp_hostname,
-            'username'  => $this->smtp_user,
-            'password'  => $this->smtp_password,
-        );
+        if ($this->smtp_hostname) {
+            $result['hostname'] = $this->smtp_hostname; 
+        }
+        
+        if ($this->smtp_user) {
+            $result['username'] = $this->smtp_user; 
+        }
+        
+        if ($this->smtp_password) {
+            $result['password'] = $this->smtp_password; 
+        }
         
         if ($this->smtp_auth && $this->smtp_auth != 'none') {
             $result['auth'] = $this->smtp_auth; 

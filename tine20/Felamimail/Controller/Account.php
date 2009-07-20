@@ -133,9 +133,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             
             // get account data from config file    
             $record = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray());
-            $record->smtp_hostname = Tinebase_Core::getConfig()->imap->smtp->hostname;
-            $record->smtp_user = Tinebase_Core::getConfig()->imap->smtp->username;
-            $record->smtp_password = Tinebase_Core::getConfig()->imap->smtp->password;
+            
+            if (! isset(Tinebase_Core::getConfig()->smtp)) {
+                throw new Felamimail_Exception('No default smtp account defined in config.inc.php!');
+            }
+            
+            $record->smtp_hostname  = Tinebase_Core::getConfig()->smtp->hostname;
+            $record->smtp_user      = Tinebase_Core::getConfig()->smtp->username;
+            $record->smtp_password  = Tinebase_Core::getConfig()->smtp->password;
+            
+            $record->setId(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID);
         } else {
             $record = parent::get($_id, $_containerId);
         }
@@ -421,11 +428,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $defaultAccount->smtp_credentials_id = $defaultAccount->credentials_id;
 
                 // add smtp server settings
-                if (Tinebase_Core::getConfig()->imap->smtp) {
-                    $defaultAccount->smtp_port              = Tinebase_Core::getConfig()->imap->smtp->port;
-                    $defaultAccount->smtp_hostname          = Tinebase_Core::getConfig()->imap->smtp->hostname;
-                    $defaultAccount->smtp_auth              = Tinebase_Core::getConfig()->imap->smtp->auth;
-                    $defaultAccount->smtp_secure_connection = Tinebase_Core::getConfig()->imap->smtp->ssl;             
+                if (Tinebase_Core::getConfig()->smtp) {
+                    $smtpConfig = Tinebase_Core::getConfig()->smtp;
+                    $defaultAccount->smtp_port              = $smtpConfig->port;
+                    $defaultAccount->smtp_hostname          = $smtpConfig->hostname;
+                    $defaultAccount->smtp_auth              = $smtpConfig->auth;
+                    $defaultAccount->smtp_secure_connection = $smtpConfig->ssl;             
                 }
                 
                 // create new account
