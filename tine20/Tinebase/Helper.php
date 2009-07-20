@@ -60,6 +60,10 @@ function convertToBytes($_value)
  */
 function getDevelopmentRevision()
 {
+    $branch = '';
+    $rev = '';
+    $date = '';
+    
     try {
         $file = @fopen(dirname(dirname(__FILE__)) . '/.svn/entries', 'r');
         while ($line = @fgets($file)) {
