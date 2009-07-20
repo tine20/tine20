@@ -56,11 +56,12 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
             this.sm = this.gridPanel.grid.getSelectionModel();
         }
         
+        // return if no rows are selected
+        if (this.sm.getCount() == 0) {
+            return false;
+        }
+        
     	var filterSettings = this.sm.getSelectionFilter();
-
-        //console.log(filterSettings);
-    	//Tine.Tinebase.common.openWindow('exportWindow', 'index.php?method=' + 
-        //    this.exportFunction + '&_format=' + this.format + '&_filter=' + Ext.util.JSON.encode(filterSettings), 200, 150);
     	
         var form = Ext.getBody().createChild({
             tag:'form',
