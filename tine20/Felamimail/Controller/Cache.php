@@ -114,6 +114,12 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
         /***************** get folder & backend *****************************/
         
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : $this->_folderBackend->get($_folder);
+        
+        if (! $folder->is_selectable) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Folder ' . $folder->globalname . ' is not selectable.');
+            return $folder;
+        }
+        
         $folderId = $folder->getId();
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folder->toArray(), true));

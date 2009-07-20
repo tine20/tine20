@@ -327,6 +327,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function moveMessages($_ids, $_folderId)
     {
         if ($imapBackend = $this->_getBackendAndSelectFolder($_folderId, $folder, FALSE)) {
+            
+            if (! $folder->is_selectable) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' Target folder ' . $folder->globalname . ' is not selectable.'
+                );
+                return $folder;
+            }
+            
             $messages = $this->_backend->getMultiple($_ids);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                 ' Moving ' . count($messages) . ' messages to folder ' . $folder->globalname);

@@ -287,6 +287,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             }
         }
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), true));
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folders, true));
         
         // get folder record set and sort it
@@ -440,8 +441,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                 
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // create new folder
+                if (empty($folderData['localName'])) {
+                    // skip
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Do not add folder ' . $folderData['globalName']);
+                    continue;
+                }
                 $folder = new Felamimail_Model_Folder(array(
-                    'localname'     => (! empty($folderData['localName'])) ? $folderData['localName'] : $folderData['globalName'],
+                    'localname'     => $folderData['localName'],
                     'globalname'    => $folderData['globalName'],
                     'is_selectable' => ($folderData['isSelectable'] == '1'),
                     'has_children'  => ($folderData['hasChildren'] == '1'),
@@ -449,7 +455,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                     'timestamp'     => Zend_Date::now(),
                     'user_id'       => $this->_currentAccount->getId(),
                     'parent'        => $_parentFolder,
-                    'system_folder' => in_array(strtolower($folderData['localName']), $this->_systemFolders)
+                    'system_folder' => in_array(strtolower($folderData['localName']), $this->_systemFolders),
+                    'delimiter'     => $folderData['delimiter']
                 ));
                 
                 $folder = $this->_folderBackend->create($folder);
