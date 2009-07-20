@@ -577,7 +577,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
         if (count($_records) == 0) {
             return array();
@@ -601,7 +601,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
         }
         
-        $result = parent::_multipleRecordsToJson($_records);
+        $result = parent::_multipleRecordsToJson($_records, $_filter);
         return $result;
     }
 }

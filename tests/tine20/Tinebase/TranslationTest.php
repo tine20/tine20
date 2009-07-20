@@ -87,6 +87,38 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue((bool)preg_match("/Locale\.Gettext\.prototype\._msgs\['\.\/LC_MESSAGES\/Tinebase'\]/", $jsTranslations), 'tine translations are missing');
     }
     
+    public function testGetCountryList()
+    {
+        Tinebase_Core::setupUserLocale('de_DE');
+        $countries = Tinebase_Translation::getCountryList();
+        $this->assertTrue(is_array($countries));
+        $failure = true;
+        foreach ($countries['results'] as $country) {
+            if ($country['shortName'] == 'DE') {
+                $this->assertEquals('Deutschland', $country['translatedName']);
+                $failure = false;
+            }
+        }
+        if ($failure) {
+            $this->fail('The result of Tinebase_Translation::getCountryList does not contain country with shortName "DE"');
+        }
+        
+        Tinebase_Core::setupUserLocale('en_US');
+        $countries = Tinebase_Translation::getCountryList();
+        $this->assertTrue(is_array($countries));
+        $failure = true;
+        foreach ($countries['results'] as $country) {
+            if ($country['shortName'] == 'DE') {
+                $this->assertEquals('Germany', $country['translatedName']);
+                $failure = false;
+            }
+        }
+        if ($failure) {
+            $this->fail('The result of Tinebase_Translation::getCountryList does not contain country with shortName "DE"');
+        }
+
+    }
+    
     public function testGetCountryNameByRegionCode()
     {
         Tinebase_Core::setupUserLocale('de_DE');
@@ -110,5 +142,6 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('DE', Tinebase_Translation::getRegionCodeByCountryName('Germany'));
         $this->assertEquals('US', Tinebase_Translation::getRegionCodeByCountryName('United States'));
     }
+
 }
 

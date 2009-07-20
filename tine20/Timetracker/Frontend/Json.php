@@ -104,7 +104,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @todo check if we can remove Timetracker_Model_TimeaccountGrants::getGrantsOfRecords 
      *       / it seems to be obsolete/redundant because of _resolveTimesheetGrantsByTimeaccountGrants()
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
         if (count($_records) == 0) {
             return array();

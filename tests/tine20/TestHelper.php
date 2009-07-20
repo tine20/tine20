@@ -49,9 +49,12 @@ define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
 
 /*
  * Set up basic tine 2.0 environment
- */
-require_once 'Zend/Loader.php';
-Zend_Loader::registerAutoload();
+*/
+
+require_once 'Zend/Loader/Autoloader.php';
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->setFallbackAutoloader(true);
+
 
 // get config
 if(file_exists(dirname(__FILE__) . '/config.inc.php')) {

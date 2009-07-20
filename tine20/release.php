@@ -15,8 +15,9 @@ if (php_sapi_name() != 'cli') {
 }
 
 require_once 'Tinebase/Helper.php';
-require_once 'Zend/Loader.php';
-Zend_Loader::registerAutoload();
+require_once 'Zend/Loader/Autoloader.php';
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->setFallbackAutoloader(true);
 
 /**
  * path to tine 2.0 checkout

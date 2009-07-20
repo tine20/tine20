@@ -286,10 +286,15 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      *
      * @param Tinebase_Record_Interface $_record
      * @param array $_param
+     * @param string $key
      * @return string
      */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key)
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key = null)
     {
+    	if (is_null($key)) {
+    		throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
+    	}
+    	
         $value = '';
         
         switch($_param['type']) {

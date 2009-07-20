@@ -11,8 +11,9 @@
 
 var_dump($_POST);
 
-require_once 'Zend/Loader.php';
-Zend_Loader::registerAutoload();
+require_once 'Zend/Loader/Autoloader.php';
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->setFallbackAutoloader(true);
 
 echo "Fetching connection...<br>";
 // feteching the connection

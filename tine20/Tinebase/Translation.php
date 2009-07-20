@@ -110,7 +110,7 @@ class Tinebase_Translation
     	
     	//try lazy loading of translated country list
     	if (empty(self::$_countryLists[$language])) {
-	        $countries = $locale->getCountryTranslationList();
+	        $countries = Zend_Locale::getCountryTranslationList($locale);
 	        asort($countries);
 	        foreach($countries as $shortName => $translatedName) {
 	            $results[] = array(

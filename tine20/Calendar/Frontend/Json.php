@@ -185,8 +185,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
+    	if (is_null($_filter)) {
+    		throw new Tinebase_Exception_InvalidArgument('Required argument $_filter is missing');
+    	}
+
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
         Calendar_Model_Attender::resolveAttendee($_records->attendee);

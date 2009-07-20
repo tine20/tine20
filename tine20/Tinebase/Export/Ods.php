@@ -368,9 +368,10 @@ class Tinebase_Export_Ods extends OpenDocument_Document
      *
      * @param Tinebase_Record_Interface $_record
      * @param array $_param
+     * @param string || null $key [may be used by child methods e.g. {@see Timetracker_Export_Ods::_getSpecialFieldValue)]
      * @return string
      */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param)
+    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $key = null)
     {
         return '';
     }

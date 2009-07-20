@@ -126,9 +126,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param Tinebase_Record_RecordSet $_leads Crm_Model_Lead
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
-        $result = parent::_multipleRecordsToJson($_records);
+        $result = parent::_multipleRecordsToJson($_records, $_filter);
         
         foreach ($result as &$contact) {
             $contact['jpegphoto'] = $this->_getImageLink($contact);

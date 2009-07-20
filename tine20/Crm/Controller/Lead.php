@@ -122,9 +122,9 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @param boolean $_getRelations
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
-        $leads = parent::search($_filter, $_pagination);
+        $leads = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
         
         if ($_getRelations) {
             $leads->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $leads->getId(), NULL, array('CUSTOMER', 'PARTNER')));
