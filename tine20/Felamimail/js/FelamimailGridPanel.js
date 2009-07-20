@@ -9,6 +9,8 @@
  *
  * TODO         add flagged/'starred' filter
  * TODO         add show source code function
+ * TODO         make doubleclick work again: show mail in new window (no edit dialog)
+ * TODO         add pdf export
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -377,6 +379,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             }
         }
     },
+    
+    /**
+     * row doubleclick handler
+     * - overwrite default behaviour: do nothing
+     * 
+     * @param {} grid
+     * @param {} row
+     * @param {} e
+     */
+    onRowDblClick: function(grid, row, e) {
+        return false;
+    }, 
     
     /**
      * key down handler
