@@ -419,12 +419,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         if(isset($xmlData->Reminder)) {
-            $alarm = new Tinebase_Model_Alarm(array(
+            $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
                 'alarm_time'    => $event->dtstart->subMinute((int)$xmlData->Reminder),
                 'model'         => 'Calendar_Model_Event',
-                'record_id'     => 'xxx'
             ));
-            #$event->alarms = array($alarm);
         }
         
 //@todo get timezone from ActiveSync_TimezoneGuesser
