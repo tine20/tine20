@@ -191,8 +191,14 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result['password'] = $this->smtp_password; 
         }
         
-        if ($this->smtp_auth && $this->smtp_auth != 'none') {
-            $result['auth'] = $this->smtp_auth; 
+        if ($this->smtp_auth) {
+            if ( $this->smtp_auth == 'none') {
+                unset($result['username']);
+                unset($result['password']);
+                unset($result['auth']);
+            } else {
+                $result['auth'] = $this->smtp_auth;
+            }
         }
         
         if ($this->smtp_secure_connection && $this->smtp_secure_connection != 'none') {
