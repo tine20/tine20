@@ -332,7 +332,14 @@ abstract class Tinebase_User_Abstract
             $userIds = array_merge($userIds, $_records->$property);
         }
 
-        $users = $this->getMultiple(array_unique($userIds));
+        $userIds = array_unique($userIds);
+        foreach ($userIds as $index => $userId) {
+        	if (empty($userId)) {
+        		unset ($userIds[$index]);
+        	}
+        }
+        
+        $users = $this->getMultiple($userIds);
         $nonExistingUser = $this->getNonExistentUser();
         
         foreach ($_records as $record) {
