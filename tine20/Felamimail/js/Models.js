@@ -139,14 +139,14 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
         signature: 'Sent with love from the new tine 2.0 email client ...<br/>'
             + 'Please visit <a href="http://tine20.org">http://tine20.org</a>',
         sent_folder: (defaults.sent_folder) ? defaults.sent_folder : 'Sent',
-        trash_folder: (defaults.trash_folder) ? defaults.trash_folder : 'Trash'
+        trash_folder: (defaults.trash_folder) ? defaults.trash_folder : 'Trash',
+        smtp_secure_connection: (defaults.smtp && defaults.smtp.ssl) ? defaults.smtp.ssl : 'none'
         
         // some more possible defaults
         /*
         name: 'new account',
         email: 'test@tine20.org',
         user: 'test@tine20.org',
-        smtp_secure_connection: 'tls'
         */
     };
 };
