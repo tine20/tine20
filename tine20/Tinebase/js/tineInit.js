@@ -565,7 +565,7 @@ Tine.Tinebase.tineInit = {
                 
             } else {
                 new Ext.LoadMask(Ext.getBody(), {
-                    msg: _('Fatal Error: Client self-update failed, please contact your administrator.'),
+                    msg: _('Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser.'),
                     msgCls: ''
                 }).show();
             }
