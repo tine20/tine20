@@ -215,7 +215,7 @@ class Tinebase_Container
                 $accountId = Tinebase_Model_Group::convertGroupIdToInt($_accountId);
                 break;
             case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
-                $accountId = 0;
+                $accountId = '0';
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('invalid $_accountType');
