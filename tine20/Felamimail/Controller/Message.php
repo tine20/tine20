@@ -459,6 +459,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ) {
                 $this->addFlags($originalMessage, array($_message->flags));
             }
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
         }
         
         return $_message;
