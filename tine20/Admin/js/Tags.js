@@ -547,7 +547,8 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                             columnWidth: .6,
                             name: 'description',
                             fieldLabel: this.translation.gettext('Description'),
-                            anchor:'100%'
+                            anchor:'100%',
+                            maxLength: 50
                         },
                         colorPicker
                         ]        
