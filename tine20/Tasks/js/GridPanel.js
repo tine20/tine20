@@ -198,14 +198,17 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             sortable: true,
             dataIndex: 'organizer',
             renderer: Tine.Tinebase.common.accountRenderer,
-            /* the value already updates when an acclunt is clicked in the accounts gird
-             * we should fix this with ne new account picker and enable editor here again
-             editor: new Tine.widgets.AccountpickerField({
-                autoExpand: true,
-                blurOnSelect: true
-            }),*/
-            quickaddField: new Tine.widgets.AccountpickerField({
-                autoExpand: true
+            quickaddField: new Tine.Addressbook.SearchCombo({
+                // at the moment we support accounts only
+                internalContactsOnly: true,
+
+                blurOnSelect: true,
+                selectOnFocus: true,
+                getValue: function() {
+                    if (this.selectedRecord) {
+                        return this.selectedRecord.get('account_id');
+                    }
+                }
             })
         }];
     },
