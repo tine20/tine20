@@ -351,12 +351,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         }));
         
         // init various grid / sm listeners
-        this.grid.on('keydown', this.onKeyDown, this);
-        this.grid.on('rowclick',  this.onRowClick, this);
-        
-        this.grid.on('rowdblclick', function(grid, row, e){
-            this.onEditInNewWindow.call(this, {actionType: 'edit'});
-        }, this);
+        this.grid.on('keydown',     this.onKeyDown,     this);
+        this.grid.on('rowclick',    this.onRowClick,    this);
+        this.grid.on('rowdblclick', this.onRowDblClick, this);
         
         this.grid.on('rowcontextmenu', function(grid, row, e) {
             e.stopEvent();
@@ -490,6 +487,17 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             grid.view.focusRow(row);
         }
     },
+    
+    /**
+     * row doubleclick handler
+     * 
+     * @param {} grid
+     * @param {} row
+     * @param {} e
+     */
+    onRowDblClick: function(grid, row, e) {
+        this.onEditInNewWindow.call(this, {actionType: 'edit'});
+    }, 
     
     /**
      * generic edit in new window handler
