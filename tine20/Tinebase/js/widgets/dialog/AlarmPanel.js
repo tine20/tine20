@@ -53,12 +53,13 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
             forceSelection: true,
             value: 'none',
             store: [
-                ['none', _('None')],
-                ['15',  _('15 minutes before')],
-                ['30',  _('30 minutes before')],
-                ['60',  _('1 hour before')],
-                ['120',  _('2 hours before')],
-                ['1440',  _('1 day before')]
+                ['none',    _('None')],
+                ['0',       _('0 minutes before')],
+                ['15',      _('15 minutes before')],
+                ['30',      _('30 minutes before')],
+                ['60',      _('1 hour before')],
+                ['120',     _('2 hours before')],
+                ['1440',    _('1 day before')]
             ]
         });
         
