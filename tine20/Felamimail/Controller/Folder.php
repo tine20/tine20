@@ -497,7 +497,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders->globalname, TRUE));
         
         foreach ($this->_systemFolders as $systemFolderName) {
-            $folders = $_folders->filter('globalname', '@' . $systemFolderName . '@i', TRUE);
+            $folders = $_folders->filter('globalname', '@^' . $systemFolderName . '$@i', TRUE);
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $systemFolderName . ' => ' . print_r($folders->toArray(), TRUE));
             if (count($folders) > 0) {
                 $sortedFolders->addRecord($folders->getFirstRecord());
