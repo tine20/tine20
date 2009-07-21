@@ -25,21 +25,21 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
         loadMask: true,
         autoExpandColumn: 'title'
     },
-    
+     
     initComponent: function() {
         this.recordProxy = Tine.ExampleApplication.recordBackend;
         
-        this.actionToolbarItems = this.getToolbarItems();
+        //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
+        //this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);        
+        //this.plugins.push(this.filterToolbar);
         
         Tine.ExampleApplication.ExampleRecordGridPanel.superclass.initComponent.call(this);
         
-        this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'ExampleApplication', 'records'));
-        this.action_editInNewWindow.requiredGrant = 'editGrant';
+        //this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'ExampleApplication', 'records'));
+        //this.action_editInNewWindow.requiredGrant = 'editGrant';
         
     },
     
