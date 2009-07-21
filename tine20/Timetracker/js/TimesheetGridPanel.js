@@ -262,7 +262,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             header: this.app.i18n._("Cleared"),
             width: 100,
             sortable: true,
-            //dataIndex: 'is_cleared',
             dataIndex: 'is_cleared_combined',
             renderer: Tine.Tinebase.common.booleanRenderer
         },{
@@ -349,8 +348,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             
             showDefault: function(body) {
             	
-            	//console.log(this.gridpanel.store.proxy.jsonReader.jsonData);
-            	
 				var data = {
 				    count: this.gridpanel.store.proxy.jsonReader.jsonData.totalcount,
 				    countbillable: (this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable) ? this.gridpanel.store.proxy.jsonReader.jsonData.totalcountbillable : 0,
@@ -358,8 +355,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
 				    sumbillable: Tine.Tinebase.common.minutesRenderer(this.gridpanel.store.proxy.jsonReader.jsonData.totalsumbillable)
 			    };
                 
-			    //console.log(this.gridpanel.store.proxy.jsonReader.jsonData);
-			    
                 this.defaultTpl.overwrite(body, data);
             },
             
@@ -372,7 +367,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                     sumbillable: 0
                 };
                 sm.each(function(record){
-                    console.log(record);
                     
                     data.sum = data.sum + parseInt(record.data.duration);
                     if (record.data.is_billable_combined == '1') {
