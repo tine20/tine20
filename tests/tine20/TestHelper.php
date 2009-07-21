@@ -33,9 +33,9 @@ define('PATH_TO_TEST_DIR', dirname(__FILE__));
 
 $path = array(
     PATH_TO_REAL_DIR,
-    get_include_path(),
 	PATH_TO_TEST_DIR,
-	PATH_TO_TINE_LIBRARY
+	PATH_TO_TINE_LIBRARY,
+    get_include_path(),
 );
         
 set_include_path(implode(PATH_SEPARATOR, $path));
