@@ -419,13 +419,20 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      * 
      * @todo replace mb_convert_encoding with iconv or something like that
-     * @todo update $this->_systemFolders with configured folders from account for sorting here? 
      */
     protected function _getOrCreateFolders(array $_folders, $_account, $_parentFolder)
     {
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         
-        //-- get configured account standard folders here 
+        // get configured account standard folders here
+        if (strtolower($_account->sent_folder) != $this->_systemFolders[2]) {
+            $this->_systemFolders[2] = strtolower($_account->sent_folder);
+        }
+        if (strtolower($_account->trash_folder) != $this->_systemFolders[5]) {
+            $this->_systemFolders[5] = strtolower($_account->trash_folder);
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_systemFolders, TRUE));
         
         // do some mapping and save folder in db (if it doesn't exist
         foreach ($_folders as $folderData) {
@@ -439,27 +446,31 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                 $folder->is_selectable = ($folderData['isSelectable'] == '1');
                 $folder->has_children = ($folderData['hasChildren'] == '1');
                 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding cached folder ' . $folderData['globalName']);
+                
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // create new folder
                 if (empty($folderData['localName'])) {
                     // skip
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Do not add folder ' . $folderData['globalName']);
                     continue;
+                    
+                } else {
+                    $folder = new Felamimail_Model_Folder(array(
+                        'localname'     => $folderData['localName'],
+                        'globalname'    => $folderData['globalName'],
+                        'is_selectable' => ($folderData['isSelectable'] == '1'),
+                        'has_children'  => ($folderData['hasChildren'] == '1'),
+                        'account_id'    => $_account->getId(),
+                        'timestamp'     => Zend_Date::now(),
+                        'user_id'       => $this->_currentAccount->getId(),
+                        'parent'        => $_parentFolder,
+                        'system_folder' => in_array(strtolower($folderData['localName']), $this->_systemFolders),
+                        'delimiter'     => $folderData['delimiter']
+                    ));
+                    
+                    $folder = $this->_folderBackend->create($folder);
                 }
-                $folder = new Felamimail_Model_Folder(array(
-                    'localname'     => $folderData['localName'],
-                    'globalname'    => $folderData['globalName'],
-                    'is_selectable' => ($folderData['isSelectable'] == '1'),
-                    'has_children'  => ($folderData['hasChildren'] == '1'),
-                    'account_id'    => $_account->getId(),
-                    'timestamp'     => Zend_Date::now(),
-                    'user_id'       => $this->_currentAccount->getId(),
-                    'parent'        => $_parentFolder,
-                    'system_folder' => in_array(strtolower($folderData['localName']), $this->_systemFolders),
-                    'delimiter'     => $folderData['delimiter']
-                ));
-                
-                $folder = $this->_folderBackend->create($folder);
             }
             
             $result->addRecord($folder);
@@ -475,8 +486,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param Tinebase_Record_RecordSet $_folders
      * @param string $_parentFolder
      * @return Tinebase_Record_RecordSet
-     * 
-     * @todo write test
      */
     protected function _sortFolders(Tinebase_Record_RecordSet $_folders, $_parentFolder)
     {
@@ -484,22 +493,24 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         $_folders->sort('localname', 'ASC', 'natcasesort');
         $_folders->addIndices(array('globalname'));
+
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders->globalname, TRUE));
         
-        // only add system folders to root level
-        if (empty($_parentFolder)) {
-            foreach ($this->_systemFolders as $systemFolderName) {
-                $folders = $_folders->filter('globalname', '/' . $systemFolderName . '/i', TRUE);
-                if (count($folders) > 0) {
-                    $sortedFolders->addRecord($folders->getFirstRecord());
-                }
+        foreach ($this->_systemFolders as $systemFolderName) {
+            $folders = $_folders->filter('globalname', '@' . $systemFolderName . '@i', TRUE);
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $systemFolderName . ' => ' . print_r($folders->toArray(), TRUE));
+            if (count($folders) > 0) {
+                $sortedFolders->addRecord($folders->getFirstRecord());
             }
         }
         
         foreach ($_folders as $folder) {
-            if (! empty($_parentFolder) || ! in_array(strtolower($folder->localname), $this->_systemFolders)) {
+            if (! in_array(strtolower($folder->globalname), $this->_systemFolders)) {
                 $sortedFolders->addRecord($folder);
             }
         }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($sortedFolders->globalname, TRUE));
         
         return $sortedFolders;
     }

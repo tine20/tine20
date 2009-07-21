@@ -75,7 +75,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /*********************** folder tests ****************************/
     
     /**
-     * test search folders
+     * test search folders (check order of folders as well)
      *
      */
     public function testSearchFolders()
@@ -84,9 +84,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->searchFolders(Zend_Json::encode($filter));
         
         $this->assertEquals(6, $result['totalcount']);
-        $expectedFolders = array('Drafts', 'INBOX', 'Junk', 'Sent', 'Templates', 'Trash');
-        foreach ($result['results'] as $folder) {
-            $this->assertTrue(in_array($folder['localname'], $expectedFolders));
+        $expectedFolders = array('INBOX', 'Drafts', 'Sent', 'Templates', 'Junk', 'Trash');
+        
+        foreach ($expectedFolders as $index => $folderName) {
+            $this->assertEquals($folderName, $result['results'][$index]['localname']);
         }
     }
     
