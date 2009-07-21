@@ -299,8 +299,18 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             $defaultNote = $this->getNoteTypeByName('note');
                             $noteArray['note_type_id'] = $defaultNote->getId();
                         }
-                        $note = new Tinebase_Model_Note($noteArray);
-                        $notesToSet->addRecord($note);
+                        try {
+                            $note = new Tinebase_Model_Note($noteArray);
+                            $notesToSet->addRecord($note);
+                            
+                        } catch (Tinebase_Exception_Record_Validation $terv) {
+                            // discard invalid notes here
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                . ' Note is invalid! '
+                                . $terv->getMessage()
+                                //. print_r($noteArray, TRUE)
+                            );
+                        }
                     }
                 }
                 
