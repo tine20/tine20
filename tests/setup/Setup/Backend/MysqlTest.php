@@ -27,8 +27,13 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
      * @var    Setup_Backend_Mysql
      * @access protected
      */
-     
     protected $_backend;
+    
+    /**
+     * @var Setup_Backend_Schema_Table_Abstract
+     */
+    protected $_table;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -50,6 +55,36 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_backend = Setup_Backend_Factory::factory('Mysql');
+        
+        $tableXml = '
+	        <table>
+	            <name>phpunit_mysql_test_table</name>
+	            <version>1</version>
+	            <declaration>
+	                <field>
+	                    <name>id</name>
+	                    <type>integer</type>
+	                    <autoincrement>true</autoincrement>
+	                </field>
+	                <field>
+	                    <name>name</name>
+	                    <type>text</type>
+	                    <length>128</length>
+	                    <notnull>true</notnull>
+	                </field>
+	                <index>
+	                    <name>id</name>
+	                    <primary>true</primary>
+	                    <field>
+	                        <name>id</name>
+	                    </field>
+	                </index>
+	            </declaration>
+	        </table>';
+
+        $this->_table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
+        
+        $this->_backend->createTable($this->_table);
     }
 
     /**
@@ -60,8 +95,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    
+        $this->_backend->dropTable($this->_table->name);
     }
+
     /**
      * Perform some insignificant string format manipulations (add/remove Whitespace).
      * This is needed because the format of the return values of the tested methods 
@@ -103,55 +139,64 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '1060'); //1060: Column "id" already exists - expecting Exception'
+      	$this->_backend->addCol($this->_table->name, $field);
+        
     }
     
     public function testStringToMysqlFieldStatement_002() 
     {
         $string ="
             <field>
-                <name>id</name>
+                <name>id2</name>
                 <type>integer</type>
                 <autoincrement>true</autoincrement>
             </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`id` int(11) unsigned NOT NULL auto_increment");    
+        $statement = $this->_fixFieldDeclarationString("`id2` int(11) unsigned NOT NULL auto_increment");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->setExpectedException('Zend_Db_Statement_Exception', '1075'); //1075: There may only be one autoincrement column  - expecting Exception'
+        $this->_backend->addCol($this->_table->name, $field);
     }
     
     public function testStringToMysqlFieldStatement_003() 
     {
         $string ="
                 <field>
-                    <name>name</name>
+                    <name>{__FUNCTION__}</name>
                     <type>text</type>
                     <length>25</length>
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`name` varchar(25) NOT NULL");    
+        $statement = $this->_fixFieldDeclarationString("`{__FUNCTION__}` varchar(25) NOT NULL");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+
+        $this->_backend->addCol($this->_table->name, $field);
     }
     
     public function testStringToMysqlFieldStatement_004() 
     {
         $string ="
                  <field>
-                    <name>status</name>
+                    <name>{__FUNCTION__}</name>
                     <type>enum</type>
                     <value>enabled</value>
                     <value>disabled</value>
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`status` enum('enabled','disabled') NOT NULL");    
+        $statement = $this->_fixFieldDeclarationString("`{__FUNCTION__}` enum('enabled','disabled') NOT NULL");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }            
     
     public function testStringToMysqlFieldStatement_005() 
@@ -169,6 +214,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }        
     
     public function testStringToMysqlFieldStatement_006() 
@@ -184,6 +231,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }    
     
     public function testStringToMysqlFieldStatement_007() 
@@ -200,6 +249,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }    
     
     public function testStringToMysqlFieldStatement_008() 
@@ -216,6 +267,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }    
     
     public function testStringToMysqlFieldStatement_009() 
@@ -231,6 +284,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }    
     
     public function testStringToMysqlFieldStatement_010() 
@@ -247,6 +302,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }    
     
     public function testStringToMysqlFieldStatement_011() 
@@ -261,6 +318,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }        
     
     public function testStringToMysqlFieldStatement_012() 
@@ -275,6 +334,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }    
     
     public function testStringToMysqlFieldStatement_013() 
@@ -290,6 +351,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }
     
     public function testStringToMysqlFieldStatement_014() 
@@ -304,6 +367,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }    
     
     public function testStringToMysqlFieldStatement_015() 
@@ -320,6 +385,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }
     
     public function testStringToMysqlFieldStatement_016() 
@@ -335,6 +402,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }        
 
     public function testStringToMysqlFieldStatement_018() 
@@ -351,6 +420,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }    
     
     public function testStringToMysqlFieldStatement_019() 
@@ -366,6 +437,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
     }        
     
     
@@ -388,6 +461,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '1068'); //1068: there can only be one primary key - expecting Exception
+        $this->_backend->addIndex($this->_table->name, $index);
     }        
     
     public function testStringToMysqlIndexStatement_002() 
@@ -407,6 +483,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '1068'); //1068: there can only be one primary key - expecting Exception
+        $this->_backend->addIndex($this->_table->name, $index);
     }        
 
     public function testStringToMysqlIndexStatement_003() 
@@ -427,6 +506,29 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '42000'); //42000: group_id and account_id fields missing - expecting Exception
+        $this->_backend->addIndex($this->_table->name, $index);
+        
+        $fieldString ="
+                <field>
+                    <name>group_id</name>
+                    <type>integer</type>
+                </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+        
+        $fieldString ="
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+
+        $this->_backend->addIndex($this->_table->name, $index);
     }        
     
     public function testStringToMysqlIndexStatement_004() 
@@ -449,6 +551,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '42000'); //42000: group_id and account_id fields missing - expecting Exception
+        $this->_backend->addIndex($this->_table->name, $index);
     }    
     
     
@@ -471,34 +576,25 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
             
         $statement = $this->_fixIndexDeclarationString("CONSTRAINT `" . SQL_TABLE_PREFIX . "container_id` FOREIGN KEY (`container_id`) REFERENCES `" . SQL_TABLE_PREFIX . "container` (`id`) ");    
         
-        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($index));
-    }        
-    
-    public function testStringToMysqlForeignKeyStatement_002() 
-    {
-        $string ="
-                <index>
-                    <name>container_id</name>
-                    <field>
-                        <name>container_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>container</table>
-                        <field>id</field>
-                    </reference>
-                </index>";
-            
-        $statement = $this->_fixIndexDeclarationString("CONSTRAINT `" . SQL_TABLE_PREFIX . "container_id` FOREIGN KEY (`container_id`) REFERENCES `" . SQL_TABLE_PREFIX . "container` (`id`) ");    
+        $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($foreignKey));
         
-        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($index));
-    }        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '42000'); //42000: container_id field missing - expecting Exception
+        $this->_backend->addForeignKey($this->_table->name, $foreignKey);
         
+        
+        $fieldString ="
+            <field>
+                <name>container_id</name>
+                <type>integer</type>
+            </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+        $this->_backend->addForeignKey($this->_table->name, $foreignKey);
+    }        
+
 }        
-                
-                 
                 
                 
 if (PHPUnit_MAIN_METHOD == 'Setup_Backend_MysqlTest::main') {
