@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	/**
+	 * $Id$
+	 * Notes: field descriptions may be in Setup_Backend_Schema_Field_Xml 
+	 */
+-->
 <application>
     <name>ExampleApplication</name>
     <!-- gettext('ExampleApplication') -->   
@@ -17,6 +23,29 @@
                     <notnull>true</notnull>
                 </field>
                 <!-- add more fields here -->
+                <field>
+                    <name>reason</name>
+                    <type>text</type>
+                    <length>250</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>label</name>
+                    <type>text</type>
+                    <length>250</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>clob</type>
+                </field>
+                <field>
+                    <name>information</name>
+                    <type>text</type>
+                    <length>150</length>
+                    <notnull>true</notnull>
+                </field>
+                <!-- defaults for tine system -->
                 <field>
                     <name>created_by</name>
                     <type>integer</type>
