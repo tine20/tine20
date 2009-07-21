@@ -59,6 +59,12 @@ class Tinebase_Frontend_Cli_Abstract
         // get csv importer
         $definitionBackend = new Tinebase_ImportExportDefinition();
         $definitionName = array_pop($args);
+        
+        if (empty($definitionName)) {
+            echo "No definition name/file given.\n";
+            exit;
+        }
+        
         if (preg_match("/\.xml/", $definitionName)) {
             $definition = $definitionBackend->getFromFile(
                 $definitionName,
