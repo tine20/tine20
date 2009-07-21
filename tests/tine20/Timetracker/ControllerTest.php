@@ -114,6 +114,23 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      * test to create TS with book_own grant
      *
      */
+    public function testNoGrantsValidatorDefaultValue()
+    {
+        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            'view_all'      => TRUE,
+        )));
+        
+        $this->assertEquals($grants->view_all, array(TRUE));
+        $this->assertEquals($grants->book_own, array(FALSE));
+        $this->assertEquals($grants->book_all, array(FALSE));
+    }
+
+    /**
+     * test to create TS with book_own grant
+     *
+     */
     public function testNoGrantsTS()
     {
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(

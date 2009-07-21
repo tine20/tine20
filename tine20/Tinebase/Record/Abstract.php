@@ -521,6 +521,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         return array_key_exists($_name, $this->_properties) ? $this->_properties[$_name] : NULL;
     }
     
+   /** convert this to string
+    *
+    * @return string
+    */
+    public function __toString()
+    {
+       return print_r($this->toArray(), TRUE);
+    }
+    
     /**
      * returns a Zend_Filter for the $_filters and $_validators of this record class.
      * we just create an instance of Filter if we really need it.

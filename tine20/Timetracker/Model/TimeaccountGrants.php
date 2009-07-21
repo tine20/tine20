@@ -106,23 +106,33 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         
             'book_own'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => TRUE
             ),
             'view_all'    => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => TRUE
             ),
             'book_all'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => TRUE
             ),
             'manage_billable' => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => TRUE
             ),
             'manage_all'  => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => TRUE
             )
         );
         return parent::__construct($_data, $_bypassFilters, $_convertDates);

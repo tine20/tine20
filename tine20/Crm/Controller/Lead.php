@@ -166,7 +166,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                 $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_currentAccount->getId());
                 $emptyLead->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
                 $emptyLead->relations->addRecord(new Tinebase_Model_Relation(array(
-                    'own_id'                 => 0,
+                    'own_id'                 => '',
                     'own_model'              => 'Crm_Model_Lead',
                     'own_backend'            => Crm_Backend_Factory::SQL,
                     'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,

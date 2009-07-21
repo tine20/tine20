@@ -255,6 +255,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         return $returnValues;
     }
     
+   /** convert this to string
+    *
+    * @return string
+    */
+    public function __toString()
+    {
+       return print_r($this->toArray(), TRUE);
+    }
+    
     /**
      * Returns the number of elements in the recordSet.
      * required by interface Countable

@@ -900,12 +900,13 @@ class Tinebase_Container
 
         // @todo use _getGrantsFromArray here
         foreach($rows as $row) {
-            $containerGrant = new Tinebase_Model_Grants($row);
+        	
             $grants = explode(',', $row['account_grants']);
-
             foreach($grants as $grant) {
-                $containerGrant[Tinebase_Model_Container::$GRANTNAMEMAP[$grant]] = TRUE;
+                $row[Tinebase_Model_Container::$GRANTNAMEMAP[$grant]] = TRUE;
             }
+        	
+            $containerGrant = new Tinebase_Model_Grants($row);
 
             $result->addRecord($containerGrant);
         }
@@ -1133,17 +1134,18 @@ class Tinebase_Container
      */
     protected function _getGrantsFromArray(array $_grantsArray, $_accountId)
     {
-        $grants = new Tinebase_Model_Grants( array(
-            'account_id'     => $_accountId,
-            'account_type'   => 'account',
-        ));
-        
         foreach($_grantsArray as $key => $value) {
-            
             $grantValue = (is_array($value)) ? $value['account_grant'] : $value; 
             $grants[Tinebase_Model_Container::$GRANTNAMEMAP[$grantValue]] = TRUE;
         }
+        $grantsFields = array(
+            'account_id'     => $_accountId,
+            'account_type'   => 'account',
+        );
+        $grantsFields = array_merge($grantsFields, $grants);
         
+        $grants = new Tinebase_Model_Grants($grantsFields);
+
         return $grants;
-    }    
+    } 
 }

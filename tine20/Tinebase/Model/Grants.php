@@ -62,23 +62,33 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             //'account_name' => array('allowEmpty' => TRUE),
             'readGrant'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => true
             ),
             'addGrant'    => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => true
             ),
             'editGrant'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => true
             ),
             'deleteGrant' => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => true
             ),
             'adminGrant'  => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
+                'default' => FALSE,
+                'presence' => 'required',
+                'allowEmpty' => true
             )
         );
         
