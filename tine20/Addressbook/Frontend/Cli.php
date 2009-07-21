@@ -56,8 +56,6 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import contacts
      *
      * @param Zend_Console_Getopt $_opts
-     * 
-     * @todo remove obsolete code
      */
     public function import($_opts)
     {
