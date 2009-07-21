@@ -35,6 +35,13 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     protected $_table;
     
     /**
+     * Array holding table names that should be deleted with {@see tearDown}
+     * 
+     * @var array
+     */
+    protected $_tableNames = array();
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -85,6 +92,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
         
         $this->_backend->createTable($this->_table);
+        $this->_tableNames[] = $this->_table->name;
     }
 
     /**
@@ -95,7 +103,14 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_backend->dropTable($this->_table->name);
+    	foreach ($this->_tableNames as $tableName) {
+	    	try {
+	    		$this->_backend->dropTable($tableName);
+	    	}
+	    	catch (Zend_Db_Statement_Exception $e) {
+	    		//probably the table already was deleted by a test
+	    	}
+    	}
     }
 
     /**
@@ -592,7 +607,56 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
         $this->_backend->addCol($this->_table->name, $field);
         $this->_backend->addForeignKey($this->_table->name, $foreignKey);
-    }        
+    }
+    
+    public function testRenameCol()
+    {
+        $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
+        $testCol = $existingSchema1->fields[1];
+             
+        $oldColumnName = $testCol->name;
+        $newColumnName = "new_column_name";
+        $testCol->name = $newColumnName; 
+        $this->_backend->alterCol($this->_table->name, $testCol, $oldColumnName);
+        $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals($existingSchema2->fields[1]->name, $newColumnName);     
+    }
+    
+    public function testDropCol()
+    {
+        $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
+        $testCol = $existingSchema1->fields[1];     
+        
+        $this->_backend->dropCol($this->_table->name, $testCol->name);
+        $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals(count($existingSchema1->fields), count($existingSchema2->fields)+1);
+    }
+    
+    public function testAddCol()
+    {
+        $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
+        $testCol = $existingSchema1->fields[1];
+        $testCol->name = 'new_column_name';     
+        
+        $this->_backend->addCol($this->_table->name, $testCol);
+        $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals(count($existingSchema1->fields), count($existingSchema2->fields)-1);    
+    }
+    
+    public function testTableExists()
+    {
+        $this->assertTrue($this->_backend->tableExists($this->_table->name));
+        $this->assertFalse($this->_backend->tableExists('non_existing_tablename'));
+    }
+    
+    public function testRenameTable()
+    {
+    	$newTableName = 'renamed_phpunit_mysql_test_table';
+    	$this->_backend->renameTable($this->_table->name, $newTableName);
+    	$this->_tableNames[] = $newTableName; //cleanup with tearDown
+    	$this->assertTrue($this->_backend->tableExists($newTableName));
+    }
+
 
 }        
                 
