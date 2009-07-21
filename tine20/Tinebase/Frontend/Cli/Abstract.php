@@ -98,7 +98,7 @@ class Tinebase_Frontend_Cli_Abstract
                 continue;
             }
             
-            echo "Imported " . $result['totalcount'] . " records.\n";
+            echo "Imported " . $result['totalcount'] . " records. Import failed for " . $result['failcount'] . " records. \n";
                         
             // import (check if dry run)
             if ($_opts->d) {

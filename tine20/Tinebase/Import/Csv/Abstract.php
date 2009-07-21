@@ -138,7 +138,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
 
         $result = array(
             'results'       => new Tinebase_Record_RecordSet($this->_modelName),
-            'totalcount'    => 0
+            'totalcount'    => 0,
+            'failcount'     => 0
         );
 
         while (
@@ -168,6 +169,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                     // don't add incorrect record (name missing for example)
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                    $result['failcount']++;
                 }
             }
         }
@@ -281,11 +283,10 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                     $record->tags = $this->_addSharedTags($_recordData['tags']);
                 }
 
-                //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
-                
                 $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
             }
         } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
         }
         
