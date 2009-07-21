@@ -372,8 +372,10 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
                     sumbillable: 0
                 };
                 sm.each(function(record){
+                    console.log(record);
+                    
                     data.sum = data.sum + parseInt(record.data.duration);
-                    if (record.data.is_billable == '1') {
+                    if (record.data.is_billable_combined == '1') {
                     	data.countbillable++;
                     	data.sumbillable = data.sumbillable + parseInt(record.data.duration);
                     }
