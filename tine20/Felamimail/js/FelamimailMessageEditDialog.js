@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         show attachments and recipients in opened mails 
  * TODO         reload signature when account combo changed
  */
  
@@ -56,6 +55,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
+        
+        // generalized keybord map for edit dlgs
+        // TODO check why onRender() (from Tine.widgets.dialog.EditDialog) is not called in this dialog
+        var map = new Ext.KeyMap(this.el, [
+            {
+                key: [10,13], // enter + return
+                ctrl: true,
+                fn: this.onSaveAndClose,
+                scope: this
+            }
+        ]);
         
         var title = this.app.i18n._('Compose email:');
         if (this.record.get('subject')) {
