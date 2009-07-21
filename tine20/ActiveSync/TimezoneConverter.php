@@ -195,8 +195,14 @@ class ActiveSync_TimezoneConverter {
 
 	    if (false === ($offsets = $this->_loadFromCache($cacheId))) {
 	        $offsets = $this->_getOffsetsTemplate();
-	
-	        $timezone = new DateTimeZone($_timezone);
+	        
+	        try {
+	        	$timezone = new DateTimeZone($_timezone);
+	        } catch (Exception $e) {
+	        	$this->_log(__FUNCTION__ . ": could not instantiate timezone {$_timezone}: {$e->getMessage()}");
+	        	return null;
+	        }
+	        
 	        list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($timezone, $this->_startDate['year']);
 	        
 	        if ($standardTransition) {
@@ -332,8 +338,12 @@ class ActiveSync_TimezoneConverter {
      * @param array $_timezoneInfo
      * @return string
      */
-    protected function _packTimezoneInfo($_timezoneInfo) {
-        
+    protected function _packTimezoneInfo($_timezoneInfo) 
+    {
+        if (!is_array($_timezoneInfo)) {
+        	return null;
+        }
+
         $packed = pack(
             "la64vvvvvvvvla64vvvvvvvvl",
             $_timezoneInfo["bias"], 
