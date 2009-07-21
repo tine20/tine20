@@ -161,6 +161,11 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     public function addFlag($_message, $_flag)
     {
+        if (empty($_flag)) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not setting empty flag.');
+            return FALSE;
+        }
+        
         $data = array(
             'flag'          => $_flag,
             'message_id'    => $_message->getId(),
