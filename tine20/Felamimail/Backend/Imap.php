@@ -307,6 +307,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             if($data['flags']) {
                 $selectable  = in_array('\\Noselect', $data['flags']) ? false : true;
                 $hasChildren = in_array('\\haschildren', $data['flags']) ? true : false;
+            } else {
+                $selectable = true;
+                $hasChildren = true;
             }
             $folder = array(
                 'localName'    => $localName,
