@@ -23,6 +23,10 @@ class Setup_Backend_Schema_Table_Factory
      */
     static public function factory($_type, $_definition)
     {
+        // legacy for old setup scripts
+        if(ucfirst($_type) == 'String') {
+            $_type = 'Xml';
+        }
         $className = 'Setup_Backend_Schema_Table_' . ucfirst($_type);
         $instance = new $className($_definition);
                       
