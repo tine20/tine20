@@ -76,14 +76,23 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     		$this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
     		$result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
     	}
+    	        
+        $apps = $this->_json->searchApplications();
         
-        $this->assertEquals(
-	        array(
-	            'success'=> true,
-	        ),
-	        $result);
+        // get active sync
+        foreach ($apps['results'] as $app) {
+            if ($app['name'] == 'ActiveSync') {
+                $activeSyncApp = $app;
+                break;
+            }
+        }
+        
+        // checks
+        $this->assertTrue(isset($activeSyncApp));
+        var_dump($activeSyncApp);
+        $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
 
-	    $result = $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
+	    $this->_json->installApplications(Zend_Json::encode(array('ActiveSync'))); //cleanup
     }
     
     /**
