@@ -268,7 +268,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             
                             // reload tree node
                             this.ctxNode.reload(function(callback) {
-                                //console.log('reload');
                             });
                             
                             // update grid
@@ -425,7 +424,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 success: function(_result, _request) {
                     // update folder counters / class
                     var folderData = Ext.util.JSON.decode(_result.responseText);
-                    //console.log(folderData);
                     this.updateUnreadCount(null, folderData[0].unreadcount, node);
                 }
             });
@@ -445,7 +443,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     onClick: function(node) {
         
         if (node.expandable) {
-            //console.log('expandable');
             node.expand();
         }
         node.select();
@@ -570,8 +567,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
         
-        //console.log(attr);
-        
         // check for account setting
         attr.has_children = (
             account 
@@ -681,14 +676,9 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             return true;
 
         } else {
+            
+            // call standard exception handler
         	return false;
-            /*
-            Ext.MessageBox.alert(
-                this.app.i18n._('Failed to connect'), 
-                this.app.i18n._('Could not connect to account.') 
-                    + ' (' + this.app.i18n._('Error:') + ' ' + responseText.msg + ')'
-            );
-            */ 
         }
     }
 });
