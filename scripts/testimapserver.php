@@ -49,7 +49,7 @@ print "<h1><span style='color:red;'>ATTENTION: THIS OUTPUT CONTAINS YOUR USERNAM
 /*********** login and select INBOX ***********/
 
 $elapsedTime = microtime(true) - $startTime;
-print "<h1> $elapsedTime :: Login with config: " . print_r($imapConfig, TRUE) . "</h1>";
+print "<h1> $elapsedTime :: Login with config: </h1>" . print_r($imapConfig, TRUE);
 
 $imapBackend = new Felamimail_Backend_Imap($imapConfig);
 
@@ -58,14 +58,14 @@ $imapBackend = new Felamimail_Backend_Imap($imapConfig);
 $capabilities = $imapBackend->getCapabilityAndNamespace();
 
 $elapsedTime = microtime(true) - $startTime;
-print "<h1> $elapsedTime :: get capabilities + namespace: " . print_r($capabilities, TRUE) . "</h1>";
+print "<h1> $elapsedTime :: get capabilities + namespace: </h1>" . print_r($capabilities, TRUE);
 
 /*********** get all folders *****************/
 
 $folders = $imapBackend->getFolders();
 
 $elapsedTime = microtime(true) - $startTime;
-print "<h1> $elapsedTime :: get folders: " . print_r($folders, TRUE) . "</h1>";
+print "<h1> $elapsedTime :: get folders: </h1>" . print_r($folders, TRUE);
 
 /*********** get subfolders *****************/
 
@@ -73,7 +73,7 @@ $delimiter = $folders[$subfoldersOf]['delimiter'];
 $subfolders = $imapBackend->getFolders($subfoldersOf . $delimiter, '%');
 
 $elapsedTime = microtime(true) - $startTime;
-print "<h1> $elapsedTime :: get subfolders: " . print_r($subfolders, TRUE) . "</h1>";
+print "<h1> $elapsedTime :: get subfolders: </h1>" . print_r($subfolders, TRUE);
 
 /*********** logout ************/
 
