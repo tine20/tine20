@@ -15,7 +15,7 @@ require_once 'PHPUnit/Framework.php';
 class Setup_Backend_Schema_TableTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var    Setup_Backend_Schema_Table
+     * @var    Setup_Backend_Schema_Table_Abstract
      * @access protected
      */
     protected $object;
@@ -71,7 +71,7 @@ class Setup_Backend_Schema_TableTest extends PHPUnit_Framework_TestCase
 					        </table>'
 					);
 						
-        $this->object = new Setup_Backend_Schema_Table($table);
+        $this->object = Setup_Backend_Schema_Table_Factory::factory('Xml', $table['XmlString']);
     }
 
     /**
@@ -90,6 +90,7 @@ class Setup_Backend_Schema_TableTest extends PHPUnit_Framework_TestCase
      * @todo Implement testAddDeclarationField().
      */
     public function testAddDeclarationField() {
+    	//$this->object->addField()
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
