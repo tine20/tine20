@@ -87,6 +87,13 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         return true; 
     }
     
+    /**
+     * Get schema of existing table
+     * 
+     * @param String $_tableName
+     * 
+     * @return Setup_Backend_Schema_Table_Mysql
+     */
     public function getExistingSchema($_tableName)
     {
         // Get common table information
