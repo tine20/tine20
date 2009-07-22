@@ -96,6 +96,9 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         options.beforeSuccess = function(response) {
             return [this.jsonReader.read(response)];
         };
+        
+        // increase timeout as this can take a longer (1 minute)
+        options.timeout = 60000;
                 
         return this.request(options);
     },
