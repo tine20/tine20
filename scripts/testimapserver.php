@@ -28,6 +28,8 @@ $imapConfig =  array (
     'ssl' => 'tls',
 );
 
+$subfoldersOf = 'INBOX';
+
 /*********** environment ***********/
 
 set_include_path('.' . PATH_SEPARATOR . dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
@@ -58,19 +60,20 @@ $capabilities = $imapBackend->getCapabilityAndNamespace();
 $elapsedTime = microtime(true) - $startTime;
 print "<h1> $elapsedTime :: get capabilities + namespace: " . print_r($capabilities, TRUE) . "</h1>";
 
-/*********** get root folders *****************/
+/*********** get all folders *****************/
 
 $folders = $imapBackend->getFolders();
 
 $elapsedTime = microtime(true) - $startTime;
 print "<h1> $elapsedTime :: get folders: " . print_r($folders, TRUE) . "</h1>";
 
-/*********** get inbox subfolders *****************/
+/*********** get subfolders *****************/
 
-$subfolders = $imapBackend->getFolders('INBOX');
+$delimiter = $folders[$subfoldersOf]['delimiter'];
+$subfolders = $imapBackend->getFolders($subfoldersOf . $delimiter, '%');
 
 $elapsedTime = microtime(true) - $startTime;
-print "<h1> $elapsedTime :: get INBOX subfolders: " . print_r($subfolders, TRUE) . "</h1>";
+print "<h1> $elapsedTime :: get subfolders: " . print_r($subfolders, TRUE) . "</h1>";
 
 /*********** logout ************/
 
