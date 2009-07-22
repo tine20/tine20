@@ -137,6 +137,29 @@ class ActiveSync_TimezoneConverter {
     }
     
     /**
+     * Unpacks {@param $_packedTimezoneInfo} using {@see unpackTimezoneInfo} and then
+     * calls {@see getTimezoneForOffsets} with the unpacked timezone info
+     * 
+     * @param String $_packedTimezoneInfo
+     * @return String [timezone abbreviation e.g. CET, MST etc.]
+     * 
+     */
+    public function getTimezoneForPackedTimezoneInfo($_packedTimezoneInfo)
+    {
+        $offsets = $this->_unpackTimezoneInfo($_packedTimezoneInfo);
+        $matchingTimezones = $this->getTimezoneForOffsets($offsets);
+        $maxMatches = 0;
+        $matchingAbbr = null;
+        foreach ($matchingTimezones as $abbr => $timezones) {
+        	if (count($timezones) > $maxMatches) {
+        		$maxMatches = count($timezones);
+        		$matchingAbbr = $abbr;
+        	}
+        }
+        return $matchingAbbr;
+    }
+    
+    /**
      * Returns an array of timezones that match to the {@param $_offsets}
      * 
      * If {@see $_expectedTimezone} is set then the method will terminate as soon
@@ -145,33 +168,55 @@ class ActiveSync_TimezoneConverter {
      * 
      * @return array
      */
-	public function getTimezonesForOffsets($_offsets)
-	{
-		$this->_log(__FUNCTION__ . ': Start getting timezones that match with these offsets: ' . print_r($_offsets, true));
-		
-		$this->_setOffsets($_offsets);
-		$this->_setDefaultStartDateIfEmpty();
-		
+    public function getTimezonesForOffsets($_offsets)
+    {
+        $this->_log(__FUNCTION__ . ': Start getting timezones that match with these offsets: ' . print_r($_offsets, true));
+        
+        $this->_setOffsets($_offsets);
+        $this->_setDefaultStartDateIfEmpty();
+        
         $cacheId = $this->_getCacheId(array(__FUNCTION__));        
         if (false === ($matchingTimezones = $this->_loadFromCache($cacheId)))
         {        
-	        $matchingTimezones = array();
-		    foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
-		    	$timezone = new DateTimeZone($timezoneIdentifier);
-		    	if ($this->_checkTimezone($timezone)) {
-		    		if ($this->_isExpectedTimezone($timezoneIdentifier)) {
-	                    array_unshift($matchingTimezones, $timezoneIdentifier);
-	                    break;
-	                } else {
-	                    $matchingTimezones[] = $timezoneIdentifier;
-	                }
-		    	}
-		    }
-		    $this->_saveInCache($matchingTimezones, $cacheId);
+            $matchingTimezones = array();
+            foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
+                $timezone = new DateTimeZone($timezoneIdentifier);
+                if (false !== ($matchingTransition = $this->_checkTimezone($timezone))) {
+                	
+                    if ($this->_isExpectedTimezone($timezoneIdentifier)) {
+                        $matchingTimezones = array($matchingTransition['abbr'] => $timezoneIdentifier);
+                        break;
+                    } else {
+                    	$matchingTimezones[$matchingTransition['abbr']][] = $timezoneIdentifier;
+                    }
+                }
+            }
+            $this->_saveInCache($matchingTimezones, $cacheId);
         }
-	    $this->_log('Matching timezones: '.print_r($matchingTimezones, true));
-	    return $matchingTimezones;
-	}
+        $this->_log('Matching timezones: '.print_r($matchingTimezones, true));
+        
+        if (empty($matchingTimezones)) {
+            throw new ActiveSync_TimezoneNotFoundException('No timezone found for the given offsets');
+        }
+
+        return $matchingTimezones;
+    }
+    
+    /**
+     * Returns a timezone abbreviation (e.g. CET, MST etc.) that matches to the {@param $_offsets}
+     * 
+     * If {@see $_expectedTimezone} is set then the method will return this timezone if it matches.
+     *
+     * @param array $_offsets
+     * @return String [timezone abbreviation e.g. CET, MST etc.]
+     */
+    public function getTimezoneForOffsets($_offsets)
+    {
+        $this->_log(__FUNCTION__ . ': Start getting timezones that match with these offsets: ' . print_r($_offsets, true));
+        
+        $matchingTimezones = $this->getTimezonesForOffsets($_offsets);
+        return $matchingTimezones;
+    }
 	
 	/**
 	 * Return packed string for given {@param $_timezone}
@@ -298,7 +343,6 @@ class ActiveSync_TimezoneConverter {
             
         	if (empty($_offsets['daylightMonth']) && (empty($_daylightTransition) || empty($_daylightTransition['isdst']))) {
         		//No DST
-        		$this->_log('Matching standard transition: ' . print_r($_standardTransition, true));
         		return true;
         	}
         	
@@ -313,14 +357,8 @@ class ActiveSync_TimezoneConverter {
                     $standardParsed['wday'] == $_offsets['standardDayOfWeek'] &&
                     $daylightParsed['wday'] == $_offsets['daylightDayOfWeek'] ) 
                     {
-                        if($this->_isNthOcurrenceOfWeekdayInMonth($_daylightTransition['ts'], $_offsets['daylightDay']) &&
-                           $this->_isNthOcurrenceOfWeekdayInMonth($_standardTransition['ts'], $_offsets['standardDay'])) 
-                           {
-                            $this->_log('Matching daylight transition: ' . print_r($_daylightTransition, true));
-                            $this->_log('Matching standard transition: ' . print_r($_standardTransition, true));
-                            return true;
-                        }
-                           
+                        return $this->_isNthOcurrenceOfWeekdayInMonth($_daylightTransition['ts'], $_offsets['daylightDay']) &&
+                               $this->_isNthOcurrenceOfWeekdayInMonth($_standardTransition['ts'], $_offsets['standardDay']);
                 }
             }
         }
@@ -503,16 +541,23 @@ class ActiveSync_TimezoneConverter {
     
     /**
      * Check if the given {@param $_timezone} matches the {@see $_offsets}
-     * and also evaluate the daylight saving time transitions for this timezone.
+     * and also evaluate the daylight saving time transitions for this timezone if necessary.
      * 
      * @param DateTimeZone $_timezone
      * @return void
      */
     protected function _checkTimezone(DateTimeZone $_timezone) 
     {
-    	$this->_log(__FUNCTION__ . 'Checking for matches with timezone: ' . $_timezone->getName());
+    	$this->_log(__FUNCTION__ . 'Checking for matches with timezone: ' . $_timezone->getName(), 7);
         list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($_timezone, $this->_startDate['year']);
-        return $this->_checkTransition($standardTransition, $daylightTransition, $this->_offsets);
+        if ($this->_checkTransition($standardTransition, $daylightTransition, $this->_offsets)) {
+        	$this->_log('Matching timezone ' . $_timezone->getName(), 7);
+        	$this->_log('Matching daylight transition ' . print_r($daylightTransition, 1), 7);
+        	$this->_log('Matching standard transition ' . print_r($standardTransition, 1), 7);
+        	return $standardTransition;
+        }
+        
+        return false;
     }
     
     /**

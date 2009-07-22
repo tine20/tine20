@@ -115,11 +115,18 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     protected $_packedFixtrues = array(
         'Europe/Berlin' => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==',
         'US/Arizona'    => 'pAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
-        'Africa/Algiers'   => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
+        'Africa/Douala'   => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
 //        'Asia/Baghdad' => 'TP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAABAAMAAAAAAAAAxP///w==',
 //        'Asia/Tehran' => 'Lv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAAgAEAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAABAAIAAAAAAAAAxP///w==',
 //        'America/Sao_Paulo' => 'tAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAADAAIAAAAAAAAAxP///w==',
          );
+         
+    protected $_timezoneIdentifierToAbbreviation = array(
+        'Europe/Berlin'     => 'CET',
+        'US/Arizona'        => 'MST',
+        'Africa/Algiers'    => 'CET',
+        'Africa/Douala'     => 'WAT',
+    );
     
     public function setUp()
     {
@@ -145,7 +152,10 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     public function testActiveSyncTimezoneGuesser()
     {       
         foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
-            $this->assertContains($timezoneIdentifier, $this->_uit->getTimezonesForOffsets($offsets));
+        	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
+        	$result = $this->_uit->getTimezonesForOffsets($offsets);
+            $this->assertTrue(array_key_exists($timezoneAbbr, $result));
+            $this->assertContains($timezoneIdentifier,$result[$timezoneAbbr]);
         }        
     }
     
@@ -181,26 +191,41 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
 
     }
 
-    public function testActiveSyncTimezoneGuesserWithPackedStrings()
-    {       
+    public function testGetTimezonesForPackedTimezoneInfo()
+    {
         foreach ($this->_packedFixtrues as $timezoneIdentifier => $packedTimezoneInfo) {
+        	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
         	$result = $this->_uit->getTimezonesForPackedTimezoneInfo($packedTimezoneInfo);
-//        	var_dump($timezoneIdentifier, $result); 
-            $this->assertContains($timezoneIdentifier, $result);
+            $this->assertTrue(array_key_exists($timezoneAbbr, $result));
+            $this->assertContains($timezoneIdentifier, $result[$timezoneAbbr]);
+            
+            $result = $this->_uit->getTimezoneForPackedTimezoneInfo($packedTimezoneInfo);
+            $this->assertEquals($timezoneAbbr, $result);
         }
     }
     
-    public function testActiveSyncTimezoneGuesserWithExpectedTimezoneOption()
+    public function testExpectedTimezoneOption()
     {
         foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
+        	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
             $this->_uit->setExpectedTimezone($timezoneIdentifier);
             $matchedTimezones = $this->_uit->getTimezonesForOffsets($offsets);
-            $this->assertContains($timezoneIdentifier, $matchedTimezones);
-            $this->assertEquals($timezoneIdentifier, $matchedTimezones[0]);
+            $this->assertTrue(array_key_exists($timezoneAbbr, $matchedTimezones));
+            $this->assertEquals($timezoneIdentifier, $matchedTimezones[$timezoneAbbr]);
         }
+        
+        
+        //Africa/Algiers exceptionally belongs to CET insetad of WAT
+        $packed = 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
+        $expectedTimezone = 'Africa/Algiers';
+        $expectedAbbr = 'CET';
+        
+        $this->_uit->setExpectedTimezone($expectedTimezone);
+        $result = $this->_uit->getTimezoneForPackedTimezoneInfo($packed);
+        $this->assertEquals($expectedAbbr, $result);
     }
 
-    public function testActiveSyncTimezoneGuesserWithUnknownOffsets()
+    public function testUnknownOffsets()
     {
         $offsets = array(
 	                    'bias' => 1,
@@ -225,10 +250,8 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
 	                    'daylightMilliseconds' => 7,
 	                    'daylightBias' => 8
                    );
-
+        $this->setExpectedException('ActiveSync_TimezoneNotFoundException');
         $matchedTimezones = $this->_uit->getTimezonesForOffsets($offsets);
-        $this->assertTrue(is_array($matchedTimezones));
-        $this->assertTrue(count($matchedTimezones) === 0);
     }
 
 }
