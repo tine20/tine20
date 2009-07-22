@@ -73,7 +73,7 @@ $delimiter = $folders[$subfoldersOf]['delimiter'];
 $subfolders = $imapBackend->getFolders($subfoldersOf . $delimiter, '%');
 
 $elapsedTime = microtime(true) - $startTime;
-print "<h1> $elapsedTime :: get subfolders: </h1>" . print_r($subfolders, TRUE);
+print "<h1> $elapsedTime :: get subfolders of $subfoldersOf : </h1>" . print_r($subfolders, TRUE);
 
 /*********** logout ************/
 
