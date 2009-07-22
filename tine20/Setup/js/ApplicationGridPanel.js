@@ -210,6 +210,23 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             },
             fail: function() {
                 Ext.Msg.alert(this.app.i18n._('Shit'), this.app.i18n._('Where are the backup tapes'));
+            },
+            exceptionHandler: function(response){
+            	var data = response ? Ext.util.JSON.decode(response.responseText) : null;
+            	switch(data.code) {
+                	//Dependency Exception
+		            case 501:
+		            Ext.MessageBox.show({
+		                title: _('Dependency Violation'), 
+		                msg: _(data.msg),
+		                buttons: Ext.Msg.OK,
+		                icon: Ext.MessageBox.WARNING
+		            });
+		            this.store.load();
+		            longLoadMask.hide();
+		            return true;
+            	}
+            	return false;
             }
         });
     },

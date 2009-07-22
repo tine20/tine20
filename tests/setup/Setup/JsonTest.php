@@ -24,7 +24,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Tinebase_Group
  */
-class Setup_ControllerTest extends PHPUnit_Framework_TestCase
+class Setup_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Setup_Frontend_Json
@@ -63,7 +63,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {        
     }
-
+    
     /**
      * test uninstall application
      *
@@ -89,10 +89,19 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         
         // checks
         $this->assertTrue(isset($activeSyncApp));
-        var_dump($activeSyncApp);
         $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
 
 	    $this->_json->installApplications(Zend_Json::encode(array('ActiveSync'))); //cleanup
+    }
+    
+    /**
+     * test uninstall application
+     *
+     */
+    public function testUninstallTinebase()
+    {
+        $this->setExpectedException('Setup_Exception_Dependency');
+    	$result = $this->_json->uninstallApplications(Zend_Json::encode(array('Tinebase')));
     }
     
     /**
