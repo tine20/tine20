@@ -156,11 +156,9 @@ class ActiveSync_TimezoneConverter {
         if (false === ($matchingTimezones = $this->_loadFromCache($cacheId)))
         {        
 	        $matchingTimezones = array();
-	        $checkWithoutDST = empty($this->_offsets['daylightMonth']);
 		    foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
 		    	$timezone = new DateTimeZone($timezoneIdentifier);
-		    	if (($checkWithoutDST && $this->_checkTimezoneWithoutDST($timezone)) || 
-		    	   (!$checkWithoutDST && $this->_checkTimezoneWithDST($timezone))) {
+		    	if ($this->_checkTimezone($timezone)) {
 		    		if ($this->_isExpectedTimezone($timezoneIdentifier)) {
 	                    array_unshift($matchingTimezones, $timezoneIdentifier);
 	                    break;
@@ -171,7 +169,7 @@ class ActiveSync_TimezoneConverter {
 		    }
 		    $this->_saveInCache($matchingTimezones, $cacheId);
         }
-	    
+	    $this->_log('Matching timezones: '.print_r($matchingTimezones, true));
 	    return $matchingTimezones;
 	}
 	
@@ -287,30 +285,35 @@ class ActiveSync_TimezoneConverter {
      * 
      * @return bool
      */
-    protected function _checkTransition($_standardTransition, $_daylightTransition)
+    protected function _checkTransition($_standardTransition, $_daylightTransition, $_offsets)
     {
-        if (empty($_standardTransition) || empty($_daylightTransition)) {
+        if (empty($_standardTransition) || empty($_offsets)) {
         	return false;
         }
 
         $standardBias = ($_standardTransition['offset']/60)*-1;
-            
+               
         //check each condition in a single if statement and break the chain when one condition is not met - for performance reasons            
-        if ($standardBias == ($this->_offsets['bias']+$this->_offsets['standardBias']) ) {
+        if ($standardBias == ($_offsets['bias']+$_offsets['standardBias']) ) {
             
+        	if (empty($_offsets['daylightMonth']) && (empty($_daylightTransition) || empty($_daylightTransition['isdst']))) {
+        		//No DST
+        		return true;
+        	}
+        	
             $daylightBias = ($_daylightTransition['offset']/60)*-1 - $standardBias;
             if ($daylightBias == $this->_offsets['daylightBias']) {
                 
                 $standardParsed = getdate($_standardTransition['ts']);
                 $daylightParsed = getdate($_daylightTransition['ts']);
 
-                if ($standardParsed['mon'] == $this->_offsets['standardMonth'] && 
-                    $daylightParsed['mon'] == $this->_offsets['daylightMonth'] &&
-                    $standardParsed['wday'] == $this->_offsets['standardDayOfWeek'] &&
-                    $daylightParsed['wday'] == $this->_offsets['daylightDayOfWeek'] ) 
+                if ($standardParsed['mon'] == $_offsets['standardMonth'] && 
+                    $daylightParsed['mon'] == $_offsets['daylightMonth'] &&
+                    $standardParsed['wday'] == $_offsets['standardDayOfWeek'] &&
+                    $daylightParsed['wday'] == $_offsets['daylightDayOfWeek'] ) 
                     {
-                        return $this->_isNthOcurrenceOfWeekdayInMonth($_daylightTransition['ts'], $this->_offsets['daylightDay']) &&
-                               $this->_isNthOcurrenceOfWeekdayInMonth($_standardTransition['ts'], $this->_offsets['standardDay']);
+                        return $this->_isNthOcurrenceOfWeekdayInMonth($_daylightTransition['ts'], $_offsets['daylightDay']) &&
+                               $this->_isNthOcurrenceOfWeekdayInMonth($_standardTransition['ts'], $_offsets['standardDay']);
                 }
             }
         }
@@ -493,37 +496,16 @@ class ActiveSync_TimezoneConverter {
     
     /**
      * Check if the given {@param $_timezone} matches the {@see $_offsets}
-     * without checking the daylight saving time transitions
-     * 
-     * @param DateTimeZone $_timezone
-     * @return void
-     */
-    protected function _checkTimezoneWithoutDST(DateTimeZone $_timezone)
-    {
-    	$this->_log(__FUNCTION__ . 'Checking for matches with timezone: ' . $_timezone->getName());
-        if (empty($this->_offsets)) {
-            throw new Tinebase_Exception('Missing object property _offsets');
-        }
-
-        $bias = ($_timezone->getOffset($this->_startDate['object'])/60)*-1;
-        if ($bias == $this->_offsets['bias']) {
-            return true;
-        }
-        return false;        
-    }
-
-    /**
-     * Check if the given {@param $_timezone} matches the {@see $_offsets}
      * and also evaluate the daylight saving time transitions for this timezone.
      * 
      * @param DateTimeZone $_timezone
      * @return void
      */
-    protected function _checkTimezoneWithDST(DateTimeZone $_timezone) 
+    protected function _checkTimezone(DateTimeZone $_timezone) 
     {
     	$this->_log(__FUNCTION__ . 'Checking for matches with timezone: ' . $_timezone->getName());
         list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($_timezone, $this->_startDate['year']);
-        return $this->_checkTransition($standardTransition, $daylightTransition);
+        return $this->_checkTransition($standardTransition, $daylightTransition, $this->_offsets);
     }
     
     /**
