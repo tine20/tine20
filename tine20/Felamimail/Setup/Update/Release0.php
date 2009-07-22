@@ -102,4 +102,22 @@ class Felamimail_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_folder', 2);
         $this->setApplicationVersion('Felamimail', '0.4');
     }
+
+    /**
+     * update function 4
+     * - add sort folders setting to accounts
+     *
+     */    
+    public function update_4()
+    {
+        $field = '<field>
+                    <name>sort_folders</name>
+                    <type>boolean</type>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('felamimail_account', $declaration);
+        
+        $this->setApplicationVersion('Felamimail', '0.5');
+        $this->setTableVersion('felamimail_account', 5);
+    }
 }

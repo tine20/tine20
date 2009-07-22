@@ -89,6 +89,7 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'trash_folder' },
     { name: 'show_intelligent_folders' },
     { name: 'has_children_support' },
+    { name: 'sort_folders' },
     { name: 'delimiter' },
     { name: 'ns_personal' },
     { name: 'signature' },

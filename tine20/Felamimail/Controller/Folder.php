@@ -290,9 +290,11 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), true));
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folders, true));
         
-        // get folder record set and sort it
+        // get folder recordset and sort it
         $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
-        $result = $this->_sortFolders($result, $_folderName);
+        if ($account->sort_folders) {
+            $result = $this->_sortFolders($result, $_folderName);
+        }
         
         return $result;
     }    
