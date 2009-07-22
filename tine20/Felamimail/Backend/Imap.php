@@ -436,6 +436,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
     }
     
+    /**
+     * get server capabilities and namespace
+     *
+     * @return array
+     */
     public function getCapabilityAndNamespace()
     {
         $capabilities = $this->_protocol->capability();
