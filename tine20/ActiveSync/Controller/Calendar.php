@@ -330,12 +330,19 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 }
             }
         }
+        $timeZoneConverter = ActiveSync_TimezoneConverter::getInstance(
+            Tinebase_Core::getLogger(),
+            Tinebase_Core::get(Tinebase_Core::CACHE)
+        );
+        
+        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', $timeZoneConverter->encodeTinezone(
+            Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
+        )));
         
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MeetingStatus', 1));
-        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
+        #$_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAEAAAAAAAAAxP///w=='));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'BusyStatus', 2));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Sensitivity', 0));
-        //$_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'MeetingStatus', 0));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'DtStamp', $data->creation_time->toString('yyyyMMddTHHmmss') . 'Z'));
         $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'UID', $data->getId()));
     }
@@ -427,12 +434,26 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             )));
         }
         
-//@todo get timezone from ActiveSync_TimezoneGuesser
-//        // decode timezone data
-//        if(isset($xmlData->Timezone)) {
-//            $timezoneData = $this->unpackTimezoneInfo((string)$xmlData->Timezone);
-//            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . print_r($timezoneData, true));
-//        }
+        // decode timezone data
+        if(isset($xmlData->Timezone)) {
+            $timeZoneConverter = ActiveSync_TimezoneConverter::getInstance(
+                Tinebase_Core::getLogger(),
+                Tinebase_Core::get(Tinebase_Core::CACHE)
+            );
+
+            try {
+                $timezone = $timeZoneConverter->getTimezone(
+                    (string)$xmlData->Timezone, 
+                    Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
+                );
+                $event->originator_tz = $timezone;
+            } catch (ActiveSync_TimezoneNotFoundException $e) {
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " timezone data not found " . (string)$xmlData->Timezone);
+                $event->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+            }
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . $event->originator_tz);
+        }
         
         // handle attendees
         $addressbook = Addressbook_Controller_Contact::getInstance();
