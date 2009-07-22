@@ -323,7 +323,8 @@ Tine.Tinebase.tineInit = {
                 
                 // generic failure -> notify developers / only if no custom exception handler has been defined in options
                 default:
-                if (typeof options.exceptionHandler !== 'function') {
+                if (typeof options.exceptionHandler !== 'function' || 
+                    false === options.exceptionHandler.call(options.scope, response, options)) {
                     var windowHeight = 400;
                     if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
                         windowHeight = Ext.getBody().getHeight(true) * 0.7;
@@ -341,8 +342,6 @@ Tine.Tinebase.tineInit = {
                         });
                         Tine.Tinebase.exceptionDlg.show();
                     }
-                } else {
-                    options.exceptionHandler.call(options.scope, response, options);
                 }
                 break;
             }

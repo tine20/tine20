@@ -677,23 +677,11 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                     }
                 }
             });
+            
+            return true;
 
         } else {
-
-            // open standard exception dialog
-            if (! Tine.Tinebase.exceptionDlg) {
-                Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
-                    height: 300,
-                    exceptionInfo: responseText,
-                    listeners: {
-                        close: function() {
-                            Tine.Tinebase.exceptionDlg = null;
-                        }
-                    }
-                });
-                Tine.Tinebase.exceptionDlg.show();
-            }
-            
+        	return false;
             /*
             Ext.MessageBox.alert(
                 this.app.i18n._('Failed to connect'), 

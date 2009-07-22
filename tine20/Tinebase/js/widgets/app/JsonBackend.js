@@ -308,7 +308,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         
         if (typeof options.exceptionHandler == 'function') {
             requestOptions.exceptionHandler = function(response) {
-                options.exceptionHandler.call(options.scope, response, options);
+                return options.exceptionHandler.call(options.scope, response, options);
             };
         }
         
