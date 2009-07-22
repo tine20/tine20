@@ -90,9 +90,10 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
 	        </table>';
 
         $this->_table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
+        $this->_tableNames[] = $this->_table->name;
         
         $this->_backend->createTable($this->_table);
-        $this->_tableNames[] = $this->_table->name;
+        
     }
 
     /**
@@ -656,7 +657,34 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     	$this->_tableNames[] = $newTableName; //cleanup with tearDown
     	$this->assertTrue($this->_backend->tableExists($newTableName));
     }
-
+    
+    public function testExecQueryAndInsertStatement()
+    {
+    	$testValue = 'test_exec_insert_statement';
+    	$recordsXml = "
+	    	<defaultRecords>
+		       <record>
+		            <table>
+		                <name>{$this->_table->name}</name>
+		            </table>
+		            <field>
+		                <name>id</name>
+		                <value>1</value>
+		            </field>
+		            <field>
+		                <name>name</name>
+		                <value>{$testValue}</value>
+		            </field>
+		        </record>
+		    </defaultRecords>";
+    	$records = simplexml_load_string($recordsXml);
+    	$this->_backend->execInsertStatement($records->record[0]);
+    	
+    	$statement = 'SELECT * FROM `' . SQL_TABLE_PREFIX . $this->_table->name . '`;';
+        $result = $this->_backend->execQuery($statement);
+    	$this->assertEquals(1, count($result));
+        $this->assertEquals($testValue, $result[0]['name']);
+    }
 
 }        
                 
