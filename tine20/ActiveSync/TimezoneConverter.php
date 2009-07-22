@@ -53,7 +53,6 @@
 class ActiveSync_TimezoneConverter {
 
 	protected $_startDate          = array();
-	protected $_offsets            = array();
 	
 	/**
 	 * If set then timezone guessing will end when the expected timezon was matched and the expected timezone
@@ -172,16 +171,16 @@ class ActiveSync_TimezoneConverter {
     {
         $this->_log(__FUNCTION__ . ': Start getting timezones that match with these offsets: ' . print_r($_offsets, true));
         
-        $this->_setOffsets($_offsets);
-        $this->_setDefaultStartDateIfEmpty();
+        $this->_validateOffsets($_offsets);
+        $this->_setDefaultStartDateIfEmpty($_offsets);
         
-        $cacheId = $this->_getCacheId(array(__FUNCTION__));        
+        $cacheId = $this->_getCacheId(array(__FUNCTION__, $_offsets));        
         if (false === ($matchingTimezones = $this->_loadFromCache($cacheId)))
         {        
             $matchingTimezones = array();
             foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
                 $timezone = new DateTimeZone($timezoneIdentifier);
-                if (false !== ($matchingTransition = $this->_checkTimezone($timezone))) {
+                if (false !== ($matchingTransition = $this->_checkTimezone($timezone, $_offsets))) {
                 	
                     if ($this->_isExpectedTimezone($timezoneIdentifier)) {
                         $matchingTimezones = array($matchingTransition['abbr'] => $timezoneIdentifier);
@@ -347,7 +346,7 @@ class ActiveSync_TimezoneConverter {
         	}
         	
             $daylightBias = ($_daylightTransition['offset']/60)*-1 - $standardBias;
-            if ($daylightBias == $this->_offsets['daylightBias']) {
+            if ($daylightBias == $_offsets['daylightBias']) {
                 
                 $standardParsed = getdate($_standardTransition['ts']);
                 $daylightParsed = getdate($_daylightTransition['ts']);
@@ -462,16 +461,14 @@ class ActiveSync_TimezoneConverter {
      * 
      * @return unknown_type
      */
-    protected function _setOffsets($_value)
+    protected function _validateOffsets($_value)
     {       
         //validate $_value
         if ((!empty($_value['standardMonth']) || !empty($_value['standardDay']) || !empty($_value['daylightMonth']) || !empty($_value['daylightDay'])) &&
             (empty($_value['standardMonth']) || empty($_value['standardDay']) || empty($_value['daylightMonth']) || empty($_value['daylightDay']))       
             ) {
-              throw new Tinebase_Exception_InvalidArgument('It is not possible not set standard offsets without setting daylight offsets and vice versa');
+              throw new ActiveSync_Exception('It is not possible not set standard offsets without setting daylight offsets and vice versa');
         }
-
-        $this->_offsets = $_value;
     }
     
     /**
@@ -510,16 +507,17 @@ class ActiveSync_TimezoneConverter {
      * Tries to guewss the correct startDate depending on object property {@see $_offsets} and
      * falls back to current date. 
      *  
+     * @param array | null $_offsets [offsets may be avaluated for a given start year]
      * @return void
      */
-    protected function _setDefaultStartDateIfEmpty()
+    protected function _setDefaultStartDateIfEmpty($_offsets = null)
     {
         if (!empty($this->_startDate)) {
             return;
         }
         
-        if (!empty($this->_offsets['standardYear'])) {
-            $this->_setStartDate($this->_offsets['standardYear'].'-01-01');
+        if (!empty($_offsets['standardYear'])) {
+            $this->_setStartDate($_offsets['standardYear'].'-01-01');
         }
         else {
             $this->_setStartDate(time());
@@ -544,13 +542,14 @@ class ActiveSync_TimezoneConverter {
      * and also evaluate the daylight saving time transitions for this timezone if necessary.
      * 
      * @param DateTimeZone $_timezone
+     * @param array $_offsets
      * @return void
      */
-    protected function _checkTimezone(DateTimeZone $_timezone) 
+    protected function _checkTimezone(DateTimeZone $_timezone, $_offsets) 
     {
     	$this->_log(__FUNCTION__ . 'Checking for matches with timezone: ' . $_timezone->getName(), 7);
         list($standardTransition, $daylightTransition) = $this->_getTransitionsForTimezoneAndYear($_timezone, $this->_startDate['year']);
-        if ($this->_checkTransition($standardTransition, $daylightTransition, $this->_offsets)) {
+        if ($this->_checkTransition($standardTransition, $daylightTransition, $_offsets)) {
         	$this->_log('Matching timezone ' . $_timezone->getName(), 7);
         	$this->_log('Matching daylight transition ' . print_r($daylightTransition, 1), 7);
         	$this->_log('Matching standard transition ' . print_r($standardTransition, 1), 7);
@@ -599,7 +598,7 @@ class ActiveSync_TimezoneConverter {
     
     protected function _getCacheId($additionlIdParams = array())
     {
-        return 'ActiveSync_TimezoneGuesser_' . md5(serialize(array($additionlIdParams, $this->_expectedTimezone, $this->_offsets, $this->_startDate)));
+        return 'ActiveSync_TimezoneGuesser_' . md5(serialize(array($additionlIdParams, $this->_expectedTimezone, $this->_startDate)));
     }
     
     protected function _loadFromCache($_id)

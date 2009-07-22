@@ -159,38 +159,6 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         }        
     }
     
-    public function testInvalidArgumentException()
-    {
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
-        //When specifiying standardOffsest then it is invalid provide empty daylight offsets and vice versa 
-        $offsets = array(
-                        'bias' => 1,
-                        'standardName' => null,
-                        'standardYear' => 0,
-                        'standardMonth' => 1,
-                        'standardDayOfWeek' => 2,
-                        'standardDay' => 3,
-                        'standardHour' => 4,
-                        'standardMinute' => 5,
-                        'standardSecond' => 6,
-                        'standardMilliseconds' => 7,
-                        'standardBias' => 8,
-                        'daylightName' => null,
-                        'daylightYear' => 0,
-                        'daylightMonth' => 1,
-                        'daylightDayOfWeek' => 0,
-                        'daylightDay' => 0,
-                        'daylightHour' => 0,
-                        'daylightMinute' => 0,
-                        'daylightSecond' => 0,
-                        'daylightMilliseconds' => 0,
-                        'daylightBias' => 0
-                   );
-
-        $this->_uit->getTimezonesForOffsets($offsets);
-
-    }
-
     public function testGetTimezonesForPackedTimezoneInfo()
     {
         foreach ($this->_packedFixtrues as $timezoneIdentifier => $packedTimezoneInfo) {
@@ -227,31 +195,63 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
 
     public function testUnknownOffsets()
     {
-        $offsets = array(
-	                    'bias' => 1,
-	                    'standardName' => null,
-	                    'standardYear' => 0,
-	                    'standardMonth' => 1,
-	                    'standardDayOfWeek' => 2,
-	                    'standardDay' => 3,
-	                    'standardHour' => 4,
-	                    'standardMinute' => 5,
-	                    'standardSecond' => 6,
-	                    'standardMilliseconds' => 7,
-	                    'standardBias' => 8,
-	                    'daylightName' => null,
-	                    'daylightYear' => 0,
-	                    'daylightMonth' => 1,
-	                    'daylightDayOfWeek' => 2,
-	                    'daylightDay' => 3,
-	                    'daylightHour' => 4,
-	                    'daylightMinute' => 5,
-	                    'daylightSecond' => 6,
-	                    'daylightMilliseconds' => 7,
-	                    'daylightBias' => 8
-                   );
-        $this->setExpectedException('ActiveSync_TimezoneNotFoundException');
+    	$this->setExpectedException('ActiveSync_TimezoneNotFoundException');
+        $offsets = array(                                                                                                                            
+                    'bias' => -600000,
+                    'standardName' => '',
+                    'standardYear' => 0,
+                    'standardMonth' => 10,
+                    'standardDayOfWeek' => 0,
+                    'standardDay' => 5,
+                    'standardHour' => 3,
+                    'standardMinute' => 0,
+                    'standardSecond' => 0,
+                    'standardMilliseconds' => 0,
+                    'standardBias' => 0,
+                    'daylightName' => '',
+                    'daylightYear' => 0,
+                    'daylightMonth' => 3,
+                    'daylightDayOfWeek' => 0,
+                    'daylightDay' => 5,
+                    'daylightHour' => 2,
+                    'daylightMinute' => 0,
+                    'daylightSecond' => 0,
+                    'daylightMilliseconds' => 0,
+                    'daylightBias' => -60                                                         
+               );
         $matchedTimezones = $this->_uit->getTimezonesForOffsets($offsets);
+    }
+    
+    public function testInvalidOffsets()
+    {
+        $this->setExpectedException('ActiveSync_Exception');
+        //When specifiying standardOffsest then it is invalid provide empty daylight offsets and vice versa 
+        $offsets = array(
+                        'bias' => 1,
+                        'standardName' => null,
+                        'standardYear' => 0,
+                        'standardMonth' => 1,
+                        'standardDayOfWeek' => 2,
+                        'standardDay' => 3,
+                        'standardHour' => 4,
+                        'standardMinute' => 5,
+                        'standardSecond' => 6,
+                        'standardMilliseconds' => 7,
+                        'standardBias' => 8,
+                        'daylightName' => null,
+                        'daylightYear' => 0,
+                        'daylightMonth' => 1,
+                        'daylightDayOfWeek' => 0,
+                        'daylightDay' => 0,
+                        'daylightHour' => 0,
+                        'daylightMinute' => 0,
+                        'daylightSecond' => 0,
+                        'daylightMilliseconds' => 0,
+                        'daylightBias' => 0
+                   );
+
+        $this->_uit->getTimezonesForOffsets($offsets);
+
     }
 
 }
