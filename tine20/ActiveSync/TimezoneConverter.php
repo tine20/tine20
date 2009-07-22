@@ -298,6 +298,7 @@ class ActiveSync_TimezoneConverter {
             
         	if (empty($_offsets['daylightMonth']) && (empty($_daylightTransition) || empty($_daylightTransition['isdst']))) {
         		//No DST
+        		$this->_log('Matching standard transition: ' . print_r($_standardTransition, true));
         		return true;
         	}
         	
@@ -312,8 +313,14 @@ class ActiveSync_TimezoneConverter {
                     $standardParsed['wday'] == $_offsets['standardDayOfWeek'] &&
                     $daylightParsed['wday'] == $_offsets['daylightDayOfWeek'] ) 
                     {
-                        return $this->_isNthOcurrenceOfWeekdayInMonth($_daylightTransition['ts'], $_offsets['daylightDay']) &&
-                               $this->_isNthOcurrenceOfWeekdayInMonth($_standardTransition['ts'], $_offsets['standardDay']);
+                        if($this->_isNthOcurrenceOfWeekdayInMonth($_daylightTransition['ts'], $_offsets['daylightDay']) &&
+                           $this->_isNthOcurrenceOfWeekdayInMonth($_standardTransition['ts'], $_offsets['standardDay'])) 
+                           {
+                            $this->_log('Matching daylight transition: ' . print_r($_daylightTransition, true));
+                            $this->_log('Matching standard transition: ' . print_r($_standardTransition, true));
+                            return true;
+                        }
+                           
                 }
             }
         }
