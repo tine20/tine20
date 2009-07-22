@@ -24,7 +24,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Tinebase_Group
  */
-class Setup_JsonTest extends PHPUnit_Framework_TestCase
+class Setup_ControllerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Setup_Frontend_Json
@@ -70,7 +70,20 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUninstallApplications()
     {
-        //$this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
+    	try {
+    		$result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
+    	} catch (Tinebase_Exception_NotFound $e) {
+    		$this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
+    		$result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
+    	}
+        
+        $this->assertEquals(
+	        array(
+	            'success'=> true,
+	        ),
+	        $result);
+
+	    $result = $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
     }
     
     /**
@@ -106,8 +119,13 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testInstallApplications()
     {
-        /*
-        $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
+        try {
+            $result = $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
+        } catch (Exception $e) {
+            $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
+            $result = $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
+        }
+        
 
         $apps = $this->_json->searchApplications();
         
@@ -122,9 +140,8 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         // checks
         $this->assertTrue(isset($activeSyncApp));
         $this->assertTrue(isset($activeSyncApp['id']));
-        $this->assertEquals('disabled', $activeSyncApp['status']);
+        $this->assertEquals('enabled', $activeSyncApp['status']);
         $this->assertEquals('uptodate', $activeSyncApp['install_status']);
-        */
     }
 
     /**
