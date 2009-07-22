@@ -74,6 +74,10 @@ class Setup_Controller
         // setup actions could take quite a while we try to set max execution time to 5 minutes
         Setup_Core::setExecutionLifeTime(300);
         
+        if (!defined('MAXLOOPCOUNT')) {
+            define('MAXLOOPCOUNT', 50);
+        }
+        
         $this->_baseDir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
         
         if (Setup_Core::get(Setup_Core::CHECKDB)) {
@@ -787,7 +791,6 @@ class Setup_Controller
         //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($appsToSort, true));
         
         // re-sort apps
-        define('MAXLOOPCOUNT', 50);
         $count = 0;
         while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
             
@@ -853,7 +856,6 @@ class Setup_Controller
         }
         
         // re-sort apps
-        define('MAXLOOPCOUNT', 50);
         $count = 0;
         while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
 
