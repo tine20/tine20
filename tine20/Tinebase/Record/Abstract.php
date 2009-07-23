@@ -406,8 +406,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      *
      * @param $_throwExceptionOnInvalidData
      * @return bool
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function isValid($_throwExceptionOnInvalidData=false)
+    public function isValid($_throwExceptionOnInvalidData = false)
     {
         if($this->_isValidated === false) {
             $inputFilter = $this->_getFilter();
