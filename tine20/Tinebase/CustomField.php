@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        add join to cf config to value backend to get name
- * @todo        add caching again?
  */
 
 /**
@@ -85,10 +84,10 @@ class Tinebase_CustomField
      */
     public function addCustomField(Tinebase_Model_CustomField_Config $_record)
     {
-        return $this->_backendConfig->create($_record);
-        
         // invalidate cache (no memcached support yet)
-        //Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+        
+        return $this->_backendConfig->create($_record);
     }
 
     /**
@@ -114,40 +113,39 @@ class Tinebase_CustomField
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        $filterValues = array(array(
-            'field'     => 'application_id', 
-            'operator'  => 'equals', 
-            'value'     => $applicationId
-        ));
-        
-        if ($_modelName !== NULL) {
-            $filterValues[] = array(
-                'field'     => 'model', 
-                'operator'  => 'equals', 
-                'value'     => $_modelName
-            );
-        }
-        
-        $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
-        $result = $this->_backendConfig->search($filter);
-        
-        if (count($result) > 0) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
-                //. print_r($result->toArray(), TRUE)
-            );
-        }
-            
-        return $result;
-        
-        /*
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
         $cacheId = 'getCustomFieldsForApplication' . $applicationId . (($_modelName !== NULL) ? $_modelName : '');
         $result = $cache->load($cacheId);
-        if (!$result) {        
+        
+        if (!$result) {
+            $filterValues = array(array(
+                'field'     => 'application_id', 
+                'operator'  => 'equals', 
+                'value'     => $applicationId
+            ));
+            
+            if ($_modelName !== NULL) {
+                $filterValues[] = array(
+                    'field'     => 'model', 
+                    'operator'  => 'equals', 
+                    'value'     => $_modelName
+                );
+            }
+            
+            $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+            $result = $this->_backendConfig->search($filter);
+        
+            if (count($result) > 0) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
+                    . print_r($result->toArray(), TRUE)
+                );
+            }
+
             $cache->save($result, $cacheId, array('customfields'));
         }
-        */
+            
+        return $result;
     }
     
     /**
@@ -157,10 +155,10 @@ class Tinebase_CustomField
      */
     public function deleteCustomField($_customField)
     {
-        $this->_backendConfig->delete($_customField);
-        
         // invalidate cache (no memcached support yet)
-        //Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+
+        $this->_backendConfig->delete($_customField);
     }
     
     /**
@@ -183,6 +181,11 @@ class Tinebase_CustomField
         );
         
         foreach ($appCustomFields as $customField) {
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . print_r($_record->customfields, TRUE)
+            );
+                
             $value = (is_array($_record->customfields) && array_key_exists($customField->name, $_record->customfields) )
                 ? $_record->customfields[$customField->name]
                 : '';
@@ -202,6 +205,13 @@ class Tinebase_CustomField
                     'value'             => $value
                 ));
                 $this->_backendValue->create($cf);
+                
+                /*
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Created new custom field value: '
+                    . print_r($cf->toArray(), TRUE)
+                );
+                */
                 
             } else {
                 throw new Tinebase_Exception_UnexpectedValue('Oops, there should be only one custom field value here!');
