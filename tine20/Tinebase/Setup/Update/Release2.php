@@ -28,6 +28,12 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             <version>1</version>
             <declaration>
                 <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
                     <name>record_id</name>
                     <type>text</type>
                     <length>40</length>
