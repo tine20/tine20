@@ -34,7 +34,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         
         this.NONEcard = new Ext.Panel({
             freq: 'NONE',
-            html: this.app.i18n._('No recuring rule defined')
+            html: this.app.i18n._('No recurring rule defined')
         });
         this.NONEcard.setRule = Ext.emptyFn;
         this.NONEcard.fillDefaults = Ext.emptyFn;

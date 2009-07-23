@@ -124,7 +124,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         if (event.isRecurBase() && ! event.get('rrule').newrule) {
             Ext.MessageBox.confirm(
                 this.app.i18n._('Confirm Update of Series'),
-                this.app.i18n._('Do you realy want to update all events of this recuring event series?'),
+                this.app.i18n._('Do you really want to update all events of this recurring event series?'),
                 function(btn) {
                     if(btn == 'yes') {
                         this.loadMask.show();

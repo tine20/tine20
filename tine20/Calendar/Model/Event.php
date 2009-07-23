@@ -14,15 +14,15 @@
  * Model of an event
  * 
  * Recuring Notes: 
- *  - deleted recuring exceptions are stored in exdate (array of datetimes)
- *  - modified recuring exceptions have their own event with recurid set the uid-dtstart
+ *  - deleted recurring exceptions are stored in exdate (array of datetimes)
+ *  - modified recurring exceptions have their own event with recurid set the uid-dtstart
  *    of the originators event (@see RFC2445)
- *  - as id is unique, each modified recuring event has its own id
+ *  - as id is unique, each modified recurring event has its own id
  *  - rrule is stored in RCF2445 format
  *  - the rrule_until is redundat to the rrule until property for fast queries
  *  - we don't use rrule count, they are converted to an until
  *  - like always in tine, we save all dates in UTC, but to correctly compute
- *    recuring events, we also save the timezone of the organizer
+ *    recurring events, we also save the timezone of the organizer
  *  - despite RFC2445 we have an expicit isAllDayEvent property
  * 
  * @package Calendar

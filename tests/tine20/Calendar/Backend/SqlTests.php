@@ -288,9 +288,9 @@ class Calendar_Backend_SqlTests extends Calendar_TestCase
     */
     
     /**
-     * test search of recuring base events
+     * test search of recurring base events
      * 
-     * Recur Base events are those recuring events which potentially could have
+     * Recur Base events are those recurring events which potentially could have
      *   recurances in the searched period
      *
      *

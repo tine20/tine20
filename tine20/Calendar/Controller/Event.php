@@ -165,7 +165,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
-     * creates an exception instance of a recuring evnet
+     * creates an exception instance of a recurring evnet
      *
      * NOTE: deleting persistent exceptions is done via a normal delte action
      *       and handled in the delteInspection
@@ -245,7 +245,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
-     * returns base event of a recuring series
+     * returns base event of a recurring series
      *
      * @param  Calendar_Model_Event $_event
      * @return Calendar_Model_Event
@@ -352,7 +352,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
                 $exceptionIds = $this->_backend->getMultipleByProperty($event->uid, 'uid')->getId();
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recuring series with uid' . $event->uid);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
             }
             
@@ -462,7 +462,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }*/
     
     /**
-     * creates an attender status exception of a recuring event series
+     * creates an attender status exception of a recurring event series
      * 
      * NOTE: Recur exceptions are implicitly created
      *
@@ -544,7 +544,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
-     * updates an attender status for a complete recuring event series
+     * updates an attender status for a complete recurring event series
      * 
      * @param  Calendar_Model_Event    $_recurInstance
      * @param  Calendar_Model_Attender $_attender

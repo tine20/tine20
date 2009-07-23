@@ -327,7 +327,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $this->_db->delete($this->_tablePrefix . 'cal_exdate', $this->_db->quoteInto($this->_db->quoteIdentifier('cal_event_id') . '= ?', $_event->getId()));
         
-        // only save exdates if its an recuring event
+        // only save exdates if its an recurring event
         if (! empty($_event->rrule)) {
             foreach ((array)$_event->exdate as $exdate) {
                 $this->_db->insert($this->_tablePrefix . 'cal_exdate', array(

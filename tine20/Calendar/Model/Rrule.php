@@ -322,7 +322,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
-     * computes daily recuring events and inserts them into given $_recurSet
+     * computes daily recurring events and inserts them into given $_recurSet
      *
      * @param Calendar_Model_Event      $_event
      * @param Calendar_Model_Rrule      $_rrule
@@ -377,7 +377,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
-     * computes monthly (bymonthday) recuring events and inserts them into given $_recurSet
+     * computes monthly (bymonthday) recurring events and inserts them into given $_recurSet
      *
      * @param Calendar_Model_Event      $_event
      * @param Calendar_Model_Rrule      $_rrule
@@ -452,7 +452,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
-     * computes monthly (byday) recuring events and inserts them into given $_recurSet
+     * computes monthly (byday) recurring events and inserts them into given $_recurSet
      *
      * @param Calendar_Model_Event      $_event
      * @param Calendar_Model_Rrule      $_rrule

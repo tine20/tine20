@@ -255,7 +255,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (selection.length > 1 && (containsRecurBase || containsRecurInstance)) {
             Ext.Msg.show({
                 title: this.app.i18n._('Please Change Selection'), 
-                msg: this.app.i18n._('Your selection contains recuring events. Recuring events must be deleted seperatly!'),
+                msg: this.app.i18n._('Your selection contains recurring events. Recuring events must be deleted seperatly!'),
                 icon: Ext.MessageBox.INFO,
                 buttons: Ext.Msg.OK,
                 scope: this,
@@ -270,7 +270,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             if (containsRecurBase) {
                 Ext.MessageBox.confirm(
                     this.app.i18n._('Confirm Deletion of Series'),
-                    this.app.i18n._('Do you realy want to delete all events of this recuring event series?'),
+                    this.app.i18n._('Do you really want to delete all events of this recurring event series?'),
                     function(btn) {
                         if(btn == 'yes') {
                             panel.loadMask.show();
