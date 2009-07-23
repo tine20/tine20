@@ -217,8 +217,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
                 	//Dependency Exception
 		            case 501:
 		            Ext.MessageBox.show({
-		                title: _('Dependency Violation'), 
-		                msg: _(data.msg),
+		                title: this.app.i18n._('Dependency Violation'), 
+		                msg: data.msg,
 		                buttons: Ext.Msg.OK,
 		                icon: Ext.MessageBox.WARNING
 		            });
