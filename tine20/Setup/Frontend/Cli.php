@@ -31,6 +31,8 @@ class Setup_Frontend_Cli
      *
      * @param string $_username
      * @param string $_password
+     * 
+     * @return boolean
      */
     public function authenticate($_username, $_password)
     {
@@ -41,7 +43,7 @@ class Setup_Frontend_Cli
      * handle request (call -ApplicationName-_Cli.-MethodName- or -ApplicationName-_Cli.getHelp)
      *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean success
+     * @return void
      */
     public function handle(Zend_Console_Getopt $_opts)
     {
