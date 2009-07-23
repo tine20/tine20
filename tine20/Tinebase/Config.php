@@ -9,6 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        split config and custom field handling
  * @todo        replace Zend_Db_Table_Abstract with Zend_Db_Adapter_Abstract
  */
 
@@ -287,6 +288,13 @@ class Tinebase_Config
             $result = new Tinebase_Record_RecordSet('Tinebase_Model_CustomField', $rows, true);
             
             $cache->save($result, $cacheId, array('customfields'));
+        }
+        
+        if (count($result) > 0) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
+                //. print_r($result->toArray(), TRUE)
+            );
         }
             
         return $result;
