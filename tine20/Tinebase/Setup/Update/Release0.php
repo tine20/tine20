@@ -2083,26 +2083,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         ');
         $this->_backend->addForeignKey('preferences', $declaration);
         
-        // add default settings for timezone and locale
-        $timezonePref = new Tinebase_Model_Preference(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name'              => Tinebase_Preference::TIMEZONE,
-            'value'             => 'Europe/Berlin',
-            'account_id'        => 0,
-            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT
-        ));
-        Tinebase_Core::getPreference()->create($timezonePref);
-        $localePref = new Tinebase_Model_Preference(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name'              => Tinebase_Preference::LOCALE,
-            'value'             => 'auto',
-            'account_id'        => 0,
-            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT
-        ));
-        Tinebase_Core::getPreference()->create($localePref);
-        
         // delete old user config settings
         $oldSettings = array('Locale', 'Timezone');
         foreach ($oldSettings as $oldSetting) {
