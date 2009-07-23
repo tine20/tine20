@@ -20,7 +20,7 @@
 class Tinebase_State
 {
     /**
-     * @var Tinebase_State_Backend
+     * @var Tinebase_Backend_Sql
      */
     protected $_backend;
     

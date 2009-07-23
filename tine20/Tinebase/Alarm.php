@@ -20,7 +20,7 @@
 class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * @var Tinebase_Alarm_Backend
+     * @var Tinebase_Backend_Sql
      */
     protected $_backend;
     

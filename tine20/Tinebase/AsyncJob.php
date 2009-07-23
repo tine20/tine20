@@ -20,7 +20,7 @@
 class Tinebase_AsyncJob
 {
     /**
-     * @var Tinebase_AsyncJob_Backend
+     * @var Tinebase_Backend_Sql
      */
     protected $_backend;
     
