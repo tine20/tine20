@@ -452,7 +452,8 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'jpegphoto'},
     {name: 'account_id'},
     {name: 'tags'},
-    {name: 'notes'}
+    {name: 'notes'},
+    {name: 'customfields'}
 ];
 
 /**
