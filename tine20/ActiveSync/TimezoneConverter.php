@@ -60,17 +60,7 @@ class ActiveSync_TimezoneConverter
     private static $_instance = NULL;
     
     protected $_startDate          = array();
-	
-	/**
-	 * If set then timezone guessing will end when the expected timezon was matched and the expected timezone
-	 * will be the first entry in the returned array of matching timezones.
-	 * 
-	 * This can speedup the timezone guessing process.
-	 * 
-	 * @var String
-	 */
-	protected $_expectedTimezone = null;
-	    
+		    
 	/**
 	 * If set then the timezone guessing results will be cached.
 	 * This is strongly recommended for performance reasons.
@@ -134,25 +124,16 @@ class ActiveSync_TimezoneConverter
         return self::$_instance;
     }
 
-	
-	/**
-	 * {@see $_expectedTimezone}
-	 * 
-	 * @param String $_expectedTimezone
-	 * @return void
-	 */
-	public function setExpectedTimezone($_expectedTimezone)
-	{
-		$this->_expectedTimezone = $_expectedTimezone;
-	}
-    
 	/**
 	 * {@see $_cache}
 	 * 
-	 * @param Zend_Cache_Core $_cache
+	 * @param Zend_Cache_Core | null $_cache
 	 * @return void
 	 */
-    public function setCache(Zend_Cache_Core $_cache) {
+    public function setCache($_cache) {
+    	if (!(is_null($_cache) || $_cache instanceof Zend_Cache_Core)) {
+    		throw new ActiveSync_Exception('Invalid argument: $_cache has to be either an instance of Zend-Cache_Core or null');
+    	}
         $this->_cache = $_cache;
     }
     
@@ -167,32 +148,58 @@ class ActiveSync_TimezoneConverter
     }
 	
     /**
-     * Unpacks {@param $_packedTimezoneInfo} using {@see unpackTimezoneInfo} and then
-     * calls {@see getTimezonesForOffsets} with the unpacked timezone info
+     * Returns an array of timezones that match to the {@param $_offsets}
      * 
-     * @param String $_packedTimezoneInfo
-     * @param string|optional $_expectedTimezone
+     * If {@see $_expectedTimezone} is set then the method will terminate as soon
+     * as the expected timezone has matched and the expected timezone will be the 
+     * first entry fo the returned array.
+     * 
+     * @param String | array $_packedTimezoneInfo
+     * @param String | optional $_expectedTimezone
      * @return array
      * 
      */
-    public function getListOfTimezones($_packedTimezoneInfo, $_expectedTimezone = null)
+    public function getListOfTimezones($_offsets, $_expectedTimezone = null)
     {
-        if($_expectedTimezone !== null) {
-            $this->setExpectedTimezone($_expectedTimezone);
+        if (is_string($_offsets) && isset($this->_knownTimezones[$_offsets])) {
+            $this->_log(__METHOD__, __LINE__, 'use internal hash table');
+            $timezones = $this->_knownTimezones[$_offsets];
+        } else {
+            
+			if (is_string($_offsets)) {
+	            // unpack timezone info to array
+	            $_offsets = $this->_unpackTimezoneInfo($_offsets);
+	        }
+	        
+	        $this->_validateOffsets($_offsets);
+	        $this->_setDefaultStartDateIfEmpty($_offsets);
+	        
+	        $cacheId = $this->_getCacheId(__METHOD__, $_offsets);     
+	           
+	        if (false === ($timezones = $this->_loadFromCache($cacheId))) {        
+	            $timezones = array();
+	            foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
+	                $timezone = new DateTimeZone($timezoneIdentifier);
+	                if (false !== ($matchingTransition = $this->_checkTimezone($timezone, $_offsets))) {
+	                    if ($timezoneIdentifier === $_expectedTimezone) {
+	                        $timezones = array($timezoneIdentifier => $matchingTransition['abbr']);
+	                        break;
+	                    } else {
+	                        $timezones[$timezoneIdentifier] = $matchingTransition['abbr'];
+	                    }
+	                }
+	            }
+	            $this->_saveInCache($timezones, $cacheId);
+	        }
         }
         
-        if(isset($this->_knownTimezones[$_packedTimezoneInfo])) {
-            $this->_log(__METHOD__, __LINE__, 'use internal hash table');
-            return $this->_knownTimezones[$_packedTimezoneInfo];
-        } else {
-            // unpack timezone info to array
-            $offsets   = $this->_unpackTimezoneInfo($_packedTimezoneInfo);
+        $this->_log(__METHOD__, __LINE__, 'Matching timezones: '.print_r($timezones, true));
             
-            // get timezones matching offsets
-            $timezones = $this->getTimezonesForOffsets($offsets);
-                
-            return $timezones;
+        if (empty($timezones)) {
+            throw new ActiveSync_TimezoneNotFoundException('No timezone found for the given offsets');
         }
+    
+        return $timezones;
     }
     
     /**
@@ -207,8 +214,8 @@ class ActiveSync_TimezoneConverter
     {
         $timezones = $this->getListOfTimezones($_packedTimezoneInfo, $_expectedTimezone);
 
-        if(isset($timezones[$this->_expectedTimezone])) {
-            return $this->_expectedTimezone; 
+        if(isset($timezones[$_expectedTimezone])) {
+            return $_expectedTimezone; 
         } else {
             return current($timezones);
         }
@@ -223,62 +230,21 @@ class ActiveSync_TimezoneConverter
      * @return String [timezone abbreviation e.g. CET, MST etc.]
      * 
      */
-    public function getTimezoneForPackedTimezoneInfo($_packedTimezoneInfo)
-    {
-        $offsets = $this->_unpackTimezoneInfo($_packedTimezoneInfo);
-        $matchingTimezones = $this->getTimezoneForOffsets($offsets);
-        $maxMatches = 0;
-        $matchingAbbr = null;
-        foreach ($matchingTimezones as $abbr => $timezones) {
-        	if (count($timezones) > $maxMatches) {
-        		$maxMatches = count($timezones);
-        		$matchingAbbr = $abbr;
-        	}
-        }
-        return $matchingAbbr;
-    }
+//    public function getTimezoneForPackedTimezoneInfo($_packedTimezoneInfo)
+//    {
+//        $offsets = $this->_unpackTimezoneInfo($_packedTimezoneInfo);
+//        $matchingTimezones = $this->getTimezoneForOffsets($offsets);
+//        $maxMatches = 0;
+//        $matchingAbbr = null;
+//        foreach ($matchingTimezones as $abbr => $timezones) {
+//        	if (count($timezones) > $maxMatches) {
+//        		$maxMatches = count($timezones);
+//        		$matchingAbbr = $abbr;
+//        	}
+//        }
+//        return $matchingAbbr;
+//    }
     
-    /**
-     * Returns an array of timezones that match to the {@param $_offsets}
-     * 
-     * If {@see $_expectedTimezone} is set then the method will terminate as soon
-     * as the expected timezone has matched and the expected timezone will be the 
-     * first entry fo the returned array.
-     * 
-     * @return array
-     */
-    public function getTimezonesForOffsets($_offsets)
-    {
-        $this->_log(__METHOD__, __LINE__, ': Start getting timezones that match with these offsets: ' . print_r($_offsets, true));
-        
-        $this->_validateOffsets($_offsets);
-        $this->_setDefaultStartDateIfEmpty($_offsets);
-        
-        $cacheId = $this->_getCacheId(__METHOD__, $_offsets);     
-           
-        if (false === ($matchingTimezones = $this->_loadFromCache($cacheId))) {        
-            $matchingTimezones = array();
-            foreach (DateTimeZone::listIdentifiers() as $timezoneIdentifier) {
-                $timezone = new DateTimeZone($timezoneIdentifier);
-                if (false !== ($matchingTransition = $this->_checkTimezone($timezone, $_offsets))) {
-                    if ($this->_isExpectedTimezone($timezoneIdentifier)) {
-                        $matchingTimezones = array($timezoneIdentifier => $matchingTransition['abbr']);
-                        break;
-                    } else {
-                    	$matchingTimezones[$timezoneIdentifier] = $matchingTransition['abbr'];
-                    }
-                }
-            }
-            $this->_saveInCache($matchingTimezones, $cacheId);
-        }
-        $this->_log(__METHOD__, __LINE__, 'Matching timezones: '.print_r($matchingTimezones, true));
-        
-        if (empty($matchingTimezones)) {
-            throw new ActiveSync_TimezoneNotFoundException('No timezone found for the given offsets');
-		}
-
-        return $matchingTimezones;
-    }
     
 	/**
 	 * Return packed string for given {@param $_timezone}
@@ -286,8 +252,14 @@ class ActiveSync_TimezoneConverter
 	 * @param String | int | null  $_startDate
 	 * @return String
 	 */
-	public function encodeTinezone($_timezone, $_startDate = null)
+	public function encodeTimezone($_timezone, $_startDate = null)
 	{
+		foreach ($this->_knownTimezones as $packedString => $knownTimezone) {
+			if (array_key_exists($_timezone, $knownTimezone)) {		
+				return $packedString;
+			}
+		}
+		
 		$offsets = $this->getOffsetsForTimezone($_timezone, $_startDate);
 		return $this->_packTimezoneInfo($offsets);
 	}
@@ -303,7 +275,7 @@ class ActiveSync_TimezoneConverter
 	{
         $this->_setStartDate($_startDate);
         
-	    $cacheId = $this->_getCacheId(array(__FUNCTION__, $_timezone));
+	    $cacheId = $this->_getCacheId(__METHOD__, array($_timezone));
 
 	    if (false === ($offsets = $this->_loadFromCache($cacheId))) {
 	        $offsets = $this->_getOffsetsTemplate();
@@ -593,20 +565,7 @@ class ActiveSync_TimezoneConverter
             $this->_setStartDate(time());
         }
     }
-    
-    /**
-     * Returns true if {@param $_value} equals object property {@see $_expectedTimezone}
-     * 
-     * @param String $_value
-     * @return bool
-     */
-    protected function _isExpectedTimezone($_value)
-    {
-        if ($_value === $this->_expectedTimezone) {
-           return true;
-       }
-    }
-    
+
     /**
      * Check if the given {@param $_timezone} matches the {@see $_offsets}
      * and also evaluate the daylight saving time transitions for this timezone if necessary.

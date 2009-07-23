@@ -116,6 +116,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         'Europe/Berlin' => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==',
         'US/Arizona'    => 'pAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
         'Africa/Douala'   => 'xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
+        'Pacific/Kwajalein' => '0AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
 //        'Asia/Baghdad' => 'TP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAABAAMAAAAAAAAAxP///w==',
 //        'Asia/Tehran' => 'Lv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAAgAEAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAABAAIAAAAAAAAAxP///w==',
 //        'America/Sao_Paulo' => 'tAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAADAAIAAAAAAAAAxP///w==',
@@ -126,49 +127,41 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         'US/Arizona'        => 'MST',
         'Africa/Algiers'    => 'CET',
         'Africa/Douala'     => 'WAT',
+        'Pacific/Kwajalein' => 'MHT',
     );
     
     public function setUp()
     {
-    	$this->_uit = new ActiveSync_TimezoneConverter();
-    	$this->_uit->setLogger(Tinebase_Core::getLogger());
+    	$this->_uit = ActiveSync_TimezoneConverter::getInstance(Tinebase_Core::getLogger());
     }
         
     public function testGetPackedStringForTimezone()
     {
          foreach ($this->_packedFixtrues as $timezoneIdentifier => $packedString) {
-            $this->assertEquals($packedString, $this->_uit->getPackedTimezoneInfoForTimezone($timezoneIdentifier), "Testing for timezone $timezoneIdentifier");
+            $this->assertEquals($packedString, $this->_uit->encodeTimezone($timezoneIdentifier), "Testing for timezone $timezoneIdentifier");
         }
     }
-    
-    public function testCachedResults()
-    {
-    	$this->_uit->setCache(Tinebase_Core::get('cache'));
-    	$this->testActiveSyncTimezoneGuesser();
-    	$this->testGetPackedStringForTimezone();
-    	$this->_uit->setCache(null);
-    }
 
-    public function testActiveSyncTimezoneGuesser()
+    public function testGetListOfTimezonesForOffsets()
     {       
         foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
         	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
-        	$result = $this->_uit->getTimezonesForOffsets($offsets);
-            $this->assertTrue(array_key_exists($timezoneAbbr, $result));
-            $this->assertContains($timezoneIdentifier,$result[$timezoneAbbr]);
+        	$result = $this->_uit->getListOfTimezones($offsets);
+            $this->assertTrue(array_key_exists($timezoneIdentifier, $result));
+            $this->assertEquals($timezoneAbbr,$result[$timezoneIdentifier]);
         }        
     }
     
-    public function testGetTimezonesForPackedTimezoneInfo()
+    public function testGetListOfTimezonesForPackedStrings()
     {
         foreach ($this->_packedFixtrues as $timezoneIdentifier => $packedTimezoneInfo) {
         	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
-        	$result = $this->_uit->getTimezonesForPackedTimezoneInfo($packedTimezoneInfo);
-            $this->assertTrue(array_key_exists($timezoneAbbr, $result));
-            $this->assertContains($timezoneIdentifier, $result[$timezoneAbbr]);
+        	$result = $this->_uit->getListOfTimezones($packedTimezoneInfo);
+            $this->assertTrue(array_key_exists($timezoneIdentifier, $result));
+            $this->assertEquals($timezoneAbbr, $result[$timezoneIdentifier]);
             
-            $result = $this->_uit->getTimezoneForPackedTimezoneInfo($packedTimezoneInfo);
-            $this->assertEquals($timezoneAbbr, $result);
+//            $result = $this->_uit->getTimezoneForPackedTimezoneInfo($packedTimezoneInfo);
+//            $this->assertEquals($timezoneIdentifier, $result);
         }
     }
     
@@ -176,10 +169,9 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     {
         foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
         	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
-            $this->_uit->setExpectedTimezone($timezoneIdentifier);
-            $matchedTimezones = $this->_uit->getTimezonesForOffsets($offsets);
-            $this->assertTrue(array_key_exists($timezoneAbbr, $matchedTimezones));
-            $this->assertEquals($timezoneIdentifier, $matchedTimezones[$timezoneAbbr]);
+            $matchedTimezones = $this->_uit->getListOfTimezones($offsets, $timezoneIdentifier);
+            $this->assertTrue(array_key_exists($timezoneIdentifier, $matchedTimezones));
+            $this->assertEquals($timezoneAbbr, $matchedTimezones[$timezoneIdentifier]);
         }
         
         
@@ -188,9 +180,8 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         $expectedTimezone = 'Africa/Algiers';
         $expectedAbbr = 'CET';
         
-        $this->_uit->setExpectedTimezone($expectedTimezone);
-        $result = $this->_uit->getTimezoneForPackedTimezoneInfo($packed);
-        $this->assertEquals($expectedAbbr, $result);
+        $result = $this->_uit->getTimezone($packed, $expectedTimezone);
+        $this->assertEquals($expectedTimezone, $result);
     }
 
     public function testUnknownOffsets()
@@ -219,7 +210,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
                     'daylightMilliseconds' => 0,
                     'daylightBias' => -60                                                         
                );
-        $matchedTimezones = $this->_uit->getTimezonesForOffsets($offsets);
+        $matchedTimezones = $this->_uit->getTimezone($offsets);
     }
     
     public function testInvalidOffsets()
@@ -250,8 +241,16 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
                         'daylightBias' => 0
                    );
 
-        $this->_uit->getTimezonesForOffsets($offsets);
+        $this->_uit->getTimezone($offsets);
 
     }
 
+    public function testCachedResults()
+    {
+        $this->_uit->setCache(Tinebase_Core::get('cache'));
+        $this->testGetListOfTimezonesForOffsets();
+        $this->testGetListOfTimezonesForPackedStrings();
+        $this->_uit->setCache(null);
+    }
+    
 }
