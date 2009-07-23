@@ -184,6 +184,7 @@ class Setup_Core extends Tinebase_Core
         Zend_Session::start();
         
         define('TINE20_BUILDTYPE',          strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20SETUP_BUILDTYPE',     TINE20_BUILDTYPE);
         define('TINE20SETUP_CODENAME',      'trunk');
         define('TINE20SETUP_PACKAGESTRING', 'none');
         define('TINE20SETUP_RELEASETIME',   'none');

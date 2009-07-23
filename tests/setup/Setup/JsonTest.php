@@ -217,7 +217,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     
     public function testGetRegistryData()
     {
-    	@$result = $this->_json->getRegistryData();
+    	$result = $this->_json->getRegistryData();
     	
     	$this->assertTrue(is_array($result));
     	$this->assertTrue(isset($result['configExists']));
@@ -229,7 +229,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
 //    public function testGetAllRegistryData()
 //    {
 //    	ob_start();
-//    	@$this->_json->getAllRegistryData();
+//    	$this->_json->getAllRegistryData();
 //    	$result = ob_get_contents();
 //    	ob_end_clean();
 //    	//var_dump(Zend_Json::decode($result));
