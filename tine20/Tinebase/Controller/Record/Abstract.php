@@ -213,9 +213,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $_record->container_id = $containers[0]->getId();
             }            
             
-            if(!$_record->isValid()) {
-                throw new Tinebase_Exception_Record_Validation('Record is not valid. Invalid fields: ' . print_r($_record->getValidationErrors(), true));
-            }
+            $_record->isValid(TRUE);
             
             $this->_checkGrant($_record, 'create');
         
