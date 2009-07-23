@@ -711,9 +711,17 @@ class Setup_Controller
         
         do {
             $oldCount = count($applicationTables);
-            
+
+            if ($_application == 'Tinebase') {
+                $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+                if (count($installedApplications) !== 1) {
+                    throw new Setup_Exception_Dependency('Failed to uninstall application "Tinebase" because of dependencies to other installed applications.');
+                }
+            }
+
             foreach ($applicationTables as $key => $table) {
                 Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "Remove table: $table");
+                
                 try {
                     $this->_backend->dropTable($table);
                     if($_application != 'Tinebase') {
