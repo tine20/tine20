@@ -43,7 +43,7 @@ class Tinebase_AsyncJob
      */
     private function __construct()
     {
-        $this->_backend = new Tinebase_AsyncJob_Backend();
+        $this->_backend = new Tinebase_Backend_Sql('Tinebase_Model_AsyncJob', 'async_job');
     }
     
     /**

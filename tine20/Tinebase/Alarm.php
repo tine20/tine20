@@ -51,7 +51,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      */
     private function __construct()
     {
-        $this->_backend = new Tinebase_Alarm_Backend();
+        $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'alarm');
     }
     
     /**

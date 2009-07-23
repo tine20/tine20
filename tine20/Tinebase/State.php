@@ -37,7 +37,7 @@ class Tinebase_State
      */
     private function __construct()
     {
-        $this->_backend = new Tinebase_State_Backend();
+        $this->_backend = new Tinebase_Backend_Sql('Tinebase_Model_State', 'state');
     }
     
     /**
