@@ -139,7 +139,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                
         // get custom fields
         if ($result->has('customfields')) {
-            Tinebase_CustomField::getInstance()->getRecordCustomFields($result);
+            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($result);
         }
         
         return $result;

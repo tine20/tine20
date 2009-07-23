@@ -9,6 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        add join to cf config to value backend to get name
  * @todo        add caching again?
  */
 
@@ -34,7 +35,7 @@ class Tinebase_CustomField
      * 
      * @var Tinebase_Backend_Sql
      */
-    protected $_backendValues;
+    protected $_backendValue;
     
     /**
      * holds the instance of the singleton
@@ -50,8 +51,8 @@ class Tinebase_CustomField
      */    
     private function __construct() 
     {
-        $this->_backendConfig = new Tinebase_Backend_Sql('Tinebase_Model_CustomFieldConfig', 'customfield_config');
-        $this->_backendValues = new Tinebase_Backend_Sql('Tinebase_Model_CustomField', 'customfield');
+        $this->_backendConfig = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Config', 'customfield_config');
+        $this->_backendValue = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Value', 'customfield');
     }
 
     /**
@@ -79,10 +80,10 @@ class Tinebase_CustomField
     /**
      * add new custom field
      *
-     * @param Tinebase_Model_CustomFieldConfig $_customField
-     * @return Tinebase_Model_CustomFieldConfig
+     * @param Tinebase_Model_CustomField_Config $_customField
+     * @return Tinebase_Model_CustomField_Config
      */
-    public function addCustomField(Tinebase_Model_CustomFieldConfig $_record)
+    public function addCustomField(Tinebase_Model_CustomField_Config $_record)
     {
         return $this->_backendConfig->create($_record);
         
@@ -94,7 +95,7 @@ class Tinebase_CustomField
      * get custom field by id
      *
      * @param string $_customFieldId
-     * @return Tinebase_Model_CustomFieldConfig
+     * @return Tinebase_Model_CustomField_Config
      */
     public function getCustomField($_customFieldId)
     {        
@@ -107,7 +108,7 @@ class Tinebase_CustomField
      *
      * @param string|Tinebase_Model_Application $_applicationId
      * @param string                            $_modelName
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomFieldConfig records
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Config records
      */
     public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL)
     {
@@ -127,7 +128,7 @@ class Tinebase_CustomField
             );
         }
         
-        $filter = new Tinebase_Model_CustomFieldConfigFilter($filterValues);
+        $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
         $result = $this->_backendConfig->search($filter);
         
         if (count($result) > 0) {
@@ -152,7 +153,7 @@ class Tinebase_CustomField
     /**
      * delete a custom field
      *
-     * @param string|Tinebase_Model_CustomFieldConfig $_customField
+     * @param string|Tinebase_Model_CustomField_Config $_customField
      */
     public function deleteCustomField($_customField)
     {
@@ -167,32 +168,45 @@ class Tinebase_CustomField
      *
      * @param Tinebase_Record_Interface $_record
      * 
-     * @todo implement
+     * @todo use recordset instead of array?
      */
     public function saveRecordCustomFields(Tinebase_Record_Interface $_record)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' not implemented');
-        
-        /*
-        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
-        
-        // delete all custom fields for this record first
-        $this->_deleteCustomFields($_record->getId());
-        
-        // save custom fields
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
-        $customFields = Tinebase_Config::getInstance()->getCustomFieldsForApplication($applicationId, $this->_modelName)->name;
-        foreach ($customFields as $customField) {
-            if (!empty($_record->customfields[$customField])) {
-                $data = array(
-                    'record_id' => $_record->getId(),
-                    'name'      => $customField,
-                    'value'     => $_record->customfields[$customField]
-                );
-                $this->_db->insert($customFieldsTableName, $data);
+        $appCustomFields = $this->getCustomFieldsForApplication($applicationId, get_class($_record));
+        
+        $existingCustomFields = $this->_getRecordCustomFields($_record->getId());
+        $existingCustomFields->addIndices(array('customfield_id'));
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Updating custom fields for record of class ' . get_class($_record)
+        );
+        
+        foreach ($appCustomFields as $customField) {
+            $value = (is_array($_record->customfields) && array_key_exists($customField->name, $_record->customfields) )
+                ? $_record->customfields[$customField->name]
+                : '';
+                
+            $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
+            if (count($filtered) == 1) {
+                // update
+                $cf = $filtered->getFirstRecord();
+                $cf->value = $value;
+                $this->_backendValue->update($cf);
+                
+            } else if (count($filtered) == 0) {
+                // create
+                $cf = new Tinebase_Model_CustomField_Value(array(
+                    'record_id'         => $_record->getId(),
+                    'customfield_id'    => $customField->getId(),
+                    'value'             => $value
+                ));
+                $this->_backendValue->create($cf);
+                
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue('Oops, there should be only one custom field value here!');
             }
         }
-        */
     }
     
     /**
@@ -200,43 +214,41 @@ class Tinebase_CustomField
      *
      * @param Tinebase_Record_Interface $_record
      * 
-     * @todo implement
+     * @todo use recordset instead of array?
      */
-    public function getRecordCustomFields(Tinebase_Record_Interface $_record)
+    public function resolveRecordCustomFields(Tinebase_Record_Interface $_record)
     {
-        /*
-        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
+        $customFields = $this->_getRecordCustomFields($_record->getId());
 
-        $select = $this->_db->select()
-            ->from(array('cftable' => $customFieldsTableName))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('cftable.record_id') . ' = ?', $_record->getId()));
-        $stmt = $this->_db->query($select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $customFields = array();
-        foreach ($rows as $row) {            
-            $customFields[$row['name']] = $row['value'];
+        $configs = $this->_backendConfig->getMultiple($customFields->customfield_id);
+            
+        $result = array();
+        foreach ($customFields as $customField) {            
+            $config = $configs[$configs->getIndexById($customField->customfield_id)];
+            $result[$config->name] = $customField->value;
         }
-        $_record->customfields = $customFields;
-        */ 
+        $_record->customfields = $result;
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Resolved custom fields for record of class ' . get_class($_record)
+        );
     }
     
     /**
-     * delete custom fields of record
+     * get custom fields of record
      *
      * @param string $_recordId
-     * 
-     * @todo implement (is this needed?)
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Value
      */
-    public function deleteRecordCustomFields($_recordId)
+    protected function _getRecordCustomFields($_recordId)
     {
-        /*
-        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
-
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('record_id') . ' = ?', $_recordId)
-        );        
-        $this->_db->delete($customFieldsTableName, $where);
-        */
+        $filterValues = array(array(
+            'field'     => 'record_id', 
+            'operator'  => 'equals', 
+            'value'     => $_recordId
+        ));
+        $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
+        
+        return $this->_backendValue->search($filter);
     }
 }

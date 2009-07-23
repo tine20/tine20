@@ -667,11 +667,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get custom field record
      *
-     * @return Tinebase_Model_CustomFieldConfig
+     * @return Tinebase_Model_CustomField_Config
      */
     protected function _getCustomField()
     {
-        $record = new Tinebase_Model_CustomFieldConfig(array(
+        $record = new Tinebase_Model_CustomField_Config(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'label'             => Tinebase_Record_Abstract::generateUID(),        

@@ -12,12 +12,12 @@
  */
 
 /**
- * CustomFieldConfig filter class
+ * CustomFieldValue filter class
  * 
  * @package     Tinebase
  * @subpackage  Filter 
  */
-class Tinebase_Model_CustomFieldConfigFilter extends Tinebase_Model_Filter_FilterGroup
+class Tinebase_Model_CustomField_ValueFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
      * @var string application of this filter group
@@ -29,14 +29,13 @@ class Tinebase_Model_CustomFieldConfigFilter extends Tinebase_Model_Filter_Filte
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
      */
-    protected $_className = 'Tinebase_Model_CustomFieldConfigFilter';
+    protected $_className = 'Tinebase_Model_CustomField_ValueFilter';
     
     /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'application_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'name'              => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'model'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'record_id'         => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'customfield_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
     );
 }
