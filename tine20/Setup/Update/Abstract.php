@@ -85,7 +85,7 @@ class Setup_Update_Abstract
     {
         $select = $this->_db->select()
                 ->from( SQL_TABLE_PREFIX . 'application_tables')
-                ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName)
+                ->where($this->_db->quoteIdentifier('name') . ' = ?', $_tableName)
                 ->orwhere($this->_db->quoteIdentifier('name') . ' = ?', $_tableName);
 
         $stmt = $select->query();
@@ -109,7 +109,7 @@ class Setup_Update_Abstract
     {
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_tableName),
         );
         $result = $applicationsTables->update(array('version' => $_version), $where);
     }
@@ -129,7 +129,7 @@ class Setup_Update_Abstract
         
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_tableName),
         );
         $result = $applicationsTables->update(array('version' => $version), $where);
     }
@@ -161,7 +161,7 @@ class Setup_Update_Abstract
         
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_oldTableName),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_oldTableName),
         );
         $result = $applicationsTables->update(array('name' => SQL_TABLE_PREFIX . $_newTableName), $where);
     }
