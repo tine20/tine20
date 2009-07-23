@@ -13,7 +13,7 @@
  * NOTE: init.js is included before the tine2.0 code!
  */
  
-/** --------------------- Ultra Geneirc Javacipt Stuff --------------------- **/
+/** --------------------- Ultra Generic JavaScript Stuff --------------------- **/
 
 /**
  * create console pseudo object when firebug is disabled/not installed
