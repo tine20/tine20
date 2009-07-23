@@ -207,7 +207,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             extraCls = extraCls + ' cal-daysviewpanel-event-cropright';
         }
         
-        var domId = Ext.id() + '-evnet:' + this.event.get('id');
+        var domId = Ext.id() + '-event:' + this.event.get('id');
         this.domIds.push(domId);
         
         var eventEl = view.templates.wholeDayEvent.insertFirst(view.wholeDayArea, {
@@ -270,7 +270,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 extraCls = extraCls + ' cal-daysviewpanel-event-cropbottom';
             }
             
-            var domId = Ext.id() + '-evnet:' + this.event.get('id');
+            var domId = Ext.id() + '-event:' + this.event.get('id');
             this.domIds.push(domId);
             
             // minimal height

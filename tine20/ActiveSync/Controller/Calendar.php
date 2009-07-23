@@ -16,7 +16,7 @@
  * controller events class
  * 
  * current problems:
- *   n tine evnets become one AS evnet as AS events house all exceptions
+ *   n tine events become one AS event as AS events house all exceptions
  *   one AS event becomes n tine events
  *
  * @package     ActiveSync

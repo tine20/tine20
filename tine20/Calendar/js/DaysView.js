@@ -429,7 +429,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     /**
-     * removes a evnet from the dom
+     * removes a event from the dom
      * @param {Tine.Calendar.Model.Event} event
      */
     removeEvent: function(event) {

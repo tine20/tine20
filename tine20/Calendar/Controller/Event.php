@@ -165,7 +165,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
-     * creates an exception instance of a recurring evnet
+     * creates an exception instance of a recurring event
      *
      * NOTE: deleting persistent exceptions is done via a normal delte action
      *       and handled in the delteInspection

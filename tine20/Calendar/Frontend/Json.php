@@ -18,7 +18,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_applicationName = 'Calendar';
     
     /**
-     * creates an exception instance of a recurring evnet
+     * creates an exception instance of a recurring event
      *
      * NOTE: deleting persistent exceptions is done via a normal delte action
      *       and handled in the controller
