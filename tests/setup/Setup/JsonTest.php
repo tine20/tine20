@@ -98,7 +98,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      * test uninstall application
      *
      */
-    public function testUninstallTinebase()
+    public function testUninstallTinebaseShouldThrowDependencyException()
     {
         $this->setExpectedException('Setup_Exception_Dependency');
     	$result = $this->_json->uninstallApplications(Zend_Json::encode(array('Tinebase')));
@@ -110,9 +110,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchApplications()
     {
-        /*
         $apps = $this->_json->searchApplications();
-        //print_r($apps);
         
         $this->assertGreaterThan(0, $apps['totalcount']);
         
@@ -126,9 +124,8 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         
         // checks
         $this->assertTrue(isset($activeSyncApp));
-        $this->assertTrue(!isset($activeSyncApp['id']));
-        $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
-        */
+        $this->assertTrue(isset($activeSyncApp['id']));
+        $this->assertEquals('uptodate', $activeSyncApp['install_status']);
     }
     
     /**
@@ -165,11 +162,12 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test update application
      *
-     * @todo implement
+     * @todo test real update process; currently this test case only tests updating an already uptodate application 
      */
     public function testUpdateApplications()
     {
-        
+        $result = $this->_json->updateApplications(Zend_Json::encode(array('ActiveSync')));
+        $this->assertTrue($result['success']);
     }
 
     /**
@@ -184,6 +182,26 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(16, count($result['results']));
     }
 
+    public function testCheckCOnfig()
+    {
+    	$result = $this->_json->checkConfig();
+    	$this->assertTrue(is_array($result));
+    	$this->assertTrue($result['configExists']);
+    	$this->assertTrue(isset($result['configWritable']));
+    }
+    
+    public function testLogin()
+    {
+    	$result = $this->_json->login('unknown_user_xxyz', 'wrong_password');
+    	$this->assertTrue(is_array($result));
+        $this->assertFalse($result['success']);
+        $this->assertTrue(isset($result['errorMessage']));
+        
+//        $config = Tinebase_Core::getConfig();
+//        $result = $this->_json->login($config->setupuser->username, $config->setupuser->password);
+
+    }
+    
     /**
      * test load config
      *
@@ -192,9 +210,30 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     {
         $result = $this->_json->loadConfig();
         
+        $this->assertTrue(is_array($result));
         $this->assertTrue(isset($result['database']));
         $this->assertGreaterThan(1, count($result));
     }
+    
+    public function testGetRegistryData()
+    {
+    	@$result = $this->_json->getRegistryData();
+    	
+    	$this->assertTrue(is_array($result));
+    	$this->assertTrue(isset($result['configExists']));
+        $this->assertTrue(isset($result['configWritable']));
+        $this->assertTrue(isset($result['checkDB']));
+        $this->assertTrue(isset($result['setupChecks']));
+    }
+    
+//    public function testGetAllRegistryData()
+//    {
+//    	ob_start();
+//    	@$this->_json->getAllRegistryData();
+//    	$result = ob_get_contents();
+//    	ob_end_clean();
+//    	//var_dump(Zend_Json::decode($result));
+//    }
 
     /**
      * test load config
