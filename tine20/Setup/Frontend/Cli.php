@@ -87,9 +87,7 @@ class Setup_Frontend_Cli
         $controller->installApplications($applications);
         
         if(in_array('Tinebase', $applications)) {
-            $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
-            
-            switch(ucfirst($authType)) {
+            switch(Tinebase_Core::getAuthType()) {
                 case Tinebase_Auth_Factory::SQL:
                     $import = new Setup_Import_TineInitial();
                     break;

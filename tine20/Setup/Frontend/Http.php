@@ -138,9 +138,8 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $controller->installApplications(array_keys($applications));
             
             if(array_key_exists('Tinebase', $applications)) {
-                $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
                 
-                switch(ucfirst($authType)) {
+                switch(Tinebase_Core::getAuthType()) {
                     case Tinebase_Auth_Factory::SQL:
                         $import = new Setup_Import_TineInitial();
                         break;

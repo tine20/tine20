@@ -649,6 +649,22 @@ class Tinebase_Core
     }
 
     /**
+     * Returns the auth typ from config or default value
+     *
+     * @return String
+     */
+    public static function getAuthType()
+    {
+        if (isset(Tinebase_Core::getConfig()->authentication)) {
+            $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
+        } else {
+            $authType = Tinebase_Auth_Factory::SQL;
+        }
+
+        return ucfirst($authType);
+    }
+
+    /**
      * get config from the registry
      *
      * @return Zend_Config|Zend_Config_Ini
