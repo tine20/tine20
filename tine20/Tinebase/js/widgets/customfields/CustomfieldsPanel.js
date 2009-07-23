@@ -27,6 +27,7 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     frame: true,
     labelAlign: 'top',
     autoScroll: true,
+    fieldset: null,
     defaults: {
         anchor: '100%',
         labelSeparator: ''
@@ -34,20 +35,29 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     
     initComponent: function() {
         this.title = _('Custom Fields');
+        this.fieldset = [];
         
         var cfStore = this.getCustomFieldDefinition();
         if (cfStore) {
             this.items = [];
+            this.getFieldSet(_('General'));
             cfStore.each(function(def) {
                 var fieldDef = {
                     fieldLabel: def.get('label'),
                     name: 'customfield_' + def.get('name'),
-                    xtype: def.get('type')
+                    xtype: def.get('type'),
+                    width: '90%'
                 };
                 
                 try {
                     var fieldObj = Ext.ComponentMgr.create(fieldDef);
-                    this.items.push(fieldObj);
+                    //this.items.push(fieldObj);
+                    
+                    if (def.get('group') == '') {
+                        this.getFieldSet(_('General')).insert(def.get('order'),fieldObj);
+                    } else {
+                        this.getFieldSet(def.get('group')).insert(def.get('order'),fieldObj);
+                    }
                     
                     // ugh a bit ugly
                     def.fieldObj = fieldObj;
@@ -78,6 +88,32 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         }, this);
         
     },
+
+    /**
+     * sort custom fields into groups
+     * 
+     * @param {} name
+     * @return {}
+     * @author Mihail Panayotov
+     */
+    getFieldSet: function(name) {
+        reg = /\s+/;
+        var system_name = name.replace(reg,'_');
+        if (! this.fieldset[system_name]) {
+            this.fieldset[system_name] = new Ext.form.FieldSet({
+                title: name,
+                autoHeight:true,
+                autoWidth:true,
+                labelAlign: 'top',
+                labelWidth: '90%',
+                collapsible:true,
+                name:system_name,
+                id: Ext.id() + system_name
+            });
+            this.items.push(this.fieldset[system_name]);
+        }
+        return this.fieldset[system_name];
+    },    
     
     getCustomFieldDefinition: function() {
         var appName = this.recordClass.getMeta('appName');

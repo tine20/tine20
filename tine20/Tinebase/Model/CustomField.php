@@ -40,6 +40,8 @@ class Tinebase_Model_CustomField extends Tinebase_Record_Abstract
         'model'             => array('presence' => 'required', 'allowEmpty' => false ),
         'type'              => array('allowEmpty' => true ),
         'length'            => array('allowEmpty' => true, 'Alnum'  ),
+        'group'             => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => '' ),
+        'order'             => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0, 'Int' ),
     );
     
 } // end of Tinebase_Model_CustomField

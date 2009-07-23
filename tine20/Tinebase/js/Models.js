@@ -176,7 +176,9 @@ Tine.Tinebase.Model.Customfield = Ext.data.Record.create([
     { name: 'name'           },
     { name: 'label'          },
     { name: 'type'           },
-    { name: 'length'         }
+    { name: 'length'         },
+    { name: 'group'          },
+    { name: 'order'          }
 ]);
 
 /**

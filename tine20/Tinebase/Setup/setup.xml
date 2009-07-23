@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>1.13</version>
+    <version>2.0</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1740,7 +1740,7 @@
 
         <table>
             <name>config_customfields</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1771,7 +1771,7 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                </field>                
+                </field>
                 <field>
                     <name>type</name>
                     <type>text</type>
@@ -1780,6 +1780,15 @@
                 </field>
                 <field>
                     <name>length</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>group</name>
+                    <type>text</type>
+                    <length>100</length>
+                </field>                
+                <field>
+                    <name>order</name>
                     <type>integer</type>
                 </field>
                 <index>

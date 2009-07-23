@@ -14,27 +14,10 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
 {
     /**
      * update to 1.1
-     * - add default app
      *
-     * @deprecated we now have default prefs
      */    
     public function update_0()
     {
-        // add default app preference
-        $defaultAppPref = new Tinebase_Model_Preference(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name'              => Tinebase_Preference::DEFAULT_APP,
-            'value'             => 'Addressbook',
-            'account_id'        => 0,
-            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
-            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
-                <options>
-                    <special>' . Tinebase_Preference::DEFAULT_APP . '</special>
-                </options>'
-        ));
-        Tinebase_Core::getPreference()->create($defaultAppPref);
-        
         $this->setApplicationVersion('Tinebase', '1.1');
     }
 
@@ -697,5 +680,34 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '1.13');
     }
+
+    /**
+     * update tinebase to 2.0
+     * - add two more fields (group, order) to custom fields table
+     */
+    public function update_13()
+    {
+        $this->validateTableVersion('config_customfields', '1');        
+
+        $newFields = array(
+            '<field>
+                <name>group</name>
+                <type>text</type>
+                <length>100</length>
+            </field>',                
+            '<field>
+                <name>order</name>
+                <type>integer</type>
+            </field>'
+        );
         
+        foreach ($newFields as $field) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('config_customfields', $declaration);
+        }
+
+        $this->setTableVersion('config_customfields', '2');
+                
+        $this->setApplicationVersion('Tinebase', '2.0');
+    }
 }
