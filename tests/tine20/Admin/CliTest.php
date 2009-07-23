@@ -124,7 +124,7 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
         $out = ob_get_clean();
         
         // check output
-        $this->assertEquals("Imported 3 records.\n", $out);
+        $this->assertEquals("Imported 3 records. Import failed for 0 records. \n", $out);
     }
 }       
     
