@@ -687,7 +687,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
      */
     public function update_13()
     {
-        $this->validateTableVersion('config_customfields', '1');        
+        // $this->validateTableVersion('config_customfields', '1');        
 
         $newFields = array(
             '<field>

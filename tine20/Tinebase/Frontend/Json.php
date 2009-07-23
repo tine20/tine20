@@ -398,7 +398,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $registryData[$application->name] = $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = Tinebase_Config::getInstance()->getConfigForApplication($application);
-                    $registryData[$application->name]['customfields'] = Tinebase_Config::getInstance()->getCustomFieldsForApplication($application)->toArray();
+                    $registryData[$application->name]['customfields'] = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application)->toArray();
                     
                     // add preferences for app
                     $appPrefs =Tinebase_Core::getPreference($application->name);

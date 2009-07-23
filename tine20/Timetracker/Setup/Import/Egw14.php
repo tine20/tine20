@@ -183,7 +183,7 @@ class Timetracker_Setup_Import_Egw14
         $queryResult = $stmt->fetchAll();       
         
         foreach($queryResult as $row) {
-            $customField = new Tinebase_Model_CustomField(array(
+            $customField = new Tinebase_Model_CustomFieldConfig(array(
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
                 'name'              => $row['ts_extra_name'],
                 'label'             => $row['ts_extra_name'],        
@@ -193,7 +193,7 @@ class Timetracker_Setup_Import_Egw14
             ));
             
             try {
-                Tinebase_Config::getInstance()->addCustomField($customField);
+                Tinebase_CustomField::getInstance()->addCustomField($customField);
             } catch (Zend_Db_Statement_Exception $ze) {                
                 // ignore duplicates
                 if (!preg_match("/SQLSTATE\[23000\]/", $ze->getMessage())) {

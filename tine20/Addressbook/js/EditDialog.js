@@ -412,12 +412,13 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                         }
                     ]
                 ]
-            },
+            }
+            /*,
             {
                 title: translation._('Custom Fields'),
                 html: '',
                 disabled: true
-            }
+            }*/
         ]
     };
 
@@ -504,7 +505,11 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 record_id: _contact.id,
                 record_model: 'Addressbook_Model_Contact'
             }),
-            {
+            new Tine.widgets.customfields.CustomfieldsPanel({
+                recordClass: Tine.Addressbook.Model.Contact,
+                disabled: (Tine.Addressbook.registry.get('customfields').length == 0),
+                quickHack: {record: _contact}
+            }),{
                 title: String.format(translation.ngettext('Link', 'Links [%d]', 1), 1),
                 disabled: true
             }

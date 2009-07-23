@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        split config and custom field handling
  * @todo        replace Zend_Db_Table_Abstract with Zend_Db_Adapter_Abstract
  */
 
@@ -45,13 +44,6 @@ class Tinebase_Config
     protected $_configTable;
 
     /**
-     * the name of the customfields table
-     *
-     * @var string
-     */
-    protected $_configCustomFieldsTablename;
-    
-    /**
      * the db adapter
      *
      * @var Zend_Db_Adapter_Abstract
@@ -73,8 +65,6 @@ class Tinebase_Config
     private function __construct() 
     {
         $this->_configTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config'));
-        
-        $this->_configCustomFieldsTablename = SQL_TABLE_PREFIX . 'config_customfields';
         $this->_db = $this->_configTable->getAdapter();
     }
 
@@ -203,132 +193,5 @@ class Tinebase_Config
     public function deleteConfig(Tinebase_Model_Config $_config)
     {
         $this->_configTable->delete($this->_db->quoteInto('id = ?', $_config->getId()));
-    }
-
-    /************************ custom field functions **************************/
-    
-    /**
-     * add new custom field
-     *
-     * @param Tinebase_Model_CustomField $_customField
-     * @return Tinebase_Model_CustomField
-     * 
-     * @todo    add check for existance
-     */
-    public function addCustomField(Tinebase_Model_CustomField $_record)
-    {
-        // set uid if record has hash id and id is empty
-        if (empty($_record->id)) {
-            $newId = $_record->generateUID();
-            $_record->setId($newId);
-        }
-        
-        $recordArray = $_record->toArray();        
-        $tableKeys = $this->_db->describeTable($this->_configCustomFieldsTablename);
-        $recordArray = array_intersect_key($recordArray, $tableKeys);
-        
-        $this->_db->insert($this->_configCustomFieldsTablename, $recordArray);
-        
-        // invalidate cache (no memcached support yet)
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
-                
-        return $this->getCustomField($_record->getId());
-    }
-
-    /**
-     * get custom field by id
-     *
-     * @param string $_customFieldId
-     * @return Tinebase_Model_CustomField
-     */
-    public function getCustomField($_customFieldId)
-    {
-        $select = $this->_db->select()
-            ->from($this->_configCustomFieldsTablename)
-            ->where($this->_db->quoteIdentifier('id') . ' = ?', $_customFieldId);
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
-                
-        if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound('Tinebase_Model_CustomField record with id ' . $_customFieldId . ' not found!');
-        }        
-        $result = new Tinebase_Model_CustomField($queryResult);
-        
-        return $result;
-    }
-
-    /**
-     * get custom fields for an application
-     * - results are cached if caching is active (with cache tag 'customfields')
-     *
-     * @param string|Tinebase_Model_Application $_applicationId
-     * @param string                            $_modelName
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField records
-     */
-    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL)
-    {
-        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
-        
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'getCustomFieldsForApplication' . $applicationId . (($_modelName !== NULL) ? $_modelName : '');
-        $result = $cache->load($cacheId);
-        
-        if (!$result) {        
-        
-            $select = $this->_db->select();
-            $select->from($this->_configCustomFieldsTablename)
-                   ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId));
-                   
-            if ($_modelName !== NULL) {
-                $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('model') . ' = ?', $_modelName));
-            }
-            
-            $rows = $this->_db->fetchAssoc($select);
-            $result = new Tinebase_Record_RecordSet('Tinebase_Model_CustomField', $rows, true);
-            
-            $cache->save($result, $cacheId, array('customfields'));
-        }
-        
-        if (count($result) > 0) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
-                //. print_r($result->toArray(), TRUE)
-            );
-        }
-            
-        return $result;
-    }
-    
-    /**
-     * gets all custom fields
-     * 
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField
-     */
-    public function getAllCustomFields()
-    {
-        $select = $this->_db->select()->from($this->_configCustomFieldsTablename);
-        
-        $rows = $this->_db->fetchAssoc($select);
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_CustomField', $rows, true);
-        
-        return $result;
-    }
-    
-    /**
-     * delete a custom field
-     *
-     * @param Tinebase_Model_CustomField $_customField
-     */
-    public function deleteCustomField(Tinebase_Model_CustomField $_customField)
-    {
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_customField->getId())
-        );
-        
-        $this->_db->delete($this->_configCustomFieldsTablename, $where);
-
-        // invalidate cache (no memcached support yet)
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
     }
 }

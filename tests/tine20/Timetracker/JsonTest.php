@@ -219,8 +219,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
-        Tinebase_Config::getInstance()->deleteCustomField($customField1);
-        Tinebase_Config::getInstance()->deleteCustomField($customField2);
+        Tinebase_CustomField::getInstance()->deleteCustomField($customField1);
+        Tinebase_CustomField::getInstance()->deleteCustomField($customField2);
     }
     
     /**
@@ -667,11 +667,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get custom field record
      *
-     * @return Tinebase_Model_CustomField
+     * @return Tinebase_Model_CustomFieldConfig
      */
     protected function _getCustomField()
     {
-        $record = new Tinebase_Model_CustomField(array(
+        $record = new Tinebase_Model_CustomFieldConfig(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'label'             => Tinebase_Record_Abstract::generateUID(),        
@@ -680,7 +680,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             'length'            => 10,        
         ));
         
-        return Tinebase_Config::getInstance()->addCustomField($record);
+        return Tinebase_CustomField::getInstance()->addCustomField($record);
     }
     
     /**

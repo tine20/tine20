@@ -267,7 +267,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         // get custom fields
         if ($this->has('customfields')) {
             $application = Tinebase_Application::getInstance()->getApplicationByName($this->_application);
-            $customFields = Tinebase_Config::getInstance()->getCustomFieldsForApplication($application, get_class($this))->name;
+            $customFields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application, get_class($this))->name;
             $recordCustomFields = array();
         } else {
             $customFields = array();    

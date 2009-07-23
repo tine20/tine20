@@ -38,6 +38,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_ContainerTest');
         $suite->addTestSuite('Tinebase_ImageHelperTest');
         $suite->addTestSuite('Tinebase_ConfigTest');
+        $suite->addTestSuite('Tinebase_CustomFieldTest');
         $suite->addTestSuite('Tinebase_PreferenceTest');
         $suite->addTestSuite('Tinebase_ApplicationTest');
         $suite->addTestSuite('Tinebase_Relation_AllTests');

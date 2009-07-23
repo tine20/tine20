@@ -11,12 +11,12 @@
  */
 
 /**
- * class Tinebase_Model_CustomField
+ * class Tinebase_Model_CustomFieldConfig
  * 
  * @package     Tinebase
  * @subpackage  Record
  */
-class Tinebase_Model_CustomField extends Tinebase_Record_Abstract 
+class Tinebase_Model_CustomFieldConfig extends Tinebase_Record_Abstract 
 {    
     protected $_identifier = 'id';
     
@@ -44,4 +44,4 @@ class Tinebase_Model_CustomField extends Tinebase_Record_Abstract
         'order'             => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0, 'Int' ),
     );
     
-} // end of Tinebase_Model_CustomField
+} // end of Tinebase_Model_CustomFieldConfig

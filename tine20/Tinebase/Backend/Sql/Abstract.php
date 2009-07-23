@@ -10,7 +10,7 @@
  * @version     $Id$
  * 
  * @todo        use const for type (set in constructor)
- * @todo        remove 'abstract' keyword to allow objects of this class?
+ * @todo        move custom fields handling to controller?
  */
 
 /**
@@ -139,7 +139,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                
         // get custom fields
         if ($result->has('customfields')) {
-            $this->_getCustomFields($result);
+            Tinebase_CustomField::getInstance()->getRecordCustomFields($result);
         }
         
         return $result;
@@ -344,7 +344,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         // add custom fields
         if ($_record->has('customfields') && !empty($_record->customfields)) {
-            $this->_saveCustomFields($_record);
+            Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
         }
         
         return $this->get($_record->$identifier);
@@ -385,7 +385,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         // update custom fields
         if ($_record->has('customfields')) {
-            $this->_saveCustomFields($_record);
+            Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
         }
                 
         return $this->get($id, TRUE);
@@ -447,13 +447,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         );
         
         $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
-        
-        // delete custom fields
-        /*
-        if ($_record->has('customfields')) {
-            $this->_saveCustomFields($_record);
-        }
-        */
     }
     
     /*************************** foreign record fetchers *******************************/
@@ -680,70 +673,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     	}
     	
         return $identifier;    
-    }
-
-    /**
-     * save custom fields of record in its custom fields table
-     *
-     * @param Tinebase_Record_Interface $_record
-     */
-    protected function _saveCustomFields(Tinebase_Record_Interface $_record)
-    {
-        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
-        
-        // delete all custom fields for this record first
-        $this->_deleteCustomFields($_record->getId());
-        
-        // save custom fields
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
-        $customFields = Tinebase_Config::getInstance()->getCustomFieldsForApplication($applicationId, $this->_modelName)->name;
-        foreach ($customFields as $customField) {
-            if (!empty($_record->customfields[$customField])) {
-                $data = array(
-                    'record_id' => $_record->getId(),
-                    'name'      => $customField,
-                    'value'     => $_record->customfields[$customField]
-                );
-                $this->_db->insert($customFieldsTableName, $data);
-            }
-        }
-    }
-
-    /**
-     * get custom fields and add them to $_record->customfields arraay
-     *
-     * @param Tinebase_Record_Interface $_record
-     */
-    protected function _getCustomFields(Tinebase_Record_Interface &$_record)
-    {
-        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
-
-        $select = $this->_db->select()
-            ->from(array('cftable' => $customFieldsTableName))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('cftable.record_id') . ' = ?', $_record->getId()));
-        $stmt = $this->_db->query($select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $customFields = array();
-        foreach ($rows as $row) {            
-            $customFields[$row['name']] = $row['value'];
-        }
-        $_record->customfields = $customFields; 
-    }
-    
-    /**
-     * delete custom fields of record
-     *
-     * @param string $_recordId
-     */
-    protected function _deleteCustomFields($_recordId)
-    {
-        $customFieldsTableName = $this->_tablePrefix . $this->_tableName . '_' . 'custom';
-
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('record_id') . ' = ?', $_recordId)
-        );        
-        $this->_db->delete($customFieldsTableName, $where);
     }
 
     /**
