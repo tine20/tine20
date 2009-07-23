@@ -248,6 +248,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      *
      * @param array $_data            the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     * 
+     * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
      */
     public function setFromArray(array $_data)
     {
