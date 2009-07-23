@@ -37,12 +37,13 @@ class Setup_Server_Cli extends Setup_Server_Abstract
                 'update-s'              => 'Update applications [All] or comma separated list',             
                 'uninstall-s'           => 'Uninstall application [All] or comma separated list',
                 'list-s'                => 'List installed applications',
-                'import_accounts'       => 'Import user and groups from ldap'
+                'import_accounts'       => 'Import user and groups from ldap',
                 #'username'             => 'Username [required]',              
                 #'password'             => 'Password [required]',              
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
+        	echo "Invalid usage: {$e->getMessage()}\n\n";
             echo $e->getUsageMessage();
             exit;
         }
