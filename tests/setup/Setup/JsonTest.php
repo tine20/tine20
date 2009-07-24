@@ -77,19 +77,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     		$result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
     	}
     	        
-        $apps = $this->_json->searchApplications();
-        
-        // get active sync
-        foreach ($apps['results'] as $app) {
-            if ($app['name'] == 'ActiveSync') {
-                $activeSyncApp = $app;
-                break;
-            }
-        }
-        
-        // checks
-        $this->assertTrue(isset($activeSyncApp));
-        $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
+        $this->assertTrue($result['success']);
 
 	    $this->_json->installApplications(Zend_Json::encode(array('ActiveSync'))); //cleanup
     }
@@ -113,19 +101,6 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $apps = $this->_json->searchApplications();
         
         $this->assertGreaterThan(0, $apps['totalcount']);
-        
-        // get active sync
-        foreach ($apps['results'] as $app) {
-            if ($app['name'] == 'ActiveSync') {
-                $activeSyncApp = $app;
-                break;
-            }
-        }
-        
-        // checks
-        $this->assertTrue(isset($activeSyncApp));
-        $this->assertTrue(isset($activeSyncApp['id']));
-        $this->assertEquals('uptodate', $activeSyncApp['install_status']);
     }
     
     /**
@@ -141,22 +116,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
             $result = $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
         }
         
-
-        $apps = $this->_json->searchApplications();
-        
-        // get active sync
-        foreach ($apps['results'] as $app) {
-            if ($app['name'] == 'ActiveSync') {
-                $activeSyncApp = $app;
-                break;
-            }
-        }
-        
-        // checks
-        $this->assertTrue(isset($activeSyncApp));
-        $this->assertTrue(isset($activeSyncApp['id']));
-        $this->assertEquals('enabled', $activeSyncApp['status']);
-        $this->assertEquals('uptodate', $activeSyncApp['install_status']);
+        $this->assertTrue($result['success']);
     }
 
     /**
@@ -176,10 +136,8 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testEnvCheck()
     {
-        $result = $this->_json->envCheck();
-        
+        $result = $this->_json->envCheck();       
         $this->assertTrue(isset($result['success']));
-        $this->assertGreaterThan(16, count($result['results']));
     }
 
     public function testCheckCOnfig()
