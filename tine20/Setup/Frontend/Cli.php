@@ -57,6 +57,8 @@ class Setup_Frontend_Cli
             $this->_listInstalled();
         } elseif(isset($_opts->import_accounts)) {
             $this->_importAccounts($_opts);
+        } elseif(isset($_opts->check_requirements)) {
+            $this->_checkRequirements($_opts);
         }
     }
     
@@ -194,5 +196,25 @@ class Setup_Frontend_Cli
         
         // import group memberships
         Tinebase_Group::getInstance()->importGroupMembers();
+    }
+    
+    /**
+     * do the environment check
+     *
+     * @return array
+     */
+    protected function _checkRequirements(Zend_Console_Getopt $_opts)
+    {
+        $results = Setup_Controller::getInstance()->checkRequirements();
+        if ($results['success']) {
+        	echo "OK - All requirements are met\n";
+        } else {
+        	echo "ERRORS - The following requirements are not met: \n";
+        	foreach ($results['results'] as $result) {
+        		if (!empty($result['message'])) {
+        			echo "- " . strip_tags($result['message']) . "\n";
+        		}
+        	}
+        }
     }
 }

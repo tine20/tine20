@@ -32,6 +32,7 @@ class Setup_Server_Cli extends Setup_Server_Abstract
                 'help|h'                => 'Display this help Message',
                 'verbose|v'             => 'Output messages',
                 'config|c=w'            => 'Path to config.inc.php file',
+                'check_requirements'    => 'Check if all requirements are met to install and run tine20',
             
                 'install-s'             => 'Install applications [All] or comma separated list',              
                 'update-s'              => 'Update applications [All] or comma separated list',             
@@ -48,7 +49,7 @@ class Setup_Server_Cli extends Setup_Server_Abstract
             exit;
         }
 
-        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list) && empty($opts->import_accounts))) {
+        if (count($opts->toArray()) === 0 || $opts->h || (empty($opts->install) && empty($opts->update) && empty($opts->uninstall) && empty($opts->list) && empty($opts->import_accounts) && empty($opts->check_requirements))) {
             echo $opts->getUsageMessage();
             exit;
         }
