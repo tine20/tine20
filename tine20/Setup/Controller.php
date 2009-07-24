@@ -630,6 +630,7 @@ class Setup_Controller
         foreach ($applications as $name => $xml) {
             $this->_installApplication($xml);
         }
+
     }
 
     /**
@@ -711,6 +712,8 @@ class Setup_Controller
         
         // look for import definitions and put them into the db
         $this->_createImportExportDefinitions($application);
+        
+        Setup_Initialize::initialize($application);
     }
 
     /**

@@ -88,19 +88,6 @@ class Setup_Frontend_Cli
         
         $controller->installApplications($applications);
         
-        if(in_array('Tinebase', $applications)) {
-            switch(Tinebase_Core::getAuthType()) {
-                case Tinebase_Auth_Factory::SQL:
-                    $import = new Setup_Import_TineInitial();
-                    break;
-                case Tinebase_Auth_Factory::LDAP:
-                    $import = new Setup_Import_TineInitialLdap();
-                    break;
-                //$import = new Setup_Import_Egw14();
-            }
-            $import->import();
-        }
-        
         echo "Successfully installed " . count($applications) . " applications.\n";        
     }
 

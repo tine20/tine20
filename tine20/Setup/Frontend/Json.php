@@ -91,20 +91,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         if (is_array($decodedNames)) {
             $this->_controller->installApplications($decodedNames);
-    
-            if(in_array('Tinebase', $decodedNames)) {               
-                switch(Tinebase_Core::getAuthType()) {
-                    case Tinebase_Auth_Factory::SQL:
-                        $import = new Setup_Import_TineInitial();
-                        break;
-                    case Tinebase_Auth_Factory::LDAP:
-                        $import = new Setup_Import_TineInitialLdap();
-                        break;
-                    //$import = new Setup_Import_Egw14();
-                }
-                $import->import();
-            }
-            
+               
             $result = TRUE;
         } else {
             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not handle param $applicationNames: ' . $decodedNames);
