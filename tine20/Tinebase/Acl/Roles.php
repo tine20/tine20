@@ -460,7 +460,7 @@ class Tinebase_Acl_Roles
     public function getRoleRights($_roleId)
     {
         $roleId = (int)$_roleId;
-        if ($roleId != $_roleId && $roleId > 0) {
+        if ($roleId != $_roleId || $roleId <= 0) {
             throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
