@@ -51,7 +51,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_uit = Setup_Controller::getInstance();
+        $this->_uit = Setup_Controller::getInstance();       
     }
 
     /**
@@ -61,9 +61,9 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {        
+    {       
     }
-    
+       
     /**
      * test uninstall application
      *
@@ -140,8 +140,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
             $this->_uit->uninstallApplications(array('ActiveSync'));
             $result = $this->_uit->installApplications(array('ActiveSync'));
         }
-        
-
+                
         $apps = $this->_uit->searchApplications();
         
         // get active sync
@@ -152,11 +151,26 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
             }
         }
         
+        
+        $applicationId = $activeSyncApp['id'];
         // checks
         $this->assertTrue(isset($activeSyncApp));
-        $this->assertTrue(isset($activeSyncApp['id']));
+        $this->assertTrue(isset($applicationId));
         $this->assertEquals('enabled', $activeSyncApp['status']);
         $this->assertEquals('uptodate', $activeSyncApp['install_status']);
+        
+        //check if user role has the right to run the recently installed app
+        $roles = Tinebase_Acl_Roles::getInstance();
+        $userRole = $roles->getRoleByName('user role');
+        $rights = $roles->getRoleRights($userRole->getId());
+        $hasRight = false;
+        foreach ($rights as $right) {
+            if ($right['application_id'] === $applicationId &&
+                $right['right'] === 'run') {
+            	$hasRight = true;
+            }
+        } 
+        $this->assertTrue($hasRight, 'User role has run right for recently installed app?');
     }
 
     /**
