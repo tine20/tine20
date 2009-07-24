@@ -159,51 +159,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      */
     public function searchApplications()
     {
-        // get installable apps
-        $installable = $this->_controller->getInstallableApplications();
-        
-        // get installed apps
-        if (Setup_Core::get(Setup_Core::CHECKDB)) {
-            try {
-                $installed = Tinebase_Application::getInstance()->getApplications(NULL, 'id')->toArray();
-                
-                // merge to create result array
-                $applications = array();
-                foreach ($installed as $application) {
-                    $depends = (array) $installable[$application['name']]->depends;
-                    if (isset($depends['application'])) {
-                        $depends = implode(', ', (array) $depends['application']);
-                    }
-                    
-                    $application['current_version'] = (string) $installable[$application['name']]->version;
-                    $application['install_status'] = (version_compare($application['version'], $application['current_version']) === -1) ? 'updateable' : 'uptodate';
-                    $application['depends'] = $depends;
-                    $applications[] = $application;
-                    unset($installable[$application['name']]);
-                }
-            } catch (Zend_Db_Statement_Exception $zse) {
-                // no tables exist
-            }
-        }
-        
-        foreach ($installable as $name => $setupXML) {
-            $depends = (array) $setupXML->depends;
-            if (isset($depends['application'])) {
-                $depends = implode(', ', (array) $depends['application']);
-            }
-            
-            $applications[] = array(
-                'name'              => $name,
-                'current_version'   => (string) $setupXML->version,
-                'install_status'    => 'uninstalled',
-                'depends'           => $depends,
-            );
-        }
-        
-        return array(
-            'results'       => $applications,
-            'totalcount'    => count($applications)
-        );
+        return $this->_controller->searchApplications();
     }
     
     /**
