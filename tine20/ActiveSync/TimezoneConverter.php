@@ -154,7 +154,7 @@ class ActiveSync_TimezoneConverter
      * as the expected timezone has matched and the expected timezone will be the 
      * first entry fo the returned array.
      * 
-     * @param String | array $_packedTimezoneInfo
+     * @param String | array $_offsets
      * @param String | optional $_expectedTimezone
      * @return array
      * 
@@ -207,12 +207,12 @@ class ActiveSync_TimezoneConverter
      * 
      * If {@see $_expectedTimezone} is set then the method will return this timezone if it matches.
      *
-     * @param array $_offsets
+     * @param String | array $_offsets
      * @return String [timezone abbreviation e.g. CET, MST etc.]
      */
-    public function getTimezone($_packedTimezoneInfo, $_expectedTimezone = null)
+    public function getTimezone($_offsets, $_expectedTimezone = null)
     {
-        $timezones = $this->getListOfTimezones($_packedTimezoneInfo, $_expectedTimezone);
+        $timezones = $this->getListOfTimezones($_offsets, $_expectedTimezone);
 
         if(isset($timezones[$_expectedTimezone])) {
             return $_expectedTimezone; 
