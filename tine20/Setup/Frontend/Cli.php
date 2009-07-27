@@ -88,7 +88,8 @@ class Setup_Frontend_Cli
             }
         }
         
-        $controller->installApplications($applications);
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        $controller->installApplications($applications, $options);
         
         echo "Successfully installed " . count($applications) . " applications.\n";        
     }
@@ -216,5 +217,16 @@ class Setup_Frontend_Cli
         		}
         	}
         }
+    }
+    
+    protected function _parseRemainingArgs($_args)
+    {
+    	$options = array();
+    	foreach ($_args as $arg) {
+    		list($key, $value) = explode('=', $arg);
+    		$options[$key] = $value;
+    	}
+    	
+    	return $options;
     }
 }
