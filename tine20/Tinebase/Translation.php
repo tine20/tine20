@@ -170,6 +170,8 @@ class Tinebase_Translation
      */
     public static function getLocale($_localeString = 'auto')
     {
+    	Zend_Locale::$compatibilityMode = false;
+    	
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
         try {
             $locale = new Zend_Locale($_localeString);
