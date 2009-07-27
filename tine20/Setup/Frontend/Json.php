@@ -84,13 +84,15 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * install new applications
      *
      * @param string $applicationNames application names to install
+     * @param array | optional $options
      */
-    public function installApplications($applicationNames)
+    public function installApplications($applicationNames, $options = null)
     {
-        $decodedNames = Zend_Json::decode($applicationNames);
+    	$decodedOptions = Zend_Json::decode($options);
+        $decodedNames   = Zend_Json::decode($applicationNames);
         
         if (is_array($decodedNames)) {
-            $this->_controller->installApplications($decodedNames);
+            $this->_controller->installApplications($decodedNames, $decodedOptions);
                
             $result = TRUE;
         } else {

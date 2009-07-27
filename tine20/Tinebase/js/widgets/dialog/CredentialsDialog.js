@@ -32,6 +32,7 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     loadRecord: false,
     tbarItems: [],
     evalGrants: false,
+    sendRequest: true,
     
     /**
      * init record to edit
@@ -81,30 +82,35 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     onApplyChanges: function(button, event, closeWindow) {
         var form = this.getForm();
         if(form.isValid()) {
-            this.loadMask.show();
-            
             var values = form.getValues();
-
-            var params = {
-                method: this.appName + '.changeCredentials',
-                password: values.password,
-                username: values.username,
-                id: this.credentialsId
-            };
             
-            Ext.Ajax.request({
-                params: params,
-                scope: this,
-                success: function(_result, _request){
-                    this.loadMask.hide();
-                    this.fireEvent('update', _result);
-                    
-                    if (closeWindow) {
-                        this.purgeListeners();
-                        this.window.close();
+            if (this.sendRequest) {
+                this.loadMask.show();
+                
+                var params = {
+                    method: this.appName + '.changeCredentials',
+                    password: values.password,
+                    username: values.username,
+                    id: this.credentialsId
+                };
+                
+                Ext.Ajax.request({
+                    params: params,
+                    scope: this,
+                    success: function(_result, _request){
+                        this.loadMask.hide();
+                        this.fireEvent('update', _result);
+                        
+                        if (closeWindow) {
+                            this.purgeListeners();
+                            this.window.close();
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                this.fireEvent('update', values);
+                this.window.close();
+            }
             
         } else {
             Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));

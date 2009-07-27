@@ -187,49 +187,72 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         for(var i=0; i<apps.length; i++) {
             appNames.push(apps[i].get('name'));
         }
-        
+
+        if (type === 'install' && appNames.indexOf('Addressbook') !== -1) {
+            var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
+                title: this.app.i18n._('Initial admin username and password'),
+                sendRequest: false,
+                appName: 'Setup',
+                i18nRecordName: this.app.i18n._('Credentials'),
+                listeners: {
+                    scope: this,
+                    'update': function(data) {
+                          var options = {
+                            admin_login_name : data.username,
+                            admin_login_password : data.password
+                          };
+                          
+                          this.sendAlterApplicationsRequest(type, appNames, options);
+                    }
+                }
+            });
+        } else {
+            this.sendAlterApplicationsRequest(type, appNames, null);
+        }
+    },
+    
+    sendAlterApplicationsRequest: function(type, appNames, options) {
         var msg = this.app.i18n.n_('Updating Application "{0}".', 'Updating {0} Applications.', appNames.length);
         msg = String.format(msg, appNames.length == 1 ? appNames[0] : appNames.length ) + ' ' + this.app.i18n._('This may take a while');
-        
-        
+
         var longLoadMask = new Ext.LoadMask(this.grid.getEl(), {
             msg: msg,
             removeMask: true
         });
         longLoadMask.show();
-        
         Ext.Ajax.request({
-            scope: this,
-            params: {
-                method: 'Setup.' + type + 'Applications',
-                applicationNames: Ext.util.JSON.encode(appNames)
-            },
-            success: function() {
-                this.store.load();
-                longLoadMask.hide();
-            },
-            fail: function() {
-                Ext.Msg.alert(this.app.i18n._('Shit'), this.app.i18n._('Where are the backup tapes'));
-            },
-            exceptionHandler: function(response){
-            	var data = response ? Ext.util.JSON.decode(response.responseText) : null;
-            	switch(data.code) {
-                	//Dependency Exception
-		            case 501:
-		            Ext.MessageBox.show({
-		                title: this.app.i18n._('Dependency Violation'), 
-		                msg: data.msg,
-		                buttons: Ext.Msg.OK,
-		                icon: Ext.MessageBox.WARNING
-		            });
-		            this.store.load();
-		            longLoadMask.hide();
-		            return true;
-            	}
-            	return false;
-            }
-        });
-    },
+                scope: this,
+                params: {
+                    method: 'Setup.' + type + 'Applications',
+                    applicationNames: Ext.util.JSON.encode(appNames),
+                    options: Ext.util.JSON.encode(options)
+                },
+                success: function() {
+                    this.store.load();
+                    longLoadMask.hide();
+                },
+                fail: function() {
+                    Ext.Msg.alert(this.app.i18n._('Shit'), this.app.i18n._('Where are the backup tapes'));
+                },
+                exceptionHandler: function(response){
+                    var data = response ? Ext.util.JSON.decode(response.responseText) : null;
+                    switch(data.code) {
+                        //Dependency Exception
+                        case 501:
+                        Ext.MessageBox.show({
+                            title: this.app.i18n._('Dependency Violation'), 
+                            msg: data.msg,
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.MessageBox.WARNING
+                        });
+                        this.store.load();
+                        longLoadMask.hide();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        },
     
     enabledRenderer: function(value) {
         return Tine.Tinebase.common.booleanRenderer(value == 'enabled');
