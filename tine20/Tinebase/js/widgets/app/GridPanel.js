@@ -136,7 +136,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         // for some reason IE looses split height when outer layout is layouted
         if (Ext.isIE6 || Ext.isIE7) {
             this.on('show', function() {
-                if (this.layout.rendered) {
+                if (this.layout.rendered && this.detailsPanel) {
                     var height = this.detailsPanel.getSize().height;
                     this.layout.south.split.setCurrentSize(height);
                 }
