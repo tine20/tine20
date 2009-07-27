@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -118,11 +118,6 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
             array(  'label' => $translate->_('Job Title'), 
                     'value' => array( 'title' ), 
             ),
-
-            //'id' => 'Contact ID',    
-            //'n_prefix' => 'Name Prefix',
-            //'n_suffix' => 'Name Suffix',
-             
         );
          
         try {
@@ -140,20 +135,21 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
             $contactPhoto = NULL;
         }
         
-        // build title (name)
-        $title = $_contact['n_fn']; 
-        if (!empty($_contact['n_prefix'])) {
-            $title = $_contact['n_prefix'] . ' ' . $title;
+        // build title (name) + subtitle + icon
+        $nameFields = array('n_prefix', 'n_given', 'n_middle', 'n_family', 'n_suffix');
+        $titleArray = array();
+        foreach ($nameFields as $nameField) {
+            if (!empty($_contact[$nameField])) {
+                $titleArray[] = $_contact[$nameField];
+            }
         }
-        if (!empty($_contact['n_suffix'])) {
-            $title .= ' ' . $_contact['n_suffix'];
-        }
+        $title = implode(' ', $titleArray);
         $subtitle = $_contact['org_name'];
         $titleIcon = "/images/oxygen/32x32/apps/system-users.png";
         
         // add data to array
         $record = array ();
-        foreach ( $contactFields as $fieldArray ) {
+        foreach ($contactFields as $fieldArray) {
             if ( !isset($fieldArray['type']) || $fieldArray['type'] !== 'separator' ) {
                 $values = array();
                 foreach ( $fieldArray['value'] as $valueFields ) {
