@@ -39,7 +39,7 @@ Tine.Calendar.EventSelectionModel = Ext.extend(Ext.tree.MultiSelectionModel, {
      * @return {Tine.Calendar.Model.Event} The selected event
      */
     select : function(event, e, keepExisting){
-        if (! event.ui) {
+        if (! event || ! event.ui) {
             return event;
         }
         

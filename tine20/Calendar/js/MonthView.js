@@ -351,8 +351,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 var event = data.event;
                 
                 // we dont support multiple dropping yet
-                data.scope.getSelectionModel().select(event);
-                return target && event.get('editGrant') ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
+                if (event) {
+                    data.scope.getSelectionModel().select(event);
+                }
+                return target && event && event.get('editGrant') ? 'cal-daysviewpanel-event-drop-ok' : 'cal-daysviewpanel-event-drop-nodrop';
             },
             
             notifyDrop : function(dd, e, data) {

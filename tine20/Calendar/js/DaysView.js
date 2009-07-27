@@ -235,14 +235,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 sourceEl.setStyle({'border-style': 'dashed'});
                 sourceEl.setOpacity(0.5);
                 
-                var event = data.event;
+                if (data.event) {
+                    var event = data.event;
+                    
+                    // we dont support multiple dropping yet
+                    data.scope.getSelectionModel().select(event);
                 
-                // we dont support multiple dropping yet
-                data.scope.getSelectionModel().select(event);
-                
-                var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
-                if (targetDateTime && event.get('editGrant')) {
-                    return Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                    var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
+                    if (targetDateTime && event.get('editGrant')) {
+                        return Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                    }
                 }
                 
                 return 'cal-daysviewpanel-event-drop-nodrop';
@@ -725,7 +727,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         //});
         
         //this.setActiveEvent(event);
-        this.getSelectionModel().select(event);
+        if (event) {
+            this.getSelectionModel().select(event);
+        } else {
+            this.getSelectionModel().clearSelections();
+        }
     },
     
     /**
