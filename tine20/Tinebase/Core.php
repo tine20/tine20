@@ -144,7 +144,7 @@ class Tinebase_Core
             
         } elseif($_SERVER['PHP_SELF'] == '/Microsoft-Server-ActiveSync' || 
                  $_SERVER['SCRIPT_NAME'] == '/Microsoft-Server-ActiveSync' ||
-                 $_SERVER['REDIRECT_ACTIVESYNC'] == 'true' || 
+                 (isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') || 
                 (isset($_SERVER['SCRIPT_URL']) && $_SERVER['SCRIPT_URL'] == '/Microsoft-Server-ActiveSync') ) {
             $server = new ActiveSync_Server_Http();
             
