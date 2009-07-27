@@ -23,7 +23,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      * 
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
      */
-    public function _initialize(Tinebase_Model_Application $_application)
+    public function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
         $this->_setDefaultGroups('Users', 'Administrators');
         
@@ -41,7 +41,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
 		
         $this->_createInitialRoles();
 
-    	parent::_initialize($_application);
+    	parent::_initialize($_application, $_options);
     }
     
     /**

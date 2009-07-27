@@ -25,10 +25,10 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      * 
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
      */
-    public function _initialize(Tinebase_Model_Application $_application)
-    {
-    	$this->_createInitialAdminAccount('tine20admin', 'lars', 'Tine 2.0', 'Admin Account'); //needed to give anyone read rights to the internal addressbook (see _createInitialRights) 
-        parent::_initialize($_application);
+    public function _initialize(Tinebase_Model_Application $_application, $_options = null)
+    {    	
+    	$this->_createInitialAdminAccount($_options); //needed to give anyone read rights to the internal addressbook (see _createInitialRights) 
+        parent::_initialize($_application, $_options);
     }
     /**
      * Override method because this app requires special rights
@@ -59,13 +59,28 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     /**
      * create initial admin account
      *
-     * @param string $_loginName
-     * @param string $_password
-     * @param string $_firstname
-     * @param string $_lastname
+     * @param array | optional $_options [hash that may contain override values for admin user name and password]
+     * 
+     * @example $_options may contain the following keys:
+     * <pre>
+     * $options = array(
+     *  'admin_login_name' => 'admin',
+     *  'admin_login_password' => 'lars',
+     *  'admin_first_name' => 'Tine 2.0',
+     *  'admin_last_name' => 'Admin Account',
+     * );
+     * </pre>
+     * 
+     * @return void
      */
-    protected function _createInitialAdminAccount($_loginName, $_password, $_firstname, $_lastname)
+    protected function _createInitialAdminAccount($_options = null)
     {
+    	
+    	$_loginName    = empty($_options['admin_login_name']) ? 'tine20admin' : $_options['admin_login_name'];
+    	$_password     = empty($_options['admin_login_password']) ? 'lars' : $_options['admin_login_password'];
+    	$_firstname    = empty($_options['admin_first_name']) ? 'Tine 2.0' : $_options['admin_first_name'];
+    	$_lastname     = empty($_options['admin_last_name']) ? 'Admin Account' : $_options['admin_last_name'];
+    	
         if (Tinebase_Core::getAuthType() !== Tinebase_Auth_Factory::SQL) {
             Tinebase_Core::getLogger()->info("Skip creation of initial admin account because the authtype is not " . Tinebase_Auth_Factory::SQL);
             return;

@@ -94,6 +94,18 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
 	    $this->_uit->installApplications(array('ActiveSync')); //cleanup
     }
     
+    public function testInstallAdminAccountOptions()
+    {
+    	$this->_uninstallAllApplications();
+    	$this->_installAllApplications(array('admin_login_name' => 'phpunit-admin', 'admin_login_password' => 'phpunit-password'));
+    	$adminUser = Tinebase_Core::get('currentAccount');
+    	$this->assertEquals($adminUser->accountLoginName, 'phpunit-admin');
+    	
+    	//cleanup
+    	$this->_uninstallAllApplications();
+        $this->_installAllApplications();
+    }
+    
     /**
      * test uninstall application
      *
@@ -203,5 +215,17 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     	$result = $this->_uit->login('unknown_user_xxyz', 'wrong_password');
         $this->assertFalse($result);
     }
-
+    
+    protected function _uninstallAllApplications()
+    {
+        $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        $this->_uit->uninstallApplications($installedApplications->name);
+    }
+    
+    protected function _installAllApplications($_options = null)
+    {
+        $installableApplications = $this->_uit->getInstallableApplications();
+        $installableApplications = array_keys($installableApplications);
+        $this->_uit->installApplications($installableApplications, $_options);
+    }
 }

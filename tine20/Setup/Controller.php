@@ -593,10 +593,11 @@ class Setup_Controller
      * install list of applications
      *
      * @param array $_applications list of application names
+     * @param array | optional $_options
      * @return void
      * @todo remove deprecated code
      */
-    public function installApplications($_applications)
+    public function installApplications($_applications, $_options = null)
     {
         // check requirements for initial install / add required apps to list
         if (! $this->_isInstalled('Tinebase')) {
@@ -628,7 +629,7 @@ class Setup_Controller
         Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' installing applications: ' . print_r(array_keys($applications), true));
         
         foreach ($applications as $name => $xml) {
-            $this->_installApplication($xml);
+            $this->_installApplication($xml, $_options);
         }
 
     }
@@ -674,9 +675,10 @@ class Setup_Controller
      * install given application
      *
      * @param  SimpleXMLElement $_xml
+     * @param  array | optional $_options
      * @return void
      */
-    protected function _installApplication($_xml)
+    protected function _installApplication($_xml, $_options = null)
     {
         $createdTables = array();
         if (isset($_xml->tables)) {
@@ -713,7 +715,7 @@ class Setup_Controller
         // look for import definitions and put them into the db
         $this->_createImportExportDefinitions($application);
         
-        Setup_Initialize::initialize($application);
+        Setup_Initialize::initialize($application, $_options);
     }
 
     /**

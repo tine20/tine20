@@ -21,22 +21,26 @@ class Setup_Initialize
     /**
      * Return new instance of the concrete Setup_Initialize class for the given {@param $_application}  
      * 
-     * @param String $_application
-     * @return Setup_Initialize
+     * @param Tinebase_Model_Application $_application
+     * @param array | optional $_options
+     * @return void
      */
-    public static function initialize(Tinebase_Model_Application $_application)
+    public static function initialize(Tinebase_Model_Application $_application, $_options = null)
     {
     	$applicationName = $_application->name;
     	$classname = "{$applicationName}_Setup_Initialize"; 	
     	$instance = new $classname;
-    	$instance->_initialize($_application);
+    	$instance->_initialize($_application, $_options);
     }
     
     /**
      * initialize application
      *
+     * @param Tinebase_Model_Application $_application
+     * @param array | optional $_options
+     * @return void
      */
-    protected function _initialize(Tinebase_Model_Application $_application)
+    protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
         $this->_createInitialRights($_application);
     }
