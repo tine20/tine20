@@ -21,6 +21,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
    
     protected $_autoincrementID = '';
     
+    protected static $_sequence_postfix = '_seq';
+    
     /**
      * takes the xml stream and creates a table
      *
@@ -50,7 +52,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     public function getIncrementSequence($_tableName) 
     { 
-        $statement = 'CREATE SEQUENCE "' . SQL_TABLE_PREFIX . substr($_tableName, 0, 20) . '_seq" 
+        $statement = 'CREATE SEQUENCE "' . SQL_TABLE_PREFIX . substr($_tableName, 0, 20) . self::$_sequence_postfix . '" 
             MINVALUE 1
             MAXVALUE 999999999999999999999999999 
             INCREMENT BY 1
@@ -109,18 +111,14 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
     public function tableExists($_tableName)
     {
-         $select = $this->_db->select()
-          ->from('information_schema.tables')
-          ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
-          ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
-
+        $tableName = SQL_TABLE_PREFIX . $_tableName;
         try {
-            $stmt = $select->query();
-            $table = $stmt->fetchObject();
+            $tables = $this->_db->listTables();
+            return in_array($tableName, $tables);
         } catch (Zend_Db_Exception $e){
             return false;
         }
-        return true; 
+        return false; 
     }
     
     public function getExistingSchema($_tableName)
@@ -289,6 +287,23 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         
         $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration);
         $this->execQueryVoid($statement);    
+    }
+    
+    /**
+     * removes table from database
+     * 
+     * @param string tableName
+     */
+    public function dropTable($_tableName)
+    {
+    	parent::dropTable($_tableName);
+    	try {
+    		$statement = "DROP SEQUENCE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . self::$_sequence_postfix);
+    	} catch (Zend_Db_Statement_Exception $e) {
+    		//probably a sequencer did not exist (the table had no auto increment column
+    	}
+        
+        $this->execQueryVoid($statement);
     }
     
     /**
