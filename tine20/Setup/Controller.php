@@ -89,7 +89,7 @@ class Setup_Controller
                     break;
                     
                 case 'Zend_Db_Adapter_Pdo_Oci':
-                    $this->_backend = Setup_Backend_Factory::factory('Pdo_Oci');
+                    $this->_backend = Setup_Backend_Factory::factory('Oracle');
                     break;
                     
                 default:
