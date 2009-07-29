@@ -50,9 +50,14 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         // auto shutup by cweiss: echo "<hr color=red>";
     }
     
+    protected function _getIncrementSequenceName($_tableName)
+    {
+        return SQL_TABLE_PREFIX . substr($_tableName, 0, 20) . self::$_sequence_postfix;
+    }
+    
     public function getIncrementSequence($_tableName) 
     { 
-        $statement = 'CREATE SEQUENCE "' . SQL_TABLE_PREFIX . substr($_tableName, 0, 20) . self::$_sequence_postfix . '" 
+        $statement = 'CREATE SEQUENCE ' . $this->_db->quoteIdentifier($this->_getIncrementSequenceName($_tableName)) . ' 
             MINVALUE 1
             MAXVALUE 999999999999999999999999999 
             INCREMENT BY 1
@@ -64,10 +69,16 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             
         return $statement;
     }
-                
+
+    
+    protected function _getIncrementTriggerName($_tableName) 
+    {
+        return SQL_TABLE_PREFIX . substr($_tableName, 0, 20) . '_tri';
+    }
+    
     public function getIncrementTrigger($_tableName) 
     {
-        $statement = 'CREATE TRIGGER "' . SQL_TABLE_PREFIX .  substr($_tableName, 0, 20) . '_tri"
+        $statement = 'CREATE TRIGGER ' . $this->_db->quoteIdentifier($this->_getIncrementTriggerName($_tableName)) . '
             BEFORE INSERT ON "' .  SQL_TABLE_PREFIX . $_tableName . '"
             FOR EACH ROW
             BEGIN
@@ -151,10 +162,26 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         $tableName = SQL_TABLE_PREFIX . $_tableName;
         $tableInfo = $this->_db->describeTable($tableName);
-        foreach ($tableInfo as $field) {
+        $trigger = $this->_db->fetchRow("SELECT * FROM USER_TRIGGERS WHERE TRIGGER_NAME=?", array($this->_getIncrementTriggerName($_tableName)));
+        
+        foreach ($tableInfo as $index => $field) {
+            $field['EXTRA'] = '';
+            if (isset($trigger['TRIGGER_BODY']) &&
+                strstr($trigger['TRIGGER_BODY'], ':NEW.' . $this->_db->quoteIdentifier($field['COLUMN_NAME'])))
+               {
+                $field['EXTRA'] = 'autoincrement';
+            }
             //@todo aggregate more information liek auto_increment, indices, constraints etc. that have not been returned by describeTable
+            
+            $tableInfo[$index] = $field;
         }
+ 
         return $tableInfo;
+    }
+    
+    public function sequenceExists($_tableName)
+    {
+        return (bool)$this->_db->fetchOne("SELECT SEQUENCE_NAME FROM USER_SEQUENCES WHERE SEQUENCE_NAME=?", array($this->_getIncrementSequenceName($_tableName)));
     }
     
     /**
@@ -283,7 +310,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         parent::dropTable($_tableName);
         try {
-    	    $statement = "DROP SEQUENCE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . self::$_sequence_postfix);
+    	    $statement = 'DROP SEQUENCE ' . $this->_db->quoteIdentifier($this->_getIncrementSequenceName($_tableName));
     	    $this->execQueryVoid($statement);
         } catch (Zend_Db_Statement_Exception $e) {
         	Tinebase_Core::getLogger()->debug("An exception was thrown while dropping sequence for table {$_tableName}: " . $e->getMessage() . "; This might be OK if the table had no sequencer.");

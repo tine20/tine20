@@ -150,6 +150,31 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_backend->columnExists($columntName, $this->_table->name));
     }
     
+    public function testSequenceExists()
+    {
+        //Tests standard test table (with sequence)
+        $this->assertTrue($this->_backend->sequenceExists($this->_table->name));
+
+        //Tests table without sequence
+        $tableXml = '
+        <table>
+            <name>oracle_seq_test</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+            </declaration>
+        </table>';
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
+        $this->_tableNames[] = $table->name;
+        $this->_backend->createTable($table);
+        $this->assertFalse($this->_backend->sequenceExists($table->name));
+    }
+    
     public function testGetExistingSchema()
     {
     	$schema = $this->_backend->getExistingSchema($this->_table->name);
@@ -158,7 +183,7 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
     	$idField = $schema->fields[0];
     	$this->assertEquals('true', $idField->notnull, 'Test idField->notnull');
     	$this->assertEquals('true', $idField->primary, 'Test idField->primary');
-    	$this->assertEquals('true', $idField->auto_increment, 'Test idField->auto_increment');
+    	$this->assertEquals('true', $idField->autoincrement, 'Test idField->auto_increment');
     	$this->assertTrue(empty($idField->unsigned), 'Test idField->unsigned');
     	
     }

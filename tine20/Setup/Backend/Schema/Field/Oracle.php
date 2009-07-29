@@ -56,9 +56,9 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
                     $type = $_declaration['DATA_TYPE'];
                 }
 
-            //if ($_declaration['EXTRA'] == 'auto_increment') {
-            //    $this->autoincrement = 'true';
-            //}
+            if (isset($_declaration['EXTRA']) && $_declaration['EXTRA'] == 'autoincrement') {
+                $this->autoincrement = 'true';
+            }
 
             if (!empty($_declaration['UNSIGNED'])) {
                 $this->unsigned = 'true';
