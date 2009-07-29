@@ -105,7 +105,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     /**
      * check's if a given table exists
      *
-     * @param string $_tableSchema
      * @param string $_tableName
      * @return boolean return true if the table exists, otherwise false
      */
@@ -113,65 +112,49 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         $tableName = SQL_TABLE_PREFIX . $_tableName;
         try {
-            $tables = $this->_db->listTables();
-            return in_array($tableName, $tables);
+            $table = $this->_db->fetchOne('SELECT table_name FROM ALL_TABLES WHERE table_name=?', array($tableName));
+            return $table === $tableName;
         } catch (Zend_Db_Exception $e){
-            return false;
+            Tinebase_Core::getLogger()->warn("An exception was thrown while checking if table $tableName exists: " . $e->getMessage() . "; returnbing false");
+        }
+        return false; 
+    }
+    
+    /**
+     * check's if a given column {@param $_columnName} exists in table {@param $_tableName}.
+     *
+     * @param string $_columnName
+     * @param string $_tableName
+     * @return boolean return true if the table exists, otherwise false
+     */
+    public function columnExists($_columnName, $_tableName)
+    {
+        $tableName = SQL_TABLE_PREFIX . $_tableName;
+        try {
+            $column = $this->_db->fetchOne('SELECT column_name FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=? AND COLUMN_NAME=?', array($tableName, $_columnName));
+            return $column === $_columnName;
+        } catch (Zend_Db_Exception $e){
+            Tinebase_Core::getLogger()->warn("An exception was thrown while checking if column $_columnName exists $tableName: " . $e->getMessage() . "; returnbing false");
         }
         return false; 
     }
     
     public function getExistingSchema($_tableName)
     {
-        // Get common table information
-         $select = $this->_db->select()
-          ->from('information_schema.tables')
-          ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
-          ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
-          
-          
-        $stmt = $select->query();
-        $tableInfo = $stmt->fetchObject();
-        
-        //$existingTable = new Setup_Backend_Schema_Table($tableInfo);
-        $existingTable = Setup_Backend_Schema_Table_Factory::factory('Mysql', $tableInfo);
-       // get field informations
-        $select = $this->_db->select()
-          ->from('information_schema.COLUMNS')
-          ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName);
-
-        $stmt = $select->query();
-        $tableColumns = $stmt->fetchAll();
-
-        foreach ($tableColumns as $tableColumn) {
-            $field = Setup_Backend_Schema_Field_Factory::factory('Mysql', $tableColumn);
-            $existingTable->addField($field);
+        $tableInfo = $this->_getTableInfo($_tableName);
+        $existingTable = Setup_Backend_Schema_Table_Factory::factory('Oracle', $tableInfo);
             
-            if ($field->primary === 'true' || $field->unique === 'true' || $field->mul === 'true') {
-                $index = Setup_Backend_Schema_Index_Factory::factory('Mysql', $tableColumn);
-                        
-                // get foreign keys
-                $select = $this->_db->select()
-                  ->from('information_schema.KEY_COLUMN_USAGE')
-                  ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName)
-                  ->where($this->_db->quoteIdentifier('COLUMN_NAME') . ' = ?', $tableColumn['COLUMN_NAME']);
-
-                $stmt = $select->query();
-                $keyUsage = $stmt->fetchAll();
-
-                foreach ($keyUsage as $keyUse) {
-                    if ($keyUse['REFERENCED_TABLE_NAME'] != NULL) {
-                        $index->setForeignKey($keyUse);
-                    }
-                }
-                $existingTable->addIndex($index);
-            }
-        }
-        
-        //var_dump($existingTable);
-        
-      
         return $existingTable;
+    }
+    
+    protected function _getTableInfo($_tableName)
+    {
+        $tableName = SQL_TABLE_PREFIX . $_tableName;
+        $tableInfo = $this->_db->describeTable($tableName);
+        foreach ($tableInfo as $field) {
+            //@todo aggregate more information liek auto_increment, indices, constraints etc. that have not been returned by describeTable
+        }
+        return $tableInfo;
     }
     
     /**
@@ -253,9 +236,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */    
     public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD (" ;
         
         $statement .= $this->getFieldDeclarations($_declaration);
+        
+        $statement .= ")";
         
         if ($_position != NULL) {
             if ($_position == 0) {
@@ -296,14 +281,13 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
     public function dropTable($_tableName)
     {
-    	parent::dropTable($_tableName);
-    	try {
-    		$statement = "DROP SEQUENCE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . self::$_sequence_postfix);
-    	} catch (Zend_Db_Statement_Exception $e) {
-    		//probably a sequencer did not exist (the table had no auto increment column
-    	}
-        
-        $this->execQueryVoid($statement);
+        parent::dropTable($_tableName);
+        try {
+    	    $statement = "DROP SEQUENCE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . self::$_sequence_postfix);
+    	    $this->execQueryVoid($statement);
+        } catch (Zend_Db_Statement_Exception $e) {
+        	Tinebase_Core::getLogger()->debug("An exception was thrown while dropping sequence for table {$_tableName}: " . $e->getMessage() . "; This might be OK if the table had no sequencer.");
+        }
     }
     
     /**

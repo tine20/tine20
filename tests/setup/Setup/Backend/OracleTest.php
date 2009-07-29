@@ -24,10 +24,17 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var    Setup_Backend_Mysql
+     * @var    Setup_Backend_Oracle
      * @access protected
      */
     protected $_backend;
+    
+    /**
+     * Array holding table names that should be deleted with {@see tearDown}
+     * 
+     * @var array
+     */
+    protected $_tableNames = array();
     
     /**
      * @var Setup_Backend_Schema_Table_Abstract
@@ -59,13 +66,10 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
                     </index>
                 </declaration>
             </table>';
+
     
-    /**
-     * Array holding table names that should be deleted with {@see tearDown}
-     * 
-     * @var array
-     */
-    protected $_tableNames = array();
+    
+
     
     /**
      * Runs the test methods of this class.
@@ -88,7 +92,7 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_backend = Setup_Backend_Factory::factory('Oracle');
-        
+        $this->_createTestTable();
     }
 
     /**
@@ -108,12 +112,108 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
             }
         }
     }
+
+    
+    
+    
+    
+    public function testGetCreateStatement()
+    {
+        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'CONSTRAINT "pk_' . $this->_table->name .'" PRIMARY KEY ("id")'."\n".')';
+        $actual = $this->_backend->getCreateStatement(Setup_Backend_Schema_Table_Factory::factory('Xml', $this->_tableXml));
+
+        $this->assertEquals($expected, $actual);
+    }
+    
+    public function testTableExists()
+    {
+        $this->assertTrue($this->_backend->tableExists($this->_table->name));
+        $this->_backend->dropTable($this->_table->name);
+        $this->assertFalse($this->_backend->tableExists($this->_table->name));
+    }
+    
+    public function testColumnExists()
+    {
+    	$columntName = 'testColumnExists';
+        $string ="
+                <field>
+                    <name>$columntName</name>
+                    <type>text</type>
+                    <length>25</length>
+                    <notnull>true</notnull>
+                </field>";
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+
+        $this->assertFalse($this->_backend->columnExists($columntName, $this->_table->name));
+        $this->_backend->addCol($this->_table->name, $field);
+        $this->assertTrue($this->_backend->columnExists($columntName, $this->_table->name));
+    }
+    
+    public function testGetExistingSchema()
+    {
+    	$schema = $this->_backend->getExistingSchema($this->_table->name);
+    	$this->assertEquals(2, count($schema->fields));
+    	
+    	$idField = $schema->fields[0];
+    	$this->assertEquals('true', $idField->notnull, 'Test idField->notnull');
+    	$this->assertEquals('true', $idField->primary, 'Test idField->primary');
+    	$this->assertEquals('true', $idField->auto_increment, 'Test idField->auto_increment');
+    	$this->assertTrue(empty($idField->unsigned), 'Test idField->unsigned');
+    	
+    }
+    
+    public function testAddCol() 
+    {
+        $string ="
+                <field>
+                    <name>testAddCol</name>
+                    <type>text</type>
+                    <length>25</length>
+                    <notnull>true</notnull>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"testAddCol" VARCHAR2(25) NOT NULL');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToMysqlFieldStatement_001() 
+    {
+        $string ="
+            <field>
+                <name>id</name>
+                <type>integer</type>
+                <autoincrement>true</autoincrement>
+                <unsigned>true</unsigned>
+            </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"id" NUMBER(11,0) NOT NULL');    
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        //TODO make addCol work and throw the right exception
+        //$this->setExpectedException('Zend_Db_Statement_Exception', '1060'); //1060: Column "id" already exists - expecting Exception'
+        //$this->_backend->addCol($this->_table->name, $field);
+        
+    }
+
+
+    
     
     protected function _createTestTable()
     {
         $this->_table = Setup_Backend_Schema_Table_Factory::factory('Xml', $this->_tableXml);
         $this->_tableNames[] = $this->_table->name;
-        $this->_backend->createTable($this->_table);
+        try {
+            $this->_backend->createTable($this->_table);
+        } catch (Zend_Db_Statement_Exception $e) {
+        	$this->_backend->dropTable($this->_table->name);
+        	$this->_backend->createTable($this->_table);
+        }
     }
 
     /**
@@ -142,47 +242,10 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $return = trim($_value);
         return '  ' . $return;
     }
-
-    public function testGetCreateStatement()
-    {
-        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'CONSTRAINT "pk_" PRIMARY KEY ("id")'."\n".')';
-        $actual = $this->_backend->getCreateStatement(Setup_Backend_Schema_Table_Factory::factory('Xml', $this->_tableXml));
-
-        $this->assertEquals($expected, $actual);
-    }
     
-    public function testCreateAndDropTable()
-    {
-        $this->_createTestTable();
-        $this->assertTrue($this->_backend->tableExists($this->_table->name));
-        $this->_backend->dropTable($this->_table->name);
-        $this->assertFalse($this->_backend->tableExists($this->_table->name));
-    }
-    
-    public function testStringToMysqlFieldStatement_001() 
-    {
-    	$this->_createTestTable();
-    	
-        $string ="
-            <field>
-                <name>id</name>
-                <type>integer</type>
-                <autoincrement>true</autoincrement>
-                <unsigned>true</unsigned>
-            </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"id" NUMBER(11,0) NOT NULL');    
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
-        
-        //TODO make addCol work and throw the right exception
-        //$this->setExpectedException('Zend_Db_Statement_Exception', '1060'); //1060: Column "id" already exists - expecting Exception'
-        //$this->_backend->addCol($this->_table->name, $field);
-        
-    }
-
 }        
-                
+
+
                 
 if (PHPUnit_MAIN_METHOD == 'Setup_Backend_MysqlTest::main') {
     Setup_Backend_OracleTest::main();
