@@ -224,11 +224,10 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
             <field>
                 <name>id</name>
                 <type>integer</type>
-                <autoincrement>true</autoincrement>
                 <unsigned>true</unsigned>
             </field>";
             
-        $statement = $this->_fixFieldDeclarationString('"id" NUMBER(11,0) NOT NULL');    
+        $statement = $this->_fixFieldDeclarationString('"id" NUMBER(11,0)');    
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
@@ -251,8 +250,8 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
+        $this->setExpectedException('Setup_Exception_NotImplemented');
         $this->_backend->addCol($this->_table->name, $field);
-        //@todo the autoincrement should thrown an exception because there is already an autoincrement  
     }
     
     public function testStringToFieldStatement_003() 
@@ -281,6 +280,16 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('true', $newColumn->primary);
         $this->assertNotEquals('true', $newColumn->unique);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     protected function _createTestTable()
     {

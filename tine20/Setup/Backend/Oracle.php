@@ -288,15 +288,19 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */    
     public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
     {
+        if ($_position != NULL) {
+            throw new Setup_Exception_NotImplemented(__METHOD__ . ' parameter "$_position" is not supported in Oracle adapter');
+        }
+
+        if ($_declaration->autoincrement) {
+            throw new Setup_Exception_NotImplemented('Add column autoincrement option is not implemented in Orcale adapter');
+        }
+     
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD (" ;
         
         $statement .= $this->getFieldDeclarations($_declaration);
         
         $statement .= ")";
-        
-        if ($_position != NULL) {
-            throw new Setup_Exception_NotImplemented(__METHOD__ . ' parameter "$_position" is not supported in Oracle adapter');
-        }
         
         $this->execQueryVoid($statement);
     }
