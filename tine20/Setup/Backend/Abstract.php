@@ -179,6 +179,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function dropTable($_tableName)
     {
+    	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
         $statement = "DROP TABLE " . $this->_db->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
     }
