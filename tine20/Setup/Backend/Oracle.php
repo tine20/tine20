@@ -190,6 +190,18 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $trigger = $this->_db->fetchRow("SELECT * FROM USER_TRIGGERS WHERE TRIGGER_NAME=?", array($this->_getIncrementTriggerName($_tableName)));
         
         foreach ($tableInfo as $index => $field) {
+            switch ($field['DATA_TYPE']) {
+                case 'VARCHAR2':
+                    $constraint = $this->_db->fetchOne("SELECT SEARCH_CONDITION FROM USER_CONSTRAINTS WHERE CONSTRAINT_NAME=?", array($this->_getConstraintEnumName($_tableName, $field['COLUMN_NAME'])));
+                    if ($constraint) {
+                        $field['DATA_TYPE'] = 'enum';
+                        //extract allowed enum values to $field['TYPE_SPECIAL']
+                        preg_match('/.* IN \((.*)\)$/', $constraint, $matches);
+                        $field['TYPE_SPECIAL'] = $matches[1]; 
+                    }
+                    break;
+            }
+            
             $field['EXTRA'] = '';
             if (isset($trigger['TRIGGER_BODY']) &&
                 strstr($trigger['TRIGGER_BODY'], ':NEW.' . $this->_db->quoteIdentifier($field['COLUMN_NAME'])))
@@ -428,6 +440,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $this->execQueryVoid($statement);    
     }
     
+    protected function _getConstraintEnumName($_tableName, $_fieldName)
+    {
+        return 'cons_' . substr($_tableName, 0, 10) . "_" . substr($_fieldName, 0, 9) . '_enum';
+    }
+    
     /**
      * create the right mysql-statement-snippet for columns/fields
      *
@@ -491,7 +508,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                     }
                 }    
                 
-                $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT "cons_' . substr($this->_table, 0, 10) . "_" . substr($_field->name, 0, 9) . '_enum" CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
+                $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($this->_table, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
                 break;
             
             case 'datetime':

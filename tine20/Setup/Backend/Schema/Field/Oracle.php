@@ -30,7 +30,7 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
             $this->name = $_declaration['COLUMN_NAME'];
             $type = '';
             $length= '';
-            
+
             switch ($_declaration['DATA_TYPE']) {
                 case('NUMBER'):
                     $type = 'integer';
@@ -44,7 +44,7 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
                 
                 case('enum'):
                     $type = $_declaration['DATA_TYPE'];
-                    $this->value = explode(',', str_replace("'", '', substr($_declaration['COLUMN_TYPE'], 5, (strlen($_declaration['COLUMN_TYPE']) - 6))));
+                    $this->value = explode(',', str_replace("'", '', $_declaration['TYPE_SPECIAL']));
                     break;
                 
                 case('VARCHAR2'):

@@ -281,7 +281,33 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('true', $newColumn->unique);
     }
     
-    
+    public function testStringToMysqlFieldStatement_004() 
+    {
+        $string ="
+                 <field>
+                    <name>test</name>
+                    <type>enum</type>
+                    <value>enabled</value>
+                    <value>disabled</value>
+                    <notnull>true</notnull>
+                </field>";
+   
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals(array('enabled', 'disabled'), $newColumn->value);
+        $this->assertEquals('test', $newColumn->name);
+        $this->assertEquals('true', $newColumn->notnull);       
+        $this->assertEquals('enum', $newColumn->type);
+        $this->assertNotEquals('true', $newColumn->primary);
+        $this->assertNotEquals('true', $newColumn->unique);
+        
+        $db = Tinebase_Core::getDb();
+        $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'test' => 'enabled'));
+        $this->setExpectedException('Zend_Db_Statement_Exception', '2290'); //invalid enum value -> expect exception
+        $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'test' => 'deleted'));
+    }  
     
     
     
