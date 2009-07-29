@@ -182,18 +182,25 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     {
         $string ="
                 <field>
-                    <name>{__FUNCTION__}</name>
+                    <name>test</name>
                     <type>text</type>
                     <length>25</length>
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`{__FUNCTION__}` varchar(25) NOT NULL");    
+        $statement = $this->_fixFieldDeclarationString("`test` varchar(25) NOT NULL");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
 
         $this->_backend->addCol($this->_table->name, $field);
+        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('test', $newColumn->name);
+        $this->assertEquals('25', $newColumn->length);
+        $this->assertEquals('true', $newColumn->notnull);
+        $this->assertEquals('text', $newColumn->type);
     }
     
     public function testStringToMysqlFieldStatement_004() 

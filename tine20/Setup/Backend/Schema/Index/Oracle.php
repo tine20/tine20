@@ -5,12 +5,12 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Matthias Greiling <m.greiling@metaways.de>
+ * @author      Jonas Fischer <j.fischer@metaways.de>
  * @version     $Id: Mysql.php 1703 2008-04-03 18:16:32Z lkneschke $
  */
 
  
-class Setup_Backend_Schema_Index_Mysql extends Setup_Backend_Schema_Index_Abstract
+class Setup_Backend_Schema_Index_Oracle extends Setup_Backend_Schema_Index_Abstract
 {
 
     public function __construct($_declaration)
@@ -37,11 +37,10 @@ class Setup_Backend_Schema_Index_Mysql extends Setup_Backend_Schema_Index_Abstra
         $this->name = $_declaration['COLUMN_NAME'];
         $type = '';
         $length= '';
-        
         switch ($_declaration['DATA_TYPE']) {
-            case('int'):
+            case('NUMBER'):
                 $type = 'integer';
-                $length = $_declaration['NUMERIC_PRECISION'] + 1;
+                $length = $_declaration['LENGTH'];
                 break;
         
             case('tinyint'):
@@ -60,7 +59,7 @@ class Setup_Backend_Schema_Index_Mysql extends Setup_Backend_Schema_Index_Abstra
                 break;
             
             default:
-                $length = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
+                $length = $_declaration['LENGTH'];
                 $type = $_declaration['DATA_TYPE'];
             }
 
@@ -68,16 +67,17 @@ class Setup_Backend_Schema_Index_Mysql extends Setup_Backend_Schema_Index_Abstra
             $this->autoincrement = 'true';
         }
 
-        if (preg_match('/unsigned/', $_declaration['COLUMN_TYPE'])) {
-            $this->unsigned = 'true';
+        if (!empty($_declaration['UNSIGNED'])) {
+           $this->unsigned = 'true';
         }
 
-        ($_declaration['IS_NULLABLE'] == 'NO')? $this->notnull = 'true': $this->notnull = 'false';
-        ($_declaration['COLUMN_KEY'] == 'UNI')? $this->unique = 'true': $this->unique = 'false';
-        ($_declaration['COLUMN_KEY'] == 'PRI')? $this->primary = 'true': $this->primary = 'false';
-        ($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
+        
+        $_declaration['NULLABLE'] ? $this->notnull = 'false': $this->notnull = 'true';
+        //($_declaration['COLUMN_KEY'] == 'UNI')? $this->unique = 'true': $this->unique = 'false';
+        $_declaration['PRIMARY'] ? $this->primary = 'true': $this->primary = 'false';
+        //($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
 
-        $this->comment = $_declaration['COLUMN_COMMENT'];
+//        $this->comment = $_declaration['COLUMN_COMMENT'];
         $this->length = $length;
         $this->type = $type;
     }

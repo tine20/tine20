@@ -123,7 +123,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         $tableName = SQL_TABLE_PREFIX . $_tableName;
         try {
-            $table = $this->_db->fetchOne('SELECT table_name FROM ALL_TABLES WHERE table_name=?', array($tableName));
+            $table = $this->_db->fetchOne('SELECT TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME=?', array($tableName));
             return $table === $tableName;
         } catch (Zend_Db_Exception $e){
             Tinebase_Core::getLogger()->warn("An exception was thrown while checking if table $tableName exists: " . $e->getMessage() . "; returnbing false");
@@ -142,7 +142,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         $tableName = SQL_TABLE_PREFIX . $_tableName;
         try {
-            $column = $this->_db->fetchOne('SELECT column_name FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=? AND COLUMN_NAME=?', array($tableName, $_columnName));
+            $column = $this->_db->fetchOne('SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=? AND COLUMN_NAME=?', array($tableName, $_columnName));
             return $column === $_columnName;
         } catch (Zend_Db_Exception $e){
             Tinebase_Core::getLogger()->warn("An exception was thrown while checking if column $_columnName exists $tableName: " . $e->getMessage() . "; returnbing false");
@@ -152,9 +152,34 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     public function getExistingSchema($_tableName)
     {
-        $tableInfo = $this->_getTableInfo($_tableName);
+        $tableInfo = $this->_getTableInfo($_tableName);       
         $existingTable = Setup_Backend_Schema_Table_Factory::factory('Oracle', $tableInfo);
-            
+        
+        foreach ($tableInfo as $index => $tableColumn) {
+            $field = Setup_Backend_Schema_Field_Factory::factory('Oracle', $tableColumn);
+            $existingTable->addField($field);
+            if ($field->primary === 'true' || $field->unique === 'true' || $field->mul === 'true') {
+                $index = Setup_Backend_Schema_Index_Factory::factory('Oracle', $tableColumn);
+                    
+                    //@todo implement foreign key support    
+                // get foreign keys
+//                $select = $this->_db->select()
+//                  ->from('information_schema.KEY_COLUMN_USAGE')
+//                  ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName)
+//                  ->where($this->_db->quoteIdentifier('COLUMN_NAME') . ' = ?', $tableColumn['COLUMN_NAME']);
+//    
+//                $stmt = $select->query();
+//                $keyUsage = $stmt->fetchAll();
+//    
+//                foreach ($keyUsage as $keyUse) {
+//                    if ($keyUse['REFERENCED_TABLE_NAME'] != NULL) {
+//                        $index->setForeignKey($keyUse);
+//                    }
+//                }
+                $existingTable->addIndex($index);
+            }
+        }
+
         return $existingTable;
     }
     
@@ -169,7 +194,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             if (isset($trigger['TRIGGER_BODY']) &&
                 strstr($trigger['TRIGGER_BODY'], ':NEW.' . $this->_db->quoteIdentifier($field['COLUMN_NAME'])))
                {
-                $field['EXTRA'] = 'autoincrement';
+                $field['EXTRA'] = 'auto_increment';
             }
             //@todo aggregate more information liek auto_increment, indices, constraints etc. that have not been returned by describeTable
             
@@ -270,12 +295,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $statement .= ")";
         
         if ($_position != NULL) {
-            if ($_position == 0) {
-                $statement .= ' FIRST ';
-            } else {
-                $before = $this->execQuery('DESCRIBE `' . SQL_TABLE_PREFIX . $_tableName . '` ');
-                $statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
-            }
+            throw new Setup_Exception_NotImplemented(__METHOD__ . ' parameter "$_position" is not supported in Oracle adapter');
         }
         
         $this->execQueryVoid($statement);

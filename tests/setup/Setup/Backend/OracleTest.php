@@ -178,8 +178,16 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
     public function testGetExistingSchema()
     {
     	$schema = $this->_backend->getExistingSchema($this->_table->name);
-    	$this->assertEquals(2, count($schema->fields));
     	
+    	$this->assertEquals($this->_table->name, $schema->name, 'Test table name');
+    	
+    	$this->assertEquals(1, count($schema->indices));
+    	$idIndex = $schema->indices[0];
+        $this->assertEquals('true', $idIndex->notnull, 'Test $idIndex->notnull');
+        $this->assertEquals('true', $idIndex->primary, 'Test $idIndex->primary');
+        $this->assertEquals('true', $idIndex->autoincrement, 'Test $idIndex->auto_increment');
+    	
+    	$this->assertEquals(2, count($schema->fields));
     	$idField = $schema->fields[0];
     	$this->assertEquals('true', $idField->notnull, 'Test idField->notnull');
     	$this->assertEquals('true', $idField->primary, 'Test idField->primary');
@@ -204,9 +212,13 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
 
         $this->_backend->addCol($this->_table->name, $field);
+        
+        $this->setExpectedException('Setup_Exception_NotImplemented');
+        
+        $this->_backend->addCol($this->_table->name, $field, 1); //Cannot use 3rd parameter $_position in Oracle 
     }
     
-    public function testStringToMysqlFieldStatement_001() 
+    public function testStringToFieldStatement_001() 
     {
         $string ="
             <field>
@@ -220,14 +232,55 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
-        //TODO make addCol work and throw the right exception
-        //$this->setExpectedException('Zend_Db_Statement_Exception', '1060'); //1060: Column "id" already exists - expecting Exception'
-        //$this->_backend->addCol($this->_table->name, $field);
+        $this->setExpectedException('Zend_Db_Statement_Exception', '1430'); //1060: Column "id" already exists - expecting Exception'
+        $this->_backend->addCol($this->_table->name, $field);
         
     }
 
-
+    public function testStringToFieldStatement_002() 
+    {
+        $string ="
+            <field>
+                <name>id2</name>
+                <type>integer</type>
+                <autoincrement>true</autoincrement>
+            </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"id2" NUMBER(11,0) NOT NULL');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+        //@todo the autoincrement should thrown an exception because there is already an autoincrement  
+    }
     
+    public function testStringToFieldStatement_003() 
+    {
+        $string ="
+                <field>
+                    <name>test</name>
+                    <type>text</type>
+                    <length>25</length>
+                    <notnull>true</notnull>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"test" VARCHAR2(25) NOT NULL');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+
+        $this->_backend->addCol($this->_table->name, $field);
+        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('test', $newColumn->name);
+        $this->assertEquals('25', $newColumn->length);
+        $this->assertEquals('true', $newColumn->notnull);
+        $this->assertEquals('text', $newColumn->type);
+        $this->assertNotEquals('true', $newColumn->primary);
+        $this->assertNotEquals('true', $newColumn->unique);
+    }
     
     protected function _createTestTable()
     {

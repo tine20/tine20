@@ -50,13 +50,14 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
                 case('VARCHAR2'):
                     $length = $_declaration['LENGTH'];
                     $type = 'text';
+                    break;
                 
                 default:
                     $length = $_declaration['LENGTH'];
                     $type = $_declaration['DATA_TYPE'];
                 }
 
-            if (isset($_declaration['EXTRA']) && $_declaration['EXTRA'] == 'autoincrement') {
+            if (isset($_declaration['EXTRA']) && $_declaration['EXTRA'] == 'auto_increment') {
                 $this->autoincrement = 'true';
             }
 

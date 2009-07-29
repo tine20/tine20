@@ -50,6 +50,7 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
                 case('varchar'):
                     $length = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
                     $type = 'text';
+                    break;
                 
                 default:
                     $length = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
