@@ -526,7 +526,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 break;
                 
             case 'text':
-                $buffer[] = 'BLOB';
+                //@todo what if a text is longer thewn 4000 chars? use clob? but then the data handling becomes difficult
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Converting datatype text to varchar(4000');
+                $buffer[] = "VARCHAR2(4000)";
                 break;
                 
             default:

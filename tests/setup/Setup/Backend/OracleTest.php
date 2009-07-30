@@ -213,7 +213,7 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
 
         $this->_backend->addCol($this->_table->name, $field);
         
-        $this->setExpectedException('Setup_Exception_NotImplemented');
+        $this->setExpectedException('Setup_Backend_Exception_NotImplemented');
         
         $this->_backend->addCol($this->_table->name, $field, 1); //Cannot use 3rd parameter $_position in Oracle 
     }
@@ -249,7 +249,7 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
-        $this->setExpectedException('Setup_Exception_NotImplemented');
+        $this->setExpectedException('Setup_Backend_Exception_NotImplemented');
         $this->_backend->addCol($this->_table->name, $field);
     }
     
@@ -368,7 +368,58 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
         $this->_backend->addCol($this->_table->name, $field);
-    }    
+    }
+    
+    public function testLongTableName() 
+    {
+        //Tests table without sequence
+        $tableXml = '
+        <table>
+            <name>long_name_0123456789_0123456789</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+            </declaration>
+        </table>';
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
+        $this->_tableNames[] = $table->name;
+        $this->setExpectedException('Zend_Db_Statement_Exception', '972'); //oracle identifiers cannot be longer than 30 characters 
+        $this->_backend->createTable($table);
+    }  
+      
+    public function testDatatypeTextReturnsPlainText() 
+    {
+        $string ="
+                <field>
+                    <name>test</name>
+                    <type>text</type>
+                </field>";
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->_backend->addCol($this->_table->name, $field);
+        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('text', $newColumn->type);
+        $this->assertEquals('4000', $newColumn->length);
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+        $testValues = array(
+            'some text',
+            str_pad('test', 4001, 'x') 
+        );
+        $this->setExpectedException('Zend_Db_Statement_Exception', '1461'); //maximum length is 4000 characters
+        foreach ($testValues as $index => $value) {
+            $db->insert($tableName, array('name' => $index, 'test' => $value));
+            $result = $db->fetchOne('SELECT "test" FROM "' . $tableName . '" WHERE "name"=?', array($index));
+            $this->assertEquals($value, $result);
+        }
+    }
     
     protected function _createTestTable()
     {
