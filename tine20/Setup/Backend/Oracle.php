@@ -301,11 +301,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
     {
         if ($_position != NULL) {
-            throw new Setup_Exception_NotImplemented(__METHOD__ . ' parameter "$_position" is not supported in Oracle adapter');
+            throw new Setup_Backend_Exception_NotImplemented(__METHOD__ . ' parameter "$_position" is not supported in Oracle adapter');
         }
 
         if ($_declaration->autoincrement) {
-            throw new Setup_Exception_NotImplemented('Add column autoincrement option is not implemented in Orcale adapter');
+            throw new Setup_Backend_Exception_NotImplemented('Add column autoincrement option is not implemented in Orcale adapter');
         }
      
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD (" ;
@@ -454,6 +454,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field)
     {
+     
         $buffer[] = '  "' . $_field->name . '"';
 
         switch ($_field->type) {
@@ -467,11 +468,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             
             case 'integer':
                 if ($_field->length !== NULL) {
-                    if ($_field->length < 5){
-                        $buffer[] = 'NUMBER(1,0)';
-                    } else {
                         $buffer[] = 'NUMBER(' . $_field->length . ',0)';
-                    }
                 } else {
                     $buffer[] = 'NUMBER(11,0)';
                 }                
@@ -512,6 +509,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 break;
             
             case 'datetime':
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' converting field type datetime to VARCHAR(25) because datetime is not supported in oracle adapter.');
                 $buffer[] = 'VARCHAR2(25)';
                 break;
             
@@ -533,6 +531,10 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 
             default:
                 $buffer[] = $_field->type;
+        }
+        
+        if (isset($_field->unsigned)) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' $_field has property unsgined set which is currently not supported by oracle adapter; unsigned property is ignored.');
         }
         
         if ($_field->type != 'enum') {

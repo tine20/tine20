@@ -224,7 +224,6 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
             <field>
                 <name>id</name>
                 <type>integer</type>
-                <unsigned>true</unsigned>
             </field>";
             
         $statement = $this->_fixFieldDeclarationString('"id" NUMBER(11,0)');    
@@ -281,7 +280,7 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('true', $newColumn->unique);
     }
     
-    public function testStringToMysqlFieldStatement_004() 
+    public function testStringToFieldStatement_004() 
     {
         $string ="
                  <field>
@@ -309,13 +308,67 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'test' => 'deleted'));
     }  
     
+    public function testStringToFieldStatement_005() 
+    {
+        $string ="
+                <field>
+                    <name>order</name>
+                    <type>integer</type>
+                    <length>11</length>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString("`order` int(11)  unsigned  NOT NULL");    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $this->_backend->addCol($this->_table->name, $field);
+        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('order', $newColumn->name);
+        $this->assertEquals('true', $newColumn->notnull);       
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertFalse(isset($newColumn->unsigned)); //unsigned option is currently not supported by oracle adapter
+        $this->assertNotEquals('true', $newColumn->primary);
+        $this->assertNotEquals('true', $newColumn->unique);
+    }
     
+    public function testStringToFieldStatement_006() 
+    {
+        $string ="
+                
+                <field>
+                    <name>last_login</name>
+                    <type>datetime</type>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"last_login" VARCHAR2(25)');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
     
-    
-    
-    
-    
-    
+    public function testStringToFieldStatement_007() 
+    {
+        $string ="
+                
+                <field>
+                    <name>email_sent</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"email_sent" NUMBER(4,0) DEFAULT 0');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }    
     
     protected function _createTestTable()
     {
