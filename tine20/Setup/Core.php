@@ -125,8 +125,9 @@ class Setup_Core extends Tinebase_Core
                 
                 // check (mysql)db server version
                 $ext = new Setup_ExtCheck(dirname(__FILE__) . '/essentials.xml');
-                if ($mysqlRequired = $ext->getExtensionData('MySQL')) {
-                    $dbConfig = Tinebase_Core::getConfig()->database;
+                $dbConfig = Tinebase_Core::getConfig()->database;
+                if ($dbConfig->adapter === 'pdo_mysql' && ($mysqlRequired = $ext->getExtensionData('MySQL'))) {
+                    //Check if installed MySQL version is compatible with required version
                     $link = @mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
                     if ($link) {
                         $serverVersion = @mysql_get_server_info();
@@ -140,6 +141,7 @@ class Setup_Core extends Tinebase_Core
                         }
                     }
                 } else {
+                    //@todo check version requirements for other db adapters
                     self::set(Setup_Core::CHECKDB, TRUE);
                 }
             } catch (Zend_Db_Adapter_Exception $zae) {
