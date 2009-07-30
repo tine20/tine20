@@ -207,10 +207,11 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
     protected function _addFolderState($_class, $_folderId)
     {
         $folderState = new ActiveSync_Model_FolderState(array(
-            'device_id'     => $this->_device->getId(),
-            'class'         => $_class,
-            'folderid'      => $_folderId,
-            'creation_time' => $this->_syncTimeStamp
+            'device_id'         => $this->_device->getId(),
+            'class'             => $_class,
+            'folderid'          => $_folderId,
+            'creation_time'     => $this->_syncTimeStamp,
+            'lastfiltertype'    => 0
         ));
         
         /**
