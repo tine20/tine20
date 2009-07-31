@@ -51,6 +51,10 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
                     $length = $_declaration['LENGTH'];
                     $type = 'text';
                     break;
+                    
+                case('CLOB'):
+                    $type = 'text';
+                    break;
                 
                 default:
                     $length = $_declaration['LENGTH'];

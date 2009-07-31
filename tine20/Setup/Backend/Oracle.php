@@ -142,7 +142,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         $tableName = SQL_TABLE_PREFIX . $_tableName;
         try {
-            $column = $this->_db->fetchOne('SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=? AND COLUMN_NAME=?', array($tableName, $_columnName));
+            $column = $this->_db->fetchOne('SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=:table_name AND COLUMN_NAME=:column_name', array('table_name' => $tableName, 'column_name' => $_columnName));
             return $column === $_columnName;
         } catch (Zend_Db_Exception $e){
             Tinebase_Core::getLogger()->warn("An exception was thrown while checking if column $_columnName exists $tableName: " . $e->getMessage() . "; returnbing false");
@@ -526,9 +526,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 break;
                 
             case 'text':
-                //@todo what if a text is longer thewn 4000 chars? use clob? but then the data handling becomes difficult
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Converting datatype text to varchar(4000');
-                $buffer[] = "VARCHAR2(4000)";
+                $buffer[] = 'CLOB';
                 break;
                 
             default:
