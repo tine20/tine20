@@ -654,7 +654,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _hasHashId()
     {
         $identifier = $this->_getRecordIdentifier();
-        $result = ($this->_schema[$identifier]['DATA_TYPE'] === 'varchar' && $this->_schema[$identifier]['LENGTH'] == 40);
+        $result = (in_array($this->_schema[$identifier]['DATA_TYPE'], array('varchar', 'VARCHAR2')) && $this->_schema[$identifier]['LENGTH'] == 40);
         
         return $result;
     }
