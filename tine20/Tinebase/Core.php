@@ -102,6 +102,13 @@ class Tinebase_Core
      */
     const PDO_OCI = 'Pdo_Oci';
     
+    /**
+     * const ORACLE 
+     * Zend_Db adapter name for the oci8 driver.
+     *
+     */
+    const ORACLE = 'Oracle';
+    
     /******************************* DISPATCH *********************************/
     
     /**
@@ -480,6 +487,11 @@ class Tinebase_Core
                 case self::PDO_OCI:
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
                     break;
+                case self::ORACLE:
+                    $db = Zend_Db::factory(self::ORACLE, $dbConfig->toArray());
+                    $db->setLobAsString(true);
+                    break;
+                    
                 default:
                     throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');
                     break;
