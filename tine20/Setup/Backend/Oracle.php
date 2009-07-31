@@ -616,7 +616,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             $snippet .= " ON DELETE " . strtoupper($_key->referenceOnDelete);
         }
         if (!empty($_key->referenceOnUpdate)) {
-            $snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
+            //$snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
+            throw new Setup_Backend_Exception_NotImplemented('ON UPDATE CONSTRAINTS are not supported by Oracle adapter');
         }
         
         return $snippet;
