@@ -175,6 +175,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
     },
     
     onContactLoad: function(response) {
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onContactLoad.defer(250, this);
+            return;
+        }
+
         this.getForm().findField('n_prefix').focus(false, 250);
         var contactData = Ext.util.JSON.decode(response.responseText);
         if (this.forceContainer) {
@@ -193,6 +199,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, 
         
         if (this.fireEvent('load', this) !== false) {
             this.getForm().loadRecord(this.contact);
+            
+            // quickhack continues ... :( this should not be needed when adb uses generic edit dialog
+            // update cf panel record
+            Ext.getCmp('adbEditDialogCfPanel').quickHack.record = this.contact;
+            
             this.updateToolbars(this.contact, 'container_id');
             Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contact.get('jpegphoto'));
     

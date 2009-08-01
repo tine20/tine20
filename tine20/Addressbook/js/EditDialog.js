@@ -506,6 +506,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 record_model: 'Addressbook_Model_Contact'
             }),
             new Tine.widgets.customfields.CustomfieldsPanel({
+                id: 'adbEditDialogCfPanel',
                 recordClass: Tine.Addressbook.Model.Contact,
                 disabled: (Tine.Addressbook.registry.get('customfields').length == 0),
                 quickHack: {record: _contact}
