@@ -141,7 +141,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         return '  ' . $return;
     }
 
-    public function testStringToMysqlFieldStatement_001() 
+    public function testStringToFieldStatement_001() 
     {
         $string ="
             <field>
@@ -161,7 +161,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         
     }
     
-    public function testStringToMysqlFieldStatement_002() 
+    public function testStringToFieldStatement_002() 
     {
         $string ="
             <field>
@@ -178,7 +178,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }
     
-    public function testStringToMysqlFieldStatement_003() 
+    public function testStringToFieldStatement_003() 
     {
         $string ="
                 <field>
@@ -203,7 +203,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('text', $newColumn->type);
     }
     
-    public function testStringToMysqlFieldStatement_004() 
+    public function testStringToFieldStatement_004() 
     {
         $string ="
                  <field>
@@ -231,7 +231,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'test' => 'deleted'));
     }            
     
-    public function testStringToMysqlFieldStatement_005() 
+    public function testStringToFieldStatement_005() 
     {
         $string ="
                 <field>
@@ -248,9 +248,17 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
         $this->_backend->addCol($this->_table->name, $field);
-    }        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('order', $newColumn->name);
+        $this->assertEquals('true', $newColumn->notnull);       
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('true', $newColumn->unsigned, 'Test unsigned');
+        $this->assertNotEquals('true', $newColumn->primary);
+        $this->assertNotEquals('true', $newColumn->unique);
+    }
     
-    public function testStringToMysqlFieldStatement_006() 
+    public function testStringToFieldStatement_006() 
     {
         $string ="
                 
@@ -267,7 +275,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }    
     
-    public function testStringToMysqlFieldStatement_007() 
+    public function testStringToFieldStatement_007() 
     {
         $string ="
                 
@@ -285,7 +293,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }    
     
-    public function testStringToMysqlFieldStatement_008() 
+    public function testStringToFieldStatement_008() 
     {
         $string ="
                 <field>
@@ -303,7 +311,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }    
     
-    public function testStringToMysqlFieldStatement_009() 
+    public function testStringToFieldStatement_009() 
     {
         $string ="
                 <field>
@@ -320,7 +328,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }    
     
-    public function testStringToMysqlFieldStatement_010() 
+    public function testStringToFieldStatement_010() 
     {
         $string ="
                 <field>
@@ -338,7 +346,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }    
     
-    public function testStringToMysqlFieldStatement_011() 
+    public function testStringToFieldStatement_011() 
     {
         $string ="
                 <field>
@@ -354,7 +362,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }        
     
-    public function testStringToMysqlFieldStatement_012() 
+    public function testStringToFieldStatement_012() 
     {
         $string ="
                 <field>
@@ -370,7 +378,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }    
     
-    public function testStringToMysqlFieldStatement_013() 
+    public function testStringToFieldStatement_013() 
     {
         $string ="
                 <field>
@@ -387,7 +395,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }
     
-    public function testStringToMysqlFieldStatement_014() 
+    public function testStringToFieldStatement_014() 
     {
         $string ="
                <field>
@@ -403,7 +411,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }    
     
-    public function testStringToMysqlFieldStatement_015() 
+    public function testStringToFieldStatement_015() 
     {
         $string ="
                 <field>
@@ -421,7 +429,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }
     
-    public function testStringToMysqlFieldStatement_016() 
+    public function testStringToFieldStatement_016() 
     {
         $string ="
                 <field>
@@ -438,7 +446,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }        
 
-    public function testStringToMysqlFieldStatement_018() 
+    public function testStringToFieldStatement_018() 
     {
         $string ="
                <field>
@@ -456,7 +464,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }    
     
-    public function testStringToMysqlFieldStatement_019() 
+    public function testStringToFieldStatement_019() 
     {
         $string ="
                <field>
@@ -478,7 +486,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     #    I     N     D     I    C     I     E    S 
     ##############################
     
-    public function testStringToMysqlIndexStatement_001() 
+    public function testStringToIndexStatement_001() 
     {
         $string ="
                 <index>
@@ -498,7 +506,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addIndex($this->_table->name, $index);
     }        
     
-    public function testStringToMysqlIndexStatement_002() 
+    public function testStringToIndexStatement_002() 
     {
         $string ="
                 <index>
@@ -520,7 +528,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addIndex($this->_table->name, $index);
     }        
 
-    public function testStringToMysqlIndexStatement_003() 
+    public function testStringToIndexStatement_003() 
     {
         $string ="
                 <index>
@@ -563,7 +571,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addIndex($this->_table->name, $index);
     }        
     
-    public function testStringToMysqlIndexStatement_004() 
+    public function testStringToIndexStatement_004() 
     {
         $string ="
                 <index>
@@ -591,7 +599,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     
     #####################################
     
-    public function testStringToMysqlForeignKeyStatement_001() 
+    public function testStringToForeignKeyStatement_001() 
     {
         $string ="
                 <index>
