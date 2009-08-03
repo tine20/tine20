@@ -106,6 +106,19 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_installAllApplications();
     }
     
+    public function testInstallGoupNameOptions()
+    {
+        $this->_uninstallAllApplications();
+        $this->_installAllApplications(array('admin_group_name' => 'phpunit-admins', 'user_group_name' => 'phpunit-users'));
+        $adminUser = Tinebase_Core::get('currentAccount');
+        $this->assertEquals('phpunit-admins', Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value);
+        $this->assertEquals('phpunit-users', Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value);
+        
+        //cleanup
+        $this->_uninstallAllApplications();
+        $this->_installAllApplications();
+    }
+    
     /**
      * test uninstall application
      *

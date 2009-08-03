@@ -25,7 +25,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
-        $this->_setDefaultGroups('Users', 'Administrators');
+        $this->_setDefaultGroups($_options);
         
 		switch(Tinebase_Core::getAuthType()) {
 			case Tinebase_Auth_Factory::SQL:
@@ -71,15 +71,18 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     /**
      * set default group names in config
      *
-     * @param string $_userGroup
-     * @param string $_adminGroup
+     * @param array | optional $_options [may contain default 'user_group_name' and 'admin_group_name'
      */
-    protected function _setDefaultGroups($_userGroup, $_adminGroup)
+    protected function _setDefaultGroups($_options = null)
     {
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial config settings ...');
+
+        $userGroup  = isset($_options['user_group_name']) ? $_options['user_group_name'] : 'Users';
+        $adminGroup = isset($_options['admin_group_name']) ? $_options['admin_group_name'] : 'Administrators'; 
+
         $configSettings = array(
-            Tinebase_Config::DEFAULT_USER_GROUP     => $_userGroup,              
-            Tinebase_Config::DEFAULT_ADMIN_GROUP    => $_adminGroup,
+            Tinebase_Config::DEFAULT_USER_GROUP     => $userGroup,              
+            Tinebase_Config::DEFAULT_ADMIN_GROUP    => $adminGroup,
         );
         
         $configBackend = Tinebase_Config::getInstance();
