@@ -854,15 +854,17 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     lead: Ext.util.JSON.encode(lead.data)
                 },
                 success: function(response) {
-                    this.onRecordLoad(response);
+                    // 2009-08-03 commented out cause it makes problems with ext style windows
+                    // this should be gone when switching to EditDialog
+                    //this.onRecordLoad(response);
                     
                     this.fireEvent('update', this.lead);
+                    Ext.MessageBox.hide();
                     
                     if (_closeWindow === true) {
+                        this.purgeListeners();
                         this.window.close();
                     }
-
-                    Ext.MessageBox.hide();
                 },
                 failure: function ( result, request) { 
                     Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save lead.')); 
