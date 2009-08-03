@@ -151,7 +151,7 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
         Tine.Tinebase.AppPile.superclass.onRender.call(this, ct, position);
 
         this.apps.sort("ASC", function(app1, app2) {
-            return app1.order < app2.order ? 1 : -1;
+            return parseInt(app1.order, 10) < parseInt(app2.order, 10) ? 1 : -1;
         });
         
         this.apps.each(function(app) {
