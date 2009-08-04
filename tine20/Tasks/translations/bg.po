@@ -13,6 +13,14 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr ""
+
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
@@ -84,7 +92,7 @@ msgstr "Процент"
 msgid "Creation Time"
 msgstr "Създаден на"
 
-#: js/GridPanel.js:218
+#: js/GridPanel.js:221
 msgid "Show closed"
 msgstr "Покажи приключени задачи"
 
@@ -92,23 +100,23 @@ msgstr "Покажи приключени задачи"
 msgid "IN-PROCESS"
 msgstr "В ПРОЦЕС"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Задачa"
 msgstr[1] "Задачи"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 msgid "Tasks"
 msgstr "Задачи"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "списък със задачи"
 msgstr[1] "списъка със задачи"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do lists"
 msgstr "списъци със задачи"
 

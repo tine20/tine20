@@ -13,8 +13,9 @@ msgstr ""
 "X-Poedit-Country: JAPAN\n"
 
 #: Acl/Rights.php:98
-msgid "manage shared folders"
-msgstr ""
+#, fuzzy
+msgid "manage shared addressbooks"
+msgstr "アドレス帳"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
@@ -132,77 +133,77 @@ msgstr "アドレス帳"
 msgid "Internal Contacts"
 msgstr "内部コンタクト"
 
-#: js/Addressbook.js:139 js/Addressbook.js:141
+#: js/Addressbook.js:142 js/Addressbook.js:144
 msgid "contacts"
 msgstr "コンタクト"
 
-#: js/Addressbook.js:140 js/Addressbook.js:468
+#: js/Addressbook.js:143 js/Addressbook.js:483
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "アドレス帳"
 
-#: js/Addressbook.js:146 js/ContactGrid.js:155
+#: js/Addressbook.js:149 js/ContactGrid.js:155
 msgid "export as pdf"
 msgstr "PDFにエキスポートする"
 
-#: js/Addressbook.js:171
+#: js/Addressbook.js:174
 msgid "Loading Contact..."
 msgstr "コンタクトのロード中..."
 
-#: js/Addressbook.js:171
+#: js/Addressbook.js:174
 msgid "Please Wait"
 msgstr "お待ちください"
 
-#: js/Addressbook.js:185
+#: js/Addressbook.js:194
 msgid "Add new contact"
 msgstr "新しいコンタクトの追加"
 
-#: js/Addressbook.js:187
+#: js/Addressbook.js:196
 msgid "Edit Contact \"{0}\""
 msgstr "コンタクトの編集 \"{0}\""
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:226
 msgid "Please wait a moment..."
 msgstr "しばらくお待ちください"
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:226
 msgid "Saving Contact"
 msgstr "コンタクトの保存"
 
-#: js/Addressbook.js:237 js/Addressbook.js:262
+#: js/Addressbook.js:251 js/Addressbook.js:276
 msgid "Failed"
 msgstr "失敗"
 
-#: js/Addressbook.js:237
+#: js/Addressbook.js:251
 msgid "Could not save contact."
 msgstr "コンタクトを保存できませんでした"
 
-#: js/Addressbook.js:243
+#: js/Addressbook.js:257
 msgid "Errors"
 msgstr "エラー"
 
-#: js/Addressbook.js:243
+#: js/Addressbook.js:257
 msgid "Please fix the errors noted."
 msgstr "エラーを訂正してください"
 
-#: js/Addressbook.js:256
+#: js/Addressbook.js:270
 msgid "Deleting contact..."
 msgstr "コンタクトを削除しています..."
 
-#: js/Addressbook.js:262
+#: js/Addressbook.js:276
 msgid "Some error occured while trying to delete the contact."
 msgstr "削除中に問題が発生しました"
 
-#: js/Addressbook.js:464
+#: js/Addressbook.js:479
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "コンタクト"
 
-#: js/Addressbook.js:464
+#: js/Addressbook.js:479
 msgid "Contacts"
 msgstr "コンタクト"
 
-#: js/Addressbook.js:468
+#: js/Addressbook.js:483
 msgid "addressbooks"
 msgstr "アドレス帳"
 
@@ -428,19 +429,19 @@ msgstr "コンタクト情報"
 msgid "Street 2"
 msgstr "通り（２）"
 
-#: js/EditDialog.js:417
+#: js/EditDialog.js:418
 msgid "Custom Fields"
 msgstr "カスタムフィールド"
 
-#: js/EditDialog.js:457
+#: js/EditDialog.js:458
 msgid "Description"
 msgstr "説明"
 
-#: js/EditDialog.js:471
+#: js/EditDialog.js:472
 msgid "Enter description"
 msgstr "説明を入力してください"
 
-#: js/EditDialog.js:508
+#: js/EditDialog.js:514
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"

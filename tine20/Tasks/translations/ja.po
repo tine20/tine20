@@ -12,6 +12,14 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr ""
+
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
@@ -82,7 +90,7 @@ msgstr "パーセント"
 msgid "Creation Time"
 msgstr "作成時間"
 
-#: js/GridPanel.js:218
+#: js/GridPanel.js:221
 msgid "Show closed"
 msgstr "クローズされたものの表示"
 
@@ -90,21 +98,21 @@ msgstr "クローズされたものの表示"
 msgid "IN-PROCESS"
 msgstr "進行中"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "タスク"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 msgid "Tasks"
 msgstr "タスク"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "ToDoリスト"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do lists"
 msgstr "ToDoリスト"
 

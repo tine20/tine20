@@ -1,3 +1,11 @@
+#: Acl/Rights.php:89
+msgid "manage shared calendars"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Create new shared calendars"
+msgstr ""
+
 #: Controller/Event.php:762
 msgid "Notification for Event "
 msgstr ""
@@ -39,19 +47,19 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:166 js/AttendeeGridPanel.js:416
+#: js/AttendeeGridPanel.js:166 js/AttendeeGridPanel.js:420
 msgid "No response"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:167 js/AttendeeGridPanel.js:419
+#: js/AttendeeGridPanel.js:167 js/AttendeeGridPanel.js:423
 msgid "Accepted"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:168 js/AttendeeGridPanel.js:422
+#: js/AttendeeGridPanel.js:168 js/AttendeeGridPanel.js:426
 msgid "Declined"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:169 js/AttendeeGridPanel.js:425
+#: js/AttendeeGridPanel.js:169 js/AttendeeGridPanel.js:429
 msgid "Tentative"
 msgstr ""
 
@@ -59,19 +67,19 @@ msgstr ""
 msgid "Remove Attender"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:358 js/AttendeeGridPanel.js:380
+#: js/AttendeeGridPanel.js:362 js/AttendeeGridPanel.js:384
 msgid "No Information"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:368
+#: js/AttendeeGridPanel.js:372
 msgid "Click here to invite another attender..."
 msgstr ""
 
-#: js/AttendeeGridPanel.js:392
+#: js/AttendeeGridPanel.js:396
 msgid "Required"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:395
+#: js/AttendeeGridPanel.js:399
 msgid "Optional"
 msgstr ""
 
@@ -94,7 +102,7 @@ msgid "Confirm Update of Series"
 msgstr ""
 
 #: js/CalendarPanel.js:127
-msgid "Do you realy want to update all events of this recuring event series?"
+msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 
 #: js/CalendarPanel.js:144
@@ -189,51 +197,51 @@ msgstr ""
 msgid "Month"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:255
+#: js/MainScreenCenterPanel.js:257
 msgid "Please Change Selection"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:256
+#: js/MainScreenCenterPanel.js:258
 msgid ""
-"Your selection contains recuring events. Recuring events must be deleted "
+"Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:270
+#: js/MainScreenCenterPanel.js:272
 msgid "Confirm Deletion of Series"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:271
-msgid "Do you realy want to delete all events of this recuring event series?"
+#: js/MainScreenCenterPanel.js:273
+msgid "Do you really want to delete all events of this recurring event series?"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:287
+#: js/MainScreenCenterPanel.js:289
 msgid "Delete Event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:290 js/MainScreenCenterPanel.js:292
+#: js/MainScreenCenterPanel.js:292 js/MainScreenCenterPanel.js:294
 msgid ""
 "Do you want to delete the whole series, this and all future events of this "
 "series, or just this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:294
+#: js/MainScreenCenterPanel.js:296
 msgid "Delete nothing"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:301
+#: js/MainScreenCenterPanel.js:303
 msgid "Delete whole series"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:322
+#: js/MainScreenCenterPanel.js:324
 msgid "Delete this and all future events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:343
+#: js/MainScreenCenterPanel.js:345
 msgid "Delete this event only"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:372
+#: js/MainScreenCenterPanel.js:374
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] ""
@@ -268,7 +276,7 @@ msgid "Recurrances"
 msgstr ""
 
 #: js/RrulePanel.js:37
-msgid "No recuring rule defined"
+msgid "No recurring rule defined"
 msgstr ""
 
 #: js/RrulePanel.js:74
@@ -354,6 +362,11 @@ msgstr ""
 
 #: js/RrulePanel.js:675 js/RrulePanel.js:687
 msgid "of"
+msgstr ""
+
+#: Model/Attender.php:242
+msgid ""
+"This contact has been automatically added by the system as an event attender"
 msgstr ""
 
 #: Preference.php:66

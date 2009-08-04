@@ -18,8 +18,9 @@ msgstr ""
 "X-Poedit-SearchPath-0: Addressbook\n"
 
 #: Acl/Rights.php:98
-msgid "manage shared folders"
-msgstr "spravovat sdílené složky"
+#, fuzzy
+msgid "manage shared addressbooks"
+msgstr "Vytvořit nové sdílené složky adresáře"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
@@ -137,81 +138,81 @@ msgstr "Adresář"
 msgid "Internal Contacts"
 msgstr "Interní kontakty"
 
-#: js/Addressbook.js:139 js/Addressbook.js:141
+#: js/Addressbook.js:142 js/Addressbook.js:144
 msgid "contacts"
 msgstr "kontakty"
 
-#: js/Addressbook.js:140 js/Addressbook.js:468
+#: js/Addressbook.js:143 js/Addressbook.js:483
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "adresář"
 msgstr[1] "adresáře"
 msgstr[2] "adresářů"
 
-#: js/Addressbook.js:146 js/ContactGrid.js:155
+#: js/Addressbook.js:149 js/ContactGrid.js:155
 msgid "export as pdf"
 msgstr "exportovat do pdf"
 
-#: js/Addressbook.js:171
+#: js/Addressbook.js:174
 msgid "Loading Contact..."
 msgstr "Načítám kontakt..."
 
-#: js/Addressbook.js:171
+#: js/Addressbook.js:174
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
-#: js/Addressbook.js:185
+#: js/Addressbook.js:194
 msgid "Add new contact"
 msgstr "Přidat nový kontakt"
 
-#: js/Addressbook.js:187
+#: js/Addressbook.js:196
 msgid "Edit Contact \"{0}\""
 msgstr "Editovat kontakt \"{0}\""
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:226
 msgid "Please wait a moment..."
 msgstr "Počkejte prosím okamžik..."
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:226
 msgid "Saving Contact"
 msgstr "Ukládám kontakt"
 
-#: js/Addressbook.js:237 js/Addressbook.js:262
+#: js/Addressbook.js:251 js/Addressbook.js:276
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/Addressbook.js:237
+#: js/Addressbook.js:251
 msgid "Could not save contact."
 msgstr "Nepodařilo se uložit kontakt."
 
-#: js/Addressbook.js:243
+#: js/Addressbook.js:257
 msgid "Errors"
 msgstr "Chyby"
 
-#: js/Addressbook.js:243
+#: js/Addressbook.js:257
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím vyznačené chyby."
 
-#: js/Addressbook.js:256
+#: js/Addressbook.js:270
 msgid "Deleting contact..."
 msgstr "Mažu kontakt..."
 
-#: js/Addressbook.js:262
+#: js/Addressbook.js:276
 msgid "Some error occured while trying to delete the contact."
 msgstr "Při mazání kontaktu došlo k chybě."
 
-#: js/Addressbook.js:464
+#: js/Addressbook.js:479
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Kontakt"
 msgstr[1] "Kontakty"
 msgstr[2] "Kontaktů"
 
-#: js/Addressbook.js:464
+#: js/Addressbook.js:479
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: js/Addressbook.js:468
+#: js/Addressbook.js:483
 msgid "addressbooks"
 msgstr "adresáře"
 
@@ -437,19 +438,19 @@ msgstr "Kontaktní informace"
 msgid "Street 2"
 msgstr "Ulice 2"
 
-#: js/EditDialog.js:417
+#: js/EditDialog.js:418
 msgid "Custom Fields"
 msgstr "Volitelné položky"
 
-#: js/EditDialog.js:457
+#: js/EditDialog.js:458
 msgid "Description"
 msgstr "Popis"
 
-#: js/EditDialog.js:471
+#: js/EditDialog.js:472
 msgid "Enter description"
 msgstr "Vložit popis"
 
-#: js/EditDialog.js:508
+#: js/EditDialog.js:514
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
@@ -468,6 +469,9 @@ msgstr "Pan"
 #: Setup/setup.xml:582
 msgid "Ms"
 msgstr "Paní"
+
+#~ msgid "manage shared folders"
+#~ msgstr "spravovat sdílené složky"
 
 #~ msgid "Are you Sure?"
 #~ msgstr "Jste si jistý(á)?"

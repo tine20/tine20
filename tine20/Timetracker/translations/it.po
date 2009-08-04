@@ -21,7 +21,7 @@ msgstr ""
 msgid "Add, edit and delete timeaccounts"
 msgstr ""
 
-#: Export/Ods.php:89 js/Timetracker.js:28
+#: Export/Ods.php:89 js/Timetracker.js:29
 msgid "Timesheets"
 msgstr ""
 
@@ -51,7 +51,7 @@ msgstr ""
 #: Export/Ods.php:181 Export/Ods.php:242 js/TimeaccountEditDialog.js:156
 #: js/TimeaccountGridPanel.js:54 js/TimesheetEditDialog.js:167
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
-#: js/TimesheetGridPanel.js:395
+#: js/TimesheetGridPanel.js:391
 msgid "Description"
 msgstr ""
 
@@ -68,7 +68,7 @@ msgid "Staff Member"
 msgstr ""
 
 #: Export/Ods.php:205 js/TimesheetEditDialog.js:140
-#: js/TimesheetGridPanel.js:284
+#: js/TimesheetGridPanel.js:283
 msgid "Duration"
 msgstr ""
 
@@ -225,19 +225,19 @@ msgid "Permissions"
 msgstr ""
 
 #: js/TimeaccountGridPanel.js:101 js/TimesheetGridPanel.js:58
-#: js/TimesheetGridPanel.js:271
+#: js/TimesheetGridPanel.js:270
 msgid "Cleared in"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:122 js/TimesheetGridPanel.js:463
+#: js/TimeaccountGridPanel.js:122 js/TimesheetGridPanel.js:459
 msgid "Export"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:131 js/TimesheetGridPanel.js:472
+#: js/TimeaccountGridPanel.js:131 js/TimesheetGridPanel.js:468
 msgid "Export as ODS"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:138 js/TimesheetGridPanel.js:478
+#: js/TimeaccountGridPanel.js:138 js/TimesheetGridPanel.js:474
 msgid "Export as CSV"
 msgstr ""
 
@@ -274,7 +274,7 @@ msgid "Enter description..."
 msgstr ""
 
 #: js/TimesheetEditDialog.js:177 js/TimesheetGridPanel.js:185
-#: js/TimesheetGridPanel.js:277
+#: js/TimesheetGridPanel.js:276
 msgid "Account"
 msgstr ""
 
@@ -314,43 +314,43 @@ msgstr ""
 msgid "Time Account closed"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:305
+#: js/TimesheetGridPanel.js:304
 msgid "timeframe"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:329
+#: js/TimesheetGridPanel.js:328
 msgid "summary"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:332
+#: js/TimesheetGridPanel.js:331
 msgid "Total Timesheets"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:333
+#: js/TimesheetGridPanel.js:332
 msgid "Billable Timesheets"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:334
+#: js/TimesheetGridPanel.js:333
 msgid "Total Time"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:335
+#: js/TimesheetGridPanel.js:334
 msgid "Time of Billable Timesheets"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:409
+#: js/TimesheetGridPanel.js:405
 msgid "Detail"
 msgstr ""
 
-#: js/Timetracker.js:33
+#: js/Timetracker.js:34
 msgid "All Timesheets"
 msgstr ""
 
-#: js/Timetracker.js:38
+#: js/Timetracker.js:39
 msgid "Timeaccounts"
 msgstr ""
 
-#: js/Timetracker.js:43
+#: js/Timetracker.js:44
 msgid "All Timeaccounts"
 msgstr ""
 

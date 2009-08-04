@@ -15,8 +15,9 @@ msgstr ""
 "X-Poedit-Bookmarks: 23,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: Acl/Rights.php:98
-msgid "manage shared folders"
-msgstr ""
+#, fuzzy
+msgid "manage shared addressbooks"
+msgstr "Списъци на адреси"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
@@ -134,79 +135,79 @@ msgstr "Адреси"
 msgid "Internal Contacts"
 msgstr "Международни контакти"
 
-#: js/Addressbook.js:139 js/Addressbook.js:141
+#: js/Addressbook.js:142 js/Addressbook.js:144
 msgid "contacts"
 msgstr "Контакти"
 
-#: js/Addressbook.js:140 js/Addressbook.js:468
+#: js/Addressbook.js:143 js/Addressbook.js:483
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "Списък адреси"
 msgstr[1] "Списъка на адреси"
 
-#: js/Addressbook.js:146 js/ContactGrid.js:155
+#: js/Addressbook.js:149 js/ContactGrid.js:155
 msgid "export as pdf"
 msgstr "Експортирай като pdf"
 
-#: js/Addressbook.js:171
+#: js/Addressbook.js:174
 msgid "Loading Contact..."
 msgstr "Зарежда контакт..."
 
-#: js/Addressbook.js:171
+#: js/Addressbook.js:174
 msgid "Please Wait"
 msgstr "Моля изчакайте"
 
-#: js/Addressbook.js:185
+#: js/Addressbook.js:194
 msgid "Add new contact"
 msgstr "Прибави нов контакт"
 
-#: js/Addressbook.js:187
+#: js/Addressbook.js:196
 msgid "Edit Contact \"{0}\""
 msgstr "Редактирай контакт  \"{0}\""
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:226
 msgid "Please wait a moment..."
 msgstr "Моля изчакайте за момент..."
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:226
 msgid "Saving Contact"
 msgstr "Съхранява контакт"
 
-#: js/Addressbook.js:237 js/Addressbook.js:262
+#: js/Addressbook.js:251 js/Addressbook.js:276
 msgid "Failed"
 msgstr "Несполучливо"
 
-#: js/Addressbook.js:237
+#: js/Addressbook.js:251
 msgid "Could not save contact."
 msgstr "Не може да съхрани контакта."
 
-#: js/Addressbook.js:243
+#: js/Addressbook.js:257
 msgid "Errors"
 msgstr "Грешки"
 
-#: js/Addressbook.js:243
+#: js/Addressbook.js:257
 msgid "Please fix the errors noted."
 msgstr "Моля коригирайте грешките."
 
-#: js/Addressbook.js:256
+#: js/Addressbook.js:270
 msgid "Deleting contact..."
 msgstr "Изтрива контакт..."
 
-#: js/Addressbook.js:262
+#: js/Addressbook.js:276
 msgid "Some error occured while trying to delete the contact."
 msgstr "грешка при опит за изтриване на контакта."
 
-#: js/Addressbook.js:464
+#: js/Addressbook.js:479
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Контакт"
 msgstr[1] "Контакта"
 
-#: js/Addressbook.js:464
+#: js/Addressbook.js:479
 msgid "Contacts"
 msgstr "Контакти"
 
-#: js/Addressbook.js:468
+#: js/Addressbook.js:483
 msgid "addressbooks"
 msgstr "Списъци на адреси"
 
@@ -432,19 +433,19 @@ msgstr "Информаця за контакт"
 msgid "Street 2"
 msgstr "Улица 2"
 
-#: js/EditDialog.js:417
+#: js/EditDialog.js:418
 msgid "Custom Fields"
 msgstr "Допълнителни данни"
 
-#: js/EditDialog.js:457
+#: js/EditDialog.js:458
 msgid "Description"
 msgstr "Описание (допълнителна информаця)"
 
-#: js/EditDialog.js:471
+#: js/EditDialog.js:472
 msgid "Enter description"
 msgstr "Вкарай описание"
 
-#: js/EditDialog.js:508
+#: js/EditDialog.js:514
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-05-31 12:21+0100\n"
+"PO-Revision-Date: 2009-08-02 18:04+0100\n"
 "Last-Translator: \n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -12,147 +12,236 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/ApplicationGridPanel.js:37
+#: js/ApplicationGridPanel.js:40
 msgid "Name"
 msgstr "Název"
 
-#: js/ApplicationGridPanel.js:38
+#: js/ApplicationGridPanel.js:41
 msgid "Enabled"
 msgstr "Povoleno"
 
-#: js/ApplicationGridPanel.js:39
+#: js/ApplicationGridPanel.js:42
 msgid "Order"
 msgstr "Pořadí"
 
-#: js/ApplicationGridPanel.js:40
+#: js/ApplicationGridPanel.js:43
 msgid "Installed Version"
 msgstr "Nainstalovaná verze"
 
-#: js/ApplicationGridPanel.js:41
+#: js/ApplicationGridPanel.js:44
 msgid "Available Version"
 msgstr "Dostupná verze"
 
-#: js/ApplicationGridPanel.js:42
+#: js/ApplicationGridPanel.js:45
 msgid "Status"
 msgstr "Stav"
 
-#: js/ApplicationGridPanel.js:43
+#: js/ApplicationGridPanel.js:46
 msgid "Depends on"
 msgstr "Závisí na"
 
-#: js/ApplicationGridPanel.js:49 js/EnvCheckGridPanel.js:169
+#: js/ApplicationGridPanel.js:52 js/EnvCheckGridPanel.js:169
 msgid "Install application"
 msgstr "Instalovat aplikaci"
 
-#: js/ApplicationGridPanel.js:58
+#: js/ApplicationGridPanel.js:61
 msgid "Uninstall application"
 msgstr "Odinstalovat aplikaci"
 
-#: js/ApplicationGridPanel.js:67
+#: js/ApplicationGridPanel.js:70
 msgid "Update application"
 msgstr "Aktualizovat aplikaci"
 
-#: js/ApplicationGridPanel.js:135
+#: js/ApplicationGridPanel.js:138
 msgid "uninstall"
-msgstr ""
+msgstr "odinstalovat"
 
-#: js/ApplicationGridPanel.js:135
+#: js/ApplicationGridPanel.js:138
 msgid "Do you really want to uninstall the application(s)?"
+msgstr "Opravdu chcete aplikaci/e odinstalovat?"
+
+#: js/ApplicationGridPanel.js:193
+msgid "Initial admin username and password"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:189
+#: js/ApplicationGridPanel.js:196
+msgid "Credentials"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:216
 msgid "This may take a while"
 msgstr "Tato operace může chvíli trvat"
 
-#: js/ApplicationGridPanel.js:209
+#: js/ApplicationGridPanel.js:235
 msgid "Shit"
 msgstr "Zatraceně"
 
-#: js/ApplicationGridPanel.js:209
+#: js/ApplicationGridPanel.js:235
 msgid "Where are the backup tapes"
 msgstr "Kde jsou zálohovací pásky"
 
-#: js/ConfigManagerGridPanel.js:71
+#: js/ApplicationGridPanel.js:243
+#, fuzzy
+msgid "Dependency Violation"
+msgstr "Závisí na"
+
+#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
 msgstr "Neplatná konfigurace"
 
-#: js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr "Než bude konfigurace uložena, musíte opravit červeně označená pole"
 
-#: js/ConfigManagerGridPanel.js:118
+#: js/AuthenticationGridPanel.js:121 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
 msgstr "Přesouvám konfiguraci..."
 
-#: js/ConfigManagerGridPanel.js:130
-msgid "Informations"
-msgstr "Informace"
-
-#: js/ConfigManagerGridPanel.js:134
-msgid "Setup Authentication"
+#: js/AuthenticationGridPanel.js:135
+#, fuzzy
+msgid "Authentication provider"
 msgstr "Přihlášení do instalačního programu"
 
-#: js/ConfigManagerGridPanel.js:137
-msgid "Username"
-msgstr "Uživatelské jméno"
+#: js/AuthenticationGridPanel.js:147 js/AuthenticationGridPanel.js:241
+msgid "Backend"
+msgstr ""
 
-#: js/ConfigManagerGridPanel.js:141 js/ConfigManagerGridPanel.js:167
+#: js/AuthenticationGridPanel.js:174 js/AuthenticationGridPanel.js:198
+#: js/AuthenticationGridPanel.js:268 js/AuthenticationGridPanel.js:292
+msgid "Login name"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:177 js/AuthenticationGridPanel.js:201
+#: js/AuthenticationGridPanel.js:271 js/AuthenticationGridPanel.js:295
+#: js/ConfigManagerGridPanel.js:118 js/ConfigManagerGridPanel.js:144
 msgid "Password"
 msgstr "Heslo"
 
-#: js/ConfigManagerGridPanel.js:146 js/ConfigManagerGridPanel.js:159
+#: js/AuthenticationGridPanel.js:180 js/AuthenticationGridPanel.js:274
+#, fuzzy
+msgid "Password confirmation"
+msgstr "Neplatná konfigurace"
+
+#: js/AuthenticationGridPanel.js:193 js/AuthenticationGridPanel.js:287
+#, fuzzy
+msgid "Host"
+msgstr "Název nebo adresa počítače"
+
+#: js/AuthenticationGridPanel.js:214 js/AuthenticationGridPanel.js:308
+msgid "Bind requires DN"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:218
+msgid "Base DN"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:221
+msgid "Account canonical form"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:229
+msgid "Accounts storage"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:312
+#, fuzzy
+msgid "User DN"
+msgstr "Uživatel"
+
+#: js/AuthenticationGridPanel.js:315
+msgid "Groups DN"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:327
+#, fuzzy
+msgid "Password encoding"
+msgstr "Heslo"
+
+#: js/AuthenticationGridPanel.js:340
+msgid "Use Rfc 2307 bis"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:344
+msgid "Min User Id"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:347
+msgid "Max User Id"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:350
+msgid "Min Group Id"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:353
+msgid "Max Group Id"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:446
+msgid "Apply changes"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:107
+msgid "Informations"
+msgstr "Informace"
+
+#: js/ConfigManagerGridPanel.js:111
+msgid "Setup Authentication"
+msgstr "Přihlášení do instalačního programu"
+
+#: js/ConfigManagerGridPanel.js:114
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+#: js/ConfigManagerGridPanel.js:123 js/ConfigManagerGridPanel.js:136
 msgid "Database"
 msgstr "Databáze"
 
-#: js/ConfigManagerGridPanel.js:150
+#: js/ConfigManagerGridPanel.js:127
 msgid "Adapter"
 msgstr "Adaptér"
 
-#: js/ConfigManagerGridPanel.js:155
+#: js/ConfigManagerGridPanel.js:132
 msgid "Hostname"
 msgstr "Název nebo adresa počítače"
 
-#: js/ConfigManagerGridPanel.js:163
+#: js/ConfigManagerGridPanel.js:140
 msgid "User"
 msgstr "Uživatel"
 
-#: js/ConfigManagerGridPanel.js:171
+#: js/ConfigManagerGridPanel.js:148
 msgid "Prefix"
 msgstr "Prefix"
 
-#: js/ConfigManagerGridPanel.js:174
+#: js/ConfigManagerGridPanel.js:151
 msgid "Logging"
 msgstr "Logování"
 
-#: js/ConfigManagerGridPanel.js:180
+#: js/ConfigManagerGridPanel.js:157
 msgid "Filename"
 msgstr "Název souboru"
 
-#: js/ConfigManagerGridPanel.js:192
+#: js/ConfigManagerGridPanel.js:169
 msgid "Priority"
 msgstr "Priorita"
 
-#: js/ConfigManagerGridPanel.js:196
+#: js/ConfigManagerGridPanel.js:173
 msgid "Caching"
 msgstr "Kešování"
 
-#: js/ConfigManagerGridPanel.js:202
+#: js/ConfigManagerGridPanel.js:179
 msgid "Path"
 msgstr "Cesta"
 
-#: js/ConfigManagerGridPanel.js:205
+#: js/ConfigManagerGridPanel.js:182
 msgid "Lifetime (seconds)"
 msgstr "Životnost (v sekundách)"
 
-#: js/ConfigManagerGridPanel.js:298
-msgid "Check config"
-msgstr "Zkontrolovat konfiguraci"
-
-#: js/ConfigManagerGridPanel.js:305
+#: js/ConfigManagerGridPanel.js:275
 msgid "Save config"
 msgstr "Uložit konfiguraci"
 
-#: js/ConfigManagerGridPanel.js:313
+#: js/ConfigManagerGridPanel.js:283
 msgid "Download config file"
 msgstr "Stáhnout konfigurační soubor"
 
@@ -193,12 +282,20 @@ msgid "Config Manager"
 msgstr "Správce konfigurace"
 
 #: js/Setup.js:40
+#, fuzzy
+msgid "Authentication"
+msgstr "Přihlášení do instalačního programu"
+
+#: js/Setup.js:46
 msgid "Application Manager"
 msgstr "Správce aplikací"
 
-#: js/Setup.js:129
+#: js/Setup.js:135
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Aplikace"
 msgstr[1] "Aplikace"
 msgstr[2] "Aplikací"
+
+#~ msgid "Check config"
+#~ msgstr "Zkontrolovat konfiguraci"

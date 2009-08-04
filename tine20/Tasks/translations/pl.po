@@ -15,6 +15,14 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Bookmarks: 0,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr ""
+
 #: Controller.php:97
 #, fuzzy, python-format
 msgid "%s's personal tasks"
@@ -88,7 +96,7 @@ msgstr "Procent"
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:218
+#: js/GridPanel.js:221
 msgid "Show closed"
 msgstr "Pokaż zamknięte"
 
@@ -96,7 +104,7 @@ msgstr "Pokaż zamknięte"
 msgid "IN-PROCESS"
 msgstr "W PRZETWARZANIU"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -104,12 +112,12 @@ msgstr[0] "Zadania"
 msgstr[1] "Zadania"
 msgstr[2] "Zadania"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 #, fuzzy
 msgid "Tasks"
 msgstr "Zadania"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -117,7 +125,7 @@ msgstr[0] "Lista to do"
 msgstr[1] "Lista to do"
 msgstr[2] "Lista to do"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do lists"
 msgstr "Listy to do"
 

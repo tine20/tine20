@@ -14,8 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: Acl/Rights.php:98
-msgid "manage shared folders"
-msgstr ""
+#, fuzzy
+msgid "manage shared addressbooks"
+msgstr "通訊錄"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
@@ -133,77 +134,77 @@ msgstr "通訊錄"
 msgid "Internal Contacts"
 msgstr "分機號碼"
 
-#: js/Addressbook.js:139 js/Addressbook.js:141
+#: js/Addressbook.js:142 js/Addressbook.js:144
 msgid "contacts"
 msgstr "聯絡人"
 
-#: js/Addressbook.js:140 js/Addressbook.js:468
+#: js/Addressbook.js:143 js/Addressbook.js:483
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "通訊錄"
 
-#: js/Addressbook.js:146 js/ContactGrid.js:155
+#: js/Addressbook.js:149 js/ContactGrid.js:155
 msgid "export as pdf"
 msgstr "匯出成pdf"
 
-#: js/Addressbook.js:171
+#: js/Addressbook.js:174
 msgid "Loading Contact..."
 msgstr "載入聯絡人"
 
-#: js/Addressbook.js:171
+#: js/Addressbook.js:174
 msgid "Please Wait"
 msgstr "請稍後..."
 
-#: js/Addressbook.js:185
+#: js/Addressbook.js:194
 msgid "Add new contact"
 msgstr "新增聯絡人"
 
-#: js/Addressbook.js:187
+#: js/Addressbook.js:196
 msgid "Edit Contact \"{0}\""
 msgstr "編輯聯絡人 \"{0}\""
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:226
 msgid "Please wait a moment..."
 msgstr "請稍後..."
 
-#: js/Addressbook.js:212
+#: js/Addressbook.js:226
 msgid "Saving Contact"
 msgstr "儲存聯絡人"
 
-#: js/Addressbook.js:237 js/Addressbook.js:262
+#: js/Addressbook.js:251 js/Addressbook.js:276
 msgid "Failed"
 msgstr ""
 
-#: js/Addressbook.js:237
+#: js/Addressbook.js:251
 msgid "Could not save contact."
 msgstr "資料無法儲存"
 
-#: js/Addressbook.js:243
+#: js/Addressbook.js:257
 msgid "Errors"
 msgstr ""
 
-#: js/Addressbook.js:243
+#: js/Addressbook.js:257
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/Addressbook.js:256
+#: js/Addressbook.js:270
 msgid "Deleting contact..."
 msgstr "刪除聯絡人"
 
-#: js/Addressbook.js:262
+#: js/Addressbook.js:276
 msgid "Some error occured while trying to delete the contact."
 msgstr ""
 
-#: js/Addressbook.js:464
+#: js/Addressbook.js:479
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "聯絡人"
 
-#: js/Addressbook.js:464
+#: js/Addressbook.js:479
 msgid "Contacts"
 msgstr "聯絡人"
 
-#: js/Addressbook.js:468
+#: js/Addressbook.js:483
 msgid "addressbooks"
 msgstr "通訊錄"
 
@@ -429,19 +430,19 @@ msgstr "聯絡資料"
 msgid "Street 2"
 msgstr "街道2"
 
-#: js/EditDialog.js:417
+#: js/EditDialog.js:418
 msgid "Custom Fields"
 msgstr "自定欄位"
 
-#: js/EditDialog.js:457
+#: js/EditDialog.js:458
 msgid "Description"
 msgstr "說明"
 
-#: js/EditDialog.js:471
+#: js/EditDialog.js:472
 msgid "Enter description"
 msgstr "輸入說明"
 
-#: js/EditDialog.js:508
+#: js/EditDialog.js:514
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"

@@ -13,6 +13,14 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr ""
+
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
@@ -84,7 +92,7 @@ msgstr "Prozent"
 msgid "Creation Time"
 msgstr "Angelegt am"
 
-#: js/GridPanel.js:218
+#: js/GridPanel.js:221
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
@@ -92,23 +100,23 @@ msgstr "Geschlossene Aufgaben anzeigen"
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Aufgabe"
 msgstr[1] "Aufgaben"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
 msgstr[1] "Aufgabenlisten"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do lists"
 msgstr "Aufgabenlisten"
 

@@ -108,11 +108,11 @@ msgstr ""
 msgid "Some error occured while trying to update the courses."
 msgstr ""
 
-#: js/Courses.js:27 Setup/setup.xml:4
+#: js/Courses.js:29 Setup/setup.xml:4
 msgid "Courses"
 msgstr ""
 
-#: js/Courses.js:32
+#: js/Courses.js:34
 msgid "All Courses"
 msgstr ""
 

@@ -12,16 +12,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/ExampleApplication.js:27
+#: js/ExampleApplication.js:29
 msgid "ExampleRecords"
 msgstr "Ukázkové záznamy"
 
-#: js/ExampleApplication.js:32
+#: js/ExampleApplication.js:34
 msgid "All ExampleRecords"
 msgstr "Všechny ukázkové záznamy"
 
-#: js/ExampleRecordEditDialog.js:59
-#: js/ExampleRecordGridPanel.js:54
+#: js/ExampleRecordEditDialog.js:59 js/ExampleRecordGridPanel.js:54
 #: js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
@@ -29,13 +28,11 @@ msgstr[0] "Ukázkový záznam"
 msgstr[1] "Ukázkové záznamy"
 msgstr[2] "Ukázkových záznamů"
 
-#: js/ExampleRecordEditDialog.js:75
-#: js/ExampleRecordGridPanel.js:76
+#: js/ExampleRecordEditDialog.js:75 js/ExampleRecordGridPanel.js:76
 msgid "Number"
 msgstr "Počet"
 
-#: js/ExampleRecordEditDialog.js:80
-#: js/ExampleRecordGridPanel.js:82
+#: js/ExampleRecordEditDialog.js:80 js/ExampleRecordGridPanel.js:82
 msgid "Title"
 msgstr "Název"
 
@@ -47,8 +44,7 @@ msgstr "Jednotka"
 msgid "Unit Price"
 msgstr "Jednotková cena"
 
-#: js/ExampleRecordEditDialog.js:98
-#: js/ExampleRecordGridPanel.js:95
+#: js/ExampleRecordEditDialog.js:98 js/ExampleRecordGridPanel.js:95
 msgid "Budget"
 msgstr "Rozpočet"
 
@@ -56,8 +52,7 @@ msgstr "Rozpočet"
 msgid "Timesheets are billable"
 msgstr "Pracovní výkazy lze účtovat"
 
-#: js/ExampleRecordEditDialog.js:106
-#: js/ExampleRecordGridPanel.js:88
+#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:88
 msgid "Status"
 msgstr "Stav"
 
@@ -100,7 +95,6 @@ msgstr[0] "výpis záznamů"
 msgstr[1] "výpisy záznamů"
 msgstr[2] "výpisů záznamů"
 
-#: Setup/setup.xml:4
+#: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "Ukázková aplikace"
-

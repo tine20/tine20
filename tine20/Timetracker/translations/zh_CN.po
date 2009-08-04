@@ -21,7 +21,7 @@ msgstr "管理时间帐户"
 msgid "Add, edit and delete timeaccounts"
 msgstr "添加、编辑和删除时间帐户"
 
-#: Export/Ods.php:89 js/Timetracker.js:28
+#: Export/Ods.php:89 js/Timetracker.js:29
 msgid "Timesheets"
 msgstr "时间表"
 
@@ -51,7 +51,7 @@ msgstr "日期"
 #: Export/Ods.php:181 Export/Ods.php:242 js/TimeaccountEditDialog.js:156
 #: js/TimeaccountGridPanel.js:54 js/TimesheetEditDialog.js:167
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
-#: js/TimesheetGridPanel.js:395
+#: js/TimesheetGridPanel.js:391
 msgid "Description"
 msgstr "描述"
 
@@ -68,7 +68,7 @@ msgid "Staff Member"
 msgstr "员工成员"
 
 #: Export/Ods.php:205 js/TimesheetEditDialog.js:140
-#: js/TimesheetGridPanel.js:284
+#: js/TimesheetGridPanel.js:283
 msgid "Duration"
 msgstr "期间"
 
@@ -223,19 +223,19 @@ msgid "Permissions"
 msgstr "许可"
 
 #: js/TimeaccountGridPanel.js:101 js/TimesheetGridPanel.js:58
-#: js/TimesheetGridPanel.js:271
+#: js/TimesheetGridPanel.js:270
 msgid "Cleared in"
 msgstr "已清除于"
 
-#: js/TimeaccountGridPanel.js:122 js/TimesheetGridPanel.js:463
+#: js/TimeaccountGridPanel.js:122 js/TimesheetGridPanel.js:459
 msgid "Export"
 msgstr "导出"
 
-#: js/TimeaccountGridPanel.js:131 js/TimesheetGridPanel.js:472
+#: js/TimeaccountGridPanel.js:131 js/TimesheetGridPanel.js:468
 msgid "Export as ODS"
 msgstr "导出 ODS"
 
-#: js/TimeaccountGridPanel.js:138 js/TimesheetGridPanel.js:478
+#: js/TimeaccountGridPanel.js:138 js/TimesheetGridPanel.js:474
 msgid "Export as CSV"
 msgstr "导出 CSV"
 
@@ -272,7 +272,7 @@ msgid "Enter description..."
 msgstr "输入描述 ..."
 
 #: js/TimesheetEditDialog.js:177 js/TimesheetGridPanel.js:185
-#: js/TimesheetGridPanel.js:277
+#: js/TimesheetGridPanel.js:276
 msgid "Account"
 msgstr "帐户"
 
@@ -312,43 +312,43 @@ msgstr "开始时间"
 msgid "Time Account closed"
 msgstr "时间帐户关闭"
 
-#: js/TimesheetGridPanel.js:305
+#: js/TimesheetGridPanel.js:304
 msgid "timeframe"
 msgstr "时段"
 
-#: js/TimesheetGridPanel.js:329
+#: js/TimesheetGridPanel.js:328
 msgid "summary"
 msgstr "摘要"
 
-#: js/TimesheetGridPanel.js:332
+#: js/TimesheetGridPanel.js:331
 msgid "Total Timesheets"
 msgstr "全部的时间表"
 
-#: js/TimesheetGridPanel.js:333
+#: js/TimesheetGridPanel.js:332
 msgid "Billable Timesheets"
 msgstr "记帐的时间表"
 
-#: js/TimesheetGridPanel.js:334
+#: js/TimesheetGridPanel.js:333
 msgid "Total Time"
 msgstr "全部时间"
 
-#: js/TimesheetGridPanel.js:335
+#: js/TimesheetGridPanel.js:334
 msgid "Time of Billable Timesheets"
 msgstr "记帐时间表的时间"
 
-#: js/TimesheetGridPanel.js:409
+#: js/TimesheetGridPanel.js:405
 msgid "Detail"
 msgstr ""
 
-#: js/Timetracker.js:33
+#: js/Timetracker.js:34
 msgid "All Timesheets"
 msgstr "所有的时间表"
 
-#: js/Timetracker.js:38
+#: js/Timetracker.js:39
 msgid "Timeaccounts"
 msgstr "时间帐户"
 
-#: js/Timetracker.js:43
+#: js/Timetracker.js:44
 msgid "All Timeaccounts"
 msgstr "所有时间帐户"
 

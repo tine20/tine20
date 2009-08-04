@@ -1,3 +1,11 @@
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr ""
+
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
@@ -69,7 +77,7 @@ msgstr ""
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:218
+#: js/GridPanel.js:221
 msgid "Show closed"
 msgstr ""
 
@@ -77,23 +85,23 @@ msgstr ""
 msgid "IN-PROCESS"
 msgstr ""
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 msgid "Tasks"
 msgstr ""
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do lists"
 msgstr ""
 

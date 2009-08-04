@@ -17,6 +17,14 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: Tasks\n"
 
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr ""
+
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
@@ -90,7 +98,7 @@ msgstr "Процент"
 msgid "Creation Time"
 msgstr "Время Создания"
 
-#: js/GridPanel.js:218
+#: js/GridPanel.js:221
 msgid "Show closed"
 msgstr "Показ закрылся"
 
@@ -98,7 +106,7 @@ msgstr "Показ закрылся"
 msgid "IN-PROCESS"
 msgstr "НЕЗАВЕРШЕННЫЙ"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 #, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
@@ -106,12 +114,12 @@ msgstr[0] "Задания"
 msgstr[1] "Задания"
 msgstr[2] "Задания"
 
-#: js/Tasks.js:75
+#: js/Tasks.js:82
 #, fuzzy
 msgid "Tasks"
 msgstr "Задания"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 #, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
@@ -119,7 +127,7 @@ msgstr[0] "Сделать список"
 msgstr[1] "Сделать список"
 msgstr[2] "Сделать список"
 
-#: js/Tasks.js:79
+#: js/Tasks.js:86
 msgid "to do lists"
 msgstr "Делать списки"
 
