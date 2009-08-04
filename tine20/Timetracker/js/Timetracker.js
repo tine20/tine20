@@ -81,7 +81,7 @@ Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker
             var scope = this;
             this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
                 getValue: function() {
-                    var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
+                    //var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
                     return [
                         //{field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
                         //{field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },

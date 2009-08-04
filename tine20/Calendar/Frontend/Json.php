@@ -204,11 +204,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
          
          $fakeId = microtime();
          foreach ($candidates as $candidate) {
-             $exceptions = $_records->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
-             $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $period->getFrom(), $period->getUntil());
-             foreach ($recurSet as $event) {
-                 $_records->addRecord($event);
-                 $event->setId('fakeid' . $candidate->uid . $fakeId++);
+             try {
+                 $exceptions = $_records->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
+                 $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $period->getFrom(), $period->getUntil());
+                 foreach ($recurSet as $event) {
+                     $_records->addRecord($event);
+                     $event->setId('fakeid' . $candidate->uid . $fakeId++);
+                 }
+             } catch (Exception $e) {
+             	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
+             	continue;
              }
          }
           

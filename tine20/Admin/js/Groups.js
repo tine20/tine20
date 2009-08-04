@@ -73,7 +73,7 @@ Tine.Admin.Groups.Main = {
                         }
                     });
                 }
-            });
+            }, this);
         }    
     },
     

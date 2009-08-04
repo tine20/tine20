@@ -70,7 +70,7 @@ Tine.Admin.Roles.Main = {
                         }
                     });
                 }
-            });
+            }, this);
         }    
     },
     
