@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-26 11:38+0100\n"
-"Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
+"PO-Revision-Date: 2009-07-22 00:50+0300\n"
+"Last-Translator: Nikolay Parukhin <nik@sevpinro.ru>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,82 +18,77 @@ msgid "Phone"
 msgstr "Телефон"
 
 #: js/MyPhoneEditDialog.js:287
-#, fuzzy
 msgid "Name"
-msgstr "Номер"
+msgstr "Имя"
 
 #: js/MyPhoneEditDialog.js:291
-#, fuzzy
 msgid "Phone Model"
-msgstr "Телефон"
+msgstr "Модель телефона"
 
 #: js/MyPhoneEditDialog.js:306
 msgid "MAC Address"
-msgstr ""
+msgstr "MAC адрес"
 
 #: js/MyPhoneEditDialog.js:340
 msgid "infos"
-msgstr ""
+msgstr "данные"
 
 #: js/MyPhoneEditDialog.js:355
 msgid "Current IP Address"
-msgstr ""
+msgstr "Текущий IP адрес"
 
 #: js/MyPhoneEditDialog.js:362
 msgid "Firmware last checked at"
-msgstr ""
+msgstr "Прошивка проверена"
 
 #: js/MyPhoneEditDialog.js:370
 msgid "Current Software Version"
-msgstr ""
+msgstr "Текущая версия ПО"
 
 #: js/MyPhoneEditDialog.js:377
 msgid "Settings Loaded at"
-msgstr ""
+msgstr "Настройки загружены"
 
 #: js/MyPhoneEditDialog.js:387 js/MyPhoneEditDialog.js:843
-#, fuzzy
 msgid "redirection"
-msgstr "Описание"
+msgstr "переадресация"
 
 #: js/MyPhoneEditDialog.js:402 js/MyPhoneEditDialog.js:860
 msgid "redirect_event"
 msgstr ""
 
 #: js/MyPhoneEditDialog.js:421 js/MyPhoneEditDialog.js:885
-#, fuzzy
 msgid "all"
-msgstr "ID звонка"
+msgstr "все"
 
 #: js/MyPhoneEditDialog.js:422 js/MyPhoneEditDialog.js:886
 msgid "busy"
-msgstr ""
+msgstr "занято"
 
 #: js/MyPhoneEditDialog.js:423 js/MyPhoneEditDialog.js:557
 #: js/MyPhoneEditDialog.js:887 js/MyPhoneEditDialog.js:1191
-#, fuzzy
 msgid "none"
-msgstr "Телефон"
+msgstr "нет"
 
 #: js/MyPhoneEditDialog.js:424 js/MyPhoneEditDialog.js:888
 msgid "time"
-msgstr ""
+msgstr "время"
 
 #: js/MyPhoneEditDialog.js:428 js/MyPhoneEditDialog.js:899
 msgid "redirect_number"
-msgstr ""
+msgstr "номер_переадресации"
 
 #: js/MyPhoneEditDialog.js:432 js/MyPhoneEditDialog.js:911
 msgid "redirect_time"
-msgstr ""
+msgstr "время_переадресации"
 
 #: js/MyPhoneEditDialog.js:450 js/MyPhoneEditDialog.js:935
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #: js/MyPhoneEditDialog.js:468 js/MyPhoneEditDialog.js:967
 msgid "web_language"
-msgstr ""
+msgstr "язык_веб"
 
 #: js/MyPhoneEditDialog.js:472 js/MyPhoneEditDialog.js:490
 #: js/MyPhoneEditDialog.js:514 js/MyPhoneEditDialog.js:526
@@ -108,41 +103,39 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1246 js/MyPhoneEditDialog.js:1279
 #: js/MyPhoneEditDialog.js:1307 js/MyPhoneEditDialog.js:1335
 msgid "- factory default -"
-msgstr ""
+msgstr "- заводские установки -"
 
 #: js/MyPhoneEditDialog.js:486 js/MyPhoneEditDialog.js:1004
 msgid "language"
-msgstr ""
+msgstr "язык"
 
 #: js/MyPhoneEditDialog.js:510 js/MyPhoneEditDialog.js:1047
 msgid "display_method"
-msgstr ""
+msgstr "способ_показа"
 
 #: js/MyPhoneEditDialog.js:515 js/MyPhoneEditDialog.js:1063
 msgid "whole url"
-msgstr ""
+msgstr "весь url"
 
 #: js/MyPhoneEditDialog.js:516 js/MyPhoneEditDialog.js:1064
 msgid "name"
-msgstr ""
+msgstr "имя"
 
 #: js/MyPhoneEditDialog.js:517 js/MyPhoneEditDialog.js:1065
-#, fuzzy
 msgid "number"
-msgstr "Номер"
+msgstr "номер"
 
 #: js/MyPhoneEditDialog.js:518 js/MyPhoneEditDialog.js:1066
-#, fuzzy
 msgid "name + number"
-msgstr "Наберите номер"
+msgstr "имя + номер"
 
 #: js/MyPhoneEditDialog.js:519 js/MyPhoneEditDialog.js:1067
 msgid "number + name"
-msgstr ""
+msgstr "номер + имя"
 
 #: js/MyPhoneEditDialog.js:522 js/MyPhoneEditDialog.js:1083
 msgid "call_waiting"
-msgstr ""
+msgstr "ожидание_звонка"
 
 #: js/MyPhoneEditDialog.js:527 js/MyPhoneEditDialog.js:566
 #: js/MyPhoneEditDialog.js:575 js/MyPhoneEditDialog.js:584
@@ -151,17 +144,16 @@ msgstr ""
 #: js/MyPhoneEditDialog.js:1247 js/MyPhoneEditDialog.js:1280
 #: js/MyPhoneEditDialog.js:1308 js/MyPhoneEditDialog.js:1336
 msgid "on"
-msgstr ""
+msgstr "вкл"
 
 #: js/MyPhoneEditDialog.js:528 js/MyPhoneEditDialog.js:1100
 #, fuzzy
 msgid "visual"
-msgstr "Набрать"
+msgstr "видимый"
 
 #: js/MyPhoneEditDialog.js:529 js/MyPhoneEditDialog.js:1101
-#, fuzzy
 msgid "ringer"
-msgstr "Линия"
+msgstr "звонок"
 
 #: js/MyPhoneEditDialog.js:530 js/MyPhoneEditDialog.js:567
 #: js/MyPhoneEditDialog.js:576 js/MyPhoneEditDialog.js:585
@@ -170,7 +162,7 @@ msgstr "Линия"
 #: js/MyPhoneEditDialog.js:1248 js/MyPhoneEditDialog.js:1281
 #: js/MyPhoneEditDialog.js:1309 js/MyPhoneEditDialog.js:1337
 msgid "off"
-msgstr ""
+msgstr "выкл"
 
 #: js/MyPhoneEditDialog.js:533 js/MyPhoneEditDialog.js:1113
 msgid "mwi_notification"
@@ -178,7 +170,7 @@ msgstr ""
 
 #: js/MyPhoneEditDialog.js:538 js/MyPhoneEditDialog.js:1129
 msgid "silent"
-msgstr ""
+msgstr "беззвучный"
 
 #: js/MyPhoneEditDialog.js:539 js/MyPhoneEditDialog.js:1130
 msgid "beep"
@@ -186,7 +178,7 @@ msgstr ""
 
 #: js/MyPhoneEditDialog.js:540 js/MyPhoneEditDialog.js:1131
 msgid "reminder"
-msgstr ""
+msgstr "напоминание"
 
 #: js/MyPhoneEditDialog.js:543 js/MyPhoneEditDialog.js:1142
 msgid "mwi_dialtone"
@@ -194,19 +186,19 @@ msgstr ""
 
 #: js/MyPhoneEditDialog.js:548 js/MyPhoneEditDialog.js:1158
 msgid "normal"
-msgstr ""
+msgstr "нормальный"
 
 #: js/MyPhoneEditDialog.js:549 js/MyPhoneEditDialog.js:1159
 msgid "stutter"
-msgstr ""
+msgstr "заикание"
 
 #: js/MyPhoneEditDialog.js:552 js/MyPhoneEditDialog.js:1175
 msgid "headset_device"
-msgstr ""
+msgstr "гарнитура"
 
 #: js/MyPhoneEditDialog.js:558 js/MyPhoneEditDialog.js:1192
 msgid "headset_rj"
-msgstr ""
+msgstr "разъём_гарнитуры"
 
 #: js/MyPhoneEditDialog.js:561 js/MyPhoneEditDialog.js:1203
 msgid "message_led_other"
@@ -214,49 +206,49 @@ msgstr ""
 
 #: js/MyPhoneEditDialog.js:570 js/MyPhoneEditDialog.js:1231
 msgid "global_missed_counter"
-msgstr ""
+msgstr "общий_счётчик_пропущенных"
 
 #: js/MyPhoneEditDialog.js:579 js/MyPhoneEditDialog.js:1264
 #, fuzzy
 msgid "scroll_outgoing"
-msgstr "Исходящий"
+msgstr "прокрутка_исходящего"
 
 #: js/MyPhoneEditDialog.js:588 js/MyPhoneEditDialog.js:1292
 msgid "show_local_line"
-msgstr ""
+msgstr "показывать_местное_время"
 
 #: js/MyPhoneEditDialog.js:597 js/MyPhoneEditDialog.js:1320
 msgid "show_call_status"
-msgstr ""
+msgstr "показать_состояние_звонка"
 
 #: js/MyPhoneEditDialog.js:622
+#, fuzzy
 msgid "lineactive"
-msgstr ""
+msgstr "активная линия"
 
 #: js/MyPhoneEditDialog.js:650
 msgid "sipCombo"
-msgstr ""
+msgstr "sipCombo"
 
 #: js/MyPhoneEditDialog.js:669
 msgid "Idle Text"
-msgstr ""
+msgstr "Текст при ожидании"
 
 #: js/MyPhoneEditDialog.js:702
-#, fuzzy
 msgid "Lines"
-msgstr "Линия"
+msgstr "Линии"
 
 #: js/MyPhoneEditDialog.js:717
 msgid "Users"
-msgstr ""
+msgstr "Пользователи"
 
 #: js/MyPhoneEditDialog.js:721
 msgid "Rights"
-msgstr ""
+msgstr "Права"
 
 #: js/Phone.js:28 js/Phone.js:464 js/Phone.js:465
 msgid "Edit phone settings"
-msgstr "Обработать телефонные установки"
+msgstr "Изменить настройки телефона"
 
 #: js/Phone.js:69
 msgid "Phones"
@@ -300,11 +292,11 @@ msgstr "Исходящий звонок"
 
 #: js/Phone.js:515
 msgid "unknown number"
-msgstr "Неизвестный номер"
+msgstr "неизвестный номер"
 
 #: js/Phone.js:526
 msgid "enter searchfilter"
-msgstr "Ввести поисковый фильтр"
+msgstr "ввести поисковый фильтр"
 
 #: js/Phone.js:540
 msgid "Search:"
@@ -312,19 +304,19 @@ msgstr "Поиск:"
 
 #: js/Phone.js:625
 msgid "Source or Destination"
-msgstr "Источник или Предназначение"
+msgstr "Источник или Назначение"
 
 #: js/Phone.js:641
 msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Показ звонков {0} - {1} of {2}"
+msgstr "Показаны звонки {0} - {1} из {2}"
 
 #: js/Phone.js:642 js/Phone.js:680
 msgid "No calls to display"
-msgstr "Не каких звонков для показа нет"
+msgstr "Нет звонков"
 
 #: js/Phone.js:647
 msgid "Direction"
-msgstr "Описание"
+msgstr "Направление"
 
 #: js/Phone.js:648
 msgid "Source"
@@ -336,7 +328,7 @@ msgstr "Id звонящего по телефону"
 
 #: js/Phone.js:650
 msgid "Destination"
-msgstr "Предназначение"
+msgstr "Назначение"
 
 #: js/Phone.js:651
 msgid "Start"
@@ -356,7 +348,7 @@ msgstr "Продолжительность"
 
 #: js/Phone.js:655
 msgid "Ringing"
-msgstr "Звон"
+msgstr "Звонок"
 
 #: js/Phone.js:656
 msgid "Call ID"

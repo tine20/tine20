@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-08-05 17:49+0100\n"
-"PO-Revision-Date: 2009-02-27 15:24+0100\n"
-"Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
+"PO-Revision-Date: 2009-07-20 12:16+0300\n"
+"Last-Translator: Nikolay Parukhin <nik@sevpinro.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,15 +28,15 @@ msgstr ""
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
-msgstr "%s's личные задания"
+msgstr "%s личные задания"
 
 #: js/EditDialog.js:113 js/GridPanel.js:64 js/GridPanel.js:123
 msgid "Summary"
-msgstr "Содержание"
+msgstr "Сводка"
 
 #: js/EditDialog.js:118
 msgid "Due date"
-msgstr "Число истечения срока"
+msgstr "Дата завершения"
 
 #: js/EditDialog.js:121 js/GridPanel.js:144
 msgid "Priority"
@@ -56,7 +56,7 @@ msgstr "Введите описание..."
 
 #: js/EditDialog.js:134
 msgid "Percentage"
-msgstr "Подтвердить"
+msgstr "Процентное отношение"
 
 #: js/EditDialog.js:138 js/GridPanel.js:173
 msgid "Status"
@@ -67,24 +67,23 @@ msgid "Completed"
 msgstr "Закончено"
 
 #: js/GridPanel.js:31
-#, fuzzy
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Вы уверены что хотите удалить выбранное задание"
-msgstr[1] "Вы уверены что хотите удалить выбранные задания"
-msgstr[2] "Вы уверены что хотите удалить выбранных заданий"
+msgstr[0] "Вы действительно хотите удалить выбранное задание"
+msgstr[1] "Вы действительно хотите удалить выбранные задания"
+msgstr[2] "Вы действительно хотите удалить выбранных заданий"
 
 #: js/GridPanel.js:65 js/GridPanel.js:135
 msgid "Due Date"
-msgstr "Число истечения срока"
+msgstr "Дата завершения"
 
 #: js/GridPanel.js:87
 msgid "Failed"
-msgstr "Неудача"
+msgstr "Сбой"
 
 #: js/GridPanel.js:87
 msgid "Could not save task."
-msgstr "Задание не смогла быть сохранино"
+msgstr "Не удалось сохранить задание."
 
 #: js/GridPanel.js:131
 msgid "Add a task..."
@@ -96,44 +95,41 @@ msgstr "Процент"
 
 #: js/GridPanel.js:188
 msgid "Creation Time"
-msgstr "Время Создания"
+msgstr "Время создания"
 
 #: js/GridPanel.js:221
 msgid "Show closed"
-msgstr "Показ закрылся"
+msgstr "Показать закрытые"
 
 #: js/Status.js:45 Setup/setup.xml:443
 msgid "IN-PROCESS"
 msgstr "НЕЗАВЕРШЕННЫЙ"
 
 #: js/Tasks.js:82
-#, fuzzy
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] "Задания"
+msgstr[0] "Задание"
 msgstr[1] "Задания"
-msgstr[2] "Задания"
+msgstr[2] "Заданий"
 
 #: js/Tasks.js:82
-#, fuzzy
 msgid "Tasks"
 msgstr "Задания"
 
 #: js/Tasks.js:86
-#, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] "Сделать список"
-msgstr[1] "Сделать список"
-msgstr[2] "Сделать список"
+msgstr[0] "список работ"
+msgstr[1] "списка работ"
+msgstr[2] "списков работ"
 
 #: js/Tasks.js:86
 msgid "to do lists"
-msgstr "Делать списки"
+msgstr "списки работ"
 
 #: Setup/setup.xml:399
 msgid "NEEDS-ACTION"
-msgstr "ДЕЙСТВИЕ-ПОТРЕБНОСТЕЙ"
+msgstr "ТРЕБУЕТ-ДЕЙСТВИЯ"
 
 #: Setup/setup.xml:421
 msgid "COMPLETED"
@@ -141,7 +137,7 @@ msgstr "ЗАКОНЧЕНО"
 
 #: Setup/setup.xml:465
 msgid "CANCELLED"
-msgstr "ОТСТАВЛЕНО"
+msgstr "ОТМЕНЕНО"
 
 #, fuzzy
 #~ msgid "to to list"

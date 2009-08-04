@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-08-05 17:50+0100\n"
-"PO-Revision-Date: 2008-10-02 15:41+0100\n"
-"Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
+"PO-Revision-Date: 2009-07-22 01:47+0300\n"
+"Last-Translator: Nikolay Parukhin <nik@sevpinro.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,12 +31,11 @@ msgstr "Описание"
 
 #: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/SipPeerEditDialog.js:56
 #: js/Asterisk/VoicemailEditDialog.js:55 js/Models.js:496 js/Voipmanager.js:53
-#, fuzzy
 msgid "Context"
 msgid_plural "Contexts"
 msgstr[0] "Контекст"
-msgstr[1] "Контекст"
-msgstr[2] "Контекст"
+msgstr[1] "Контекста"
+msgstr[2] "Контекстов"
 
 #: js/Asterisk/ContextGridPanel.js:66 js/Asterisk/MeetmeGridPanel.js:66
 #: js/Asterisk/VoicemailGridPanel.js:72 js/Snom/LocationGridPanel.js:121
@@ -50,7 +49,7 @@ msgstr "Номер совещание."
 
 #: js/Asterisk/MeetmeEditDialog.js:49 js/Asterisk/MeetmeGridPanel.js:82
 msgid "pin"
-msgstr ""
+msgstr "пин"
 
 #: js/Asterisk/MeetmeEditDialog.js:57 js/Asterisk/MeetmeGridPanel.js:91
 msgid "adminpin"
@@ -77,9 +76,8 @@ msgid "friend"
 msgstr ""
 
 #: js/Asterisk/SipPeerEditDialog.js:78
-#, fuzzy
 msgid "user"
-msgstr "Имя пользователя"
+msgstr "пользователь"
 
 #: js/Asterisk/SipPeerEditDialog.js:79
 #, fuzzy
@@ -116,7 +114,7 @@ msgstr "Язык"
 
 #: js/Asterisk/SipPeerEditDialog.js:132
 msgid "NAT"
-msgstr "Нэт"
+msgstr "NAT"
 
 #: js/Asterisk/SipPeerEditDialog.js:140 js/Asterisk/SipPeerEditDialog.js:151
 #: js/Asterisk/VoicemailEditDialog.js:116 js/Snom/LocationEditDialog.js:164
@@ -217,7 +215,7 @@ msgstr ""
 #: js/Asterisk/SipPeerGridPanel.js:168 js/Snom/PhoneEditDialog.js:484
 #: js/Snom/SettingEditDialog.js:147 js/Snom/SettingGridPanel.js:92
 msgid "language"
-msgstr ""
+msgstr "язык"
 
 #: js/Asterisk/SipPeerGridPanel.js:175 js/Asterisk/VoicemailGridPanel.js:79
 msgid "mailbox"
@@ -241,7 +239,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeerGridPanel.js:209
 msgid "mask"
-msgstr ""
+msgstr "маска"
 
 #: js/Asterisk/SipPeerGridPanel.js:216
 msgid "pickup group"
@@ -249,7 +247,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeerGridPanel.js:222
 msgid "port"
-msgstr ""
+msgstr "порт"
 
 #: js/Asterisk/SipPeerGridPanel.js:229
 msgid "qualify"
@@ -273,7 +271,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeerGridPanel.js:264
 msgid "type"
-msgstr ""
+msgstr "тип"
 
 #: js/Asterisk/SipPeerGridPanel.js:270
 msgid "username"
@@ -289,7 +287,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeerGridPanel.js:291
 msgid "music on hold"
-msgstr ""
+msgstr "музыка на удержании"
 
 #: js/Asterisk/SipPeerGridPanel.js:298
 msgid "reg seconds"
@@ -297,7 +295,7 @@ msgstr ""
 
 #: js/Asterisk/SipPeerGridPanel.js:304
 msgid "ip address"
-msgstr ""
+msgstr "ip адрес"
 
 #: js/Asterisk/SipPeerGridPanel.js:311
 msgid "reg exten"
@@ -406,7 +404,7 @@ msgstr "Послать речевую почту"
 #: js/Asterisk/VoicemailEditDialog.js:173
 #: js/Asterisk/VoicemailGridPanel.js:186
 msgid "delete"
-msgstr "Удолить"
+msgstr "Удалить"
 
 #: js/Asterisk/VoicemailEditDialog.js:177
 #: js/Asterisk/VoicemailGridPanel.js:193
@@ -429,24 +427,22 @@ msgid "hidefromdir"
 msgstr ""
 
 #: js/Asterisk/VoicemailGridPanel.js:51 js/Models.js:551 js/Voipmanager.js:63
-#, fuzzy
 msgid "Voicemail"
 msgid_plural "Voicemails"
-msgstr[0] "Добавьте речевую почту"
-msgstr[1] "Добавьте речевую почту"
-msgstr[2] "Добавьте речевую почту"
+msgstr[0] "Голосовая почта"
+msgstr[1] "Голосовые почты"
+msgstr[2] "Голосовые почты"
 
 #: js/Asterisk/VoicemailGridPanel.js:91
 msgid "fullname"
 msgstr "Полное Имя"
 
 #: js/Models.js:82 js/Snom/PhoneEditDialog.js:270 js/Snom/PhoneGridPanel.js:67
-#, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
-msgstr[0] "ни один"
-msgstr[1] "ни один"
-msgstr[2] "ни один"
+msgstr[0] "Телефон"
+msgstr[1] "Телефона"
+msgstr[2] "Телефонов"
 
 #: js/Models.js:86
 msgid "phones list"
@@ -457,12 +453,11 @@ msgstr[2] ""
 
 #: js/Models.js:133 js/Snom/LocationGridPanel.js:50
 #: js/Snom/PhoneGridPanel.js:100 js/Voipmanager.js:116
-#, fuzzy
 msgid "Location"
 msgid_plural "Locations"
 msgstr[0] "Местоположение"
-msgstr[1] "Местоположение"
-msgstr[2] "Местоположение"
+msgstr[1] "Местоположения"
+msgstr[2] "Местоположений"
 
 #: js/Models.js:137
 #, fuzzy
@@ -476,9 +471,9 @@ msgstr[2] "Местоположение"
 #: js/Snom/TemplateGridPanel.js:51
 msgid "Template"
 msgid_plural "Templates"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Шаблон"
+msgstr[1] "Шаблона"
+msgstr[2] "Шаблонов"
 
 #: js/Models.js:174
 #, fuzzy
@@ -521,19 +516,18 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: js/Models.js:279
-#, fuzzy
 msgid "Line"
 msgid_plural "Lines"
-msgstr[0] "Тон"
-msgstr[1] "Тон"
-msgstr[2] "Тон"
+msgstr[0] "Линия"
+msgstr[1] "Линии"
+msgstr[2] "Линий"
 
 #: js/Models.js:283
 msgid "lines list"
 msgid_plural "lines lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "список линий"
+msgstr[1] "списка линий"
+msgstr[2] "списков линий"
 
 #: js/Models.js:336 js/Snom/SettingGridPanel.js:51 js/Voipmanager.js:147
 #, fuzzy
@@ -552,12 +546,11 @@ msgstr[1] "Настройки"
 msgstr[2] "Настройки"
 
 #: js/Models.js:381
-#, fuzzy
 msgid "Owner"
 msgid_plural "Owners"
 msgstr[0] "Владелец"
-msgstr[1] "Владелец"
-msgstr[2] "Владелец"
+msgstr[1] "Владельца"
+msgstr[2] "Владельцев"
 
 #: js/Models.js:385
 msgid "owners list"
@@ -604,9 +597,8 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: js/Snom/LocationEditDialog.js:55 js/Snom/LocationGridPanel.js:79
-#, fuzzy
 msgid "Registrar"
-msgstr "Регистратор фильтра"
+msgstr "Регистратор"
 
 #: js/Snom/LocationEditDialog.js:62
 msgid "Base Download URL"
@@ -634,11 +626,11 @@ msgstr ""
 
 #: js/Snom/LocationEditDialog.js:194 js/Snom/LocationGridPanel.js:93
 msgid "NTP Server"
-msgstr "НТР сервер"
+msgstr "NTP сервер"
 
 #: js/Snom/LocationEditDialog.js:211
 msgid "NTP Server Address"
-msgstr "НТР (NTP) сервер адрес"
+msgstr "Адрес NTP сервера"
 
 #: js/Snom/LocationEditDialog.js:224
 msgid "NTP Refresh"
@@ -670,7 +662,7 @@ msgstr "HTTP порт"
 
 #: js/Snom/LocationEditDialog.js:366 js/Snom/LocationGridPanel.js:107
 msgid "HTTPS Port"
-msgstr ""
+msgstr "HTTPS порт"
 
 #: js/Snom/LocationEditDialog.js:387 js/Snom/LocationGridPanel.js:114
 msgid "HTTP User"
@@ -686,7 +678,7 @@ msgstr ""
 
 #: js/Snom/LocationGridPanel.js:86
 msgid "Admin Mode"
-msgstr "Метод администратора"
+msgstr "Режим администратора"
 
 #: js/Snom/LocationGridPanel.js:140
 msgid "Filter Registrar"
@@ -706,7 +698,7 @@ msgstr "Модель телефона"
 
 #: js/Snom/PhoneEditDialog.js:304
 msgid "MAC Address"
-msgstr "Адрес MAC "
+msgstr "MAC адрес"
 
 #: js/Snom/PhoneEditDialog.js:338
 msgid "infos"
@@ -718,7 +710,7 @@ msgstr "Актуальный IP адрес"
 
 #: js/Snom/PhoneEditDialog.js:360
 msgid "Firmware last checked at"
-msgstr "Фирмвер (Firmware) было последний раз проверено"
+msgstr "Прошивка последний раз проверена"
 
 #: js/Snom/PhoneEditDialog.js:368
 msgid "Current Software Version"
@@ -726,7 +718,7 @@ msgstr "Актуальная версия программного обеспе�
 
 #: js/Snom/PhoneEditDialog.js:375
 msgid "Settings Loaded at"
-msgstr "Установки выли загружены"
+msgstr "Установки были загружены"
 
 #: js/Snom/PhoneEditDialog.js:385
 msgid "redirection"
@@ -897,9 +889,8 @@ msgid "Idle Text"
 msgstr "Текст Idle "
 
 #: js/Snom/PhoneEditDialog.js:700
-#, fuzzy
 msgid "Lines"
-msgstr "Информация"
+msgstr "Линии"
 
 #: js/Snom/PhoneEditDialog.js:715
 msgid "Users"
@@ -919,7 +910,7 @@ msgstr ""
 
 #: js/Snom/PhoneGridPanel.js:89
 msgid "MAC address"
-msgstr ""
+msgstr "MAC адрес"
 
 #: js/Snom/PhoneGridPanel.js:95 js/Snom/SettingGridPanel.js:79
 msgid "description"
@@ -927,7 +918,7 @@ msgstr "Описание"
 
 #: js/Snom/PhoneGridPanel.js:118
 msgid "IP Address"
-msgstr ""
+msgstr "IP адрес"
 
 #: js/Snom/PhoneGridPanel.js:130
 msgid "current model"
@@ -947,11 +938,11 @@ msgstr ""
 
 #: js/Snom/PhoneGridPanel.js:158
 msgid "settings loaded at"
-msgstr "Установки выли последний раз загруженные"
+msgstr "Установки загружены"
 
 #: js/Snom/PhoneGridPanel.js:166
 msgid "last modified"
-msgstr "Последний раз измененны"
+msgstr "Последний раз изменены"
 
 #: js/Snom/TemplateEditDialog.js:56
 msgid "Software Version"
@@ -967,16 +958,15 @@ msgstr "Id размещение клавиатуры "
 
 #: js/Snom/TemplateGridPanel.js:92
 msgid "Settings Id"
-msgstr " Id установки"
+msgstr "Id установки"
 
 #: js/Snom/TemplateGridPanel.js:99
 msgid "Software Id"
 msgstr "Id программного обеспечения"
 
 #: js/Voipmanager.js:25
-#, fuzzy
 msgid "Asterisk"
-msgstr "Пользователи"
+msgstr "Asterisk"
 
 #: js/Voipmanager.js:42
 msgid "Dialplan"
@@ -984,7 +974,7 @@ msgstr ""
 
 #: js/Voipmanager.js:83
 msgid "Queues"
-msgstr ""
+msgstr "Очереди"
 
 #: js/Voipmanager.js:99
 #, fuzzy
@@ -992,14 +982,12 @@ msgid "Snom"
 msgstr "Нормально"
 
 #: js/Voipmanager.js:106
-#, fuzzy
 msgid "Phones"
-msgstr "ни один"
+msgstr "Телефоны"
 
 #: js/Voipmanager.js:126
-#, fuzzy
 msgid "Templates"
-msgstr "Добавить темплейт (template)"
+msgstr "Шаблоны"
 
 #~ msgid "edit myphone"
 #~ msgstr "Обработать телефон "

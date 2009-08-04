@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-08-05 17:42+0100\n"
-"PO-Revision-Date: 2009-02-27 15:18+0100\n"
-"Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
+"PO-Revision-Date: 2009-07-20 16:00+0300\n"
+"Last-Translator: Nikolay Parukhin <nik@sevpinro.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,12 +24,12 @@ msgstr "Книга адресов"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
-msgstr ""
+msgstr "Создать новую общую папку адресной книги"
 
 #: Controller.php:96
 #, python-format
 msgid "%s's personal addressbook"
-msgstr "%s's Личная книга адресов"
+msgstr "%s личная адресная книга"
 
 #: Export/Pdf.php:38
 msgid "Business Contact Data"
@@ -41,7 +41,7 @@ msgstr "Организация / Отделение"
 
 #: Export/Pdf.php:45
 msgid "Business Address"
-msgstr "Фирменный адрес"
+msgstr "Рабочий адрес"
 
 #: Export/Pdf.php:53 js/ContactGrid.js:102
 msgid "Email"
@@ -49,15 +49,15 @@ msgstr "Электронная почта"
 
 #: Export/Pdf.php:56
 msgid "Telephone Work"
-msgstr "Телефон (офис)"
+msgstr "Телефон (рабочий)"
 
 #: Export/Pdf.php:59
 msgid "Telephone Cellphone"
-msgstr "Телефонный толефон"
+msgstr "Телефон (мобильный)"
 
 #: Export/Pdf.php:62
 msgid "Telephone Car"
-msgstr "Телефон (автомобил)"
+msgstr "Телефон (автомобильный)"
 
 #: Export/Pdf.php:65
 msgid "Telephone Fax"
@@ -69,7 +69,7 @@ msgstr "Пейджер"
 
 #: Export/Pdf.php:71
 msgid "URL"
-msgstr "URL (Единый указатель ресурсов)"
+msgstr "URL"
 
 #: Export/Pdf.php:74
 msgid "Role"
@@ -110,15 +110,15 @@ msgstr "Личный сотовый телефон"
 
 #: Export/Pdf.php:106
 msgid "Telephone Fax Home"
-msgstr "Факс"
+msgstr "Факс (домашний)"
 
 #: Export/Pdf.php:109
 msgid "URL Home"
-msgstr "Домашний URL (Единый указатель ресурсов)"
+msgstr "Домашний URL"
 
 #: Export/Pdf.php:113
 msgid "Other Data"
-msgstr "Другая дата"
+msgstr "Другие данные"
 
 #: Export/Pdf.php:115 js/ContactGrid.js:63 js/ContactGrid.js:117
 #: js/EditDialog.js:155 js/EditDialog.js:206
@@ -128,11 +128,11 @@ msgstr "Дата рождения"
 #: Export/Pdf.php:118 js/ContactGrid.js:60 js/ContactGrid.js:89
 #: js/EditDialog.js:150 js/EditDialog.js:189
 msgid "Job Title"
-msgstr "Професия"
+msgstr "Профессия"
 
 #: js/Addressbook.js:12
 msgid "Addressbook"
-msgstr "Записная книжка"
+msgstr "Адресная книга"
 
 #: js/Addressbook.js:67 js/ContactGrid.js:286 Setup/setup.xml:538
 msgid "Internal Contacts"
@@ -140,19 +140,18 @@ msgstr "Внутренние контакты"
 
 #: js/Addressbook.js:142 js/Addressbook.js:144
 msgid "contacts"
-msgstr "Контакты"
+msgstr "контакты"
 
 #: js/Addressbook.js:143 js/Addressbook.js:483
-#, fuzzy
 msgid "addressbook"
 msgid_plural "addressbooks"
-msgstr[0] "Книга адресов"
-msgstr[1] "Книга адресов"
-msgstr[2] "Книга адресов"
+msgstr[0] "адресная книга"
+msgstr[1] "адресные книги"
+msgstr[2] "адресных книг"
 
 #: js/Addressbook.js:149 js/ContactGrid.js:155
 msgid "export as pdf"
-msgstr "экспортировать как пдф"
+msgstr "экспортировать как pdf"
 
 #: js/Addressbook.js:174
 msgid "Loading Contact..."
@@ -160,24 +159,23 @@ msgstr "Контакт загружается..."
 
 #: js/Addressbook.js:174
 msgid "Please Wait"
-msgstr "Пожалуйста подождите"
+msgstr "Пожалуйста, подождите"
 
 #: js/Addressbook.js:194
 msgid "Add new contact"
 msgstr "Добавить новый контакт"
 
 #: js/Addressbook.js:196
-#, fuzzy
 msgid "Edit Contact \"{0}\""
-msgstr "Обработать контакт \"{0}\""
+msgstr "Изменить контакт \"{0}\""
 
 #: js/Addressbook.js:226
 msgid "Please wait a moment..."
-msgstr "Пожалуйста подождите момент..."
+msgstr "Пожалуйста, подождите минуту..."
 
 #: js/Addressbook.js:226
 msgid "Saving Contact"
-msgstr "Сохранить контакт"
+msgstr "Сохранение контакта"
 
 #: js/Addressbook.js:251 js/Addressbook.js:276
 msgid "Failed"
@@ -185,7 +183,7 @@ msgstr "Ошибка"
 
 #: js/Addressbook.js:251
 msgid "Could not save contact."
-msgstr "Контакт не смог выть сохранен"
+msgstr "Не удалось сохранить контакт."
 
 #: js/Addressbook.js:257
 msgid "Errors"
@@ -193,35 +191,30 @@ msgstr "Ошибки"
 
 #: js/Addressbook.js:257
 msgid "Please fix the errors noted."
-msgstr "Пожалуйста, исправьте указанные ошибки"
+msgstr "Пожалуйста, исправьте указанные ошибки."
 
 #: js/Addressbook.js:270
-#, fuzzy
 msgid "Deleting contact..."
-msgstr "Контакт удаляется"
+msgstr "Удаление контакта..."
 
 #: js/Addressbook.js:276
-#, fuzzy
 msgid "Some error occured while trying to delete the contact."
 msgstr "При удаление контакта возникла ошибка."
 
 #: js/Addressbook.js:479
-#, fuzzy
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Контакт"
-msgstr[1] "Контакт"
-msgstr[2] "Контакт"
+msgstr[1] "Контакта"
+msgstr[2] "Контактов"
 
 #: js/Addressbook.js:479
-#, fuzzy
 msgid "Contacts"
-msgstr "Контакт"
+msgstr "Контакты"
 
 #: js/Addressbook.js:483
-#, fuzzy
 msgid "addressbooks"
-msgstr "Книга адресов"
+msgstr "адресные книги"
 
 #: js/ContactGrid.js:56 js/ContactGrid.js:84 js/EditDialog.js:106
 #: js/EditDialog.js:167
@@ -256,7 +249,7 @@ msgstr "Улица"
 #: js/ContactGrid.js:64 js/ContactGrid.js:65 js/ContactGrid.js:66
 #: js/EditDialog.js:328
 msgid "Company Address"
-msgstr "Адрес Фирмы"
+msgstr "Адрес фирмы"
 
 #: js/ContactGrid.js:65 js/ContactGrid.js:68 js/EditDialog.js:358
 #: js/EditDialog.js:401
@@ -274,12 +267,12 @@ msgstr "Тип"
 
 #: js/ContactGrid.js:85
 msgid "Full Name"
-msgstr "Полное Имя"
+msgstr "Полное имя"
 
 #: js/ContactGrid.js:86 js/EditDialog.js:17 js/EditDialog.js:144
 #: js/EditDialog.js:183
 msgid "Display Name"
-msgstr "Показаное имя"
+msgstr "Отображать как"
 
 #: js/ContactGrid.js:88 js/EditDialog.js:133 js/EditDialog.js:201
 msgid "Unit"
@@ -337,19 +330,19 @@ msgstr "Пейджер"
 
 #: js/ContactGrid.js:108 js/EditDialog.js:244
 msgid "Phone (private)"
-msgstr "(Личный) телефон"
+msgstr "Телефон (личный)"
 
 #: js/ContactGrid.js:109 js/EditDialog.js:254
 msgid "Fax (private)"
-msgstr "(Личный) Факс"
+msgstr "Факс (личный)"
 
 #: js/ContactGrid.js:110 js/EditDialog.js:249
 msgid "Mobile (private)"
-msgstr "(личный) мобильный телефон"
+msgstr "Мобильный телефон (личный)"
 
 #: js/ContactGrid.js:111
 msgid "Email (private)"
-msgstr "(Личная) Электронная почта"
+msgstr "Электронная почта (личная)"
 
 #: js/ContactGrid.js:112 js/ContactGridDetailsPanel.js:149
 #: js/ContactGridDetailsPanel.js:173 js/EditDialog.js:274
@@ -358,7 +351,7 @@ msgstr "Интернет"
 
 #: js/ContactGrid.js:113
 msgid "URL (private)"
-msgstr "Личная веб-сайт"
+msgstr "Личный веб-сайт"
 
 #: js/ContactGrid.js:114
 msgid "Note"
@@ -366,7 +359,7 @@ msgstr "Заметка"
 
 #: js/ContactGrid.js:115
 msgid "Timezone"
-msgstr "Зона времени"
+msgstr "Часовой пояс"
 
 #: js/ContactGrid.js:116
 msgid "Geo"
@@ -377,36 +370,32 @@ msgid "Export"
 msgstr "Экспорт"
 
 #: js/ContactGrid.js:135
-#, fuzzy
 msgid "Export as PDF"
-msgstr "экспортировать как пдф"
+msgstr "Экспортировать как PDF"
 
 #: js/ContactGrid.js:142
-#, fuzzy
 msgid "Export as CSV"
-msgstr "экспортировать как пдф"
+msgstr "Экспортировать как CSV"
 
 #: js/ContactGrid.js:166
 msgid "call contact"
-msgstr "Позвонит контакту"
+msgstr "позвонить контакту"
 
 #: js/ContactGrid.js:204
 msgid "Work"
 msgstr "Работа "
 
 #: js/ContactGrid.js:213
-#, fuzzy
 msgid "Home"
-msgstr "Домашний URL (Единый указатель ресурсов)"
+msgstr "Домашний URL"
 
 #: js/ContactGrid.js:222
 msgid "Cell"
 msgstr "Сотовый"
 
 #: js/ContactGrid.js:231
-#, fuzzy
 msgid "Cell private"
-msgstr "Город (личный)"
+msgstr "Мобильный телефон (личный)"
 
 #: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
@@ -439,7 +428,7 @@ msgstr "Второе имя"
 
 #: js/EditDialog.js:267
 msgid "E-Mail (private)"
-msgstr "(личная) Электронная почта"
+msgstr "Электронная почта (личная)"
 
 #: js/EditDialog.js:298
 msgid "Contact Information"
@@ -455,7 +444,7 @@ msgstr "Дополнительные поля"
 
 #: js/EditDialog.js:458
 msgid "Description"
-msgstr "Oписание"
+msgstr "Описание"
 
 #: js/EditDialog.js:472
 msgid "Enter description"
@@ -465,22 +454,21 @@ msgstr "Введите описание"
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
-msgstr[0] "Линк"
-msgstr[1] "Линка [%d]"
-msgstr[2] "Линков [%d]"
+msgstr[0] "Ссылка"
+msgstr[1] "Ссылки [%d]"
+msgstr[2] "Ссылок [%d]"
 
 #: js/SearchCombo.js:51
-#, fuzzy
 msgid "Searching..."
-msgstr "Поиск:"
+msgstr "Поиск..."
 
 #: Setup/setup.xml:564
 msgid "Mr"
-msgstr "Мистер"
+msgstr "Господин"
 
 #: Setup/setup.xml:582
 msgid "Ms"
-msgstr "Женщина"
+msgstr "Госпожа"
 
 #~ msgid "Are you Sure?"
 #~ msgstr "Вы уверены?"
@@ -530,3 +518,6 @@ msgstr "Женщина"
 
 #~ msgid "History"
 #~ msgstr "История"
+
+#~ msgid "manage shared folders"
+#~ msgstr "управление общими папками"

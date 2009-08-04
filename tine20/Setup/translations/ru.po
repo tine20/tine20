@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-27 15:50+0100\n"
-"Last-Translator: iyurkovetskiy <i.yurkovetskiy@metaways.de>\n"
+"PO-Revision-Date: 2009-07-20 17:17+0300\n"
+"Last-Translator: Nikolay Parukhin <nik@sevpinro.ru>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,13 +26,12 @@ msgid "Order"
 msgstr "Последовательность"
 
 #: js/ApplicationGridPanel.js:43
-#, fuzzy
 msgid "Installed Version"
-msgstr "Нынешная версия"
+msgstr "Установленная версия"
 
 #: js/ApplicationGridPanel.js:44
 msgid "Available Version"
-msgstr ""
+msgstr "Доступная версия"
 
 #: js/ApplicationGridPanel.js:45
 msgid "Status"
@@ -40,27 +39,27 @@ msgstr "Статус"
 
 #: js/ApplicationGridPanel.js:46
 msgid "Depends on"
-msgstr ""
+msgstr "Зависит от"
 
 #: js/ApplicationGridPanel.js:52 js/EnvCheckGridPanel.js:169
 msgid "Install application"
-msgstr "Установить программу пользования"
+msgstr "Установить приложение"
 
 #: js/ApplicationGridPanel.js:61
 msgid "Uninstall application"
-msgstr ""
+msgstr "Удалить приложение"
 
 #: js/ApplicationGridPanel.js:70
 msgid "Update application"
-msgstr "Обновить программу пользования"
+msgstr "Обновить приложение"
 
 #: js/ApplicationGridPanel.js:138
 msgid "uninstall"
-msgstr ""
+msgstr "удалить"
 
 #: js/ApplicationGridPanel.js:138
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
+msgstr "Вы действительно хотите удалить приложение(я)?"
 
 #: js/ApplicationGridPanel.js:193
 msgid "Initial admin username and password"
@@ -72,15 +71,16 @@ msgstr ""
 
 #: js/ApplicationGridPanel.js:216
 msgid "This may take a while"
-msgstr ""
+msgstr "Это может занять некоторое время"
 
 #: js/ApplicationGridPanel.js:235
+#, fuzzy
 msgid "Shit"
-msgstr ""
+msgstr "Сдвиг"
 
 #: js/ApplicationGridPanel.js:235
 msgid "Where are the backup tapes"
-msgstr ""
+msgstr "Где находятся резервные ленты"
 
 #: js/ApplicationGridPanel.js:243
 msgid "Dependency Violation"
@@ -88,15 +88,17 @@ msgstr ""
 
 #: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
-msgstr ""
+msgstr "Неверная конфигурация"
 
 #: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr ""
+"Вам нужно исправить поля отмеченные красным до того, как конфигурация может "
+"быть сохранена"
 
 #: js/AuthenticationGridPanel.js:121 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
-msgstr ""
+msgstr "Передача конфигурации..."
 
 #: js/AuthenticationGridPanel.js:135
 msgid "Authentication provider"
@@ -115,7 +117,7 @@ msgstr ""
 #: js/AuthenticationGridPanel.js:271 js/AuthenticationGridPanel.js:295
 #: js/ConfigManagerGridPanel.js:118 js/ConfigManagerGridPanel.js:144
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: js/AuthenticationGridPanel.js:180 js/AuthenticationGridPanel.js:274
 msgid "Password confirmation"
@@ -179,101 +181,103 @@ msgstr ""
 
 #: js/ConfigManagerGridPanel.js:107
 msgid "Informations"
-msgstr ""
+msgstr "Информация"
 
 #: js/ConfigManagerGridPanel.js:111
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Аутентификация установки"
 
 #: js/ConfigManagerGridPanel.js:114
 msgid "Username"
-msgstr ""
+msgstr "Имя пользователя"
 
 #: js/ConfigManagerGridPanel.js:123 js/ConfigManagerGridPanel.js:136
 msgid "Database"
-msgstr ""
+msgstr "База данных"
 
 #: js/ConfigManagerGridPanel.js:127
 msgid "Adapter"
-msgstr ""
+msgstr "Адаптер"
 
 #: js/ConfigManagerGridPanel.js:132
 msgid "Hostname"
-msgstr ""
+msgstr "Имя узла"
 
 #: js/ConfigManagerGridPanel.js:140
 msgid "User"
-msgstr ""
+msgstr "Пользователь"
 
 #: js/ConfigManagerGridPanel.js:148
 msgid "Prefix"
-msgstr ""
+msgstr "Префикс"
 
 #: js/ConfigManagerGridPanel.js:151
 msgid "Logging"
-msgstr ""
+msgstr "Регистрация"
 
 #: js/ConfigManagerGridPanel.js:157
 msgid "Filename"
-msgstr ""
+msgstr "Имя файла"
 
 #: js/ConfigManagerGridPanel.js:169
 msgid "Priority"
-msgstr ""
+msgstr "Приоритет"
 
 #: js/ConfigManagerGridPanel.js:173
 msgid "Caching"
-msgstr ""
+msgstr "Кэширование"
 
 #: js/ConfigManagerGridPanel.js:179
 msgid "Path"
-msgstr ""
+msgstr "Путь"
 
 #: js/ConfigManagerGridPanel.js:182
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "Время жизни (секунд)"
 
 #: js/ConfigManagerGridPanel.js:275
 msgid "Save config"
-msgstr ""
+msgstr "Сохранить конфигурацию"
 
 #: js/ConfigManagerGridPanel.js:283
 msgid "Download config file"
-msgstr ""
+msgstr "Загрузить файл конфигурации"
 
 #: js/EnvCheckGridPanel.js:69
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Проведение проверок окружения..."
 
 #: js/EnvCheckGridPanel.js:110
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
+"{0} не найдены. Пожалуйста, попробуйте изменить фильтр, параметры просмотра "
+"или {1} в котором вы ищете."
 
 #: js/EnvCheckGridPanel.js:140
 msgid "Check"
-msgstr ""
+msgstr "Проверка"
 
 #: js/EnvCheckGridPanel.js:141
 msgid "Result"
-msgstr ""
+msgstr "Результат"
 
 #: js/EnvCheckGridPanel.js:142
 msgid "Error"
-msgstr ""
+msgstr "Ошибка"
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Run setup tests"
-msgstr ""
+msgstr "Запуск тестов установки"
 
 #: js/Setup.js:29
 msgid "Setup Checks"
-msgstr ""
+msgstr "Проверки установки "
 
 #: js/Setup.js:34
 msgid "Config Manager"
-msgstr "Упровление конфигурации"
+msgstr "Управление конфигурацией"
 
 #: js/Setup.js:40
 #, fuzzy
@@ -282,14 +286,14 @@ msgstr "Программа пользования"
 
 #: js/Setup.js:46
 msgid "Application Manager"
-msgstr "Упровление программы пользования"
+msgstr "Управление приложениями"
 
 #: js/Setup.js:135
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] "Программа пользования"
-msgstr[1] "Программы пользования"
-msgstr[2] "Программ пользования"
+msgstr[0] "Приложение"
+msgstr[1] "Приложения"
+msgstr[2] "Приложений"
 
 #~ msgid "Version"
 #~ msgstr "Версия"
@@ -299,3 +303,6 @@ msgstr[2] "Программ пользования"
 
 #~ msgid "No {0} to display"
 #~ msgstr "Не {0} для показа"
+
+#~ msgid "Check config"
+#~ msgstr "Проверить конфигурацию"
