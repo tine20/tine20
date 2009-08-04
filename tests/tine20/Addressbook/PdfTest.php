@@ -85,7 +85,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
 		
         // check name and company name
-        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), 'name not found');   
+        $this->assertEquals(1, preg_match("/Metaways Infosystems GmbH/", $pdfOutput), 'name not found');    
 
         // check notes (removed that because system notes are no longer shown in pdf)
         /*
