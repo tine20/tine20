@@ -15,12 +15,11 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
      */
     dtStart: null,
     /**
-     * @cfg view
+     * @cfg {String} view
      */
     view: 'day',
     /**
-     * @private
-     * @property periodPicker
+     * @private periodPicker
      */
     periodPicker: null,
     

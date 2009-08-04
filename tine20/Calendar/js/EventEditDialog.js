@@ -12,11 +12,14 @@
 Ext.ns('Tine.Calendar');
 
 /**
- * Calendar Edit Dialog
+ * @class Tine.Calendar.EventEditDialog
+ * @extends Tine.widgets.dialog.EditDialog
+ * Calendar Edit Dialog <br>
+ *
  */
 Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
-     * @cfg {Number}
+     * @cfg {Number} containerId initial container id
      */
     containerId: -1,
     /**
