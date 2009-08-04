@@ -190,6 +190,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     'type'          => $this->_folderType
                 );
             }
+            
+            $accountsFolder = Tinebase_Container::getInstance()->getInternalContainer(Tinebase_Core::getUser(), $this->_applicationName);
+            $folders[$accountsFolder->id] = array(
+                'folderId'      => $accountsFolder->id,
+                'parentId'      => 0,
+                'displayName'   => $accountsFolder->name,
+                'type'          => $this->_folderType
+            );
 
         } else {
             
