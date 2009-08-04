@@ -305,7 +305,7 @@ Tine.Tinebase.tineInit = {
                 case 404:
                 Ext.MessageBox.show({
                     title: _('Not Found'), 
-                    msg: _('Sorry, your requested could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
+                    msg: _('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR
                 });
