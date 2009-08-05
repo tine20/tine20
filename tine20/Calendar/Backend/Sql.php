@@ -130,11 +130,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
         
+        /* do we realy need all cols to group?
+         * id should be enough, as spechial chars could break grouping
         $groupByCols = array();
         foreach(array_keys($this->_schema) as $col) {
             $groupByCols[] = $this->_tableName . '.' . $col;
         }
-        $select->group($groupByCols);
+        */
+        $select->group($this->_tableName . '.' . 'id');
         
         return $select;
     }
