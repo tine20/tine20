@@ -34,8 +34,25 @@ Ext.onReady(function() {
 
 /** ------------------------ Tine 2.0 Initialisation ----------------------- **/
 
-Ext.namespace('Tine');
+/**
+ * @class Tine
+ * @singleton
+ */
+Ext.namespace('Tine', 'Tine.Tinebase', 'Tine.Calendar');
 
+
+/**
+ * version of Tine 2.0 javascript client version, gets set a build time <br>
+ * <b>Supported Properties:</b>
+ * <table>
+ *   <tr><td><b>codeName</b></td>  <td> codename of release</td></tr>
+ *   <tr><td><b>buildType</b></td> <td> buildType? of release</td></tr>
+ *   <tr><td><b>buildDate</b></td> <td> buildDate of release</td></tr>
+ *   <tr><td><b>packageString</b>  </td><td> packageString of release</td></tr>
+ *   <tr><td><b>releaseTime</b>    </td><td> releaseTime of release</td></tr>
+ * </table>
+ * @type {Object}
+ */
 Tine.clientVersion = {};
 Tine.clientVersion.codeName         = '$HeadURL$';
 Tine.clientVersion.buildType        = 'none';
@@ -43,7 +60,12 @@ Tine.clientVersion.buildDate        = 'none';
 Tine.clientVersion.packageString    = 'none';
 Tine.clientVersion.releaseTime      = 'none';
 
+Ext.namespace('Tine.Tinebase');
+
 /**
+ * @class Tine.Tinebase.tineInit
+ * @namespace Tine.Tinebase
+ * @sigleton
  * static tine init functions
  */
 Tine.Tinebase.tineInit = {
