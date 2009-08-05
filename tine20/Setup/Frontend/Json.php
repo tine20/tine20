@@ -102,6 +102,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         return array(
             'success' => $result,
+            'setupRequired' => $this->_controller->setupRequired()
         );
     }
 
@@ -123,6 +124,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         return array(
             'success'=> true,
+            'setupRequired' => $this->_controller->setupRequired()
         );
     }
 
@@ -138,6 +140,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         return array(
             'success'=> true,
+            'setupRequired' => $this->_controller->setupRequired()
         );
     }
     
@@ -211,6 +214,32 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         return $result;        
     }
     
+    public function loadAuthenticationData()
+    {
+        return $this->_controller->loadAuthenticationData();
+    }
+    
+    /**
+     * Update authentication data (needs Tinebase tables to store the data)
+     * 
+     * Installs Tinebase if not already installed
+     *  
+     * 
+     * @todo validate $data
+     * 
+     * @param String $data [Json encoded string]
+     * 
+     * @return array [success status]
+     */
+    public function saveAuthentication($data)
+    {
+        $this->_controller->saveAuthentication(Zend_Json::decode($data));
+        return array(
+            'success' => true,
+            'setupRequired' => $this->_controller->setupRequired()
+        );
+    }
+    
     /**
      * Returns registry data of tinebase.
      * @see Tinebase_Application_Json_Abstract
@@ -224,7 +253,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             'configWritable'   => Setup_Core::configFileWritable(),
             'checkDB'          => Setup_Core::get(Setup_Core::CHECKDB),
             'setupChecks'      => $this->envCheck(),
+            'setupRequired'    => $this->_controller->setupRequired(),
             'configData'       => $this->loadConfig(),
+            'authenticationData' => $this->loadAuthenticationData(),
             'version'          => array(
                 'buildType'     => TINE20SETUP_BUILDTYPE,
                 'codeName'      => TINE20SETUP_CODENAME,

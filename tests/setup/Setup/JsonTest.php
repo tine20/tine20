@@ -61,13 +61,10 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {        
+    {
+        $this->_installAllApps();
     }
     
-    /**
-     * test uninstall application
-     *
-     */
     public function testUninstallApplications()
     {
     	try {
@@ -81,32 +78,20 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
 
 	    $this->_json->installApplications(Zend_Json::encode(array('ActiveSync'))); //cleanup
     }
-    
-    /**
-     * test uninstall application
-     *
-     */
+
     public function testUninstallTinebaseShouldThrowDependencyException()
     {
         $this->setExpectedException('Setup_Exception_Dependency');
     	$result = $this->_json->uninstallApplications(Zend_Json::encode(array('Tinebase')));
     }
     
-    /**
-     * test search applications
-     *
-     */
     public function testSearchApplications()
     {
         $apps = $this->_json->searchApplications();
         
         $this->assertGreaterThan(0, $apps['totalcount']);
     }
-    
-    /**
-     * test install application
-     *
-     */
+
     public function testInstallApplications()
     {
         try {
@@ -140,13 +125,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($result['success']));
     }
 
-    public function testCheckCOnfig()
-    {
-    	$result = $this->_json->checkConfig();
-    	$this->assertTrue(is_array($result));
-    	$this->assertTrue($result['configExists']);
-    	$this->assertTrue(isset($result['configWritable']));
-    }
+
     
     public function testLoginWithWrongUsernameAndPassword()
     {
@@ -182,16 +161,60 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($result['configWritable']));
         $this->assertTrue(isset($result['checkDB']));
         $this->assertTrue(isset($result['setupChecks']));
+        $this->assertFalse($result['setupRequired']);
+        $this->assertTrue(is_array($result['authenticationData']));
     }
     
-//    public function testGetAllRegistryData()
-//    {
-//    	ob_start();
-//    	$this->_json->getAllRegistryData();
-//    	$result = ob_get_contents();
-//    	ob_end_clean();
-//    	//var_dump(Zend_Json::decode($result));
-//    }
+    /**
+     * test load config
+     *
+     */
+    public function testLoadAuthenticationData()
+    {
+        $result = $this->_json->loadAuthenticationData();
+        
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(array_key_exists('authentication', $result));
+        $this->assertTrue(array_key_exists('accounts', $result));
+        $authentication = $result['authentication'];
+        $this->assertContains($authentication['backend'], array(Tinebase_Auth_Factory::SQL, Tinebase_Auth_Factory::LDAP));
+        $this->assertTrue(is_array($authentication[Tinebase_Auth_Factory::SQL]));
+        $this->assertTrue(is_array($authentication[Tinebase_Auth_Factory::LDAP]));
+    }
+    
+    public function testSaveAuthentication()
+    {
+        $originalAuthenticationData = $this->_json->loadAuthenticationData();
+
+        $testAuthenticationData = $originalAuthenticationData;
+        $testAuthenticationData['authentication']['backend'] = 'Sql';
+        $testAuthenticationData['authentication']['Sql']['admin']['loginName'] = 'phpunit-admin';
+        $testAuthenticationData['authentication']['Sql']['admin']['password'] = 'phpunit-password';
+        $testAuthenticationData['authentication']['Sql']['admin']['passwordConfirmation'] = 'phpunit-password';
+        
+        $this->_uninstallAllApps();
+        
+        $result = $this->_json->saveAuthentication(Zend_Json::encode($testAuthenticationData));
+        
+        $savedAuthenticationData = $this->_json->loadAuthenticationData();
+
+        $adminUser = Tinebase_Core::get('currentAccount');
+        $this->assertEquals($adminUser->accountLoginName, 'phpunit-admin', 'default admin user should be named as specified in authentication data');
+        $this->assertTrue(empty($savedAuthenticationData['authentication']['Sql']['admin']), 'admin loginname/password must not be stored in authentication config');
+        $this->assertEquals($savedAuthenticationData, $originalAuthenticationData);
+        
+        //test if Tinebase stack was installed
+        $apps = $this->_json->searchApplications();
+        $baseApplicationStack = array('Tinebase', 'Admin', 'Addressbook');
+        foreach ($apps['results'] as $app) {
+            if ($app['install_status'] === 'uptodate' &&
+                false !== ($index = array_search($app['name'], $baseApplicationStack))) {
+                unset($baseApplicationStack[$index]);
+            }
+        }
+
+        $this->assertTrue(empty($baseApplicationStack), 'Assure that base application stack was installed after saving authentication');
+    }
 
     /**
      * test load config
@@ -212,5 +235,20 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($result['test']));
         $this->assertEquals('value', $result['test']);
         $this->assertEquals($configData['database'], $result['database']);
+    }
+    
+    protected function _uninstallAllApps()
+    {
+        $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        $installedApplications = Zend_Json::encode($installedApplications->name);
+
+        $this->_json->uninstallApplications($installedApplications);
+    }
+    
+    protected function _installAllApps()
+    {
+        $installableApplications = Setup_Controller::getInstance()->getInstallableApplications();
+        $installableApplications = array_keys($installableApplications);
+        $this->_json->installApplications(Zend_Json::encode($installableApplications));
     }
 }

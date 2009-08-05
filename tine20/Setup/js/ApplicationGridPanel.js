@@ -188,27 +188,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             appNames.push(apps[i].get('name'));
         }
 
-        if (type === 'install' && appNames.indexOf('Addressbook') !== -1) {
-            var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
-                title: this.app.i18n._('Initial admin username and password'),
-                sendRequest: false,
-                appName: 'Setup',
-                i18nRecordName: this.app.i18n._('Credentials'),
-                listeners: {
-                    scope: this,
-                    'update': function(data) {
-                          var options = {
-                            admin_login_name : data.username,
-                            admin_login_password : data.password
-                          };
-                          
-                          this.sendAlterApplicationsRequest(type, appNames, options);
-                    }
-                }
-            });
-        } else {
-            this.sendAlterApplicationsRequest(type, appNames, null);
-        }
+        this.sendAlterApplicationsRequest(type, appNames, null);
     },
     
     sendAlterApplicationsRequest: function(type, appNames, options) {
@@ -227,7 +207,14 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
                     applicationNames: Ext.util.JSON.encode(appNames),
                     options: Ext.util.JSON.encode(options)
                 },
-                success: function() {
+                success: function(response) {
+                    var regData = Ext.util.JSON.decode(response.responseText);
+                    // replace some registry data
+                    for (key in regData) {
+                        if (key != 'status' && key != 'success') {
+                            Tine.Setup.registry.replace(key, regData[key]);
+                        }
+                    }
                     this.store.load();
                     longLoadMask.hide();
                 },

@@ -61,7 +61,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {       
+    {
+        $this->_installAllApplications();       
     }
        
     /**
@@ -103,7 +104,6 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     	
     	//cleanup
     	$this->_uninstallAllApplications();
-        $this->_installAllApplications();
     }
     
     public function testInstallGoupNameOptions()
@@ -116,7 +116,6 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         
         //cleanup
         $this->_uninstallAllApplications();
-        $this->_installAllApplications();
     }
     
     /**

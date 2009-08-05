@@ -27,6 +27,10 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     {
         $this->_setDefaultGroups($_options);
         
+        if (isset($_options['authenticationData'])) {
+            Setup_Controller::getInstance()->saveAuthentication($_options['authenticationData']);
+        }
+        
 		switch(Tinebase_Core::getAuthType()) {
 			case Tinebase_Auth_Factory::SQL:
 			    $this->_createInitialGroups();

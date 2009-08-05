@@ -22,6 +22,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var testsFailed   = !Tine.Setup.registry.get('setupChecks').success;
         var configMissing = !Tine.Setup.registry.get('configExists');
         var dbMissing     = !Tine.Setup.registry.get('checkDB');
+        var setupRequired = Tine.Setup.registry.get('setupRequired');
         
         this.root = {
             id: '/',
@@ -37,15 +38,15 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 id: 'ConfigManager',
                 leaf: true
             }, {
-                text: this.app.i18n._('Authentication'),
+                text: this.app.i18n._('Authentication/Accounts'),
                 iconCls: 'setup_config_manager',
-                disabled: testsFailed,
+                disabled: testsFailed || configMissing || dbMissing,
                 id: 'Authentication',
                 leaf: true
             }, {
                 text: this.app.i18n._('Application Manager'),
                 iconCls: 'setup_application_manager',
-                disabled: testsFailed || configMissing || dbMissing,
+                disabled: testsFailed || configMissing || dbMissing || setupRequired,
                 id: 'Application',
                 leaf: true
             }]
@@ -93,6 +94,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var setupChecks  = Tine.Setup.registry.get('setupChecks').success;
         var configExists = Tine.Setup.registry.get('configExists');
         var checkDB      = Tine.Setup.registry.get('checkDB');
+        var setupRequired = Tine.Setup.registry.get('setupRequired');
         
         var envNode = this.getNodeById('EnvCheck');
         var envIconCls = setupChecks ? 'setup_checks_success' : 'setup_checks_fail';
@@ -106,7 +108,8 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
         
         this.getNodeById('ConfigManager')[setupChecks ? 'enable': 'disable']();
-        this.getNodeById('Application')[setupChecks && configExists && checkDB ? 'enable': 'disable']();
+        this.getNodeById('Authentication')[setupChecks && configExists && checkDB ? 'enable': 'disable']();
+        this.getNodeById('Application')[setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
     }
 });
 

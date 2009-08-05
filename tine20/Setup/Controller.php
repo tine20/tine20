@@ -552,6 +552,100 @@ class Setup_Controller
         Setup_Core::set(Setup_Core::CONFIG, $config);
     }
     
+    public function loadAuthenticationData()
+    {
+        return array(
+                'authentication' => $this->_getAuthProviderData(),
+                'accounts'       => $this->_getAccountsStorageData()
+            );
+    }
+    
+    /**
+     * Update authentication data (needs Tinebase tables to store the data)
+     * 
+     * Installs Tinebase if not already installed
+     *  
+     * 
+     * @todo validate $data
+     * 
+     * @param String $data [Json encoded string]
+     * 
+     * @return bool
+     */
+    public function saveAuthentication($_authenticationData)
+    {    
+        if ($this->isInstalled('Tinebase')) {
+            $this->_updateAuthentication($_authenticationData);
+        } else {
+            $installationOptions = array();
+            if (!empty($_authenticationData['authentication']['Sql']['admin'])) {
+                $admin = $_authenticationData['authentication']['Sql']['admin'];
+                $installationOptions['admin_login_name'] = $admin['loginName'];
+                $installationOptions['admin_login_password'] = $admin['password'];
+            }
+            $installationOptions['authenticationData'] = $_authenticationData;
+            $this->installApplications(array('Tinebase'), $installationOptions);
+        }
+    }
+
+    /**
+     * 
+     * @param array $_authenticationData [hash containing settings for authentication and accountsStorage]
+     * @return void
+     */
+    protected function _updateAuthentication($_authenticationData)
+    {
+        if (isset($_authenticationData['authentication']['Sql']['admin'])) {
+             unset($_authenticationData['authentication']['Sql']['admin']);
+        }
+//        if ($_authenticationData['authentication']['backend'] === Tinebase_Auth_Factory::LDAP) {
+//            unset($_authenticationData['authentication'][Tinebase_Auth_Factory::SQL]);
+//        } else {
+//            unset($_authenticationData['authentication'][Tinebase_Auth_Factory::LDAP]);
+//        }
+        
+        $this->saveConfigData($_authenticationData);
+    }
+    
+    protected function _getAuthProviderData()
+    {
+        $result = Tinebase_Core::getConfig()->authentication;
+        if (isset($result)) {
+            $result = $result->toArray();
+        } else {
+            $result = array();
+            $result['backend'] = Tinebase_Auth_Factory::SQL;
+            
+            $result[Tinebase_Auth_Factory::SQL] = array();
+            $result[Tinebase_Auth_Factory::SQL]['admin']['loginName'] = 'tine20admin';
+            
+            $result[Tinebase_Auth_Factory::LDAP] = array();
+            $result[Tinebase_Auth_Factory::LDAP]['bindRequiresDn'] = true;
+            $result[Tinebase_Auth_Factory::LDAP]['accountCanonicalForm'] = 2;
+        }
+        
+        return $result;
+    }
+    
+    protected function _getAccountsStorageData()
+    {
+        $result = array();
+        $result['backend'] = Tinebase_Auth_Factory::SQL;
+        
+        $result[Tinebase_Auth_Factory::SQL] = array();
+        
+        $result[Tinebase_Auth_Factory::LDAP] = array();
+        $result[Tinebase_Auth_Factory::LDAP]['bindRequiresDn'] = true;
+        $result[Tinebase_Auth_Factory::LDAP]['pwEncType'] = 'SHA';
+        $result[Tinebase_Auth_Factory::LDAP]['minUserId'] = 10000;
+        $result[Tinebase_Auth_Factory::LDAP]['maxUserId'] = 29999;
+        $result[Tinebase_Auth_Factory::LDAP]['minGroupId'] = 11000;
+        $result[Tinebase_Auth_Factory::LDAP]['maxGroupId'] = 11099;
+        
+        $result[Tinebase_Auth_Factory::LDAP]['accountCanonicalForm'] = 2;
+        
+        return $result;
+    }
     /**
      * create new setup user session
      *
@@ -600,12 +694,12 @@ class Setup_Controller
     public function installApplications($_applications, $_options = null)
     {
         // check requirements for initial install / add required apps to list
-        if (! $this->_isInstalled('Tinebase')) {
+        if (! $this->isInstalled('Tinebase')) {
     
             $minimumRequirements = array('Tinebase', 'Addressbook', 'Admin');
             
             foreach ($minimumRequirements as $requiredApp) {
-                if (!in_array($requiredApp, $_applications) && !$this->_isInstalled($requiredApp)) {
+                if (!in_array($requiredApp, $_applications) && !$this->isInstalled($requiredApp)) {
                     // Addressbook has to be installed with Tinebase for initial data (user contact)
                     Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                         . ' ' . $requiredApp . ' has to be installed first (adding it to list).'
@@ -618,7 +712,7 @@ class Setup_Controller
         // get xml and sort apps first
         $applications = array();
         foreach($_applications as $applicationName) {       	
-            if ($this->_isInstalled($applicationName)) {
+            if ($this->isInstalled($applicationName)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipping installation of application {$applicationName} because it is already installed");
             } else {
                 $applications[$applicationName] = $this->getSetupXml($applicationName);
@@ -865,7 +959,7 @@ class Setup_Controller
                     unset($appsToSort[$name]);
                 } else {
                     foreach ($depends as $key => $dependingAppName) {
-                        if (in_array($dependingAppName, array_keys($result)) || $this->_isInstalled($dependingAppName)) {
+                        if (in_array($dependingAppName, array_keys($result)) || $this->isInstalled($dependingAppName)) {
                             // remove from depending apps because it is already in result set
                             unset($appsToSort[$name][$key]);
                         }
@@ -963,7 +1057,7 @@ class Setup_Controller
      * @param string $appname
      * @return boolean
      */
-    protected function _isInstalled($appname)
+    public function isInstalled($appname)
     {
         $result = TRUE;
         try {
