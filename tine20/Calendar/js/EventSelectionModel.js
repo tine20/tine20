@@ -10,6 +10,7 @@
 Ext.ns('Tine.Calendar');
 
 /**
+ * @namespace Tine.Calendar
  * @class Tine.Calendar.EventSelectionModel
  * @extends Ext.tree.MultiSelectionModel
  * Selection model for a calendar views.

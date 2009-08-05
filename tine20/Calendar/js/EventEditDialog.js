@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Calendar
@@ -12,6 +12,7 @@
 Ext.ns('Tine.Calendar');
 
 /**
+ * @namespace Tine.Calendar
  * @class Tine.Calendar.EventEditDialog
  * @extends Tine.widgets.dialog.EditDialog
  * Calendar Edit Dialog <br>

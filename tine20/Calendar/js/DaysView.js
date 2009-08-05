@@ -108,13 +108,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     denyDragOnMissingEditGrant: true,
     /**
-     * @property {Ext.data.Store} timeScale
-     * store holding timescale 
+     * store holding timescale
+     * @type {Ext.data.Store}
      */
     timeScale: null,
     /**
      * The amount of space to reserve for the scrollbar (defaults to 19 pixels)
-     * @type Number
+     * @type {Number}
      */
     scrollOffset: 19,
     /**
@@ -123,8 +123,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     editing: false,
     /**
-     * @property {Tine.Calendar.Model.Event} activeEvent
-     * @private
+     * currently active event
+     * $type {Tine.Calendar.Model.Event}
      */
     activeEvent: null,
     /**

@@ -9,7 +9,11 @@
 
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
 
-// Event model
+/**
+ * @namespace Tine.Calendar.Model
+ * @type {Array}
+ * Event record definition array
+ */
 Tine.Calendar.Model.EventArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'dtend', type: 'date', dateFormat: Date.patterns.ISO8601Long },
@@ -56,6 +60,9 @@ Tine.Calendar.Model.EventArray = Tine.Tinebase.Model.genericFields.concat([
 
 /**
  * Event record definition
+ * @namespace Tine.Calendar.Model
+ * @class Tine.Calendar.Model.Event
+ * @extends Tine.Tinebase.data.Record
  */
 Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.EventArray, {
     appName: 'Calendar',
@@ -211,6 +218,12 @@ Tine.Calendar.Model.AttenderArray = [
     {name: 'displaycontainer_id'}
 ];
 
+/**
+ * Attender Record Definition
+ * @namespace Tine.Calendar.Model
+ * @class Tine.Calendar.Model.Attender
+ * @extends Tine.Tinebase.data.Record
+ */
 Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.AttenderArray, {
     appName: 'Calendar',
     modelName: 'Attender',
