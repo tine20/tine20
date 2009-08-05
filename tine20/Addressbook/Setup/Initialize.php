@@ -75,7 +75,6 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _createInitialAdminAccount($_options = null)
     {
-    	
     	$_loginName    = empty($_options['admin_login_name']) ? 'tine20admin' : $_options['admin_login_name'];
     	$_password     = empty($_options['admin_login_password']) ? 'lars' : $_options['admin_login_password'];
     	$_firstname    = empty($_options['admin_first_name']) ? 'Tine 2.0' : $_options['admin_first_name'];
@@ -112,7 +111,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         Tinebase_Core::set('currentAccount', $account);
 
         // set the password for the account
-        Tinebase_User::getInstance()->setPassword($_loginName, $_password, $_password);
+        Tinebase_User::getInstance()->setPassword($_loginName, $_password);
 
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
