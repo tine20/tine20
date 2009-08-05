@@ -11,6 +11,11 @@
  
 Ext.ns('Tine.Calendar');
 
+/**
+ * @namespace Tine.Calendar
+ * @class Tine.Calendar.AttendeeGridPanel
+ * @extends Ext.grid.EditorGridPanel
+ */
 Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     autoExpandColumn: 'user_id',
     clicksToEdit: 1,

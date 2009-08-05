@@ -15,6 +15,14 @@ Date.msWEEK   =  7 * Date.msDAY;
 
 Ext.ns('Tine.Calendar');
 
+/**
+ * @class Tine.Calendar.CalendarPanel
+ * @namespace Tine.Calendar
+ * @extends Ext.Panel
+ * Calendar Panel, pooling together store, and view <br/>
+ * @author Cornelius Weiss <c.weiss@metaways.de>
+ * @version $Id$
+ */
 Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Tine.Calendar.someView} view

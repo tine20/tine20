@@ -18,6 +18,9 @@ Ext.onReady(function(){
 });
 
 /**
+ * @namespace Tine.Calendar
+ * @class Tine.Calendar.Application
+ * @extends Tine.Tinebase.Application
  * Calendar Application
  */
 Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
@@ -27,9 +30,12 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
 });
 
 /**
- * default mainscreen
+ * @namespace Tine.Calendar
+ * @class Tine.Calendar.MainScreen
+ * @extends Tine.Tinebase.widgets.app.MainScreen
+ * @constructor
  * 
- * @type Tine.Tinebase.widgets.app.MainScreen
+ * Calendar Mainscreen
  */
 Tine.Calendar.MainScreen = function(config) {
     Ext.apply(this, config);
@@ -72,9 +78,10 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
 });
 
 /**
+ * @namespace Tine.Calendar
  * @class Tine.Calendar.TreePanel
  * @extends Ext.Panel
- * 
+ * Left Calendar Panel including Tree and DatePicker<br>
  * @todo add d&d support to tree (change calendar)
  */
 Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
