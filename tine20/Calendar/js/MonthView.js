@@ -9,6 +9,13 @@
 
 Ext.ns('Tine.Calendar');
 
+/**
+ * @namespace Tine.Calendar
+ * @class Tine.Calendar.MonthView
+ * @extends Ext.util.Observable
+ * @constructor
+ * @param {Object} config
+ */
 Tine.Calendar.MonthView = function(config){
     Ext.apply(this, config);
     Tine.Calendar.MonthView.superclass.constructor.call(this);

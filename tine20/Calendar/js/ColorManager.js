@@ -10,9 +10,9 @@
 Ext.ns('Tine.Calendar');
 
 /**
- * Manages coloring for calendar
- * 
+ * @namespace Tine.Calendar
  * @class Tine.Calendar.ColorManager
+ * @extends Ext.util.Observable
  * @constructor
  * @param {Object} config
  */

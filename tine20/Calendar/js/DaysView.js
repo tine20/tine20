@@ -9,6 +9,13 @@
 
 Ext.ns('Tine.Calendar');
 
+/**
+ * @namespace Tine.Calendar
+ * @class Tine.Calendar.DaysView
+ * @extends Ext.util.Observable
+ * @constructor
+ * @param {Object} config
+ */
 Tine.Calendar.DaysView = function(config){
     Ext.apply(this, config);
     Tine.Calendar.DaysView.superclass.constructor.call(this);
