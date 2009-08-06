@@ -33,14 +33,19 @@ class Setup_Server_Json extends Setup_Server_Abstract
             Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ ." is json request. method: '{$_POST['method']}' ");
             
             $anonymnousMethods = array(
-                'Setup.getRegistryData',
                 'Setup.getAllRegistryData',
                 'Setup.login',
-                'Setup.envCheck',
                 'Tinebase.getAvailableTranslations',
                 'Tinebase.getTranslations',
                 'Tinebase.setLocale',
             );
+            
+            if (! Setup_Core::configFileExists()) {
+            	$anonymnousMethods = array_merge($anonymnousMethods, array(
+                'Setup.envCheck',
+            ));
+            
+            }
             // check json key for all methods but some exceptoins
             if (! in_array($_POST['method'], $anonymnousMethods) && Setup_Core::configFileExists()
                      && ( empty($_POST['jsonKey']) || $_POST['jsonKey'] != Setup_Core::get('jsonKey')

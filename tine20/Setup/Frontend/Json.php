@@ -175,7 +175,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 ? Setup_Controller::getInstance()->getConfigDefaults()
                 : Setup_Controller::getInstance()->getConfigData();
 
-        return $result;
+        return Setup_Core::isRegistered(Setup_Core::USER) ? $result : array();
     }
     
     /**
@@ -241,21 +241,17 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     }
     
     /**
-     * Returns registry data of tinebase.
+     * Returns registry data of setup
+     * .
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
      */
     public function getRegistryData()
     {
+    	// anonymous registry
         $registryData =  array(
             'configExists'     => Setup_Core::configFileExists(),
-            'configWritable'   => Setup_Core::configFileWritable(),
-            'checkDB'          => Setup_Core::get(Setup_Core::CHECKDB),
-            'setupChecks'      => $this->envCheck(),
-            'setupRequired'    => $this->_controller->setupRequired(),
-            'configData'       => $this->loadConfig(),
-            'authenticationData' => $this->loadAuthenticationData(),
             'version'          => array(
                 'buildType'     => TINE20SETUP_BUILDTYPE,
                 'codeName'      => TINE20SETUP_CODENAME,
@@ -264,6 +260,19 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             ),
         );
         
+        // authenticated or non existent config
+        if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
+        	$registryData = array_merge($registryData, array(
+	            'configWritable'     => Setup_Core::configFileWritable(),
+	            'checkDB'            => Setup_Core::get(Setup_Core::CHECKDB),
+	            'setupChecks'        => $this->envCheck(),
+        	    'setupRequired'      => $this->_controller->setupRequired(),
+	            'configData'         => $this->loadConfig(),
+        	    'authenticationData' => $this->loadAuthenticationData(),
+	        ));
+        }
+        
+        // if setup user is logged in
         if (Setup_Core::isRegistered(Setup_Core::USER)) {
             $registryData += array(
                 'currentAccount'   => Setup_Core::getUser(),
