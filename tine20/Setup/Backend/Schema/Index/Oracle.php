@@ -34,7 +34,7 @@ class Setup_Backend_Schema_Index_Oracle extends Setup_Backend_Schema_Index_Abstr
      */    
     protected function _setIndex($_declaration)
     {    
-        $this->name = $_declaration['COLUMN_NAME'];
+        $this->setName($_declaration['COLUMN_NAME']);
         $type = '';
         $length= '';
         switch ($_declaration['DATA_TYPE']) {

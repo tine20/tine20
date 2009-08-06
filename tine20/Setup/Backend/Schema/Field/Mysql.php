@@ -16,6 +16,8 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
     public function __construct($_declaration)
     {
         $this->_setField($_declaration);
+        
+        parent::__construct($_declaration);
     }
     
     /**

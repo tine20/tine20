@@ -6,7 +6,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 require_once 'PHPUnit/Framework.php';
 
-//require_once '\xampp\htdocs\tine30\Setup\Backend\Schema\Field.php';
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /**
  * Test class for Setup_Backend_Schema_Field.
@@ -54,6 +54,31 @@ class Setup_Backend_Schema_FieldTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
+    
+    public function testIsValid()
+    {
+        $string ="
+            <field>
+                <name>a</name>
+                <type>integer</type>
+                <autoincrement>true</autoincrement>
+                <unsigned>true</unsigned>
+            </field>";
+
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);       
+        $this->assertTrue($field->isValid(), 'Test if a valid field is correctly marked as valid');
+        $this->assertTrue($field->isValid(true), 'Test if no Exception is thrown on validating a valid field is correctly marked as valid');
+        
+        $field->setName(str_pad('A', 23, 'a'));
+        $this->asserttrue($field->isValid(), 'Test if the maximum field name length is still valid');
+        
+        $field->setName(str_pad('A', 24, 'a'));
+        $this->assertFalse($field->isValid(), 'Test if a too long field name is invalid');
+        
+        $this->setExpectedException('Setup_Exception_InvalidSchema');
+        $field->isValid(true); //Test if the parameter throwException works as expected
+    }
+
 }
 
 // Call Setup_Backend_Schema_FieldTest::main() if this source file is executed directly.

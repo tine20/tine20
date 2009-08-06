@@ -10,14 +10,8 @@
  */
 
 
-abstract class Setup_Backend_Schema_Index_Abstract
+abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_Abstract
 {
-     /**
-     * the name of the index
-     *
-     * @var string
-     */
-    public $name;
     
     /**
      * the name of the field(s)/column(s) in its own table 
@@ -85,85 +79,71 @@ abstract class Setup_Backend_Schema_Index_Abstract
     
     
     abstract protected function _setIndex($_declaration);
-    
-    
-    /**
-     * set index from declaration 
-    * @param stdClass $_declaration
-     * NOT IMPLEMENTED YET
-     */      
-    public function setName($_name)
-    {
-        if (SQL_TABLE_PREFIX == substr($_name, 0, strlen(SQL_TABLE_PREFIX))) {
-            $this->name = substr($_name, strlen(SQL_TABLE_PREFIX));
-        } else {
-            $this->name == $_name;
-        }
-    }
-    
-    /**
-     * set index from declaration 
-    * @param stdClass $_declaration
-     * NOT IMPLEMENTED YET
-     */  
-    public function setForeignKey($_foreign)
-    {
-        $this->foreign = 'true';
-        $this->reference['table'] = substr($_foreign['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
-        $this->reference['field'] = $_foreign['REFERENCED_COLUMN_NAME'];
-    }
-    
-    /**
-     * set index from declaration 
-    * @param stdClass $_declaration
-     * NOT IMPLEMENTED YET
-     */  
-    public function addIndex($_definition)
-    {
-        foreach ($this->declaration['index'] as $index) {
-            if ($index->field['name'] == $_definition['COLUMN_NAME']) {
-                if ($_definition['CONSTRAINT_NAME'] == 'PRIMARY') {
-                    $index->setName($_definition['COLUMN_NAME']);
-                } else {
-                    $index->setName($_definition['CONSTRAINT_NAME']);
-                }
-            }
-        }
-    }
-    
-    /**
-     * set index from declaration 
-    * @param stdClass $_declaration
-     * NOT IMPLEMENTED YET
-     */     
-    public function setIndex($_definition)
-    {
-        foreach ($this->declaration['index'] as $index) {
-            if ($index->field['name'] == $_definition['COLUMN_NAME']) {
-                if ($_definition['CONSTRAINT_NAME'] == 'PRIMARY') {
-                    $index->setName($_definition['COLUMN_NAME']);
-                } else {
-                    $index->setName($_definition['CONSTRAINT_NAME']);
-                }
-            }
-        }
-    }
-    
-    /**
-     * set index from declaration 
-    * @param stdClass $_declaration
-     * NOT IMPLEMENTED YET
-     */  
-    public function setForeign($_definition)
-    {
-        foreach ($this->declaration['index'] as $index) {
-            //// auto shutup by cweiss: echo "<h1>"  . substr($_definition['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)) . "/" .$index->field->name.  "</h1>";
-            
-            //if ($index->field->name == substr($_definition['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)))
-            //{
-                $index->setForeignKey($_definition);
-            //}
-        }
-    }
+
+//    
+//    /**
+//     * set index from declaration 
+//    * @param stdClass $_declaration
+//     * NOT IMPLEMENTED YET
+//     */  
+//    public function setForeignKey($_foreign)
+//    {
+//        $this->foreign = 'true';
+//        $this->reference['table'] = substr($_foreign['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
+//        $this->reference['field'] = $_foreign['REFERENCED_COLUMN_NAME'];
+//    }
+//    
+//    /**
+//     * set index from declaration 
+//    * @param stdClass $_declaration
+//     * NOT IMPLEMENTED YET
+//     */  
+//    public function addIndex($_definition)
+//    {
+//        foreach ($this->declaration['index'] as $index) {
+//            if ($index->field['name'] == $_definition['COLUMN_NAME']) {
+//                if ($_definition['CONSTRAINT_NAME'] == 'PRIMARY') {
+//                    $index->setName($_definition['COLUMN_NAME']);
+//                } else {
+//                    $index->setName($_definition['CONSTRAINT_NAME']);
+//                }
+//            }
+//        }
+//    }
+//    
+//    /**
+//     * set index from declaration 
+//    * @param stdClass $_declaration
+//     * NOT IMPLEMENTED YET
+//     */     
+//    public function setIndex($_definition)
+//    {
+//        foreach ($this->declaration['index'] as $index) {
+//            if ($index->field['name'] == $_definition['COLUMN_NAME']) {
+//                if ($_definition['CONSTRAINT_NAME'] == 'PRIMARY') {
+//                    $index->setName($_definition['COLUMN_NAME']);
+//                } else {
+//                    $index->setName($_definition['CONSTRAINT_NAME']);
+//                }
+//            }
+//        }
+//    }
+//    
+//    /**
+//     * set index from declaration 
+//    * @param stdClass $_declaration
+//     * NOT IMPLEMENTED YET
+//     */  
+//    public function setForeign($_definition)
+//    {
+//        foreach ($this->declaration['index'] as $index) {
+//            //// auto shutup by cweiss: echo "<h1>"  . substr($_definition['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)) . "/" .$index->field->name.  "</h1>";
+//            
+//            //if ($index->field->name == substr($_definition['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)))
+//            //{
+//                $index->setForeignKey($_definition);
+//            //}
+//        }
+//    }
     
 }

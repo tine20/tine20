@@ -6,7 +6,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 require_once 'PHPUnit/Framework.php';
 
-//require_once '\xampp\htdocs\tine20\Setup\Backend\Schema\Table.php';
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /**
  * Test class for Setup_Backend_Schema_Table.
@@ -84,7 +84,28 @@ class Setup_Backend_Schema_TableTest extends PHPUnit_Framework_TestCase
     {
     }
 
+    public function testIsValid()
+    {
+        $table = $this->object;
+        $this->assertTrue($table->isValid(), 'Test if a valid field is correctly marked as valid');
+        $this->assertTrue($table->isValid(true), 'Test if no Exception is thrown on validating a valid field is correctly marked as valid');
+        
+        $table->setName(str_pad('A', 24, 'a'));
+        $this->assertFalse($table->isValid(), 'Test if a too long field name is invalid');
+        
+        $this->setExpectedException('Setup_Exception_InvalidSchema');
+        $table->isValid(true); //Test if the parameter throwException works as expected
+    }
 	
+    public function testSetName()
+    {
+        $name = 'phpunit-test';
+        $this->object->setName($name);
+        $this->assertEquals('phpunit-test', $this->object->name);
+        
+        $this->object->setName(SQL_TABLE_PREFIX . 'phpunit-test');
+        $this->assertEquals('phpunit-test', $this->object->name);
+    }
 	
     /**
      * @todo Implement testAddDeclarationField().
@@ -96,21 +117,6 @@ class Setup_Backend_Schema_TableTest extends PHPUnit_Framework_TestCase
           'This test has not been implemented yet.'
         );
     }
-
-	public function test_setTableFromXml(){
-	
-	
-	}
-	
-	public function test_setTableFromArray(){
-	
-	
-	}
-	
-	public function test_setTableFromObject(){
-	
-	
-	}
 	
     /**
      * @todo Implement testSetDeclarationField().
@@ -187,4 +193,3 @@ class Setup_Backend_Schema_TableTest extends PHPUnit_Framework_TestCase
 if (PHPUnit_MAIN_METHOD == 'Setup_Backend_Schema_TableTest::main') {
     Setup_Backend_Schema_TableTest::main();
 }
-?>

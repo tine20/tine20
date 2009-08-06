@@ -10,14 +10,8 @@
  */
 
 
-abstract class Setup_Backend_Schema_Table_Abstract
+abstract class Setup_Backend_Schema_Table_Abstract extends Setup_Backend_Schema_Abstract
 {
-     /**
-     * the name of the table
-     *
-     * @var string
-     */
-    public $name;
     
     /**
      * the table comment
@@ -84,6 +78,19 @@ abstract class Setup_Backend_Schema_Table_Abstract
     public function addIndex(Setup_Backend_Schema_Index_Abstract $_index)
     {
         $this->indices[] = $_index;
+    }
+    
+    /**
+     * set index from declaration 
+     * @param string $_name
+     */      
+    public function setName($_name)
+    {
+        $name = (string)$_name;
+        if (SQL_TABLE_PREFIX == substr($name, 0, strlen(SQL_TABLE_PREFIX))) {
+            $name = substr($name, strlen(SQL_TABLE_PREFIX));
+        }
+        parent::setName($name);
     }
     
     /**

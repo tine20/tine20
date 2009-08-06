@@ -10,14 +10,8 @@
  */
 
 
-abstract class Setup_Backend_Schema_Field_Abstract
+abstract class Setup_Backend_Schema_Field_Abstract extends Setup_Backend_Schema_Abstract
 {
-    /**
-     * the name of the column / field
-     *
-     * @var string
-     */
-    public $name;
     
     /**
      * the data type (int/varchar/etc)
@@ -96,7 +90,6 @@ abstract class Setup_Backend_Schema_Field_Abstract
      */
     public $unique;
     
-    
     //abstract protected function _setField($_declaration);
     
     /**
@@ -137,4 +130,5 @@ abstract class Setup_Backend_Schema_Field_Abstract
                     'unique' => $this->unique,
                    );
     }
+
 }

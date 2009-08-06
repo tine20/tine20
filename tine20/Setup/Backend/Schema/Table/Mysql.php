@@ -15,7 +15,7 @@ class Setup_Backend_Schema_Table_Mysql extends Setup_Backend_Schema_Table_Abstra
 
     public function __construct($_tableDefinition)
     {
-         $this->name = substr($_tableDefinition->TABLE_NAME, strlen(SQL_TABLE_PREFIX));
+         $this->setName($_tableDefinition->TABLE_NAME);
          $version = explode(';', $_tableDefinition->TABLE_COMMENT);
          $this->version = substr($version[0], 9);  
     }

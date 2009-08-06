@@ -25,6 +25,8 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
             $declaration = new SimpleXMLElement($_declaration);
             $this->_setField($declaration);
         }
+        
+        parent::__construct($_declaration);
     }
 
     /**

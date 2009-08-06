@@ -19,7 +19,7 @@ class Setup_Backend_Schema_Table_Xml extends Setup_Backend_Schema_Table_Abstract
                 $_tableDefinition = new SimpleXMLElement($_tableDefinition);
             }
             
-            $this->name    = (string) $_tableDefinition->name;
+            $this->setName($_tableDefinition->name);
             $this->comment = (string) $_tableDefinition->comment;
             $this->version = (string) $_tableDefinition->version;
             

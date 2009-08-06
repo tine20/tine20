@@ -6,7 +6,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 require_once 'PHPUnit/Framework.php';
 
-//require_once '\xampp\htdocs\tine30\Setup\Backend\Schema\Index.php';
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /**
  * Test class for Setup_Backend_Schema_Index.
@@ -55,6 +55,51 @@ class Setup_Backend_Schema_IndexTest extends PHPUnit_Framework_TestCase
     {
     }
 
+    public function testIsValid()
+    {
+        $string ="
+                <index>
+                    <unique>true</unique>
+                    <field>
+                        <name>a</name>
+                    </field>
+                </index>";
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+
+        $this->assertTrue($index->isValid(), 'Test if a valid field is correctly marked as valid');
+        $this->assertTrue($index->isValid(true), 'Test if no Exception is thrown on validating a valid field is correctly marked as valid');
+
+        $string ="
+                <index>
+                    <unique>true</unique>
+                    <field>
+                        <name>" . str_pad('A', 23, 'a') . "</name>
+                    </field>
+                </index>";
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        $this->asserttrue($index->isValid(), 'Test if the maximum field name length is still valid');
+
+        $string ="
+                <index>
+                    <unique>true</unique>
+                    <field>
+                        <name>a</name>
+                    </field>
+                    <field>
+                        <name>" . str_pad('A', 23, 'a') . "</name>
+                    </field>
+                </index>";
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        
+        $this->assertFalse($index->isValid(), 'Test if a too long field name is invalid');
+        
+        $this->setExpectedException('Setup_Exception_InvalidSchema');
+        $index->isValid(true); //Test if the parameter throwException works as expected
+    }
+    
     /**
      * @todo Implement testSetName().
      */

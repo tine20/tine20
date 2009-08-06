@@ -30,7 +30,6 @@ class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
     protected function _setIndex($_declaration)
     {
         foreach ($_declaration as $key => $val) {
-        
             if ($key != 'field' && $key != 'reference') {
                 $this->$key = (string) $val;
                 
@@ -50,6 +49,10 @@ class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
                 $this->referenceOnDelete= $val->ondelete;
                 $this->field = $this->field[0];
             }
+        }
+
+        if (empty($this->name)) {
+            $this->setName(join('-', (array)$this->field));
         }
     }
 }

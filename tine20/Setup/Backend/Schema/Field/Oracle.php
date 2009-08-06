@@ -16,6 +16,8 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
     public function __construct($_declaration)
     {
         $this->_setField($_declaration);
+        
+        parent::__construct($_declaration);
     }
     
     /**

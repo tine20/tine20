@@ -20,7 +20,7 @@ class Setup_Backend_Schema_Table_Oracle extends Setup_Backend_Schema_Table_Abstr
          //$version = explode(';', $_tableDefinition->TABLE_COMMENT);
          //$this->version = substr($version[0], 9);  
          $field = current($_tableDefinition);
-         $this->name = substr($field['TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
+         $this->setName($field['TABLE_NAME']);
     }
       
     public function setFields($_tableDefinition)

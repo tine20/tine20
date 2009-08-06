@@ -214,6 +214,8 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue(empty($baseApplicationStack), 'Assure that base application stack was installed after saving authentication');
+        
+        $this->_uninstallAllApps(); //Ensure that all aps get re-installed with default username/password because some tests rely on these values
     }
 
     /**
