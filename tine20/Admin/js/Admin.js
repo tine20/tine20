@@ -135,7 +135,8 @@ Tine.Admin = function() {
             iconCls: 'AdminIconCls',
             loader: treeLoader,
             rootVisible: false,
-            border: false
+            border: false,
+            autoScroll: true
         });
         
         // set the root node
