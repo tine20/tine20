@@ -21,7 +21,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Tinebase_User
  */
-class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
+class Setup_Backend_OracleTest extends BaseTest
 {
     /**
      * @var    Setup_Backend_Oracle
@@ -115,7 +115,61 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
 
     
     
+    public function testOracleDbAdapterPositionalToNamedParameters()
+    {
+        $db = Tinebase_Core::getDb();
+        
+        $prefix = 'npp';
+        
+        //setup proxy for Zend_Db_Adapter_Oralce because we want to test a protected method
+        $config = Tinebase_Core::getConfig();
+        $dbConfig = $config->database;
+        $dbProxy = $this->getProxy('Zend_Db_Adapter_Oracle', $dbConfig->toArray());
+        $dbProxy->supportPositionalParameters(true);
+        $dbProxy->setNamedParamPrefix($prefix);
+        
+        $sqlOrig = 'test';
+        $bindOrig = array();
+        list($sqlConverted, $bindConverted) = $dbProxy->proxy_positionalToNamedParameters($sqlOrig, $bindOrig);
+        $this->assertEquals($sqlOrig, $sqlConverted);
+        $this->assertEquals($bindOrig, $bindConverted);
+        
+        $sqlOrig = 'select x from y where x=?';
+        $bindOrig = array('z');
+        
+        list($sqlConverted, $bindConverted) = $dbProxy->proxy_positionalToNamedParameters($sqlOrig, $bindOrig);
+        $this->assertFalse(strpos($sqlConverted, '?'));
+        $this->assertTrue(false !== strpos($sqlConverted, ':' . $prefix . '0'));
+        $this->assertEquals($bindConverted[$prefix . '0'], 'z');     
+    }
     
+    public function testQuestionMarkInFieldValue()
+    {
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+        $value = 'test ??  . ?=? ..';
+        $db->insert($tableName, array('name' => $value));
+        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
+        $this->assertEquals($value, $result[0]);
+        
+        $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ') VALUES (' . $db->quote($value, 'text') . ')');
+        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
+        $this->assertEquals($value, $result[1]);
+        
+        $string ="
+                <field>
+                    <name>test</name>
+                    <type>text</type>
+                    <length>25</length>
+                </field>";
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->_backend->addCol($this->_table->name, $field);
+
+//        $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ', ' . $db->quoteIdentifier('test') . ') VALUES (' . $db->quote($value, 'text') . ', ?)', array('test value for col 2'));
+//        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
+//        $this->assertEquals($value, $result[1]);
+    }
     
     public function testGetCreateStatement()
     {
@@ -370,6 +424,39 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }
     
+    public function testStringToFieldStatement_008() 
+    {
+        $string ="
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"account_id" NUMBER(11,0)');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+//    public function testUnsignedNotImplemented()
+//    {
+//        $string ="
+//                <field>
+//                    <name>account_id</name>
+//                    <type>integer</type>
+//                    <unsigned>true</unsigned>
+//                </field>";
+//
+//        
+//        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+//        
+//        $this->setExpectedException('Setup_Backend_Exception_NotImplemented', 'unsigned');
+//        $this->_backend->addCol($this->_table->name, $field);
+//    }
+    
     public function testLongTableName() 
     {
         //Tests table without sequence
@@ -402,10 +489,10 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->_backend->addCol($this->_table->name, $field);
         
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
-        $this->assertEquals('text', $newColumn->type);
-        $this->assertEquals('4000', $newColumn->length);
+//        $schema = $this->_backend->getExistingSchema($this->_table->name);
+//        $newColumn = end($schema->fields);
+//        $this->assertEquals('text', $newColumn->type);
+//        $this->assertEquals('4000', $newColumn->length);
         
         $db = Tinebase_Core::getDb();
         $tableName = SQL_TABLE_PREFIX . $this->_table->name;
@@ -413,10 +500,10 @@ class Setup_Backend_OracleTest extends PHPUnit_Framework_TestCase
             'some text',
             str_pad('test', 4001, 'x') 
         );
-        $this->setExpectedException('Zend_Db_Statement_Exception', '1461'); //maximum length is 4000 characters
+
         foreach ($testValues as $index => $value) {
             $db->insert($tableName, array('name' => $index, 'test' => $value));
-            $result = $db->fetchOne('SELECT "test" FROM "' . $tableName . '" WHERE "name"=?', array($index));
+            $result = $db->fetchOne('SELECT "test" FROM "' . $tableName . '" WHERE "name"=:name', array('name' => $index));
             $this->assertEquals($value, $result);
         }
     }
