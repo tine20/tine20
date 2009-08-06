@@ -68,7 +68,7 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Frontend/Http.php:288 js/tineInit.js:283
+#: Frontend/Http.php:288 js/tineInit.js:305
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
@@ -335,11 +335,11 @@ msgstr "Určitě se chcete odhlásit?"
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
-#: js/tineInit.js:266
+#: js/tineInit.js:288
 msgid "Connection lost, please check your network!"
 msgstr "Spojení přerušeno, zkontrolujte prosím Vaší síť."
 
-#: js/tineInit.js:274
+#: js/tineInit.js:296
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -347,25 +347,26 @@ msgstr ""
 "Server neodpověděl na Váš požadavek. Zkontrolujte prosím své síťové "
 "připojení nebo kontaktujte administrátora."
 
-#: js/tineInit.js:284
+#: js/tineInit.js:306
 msgid "Your session timed out. You need to login again."
 msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
 
-#: js/tineInit.js:297
+#: js/tineInit.js:319
 msgid "Insufficient Rights"
 msgstr "Nedostatečná oprávnění"
 
-#: js/tineInit.js:298
+#: js/tineInit.js:320
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Lituji, nemáte oprávnění k této akci."
 
-#: js/tineInit.js:307
+#: js/tineInit.js:329
 msgid "Not Found"
 msgstr "Nebylo nalezeno"
 
-#: js/tineInit.js:308
+#: js/tineInit.js:330
+#, fuzzy
 msgid ""
-"Sorry, your requested could not be completed because the required data could "
+"Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
@@ -373,11 +374,11 @@ msgstr ""
 "nalezena. Ve většině případů to znamená, že je někdo již smazal. Obnovte "
 "prosím aktuální zobrazení."
 
-#: js/tineInit.js:317
+#: js/tineInit.js:339
 msgid "Concurrent Updates"
 msgstr "Kolidující aktualizace"
 
-#: js/tineInit.js:318
+#: js/tineInit.js:340
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -385,7 +386,7 @@ msgstr ""
 "Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musíte záznam "
 "znovu načíst a opětovně provést Vaše změny."
 
-#: js/tineInit.js:567
+#: js/tineInit.js:589
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."

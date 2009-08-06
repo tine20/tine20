@@ -67,7 +67,7 @@ msgstr "Angelegt von"
 msgid "Activities"
 msgstr "Aktivitäten"
 
-#: Frontend/Http.php:288 js/tineInit.js:283
+#: Frontend/Http.php:288 js/tineInit.js:305
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
@@ -333,11 +333,11 @@ msgstr "Wollen sie sich wirklich Abmelden?"
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
 
-#: js/tineInit.js:266
+#: js/tineInit.js:288
 msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch, bitte überprüfen sie ihre Netzwerkeinstellungen!"
 
-#: js/tineInit.js:274
+#: js/tineInit.js:296
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -345,25 +345,26 @@ msgstr ""
 "Der Server konnte leider auf Ihre Anfrage nicht antworten. Bitte überprüfen "
 "Sie Ihr Netzwerk oder kontaktieren Sie Ihren Administrator."
 
-#: js/tineInit.js:284
+#: js/tineInit.js:306
 msgid "Your session timed out. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: js/tineInit.js:297
+#: js/tineInit.js:319
 msgid "Insufficient Rights"
 msgstr "Fehlende Berechtigungen"
 
-#: js/tineInit.js:298
+#: js/tineInit.js:320
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sie sind nicht berechtigt diese Aktion auszuführen"
 
-#: js/tineInit.js:307
+#: js/tineInit.js:329
 msgid "Not Found"
 msgstr "Nicht gefunden"
 
-#: js/tineInit.js:308
+#: js/tineInit.js:330
+#, fuzzy
 msgid ""
-"Sorry, your requested could not be completed because the required data could "
+"Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
@@ -371,11 +372,11 @@ msgstr ""
 "In den meisten Fällen wurden diese Daten von einem anderen Benutzer "
 "gelöscht. Bitte aktualisieren Sie Ihre momentane Ansicht."
 
-#: js/tineInit.js:317
+#: js/tineInit.js:339
 msgid "Concurrent Updates"
 msgstr "Passende Updates"
 
-#: js/tineInit.js:318
+#: js/tineInit.js:340
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -383,7 +384,7 @@ msgstr ""
 "Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. "
 "Sie müssen aktualisieren und die Änderungen erneut durchführen."
 
-#: js/tineInit.js:567
+#: js/tineInit.js:589
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -1364,3 +1365,12 @@ msgstr "geändert"
 #: Setup/setup.xml:2519
 msgid "record changed"
 msgstr "Eintrag geändert"
+
+#~ msgid ""
+#~ "Sorry, your requested could not be completed because the required data "
+#~ "could not be found. In most cases this means that someone already deleted "
+#~ "the data. Please refresh your current view."
+#~ msgstr ""
+#~ "Ihre Anfrage konnte aufgrund von fehlenden Daten nicht beantwortet "
+#~ "werden. In den meisten Fällen wurden diese Daten von einem anderen "
+#~ "Benutzer gelöscht. Bitte aktualisieren Sie Ihre momentane Ansicht."

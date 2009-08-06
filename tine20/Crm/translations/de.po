@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2009-02-25 14:59+0100\n"
+"PO-Revision-Date: 2009-08-06 10:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,13 +23,12 @@ msgid "add, edit and delete leads"
 msgstr "Leads hinzufügen, bearbeiten und löschen"
 
 #: Acl/Rights.php:110
-#, fuzzy
 msgid "manage shared lead folders"
-msgstr "Leads bearbeiten"
+msgstr "Gemeinsame Leads Ordner bearbeiten"
 
 #: Acl/Rights.php:111
 msgid "Create new shared lead folders"
-msgstr ""
+msgstr "Anlegen von gemeinsamen Leads Ordnern"
 
 #: Controller/Lead.php:235
 msgid "State"

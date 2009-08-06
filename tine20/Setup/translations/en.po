@@ -61,118 +61,118 @@ msgstr "uninstall"
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Do you really want to uninstall the application(s)?"
 
-#: js/ApplicationGridPanel.js:193
-msgid "Initial admin username and password"
-msgstr "Initial admin username and password"
-
 #: js/ApplicationGridPanel.js:196
-msgid "Credentials"
-msgstr "Credentials"
-
-#: js/ApplicationGridPanel.js:216
 msgid "This may take a while"
 msgstr "This may take a while"
 
-#: js/ApplicationGridPanel.js:235
+#: js/ApplicationGridPanel.js:222
 msgid "Shit"
 msgstr "Shit"
 
-#: js/ApplicationGridPanel.js:235
+#: js/ApplicationGridPanel.js:222
 msgid "Where are the backup tapes"
 msgstr "Where are the backup tapes"
 
-#: js/ApplicationGridPanel.js:243
+#: js/ApplicationGridPanel.js:230
 msgid "Dependency Violation"
 msgstr "Dependency Violation"
 
-#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
 msgstr "Invalid configuration"
 
-#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr "You need to correct the red marked fields before config could be saved"
 
-#: js/AuthenticationGridPanel.js:121 js/ConfigManagerGridPanel.js:95
+#: js/AuthenticationGridPanel.js:122 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
 msgstr "Transfering Configuration..."
 
-#: js/AuthenticationGridPanel.js:135
+#: js/AuthenticationGridPanel.js:138
 msgid "Authentication provider"
 msgstr "Authentication provider"
 
-#: js/AuthenticationGridPanel.js:147 js/AuthenticationGridPanel.js:241
+#: js/AuthenticationGridPanel.js:150 js/AuthenticationGridPanel.js:247
 msgid "Backend"
 msgstr "Backend"
 
-#: js/AuthenticationGridPanel.js:174 js/AuthenticationGridPanel.js:198
-#: js/AuthenticationGridPanel.js:268 js/AuthenticationGridPanel.js:292
-msgid "Login name"
-msgstr "Login name"
+#: js/AuthenticationGridPanel.js:177
+msgid "Initial admin login name"
+msgstr "Initial admin login name"
 
-#: js/AuthenticationGridPanel.js:177 js/AuthenticationGridPanel.js:201
-#: js/AuthenticationGridPanel.js:271 js/AuthenticationGridPanel.js:295
-#: js/ConfigManagerGridPanel.js:118 js/ConfigManagerGridPanel.js:144
-msgid "Password"
-msgstr "Password"
+#: js/AuthenticationGridPanel.js:181
+msgid "Initial admin Password"
+msgstr "Initial admin Password"
 
-#: js/AuthenticationGridPanel.js:180 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:185 js/AuthenticationGridPanel.js:280
 msgid "Password confirmation"
 msgstr "Password confirmation"
 
-#: js/AuthenticationGridPanel.js:193 js/AuthenticationGridPanel.js:287
+#: js/AuthenticationGridPanel.js:199 js/AuthenticationGridPanel.js:293
 msgid "Host"
 msgstr "Host"
 
-#: js/AuthenticationGridPanel.js:214 js/AuthenticationGridPanel.js:308
+#: js/AuthenticationGridPanel.js:204 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:298
+msgid "Login name"
+msgstr "Login name"
+
+#: js/AuthenticationGridPanel.js:207 js/AuthenticationGridPanel.js:277
+#: js/AuthenticationGridPanel.js:301 js/ConfigManagerGridPanel.js:118
+#: js/ConfigManagerGridPanel.js:144
+msgid "Password"
+msgstr "Password"
+
+#: js/AuthenticationGridPanel.js:220 js/AuthenticationGridPanel.js:314
 msgid "Bind requires DN"
 msgstr "Bind requires DN"
 
-#: js/AuthenticationGridPanel.js:218
+#: js/AuthenticationGridPanel.js:224
 msgid "Base DN"
 msgstr "Base DN"
 
-#: js/AuthenticationGridPanel.js:221
+#: js/AuthenticationGridPanel.js:227
 msgid "Account canonical form"
 msgstr "Account canonical form"
 
-#: js/AuthenticationGridPanel.js:229
+#: js/AuthenticationGridPanel.js:235
 msgid "Accounts storage"
 msgstr "Accounts storage"
 
-#: js/AuthenticationGridPanel.js:312
+#: js/AuthenticationGridPanel.js:318
 msgid "User DN"
 msgstr "User DN"
 
-#: js/AuthenticationGridPanel.js:315
+#: js/AuthenticationGridPanel.js:321
 msgid "Groups DN"
 msgstr "Groups DN"
 
-#: js/AuthenticationGridPanel.js:327
+#: js/AuthenticationGridPanel.js:333
 msgid "Password encoding"
 msgstr "Password encoding"
 
-#: js/AuthenticationGridPanel.js:340
+#: js/AuthenticationGridPanel.js:346
 msgid "Use Rfc 2307 bis"
 msgstr "Use Rfc 2307 bis"
 
-#: js/AuthenticationGridPanel.js:344
+#: js/AuthenticationGridPanel.js:350
 msgid "Min User Id"
 msgstr "Min User Id"
 
-#: js/AuthenticationGridPanel.js:347
+#: js/AuthenticationGridPanel.js:353
 msgid "Max User Id"
 msgstr "Max User Id"
 
-#: js/AuthenticationGridPanel.js:350
+#: js/AuthenticationGridPanel.js:356
 msgid "Min Group Id"
 msgstr "Min Group Id"
 
-#: js/AuthenticationGridPanel.js:353
+#: js/AuthenticationGridPanel.js:359
 msgid "Max Group Id"
 msgstr "Max Group Id"
 
-#: js/AuthenticationGridPanel.js:446
+#: js/AuthenticationGridPanel.js:442
 msgid "Apply changes"
 msgstr "Apply changes"
 
@@ -268,23 +268,23 @@ msgstr "Error"
 msgid "Run setup tests"
 msgstr "Run setup tests"
 
-#: js/Setup.js:29
+#: js/Setup.js:30
 msgid "Setup Checks"
 msgstr "Setup Checks"
 
-#: js/Setup.js:34
+#: js/Setup.js:35
 msgid "Config Manager"
 msgstr "Config Manager"
 
-#: js/Setup.js:40
-msgid "Authentication"
-msgstr "Authentication"
+#: js/Setup.js:41
+msgid "Authentication/Accounts"
+msgstr "Authentication/Accounts"
 
-#: js/Setup.js:46
+#: js/Setup.js:47
 msgid "Application Manager"
 msgstr "Application Manager"
 
-#: js/Setup.js:135
+#: js/Setup.js:138
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Application"

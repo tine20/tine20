@@ -34,116 +34,116 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:35 js/Model.js:219
+#: js/AttendeeGridPanel.js:40 js/Model.js:232
 msgid "Attendee"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:64
+#: js/AttendeeGridPanel.js:69
 msgid "Role"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:73
+#: js/AttendeeGridPanel.js:78
 msgid "Quantity"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:82
+#: js/AttendeeGridPanel.js:87
 msgid "This is the calendar where the attender has saved this event in"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:118
+#: js/AttendeeGridPanel.js:123
 msgid "Type"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:125
+#: js/AttendeeGridPanel.js:130
 msgid "Name"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:155
+#: js/AttendeeGridPanel.js:160
 msgid "Status"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:166 js/AttendeeGridPanel.js:420
+#: js/AttendeeGridPanel.js:171 js/AttendeeGridPanel.js:425
 msgid "No response"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:167 js/AttendeeGridPanel.js:423
+#: js/AttendeeGridPanel.js:172 js/AttendeeGridPanel.js:428
 msgid "Accepted"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:168 js/AttendeeGridPanel.js:426
+#: js/AttendeeGridPanel.js:173 js/AttendeeGridPanel.js:431
 msgid "Declined"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:169 js/AttendeeGridPanel.js:429
+#: js/AttendeeGridPanel.js:174 js/AttendeeGridPanel.js:434
 msgid "Tentative"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:233
+#: js/AttendeeGridPanel.js:238
 msgid "Remove Attender"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:362 js/AttendeeGridPanel.js:384
+#: js/AttendeeGridPanel.js:367 js/AttendeeGridPanel.js:389
 msgid "No Information"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:372
+#: js/AttendeeGridPanel.js:377
 msgid "Click here to invite another attender..."
 msgstr ""
 
-#: js/AttendeeGridPanel.js:396
+#: js/AttendeeGridPanel.js:401
 msgid "Required"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:399
+#: js/AttendeeGridPanel.js:404
 msgid "Optional"
 msgstr ""
 
-#: js/Calendar.js:25 js/Model.js:69 Setup/setup.xml:4
+#: js/Calendar.js:28 js/Model.js:76 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] ""
 
-#: js/Calendar.js:114 js/MonthView.js:80
+#: js/Calendar.js:121 js/MonthView.js:87
 msgid "WK"
 msgstr ""
 
-#: js/CalendarPanel.js:33
+#: js/CalendarPanel.js:41
 msgid "Loading events, please wait..."
 msgstr ""
 
-#: js/CalendarPanel.js:126
+#: js/CalendarPanel.js:134
 msgid "Confirm Update of Series"
 msgstr ""
 
-#: js/CalendarPanel.js:127
+#: js/CalendarPanel.js:135
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 
-#: js/CalendarPanel.js:144
+#: js/CalendarPanel.js:152
 msgid "Update Event"
 msgstr ""
 
-#: js/CalendarPanel.js:147 js/CalendarPanel.js:149
+#: js/CalendarPanel.js:155 js/CalendarPanel.js:157
 msgid "Do you want to update the whole series, or just this event"
 msgstr ""
 
-#: js/CalendarPanel.js:151
+#: js/CalendarPanel.js:159
 msgid "Update nothing"
 msgstr ""
 
-#: js/CalendarPanel.js:159
+#: js/CalendarPanel.js:167
 msgid "Update whole series"
 msgstr ""
 
-#: js/CalendarPanel.js:171
+#: js/CalendarPanel.js:179
 msgid "Failed not update recurring event series"
 msgstr ""
 
-#: js/CalendarPanel.js:179
+#: js/CalendarPanel.js:187
 msgid "Update this event only"
 msgstr ""
 
-#: js/CalendarPanel.js:193
+#: js/CalendarPanel.js:201
 msgid "Failed not update event"
 msgstr ""
 
@@ -151,51 +151,51 @@ msgstr ""
 msgid "Originally"
 msgstr ""
 
-#: js/DaysView.js:80 js/MonthView.js:75
+#: js/DaysView.js:87 js/MonthView.js:82
 msgid "New Event"
 msgstr ""
 
-#: js/DaysView.js:85
+#: js/DaysView.js:92
 msgid "{0}, the {1}. of {2}"
 msgstr ""
 
-#: js/EventEditDialog.js:91
+#: js/EventEditDialog.js:95
 msgid "Summary"
 msgstr ""
 
-#: js/EventEditDialog.js:98
+#: js/EventEditDialog.js:102
 msgid "Location"
 msgstr ""
 
-#: js/EventEditDialog.js:103
+#: js/EventEditDialog.js:107
 msgid "Start Time"
 msgstr ""
 
-#: js/EventEditDialog.js:118
+#: js/EventEditDialog.js:122
 msgid "End Time"
 msgstr ""
 
-#: js/EventEditDialog.js:126
+#: js/EventEditDialog.js:130
 msgid "whole day"
 msgstr ""
 
-#: js/EventEditDialog.js:159
+#: js/EventEditDialog.js:163
 msgid "Description"
 msgstr ""
 
-#: js/EventEditDialog.js:173
+#: js/EventEditDialog.js:177
 msgid "Enter description"
 msgstr ""
 
-#: js/EventEditDialog.js:292
+#: js/EventEditDialog.js:296
 msgid "End date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:295
+#: js/EventEditDialog.js:299
 msgid "End date must be after start date"
 msgstr ""
 
-#: js/EventEditDialog.js:308
+#: js/EventEditDialog.js:312
 msgid "Start date is not valid"
 msgstr ""
 
@@ -203,7 +203,7 @@ msgstr ""
 msgid "Day"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:83 js/PagingToolbar.js:276
+#: js/MainScreenCenterPanel.js:83 js/PagingToolbar.js:275
 msgid "Week"
 msgstr ""
 
@@ -260,25 +260,25 @@ msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] ""
 
-#: js/Model.js:65 js/Model.js:223
+#: js/Model.js:72 js/Model.js:236
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] ""
 
-#: js/Model.js:65 js/Model.js:223
+#: js/Model.js:72 js/Model.js:236
 msgid "Events"
 msgstr ""
 
-#: js/Model.js:69
+#: js/Model.js:76
 msgid "Calendars"
 msgstr ""
 
-#: js/Model.js:219
+#: js/Model.js:232
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] ""
 
-#: js/MonthView.js:85
+#: js/MonthView.js:92
 msgid "{0} more..."
 msgstr ""
 

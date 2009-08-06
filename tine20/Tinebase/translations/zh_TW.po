@@ -66,7 +66,7 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: Frontend/Http.php:288 js/tineInit.js:283
+#: Frontend/Http.php:288 js/tineInit.js:305
 msgid "Authorisation Required"
 msgstr "需要認證"
 
@@ -322,50 +322,50 @@ msgstr "確認要登出嗎?"
 msgid "Logging you out..."
 msgstr ""
 
-#: js/tineInit.js:266
+#: js/tineInit.js:288
 msgid "Connection lost, please check your network!"
 msgstr "連線失敗, 請檢查網路狀態"
 
-#: js/tineInit.js:274
+#: js/tineInit.js:296
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
 msgstr "伺服器無法收到回應, 請檢查網路狀態或聯絡系統管理者"
 
-#: js/tineInit.js:284
+#: js/tineInit.js:306
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: js/tineInit.js:297
+#: js/tineInit.js:319
 msgid "Insufficient Rights"
 msgstr ""
 
-#: js/tineInit.js:298
+#: js/tineInit.js:320
 msgid "Sorry, you are not permitted to perform this action"
 msgstr ""
 
-#: js/tineInit.js:307
+#: js/tineInit.js:329
 msgid "Not Found"
 msgstr ""
 
-#: js/tineInit.js:308
+#: js/tineInit.js:330
 msgid ""
-"Sorry, your requested could not be completed because the required data could "
+"Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/tineInit.js:317
+#: js/tineInit.js:339
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/tineInit.js:318
+#: js/tineInit.js:340
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr ""
 
-#: js/tineInit.js:567
+#: js/tineInit.js:589
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."

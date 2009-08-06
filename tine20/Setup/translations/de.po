@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-27 17:08+0100\n"
+"PO-Revision-Date: 2009-08-06 10:28+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -25,13 +25,12 @@ msgid "Order"
 msgstr "Reihenfolge"
 
 #: js/ApplicationGridPanel.js:43
-#, fuzzy
 msgid "Installed Version"
 msgstr "Installierte Version"
 
 #: js/ApplicationGridPanel.js:44
 msgid "Available Version"
-msgstr ""
+msgstr "Verfügbare Version"
 
 #: js/ApplicationGridPanel.js:45
 msgid "Status"
@@ -39,7 +38,7 @@ msgstr "Status"
 
 #: js/ApplicationGridPanel.js:46
 msgid "Depends on"
-msgstr ""
+msgstr "Hängt ab von"
 
 #: js/ApplicationGridPanel.js:52 js/EnvCheckGridPanel.js:169
 msgid "Install application"
@@ -55,200 +54,202 @@ msgstr "Anwendung aktualisieren"
 
 #: js/ApplicationGridPanel.js:138
 msgid "uninstall"
-msgstr ""
+msgstr "Deinstallieren"
 
 #: js/ApplicationGridPanel.js:138
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:193
-msgid "Initial admin username and password"
-msgstr ""
+msgstr "Möchten sie die Anwendung(en) wirklich deinstallieren?"
 
 #: js/ApplicationGridPanel.js:196
-msgid "Credentials"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:216
 msgid "This may take a while"
-msgstr ""
+msgstr "Dies kann eine einige Zeit in Anspruch nehmen"
 
-#: js/ApplicationGridPanel.js:235
+#: js/ApplicationGridPanel.js:222
 msgid "Shit"
 msgstr "Scheiße"
 
-#: js/ApplicationGridPanel.js:235
+#: js/ApplicationGridPanel.js:222
 msgid "Where are the backup tapes"
 msgstr "Wo sind nur die Backup Bänder"
 
-#: js/ApplicationGridPanel.js:243
+#: js/ApplicationGridPanel.js:230
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
-msgstr ""
+msgstr "Fehlerhafte Konfiguration"
 
-#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr ""
+"Sie müssen die rot markierten Felder korrigieren bevor die Konfiguration "
+"gepeichert werden kann."
 
-#: js/AuthenticationGridPanel.js:121 js/ConfigManagerGridPanel.js:95
+#: js/AuthenticationGridPanel.js:122 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
-msgstr ""
+msgstr "Übertrage Konfiguration..."
 
-#: js/AuthenticationGridPanel.js:135
+#: js/AuthenticationGridPanel.js:138
 msgid "Authentication provider"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:147 js/AuthenticationGridPanel.js:241
+#: js/AuthenticationGridPanel.js:150 js/AuthenticationGridPanel.js:247
 msgid "Backend"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:174 js/AuthenticationGridPanel.js:198
-#: js/AuthenticationGridPanel.js:268 js/AuthenticationGridPanel.js:292
-msgid "Login name"
+#: js/AuthenticationGridPanel.js:177
+msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:177 js/AuthenticationGridPanel.js:201
-#: js/AuthenticationGridPanel.js:271 js/AuthenticationGridPanel.js:295
-#: js/ConfigManagerGridPanel.js:118 js/ConfigManagerGridPanel.js:144
-msgid "Password"
+#: js/AuthenticationGridPanel.js:181
+msgid "Initial admin Password"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:180 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:185 js/AuthenticationGridPanel.js:280
 msgid "Password confirmation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:193 js/AuthenticationGridPanel.js:287
+#: js/AuthenticationGridPanel.js:199 js/AuthenticationGridPanel.js:293
 msgid "Host"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:214 js/AuthenticationGridPanel.js:308
+#: js/AuthenticationGridPanel.js:204 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:298
+msgid "Login name"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:207 js/AuthenticationGridPanel.js:277
+#: js/AuthenticationGridPanel.js:301 js/ConfigManagerGridPanel.js:118
+#: js/ConfigManagerGridPanel.js:144
+msgid "Password"
+msgstr "Kennwort"
+
+#: js/AuthenticationGridPanel.js:220 js/AuthenticationGridPanel.js:314
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:218
+#: js/AuthenticationGridPanel.js:224
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:221
+#: js/AuthenticationGridPanel.js:227
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:229
+#: js/AuthenticationGridPanel.js:235
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:312
+#: js/AuthenticationGridPanel.js:318
 msgid "User DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:315
+#: js/AuthenticationGridPanel.js:321
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:327
+#: js/AuthenticationGridPanel.js:333
 msgid "Password encoding"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:340
+#: js/AuthenticationGridPanel.js:346
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:344
+#: js/AuthenticationGridPanel.js:350
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:347
+#: js/AuthenticationGridPanel.js:353
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:350
+#: js/AuthenticationGridPanel.js:356
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:353
+#: js/AuthenticationGridPanel.js:359
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:446
+#: js/AuthenticationGridPanel.js:442
 msgid "Apply changes"
 msgstr ""
 
 #: js/ConfigManagerGridPanel.js:107
 msgid "Informations"
-msgstr ""
+msgstr "Informationen"
 
 #: js/ConfigManagerGridPanel.js:111
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Setup Authentifizierung"
 
 #: js/ConfigManagerGridPanel.js:114
 msgid "Username"
-msgstr ""
+msgstr "Benutzername"
 
 #: js/ConfigManagerGridPanel.js:123 js/ConfigManagerGridPanel.js:136
 msgid "Database"
-msgstr ""
+msgstr "Datenbank"
 
 #: js/ConfigManagerGridPanel.js:127
 msgid "Adapter"
-msgstr ""
+msgstr "Adapter"
 
 #: js/ConfigManagerGridPanel.js:132
 msgid "Hostname"
-msgstr ""
+msgstr "Hostname"
 
 #: js/ConfigManagerGridPanel.js:140
 msgid "User"
-msgstr ""
+msgstr "Benutzer"
 
 #: js/ConfigManagerGridPanel.js:148
 msgid "Prefix"
-msgstr ""
+msgstr "Perfix"
 
 #: js/ConfigManagerGridPanel.js:151
 msgid "Logging"
-msgstr ""
+msgstr "Logging"
 
 #: js/ConfigManagerGridPanel.js:157
 msgid "Filename"
-msgstr ""
+msgstr "Dateiname"
 
 #: js/ConfigManagerGridPanel.js:169
 msgid "Priority"
-msgstr ""
+msgstr "Priorität"
 
 #: js/ConfigManagerGridPanel.js:173
 msgid "Caching"
-msgstr ""
+msgstr "Caching"
 
 #: js/ConfigManagerGridPanel.js:179
 msgid "Path"
-msgstr ""
+msgstr "Pfad"
 
 #: js/ConfigManagerGridPanel.js:182
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "Lifetime (sekunden)"
 
 #: js/ConfigManagerGridPanel.js:275
 msgid "Save config"
-msgstr ""
+msgstr "Konfiguration speichern"
 
 #: js/ConfigManagerGridPanel.js:283
 msgid "Download config file"
-msgstr ""
+msgstr "Konfigurationsdatei herunterladen"
 
 #: js/EnvCheckGridPanel.js:69
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Führe Environment Prüfungen aus..."
 
 #: js/EnvCheckGridPanel.js:110
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
-msgstr ""
+msgstr "Keine {0} gefunden. Bitte überprüfen sie ihre Filterkriterien"
 
 #: js/EnvCheckGridPanel.js:140
 msgid "Check"
@@ -260,38 +261,37 @@ msgstr "Ergebnis"
 
 #: js/EnvCheckGridPanel.js:142
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Run setup tests"
-msgstr ""
+msgstr "Setup Tests ausführen"
 
-#: js/Setup.js:29
+#: js/Setup.js:30
 msgid "Setup Checks"
 msgstr "Setup Tests"
 
-#: js/Setup.js:34
+#: js/Setup.js:35
 msgid "Config Manager"
 msgstr "Konfigurations-Verwaltung"
 
-#: js/Setup.js:40
+#: js/Setup.js:41
 #, fuzzy
-msgid "Authentication"
+msgid "Authentication/Accounts"
 msgstr "Anwendung"
 
-#: js/Setup.js:46
+#: js/Setup.js:47
 msgid "Application Manager"
 msgstr "Anwendungs-Verwaltung"
 
-#: js/Setup.js:135
+#: js/Setup.js:138
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Anwendung"
 msgstr[1] "Anwendungen"
 
-#, fuzzy
 #~ msgid "Check config"
-#~ msgstr "Teste"
+#~ msgstr "Konfiguration testen"
 
 #~ msgid "Version"
 #~ msgstr "Version"

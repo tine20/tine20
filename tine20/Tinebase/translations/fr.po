@@ -67,7 +67,7 @@ msgstr "Auteur"
 msgid "Activities"
 msgstr "Activités"
 
-#: Frontend/Http.php:288 js/tineInit.js:283
+#: Frontend/Http.php:288 js/tineInit.js:305
 msgid "Authorisation Required"
 msgstr "Authentification requise"
 
@@ -335,11 +335,11 @@ msgstr "Êtes-vous sûr de vouloir vous déconnecter?"
 msgid "Logging you out..."
 msgstr "Déconnexion..."
 
-#: js/tineInit.js:266
+#: js/tineInit.js:288
 msgid "Connection lost, please check your network!"
 msgstr "Connexion perdue, vérifiez la connexion réseau!"
 
-#: js/tineInit.js:274
+#: js/tineInit.js:296
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -347,35 +347,35 @@ msgstr ""
 "Le serveur n'a pas répondu à votre requête. Vérifiez la connexion réseau ou "
 "contactez votre administrateur."
 
-#: js/tineInit.js:284
+#: js/tineInit.js:306
 msgid "Your session timed out. You need to login again."
 msgstr "Votre session a expiré, veuillez vous reconnecter."
 
-#: js/tineInit.js:297
+#: js/tineInit.js:319
 msgid "Insufficient Rights"
 msgstr "Droits inssufisants"
 
-#: js/tineInit.js:298
+#: js/tineInit.js:320
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Désolé, vous n'êtes pas autorisé à effectuer cette action"
 
-#: js/tineInit.js:307
+#: js/tineInit.js:329
 #, fuzzy
 msgid "Not Found"
 msgstr "Non autorisé"
 
-#: js/tineInit.js:308
+#: js/tineInit.js:330
 msgid ""
-"Sorry, your requested could not be completed because the required data could "
+"Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/tineInit.js:317
+#: js/tineInit.js:339
 msgid "Concurrent Updates"
 msgstr "Mises à jour simultanées"
 
-#: js/tineInit.js:318
+#: js/tineInit.js:340
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -383,7 +383,7 @@ msgstr ""
 "Un autre utilisateur a sauvegardé cet enregistrement pendant votre "
 "modification. Vous devez le recharger et ressaisir vos modifications."
 
-#: js/tineInit.js:567
+#: js/tineInit.js:589
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."

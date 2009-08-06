@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-02-23 14:04+0100\n"
+"PO-Revision-Date: 2009-08-06 10:22+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -14,13 +14,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Acl/Rights.php:98
-#, fuzzy
 msgid "manage shared addressbooks"
-msgstr "Adressbücher"
+msgstr "Gemeinsame Adressbücher verwalten"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
-msgstr ""
+msgstr "Neue gemeinsame Adressbücher anlegen"
 
 #: Controller.php:96
 #, python-format
@@ -452,9 +451,8 @@ msgstr[0] "Verknüpfung"
 msgstr[1] "Verknüpfungen [%d]"
 
 #: js/SearchCombo.js:51
-#, fuzzy
 msgid "Searching..."
-msgstr "Suche: "
+msgstr "Suche..."
 
 #: Setup/setup.xml:564
 msgid "Mr"

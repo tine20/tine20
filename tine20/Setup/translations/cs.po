@@ -60,124 +60,124 @@ msgstr "odinstalovat"
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Opravdu chcete aplikaci/e odinstalovat?"
 
-#: js/ApplicationGridPanel.js:193
-msgid "Initial admin username and password"
-msgstr ""
-
 #: js/ApplicationGridPanel.js:196
-msgid "Credentials"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:216
 msgid "This may take a while"
 msgstr "Tato operace může chvíli trvat"
 
-#: js/ApplicationGridPanel.js:235
+#: js/ApplicationGridPanel.js:222
 msgid "Shit"
 msgstr "Zatraceně"
 
-#: js/ApplicationGridPanel.js:235
+#: js/ApplicationGridPanel.js:222
 msgid "Where are the backup tapes"
 msgstr "Kde jsou zálohovací pásky"
 
-#: js/ApplicationGridPanel.js:243
+#: js/ApplicationGridPanel.js:230
 #, fuzzy
 msgid "Dependency Violation"
 msgstr "Závisí na"
 
-#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
 msgstr "Neplatná konfigurace"
 
-#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr "Než bude konfigurace uložena, musíte opravit červeně označená pole"
 
-#: js/AuthenticationGridPanel.js:121 js/ConfigManagerGridPanel.js:95
+#: js/AuthenticationGridPanel.js:122 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
 msgstr "Přesouvám konfiguraci..."
 
-#: js/AuthenticationGridPanel.js:135
+#: js/AuthenticationGridPanel.js:138
 #, fuzzy
 msgid "Authentication provider"
 msgstr "Přihlášení do instalačního programu"
 
-#: js/AuthenticationGridPanel.js:147 js/AuthenticationGridPanel.js:241
+#: js/AuthenticationGridPanel.js:150 js/AuthenticationGridPanel.js:247
 msgid "Backend"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:174 js/AuthenticationGridPanel.js:198
-#: js/AuthenticationGridPanel.js:268 js/AuthenticationGridPanel.js:292
-msgid "Login name"
+#: js/AuthenticationGridPanel.js:177
+msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:177 js/AuthenticationGridPanel.js:201
-#: js/AuthenticationGridPanel.js:271 js/AuthenticationGridPanel.js:295
-#: js/ConfigManagerGridPanel.js:118 js/ConfigManagerGridPanel.js:144
-msgid "Password"
-msgstr "Heslo"
+#: js/AuthenticationGridPanel.js:181
+msgid "Initial admin Password"
+msgstr ""
 
-#: js/AuthenticationGridPanel.js:180 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:185 js/AuthenticationGridPanel.js:280
 #, fuzzy
 msgid "Password confirmation"
 msgstr "Neplatná konfigurace"
 
-#: js/AuthenticationGridPanel.js:193 js/AuthenticationGridPanel.js:287
+#: js/AuthenticationGridPanel.js:199 js/AuthenticationGridPanel.js:293
 #, fuzzy
 msgid "Host"
 msgstr "Název nebo adresa počítače"
 
-#: js/AuthenticationGridPanel.js:214 js/AuthenticationGridPanel.js:308
+#: js/AuthenticationGridPanel.js:204 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:298
+msgid "Login name"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:207 js/AuthenticationGridPanel.js:277
+#: js/AuthenticationGridPanel.js:301 js/ConfigManagerGridPanel.js:118
+#: js/ConfigManagerGridPanel.js:144
+msgid "Password"
+msgstr "Heslo"
+
+#: js/AuthenticationGridPanel.js:220 js/AuthenticationGridPanel.js:314
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:218
+#: js/AuthenticationGridPanel.js:224
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:221
+#: js/AuthenticationGridPanel.js:227
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:229
+#: js/AuthenticationGridPanel.js:235
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:312
+#: js/AuthenticationGridPanel.js:318
 #, fuzzy
 msgid "User DN"
 msgstr "Uživatel"
 
-#: js/AuthenticationGridPanel.js:315
+#: js/AuthenticationGridPanel.js:321
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:327
+#: js/AuthenticationGridPanel.js:333
 #, fuzzy
 msgid "Password encoding"
 msgstr "Heslo"
 
-#: js/AuthenticationGridPanel.js:340
+#: js/AuthenticationGridPanel.js:346
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:344
+#: js/AuthenticationGridPanel.js:350
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:347
+#: js/AuthenticationGridPanel.js:353
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:350
+#: js/AuthenticationGridPanel.js:356
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:353
+#: js/AuthenticationGridPanel.js:359
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:446
+#: js/AuthenticationGridPanel.js:442
 msgid "Apply changes"
 msgstr ""
 
@@ -273,24 +273,24 @@ msgstr "Chyba"
 msgid "Run setup tests"
 msgstr "Spustit instalační testy"
 
-#: js/Setup.js:29
+#: js/Setup.js:30
 msgid "Setup Checks"
 msgstr "Instalační kontroly"
 
-#: js/Setup.js:34
+#: js/Setup.js:35
 msgid "Config Manager"
 msgstr "Správce konfigurace"
 
-#: js/Setup.js:40
+#: js/Setup.js:41
 #, fuzzy
-msgid "Authentication"
+msgid "Authentication/Accounts"
 msgstr "Přihlášení do instalačního programu"
 
-#: js/Setup.js:46
+#: js/Setup.js:47
 msgid "Application Manager"
 msgstr "Správce aplikací"
 
-#: js/Setup.js:135
+#: js/Setup.js:138
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Aplikace"

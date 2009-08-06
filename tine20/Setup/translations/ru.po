@@ -61,121 +61,121 @@ msgstr "удалить"
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Вы действительно хотите удалить приложение(я)?"
 
-#: js/ApplicationGridPanel.js:193
-msgid "Initial admin username and password"
-msgstr ""
-
 #: js/ApplicationGridPanel.js:196
-msgid "Credentials"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:216
 msgid "This may take a while"
 msgstr "Это может занять некоторое время"
 
-#: js/ApplicationGridPanel.js:235
+#: js/ApplicationGridPanel.js:222
 #, fuzzy
 msgid "Shit"
 msgstr "Сдвиг"
 
-#: js/ApplicationGridPanel.js:235
+#: js/ApplicationGridPanel.js:222
 msgid "Where are the backup tapes"
 msgstr "Где находятся резервные ленты"
 
-#: js/ApplicationGridPanel.js:243
+#: js/ApplicationGridPanel.js:230
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
 msgstr "Неверная конфигурация"
 
-#: js/AuthenticationGridPanel.js:75 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr ""
 "Вам нужно исправить поля отмеченные красным до того, как конфигурация может "
 "быть сохранена"
 
-#: js/AuthenticationGridPanel.js:121 js/ConfigManagerGridPanel.js:95
+#: js/AuthenticationGridPanel.js:122 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
 msgstr "Передача конфигурации..."
 
-#: js/AuthenticationGridPanel.js:135
+#: js/AuthenticationGridPanel.js:138
 msgid "Authentication provider"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:147 js/AuthenticationGridPanel.js:241
+#: js/AuthenticationGridPanel.js:150 js/AuthenticationGridPanel.js:247
 msgid "Backend"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:174 js/AuthenticationGridPanel.js:198
-#: js/AuthenticationGridPanel.js:268 js/AuthenticationGridPanel.js:292
-msgid "Login name"
+#: js/AuthenticationGridPanel.js:177
+msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:177 js/AuthenticationGridPanel.js:201
-#: js/AuthenticationGridPanel.js:271 js/AuthenticationGridPanel.js:295
-#: js/ConfigManagerGridPanel.js:118 js/ConfigManagerGridPanel.js:144
-msgid "Password"
-msgstr "Пароль"
+#: js/AuthenticationGridPanel.js:181
+msgid "Initial admin Password"
+msgstr ""
 
-#: js/AuthenticationGridPanel.js:180 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:185 js/AuthenticationGridPanel.js:280
 msgid "Password confirmation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:193 js/AuthenticationGridPanel.js:287
+#: js/AuthenticationGridPanel.js:199 js/AuthenticationGridPanel.js:293
 msgid "Host"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:214 js/AuthenticationGridPanel.js:308
+#: js/AuthenticationGridPanel.js:204 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:298
+msgid "Login name"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:207 js/AuthenticationGridPanel.js:277
+#: js/AuthenticationGridPanel.js:301 js/ConfigManagerGridPanel.js:118
+#: js/ConfigManagerGridPanel.js:144
+msgid "Password"
+msgstr "Пароль"
+
+#: js/AuthenticationGridPanel.js:220 js/AuthenticationGridPanel.js:314
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:218
+#: js/AuthenticationGridPanel.js:224
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:221
+#: js/AuthenticationGridPanel.js:227
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:229
+#: js/AuthenticationGridPanel.js:235
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:312
+#: js/AuthenticationGridPanel.js:318
 msgid "User DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:315
+#: js/AuthenticationGridPanel.js:321
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:327
+#: js/AuthenticationGridPanel.js:333
 msgid "Password encoding"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:340
+#: js/AuthenticationGridPanel.js:346
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:344
+#: js/AuthenticationGridPanel.js:350
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:347
+#: js/AuthenticationGridPanel.js:353
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:350
+#: js/AuthenticationGridPanel.js:356
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:353
+#: js/AuthenticationGridPanel.js:359
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:446
+#: js/AuthenticationGridPanel.js:442
 msgid "Apply changes"
 msgstr ""
 
@@ -271,24 +271,24 @@ msgstr "Ошибка"
 msgid "Run setup tests"
 msgstr "Запуск тестов установки"
 
-#: js/Setup.js:29
+#: js/Setup.js:30
 msgid "Setup Checks"
 msgstr "Проверки установки "
 
-#: js/Setup.js:34
+#: js/Setup.js:35
 msgid "Config Manager"
 msgstr "Управление конфигурацией"
 
-#: js/Setup.js:40
+#: js/Setup.js:41
 #, fuzzy
-msgid "Authentication"
+msgid "Authentication/Accounts"
 msgstr "Программа пользования"
 
-#: js/Setup.js:46
+#: js/Setup.js:47
 msgid "Application Manager"
 msgstr "Управление приложениями"
 
-#: js/Setup.js:135
+#: js/Setup.js:138
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Приложение"

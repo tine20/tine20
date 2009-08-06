@@ -68,7 +68,7 @@ msgstr "Обработен/създаден от "
 msgid "Activities"
 msgstr "Операции"
 
-#: Frontend/Http.php:288 js/tineInit.js:283
+#: Frontend/Http.php:288 js/tineInit.js:305
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
@@ -337,11 +337,11 @@ msgstr "Наистина ли желаете да излезете?"
 msgid "Logging you out..."
 msgstr "Подготвя излизане..."
 
-#: js/tineInit.js:266
+#: js/tineInit.js:288
 msgid "Connection lost, please check your network!"
 msgstr "Връзка е прекъсната. Моля проверете връзката Ви с интернет!"
 
-#: js/tineInit.js:274
+#: js/tineInit.js:296
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -349,36 +349,36 @@ msgstr ""
 "За съжаление сървъра не може да отговори на Вашето запитване. Моля проверете "
 "Вашата мрежа или се свържете с Вашият администратор."
 
-#: js/tineInit.js:284
+#: js/tineInit.js:306
 msgid "Your session timed out. You need to login again."
 msgstr ""
 "Времевият лимит на сесията е преминат. Трявва да се регистрирате наново."
 
-#: js/tineInit.js:297
+#: js/tineInit.js:319
 msgid "Insufficient Rights"
 msgstr "Липса на права"
 
-#: js/tineInit.js:298
+#: js/tineInit.js:320
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "За съжаление Вие нямате необходимите за това права."
 
-#: js/tineInit.js:307
+#: js/tineInit.js:329
 #, fuzzy
 msgid "Not Found"
 msgstr "Непозволено"
 
-#: js/tineInit.js:308
+#: js/tineInit.js:330
 msgid ""
-"Sorry, your requested could not be completed because the required data could "
+"Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/tineInit.js:317
+#: js/tineInit.js:339
 msgid "Concurrent Updates"
 msgstr "Конкурентно актуализиране"
 
-#: js/tineInit.js:318
+#: js/tineInit.js:340
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -386,7 +386,7 @@ msgstr ""
 "Някой друг е запаметил документацията докато Вие сте редактирали данните. "
 "Трябва да заредите и наново да направите промяната."
 
-#: js/tineInit.js:567
+#: js/tineInit.js:589
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
