@@ -41,9 +41,16 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
  */
 Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 	/**
-	 * @cfg {String} quickaddMandatory Mandatory field which must be set before quickadd fields will be enabled
+	 * @cfg {String} quickaddMandatory 
+     * Mandatory field which must be set before quickadd fields will be enabled
 	 */
 	quickaddMandatory: false,
+    
+    /**
+     * @cfg {Bool} resetAllOnNew
+     * reset all fields after new record got created (per default only den mandatory field gets resetted).
+     */
+    resetAllOnNew: false,
     
     /**
      * @property {Bool} adding true if a quickadd is in process
@@ -138,6 +145,14 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (this.colModel.getColumnById(this.quickaddMandatory).quickaddField.getValue() != '') {
             	if (this.fireEvent('newentry', data)){
                     this.colModel.getColumnById(this.quickaddMandatory).quickaddField.setValue('');
+                    if (this.resetAllOnNew) {
+                        var columns = this.colModel.config;
+                        for (var i = 0, len = columns.length; i < len; i++) {
+                            if(columns[i].quickaddField != undefined){
+                               columns[i].quickaddField.setValue('');
+                            }
+                        }
+                    }
                 }
             }
     		
