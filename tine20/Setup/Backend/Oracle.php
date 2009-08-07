@@ -91,6 +91,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     public function getCreateStatement(Setup_Backend_Schema_Table_Abstract $_table)
     {
+     
         $statement = 'CREATE TABLE "' . SQL_TABLE_PREFIX . $_table->name . "\" (\n";
         $statementSnippets = array();
      
@@ -104,6 +105,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             } else if ($index->primary || $index->unique) {
                $statementSnippets[] = $this->getIndexDeclarations($index);
             }
+        }
+        
+        if (isset($_table->comment)) {
+            //@todo support comments
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  ignoring comment because comments are currently not supported by oracle adapter.');
         }
         
         $statement .= implode(",\n", $statementSnippets) . "\n)";
@@ -374,7 +380,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */       
     public function addForeignKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " 
                     . $this->getForeignKeyDeclarations($_declaration);
         $this->execQueryVoid($statement);    
     }
@@ -387,7 +393,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */     
     public function dropForeignKey($_tableName, $_name)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP FOREIGN KEY `" . $_name . "`" ;
         $this->execQueryVoid($statement);    
     }
     
@@ -398,7 +404,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */         
     public function dropPrimaryKey($_tableName)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP PRIMARY KEY " ;
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP PRIMARY KEY " ;
         $this->execQueryVoid($statement);    
     }
     
@@ -410,7 +416,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */         
     public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD "
                     . $this->getIndexDeclarations($_declaration);
         $this->execQueryVoid($statement);    
     }
@@ -423,7 +429,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */     
     public function addIndex($_tableName ,  Setup_Backend_Schema_Index_Abstract$_declaration)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD "
                     . $this->getIndexDeclarations($_declaration);
         $this->execQueryVoid($statement);    
     }
@@ -436,7 +442,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */    
     public function dropIndex($_tableName, $_indexName)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX `"  . $_indexName. "`" ;
         $this->execQueryVoid($statement);    
     }
     
@@ -555,6 +561,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             $this->_autoincrementId = $_field->name;
         }
        
+        if (isset($_field->comment)) {
+            //@todo support comments
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  ignoring comment because comments are currently not supported by oracle adapter.');
+        }
+        
         $definition = implode(' ', $buffer);
         
         return $definition;
@@ -571,14 +582,14 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {    
         $keys = array();
         if (!empty($_key->primary)) {
-            $snippet = "CONSTRAINT \"pk_" . $this->_table . "\" PRIMARY KEY";        
+            $snippet = "  CONSTRAINT \"pk_" . $this->_table . "\" PRIMARY KEY";        
         
         } else if (!empty($_key->unique)) {
-            $snippet = "CONSTRAINT \"uni_" . substr($this->_table, 0, 13) . "_" . substr($_key->name, 0, 12) . "\" UNIQUE" ;
+            $snippet = "  CONSTRAINT \"uni_" . substr($this->_table, 0, 13) . "_" . substr($_key->name, 0, 12) . "\" UNIQUE" ;
         }
 
         else {
-            $snippet = "CONSTRAINT \"idx_" . $this->_table . "_" . $_key->name . "\" INDEX ";
+            $snippet = "  CONSTRAINT \"idx_" . $this->_table . "_" . $_key->name . "\" INDEX ";
         }
         
         foreach ($_key->field as $keyfield) {
@@ -605,10 +616,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
     public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     {
-        $snippet = '  CONSTRAINT "fk_' . substr($this->_table, 0, 13) . "_" . substr($_key->field, 0, 13). '" FOREIGN KEY ';
-        $snippet .= '("' . $_key->field . '") REFERENCES "' . SQL_TABLE_PREFIX
-            . $_key->referenceTable  
-            . '" ("' . $_key->referenceField . '")';
+        $contraintName = isset($_key->name) ? SQL_TABLE_PREFIX . $_key->name : 'fk_' . substr($this->_table, 0, 13) . "_" . substr($_key->field, 0, 13);
+        $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($contraintName) . ' FOREIGN KEY ';
+        $snippet .= '("' . $_key->field . '") REFERENCES ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_key->referenceTable) . ' ("' . $_key->referenceField . '")';
 
         if (!empty($_key->referenceOnDelete)) {
             $snippet .= " ON DELETE " . strtoupper($_key->referenceOnDelete);
