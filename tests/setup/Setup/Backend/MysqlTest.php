@@ -140,6 +140,34 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $return = trim($_value);
         return '  ' . $return;
     }
+    
+    public function testQuestionMarkInFieldValue()
+    {
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+        $value = 'test ??  . ?=? ..';
+        $db->insert($tableName, array('name' => $value));
+        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
+        $this->assertEquals($value, $result[0]);
+        
+        $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ') VALUES (' . $db->quote($value, 'text') . ')');
+        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
+        $this->assertEquals($value, $result[1]);
+        
+        $string ="
+                <field>
+                    <name>test</name>
+                    <type>text</type>
+                    <length>25</length>
+                </field>";
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->_backend->addCol($this->_table->name, $field);
+
+        $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ', ' . $db->quoteIdentifier('test') . ') VALUES (' . $db->quote($value, 'text') . ', ?)', array('test value for col 2'));
+        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
+        $this->assertEquals($value, $result[2]);
+    }
 
     public function testStringToFieldStatement_001() 
     {
@@ -597,41 +625,75 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     }    
     
     
-    #####################################
-    
+
     public function testStringToForeignKeyStatement_001() 
     {
-        $string ="
-                <index>
-                    <name>container_id</name>
+     
+     $referencedTableName = 'oracle_foreign';
+     $referencedTableXml = "
+            <table>
+                <name>$referencedTableName</name>
+                <version>1</version>
+                <declaration>
                     <field>
-                        <name>container_id</name>
+                        <name>id</name>
+                        <type>integer</type>
+                        <autoincrement>true</autoincrement>
                     </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>container</table>
-                        <field>id</field>
-                    </reference>
-                </index>";
-            
-        $statement = $this->_fixIndexDeclarationString("CONSTRAINT `" . SQL_TABLE_PREFIX . "container_id` FOREIGN KEY (`container_id`) REFERENCES `" . SQL_TABLE_PREFIX . "container` (`id`) ");    
-        
-        $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($foreignKey));
-        
-        $this->setExpectedException('Zend_Db_Statement_Exception', '42000'); //42000: container_id field missing - expecting Exception
-        $this->_backend->addForeignKey($this->_table->name, $foreignKey);
-        
-        
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>128</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>";
+        $referencedTable = Setup_Backend_Schema_Table_Factory::factory('Xml', $referencedTableXml);
+        $this->_tableNames[] = $referencedTableName;
+        $this->_backend->createTable($referencedTable);
+
         $fieldString ="
             <field>
-                <name>container_id</name>
+                <name>foreign_id</name>
                 <type>integer</type>
             </field>";
           
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
         $this->_backend->addCol($this->_table->name, $field);
+     
+        $string ="
+                <index>
+                    <name>test_fk</name>
+                    <field>
+                        <name>foreign_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>$referencedTableName</table>
+                        <field>id</field>
+                    </reference>
+                </index>";
+
+        $statement = $this->_fixIndexDeclarationString("CONSTRAINT `" . SQL_TABLE_PREFIX . "test_fk` FOREIGN KEY (`foreign_id`) REFERENCES `" . SQL_TABLE_PREFIX . "oracle_foreign` (`id`)");    
+        
+        $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($foreignKey));
+
         $this->_backend->addForeignKey($this->_table->name, $foreignKey);
+        
+        $db = Tinebase_Core::getDb();
+        $db->insert(SQL_TABLE_PREFIX . $referencedTableName, array('name' => 'test'));
+        $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 1));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '23000'); //23000: foreign key constraint violation
+        $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 999));
     }
     
     public function testRenameCol()
