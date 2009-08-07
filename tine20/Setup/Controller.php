@@ -88,8 +88,8 @@ class Setup_Controller
                     $this->_backend = Setup_Backend_Factory::factory('Mysql');
                     break;
                     
-                case 'Zend_Db_Adapter_Pdo_Oci':
-                    $this->_backend = Setup_Backend_Factory::factory('Oracle');
+                case 'Zend_Db_Adapter_Oracle':
+                    $this->_backend = Setup_Backend_Factory::factory(Tinebase_Core::ORACLE);
                     break;
                     
                 default:
