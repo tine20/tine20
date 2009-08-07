@@ -113,20 +113,26 @@ class Setup_Backend_OracleTest extends BaseTest
         }
     }
 
-    
+    public function testOracleDbAdapterIsQuoted()
+    {
+        $prefix = 'phpunit';
+        $dbProxy = $this->_getDbProxy($prefix);
+        $testString = 'This is NOT QUOTED but this is "QUOTED" and this is NOT QUOTED and "still NOT "QUOTED" but here yes it is QUOTED" but this is \"NOT QUOTED\" while this is \\\\"QUOTED\\\\".'; 
+        
+        $this->assertFalse($dbProxy->proxy_isQuoted($testString, 12, '"'), 'Test position of "THIS1"');
+        $this->assertTrue($dbProxy->proxy_isQuoted($testString, 32, '"'), 'Test position of "THIS2"');
+        $this->assertFalse($dbProxy->proxy_isQuoted($testString, 56, '"'), 'Test position of "THIS3"');
+        $this->assertFalse($dbProxy->proxy_isQuoted($testString, 79, '"'), 'Test position of "THIS4"');
+        $this->assertTrue($dbProxy->proxy_isQuoted($testString, 106, '"'), 'Test position of "THIS5"');
+        $this->assertFalse($dbProxy->proxy_isQuoted($testString, 132, '"'), 'Test position of "THIS6"');
+        $this->assertTrue($dbProxy->proxy_isQuoted($testString, 158, '"'), 'Test position of "THIS7"');
+    }
     
     public function testOracleDbAdapterPositionalToNamedParameters()
     {
         $db = Tinebase_Core::getDb();
-        
-        $prefix = 'npp';
-        
-        //setup proxy for Zend_Db_Adapter_Oralce because we want to test a protected method
-        $config = Tinebase_Core::getConfig();
-        $dbConfig = $config->database;
-        $dbProxy = $this->getProxy('Zend_Db_Adapter_Oracle', $dbConfig->toArray());
-        $dbProxy->supportPositionalParameters(true);
-        $dbProxy->setNamedParamPrefix($prefix);
+        $prefix = 'phpunit';
+        $dbProxy = $this->_getDbProxy($prefix);
         
         $sqlOrig = 'test';
         $bindOrig = array();
@@ -140,14 +146,23 @@ class Setup_Backend_OracleTest extends BaseTest
         list($sqlConverted, $bindConverted) = $dbProxy->proxy_positionalToNamedParameters($sqlOrig, $bindOrig);
         $this->assertFalse(strpos($sqlConverted, '?'));
         $this->assertTrue(false !== strpos($sqlConverted, ':' . $prefix . '0'));
-        $this->assertEquals($bindConverted[$prefix . '0'], 'z');     
+        $this->assertEquals($bindConverted[$prefix . '0'], 'z');
+
+        $sqlOrig = "select x from y where z='why?' and a=?";
+        $bindOrig = array('b');
+        
+        list($sqlConverted, $bindConverted) = $dbProxy->proxy_positionalToNamedParameters($sqlOrig, $bindOrig);
+        $this->assertEquals("select x from y where z='why?' and a=:" . $prefix . '0', $sqlConverted);
+        $this->assertTrue(false !== strpos($sqlConverted, ':' . $prefix . '0'));
+        $this->assertEquals($bindConverted[$prefix . '0'], 'b');
     }
     
     public function testQuestionMarkInFieldValue()
     {
         $db = Tinebase_Core::getDb();
         $tableName = SQL_TABLE_PREFIX . $this->_table->name;
-        $value = 'test ??  . ?=? ..';
+        //$value = 'test ??  . ?=? ..';
+        $value = 'test?';
         $db->insert($tableName, array('name' => $value));
         $result = $db->fetchCol($db->select()->from($tableName, 'name'));
         $this->assertEquals($value, $result[0]);
@@ -166,9 +181,9 @@ class Setup_Backend_OracleTest extends BaseTest
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->_backend->addCol($this->_table->name, $field);
 
-//        $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ', ' . $db->quoteIdentifier('test') . ') VALUES (' . $db->quote($value, 'text') . ', ?)', array('test value for col 2'));
-//        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
-//        $this->assertEquals($value, $result[1]);
+        $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ', ' . $db->quoteIdentifier('test') . ') VALUES (' . $db->quote($value, 'text') . ', ?)', array('test value for col 2'));
+        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
+        $this->assertEquals($value, $result[1]);
     }
     
     public function testGetCreateStatement()
@@ -441,6 +456,41 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->_backend->addCol($this->_table->name, $field);
     }
     
+    public function testStringToFieldStatement_009() 
+    {
+        $string ="
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"last_modified_time" VARCHAR2(25) NOT NULL ');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToFieldStatement_010() 
+    {
+        $string ="
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"is_deleted" NUMBER(4,0) DEFAULT 0 NOT NULL');
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }    
+    
 //    public function testUnsignedNotImplemented()
 //    {
 //        $string ="
@@ -547,6 +597,22 @@ class Setup_Backend_OracleTest extends BaseTest
         return '  ' . $return;
     }
     
+    /**
+     * setup proxy for Zend_Db_Adapter_Oralce because we want to test a protected method
+     * 
+     * @param String $_prefix
+     * @return Zend_Db_Adapter_OralceProxy
+     */
+    protected function _getDbProxy($_prefix = 'npp')
+    {
+        $config = Tinebase_Core::getConfig();
+        $dbConfig = $config->database;
+        $dbProxy = $this->getProxy('Zend_Db_Adapter_Oracle', $dbConfig->toArray());
+        $dbProxy->supportPositionalParameters(true);
+        $dbProxy->setNamedParamPrefix($_prefix);
+        
+        return $dbProxy;
+    }    
 }        
 
 

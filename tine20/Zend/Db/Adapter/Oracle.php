@@ -756,18 +756,60 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         }
         
         $keyCounter = 0;
+        $quotedQuestionMarksCounter = 0;
         foreach ($bind as $key => $value)
         {
             if (is_int($key)) {
                 unset($bind[$key]);
                 $bind[$this->_namedParamPrefix . $keyCounter] = $value;
-                //$sql = preg_replace('/\?/', ':' . $this->_namedParamPrefix . $keyCounter, $sql, 1);
-                $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, strpos($sql, '?'), 1);
+                
+                $position = 0;
+                while (false !== ($position = strpos($sql, '?', $quotedQuestionMarksCounter))) {
+                    if ($this->_isQuoted($sql, $position)) {
+                        $quotedQuestionMarksCounter++;
+                    } else {
+                          break;                      
+                    }
+                }
+                $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, $position, 1);
+                
                 $keyCounter++;
             }
         }
 
         return array($sql, $bind);
+    }
+
+    /**
+     * Determine whether a character at position {@param $position} in the string {@param $string} 
+     * is within a pair of quotation marks or not. 
+     * 
+     * @param String $string
+     * @param int $position
+     * @param String | optional $quoteChar
+     * @param String | optional $escapeChar
+     * 
+     * @return bool
+     */
+    protected function _isQuoted($string, $position, $quoteChar = "'", $escapeChar = '\\')
+    {
+        $subString = substr($string, 0, $position);
+        
+        $unescapedQuoteCharsCount = 0;
+        while (false !== ($position = strpos($subString, $quoteChar))) {
+            //test if quotation mark is escaped
+            $escapeCharsCount = 0;
+            while ($subString[$position-1-$escapeCharsCount] == $escapeChar) {
+                $escapeCharsCount++;
+            }
+            if ($escapeCharsCount % 2 === 0) {
+                $unescapedQuoteCharsCount++;
+            }
+
+            $subString = substr($subString, $position+1);
+        }
+        
+        return (bool)($unescapedQuoteCharsCount % 2);
     }
         
 }
