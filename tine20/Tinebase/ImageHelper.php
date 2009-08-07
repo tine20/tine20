@@ -49,6 +49,11 @@ class Tinebase_ImageHelper
     public static function getImageInfoFromBlob($_blob)
     {
         $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+        
+        if ($tmpPath === FALSE) {
+            throw new Tinebase_Exception('Could not generate temporary file.');
+        }
+        
         file_put_contents($tmpPath, $_blob);
         
         $imgInfo = getimagesize($tmpPath);
