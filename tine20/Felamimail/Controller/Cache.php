@@ -430,7 +430,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
                                 $cachedMessage->content_type = $message->contentType;
                                 break;
                             case 'from':
-                                $cachedMessage->from = Felamimail_Message::convertText($message->from);
+                                $cachedMessage->from = Felamimail_Message::convertText($message->from, TRUE, 256);
                                 break;
                             case 'sent':
                                 $cachedMessage->sent = $this->_convertDate($message->date);

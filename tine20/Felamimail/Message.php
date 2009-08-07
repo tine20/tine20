@@ -145,11 +145,12 @@ class Felamimail_Message extends Zend_Mail_Message
      *
      * @param string $_string
      * @param boolean $_isHeader (if not, use base64 decode)
+     * @param integer $_ellipsis use substring (0 ... value) if value is > 0
      * @return string
      * 
      * @todo make it work for message body (use table for quoted printables?)
      */
-    public static function convertText($_string, $_isHeader = TRUE)
+    public static function convertText($_string, $_isHeader = TRUE, $_ellipsis = 0)
     {
         $string = $_string;
         if(preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
@@ -165,6 +166,11 @@ class Felamimail_Message extends Zend_Mail_Message
                 $string = utf8_encode($string);
                 */                
             }
+        }
+        
+        if ($_ellipsis > 0 && strlen($string) > $_ellipsis) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' String to long, cutting it to ' . $_ellipsis . ' chars.');
+            $string = substr($string, 0, $_ellipsis);
         }
         
         return $string;
