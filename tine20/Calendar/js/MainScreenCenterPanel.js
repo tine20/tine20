@@ -185,10 +185,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.activeView = view;
         
         // move around changeViewButtons
-        var tbar = panel.getTopToolbar();
-        var spacerEl = Ext.fly(Ext.DomQuery.selectNode('div[class=ytb-spacer]', tbar.el.dom)).parent();
+        var rightRow = Ext.get(Ext.DomQuery.selectNode('tr[class=x-toolbar-right-row]', panel.tbar.dom));
+        
         for (var i=this.changeViewActions.length-1; i>=0; i--) {
-            this.changeViewActions[i].getEl().parent().insertAfter(spacerEl);
+            rightRow.insertFirst(this.changeViewActions[i].getEl().parent().dom);
         }
         this['show' + Ext.util.Format.capitalize(view) +  'View'].toggle(true);
         

@@ -83,10 +83,12 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
  * @extends Ext.Panel
  * Left Calendar Panel including Tree and DatePicker<br>
  * @todo add d&d support to tree (change calendar)
+ * @todo why the hack is the strech option not working???
  */
 Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     border: false,
-    layout: 'border',
+    layout: 'vbox',
+    align: 'stretch',
     cls: 'cal-tree',
     defaults: {
         border: false
@@ -95,7 +97,8 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         
         this.calSelector = new Tine.widgets.container.TreePanel({
-            region: 'center',
+            //region: 'center',
+            width: 200,
             app: Tine.Tinebase.appMgr.get('Calendar'),
             recordClass: Tine.Calendar.Model.Event,
             allowMultiSelection: true,
@@ -112,9 +115,13 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
         });
         
         this.items = [this.calSelector, {
-            region: 'south',
-            collapsible: true,
+            xtype:'spacer',
+            flex:1
+        }, {
+            //region: 'south',
+            //collapsible: true,
             height: 190,
+            width: 200,
             items: new Ext.DatePicker({
                 id :'cal-mainscreen-minical',
                 plugins: [new Ext.ux.DatePickerWeekPlugin({
@@ -134,7 +141,7 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
                         var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
                         contentPanel.changeView(weekNumber ? 'week' : 'day', value);
                     },
-                    render: function(picker) {
+                    render2: function(picker) {
                         // fix height of minipicker panel (south panel)
                         var layout = this.layout;
                         layout.south.el.setHeight(picker.el.getHeight());

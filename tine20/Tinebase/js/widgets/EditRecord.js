@@ -179,7 +179,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         Tine.widgets.dialog.EditRecord.superclass.onRender.call(this, ct, position);
         
         if (this.showContainerSelector) {
-            this.recordContainerEl = this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
+            this.recordContainerEl = this.footer.first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
             var ContainerForm = new Tine.widgets.container.selectionComboBox({
                 id: this.appName + 'EditRecordContainerSelector',
                 fieldLabel: _('Saved in'),

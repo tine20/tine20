@@ -33,6 +33,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         this.recordProxy = Tine.Addressbook.contactBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
+        
         this.gridConfig.columns = this.getColumns();
         this.filterToolbar = this.getFilterToolbar();
         this.detailsPanel = this.getDetailsPanel();
@@ -121,7 +122,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     /**
      * return additional tb items
      */
-    getToolbarItems: function(){
+    getToolbarItems: function() {
         this.actions_exportContact = new Ext.Action({
             text: _('Export'),
             iconCls: 'action_exportAsPdf',
@@ -179,7 +180,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         ];
         
         if (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) {
-            items.push(new Ext.Toolbar.MenuButton(this.actions_callContact));
+            items.push(new Ext.Button(this.actions_callContact));
         }
         
         return items;

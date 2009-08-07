@@ -342,7 +342,6 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         var bydayItems = [];
         for (var i=0,d; i<7; i++) {
             d = (i+Ext.DatePicker.prototype.startDay)%7
-            Tine.Calendar.RrulePanel.prototype.wkdays[d];
             bydayItems.push({
                 boxLabel: Date.dayNames[d],
                 name: Tine.Calendar.RrulePanel.prototype.wkdays[d]
@@ -351,7 +350,7 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
         
         this.byday = new Ext.form.CheckboxGroup({
             requiredGrant : 'editGrant',
-            style: 'padding-top: 5px; padding-left: 10px',
+            style: 'padding-top: 5px;',
             hideLabel: true,
             items: bydayItems
         });

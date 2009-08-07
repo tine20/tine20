@@ -497,9 +497,14 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         });
         colorPicker.colorPalette.on('select', function(cp, color) {
             color = '#' + color;
-            colorPicker.setValue(color);
-            colorPicker.onTriggerClick();
-        }, this);
+            this.setValue(color);
+            this.onTriggerClick();
+        }, colorPicker);
+        
+        colorPicker.on('blur', function() {
+            console.log(this.color);
+            this.el.setStyle('background', colorPicker.getValue());
+        }, colorPicker);
         
         colorPicker.onTriggerClick = function() {
             if(this.disabled){
@@ -512,9 +517,9 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 colorPicker.initList();
                 colorPicker.list.alignTo(colorPicker.wrap, colorPicker.listAlign);
                 colorPicker.list.show();
-                //if (typeof(colorPicker.colorPalette.render) == 'function') {
-                    colorPicker.colorPalette.render(colorPicker.list);
-                //}
+
+                colorPicker.colorPalette.render(colorPicker.list);
+                colorPicker.list.setHeight(colorPicker.colorPalette.getEl().getHeight());
             }
         };
         

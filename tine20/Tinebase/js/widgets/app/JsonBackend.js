@@ -71,7 +71,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         p.method = this.appName + '.get' + this.modelName;
         p.id = record.get(this.idProperty); 
         
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     },
     
     /**
@@ -100,7 +100,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         // increase timeout as this can take a longer (1 minute)
         options.timeout = 60000;
                 
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     },
     
     /**
@@ -122,7 +122,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         p.method = this.appName + '.save' + this.modelName;
         p.recordData = Ext.util.JSON.encode(record.data);
         
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     },
     
     /**
@@ -139,7 +139,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         options.params.method = this.appName + '.delete' + this.modelName + 's';
         options.params.ids = Ext.util.JSON.encode(this.getRecordIds(records));
         
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     },
 
     /**
@@ -159,7 +159,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
         // increase timeout as this can take a long time (5 mins)
         options.timeout = 300000;
         
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     },
     
     /**
@@ -181,7 +181,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
             return [Ext.util.JSON.decode(response.responseText)];
         };
         
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     },
     
     /**
@@ -275,8 +275,7 @@ Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
     /**
      * performs an Ajax request
      */
-    request: function(options) {
-        
+    doXHTTPRequest: function(options) {
         var requestOptions = {
             scope: this,
             params: options.params,

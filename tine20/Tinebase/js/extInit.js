@@ -65,6 +65,11 @@ Ext.QuickTips.init();
 Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
 
 /**
+ * beginning with Ext. 3.0 JsonStore needs to have url set to configure a proxy automatically
+ */
+Ext.data.JsonStore.prototype.url = 'index.php';
+
+/**
  * additional date patterns
  * @see{Date}
  */

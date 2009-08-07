@@ -292,7 +292,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
         
         if (this.showContainerSelector) {
-            this.recordContainerEl = this.footer.first().first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
+            this.recordContainerEl = this.footer.first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
             var ContainerForm = new Tine.widgets.container.selectionComboBox({
                 id: this.app.appName + 'EditDialogContainerSelector',
                 fieldLabel: _('Saved in'),

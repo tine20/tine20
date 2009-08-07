@@ -21,7 +21,7 @@ Tine.widgets.grid.ExportButton = function(config) {
     config = config || {};
     Ext.apply(this, config);
     
-    Tine.widgets.grid.ExportButton.superclass.constructor.call(this);
+    Tine.widgets.grid.ExportButton.superclass.constructor.call(this, config);
 };
 
 Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {	

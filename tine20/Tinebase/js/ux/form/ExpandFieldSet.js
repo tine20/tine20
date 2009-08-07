@@ -51,7 +51,7 @@ Ext.ux.form.ExpandFieldSet = Ext.extend(Ext.form.FieldSet, {
             }
             panelCount++;
         }, this);
-        this.collapsed = true;
+        //this.collapsed = true;
     },
     onRender : function(ct, position){
         Ext.ux.form.ExpandFieldSet.superclass.onRender.call(this, ct, position);
