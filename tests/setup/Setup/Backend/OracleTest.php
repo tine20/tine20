@@ -490,6 +490,142 @@ class Setup_Backend_OracleTest extends BaseTest
         
         $this->_backend->addCol($this->_table->name, $field);
     }    
+
+    public function testStringToFieldStatement_011() 
+    {
+        $string ="
+                <field>
+                    <name>new_value</name>
+                    <type>clob</type>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"new_value" CLOB ');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToFieldStatement_012() 
+    {
+        $string ="
+                <field>
+                    <name>created_by</name>
+                    <type>integer</type>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"created_by" NUMBER(11,0)');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToFieldStatement_013() 
+    {
+        $string ="
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <comment>comment</comment>
+                </field>";
+            
+        
+        $statement = $this->_fixFieldDeclarationString('"account_id" NUMBER(11,0)'); //COMMENTS are ignored in Oracle Adapter    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToFieldStatement_014() 
+    {
+        $string ="
+               <field>
+                    <name>jpegphoto</name>
+                    <type>blob</type>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"jpegphoto" BLOB');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToFieldStatement_015() 
+    {
+        $string ="
+                <field>
+                    <name>private</name>
+                    <type>integer</type>
+                    <default>0</default>
+                    <length>4</length>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"private" NUMBER(4,0) DEFAULT 0');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToFieldStatement_016() 
+    {
+        $string ="
+                <field>
+                    <name>created</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"created" VARCHAR2(25) NOT NULL');
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToFieldStatement_018() 
+    {
+        $string ="
+               <field>
+                    <name>leadtype_translate</name>
+                    <type>integer</type>
+                    <length>4</length>
+                    <default>1</default>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"leadtype_translate" NUMBER(4,0) DEFAULT 1');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }
+    
+    public function testStringToFieldStatement_019() 
+    {
+        $string ="
+               <field>
+                    <name>bigint</name>
+                    <type>integer</type>
+                    <length>24</length>
+                </field>";
+            
+        $statement = $this->_fixFieldDeclarationString('"bigint" NUMBER(24,0)');    
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        
+        $this->_backend->addCol($this->_table->name, $field);
+    }  
     
 //    public function testUnsignedNotImplemented()
 //    {
