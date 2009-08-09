@@ -45,6 +45,8 @@ class Tinebase_ImageHelper
      * @param   blob  $_blob
      * @return  array
      * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo use session_save_path or another configurable path here instead of /tmp?
      */
     public static function getImageInfoFromBlob($_blob)
     {
