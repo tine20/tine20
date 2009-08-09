@@ -96,7 +96,7 @@ class Setup_Core extends Tinebase_Core
         if (self::configFileExists()) {
             return is_writable($path . DIRECTORY_SEPARATOR . 'config.inc.php');
         } else {
-            $testfilename = $path . uniqid(mt_rand()).'.tmp';
+            $testfilename = $path . DIRECTORY_SEPARATOR . uniqid(mt_rand()).'.tmp';
             if (!($f = @fopen($testfilename, 'w'))) {
                 error_log(__METHOD__ . '::' . __LINE__ . ' Your tine root dir ' . $path . ' is not writable for the webserver! Config file can\'t be created.');
                 return false;
