@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-03-16 15:51+0100\n"
+"PO-Revision-Date: 2009-08-06 14:52+0100\n"
 "Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -26,11 +26,11 @@ msgstr "Ordre"
 
 #: js/ApplicationGridPanel.js:43
 msgid "Installed Version"
-msgstr ""
+msgstr "Version installée"
 
 #: js/ApplicationGridPanel.js:44
 msgid "Available Version"
-msgstr ""
+msgstr "Version disponible"
 
 #: js/ApplicationGridPanel.js:45
 msgid "Status"
@@ -38,7 +38,7 @@ msgstr "Statut"
 
 #: js/ApplicationGridPanel.js:46
 msgid "Depends on"
-msgstr ""
+msgstr "Dépend de"
 
 #: js/ApplicationGridPanel.js:52 js/EnvCheckGridPanel.js:169
 msgid "Install application"
@@ -54,18 +54,17 @@ msgstr "Mettre à jour une application"
 
 #: js/ApplicationGridPanel.js:138
 msgid "uninstall"
-msgstr ""
+msgstr "désinstaller"
 
 #: js/ApplicationGridPanel.js:138
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir désinstaller l'application?"
 
 #: js/ApplicationGridPanel.js:196
 msgid "This may take a while"
-msgstr ""
+msgstr "Cela peut être long"
 
 #: js/ApplicationGridPanel.js:222
-#, fuzzy
 msgid "Shit"
 msgstr "Oups"
 
@@ -79,15 +78,16 @@ msgstr ""
 
 #: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
-msgstr ""
+msgstr "Configuration incorrecte"
 
 #: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr ""
+"Vous devez corriger les champs en rouge avant d'enregistrer la configuration"
 
 #: js/AuthenticationGridPanel.js:122 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
-msgstr ""
+msgstr "Transfert de la configuration..."
 
 #: js/AuthenticationGridPanel.js:138
 msgid "Authentication provider"
@@ -122,7 +122,7 @@ msgstr ""
 #: js/AuthenticationGridPanel.js:301 js/ConfigManagerGridPanel.js:118
 #: js/ConfigManagerGridPanel.js:144
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 #: js/AuthenticationGridPanel.js:220 js/AuthenticationGridPanel.js:314
 msgid "Bind requires DN"
@@ -178,71 +178,71 @@ msgstr ""
 
 #: js/ConfigManagerGridPanel.js:107
 msgid "Informations"
-msgstr ""
+msgstr "Informations"
 
 #: js/ConfigManagerGridPanel.js:111
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Paramétrer l'authentification"
 
 #: js/ConfigManagerGridPanel.js:114
 msgid "Username"
-msgstr ""
+msgstr "Nom d'utilisateur"
 
 #: js/ConfigManagerGridPanel.js:123 js/ConfigManagerGridPanel.js:136
 msgid "Database"
-msgstr ""
+msgstr "Base de données"
 
 #: js/ConfigManagerGridPanel.js:127
 msgid "Adapter"
-msgstr ""
+msgstr "Connecteur"
 
 #: js/ConfigManagerGridPanel.js:132
 msgid "Hostname"
-msgstr ""
+msgstr "Nom d'hôte"
 
 #: js/ConfigManagerGridPanel.js:140
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #: js/ConfigManagerGridPanel.js:148
 msgid "Prefix"
-msgstr ""
+msgstr "Préfixe"
 
 #: js/ConfigManagerGridPanel.js:151
 msgid "Logging"
-msgstr ""
+msgstr "Journalisation"
 
 #: js/ConfigManagerGridPanel.js:157
 msgid "Filename"
-msgstr ""
+msgstr "Nom du fichier"
 
 #: js/ConfigManagerGridPanel.js:169
 msgid "Priority"
-msgstr ""
+msgstr "Priorité"
 
 #: js/ConfigManagerGridPanel.js:173
 msgid "Caching"
-msgstr ""
+msgstr "Mise en cache"
 
 #: js/ConfigManagerGridPanel.js:179
 msgid "Path"
-msgstr ""
+msgstr "Chemin"
 
 #: js/ConfigManagerGridPanel.js:182
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "Durée de vie (secondes)"
 
 #: js/ConfigManagerGridPanel.js:275
 msgid "Save config"
-msgstr ""
+msgstr "Enregistrer la configuration"
 
 #: js/ConfigManagerGridPanel.js:283
 msgid "Download config file"
-msgstr ""
+msgstr "Télécharger la configuration"
 
 #: js/EnvCheckGridPanel.js:69
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Vérification en cours..."
 
 #: js/EnvCheckGridPanel.js:110
 msgid ""
@@ -250,7 +250,7 @@ msgid ""
 "or the {1} you search in."
 msgstr ""
 "Pas de {0} trouve(e). Essayez de changer vos critères de recherche, les "
-"options d'affichage ou votre {1} de recherche."
+"options d'affichage ou le critère {1} de recherche."
 
 #: js/EnvCheckGridPanel.js:140
 msgid "Check"
@@ -266,7 +266,7 @@ msgstr "Erreur"
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Run setup tests"
-msgstr ""
+msgstr "Lancer les tests de vérification"
 
 #: js/Setup.js:30
 msgid "Setup Checks"
@@ -291,11 +291,14 @@ msgid_plural "Applications"
 msgstr[0] "Application"
 msgstr[1] "Applications"
 
-#~ msgid "Current Version"
-#~ msgstr "Version actuelle"
+msgid "Current Version"
+msgstr "Version actuelle"
 
-#~ msgid "Version"
-#~ msgstr "Version"
+msgid "Version"
+msgstr "Version"
 
-#~ msgid "Check again"
-#~ msgstr "Nouvelle vérification"
+msgid "Check again"
+msgstr "Nouvelle vérification"
+
+#~ msgid "Check config"
+#~ msgstr "Vérifier la configuration"

@@ -103,7 +103,7 @@ msgid_plural "Calendars"
 msgstr[0] "Kalender"
 msgstr[1] "Kalender"
 
-#: js/Calendar.js:121 js/MonthView.js:87
+#: js/Calendar.js:128 js/MonthView.js:87
 msgid "WK"
 msgstr "KW"
 
@@ -349,40 +349,40 @@ msgstr ". Tag"
 msgid ". Week at"
 msgstr ". Woche am"
 
-#: js/RrulePanel.js:399
+#: js/RrulePanel.js:398
 msgid ". Month"
 msgstr ". Monat"
 
-#: js/RrulePanel.js:405 js/RrulePanel.js:454 js/RrulePanel.js:585
-#: js/RrulePanel.js:635
+#: js/RrulePanel.js:404 js/RrulePanel.js:453 js/RrulePanel.js:584
+#: js/RrulePanel.js:634
 msgid "at the"
 msgstr "am"
 
-#: js/RrulePanel.js:424 js/RrulePanel.js:604
+#: js/RrulePanel.js:423 js/RrulePanel.js:603
 msgid "first"
 msgstr "ersten"
 
-#: js/RrulePanel.js:425 js/RrulePanel.js:605
+#: js/RrulePanel.js:424 js/RrulePanel.js:604
 msgid "second"
 msgstr "zweiten"
 
-#: js/RrulePanel.js:426 js/RrulePanel.js:606
+#: js/RrulePanel.js:425 js/RrulePanel.js:605
 msgid "third"
 msgstr "dritten"
 
-#: js/RrulePanel.js:427 js/RrulePanel.js:607
+#: js/RrulePanel.js:426 js/RrulePanel.js:606
 msgid "fourth"
 msgstr "vierten"
 
-#: js/RrulePanel.js:428 js/RrulePanel.js:608
+#: js/RrulePanel.js:427 js/RrulePanel.js:607
 msgid "last"
 msgstr "letzten"
 
-#: js/RrulePanel.js:578
+#: js/RrulePanel.js:577
 msgid ". Year"
 msgstr ". Jahr"
 
-#: js/RrulePanel.js:675 js/RrulePanel.js:687
+#: js/RrulePanel.js:674 js/RrulePanel.js:686
 msgid "of"
 msgstr " "
 

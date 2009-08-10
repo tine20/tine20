@@ -142,99 +142,99 @@ msgstr "Роли"
 msgid "Admin"
 msgstr "Администратор"
 
-#: js/Admin.js:283 js/Groups.js:50 js/Roles.js:47 js/Tags.js:56
+#: js/Admin.js:284 js/Groups.js:50 js/Roles.js:47 js/Tags.js:56
 #: js/Users.js:183
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: js/Admin.js:283
+#: js/Admin.js:284
 msgid "Do you really want to delete the selected access log entries?"
 msgstr "Вы действительно хотите удалить выбранные элементы лога доступа?"
 
-#: js/Admin.js:398
+#: js/Admin.js:399
 msgid "delete entry"
 msgstr "удалить элемент"
 
-#: js/Admin.js:399
+#: js/Admin.js:400
 msgid "select all"
 msgstr "выбрать все"
 
-#: js/Admin.js:404 js/Applications.js:149 js/Groups.js:131 js/Roles.js:131
+#: js/Admin.js:405 js/Applications.js:149 js/Groups.js:131 js/Roles.js:131
 #: js/Tags.js:118 js/Users.js:222
 msgid "enter searchfilter"
 msgstr "Введите поисковый фильтр"
 
-#: js/Admin.js:434
+#: js/Admin.js:435
 msgid "Display from:"
 msgstr "Показаны с:"
 
-#: js/Admin.js:438
+#: js/Admin.js:439
 msgid "to:"
 msgstr "до:"
 
-#: js/Admin.js:443 js/Applications.js:166 js/Groups.js:151 js/Roles.js:151
+#: js/Admin.js:444 js/Applications.js:166 js/Groups.js:151 js/Roles.js:151
 #: js/Tags.js:138 js/Users.js:238
 msgid "Search:"
 msgstr "Поиск:"
 
-#: js/Admin.js:516
+#: js/Admin.js:517
 msgid "invalid password"
 msgstr "неверный пароль"
 
-#: js/Admin.js:520
+#: js/Admin.js:521
 msgid "ambiguous username"
 msgstr "Имя пользователя многозначно"
 
-#: js/Admin.js:524
+#: js/Admin.js:525
 msgid "user not found"
 msgstr "пользователь не найден"
 
-#: js/Admin.js:528
+#: js/Admin.js:529
 msgid "failure"
 msgstr "неудачно"
 
-#: js/Admin.js:532
+#: js/Admin.js:533
 msgid "success"
 msgstr "успешно"
 
-#: js/Admin.js:553
+#: js/Admin.js:554
 msgid "Displaying access log entries {0} - {1} of {2}"
 msgstr "Показаны элементы лога доступа {0} - {1} из {2}"
 
-#: js/Admin.js:554
+#: js/Admin.js:555
 msgid "No access log entries to display"
 msgstr "Нет записей лога доступа"
 
-#: js/Admin.js:558
+#: js/Admin.js:559
 msgid "Session ID"
 msgstr "ID сессии"
 
-#: js/Admin.js:559 js/UserEditDialog.js:104
+#: js/Admin.js:560 js/UserEditDialog.js:104
 msgid "Login Name"
 msgstr "Имя для регистрации"
 
-#: js/Admin.js:560 js/Applications.js:237 js/Groups.js:196 js/Groups.js:513
+#: js/Admin.js:561 js/Applications.js:237 js/Groups.js:196 js/Groups.js:513
 #: js/Roles.js:196 js/SambaMachineGrid.js:87 js/Tags.js:180
 msgid "Name"
 msgstr "Имя"
 
-#: js/Admin.js:561
+#: js/Admin.js:562
 msgid "IP Address"
 msgstr "IP адрес"
 
-#: js/Admin.js:562
+#: js/Admin.js:563
 msgid "Login Time"
 msgstr "Время регистрации"
 
-#: js/Admin.js:563
+#: js/Admin.js:564
 msgid "Logout Time"
 msgstr "Время выхода из системы"
 
-#: js/Admin.js:564
+#: js/Admin.js:565
 msgid "Account ID"
 msgstr "ID учётной записи"
 
-#: js/Admin.js:565
+#: js/Admin.js:566
 msgid "Result"
 msgstr "Результат"
 
@@ -325,7 +325,7 @@ msgstr "ID"
 
 #: js/Groups.js:197 js/Groups.js:583 js/Roles.js:197 js/Roles.js:671
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:93 js/Tags.js:181
-#: js/Tags.js:549
+#: js/Tags.js:554
 msgid "Description"
 msgstr "Описание"
 
@@ -425,7 +425,7 @@ msgstr "Участники роли"
 msgid "Members"
 msgstr "Участники"
 
-#: js/Roles.js:633 js/Tags.js:566
+#: js/Roles.js:633 js/Tags.js:571
 msgid "Rights"
 msgstr "Права"
 
@@ -437,7 +437,7 @@ msgstr "Название роли"
 msgid "Loading Role..."
 msgstr "Загрузка роли..."
 
-#: js/Roles.js:704 js/Tags.js:587
+#: js/Roles.js:704 js/Tags.js:592
 msgid "Please Wait"
 msgstr "Пожалуйста, подождите"
 
@@ -517,23 +517,23 @@ msgstr "Представление"
 msgid "Use"
 msgstr "Использовать"
 
-#: js/Tags.js:542
+#: js/Tags.js:547
 msgid "Tag Name"
 msgstr "Название тэга"
 
-#: js/Tags.js:569
+#: js/Tags.js:574
 msgid "Context"
 msgstr "Контекст"
 
-#: js/Tags.js:587
+#: js/Tags.js:592
 msgid "Loading Tag..."
 msgstr "Загрузка тэга..."
 
-#: js/Tags.js:618
+#: js/Tags.js:623
 msgid "Add New Tag"
 msgstr "Добавить новый тэг"
 
-#: js/Tags.js:620
+#: js/Tags.js:625
 msgid "Edit Tag \"{0}\""
 msgstr "Изменить тэг \"{0}\""
 

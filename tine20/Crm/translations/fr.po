@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2009-08-06 16:17+0100\n"
+"Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +33,8 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-#: Controller/Lead.php:236 js/Crm.js:1042
+#: Controller/Lead.php:236
+#: js/Crm.js:1042
 msgid "Type"
 msgstr ""
 
@@ -41,7 +42,9 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: Controller/Lead.php:238 Export/Pdf.php:92 js/LeadEditDialog.js:112
+#: Controller/Lead.php:238
+#: Export/Pdf.php:92
+#: js/LeadEditDialog.js:112
 msgid "Start"
 msgstr ""
 
@@ -49,15 +52,23 @@ msgstr ""
 msgid "Scheduled end"
 msgstr ""
 
-#: Controller/Lead.php:240 Export/Pdf.php:95 js/LeadEditDialog.js:125
+#: Controller/Lead.php:240
+#: Export/Pdf.php:95
+#: js/LeadEditDialog.js:125
 msgid "End"
 msgstr ""
 
-#: Controller/Lead.php:241 Export/Pdf.php:86 js/Crm.js:299 js/Crm.js:347
+#: Controller/Lead.php:241
+#: Export/Pdf.php:86
+#: js/Crm.js:299
+#: js/Crm.js:347
 msgid "Turnover"
 msgstr ""
 
-#: Controller/Lead.php:242 Export/Pdf.php:89 js/Crm.js:298 js/Crm.js:346
+#: Controller/Lead.php:242
+#: Export/Pdf.php:89
+#: js/Crm.js:298
+#: js/Crm.js:346
 #: js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr ""
@@ -98,15 +109,20 @@ msgstr ""
 msgid "Lead Data"
 msgstr ""
 
-#: Export/Pdf.php:77 js/Crm.js:345 js/LeadEditDialog.js:41 js/LeadState.js:220
+#: Export/Pdf.php:77
+#: js/Crm.js:345
+#: js/LeadEditDialog.js:41
+#: js/LeadState.js:220
 msgid "Leadstate"
 msgstr ""
 
-#: Export/Pdf.php:80 js/LeadEditDialog.js:70
+#: Export/Pdf.php:80
+#: js/LeadEditDialog.js:70
 msgid "Leadtype"
 msgstr ""
 
-#: Export/Pdf.php:83 js/LeadEditDialog.js:87
+#: Export/Pdf.php:83
+#: js/LeadEditDialog.js:87
 msgid "Leadsource"
 msgstr ""
 
@@ -114,11 +130,13 @@ msgstr ""
 msgid "End Scheduled"
 msgstr ""
 
-#: Export/Pdf.php:176 js/Crm.js:1073
+#: Export/Pdf.php:176
+#: js/Crm.js:1073
 msgid "Contacts"
 msgstr ""
 
-#: Export/Pdf.php:203 js/Crm.js:1020
+#: Export/Pdf.php:203
+#: js/Crm.js:1020
 msgid "Address"
 msgstr ""
 
@@ -130,19 +148,24 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: Export/Pdf.php:224 js/Crm.js:1207
+#: Export/Pdf.php:224
+#: js/Crm.js:1207
 msgid "Tasks"
 msgstr ""
 
-#: Export/Pdf.php:243 js/Crm.js:1131
+#: Export/Pdf.php:243
+#: js/Crm.js:1131
 msgid "Due Date"
 msgstr ""
 
-#: Export/Pdf.php:248 js/Crm.js:1145
+#: Export/Pdf.php:248
+#: js/Crm.js:1145
 msgid "Priority"
 msgstr ""
 
-#: Export/Pdf.php:262 js/Crm.js:618 js/Crm.js:1347
+#: Export/Pdf.php:262
+#: js/Crm.js:618
+#: js/Crm.js:1347
 msgid "Products"
 msgstr ""
 
@@ -186,7 +209,8 @@ msgstr ""
 msgid "Lead"
 msgstr ""
 
-#: js/Crm.js:296 js/Crm.js:342
+#: js/Crm.js:296
+#: js/Crm.js:342
 msgid "Lead name"
 msgstr ""
 
@@ -194,7 +218,8 @@ msgstr ""
 msgid "Displaying leads {0} - {1} of {2}"
 msgstr ""
 
-#: js/Crm.js:315 js/Crm.js:379
+#: js/Crm.js:315
+#: js/Crm.js:379
 msgid "No leads found."
 msgstr ""
 
@@ -202,12 +227,16 @@ msgstr ""
 msgid "Lead id"
 msgstr ""
 
-#: js/Crm.js:343 js/Crm.js:1650 js/LeadEditDialog.js:322
+#: js/Crm.js:343
+#: js/Crm.js:1650
+#: js/LeadEditDialog.js:322
 #: js/LeadEditDialog.js:365
 msgid "Partner"
 msgstr ""
 
-#: js/Crm.js:344 js/Crm.js:1630 js/LeadEditDialog.js:321
+#: js/Crm.js:344
+#: js/Crm.js:1630
+#: js/LeadEditDialog.js:321
 #: js/LeadEditDialog.js:361
 msgid "Customer"
 msgstr ""
@@ -238,7 +267,9 @@ msgstr[1] ""
 msgid "Delete selected leads"
 msgstr ""
 
-#: js/Crm.js:485 js/Crm.js:1737 js/Crm.js:1738
+#: js/Crm.js:485
+#: js/Crm.js:1737
+#: js/Crm.js:1738
 msgid "Export as PDF"
 msgstr ""
 
@@ -246,7 +277,9 @@ msgstr ""
 msgid "Export selected lead as PDF"
 msgstr ""
 
-#: js/Crm.js:495 js/Crm.js:1682 js/Crm.js:1701
+#: js/Crm.js:495
+#: js/Crm.js:1682
+#: js/Crm.js:1701
 msgid "Add task"
 msgstr ""
 
@@ -266,11 +299,13 @@ msgstr ""
 msgid "Lead types"
 msgstr ""
 
-#: js/Crm.js:673 js/Crm.js:1034
+#: js/Crm.js:673
+#: js/Crm.js:1034
 msgid "Phone"
 msgstr ""
 
-#: js/Crm.js:674 js/Crm.js:1035
+#: js/Crm.js:674
+#: js/Crm.js:1035
 msgid "Cellphone"
 msgstr ""
 
@@ -334,7 +369,8 @@ msgstr ""
 msgid "Add a product..."
 msgstr ""
 
-#: js/Crm.js:1294 js/LeadEditDialog.js:152
+#: js/Crm.js:1294
+#: js/LeadEditDialog.js:152
 msgid "Description"
 msgstr ""
 
@@ -358,7 +394,9 @@ msgstr ""
 msgid "Change type to Customer"
 msgstr ""
 
-#: js/Crm.js:1640 js/LeadEditDialog.js:320 js/LeadEditDialog.js:357
+#: js/Crm.js:1640
+#: js/LeadEditDialog.js:320
+#: js/LeadEditDialog.js:357
 msgid "Responsible"
 msgstr ""
 
@@ -418,7 +456,8 @@ msgstr ""
 msgid "Remove selected products"
 msgstr ""
 
-#: js/Crm.js:1766 js/Crm.js:1767
+#: js/Crm.js:1766
+#: js/Crm.js:1767
 msgid "Leads"
 msgstr ""
 
@@ -509,3 +548,4 @@ msgstr ""
 #: Setup/setup.xml:562
 msgid "lost"
 msgstr ""
+

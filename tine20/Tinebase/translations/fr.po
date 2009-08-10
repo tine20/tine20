@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-03-09 17:00+0100\n"
+"PO-Revision-Date: 2009-08-06 16:14+0100\n"
 "Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,6 @@ msgid "Report bugs"
 msgstr "Rapporter les bugs"
 
 #: Acl/Rights.php:135
-#, fuzzy
 msgid "Report bugs to tine20.org directly when they occur"
 msgstr "Rapporter les bugs à tine20.org dès qu'ils surviennent"
 
@@ -47,9 +46,8 @@ msgid "Check tine20.org for new versions"
 msgstr "Vérifier les mises à jour de tine20.org"
 
 #: Export/Ods.php:198
-#, fuzzy
 msgid "Filter"
-msgstr "Échoué"
+msgstr "Filtrer"
 
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
 msgid "Tags"
@@ -109,7 +107,6 @@ msgstr[0] "Tâche"
 msgstr[1] "Tâches"
 
 #: js/data/Record.js:107
-#, fuzzy
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "liste \"à faire\""
@@ -136,6 +133,9 @@ msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occurred."
 msgstr ""
+"S'il vous plait, aidez-nous à améliorer ce programme et informez les "
+"créateurs. Décrivez brièvement ce qui vous faisiez quand l'erreur s'est "
+"produite."
 
 #: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:561
 msgid "Description"
@@ -143,12 +143,11 @@ msgstr "Description"
 
 #: js/ExceptionDialog.js:87
 msgid "Send Contact Information"
-msgstr ""
+msgstr "Envoyer les informations de contact"
 
 #: js/ExceptionDialog.js:104
-#, fuzzy
 msgid "Details:"
-msgstr "Afficher les détails:"
+msgstr "Détails:"
 
 #: js/ExceptionDialog.js:127
 msgid "Sending report..."
@@ -167,18 +166,16 @@ msgid "Your report has been sent. Thanks for your contribution"
 msgstr "Votre rapport a bien été envoyé. Merci de votre contribution."
 
 #: js/ExceptionDialog.js:172
-#, fuzzy
 msgid "Please restart your browser now!"
-msgstr "Saisissez votre login"
+msgstr "Veuillez redémarrer votre navigateur!"
 
 #: js/Login.js:40
 msgid "Login"
 msgstr "Login"
 
 #: js/Login.js:47
-#, fuzzy
 msgid "Register"
-msgstr "Enregistrement"
+msgstr "S'enregistrer"
 
 #: js/Login.js:61 js/Login.js:98
 msgid "Please enter your login data"
@@ -234,20 +231,16 @@ msgstr "Utilisateur: {0}"
 
 #: js/MainScreen.js:102
 msgid "Sorry"
-msgstr ""
+msgstr "Désolé"
 
 #: js/MainScreen.js:102
-#, fuzzy
 msgid ""
 "There are no applications enabled for you. Please contact your administrator."
-msgstr ""
-"Le serveur n'a pas répondu à votre requête. Vérifiez la connexion réseau ou "
-"contactez votre administrateur."
+msgstr "Vous n'avez pas d'application, veuillez contacter l'administrateur."
 
 #: js/MainScreen.js:201 js/MainScreen.js:375 js/MainScreen.js:390
-#, fuzzy
 msgid "About Tine 2.0"
-msgstr "Déconnexion de tine2.0"
+msgstr "A propos de tine2.0"
 
 #: js/MainScreen.js:207
 msgid "Change password"
@@ -279,7 +272,7 @@ msgstr "Nouveau mot de passe"
 
 #: js/MainScreen.js:438
 msgid "Repeat new Password"
-msgstr "confirmer le nouveau mot de passe"
+msgstr "Confirmer le nouveau mot de passe"
 
 #: js/MainScreen.js:448 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:372
@@ -360,9 +353,8 @@ msgid "Sorry, you are not permitted to perform this action"
 msgstr "Désolé, vous n'êtes pas autorisé à effectuer cette action"
 
 #: js/tineInit.js:329
-#, fuzzy
 msgid "Not Found"
-msgstr "Non autorisé"
+msgstr "Non trouvé"
 
 #: js/tineInit.js:330
 msgid ""
@@ -370,6 +362,9 @@ msgid ""
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
+"Désolé, votre requête ne peux aboutir car l'information est introuvable. La "
+"plupart du temps, c'est que quelqu'un a déjà effacé l'information. Veuillez "
+"rafraîchir votre affichage."
 
 #: js/tineInit.js:339
 msgid "Concurrent Updates"
@@ -388,6 +383,8 @@ msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
 msgstr ""
+"Erreur fatale: mise à jour client échouée, veuillez relancer votre "
+"navigateur ou contacter l'administrateur."
 
 #: js/UserRegistration.js:33
 msgid "Registration Wizard"
@@ -472,10 +469,9 @@ msgstr "Effacer l'image"
 
 #: js/ux/form/ImageField.js:223
 msgid "Show Original Image"
-msgstr ""
+msgstr "Afficher l'image originale"
 
 #: js/ux/form/ImageField.js:257
-#, fuzzy
 msgid "Image Failed"
 msgstr "Erreur d'image"
 
@@ -508,9 +504,8 @@ msgid "Toggle selection"
 msgstr "Inverser la sélection"
 
 #: js/widgets/account/ConfigGrid.js:61
-#, fuzzy
 msgid "Remove account"
-msgstr "supprimer le compte"
+msgstr "Supprimer le compte"
 
 #: js/widgets/account/ConfigGrid.js:85 js/widgets/account/PickerPanel.js:166
 msgid "Name"
@@ -518,7 +513,7 @@ msgstr "Nom"
 
 #: js/widgets/account/PickerPanel.js:70
 msgid "add account"
-msgstr "ajouter un compte"
+msgstr "ajouter"
 
 #: js/widgets/account/PickerPanel.js:177 js/widgets/GridPicker.js:389
 msgid "enter searchfilter"
@@ -576,7 +571,6 @@ msgid "Add a {0} Note"
 msgstr "Ajouter une {0} note"
 
 #: js/widgets/ActivitiesPanel.js:391 js/widgets/ActivitiesPanel.js:526
-#, fuzzy
 msgid "Type"
 msgstr "Type"
 
@@ -590,7 +584,7 @@ msgstr "Horodatage"
 
 #: js/widgets/ActivitiesPanel.js:409
 msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Afficher l'historique des enregistrements {0} - {1} of {2}"
+msgstr "Afficher l'historique des enregistrements {0} - {1} de {2}"
 
 #: js/widgets/ActivitiesPanel.js:410
 msgid "No history to display"
@@ -625,20 +619,19 @@ msgstr[1] "Supprimer {0}"
 
 #: js/widgets/app/GridPanel.js:296
 msgid "Displaying records {0} - {1} of {2}"
-msgstr "Afficher enregistrement {0} - {1} of {2}"
+msgstr "Afficher enregistrement {0} - {1} de {2}"
 
 #: js/widgets/app/GridPanel.js:297
 msgid "No {0} to display"
 msgstr "Aucun {0} à afficher"
 
 #: js/widgets/app/GridPanel.js:318
-#, fuzzy
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
 "Aucun {0} trouvé. Changez vos critères de recherche, les options d'affichage "
-"ou le/la {1} de votre recherche."
+"ou votre recherche de {1}."
 
 #: js/widgets/app/GridPanel.js:537
 msgid "Not Allowed"
@@ -660,7 +653,7 @@ msgstr "Suppression de {0}"
 
 #: js/widgets/app/GridPanel.js:557
 msgid " ... This may take a long time!"
-msgstr ""
+msgstr "...Cela peut être long!"
 
 #: js/widgets/app/GridPanel.js:571 js/widgets/dialog/EditDialog.js:403
 #: js/widgets/dialog/EditDialog.js:441 js/widgets/tags/TagsPanel.js:255
@@ -696,9 +689,8 @@ msgid "shared"
 msgstr "Partagé"
 
 #: js/widgets/container/ContainerSelect.js:360
-#, fuzzy
 msgid "please select a {0}"
-msgstr "Veuillez choisir un/une {0}"
+msgstr "Veuillez choisir {0}"
 
 #: js/widgets/container/ContainerTree.js:134
 msgid "All {0}"
@@ -713,9 +705,8 @@ msgid "Shared {0}"
 msgstr "{0} partagé(e)s"
 
 #: js/widgets/container/ContainerTree.js:154
-#, fuzzy
 msgid "Other Users {0}"
-msgstr "{0} des autres utilisateurs"
+msgstr "Autres utilisateurs {0}"
 
 #: js/widgets/container/GrantsDialog.js:55
 msgid "Folder"
@@ -757,46 +748,39 @@ msgstr "Aucun champ personnalisé actuellement"
 
 #: js/widgets/dialog/AlarmPanel.js:35
 msgid "Alarms"
-msgstr ""
+msgstr "Alarmes"
 
 #: js/widgets/dialog/AlarmPanel.js:46
 msgid "Send Alarm"
-msgstr ""
+msgstr "Envoyer une alerte"
 
 #: js/widgets/dialog/AlarmPanel.js:56
-#, fuzzy
 msgid "None"
-msgstr "Note"
+msgstr "Aucun"
 
 #: js/widgets/dialog/AlarmPanel.js:57
-#, fuzzy
 msgid "0 minutes before"
-msgstr "avant"
+msgstr "0 minute avant"
 
 #: js/widgets/dialog/AlarmPanel.js:58
-#, fuzzy
 msgid "15 minutes before"
-msgstr "avant"
+msgstr "15 minutes avant"
 
 #: js/widgets/dialog/AlarmPanel.js:59
-#, fuzzy
 msgid "30 minutes before"
-msgstr "avant"
+msgstr "30 minutes avant"
 
 #: js/widgets/dialog/AlarmPanel.js:60
-#, fuzzy
 msgid "1 hour before"
-msgstr "avant"
+msgstr "1 heure avant"
 
 #: js/widgets/dialog/AlarmPanel.js:61
-#, fuzzy
 msgid "2 hours before"
-msgstr "avant"
+msgstr "2 heures avant"
 
 #: js/widgets/dialog/AlarmPanel.js:62
-#, fuzzy
 msgid "1 day before"
-msgstr "avant"
+msgstr "1 jour avant"
 
 #: js/widgets/dialog/CredentialsDialog.js:116
 #: js/widgets/dialog/EditDialog.js:421
@@ -826,9 +810,8 @@ msgid "Edit {0} \"{1}\""
 msgstr "Editer {0} \"{1}\""
 
 #: js/widgets/dialog/EditDialog.js:298 js/widgets/EditRecord.js:185
-#, fuzzy
 msgid "Saved in"
-msgstr "Sauvegardé dans"
+msgstr "Sauvegardé"
 
 #: js/widgets/dialog/EditDialog.js:317
 msgid "Transfering {0}..."
@@ -839,42 +822,36 @@ msgid "Could not save {0}."
 msgstr "Échec de sauvegarde de {0}."
 
 #: js/widgets/dialog/EditDialog.js:429
-#, fuzzy
 msgid "Do you really want to delete this {0}?"
 msgstr "Êtes-vous sûr de vouloir supprimer {0}?"
 
 #: js/widgets/dialog/PreferencesDialog.js:137
-#, fuzzy
 msgid "Admin Mode"
-msgstr "Admin"
+msgstr "Mode admin"
 
 #: js/widgets/dialog/PreferencesDialog.js:173
 msgid "Applications"
-msgstr ""
+msgstr "Applications"
 
 #: js/widgets/dialog/PreferencesDialog.js:200
-#, fuzzy
 msgid "Edit Preferences"
 msgstr "Préférences"
 
 #: js/widgets/dialog/PreferencesDialog.js:201
-#, fuzzy
 msgid "Loading ..."
-msgstr "Chargement"
+msgstr "Chargement..."
 
 #: js/widgets/dialog/PreferencesDialog.js:278
 msgid "Saving of preferences failed."
-msgstr ""
+msgstr "Erreur d'enregistrement des préférences."
 
 #: js/widgets/dialog/PreferencesPanel.js:150
-#, fuzzy
 msgid "There are no preferences for this application."
-msgstr "Aucun champ personnalisé actuellement"
+msgstr "Pas de préférences pour cette application."
 
 #: js/widgets/dialog/PreferencesTreePanel.js:60
-#, fuzzy
 msgid "General Preferences"
-msgstr "Préférences"
+msgstr "Préférences générales"
 
 #: js/widgets/grid/FilterModel.js:129
 msgid "contains"
@@ -1037,6 +1014,8 @@ msgid ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
 msgstr ""
+"Veuillez saisir un nom plus court! Les noms des filtres sauvegardés ne "
+"peuvent dépasser 40 caractères."
 
 #: js/widgets/grid/FilterToolbar.js:577 js/widgets/LangChooser.js:72
 #: js/widgets/LangChooser.js:94 js/widgets/TimezoneChooser.js:74
@@ -1064,9 +1043,8 @@ msgid "Deleting Filter \"{0}\""
 msgstr "Suppression du filtre \"{0}\""
 
 #: js/widgets/GridPicker.js:78
-#, fuzzy
 msgid "remove record"
-msgstr "enlever un enregistrement"
+msgstr "supprimer l'enregistrement "
 
 #: js/widgets/GroupSelect.js:94
 msgid "Please Select a Group"
@@ -1234,9 +1212,8 @@ msgid "setting new timezone..."
 msgstr "Mise à jour du fuseau horaire..."
 
 #: js/widgets/tree/ContextMenu.js:37
-#, fuzzy
 msgid "New {0}"
-msgstr "Nouveau/Nouvelle {0}"
+msgstr "Nouveau {0}"
 
 #: js/widgets/tree/ContextMenu.js:37
 msgid "Please enter the name of the new {0}:"
@@ -1267,7 +1244,6 @@ msgid "Please enter the new name of the {0}:"
 msgstr "Veuillez saisir le nouveau nom de {0}:"
 
 #: js/widgets/tree/ContextMenu.js:137
-#, fuzzy
 msgid "Not renamed {0}"
 msgstr "{0} non renommé"
 
@@ -1288,9 +1264,8 @@ msgid "Manage permissions"
 msgstr "Gérer les droits"
 
 #: js/widgets/tree/ContextMenu.js:248
-#, fuzzy
 msgid "Reload {0}"
-msgstr "Renommer {0}"
+msgstr "Recharger {0}"
 
 #: js/widgets/VersionCheck.js:43 js/widgets/VersionCheck.js:52
 msgid "New version of Tine 2.0 available"
@@ -1318,37 +1293,36 @@ msgstr "Champs modifiés:"
 
 #: Preference.php:89
 msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr ""
+msgstr "Fuseau horaire utilisé par Tine 2.0."
 
 #: Preference.php:93
 msgid "The language of the Tine 2.0 GUI."
-msgstr ""
+msgstr "Langue de l'interface Tine 2.0."
 
 #: Preference.php:96
 msgid "Default Application"
-msgstr ""
+msgstr "Application par défaut"
 
 #: Preference.php:97
 msgid "The default application to show after login."
-msgstr ""
+msgstr "Application par défaut à la connexion."
 
 #: Preference.php:100
 msgid "Window Type"
-msgstr ""
+msgstr "Type de fenêtre"
 
 #: Preference.php:101
 msgid ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr ""
+msgstr "Vous pouvez choisir des fenêtres de style popup ou Extjs."
 
 #: Setup/setup.xml:2390
 msgid "note"
 msgstr "Information"
 
 #: Setup/setup.xml:2395
-#, fuzzy
 msgid "default note type"
-msgstr "Information par défaut"
+msgstr "type de note (défaut)"
 
 #: Setup/setup.xml:2421
 msgid "telephone"
@@ -1381,3 +1355,6 @@ msgstr "mis à jour"
 #: Setup/setup.xml:2519
 msgid "record changed"
 msgstr "enregistrement mis à jour"
+
+#~ msgid "Timezone: {0}"
+#~ msgstr "Fuseau horaire: {0}"

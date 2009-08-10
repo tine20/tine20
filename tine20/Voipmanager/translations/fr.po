@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-08-05 16:29+0100\n"
+"Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 #: js/Snom/LocationEditDialog.js:42 js/Snom/LocationGridPanel.js:128
 #: js/Snom/PhoneEditDialog.js:285 js/Snom/TemplateEditDialog.js:42
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: js/Asterisk/ContextEditDialog.js:49 js/Asterisk/ContextGridPanel.js:82
 #: js/Snom/LocationEditDialog.js:49 js/Snom/LocationGridPanel.js:134

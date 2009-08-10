@@ -1,58 +1,59 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Erp\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2009-08-06 15:19+0100\n"
+"Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: French\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: js/ContractEditDialog.js:86 js/ContractGridPanel.js:93
+#: js/ContractEditDialog.js:86
+#: js/ContractGridPanel.js:93
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 #: js/ContractEditDialog.js:92
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: js/ContractEditDialog.js:93
 msgid "Enter description..."
-msgstr ""
+msgstr "Saisissez une description..."
 
 #: js/ContractGridPanel.js:47
 msgid "Summary"
-msgstr ""
+msgstr "Résumé"
 
 #: js/ContractGridPanel.js:87
 msgid "Contract number"
-msgstr ""
+msgstr "Numéro de contrat"
 
 #: js/ContractGridPanel.js:99
 msgid "Status"
-msgstr ""
+msgstr "Statut"
 
 #: js/Erp.js:50
 msgid "Contracts"
-msgstr ""
+msgstr "Contrats"
 
 #: js/Erp.js:84
 msgid "Contract"
 msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Contrat"
+msgstr[1] "Contrats"
 
 #: js/Erp.js:88
 msgid "contracts list"
 msgid_plural "contracts lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "liste de contrats"
+msgstr[1] "listes de contrats"
 
 #: Setup/setup.xml:164
 msgid "Shared Contracts"
-msgstr ""
+msgstr "Contrats partagés"
+
