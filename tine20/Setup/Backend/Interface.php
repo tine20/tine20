@@ -146,7 +146,7 @@ interface Setup_Backend_Interface
 
     public function checkTable(Setup_Backend_Schema_Table_Abstract $_table);
  
-    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field);
+    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '');
 
     /**
      * get SQL statement snippets for index declarations

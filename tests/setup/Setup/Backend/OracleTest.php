@@ -187,7 +187,7 @@ class Setup_Backend_OracleTest extends BaseTest
     
     public function testGetCreateStatement()
     {
-        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'  CONSTRAINT "pk_' . SQL_TABLE_PREFIX . $this->_table->name .'" PRIMARY KEY ("id")'."\n".')';
+        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'  CONSTRAINT "' . SQL_TABLE_PREFIX . 'pk_' . $this->_table->name .'" PRIMARY KEY ("id")'."\n".')';
         $actual = $this->_backend->getCreateStatement(Setup_Backend_Schema_Table_Factory::factory('Xml', $this->_tableXml));
 
         $this->assertEquals($expected, $actual);
@@ -277,7 +277,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"testAddCol" VARCHAR2(25) NOT NULL');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
 
         $this->_backend->addCol($this->_table->name, $field);
         
@@ -296,7 +296,7 @@ class Setup_Backend_OracleTest extends BaseTest
             
         $statement = $this->_fixFieldDeclarationString('"id" NUMBER(11,0)');    
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->setExpectedException('Zend_Db_Statement_Exception', '1430'); //1060: Column "id" already exists - expecting Exception'
         $this->_backend->addCol($this->_table->name, $field);
@@ -315,7 +315,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"id2" NUMBER(11,0) NOT NULL');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->setExpectedException('Setup_Backend_Exception_NotImplemented');
         $this->_backend->addCol($this->_table->name, $field);
@@ -334,7 +334,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"test" VARCHAR2(25) NOT NULL');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
 
         $this->_backend->addCol($this->_table->name, $field);
         
@@ -415,7 +415,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"last_login" VARCHAR2(25)');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -433,7 +433,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"email_sent" NUMBER(4,0) DEFAULT 0');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -450,7 +450,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"account_id" NUMBER(11,0)');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -467,7 +467,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"last_modified_time" VARCHAR2(25) NOT NULL ');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -485,7 +485,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"is_deleted" NUMBER(4,0) DEFAULT 0 NOT NULL');
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }    
@@ -501,7 +501,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"new_value" CLOB ');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -517,7 +517,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"created_by" NUMBER(11,0)');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -535,7 +535,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"account_id" NUMBER(11,0)'); //COMMENTS are ignored in Oracle Adapter    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -551,7 +551,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"jpegphoto" BLOB');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -569,7 +569,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"private" NUMBER(4,0) DEFAULT 0');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -586,7 +586,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"created" VARCHAR2(25) NOT NULL');
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -604,7 +604,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"leadtype_translate" NUMBER(4,0) DEFAULT 1');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -621,7 +621,7 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixFieldDeclarationString('"bigint" NUMBER(24,0)');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
     }
@@ -670,7 +670,6 @@ class Setup_Backend_OracleTest extends BaseTest
      
         $string ="
                 <index>
-                    <name>test_fk</name>
                     <field>
                         <name>foreign_id</name>
                     </field>
@@ -679,12 +678,9 @@ class Setup_Backend_OracleTest extends BaseTest
                         <table>$referencedTableName</table>
                         <field>id</field>
                     </reference>
-                </index>";
-
-        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "' . SQL_TABLE_PREFIX . 'test_fk" FOREIGN KEY ("foreign_id") REFERENCES "' . SQL_TABLE_PREFIX . 'oracle_foreign" ("id")');    
+                </index>";  
         
         $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($foreignKey));
 
         $this->_backend->addForeignKey($this->_table->name, $foreignKey);
         
@@ -768,7 +764,7 @@ class Setup_Backend_OracleTest extends BaseTest
                     </field>
                 </index>";
             
-        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "pk_' . SQL_TABLE_PREFIX . 'oracle_test" PRIMARY KEY ("id")');    
+        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "' . SQL_TABLE_PREFIX . 'pk_oracle_test" PRIMARY KEY ("id")');    
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name));
@@ -790,7 +786,7 @@ class Setup_Backend_OracleTest extends BaseTest
                     </field>
                 </index>";
             
-        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "pk_' . SQL_TABLE_PREFIX . 'oracle_test" PRIMARY KEY ("name","application_id")');    
+        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "' . SQL_TABLE_PREFIX . 'pk_oracle_test" PRIMARY KEY ("name","application_id")');    
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name));

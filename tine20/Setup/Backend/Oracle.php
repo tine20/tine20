@@ -97,12 +97,12 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $statementSnippets = array();
      
         foreach ($_table->fields as $field) {
-           $statementSnippets[] = $this->getFieldDeclarations($field);
+           $statementSnippets[] = $this->getFieldDeclarations($field, $_table->name);
         }
 
         foreach ($_table->indices as $index) {    
             if ($index->foreign) {
-               $statementSnippets[] = $this->getForeignKeyDeclarations($index);
+               $statementSnippets[] = $this->getForeignKeyDeclarations($index, $_table->name);
             } else if ($index->primary || $index->unique) {
                $statementSnippets[] = $this->getIndexDeclarations($index, $_table->name);
             }
@@ -330,7 +330,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD (" ;
         
-        $statement .= $this->getFieldDeclarations($_declaration);
+        $statement .= $this->getFieldDeclarations($_declaration, $_tableName);
         
         $statement .= ")";
         
@@ -353,7 +353,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             $oldName = SQL_TABLE_PREFIX . $_declaration->name;
         }
         
-        $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration);
+        $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration, $_tableName);
         $this->execQueryVoid($statement);    
     }
     
@@ -395,7 +395,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     public function addForeignKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " 
-                    . $this->getForeignKeyDeclarations($_declaration);
+                    . $this->getForeignKeyDeclarations($_declaration, $_tableName);
         $this->execQueryVoid($statement);    
     }
 
@@ -465,19 +465,24 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     protected function _getConstraintEnumName($_tableName, $_fieldName)
     {
-        return 'cons_' . substr($_tableName, 0, 10) . "_" . substr($_fieldName, 0, 9) . '_enum';
+        $tableName = SQL_TABLE_PREFIX . $_tableName;
+        return $this->_sanititzeName('cons_' . $tableName . "_" . $_fieldName . '_enum');
     }
     
     /**
      * create the right mysql-statement-snippet for columns/fields
      *
      * @param Setup_Backend_Schema_Field field / column
+     * @param String $_tableName [required in this backend (Oracle)]
      * @todo how gets unsigned handled
      * @return string
      */
-    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field)
+    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
     {
-     
+        if (empty($_tableName)) {
+            throw new Tinebase_Exception_InvalidArgument('Missing required argument $_tableName');
+        }
+
         $buffer[] = '  "' . $_field->name . '"';
 
         switch ($_field->type) {
@@ -528,7 +533,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                     }
                 }    
                 
-                $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($this->_table, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
+                $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($_tableName, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
                 break;
             
             case 'datetime':
@@ -602,18 +607,16 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             throw new Tinebase_Exception_InvalidArgument('Missing required argument $_tableName');
         }
 
-        $tableName = SQL_TABLE_PREFIX . $_tableName;
-
         $keys = array();
         if (!empty($_key->primary)) {
-            $name = $this->_sanititzeName('pk_' . $tableName);
+            $name = $this->_sanititzeName(SQL_TABLE_PREFIX . 'pk_' . $_tableName);
             $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($name) . " PRIMARY KEY";
         } else if (!empty($_key->unique)) {
-            $name = $this->_sanititzeName("uni_" . $tableName . "_" . $_key->name);
+            $name = $this->_sanititzeName(SQL_TABLE_PREFIX . "uni_" . $_tableName . "_" . $_key->name);
             $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($name) . " UNIQUE";
         } else {
-            $name = $this->_sanititzeName('idx_' . $tableName . "_" . $_key->name);
-            $snippet = '  CREATE INDEX ' . $this->_db->quoteIdentifier($name) . ' ON ' . $this->_db->quoteIdentifier($tableName);
+            $name = $this->_sanititzeName(SQL_TABLE_PREFIX . 'idx_' . $_tableName . "_" . $_key->name);
+            $snippet = '  CREATE INDEX ' . $this->_db->quoteIdentifier($name) . ' ON ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         }        
 
         foreach ($_key->field as $keyfield) {
@@ -636,21 +639,26 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      *  create the right mysql-statement-snippet for foreign keys
      *
      * @param object $_key the xml index definition
+     * @param String $_tableName [required in this backend (Oracle)]
      * @return string
      */
-    public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
+    public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key, $_tableName = '')
     {
-        $constraintName = isset($_key->name) ? SQL_TABLE_PREFIX . $_key->name : 'fk_' . substr($this->_table, 0, 13) . "_" . substr($_key->field, 0, 13);
-        $constraintName = $this->_sanititzeName($constraintName);
+        if (empty($_tableName)) {
+            throw new Tinebase_Exception_InvalidArgument('Missing required argument $_tableName');
+        }
+
+        if (!empty($_key->referenceOnUpdate)) {
+            //$snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
+            throw new Setup_Backend_Exception_NotImplemented('ON UPDATE CONSTRAINTS are not supported by Oracle adapter');
+        }
+        
+        $constraintName = $this->_sanititzeName(SQL_TABLE_PREFIX . 'fk_' . $_tableName . "_" . $_key->field);
         $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($constraintName) . ' FOREIGN KEY ';
         $snippet .= '("' . $_key->field . '") REFERENCES ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_key->referenceTable) . ' ("' . $_key->referenceField . '")';
 
         if (!empty($_key->referenceOnDelete)) {
             $snippet .= " ON DELETE " . strtoupper($_key->referenceOnDelete);
-        }
-        if (!empty($_key->referenceOnUpdate)) {
-            //$snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
-            throw new Setup_Backend_Exception_NotImplemented('ON UPDATE CONSTRAINTS are not supported by Oracle adapter');
         }
         
         return $snippet;

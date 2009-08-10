@@ -351,9 +351,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * create the right mysql-statement-snippet for columns/fields
      *
      * @param Setup_Backend_Schema_Field_Abstract field / column
+     * @param String | optional $_tableName [Not used in this backend (MySQL)]
      * @return string
      */
-    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field)
+    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
     {
         $buffer[] = '  `' . $_field->name . '`';
 
