@@ -20,6 +20,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
 Tine.widgets.grid.ExportButton = function(config) {
     config = config || {};
     Ext.apply(this, config);
+    config.handler = this.doExport.createDelegate(this);
     
     Tine.widgets.grid.ExportButton.superclass.constructor.call(this, config);
 };
@@ -62,45 +63,15 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
         }
         
     	var filterSettings = this.sm.getSelectionFilter();
-    	
-        var form = Ext.getBody().createChild({
-            tag:'form',
-            method:'post',
-            cls:'x-hidden'
-        });
         
-        Ext.Ajax.request({
-            isUpload: true,
-            form: form,
-            // @todo replace icon with loading icon ...
-            /*
-            beforerequest: function() {
-            	// replace icon
-            	this.iconCls: 
-            },
-            */
+        new Ext.ux.file.Download({
             params: {
                 method: this.exportFunction,
                 requestType: 'HTTP',
                 _filter: Ext.util.JSON.encode(filterSettings),
                 _format: this.format
-            },
-            success: function() {
-                form.remove();
-            },
-            failure: function() {
-                form.remove();
             }
-        });
-    },
-    
-    /**
-     * @private
-     * 
-     * @todo add on click handler -> call export function with grid selected ids
-     */
-    handler: function() { 	
-        this.doExport();
+        }).start();
     }
 });
 
