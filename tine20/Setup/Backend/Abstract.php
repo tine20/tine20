@@ -19,6 +19,13 @@
 abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
 {
     /**
+     * Maximum length of table-, index-, contraint- and field names.
+     * 
+     * @var int
+     */
+    const MAX_NAME_LENGTH = 30;
+ 
+    /**
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db = NULL;
@@ -182,5 +189,13 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
         $statement = "DROP TABLE " . $this->_db->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
+    }
+    
+    protected function _sanititzeName($_name)
+    {
+        if (strlen($_name) > Setup_Backend_Abstract::MAX_NAME_LENGTH) {
+            $_name = substr(md5($_name), 0 , Setup_Backend_Abstract::MAX_NAME_LENGTH);
+        }
+        return $_name;
     }
 }

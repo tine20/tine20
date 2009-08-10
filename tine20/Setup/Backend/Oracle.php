@@ -17,6 +17,7 @@
  */
 class Setup_Backend_Oracle extends Setup_Backend_Abstract
 {
+ 
     protected $_table ='';
    
     protected $_autoincrementID = '';
@@ -589,7 +590,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         }
 
         else {
-            $snippet = "  CONSTRAINT \"idx_" . $this->_table . "_" . $_key->name . "\" INDEX ";
+            $snippet = "  CONSTRAINT \"idx_" . substr($this->_table, 0, 13) . "_" . substr($_key->name, 0, 12) . "\" INDEX ";
         }
         
         foreach ($_key->field as $keyfield) {
@@ -616,8 +617,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */
     public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     {
-        $contraintName = isset($_key->name) ? SQL_TABLE_PREFIX . $_key->name : 'fk_' . substr($this->_table, 0, 13) . "_" . substr($_key->field, 0, 13);
-        $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($contraintName) . ' FOREIGN KEY ';
+        $constraintName = isset($_key->name) ? SQL_TABLE_PREFIX . $_key->name : 'fk_' . substr($this->_table, 0, 13) . "_" . substr($_key->field, 0, 13);
+        $constraintName = $this->_sanititzeName($constraintName);
+        $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($constraintName) . ' FOREIGN KEY ';
         $snippet .= '("' . $_key->field . '") REFERENCES ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_key->referenceTable) . ' ("' . $_key->referenceField . '")';
 
         if (!empty($_key->referenceOnDelete)) {
@@ -630,4 +632,5 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         
         return $snippet;
     }
+
 }

@@ -30,8 +30,10 @@ abstract class Setup_Backend_Schema_Abstract
     }
     
     /**
-     * set index from declaration 
+     * Setter for {@see $name} property
+     * 
      * @param string $_name
+     * @return void
      */      
     public function setName($_name)
     {

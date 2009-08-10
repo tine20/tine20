@@ -81,8 +81,12 @@ abstract class Setup_Backend_Schema_Table_Abstract extends Setup_Backend_Schema_
     }
     
     /**
-     * set index from declaration 
+     * Override method to cut table prefix from {@param $_name} if present 
+     * 
+     * Setter for {@see $name} property
+     * 
      * @param string $_name
+     * @return void
      */      
     public function setName($_name)
     {
