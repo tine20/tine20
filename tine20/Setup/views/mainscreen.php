@@ -26,7 +26,7 @@
     <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/ext-yui-adapter.js"></script> --> */?>
     
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != RELEASE ? '-debug' : '' ?>.js"></script>
+    <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
 
     <!-- Tine 2.0 setup static files --><?php
         /**
