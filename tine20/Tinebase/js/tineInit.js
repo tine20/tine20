@@ -263,7 +263,7 @@ Tine.Tinebase.tineInit = {
          */
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
             // detect resoponse errors (e.g. html from xdebug)
-            if (! response.responseText.match(/^([{\[])|(<\?xml)+/)) {
+            if (! options.isUpload && ! response.responseText.match(/^([{\[])|(<\?xml)+/)) {
                 var htmlText = response.responseText;
                 response.responseText = Ext.util.JSON.encode({
                     msg: htmlText,
