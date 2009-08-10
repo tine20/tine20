@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>2.1</version>
+    <version>2.2</version>
     <tables>
         <table>
             <name>applications</name>
@@ -409,8 +409,8 @@
         </table>
 
         <table>
-            <name>registration_invitations</name>
-            <version>1</version>
+            <name>registration_invitation</name>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -683,8 +683,8 @@
         </table>
 
         <table>
-            <name>record_persistentobserver</name>
-            <version>1</version>
+            <name>record_observer</name>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2115,8 +2115,8 @@
             </declaration>
         </table>        
         <table>
-            <name>importexport_definitions</name>
-            <version>1</version>
+            <name>importexport_definition</name>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>

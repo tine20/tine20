@@ -72,4 +72,23 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.1');
     }
+    
+    /**
+     * update to 2.2
+     * - rename tables and fields to be at most 30 characters long (needed for Oracle support)
+     *  
+     */    
+    public function update_1()
+    {
+        $this->renameTable('registration_invitations', 'registration_invitation');
+        $this->setTableVersion('registration_invitation', '2');
+        
+        $this->renameTable('record_persistentobserver', 'record_observer');
+        $this->setTableVersion('record_observer', '2');
+        
+        $this->renameTable('importexport_definitions', 'importexport_definition');
+        $this->setTableVersion('importexport_definition', '2');
+        
+        $this->setApplicationVersion('Tinebase', '2.2');
+    }
 }

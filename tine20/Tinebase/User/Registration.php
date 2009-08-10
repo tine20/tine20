@@ -59,7 +59,7 @@ class Tinebase_User_Registration
         }
         // create table objects and get db adapter
         $this->_registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
-        $this->_invitationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registration_invitations'));
+        $this->_invitationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registration_invitation'));
         $this->_db = Tinebase_Core::getDb();
     }
     

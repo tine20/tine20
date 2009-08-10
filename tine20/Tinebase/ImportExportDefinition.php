@@ -25,7 +25,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_tableName = 'importexport_definitions';
+    protected $_tableName = 'importexport_definition';
     
     /**
      * Model name
