@@ -229,7 +229,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         this.action_logout = new Ext.Action({
             text: _('Logout'),
             tooltip:  _('Logout from Tine 2.0'),
-            id: 'tblogout',
             iconCls: 'action_logOut',
             handler: this.onLogout
         });
