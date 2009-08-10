@@ -899,7 +899,7 @@ class Setup_Controller
             
             $this->_db->delete(SQL_TABLE_PREFIX . 'role_rights', $where);        
             $this->_db->delete(SQL_TABLE_PREFIX . 'container', $where);
-            $this->_db->delete(SQL_TABLE_PREFIX . 'importexport_definitions', $where);
+            $this->_db->delete(SQL_TABLE_PREFIX . 'importexport_definition', $where);
                     
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
