@@ -187,7 +187,7 @@ class Setup_Backend_OracleTest extends BaseTest
     
     public function testGetCreateStatement()
     {
-        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'  CONSTRAINT "pk_' . $this->_table->name .'" PRIMARY KEY ("id")'."\n".')';
+        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'  CONSTRAINT "pk_' . SQL_TABLE_PREFIX . $this->_table->name .'" PRIMARY KEY ("id")'."\n".')';
         $actual = $this->_backend->getCreateStatement(Setup_Backend_Schema_Table_Factory::factory('Xml', $this->_tableXml));
 
         $this->assertEquals($expected, $actual);
@@ -768,7 +768,7 @@ class Setup_Backend_OracleTest extends BaseTest
                     </field>
                 </index>";
             
-        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "pk_oracle_test" PRIMARY KEY ("id")');    
+        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "pk_' . SQL_TABLE_PREFIX . 'oracle_test" PRIMARY KEY ("id")');    
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name));
@@ -790,7 +790,7 @@ class Setup_Backend_OracleTest extends BaseTest
                     </field>
                 </index>";
             
-        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "pk_oracle_test" PRIMARY KEY ("name","application_id")');    
+        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "pk_' . SQL_TABLE_PREFIX . 'oracle_test" PRIMARY KEY ("name","application_id")');    
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name));
@@ -832,11 +832,8 @@ class Setup_Backend_OracleTest extends BaseTest
                         <name>account_id</name>
                     </field>
                 </index> ";
-            
-        $statement = $this->_fixIndexDeclarationString('  CONSTRAINT "uni_oracle_test_group_id-acc" UNIQUE ("group_id","account_id")');    
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name)); 
 
         $this->_backend->addIndex($this->_table->name, $index);
         
@@ -872,12 +869,12 @@ class Setup_Backend_OracleTest extends BaseTest
                     </field>
                 </index>";
             
-        $statement = $this->_fixIndexDeclarationString('  CREATE INDEX "idx_' . SQL_TABLE_PREFIX . 'oracle_test_id-account_t" ON "' . SQL_TABLE_PREFIX . 'oracle_test" ("name","account_id")');    
-        
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name));
         
+        $indexesBefore = $this->_backend->getIndexesForTable($this->_table->name);
         $this->_backend->addIndex($this->_table->name, $index);
+        $indexesAfter = $this->_backend->getIndexesForTable($this->_table->name);
+        $this->assertEquals(count($indexesBefore) + 1, count($indexesAfter));
     }   
     
 //    public function testUnsignedNotImplemented()

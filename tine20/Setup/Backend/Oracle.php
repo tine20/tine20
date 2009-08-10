@@ -227,7 +227,20 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         return (bool)$this->_db->fetchOne("SELECT SEQUENCE_NAME FROM USER_SEQUENCES WHERE SEQUENCE_NAME=?", array($this->_getIncrementSequenceName($_tableName)));
     }
-    
+   
+    /**
+     * Get a list of index names belonging to the given {@param $_tableName}
+     * 
+     * @param String $_tableName
+     * @return Array
+     */
+    public function getIndexesForTable($_tableName)
+    {
+        $tableName = SQL_TABLE_PREFIX . $_tableName;
+        $sql = 'SELECT INDEX_NAME FROM ' . $this->_db->quoteIdentifier('ALL_INDEXES') . ' WHERE TABLE_NAME=:tableName';
+        return $this->_db->fetchCol($sql, array('tableName' => $tableName));
+    }
+
     /**
      * checkTable
      * 
@@ -589,16 +602,17 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             throw new Tinebase_Exception_InvalidArgument('Missing required argument $_tableName');
         }
 
+        $tableName = SQL_TABLE_PREFIX . $_tableName;
+
         $keys = array();
         if (!empty($_key->primary)) {
-            $name = 'pk_' . $_tableName;
+            $name = $this->_sanititzeName('pk_' . $tableName);
             $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($name) . " PRIMARY KEY";
         } else if (!empty($_key->unique)) {
-            $name = "uni_" . substr($_tableName, 0, 13) . "_" . substr($_key->name, 0, 12);
+            $name = $this->_sanititzeName("uni_" . $tableName . "_" . $_key->name);
             $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($name) . " UNIQUE";
         } else {
-            $tableName = SQL_TABLE_PREFIX . $_tableName;
-            $name = 'idx_' . substr($tableName, 0, 13) . "_" . substr($_key->name, 0, 12);
+            $name = $this->_sanititzeName('idx_' . $tableName . "_" . $_key->name);
             $snippet = '  CREATE INDEX ' . $this->_db->quoteIdentifier($name) . ' ON ' . $this->_db->quoteIdentifier($tableName);
         }        
 
