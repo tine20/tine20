@@ -558,26 +558,6 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
 
     public function testStringToIndexStatement_003() 
     {
-        $string ="
-                <index>
-                    <name>group_id-account_id</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>group_id</name>
-                    </field>
-                    <field>
-                        <name>account_id</name>
-                    </field>
-                </index> ";
-            
-        $statement = $this->_fixIndexDeclarationString(" UNIQUE KEY `group_id-account_id` (`group_id`,`account_id`) ");    
-        
-        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
-        
-        $this->setExpectedException('Zend_Db_Statement_Exception', '42000'); //42000: group_id and account_id fields missing - expecting Exception
-        $this->_backend->addIndex($this->_table->name, $index);
-        
         $fieldString ="
                 <field>
                     <name>group_id</name>
@@ -595,8 +575,34 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
           
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
         $this->_backend->addCol($this->_table->name, $field);
+     
+        $string ="
+                <index>
+                    <name>group_id-account_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>group_id</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index> ";
+            
+        $statement = $this->_fixIndexDeclarationString(" UNIQUE KEY `group_id-account_id` (`group_id`,`account_id`) ");    
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
 
         $this->_backend->addIndex($this->_table->name, $index);
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+        $db->insert($tableName, array('name' => 'test1', 'group_id' => 1, 'account_id' => 1));
+        $db->insert($tableName, array('name' => 'test2', 'group_id' => 1, 'account_id' => 2));
+        $db->insert($tableName, array('name' => 'test3', 'group_id' => 2, 'account_id' => 1));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '23000'); //23000: unique constraint violation
+        $db->insert($tableName, array('name' => 'test4', 'group_id' => 1, 'account_id' => 1));
     }        
     
     public function testStringToIndexStatement_004() 
