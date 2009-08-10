@@ -101,8 +101,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array data
      * 
      * @todo move that to Tinebase_Record_RecordSet
-     * @todo check if we can remove Timetracker_Model_TimeaccountGrants::getGrantsOfRecords 
-     *       / it seems to be obsolete/redundant because of _resolveTimesheetGrantsByTimeaccountGrants()
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
@@ -116,7 +114,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $timeaccountIds = $_records->timeaccount_id;
                 $timeaccounts = $this->_timeaccountController->getMultiple(array_unique(array_values($timeaccountIds)));
                 
-                // this is possibly @deprecated / obsolete
                 Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
                 
                 Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'account_id', true);
@@ -129,9 +126,8 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
             case 'Timetracker_Model_Timeaccount':
                 // resolve timeaccounts grants
-                //Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
+                Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
                 $this->_resolveTimeaccountGrants($_records);
-                //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
                 break;
         }
         
