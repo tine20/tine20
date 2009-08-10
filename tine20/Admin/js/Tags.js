@@ -480,58 +480,6 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         });
         
         /******* THE edit dialog ********/
-
-        /** quick hack for a color chooser **/
-        var colorPicker = new Ext.form.ComboBox({
-            listWidth: 150,
-            readOnly:true,
-            editable: false,
-            name: 'color',
-            fieldLabel: this.translation.gettext('Color'),
-            columnWidth: .1,
-            store: new Ext.data.Store({})
-        });
-        
-        colorPicker.colorPalette = new Ext.ColorPalette({
-            border: true
-        });
-        colorPicker.colorPalette.on('select', function(cp, color) {
-            color = '#' + color;
-            this.setValue(color);
-            this.onTriggerClick();
-        }, colorPicker);
-        
-        colorPicker.on('blur', function() {
-            console.log(this.color);
-            this.el.setStyle('background', colorPicker.getValue());
-        }, colorPicker);
-        
-        colorPicker.onTriggerClick = function() {
-            if(this.disabled){
-                return;
-            }
-            if(this.isExpanded()){
-                this.collapse();
-                this.el.focus();
-            }else {
-                colorPicker.initList();
-                colorPicker.list.alignTo(colorPicker.wrap, colorPicker.listAlign);
-                colorPicker.list.show();
-
-                colorPicker.colorPalette.render(colorPicker.list);
-                colorPicker.list.setHeight(colorPicker.colorPalette.getEl().getHeight());
-            }
-        };
-        
-        colorPicker.setValue = function(color) {
-            colorPicker.el.setStyle('background', color);
-            colorPicker.color = color;
-        };
-        colorPicker.getValue = function() {
-            return colorPicker.color;
-        };
-        /** end of color chooser **/
-        
         var editTagDialog = {
             layout:'hfit',
             border:false,
@@ -554,9 +502,13 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                             fieldLabel: this.translation.gettext('Description'),
                             anchor:'100%',
                             maxLength: 50
-                        },
-                        colorPicker
-                        ]        
+                        }, {
+                            xtype: 'colorfield',
+                            columnWidth: .1,
+                            fieldLabel: this.translation.gettext('Color'),
+                            name: 'color'
+                            
+                        }]        
                     ]
                 },{
                     xtype: 'tabpanel',
