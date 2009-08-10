@@ -72,6 +72,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/file/Uploader.js',
             'Tinebase/js/ux/file/BrowsePlugin.js',
             'Tinebase/js/ux/file/Download.js',
+            'Tinebase/js/ux/form/ColorField.js',
             'Tinebase/js/ux/form/IconTextField.js',
             'Tinebase/js/ux/form/MirrorTextField.js',
             'Tinebase/js/ux/form/ColumnFormPanel.js',
