@@ -20,12 +20,12 @@
 }
 
 .tw-filtertoolbar  { 
-	background-color: #f0f0f0;
+	/*background-color: #f0f0f0;*/
 }
 
 
 .tw-filtertoolbar  td { 
-	padding: 0px 5px 1px;
+	padding: 0px 5px 0px;
 }
 
 .tw-filtertoolbar .tw-ftb-frow-pbutton { 
