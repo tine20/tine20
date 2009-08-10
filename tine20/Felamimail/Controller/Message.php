@@ -155,9 +155,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // get folder_id from filter (has to be set)
         $filterValues = $this->_extractFilter($_filter);
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filterValues, true));
+        
         if (empty($filterValues['folder_id']) && empty($filterValues['flags'])) {
             $result = 0;
-        } elseif (! empty($this->_totalcount) && (count($_filter->toArray()) == 1 && isset($filterValues['folder_id']))) {
+        } elseif (! empty($this->_totalcount) && count($filterValues) == 2) {
             // cache is incomplete but we want to show the total number of messages in mailbox folder (only if no filter is set)
             $result = $this->_totalcount;
         } else {
@@ -662,7 +664,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $filters = $_filter->toArray();
         foreach($filters as $filter) {
-            if (in_array($filter['field'], array_keys($result))) {
+            if (in_array($filter['field'], array_keys($result)) || ! empty($filter['value'])) {
                 $result[$filter['field']] = $filter['value'];
             }
         }
