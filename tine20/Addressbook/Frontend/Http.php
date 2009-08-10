@@ -45,15 +45,19 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     $paging = new Tinebase_Model_Pagination();
                     $contactIds = Addressbook_Controller_Contact::getInstance()->search($filter, $paging, false, true);                
                 } else {
-                    $contactIds = array($decodedFilter);
+                    $contactIds = (array) $decodedFilter;
                 }
                 
                 $pdf = new Addressbook_Export_Pdf();
                 
                 foreach ($contactIds as $contactId) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating pdf for contact id ' . $contactId);
-                    $contact = Addressbook_Controller_Contact::getInstance()->get($contactId);
-                    $pdf->generateContactPdf($contact);
+                    if (! empty($contactId)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating pdf for contact id ' . $contactId);
+                        $contact = Addressbook_Controller_Contact::getInstance()->get($contactId);
+                        $pdf->generateContactPdf($contact);
+                    } else {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' contactId empty!');
+                    }
                 }
                     
                 try {
