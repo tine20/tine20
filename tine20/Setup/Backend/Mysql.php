@@ -448,10 +448,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * create the right mysql-statement-snippet for keys
      *
      * @param   Setup_Backend_Schema_Index_Abstract $_key
+     * @param String | optional $_tableName [is not used in this Backend (MySQL)]
      * @return  string
      * @throws  Setup_Exception_NotFound
      */
-    public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
+    public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key, $_tableName = '')
     {    
         $keys = array();
 

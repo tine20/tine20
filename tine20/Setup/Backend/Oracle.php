@@ -104,7 +104,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             if ($index->foreign) {
                $statementSnippets[] = $this->getForeignKeyDeclarations($index);
             } else if ($index->primary || $index->unique) {
-               $statementSnippets[] = $this->getIndexDeclarations($index);
+               $statementSnippets[] = $this->getIndexDeclarations($index, $_table->name);
             }
         }
         
@@ -412,14 +412,14 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     /**
      * add a primary key to database table
      * 
+     * Delegates to {@see addPrimaryKey()}
+     * 
      * @param string tableName 
      * @param Setup_Backend_Schema_Index_Abstract declaration
      */         
     public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
-        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD "
-                    . $this->getIndexDeclarations($_declaration);
-        $this->execQueryVoid($statement);    
+        $this->addIndex($_tableName, $_declaration);
     }
  
     /**
@@ -428,10 +428,13 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * @param string tableName 
      * @param Setup_Backend_Schema_Index_Abstract declaration
      */     
-    public function addIndex($_tableName ,  Setup_Backend_Schema_Index_Abstract$_declaration)
+    public function addIndex($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
-        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD "
-                    . $this->getIndexDeclarations($_declaration);
+       $statement = $this->getIndexDeclarations($_declaration, $_tableName);
+       if (!empty($_declaration->primary) || !empty($_declaration->unique)) {
+            $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " . $statement;
+        }
+        
         $this->execQueryVoid($statement);    
     }
     
@@ -576,23 +579,29 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * create the right mysql-statement-snippet for keys
      *
      * @param   Setup_Backend_Schema_Index_Abstract key
-     * @return  string
+     * @param   String $_tableName [parameter is required in this (Oracle) Backend. It is used to create unique index names spanning all tables of the database] 
+     * @return  String
      * @throws  Setup_Exception_NotFound
      */
-    public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
-    {    
-        $keys = array();
-        if (!empty($_key->primary)) {
-            $snippet = "  CONSTRAINT \"pk_" . $this->_table . "\" PRIMARY KEY";        
-        
-        } else if (!empty($_key->unique)) {
-            $snippet = "  CONSTRAINT \"uni_" . substr($this->_table, 0, 13) . "_" . substr($_key->name, 0, 12) . "\" UNIQUE" ;
+    public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key, $_tableName = '')
+    {   
+        if (empty($_tableName)) {
+            throw new Tinebase_Exception_InvalidArgument('Missing required argument $_tableName');
         }
 
-        else {
-            $snippet = "  CONSTRAINT \"idx_" . substr($this->_table, 0, 13) . "_" . substr($_key->name, 0, 12) . "\" INDEX ";
-        }
-        
+        $keys = array();
+        if (!empty($_key->primary)) {
+            $name = 'pk_' . $_tableName;
+            $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($name) . " PRIMARY KEY";
+        } else if (!empty($_key->unique)) {
+            $name = "uni_" . substr($_tableName, 0, 13) . "_" . substr($_key->name, 0, 12);
+            $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($name) . " UNIQUE";
+        } else {
+            $tableName = SQL_TABLE_PREFIX . $_tableName;
+            $name = 'idx_' . substr($tableName, 0, 13) . "_" . substr($_key->name, 0, 12);
+            $snippet = '  CREATE INDEX ' . $this->_db->quoteIdentifier($name) . ' ON ' . $this->_db->quoteIdentifier($tableName);
+        }        
+
         foreach ($_key->field as $keyfield) {
             $key = '"' . (string)$keyfield . '"';
             if (!empty($keyfield->length)) {

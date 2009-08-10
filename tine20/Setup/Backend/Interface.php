@@ -148,5 +148,12 @@ interface Setup_Backend_Interface
  
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field);
 
-    public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_index);
+    /**
+     * get SQL statement snippets for index declarations
+     * 
+     * @param Setup_Backend_Schema_Index_Abstract $_index
+     * @param String | optional $_tableName
+     * @return String
+     */
+    public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_index, $_tableName = '');
 }

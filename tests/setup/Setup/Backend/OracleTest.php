@@ -58,7 +58,6 @@ class Setup_Backend_OracleTest extends BaseTest
                         <notnull>true</notnull>
                     </field>
                     <index>
-                        <name>id</name>
                         <primary>true</primary>
                         <field>
                             <name>id</name>
@@ -188,7 +187,7 @@ class Setup_Backend_OracleTest extends BaseTest
     
     public function testGetCreateStatement()
     {
-        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'CONSTRAINT "pk_' . $this->_table->name .'" PRIMARY KEY ("id")'."\n".')';
+        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'  CONSTRAINT "pk_' . $this->_table->name .'" PRIMARY KEY ("id")'."\n".')';
         $actual = $this->_backend->getCreateStatement(Setup_Backend_Schema_Table_Factory::factory('Xml', $this->_tableXml));
 
         $this->assertEquals($expected, $actual);
@@ -697,6 +696,67 @@ class Setup_Backend_OracleTest extends BaseTest
         $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 999));
     }
     
+    public function testLongForeignKeyName() 
+    {
+     
+     $referencedTableName = 'oracle_foreign';
+     $referencedTableXml = "
+            <table>
+                <name>$referencedTableName</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>integer</type>
+                        <autoincrement>true</autoincrement>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>128</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>";
+        $referencedTable = Setup_Backend_Schema_Table_Factory::factory('Xml', $referencedTableXml);
+        $this->_tableNames[] = $referencedTableName;
+        $this->_backend->createTable($referencedTable);
+
+        $fieldString ="
+            <field>
+                <name>foreign_id</name>
+                <type>integer</type>
+            </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+     
+        $string ="
+                <index>
+                    <name>" . str_pad('X', 31, 'x') . "</name>
+                    <field>
+                        <name>foreign_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>$referencedTableName</table>
+                        <field>id</field>
+                    </reference>
+                </index>";
+
+        $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+
+        $this->_backend->addForeignKey($this->_table->name, $foreignKey);
+
+    }
+    
     public function testStringToIndexStatement_001() 
     {
         $string ="
@@ -711,11 +771,114 @@ class Setup_Backend_OracleTest extends BaseTest
         $statement = $this->_fixIndexDeclarationString('CONSTRAINT "pk_oracle_test" PRIMARY KEY ("id")');    
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
+        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name));
         
         $this->setExpectedException('Zend_Db_Statement_Exception', 'ORA-02260'); //ORA-02260: there can only be one primary key - expecting Exception
         $this->_backend->addIndex($this->_table->name, $index);
+    }
+    
+    public function testStringToIndexStatement_002() 
+    {
+        $string ="
+                <index>
+                    <primary>true</primary>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                </index>";
+            
+        $statement = $this->_fixIndexDeclarationString('CONSTRAINT "pk_oracle_test" PRIMARY KEY ("name","application_id")');    
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', 'ORA-00904'); //ORA-00904: field application_id does not exist
+        $this->_backend->addIndex($this->_table->name, $index);
     } 
+    
+    public function testStringToIndexStatement_003() 
+    {
+     
+        $fieldString ="
+                <field>
+                    <name>group_id</name>
+                    <type>integer</type>
+                </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+        
+        $fieldString ="
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+     
+     
+        $string ="
+                <index>
+                    <name>group_id-account_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>group_id</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index> ";
+            
+        $statement = $this->_fixIndexDeclarationString('  CONSTRAINT "uni_oracle_test_group_id-acc" UNIQUE ("group_id","account_id")');    
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name)); 
+
+        $this->_backend->addIndex($this->_table->name, $index);
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+        $db->insert($tableName, array('name' => 'test1', 'group_id' => 1, 'account_id' => 1));
+        $db->insert($tableName, array('name' => 'test2', 'group_id' => 1, 'account_id' => 2));
+        $db->insert($tableName, array('name' => 'test3', 'group_id' => 2, 'account_id' => 1));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', 'ORA-00001'); //ORA-00001: unique constraint violation
+        $db->insert($tableName, array('name' => 'test4', 'group_id' => 1, 'account_id' => 1));
+    }
+    
+    public function testStringToIndexStatement_004() 
+    {
+        $fieldString ="
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+     
+        $string ="
+                <index>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>";
+            
+        $statement = $this->_fixIndexDeclarationString('  CREATE INDEX "idx_' . SQL_TABLE_PREFIX . 'oracle_test_id-account_t" ON "' . SQL_TABLE_PREFIX . 'oracle_test" ("name","account_id")');    
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index, $this->_table->name));
+        
+        $this->_backend->addIndex($this->_table->name, $index);
+    }   
     
 //    public function testUnsignedNotImplemented()
 //    {
@@ -732,6 +895,7 @@ class Setup_Backend_OracleTest extends BaseTest
 //        $this->setExpectedException('Setup_Backend_Exception_NotImplemented', 'unsigned');
 //        $this->_backend->addCol($this->_table->name, $field);
 //    }
+
     
     public function testLongTableName() 
     {
