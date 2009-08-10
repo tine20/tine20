@@ -39,8 +39,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
      * @private
      */
     initComponent: function() {
-        // we don't use the original display-info handling
-        this.displayInfo = false;
         
         // initialise i18n
         this.selHelperText = {
@@ -59,10 +57,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
      */
     onRender : function(ct, position) {
         Ext.ux.grid.PagingToolbar.superclass.onRender.call(this, ct, position);
-        
-        // lets display info be a 'normal' tb item
-        this.addFill();
-        this.displayEl = Ext.get(this.addText('').getEl());
         
         if (this.displaySelectionHelper) {
             this.renderSelHelper();
