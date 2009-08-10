@@ -53,17 +53,16 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.getForm().findField('billed_in').setDisabled(! (grants.manage_all || manageRight));
         }
         
-        if (timeaccount && timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0") {
-        	this.getForm().findField('is_billable').setDisabled(true);
-        	if (this.record.id == 0) {
-        	    // set to 0 be default for new records
-        	    this.getForm().findField('is_billable').setValue(0);
-        	}
-        } else {
-            if (this.record.id == 0) {
-            	this.getForm().findField('is_billable').setValue(1);
-            }        	
+        var notBillable = false;
+        if (timeaccount) {
+            notBillable = timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0";
+            this.getForm().findField('is_billable').setDisabled(notBillable);
         }
+        
+    	if (this.record.id == 0) {
+    	    // set to 0 be default for new records / not billable
+    	    this.getForm().findField('is_billable').setValue((notBillable) ? 0 : 1);
+    	}
     },
 
     /**
