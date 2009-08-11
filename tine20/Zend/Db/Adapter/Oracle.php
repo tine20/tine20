@@ -768,7 +768,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                     if ($this->_isQuoted($sql, $position)) {
                         $quotedQuestionMarksCounter++;
                     } else {
-                          break;                      
+                        break;                      
                     }
                 }
                 $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, $position, 1);
