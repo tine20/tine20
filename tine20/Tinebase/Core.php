@@ -489,6 +489,7 @@ class Tinebase_Core
                     break;
                 case self::ORACLE:
                     $db = Zend_Db::factory(self::ORACLE, $dbConfig->toArray());
+                    $db->supportPositionalParameters(true);
                     $db->setLobAsString(true);
                     break;
                     
