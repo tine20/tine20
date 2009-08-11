@@ -270,10 +270,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setFlag($ids, $flag)
     {
-        $encodedFlag = Zend_Json::decode($flag);
-        foreach (Zend_Json::decode($ids) as $id) {
-            $message = Felamimail_Controller_Message::getInstance()->get($id);
-            Felamimail_Controller_Message::getInstance()->addFlags($message, array($encodedFlag));
+        $decodedFlag = Zend_Json::decode($flag);
+        if (! empty($decodedFlag)) {
+            foreach (Zend_Json::decode($ids) as $id) {
+                $message = Felamimail_Controller_Message::getInstance()->get($id);
+                Felamimail_Controller_Message::getInstance()->addFlags($message, (array) $decodedFlag);
+            }
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No flag set in request.');
         }
         
         return array('status' => 'success');
