@@ -34,14 +34,16 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
             $length= '';
             
             switch ($_declaration['DATA_TYPE']) {
+                case('tinyint'):
+                case('bigint'):
                 case('int'):
                     $type = 'integer';
-                    $length = $_declaration['NUMERIC_PRECISION'] + 1;
-                    break;
-            
-                case('tinyint'):
-                    $type = $_declaration['DATA_TYPE'];
-                    $length = $_declaration['NUMERIC_PRECISION'] + 1;
+                    $matches = null;
+                    if (preg_match('/\((\d+)\)/', $_declaration['COLUMN_TYPE'], $matches)) {
+                        $length = $matches[1];
+                    } else {
+                        $length = $_declaration['NUMERIC_PRECISION'] + 1;
+                    }
                     break;
                 
                 case('enum'):
@@ -71,6 +73,8 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
             ($_declaration['COLUMN_KEY'] == 'UNI')? $this->unique = 'true': $this->unique = 'false';
             ($_declaration['COLUMN_KEY'] == 'PRI')? $this->primary = 'true': $this->primary = 'false';
             ($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
+            
+            $this->default = $_declaration['COLUMN_DEFAULT'];
 
             $this->comment = $_declaration['COLUMN_COMMENT'];
             $this->length = $length;

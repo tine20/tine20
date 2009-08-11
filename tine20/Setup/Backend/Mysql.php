@@ -235,7 +235,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 $statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
             }
         }
-        
+
         $this->execQueryVoid($statement);
     }
     
@@ -425,12 +425,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
 
         if (isset($_field->default)) {
-            if($_field->default === NULL) {
-                $buffer[] = "default NULL" ;
-            } else {
-                $buffer[] = $this->_db->quoteInto("default ?", $_field->default) ;
-            }
-        }    
+            $buffer[] = $this->_db->quoteInto("default ?", $_field->default) ;
+        }
 
         if (isset($_field->autoincrement) && $_field->autoincrement === true) {
             $buffer[] = 'auto_increment';
