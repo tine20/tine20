@@ -33,9 +33,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         $this->_table = $_table->name;
         $statement = $this->getCreateStatement($_table);
-        // auto shutup by cweiss: echo "<hr color=green>";
-
-     //   // auto shutup by cweiss: echo $statement;
         
         $this->execQueryVoid($statement);
         
@@ -45,10 +42,16 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             $statement = $this->getIncrementTrigger($_table->name);
             $this->execQueryVoid($statement);
             
-     //       // auto shutup by cweiss: echo $statement;
+
             unset($this->_autoincrementId);
         }
-        // auto shutup by cweiss: echo "<hr color=red>";
+        
+       foreach ($_table->indices as $index) {    
+            if (empty($index->primary) && empty($index->unique)) {
+               $this->addIndex($_table->name, $index);
+            }
+        }        
+
     }
     
     protected function _getIncrementSequenceName($_tableName)

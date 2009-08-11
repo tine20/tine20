@@ -871,7 +871,45 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->_backend->addIndex($this->_table->name, $index);
         $indexesAfter = $this->_backend->getIndexesForTable($this->_table->name);
         $this->assertEquals(count($indexesBefore) + 1, count($indexesAfter));
-    }   
+    }
+    
+    public function testCreateTableWithIndex()
+    {
+        $tableXml = '
+            <table>
+                <name>oracle_test_index</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>first_name</name>
+                        <type>text</type>
+                        <length>128</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>last_name</name>
+                        <type>text</type>
+                        <length>128</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <index>
+                        <field>
+                            <name>first_name</name>
+                        </field>
+                        <field>
+                            <name>last_name</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
+        $this->_tableNames[] = $table->name;
+        $this->_backend->createTable($table);
+        
+        $indexes = $this->_backend->getIndexesForTable($table->name);
+        $this->assertEquals(1, count($indexes));
+    }
     
 //    public function testUnsignedNotImplemented()
 //    {
