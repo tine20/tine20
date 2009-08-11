@@ -141,6 +141,12 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         return '  ' . $return;
     }
     
+    public function testTableName() 
+    {
+        $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals($this->_table->name, $existingSchema->name);
+    }
+    
     public function testQuestionMarkInFieldValue()
     {
         $db = Tinebase_Core::getDb();
@@ -434,6 +440,9 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('comment', $newColumn->comment);
     }
     
     public function testStringToFieldStatement_014() 
