@@ -313,7 +313,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <default>false</default>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`email_sent` tinyint(4) unsigned default 0");    
+        $statement = $this->_fixFieldDeclarationString("`email_sent` tinyint(1) unsigned default 0");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
@@ -366,7 +366,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     <default>false</default>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`is_deleted` tinyint(4) unsigned NOT NULL default 0");    
+        $statement = $this->_fixFieldDeclarationString("`is_deleted` tinyint(1) unsigned NOT NULL default 0");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));

@@ -372,7 +372,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                     if ($_field->length > 19) {
                         $buffer[] = 'bigint(' . $_field->length . ')';
                     } else if ($_field->length < 5){
-                        $buffer[] = 'tinyint(4)';
+                        $buffer[] = 'tinyint(' . $_field->length . ')';
                     } else {
                         $buffer[] = 'int(' . $_field->length . ')';
                     }

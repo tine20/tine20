@@ -114,7 +114,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
             
             case 'boolean':
                 $this->type =  'integer';
-                $this->length = 4;
+                $this->length = 1;
                 break;
             
             case 'integer':
