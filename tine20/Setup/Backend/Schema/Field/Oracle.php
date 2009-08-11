@@ -71,7 +71,8 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
             $_declaration['PRIMARY'] ? $this->primary = 'true': $this->primary = 'false';
             //($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
             
-            $this->default = $_declaration['DEFAULT'];
+            
+            $this->default = $type == 'integer' ? (int) $_declaration['DEFAULT'] : $_declaration['DEFAULT'];
             
             //$this->comment = $_declaration['COLUMN_COMMENT'];
             $this->length = $length;

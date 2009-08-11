@@ -482,6 +482,11 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('last_modified_time', $newColumn->name);
+        $this->assertEquals('text', $newColumn->type);
+        $this->assertEquals('25', $newColumn->length);
     }
     
     public function testStringToFieldStatement_010() 
@@ -500,6 +505,12 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('is_deleted', $newColumn->name);
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('1', $newColumn->length);
+        $this->assertEquals(0, $newColumn->default);
     }    
 
     public function testStringToFieldStatement_011() 
