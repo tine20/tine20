@@ -322,8 +322,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
         } else if ($_record instanceof Felamimail_Model_Account) {
-            // add username
+            // add usernames (imap + smtp)
             $_record->resolveCredentials();
+            $_record->resolveCredentials(TRUE, FALSE, TRUE);
         }
         
         return parent::_recordToJson($_record);

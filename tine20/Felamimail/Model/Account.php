@@ -226,17 +226,24 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
 
         // don't show password
         unset($result['password']);
+        unset($result['smtp_password']);
         
         return $result;
     }
 
     /**
-     * resolve credentials
+     * resolve imap or smtp credentials
      *
+     * @param boolean $_onlyUsername
+     * @param boolean $_throwException
+     * @param boolean $_smtp
+     * @return boolean
+     * 
+     * @todo simplify this (set fieldnames at the beginning depending on smtp/imap)
      */
     public function resolveCredentials($_onlyUsername = TRUE, $_throwException = FALSE, $_smtp = FALSE)
     {
-        if (! $this->user || (! $this->password && ! $_onlyUsername)) {
+        if (! ($this->user && ! $_smtp) || ! ($this->smtp_user && $_smtp) || (! $this->password && ! $_onlyUsername)) {
             
             $fieldname = ($_smtp) ? 'smtp_credentials_id' : 'credentials_id';
             
