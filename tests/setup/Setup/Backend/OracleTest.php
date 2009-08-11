@@ -285,7 +285,7 @@ class Setup_Backend_OracleTest extends BaseTest
         
         $this->_backend->addCol($this->_table->name, $field, 1); //Cannot use 3rd parameter $_position in Oracle 
     }
-    
+
     public function testStringToFieldStatement_001() 
     {
         $string ="
@@ -418,6 +418,12 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('last_login', $newColumn->name);
+        $this->assertEquals('text', $newColumn->type);
+        $this->assertEquals('25', $newColumn->length);
     }
     
     public function testStringToFieldStatement_007() 
@@ -430,12 +436,18 @@ class Setup_Backend_OracleTest extends BaseTest
                     <default>false</default>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString('"email_sent" NUMBER(4,0) DEFAULT 0');    
+        $statement = $this->_fixFieldDeclarationString('"email_sent" NUMBER(1,0) DEFAULT 0');    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('email_sent', $newColumn->name);
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('1', $newColumn->length);
+        $this->assertEquals(0, $newColumn->default);
     }
     
     public function testStringToFieldStatement_008() 
@@ -482,7 +494,7 @@ class Setup_Backend_OracleTest extends BaseTest
                     <default>false</default>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString('"is_deleted" NUMBER(4,0) DEFAULT 0 NOT NULL');
+        $statement = $this->_fixFieldDeclarationString('"is_deleted" NUMBER(1,0) DEFAULT 0 NOT NULL');
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));

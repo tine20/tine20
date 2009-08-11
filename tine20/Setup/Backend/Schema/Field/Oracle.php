@@ -36,12 +36,7 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
             switch ($_declaration['DATA_TYPE']) {
                 case('NUMBER'):
                     $type = 'integer';
-                    $length = (int)$_declaration['LENGTH'];
-                    break;
-            
-                case('tinyint'):
-                    $type = $_declaration['DATA_TYPE'];
-                    $length = $_declaration['NUMERIC_PRECISION'] + 1;
+                    $length = (int)$_declaration['PRECISION'];
                     break;
                 
                 case('enum'):
@@ -75,7 +70,9 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
             //($_declaration['COLUMN_KEY'] == 'UNI')? $this->unique = 'true': $this->unique = 'false';
             $_declaration['PRIMARY'] ? $this->primary = 'true': $this->primary = 'false';
             //($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
-
+            
+            $this->default = $_declaration['DEFAULT'];
+            
             //$this->comment = $_declaration['COLUMN_COMMENT'];
             $this->length = $length;
             $this->type = $type;
