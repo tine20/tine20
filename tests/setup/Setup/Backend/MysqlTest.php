@@ -379,6 +379,12 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('is_deleted', $newColumn->name);
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('1', $newColumn->length);
+        $this->assertEquals(0, $newColumn->default);
     }    
     
     public function testStringToFieldStatement_011() 
