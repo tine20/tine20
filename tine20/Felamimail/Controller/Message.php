@@ -245,7 +245,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder)) {
             
-            $imapMessage = $imapBackend->getMessage($message->messageuid);
+            try {
+                $imapMessage = $imapBackend->getMessage($message->messageuid);
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                if ($zmpe->getMessage() == 'the single id was not found in response') {
+                    throw new Felamimail_Exception('Message not found. Maybe it was deleted by another client.', 404);
+                } else {
+                    throw $zmpe;
+                }
+            }
             
             // add body
             $message->body = $this->_getBody($imapMessage, $message->content_type);
