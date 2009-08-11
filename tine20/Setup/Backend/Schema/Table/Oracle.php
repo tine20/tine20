@@ -14,11 +14,7 @@ class Setup_Backend_Schema_Table_Oracle extends Setup_Backend_Schema_Table_Abstr
 {
 
     public function __construct($_tableDefinition)
-    {
-         
-         //@todo version
-         //$version = explode(';', $_tableDefinition->TABLE_COMMENT);
-         //$this->version = substr($version[0], 9);  
+    { 
          $field = current($_tableDefinition);
          $this->setName($field['TABLE_NAME']);
     }
