@@ -74,7 +74,7 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
             ($_declaration['COLUMN_KEY'] == 'PRI')? $this->primary = 'true': $this->primary = 'false';
             ($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
             
-            $this->default = $_declaration['COLUMN_DEFAULT'];
+            $this->default = $type == 'integer' ? (int)$_declaration['COLUMN_DEFAULT'] : $_declaration['COLUMN_DEFAULT'];
 
             $this->comment = $_declaration['COLUMN_COMMENT'];
             $this->length = $length;
