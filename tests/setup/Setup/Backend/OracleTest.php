@@ -104,7 +104,7 @@ class Setup_Backend_OracleTest extends BaseTest
     {
         foreach ($this->_tableNames as $tableName) {
             try {
-                $this->_backend->dropTable($tableName);
+               $this->_backend->dropTable($tableName);
             }
             catch (Zend_Db_Statement_Exception $e) {
                 //probably the table already was deleted by a test
@@ -527,6 +527,12 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('new_value', $newColumn->name);
+        $this->assertEquals('text', $newColumn->type);
+        $this->assertEquals(null, $newColumn->length);
+        $this->assertEquals(null, $newColumn->default);
     }
     
     public function testStringToFieldStatement_012() 
@@ -561,6 +567,10 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('comment', $newColumn->comment);
+        $this->assertEquals('comment', $this->_backend->getFieldComment($this->_table->name, 'account_id'));       
     }
     
     public function testStringToFieldStatement_014() 

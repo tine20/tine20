@@ -50,7 +50,14 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             if (empty($index->primary) && empty($index->unique)) {
                $this->addIndex($_table->name, $index);
             }
-        }        
+        }  
+
+        foreach ($_table->fields as $field) {
+            if (isset($field->comment)) {
+                $this->setFieldComment($_table->name, $field->name, $field->comment);
+            }         
+        }
+        
 
     }
     
@@ -198,8 +205,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $tableName = SQL_TABLE_PREFIX . $_tableName;
         $tableInfo = $this->_db->describeTable($tableName);
         $trigger = $this->_db->fetchRow("SELECT * FROM USER_TRIGGERS WHERE TRIGGER_NAME=?", array($this->_getIncrementTriggerName($_tableName)));
+        $fieldComments = $this->_getFieldComments($_tableName);
         
         foreach ($tableInfo as $index => $field) {
+            $field['COLUMN_COMMENT'] = isset($fieldComments[$field['COLUMN_NAME']]) ? $fieldComments[$field['COLUMN_NAME']] : null;
+         
             switch ($field['DATA_TYPE']) {
                 case 'VARCHAR2':
                     $constraint = $this->_db->fetchOne("SELECT SEARCH_CONDITION FROM USER_CONSTRAINTS WHERE CONSTRAINT_NAME=?", array($this->_getConstraintEnumName($_tableName, $field['COLUMN_NAME'])));
@@ -222,6 +232,10 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             
             $tableInfo[$index] = $field;
         }
+        
+        
+
+        
  
         return $tableInfo;
     }
@@ -338,6 +352,38 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $statement .= ")";
         
         $this->execQueryVoid($statement);
+        
+        if (isset($_declaration->comment)) {
+            $this->setFieldComment($_tableName, $_declaration->name, $_declaration->comment);
+        }
+    }
+    
+    public function setFieldComment($_tableName, $_fieldName, $_comment)
+    {
+        $statement = "COMMENT ON COLUMN " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . "." . $this->_db->quoteIdentifier($_fieldName) . " IS " . $this->_db->quote($_comment);
+        $this->execQueryVoid($statement); 
+    }
+    
+    public function getFieldComment($_tableName, $_fieldName)
+    {
+        return $this->_db->fetchOne("SELECT COMMENTS FROM USER_COL_COMMENTS WHERE TABLE_NAME=:table_name AND COLUMN_NAME=:column_name", 
+            array(
+                'table_name' => SQL_TABLE_PREFIX . $_tableName,
+                'column_name' => $_fieldName
+            )
+        ); 
+    }
+    
+    protected function _getFieldComments($_tableName)
+    {
+        $fieldComments = array();
+        $fieldCommentsRaw = $this->_db->fetchAll("SELECT COLUMN_NAME, COMMENTS FROM USER_COL_COMMENTS WHERE TABLE_NAME = :table_name", array('table_name' => SQL_TABLE_PREFIX . $_tableName));
+        foreach ($fieldCommentsRaw as $fieldComment) {
+            if (!empty($fieldComment['COMMENTS'])) {
+                $fieldComments[$fieldComment['COLUMN_NAME']] = $fieldComment['COMMENTS'];
+            }
+        }
+        return $fieldComments;
     }
     
     /**
@@ -349,7 +395,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */    
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " CHANGE COLUMN " ;
         $oldName = $_oldName ;
         
         if ($_oldName == NULL) {
