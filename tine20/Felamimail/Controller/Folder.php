@@ -12,6 +12,7 @@
  * @todo        add cleanup routine for deleted (by other clients)/outofdate folders?
  * @todo        use other/shared namespaces
  * @todo        translate standard folder names
+ * @todo        accountId should not be optional (and 'default')
  */
 
 /**
@@ -206,15 +207,18 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_newFolderName new globalName of folder
      * @param string $_accountId [optional]
      * @return Felamimail_Model_Folder
-     * 
-     * @todo use delimiter to explode name?
      */
     public function rename($_newLocalName, $_oldGlobalName, $_accountId = 'default')
     {
-        //$globalNameParts = explode($this->_delimiter, $_oldGlobalName);
-        //$folder->localname = array_pop($globalNameParts);
+        $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $this->_delimiter = $account->delimiter;
         
-        $newGlobalName = preg_replace("/[_\-a-zA-Z0-9\.]+$/", $_newLocalName, $_oldGlobalName);
+        // use delimiter to old globalname, remove old localname and build new globalname
+        $globalNameParts = explode($this->_delimiter, $_oldGlobalName);
+        array_pop($globalNameParts);
+        $newGlobalName = implode($this->_delimiter, $globalNameParts) . $this->_delimiter . $_newLocalName;
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
         
         $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
         $imap->renameFolder($_oldGlobalName, $newGlobalName);
