@@ -183,7 +183,7 @@ class Timetracker_Setup_Import_Egw14
         $queryResult = $stmt->fetchAll();       
         
         foreach($queryResult as $row) {
-            $customField = new Tinebase_Model_CustomFieldConfig(array(
+            $customField = new Tinebase_Model_CustomField_Config(array(
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
                 'name'              => $row['ts_extra_name'],
                 'label'             => $row['ts_extra_name'],        

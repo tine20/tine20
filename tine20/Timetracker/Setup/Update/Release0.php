@@ -88,7 +88,6 @@ class Timetracker_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->alterCol('timetracker_timeaccount', $declaration, 'created_by');
         $this->_backend->alterCol('timetracker_timesheet', $declaration, 'created_by');
         
-        
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>last_modified_by</name>
@@ -98,7 +97,6 @@ class Timetracker_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->alterCol('timetracker_timeaccount', $declaration, 'last_modified_by');
         $this->_backend->alterCol('timetracker_timesheet', $declaration, 'last_modified_by');
 
-        
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>deleted_by</name>
@@ -107,7 +105,6 @@ class Timetracker_Setup_Update_Release0 extends Setup_Update_Abstract
             </field>');
         $this->_backend->alterCol('timetracker_timeaccount', $declaration, 'deleted_by');
         $this->_backend->alterCol('timetracker_timesheet', $declaration, 'deleted_by');
-        
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -121,4 +118,50 @@ class Timetracker_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Timetracker', '0.5');
     }
     
+    /**
+     * update from 0.5 to 2.0
+     * - copy entries from timetracker_timesheet_custom to customfield table
+     * - drop timetracker_timesheet_custom table
+     */
+    public function update_5()
+    {
+        // get all timetracker/timesheet custom fields
+        $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
+            Tinebase_Application::getInstance()->getApplicationByName('Timetracker'),
+            'Timetracker_Model_Timesheet'
+        );
+        
+        if (count($customfields) > 0) {
+            
+            $customfields->addIndices(array('name'));
+            
+            // get all custom field values
+            $select = $this->_db->select()
+                ->from(SQL_TABLE_PREFIX . 'timetracker_timesheet_custom')
+                ->order('name ASC');
+            $stmt = $this->_db->query($select);
+            $queryResult = $stmt->fetchAll();
+    
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
+            
+            // insert values into customfield table
+            $cfValueBackend = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Value', 'customfield');
+            foreach ($queryResult as $row) {
+                if (! isset($customfield) || $customfield->name != $row['name']) {
+                    $customfield = $customfields->filter('name', $row['name'])->getFirstRecord();
+                }
+                $cfValue = new Tinebase_Model_CustomField_Value(array(
+                    'record_id'         => $row['record_id'],
+                    'customfield_id'    => $customfield->getId(),
+                    'value'             => $row['value'],
+                ));
+                $cfValueBackend->create($cfValue);
+            }
+        }
+        
+        // drop obsolete table
+        $this->dropTable('timetracker_timesheet_custom');
+        
+        $this->setApplicationVersion('Timetracker', '2.0');
+    }
 }
