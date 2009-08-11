@@ -161,9 +161,9 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * 
      * @param string statement
      */    
-    public function execQueryVoid($_statement)
+    public function execQueryVoid($_statement, $bind = array())
     {
-        $stmt = $this->_db->query($_statement);
+        $stmt = $this->_db->query($_statement, $bind);
     }
     
     /**
@@ -172,9 +172,9 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * @param string statement
      * @return stdClass object
      */       
-    public function execQuery($_statement)
+    public function execQuery($_statement, $bind = array())
     {
-        $stmt = $this->_db->query($_statement);
+        $stmt = $this->_db->query($_statement, $bind);
         
         return $stmt->fetchAll();
     }
