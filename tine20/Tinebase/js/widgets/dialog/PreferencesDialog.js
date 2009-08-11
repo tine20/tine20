@@ -213,13 +213,17 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
 
     /**
      * @private
+     * 
+     * TODO check if this is working correctly
      */
     onDestroy: function(){
         // delete panels
         for (var panelName in this.adminPrefPanels) {
             if (this.adminPrefPanels.hasOwnProperty(panelName)) {
-                this.adminPrefPanels[panelName].destroy();
-                this.adminPrefPanels[panelName] = null;
+                if (this.adminPrefPanels[panelName] !== null) {
+                    this.adminPrefPanels[panelName].destroy();
+                    this.adminPrefPanels[panelName] = null;
+                }
             }
         }
         for (panelName in this.prefPanels) {
