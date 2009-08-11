@@ -111,6 +111,12 @@ class Setup_Backend_OracleTest extends BaseTest
             }
         }
     }
+    
+    public function testTableName() 
+    {
+        $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals($this->_table->name, $existingSchema->name);
+    }
 
     public function testOracleDbAdapterIsQuoted()
     {
@@ -587,6 +593,9 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('BLOB', $newColumn->type);
     }
     
     public function testStringToFieldStatement_015() 
@@ -605,23 +614,11 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-    }
-    
-    public function testStringToFieldStatement_016() 
-    {
-        $string ="
-                <field>
-                    <name>created</name>
-                    <type>datetime</type>
-                    <notnull>true</notnull>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"created" VARCHAR2(25) NOT NULL');
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('4', $newColumn->length);
+        $this->assertEquals(0, $newColumn->default);
     }
     
     public function testStringToFieldStatement_018() 
@@ -640,6 +637,11 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('4', $newColumn->length);
+        $this->assertEquals(1, $newColumn->default);
     }
     
     public function testStringToFieldStatement_019() 
@@ -657,6 +659,10 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $newColumn = end($schema->fields);
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('24', $newColumn->length);
     }
     
     public function testStringToForeignKeyStatement_001() 
