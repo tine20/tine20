@@ -73,7 +73,7 @@ class Tinebase_EmailUser
      */
     private function __construct()
     {
-        if (! isset(Tinebase_Core::getConfig()->accounts)) {
+        if (! isset(Tinebase_Core::getConfig()->accounts->ldap)) {
             throw new Tinebase_Exception('No LDAP config found.');
         }
         $ldapOptions = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
