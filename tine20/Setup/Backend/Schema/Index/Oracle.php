@@ -20,10 +20,12 @@ class Setup_Backend_Schema_Index_Oracle extends Setup_Backend_Schema_Index_Abstr
 
     public function setForeignKey($_declaration)
     {
-        $this->referencetable = substr($_declaration['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
-        $this->referencefield = $_declaration['REFERENCED_COLUMN_NAME'];
-        $this->referenceOnDelete;
-        $this->referenceOnUpdate;
+        parent::setForeignKey($_declaration);
+        //@todo: correclty read reference information
+//        $this->referencetable = substr($_declaration['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
+//        $this->referencefield = $_declaration['REFERENCED_COLUMN_NAME'];
+//        $this->referenceOnDelete;
+//        $this->referenceOnUpdate;
     }
     
     

@@ -224,6 +224,22 @@ class Setup_Backend_OracleTest extends BaseTest
         $this->assertTrue($this->_backend->columnExists($columntName, $this->_table->name));
     }
     
+    public function testGetConstraintsForTable()
+    {
+        //test without optional parameters
+        $constraints = $this->_backend->getConstraintsForTable($this->_table->name);
+        $this->assertEquals(3, count($constraints)); //Primary Key, ID NOT NULL, NAME NTO NULL
+        
+        //test $_constraintType parameter
+        $constraints = $this->_backend->getConstraintsForTable($this->_table->name, Setup_Backend_Oracle::CONSTRAINT_TYPE_PRIMARY);
+        $this->assertEquals(1, count($constraints));
+        $this->assertTrue(is_array($constraints[0]));
+        $this->assertEquals(Setup_Backend_Oracle::CONSTRAINT_TYPE_PRIMARY, $constraints[0]['CONSTRAINT_TYPE']);
+        
+        $constraints = $this->_backend->getConstraintsForTable($this->_table->name, Setup_Backend_Oracle::CONSTRAINT_TYPE_FOREIGN);
+        $this->assertEquals(0, count($constraints));
+    }
+    
     public function testSequenceExists()
     {
         //Tests standard test table (with sequence)
@@ -721,7 +737,23 @@ class Setup_Backend_OracleTest extends BaseTest
         
         $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
 
+        $constraints = $this->_backend->getConstraintsForTable($this->_table->name, Setup_Backend_Oracle::CONSTRAINT_TYPE_FOREIGN);
+        $this->assertEquals(0, count($constraints));
+        
         $this->_backend->addForeignKey($this->_table->name, $foreignKey);
+
+        //check number of foreign key constraints
+        $constraints = $this->_backend->getConstraintsForTable($this->_table->name, Setup_Backend_Oracle::CONSTRAINT_TYPE_FOREIGN);
+        $this->assertEquals(1, count($constraints));
+        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals(2, count($schema->indices));
+        $index = $schema->indices[1];
+        $this->assertEquals('true', $index->foreign);
+        $this->assertNull($index->mul); //MUL is MySQL sepcific
+        $this->assertEquals('false', $index->primary);
+//        $this->assertFalse(empty($index->referencetable));
+//        $this->assertFalse(empty($index->referencefield));
         
         $db = Tinebase_Core::getDb();
         $db->insert(SQL_TABLE_PREFIX . $referencedTableName, array('name' => 'test'));
@@ -729,6 +761,8 @@ class Setup_Backend_OracleTest extends BaseTest
         
         $this->setExpectedException('Zend_Db_Statement_Exception', 'ORA-02291'); //ORA-02291: foreign key constraint violation
         $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 999));
+        
+        
     }
     
     public function testLongForeignKeyName() 

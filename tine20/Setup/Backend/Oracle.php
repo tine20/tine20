@@ -18,6 +18,11 @@
 class Setup_Backend_Oracle extends Setup_Backend_Abstract
 {
  
+    CONST CONSTRAINT_TYPE_PRIMARY   = 'P';
+    CONST CONSTRAINT_TYPE_FOREIGN   = 'R';
+    CONST CONSTRAINT_TYPE_CHECK     = 'C';
+    CONST CONSTRAINT_TYPE_UNIQUE    = 'U';
+    
     protected $_table ='';
    
     protected $_autoincrementID = '';
@@ -171,30 +176,20 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     {
         $tableInfo = $this->_getTableInfo($_tableName);       
         $existingTable = Setup_Backend_Schema_Table_Factory::factory('Oracle', $tableInfo);
-        
         foreach ($tableInfo as $index => $tableColumn) {
             $field = Setup_Backend_Schema_Field_Factory::factory('Oracle', $tableColumn);
             $existingTable->addField($field);
             if ($field->primary === 'true' || $field->unique === 'true' || $field->mul === 'true') {
                 $index = Setup_Backend_Schema_Index_Factory::factory('Oracle', $tableColumn);
-                    
-                    //@todo implement foreign key support    
-                // get foreign keys
-//                $select = $this->_db->select()
-//                  ->from('information_schema.KEY_COLUMN_USAGE')
-//                  ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName)
-//                  ->where($this->_db->quoteIdentifier('COLUMN_NAME') . ' = ?', $tableColumn['COLUMN_NAME']);
-//    
-//                $stmt = $select->query();
-//                $keyUsage = $stmt->fetchAll();
-//    
-//                foreach ($keyUsage as $keyUse) {
-//                    if ($keyUse['REFERENCED_TABLE_NAME'] != NULL) {
-//                        $index->setForeignKey($keyUse);
-//                    }
-//                }
                 $existingTable->addIndex($index);
             }
+        }
+        
+        $foreignKeys = $this->getConstraintsForTable($_tableName, Setup_Backend_Oracle::CONSTRAINT_TYPE_FOREIGN, true);
+        foreach ($foreignKeys as $foreignKey) {
+            $index = Setup_Backend_Schema_Index_Factory::factory('Oracle', $tableColumn);
+            $index->setForeignKey($foreignKey);
+            $existingTable->addIndex($index);
         }
 
         return $existingTable;
@@ -256,6 +251,23 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $tableName = SQL_TABLE_PREFIX . $_tableName;
         $sql = 'SELECT INDEX_NAME FROM ' . $this->_db->quoteIdentifier('ALL_INDEXES') . ' WHERE TABLE_NAME=:tableName';
         return $this->_db->fetchCol($sql, array('tableName' => $tableName));
+    }
+    
+    /**
+     * Get a list of constraints belonging to the given {@param $_tableName}
+     * 
+     * @param String $_tableName
+     * @param String | optional [restrict returned constraints to this type]
+     * @return Array
+     */
+    public function getConstraintsForTable($_tableName, $_constraintType = null)
+    {
+        $select = $this->_db->select();
+        $select->from('ALL_CONSTRAINTS')->where('TABLE_NAME=?', SQL_TABLE_PREFIX . $_tableName);
+        if ($_constraintType) {
+            $select->where('CONSTRAINT_TYPE=?', $_constraintType);
+        }
+        return $this->_db->fetchAll($select);
     }
 
     /**
@@ -630,11 +642,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         
         if (isset($_field->autoincrement)) {
             $this->_autoincrementId = $_field->name;
-        }
-       
-        if (isset($_field->comment)) {
-            //@todo support comments
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  ignoring comment because comments are currently not supported by oracle adapter.');
         }
         
         $definition = implode(' ', $buffer);
