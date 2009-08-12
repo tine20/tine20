@@ -157,7 +157,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         // check if user has all required object classes.
         foreach ($this->_requiredUserObjectClass as $className) {
             if (! in_array($className, $metaData['objectClass'])) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no samba account. Make shure to reset the users password!');
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no samba account. Make sure to reset the users password!');
 
                 return $this->addUser($_user, $_samUser);
             }
@@ -207,7 +207,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     public function setPassword($_user, $_password, $_encrypt = TRUE, $_mustChange = FALSE)
 	{
         if (! $_encrypt) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make shure to reset the users password!');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make sure to reset the users password!');
         } else {
             $metaData = $this->_getUserMetaData($_user);
             $ldapData = array(

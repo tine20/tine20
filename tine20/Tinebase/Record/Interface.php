@@ -31,7 +31,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      *
      * @param mixed $_contactData
      * @param bool $_bypassFilters Bypass filters at object creation with data
-     * this is usefull when datas are for shure valid, e.g. after database query
+     * this is usefull when datas are for sure valid, e.g. after database query
      * @param array $_convertDates array with Zend_Date constructor parameters part and locale
      * 
      * @return void

@@ -155,7 +155,7 @@ class Tasks_Setup_MigrateFromTine14
     /**
      * Returns Container we can migrate tasks to
      * 
-     * @todo Make shure we use same containers in calendar and tasks!
+     * @todo Make sure we use same containers in calendar and tasks!
      * ??? what about loose coupling in this case???
      * 
      * @param int $_owner

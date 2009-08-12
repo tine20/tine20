@@ -51,7 +51,7 @@ Ext.apply(Ext.form.VTypes, {
  * _BUT_ for an other user sitting in a different timezone it means e.g. the 
  * time range from 2008-10-01T02:00:00 to 2008-10-02T21:59:59.
  * 
- * So on the one hand we need to make shure, that the date picker only returns 
+ * So on the one hand we need to make sure, that the date picker only returns 
  * changed datetime information when the user did a change. 
  * 
  * @todo On the other hand we

@@ -22,7 +22,7 @@
  * current user has readGrants for
  * 
  * NOTE: This filter already does all ACL checks. This means a controller only 
- *       has to make shure a containerfilter is set and if not add one
+ *       has to make sure a containerfilter is set and if not add one
  * 
  * @todo implement setRequiredGrants
  */

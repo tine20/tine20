@@ -207,7 +207,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             //console.log('inserted slice: ' + i);
         }
         
-        // make shure cell is empty
+        // make sure cell is empty
         while (dayCell.childNodes[pos].innerHTML) {
             pos++;
             
