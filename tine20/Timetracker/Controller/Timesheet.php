@@ -101,6 +101,9 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @param Timetracker_Model_Timesheet $_oldRecord
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
+     * 
+     * @todo think about just setting the default values when user 
+     *       hasn't the required grant to change the field (instead of throwing exception) 
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
@@ -118,6 +121,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             if (! $timeaccount->is_open) {
                 return FALSE;
             }
+            
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($timeaccount->toArray(), true));
             
             // check if timeaccount->is_billable is false => set default in fieldGrants to 0 and allow only managers to change it
             if (!$timeaccount->is_billable) {
