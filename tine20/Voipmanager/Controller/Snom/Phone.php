@@ -182,7 +182,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      */
     public function update(Tinebase_Record_Interface $_phone)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phone->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phone->toArray(), true));
         
         $phone = $this->_backend->update($_phone);
         
