@@ -24,15 +24,28 @@ class Setup_Backend_Factory
 {
 
     /**
-     * factory function to return a selected contacts backend class
+     * factory function to return a selected setup backend class
      *
-     * @param string $type
+     * @param string | optional $type
      * @return object
      */
-    static public function factory($_type)
+    static public function factory($_type = null)
     {
+        if (empty($_type)) {
+            $db = Tinebase_Core::getDb();
+            switch(get_class($db)) {
+                case 'Zend_Db_Adapter_Pdo_Mysql':
+                    return self::factory('Mysql');
+                    
+                case 'Zend_Db_Adapter_Oracle':
+                    return self::factory(Tinebase_Core::ORACLE);
+                    
+                default:
+                    throw new InvalidArgumentException('Invalid database backend type defined.');
+            }
+        }
+     
         $className = 'Setup_Backend_' . ucfirst($_type);
-        //$instance = new $className($_definition);
         $instance = new $className();
 
         return $instance;

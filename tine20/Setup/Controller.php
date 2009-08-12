@@ -82,20 +82,7 @@ class Setup_Controller
         
         if (Setup_Core::get(Setup_Core::CHECKDB)) {
             $this->_db = Setup_Core::getDb();
-            
-            switch(get_class($this->_db)) {
-                case 'Zend_Db_Adapter_Pdo_Mysql':
-                    $this->_backend = Setup_Backend_Factory::factory('Mysql');
-                    break;
-                    
-                case 'Zend_Db_Adapter_Oracle':
-                    $this->_backend = Setup_Backend_Factory::factory(Tinebase_Core::ORACLE);
-                    break;
-                    
-                default:
-                    throw new InvalidArgumentException('Invalid database backend type defined.');
-                    break;
-            }        
+            $this->_backend = Setup_Backend_Factory::factory();      
         } else {
             $this->_db = NULL;
         }

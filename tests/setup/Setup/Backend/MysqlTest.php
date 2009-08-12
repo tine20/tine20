@@ -21,98 +21,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Tinebase_User
  */
-class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
-{
-    /**
-     * @var    Setup_Backend_Mysql
-     * @access protected
-     */
-    protected $_backend;
-    
-    /**
-     * @var Setup_Backend_Schema_Table_Abstract
-     */
-    protected $_table;
-    
-    /**
-     * Array holding table names that should be deleted with {@see tearDown}
-     * 
-     * @var array
-     */
-    protected $_tableNames = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Backend Mysql Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        $this->_backend = Setup_Backend_Factory::factory('Mysql');
-        
-        $tableXml = '
-	        <table>
-	            <name>phpunit_mysql_test_table</name>
-	            <version>1</version>
-	            <declaration>
-	                <field>
-	                    <name>id</name>
-	                    <type>integer</type>
-	                    <autoincrement>true</autoincrement>
-	                </field>
-	                <field>
-	                    <name>name</name>
-	                    <type>text</type>
-	                    <length>128</length>
-	                    <notnull>true</notnull>
-	                </field>
-	                <index>
-	                    <name>id</name>
-	                    <primary>true</primary>
-	                    <field>
-	                        <name>id</name>
-	                    </field>
-	                </index>
-	            </declaration>
-	        </table>';
-
-        $this->_table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
-        $this->_tableNames[] = $this->_table->name;
-        
-        $this->_backend->createTable($this->_table);
-        
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    	foreach ($this->_tableNames as $tableName) {
-	    	try {
-	    		$this->_backend->dropTable($tableName);
-	    	}
-	    	catch (Zend_Db_Statement_Exception $e) {
-	    		//probably the table already was deleted by a test
-	    	}
-    	}
-    }
+class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
+{    
 
     /**
      * Perform some insignificant string format manipulations (add/remove Whitespace).
@@ -479,22 +389,6 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->addCol($this->_table->name, $field);
     }
     
-    public function testStringToFieldStatement_016() 
-    {
-        $string ="
-                <field>
-                    <name>created</name>
-                    <type>datetime</type>
-                    <notnull>true</notnull>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString("`created` datetime  NOT NULL ");
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-    }        
 
     public function testStringToFieldStatement_018() 
     {
@@ -657,7 +551,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
     public function testStringToForeignKeyStatement_001() 
     {
      
-     $referencedTableName = 'oracle_foreign';
+     $referencedTableName = 'foreign_key_test';
      $referencedTableXml = "
             <table>
                 <name>$referencedTableName</name>
@@ -709,12 +603,22 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
                     </reference>
                 </index>";
 
-        $statement = $this->_fixIndexDeclarationString("CONSTRAINT `" . SQL_TABLE_PREFIX . "test_fk` FOREIGN KEY (`foreign_id`) REFERENCES `" . SQL_TABLE_PREFIX . "oracle_foreign` (`id`)");    
+        $statement = $this->_fixIndexDeclarationString("CONSTRAINT `" . SQL_TABLE_PREFIX . "test_fk` FOREIGN KEY (`foreign_id`) REFERENCES `" . SQL_TABLE_PREFIX . "foreign_key_test` (`id`)");    
         
         $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getForeignKeyDeclarations($foreignKey));
 
         $this->_backend->addForeignKey($this->_table->name, $foreignKey);
+        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals(2, count($schema->indices));
+        $index = $schema->indices[1];
+        $this->assertEquals('true', $index->foreign);
+        $this->assertEquals('true', $index->mul);
+        $this->assertEquals('false', $index->primary);
+        $this->assertFalse(empty($index->referencetable));
+        $this->assertFalse(empty($index->referencefield));
+        
         
         $db = Tinebase_Core::getDb();
         $db->insert(SQL_TABLE_PREFIX . $referencedTableName, array('name' => 'test'));

@@ -15,102 +15,14 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Setup_Backend_PdoOciTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Setup_Backend_OracleTest::main');
 }
 
 /**
  * Test class for Tinebase_User
  */
-class Setup_Backend_OracleTest extends BaseTest
+class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
 {
-    /**
-     * @var    Setup_Backend_Oracle
-     * @access protected
-     */
-    protected $_backend;
-    
-    /**
-     * Array holding table names that should be deleted with {@see tearDown}
-     * 
-     * @var array
-     */
-    protected $_tableNames = array();
-    
-    /**
-     * @var Setup_Backend_Schema_Table_Abstract
-     */
-    protected $_table;
-    
-    protected $_tableXml = '
-            <table>
-                <name>oracle_test</name>
-                <version>1</version>
-                <declaration>
-                    <field>
-                        <name>id</name>
-                        <type>integer</type>
-                        <autoincrement>true</autoincrement>
-                    </field>
-                    <field>
-                        <name>name</name>
-                        <type>text</type>
-                        <length>128</length>
-                        <notnull>true</notnull>
-                    </field>
-                    <index>
-                        <primary>true</primary>
-                        <field>
-                            <name>id</name>
-                        </field>
-                    </index>
-                </declaration>
-            </table>';
-
-    
-    
-
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Backend Pdo_Oci Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        $this->_backend = Setup_Backend_Factory::factory('Oracle');
-        $this->_createTestTable();
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        foreach ($this->_tableNames as $tableName) {
-            try {
-               $this->_backend->dropTable($tableName);
-            }
-            catch (Zend_Db_Statement_Exception $e) {
-                //probably the table already was deleted by a test
-            }
-        }
-    }
     
     public function testTableName() 
     {
@@ -1049,18 +961,6 @@ class Setup_Backend_OracleTest extends BaseTest
             $db->insert($tableName, array('name' => $index, 'test' => $value));
             $result = $db->fetchOne('SELECT "test" FROM "' . $tableName . '" WHERE "name"=:name', array('name' => $index));
             $this->assertEquals($value, $result);
-        }
-    }
-    
-    protected function _createTestTable()
-    {
-        $this->_table = Setup_Backend_Schema_Table_Factory::factory('Xml', $this->_tableXml);
-        $this->_tableNames[] = $this->_table->name;
-        try {
-            $this->_backend->createTable($this->_table);
-        } catch (Zend_Db_Statement_Exception $e) {
-        	$this->_backend->dropTable($this->_table->name);
-        	$this->_backend->createTable($this->_table);
         }
     }
 
