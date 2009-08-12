@@ -525,7 +525,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     protected function _getMetaData($_userId)
     {
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        $result = $this->_ldap->getMetaData($this->_options['userDn'], $this->_rowNameMapping['accountId'] . "=" . $userId);
+        $result = $this->_backend->getMetaData($this->_options['userDn'], $this->_rowNameMapping['accountId'] . "=" . $userId);
         return $result;
         
         /*
