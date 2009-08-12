@@ -61,9 +61,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         this.getForm().findField('is_billable').setDisabled(notBillable);
         
-    	if (this.record.id == 0) {
-    	    // set to 0 be default for new records / not billable
-    	    this.getForm().findField('is_billable').setValue((notBillable) ? 0 : 1);
+    	if (this.record.id == 0 && timeaccount) {
+    	    // set is_billable for new records according to the timeaccount setting
+    	    this.getForm().findField('is_billable').setValue(timeaccount.data.is_billable);
     	}
     },
 
