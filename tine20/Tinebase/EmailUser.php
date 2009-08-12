@@ -9,7 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        make it work
+ * @todo        test it!
  * @todo        add forward / alias
  * @todo        add support for qmail
  * @todo        add factory / different backends?
@@ -54,6 +54,13 @@ class Tinebase_EmailUser
     );
     
     /**
+     * ldap / email user options array
+     *
+     * @var array
+     */
+    protected $_options = array();
+    
+    /**
      * the constructor
      *
      * @param  array $options Options used in connecting, binding, etc.
@@ -62,9 +69,9 @@ class Tinebase_EmailUser
     {
         $ldapOptions = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
         $emailOptions = Tinebase_Core::getConfig()->emailUser->toArray();
-        $options = array_merge($ldapOptions, $emailOptions);
+        $this->_options = array_merge($ldapOptions, $emailOptions);
                 
-        $this->_ldap = new Tinebase_Ldap($options);
+        $this->_ldap = new Tinebase_Ldap($this->_options);
         $this->_ldap->bind();
     }
     
@@ -94,29 +101,19 @@ class Tinebase_EmailUser
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
      * 
-     * @todo    implement
+     * @todo add defaults?
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    /*
         $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_emailUser);
         
         $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredUserObjectClass));
-        
-        // defaults
-        $ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $_user->getId() + 1000);
-        $ldapData['sambaacctflags'] = (isset($ldapData['sambaacctflags']) && !empty($ldapData['sambaacctflags'])) ? $ldapData['sambaacctflags'] : '[U          ]';
-        $ldapData['sambapwdcanchange']	= isset($ldapData['sambapwdcanchange'])  ? $ldapData['sambapwdcanchange']  : 0;
-        $ldapData['sambapwdmustchange']	= isset($ldapData['sambapwdmustchange']) ? $ldapData['sambapwdmustchange'] : 2147483647;
-
-        $ldapData['sambaprimarygroupsid'] = $this->getGroupById($_user->accountPrimaryGroup)->sid;
-        
+                
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_ldap->update($metaData['dn'], $ldapData);
-        */
         
         return $this->getUserById($_user->getId());
 	}
@@ -127,31 +124,25 @@ class Tinebase_EmailUser
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
-     * 
-     * @todo    implement
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    /*
         $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_emailUser);
         
         // check if user has all required object classes.
         foreach ($this->_requiredUserObjectClass as $className) {
             if (! in_array($className, $metaData['objectClass'])) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no samba account. Make shure to reset the users password!');
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no email objectclass.');
 
                 return $this->addUser($_user, $_emailUser);
             }
         }
 
-        $ldapData['sambaprimarygroupsid'] = $this->getGroupById($_user->accountPrimaryGroup)->sid;
-
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_ldap->update($metaData['dn'], $ldapData);
-        */
         
         return $this->getUserById($_user->getId());
 	}
@@ -161,54 +152,12 @@ class Tinebase_EmailUser
      *
      * @param  int         $_userId
      * @return string 
-     * 
-     * @todo check if this is needed
      */
     protected function _getUserMetaData($_userId)
     {
-        /*
-        $metaData = array();
-        
-        try {
-            $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $account = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId, array('objectclass'));
-            $metaData['dn'] = $account['dn'];
-            
-            $metaData['objectClass'] = $account['objectclass'];
-            unset($metaData['objectClass']['count']);
-            
-        } catch (Tinebase_Exception_NotFound $enf) {
-            throw new Exception("account with id $userId not found");
-        }
-        
-        return $metaData;
-
-        */
-    }
-    
-    /**
-     * Fetches all accounts from backend matching the given filter
-     *
-     * @param string $_filter
-     * @param string $_accountClass
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @todo check if this is needed
-     */
-    protected function _getUsersFromBackend($_filter, $_accountClass = 'Tinebase_Model_EmailUser')
-    {
-        /*
-        $result = new Tinebase_Record_RecordSet($_accountClass);
-        $accounts = $this->_ldap->fetchAll($this->_options['userDn'], $_filter, array_values($this->_userPropertyNameMapping));
-        
-        foreach ($accounts as $account) {
-            $accountObject = $this->_ldap2User($account, $_accountClass);
-            
-            $result->addRecord($accountObject);
-        }
-        
+        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+        $result = $this->_ldap->getMetaData($this->_options['userDn'], 'uidnumber=' . $userId);
         return $result;
-        */
     }
     
     /**
