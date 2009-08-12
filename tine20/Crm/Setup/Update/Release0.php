@@ -193,4 +193,19 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Crm', '0.5');
     }
+    
+    public function update_5()
+    {
+     
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>turnover</name>
+                <type>float</type>
+            </field>');
+        $this->_backend->alterCol('metacrm_lead', $declaration, 'turnover');   
+
+        $this->setTableVersion('metacrm_lead', '4');
+
+        $this->setApplicationVersion('Crm', '2.0');
+    }
 }

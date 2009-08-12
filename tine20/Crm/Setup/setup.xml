@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>0.5</version>
+    <version>2.0</version>
     <order>20</order>
     <depends>
         <application>Admin</application>
@@ -111,7 +111,7 @@
         </table>                
         <table>
             <name>metacrm_lead</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -147,7 +147,7 @@
                 </field>
                 <field>
                     <name>turnover</name>
-                    <type>double</type>
+                    <type>float</type>
                 </field>
                 <field>
                     <name>probability</name>

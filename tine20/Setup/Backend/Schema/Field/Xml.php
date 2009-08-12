@@ -57,9 +57,6 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
         }
 
         switch ($this->type) {
-
-            
-
             
             case 'enum':
                 if (isset($_declaration->value[0])) {
@@ -74,17 +71,12 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 break;
 
             case 'boolean':
-                $this->type =  'integer';
-                $this->length = 1;
-                break;
-
             case 'blob':
             case 'clob':
             case 'text':
             case 'datetime':
             case 'time':
             case 'date':
-            case 'double':
             case 'float':
             case 'integer':
                 break;
@@ -105,91 +97,60 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
 
         /**
          * set default values
-         */        
+         */     
+
+        if(!isset($_declaration->default) || strtolower($_declaration->default) == 'null') {
+            $this->default = NULL;
+        } else {        
+            switch ($this->type) {
+                case 'integer':
+                    $this->default = (int) $_declaration->default;
+                    break;
+    
+                case 'datetime':
+                    $this->type = 'datetime';
+                    $this->default = NULL; //@todo default value is ignored - is this intended?
+                    break;
+                
+                case 'float':
+                    $this->default = (float) $_declaration->default;
+                    break;
+
+                case 'text':
+                case 'clob':
+                case 'blob':
+                case 'enum':
+                default:
+                    $this->default = (string) $_declaration->default;
+                    break;
+            }
+        }
+        
+        
+        //special type handling
         switch ($this->type) {
-            case 'text':
-            case 'clob':
-            case 'blob':
-            case 'enum':
-                if(isset($_declaration->default)) {
-                    if(strtolower($_declaration->default) == 'null') {
-                        $this->default = NULL;
-                    } else {
-                        $this->default = (string) $_declaration->default;
-                    }
+            case 'boolean':
+                //boolean always gets a default value, even if no default value is specified in schema
+                if (!isset($_declaration->default) || $_declaration->default != 'true') {
+                    $this->default = 0;
+                } else {
+                    $this->default = 1;
                 }
+                $this->unsigned = true;
                 break;
-            
-            case 'tinyint':
             case 'integer':
                 if ($_declaration->autoincrement) {
                     $this->notnull = true;
                     $this->autoincrement = true;
-                } else {
-                    if(isset($_declaration->default)) {
-                        if(strtolower($_declaration->default) == 'null') {
-                            $this->default = NULL;
-                        } else {
-                            $this->default = (int) $_declaration->default;
-                        }
-                    }
-                    #if(isset($_declaration->unsigned)) {
-                    #    $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
-                    #} else {
-                    #    $this->unsigned = true;
-                    #}
                 }
                 break;
-            
-            case 'datetime':
-                $this->type = 'datetime';
-                if(isset($_declaration->default)) {
-                    $this->default = NULL;
-                }
-                break;
-    
-            case 'double':
-                if(isset($_declaration->default)) {
-                    if(strtolower($_declaration->default) == 'null') {
-                        $this->default = NULL;
-                    } else {
-                        $this->default = (double) $_declaration->default;
-                    }
-                }
-
-                break;
-            
-            case 'float':
-                if(isset($_declaration->default)) {
-                    if(strtolower($_declaration->default) == 'null') {
-                        $this->default = NULL;
-                    } else {
-                        $this->default = (float) $_declaration->default;
-                    }
-                }
-
-                break;
-            
-            case 'boolean':
-                if(isset($_declaration->default)) {
-                    if(strtolower($_declaration->default) == 'false') {
-                        $this->default = 0;
-                    } else {
-                        $this->default = 1;
-                    }
-                }
-                $this->unsigned = true;
-                break;
-            
         }
         
         /**
          * set signed / unsigned
          */        
         switch ($this->type) {
-            case 'tinyint':
             case 'integer':
-            case 'double':
             case 'float':
                 if(isset($_declaration->unsigned)) {
                     $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;

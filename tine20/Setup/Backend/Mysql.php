@@ -400,16 +400,16 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 $buffer[] = 'datetime';
                 break;
             
-            case 'double':
-                $buffer[] = 'double';
-                break;
-            
             case 'float':
                 $buffer[] = 'float';
                 break;
             
             case 'decimal':
                 $buffer[] = "decimal(" . $_field->value . ")";
+                break;
+                
+            case 'boolean':
+                $buffer[] = 'tinyint(1)';
                 break;
                 
             default:

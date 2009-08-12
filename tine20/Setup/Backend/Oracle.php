@@ -551,7 +551,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 if ($_field->length !== NULL) {
                         $buffer[] = 'NUMBER(' . $_field->length . ',0)';
                 } else {
-                    $buffer[] = 'NUMBER(11,0)';
+                    $buffer[] = 'NUMBER(' . Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH . ',0)';
                 }                
                 break;
                 
@@ -594,10 +594,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 $buffer[] = 'VARCHAR2(25)';
                 break;
             
-            case 'double':
-                $buffer[] = 'BINARY_DOUBLE';
-                break;
-            
             case 'float':
                 $buffer[] = 'BINARY_FLOAT';
                 break;
@@ -612,6 +608,10 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 } else {
                     $buffer[] = 'CLOB';
                 }
+                break;
+                
+            case 'boolean':
+                $buffer[] = 'NUMBER(1,0)';
                 break;
                 
             default:
