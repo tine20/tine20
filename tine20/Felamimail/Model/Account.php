@@ -204,13 +204,19 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             }
         }
         
-        if ($this->smtp_secure_connection && $this->smtp_secure_connection != 'none') {
-            $result['ssl'] = $this->smtp_secure_connection; 
+        if ($this->smtp_secure_connection) {
+            if ($this->smtp_secure_connection == 'none') {
+                unset($result['ssl']);
+            } else {
+                $result['ssl'] = $this->smtp_secure_connection;
+            } 
         }
 
         if ($this->smtp_port) {
             $result['port'] = $this->smtp_port; 
         }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
     }
