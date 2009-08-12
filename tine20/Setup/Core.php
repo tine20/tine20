@@ -37,9 +37,9 @@ class Setup_Core extends Tinebase_Core
         
         /**************************** JSON API *****************************/
 
-        if (( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
-              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
-            ) && isset($_REQUEST['method'])) {
+        if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
+             (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
+           ) {
             $server = new Setup_Server_Json();
 
         /**************************** CLI API *****************************/

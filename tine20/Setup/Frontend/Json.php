@@ -295,8 +295,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         // setup also need some core tinebase regdata
         $locale = Tinebase_Core::get('locale');
         $registryData['Tinebase'] = array(
+            'serviceMap'       => Setup_Frontend_Http::getServiceMap(),
             'timeZone'         => Setup_Core::get('userTimeZone'),
-            'jsonKey'       => Setup_Core::get('jsonKey'),
+            'jsonKey'          => Setup_Core::get('jsonKey'),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
@@ -304,6 +305,6 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             ),
         );
         
-        die(Zend_Json::encode($registryData));
+        return $registryData;
     }
 }

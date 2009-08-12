@@ -43,6 +43,28 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         );
     }
     
+    /**
+     * get json-api service map
+     * 
+     * @return string
+     */
+    public static function getServiceMap()
+    {
+        $server = new Zend_Json_Server();
+        
+        $server->setClass('Setup_Frontend_Json', 'Setup');
+        $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
+        
+        $server->setTarget('setup.php')
+               ->setEnvelope(Zend_Json_Server_Smd::ENV_JSONRPC_2);
+            
+        $smd = $server->getServiceMap();
+        
+        $smdArray = $smd->toArray();
+        unset($smdArray['methods']);
+        
+        return $smdArray;
+    }
     
     /**
      * renders the tine main screen 

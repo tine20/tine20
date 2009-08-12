@@ -30,7 +30,12 @@ class Setup_Server_Json extends Setup_Server_Abstract
         try {
             $this->_initFramework();
             
-            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ ." is json request. method: '{$_POST['method']}' ");
+            $request = new Zend_Json_Server_Request_Http();
+            
+            $method  = $request->getMethod();
+            $jsonKey = $_SERVER['HTTP_X_TINE20_JSONKEY'];
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
             $anonymnousMethods = array(
                 'Setup.getAllRegistryData',
@@ -47,8 +52,8 @@ class Setup_Server_Json extends Setup_Server_Abstract
             }
             
             // check json key for all methods but some exceptoins
-            if (! in_array($_POST['method'], $anonymnousMethods) && Setup_Core::configFileExists()
-                     && ( empty($_POST['jsonKey']) || $_POST['jsonKey'] != Setup_Core::get('jsonKey')
+            if (! in_array($method, $anonymnousMethods) && Setup_Core::configFileExists()
+                     && ( empty($jsonKey) || $jsonKey != Setup_Core::get('jsonKey')
                             || !Setup_Core::isRegistered(Setup_Core::USER)
                         )
                ) {
@@ -57,7 +62,7 @@ class Setup_Server_Json extends Setup_Server_Abstract
                     
                     throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                 } else {
-                    Setup_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
+                    Setup_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
                         ' affected account: ' . print_r(Setup_Core::getUser(), true) .
                         ' request: ' . print_r($_REQUEST, true)
                     );
@@ -83,6 +88,6 @@ class Setup_Server_Json extends Setup_Server_Abstract
             exit;
         }
          
-        $server->handle($_REQUEST);
+        $server->handle($request);
     }
 }
