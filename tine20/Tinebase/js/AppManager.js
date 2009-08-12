@@ -27,7 +27,7 @@ Tine.Tinebase.AppManager = function() {
         
         // if the app is not in the namespace, we don't initialise it
         // we don't have a Tinebase 'Application'
-        if (Tine[app.name] && app.name != 'Tinebase') {
+        if (Tine[app.name] && ! app.name.match(/(Tinebase|ActiveSync)/)) {
             app.appName = app.name;
             app.isInitialised = false;
             
