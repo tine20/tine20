@@ -53,6 +53,21 @@ Tine.Tinebase.common = {
         return popup;
     },
     
+    showDebugConsole: function() {
+        if (! Ext.debug) {
+            var head = Ext.getDoc().first().first();
+            var scriptTag = head.insertFirst({tag: 'script', type: 'text/javascript', src: 'library/ExtJS/src/debug.js'});
+            scriptTag.on('load', function() {
+                Ext.log('debug console initialised');
+            });
+            scriptTag.on('fail', function() {
+                Ext.msg.alert('could not activate debug console');
+            });
+        } else {
+            Ext.log('debug console reactivated');
+        }
+    },
+    
     /**
      * Returns localised date and time string
      * 

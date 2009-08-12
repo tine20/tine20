@@ -13,6 +13,7 @@
 
 Ext.onReady(function() {
     Tine.Tinebase.tineInit.initWindow();
+    Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
@@ -103,6 +104,15 @@ Tine.Tinebase.tineInit = {
         //init window is done in Ext.ux.PopupWindowMgr. yet
         this.initList.initWindow = true;
     },
+    
+    initDebugConsole: function() {
+        var map = new Ext.KeyMap(Ext.getDoc(), [{
+            key: [122], // F11
+            ctrl:true,
+            fn: Tine.Tinebase.common.showDebugConsole
+        }]);
+    },
+    
     
     /**
      * Each window has exactly one viewport containing a card layout in its lifetime
