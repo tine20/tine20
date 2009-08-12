@@ -27,7 +27,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 	/**
 	 * @var bool
 	 */
-	protected $_manageSAM = false;
+	protected $_manageSAM = FALSE;
 	
 	/**
 	 * @var Tinebase_SambaSAM_Ldap
@@ -35,6 +35,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 	protected $_samBackend = NULL;
 
     /**
+     * @var bool
+     */
+    protected $_manageEmailUser = FALSE;
+    
+    /**
+     * @var Tinebase_EmailUser
+     */
+    protected $_emailUserBackend = NULL;
+
+	/**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -48,11 +58,19 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 		
 		// manage samba sam?
 		if(isset(Tinebase_Core::getConfig()->samba)) {
-			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
+			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE); 
 			if ($this->_manageSAM) {
 				$this->_samBackend = Tinebase_SambaSAM::getInstance();
 			}
 		}
+
+        // manage email user settings
+        if(isset(Tinebase_Core::getConfig()->emailUser)) {
+            $this->_manageEmailUser = TRUE; 
+            if ($this->_manageEmailUser) {
+                $this->_emailUserBackend = Tinebase_EmailUser::getInstance();
+            }
+        }
     }
 
     /**
@@ -120,7 +138,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $user->sambaSAM = $samUser;
         }
         
-        // @todo add email user here
+        // add email user data here
+        if ($this->_manageEmailUser) {
+            $user->emailUser = $this->_emailUserBackend->getUserById($_accountId);;
+        }
         
         return $user;
     }
@@ -210,7 +231,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $account->sambaSAM = $samResult;
         }
         
-        // @todo update email user here
+        // update email user data here
+        if ($this->_manageEmailUser) {
+            $account->emailUser = $this->_emailUserBackend->updateUser($_account, $_account->emailUser);
+        }
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($_account, $_password, $_passwordRepeat);
@@ -246,7 +270,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $account->sambaSAM = $samResult;
         }
         
-        // @todo create email user here
+        // create email user data here
+        if ($this->_manageEmailUser) {
+            $account->emailUser = $this->_emailUserBackend->addUser($_account, $_account->emailUser);
+        }
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($account, $_password, $_passwordRepeat);
@@ -270,7 +297,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
             
             $memberships = $groupsBackend->getGroupMemberships($accountId);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removeing user from groups: " . print_r($memberships, true));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
             
             foreach ((array)$memberships as $groupId) {
                 $groupsBackend->removeGroupMember($groupId, $accountId);
