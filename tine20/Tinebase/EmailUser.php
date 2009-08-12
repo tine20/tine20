@@ -73,6 +73,9 @@ class Tinebase_EmailUser
      */
     private function __construct()
     {
+        if (! isset(Tinebase_Core::getConfig()->accounts)) {
+            throw new Tinebase_Exception('No LDAP config found.');
+        }
         $ldapOptions = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
         $emailOptions = Tinebase_Core::getConfig()->emailUser->toArray();
         $this->_options = array_merge($ldapOptions, $emailOptions);
@@ -155,6 +158,12 @@ class Tinebase_EmailUser
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
+	    // @todo remove that later
+	    /*
+	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_emailUser->toArray(), TRUE));
+	    return $this->getUserById($_user->getId());
+        */
+	    
         $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_emailUser);
         
