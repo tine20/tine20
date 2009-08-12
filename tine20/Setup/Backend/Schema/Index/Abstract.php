@@ -80,18 +80,11 @@ abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_
     
     abstract protected function _setIndex($_declaration);
 
-//    
-//    /**
-//     * set index from declaration 
-//    * @param stdClass $_declaration
-//     * NOT IMPLEMENTED YET
-//     */  
-//    public function setForeignKey($_foreign)
-//    {
-//        $this->foreign = 'true';
-//        $this->reference['table'] = substr($_foreign['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
-//        $this->reference['field'] = $_foreign['REFERENCED_COLUMN_NAME'];
-//    }
+    public function setForeignKey($_foreign)
+    {
+        $this->foreign = 'true';
+    }
+
 //    
 //    /**
 //     * set index from declaration 

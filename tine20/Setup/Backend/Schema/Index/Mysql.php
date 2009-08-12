@@ -20,10 +20,11 @@ class Setup_Backend_Schema_Index_Mysql extends Setup_Backend_Schema_Index_Abstra
 
     public function setForeignKey($_declaration)
     {
+        parent::setForeignKey($_declaration);
         $this->referencetable = substr($_declaration['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
         $this->referencefield = $_declaration['REFERENCED_COLUMN_NAME'];
-        $this->referenceOnDelete;
-        $this->referenceOnUpdate;
+//        $this->referenceOnDelete;
+//        $this->referenceOnUpdate;
     }
     
     
