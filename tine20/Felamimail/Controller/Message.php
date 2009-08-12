@@ -190,12 +190,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($folder->globalname == $trashFolder) {
                 
                 // only delete if in Trash
-                $imapBackend->removeMessage($_record->messageuid);
+                try {
+                    $imapBackend->removeMessage($_record->messageuid);
+                } catch (Zend_Mail_Storage_Exception $zmse) {
+                    Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ 
+                        . ' Could not delete message. Maybe it has already been deleted. Message: ' 
+                        . $zmse->getMessage()
+                    );
+                }
                 
             } else {
-                
                 try {
-                    
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Moving message '" . $_record->subject . "' to $trashFolder.");
                     
                     // move to trash folder
