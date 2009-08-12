@@ -246,7 +246,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 })]]
             }, {
                 title: this.app.i18n._('Email'),
-                //disabled: !this.ldapBackend,
+                disabled: !this.ldapBackend,
                 border: false,
                 frame: true,
                 xtype: 'columnform',
