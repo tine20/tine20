@@ -47,7 +47,12 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                         '-',
                         this.action_changePassword,
                         this.action_installGoogleGears,
-                        '-', 
+                        '-',
+                        {
+                            text: _('Debug Console (Ctrl + F11)'),
+                            handler: Tine.Tinebase.common.showDebugConsole,
+                            hidden: ! Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)
+                        },
                         this.action_logout
                     ]                
                 }
@@ -73,6 +78,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             }, '->', 
             this.action_logout
         ]});
+        
+        
         
         // init footer
         var tineFooter = new Ext.Toolbar({
