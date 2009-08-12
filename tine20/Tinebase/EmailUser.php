@@ -61,11 +61,17 @@ class Tinebase_EmailUser
     protected $_options = array();
     
     /**
+     * holds the instance of the singleton
+     *
+     * @var Tinebase_EmailUser
+     */
+    private static $instance = NULL;
+    
+    /**
      * the constructor
      *
-     * @param  array $options Options used in connecting, binding, etc.
      */
-    public function __construct() 
+    private function __construct()
     {
         $ldapOptions = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
         $emailOptions = Tinebase_Core::getConfig()->emailUser->toArray();
@@ -76,6 +82,19 @@ class Tinebase_EmailUser
     }
     
     /**
+     * the singleton pattern
+     *
+     * @return Tinebase_EmailUser
+     */
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Tinebase_EmailUser();
+        }
+        return self::$instance;
+    }
+    
+    /**
      * get user by id
      *
      * @param   int         $_userId
@@ -83,6 +102,15 @@ class Tinebase_EmailUser
      */
     public function getUserById($_userId) 
     {
+        // @todo remove that later
+        /*
+        return new Tinebase_Model_EmailUser(array(
+            'emailUID'      => 'uid',
+            'emailGID'      => 'gid',
+            'emailQuota'    => 10000,
+        ));
+        */
+        
         try {
             $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
             $ldapData = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId);
