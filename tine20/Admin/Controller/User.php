@@ -120,6 +120,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $user->sambaSAM = $samUser;
         }
         
+        // @todo add email user here
+        
         return $user;
     }
     
@@ -208,6 +210,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $account->sambaSAM = $samResult;
         }
         
+        // @todo update email user here
+        
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($_account, $_password, $_passwordRepeat);
         }
@@ -241,6 +245,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $samResult = $this->_samBackend->addUser($account, $_account->sambaSAM);
             $account->sambaSAM = $samResult;
         }
+        
+        // @todo create email user here
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($account, $_password, $_passwordRepeat);

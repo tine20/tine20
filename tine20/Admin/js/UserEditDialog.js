@@ -31,12 +31,19 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onRecordLoad: function() {
+        // samba user
         var response = {
             responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
         };
-        
         this.samRecord = Tine.Admin.samUserBackend.recordReader(response);
         this.getForm().loadRecord(this.samRecord);
+
+        // email user
+        var emailResponse = {
+            responseText: Ext.util.JSON.encode(this.record.get('emailUser'))
+        };
+        this.emailRecord = Tine.Admin.emailUserBackend.recordReader(emailResponse);
+        this.getForm().loadRecord(this.emailRecord);
         
         Tine.Admin.Users.EditDialog.superclass.onRecordLoad.call(this);
     },
@@ -45,9 +52,14 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Admin.Users.EditDialog.superclass.onRecordUpdate.call(this);
         
         var form = this.getForm();
+        
         form.updateRecord(this.samRecord);
         this.record.set('sambaSAM', '');
         this.record.set('sambaSAM', this.samRecord.data);
+
+        form.updateRecord(this.emailRecord);
+        this.record.set('emailUser', '');
+        this.record.set('emailUser', this.emailRecord.data);
     },
 
     getFormItems: function() {
@@ -232,6 +244,40 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'kickoffTime',
                     emptyText: this.app.i18n._('not set')
                 })]]
+            }, {
+                title: this.app.i18n._('Email'),
+                //disabled: !this.ldapBackend,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                labelAlign: 'top',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '100%',
+                    labelSeparator: '',
+                    columnWidth: .333
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n._('Email UID'),
+                    name: 'emailUID',
+                    columnWidth: .666
+                }], [{
+                    fieldLabel: this.app.i18n._('Email GID'),
+                    name: 'emailGID',
+                    columnWidth: .666
+                }], [{
+                    fieldLabel: this.app.i18n._('Forward'),
+                    name: 'emailForward',
+                    columnWidth: .666
+                }], [{
+                    fieldLabel: this.app.i18n._('Aliases'),
+                    name: 'emailAliases',
+                    columnWidth: .666
+                }], [{
+                    fieldLabel: this.app.i18n._('Quota'),
+                    name: 'emailQuota',
+                    columnWidth: .666
+                }]]
             }]
         };
     },

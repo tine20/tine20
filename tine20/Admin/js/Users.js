@@ -449,6 +449,8 @@ Tine.Admin.Users.Main = function() {
     
 }();
 
+/************** models *****************/
+
 Ext.ns('Tine.Admin.Model');
 
 /**
@@ -472,7 +474,8 @@ Tine.Admin.Model.UserArray = [
     { name: 'accountEmailAddress' },
     { name: 'accountHomeDirectory' },
     { name: 'accountLoginShell' },
-    { name: 'sambaSAM' }
+    { name: 'sambaSAM' },
+    { name: 'emailUser' }
 ];
 
 Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserArray, {
@@ -511,6 +514,26 @@ Tine.Admin.Model.SAMUser = Tine.Tinebase.data.Record.create(Tine.Admin.Model.SAM
     recordsName: 'Samba Users'
 });
 
+Tine.Admin.Model.EmailUserArray = [
+    { name: 'emailUID' },
+    { name: 'emailGID' },
+    { name: 'emailForward' },
+    { name: 'emailAliases' },
+    { name: 'emailQuota' }
+];
+
+Tine.Admin.Model.EmailUser = Tine.Tinebase.data.Record.create(Tine.Admin.Model.EmailUserArray, {
+    appName: 'Admin',
+    modelName: 'EmailUser',
+    idProperty: 'sid',
+    titleProperty: null,
+    // ngettext('Email User', 'Email Users', n);
+    recordName: 'Email User',
+    recordsName: 'Email Users'
+});
+
+/************** backends *****************/
+
 Tine.Admin.userBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Admin',
     modelName: 'User',
@@ -525,3 +548,9 @@ Tine.Admin.samUserBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     idProperty: 'sid'
 });
 
+Tine.Admin.emailUserBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+    appName: 'Admin',
+    modelName: 'EmailUser',
+    recordClass: Tine.Admin.Model.EmailUser,
+    idProperty: 'emailUID'
+});
