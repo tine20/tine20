@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-06 10:28+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-08-12 17:48+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,8 @@ msgstr "Status"
 msgid "Depends on"
 msgstr "Hängt ab von"
 
-#: js/ApplicationGridPanel.js:52 js/EnvCheckGridPanel.js:169
+#: js/ApplicationGridPanel.js:52
+#: js/EnvCheckGridPanel.js:169
 msgid "Install application"
 msgstr "Anwendung installieren"
 
@@ -76,17 +77,18 @@ msgstr "Wo sind nur die Backup Bänder"
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76
+#: js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
 msgstr "Fehlerhafte Konfiguration"
 
-#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:76
+#: js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-"Sie müssen die rot markierten Felder korrigieren bevor die Konfiguration "
-"gepeichert werden kann."
+msgstr "Sie müssen die rot markierten Felder korrigieren bevor die Konfiguration gepeichert werden kann."
 
-#: js/AuthenticationGridPanel.js:122 js/ConfigManagerGridPanel.js:95
+#: js/AuthenticationGridPanel.js:122
+#: js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
 msgstr "Übertrage Konfiguration..."
 
@@ -94,7 +96,8 @@ msgstr "Übertrage Konfiguration..."
 msgid "Authentication provider"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:150 js/AuthenticationGridPanel.js:247
+#: js/AuthenticationGridPanel.js:150
+#: js/AuthenticationGridPanel.js:247
 msgid "Backend"
 msgstr ""
 
@@ -106,26 +109,32 @@ msgstr ""
 msgid "Initial admin Password"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:185 js/AuthenticationGridPanel.js:280
+#: js/AuthenticationGridPanel.js:185
+#: js/AuthenticationGridPanel.js:280
 msgid "Password confirmation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:199 js/AuthenticationGridPanel.js:293
+#: js/AuthenticationGridPanel.js:199
+#: js/AuthenticationGridPanel.js:293
 msgid "Host"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:204 js/AuthenticationGridPanel.js:274
+#: js/AuthenticationGridPanel.js:204
+#: js/AuthenticationGridPanel.js:274
 #: js/AuthenticationGridPanel.js:298
 msgid "Login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:207 js/AuthenticationGridPanel.js:277
-#: js/AuthenticationGridPanel.js:301 js/ConfigManagerGridPanel.js:118
+#: js/AuthenticationGridPanel.js:207
+#: js/AuthenticationGridPanel.js:277
+#: js/AuthenticationGridPanel.js:301
+#: js/ConfigManagerGridPanel.js:118
 #: js/ConfigManagerGridPanel.js:144
 msgid "Password"
 msgstr "Kennwort"
 
-#: js/AuthenticationGridPanel.js:220 js/AuthenticationGridPanel.js:314
+#: js/AuthenticationGridPanel.js:220
+#: js/AuthenticationGridPanel.js:314
 msgid "Bind requires DN"
 msgstr ""
 
@@ -189,7 +198,8 @@ msgstr "Setup Authentifizierung"
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/ConfigManagerGridPanel.js:123 js/ConfigManagerGridPanel.js:136
+#: js/ConfigManagerGridPanel.js:123
+#: js/ConfigManagerGridPanel.js:136
 msgid "Database"
 msgstr "Datenbank"
 
@@ -207,7 +217,7 @@ msgstr "Benutzer"
 
 #: js/ConfigManagerGridPanel.js:148
 msgid "Prefix"
-msgstr "Perfix"
+msgstr "Prefix"
 
 #: js/ConfigManagerGridPanel.js:151
 msgid "Logging"
@@ -246,9 +256,7 @@ msgid "Performing Environment Checks..."
 msgstr "Führe Environment Prüfungen aus..."
 
 #: js/EnvCheckGridPanel.js:110
-msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Keine {0} gefunden. Bitte überprüfen sie ihre Filterkriterien"
 
 #: js/EnvCheckGridPanel.js:140
@@ -292,6 +300,6 @@ msgstr[1] "Anwendungen"
 
 #~ msgid "Check config"
 #~ msgstr "Konfiguration testen"
-
 #~ msgid "Version"
 #~ msgstr "Version"
+
