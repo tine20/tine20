@@ -65,7 +65,7 @@ Ext.ux.direct.ZendFrameworkProvider = Ext.extend(Ext.direct.RemotingProvider, {
     onData: function(opt, success, xhr) {
         var rpcresponse = Ext.decode(xhr.responseText);
         xhr.responseText = {
-            type: 'rpc',
+            type: rpcresponse.result ? 'rpc' : 'exception',
             result: rpcresponse.result,
             tid: rpcresponse.id
         };
