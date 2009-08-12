@@ -53,7 +53,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
                     Tinebase_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without autorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (seesion timeout?)');
                     
-                    throw new Tinebase_Exception_AccessDenied('Not Autorised', 401);
+                    throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                 } else {
                     Tinebase_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $_POST['jsonKey'] . ') Possible CSRF attempt!' .
                         ' affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), true) .
