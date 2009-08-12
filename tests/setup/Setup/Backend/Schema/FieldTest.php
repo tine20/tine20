@@ -38,6 +38,98 @@ class Setup_Backend_Schema_FieldTest extends Setup_Backend_AbstractTest
         $this->setExpectedException('Setup_Exception_InvalidSchema');
         $field->isValid(true); //Test if the parameter throwException works as expected
     }
+    
+    public function testEquals()
+    {
+        $string ="
+            <field>
+                <name>a</name>
+                <type>integer</type>
+            </field>";
+
+        $field1 = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+
+        $string ="
+            <field>
+                <name>a</name>
+                <type>integer</type>
+            </field>";
+
+        $field2 = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $this->assertTrue($field1->equals($field2));
+    }
+    
+    public function testEqualsExistingSchema_001()
+    {
+        $string ="
+            <field>
+                <name>a</name>
+                <type>integer</type>
+            </field>";
+
+        $field1 = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+
+        $this->_backend->addCol($this->_table->name, $field1);
+        $field2 = $this->_getLastField();
+        
+        $this->assertTrue($field1->equals($field2));
+    }
+    
+    public function testEqualsExistingSchema_002()
+    {
+        $string ="
+            <field>
+                <name>a</name>
+                <type>integer</type>
+            </field>";
+
+        $field1 = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $string ="
+            <field>
+                <name>a</name>
+                <type>integer</type>
+                <length>3</length>
+            </field>";
+
+        $field2 = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+
+        $this->_backend->addCol($this->_table->name, $field2);
+        
+        $field3 = $this->_getLastField();
+        
+        $this->assertTrue($field3->equals($field2));
+        $this->assertFalse($field3->equals($field1));
+        
+    }
+    
+    public function testEqualsExistingSchema_003()
+    {
+        $string ="
+            <field>
+                <name>a</name>
+                <type>text</type>
+            </field>";
+
+        $field1 = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $string ="
+            <field>
+                <name>a</name>
+                <type>text</type>
+                <length>3</length>
+            </field>";
+
+        $field2 = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+
+        $this->_backend->addCol($this->_table->name, $field2);
+        
+        $field3 = $this->_getLastField();
+        
+        $this->assertTrue($field3->equals($field2));
+        $this->assertFalse($field3->equals($field1));
+    }
 
 }
 

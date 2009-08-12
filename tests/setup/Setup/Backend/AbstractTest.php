@@ -88,5 +88,12 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
             $this->_backend->createTable($this->_table);
         }
     }
+    
+    protected function _getLastField($_tableName = null)
+    {
+        $tableName = empty($_tabelName) ? $this->_table->name : $_tabeName;
+        $schema = $this->_backend->getExistingSchema($tableName);
+        return end($schema->fields);
+    }
  
 }

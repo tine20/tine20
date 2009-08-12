@@ -57,28 +57,9 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
         }
 
         switch ($this->type) {
-            case 'text':
-                if ($this->length === NULL) {
-                    $this->type = 'text';
-                } else {
-                    $this->type = 'varchar';
-                }
-                break;
+
             
-            case 'tinyint':
-                $this->type = 'integer';
-                $this->length = 4;
-                break;
-            
-            case 'clob':
-                $this->type = 'text';
-                $this->length = 65535;
-                break;
-            
-            case 'blob':
-                $this->type = 'longblob';
-                $this->length = 4294967295;
-                break;
+
             
             case 'enum':
                 if (isset($_declaration->value[0])) {
@@ -92,33 +73,20 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 }
                 break;
 
-            case 'datetime':
-                $this->type = 'datetime';
-                break;
-    
-            case 'time':
-                $this->type = 'time';
-                break;
-    
-            case 'date':
-                $this->type = 'date';
-                break;
-                
-            case 'double':
-                $this->type = 'double';
-                break;
-            
-            case 'float':
-                $this->type = 'float';
-                break;
-            
             case 'boolean':
                 $this->type =  'integer';
                 $this->length = 1;
                 break;
-            
+
+            case 'blob':
+            case 'clob':
+            case 'text':
+            case 'datetime':
+            case 'time':
+            case 'date':
+            case 'double':
+            case 'float':
             case 'integer':
-                $this->type =  'integer';
                 break;
             
 /*            case ('decimal'):

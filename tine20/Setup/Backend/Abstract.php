@@ -24,6 +24,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * @var int
      */
     const MAX_NAME_LENGTH = 30;
+    
+    const INTEGER_DEFAULT_LENGTH = 11;
  
     /**
      * @var Zend_Db_Adapter_Abstract

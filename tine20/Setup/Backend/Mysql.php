@@ -359,11 +359,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $buffer[] = '  `' . $_field->name . '`';
 
         switch ($_field->type) {
-            case 'varchar': 
-                if ($_field->length !== NULL) {
+            case 'text': 
+                if ($_field->length !== NULL && $_field->length <= 256) {
                     $buffer[] = 'varchar(' . $_field->length . ')';
                 } else {
-                    $buffer[] = 'varchar(255)';
+                    $buffer[] = 'text';
                 }
                 break;
             
@@ -377,7 +377,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                         $buffer[] = 'int(' . $_field->length . ')';
                     }
                 } else {
-                    $buffer[] = 'int(11)';
+                    $buffer[] = 'int(' . Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH .')';
                 }
                 break;
             

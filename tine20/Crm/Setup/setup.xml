@@ -56,7 +56,8 @@
                 </field>
                 <field>
                     <name>probability</name>
-                    <type>tinyint</type>
+                    <type>integer</type>
+                    <length>4</length>
                 </field>
                 <field>
                     <name>endslead</name>
@@ -150,7 +151,8 @@
                 </field>
                 <field>
                     <name>probability</name>
-                    <type>tinyint</type>
+                    <type>integer</type>
+                    <length>4</length>
                 </field>
                 <field>
                     <name>lastreader</name>

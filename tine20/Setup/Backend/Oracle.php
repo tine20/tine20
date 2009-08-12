@@ -547,14 +547,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $buffer[] = '  "' . $_field->name . '"';
 
         switch ($_field->type) {
-            case 'varchar': 
-                if ($_field->length !== NULL) {
-                    $buffer[] = 'VARCHAR2(' . $_field->length . ')';
-                } else {
-                    $buffer[] = 'VARCHAR2(255)';
-                }
-                break;
-            
             case 'integer':
                 if ($_field->length !== NULL) {
                         $buffer[] = 'NUMBER(' . $_field->length . ',0)';
@@ -615,7 +607,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 break;
                 
             case 'text':
-                $buffer[] = 'CLOB';
+                if ($_field->length !== NULL && $_field->length <= 256) {
+                    $buffer[] = 'VARCHAR2(' . $_field->length . ')';
+                } else {
+                    $buffer[] = 'CLOB';
+                }
                 break;
                 
             default:

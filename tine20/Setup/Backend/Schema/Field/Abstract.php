@@ -130,5 +130,24 @@ abstract class Setup_Backend_Schema_Field_Abstract extends Setup_Backend_Schema_
                     'unique' => $this->unique,
                    );
     }
+    
+    /**
+     * 
+     * @param Setup_Backend_Schema_Field_Abstract $field
+     * @return unknown_type
+     */
+    public function equals(Setup_Backend_Schema_Field_Abstract $field)
+    {
+	    //var_dump($this, $field);
+        return (
+            $field->name == $this->name &&
+            $field->type == $this->type &&
+            (
+                (empty($field->length) && $this->length == Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH) ||
+                (empty($this->length) && $field->length == Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH) ||
+                $field->length == $this->length
+            )
+        );
+    }
 
 }

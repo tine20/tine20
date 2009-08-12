@@ -139,8 +139,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
 
         $this->_backend->addCol($this->_table->name, $field);
         
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('test', $newColumn->name);
         $this->assertEquals('25', $newColumn->length);
         $this->assertEquals('true', $newColumn->notnull);
@@ -160,8 +159,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
    
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
 
         $this->assertEquals('test', $newColumn->name);
         $this->assertEquals('true', $newColumn->notnull);       
@@ -192,8 +190,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('order', $newColumn->name);
         $this->assertEquals('true', $newColumn->notnull);       
         $this->assertEquals('integer', $newColumn->type);
@@ -236,8 +233,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         
         $this->_backend->addCol($this->_table->name, $field);
         
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('email_sent', $newColumn->name);
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('1', $newColumn->length);
@@ -295,8 +291,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('is_deleted', $newColumn->name);
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('1', $newColumn->length);
@@ -350,8 +345,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('comment', $newColumn->comment);
     }
     

@@ -272,8 +272,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
 
         $this->_backend->addCol($this->_table->name, $field);
         
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('test', $newColumn->name);
         $this->assertEquals('25', $newColumn->length);
         $this->assertEquals('true', $newColumn->notnull);
@@ -295,8 +294,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
    
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals(array('enabled', 'disabled'), $newColumn->value);
         $this->assertEquals('test', $newColumn->name);
         $this->assertEquals('true', $newColumn->notnull);       
@@ -327,8 +325,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         
         $this->_backend->addCol($this->_table->name, $field);
         
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('order', $newColumn->name);
         $this->assertEquals('true', $newColumn->notnull);       
         $this->assertEquals('integer', $newColumn->type);
@@ -353,8 +350,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         
         $this->_backend->addCol($this->_table->name, $field);
         
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('last_login', $newColumn->name);
         $this->assertEquals('text', $newColumn->type);
         $this->assertEquals('25', $newColumn->length);
@@ -376,8 +372,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('email_sent', $newColumn->name);
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('1', $newColumn->length);
@@ -416,8 +411,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('last_modified_time', $newColumn->name);
         $this->assertEquals('text', $newColumn->type);
         $this->assertEquals('25', $newColumn->length);
@@ -439,8 +433,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('is_deleted', $newColumn->name);
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('1', $newColumn->length);
@@ -461,8 +454,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('new_value', $newColumn->name);
         $this->assertEquals('text', $newColumn->type);
         $this->assertEquals(null, $newColumn->length);
@@ -501,8 +493,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('comment', $newColumn->comment);
         $this->assertEquals('comment', $this->_backend->getFieldComment($this->_table->name, 'account_id'));       
     }
@@ -521,8 +512,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('BLOB', $newColumn->type);
     }
     
@@ -542,8 +532,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('4', $newColumn->length);
         $this->assertEquals(0, $newColumn->default);
@@ -565,8 +554,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('4', $newColumn->length);
         $this->assertEquals(1, $newColumn->default);
@@ -587,8 +575,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->_backend->addCol($this->_table->name, $field);
-        $schema = $this->_backend->getExistingSchema($this->_table->name);
-        $newColumn = end($schema->fields);
+        $newColumn = $this->_getLastField();
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('24', $newColumn->length);
     }
@@ -945,10 +932,8 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->_backend->addCol($this->_table->name, $field);
         
-//        $schema = $this->_backend->getExistingSchema($this->_table->name);
-//        $newColumn = end($schema->fields);
-//        $this->assertEquals('text', $newColumn->type);
-//        $this->assertEquals('4000', $newColumn->length);
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('text', $newColumn->type);
         
         $db = Tinebase_Core::getDb();
         $tableName = SQL_TABLE_PREFIX . $this->_table->name;
