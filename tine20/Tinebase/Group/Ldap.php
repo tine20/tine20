@@ -445,9 +445,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * returns ldap metadata of given group
      *
      * @param  string $_groupId
+     * @return array
+     * 
+     * @todo remove obsolete code
      */
     protected function _getMetaData($_groupId)
     {
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
+        $result = $this->_ldap->getMetaData($this->_options['groupsDn'], $this->_groupUUIDAttribute . '=' . $groupId);
+        return $result;
+        
+        /*
         $metaData = array();
         
         try {
@@ -464,6 +472,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($metaData, true));
         return $metaData;
+        */
     }
     
     /**

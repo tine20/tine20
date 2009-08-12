@@ -338,10 +338,17 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
      * get metatada of existing account
      *
      * @param  int         $_userId
-     * @return string 
+     * @return array 
+     * 
+     * @todo remove obsolete code
      */
     protected function _getUserMetaData($_userId)
     {
+        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+        $result = $this->_ldap->getMetaData($this->_options['userDn'], 'uidnumber=' . $userId);
+        return $result;
+        
+        /*
         $metaData = array();
         
         try {
@@ -357,15 +364,24 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         }
         
         return $metaData;
+        */
     }
     
     /**
      * returns ldap metadata of given group
      *
      * @param  int         $_groupId
+     * @return array 
+     * 
+     * @todo remove obsolete code
      */
     protected function _getGroupMetaData($_groupId)
     {
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
+        $result = $this->_ldap->getMetaData($this->_options['groupsDn'], 'gidnumber=' . $groupId);
+        return $result;
+        
+        /*
         $metaData = array();
         
         try {
@@ -382,6 +398,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($metaData, true));
         return $metaData;
+        */
     }
     
     /**

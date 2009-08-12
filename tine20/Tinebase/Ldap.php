@@ -360,4 +360,31 @@ class Tinebase_Ldap extends Zend_Ldap
             }
         }
     }
+
+    /**
+     * get metadata of ldap record
+     *
+     * @param  string $_dn
+     * @param  string $_filter
+     * @param  array  $_attributes
+     * @return array 
+     */
+    public function getMetaData($_dn, $_filter, $_attributes = array('objectclass'))
+    {
+        $metaData = array();
+        
+        $record = $this->fetch($_dn, $_filter, $_attributes);
+        $metaData['dn'] = $record['dn'];
+        
+        foreach($_attributes as $attribute) {
+            if ($attribute == 'objectclass') {
+                $metaData['objectClass'] = $record['objectclass'];
+                unset($metaData['objectClass']['count']);
+            } else {
+                $metaData[$attribute] = $record[$attribute];
+            }
+        }
+        
+        return $metaData;
+    }
 }

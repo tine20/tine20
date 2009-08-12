@@ -517,11 +517,18 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     /**
      * get metatada of existing account
      *
-     * @param  int         $_accountId
-     * @return string 
+     * @param  int         $_userId
+     * @return array 
+     * 
+     * @todo remove obsolete code
      */
-    protected function _getMetaData($_accountId)
+    protected function _getMetaData($_userId)
     {
+        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+        $result = $this->_ldap->getMetaData($this->_options['userDn'], $this->_rowNameMapping['accountId'] . "=" . $userId);
+        return $result;
+        
+        /*
         $metaData = array();
         
         try {
@@ -537,6 +544,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         }
         
         return $metaData;
+        */
     }
     
     /**
