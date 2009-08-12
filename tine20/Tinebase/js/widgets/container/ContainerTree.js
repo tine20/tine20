@@ -169,22 +169,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	    
 	    this.loader = new Tine.widgets.container.TreeLoader({
             appName: this.appName,
-	        dataUrl:'index.php',
-            displayLength: this.displayLength,
-	        baseParams: {
-	            jsonKey: Tine.Tinebase.registry.get('jsonKey'),
-                requestType : 'JSON',
-				method: 'Tinebase_Container.getContainer',
-				application: this.appName,
-				containerType: Tine.Tinebase.container.TYPE_PERSONAL
-	        }
+            displayLength: this.displayLength
 	    });
 		
-		this.loader.on("beforeload", function(loader, node) {
-			loader.baseParams.containerType = node.attributes.containerType;
-			loader.baseParams.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
-	    }, this);
-        
 		this.initContextMenu();
 		
         this.on('beforeclick', function(node, e) {
@@ -432,17 +419,40 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	}
 });
 
+Tine.widgets.container.TreeLoader = function(config) {
+    
+    Tine.widgets.container.TreeLoader.superclass.constructor.call(this, config);
+    
+    this.on("beforeload", function(loader, node) {
+        loader.baseParams.method = 'Tinebase_Container.getContainer';
+        loader.baseParams.application = this.appName;
+        loader.baseParams.containerType = node.attributes.containerType;
+        loader.baseParams.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
+    }, this);
+}
 /**
  * Helper class for {Tine.widgets.container.TreePanel}
  * 
  * @extends {Ext.tree.TreeLoader}
  * @param {Object} attr
  */
-Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
+Ext.extend(Tine.widgets.container.TreeLoader, Ext.tree.TreeLoader, {
     /**
      * @cfg {Number} how many chars of the containername to display
      */
     displayLength: 25,
+    
+    paramsAsHash: true,
+    //paramOrder: ['application', 'containerType', 'owner'],
+    
+    directFn: function(nodeId, params, cb) {
+        Ext.Ajax.request({
+            params: params,
+            success: function(response) {
+                cb(response.responseText, response);
+            }
+        })
+    },
     
 	/**
      * @private

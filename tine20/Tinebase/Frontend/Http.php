@@ -19,6 +19,40 @@
 class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     /**
+     * get json-api service map
+     * 
+     * @return string
+     */
+	public static function getServiceMap()
+	{
+		$server = new Zend_Json_Server();
+		
+		$server->setClass('Tinebase_Frontend_Json', 'Tinebase');
+		$server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
+		
+		if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) { 
+			$server->setClass('Tinebase_Frontend_Json_Container', 'Tinebase_Container');
+            $server->setClass('Tinebase_Frontend_Json_PersistentFilter', 'Tinebase_PersistentFilter');
+            
+            $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+            foreach($userApplications as $application) {
+                $jsonAppName = $application->name . '_Frontend_Json';
+                $server->setClass($jsonAppName, $application->name);
+            }
+		}
+        
+        $server->setTarget('index.php')
+               ->setEnvelope(Zend_Json_Server_Smd::ENV_JSONRPC_2);
+            
+        $smd = $server->getServiceMap();
+        
+        $smdArray = $smd->toArray();
+        unset($smdArray['methods']);
+        
+        return $smdArray;
+    }
+            
+    /**
      * checks if a user is logged in. If not we redirect to login
      */
     protected function checkAuth()
@@ -54,6 +88,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/Locale/Gettext.js',
             // Ext user extensions
             'Tinebase/js/ux/ConnectionStatus.js',
+            'Tinebase/js/ux/Direct/ZendFrameworkProvider.js',
             'Tinebase/js/ux/DatePickerWeekPlugin.js',
             'Tinebase/js/ux/ButtonLockedToggle.js',
             'Tinebase/js/ux/Percentage.js',
@@ -108,13 +143,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/dialog/PreferencesDialog.js',
             'Tinebase/js/widgets/dialog/PreferencesTreePanel.js',
             'Tinebase/js/widgets/dialog/PreferencesPanel.js',
-            'Tinebase/js/widgets/container/ContainerSelect.js',
-            'Tinebase/js/widgets/container/GrantsDialog.js',
-            'Tinebase/js/widgets/container/ContainerTree.js',
             'Tinebase/js/widgets/customfields/CustomfieldsPanel.js',
 			'Tinebase/js/widgets/customfields/CustomfieldsCombo.js',
             'Tinebase/js/widgets/tree/Loader.js',
             'Tinebase/js/widgets/tree/ContextMenu.js',
+            'Tinebase/js/widgets/container/ContainerSelect.js',
+            'Tinebase/js/widgets/container/GrantsDialog.js',
+            'Tinebase/js/widgets/container/ContainerTree.js',
             'Tinebase/js/widgets/grid/DetailsPanel.js',
             'Tinebase/js/widgets/grid/FilterModel.js',
             'Tinebase/js/widgets/grid/FilterPlugin.js',

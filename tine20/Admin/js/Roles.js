@@ -163,15 +163,17 @@ Tine.Admin.Roles.Main = {
         }    	
     	
         // the datastore
-        var dataStore = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Admin.getRoles'
+        var dataStore = new Ext.data.DirectStore({
+            api: {
+                read: Tine.Admin.getRoles
             },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Tinebase.Model.Role,
-            // turn on remote sorting
+            
+            reader: new Ext.data.JsonReader({
+                root: 'results',
+                idProperty: 'id',
+                totalProperty: 'totalcount'
+            }, Tine.Tinebase.Model.Role),
+            
             remoteSort: true
         });
         

@@ -1,10 +1,10 @@
 /**
  * IE8 fixes
- */
+ *
 if (Ext.isIE8) {
     /**
      * fix twin trigger field layout
-     */
+     *
     Ext.form.TwinTriggerField.prototype.onRender = function(ct, position) {
         Ext.form.TwinTriggerField.superclass.onRender.call(this, ct, position);
         this.el.setTop.defer(10, this.el, ['1px']);
@@ -12,7 +12,7 @@ if (Ext.isIE8) {
     
     /**
      * fix datepicker width
-     */
+     *
     Ext.DatePicker.prototype.onRender = Ext.DatePicker.prototype.onRender.createSequence(function(ct, position) {
         var wrap = ct.up('div[class="x-layer x-menu x-menu-plain x-date-menu"]');
         var orgWidth = this.el.getWidth();
@@ -22,6 +22,7 @@ if (Ext.isIE8) {
         }
     });
 }
+*/
 
 /**
  * fix broken ext email validator

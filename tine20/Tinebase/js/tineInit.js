@@ -22,6 +22,7 @@ Ext.onReady(function() {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
             waitForInits.defer(100);
         } else {
+            Tine.Tinebase.tineInit.initExtDirect();
             Tine.Tinebase.tineInit.initState();
             Tine.Tinebase.tineInit.initWindowMgr();
             Tine.Tinebase.tineInit.onLangFilesLoad();
@@ -170,6 +171,7 @@ Tine.Tinebase.tineInit = {
                     var waitForRegistry = function() {
                         if (Tine.Tinebase.tineInit.initList.initRegistry) {
                             Ext.MessageBox.hide();
+                            Tine.Tinebase.tineInit.initExtDirect();
                             Tine.Tinebase.tineInit.renderWindow();
                         } else {
                             waitForRegistry.defer(100);
@@ -226,16 +228,22 @@ Tine.Tinebase.tineInit = {
     },
 
     initAjax: function() {
+        Ext.Ajax.url = Tine.Tinebase.tineInit.requestUrl;
+        Ext.Ajax.method = 'POST';
+        
+        Ext.Ajax.defaultHeaders = {
+            'X-Tine20-Request-Type' : 'JSON'
+        };
+        
+        // to use as jsonprc id
+        Ext.Ajax.requestId = 0;
+        
         /**
          * send custom headers and json key on Ext.Ajax.requests
          */
         Ext.Ajax.on('beforerequest', function(connection, options){
-            options.url = options.url ? options.url : Tine.Tinebase.tineInit.requestUrl;
-            options.params.jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
-            options.params.requestType = options.params.requestType || 'JSON';
-            
-            options.headers = options.headers ? options.headers : {};
-            options.headers['X-Tine20-Request-Type'] = options.headers['X-Tine20-Request-Type'] || 'JSON';
+            options.headers = options.headers || {};
+            options.headers['X-Tine20-JsonKey'] = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
             
             // append updated state info if state has changes
             if (typeof Ext.state.Manager.getProvider().getStateStore == 'function') {
@@ -256,6 +264,36 @@ Tine.Tinebase.tineInit = {
                     options.params.stateInfo = Ext.util.JSON.encode(stateInfo);
                 }
             }
+            
+            // convert non Ext.Direct request to jsonrpc
+            if (options.params) {
+                var params = {};
+                
+                var def = typeof Tine.Tinebase.registry.get == 'function' ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
+                if (def) {
+                    // sort parms according to def
+                    for (var i=0, p; i<def.parameters.length; i++) {
+                        p = def.parameters[i].name;
+                        params[p] = options.params[p];
+                    }
+                } else {
+                    for (param in options.params) {
+                        if (options.params.hasOwnProperty(param) && param != 'method') {
+                            params[param] = options.params[param];
+                        }
+                    }
+                }
+                
+                options.jsonData = Ext.encode({
+                    jsonrpc: '2.0',
+                    method: options.params.method,
+                    params: params,
+                    id: ++Ext.Ajax.requestId
+                });
+                
+                options.isImplicitJsonRpc = true;
+                delete options.params;
+            }
         });
         
         /**
@@ -271,6 +309,11 @@ Tine.Tinebase.tineInit = {
                 });
                 
                 connection.fireEvent('requestexception', connection, response, options);
+            }
+            
+            // strip jsonrpc fragments for non Ext.Direct requests
+            if (options.isImplicitJsonRpc){
+                response.responseText = Ext.encode(Ext.decode(response.responseText).result);
             }
         });
         
@@ -645,6 +688,19 @@ Tine.Tinebase.tineInit = {
                 contentPanelConstructor: 'Tine.Tinebase.MainScreen'
             });
         }
+    },
+    
+    /**
+     * add provider to Ext.Direct based on Tine servicemap
+     */
+    initExtDirect: function() {
+        var sam = Tine.Tinebase.registry.get('serviceMap');
+        
+        Ext.Direct.addProvider(Ext.apply(sam, {
+            'type'     : 'zfprovider',
+            'namespace': 'Tine',
+            'url'      : sam.target
+        }));
     },
     
     /**

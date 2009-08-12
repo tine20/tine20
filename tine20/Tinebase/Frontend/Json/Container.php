@@ -38,7 +38,7 @@ class Tinebase_Frontend_Json_Container
                     $container->bypassFilters = true;
                     $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
                 }
-                echo Zend_Json::encode($containers->toArray());
+                $response = $containers->toArray();
                 
                 break;
                 
@@ -48,13 +48,13 @@ class Tinebase_Frontend_Json_Container
                     $container->bypassFilters = true;
                     $container->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
                 }
-                echo Zend_Json::encode($containers->toArray());
+                $response = $containers->toArray();
                 
                 break;
                 
             case 'otherUsers':
                 $accounts = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, Tinebase_Model_Container::GRANT_READ);
-                echo Zend_Json::encode($accounts->toArray());
+                $response = $accounts->toArray();
                 
                 break;
                 
@@ -62,7 +62,8 @@ class Tinebase_Frontend_Json_Container
                 throw new Exception('no such NodeType');
         }
         // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        exit;
+        //exit;
+        return $response;
     }
     
     /**

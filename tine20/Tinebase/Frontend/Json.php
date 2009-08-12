@@ -340,6 +340,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $registryData =  array(
+            'serviceMap'       => Tinebase_Frontend_Http::getServiceMap(),
             'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
@@ -353,7 +354,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'releaseTime'   => TINE20_RELEASETIME
             ),
             'defaultUsername' => $defaultUsername,
-            'defaultPassword' => $defaultPassword
+            'defaultPassword' => $defaultPassword,
         );
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
@@ -414,8 +415,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $registryData['Tinebase'] = $this->getRegistryData();
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dying to avoid servers success property to be part of the registry.');
-        die(Zend_Json::encode($registryData));
+        return $registryData;
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dying to avoid servers success property to be part of the registry.');
+        //die(Zend_Json::encode($registryData));
     }
 
     /************************ preferences functions ***************************/
