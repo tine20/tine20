@@ -16,15 +16,13 @@ Tine.Admin.Users.Main = function() {
         /**
          * the datastore for lists
          */
-        var dataStore = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Admin.getUsers'
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'accountId',
-            fields: Tine.Admin.Model.User,
-            // turn on remote sorting
+        var dataStore = new Ext.data.DirectStore({
+            directFn: Tine.Admin.getUsers,
+            reader: new Ext.data.JsonReader({
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'accountId'
+            },Tine.Admin.Model.User),
             remoteSort: true
         });
         
