@@ -112,7 +112,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             if (array_key_exists($code, $this->_errorMap)) {
             	$code = $this->_errorMap[$code];
             }
-            $server->fault($exception->getMessage(), $code, $exception->getTraceAsString());
+            $server->fault($exception->getMessage(), $code, $exception->getTrace());
             
             $response = $server->getResponse();
 	        if (null !== ($id = $request->getId())) {
