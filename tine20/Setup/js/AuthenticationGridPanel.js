@@ -37,6 +37,16 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
      */
     accountsStorageIdPrefix: null,
     
+    /**
+     * @property Ext.form.ComboBox combo box containing the authentication backend selection 
+     */
+    authenticationBackendCombo: null,
+
+    /**
+     * @property Ext.form.ComboBox combo box containing the accounts storage selection 
+     */
+    accountsStorageCombo: null,
+    
     border: false,
     bodyStyle:'padding:5px 5px 0',
     labelAlign: 'left',
@@ -80,8 +90,8 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
     /**
      * Change card layout depending on selected combo box entry
      */
-    onChangeAuthProvider: function(field, record) {
-        var authProvider = field.getValue();
+    onChangeAuthProvider: function() {
+        var authProvider = this.authenticationBackendCombo.getValue();
         var cardLayout = Ext.getCmp(this.authProviderIdPrefix + 'CardLayout').getLayout();
         cardLayout.setActiveItem(this.authProviderIdPrefix + authProvider);
     },
@@ -89,8 +99,8 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
     /**
      * Change card layout depending on selected combo box entry
      */
-    onChangeAccountsStorage: function(field, record) {
-        var AccountsStorage = field.getValue();
+    onChangeAccountsStorage: function() {
+        var AccountsStorage = this.accountsStorageCombo.getValue();
         var cardLayout = Ext.getCmp(this.accountsStorageIdPrefix + 'CardLayout').getLayout();
         cardLayout.setActiveItem(this.accountsStorageIdPrefix + AccountsStorage);
     },
@@ -105,7 +115,7 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
         this.accountsStorageIdPrefix    = this.idPrefix + '-accountsStorage-',
         this.initActions();
         this.items = this.getFormItems();
-
+        
         Tine.Setup.AuthenticationGridPanel.superclass.initComponent.call(this);
     },
     
@@ -120,6 +130,10 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
         
         //Tine.Setup.registry.on('replace', this.applyRegistryState, this);
         this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Transfering Configuration...')});
+        
+        this.onChangeAuthProvider.defer(250, this);
+        this.onChangeAccountsStorage.defer(250, this);
+
     },
     
     /**
@@ -131,14 +145,8 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
     getFormItems: function() {
         var setupRequired = Tine.Setup.registry.get('setupRequired');
         
-        return [ {
-            xtype:'fieldset',
-            collapsible: false,
-            autoHeight:true,
-            title: this.app.i18n._('Authentication provider'),
-            items: [{
-                xtype: 'combo',
-                width: 300,
+        this.authenticationBackendCombo = new Ext.form.ComboBox({
+            width: 300,
                 listWidth: 300,
                 mode: 'local',
                 forceSelection: true,
@@ -154,7 +162,36 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                     change: this.onChangeAuthProvider,
                     select: this.onChangeAuthProvider
                 }
-            }, {
+            });
+            
+       this.accountsStorageCombo = new Ext.form.ComboBox({
+                xtype: 'combo',
+                width: 300,
+                listWidth: 300,
+                mode: 'local',
+                forceSelection: true,
+                allowEmpty: false,
+                triggerAction: 'all',
+                selectOnFocus:true,
+                store: [['Sql', 'Sql'], ['Ldap','Ldap']],
+                name: 'accounts_backend',
+                fieldLabel: this.app.i18n._('Backend'),
+                value: 'Sql',
+                listeners: {
+                    scope: this,
+                    change: this.onChangeAccountsStorage,
+                    select: this.onChangeAccountsStorage
+                }
+            });
+        
+        return [ {
+            xtype:'fieldset',
+            collapsible: false,
+            autoHeight:true,
+            title: this.app.i18n._('Authentication provider'),
+            items: [
+                this.authenticationBackendCombo,
+                {
                 id: this.authProviderIdPrefix + 'CardLayout',
                 layout: 'card',
                 activeItem: this.authProviderIdPrefix + 'Sql',
@@ -233,25 +270,9 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
             collapsible: false,
             autoHeight:true,
             title: this.app.i18n._('Accounts storage'),
-            items: [{
-                xtype: 'combo',
-                width: 300,
-                listWidth: 300,
-                mode: 'local',
-                forceSelection: true,
-                allowEmpty: false,
-                triggerAction: 'all',
-                selectOnFocus:true,
-                store: [['Sql', 'Sql'], ['Ldap','Ldap']],
-                name: 'accounts_backend',
-                fieldLabel: this.app.i18n._('Backend'),
-                value: 'Sql',
-                listeners: {
-                    scope: this,
-                    change: this.onChangeAccountsStorage,
-                    select: this.onChangeAccountsStorage
-                }
-            }, {
+            items: [
+                this.accountsStorageCombo,
+                {
                 id: this.accountsStorageIdPrefix + 'CardLayout',
                 layout: 'card',
                 activeItem: this.accountsStorageIdPrefix + 'Sql',

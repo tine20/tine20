@@ -616,20 +616,25 @@ class Setup_Controller
     
     protected function _getAccountsStorageData()
     {
-        $result = array();
-        $result['backend'] = Tinebase_Auth_Factory::SQL;
-        
-        $result[Tinebase_Auth_Factory::SQL] = array();
-        
-        $result[Tinebase_Auth_Factory::LDAP] = array();
-        $result[Tinebase_Auth_Factory::LDAP]['bindRequiresDn'] = true;
-        $result[Tinebase_Auth_Factory::LDAP]['pwEncType'] = 'SHA';
-        $result[Tinebase_Auth_Factory::LDAP]['minUserId'] = 10000;
-        $result[Tinebase_Auth_Factory::LDAP]['maxUserId'] = 29999;
-        $result[Tinebase_Auth_Factory::LDAP]['minGroupId'] = 11000;
-        $result[Tinebase_Auth_Factory::LDAP]['maxGroupId'] = 11099;
-        
-        $result[Tinebase_Auth_Factory::LDAP]['accountCanonicalForm'] = 2;
+        $result = Tinebase_Core::getConfig()->accounts;
+        if (isset($result)) {
+            $result = $result->toArray();
+        } else {
+            $result = array();
+            $result['backend'] = Tinebase_Auth_Factory::SQL;
+            
+            $result[Tinebase_Auth_Factory::SQL] = array();
+            
+            $result[Tinebase_Auth_Factory::LDAP] = array();
+            $result[Tinebase_Auth_Factory::LDAP]['bindRequiresDn'] = true;
+            $result[Tinebase_Auth_Factory::LDAP]['pwEncType'] = 'SHA';
+            $result[Tinebase_Auth_Factory::LDAP]['minUserId'] = 10000;
+            $result[Tinebase_Auth_Factory::LDAP]['maxUserId'] = 29999;
+            $result[Tinebase_Auth_Factory::LDAP]['minGroupId'] = 11000;
+            $result[Tinebase_Auth_Factory::LDAP]['maxGroupId'] = 11099;
+            
+            $result[Tinebase_Auth_Factory::LDAP]['accountCanonicalForm'] = 2;
+        }
         
         return $result;
     }
