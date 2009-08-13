@@ -232,7 +232,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  * @constructor
  * 
- * TODO what about email_home?
  */
 Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
 
@@ -246,7 +245,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
                 '{[this.encode(values.n_fileas)]}',
-                ' (<b>{[this.encode(values.email)]}</b>)',
+                ' (<b>{[this.encode(values.email, values.email_home)]}</b>)',
                 /*
                 '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                     '<tr>',
@@ -263,9 +262,11 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                 */
             '</div></tpl>',
             {
-                encode: function(value) {
-                     if (value) {
-                        return Ext.util.Format.htmlEncode(value);
+                encode: function(email, email_home) {
+                    if (email) {
+                        return Ext.util.Format.htmlEncode(email);
+                    } else if (email_home) {
+                        return Ext.util.Format.htmlEncode(email_home);
                     } else {
                         return '';
                     }
@@ -289,9 +290,9 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     onSelect: function(record) {
         if (record.get('email') != '') {
             this.setValue(record.get('email'));
-        } /*else {
+        } else {
             this.setValue(record.get('email_home'));
-        } */
+        } 
         this.collapse();
         this.fireEvent('blur', this);
     }    
