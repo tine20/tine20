@@ -51,7 +51,7 @@
 
     <sources>
         <source src="../tine20/library/ExtJS/src" match="*.js"/>
-        <source src="../tine20/Tinebase/js/tineinit.js"/>
+        <source src="../tine20/Tinebase/js/tineInit.js"/>
         <source src="../tine20/Calendar/js" match="*.js"/>
         <!--<source src="Calendar/js/AttendeeGridPanel.js"/> 
         <source src="Calendar/js/Calendar.js"/> 
