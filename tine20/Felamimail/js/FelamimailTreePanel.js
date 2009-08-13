@@ -368,6 +368,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             var node = this.getSelectionModel().getSelectedNode();
         }
         
+        var oldCount = node.attributes.unreadcount;
+        
         if (! change ) {
             change = Number(unreadcount) - Number(node.attributes.unreadcount);
         }
@@ -377,8 +379,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             
             if (node.attributes.unreadcount > 0) {
                 node.setText(node.attributes.localname + ' (' + node.attributes.unreadcount + ')');
-                if (node.attributes.unreadcount == 1 && change == 1) {
-                    // 0 -> 1
+                if (oldCount == 0 && node.attributes.unreadcount > 0) {
                     node.getUI().addClass('felamimail-node-unread');
                 }
             } else {
