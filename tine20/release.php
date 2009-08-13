@@ -434,7 +434,7 @@ function createJsTranslationLists($_locale)
                 
             foreach ( $list as $key => $value ) {    
                 // convert ISO -> PHP for date formats
-                if ( in_array($type, array('Date', 'Time', 'DateTime')) ) {
+                if ( in_array($name, array('Date', 'Time', 'DateTime')) ) {
                     $value = convertIsoToPhpFormat($value);
                 }
                 $value = preg_replace("/\"/", '\"', $value);        
