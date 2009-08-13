@@ -306,7 +306,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
                     <type>clob</type>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`new_value` text ");    
+        $statement = $this->_fixFieldDeclarationString("`new_value` longtext ");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
