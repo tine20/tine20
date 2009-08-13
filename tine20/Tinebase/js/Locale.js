@@ -108,3 +108,13 @@ Locale.getTranslationData = function(type, key) {
     
     return value;
 };
+
+/**
+ * get translation list from generic locale object (partial clone of Zend Frameworks locale data)
+ * 
+ * @param {String} type
+ * @return {Object}
+ */
+Locale.getTranslationList = function(type) {
+    return Locale.prototype.TranslationLists[type];
+}
