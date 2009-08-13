@@ -226,7 +226,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
                     <default>false</default>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`email_sent` tinyint(1) unsigned default 0");    
+        $statement = $this->_fixFieldDeclarationString("`email_sent` tinyint(1) unsigned DEFAULT 0");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
@@ -285,7 +285,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
                     <default>false</default>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`is_deleted` tinyint(1) unsigned NOT NULL default 0");    
+        $statement = $this->_fixFieldDeclarationString("`is_deleted` tinyint(1) unsigned DEFAULT 0 NOT NULL");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
@@ -375,7 +375,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
                     <length>4</length>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`private` tinyint(4)  unsigned default 0");    
+        $statement = $this->_fixFieldDeclarationString("`private` tinyint(4)  unsigned DEFAULT 0");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
@@ -394,7 +394,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
                     <default>1</default>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString("`leadtype_translate` tinyint(4)  unsigned default 1");    
+        $statement = $this->_fixFieldDeclarationString("`leadtype_translate` tinyint(4)  unsigned DEFAULT 1");    
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
