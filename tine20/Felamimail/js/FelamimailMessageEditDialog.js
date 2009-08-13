@@ -134,6 +134,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: this.app.i18n._('Recipients'),
             record: this.record,
             i18n: this.app.i18n,
+            hideLabel: true,
             anchor: '100% 90%'
         });
         
@@ -141,6 +142,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: this.app.i18n._('Attachments'),
             record: this.record,
             i18n: this.app.i18n,
+            hideLabel: true,
             anchor: '100% 90%'
         });
         
