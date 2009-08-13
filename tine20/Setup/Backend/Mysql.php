@@ -382,7 +382,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 break;
             
             case 'clob':
-                $buffer[] = 'text';
+                $buffer[] = 'longtext';
                 break;
             
             case 'blob':
