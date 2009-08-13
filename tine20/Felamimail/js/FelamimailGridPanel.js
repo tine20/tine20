@@ -585,10 +585,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 }
                 
                 // remove flag
-                messages[i].data.flags = messages[i].data.flags.replace(regexp, '');
-                
-                // PUSH
-                toUpdateIds.push(messages[i].data.id);
+                if (messages[i].data.flags !== null) {
+                    messages[i].data.flags = messages[i].data.flags.replace(regexp, '');
+                    
+                    // PUSH
+                    toUpdateIds.push(messages[i].data.id);
+                }
                 
             } else {
                 
