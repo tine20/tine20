@@ -256,6 +256,7 @@ Tine.Tinebase.tineInit = {
             options.headers['X-Tine20-JsonKey'] = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
             
             // append updated state info if state has changes
+            /*
             if (typeof Ext.state.Manager.getProvider().getStateStore == 'function') {
                 var stateStore = Ext.state.Manager.getProvider().getStateStore();
                 if (stateStore.hasChanges) {
@@ -273,7 +274,7 @@ Tine.Tinebase.tineInit = {
                     
                     options.params.stateInfo = Ext.util.JSON.encode(stateInfo);
                 }
-            }
+            }*/
             
             // convert non Ext.Direct request to jsonrpc
             if (options.params) {
