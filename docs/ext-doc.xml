@@ -50,9 +50,9 @@
         -->
 
     <sources>
-        <source src="library/ExtJS/source" match="*.js"/>
-        <source src="Tinebase/js/tineinit.js"/>
-        <source src="Calendar/js" match="*.js"/>
+        <source src="../tine20/library/ExtJS/src" match="*.js"/>
+        <source src="../tine20/Tinebase/js/tineinit.js"/>
+        <source src="../tine20/Calendar/js" match="*.js"/>
         <!--<source src="Calendar/js/AttendeeGridPanel.js"/> 
         <source src="Calendar/js/Calendar.js"/> 
         <source src="Calendar/js/CalendarPanel.js"/> 
