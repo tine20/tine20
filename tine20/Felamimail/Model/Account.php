@@ -244,18 +244,24 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * @param boolean $_throwException
      * @param boolean $_smtp
      * @return boolean
-     * 
-     * @todo simplify this (set fieldnames at the beginning depending on smtp/imap)
      */
     public function resolveCredentials($_onlyUsername = TRUE, $_throwException = FALSE, $_smtp = FALSE)
     {
-        if (! ($this->user && ! $_smtp) || ! ($this->smtp_user && $_smtp) || (! $this->password && ! $_onlyUsername)) {
+        if ($_smtp) {
+            $passwordField      = 'smtp_password';
+            $userField          = 'smtp_user';
+            $credentialsField   = 'smtp_credentials_id';
+        } else {
+            $passwordField      = 'password';
+            $userField          = 'user';
+            $credentialsField   = 'credentials_id';
+        }
+        
+        if (! $this->{$userField} || ! ($this->{$passwordField} && ! $_onlyUsername)) {
             
-            $fieldname = ($_smtp) ? 'smtp_credentials_id' : 'credentials_id';
-            
-            if (! $this->{$fieldname}) {
+            if (! $this->{$credentialsField}) {
                 if ($_throwException) {
-                    throw new Felamimail_Exception('Could not get credentials, no ' . $fieldname . ' given.');
+                    throw new Felamimail_Exception('Could not get credentials, no ' . $credentialsField . ' given.');
                 } else {
                     return FALSE;
                 }
@@ -268,7 +274,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 $credentialsBackend->getCachedCredentials($userCredentialCache);
             } else {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
-                    . ' Something went wrong with the CredentialsCache / use given username/password instead.'
+                    . ' Something went wrong with the CredentialsCache / use given imap username/password instead.'
                 );
                 $userCredentialCache = new Tinebase_Model_CredentialCache(array(
                     'username' => $this->user,
@@ -276,17 +282,12 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 ));
             }
             
-            $credentials = $credentialsBackend->get($this->{$fieldname});
+            $credentials = $credentialsBackend->get($this->{$credentialsField});
             $credentials->key = substr($userCredentialCache->password, 0, 24);
             $credentialsBackend->getCachedCredentials($credentials);
             
-            if ($_smtp) {
-                $this->smtp_user = $credentials->username;
-                $this->smtp_password = $credentials->password;
-            } else {
-                $this->user = $credentials->username;
-                $this->password = $credentials->password;
-            }
+            $this->{$userField} = $credentials->username;
+            $this->{$passwordField} = $credentials->password;
         }
         
         return TRUE;
