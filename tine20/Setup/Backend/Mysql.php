@@ -389,42 +389,6 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
         $this->execQueryVoid($statement);    
     }
-    
-    /**
-     * create the right mysql-statement-snippet for columns/fields
-     *
-     * @param Setup_Backend_Schema_Field_Abstract field / column
-     * @param String | optional $_tableName [Not used in this backend (MySQL)]
-     * @return string
-     */
-    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
-    {
-        $buffer = $this->_getFieldDeclarations($_field, $_tableName);
-
-        if (isset($_field->unsigned) && $_field->unsigned === true) {
-            $buffer[] = 'unsigned';
-        }
-
-        if ($_field->notnull === true) {
-            $buffer[] = 'NOT NULL';
-        }
-
-        if (isset($_field->default)) {
-            $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
-        }
-
-        if (isset($_field->autoincrement) && $_field->autoincrement === true) {
-            $buffer[] = 'auto_increment';
-        }
-        
-        if (isset($_field->comment)) {
-            $buffer[] = "COMMENT '" .  $_field->comment . "'";
-        }
-
-        $definition = implode(' ', $buffer);
-
-        return $definition;
-    }
 
     /**
      * create the right mysql-statement-snippet for keys

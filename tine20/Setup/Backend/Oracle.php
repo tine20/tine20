@@ -53,7 +53,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         'clob' => array(
             'defaultType' => 'CLOB'),
         'enum' => array(
-            'defaultType' => 'VARCHAR2')
+            'defaultType' => 'VARCHAR2',
+            'declarationMethod' => '_getSpecialFieldDeclarationEnum')
     );
  
     CONST CONSTRAINT_TYPE_PRIMARY   = 'P';
@@ -63,7 +64,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     protected $_table ='';
    
-    protected $_autoincrementID = '';
+    protected $_autoincrementId = '';
     
     protected static $_sequence_postfix = '_seq';
     
@@ -581,62 +582,104 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         if (empty($_tableName)) {
             throw new Tinebase_Exception_InvalidArgument('Missing required argument $_tableName');
         }
-
-        $buffer = $this->_getFieldDeclarations($_field, $_tableName);
-
-//        switch ($_field->type) {
-//        
-//            case 'enum':
-//                $length = 0;
-//                foreach ($_field->value as $value) {
-//                    $values[] = $value;
-//                    $tempLength = strlen($value);
-//                    if ($tempLength > $length) {
-//                        $length = $tempLength;
-//                    }
-//                }
-//                
-//                $additional = ''; 
-//                if ($_field->notnull === true) {
-//                    $additional .= ' NOT NULL ';
-//                }
-//                if (isset($_field->default)) {
-//                    if($_field->default === NULL) {
-//                        $buffer[] = "DEFAULT NULL" ;
-//                    } else {
-//                        $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
-//                    }
-//                }    
-//                
-//                $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($_tableName, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
-//                break;            
-//        }
         
-        if (isset($_field->unsigned)) {
+        return parent::getFieldDeclarations($_field, $_tableName);
+    }
+    
+    /**
+     * Override method: unsigned option is not supported by oracle backend
+     * @see tine20/Setup/Backend/Setup_Backend_Abstract#_addDeclarationUnsigned($_buffer, $_field)
+     */
+    protected function _addDeclarationUnsigned(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if (isset($_field->unsigned) && $_field->unsigned === true) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' $_field has property unsgined set which is currently not supported by oracle adapter; unsigned property is ignored.');
         }
-        
-        if ($_field->type != 'enum') {
-            if (isset($_field->default)) {
-                if($_field->default === NULL) {
-                    $buffer[] = "DEFAULT NULL" ;
-                } else {
-                    $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
-                }
-            }    
-
-            if ($_field->notnull === true) {
-                $buffer[] = 'NOT NULL';
-            }
+        return $_buffer;
+    }
+    
+    /**
+     * Override method: default value option has to be handled differently for enum data type
+     * @see tine20/Setup/Backend/Setup_Backend_Abstract#_addDeclarationDefaultValue($_buffer, $_field)
+     */
+    protected function _addDeclarationDefaultValue(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if ($_field->type == 'enum') {
+            return $_buffer;
         }
-        
+        return parent::_addDeclarationDefaultValue($_buffer, $_field);
+    }
+    
+    /**
+     * Override method: not null option has to be handled differently for enum data type
+     * @see tine20/Setup/Backend/Setup_Backend_Abstract#_addDeclarationNotNull($_buffer, $_field)
+     */
+    protected function _addDeclarationNotNull(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if ($_field->type == 'enum') {
+            return $_buffer;
+        }
+        return parent::_addDeclarationNotNull($_buffer, $_field);
+    }
+    
+    /**
+     * Override method: autoincrementation is set up on table creation in oracle {@see createTable()}
+     * => store the name of the autoincrement field in {@see $_autoincrementId} 
+     * @see tine20/Setup/Backend/Setup_Backend_Abstract#_addDeclarationAutoincrement($_buffer, $_field)
+     */
+    protected function _addDeclarationAutoincrement(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
         if (isset($_field->autoincrement)) {
             $this->_autoincrementId = $_field->name;
         }
+        return $_buffer;
+    }
+    
+    /**
+     * Override method: comments are added after creating/aletering the table in {@see addCol()} and {@see createTable()}.
+     * 
+     * @see tine20/Setup/Backend/Setup_Backend_Abstract#_addDeclarationAutoincrement($_buffer, $_field)
+     */
+    protected function _addDeclarationComment(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        return $_buffer;
+    }
+    
+    /**
+     * enum datatype is not supported by oracle so we have to emulate the behaviour using constraint checks
+     * 
+     * @param Setup_Backend_Schema_Field_Abstract $_field
+     * @param $_tableName
+     * @return array
+     */
+    protected function _getSpecialFieldDeclarationEnum(Setup_Backend_Schema_Field_Abstract $_field, $_tableName)
+    {
+        $buffer = array();
+
+        $length = 0;
+        foreach ($_field->value as $value) {
+            $values[] = $value;
+            $tempLength = strlen($value);
+            if ($tempLength > $length) {
+                $length = $tempLength;
+            }
+        }
         
-        $definition = implode(' ', $buffer);
+        $additional = ''; 
+        if ($_field->notnull === true) {
+            $additional .= ' NOT NULL ';
+        }
+        if (isset($_field->default)) {
+            if($_field->default === NULL) {
+                $buffer[] = "DEFAULT NULL" ;
+            } else {
+                $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
+            }
+        }    
         
-        return $definition;
+        $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($_tableName, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
+
+        return $buffer;
     }
 
     /**

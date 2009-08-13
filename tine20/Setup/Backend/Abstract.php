@@ -230,57 +230,122 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * @param String | optional $_tableName [Not used in this backend (MySQL)]
      * @return string
      */
+    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
+    {
+        $buffer = $this->_getFieldDeclarations($_field, $_tableName);
+
+        $definition = implode(' ', $buffer);
+
+        return $definition;
+    }
+    
+    /**
+     * create the right mysql-statement-snippet for columns/fields
+     *
+     * @param Setup_Backend_Schema_Field_Abstract field / column
+     * @param String | optional $_tableName [Not used in this backend (MySQL)]
+     * @return string
+     */
     protected function _getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
     {
         $buffer = array();
-        $buffer[] = '  `' . $_field->name . '`';
-        
+        $buffer[] = '  ' . $this->_db->quoteIdentifier($_field->name);
 
-            $typeMapping = $this->getTypeMapping($_field->type);
+        $typeMapping = $this->getTypeMapping($_field->type);
         if ($typeMapping) {
             $fieldType = $typeMapping['defaultType'];
-
-            if ($_field->length !== NULL) {
-                if (isset($typeMapping['lengthTypes']) && is_array($typeMapping['lengthTypes'])) {
-                    foreach ($typeMapping['lengthTypes'] as $maxLength => $type) {
-                        if ($_field->length <= $maxLength) {
-                            $fieldType = $type;
-                            $precision  = '';
-                            if (isset($_field->precision)) {
-                                $precision = ',' . $_field->precision;
-                            } elseif(isset($typeMapping['defaultPrecision'])) {
-                                $precision = ',' . $typeMapping['defaultPrecision'];
+            if (isset($typeMapping['declarationMethod'])) {
+                $fieldBuffer = call_user_func(array($this, $typeMapping['declarationMethod']), $_field, $_tableName);
+                $buffer = array_merge($buffer, $fieldBuffer); 
+            } else {
+                if ($_field->length !== NULL) {
+                    if (isset($typeMapping['lengthTypes']) && is_array($typeMapping['lengthTypes'])) {
+                        foreach ($typeMapping['lengthTypes'] as $maxLength => $type) {
+                            if ($_field->length <= $maxLength) {
+                                $fieldType = $type;
+                                $precision  = '';
+                                if (isset($_field->precision)) {
+                                    $precision = ',' . $_field->precision;
+                                } elseif(isset($typeMapping['defaultPrecision'])) {
+                                    $precision = ',' . $typeMapping['defaultPrecision'];
+                                }
+                                 
+                                $options = "({$_field->length}{$precision})";
+                                break;
                             }
-                             
-                            $options = "({$_field->length}{$precision})";
-                            break;
                         }
-                    }
-                    if (!isset($options)) {
-                        throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given length of {$_field->length} is not supported by field type {$_field->type}");
+                        if (!isset($options)) {
+                            throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given length of {$_field->length} is not supported by field type {$_field->type}");
+                        }
+                    } else {
+                        throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: Length option was specified but is not supported by field type {$_field->type}");
                     }
                 } else {
-                    throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: Length option was specified but is not supported by field type {$_field->type}");
-                }
-            } else {
-                $options = '';
-                if (isset($_field->value)) {
-                    foreach ($_field->value as $value) {
-                        $values[] = $value;
+                    $options = '';
+                    if (isset($_field->value)) {
+                        foreach ($_field->value as $value) {
+                            $values[] = $value;
+                        }
+                        $options = "('" . implode("','", $values) . "')";
+                    } elseif(isset($typeMapping['defaultLength'])) {
+                        $precision = isset($typeMapping['defaultPrecision']) ? ',' . $typeMapping['defaultPrecision'] : '';
+                        $options = "({$typeMapping['defaultLength']}{$precision})";
                     }
-                    $options = "('" . implode("','", $values) . "')";
-                } elseif(isset($typeMapping['defaultLength'])) {
-                    $precision = isset($typeMapping['defaultPrecision']) ? ',' . $typeMapping['defaultPrecision'] : '';
-                    $options = "({$typeMapping['defaultLength']}{$precision})";
                 }
+    
+                $buffer[] = $fieldType . $options;
             }
-
-            $buffer[] = $fieldType . $options;
         } else {
             throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given field type {$_field->type} is not supported");
         }
         
+        $buffer = $this->_addDeclarationUnsigned($buffer, $_field);
+        $buffer = $this->_addDeclarationDefaultValue($buffer, $_field);
+        $buffer = $this->_addDeclarationNotNull($buffer, $_field);
+        $buffer = $this->_addDeclarationAutoincrement($buffer, $_field);
+        $buffer = $this->_addDeclarationComment($buffer, $_field);
+        
         return $buffer;
+    }
+    
+    protected function _addDeclarationDefaultValue(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if (isset($_field->default)) {
+            $_buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
+        }
+        return $_buffer;
+    }
+    
+    protected function _addDeclarationNotNull(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if ($_field->notnull === true) {
+            $_buffer[] = 'NOT NULL';
+        }
+        return $_buffer;
+    }
+    
+    protected function _addDeclarationUnsigned(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if (isset($_field->unsigned) && $_field->unsigned === true) {
+            $_buffer[] = 'unsigned';
+        }
+        return $_buffer;
+    }
+
+    protected function _addDeclarationAutoincrement(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if (isset($_field->autoincrement) && $_field->autoincrement === true) {
+            $_buffer[] = 'auto_increment';
+        }
+        return $_buffer;
+    }
+
+    protected function _addDeclarationComment(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if (isset($_field->comment)) {
+            $_buffer[] = "COMMENT '" .  $_field->comment . "'";
+        }
+        return $_buffer;
     }
 
 }
