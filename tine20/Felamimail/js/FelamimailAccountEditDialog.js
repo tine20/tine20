@@ -188,6 +188,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     fieldLabel: this.app.i18n._('Password (optional)'),
                     name: 'smtp_password',
+                    emptyText: 'password',
                     inputType: 'password'
                 }]]
             }, {
