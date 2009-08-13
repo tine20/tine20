@@ -276,13 +276,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             header: this.app.i18n._("Subject"),
             width: 300,
             sortable: true,
-            dataIndex: 'subject'
+            dataIndex: 'subject',
+            renderer: Ext.util.Format.htmlEncode
         },{
             id: 'from',
             header: this.app.i18n._("From"),
             width: 150,
             sortable: true,
-            dataIndex: 'from'
+            dataIndex: 'from',
+            renderer: Ext.util.Format.htmlEncode
         },{
             id: 'to',
             header: this.app.i18n._("To"),
