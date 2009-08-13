@@ -324,7 +324,13 @@ Tine.Tinebase.tineInit = {
             
             // strip jsonrpc fragments for non Ext.Direct requests
             if (options.isImplicitJsonRpc){
-                response.responseText = Ext.encode(Ext.decode(response.responseText).result);
+                var jsonrpc = Ext.decode(response.responseText);
+                if (jsonrpc.result) {
+                    response.responseText = Ext.encode(jsonrpc.result);
+                } else {
+                    response.responseText = Ext.encode(jsonrpc.error);
+                    connection.fireEvent('requestexception', connection, response, options);
+                }
             }
         });
         
@@ -353,7 +359,7 @@ Tine.Tinebase.tineInit = {
             
             switch(data.code) {
                 // not authorised
-                case 401:
+                case -32001:
                 if (! options.params || options.params.method != 'Tinebase.logout') {
                     Ext.MessageBox.show({
                         title: _('Authorisation Required'), 
@@ -368,7 +374,7 @@ Tine.Tinebase.tineInit = {
                 break;
                 
                 // insufficient rights
-                case 403:
+                case -32003:
                 Ext.MessageBox.show({
                     title: _('Insufficient Rights'), 
                     msg: _('Sorry, you are not permitted to perform this action'),
@@ -378,7 +384,7 @@ Tine.Tinebase.tineInit = {
                 break;
                 
                 // not found
-                case 404:
+                case -32004:
                 Ext.MessageBox.show({
                     title: _('Not Found'), 
                     msg: _('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
@@ -388,7 +394,7 @@ Tine.Tinebase.tineInit = {
                 break;
                 
                 // concurrency conflict
-                case 409:
+                case -32009:
                 Ext.MessageBox.show({
                     title: _('Concurrent Updates'), 
                     msg: _('Someone else saved this record while you where editing the data. You need to reload and make your changes again.'),
