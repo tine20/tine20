@@ -415,7 +415,10 @@ Tine.Tinebase.tineInit = {
                     if (! Tine.Tinebase.exceptionDlg) {
                         Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
                             height: windowHeight,
-                            exceptionInfo: data,
+                            exceptionInfo: {
+                                msg   : data.message,
+                                trace : data.data
+                            },
                             listeners: {
                                 close: function() {
                                     Tine.Tinebase.exceptionDlg = null;
