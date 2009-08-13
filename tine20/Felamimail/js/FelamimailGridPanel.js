@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
@@ -17,6 +17,12 @@ Ext.namespace('Tine.Felamimail');
 
 /**
  * Message grid panel
+ * 
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.GridPanel
+ * @extends Tine.Tinebase.widgets.app.GridPanel
+ * @constructor
+ * @param {Object} config
  */
 Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
@@ -41,8 +47,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * Return CSS class to apply to rows depending upon flags
      * - checks Flagged, Deleted and Seen
      * 
-     * @param {} record
-     * @param {} index
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {Integer} index
      * @return {String}
      */
     getViewRowClass: function(record, index) {
@@ -209,6 +215,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * initialises filter toolbar
+     * 
+     * @private
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
@@ -228,6 +236,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * the details panel (shows message content)
      * 
+     * @private
      */
     initDetailsPanel: function() {
         this.detailsPanel = new Tine.Felamimail.GridDetailsPanel({
@@ -239,6 +248,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * returns cm
+     * 
      * @private
      */
     getColumns: function(){
@@ -352,8 +362,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         
         return result;
     },
-    
-    /********************************* event handler **************************************/
     
     /**
      * update class and unread count in tree on select
@@ -683,8 +691,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.app.getMainScreen().getTreePanel().updateFolderStatus(false);
         this.store.load({});
     },
-    
-    /********************************* helper funcs **************************************/
     
     /**
      * format headers
