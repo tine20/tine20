@@ -65,10 +65,17 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
             });
             Ext.StoreMgr.add('Countries', store);
         }
-        if (Tine.Tinebase.registry.get('CountryList')) {
-            store.loadData(Tine.Tinebase.registry.get('CountryList'));
+        //if (Tine.Tinebase.registry.get('CountryList')) {
+        //    store.loadData(Tine.Tinebase.registry.get('CountryList'));
+        //}
+        var countryList = Locale.getTranslationList('CountryList');
+        if (countryList) {
+            var storeData = {results: []};
+            for (var shortName in countryList) {
+                storeData.results.push({shortName: shortName, translatedName: countryList[shortName]});
+            }
+            store.loadData(storeData);
         }
-        
         return store;
     },
     /**
