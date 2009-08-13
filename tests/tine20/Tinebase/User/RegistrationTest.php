@@ -118,14 +118,14 @@ class Tinebase_User_RegistrationTest extends PHPUnit_Framework_TestCase
     	$this->assertEquals( $account->accountLastName,  $this->userData['accountLastName'] );
     	
     	// check if "expires" in config.ini set to 0 before this check 
-        try {
+        /*
+    	try {
             // get config
             $config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'registration');
         } catch (Zend_Config_Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! '. $e->getMessage());
         }
 
-        /*
         if ( isset($config->expires) && $config->expires > 0) {
     	   $this->assertNotEquals( NULL, $account->accountExpires, "account expires" );
     	} else {
