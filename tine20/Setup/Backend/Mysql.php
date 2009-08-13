@@ -401,7 +401,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 break;
             
             case 'float':
-                $buffer[] = 'float';
+                $buffer[] = 'double';
                 break;
             
             case 'decimal':
