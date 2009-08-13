@@ -165,10 +165,6 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($result['authenticationData']));
     }
     
-    /**
-     * test load config
-     *
-     */
     public function testLoadAuthenticationData()
     {
         $result = $this->_json->loadAuthenticationData();
@@ -177,9 +173,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('authentication', $result));
         $this->assertTrue(array_key_exists('accounts', $result));
         $authentication = $result['authentication'];
-        $this->assertContains($authentication['backend'], array(Tinebase_Auth_Factory::SQL, Tinebase_Auth_Factory::LDAP));
-        $this->assertTrue(is_array($authentication[Tinebase_Auth_Factory::SQL]));
-        $this->assertTrue(is_array($authentication[Tinebase_Auth_Factory::LDAP]));
+        $this->assertContains($authentication['backend'], array(strtolower(Tinebase_Auth_Factory::SQL), strtolower(Tinebase_Auth_Factory::LDAP)));
+        $this->assertTrue(is_array($authentication[strtolower(Tinebase_Auth_Factory::SQL)]));
+        $this->assertTrue(is_array($authentication[strtolower(Tinebase_Auth_Factory::LDAP)]));
     }
     
     public function testSaveAuthentication()
@@ -187,10 +183,10 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $originalAuthenticationData = $this->_json->loadAuthenticationData();
 
         $testAuthenticationData = $originalAuthenticationData;
-        $testAuthenticationData['authentication']['backend'] = 'Sql';
-        $testAuthenticationData['authentication']['Sql']['admin']['loginName'] = 'phpunit-admin';
-        $testAuthenticationData['authentication']['Sql']['admin']['password'] = 'phpunit-password';
-        $testAuthenticationData['authentication']['Sql']['admin']['passwordConfirmation'] = 'phpunit-password';
+        $testAuthenticationData['authentication']['backend'] = 'sql';
+        $testAuthenticationData['authentication']['sql']['admin']['loginName'] = 'phpunit-admin';
+        $testAuthenticationData['authentication']['sql']['admin']['password'] = 'phpunit-password';
+        $testAuthenticationData['authentication']['sql']['admin']['passwordConfirmation'] = 'phpunit-password';
         
         $this->_uninstallAllApps();
         
@@ -200,7 +196,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
 
         $adminUser = Tinebase_Core::get('currentAccount');
         $this->assertEquals($adminUser->accountLoginName, 'phpunit-admin', 'default admin user should be named as specified in authentication data');
-        $this->assertTrue(empty($savedAuthenticationData['authentication']['Sql']['admin']), 'admin loginname/password must not be stored in authentication config');
+        $this->assertTrue(empty($savedAuthenticationData['authentication']['sql']['admin']), 'admin loginname/password must not be stored in authentication config');
         $this->assertEquals($savedAuthenticationData, $originalAuthenticationData);
         
         //test if Tinebase stack was installed

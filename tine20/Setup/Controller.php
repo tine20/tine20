@@ -565,8 +565,9 @@ class Setup_Controller
             $this->_updateAuthentication($_authenticationData);
         } else {
             $installationOptions = array();
-            if (!empty($_authenticationData['authentication']['Sql']['admin'])) {
-                $admin = $_authenticationData['authentication']['Sql']['admin'];
+            $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
+            if (!empty($_authenticationData['authentication'][$sqlKey]['admin'])) {
+                $admin = $_authenticationData['authentication'][$sqlKey]['admin'];
                 $installationOptions['admin_login_name'] = $admin['loginName'];
                 $installationOptions['admin_login_password'] = $admin['password'];
             }
@@ -582,8 +583,9 @@ class Setup_Controller
      */
     protected function _updateAuthentication($_authenticationData)
     {
-        if (isset($_authenticationData['authentication']['Sql']['admin'])) {
-             unset($_authenticationData['authentication']['Sql']['admin']);
+        $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
+        if (isset($_authenticationData['authentication'][$sqlKey]['admin'])) {
+             unset($_authenticationData['authentication'][$sqlKey]['admin']);
         }
 //        if ($_authenticationData['authentication']['backend'] === Tinebase_Auth_Factory::LDAP) {
 //            unset($_authenticationData['authentication'][Tinebase_Auth_Factory::SQL]);
@@ -601,7 +603,7 @@ class Setup_Controller
             $result = $result->toArray();
         } else {
             $result = array();
-            $result['backend'] = Tinebase_Auth_Factory::SQL;
+            $result['backend'] = strtolower(Tinebase_Auth_Factory::SQL);
             
             $result[Tinebase_Auth_Factory::SQL] = array();
             $result[Tinebase_Auth_Factory::SQL]['admin']['loginName'] = 'tine20admin';
@@ -621,13 +623,13 @@ class Setup_Controller
             $result = $result->toArray();
         } else {
             $result = array();
-            $result['backend'] = Tinebase_Auth_Factory::SQL;
+            $result['backend'] = strtolower(Tinebase_Auth_Factory::SQL);
             
             $result[Tinebase_Auth_Factory::SQL] = array();
             
             $result[Tinebase_Auth_Factory::LDAP] = array();
             $result[Tinebase_Auth_Factory::LDAP]['bindRequiresDn'] = true;
-            $result[Tinebase_Auth_Factory::LDAP]['pwEncType'] = 'SHA';
+            $result[Tinebase_Auth_Factory::LDAP]['pwEncType'] = 'CRYPT';
             $result[Tinebase_Auth_Factory::LDAP]['minUserId'] = 10000;
             $result[Tinebase_Auth_Factory::LDAP]['maxUserId'] = 29999;
             $result[Tinebase_Auth_Factory::LDAP]['minGroupId'] = 11000;
