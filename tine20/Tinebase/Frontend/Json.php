@@ -364,7 +364,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'jsonKey'          => Tinebase_Core::get('jsonKey'),
                 'userApplications' => Tinebase_Core::getUser()->getApplications()->toArray(),
                 'NoteTypes'        => $this->getNoteTypes(),
-                'CountryList'      => $this->getCountryList(),
                 'stateInfo'        => Tinebase_State::getInstance()->loadStateInfo(),
                 'changepw'         => (isset(Tinebase_Core::getConfig()->accounts)
                                         && isset(Tinebase_Core::getConfig()->accounts->changepw))
