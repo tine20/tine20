@@ -152,8 +152,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         ob_start();
 
-        // output here
-        echo Zend_Json::encode($result);
+        // output here (kind of hack to get request id and build response)
+        $request = new Zend_Json_Server_Request_Http();
+        $response = new Zend_Json_Server_Response_Http();
+        if (null !== ($id = $request->getId())) {
+            $response->setId($id);
+        }
+        if (null !== ($version = $request->getVersion())) {
+            $response->setVersion($version);
+        }
+        $response->setResult($result);
+        echo $response;
+        //echo Zend_Json::encode($result);
         
         $size = ob_get_length();
         header("Content-Length: $size");
