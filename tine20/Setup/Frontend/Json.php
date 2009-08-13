@@ -303,6 +303,12 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'language' => $locale->getLanguageTranslation($locale->getLanguage()),
                 'region'   => $locale->getCountryTranslation($locale->getRegion()),
             ),
+            'version'          => array(
+                'buildType'     => TINE20_BUILDTYPE,
+                'codeName'      => TINE20_CODENAME,
+                'packageString' => TINE20_PACKAGESTRING,
+                'releaseTime'   => TINE20_RELEASETIME
+            ),
         );
         
         return $registryData;
