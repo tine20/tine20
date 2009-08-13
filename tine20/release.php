@@ -379,18 +379,22 @@ if ($opts->a || $opts->t) {
 if ( $opts->z ) {
     // dump one langfile for every locale
     $localelist = Zend_Locale::getLocaleList();
-    //$localelist = array ( "en_US" => 1 ); 
-    foreach ($localelist as $locale => $something) {        
-        $js = createJsTranslationLists($locale);
-        file_put_contents("$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js", $js);
-        if (file_exists($yuiCompressorPath)) {
-            if ( $opts->v ) {
-                echo "compressing file generic-$locale.js\n";
-            }
-            system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/static/generic-$locale.js $tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js");
-        } else {
-            copy("$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js","$tine20path/Tinebase/js/Locale/static/generic-$locale.js");
-        }
+    //$localelist = array ( "de" => 1 ); 
+    foreach ($localelist as $locale => $something) {
+    	try {   
+	        $js = createJsTranslationLists($locale);
+	        file_put_contents("$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js", $js);
+	        if (file_exists($yuiCompressorPath)) {
+	            if ( $opts->v ) {
+	                echo "compressing file generic-$locale.js\n";
+	            }
+	            system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/static/generic-$locale.js $tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js");
+	        } else {
+	            copy("$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js","$tine20path/Tinebase/js/Locale/static/generic-$locale.js");
+	        }
+    	} catch (Exception $e) {
+    		echo "WARNING: could not create translation file for '$locale': '{$e->getMessage()}'\n";
+    	}
 
     }
 }
@@ -406,26 +410,27 @@ function createJsTranslationLists($_locale)
     $jsContent = "Locale.prototype.TranslationLists = {\n";
 
     $types = array(
-        'Date', 
-        'Time', 
-        'DateTime', 
-        'Month', 
-        'Day', 
-        'Symbols', 
-        'Question', 
-        'Language', 
-        'Territory',
-        'CityToTimezone',
+        'Date'           => array('path' => 'Date'),
+        'Time'           => array('path' => 'Time'),
+        'DateTime'       => array('path' => 'DateTime'),
+        'Month'          => array('path' => 'Month'),
+        'Day'            => array('path' => 'Day'),
+        'Symbols'        => array('path' => 'Symbols'),
+        'Question'       => array('path' => 'Question'),
+        'Language'       => array('path' => 'Language'),
+        'CountryList'    => array('path' => 'Territory', 'value' => 2),
+        'Territory'      => array('path' => 'Territory', 'value' => 1),
+        'CityToTimezone' => array('path' => 'CityToTimezone'),
     );
     
     $zendLocale = new Zend_Locale($_locale);
-            
-    foreach ( $types as $type ) {
-        $list = $zendLocale->getTranslationList($type);
+    
+    foreach ( $types as $name => $path) {
+        $list = $zendLocale->getTranslationList($path['path'], $_locale, array_key_exists('value', $path) ? $path['value'] : false);
         //print_r ( $list );
-
+        
         if ( is_array($list) ) {
-            $jsContent .= "\n\t$type: {";                
+            $jsContent .= "\n\t$name: {";                
                 
             foreach ( $list as $key => $value ) {    
                 // convert ISO -> PHP for date formats
@@ -458,7 +463,9 @@ function convertIsoToPhpFormat($format)
 {        
     $convert = array(
         'c' => '/yyyy-MM-ddTHH:mm:ssZZZZ/',
-        '$1j$2' => '/([^d])d([^d])/', 
+        '$1j$2' => '/([^d])d([^d])/',
+        'j$1' => '/^d([^d])/', 
+        '$1j' => '/([^d])d$/', 
         't' => '/ddd/', 
         'd' => '/dd/', 
         'l' => '/EEEE/', 
@@ -469,6 +476,8 @@ function convertIsoToPhpFormat($format)
         'z' => '/D/', 
         'W' => '/w/', 
         '$1n$2' => '/([^M])M([^M])/', 
+        'n$1' => '/^M([^M])/', 
+        '$1n' => '/([^M])M$/', 
         'F' => '/MMMM/', 
         'M' => '/MMM/',
         'm' => '/MM/', 
@@ -482,6 +491,8 @@ function convertIsoToPhpFormat($format)
         'h' => '/hh/',
         'g' => '/h/', 
         '$1G$2' => '/([^H])H([^H])/', 
+        'G$1' => '/^H([^H])/', 
+        '$1G' => '/([^H])H$/', 
         'H' => '/HH/', 
         'i' => '/mm/', 
         's' => '/ss/', 
