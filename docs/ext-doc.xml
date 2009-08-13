@@ -69,6 +69,7 @@
         <source src="Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="Calendar/js/RrulePanel.js"/> -->
         <source src="../tine20/Felamimail/js/FelamimailGridPanel.js"/>
+        <source src="../tine20/Felamimail/js/FelamimailRecipientGrid.js"/>
     </sources>
     <tags>
         <tag name="author" title="Author"/>

@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
@@ -7,10 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add 'x' to remove recipient / grid row
- * TODO         add name to email address for display
- * TODO         disable horizontal scrollbar
- * TODO         use 'standard' template for adb search combo with image and both email addresses
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -18,11 +14,24 @@ Ext.namespace('Tine.Felamimail');
 /**
  * grid panel for to/cc/bcc recipients
  * 
- * @class Tine.Felamimail.RecipientGrid
- * @extends Ext.grid.EditorGridPanel
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.RecipientGrid
+ * @extends     Ext.grid.EditorGridPanel
+ * @param       {Object} config
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @constructor
+ * 
+ * TODO         add 'x' to remove recipient / grid row
+ * TODO         add name to email address for display
+ * TODO         disable horizontal scrollbar
+ * TODO         use 'standard' template for adb search combo with image and both email addresses
  */
 Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
+    /**
+     * @private
+     */
     id: 'felamimail-recipient-grid',
     
     /**
@@ -32,19 +41,37 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     record: null,
     
     /**
-     * config values
+     * @cfg {String} autoExpandColumn
+     * auto expand column of grid
      */
     autoExpandColumn: 'address',
-    clicksToEdit:1,
-    header: false,
-    //frame: true,
-    border: false,
-    deferredRender: false,
-    
-    /********************** init **************************/
     
     /**
-     * init
+     * @cfg {Number} clicksToEdit
+     * clicks to edit for editor grid panel
+     */
+    clicksToEdit:1,
+    
+    /**
+     * @cfg {Boolean} header
+     * show header
+     */
+    header: false,
+    
+    /**
+     * @cfg {Boolean} border
+     * show border
+     */
+    border: false,
+    
+    /**
+     * @cfg {Boolean} deferredRender
+     * deferred rendering
+     */
+    deferredRender: false,
+    
+    /**
+     * @private
      */
     initComponent: function() {
         
@@ -59,6 +86,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
      * init store
+     * @private
      */
     initStore: function() {
         //this.store = new Ext.data.JsonStore({
@@ -78,6 +106,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
      * init cm
+     * @private
      */
     initColumnModel: function() {
         this.cm = new Ext.grid.ColumnModel([
@@ -124,13 +153,15 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 dataIndex: 'address',
                 width: 40,
                 header: 'address',
-                editor: new Tine.Felamimail.ContactSearchCombo({})
+                editor: new Tine.Felamimail.ContactSearchCombo({}),
+                renderer: Ext.util.Format.htmlEncode
             }
         ]);
     },
     
     /**
      * start editing after render
+     * @private
      */
     afterRender: function() {
         Tine.Felamimail.RecipientGrid.superclass.afterRender.call(this);
@@ -140,8 +171,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
     
-    /********************** events **************************/
-    
     /**
      * store has been updated
      * -> update record to/cc/bcc (if edit)
@@ -150,6 +179,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} store
      * @param {} record
      * @param {} operation
+     * @private
      */
     onUpdateStore: function(store, record, operation)
     {
@@ -173,13 +203,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
     
-    /********************** helper funcs **************************/
- 
     /**
      * add recipients to grid store
      * 
      * @param {Array} recipients
      * @param {String} type
+     * @private
      * 
      * TODO get own email address and don't add it to store
      */
@@ -187,7 +216,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (recipients) {
             for (var i=0; i<recipients.length; i++) {
                 this.store.add(new Ext.data.Record({type: type, 'address': recipients[i]}));
-                //this.record.data[type].push(recipients[i]);
             }
         }
     }
@@ -196,13 +224,21 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 /**
  * contact email search combo
  * 
- * @class Tine.Felamimail.ContactSearchCombo
- * @extends Tine.Addressbook.SearchCombo
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.ContactSearchCombo
+ * @extends     Tine.Addressbook.SearchCombo
+ * @param       {Object} config
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @constructor
  * 
  * TODO what about email_home?
  */
 Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
 
+    /**
+     * @cfg {Boolean} forceSelection
+     */
     forceSelection: false,
     
     //private
@@ -245,6 +281,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * - set email/name as value
      * 
      * @param {} record
+     * @private
      * 
      * TODO add name
      * TODO make it possible to choose between office/home email addresses

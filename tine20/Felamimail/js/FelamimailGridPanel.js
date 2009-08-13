@@ -7,10 +7,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         add flagged/'starred' filter
- * TODO         add show source code function
- * TODO         make doubleclick work again: show mail in new window (no edit dialog)
- * TODO         add pdf export
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -18,11 +14,18 @@ Ext.namespace('Tine.Felamimail');
 /**
  * Message grid panel
  * 
- * @namespace Tine.Felamimail
- * @class Tine.Felamimail.GridPanel
- * @extends Tine.Tinebase.widgets.app.GridPanel
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.GridPanel
+ * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * @param       {Object} config
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  * @constructor
- * @param {Object} config
+ * 
+ * TODO         add flagged/'starred' filter
+ * TODO         add show source code function
+ * TODO         make doubleclick work again: show mail in new window (no edit dialog)
+ * TODO         add pdf export
  */
 Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
@@ -442,6 +445,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * 
      * @param {} button
      * @param {} event
+     * @private
      */
     onEditInNewWindow: function(button, event) {
         
