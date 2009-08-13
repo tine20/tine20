@@ -17,6 +17,44 @@
  */
 class Setup_Backend_Oracle extends Setup_Backend_Abstract
 {
+    /**
+     * Define how database agnostic data types get mapped to oracle data types
+     * 
+     * @var array
+     */
+    protected $_typeMappings = array(
+        'integer' => array(
+            'lengthTypes' => array(
+                38 => 'NUMBER'),
+            'defaultPrecision' => 0,
+            'defaultType' => 'NUMBER',
+            'defaultLength' => self::INTEGER_DEFAULT_LENGTH),
+        'boolean' => array(
+            'defaultType' => 'NUMBER',
+            'defaultPrecision' => 0,
+            'defaultLength' => 1),
+        'text' => array(
+            'lengthTypes' => array(
+                256 => 'VARCHAR2', //@todo this should be 255 indeed but we have 256 in our setup.xml files
+                4294967295 => 'CLOB'),
+            'defaultType' => 'CLOB',
+            'defaultLength' => null),
+        'float' => array(
+            'defaultType' => 'BINARY FLOAT'),
+//        'decimal' => array(
+//            'defaultType' => 'numeric'),
+        'datetime' => array(
+            'defaultType' => 'VARCHAR2',
+            'defaultLength' => 25),
+        'date' => array(
+            'defaultType' => 'date'),
+        'blob' => array(
+            'defaultType' => 'BLOB'),
+        'clob' => array(
+            'defaultType' => 'CLOB'),
+        'enum' => array(
+            'defaultType' => 'VARCHAR2')
+    );
  
     CONST CONSTRAINT_TYPE_PRIMARY   = 'P';
     CONST CONSTRAINT_TYPE_FOREIGN   = 'R';
@@ -544,79 +582,35 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             throw new Tinebase_Exception_InvalidArgument('Missing required argument $_tableName');
         }
 
-        $buffer[] = '  "' . $_field->name . '"';
+        $buffer = $this->_getFieldDeclarations($_field, $_tableName);
 
-        switch ($_field->type) {
-            case 'integer':
-                if ($_field->length !== NULL) {
-                        $buffer[] = 'NUMBER(' . $_field->length . ',0)';
-                } else {
-                    $buffer[] = 'NUMBER(' . Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH . ',0)';
-                }                
-                break;
-                
-            case 'clob':
-                $buffer[] = 'CLOB';
-                break;
-                
-            case 'longblob':
-            case 'blob':
-                $buffer[] = 'BLOB';
-                break;
-            
-            case 'enum':
-                $length = 0;
-                foreach ($_field->value as $value) {
-                    $values[] = $value;
-                    $tempLength = strlen($value);
-                    if ($tempLength > $length) {
-                        $length = $tempLength;
-                    }
-                }
-                
-                $additional = ''; 
-                if ($_field->notnull === true) {
-                    $additional .= ' NOT NULL ';
-                }
-                if (isset($_field->default)) {
-                    if($_field->default === NULL) {
-                        $buffer[] = "DEFAULT NULL" ;
-                    } else {
-                        $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
-                    }
-                }    
-                
-                $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($_tableName, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
-                break;
-            
-            case 'datetime':
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' converting field type datetime to VARCHAR(25) because datetime is not supported in oracle adapter.');
-                $buffer[] = 'VARCHAR2(25)';
-                break;
-            
-            case 'float':
-                $buffer[] = 'BINARY_FLOAT';
-                break;
-            
-            case 'decimal':
-                $buffer[] = "NUMBER(" . $_field->value . ")";
-                break;
-                
-            case 'text':
-                if ($_field->length !== NULL && $_field->length <= 256) {
-                    $buffer[] = 'VARCHAR2(' . $_field->length . ')';
-                } else {
-                    $buffer[] = 'CLOB';
-                }
-                break;
-                
-            case 'boolean':
-                $buffer[] = 'NUMBER(1,0)';
-                break;
-                
-            default:
-                $buffer[] = $_field->type;
-        }
+//        switch ($_field->type) {
+//        
+//            case 'enum':
+//                $length = 0;
+//                foreach ($_field->value as $value) {
+//                    $values[] = $value;
+//                    $tempLength = strlen($value);
+//                    if ($tempLength > $length) {
+//                        $length = $tempLength;
+//                    }
+//                }
+//                
+//                $additional = ''; 
+//                if ($_field->notnull === true) {
+//                    $additional .= ' NOT NULL ';
+//                }
+//                if (isset($_field->default)) {
+//                    if($_field->default === NULL) {
+//                        $buffer[] = "DEFAULT NULL" ;
+//                    } else {
+//                        $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
+//                    }
+//                }    
+//                
+//                $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT ' . $this->_db->quoteIdentifier($this->_getConstraintEnumName($_tableName, $_field->name)) . ' CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
+//                break;            
+//        }
         
         if (isset($_field->unsigned)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' $_field has property unsgined set which is currently not supported by oracle adapter; unsigned property is ignored.');

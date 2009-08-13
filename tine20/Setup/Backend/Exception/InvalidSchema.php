@@ -12,11 +12,11 @@
  */
 
 /**
- * Setup_Backend_Exception_NotImplemented exception
+ * Setup_Backend_Exception_InvalidSchema exception
  * 
  * @package     Setup
  * @subpackage  Exception
  */
-class Setup_Backend_Exception_NotImplemented extends Setup_Exception
+class Setup_Backend_Exception_InvalidSchema extends Setup_Exception
 {
 }

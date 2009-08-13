@@ -26,6 +26,13 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     const MAX_NAME_LENGTH = 30;
     
     const INTEGER_DEFAULT_LENGTH = 11;
+
+    /**
+     * Define how database agnostic data types get mapped to database sepcific data types
+     * 
+     * @var array
+     */
+    protected $_typeMappings = array();
  
     /**
      * @var Zend_Db_Adapter_Abstract
@@ -38,6 +45,21 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * @var Zend_Config
      */
     protected $_config = NULL;
+    
+    /**
+     * Return the mapping from the given database-agnostic data {@param $_type} to the
+     * corresponding database specific data type
+     * 
+     * @param String $_type
+     * @return array | null
+     */
+    public function getTypeMapping($_type)
+    {
+        if (array_key_exists($_type, $this->_typeMappings)) {
+            return $this->_typeMappings[$_type];
+        }
+        return null;
+    }
     
     /**
      * constructor
@@ -200,4 +222,65 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         }
         return $_name;
     }
+    
+    /**
+     * create the right mysql-statement-snippet for columns/fields
+     *
+     * @param Setup_Backend_Schema_Field_Abstract field / column
+     * @param String | optional $_tableName [Not used in this backend (MySQL)]
+     * @return string
+     */
+    protected function _getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
+    {
+        $buffer = array();
+        $buffer[] = '  `' . $_field->name . '`';
+        
+
+            $typeMapping = $this->getTypeMapping($_field->type);
+        if ($typeMapping) {
+            $fieldType = $typeMapping['defaultType'];
+
+            if ($_field->length !== NULL) {
+                if (isset($typeMapping['lengthTypes']) && is_array($typeMapping['lengthTypes'])) {
+                    foreach ($typeMapping['lengthTypes'] as $maxLength => $type) {
+                        if ($_field->length <= $maxLength) {
+                            $fieldType = $type;
+                            $precision  = '';
+                            if (isset($_field->precision)) {
+                                $precision = ',' . $_field->precision;
+                            } elseif(isset($typeMapping['defaultPrecision'])) {
+                                $precision = ',' . $typeMapping['defaultPrecision'];
+                            }
+                             
+                            $options = "({$_field->length}{$precision})";
+                            break;
+                        }
+                    }
+                    if (!isset($options)) {
+                        throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given length of {$_field->length} is not supported by field type {$_field->type}");
+                    }
+                } else {
+                    throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: Length option was specified but is not supported by field type {$_field->type}");
+                }
+            } else {
+                $options = '';
+                if (isset($_field->value)) {
+                    foreach ($_field->value as $value) {
+                        $values[] = $value;
+                    }
+                    $options = "('" . implode("','", $values) . "')";
+                } elseif(isset($typeMapping['defaultLength'])) {
+                    $precision = isset($typeMapping['defaultPrecision']) ? ',' . $typeMapping['defaultPrecision'] : '';
+                    $options = "({$typeMapping['defaultLength']}{$precision})";
+                }
+            }
+
+            $buffer[] = $fieldType . $options;
+        } else {
+            throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given field type {$_field->type} is not supported");
+        }
+        
+        return $buffer;
+    }
+
 }

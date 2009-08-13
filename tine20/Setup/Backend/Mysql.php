@@ -17,6 +17,49 @@
  */
 class Setup_Backend_Mysql extends Setup_Backend_Abstract
 {
+ 
+    /**
+     * Define how database agnostic data types get mapped to mysql data types
+     * 
+     * @var array
+     */
+    protected $_typeMappings = array(
+        'integer' => array(
+            'lengthTypes' => array(
+                4 => 'tinyint',
+                19 => 'int',
+                64 => 'bigint'),
+            'defaultType' => 'int',
+            'defaultLength' => self::INTEGER_DEFAULT_LENGTH),
+        'boolean' => array(
+            'defaultType' => 'tinyint',
+            'defaultLength' => 1),
+        'text' => array(
+            'lengthTypes' => array(
+                256 => 'varchar', //@todo this should be 255 indeed but we have 256 in our setup.xml files
+                65535 => 'text',
+                16777215 => 'mediumtext',
+                4294967295 => 'longtext'),
+            'defaultType' => 'text',
+            'defaultLength' => null),
+        'float' => array(
+            'defaultType' => 'double'),
+//        'decimal' => array(
+//            'defaultType' => 'numeric'),
+        'datetime' => array(
+            'defaultType' => 'datetime'),
+        'time' => array(
+            'defaultType' => 'time'),
+        'date' => array(
+            'defaultType' => 'date'),
+        'blob' => array(
+            'defaultType' => 'longblob'),
+        'clob' => array(
+            'defaultType' => 'longtext'),
+        'enum' => array(
+            'defaultType' => 'enum')
+    );
+ 
     /**
      * takes the xml stream and creates a table
      *
@@ -356,65 +399,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
     {
-        $buffer[] = '  `' . $_field->name . '`';
-
-        switch ($_field->type) {
-            case 'text': 
-                if ($_field->length !== NULL && $_field->length <= 256) {
-                    $buffer[] = 'varchar(' . $_field->length . ')';
-                } else {
-                    $buffer[] = 'text';
-                }
-                break;
-            
-            case 'integer':
-                if ($_field->length !== NULL) {
-                    if ($_field->length > 19) {
-                        $buffer[] = 'bigint(' . $_field->length . ')';
-                    } else if ($_field->length < 5){
-                        $buffer[] = 'tinyint(' . $_field->length . ')';
-                    } else {
-                        $buffer[] = 'int(' . $_field->length . ')';
-                    }
-                } else {
-                    $buffer[] = 'int(' . Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH .')';
-                }
-                break;
-            
-            case 'clob':
-                $buffer[] = 'longtext';
-                break;
-            
-            case 'blob':
-                $buffer[] = 'longblob';
-                break;
-            
-            case 'enum':
-                foreach ($_field->value as $value) {
-                    $values[] = $value;
-                }
-                $buffer[] = "enum('" . implode("','", $values) . "')";
-                break;
-            
-            case 'datetime':
-                $buffer[] = 'datetime';
-                break;
-            
-            case 'float':
-                $buffer[] = 'double';
-                break;
-            
-            case 'decimal':
-                $buffer[] = "decimal(" . $_field->value . ")";
-                break;
-                
-            case 'boolean':
-                $buffer[] = 'tinyint(1)';
-                break;
-                
-            default:
-                $buffer[] = $_field->type;
-        }
+        $buffer = $this->_getFieldDeclarations($_field, $_tableName);
 
         if (isset($_field->unsigned) && $_field->unsigned === true) {
             $buffer[] = 'unsigned';
@@ -425,7 +410,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
 
         if (isset($_field->default)) {
-            $buffer[] = $this->_db->quoteInto("default ?", $_field->default) ;
+            $buffer[] = $this->_db->quoteInto("DEFAULT ?", $_field->default) ;
         }
 
         if (isset($_field->autoincrement) && $_field->autoincrement === true) {
