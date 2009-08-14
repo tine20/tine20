@@ -59,7 +59,7 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
         
         'record_id'              => array('allowEmpty' => true),
         'record_model'           => array('allowEmpty' => true),
-        'record_backend'         => array('allowEmpty' => true),
+        'record_backend'         => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 'Sql'),
     
         'created_by'             => array('allowEmpty' => true),
         'creation_time'          => array('allowEmpty' => true),
