@@ -641,6 +641,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                <field>
                     <name>geo_lattitude</name>
                     <type>float</type>
+                    <unsigned>false</unsigned>
                 </field>";
             
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
@@ -655,15 +656,12 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $db = Tinebase_Core::getDb();
         $tableName = SQL_TABLE_PREFIX . $this->_table->name;
 
-        $value = 1.2;
-        $db->insert($tableName, array('name' => 'test1', 'geo_lattitude' => $value));
-        $result = $db->fetchCol($db->select()->from($tableName, 'geo_lattitude'));
-        $this->assertEquals($value, $result[0]);
-        
-        $value = 999.99999999;
-        $db->insert($tableName, array('name' => 'test2', 'geo_lattitude' => $value));
-        $result = $db->fetchCol($db->select()->from($tableName, 'geo_lattitude'));
-        $this->assertEquals($value, $result[1]);
+        $testValues = array(1.2, -1.2, 999.99999999);
+        foreach ($testValues as $index => $value) {
+            $db->insert($tableName, array('name' => 'test', 'geo_lattitude' => $value));
+            $result = $db->fetchCol($db->select()->from($tableName, 'geo_lattitude'));
+            $this->assertEquals($value, $result[$index], 'Testing value ' . $value);
+        }
     }
     
     public function testStringToForeignKeyStatement_001() 
