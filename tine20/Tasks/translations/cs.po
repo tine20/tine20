@@ -99,7 +99,7 @@ msgstr "Čas vytvoření"
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
 
-#: js/Status.js:45 Setup/setup.xml:443
+#: js/Status.js:45 Setup/setup.xml:444
 msgid "IN-PROCESS"
 msgstr "ROZPRACOVANÝ"
 
@@ -125,15 +125,15 @@ msgstr[2] "seznamů úkolů"
 msgid "to do lists"
 msgstr "seznamy úkolů"
 
-#: Setup/setup.xml:399
+#: Setup/setup.xml:400
 msgid "NEEDS-ACTION"
 msgstr "VYŽADUJE ZÁSAH"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:422
 msgid "COMPLETED"
 msgstr "DOKONČENÝ"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:466
 msgid "CANCELLED"
 msgstr "ZRUŠENÝ"
 

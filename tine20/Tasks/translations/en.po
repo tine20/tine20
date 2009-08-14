@@ -96,7 +96,7 @@ msgstr "Creation Time"
 msgid "Show closed"
 msgstr "Show closed"
 
-#: js/Status.js:45 Setup/setup.xml:443
+#: js/Status.js:45 Setup/setup.xml:444
 msgid "IN-PROCESS"
 msgstr "IN-PROCESS"
 
@@ -120,14 +120,14 @@ msgstr[1] "to do lists"
 msgid "to do lists"
 msgstr "to do lists"
 
-#: Setup/setup.xml:399
+#: Setup/setup.xml:400
 msgid "NEEDS-ACTION"
 msgstr "NEEDS-ACTION"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:422
 msgid "COMPLETED"
 msgstr "COMPLETED"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:466
 msgid "CANCELLED"
 msgstr "CANCELLED"

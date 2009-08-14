@@ -33,77 +33,77 @@ msgstr "Description:<br/>"
 msgid "%s's personal calendar"
 msgstr "Calendrier de %s"
 
-#: js/AttendeeGridPanel.js:40 js/Model.js:232
+#: js/AttendeeGridPanel.js:55 js/Model.js:232
 msgid "Attendee"
 msgstr "Participant"
 
-#: js/AttendeeGridPanel.js:69
+#: js/AttendeeGridPanel.js:84
 msgid "Role"
 msgstr "Rôle"
 
-#: js/AttendeeGridPanel.js:78
+#: js/AttendeeGridPanel.js:93
 msgid "Quantity"
 msgstr "Quantité"
 
-#: js/AttendeeGridPanel.js:87
+#: js/AttendeeGridPanel.js:102
 msgid "This is the calendar where the attender has saved this event in"
 msgstr "Calendrier où le participant a enregistré cet évènement"
 
-#: js/AttendeeGridPanel.js:123
+#: js/AttendeeGridPanel.js:138
 msgid "Type"
 msgstr "Type"
 
-#: js/AttendeeGridPanel.js:130
+#: js/AttendeeGridPanel.js:145
 msgid "Name"
 msgstr "Nom"
 
-#: js/AttendeeGridPanel.js:160
+#: js/AttendeeGridPanel.js:175
 msgid "Status"
 msgstr "Statut"
 
-#: js/AttendeeGridPanel.js:171 js/AttendeeGridPanel.js:425
+#: js/AttendeeGridPanel.js:186 js/AttendeeGridPanel.js:447
 msgid "No response"
 msgstr "Pas de réponse"
 
-#: js/AttendeeGridPanel.js:172 js/AttendeeGridPanel.js:428
+#: js/AttendeeGridPanel.js:187 js/AttendeeGridPanel.js:450
 msgid "Accepted"
 msgstr "Accepté"
 
-#: js/AttendeeGridPanel.js:173 js/AttendeeGridPanel.js:431
+#: js/AttendeeGridPanel.js:188 js/AttendeeGridPanel.js:453
 msgid "Declined"
 msgstr "Refusé"
 
-#: js/AttendeeGridPanel.js:174 js/AttendeeGridPanel.js:434
+#: js/AttendeeGridPanel.js:189 js/AttendeeGridPanel.js:456
 msgid "Tentative"
 msgstr "Tentative"
 
-#: js/AttendeeGridPanel.js:238
+#: js/AttendeeGridPanel.js:253
 msgid "Remove Attender"
 msgstr "supprimer le participant"
 
-#: js/AttendeeGridPanel.js:367 js/AttendeeGridPanel.js:389
+#: js/AttendeeGridPanel.js:389 js/AttendeeGridPanel.js:411
 msgid "No Information"
 msgstr "Pas d'informations"
 
-#: js/AttendeeGridPanel.js:377
+#: js/AttendeeGridPanel.js:399
 msgid "Click here to invite another attender..."
 msgstr "Cliquez ici pour ajouter un participant..."
 
-#: js/AttendeeGridPanel.js:401
+#: js/AttendeeGridPanel.js:423
 msgid "Required"
 msgstr "Requis"
 
-#: js/AttendeeGridPanel.js:404
+#: js/AttendeeGridPanel.js:426
 msgid "Optional"
 msgstr "Optionnel"
 
-#: js/Calendar.js:28 js/Model.js:76 Setup/setup.xml:4
+#: js/Calendar.js:36 js/Model.js:76 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Calendrier"
 msgstr[1] "Calendriers"
 
-#: js/Calendar.js:128 js/MonthView.js:87
+#: js/Calendar.js:151 js/MonthView.js:87
 msgid "WK"
 msgstr "WK"
 
@@ -111,92 +111,92 @@ msgstr "WK"
 msgid "Loading events, please wait..."
 msgstr "Chargement, veuillez patienter..."
 
-#: js/CalendarPanel.js:134
+#: js/CalendarPanel.js:178
 msgid "Confirm Update of Series"
 msgstr "Confirmer la mise à jour de la série"
 
-#: js/CalendarPanel.js:135
+#: js/CalendarPanel.js:179
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 
-#: js/CalendarPanel.js:152
+#: js/CalendarPanel.js:196
 msgid "Update Event"
 msgstr "Mettre à jour un évènement"
 
-#: js/CalendarPanel.js:155 js/CalendarPanel.js:157
+#: js/CalendarPanel.js:199 js/CalendarPanel.js:201
 msgid "Do you want to update the whole series, or just this event"
 msgstr "Voulez-vous mettre à jour toute la série, ou juste cet évènement?"
 
-#: js/CalendarPanel.js:159
+#: js/CalendarPanel.js:203
 msgid "Update nothing"
 msgstr "Ne rien mettre à jour"
 
-#: js/CalendarPanel.js:167
+#: js/CalendarPanel.js:211
 msgid "Update whole series"
 msgstr "Mettre à jour toute la série"
 
-#: js/CalendarPanel.js:179
+#: js/CalendarPanel.js:223
 msgid "Failed not update recurring event series"
 msgstr ""
 
-#: js/CalendarPanel.js:187
+#: js/CalendarPanel.js:231
 msgid "Update this event only"
 msgstr "Mettre à jour cet évènement seulement"
 
-#: js/CalendarPanel.js:201
+#: js/CalendarPanel.js:245
 msgid "Failed not update event"
 msgstr "Impossible de mettre à jour l'évenement"
 
-#: js/CalendarSelectWidget.js:128
+#: js/CalendarSelectWidget.js:157
 #, fuzzy
 msgid "Originally"
 msgstr "A l'origine"
 
-#: js/DaysView.js:87 js/MonthView.js:82
+#: js/DaysView.js:90 js/MonthView.js:82
 msgid "New Event"
 msgstr "Nouvel évènement"
 
-#: js/DaysView.js:92
+#: js/DaysView.js:95
 msgid "{0}, the {1}. of {2}"
 msgstr "{0} {1} {2}"
 
-#: js/EventEditDialog.js:95
+#: js/EventEditDialog.js:93
 msgid "Summary"
 msgstr "Résumé"
 
-#: js/EventEditDialog.js:102
+#: js/EventEditDialog.js:100
 msgid "Location"
 msgstr "Lieu"
 
-#: js/EventEditDialog.js:107
+#: js/EventEditDialog.js:105
 msgid "Start Time"
 msgstr "Date de début"
 
-#: js/EventEditDialog.js:122
+#: js/EventEditDialog.js:120
 msgid "End Time"
 msgstr "Date de fin"
 
-#: js/EventEditDialog.js:130
+#: js/EventEditDialog.js:128
 msgid "whole day"
 msgstr "toute la journée"
 
-#: js/EventEditDialog.js:163
+#: js/EventEditDialog.js:161
 msgid "Description"
 msgstr "Description"
 
-#: js/EventEditDialog.js:177
+#: js/EventEditDialog.js:175
 msgid "Enter description"
 msgstr "Saisir une description"
 
-#: js/EventEditDialog.js:296
+#: js/EventEditDialog.js:299
 msgid "End date is not valid"
 msgstr "Date de fin non valide"
 
-#: js/EventEditDialog.js:299
+#: js/EventEditDialog.js:302
 msgid "End date must be after start date"
 msgstr "La date de fin doit être postérieure à la date de début"
 
-#: js/EventEditDialog.js:312
+#: js/EventEditDialog.js:315
 msgid "Start date is not valid"
 msgstr "Date de début non valide"
 

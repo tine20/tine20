@@ -77,107 +77,107 @@ msgstr "Kde jsou zálohovací pásky"
 msgid "Dependency Violation"
 msgstr "Závisí na"
 
-#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:86 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
 msgstr "Neplatná konfigurace"
 
-#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:86 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr "Než bude konfigurace uložena, musíte opravit červeně označená pole"
 
-#: js/AuthenticationGridPanel.js:122 js/ConfigManagerGridPanel.js:95
+#: js/AuthenticationGridPanel.js:132 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
 msgstr "Přesouvám konfiguraci..."
 
-#: js/AuthenticationGridPanel.js:138
+#: js/AuthenticationGridPanel.js:158 js/AuthenticationGridPanel.js:178
+msgid "Backend"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:191
 #, fuzzy
 msgid "Authentication provider"
 msgstr "Přihlášení do instalačního programu"
 
-#: js/AuthenticationGridPanel.js:150 js/AuthenticationGridPanel.js:247
-msgid "Backend"
-msgstr ""
-
-#: js/AuthenticationGridPanel.js:177
+#: js/AuthenticationGridPanel.js:214
 msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:181
+#: js/AuthenticationGridPanel.js:218
 msgid "Initial admin Password"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:185 js/AuthenticationGridPanel.js:280
+#: js/AuthenticationGridPanel.js:222 js/AuthenticationGridPanel.js:301
 #, fuzzy
 msgid "Password confirmation"
 msgstr "Neplatná konfigurace"
 
-#: js/AuthenticationGridPanel.js:199 js/AuthenticationGridPanel.js:293
+#: js/AuthenticationGridPanel.js:236 js/AuthenticationGridPanel.js:314
 #, fuzzy
 msgid "Host"
 msgstr "Název nebo adresa počítače"
 
-#: js/AuthenticationGridPanel.js:204 js/AuthenticationGridPanel.js:274
-#: js/AuthenticationGridPanel.js:298
+#: js/AuthenticationGridPanel.js:241 js/AuthenticationGridPanel.js:295
+#: js/AuthenticationGridPanel.js:319
 msgid "Login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:207 js/AuthenticationGridPanel.js:277
-#: js/AuthenticationGridPanel.js:301 js/ConfigManagerGridPanel.js:118
+#: js/AuthenticationGridPanel.js:244 js/AuthenticationGridPanel.js:298
+#: js/AuthenticationGridPanel.js:322 js/ConfigManagerGridPanel.js:118
 #: js/ConfigManagerGridPanel.js:144
 msgid "Password"
 msgstr "Heslo"
 
-#: js/AuthenticationGridPanel.js:220 js/AuthenticationGridPanel.js:314
+#: js/AuthenticationGridPanel.js:257 js/AuthenticationGridPanel.js:335
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:224
+#: js/AuthenticationGridPanel.js:261
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:227
+#: js/AuthenticationGridPanel.js:264
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:235
+#: js/AuthenticationGridPanel.js:272
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:318
+#: js/AuthenticationGridPanel.js:339
 #, fuzzy
 msgid "User DN"
 msgstr "Uživatel"
 
-#: js/AuthenticationGridPanel.js:321
+#: js/AuthenticationGridPanel.js:342
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:333
+#: js/AuthenticationGridPanel.js:354
 #, fuzzy
 msgid "Password encoding"
 msgstr "Heslo"
 
-#: js/AuthenticationGridPanel.js:346
+#: js/AuthenticationGridPanel.js:367
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:350
+#: js/AuthenticationGridPanel.js:371
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:353
+#: js/AuthenticationGridPanel.js:374
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:356
+#: js/AuthenticationGridPanel.js:377
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:359
+#: js/AuthenticationGridPanel.js:380
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:442
+#: js/AuthenticationGridPanel.js:463
 msgid "Apply changes"
 msgstr ""
 

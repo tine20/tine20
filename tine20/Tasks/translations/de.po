@@ -96,7 +96,7 @@ msgstr "Angelegt am"
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Status.js:45 Setup/setup.xml:443
+#: js/Status.js:45 Setup/setup.xml:444
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
@@ -120,15 +120,15 @@ msgstr[1] "Aufgabenlisten"
 msgid "to do lists"
 msgstr "Aufgabenlisten"
 
-#: Setup/setup.xml:399
+#: Setup/setup.xml:400
 msgid "NEEDS-ACTION"
 msgstr "ZU BEARBEITEN"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:422
 msgid "COMPLETED"
 msgstr "ERLEDIGT"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:466
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
 

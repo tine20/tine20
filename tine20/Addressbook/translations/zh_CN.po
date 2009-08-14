@@ -200,7 +200,7 @@ msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "联系人"
 
-#: js/Addressbook.js:479
+#: js/Addressbook.js:479 js/ContactGridDetailsPanel.js:67
 msgid "Contacts"
 msgstr "联系人"
 
@@ -377,7 +377,7 @@ msgstr "呼叫联系人"
 msgid "Work"
 msgstr "工作"
 
-#: js/ContactGrid.js:214
+#: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
 msgid "Home"
 msgstr "家里"
 
@@ -393,10 +393,18 @@ msgstr "私人手机"
 msgid "Select contact"
 msgstr "选择联系人"
 
+#: js/ContactGridDetailsPanel.js:136
+msgid "Office"
+msgstr ""
+
 #: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
 #: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "电子邮件"
+
+#: js/ContactGridDetailsPanel.js:183
+msgid "Info"
+msgstr ""
 
 #: js/EditDialog.js:30
 msgid "Suffix"

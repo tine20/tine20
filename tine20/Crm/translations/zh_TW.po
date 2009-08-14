@@ -457,54 +457,54 @@ msgstr "輸入說明"
 msgid "Expected turnover"
 msgstr ""
 
-#: Setup/setup.xml:370
+#: Setup/setup.xml:372
 msgid "telephone"
 msgstr "電話"
 
-#: Setup/setup.xml:384
+#: Setup/setup.xml:386
 msgid "email"
 msgstr "電子郵件"
 
-#: Setup/setup.xml:398
+#: Setup/setup.xml:400
 msgid "website"
 msgstr "網站"
 
-#: Setup/setup.xml:412
+#: Setup/setup.xml:414
 msgid "fair"
 msgstr ""
 
-#: Setup/setup.xml:426
+#: Setup/setup.xml:428
 msgid "customer"
 msgstr "客戶"
 
-#: Setup/setup.xml:440
+#: Setup/setup.xml:442
 msgid "partner"
 msgstr "夥伴"
 
-#: Setup/setup.xml:454
+#: Setup/setup.xml:456
 msgid "reseller"
 msgstr "經銷商"
 
-#: Setup/setup.xml:468
+#: Setup/setup.xml:470
 msgid "open"
 msgstr "開啟"
 
-#: Setup/setup.xml:486
+#: Setup/setup.xml:488
 msgid "contacted"
 msgstr ""
 
-#: Setup/setup.xml:504
+#: Setup/setup.xml:506
 msgid "waiting for feedback"
 msgstr "等候回覆"
 
-#: Setup/setup.xml:522
+#: Setup/setup.xml:524
 msgid "quote sent"
 msgstr ""
 
-#: Setup/setup.xml:540
+#: Setup/setup.xml:542
 msgid "accepted"
 msgstr "已接受"
 
-#: Setup/setup.xml:562
+#: Setup/setup.xml:564
 msgid "lost"
 msgstr "損失"

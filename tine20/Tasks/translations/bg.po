@@ -96,7 +96,7 @@ msgstr "Създаден на"
 msgid "Show closed"
 msgstr "Покажи приключени задачи"
 
-#: js/Status.js:45 Setup/setup.xml:443
+#: js/Status.js:45 Setup/setup.xml:444
 msgid "IN-PROCESS"
 msgstr "В ПРОЦЕС"
 
@@ -120,15 +120,15 @@ msgstr[1] "списъка със задачи"
 msgid "to do lists"
 msgstr "списъци със задачи"
 
-#: Setup/setup.xml:399
+#: Setup/setup.xml:400
 msgid "NEEDS-ACTION"
 msgstr "НЕОБХОДИМА Е НАМЕСА"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:422
 msgid "COMPLETED"
 msgstr "ЗАВЪРШЕНИ"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:466
 msgid "CANCELLED"
 msgstr "ПРЕКЪСНАТИ"
 

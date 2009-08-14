@@ -457,54 +457,54 @@ msgstr "説明を入力してください"
 msgid "Expected turnover"
 msgstr "概算売上見積"
 
-#: Setup/setup.xml:370
+#: Setup/setup.xml:372
 msgid "telephone"
 msgstr "電話番号"
 
-#: Setup/setup.xml:384
+#: Setup/setup.xml:386
 msgid "email"
 msgstr "Eメール"
 
-#: Setup/setup.xml:398
+#: Setup/setup.xml:400
 msgid "website"
 msgstr "ウェブサイト"
 
-#: Setup/setup.xml:412
+#: Setup/setup.xml:414
 msgid "fair"
 msgstr "フェア"
 
-#: Setup/setup.xml:426
+#: Setup/setup.xml:428
 msgid "customer"
 msgstr "顧客"
 
-#: Setup/setup.xml:440
+#: Setup/setup.xml:442
 msgid "partner"
 msgstr "パートナ"
 
-#: Setup/setup.xml:454
+#: Setup/setup.xml:456
 msgid "reseller"
 msgstr "リセラー"
 
-#: Setup/setup.xml:468
+#: Setup/setup.xml:470
 msgid "open"
 msgstr "オープン"
 
-#: Setup/setup.xml:486
+#: Setup/setup.xml:488
 msgid "contacted"
 msgstr "コンタクト済"
 
-#: Setup/setup.xml:504
+#: Setup/setup.xml:506
 msgid "waiting for feedback"
 msgstr "フィードバック待ち"
 
-#: Setup/setup.xml:522
+#: Setup/setup.xml:524
 msgid "quote sent"
 msgstr "見積送付済"
 
-#: Setup/setup.xml:540
+#: Setup/setup.xml:542
 msgid "accepted"
 msgstr "受注"
 
-#: Setup/setup.xml:562
+#: Setup/setup.xml:564
 msgid "lost"
 msgstr "失注"

@@ -77,102 +77,102 @@ msgstr "Where are the backup tapes"
 msgid "Dependency Violation"
 msgstr "Dependency Violation"
 
-#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:86 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
 msgstr "Invalid configuration"
 
-#: js/AuthenticationGridPanel.js:76 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:86 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr "You need to correct the red marked fields before config could be saved"
 
-#: js/AuthenticationGridPanel.js:122 js/ConfigManagerGridPanel.js:95
+#: js/AuthenticationGridPanel.js:132 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
 msgstr "Transfering Configuration..."
 
-#: js/AuthenticationGridPanel.js:138
-msgid "Authentication provider"
-msgstr "Authentication provider"
-
-#: js/AuthenticationGridPanel.js:150 js/AuthenticationGridPanel.js:247
+#: js/AuthenticationGridPanel.js:158 js/AuthenticationGridPanel.js:178
 msgid "Backend"
 msgstr "Backend"
 
-#: js/AuthenticationGridPanel.js:177
+#: js/AuthenticationGridPanel.js:191
+msgid "Authentication provider"
+msgstr "Authentication provider"
+
+#: js/AuthenticationGridPanel.js:214
 msgid "Initial admin login name"
 msgstr "Initial admin login name"
 
-#: js/AuthenticationGridPanel.js:181
+#: js/AuthenticationGridPanel.js:218
 msgid "Initial admin Password"
 msgstr "Initial admin Password"
 
-#: js/AuthenticationGridPanel.js:185 js/AuthenticationGridPanel.js:280
+#: js/AuthenticationGridPanel.js:222 js/AuthenticationGridPanel.js:301
 msgid "Password confirmation"
 msgstr "Password confirmation"
 
-#: js/AuthenticationGridPanel.js:199 js/AuthenticationGridPanel.js:293
+#: js/AuthenticationGridPanel.js:236 js/AuthenticationGridPanel.js:314
 msgid "Host"
 msgstr "Host"
 
-#: js/AuthenticationGridPanel.js:204 js/AuthenticationGridPanel.js:274
-#: js/AuthenticationGridPanel.js:298
+#: js/AuthenticationGridPanel.js:241 js/AuthenticationGridPanel.js:295
+#: js/AuthenticationGridPanel.js:319
 msgid "Login name"
 msgstr "Login name"
 
-#: js/AuthenticationGridPanel.js:207 js/AuthenticationGridPanel.js:277
-#: js/AuthenticationGridPanel.js:301 js/ConfigManagerGridPanel.js:118
+#: js/AuthenticationGridPanel.js:244 js/AuthenticationGridPanel.js:298
+#: js/AuthenticationGridPanel.js:322 js/ConfigManagerGridPanel.js:118
 #: js/ConfigManagerGridPanel.js:144
 msgid "Password"
 msgstr "Password"
 
-#: js/AuthenticationGridPanel.js:220 js/AuthenticationGridPanel.js:314
+#: js/AuthenticationGridPanel.js:257 js/AuthenticationGridPanel.js:335
 msgid "Bind requires DN"
 msgstr "Bind requires DN"
 
-#: js/AuthenticationGridPanel.js:224
+#: js/AuthenticationGridPanel.js:261
 msgid "Base DN"
 msgstr "Base DN"
 
-#: js/AuthenticationGridPanel.js:227
+#: js/AuthenticationGridPanel.js:264
 msgid "Account canonical form"
 msgstr "Account canonical form"
 
-#: js/AuthenticationGridPanel.js:235
+#: js/AuthenticationGridPanel.js:272
 msgid "Accounts storage"
 msgstr "Accounts storage"
 
-#: js/AuthenticationGridPanel.js:318
+#: js/AuthenticationGridPanel.js:339
 msgid "User DN"
 msgstr "User DN"
 
-#: js/AuthenticationGridPanel.js:321
+#: js/AuthenticationGridPanel.js:342
 msgid "Groups DN"
 msgstr "Groups DN"
 
-#: js/AuthenticationGridPanel.js:333
+#: js/AuthenticationGridPanel.js:354
 msgid "Password encoding"
 msgstr "Password encoding"
 
-#: js/AuthenticationGridPanel.js:346
+#: js/AuthenticationGridPanel.js:367
 msgid "Use Rfc 2307 bis"
 msgstr "Use Rfc 2307 bis"
 
-#: js/AuthenticationGridPanel.js:350
+#: js/AuthenticationGridPanel.js:371
 msgid "Min User Id"
 msgstr "Min User Id"
 
-#: js/AuthenticationGridPanel.js:353
+#: js/AuthenticationGridPanel.js:374
 msgid "Max User Id"
 msgstr "Max User Id"
 
-#: js/AuthenticationGridPanel.js:356
+#: js/AuthenticationGridPanel.js:377
 msgid "Min Group Id"
 msgstr "Min Group Id"
 
-#: js/AuthenticationGridPanel.js:359
+#: js/AuthenticationGridPanel.js:380
 msgid "Max Group Id"
 msgstr "Max Group Id"
 
-#: js/AuthenticationGridPanel.js:442
+#: js/AuthenticationGridPanel.js:463
 msgid "Apply changes"
 msgstr "Apply changes"
 

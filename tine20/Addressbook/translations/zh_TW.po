@@ -200,7 +200,7 @@ msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "聯絡人"
 
-#: js/Addressbook.js:479
+#: js/Addressbook.js:479 js/ContactGridDetailsPanel.js:67
 msgid "Contacts"
 msgstr "聯絡人"
 
@@ -377,7 +377,7 @@ msgstr "撥打聯絡人"
 msgid "Work"
 msgstr "工作"
 
-#: js/ContactGrid.js:214
+#: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
 msgid "Home"
 msgstr "家裡"
 
@@ -393,10 +393,18 @@ msgstr "個人手機號碼"
 msgid "Select contact"
 msgstr "選取聯絡人"
 
+#: js/ContactGridDetailsPanel.js:136
+msgid "Office"
+msgstr ""
+
 #: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
 #: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "電子郵件"
+
+#: js/ContactGridDetailsPanel.js:183
+msgid "Info"
+msgstr ""
 
 #: js/EditDialog.js:30
 msgid "Suffix"

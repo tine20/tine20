@@ -100,7 +100,7 @@ msgstr ""
 msgid "Show closed"
 msgstr "Pokaż zamknięte"
 
-#: js/Status.js:45 Setup/setup.xml:443
+#: js/Status.js:45 Setup/setup.xml:444
 msgid "IN-PROCESS"
 msgstr "W PRZETWARZANIU"
 
@@ -129,15 +129,15 @@ msgstr[2] "Lista to do"
 msgid "to do lists"
 msgstr "Listy to do"
 
-#: Setup/setup.xml:399
+#: Setup/setup.xml:400
 msgid "NEEDS-ACTION"
 msgstr "KONIECZNOŚĆ-DZIAŁANIA"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:422
 msgid "COMPLETED"
 msgstr "ZAKOŃCZONY"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:466
 msgid "CANCELLED"
 msgstr "ODWOŁANY "
 

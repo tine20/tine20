@@ -201,7 +201,7 @@ msgid_plural "Contacts"
 msgstr[0] "Contact"
 msgstr[1] "Contacts"
 
-#: js/Addressbook.js:479
+#: js/Addressbook.js:479 js/ContactGridDetailsPanel.js:67
 msgid "Contacts"
 msgstr "Contacts"
 
@@ -378,7 +378,7 @@ msgstr "call contact"
 msgid "Work"
 msgstr "Work"
 
-#: js/ContactGrid.js:214
+#: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
 msgid "Home"
 msgstr "Home"
 
@@ -394,10 +394,18 @@ msgstr "Cell private"
 msgid "Select contact"
 msgstr "Select contact"
 
+#: js/ContactGridDetailsPanel.js:136
+msgid "Office"
+msgstr "Office"
+
 #: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
 #: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "E-Mail"
+
+#: js/ContactGridDetailsPanel.js:183
+msgid "Info"
+msgstr "Info"
 
 #: js/EditDialog.js:30
 msgid "Suffix"

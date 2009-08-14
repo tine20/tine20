@@ -94,7 +94,7 @@ msgstr "作成時間"
 msgid "Show closed"
 msgstr "クローズされたものの表示"
 
-#: js/Status.js:45 Setup/setup.xml:443
+#: js/Status.js:45 Setup/setup.xml:444
 msgid "IN-PROCESS"
 msgstr "進行中"
 
@@ -116,14 +116,14 @@ msgstr[0] "ToDoリスト"
 msgid "to do lists"
 msgstr "ToDoリスト"
 
-#: Setup/setup.xml:399
+#: Setup/setup.xml:400
 msgid "NEEDS-ACTION"
 msgstr "要アクション"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:422
 msgid "COMPLETED"
 msgstr "完了"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:466
 msgid "CANCELLED"
 msgstr "キャンセル"

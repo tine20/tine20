@@ -95,7 +95,7 @@ msgstr "创建时间"
 msgid "Show closed"
 msgstr "显示关闭的"
 
-#: js/Status.js:45 Setup/setup.xml:443
+#: js/Status.js:45 Setup/setup.xml:444
 msgid "IN-PROCESS"
 msgstr "正在处理"
 
@@ -117,15 +117,15 @@ msgstr[0] "要做的事项列表"
 msgid "to do lists"
 msgstr "to do 列表"
 
-#: Setup/setup.xml:399
+#: Setup/setup.xml:400
 msgid "NEEDS-ACTION"
 msgstr "需要执行"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:422
 msgid "COMPLETED"
 msgstr "完成"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:466
 msgid "CANCELLED"
 msgstr "取消了"
 

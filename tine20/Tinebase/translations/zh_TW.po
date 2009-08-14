@@ -66,33 +66,33 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: Frontend/Http.php:288 js/tineInit.js:305
+#: Frontend/Http.php:324 js/tineInit.js:365
 msgid "Authorisation Required"
 msgstr "需要認證"
 
-#: Frontend/Http.php:289
+#: Frontend/Http.php:325
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 
-#: Frontend/Http.php:315 js/ExceptionDialog.js:46
+#: Frontend/Http.php:351 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr ""
 
-#: Frontend/Http.php:316 js/ExceptionDialog.js:71
+#: Frontend/Http.php:352 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
-#: js/common.js:100
+#: js/common.js:115
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} 分"
 
-#: js/common.js:101
+#: js/common.js:116
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} 小時"
 
-#: js/common.js:102
+#: js/common.js:117
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} 工作天"
@@ -107,7 +107,7 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "工作清單"
 
-#: js/ExceptionDialog.js:54 js/MainScreen.js:442
+#: js/ExceptionDialog.js:54 js/MainScreen.js:448
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:363
 #: js/widgets/dialog/EditDialog.js:173
@@ -198,7 +198,7 @@ msgstr "請稍後"
 msgid "Login successful. Loading Tine 2.0..."
 msgstr "登入成功, 進入Tine 2.0..."
 
-#: js/Login.js:138 js/MainScreen.js:527
+#: js/Login.js:138 js/MainScreen.js:533
 msgid "Please wait!"
 msgstr "請稍後!"
 
@@ -210,162 +210,166 @@ msgstr "登入失敗"
 msgid "Your username and/or your password are wrong!!!"
 msgstr "使用者名稱 或 密碼錯誤"
 
-#: js/MainScreen.js:55 js/widgets/container/GrantsDialog.js:110
+#: js/MainScreen.js:52
+msgid "Debug Console (Ctrl + F11)"
+msgstr ""
+
+#: js/MainScreen.js:60 js/widgets/container/GrantsDialog.js:110
 msgid "Admin"
 msgstr ""
 
-#: js/MainScreen.js:62 js/MainScreen.js:221
+#: js/MainScreen.js:67 js/MainScreen.js:228
 #: js/widgets/dialog/PreferencesPanel.js:37
 msgid "Preferences"
 msgstr "偏好設定"
 
-#: js/MainScreen.js:82
+#: js/MainScreen.js:89
 msgid "User: {0}"
 msgstr "使用者 : {0}"
 
-#: js/MainScreen.js:102
+#: js/MainScreen.js:109
 msgid "Sorry"
 msgstr ""
 
-#: js/MainScreen.js:102
+#: js/MainScreen.js:109
 #, fuzzy
 msgid ""
 "There are no applications enabled for you. Please contact your administrator."
 msgstr "伺服器無法收到回應, 請檢查網路狀態或聯絡系統管理者"
 
-#: js/MainScreen.js:201 js/MainScreen.js:375 js/MainScreen.js:390
+#: js/MainScreen.js:208 js/MainScreen.js:381 js/MainScreen.js:396
 #, fuzzy
 msgid "About Tine 2.0"
 msgstr "登出 Tine 2.0"
 
-#: js/MainScreen.js:207
+#: js/MainScreen.js:214
 msgid "Change password"
 msgstr "變更密碼"
 
-#: js/MainScreen.js:214
+#: js/MainScreen.js:221
 msgid "Install Google Gears"
 msgstr "安裝 Google Gears"
 
-#: js/MainScreen.js:230
+#: js/MainScreen.js:237
 msgid "Logout"
 msgstr "登出"
 
-#: js/MainScreen.js:231
+#: js/MainScreen.js:238
 msgid "Logout from Tine 2.0"
 msgstr "登出 Tine 2.0"
 
-#: js/MainScreen.js:406
+#: js/MainScreen.js:412
 msgid "Change Password For \"{0}\""
 msgstr "已變更 \"{0}\" 密碼"
 
-#: js/MainScreen.js:430
+#: js/MainScreen.js:436
 msgid "Old Password"
 msgstr "原來密碼"
 
-#: js/MainScreen.js:434
+#: js/MainScreen.js:440
 msgid "New Password"
 msgstr "新密碼"
 
-#: js/MainScreen.js:438
+#: js/MainScreen.js:444
 msgid "Repeat new Password"
 msgstr "確認新密碼"
 
-#: js/MainScreen.js:448 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:454 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:372
 #: js/widgets/dialog/EditDialog.js:156
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ok"
 
-#: js/MainScreen.js:457
+#: js/MainScreen.js:463
 msgid "Please Wait!"
 msgstr "請稍後!"
 
-#: js/MainScreen.js:458
+#: js/MainScreen.js:464
 msgid "changing password..."
 msgstr "正在變更密碼...."
 
-#: js/MainScreen.js:469
+#: js/MainScreen.js:475
 msgid "Success"
 msgstr "成功"
 
-#: js/MainScreen.js:470
+#: js/MainScreen.js:476
 msgid "Your password has been changed."
 msgstr "密碼已變更完成"
 
-#: js/MainScreen.js:476 js/MainScreen.js:486
+#: js/MainScreen.js:482 js/MainScreen.js:492
 msgid "Failure"
 msgstr "失敗"
 
-#: js/MainScreen.js:487
+#: js/MainScreen.js:493
 msgid "The new passwords mismatch, please correct them."
 msgstr "密碼不吻合, 請重新輸入"
 
-#: js/MainScreen.js:505
+#: js/MainScreen.js:511
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
 msgstr "安裝 Gears 可以改善 Tine 2.0 存取你電腦檔案的效能"
 
-#: js/MainScreen.js:525 js/widgets/app/GridPanel.js:552
+#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:552
 #: js/widgets/dialog/EditDialog.js:429
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "確認"
 
-#: js/MainScreen.js:525
+#: js/MainScreen.js:531
 msgid "Are you sure you want to logout?"
 msgstr "確認要登出嗎?"
 
-#: js/MainScreen.js:527
+#: js/MainScreen.js:533
 msgid "Logging you out..."
 msgstr ""
 
-#: js/tineInit.js:288
+#: js/tineInit.js:348
 msgid "Connection lost, please check your network!"
 msgstr "連線失敗, 請檢查網路狀態"
 
-#: js/tineInit.js:296
+#: js/tineInit.js:356
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
 msgstr "伺服器無法收到回應, 請檢查網路狀態或聯絡系統管理者"
 
-#: js/tineInit.js:306
+#: js/tineInit.js:366
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: js/tineInit.js:319
+#: js/tineInit.js:379
 msgid "Insufficient Rights"
 msgstr ""
 
-#: js/tineInit.js:320
+#: js/tineInit.js:380
 msgid "Sorry, you are not permitted to perform this action"
 msgstr ""
 
-#: js/tineInit.js:329
+#: js/tineInit.js:389
 msgid "Not Found"
 msgstr ""
 
-#: js/tineInit.js:330
+#: js/tineInit.js:390
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/tineInit.js:339
+#: js/tineInit.js:399
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/tineInit.js:340
+#: js/tineInit.js:400
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr ""
 
-#: js/tineInit.js:589
+#: js/tineInit.js:652
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -466,23 +470,23 @@ msgstr "無法載入影像, 請聯絡管理者"
 msgid "Software Version"
 msgstr "軟體版本"
 
-#: js/ux/grid/PagingToolbar.js:47
+#: js/ux/grid/PagingToolbar.js:45
 msgid "{0} selected"
 msgstr "已選取 {0} 個"
 
-#: js/ux/grid/PagingToolbar.js:48
+#: js/ux/grid/PagingToolbar.js:46
 msgid "Unselect all"
 msgstr "全不選"
 
-#: js/ux/grid/PagingToolbar.js:49
+#: js/ux/grid/PagingToolbar.js:47
 msgid "Select all visible ({0} records)"
 msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:50
+#: js/ux/grid/PagingToolbar.js:48
 msgid "Select all pages ({0} records)"
 msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:51
+#: js/ux/grid/PagingToolbar.js:49
 msgid "Toggle selection"
 msgstr ""
 
@@ -765,7 +769,7 @@ msgstr ""
 
 #: js/widgets/dialog/CredentialsDialog.js:116
 #: js/widgets/dialog/EditDialog.js:421
-#: js/widgets/dialog/PreferencesDialog.js:278
+#: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr ""
 
@@ -824,7 +828,7 @@ msgstr "偏好設定"
 msgid "Loading ..."
 msgstr "正在載入"
 
-#: js/widgets/dialog/PreferencesDialog.js:278
+#: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Saving of preferences failed."
 msgstr ""
 

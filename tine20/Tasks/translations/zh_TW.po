@@ -95,7 +95,7 @@ msgstr "建立時間"
 msgid "Show closed"
 msgstr "顯示已關閉"
 
-#: js/Status.js:45 Setup/setup.xml:443
+#: js/Status.js:45 Setup/setup.xml:444
 msgid "IN-PROCESS"
 msgstr "正在處理中"
 
@@ -117,14 +117,14 @@ msgstr[0] "工作清單"
 msgid "to do lists"
 msgstr "工作清單"
 
-#: Setup/setup.xml:399
+#: Setup/setup.xml:400
 msgid "NEEDS-ACTION"
 msgstr "需要被執行"
 
-#: Setup/setup.xml:421
+#: Setup/setup.xml:422
 msgid "COMPLETED"
 msgstr "已完成"
 
-#: Setup/setup.xml:465
+#: Setup/setup.xml:466
 msgid "CANCELLED"
 msgstr "已取消"
