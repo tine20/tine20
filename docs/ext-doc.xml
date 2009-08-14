@@ -50,29 +50,31 @@
         -->
 
     <sources>
-        <source src="../tine20/library/ExtJS/src" match="*.js"/>
-        <source src="../tine20/Tinebase/js/tineInit.js"/>
-        <source src="../tine20/Calendar/js" match="*.js"/>
-        <!--<source src="Calendar/js/AttendeeGridPanel.js"/> 
-        <source src="Calendar/js/Calendar.js"/> 
-        <source src="Calendar/js/CalendarPanel.js"/> 
-        <source src="Calendar/js/CalendarSelectWidget.js"/> 
-        <source src="Calendar/js/ColorManager.js"/> 
-        <source src="Calendar/js/DaysView.js"/> 
-        <source src="Calendar/js/EventEditDialog.js"/> 
-        <source src="Calendar/js/EventSelectionModel.js"/> 
-        <source src="Calendar/js/EventUI.js"/> 
-        <source src="Calendar/js/MainScreenCenterPanel.js"/> 
-        <source src="Calendar/js/Model.js"/> 
-        <source src="Calendar/js/MonthView.js"/> 
-        <source src="Calendar/js/PagingToolbar.js"/> 
-        <source src="Calendar/js/ParallelEventsRegistry.js"/> 
-        <source src="Calendar/js/RrulePanel.js"/> -->
+        <!-- <source src="../tine20/library/ExtJS/src" match="*.js"/> -->
+        <!-- <source src="../tine20/Tinebase/js/tineInit.js"/> -->
+        <!-- <source src="../tine20/Calendar/js" match="*.js"/> -->
+        <source src="../tine20/Calendar/js/AttendeeGridPanel.js"/>
+        <source src="../tine20/Calendar/js/Calendar.js"/>
+        <source src="../tine20/Calendar/js/CalendarPanel.js"/>
+        <source src="../tine20/Calendar/js/CalendarSelectWidget.js"/>
+        <source src="../tine20/Calendar/js/ColorManager.js"/>
+        <source src="../tine20/Calendar/js/DaysView.js"/>
+        <source src="../tine20/Calendar/js/EventEditDialog.js"/> 
+        <!-- <source src="../tine20/Calendar/js/EventSelectionModel.js"/> 
+        <source src="../tine20/Calendar/js/EventUI.js"/> 
+        <source src="../tine20/Calendar/js/MainScreenCenterPanel.js"/> 
+        <source src="../tine20/Calendar/js/Model.js"/> 
+        <source src="../tine20/Calendar/js/MonthView.js"/> 
+        <source src="../tine20/Calendar/js/PagingToolbar.js"/> 
+        <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
+        <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
         <source src="../tine20/Felamimail/js/FelamimailGridPanel.js"/>
         <source src="../tine20/Felamimail/js/FelamimailRecipientGrid.js"/>
     </sources>
     <tags>
         <tag name="author" title="Author"/>
+        <tag name="copyright" title="Copyright"/>
+        <tag name="license" title="License"/>
         <tag name="version" title="Version"/>
         <tag name="note" format="&lt;i&gt;NOTE: {0}&lt;/i&gt;"/>
         <tag name="demo" title="Demo" format="&lt;a href=&quot;{0}&quot;&gt;{0}&lt;/a&gt;" />        
