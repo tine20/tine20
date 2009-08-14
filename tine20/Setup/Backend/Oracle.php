@@ -23,7 +23,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * @var array
      */
     protected $_typeMappings = array(
-        'integer' => array(
+        'integer' => array( //integer in oracle is NUMBER with a scale of 0
             'lengthTypes' => array(
                 38 => 'NUMBER'),
             'defaultScale' => 0,
@@ -39,9 +39,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 4294967295 => 'CLOB'),
             'defaultType' => 'CLOB',
             'defaultLength' => null),
-        'float' => array(
-            'defaultType' => 'BINARY FLOAT'),
-        'decimal' => array(
+        'float' => array( //float in oracle is NUMBER without precision and scale options
+            'defaultType' => 'NUMBER'),
+        'decimal' => array( //decimal in oracle is NUMBER with length (precision) and scale options
             'lengthTypes' => array(
                 38 => 'NUMBER'),
             'defaultType' => 'NUMBER',

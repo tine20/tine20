@@ -37,10 +37,20 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
 
             switch ($_declaration['DATA_TYPE']) {
                 case('NUMBER'):
-                    $type = 'integer';
-                    $length = (int)$_declaration['PRECISION'];
-                    $scale = (int)$_declaration['SCALE'];
+                    $length = $_declaration['PRECISION'];
+                    $scale = $_declaration['SCALE'];
                     $default = intval($default);
+                    
+                    if (is_null($length) && is_null($scale)) {
+                        $type = 'float';
+                    } else if ($length && $scale) {
+                        $type = 'decimal';
+                        $scale = intval($scale);
+                        $length = intval($length);
+                    } else {
+                        $type = 'integer';
+                        $length = intval($length);
+                    }
                     break;
                 
                 case('enum'):
@@ -53,6 +63,7 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
                     
                 case('CLOB'):
                     $type = 'text'; //@todo set type to CLOB?
+                    $length = null;
                     break;
                 }
 

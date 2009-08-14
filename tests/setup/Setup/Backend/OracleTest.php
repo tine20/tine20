@@ -227,7 +227,17 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         
         $this->_backend->addCol($this->_table->name, $field, 1); //Cannot use 3rd parameter $_position in Oracle 
     }
-
+    
+    public function testDropCol()
+    {
+        $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
+        $testCol = $existingSchema1->fields[1];     
+        
+        $this->_backend->dropCol($this->_table->name, $testCol->name);
+        $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals(count($existingSchema1->fields), count($existingSchema2->fields)+1);
+    }
+    
     public function testStringToFieldStatement_001() 
     {
         $string ="
@@ -620,9 +630,40 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $result = $db->fetchCol($db->select()->from($tableName, 'price'));
         $this->assertEquals(round($value), $result[1], 'Test if too many scale digits get rounded');
         
-        $this->setExpectedException('Zend_Db_Statement_Exception', '22003'); //22003: too many digits (maxim 4 + 2 precision)
+        $this->setExpectedException('Zend_Db_Statement_Exception', 'ORA-01438'); //ORA-01438: too many digits (maxim 4 + 2 precision)
         $value = 99999;
         $db->insert($tableName, array('name' => 'test3', 'price' => $value));
+    }
+    
+    public function testStringToFieldStatement_021() 
+    {
+        $string ="
+               <field>
+                    <name>geo_lattitude</name>
+                    <type>float</type>
+                </field>";
+            
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $this->_backend->addCol($this->_table->name, $field);
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('geo_lattitude', $newColumn->name);
+        $this->assertNull($newColumn->length);
+        $this->assertNull($newColumn->scale);
+        $this->assertEquals('float', $newColumn->type);
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+
+        $value = 1.2;
+        $db->insert($tableName, array('name' => 'test1', 'geo_lattitude' => $value));
+        $result = $db->fetchCol($db->select()->from($tableName, 'geo_lattitude'));
+        $this->assertEquals($value, $result[0]);
+        
+        $value = 999.99999999;
+        $db->insert($tableName, array('name' => 'test2', 'geo_lattitude' => $value));
+        $result = $db->fetchCol($db->select()->from($tableName, 'geo_lattitude'));
+        $this->assertEquals($value, $result[1]);
     }
     
     public function testStringToForeignKeyStatement_001() 
