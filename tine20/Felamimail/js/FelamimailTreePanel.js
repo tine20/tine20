@@ -694,9 +694,11 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     onRequestFailed: function(response, request) {
         var responseText = Ext.util.JSON.decode(response.responseText);
+        
+        console.log(responseText);
 
-        if (responseText.msg == 'cannot login, user or password wrong' ||
-            responseText.msg == 'need at least user in params') {
+        if (responseText.message == 'cannot login, user or password wrong' ||
+            responseText.message == 'need at least user in params') {
             
             // get account id and update username/password
             var accountNode = request.argument.node;
