@@ -12,20 +12,22 @@
 Ext.namespace('Tine.Felamimail');
 
 /**
- * Message Compose Dialog
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.MessageEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ * 
+ * <p>Message Compose Dialog</p>
+ * <p>This dialog is for composing emails with recipients, body and attachments. 
+ * you can choose from which account you want to send the mail.</p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  * 
- * @namespace   Tine.Felamimail
- * @class       Tine.Felamimail.MessageEditDialog
- * @extends     Tine.widgets.dialog.EditDialog
  * @param       {Object} config
  * @constructor
- * 
- * TODO         reload signature when account combo changed
+ * Create a new MessageEditDialog
  */
  Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
@@ -219,7 +221,6 @@ Ext.namespace('Tine.Felamimail');
                     layout: 'form',
                     labelAlign: 'top',
                     items: [{
-                        //xtype:'reccombo',
                         xtype:'combo',
                         name: 'from',
                         fieldLabel: this.app.i18n._('From'),
@@ -228,16 +229,13 @@ Ext.namespace('Tine.Felamimail');
                         editable: false,
                         triggerAction: 'all',
                         anchor: '100%',
-                        store: accountStore
-                        /*
-                        store: new Ext.data.Store({
-                            fields: Tine.Felamimail.Model.Account,
-                            proxy: Tine.Felamimail.accountBackend,
-                            reader: Tine.Felamimail.accountBackend.getReader(),
-                            remoteSort: true,
-                            sortInfo: {field: 'user', dir: 'ASC'}
-                        })
-                        */
+                        store: accountStore,
+                        listeners: {
+                            scope: this,
+                            change: function() {
+                                
+                            }
+                        }
                     }]
                 }, {
                     region: 'center',
