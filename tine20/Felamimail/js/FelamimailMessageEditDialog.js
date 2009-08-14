@@ -232,8 +232,15 @@ Ext.namespace('Tine.Felamimail');
                         store: accountStore,
                         listeners: {
                             scope: this,
-                            change: function() {
+                            'change': function(combo, newValue, oldValue) {
+                                // get new signature
+                                var newSignature = Tine.Felamimail.getSignature(newValue);
+                                var signatureRegexp = new RegExp('<br><br><span class="felamimail\-body\-signature">\-\-<br>.*$');
                                 
+                                // update signature
+                                var bodyContent = this.htmlEditor.getValue();
+                                bodyContent = bodyContent.replace(signatureRegexp, newSignature);
+                                this.htmlEditor.setValue(bodyContent);
                             }
                         }
                     }]
