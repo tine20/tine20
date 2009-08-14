@@ -153,8 +153,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 dataIndex: 'address',
                 width: 40,
                 header: 'address',
-                editor: new Tine.Felamimail.ContactSearchCombo({}),
-                renderer: Ext.util.Format.htmlEncode
+                editor: new Tine.Felamimail.ContactSearchCombo({})
             }
         ]);
     },

@@ -279,15 +279,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             header: this.app.i18n._("Subject"),
             width: 300,
             sortable: true,
-            dataIndex: 'subject',
-            renderer: Ext.util.Format.htmlEncode
+            dataIndex: 'subject'
         },{
             id: 'from',
             header: this.app.i18n._("From"),
             width: 150,
             sortable: true,
-            dataIndex: 'from',
-            renderer: Ext.util.Format.htmlEncode
+            dataIndex: 'from'
         },{
             id: 'to',
             header: this.app.i18n._("To"),
@@ -721,7 +719,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                             : headers[header]
                     ) + '<br/>';
             }
-        }        
+        }
         return result;
     }    
 });
