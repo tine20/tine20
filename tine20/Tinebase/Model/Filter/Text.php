@@ -66,7 +66,9 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
          $value = str_replace(array('*', '_'), array('%', '\_'), $this->_value);
          
          // add wildcard to value according to operator
-         $value = str_replace('?', $value, $action['wildcards']);
+         if ($this->_operator != 'in') {
+            $value = str_replace('?', $value, $action['wildcards']);
+         }
          
          $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
          
