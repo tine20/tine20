@@ -63,6 +63,7 @@ Ext.QuickTips.init();
  * html encode all grid columns per defaut
  */
 Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
+Ext.grid.Column.prototype.renderer = Ext.util.Format.htmlEncode;
 
 Ext.apply(Ext.data.JsonStore.prototype, {
     url:  'index.php',
