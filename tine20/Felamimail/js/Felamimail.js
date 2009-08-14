@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
@@ -12,11 +12,24 @@
 Ext.namespace('Tine.Felamimail');
 
 /**
- * application obj
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.Application
+ * @extends     Tine.Tinebase.Application
  * 
- * @type Tine.Tinebase.Application
+ * <p>Felamimail application obj</p>
+ * <p></p>
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * 
+ * @constructor
+ * Create a new  Tine.Felamimail.Application
  */
-Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
+ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
      * returns title (Email)
      * 
@@ -104,7 +117,7 @@ Tine.Felamimail.getSignature = function(id) {
     var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
     if (signature && signature != '') {
         signature = Ext.util.Format.nl2br(signature);
-        result = '<br/><br/><span class="felamimail-body-signature">--<br/>' + signature + '</span>';
+        result = '<br><br><span class="felamimail-body-signature">--<br>' + signature + '</span>';
     }
     
     return result;
