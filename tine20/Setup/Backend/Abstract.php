@@ -211,18 +211,21 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     public function dropTable($_tableName)
     {
     	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
-        $statement = "DROP TABLE " . $this->_db->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
+        $statement = "DROP TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
     }
     
-    protected function _sanititzeName($_name)
+    /**
+     * renames table in database
+     * 
+     * @param string tableName
+     */
+    public function renameTable($_tableName, $_newName)
     {
-        if (strlen($_name) > Setup_Backend_Abstract::MAX_NAME_LENGTH) {
-            $_name = substr(md5($_name), 0 , Setup_Backend_Abstract::MAX_NAME_LENGTH);
-        }
-        return $_name;
+        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' RENAME TO ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_newName);
+        $this->execQueryVoid($statement);
     }
-    
+
     /**
      * create the right mysql-statement-snippet for columns/fields
      *
@@ -347,5 +350,14 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         }
         return $_buffer;
     }
+    
+    protected function _sanititzeName($_name)
+    {
+        if (strlen($_name) > Setup_Backend_Abstract::MAX_NAME_LENGTH) {
+            $_name = substr(md5($_name), 0 , Setup_Backend_Abstract::MAX_NAME_LENGTH);
+        }
+        return $_name;
+    }
+    
 
 }

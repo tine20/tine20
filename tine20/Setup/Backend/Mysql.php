@@ -234,29 +234,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
         */
     }
-    
-    /**
-     * removes table from database
-     * 
-     * @param string tableName
-     */
-#    public function dropTable($_tableName)
-#    {
-#        $statement = "DROP TABLE " . $this->_db->quoteTableAs(SQL_TABLE_PREFIX . $_tableName);
-#        $this->execQueryVoid($statement);
-#    }
-    
-    /**
-     * renames table in database
-     * 
-     * @param string tableName
-     */
-    public function renameTable($_tableName, $_newName)
-    {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` RENAME TO `" . SQL_TABLE_PREFIX . $_newName . "` ;";
-        $this->execQueryVoid($statement);
-    }
-    
+       
     /**
      * add column/field to database table
      * 
