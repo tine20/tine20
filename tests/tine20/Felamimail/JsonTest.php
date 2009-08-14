@@ -205,7 +205,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /*********************** message tests ****************************/
     
     /**
-     * test search messages
+     * test send message
      *
      */
     public function testSendMessage()
@@ -235,6 +235,26 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // delete message from inbox & sent
         $this->_json->deleteMessages($message['id']);
         $this->_deleteMessage($messageToSend['subject']);
+
+        // check if email note has been added to contact(s)
+        $contactFilter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Clever')
+        ));
+        $contactIds = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, FALSE, TRUE);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contactIds[0]);
+        $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
+        
+        // check / delete notes
+        $emailNoteIds = array();
+        foreach ($contact->notes as $note) {
+            if ($note->note_type_id == $emailNoteType->getId()) {
+                $this->assertEquals($messageToSend['subject'], $note->note);
+                $this->assertEquals(Tinebase_Core::getUser()->getId(), $note->created_by);
+                $emailNoteIds[] = $note->getId();
+            }
+        }
+        $this->assertGreaterThan(0, count($emailNoteIds), 'no email notes found');
+        Tinebase_Notes::getInstance()->deleteNotes($emailNoteIds);
     }
     
     /**

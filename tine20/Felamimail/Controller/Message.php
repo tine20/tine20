@@ -415,15 +415,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $mail->addHeader('In-Reply-To', $originalMessage->messageuid);
         }
         
+        $nonPrivateRecipients = array();
+        
         // add recipients
         if (isset($_message->to)) {
             foreach ($_message->to as $to) {
                 $mail->addTo($to, $to);
+                $nonPrivateRecipients[] = $to;
             }
         }
         if (isset($_message->cc)) {
             foreach ($_message->cc as $cc) {
                 $mail->addCc($cc, $cc);
+                $nonPrivateRecipients[] = $cc;
             }
         }
         if (isset($_message->bcc)) {
@@ -453,7 +457,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             // send message via smtp
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
-
+            
+            // add email notes to contacts (only to/cc)
+            $this->_addEmailNote($nonPrivateRecipients, $_message->subject);
+        
             // save in sent folder (account id is in from property)
             try {
                 $mailAsString = $transport->getHeaders() . Zend_Mime::LINEEND . $transport->getBody();
@@ -949,7 +956,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $result;
     }
     
-/**
+    /**
      * get attachment data from mail part
      *
      * @param Zend_Mail_Part $_part
@@ -980,5 +987,34 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($result, true));
         
         return $result;
+    }
+
+    /**
+     * add email notes to contacts with email addresses in $_recipients
+     *
+     * @param array $_recipients
+     * @param string $_subject
+     * 
+     * @todo add email home (when we have OR filters)
+     * @todo add link to message in sent folder?
+     */
+    protected function _addEmailNote($_recipients, $_subject)
+    {
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'email', 'operator' => 'in', 'value' => $_recipients)
+            // OR: array('field' => 'email_home', 'operator' => 'in', 'value' => $_recipients)
+        ));
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
+        
+        foreach ($contacts as $contact) {
+            $note = new Tinebase_Model_Note(array(
+                'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
+                'note'                   => $_subject,
+                'record_id'              => $contact->getId(),
+                'record_model'           => 'Addressbook_Model_Contact',
+            ));
+            
+            Tinebase_Notes::getInstance()->addNote($note);
+        }
     }
 }
