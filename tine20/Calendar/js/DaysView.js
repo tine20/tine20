@@ -3,16 +3,19 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
 Ext.ns('Tine.Calendar');
 
 /**
- * @namespace Tine.Calendar
- * @class Tine.Calendar.DaysView
- * @extends Ext.util.Observable
+ * @namespace   Tine.Calendar
+ * @class       Tine.Calendar.DaysView
+ * @extends     Ext.util.Observable
+ * Calendar view representing each day in a column
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  * @constructor
  * @param {Object} config
  */

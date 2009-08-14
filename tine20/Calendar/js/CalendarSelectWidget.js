@@ -1,17 +1,26 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: AttendeeGridPanel.js 8754 2009-06-18 08:50:02Z c.weiss@metaways.de $
  *
  */
  
 Ext.ns('Tine.Calendar');
 
-
+/**
+ * @namespace   Tine.Calendar
+ * @class       Tine.Calendar.CalendarSelectWidget
+ * @extends     Ext.util.Observable
+ * Calendar Selector Widget
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id: DaysView.js 9771 2009-08-05 17:50:15Z c.weiss@metaways.de $
+ * @constructor
+ * @param {Tine.Calendar.EventEditDialog} EventEditDialog
+ */
 Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
     this.EventEditDialog = EventEditDialog;
     
@@ -59,24 +68,44 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
 Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
     
     /**
-     * @property {Function} calMapRecord
+     * Calmap record definition
+     * 
+     * @type Function 
+     * @propertycalMapRecord
      */
     calMapRecord: Ext.data.Record.create([
         {name: 'attender'}, {name: 'calendar'}, {name: 'user'}, {name: 'userAccountId'}, {name: 'calendarName'}, {name: 'userName'}, {name: 'editGrant'}, {name: 'isOriginal'}
     ]),
+    
     /**
-     * @property {Ext.data.Record} currentCalMap
+     * Current calendar map
+     * 
+     * @type Ext.data.Record 
+     * @property currentCalMap
      */
     currentCalMap: null,
+    
     /**
-     * @property {Tine.Calendar.EventEditDialog}
+     * edit dialog
+     * 
+     * @type Tine.Calendar.EventEditDialog
+     * @property EventEditDialog
      */
     EventEditDialog: null,
+    
     /**
-     * @property {Tine.widgets.container.selectionComboBox} calCombo
+     * Calendar select combo box
+     * 
+     * @type Tine.widgets.container.selectionComboBox
+     * @property calCombo
      */
     calCombo: null,
     
+    /**
+     * returns physical/originator container
+     * 
+     * @return {Tine.Tinebase.Model.Container}
+     */
     getPhysContainer: function() {
         return this.record.get('container_id')
     },
@@ -200,6 +229,12 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
         }
     },
     
+    /**
+     * loads this widget with data from given record
+     * called by edit dialog when record is loaded
+     * 
+     * @param {Tine.Calendar.Model.Event} record
+     */
     onRecordLoad: function(record) {
         this.record = record;
         this.buildCalMapStore();
@@ -216,11 +251,22 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.util.Observable, {
         }
     },
     
+    /**
+     * Updates given record with data from this widget
+     * called by edit dialog to get data
+     * 
+     * @param {Tine.Calendar.Model.Event} record
+     */
     onRecordUpdate: function(record) {
         // nothing do do here!
         //console.log('todo: onRecordUpdate');
     },
     
+    /**
+     * render this widget to given element
+     * 
+     * @param {Ext.Element} el
+     */
     render: function(el) {
         this.el = el;
         

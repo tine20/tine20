@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
  
@@ -13,8 +13,15 @@ Ext.ns('Tine.Calendar');
  * @namespace Tine.Calendar
  * @class Tine.Calendar.ColorManager
  * @extends Ext.util.Observable
+ * Colormanager for Coloring Calendar Events <br>
+ * 
  * @constructor
+ * Creates a new color manager
  * @param {Object} config
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  */
 Tine.Calendar.ColorManager = function(config) {
     Ext.apply(this, config);
@@ -65,42 +72,59 @@ Tine.Calendar.ColorManager = function(config) {
 Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
     /**
      * @cfg {String} schemaName
+     * Name of color schema to use
      */
     schemaName: 'standard',
     
     /**
      * @cfg {String} stateId
+     * State id to use
      */
     stateId: 'cal-color-mgr-containers',
     
     /**
      * @cfg {Boolean} stateful
+     * Is this component statefull?
      */
     stateful: true,
     
     /**
-     * @property {Object} colorMap
+     * current color map 
+     * 
+     * @type Object 
+     * @propertycolorMap
      */
     colorMap: null,
     
     /**
-     * @property {Number} colorSchemataPointer
+     * pointer to current color set in color schema 
+     * 
+     * @type Number 
+     * @property colorSchemataPointer
      */
     colorSchemataPointer: 0,
     
     /**
-     * @property {Object} gray
+     * gray color set
+     * 
+     * @type Object 
+     * @property gray
      */
     gray: {color: '#808080', light: '#EDEDED', text: '#808080', lightText: '#FFFFFF'},
     
     /**
-     * @property {Array} colorPalette
+     * color palette from Ext.ColorPalette
+     * 
+     * @type Array
+     * @property colorPalette
      */
     colorPalette: Ext.ColorPalette.prototype.colors,
     
     /**
-     * @property {Array} colorSchemata
-     * color palette from Ext.ColorPalette
+     * color sets for colors from colorPalette
+     * 
+     * @type Array 
+     * @property colorSchemata
      */
     colorSchemata : [
         /*"000000" :*/ {},
@@ -145,7 +169,12 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
         /*"FFFFFF" :*/ {}
     ],
     
-    // hack for container only support
+    /**
+     * hack for container only support
+     * 
+     * @param {Tine.Calendar.Model.Evnet} event
+     * @return {Object} colorset
+     */
     getColor: function(event) {
         var container = null;
         
@@ -163,6 +192,12 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
         return container ? this.getColorSchema(container_id) : this.gray;
     },
     
+    /**
+     * gets the next free color set
+     * 
+     * @param {String} item e.g. a calendar id
+     * @return {Object} colorset
+     */
     getColorSchema: function(item) {
         if (this.colorMap[item]) {
             return this.colorSchemata[this.colorMap[item]];
@@ -188,6 +223,12 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
         return this.colorSchemata[this.colorSchemataPointer];
     },
     
+    /**
+     * checkes if given color is already in use
+     * 
+     * @param {String} color
+     * @return {Boolean}
+     */
     inUse: function(color) {
         for (var item in this.colorMap) {
             if (this.colorMap.hasOwnProperty(item) && this.colorMap[item] == color) {
@@ -199,7 +240,7 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
         return false;
     },
     
-    /*** state handling ***/
+    /* state handling */
     initState:       Ext.Component.prototype.initState,
     getStateId:      Ext.Component.prototype.getStateId,
     //initStateEvents: Ext.Component.prototype.initState,
