@@ -18,12 +18,22 @@ Ext.onReady(function(){
 });
 
 /**
- * @namespace Tine.Calendar
- * @class Tine.Calendar.Application
- * @extends Tine.Tinebase.Application
- * Calendar Application
+ * @namespace   Tine.Calendar
+ * @class       Tine.Calendar.Application
+ * @extends     Tine.Tinebase.Application
+ * Calendar Application Object <br>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: AttendeeGridPanel.js 9749 2009-08-05 09:08:34Z c.weiss@metaways.de $
  */
 Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
+    /**
+     * Get translated application title of the calendar application
+     * 
+     * @return {String}
+     */
     getTitle: function() {
         return this.i18n.ngettext('Calendar', 'Calendars', 1);
     }
@@ -33,9 +43,14 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
  * @namespace Tine.Calendar
  * @class Tine.Calendar.MainScreen
  * @extends Tine.Tinebase.widgets.app.MainScreen
- * @constructor
+ * MainScreen of the Calendar Application <br>
  * 
- * Calendar Mainscreen
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: AttendeeGridPanel.js 9749 2009-08-05 09:08:34Z c.weiss@metaways.de $
+ * @constructor
+ * Constructs mainscreen of the calendar application
  */
 Tine.Calendar.MainScreen = function(config) {
     Ext.apply(this, config);
@@ -47,7 +62,7 @@ Tine.Calendar.MainScreen = function(config) {
 Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
     
     /**
-     * sets content panel in mainscreen
+     * Set content panel in Tinebase.MainScreen
      */
     setContentPanel: function() {
         if (! this.contentPanel) {
@@ -59,12 +74,17 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
         Tine.Tinebase.MainScreen.setActiveContentPanel(this.contentPanel, true);
     },
     
+    /**
+     * Get content panel of calendar application
+     * 
+     * @return {Tine.Calendar.MainScreenCenterPanel}
+     */
     getContentPanel: function() {
         return this.contentPanel;
     },
     
     /**
-     * sets toolbar in mainscreen
+     * Set toolbar panel in Tinebase.MainScreen
      */
     setToolbar: function() {
         if (! this.actionToolbar) {
@@ -84,6 +104,11 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
  * Left Calendar Panel including Tree and DatePicker<br>
  * @todo add d&d support to tree (change calendar)
  * @todo why the hack is the strech option not working???
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: AttendeeGridPanel.js 9749 2009-08-05 09:08:34Z c.weiss@metaways.de $
  */
 Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     border: false,
@@ -153,12 +178,17 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.TreePanel.superclass.initComponent.call(this);
     },
     
+    /**
+     * return calendar selector tree
+     * 
+     * @return {Tine.widgets.container.TreePanel}
+     */
     getCalSelector: function() {
         return this.calSelector;
     },
     
     /**
-     * returns a calendar to take for a add event action
+     * returns a calendar to take for an add event action
      * 
      * @todo add more sophisticated logic
      * 

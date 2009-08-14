@@ -1,10 +1,10 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -12,23 +12,40 @@
 Ext.ns('Tine.Calendar');
 
 /**
- * @namespace Tine.Calendar
- * @class Tine.Calendar.AttendeeGridPanel
- * @extends Ext.grid.EditorGridPanel
+ * @namespace   Tine.Calendar
+ * @class       Tine.Calendar.AttendeeGridPanel
+ * @extends     Ext.grid.EditorGridPanel
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  */
 Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     autoExpandColumn: 'user_id',
     clicksToEdit: 1,
     enableHdMenu: false,
     
+    /**
+     * The record currently being edited
+     * 
+     * @type Tine.Calendar.Model.Event
+     * @property record
+     */
     record: null,
     
     /**
-     * @property {Number}
+     * id of current account
+     * 
+     * @type Number
+     * @property currentAccountId
      */
     currentAccountId: null,
+    
     /**
-     * @property {Ext.data.Store}
+     * store to hold all attendee
+     * 
+     * @type Ext.data.Store
+     * @property attendeeStore
      */
     attendeeStore: null,
     
@@ -249,6 +266,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
     
+    /**
+     * loads this panel with data from given record
+     * called by edit dialog when record is loaded
+     * 
+     * @param {Tine.Calendar.Model.Event} record
+     */
     onRecordLoad: function(record) {
         this.record = record;
         this.store.removeAll(attendee);
@@ -266,7 +289,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
         }
     },
-        
+    
+    /**
+     * Updates given record with data from this panel
+     * called by edit dialog to get data
+     * 
+     * @param {Tine.Calendar.Model.Event} record
+     */
     onRecordUpdate: function(record) {
         this.stopEditing(false);
         
@@ -286,11 +315,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         record.set('attendee', attendee);
     },
     
-    /**
-     * 
-     * @param {} store
-     * @param {} updatedAttender
-     */
     onStoreUpdate: function(store, updatedAttender) {
         // check if we need to add a new row
         var needUpdate = true;
