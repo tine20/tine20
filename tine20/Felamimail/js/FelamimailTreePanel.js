@@ -453,6 +453,19 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     /**
+     * get active account by checking selected node
+     * @return Tine.Felamimail.Model.Account
+     */
+    getActiveAccount: function() {
+        var node = this.getSelectionModel().getSelectedNode();
+        var accountId = node.attributes.account_id;
+        
+        var result = this.accountStore.getById(accountId);
+        
+        return result;
+    },
+    
+    /**
      * on click handler
      * 
      * - expand + select node

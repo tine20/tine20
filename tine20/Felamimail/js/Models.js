@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
@@ -57,14 +57,14 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create(Tine.Felamimail
 });
 
 /**
- * get default message data (i.e. account id)
+ * get default message data
  * 
  * @return {Object}
  */
 Tine.Felamimail.Model.Message.getDefaultData = function() {
-    var defaultFrom = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+    //var defaultFrom = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
     return {
-        from: defaultFrom
+        //from: defaultFrom
     };
 };
 

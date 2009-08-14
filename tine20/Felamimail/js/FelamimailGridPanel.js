@@ -459,6 +459,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         var recordData = this.recordClass.getDefaultData();
         var recordId = 0;
         
+        // set selected account as from
+        recordData.from = this.app.getMainScreen().getTreePanel().getActiveAccount().data.id;
+        
         if (    button.actionType == 'reply'
             ||  button.actionType == 'replyAll'
             ||  button.actionType == 'forward'
