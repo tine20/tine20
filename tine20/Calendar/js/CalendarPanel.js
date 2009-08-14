@@ -21,6 +21,7 @@ Ext.ns('Tine.Calendar');
  * @extends Ext.Panel
  * Calendar Panel, pooling together store, and view <br/>
  * @author Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version $Id$
  */
 Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
@@ -41,6 +42,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      * _('Loading events, please wait...')
      */
     loadMaskText: 'Loading events, please wait...',
+    
     /**
      * @private
      */
@@ -56,20 +58,63 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.autoScroll = false;
         this.autoWidth = false;
         
+        /**
+         * @event click
+         * fired if an event got clicked
+         * @param {Tine.Calendar.Model.Event} event
+         * @param {Ext.EventObject} e
+         */
+        /**
+         * @event contextmenu
+         * fired if an event got contextmenu 
+         * @param {Ext.EventObject} e
+         */
+        /**
+         * @event dblclick
+         * fired if an event got dblclicked
+         * @param {Tine.Calendar.Model.Event} event
+         * @param {Ext.EventObject} e
+         */
+        /**
+         * @event changeView
+         * fired if user wants to change view
+         * @param {String} requested view name
+         * @param {mixed} start param of requested view
+         */
+        /**
+         * @event changePeriod
+         * fired when period changed
+         * @param {Object} period
+         */
         this.relayEvents(this.view, ['changeView', 'changePeriod', 'click', 'dblclick', 'contextmenu']);
         
         this.store.on('beforeload', this.onBeforeLoad, this);
         this.store.on('load', this.onLoad, this);
     },
     
+    /**
+     * Returns selection model
+     * 
+     * @return {Tine.Calendar.EventSelectionModel}
+     */
     getSelectionModel: function() {
         return this.selModel;
     },
     
+    /**
+     * Returns data store
+     * 
+     * @return {Ext.data.Store}
+     */
     getStore: function() {
         return this.store;
     },
     
+    /**
+     * Retruns calendar View
+     * 
+     * @return {Tine.Calendar.View}
+     */
     getView: function() {
         return this.view;
     },
