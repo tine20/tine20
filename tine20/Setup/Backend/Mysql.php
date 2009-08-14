@@ -269,44 +269,6 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration);
         $this->execQueryVoid($statement);    
     }
-    
-    /**
-     * drop column/field in database table
-     * 
-     * @param string tableName
-     * @param string column/field name 
-     */    
-    public function dropCol($_tableName, $_colName)
-    {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP COLUMN `" . $_colName . "`";
-        $this->execQueryVoid($statement);    
-    }
-
-
-    /**
-     * add a foreign key to database table
-     * 
-     * @param string tableName
-     * @param Setup_Backend_Schema_Index_Abstract declaration
-     */       
-    public function addForeignKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
-    {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
-                    . $this->getForeignKeyDeclarations($_declaration);
-        $this->execQueryVoid($statement);    
-    }
-
-    /**
-     * removes a foreign key from database table
-     * 
-     * @param string tableName
-     * @param string foreign key name
-     */     
-    public function dropForeignKey($_tableName, $_name)
-    {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . SQL_TABLE_PREFIX .  $_name . "`" ;
-        $this->execQueryVoid($statement);    
-    }
  
     /**
      * add a key to database table

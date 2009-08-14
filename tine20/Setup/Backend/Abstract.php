@@ -238,6 +238,18 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     }
     
     /**
+     * drop column/field in database table
+     * 
+     * @param string tableName
+     * @param string column/field name 
+     */    
+    public function dropCol($_tableName, $_colName)
+    {
+        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' DROP COLUMN ' . $this->_db->quoteIdentifier($_colName);
+        $this->execQueryVoid($statement);    
+    }
+    
+    /**
      * add a primary key to database table
      * 
      * Delegates to {@see addPrimaryKey()}
@@ -258,6 +270,31 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     public function dropPrimaryKey($_tableName)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP PRIMARY KEY " ;
+        $this->execQueryVoid($statement);    
+    }
+
+    /**
+     * add a foreign key to database table
+     * 
+     * @param string tableName
+     * @param Setup_Backend_Schema_Index_Abstract declaration
+     */       
+    public function addForeignKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
+    {
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " 
+                    . $this->getForeignKeyDeclarations($_declaration, $_tableName);
+        $this->execQueryVoid($statement);    
+    }
+    
+    /**
+     * removes a foreign key from database table
+     * 
+     * @param string tableName
+     * @param string foreign key name
+     */     
+    public function dropForeignKey($_tableName, $_name)
+    {
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP FOREIGN KEY `" . $_name . "`" ;
         $this->execQueryVoid($statement);    
     }
     
