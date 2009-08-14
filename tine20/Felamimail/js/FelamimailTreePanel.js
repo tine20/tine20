@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
@@ -7,36 +7,55 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ */
+ 
+Ext.namespace('Tine.Felamimail');
+
+/**
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.TreePanel
+ * @extends     Ext.tree.TreePanel
+ * 
+ * <p>Account/Folder Tree Panel</p>
+ * <p>Tree of Accounts with folders</p>
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Felamimail.TreePanel
+ * 
  * TODO         add unread count to intelligent folders?
  * TODO         reload folder status (and number of unread messages) every x minutes 
  *              -> via ping or ext.util.delayedtask ?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  * TODO         make inbox/drafts/templates configurable in account
  */
- 
-Ext.namespace('Tine.Felamimail');
-
-/**
- * folder tree panel
- * 
- * @class Tine.Felamimail.TreePanel
- * @extends Ext.tree.TreePanel
- */
 Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 	
     /**
-     * @cfg {application}
+     * @cfg {Tine.Felamimail.Application} app
      */
     app: null,
     
     /**
-     * @cfg {String}
+     * @cfg {String} containerName
      */
     containerName: 'Folder',
     
+    /**
+     * account store
+     * @type Ext.data.JsonStore
+     */
     accountStore: null,
     
-    /****** TreePanel config ******/
+    /**
+     * TreePanel config
+     * @private
+     */
 	rootVisible: false,
 	autoScroll: true,
     id: 'felamimail-tree',
@@ -47,6 +66,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 	
     /**
      * init
+     * @private
      */
     initComponent: function() {
     	
@@ -85,6 +105,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     /**
      * add accounts from registry as nodes to root node
+     * @private
      */
     initAccounts: function() {
         this.accountStore = Tine.Felamimail.loadAccountStore();
@@ -95,7 +116,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * add account record to root node
      * 
      * @param {Tine.Felamimail.Model.Account} record
-     * 
      * @private
      */
     addAccount: function(record) {
@@ -162,10 +182,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     /**
      * init context menu
+     * @private
      */
     initContextMenus: function() {
         
-        /***************** define additional actions *****************/
+        // define additional actions
         
         var updateCacheConfigAction = {
             text: this.app.i18n._('Update Cache'),
@@ -278,7 +299,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             }
         };
 
-        /***************** mutual config options *****************/
+        // mutual config options
         
         var config = {
             nodeName: this.app.i18n._('Folder'),
@@ -287,22 +308,22 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             backendModel: 'Folder'
         };        
         
-        /***************** system folder ctx menu *****************/
+        // system folder ctx menu
 
         config.actions = ['add', updateCacheConfigAction, 'reload'];
         this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
-        /***************** user folder ctx menu *****************/
+        // user folder ctx menu
 
         config.actions = ['add', 'rename', updateCacheConfigAction, 'reload', 'delete'];
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
         
-        /***************** trash ctx menu *****************/
+        // trash ctx menu
         
         config.actions = ['add', emptyFolderAction, 'reload'];
         this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
         
-        /***************** account ctx menu *****************/
+        // account ctx menu
         
         this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._('Account'),
@@ -325,7 +346,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
    /**
      * returns a filter plugin to be used in a grid
-     *
+     * @private
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
@@ -356,11 +377,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     /**
-     * update unread count
+     * update unread count of a folder node (use selected node per default)
      * 
-     * @param {} change
-     * @param {} unreadcount [optional]
-     * @param {} node [optional]
+     * @param {Number} change
+     * @param {Number} unreadcount [optional]
+     * @param {Ext.tree.AsyncTreeNode} node [optional]
      */
     updateUnreadCount: function(change, unreadcount, node) {
         
@@ -392,11 +413,11 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     /**
      * update folder status of all visible (?) folders
      * 
+     * @param {Boolean} recursive
+     * @param {Ext.tree.AsyncTreeNode} node [optional]
+     * 
      * TODO make this work for multiple accounts
      * TODO make recursive work for delayed task or ping update
-     * 
-     * @param {} recursive
-     * @param {} node [optional]
      */
     updateFolderStatus: function(recursive, node) {
         
@@ -431,8 +452,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
     },
     
-    /***************** event handler *******************/
-    
     /**
      * on click handler
      * 
@@ -440,6 +459,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * - update filter toolbar of grid
      * 
      * @param {} node
+     * @private
      */
     onClick: function(node) {
         
@@ -466,6 +486,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * 
      * @param {} node
      * @param {} event
+     * @private
      */
     onContextMenu: function(node, event) {
         this.ctxNode = node;
@@ -501,6 +522,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * mail got dropped on folder node
      * 
      * @param {Object} dropEvent
+     * @private
      */
     onBeforenodedrop: function(dropEvent) {
         
@@ -534,13 +556,26 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 });
 
 /**
- * tree loader
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.TreeLoader
+ * @extends     Tine.widgets.tree.Loader
  * 
- * @class Tine.Felamimail.TreeLoader
- * @extends Tine.widgets.tree.Loader
+ * <p>Felamimail Account/Folder Tree Loader</p>
+ * <p></p>
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Felamimail.TreeLoader
+ * 
  */
 Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
 	
+    // private
     method: 'Felamimail.searchFolders',
 
     /**
@@ -562,7 +597,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
     /**
      * @private
-     * 
      */
     createNode: function(attr) {
         
@@ -643,6 +677,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * 
      * @param {} response
      * @param {} request
+     * @private
      */
     onRequestFailed: function(response, request) {
         var responseText = Ext.util.JSON.decode(response.responseText);
