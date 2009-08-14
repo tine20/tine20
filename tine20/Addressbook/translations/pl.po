@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-24 17:05+0100\n"
-"Last-Translator: Christof <c.gacki@metaways.de>\n"
+"PO-Revision-Date: 2009-08-13 19:27+0100\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,23 +14,26 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
+# If the translated text is too long we can just write over the whole sentence without the word 'shared' like: "Zarządzaj książkami adresowymi".
+# Wenn der uebersetzte Text zu lang ist, wir koennen den gesamten Satz einfach ohne das Wort 'shared' ueberschreiben: "Zarządzaj książkami adresowymi".
 #: Acl/Rights.php:98
-#, fuzzy
 msgid "manage shared addressbooks"
-msgstr "Książki adresowe"
+msgstr "Edytuj wspólne książki adresowe"
 
+# It is also possible to use "wspólne" instead of "współdzielone".
+# Es is auch moeglich, "wspólne" statt "współdzielone" zu verwenden.
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
-msgstr ""
+msgstr "Utwórz nowe, wspólne książki adresowe"
 
 #: Controller.php:96
-#, fuzzy, python-format
+#, python-format
 msgid "%s's personal addressbook"
-msgstr "{0}'s osobista książka adresowa"
+msgstr "%s's osobista książka adresowa"
 
 #: Export/Pdf.php:38
 msgid "Business Contact Data"
-msgstr "Firmowe dane kontaktu"
+msgstr "Firmowe dane kontaktowe"
 
 #: Export/Pdf.php:40
 msgid "Organisation / Unit"
@@ -38,40 +41,45 @@ msgstr "Organizacja / Jednostka"
 
 #: Export/Pdf.php:45
 msgid "Business Address"
-msgstr "Frimowy adres"
+msgstr "Adres frimowy"
 
 # Prüfen
+# Ist schon richtig ;)
 #: Export/Pdf.php:53 js/ContactGrid.js:103
 msgid "Email"
 msgstr "E-mail"
 
 #: Export/Pdf.php:56
 msgid "Telephone Work"
-msgstr "Telefon firmowy"
+msgstr "Telefon (biuro)"
 
 #: Export/Pdf.php:59
 msgid "Telephone Cellphone"
-msgstr "Komórka firmowa"
+msgstr "Telefon (komórka)"
 
 #: Export/Pdf.php:62
 msgid "Telephone Car"
-msgstr "Telefon w samochodzie"
+msgstr "Telefon (samochód)"
 
+# As mentioned above, we cannot use the letter 'x'. It couldn't be correct in Polish. But in this case two forms are possible: "Faks" or "Fax". I suggest to use the first one.
+# Wie oben erwaehnt, wir sollen den Buchstaben 'x' nicht benutzen. In diesem Fall jedoch sind beide Formen moeglich: "Faks" oder "Fax". Ich schage vor, die erste Form zu benutzen.
 #: Export/Pdf.php:65
 msgid "Telephone Fax"
-msgstr "Fax"
+msgstr "Faks"
 
 #: Export/Pdf.php:68
 msgid "Telephone Page"
-msgstr "Page"
+msgstr "Pager"
 
 #: Export/Pdf.php:71
 msgid "URL"
 msgstr "URL"
 
+# The word "Rola" could not be clearly understood. The word "Funkcja" is a better choice.
+# Das Wort "Rola" koennte missverstanden werden. Das Wort "Funkcja" passt besser.
 #: Export/Pdf.php:74
 msgid "Role"
-msgstr "Rola"
+msgstr "Funkcja"
 
 #: Export/Pdf.php:77 js/ContactGrid.js:92 js/EditDialog.js:40
 msgid "Room"
@@ -87,12 +95,12 @@ msgstr "Telefon sekretarki"
 
 #: Export/Pdf.php:87
 msgid "Private Contact Data"
-msgstr "Prywatne dane kontaktu"
+msgstr "Prywatne dane kontaktowe"
 
 #: Export/Pdf.php:89 js/ContactGrid.js:68 js/ContactGrid.js:69
 #: js/ContactGrid.js:70 js/EditDialog.js:375
 msgid "Private Address"
-msgstr "Prywatny adres"
+msgstr "Adres prywatny"
 
 #: Export/Pdf.php:97
 msgid "Email Home"
@@ -104,15 +112,15 @@ msgstr "Telefon domowy"
 
 #: Export/Pdf.php:103
 msgid "Telephone Cellphone Private"
-msgstr "Telefon komórka prywatne"
+msgstr "Telefon prywatny (komórka)"
 
 #: Export/Pdf.php:106
 msgid "Telephone Fax Home"
-msgstr "Fax w domu"
+msgstr "Faks domowy"
 
 #: Export/Pdf.php:109
 msgid "URL Home"
-msgstr "URL domowe"
+msgstr "Prywatny URL"
 
 #: Export/Pdf.php:113
 msgid "Other Data"
@@ -141,50 +149,51 @@ msgid "contacts"
 msgstr "Kontakty"
 
 #: js/Addressbook.js:143 js/Addressbook.js:483
-#, fuzzy
 msgid "addressbook"
 msgid_plural "addressbooks"
 msgstr[0] "Książka adresowa"
-msgstr[1] "Książka adresowa"
-msgstr[2] "Książka adresowa"
+msgstr[1] "Książki adresowe"
+msgstr[2] "Książek adresowych"
 
 #: js/Addressbook.js:149 js/ContactGrid.js:156
 msgid "export as pdf"
-msgstr "Export jako PDF"
+msgstr "eksportuj jako PDF"
 
-# Großes el fehlt
+# > Großes el fehlt
+# Nicht mehr :)
 #: js/Addressbook.js:174
 msgid "Loading Contact..."
-msgstr "Ładowanie kontaktu"
+msgstr "Ładowanie kontaktu..."
 
 #: js/Addressbook.js:174
 msgid "Please Wait"
-msgstr "Prosze czekać"
+msgstr "Proszę czekać"
 
 #: js/Addressbook.js:194
 msgid "Add new contact"
 msgstr "Dodaj nowy kontakt"
 
 #: js/Addressbook.js:196
-#, fuzzy
 msgid "Edit Contact \"{0}\""
-msgstr "Edytuj konkakt \"{0}\""
+msgstr "Edytuj kontakt \"{0}\""
 
 #: js/Addressbook.js:226
 msgid "Please wait a moment..."
-msgstr "Proszę chwileczkę poczekać"
+msgstr "Proszę chwilę poczekać..."
 
 #: js/Addressbook.js:226
 msgid "Saving Contact"
 msgstr "Zapisywanie kontaktu"
 
+# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
+# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
 #: js/Addressbook.js:251 js/Addressbook.js:276
 msgid "Failed"
-msgstr "Bez powodzenia"
+msgstr "Próba nieudana"
 
 #: js/Addressbook.js:251
 msgid "Could not save contact."
-msgstr "Zapisanie kontaktu nie jest możliwe"
+msgstr "Zapisanie kontaktu było niemożliwe."
 
 #: js/Addressbook.js:257
 msgid "Errors"
@@ -192,30 +201,26 @@ msgstr "Błędy"
 
 #: js/Addressbook.js:257
 msgid "Please fix the errors noted."
-msgstr "Proszę zlikwidowć podane błędy. "
+msgstr "Proszę poprawić wskazane błędy. "
 
 #: js/Addressbook.js:270
-#, fuzzy
 msgid "Deleting contact..."
-msgstr "Wymazywanie kontaktu …"
+msgstr "Usuwanie kontaktu…"
 
 #: js/Addressbook.js:276
-#, fuzzy
 msgid "Some error occured while trying to delete the contact."
-msgstr "Wystąpiły pewne błędy z powodu próby wmazania kontaktu."
+msgstr "Podczas próby usunięcia kontaktu wystąpił błąd"
 
 #: js/Addressbook.js:479
-#, fuzzy
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Kontakt"
-msgstr[1] "Kontakt"
-msgstr[2] "Kontakt"
+msgstr[1] "Kontakty"
+msgstr[2] "Kontaktów"
 
 #: js/Addressbook.js:479 js/ContactGridDetailsPanel.js:67
-#, fuzzy
 msgid "Contacts"
-msgstr "Kontakt"
+msgstr "Kontakty"
 
 #: js/Addressbook.js:483
 msgid "addressbooks"
@@ -244,7 +249,7 @@ msgstr "Telefon"
 
 #: js/ContactGrid.js:62 js/ContactGrid.js:91 js/EditDialog.js:35
 msgid "Job Role"
-msgstr "Funkcja"
+msgstr "Stanowisko"
 
 #: js/ContactGrid.js:65 js/ContactGrid.js:68 js/ContactGrid.js:93
 #: js/EditDialog.js:344 js/EditDialog.js:387
@@ -272,7 +277,7 @@ msgstr "Typ"
 
 #: js/ContactGrid.js:86
 msgid "Full Name"
-msgstr "Pełne imię"
+msgstr "Imię i nazwisko"
 
 #: js/ContactGrid.js:87 js/EditDialog.js:17 js/EditDialog.js:144
 #: js/EditDialog.js:183
@@ -297,23 +302,23 @@ msgstr "Kraj"
 
 #: js/ContactGrid.js:98
 msgid "Street (private)"
-msgstr "Ulica (prywatny adres)"
+msgstr "Ulica (adres prywatny)"
 
 #: js/ContactGrid.js:99
 msgid "City (private)"
-msgstr "Miasto (prywatny adres)"
+msgstr "Miasto (adres prywatny)"
 
 #: js/ContactGrid.js:100
 msgid "Region (private)"
-msgstr "Region (prywatny adres)"
+msgstr "Region (adres prywatny)"
 
 #: js/ContactGrid.js:101
 msgid "Postalcode (private)"
-msgstr "Kod pocztowy (prywatny adres)"
+msgstr "Kod pocztowy (adres prywatny)"
 
 #: js/ContactGrid.js:102
 msgid "Country (private)"
-msgstr "Kraj (prywatny adres)"
+msgstr "Kraj (adres prywatny)"
 
 #: js/ContactGrid.js:105 js/ContactGridDetailsPanel.js:145
 #: js/ContactGridDetailsPanel.js:169 js/EditDialog.js:232
@@ -323,11 +328,11 @@ msgstr "Komórka"
 #: js/ContactGrid.js:106 js/ContactGridDetailsPanel.js:146
 #: js/ContactGridDetailsPanel.js:170 js/EditDialog.js:237
 msgid "Fax"
-msgstr "Fax"
+msgstr "Faks"
 
 #: js/ContactGrid.js:107
 msgid "Car phone"
-msgstr "Telefon samochodowy"
+msgstr "Telefon (samochód)"
 
 #: js/ContactGrid.js:108
 msgid "Pager"
@@ -339,7 +344,7 @@ msgstr "Telefon (prywatny)"
 
 #: js/ContactGrid.js:110 js/EditDialog.js:254
 msgid "Fax (private)"
-msgstr "Fax (prywatny)"
+msgstr "Faks (prywatny)"
 
 #: js/ContactGrid.js:111 js/EditDialog.js:249
 msgid "Mobile (private)"
@@ -347,9 +352,10 @@ msgstr "Komórka (prywatna)"
 
 #: js/ContactGrid.js:112
 msgid "Email (private)"
-msgstr "Email (prywatny)"
+msgstr "E-mail (prywatny)"
 
 # Prüfen
+# Ist schon richtig ;)
 #: js/ContactGrid.js:113 js/ContactGridDetailsPanel.js:149
 #: js/ContactGridDetailsPanel.js:173 js/EditDialog.js:274
 msgid "Web"
@@ -357,7 +363,7 @@ msgstr "Internet"
 
 #: js/ContactGrid.js:114
 msgid "URL (private)"
-msgstr "URL (prywatne)"
+msgstr "URL (prywatny)"
 
 #: js/ContactGrid.js:115
 msgid "Note"
@@ -369,43 +375,47 @@ msgstr "Strefa czasowa"
 
 #: js/ContactGrid.js:117
 msgid "Geo"
-msgstr "Geo"
+msgstr "Położenie geograficzne"
 
+# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
+# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
 #: js/ContactGrid.js:127
 msgid "Export"
-msgstr ""
+msgstr "Eksportuj"
 
+# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
+# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
 #: js/ContactGrid.js:136
-#, fuzzy
 msgid "Export as PDF"
-msgstr "Export jako PDF"
+msgstr "Eksportuj jako PDF"
 
+# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
+# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht benutzen. Dies waere nicht richtig im Polnischen.
 #: js/ContactGrid.js:143
-#, fuzzy
 msgid "Export as CSV"
-msgstr "Export jako PDF"
+msgstr "Eksportuj jako CSV"
 
 #: js/ContactGrid.js:167
 msgid "call contact"
 msgstr "Wywołaj kontakt"
 
+# The other possibility could be: "Służbowo", see the german translation.
+# Die andere moeglichkeit waere: "Służbowo", siehe die deutsche Uebersetzung.
 #: js/ContactGrid.js:205
 msgid "Work"
-msgstr ""
+msgstr "Praca"
 
 #: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
-#, fuzzy
 msgid "Home"
-msgstr "URL domowe"
+msgstr "Prywatnie"
 
 #: js/ContactGrid.js:223
 msgid "Cell"
-msgstr ""
+msgstr "Komórka"
 
 #: js/ContactGrid.js:232
-#, fuzzy
 msgid "Cell private"
-msgstr "Miasto (prywatny adres)"
+msgstr "Komórka prywatna"
 
 #: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
@@ -426,15 +436,15 @@ msgstr ""
 
 #: js/EditDialog.js:30
 msgid "Suffix"
-msgstr "sufiks"
+msgstr "Dopełnienie nazwiska (Sufix)"
 
 #: js/EditDialog.js:48
 msgid "Personal Information"
-msgstr "Osobiste informacje"
+msgstr "Informacje osobiste"
 
 #: js/EditDialog.js:85
 msgid "Salutation"
-msgstr ""
+msgstr "Forma grzecznościowa"
 
 #: js/EditDialog.js:96 js/EditDialog.js:162
 msgid "Title"
@@ -448,13 +458,15 @@ msgstr "Drugie imię"
 msgid "E-Mail (private)"
 msgstr "E-mail (prywatny)"
 
+# I think, it would be better, if we use the plural form "Informacje" instead of "Informacja".
+# Ich denke, es waere besser, wenn wir die Pluralform "Informacje" anstatt von "Informacja" verwenden.
 #: js/EditDialog.js:298
 msgid "Contact Information"
-msgstr "Informacje kontaktu"
+msgstr "Informacje o kontakcie"
 
 #: js/EditDialog.js:348 js/EditDialog.js:391
 msgid "Street 2"
-msgstr "Ulica 2"
+msgstr "Inna ulica"
 
 #: js/EditDialog.js:418
 msgid "Custom Fields"
@@ -468,56 +480,58 @@ msgstr "Opis"
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
+# I have changed the place of [%d] here. Hope it is not forbidden.
+# Ich habe hier den Platz fuer [%d] geaedert. Hoffentlich ist das nich verbotten.
 #: js/EditDialog.js:514
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
-msgstr[0] "Link [%d]"
-msgstr[1] "Linki  [%d]"
-msgstr[2] "Linki [%d]"
+msgstr[0] "Link"
+msgstr[1] "[%d] linki"
+msgstr[2] "[%d] linków"
 
 #: js/SearchCombo.js:51
 msgid "Searching..."
-msgstr ""
+msgstr "Wyszukiwanie..."
 
 #: Setup/setup.xml:564
 msgid "Mr"
-msgstr ""
+msgstr "Pan"
 
 #: Setup/setup.xml:582
 msgid "Ms"
-msgstr ""
+msgstr "Pani"
 
-#~ msgid "Are you Sure?"
-#~ msgstr "Jesteś pewien?"
+msgid "Are you Sure?"
+msgstr "Jesteś pewien?"
 
-#~ msgid "Do you really want to delete the selected contact?"
-#~ msgid_plural "Do you really want to delete the selected contacts?"
-#~ msgstr[0] "Rzeczywiście chcesz wymazać wybrany kontakt?"
-#~ msgstr[1] "Rzeczywiście chcesz wymazać wybrane kontakty?"
-#~ msgstr[2] "Rzeczywiście chcesz wymazać wybranych kontaktów?"
+msgid "Do you really want to delete the selected contact?"
+msgid_plural "Do you really want to delete the selected contacts?"
+msgstr[0] "Rzeczywiście chcesz wymazać wybrany kontakt?"
+msgstr[1] "Rzeczywiście chcesz wymazać wybrane kontakty?"
+msgstr[2] "Rzeczywiście chcesz wymazać wybranych kontaktów?"
 
-#~ msgid "add contact"
-#~ msgstr "Dodaj kontakt"
+msgid "add contact"
+msgstr "Dodaj kontakt"
 
-#~ msgid "edit contact"
-#~ msgstr "Edycja kontaktu"
+msgid "edit contact"
+msgstr "Edycja kontaktu"
 
-#~ msgid "delete contact"
-#~ msgid_plural "delete contacts"
-#~ msgstr[0] "Wymaż kontakt"
-#~ msgstr[1] "Wymaż kontakty"
-#~ msgstr[2] "Wymaż kontaków"
+msgid "delete contact"
+msgid_plural "delete contacts"
+msgstr[0] "Wymaż kontakt"
+msgstr[1] "Wymaż kontakty"
+msgstr[2] "Wymaż kontaków"
 
-#~ msgid "Displaying contacts {0} - {1} of {2}"
-#~ msgstr "Prezentacja kontaków {0} - {1} z {2}"
+msgid "Displaying contacts {0} - {1} of {2}"
+msgstr "Prezentacja kontaków {0} - {1} z {2}"
 
-#~ msgid "No contacts to display"
-#~ msgstr "Nie znaleziono kontaktów"
+msgid "No contacts to display"
+msgstr "Nie znaleziono kontaktów"
 
-#~ msgid "Tags"
-#~ msgstr "Tagi"
+msgid "Tags"
+msgstr "Tagi"
 
 #, fuzzy
-#~ msgid "Some error occured while trying to delete the conctact."
-#~ msgstr "Wystąpiły pewne błędy z powodu próby wmazania kontaktu."
+msgid "Some error occured while trying to delete the conctact."
+msgstr "Wystąpiły pewne błędy z powodu próby wmazania kontaktu."

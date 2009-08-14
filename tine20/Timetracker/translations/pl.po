@@ -2,136 +2,138 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-08-13 18:39+0100\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
 #: Acl/Rights.php:98
 msgid "Manage timeaccounts"
-msgstr ""
+msgstr "Edytuj konta czasu"
 
 #: Acl/Rights.php:99
 msgid "Add, edit and delete timeaccounts"
-msgstr ""
+msgstr "Dodaj, edytuj i usuń konta czasu"
 
 #: Export/Ods.php:89 js/Timetracker.js:29
 msgid "Timesheets"
-msgstr ""
+msgstr "Karty godzin"
 
 #: Export/Ods.php:116
 msgid "Total Sum"
-msgstr ""
+msgstr "Suma"
 
 #: Export/Ods.php:133
 msgid "Not billable"
-msgstr ""
+msgstr "Nie gotowe do przeliczenia"
 
 #: Export/Ods.php:141 Export/Ods.php:212 Export/Ods.php:264
 #: js/TimesheetEditDialog.js:184 js/TimesheetGridPanel.js:48
 #: js/TimesheetGridPanel.js:188 js/TimesheetGridPanel.js:254
 msgid "Billable"
-msgstr ""
+msgstr "Gotowe do przeliczenia"
 
 #: Export/Ods.php:149
 msgid "Total"
-msgstr ""
+msgstr "Ogółem"
 
 #: Export/Ods.php:176 js/TimesheetEditDialog.js:146
 #: js/TimesheetGridPanel.js:186 js/TimesheetGridPanel.js:208
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: Export/Ods.php:181 Export/Ods.php:242 js/TimeaccountEditDialog.js:156
 #: js/TimeaccountGridPanel.js:54 js/TimesheetEditDialog.js:168
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
 #: js/TimesheetGridPanel.js:391
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
+# I think, the word Number stands for a counter. Perhaps I am wrong.
+# I denke, das Wort Nummer steht fuer einen Zaehler. Vielleicht bin ich da falsch.
 #: Export/Ods.php:186
+#, fuzzy
 msgid "Timeaccount Number"
-msgstr ""
+msgstr "Ilość kont czasu"
 
 #: Export/Ods.php:192
 msgid "Timeaccount"
-msgstr ""
+msgstr "Konto czasu"
 
 #: Export/Ods.php:199
 msgid "Staff Member"
-msgstr ""
+msgstr "Współpracownicy"
 
 #: Export/Ods.php:205 js/TimesheetEditDialog.js:141
 #: js/TimesheetGridPanel.js:283
 msgid "Duration"
-msgstr ""
+msgstr "Czas przeliczania"
 
 #: Export/Ods.php:217 js/TimesheetEditDialog.js:191
 #: js/TimesheetGridPanel.js:53 js/TimesheetGridPanel.js:189
 #: js/TimesheetGridPanel.js:262
 msgid "Cleared"
-msgstr ""
+msgstr "Przeliczone"
 
 #: Export/Ods.php:232 js/TimeaccountEditDialog.js:85
 #: js/TimeaccountGridPanel.js:75 js/TimesheetGridPanel.js:182
 msgid "Number"
-msgstr ""
+msgstr "Numer"
 
 #: Export/Ods.php:237 js/TimeaccountEditDialog.js:90
 #: js/TimeaccountGridPanel.js:81 js/TimesheetGridPanel.js:183
 msgid "Title"
-msgstr ""
+msgstr "Tytuł"
 
 #: Export/Ods.php:247 js/TimeaccountGridPanel.js:55
 msgid "Created By"
-msgstr ""
+msgstr "Utworzone przez"
 
 #: Export/Ods.php:253
 msgid "Creation Date"
-msgstr ""
+msgstr "Data utworzenia"
 
 #: Export/Ods.php:258 js/TimeaccountEditDialog.js:111
 #: js/TimeaccountGridPanel.js:87
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: Export/Ods.php:269 js/TimeaccountEditDialog.js:134
 #: js/TimesheetEditDialog.js:202
 msgid "Cleared In"
-msgstr ""
+msgstr "Przeliczone w"
 
 #: Export/Ods.php:274
 msgid "Open"
-msgstr ""
+msgstr "Otwarte"
 
 #: js/DurationSlider.js:95
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
 
 #: js/DurationSpinner.js:63 js/DurationSpinner.js:73
 msgid "Not a valid time"
-msgstr ""
+msgstr "Nieprawidłowy czas"
 
 #: js/Models.js:46 js/TimesheetEditDialog.js:114 js/TimesheetGridPanel.js:180
 msgid "Timesheet"
 msgid_plural "Timesheets"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Karta godzin"
+msgstr[1] "Karty godzin"
+msgstr[2] "Kart godzin"
 
 #: js/Models.js:50
 msgid "timesheets list"
 msgid_plural "timesheets lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "lista kart godzin"
+msgstr[1] "listy kart godzin"
+msgstr[2] "list kart godzin"
 
 #: js/Models.js:107 js/TimeaccountEditDialog.js:69
 #: js/TimeaccountGridPanel.js:53 js/TimeaccountSelect.js:166
@@ -139,226 +141,226 @@ msgstr[2] ""
 #: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:223
 msgid "Time Account"
 msgid_plural "Time Accounts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Konto czasu"
+msgstr[1] "Konta czasu"
+msgstr[2] "Kont czasu"
 
 #: js/Models.js:111
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "lista kont czasu"
+msgstr[1] "listy kont czasu"
+msgstr[2] "list kont czasu"
 
 #: js/TimeaccountEditDialog.js:99
 msgid "Unit"
-msgstr ""
+msgstr "Jednostka"
 
 #: js/TimeaccountEditDialog.js:103
 msgid "Unit Price"
-msgstr ""
+msgstr "Cena jednostkowa"
 
 #: js/TimeaccountEditDialog.js:108 js/TimeaccountGridPanel.js:94
 msgid "Budget"
-msgstr ""
+msgstr "Budżet"
 
 #: js/TimeaccountEditDialog.js:117 js/TimeaccountSelect.js:79
 msgid "closed"
-msgstr ""
+msgstr "zakończone"
 
 #: js/TimeaccountEditDialog.js:117
 msgid "open"
-msgstr ""
+msgstr "otwarte"
 
 #: js/TimeaccountEditDialog.js:119
 msgid "Billed"
-msgstr ""
+msgstr "Przeliczone"
 
 #: js/TimeaccountEditDialog.js:127 js/TimeaccountSelect.js:235
 #: Setup/setup.xml:80
 msgid "not yet billed"
-msgstr ""
+msgstr "Jeszcze nieprzeliczone"
 
 #: js/TimeaccountEditDialog.js:128 js/TimeaccountSelect.js:236
 #: Setup/setup.xml:82
 msgid "to bill"
-msgstr ""
+msgstr "do przeliczenia"
 
 #: js/TimeaccountEditDialog.js:129 js/TimeaccountSelect.js:237
 #: Setup/setup.xml:84
 msgid "billed"
-msgstr ""
+msgstr "przeliczone"
 
 #: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:201
 msgid "not cleared yet..."
-msgstr ""
+msgstr "jeszcze nieprzeliczone..."
 
 #: js/TimeaccountEditDialog.js:139
 msgid "Timesheets are billable"
-msgstr ""
+msgstr "Karty godzin gotowe do przeliczenia"
 
 #: js/TimeaccountEditDialog.js:170
 msgid "Enter description"
-msgstr ""
+msgstr "Wprowadź opis"
 
 #: js/TimeaccountEditDialog.js:186
 msgid "Access"
-msgstr ""
+msgstr "Dostęp"
 
 #: js/TimeaccountEditDialog.js:210
 msgid "Book Own"
-msgstr ""
+msgstr "Zarezerwuj własne"
 
 #: js/TimeaccountEditDialog.js:215
 msgid "View All"
-msgstr ""
+msgstr "Wyświetl wszystkie"
 
 #: js/TimeaccountEditDialog.js:220
 msgid "Book All"
-msgstr ""
+msgstr "Zarezerwuj wszystkie"
 
 #: js/TimeaccountEditDialog.js:225
 msgid "Manage Clearing"
-msgstr ""
+msgstr "Edytuj przeliczanie"
 
 #: js/TimeaccountEditDialog.js:230
 msgid "Manage All"
-msgstr ""
+msgstr "Edytuj wszystkie"
 
 #: js/TimeaccountEditDialog.js:238
 msgid "Permissions"
-msgstr ""
+msgstr "Uprawnienia"
 
 #: js/TimeaccountGridPanel.js:101 js/TimesheetGridPanel.js:58
 #: js/TimesheetGridPanel.js:270
 msgid "Cleared in"
-msgstr ""
+msgstr "Przeliczone w"
 
 #: js/TimeaccountGridPanel.js:122 js/TimesheetGridPanel.js:459
 msgid "Export"
-msgstr ""
+msgstr "Eksportuj"
 
 #: js/TimeaccountGridPanel.js:131 js/TimesheetGridPanel.js:468
 msgid "Export as ODS"
-msgstr ""
+msgstr "Eksportuj jako ODS"
 
 #: js/TimeaccountGridPanel.js:138 js/TimesheetGridPanel.js:474
 msgid "Export as CSV"
-msgstr ""
+msgstr "Eksportuj jako CSV"
 
 #: js/TimeaccountGridPanel.js:149
 msgid "Show closed"
-msgstr ""
+msgstr "Pokaż zakończone"
 
 #: js/TimeaccountSelect.js:212
 msgid "Time Account - Status"
-msgstr ""
+msgstr "Status konta czasu"
 
 #: js/TimesheetEditDialog.js:86 js/TimesheetEditDialog.js:87
 msgid "Billed in ..."
-msgstr ""
+msgstr "Przeliczone w ..."
 
 #: js/TimesheetEditDialog.js:132
 msgid "Select Time Account..."
-msgstr ""
+msgstr "Zaznacz konto czasu..."
 
 #: js/TimesheetEditDialog.js:133
 msgid "Searching..."
-msgstr ""
+msgstr "Wyszukiwanie..."
 
 #: js/TimesheetEditDialog.js:151
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: js/TimesheetEditDialog.js:152
 msgid "not set"
-msgstr ""
+msgstr "nieustawiony"
 
 #: js/TimesheetEditDialog.js:169
 msgid "Enter description..."
-msgstr ""
+msgstr "Wprowadź opis..."
 
 #: js/TimesheetEditDialog.js:178 js/TimesheetGridPanel.js:185
 #: js/TimesheetGridPanel.js:276
 msgid "Account"
-msgstr ""
+msgstr "Konto"
 
 #: js/TimesheetGridPanel.js:40
 msgid "Mass Update"
-msgstr ""
+msgstr "Aktualizacja całości"
 
 #: js/TimesheetGridPanel.js:46
 msgid "Update field:"
-msgstr ""
+msgstr "Aktualizacja zakończona niepowodzeniem"
 
 #: js/TimesheetGridPanel.js:117
 msgid "Update {0} records"
-msgstr ""
+msgstr "Aktualizuj {0} wierszy"
 
 #: js/TimesheetGridPanel.js:126
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: js/TimesheetGridPanel.js:132
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: js/TimesheetGridPanel.js:158
 msgid "Success"
-msgstr ""
+msgstr "Sukces"
 
 #: js/TimesheetGridPanel.js:159
 msgid "Updated {0} records"
-msgstr ""
+msgstr "Zaktualizowano {0} wierszy"
 
 #: js/TimesheetGridPanel.js:216
 msgid "Start time"
-msgstr ""
+msgstr "Czas rozpoczęcia"
 
 #: js/TimesheetGridPanel.js:233
 msgid "Time Account closed"
-msgstr ""
+msgstr "Konto czasu zostało zamknięte"
 
 #: js/TimesheetGridPanel.js:304
 msgid "timeframe"
-msgstr ""
+msgstr "przedział czasu"
 
 #: js/TimesheetGridPanel.js:328
 msgid "summary"
-msgstr ""
+msgstr "podsumowanie"
 
 #: js/TimesheetGridPanel.js:331
 msgid "Total Timesheets"
-msgstr ""
+msgstr "Wszystkie karty godzin"
 
 #: js/TimesheetGridPanel.js:332
 msgid "Billable Timesheets"
-msgstr ""
+msgstr "Karty godzin gotowe do przeliczenia"
 
 #: js/TimesheetGridPanel.js:333
 msgid "Total Time"
-msgstr ""
+msgstr "Łączny czas"
 
 #: js/TimesheetGridPanel.js:334
 msgid "Time of Billable Timesheets"
-msgstr ""
+msgstr "Łączny czas z przeliczalnych kart godzin"
 
 #: js/TimesheetGridPanel.js:405
 msgid "Detail"
-msgstr ""
+msgstr "Szczegół"
 
 #: js/Timetracker.js:34
 msgid "All Timesheets"
-msgstr ""
+msgstr "Wszystkie karty godzin"
 
 #: js/Timetracker.js:39
 msgid "Timeaccounts"
-msgstr ""
+msgstr "Konta czasu"
 
 #: js/Timetracker.js:44
 msgid "All Timeaccounts"
-msgstr ""
+msgstr "Wszystkie konta czasu"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
-msgstr ""
+msgstr "Zliczanie czasu"

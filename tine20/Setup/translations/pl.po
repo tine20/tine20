@@ -2,77 +2,76 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-08-13 18:48+0100\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
 #: js/ApplicationGridPanel.js:40
 msgid "Name"
-msgstr ""
+msgstr "Imię i nazwisko"
 
 #: js/ApplicationGridPanel.js:41
 msgid "Enabled"
-msgstr ""
+msgstr "Włączony"
 
 #: js/ApplicationGridPanel.js:42
 msgid "Order"
-msgstr ""
+msgstr "Kolejność"
 
 #: js/ApplicationGridPanel.js:43
 msgid "Installed Version"
-msgstr ""
+msgstr "Zainstalowana wersja"
 
 #: js/ApplicationGridPanel.js:44
 msgid "Available Version"
-msgstr ""
+msgstr "Dostępna wersja"
 
 #: js/ApplicationGridPanel.js:45
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/ApplicationGridPanel.js:46
 msgid "Depends on"
-msgstr ""
+msgstr "Zależy od"
 
 #: js/ApplicationGridPanel.js:52 js/EnvCheckGridPanel.js:169
 msgid "Install application"
-msgstr ""
+msgstr "Zainstaluj aplikację"
 
 #: js/ApplicationGridPanel.js:61
 msgid "Uninstall application"
-msgstr ""
+msgstr "Odinstaluj aplikację"
 
 #: js/ApplicationGridPanel.js:70
 msgid "Update application"
-msgstr ""
+msgstr "Aktualizuj aplikację"
 
 #: js/ApplicationGridPanel.js:138
 msgid "uninstall"
-msgstr ""
+msgstr "odinstaluj"
 
 #: js/ApplicationGridPanel.js:138
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
+msgstr "Czy na pewno chcesz odinstalować aplikację?"
 
 #: js/ApplicationGridPanel.js:196
 msgid "This may take a while"
-msgstr ""
+msgstr "To może chwilę potrwać"
 
 #: js/ApplicationGridPanel.js:222
 msgid "Shit"
-msgstr ""
+msgstr "Niedobrze"
 
 #: js/ApplicationGridPanel.js:222
 msgid "Where are the backup tapes"
-msgstr ""
+msgstr "Gdzie są taśmy archiwalne?"
 
 #: js/ApplicationGridPanel.js:230
 msgid "Dependency Violation"
@@ -80,15 +79,16 @@ msgstr ""
 
 #: js/AuthenticationGridPanel.js:86 js/ConfigManagerGridPanel.js:71
 msgid "Invalid configuration"
-msgstr ""
+msgstr "Nieprawidłowa konfiguracja"
 
 #: js/AuthenticationGridPanel.js:86 js/ConfigManagerGridPanel.js:71
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr ""
+"Zanim zapiszesz konfigurację, musisz poprawić pola zaznaczone na czerwono"
 
 #: js/AuthenticationGridPanel.js:132 js/ConfigManagerGridPanel.js:95
 msgid "Transfering Configuration..."
-msgstr ""
+msgstr "Przesyłanie konfiguracji..."
 
 #: js/AuthenticationGridPanel.js:158 js/AuthenticationGridPanel.js:178
 msgid "Backend"
@@ -123,7 +123,7 @@ msgstr ""
 #: js/AuthenticationGridPanel.js:322 js/ConfigManagerGridPanel.js:118
 #: js/ConfigManagerGridPanel.js:144
 msgid "Password"
-msgstr ""
+msgstr "Hasło"
 
 #: js/AuthenticationGridPanel.js:257 js/AuthenticationGridPanel.js:335
 msgid "Bind requires DN"
@@ -179,101 +179,105 @@ msgstr ""
 
 #: js/ConfigManagerGridPanel.js:107
 msgid "Informations"
-msgstr ""
+msgstr "Informacje"
 
 #: js/ConfigManagerGridPanel.js:111
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Konfiguruj uwierzytelnianie"
 
 #: js/ConfigManagerGridPanel.js:114
 msgid "Username"
-msgstr ""
+msgstr "Nazwa użytkownika"
 
 #: js/ConfigManagerGridPanel.js:123 js/ConfigManagerGridPanel.js:136
 msgid "Database"
-msgstr ""
+msgstr "Baza danych"
 
 #: js/ConfigManagerGridPanel.js:127
 msgid "Adapter"
-msgstr ""
+msgstr "Adapter"
 
 #: js/ConfigManagerGridPanel.js:132
 msgid "Hostname"
-msgstr ""
+msgstr "Nazwa komputera"
 
 #: js/ConfigManagerGridPanel.js:140
 msgid "User"
-msgstr ""
+msgstr "Użytkownik"
 
 #: js/ConfigManagerGridPanel.js:148
 msgid "Prefix"
-msgstr ""
+msgstr "Przedrostek"
 
 #: js/ConfigManagerGridPanel.js:151
 msgid "Logging"
-msgstr ""
+msgstr "Logowanie"
 
 #: js/ConfigManagerGridPanel.js:157
 msgid "Filename"
-msgstr ""
+msgstr "Nazwa pliku"
 
 #: js/ConfigManagerGridPanel.js:169
 msgid "Priority"
-msgstr ""
+msgstr "Ważność"
 
 #: js/ConfigManagerGridPanel.js:173
 msgid "Caching"
-msgstr ""
+msgstr "Zapisywanie do pamięci podręcznej"
 
 #: js/ConfigManagerGridPanel.js:179
 msgid "Path"
-msgstr ""
+msgstr "Ścieżka"
 
 #: js/ConfigManagerGridPanel.js:182
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "Długość życia (sekundy)"
 
 #: js/ConfigManagerGridPanel.js:275
 msgid "Save config"
-msgstr ""
+msgstr "Zapisz konfigurację"
 
 #: js/ConfigManagerGridPanel.js:283
 msgid "Download config file"
-msgstr ""
+msgstr "Pobierz plik konfiguracyjny"
 
 #: js/EnvCheckGridPanel.js:69
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Przygotowywanie testów środowiska..."
 
+# Instead of "widoku" it could stand the word "wyświetlania" here.
+# Anstatt "widoku" koennte es hier das Wort "wyświetlania" stehen.
 #: js/EnvCheckGridPanel.js:110
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
+"{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, "
+"opcje wyświetlania albo {1}, w których szukasz."
 
 #: js/EnvCheckGridPanel.js:140
 msgid "Check"
-msgstr ""
+msgstr "Sprawdź"
 
 #: js/EnvCheckGridPanel.js:141
 msgid "Result"
-msgstr ""
+msgstr "Wynik"
 
 #: js/EnvCheckGridPanel.js:142
 msgid "Error"
-msgstr ""
+msgstr "Błąd"
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Run setup tests"
-msgstr ""
+msgstr "Uruchom testy konfiguracji"
 
 #: js/Setup.js:30
 msgid "Setup Checks"
-msgstr ""
+msgstr "Testy konfiguracji"
 
 #: js/Setup.js:35
 msgid "Config Manager"
-msgstr ""
+msgstr "Konfigurator ustawień"
 
 #: js/Setup.js:41
 msgid "Authentication/Accounts"
@@ -281,11 +285,14 @@ msgstr ""
 
 #: js/Setup.js:47
 msgid "Application Manager"
-msgstr ""
+msgstr "Konfigurator aplikacji"
 
 #: js/Setup.js:138
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Aplikacja"
+msgstr[1] "Aplikacje"
+msgstr[2] "Aplikacji"
+
+#~ msgid "Check config"
+#~ msgstr "Sprawdź konfigurację"

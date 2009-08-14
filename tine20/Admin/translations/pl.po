@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-24 22:16+0100\n"
-"Last-Translator: Christof <c.gacki@metaways.de>\n"
+"PO-Revision-Date: 2009-08-13 19:28+0100\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,117 +16,119 @@ msgstr ""
 
 #: Acl/Rights.php:174
 msgid "manage access log"
-msgstr "Zarządzanie logu dostępu"
+msgstr "edytuj dziennik logowania"
 
 #: Acl/Rights.php:175
 msgid "delete access log entries"
-msgstr "Wymazanie pozycji logu dostępu"
+msgstr "usuń wpisy z dziennika logowania"
 
 #: Acl/Rights.php:178
 msgid "manage accounts"
-msgstr "Zarządzanie kontami"
+msgstr "edytuj konta użytkowników"
 
 #: Acl/Rights.php:179
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr ""
-"twrzenie i edycja użytkowników i grup, tworzenie grup członków, zmiana hasła "
-"użytkownika"
+"dodaj i edytuj użytkowników oraz grupy, zmień hasła użytkowników, dodaj "
+"użytkowników do grup"
 
 #: Acl/Rights.php:182
 msgid "manage applications"
-msgstr "Zarządzanie aplikacji"
+msgstr "edytuj aplikacje"
 
 #: Acl/Rights.php:183
 msgid "enable and disable applications, edit application settings"
-msgstr "załącznie i wyłącznie aplikacji, edycja ustawień aplikacji"
+msgstr "włącz i wyłącz aplikacje, edytuj ustawienia aplikacji"
 
+# The word "roles" could not be clearly understood. The word "funkcjami" is a better choice.
+# Das Wort "roles" koennte missverstanden werden. Das Wort "funkcje" passt besser.
 #: Acl/Rights.php:186
 msgid "manage roles"
-msgstr "zarządzanie ról"
+msgstr "edytuj funkcje"
 
 #: Acl/Rights.php:187
 msgid ""
 "add and edit roles, add new members to roles, add application rights to roles"
 msgstr ""
-"tworzenie i edycja ról, tworzenie nowych członków ról, definiowanie "
-"uprawnień roli"
+"dodaj nowych użytkowników do funkcji, dodaj i edytuj funkcje, przypisz "
+"funkcjom uprawnienia do aplikacji"
 
 #: Acl/Rights.php:190
 msgid "manage shared tags"
-msgstr "zarządzanie "
+msgstr "edytuj wspólne znaczniki"
 
 #: Acl/Rights.php:191
 msgid "add, delete and edit shared tags"
-msgstr "tworzenie, wymazywanie i edycja dzielonych tagów"
+msgstr "dodaj, usuń i edytuj wspólne znaczniki"
 
 #: Acl/Rights.php:194
-#, fuzzy
 msgid "manage computers"
-msgstr "Zarządzanie kontami"
+msgstr "edytuj listę komputerów"
 
 #: Acl/Rights.php:195
-#, fuzzy
 msgid "add, delete and edit (samba) computers"
-msgstr "tworzenie, wymazywanie i edycja dzielonych tagów"
+msgstr "dodaj, usuń i edytuj komputery (Samba)"
 
 #: Acl/Rights.php:198
 msgid "view access log"
-msgstr "podgląd logu dostępu"
+msgstr "wyświetl dziennik logowania"
 
+# The other possibility would be: "Podgląd listy wpisów z dziennika logowania".
+# Die andere Moeglichkeit waere: "Podgląd listy wpisów z dziennika logowania".
 #: Acl/Rights.php:199
-#, fuzzy
 msgid "view access log list"
-msgstr "podgląd listy dostępu"
+msgstr "wyświetl wpisy z dziennika logowania"
 
+# We don't really need the word "użytkowników" here.
+# Das Wort "użytkowników" braucht man hier nicht undebingt.
 #: Acl/Rights.php:202
 msgid "view accounts"
-msgstr "podgląd kont"
+msgstr "wyświetl konta użytkowników"
 
+# We don't really need the word "użytkowników" here.
+# Das Wort "użytkowników" wird hier nicht unbedingt benoetigt.
 #: Acl/Rights.php:203
 msgid "view accounts list and details"
-msgstr "podgląd listy kont i danych"
+msgstr "wyświetl listę kont użytkowników i szczegóły"
 
 #: Acl/Rights.php:206
 msgid "view applications"
-msgstr "podgląd aplikacji"
+msgstr "wyświetl aplikacje"
 
 #: Acl/Rights.php:207
 msgid "view applications list and details"
-msgstr "podgląd listy aplikacji i danych"
+msgstr "wyświetl listę aplikacji i szczegóły"
 
 #: Acl/Rights.php:210
 msgid "view roles"
-msgstr "zarządzanie dzielonych tagów"
+msgstr "wyświetl funkcje"
 
 #: Acl/Rights.php:211
 msgid "view roles list and details"
-msgstr "podgląd listy ról i danych"
+msgstr "wyświetl listę pełnionych funkcji i szczegóły"
 
 #: Acl/Rights.php:214
-#, fuzzy
 msgid "view computers"
-msgstr "podgląd kont"
+msgstr "wyświetl listę komputerów"
 
 #: Acl/Rights.php:215
-#, fuzzy
 msgid "view computers list and details"
-msgstr "podgląd listy kont i danych"
+msgstr "wyświetl listę komputerów i szczegóły"
 
 #: js/Admin.js:20 js/Users.js:484
-#, fuzzy
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Użytkownik"
-msgstr[1] "Użytkownik"
-msgstr[2] "Użytkownik"
+msgstr[1] "Użytkowników"
+msgstr[2] "Użytkowników"
 
 #: js/Admin.js:33
 msgid "Groups"
-msgstr "Gruppy"
+msgstr "Grupy"
 
 #: js/Admin.js:46
 msgid "Computers"
-msgstr ""
+msgstr "Komputery"
 
 #: js/Admin.js:59
 msgid "Applications"
@@ -134,15 +136,17 @@ msgstr "Aplikacje"
 
 #: js/Admin.js:72
 msgid "Access Log"
-msgstr "Log dostępu"
+msgstr "Dziennik logowania"
 
 #: js/Admin.js:85
 msgid "Shared Tags"
-msgstr "Wspólne tagi"
+msgstr "Wspólne znaczniki"
 
+# The word "Roles" could not be clearly understood. The word "Funkcje" is the better choice.
+# Das Wort "Roles" koennte missverstanden werden. Das Wort "Funkcje" passt besser.
 #: js/Admin.js:98
 msgid "Roles"
-msgstr "Role"
+msgstr "Funkcje"
 
 #: js/Admin.js:133
 msgid "Admin"
@@ -151,28 +155,28 @@ msgstr "Administrator"
 #: js/Admin.js:284 js/Groups.js:50 js/Roles.js:47 js/Tags.js:56
 #: js/Users.js:181
 msgid "Confirm"
-msgstr "Potwierdzenie"
+msgstr "Potwierdź"
 
 #: js/Admin.js:284
 msgid "Do you really want to delete the selected access log entries?"
-msgstr "Czy rzeczywiście chcesz wymazać wybrane dane logu dostępu?"
+msgstr "Czy na pewno chcesz usunąć wybrane wpisy z dziennika logowania?"
 
 #: js/Admin.js:399
 msgid "delete entry"
-msgstr "wymaż wprowadzenia"
+msgstr "usuń wpis"
 
 #: js/Admin.js:400
 msgid "select all"
-msgstr "wybierz wszystko"
+msgstr "zaznacz wszystko"
 
 #: js/Admin.js:405 js/Applications.js:149 js/Groups.js:131 js/Roles.js:131
 #: js/Tags.js:118 js/Users.js:220
 msgid "enter searchfilter"
-msgstr "wprowadź filtr szukanie"
+msgstr "wprowadź szukaną frazę"
 
 #: js/Admin.js:435
 msgid "Display from:"
-msgstr "Pokaż od:"
+msgstr "Wyświetl od:"
 
 #: js/Admin.js:439
 msgid "to:"
@@ -181,23 +185,23 @@ msgstr "do:"
 #: js/Admin.js:444 js/Applications.js:166 js/Groups.js:151 js/Roles.js:151
 #: js/Tags.js:138 js/Users.js:236
 msgid "Search:"
-msgstr "Szukaj:"
+msgstr "Znajdź:"
 
 #: js/Admin.js:517
 msgid "invalid password"
-msgstr "błędne hasło"
+msgstr "nieprawidłowe hasło"
 
 #: js/Admin.js:521
 msgid "ambiguous username"
-msgstr "wątpliwe imię użytkownika"
+msgstr "wieloznaczna nazwa użytkownika"
 
 #: js/Admin.js:525
 msgid "user not found"
-msgstr "użytkownika nie istnieje"
+msgstr "użytkownik nie istnieje"
 
 #: js/Admin.js:529
 msgid "failure"
-msgstr "awaria"
+msgstr "błąd"
 
 #: js/Admin.js:533
 msgid "success"
@@ -205,11 +209,11 @@ msgstr "sukces"
 
 #: js/Admin.js:554
 msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr ""
+msgstr "Wyświetl wpisy z dziennika logowania {0} - {1} z {2}"
 
 #: js/Admin.js:555
 msgid "No access log entries to display"
-msgstr ""
+msgstr "Brak wpisów w dzienniku logowania"
 
 #: js/Admin.js:559
 msgid "Session ID"
@@ -217,12 +221,12 @@ msgstr "ID sesji"
 
 #: js/Admin.js:560 js/UserEditDialog.js:116
 msgid "Login Name"
-msgstr "Imię logowania"
+msgstr "Login"
 
 #: js/Admin.js:561 js/Applications.js:237 js/Groups.js:196 js/Groups.js:513
 #: js/Roles.js:198 js/SambaMachineGrid.js:87 js/Tags.js:180
 msgid "Name"
-msgstr "Imię"
+msgstr "Imię i nazwisko"
 
 #: js/Admin.js:562
 msgid "IP Address"
@@ -238,19 +242,19 @@ msgstr "Czas wylogowania"
 
 #: js/Admin.js:565
 msgid "Account ID"
-msgstr "ID konta"
+msgstr "ID użytkownika"
 
 #: js/Admin.js:566
 msgid "Result"
-msgstr "Rezultat"
+msgstr "Wynik"
 
 #: js/Applications.js:142
 msgid "enable application"
-msgstr "załączona aplikacja"
+msgstr "włącz aplikację"
 
 #: js/Applications.js:143
 msgid "disable application"
-msgstr "wyłączona aplikacja"
+msgstr "wyłącz aplikację"
 
 #: js/Applications.js:144
 msgid "settings"
@@ -265,53 +269,51 @@ msgid "enabled"
 msgstr "włączone"
 
 #: js/Applications.js:202
-#, fuzzy
 msgid "unknown status ({0})"
-msgstr "status nie znany ({0})"
+msgstr "nieznany status ({0})"
 
 #: js/Applications.js:231
 msgid "Displaying application {0} - {1} of {2}"
-msgstr ""
+msgstr "Wyświetl aplikację {0} - {1} z {2}"
 
 #: js/Applications.js:232
 msgid "No applications to display"
-msgstr "Nie ma aplikacji do pokazania"
+msgstr "Brak aplikacji"
 
 #: js/Applications.js:236
-#, fuzzy
 msgid "Order"
-msgstr "kolejność"
+msgstr "Kolejność"
 
 #: js/Applications.js:238 js/UserEditDialog.js:97 js/Users.js:290
 msgid "Status"
 msgstr "Status"
 
 #: js/Applications.js:239
-#, fuzzy
 msgid "Version"
-msgstr "wersja"
+msgstr "Wersja"
 
 #: js/Groups.js:50
 msgid "Do you really want to delete the selected groups?"
-msgstr "Rzeczywiście chcesz wymazać wybrane grupy?"
+msgstr "Czy na pewno chcesz usunąć wybrane grupy?"
 
 #: js/Groups.js:67
 msgid "Deleting group(s)..."
-msgstr "Wymazywanie grup(y) …"
+msgstr "Usuwanie grup(y)..."
 
+# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
+# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
 #: js/Groups.js:72 js/Groups.js:403 js/Groups.js:431 js/Roles.js:69
 #: js/Roles.js:458 js/Roles.js:486 js/Tags.js:365 js/Users.js:201
 msgid "Failed"
-msgstr ""
+msgstr "Próba nieudana"
 
 #: js/Groups.js:72 js/Groups.js:431
-#, fuzzy
 msgid "Some error occurred while trying to delete the group."
-msgstr "Wystąpiły błędy z powodu próby wymazania grupy."
+msgstr "Podczas próby usunięcia grupy wystąpił błąd."
 
 #: js/Groups.js:102
 msgid "add group"
-msgstr "utwórz grupę"
+msgstr "dodaj grupę"
 
 #: js/Groups.js:110
 msgid "edit group"
@@ -319,15 +321,15 @@ msgstr "edytuj grupę"
 
 #: js/Groups.js:118
 msgid "delete group"
-msgstr "wymaż grupę"
+msgstr "usuń grupę"
 
 #: js/Groups.js:189
 msgid "Displaying groups {0} - {1} of {2}"
-msgstr ""
+msgstr "Wyświetlanie grup {0} - {1} z {2}"
 
 #: js/Groups.js:190 js/Groups.js:241
 msgid "No groups to display"
-msgstr "Nie ma grup do prezentacji"
+msgstr "Brak grup"
 
 #: js/Groups.js:195 js/Roles.js:197 js/SambaMachineGrid.js:80 js/Users.js:289
 msgid "ID"
@@ -345,11 +347,11 @@ msgstr "Proszę czekać"
 
 #: js/Groups.js:364 js/Roles.js:420
 msgid "Updating Memberships"
-msgstr ""
+msgstr "Aktualizacja uczestnictwa"
 
 #: js/Groups.js:403
 msgid "Could not save group."
-msgstr "Zapisanie grupy nie jest możliwe."
+msgstr "Zapisanie grupy niemożliwe."
 
 #: js/Groups.js:410 js/Roles.js:465 js/Tags.js:370
 msgid "Errors"
@@ -357,15 +359,15 @@ msgstr "Błędy"
 
 #: js/Groups.js:410 js/Roles.js:465 js/Tags.js:370
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Proszę poprawić wskazane błędy."
 
 #: js/Groups.js:423
 msgid "Deleting group..."
-msgstr "Wymazywanie grup …"
+msgstr "Usuwanie grupy…"
 
 #: js/Groups.js:545
 msgid "Group Members"
-msgstr "Grupy członków"
+msgstr "Uczestnicy przypisani do grupy"
 
 #: js/Groups.js:576
 msgid "Group Name"
@@ -373,69 +375,71 @@ msgstr "Nazwa grupy"
 
 #: js/Groups.js:619 js/Users.js:388
 msgid "add account"
-msgstr "utwórz konto"
+msgstr "dodaj konto"
 
 #: js/Groups.js:626
 msgid "remove account"
-msgstr "wyma"
+msgstr "usuń konto"
 
 #: js/Groups.js:644
 msgid "Add new group"
-msgstr "Utwórz nową grupę"
+msgstr "Dodaj nową grupę"
 
 #: js/Groups.js:646
-#, fuzzy
 msgid "Edit Group \"{0}\""
-msgstr "Edituj grupę \"{0}\""
+msgstr "Edytuj grupę \"{0}\""
 
 #: js/Roles.js:47
 msgid "Do you really want to delete the selected roles?"
-msgstr "Czy rzeczywiście chcesz wymazać wybraną rolę?"
+msgstr "Czy na pewno chcesz usunąć wybrane funkcje?"
 
 #: js/Roles.js:64
 msgid "Deleting role(s)..."
-msgstr "Wymazywanie ról …"
+msgstr "Usuwanie funkcji…"
 
+# The word "Roli" could not be clearly understood. The word "funkcji" is the better choice.
+# Das Wort "Roli" koennte missverstanden werden. Das Wort "funkcji" passt besser.
 #: js/Roles.js:69 js/Roles.js:486
-#, fuzzy
 msgid "Some error occurred while trying to delete the role."
-msgstr "Wystąpiły błędy z powodu próby wymazania grupy."
+msgstr "Podczas próby usunięcia funkcji wystąpił błąd."
 
 #: js/Roles.js:102
 msgid "add role"
-msgstr "utwórz rolę"
+msgstr "dodaj funkcję"
 
 #: js/Roles.js:110
 msgid "edit role"
-msgstr "edytuj rolę"
+msgstr "edytuj funkcję"
 
 #: js/Roles.js:118
 msgid "delete role"
-msgstr "wymaż rolę"
+msgstr "usuń funkcję"
 
+# The word "Role" could not be clearly understood. The word "Funkcji" is a better choice.
+# Das Wort "Role" koennte missverstanden werden. Das Wort "Funkcji" passt besser.
 #: js/Roles.js:191
 msgid "Displaying roles {0} - {1} of {2}"
-msgstr ""
+msgstr "Wyświetlanie funkcji {0} - {1} z {2}"
 
 #: js/Roles.js:192 js/Roles.js:243
 msgid "No roles to display"
-msgstr ""
+msgstr "Brak funkcji"
 
 #: js/Roles.js:458
 msgid "Could not save role."
-msgstr "Rola nie może zostać zapisana."
+msgstr "Zapisanie funkcji niemożliwe."
 
 #: js/Roles.js:478
 msgid "Deleting role..."
-msgstr "Wymazywanie ról …"
+msgstr "Usuwanie funkcji…"
 
 #: js/Roles.js:613
 msgid "Role members"
-msgstr "Członek roli"
+msgstr "Przypisani do funkcji"
 
 #: js/Roles.js:623
 msgid "Members"
-msgstr "Członek"
+msgstr "Uczestnicy"
 
 #: js/Roles.js:635 js/Tags.js:523
 msgid "Rights"
@@ -443,11 +447,11 @@ msgstr "Uprawnienia"
 
 #: js/Roles.js:665
 msgid "Role Name"
-msgstr "Nazwa roli"
+msgstr "Nazwa funkcji"
 
 #: js/Roles.js:706
 msgid "Loading Role..."
-msgstr "Wprowadzanie danych roli …"
+msgstr "Ładowanie funkcji…"
 
 #: js/Roles.js:706 js/Tags.js:544
 msgid "Please Wait"
@@ -455,74 +459,70 @@ msgstr "Proszę czekać"
 
 #: js/Roles.js:746
 msgid "Add New Role"
-msgstr "Tworzenie nowej roli"
+msgstr "Dodaj nową funkcję"
 
 #: js/Roles.js:748
-#, fuzzy
 msgid "Edit Role \"{0}\""
-msgstr "Edycja roli Edit \"{0}\""
+msgstr "Edytuj funkcję \"{0}\""
 
 #: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
-#, fuzzy
 msgid "Computer Name"
-msgstr "Nazwa roli"
+msgstr "Nazwa komputera"
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
 msgid_plural "Computers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Komputer"
+msgstr[1] "Komputery"
+msgstr[2] "Komputerów"
 
 #: js/Tags.js:56
-#, fuzzy
 msgid "Do you really want to delete the selected tags?"
-msgstr "Czy rzeczywiście chcesz wymazać wybrane tegi?"
+msgstr "Czy na pewno chcesz usunąć wybrane znaczniki?"
 
 #: js/Tags.js:73
 msgid "Deleting tag(s)..."
-msgstr "Wymazywanie tagu / tagów …"
+msgstr "Usuwanie znacznika / znaczników…"
 
 #: js/Tags.js:88
 msgid "add tag"
-msgstr "tworzenie tagu"
+msgstr "dodaj znacznik"
 
 #: js/Tags.js:96
 msgid "edit tag"
-msgstr "edycja tagu"
+msgstr "edytuj znacznik"
 
 #: js/Tags.js:104
 msgid "delete tag"
-msgstr "wymazywanie tagu"
+msgstr "usuń znacznik"
 
 #: js/Tags.js:173
 msgid "Displaying tags {0} - {1} of {2}"
-msgstr ""
+msgstr "Wyświetl znaczniki {0} - {1} z {2}"
 
 #: js/Tags.js:174 js/Tags.js:225
 msgid "No tags to display"
-msgstr "Nie istnieja tagi"
+msgstr "Brak znaczników"
 
 #: js/Tags.js:179 js/Tags.js:508
 msgid "Color"
 msgstr "Kolor"
 
 #: js/Tags.js:320
-#, fuzzy
 msgid "Updating Tag"
-msgstr "Ładowanie tagu …"
+msgstr "Aktualizacja znacznika"
 
 #: js/Tags.js:365
 msgid "Could not save tag."
-msgstr "Nie moge zapisać tagu."
+msgstr "Zapisanie znacznika było niemożliwe."
 
 #: js/Tags.js:450
 msgid "Allowed Contexts"
-msgstr "Nie dozwolony kontekst"
+msgstr "Dozwolone konteksty"
 
 #: js/Tags.js:465
 msgid "Account Rights"
-msgstr "Uprawnienia konta"
+msgstr "Uprawnienia do konta"
 
 #: js/Tags.js:470
 msgid "View"
@@ -530,11 +530,11 @@ msgstr "Podgląd"
 
 #: js/Tags.js:475
 msgid "Use"
-msgstr "Korzystanie"
+msgstr "Użyj"
 
 #: js/Tags.js:495
 msgid "Tag Name"
-msgstr "Nazwa tagu"
+msgstr "Nazwa znacznika"
 
 #: js/Tags.js:526
 msgid "Context"
@@ -542,21 +542,19 @@ msgstr "Kontekst"
 
 #: js/Tags.js:544
 msgid "Loading Tag..."
-msgstr "Ładowanie tagu …"
+msgstr "Ładowanie znacznika …"
 
 #: js/Tags.js:575
 msgid "Add New Tag"
-msgstr "Dodaj nowy tag"
+msgstr "Dodaj nowy znacznik"
 
 #: js/Tags.js:577
-#, fuzzy
 msgid "Edit Tag \"{0}\""
-msgstr "Edycja tagu \"{0}\""
+msgstr "Edycja znacznika \"{0}\""
 
 #: js/UserEditDialog.js:74
-#, fuzzy
 msgid "Account"
-msgstr "ID konta"
+msgstr "Konto"
 
 #: js/UserEditDialog.js:90
 msgid "First Name"
@@ -576,31 +574,33 @@ msgstr "nigdy"
 
 #: js/UserEditDialog.js:123 js/Users.js:296
 msgid "Last login at"
-msgstr "Ostatnie zalogowanie "
+msgstr "Ostatnie logowanie o"
 
+# The other possibility would be: "nie znam". It depends on the context.
+# Die andere Moeglichkeit waere "nie znam". Das haengt vom Kontext ab.
 #: js/UserEditDialog.js:125 js/UserEditDialog.js:140
 msgid "don't know"
-msgstr ""
+msgstr "nieznany"
 
 #: js/UserEditDialog.js:125 js/UserEditDialog.js:140 js/UserEditDialog.js:205
 msgid "never logged in"
-msgstr "Nigdy nie zalogowany"
+msgstr "nigdy nie był zalogowany"
 
 #: js/UserEditDialog.js:130
 msgid "Password"
-msgstr "Hało"
+msgstr "Hasło"
 
 #: js/UserEditDialog.js:133 js/UserEditDialog.js:147
 msgid "no password set"
-msgstr "Hasło nie ustawione"
+msgstr "brak hasła"
 
 #: js/UserEditDialog.js:138 js/Users.js:297
 msgid "Last login from"
-msgstr "Ostatnie zalogowanie przez "
+msgstr "Ostatnie zalogowanie z"
 
 #: js/UserEditDialog.js:144
 msgid "Password again"
-msgstr "Hasło ponownie"
+msgstr "Powtórz hasło"
 
 #: js/UserEditDialog.js:152
 msgid "Password set"
@@ -608,82 +608,75 @@ msgstr "Hasło ustawione"
 
 #: js/UserEditDialog.js:159
 msgid "Primary group"
-msgstr "Grupa nadżędna"
+msgstr "Grupa nadrzędna"
 
 #: js/UserEditDialog.js:167
 msgid "Emailaddress"
-msgstr "Email"
+msgstr "Adres e-mail"
 
 #: js/UserEditDialog.js:172
 msgid "Home Directory"
-msgstr ""
+msgstr "Katalog domowy"
 
 #: js/UserEditDialog.js:177
-#, fuzzy
 msgid "Login Shell"
-msgstr "Imię logowania"
+msgstr "Powłoka logowania"
 
 #: js/UserEditDialog.js:185
 msgid "Fileserver"
-msgstr ""
+msgstr "Serwer plików"
 
 #: js/UserEditDialog.js:198
 msgid "Home Drive"
-msgstr ""
+msgstr "Dysk lokalny"
 
 #: js/UserEditDialog.js:203
-#, fuzzy
 msgid "Logon Time"
 msgstr "Czas zalogowania"
 
 #: js/UserEditDialog.js:209
 msgid "Home Path"
-msgstr ""
+msgstr "Ścieżka do katalogu domowego"
 
 #: js/UserEditDialog.js:214
-#, fuzzy
 msgid "Logoff Time"
 msgstr "Czas wylogowania"
 
 #: js/UserEditDialog.js:216
-#, fuzzy
 msgid "never logged off"
-msgstr "Nigdy nie zalogowany"
+msgstr "nigdy się nie wylogowywał(a)"
 
 #: js/UserEditDialog.js:220
 msgid "Profile Path"
-msgstr ""
+msgstr "Ścieżka do katalogu z profilami"
 
 #: js/UserEditDialog.js:225
-#, fuzzy
 msgid "Password Last Set"
-msgstr "Hasło ustawione"
+msgstr "Ostatnia zmiana hasła"
 
 #: js/UserEditDialog.js:231
 msgid "Logon Script"
-msgstr ""
+msgstr "Skrypt logowania"
 
 #: js/UserEditDialog.js:235
-#, fuzzy
 msgid "Password Can Change"
-msgstr "Hasło zostało zmienione"
+msgstr "Możliwa zmiana hasła"
 
 #: js/UserEditDialog.js:237 js/UserEditDialog.js:241 js/UserEditDialog.js:245
 msgid "not set"
-msgstr ""
+msgstr "nie ustawione"
 
 #: js/UserEditDialog.js:239
-#, fuzzy
 msgid "Password Must Change"
-msgstr "Hasło zostało zmienione"
+msgstr "Konieczna zmiana hasła"
 
 #: js/UserEditDialog.js:243
 msgid "Kick Off Time"
-msgstr ""
+msgstr "Czas wylogowania"
 
 #: js/UserEditDialog.js:248 js/Users.js:295
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: js/UserEditDialog.js:261
 #, fuzzy
@@ -708,14 +701,12 @@ msgid "Quota"
 msgstr ""
 
 #: js/UserEditDialog.js:296
-#, fuzzy
 msgid "Passwords don't match"
-msgstr "Hasło ustawione"
+msgstr "Nieprawidłowe hasło"
 
 #: js/Users.js:156
-#, fuzzy
 msgid "Set new password"
-msgstr "Wprowadź nowe hasło"
+msgstr "Zdefiniuj nowe hasło"
 
 #: js/Users.js:156
 msgid "Please enter the new password:"
@@ -723,32 +714,31 @@ msgstr "Proszę wprowadzić nowe hasło:"
 
 #: js/Users.js:181
 msgid "Do you really want to delete the selected account(s)?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć zaznaczone konto(a)?"
 
 #: js/Users.js:196
 msgid "Deleting account(s)..."
-msgstr ""
+msgstr "Usuwanie kont(a)..."
 
 #: js/Users.js:201
-#, fuzzy
 msgid "Some error occurred while trying to delete the account(s)."
-msgstr "Wystąpiły pewne błędy z powodu próby wymazania konta."
+msgstr "Podczas próby usunięcia kont(a) wystąpił błąd."
 
 #: js/Users.js:281
 msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Wyświetl konta {0} - {1} of {2}"
+msgstr "Wyświetlanie kont {0} - {1} z {2}"
 
 #: js/Users.js:282
 msgid "No accounts to display"
-msgstr "Nigdy nie zalogowany"
+msgstr "Brak kont użytkowników"
 
 #: js/Users.js:291
 msgid "Displayname"
-msgstr "Wyświetl nazwa"
+msgstr "Wyświetlana nazwa"
 
 #: js/Users.js:292
 msgid "Loginname"
-msgstr "Imię zalogowania"
+msgstr "Login"
 
 #: js/Users.js:293
 msgid "Last name"
@@ -764,31 +754,30 @@ msgstr "Hasło zostało zmienione"
 
 #: js/Users.js:396
 msgid "edit account"
-msgstr "edycja konta"
+msgstr "edytuj konto"
 
 #: js/Users.js:404
 msgid "delete account"
-msgstr "wymazanie konta"
+msgstr "usuń konto"
 
 #: js/Users.js:412
 msgid "enable account"
-msgstr "załączenie konta"
+msgstr "włącz konto"
 
 #: js/Users.js:421
 msgid "disable account"
-msgstr "wyłączenie konta"
+msgstr "wyłącz konto"
 
 #: js/Users.js:430
-#, fuzzy
 msgid "reset password"
-msgstr "inicjalizacja hasła"
+msgstr "zresetuj hasło"
 
 #: js/Users.js:510
 msgid "Samba User"
 msgid_plural "Samba Users"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Użytkownik Samby"
+msgstr[1] "Użytkowników Samby"
+msgstr[2] "Użytkowników Samby"
 
 #: js/Users.js:528
 #, fuzzy
@@ -798,31 +787,31 @@ msgstr[0] "Email"
 msgstr[1] "Email"
 msgstr[2] "Email"
 
-#~ msgid "Deleting tag..."
-#~ msgstr "Wymazywanie tagu …"
+msgid "Deleting tag..."
+msgstr "Wymazywanie tagu …"
 
-#~ msgid "name"
-#~ msgstr "nazwa"
+msgid "name"
+msgstr "nazwa"
 
-#~ msgid "status"
-#~ msgstr "status"
+msgid "status"
+msgstr "status"
 
-#~ msgid "Deleting account..."
-#~ msgstr "Wymazywanie konta …"
-
-#, fuzzy
-#~ msgid "Some error occurred while trying to delete the account."
-#~ msgstr "Wystąpiły pewne błędy z powodu próby wymazania konta."
-
-#~ msgid "Saving User Account"
-#~ msgstr "Zapisywanie konta użytkownika"
-
-#~ msgid "Could not save user account."
-#~ msgstr "Konto użytkownika nie może zostać zapisane."
-
-#~ msgid "Add New User Account"
-#~ msgstr "Utwórz nowe konto użytkownika"
+msgid "Deleting account..."
+msgstr "Wymazywanie konta …"
 
 #, fuzzy
-#~ msgid "Edit User Account \"{0}\""
-#~ msgstr "Edycja konta użytkownika \"{0}\""
+msgid "Some error occurred while trying to delete the account."
+msgstr "Wystąpiły pewne błędy z powodu próby wymazania konta."
+
+msgid "Saving User Account"
+msgstr "Zapisywanie konta użytkownika"
+
+msgid "Could not save user account."
+msgstr "Konto użytkownika nie może zostać zapisane."
+
+msgid "Add New User Account"
+msgstr "Utwórz nowe konto użytkownika"
+
+#, fuzzy
+msgid "Edit User Account \"{0}\""
+msgstr "Edycja konta użytkownika \"{0}\""

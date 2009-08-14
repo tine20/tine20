@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-09-24 20:39+0100\n"
-"Last-Translator: Christof <c.gacki@metaways.de>\n"
+"PO-Revision-Date: 2009-08-13 19:30+0100\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,24 +14,23 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
+# There is no word "leads" in the polish language. I think we can replace "leads" with "zapytania" or "akcje". I mean samething, that can start some process in the feature.
+# Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "zapytania" oder "akcje" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
 #: Acl/Rights.php:106
-#, fuzzy
 msgid "manage leads"
-msgstr "Zarządzanie kierownikami"
+msgstr "Edytuj zapytania"
 
 #: Acl/Rights.php:107
-#, fuzzy
 msgid "add, edit and delete leads"
-msgstr "utwórz, edytuj i wymaż kierowników"
+msgstr "dodaj, edytuj i usuń zapytania"
 
 #: Acl/Rights.php:110
-#, fuzzy
 msgid "manage shared lead folders"
-msgstr "Zarządzanie kierownikami"
+msgstr "edytuj wspólne katalogi zapytań"
 
 #: Acl/Rights.php:111
 msgid "Create new shared lead folders"
-msgstr ""
+msgstr "Utwórz nowe, wspólne katalogi zapytań"
 
 #: Controller/Lead.php:235
 msgid "State"
@@ -42,9 +41,8 @@ msgid "Type"
 msgstr "Typ"
 
 #: Controller/Lead.php:237
-#, fuzzy
 msgid "Source"
-msgstr "Pochodzenie"
+msgstr "Źródło"
 
 #: Controller/Lead.php:238 Export/Pdf.php:92 js/LeadEditDialog.js:112
 msgid "Start"
@@ -69,7 +67,7 @@ msgstr "Prawdopodobieństwo"
 
 #: Controller/Lead.php:243
 msgid "Folder"
-msgstr "Folder"
+msgstr "Katalog"
 
 #: Controller/Lead.php:244
 msgid "Updated by"
@@ -77,43 +75,43 @@ msgstr "Zaktualizowane przez"
 
 #: Controller/Lead.php:245
 msgid "Updated Fields:"
-msgstr ""
+msgstr "Zaktualizowane pola:"
 
 #: Controller/Lead.php:246
 #, python-format
 msgid "%s changed from %s to %s."
-msgstr ""
+msgstr "%s zmieniony z %s na %s."
 
 #: Controller/Lead.php:252
 #, python-format
 msgid "Lead %s has been changed"
-msgstr ""
+msgstr "Zapytanie %s zostało zmienione"
 
 #: Controller/Lead.php:254
 #, python-format
 msgid "Lead %s has been creaded"
-msgstr ""
+msgstr "Zapytanie %s zostało utworzone"
 
 #: Controller.php:100
 #, python-format
 msgid "%s's personal leads"
-msgstr ""
+msgstr "%s's własne zapytania"
 
 #: Export/Pdf.php:74
 msgid "Lead Data"
-msgstr "Dane wprowadzenia"
+msgstr "Dane zapytania"
 
 #: Export/Pdf.php:77 js/Crm.js:345 js/LeadEditDialog.js:41 js/LeadState.js:220
 msgid "Leadstate"
-msgstr ""
+msgstr "Stan zapytań"
 
 #: Export/Pdf.php:80 js/LeadEditDialog.js:70
 msgid "Leadtype"
-msgstr "Typ wprowadzenia"
+msgstr "Typ zapytania"
 
 #: Export/Pdf.php:83 js/LeadEditDialog.js:87
 msgid "Leadsource"
-msgstr "Źródło wprowadzenia"
+msgstr "Źródło zapytania"
 
 #: Export/Pdf.php:98
 msgid "End Scheduled"
@@ -169,15 +167,15 @@ msgstr "pilne"
 
 #: js/Crm.js:145
 msgid "Are you sure you want to delete this lead?"
-msgstr "Czy jesteś pewien, że chcesz wymazać realizację?"
+msgstr "Czy na pewno chcesz usunąć to zapytanie?"
 
 #: js/Crm.js:161
 msgid "Deleting lead"
-msgstr "Wymazywanie realizacji"
+msgstr "Usuwanie zapytania"
 
 #: js/Crm.js:166
 msgid "Some error occured while trying to delete the lead."
-msgstr "Wystąpiły pewne błędy z powodu próby wymazania realizacji."
+msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
 
 #: js/Crm.js:251
 msgid "Show details"
@@ -185,28 +183,27 @@ msgstr "Pokaż szczegóły"
 
 #: js/Crm.js:259
 msgid "Show closed leads"
-msgstr "Pokaż zamknięte wprowadzenia"
+msgstr "Pokaż zakończone zapytania"
 
 #: js/Crm.js:295
-#, fuzzy
 msgid "Lead"
-msgstr "ID wporwadzenia"
+msgstr "Zapytanie"
 
 #: js/Crm.js:296 js/Crm.js:342
 msgid "Lead name"
-msgstr "Nazwa wprowadzenia"
+msgstr "Nazwa zapytania"
 
 #: js/Crm.js:314
 msgid "Displaying leads {0} - {1} of {2}"
-msgstr "Wyświetlam wprowadzeń {0} - {1} of {2}"
+msgstr "Wyświetlanie zapytania {0} - {1} z {2}"
 
 #: js/Crm.js:315 js/Crm.js:379
 msgid "No leads found."
-msgstr "Wprowadzeń nie znaleziono"
+msgstr "Nie znaleziono zapytań."
 
 #: js/Crm.js:341
 msgid "Lead id"
-msgstr "ID wporwadzenia"
+msgstr "ID zapytania"
 
 #: js/Crm.js:343 js/Crm.js:1650 js/LeadEditDialog.js:322
 #: js/LeadEditDialog.js:365
@@ -220,30 +217,30 @@ msgstr "Klient"
 
 #: js/Crm.js:444
 msgid "Add lead"
-msgstr "Utwórz wprowadzenie"
+msgstr "Dodaj zapytanie"
 
 #: js/Crm.js:445
 msgid "Add new lead"
-msgstr "Utwórz nowe wprowadzenie"
+msgstr "Dodaj nowe zapytanie"
 
 #: js/Crm.js:460
 msgid "Edit lead"
-msgstr "Edycja wprowadzenia"
+msgstr "Edytuj zapytanie"
 
 #: js/Crm.js:461
 msgid "Edit selected lead"
-msgstr "Edycja wybranego wprowadzenia"
+msgstr "Edytuj zaznaczone zapytanie"
 
 #: js/Crm.js:474
 msgid "Delete lead"
 msgid_plural "Delete leads"
-msgstr[0] "Wymaż wprowadzenie"
-msgstr[1] "Wymaż wprowadzenia"
-msgstr[2] "Wymaż wprowadzeń"
+msgstr[0] "Usuń zapytanie"
+msgstr[1] "Usuń zapytania"
+msgstr[2] "Usuń zapytań"
 
 #: js/Crm.js:475
 msgid "Delete selected leads"
-msgstr "Wymaż wybrane wprowadzenia"
+msgstr "Usuń zaznaczone zapytania"
 
 #: js/Crm.js:485 js/Crm.js:1737 js/Crm.js:1738
 msgid "Export as PDF"
@@ -251,27 +248,27 @@ msgstr "Exportuj jako PDF"
 
 #: js/Crm.js:486
 msgid "Export selected lead as PDF"
-msgstr "Exportuj wybrane wprowadzenia jako PDF"
+msgstr "Eksportuj zaznaczone zapytania jako PDF"
 
 #: js/Crm.js:495 js/Crm.js:1682 js/Crm.js:1701
 msgid "Add task"
-msgstr "Utwórz zadanie"
+msgstr "Dodaj zadanie"
 
 #: js/Crm.js:496
 msgid "Add task for selected lead"
-msgstr "Utwórz zadanie do wybranego wprowadzenia"
+msgstr "Dodaj zadanie do zaznaczonego zapytania"
 
 #: js/Crm.js:615
 msgid "Lead states"
-msgstr "Status wprowadzenia"
+msgstr "Status zapytania"
 
 #: js/Crm.js:616
 msgid "Lead sources"
-msgstr "Źródło wprowadzenia"
+msgstr "Źródła zapytania"
 
 #: js/Crm.js:617
 msgid "Lead types"
-msgstr "Typ wprowadzenia"
+msgstr "Typy zapytań"
 
 #: js/Crm.js:673 js/Crm.js:1034
 msgid "Phone"
@@ -283,36 +280,37 @@ msgstr "Komórka"
 
 #: js/Crm.js:844
 msgid "Please wait"
-msgstr "Proszę poczekać"
+msgstr "Proszę czekać"
 
 #: js/Crm.js:844
 msgid "Saving lead"
-msgstr "Zapisywanie wprowadzenia"
+msgstr "Zapisywanie zapytania"
 
+# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
+# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
 #: js/Crm.js:870
 msgid "Failed"
-msgstr "Nie powiodło się"
+msgstr "Próba nieudana"
 
 #: js/Crm.js:870
 msgid "Could not save lead."
-msgstr "Zapisanie wprowadzenia nie jest możliwe."
+msgstr "Zapisanie zapytania jest niemożliwe."
 
 #: js/Crm.js:874
 msgid "Please fix the errors noted."
-msgstr "Proszę naprawić wskazane błędy."
+msgstr "Proszę poprawić wskazane błędy."
 
 #: js/Crm.js:1011
 msgid "Name"
-msgstr "Nazwisko"
+msgstr "Imię i nazwisko"
 
 #: js/Crm.js:1031
 msgid "Contactdata"
-msgstr "Dane kontaktowe"
+msgstr "Kontakty"
 
 #: js/Crm.js:1087
-#, fuzzy
 msgid "Search for Contacts to add ..."
-msgstr "Szukanie Kontaktów"
+msgstr "Znajdź kontakty do dodania ..."
 
 #: js/Crm.js:1119
 msgid "Summary"
@@ -320,12 +318,11 @@ msgstr "Podsumowanie"
 
 #: js/Crm.js:1127
 msgid "Add a task..."
-msgstr "Utwórz zadanie …"
+msgstr "Dodaj zadanie…"
 
 #: js/Crm.js:1160
-#, fuzzy
 msgid "Percent"
-msgstr "Cena"
+msgstr "Procent"
 
 #: js/Crm.js:1174
 msgid "Status"
@@ -333,7 +330,7 @@ msgstr "Status"
 
 #: js/Crm.js:1224
 msgid "No Tasks to display"
-msgstr "Nie ma zadań do wyświetlenia"
+msgstr "Brak zadań"
 
 #: js/Crm.js:1276
 msgid "Product"
@@ -341,7 +338,7 @@ msgstr "Produkt"
 
 #: js/Crm.js:1285
 msgid "Add a product..."
-msgstr "Utwórz produkt"
+msgstr "Dodaj produkt"
 
 #: js/Crm.js:1294 js/LeadEditDialog.js:152
 msgid "Description"
@@ -353,39 +350,39 @@ msgstr "Cena"
 
 #: js/Crm.js:1391
 msgid "Change contact type"
-msgstr ""
+msgstr "Zmień typ kontaktu"
 
 #: js/Crm.js:1620
 msgid "Add new contact"
-msgstr "Utwórz nowy kontakt"
+msgstr "Dodaj nowy kontakt"
 
 #: js/Crm.js:1621
 msgid "Add new customer contact"
-msgstr "Utwórz nowy kontakt klienta"
+msgstr "Dodaj nowego klienta"
 
 #: js/Crm.js:1631
 msgid "Change type to Customer"
-msgstr ""
+msgstr "Zmień typ na wartość: Klient"
 
 #: js/Crm.js:1640 js/LeadEditDialog.js:320 js/LeadEditDialog.js:357
 msgid "Responsible"
-msgstr "Odpowiedzialny"
+msgstr "Osoba odpowiedzialna"
 
 #: js/Crm.js:1641
 msgid "Change type to Responsible"
-msgstr ""
+msgstr "Zmień typ na wartość: Osoba odpowiedzialna"
 
 #: js/Crm.js:1651
 msgid "Change type to Partner"
-msgstr ""
+msgstr "Zmień typ na wartość: Partner"
 
 #: js/Crm.js:1659
 msgid "Edit contact"
-msgstr "Edycja kontaktu"
+msgstr "Edytuj kontakt"
 
 #: js/Crm.js:1660
 msgid "Edit selected contact"
-msgstr "Edycja wybranego kontaktu"
+msgstr "Edytuj zaznaczony kontakt"
 
 #: js/Crm.js:1669
 msgid "Unlink contact"
@@ -393,23 +390,23 @@ msgstr "Usuń kontakt"
 
 #: js/Crm.js:1670
 msgid "Unlink selected contacts"
-msgstr "Usuń wybrane kontakty"
+msgstr "Usuń zaznaczone kontakty"
 
 #: js/Crm.js:1683
 msgid "Add new task"
-msgstr "Utwórz nowe zadanie"
+msgstr "Dodaj nowe zadanie"
 
 #: js/Crm.js:1691
 msgid "Edit task"
-msgstr "Edycja zadania"
+msgstr "Edytuj zadanie"
 
 #: js/Crm.js:1692
 msgid "Edit selected task"
-msgstr "Edycja wybranego zadania"
+msgstr "Edytuj zaznaczone zadanie"
 
 #: js/Crm.js:1702
 msgid "Add existing task to lead"
-msgstr "Dodaj istniejące zadanie do wprowadzenia"
+msgstr "Dodaj istniejące zadanie do zapytania"
 
 #: js/Crm.js:1711
 msgid "Remove tasks"
@@ -417,7 +414,7 @@ msgstr "Usuń zadania"
 
 #: js/Crm.js:1712
 msgid "Remove selected tasks"
-msgstr "Usuń wybrane zadań"
+msgstr "Usuń zaznaczone zadania"
 
 #: js/Crm.js:1724
 msgid "Remove products"
@@ -429,28 +426,27 @@ msgstr "Usuń wybrane produkty"
 
 #: js/Crm.js:1766 js/Crm.js:1767
 msgid "Leads"
-msgstr ""
+msgstr "Zapytania"
 
 #: js/Crm.js:1812
 msgid "Loading Lead..."
-msgstr "Ładowanie wprowadzenia"
+msgstr "Ładowanie zapytania..."
 
 #: js/Crm.js:1812
 msgid "Please Wait"
-msgstr "Proszę poczekać"
+msgstr "Proszę czekać"
 
 #: js/Crm.js:1843
 msgid "Add New Lead"
-msgstr "Utwórz nowe wprowadzenie"
+msgstr "Dodaj nowe zapytanie"
 
 #: js/Crm.js:1845
-#, fuzzy
 msgid "Edit Lead \"{0}\""
-msgstr "Edycja wprowadzenia \"{0}\""
+msgstr "Edytuj zapytanie \"{0}\""
 
 #: js/LeadEditDialog.js:32
 msgid "Enter short name"
-msgstr "Wprowadź krótką nazwę"
+msgstr "Wprowadź skróconą nazwę"
 
 #: js/LeadEditDialog.js:119
 msgid "Estimated end"
@@ -483,7 +479,7 @@ msgstr "strona internetowa"
 #: Setup/setup.xml:414
 #, fuzzy
 msgid "fair"
-msgstr "targi"
+msgstr "rynek"
 
 #: Setup/setup.xml:428
 msgid "customer"
@@ -494,8 +490,9 @@ msgid "partner"
 msgstr "partner"
 
 #: Setup/setup.xml:456
+#, fuzzy
 msgid "reseller"
-msgstr "dealer"
+msgstr "sprzedawca"
 
 #: Setup/setup.xml:470
 msgid "open"
@@ -503,16 +500,15 @@ msgstr "otwarte"
 
 #: Setup/setup.xml:488
 msgid "contacted"
-msgstr "skontaktowany"
+msgstr "kontakt nawiązany"
 
 #: Setup/setup.xml:506
 msgid "waiting for feedback"
-msgstr "oczekujący na reakcja"
+msgstr "oczekiwanie na odpowiedź"
 
 #: Setup/setup.xml:524
-#, fuzzy
 msgid "quote sent"
-msgstr "oferta wasłana"
+msgstr "kwota wysłana"
 
 #: Setup/setup.xml:542
 msgid "accepted"
@@ -522,43 +518,43 @@ msgstr "zaakceptowany"
 msgid "lost"
 msgstr "stracony"
 
-#~ msgid "folder"
-#~ msgstr "folder"
+msgid "folder"
+msgstr "folder"
 
-#~ msgid "Enter searchfilter"
-#~ msgstr "Wprowadzenie filtra szukania"
+msgid "Enter searchfilter"
+msgstr "Wprowadzenie filtra szukania"
 
-#~ msgid "Search Contacts"
-#~ msgstr "Szukanie Kontaktów"
+msgid "Search Contacts"
+msgstr "Szukanie Kontaktów"
 
-#~ msgid "Add existing contact"
-#~ msgstr "Utwórz istniejący kontakt"
+msgid "Add existing contact"
+msgstr "Utwórz istniejący kontakt"
 
-#~ msgid "Add existing contact to lead"
-#~ msgstr "Dodaj istniejący kontakt do wprowadzenia"
+msgid "Add existing contact to lead"
+msgstr "Dodaj istniejący kontakt do wprowadzenia"
 
-#~ msgid "Organisation"
-#~ msgstr "Organizacja"
-
-#, fuzzy
-#~ msgid "Lead updated"
-#~ msgstr "Realizacjia zaktualizwana"
+msgid "Organisation"
+msgstr "Organizacja"
 
 #, fuzzy
-#~ msgid "Lead added"
-#~ msgstr "Realizacjia utworzona"
+msgid "Lead updated"
+msgstr "Realizacjia zaktualizwana"
 
-#~ msgid "Add responsible"
-#~ msgstr "Utwórz odpowiedzialnego"
+#, fuzzy
+msgid "Lead added"
+msgstr "Realizacjia utworzona"
 
-#~ msgid "Add new responsible contact"
-#~ msgstr "Utwórz nowy kontakt odpowiedzialnego"
+msgid "Add responsible"
+msgstr "Utwórz odpowiedzialnego"
 
-#~ msgid "Add customer"
-#~ msgstr "Utwórz klienta"
+msgid "Add new responsible contact"
+msgstr "Utwórz nowy kontakt odpowiedzialnego"
 
-#~ msgid "Add partner"
-#~ msgstr "Utwórz partnera"
+msgid "Add customer"
+msgstr "Utwórz klienta"
 
-#~ msgid "Add new partner contact"
-#~ msgstr "Utwórz nowy kontakt partnera"
+msgid "Add partner"
+msgstr "Utwórz partnera"
+
+msgid "Add new partner contact"
+msgstr "Utwórz nowy kontakt partnera"
