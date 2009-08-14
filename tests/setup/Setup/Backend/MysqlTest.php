@@ -664,7 +664,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
     
     public function testRenameTable()
     {
-    	$newTableName = 'renamed_phpunit_mysql_test_table';
+    	$newTableName = 'renamed_test_table';
     	$this->_backend->renameTable($this->_table->name, $newTableName);
     	$this->_tableNames[] = $newTableName; //cleanup with tearDown
     	$this->assertTrue($this->_backend->tableExists($newTableName));

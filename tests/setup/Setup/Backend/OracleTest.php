@@ -29,6 +29,14 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
         $this->assertEquals($this->_table->name, $existingSchema->name);
     }
+    
+    public function testRenameTable()
+    {
+    	$newTableName = 'renamed_test_table';
+    	$this->_backend->renameTable($this->_table->name, $newTableName);
+    	$this->_tableNames[] = $newTableName; //cleanup with tearDown
+    	$this->assertTrue($this->_backend->tableExists($newTableName));
+    }
 
     public function testOracleDbAdapterIsQuoted()
     {
