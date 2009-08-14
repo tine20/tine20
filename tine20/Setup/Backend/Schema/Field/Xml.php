@@ -37,6 +37,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
      */
     protected function _setField($_declaration)
     {
+     
         $this->name = (string)$_declaration->name;
         $this->type = (string)$_declaration->type;
 
@@ -49,6 +50,12 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
         } else {
             $this->length = NULL;
         }
+        
+        if(isset($_declaration->scale)) {
+            $this->scale = (int) $_declaration->scale;
+        } else {
+            $this->scale = NULL;
+        }
 
         if(isset($_declaration->notnull)) {
             $this->notnull = (strtolower($_declaration->notnull) == 'true') ? true : false;
@@ -56,8 +63,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
             $this->notnull = false;
         }
 
-        switch ($this->type) {
-            
+        switch ($this->type) {            
             case 'enum':
                 if (isset($_declaration->value[0])) {
                     $i = 0;
@@ -68,30 +74,6 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                     }
                     $this->value = $array;
                 }
-                break;
-
-            case 'boolean':
-            case 'blob':
-            case 'clob':
-            case 'text':
-            case 'datetime':
-            case 'time':
-            case 'date':
-            case 'float':
-            case 'integer':
-                break;
-            
-/*            case ('decimal'):
-                $this->type =  "decimal";
-                $this->value = (string) $_declaration->value ;
-                if (empty($this->default)) {
-                    $this->default = 'NULL';
-                }
-              
-                break;
-*/      
-            default :
-                throw new Setup_Exception('Unsupported type ' . print_r($_declaration, true));
                 break;
         }
 

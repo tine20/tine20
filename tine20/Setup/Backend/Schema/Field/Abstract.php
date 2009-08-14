@@ -40,6 +40,13 @@ abstract class Setup_Backend_Schema_Field_Abstract extends Setup_Backend_Schema_
      * @var int
      */
     public $length;
+    
+    /**
+     * the data scale (number of digits after the decimal point)
+     *
+     * @var int
+     */
+    public $scale;
 
     /**
      * if true, there have to be some values

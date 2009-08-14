@@ -30,32 +30,30 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
     {
         if (is_array($_declaration)) {
             $this->name = $_declaration['COLUMN_NAME'];
-            $type = '';
-            $length= '';
+            $type = $_declaration['DATA_TYPE'];
+            $length = $_declaration['LENGTH'];
+            $scale = null;
+            $default = $_declaration['DEFAULT'];
 
             switch ($_declaration['DATA_TYPE']) {
                 case('NUMBER'):
                     $type = 'integer';
                     $length = (int)$_declaration['PRECISION'];
+                    $scale = (int)$_declaration['SCALE'];
+                    $default = intval($default);
                     break;
                 
                 case('enum'):
-                    $type = $_declaration['DATA_TYPE'];
                     $this->value = explode(',', str_replace("'", '', $_declaration['TYPE_SPECIAL']));
                     break;
                 
                 case('VARCHAR2'):
-                    $length = $_declaration['LENGTH'];
                     $type = 'text';
                     break;
                     
                 case('CLOB'):
-                    $type = 'text';
+                    $type = 'text'; //@todo set type to CLOB?
                     break;
-                
-                default:
-                    $length = $_declaration['LENGTH'];
-                    $type = $_declaration['DATA_TYPE'];
                 }
 
             if (isset($_declaration['EXTRA']) && $_declaration['EXTRA'] == 'auto_increment') {
@@ -69,13 +67,12 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
             $_declaration['NULLABLE'] ? $this->notnull = 'false': $this->notnull = 'true';
             //($_declaration['COLUMN_KEY'] == 'UNI')? $this->unique = 'true': $this->unique = 'false';
             $_declaration['PRIMARY'] ? $this->primary = 'true': $this->primary = 'false';
-            //($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
             
-            $this->default = $type == 'integer' ? (int) $_declaration['DEFAULT'] : $_declaration['DEFAULT'];
-            
-            $this->comment = $_declaration['COLUMN_COMMENT'];
-            $this->length = $length;
-            $this->type = $type;
+            $this->type     = $type;
+            $this->length   = $length;
+            $this->scale    = $scale;
+            $this->default  = $default;
+            $this->comment  = $_declaration['COLUMN_COMMENT'];            
             
         }
     }

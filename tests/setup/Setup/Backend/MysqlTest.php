@@ -192,6 +192,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         $this->_backend->addCol($this->_table->name, $field);
         $newColumn = $this->_getLastField();
         $this->assertEquals('order', $newColumn->name);
+        $this->assertEquals('11', $newColumn->length);
         $this->assertEquals('true', $newColumn->notnull);       
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('true', $newColumn->unsigned, 'Test unsigned');
@@ -419,6 +420,42 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         $this->_backend->addCol($this->_table->name, $field);
     }        
     
+    public function testStringToFieldStatement_020() 
+    {
+        $string ="
+               <field>
+                    <name>price</name>
+                    <type>decimal</type>
+                    <length>6</length>
+                    <scale>2</scale>
+                </field>";
+            
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $this->_backend->addCol($this->_table->name, $field);
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('price', $newColumn->name);
+        $this->assertEquals('6', $newColumn->length);
+        $this->assertEquals('2', $newColumn->scale);
+        $this->assertEquals('decimal', $newColumn->type);
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+
+        $value = 9999.99;
+        $db->insert($tableName, array('name' => 'test1', 'price' => $value));
+        $result = $db->fetchCol($db->select()->from($tableName, 'price'));
+        $this->assertEquals($value, $result[0]);
+        
+        $value = 1.999;
+        $db->insert($tableName, array('name' => 'test2', 'price' => $value));
+        $result = $db->fetchCol($db->select()->from($tableName, 'price'));
+        $this->assertEquals(round($value), $result[1], 'Test if too many scale digits get rounded');
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception', '22003'); //22003: too many digits (maxim 4 + 2 precision)
+        $value = 99999;
+        $db->insert($tableName, array('name' => 'test3', 'price' => $value));
+    }
     
     ##############################
     #    I     N     D     I    C     I     E    S 

@@ -44,8 +44,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             'defaultLength' => null),
         'float' => array(
             'defaultType' => 'double'),
-//        'decimal' => array(
-//            'defaultType' => 'numeric'),
+        'decimal' => array(
+            'lengthTypes' => array(
+                65 => 'decimal'),
+            'defaultType' => 'decimal',
+            'defaultScale' => '0'),
         'datetime' => array(
             'defaultType' => 'datetime'),
         'time' => array(

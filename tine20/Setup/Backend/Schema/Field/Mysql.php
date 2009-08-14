@@ -30,14 +30,18 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
     {    
         if (is_array($_declaration)) {
             $this->name = $_declaration['COLUMN_NAME'];
-            $type = '';
-            $length= '';
+            $type       = $_declaration['DATA_TYPE'];
+            $default    = $_declaration['COLUMN_DEFAULT'];
+            $length     = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
+            $scale      = null;
             
             switch ($_declaration['DATA_TYPE']) {
                 case('tinyint'):
+                case('mediumint'):
                 case('bigint'):
                 case('int'):
                     $type = 'integer';
+                    $default = intval($default);
                     $matches = null;
                     if (preg_match('/\((\d+)\)/', $_declaration['COLUMN_TYPE'], $matches)) {
                         $length = $matches[1];
@@ -45,20 +49,19 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
                         $length = $_declaration['NUMERIC_PRECISION'] + 1;
                     }
                     break;
-                
+
+                case('decimal'):
+                    $length = $_declaration['NUMERIC_PRECISION'];
+                    $scale  = $_declaration['NUMERIC_SCALE'];
+                    break;
+                    
                 case('enum'):
-                    $type = $_declaration['DATA_TYPE'];
                     $this->value = explode(',', str_replace("'", '', substr($_declaration['COLUMN_TYPE'], 5, (strlen($_declaration['COLUMN_TYPE']) - 6))));
                     break;
                 
                 case('varchar'):
-                    $length = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
                     $type = 'text';
                     break;
-                
-                default:
-                    $length = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
-                    $type = $_declaration['DATA_TYPE'];
                 }
 
             if ($_declaration['EXTRA'] == 'auto_increment') {
@@ -74,11 +77,11 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
             ($_declaration['COLUMN_KEY'] == 'PRI')? $this->primary = 'true': $this->primary = 'false';
             ($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
             
-            $this->default = $type == 'integer' ? (int)$_declaration['COLUMN_DEFAULT'] : $_declaration['COLUMN_DEFAULT'];
-
-            $this->comment = $_declaration['COLUMN_COMMENT'];
-            $this->length = $length;
-            $this->type = $type;
+            $this->default  = $default;
+            $this->comment  = $_declaration['COLUMN_COMMENT'];
+            $this->length   = $length;
+            $this->scale    = $scale;
+            $this->type     = $type;
         }
     }
 }

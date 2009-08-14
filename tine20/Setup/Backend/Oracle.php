@@ -41,8 +41,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             'defaultLength' => null),
         'float' => array(
             'defaultType' => 'BINARY FLOAT'),
-//        'decimal' => array(
-//            'defaultType' => 'numeric'),
+        'decimal' => array(
+            'lengthTypes' => array(
+                38 => 'NUMBER'),
+            'defaultType' => 'NUMBER',
+            'defaultScale' => '0'),
         'datetime' => array(
             'defaultType' => 'VARCHAR2',
             'defaultLength' => 25),
