@@ -60,17 +60,6 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             'defaultType' => 'enum')
     );
  
-    /**
-     * takes the xml stream and creates a table
-     *
-     * @param object $_table xml stream
-     */
-    public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
-    {
-        $statement = $this->getCreateStatement($_table);
-        $this->execQueryVoid($statement);
-        #// auto shutup by cweiss: echo "<pre>$statement</pre><hr>";
-    }
     
     public function getCreateStatement(Setup_Backend_Schema_Table_Abstract  $_table)
     {
@@ -318,30 +307,6 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . SQL_TABLE_PREFIX .  $_name . "`" ;
         $this->execQueryVoid($statement);    
     }
-    
-    /**
-     * removes a primary key from database table
-     * 
-     * @param string tableName (there is just one primary key...)
-     */         
-    public function dropPrimaryKey($_tableName)
-    {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP PRIMARY KEY " ;
-        $this->execQueryVoid($statement);    
-    }
-    
-    /**
-     * add a primary key to database table
-     * 
-     * @param string tableName 
-     * @param Setup_Backend_Schema_Index_Abstract declaration
-     */         
-    public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
-    {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
-                    . $this->getIndexDeclarations($_declaration);
-        $this->execQueryVoid($statement);    
-    }
  
     /**
      * add a key to database table
@@ -353,18 +318,6 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
                     . $this->getIndexDeclarations($_declaration);
-        $this->execQueryVoid($statement);    
-    }
-    
-    /**
-     * removes a key from database table
-     * 
-     * @param string tableName 
-     * @param string key name
-     */    
-    public function dropIndex($_tableName, $_indexName)
-    {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
         $this->execQueryVoid($statement);    
     }
 

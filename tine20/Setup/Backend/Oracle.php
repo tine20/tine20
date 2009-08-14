@@ -26,12 +26,12 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         'integer' => array(
             'lengthTypes' => array(
                 38 => 'NUMBER'),
-            'defaultPrecision' => 0,
+            'defaultScale' => 0,
             'defaultType' => 'NUMBER',
             'defaultLength' => self::INTEGER_DEFAULT_LENGTH),
         'boolean' => array(
             'defaultType' => 'NUMBER',
-            'defaultPrecision' => 0,
+            'defaultScale' => 0,
             'defaultLength' => 1),
         'text' => array(
             'lengthTypes' => array(
@@ -76,9 +76,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     public function createTable(Setup_Backend_Schema_Table_Abstract $_table)
     {
         $this->_table = $_table->name;
-        $statement = $this->getCreateStatement($_table);
         
-        $this->execQueryVoid($statement);
+        parent::createTable($_table);
         
         if (!empty($this->_autoincrementId)) {
             $statement = $this->getIncrementSequence($_table->name);
@@ -488,30 +487,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP FOREIGN KEY `" . $_name . "`" ;
         $this->execQueryVoid($statement);    
     }
-    
-    /**
-     * removes a primary key from database table
-     * 
-     * @param string tableName (there is just one primary key...)
-     */         
-    public function dropPrimaryKey($_tableName)
-    {
-        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP PRIMARY KEY " ;
-        $this->execQueryVoid($statement);    
-    }
-    
-    /**
-     * add a primary key to database table
-     * 
-     * Delegates to {@see addPrimaryKey()}
-     * 
-     * @param string tableName 
-     * @param Setup_Backend_Schema_Index_Abstract declaration
-     */         
-    public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
-    {
-        $this->addIndex($_tableName, $_declaration);
-    }
  
     /**
      * add a key to database table
@@ -526,18 +501,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " . $statement;
         }
         
-        $this->execQueryVoid($statement);    
-    }
-    
-    /**
-     * removes a key from database table
-     * 
-     * @param string tableName 
-     * @param string key name
-     */    
-    public function dropIndex($_tableName, $_indexName)
-    {
-        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX `"  . $_indexName. "`" ;
         $this->execQueryVoid($statement);    
     }
     

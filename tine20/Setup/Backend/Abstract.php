@@ -204,6 +204,17 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     }
     
     /**
+     * takes the xml stream and creates a table
+     *
+     * @param object $_table xml stream
+     */
+    public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
+    {
+        $statement = $this->getCreateStatement($_table);
+        $this->execQueryVoid($statement);
+    }    
+    
+    /**
      * removes table from database
      * 
      * @param string tableName
@@ -224,6 +235,42 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     {
         $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' RENAME TO ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_newName);
         $this->execQueryVoid($statement);
+    }
+    
+    /**
+     * add a primary key to database table
+     * 
+     * Delegates to {@see addPrimaryKey()}
+     * 
+     * @param string tableName 
+     * @param Setup_Backend_Schema_Index_Abstract declaration
+     */         
+    public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
+    {
+        $this->addIndex($_tableName, $_declaration);
+    }
+    
+    /**
+     * removes a primary key from database table
+     * 
+     * @param string tableName (there is just one primary key...)
+     */         
+    public function dropPrimaryKey($_tableName)
+    {
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP PRIMARY KEY " ;
+        $this->execQueryVoid($statement);    
+    }
+    
+    /**
+     * removes a key from database table
+     * 
+     * @param string tableName 
+     * @param string key name
+     */    
+    public function dropIndex($_tableName, $_indexName)
+    {
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX `"  . $_indexName. "`" ;
+        $this->execQueryVoid($statement);    
     }
 
     /**
@@ -254,26 +301,38 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         $buffer = array();
         $buffer[] = '  ' . $this->_db->quoteIdentifier($_field->name);
 
+        $buffer = $this->_addDeclarationFieldType($buffer, $_field, $_tableName);
+        $buffer = $this->_addDeclarationUnsigned($buffer, $_field);
+        $buffer = $this->_addDeclarationDefaultValue($buffer, $_field);
+        $buffer = $this->_addDeclarationNotNull($buffer, $_field);
+        $buffer = $this->_addDeclarationAutoincrement($buffer, $_field);
+        $buffer = $this->_addDeclarationComment($buffer, $_field);
+        
+        return $buffer;
+    }
+    
+    protected function _addDeclarationFieldType(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
+    {
         $typeMapping = $this->getTypeMapping($_field->type);
         if ($typeMapping) {
             $fieldType = $typeMapping['defaultType'];
             if (isset($typeMapping['declarationMethod'])) {
                 $fieldBuffer = call_user_func(array($this, $typeMapping['declarationMethod']), $_field, $_tableName);
-                $buffer = array_merge($buffer, $fieldBuffer); 
+                $_buffer = array_merge($_buffer, $fieldBuffer); 
             } else {
                 if ($_field->length !== NULL) {
                     if (isset($typeMapping['lengthTypes']) && is_array($typeMapping['lengthTypes'])) {
                         foreach ($typeMapping['lengthTypes'] as $maxLength => $type) {
                             if ($_field->length <= $maxLength) {
                                 $fieldType = $type;
-                                $precision  = '';
-                                if (isset($_field->precision)) {
-                                    $precision = ',' . $_field->precision;
-                                } elseif(isset($typeMapping['defaultPrecision'])) {
-                                    $precision = ',' . $typeMapping['defaultPrecision'];
+                                $scale  = '';
+                                if (isset($_field->scale)) {
+                                    $scale = ',' . $_field->scale;
+                                } elseif(isset($typeMapping['defaultScale'])) {
+                                    $scale = ',' . $typeMapping['defaultScale'];
                                 }
                                  
-                                $options = "({$_field->length}{$precision})";
+                                $options = "({$_field->length}{$scale})";
                                 break;
                             }
                         }
@@ -291,24 +350,17 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                         }
                         $options = "('" . implode("','", $values) . "')";
                     } elseif(isset($typeMapping['defaultLength'])) {
-                        $precision = isset($typeMapping['defaultPrecision']) ? ',' . $typeMapping['defaultPrecision'] : '';
-                        $options = "({$typeMapping['defaultLength']}{$precision})";
+                        $scale = isset($typeMapping['defaultScale']) ? ',' . $typeMapping['defaultScale'] : '';
+                        $options = "({$typeMapping['defaultLength']}{$scale})";
                     }
                 }
     
-                $buffer[] = $fieldType . $options;
+                $_buffer[] = $fieldType . $options;
             }
         } else {
             throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given field type {$_field->type} is not supported");
         }
-        
-        $buffer = $this->_addDeclarationUnsigned($buffer, $_field);
-        $buffer = $this->_addDeclarationDefaultValue($buffer, $_field);
-        $buffer = $this->_addDeclarationNotNull($buffer, $_field);
-        $buffer = $this->_addDeclarationAutoincrement($buffer, $_field);
-        $buffer = $this->_addDeclarationComment($buffer, $_field);
-        
-        return $buffer;
+        return $_buffer;
     }
     
     protected function _addDeclarationDefaultValue(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
