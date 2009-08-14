@@ -79,6 +79,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'content_type'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // save email as contact note
+        'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // Felamimail_Message object
         'message'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );

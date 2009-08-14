@@ -211,6 +211,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testSendMessage()
     {
         $messageToSend = $this->_getMessageData();
+        $messageToSend['note'] = 1;
         $returned = $this->_json->saveMessage(Zend_Json::encode($messageToSend));
         
         //sleep(10);
@@ -248,7 +249,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $emailNoteIds = array();
         foreach ($contact->notes as $note) {
             if ($note->note_type_id == $emailNoteType->getId()) {
-                $this->assertEquals($messageToSend['subject'], $note->note);
+                $this->assertEquals(1, preg_match('/' . $messageToSend['subject'] . '/', $note->note));
                 $this->assertEquals(Tinebase_Core::getUser()->getId(), $note->created_by);
                 $emailNoteIds[] = $note->getId();
             }

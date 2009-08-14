@@ -401,7 +401,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail = new Tinebase_Mail('UTF-8');
         
         // build mail content
-        $mail->setBodyText($this->_removeHtml($_message->body));
+        $mailBodyText = $this->_removeHtml($_message->body);
+        $mail->setBodyText($mailBodyText);
         $mail->setBodyHtml($this->_addHtmlMarkup($_message->body));
         
         // set from
@@ -459,7 +460,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
             
             // add email notes to contacts (only to/cc)
-            $this->_addEmailNote($nonPrivateRecipients, $_message->subject);
+            if ($_message->note) {
+                $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $mailBodyText);
+            }
         
             // save in sent folder (account id is in from property)
             try {
@@ -998,7 +1001,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @todo add email home (when we have OR filters)
      * @todo add link to message in sent folder?
      */
-    protected function _addEmailNote($_recipients, $_subject)
+    protected function _addEmailNote($_recipients, $_subject, $_body)
     {
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'email', 'operator' => 'in', 'value' => $_recipients)
@@ -1006,15 +1009,24 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         ));
         $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
         
-        foreach ($contacts as $contact) {
-            $note = new Tinebase_Model_Note(array(
-                'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
-                'note'                   => $_subject,
-                'record_id'              => $contact->getId(),
-                'record_model'           => 'Addressbook_Model_Contact',
-            ));
+        if (count($contacts)) {
+        
+            $translate = Tinebase_Translation::getTranslation($this->_applicationName);
             
-            Tinebase_Notes::getInstance()->addNote($note);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
+            
+            $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ':' . substr($_body, 0, 4096);
+            
+            foreach ($contacts as $contact) {
+                $note = new Tinebase_Model_Note(array(
+                    'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
+                    'note'                   => $noteText,
+                    'record_id'              => $contact->getId(),
+                    'record_model'           => 'Addressbook_Model_Contact',
+                ));
+                
+                Tinebase_Notes::getInstance()->addNote($note);
+            }
         }
     }
 }

@@ -168,7 +168,7 @@ Ext.namespace('Tine.Felamimail');
             record: this.record,
             i18n: this.app.i18n,
             hideLabel: true,
-            anchor: '100% 90%'
+            anchor: '100% 80%'
         });
         
         this.htmlEditor = new Ext.form.HtmlEditor({
@@ -282,11 +282,18 @@ Ext.namespace('Tine.Felamimail');
             }, {
                 region: 'south',
                 layout: 'form',
-                height: 80,
+                height: 100,
                 split: true,
                 collapseMode: 'mini',
                 collapsible: true,
-                items: [this.attachmentGrid]
+                items: [
+                    this.attachmentGrid, 
+                {
+                    boxLabel: this.app.i18n._('Save contact note'),
+                    name: 'note',
+                    hideLabel: true,
+                    xtype: 'checkbox'
+                }]
             }]
         };
     }
