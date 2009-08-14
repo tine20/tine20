@@ -16,21 +16,18 @@ Ext.ns('Tine.Calendar');
  * @class Tine.Calendar.EventEditDialog
  * @extends Tine.widgets.dialog.EditDialog
  * Calendar Edit Dialog <br>
- *
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
  */
 Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @cfg {Number} containerId initial container id
      */
     containerId: -1,
-    /**
-     * @private
-     */
-    labelAlign: 'side',
     
-    /**
-     * @private
-     */
+    
+    labelAlign: 'side',
     windowNamePrefix: 'EventEditWindow_',
     appName: 'Calendar',
     recordClass: Tine.Calendar.Model.Event,
@@ -58,6 +55,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
+     * @return {Object} components this.itmes definition
      */
     getFormItems: function() { 
         return {
@@ -210,6 +208,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
     },
     
+    /**
+     * checks if form data is valid
+     * 
+     * @return {Boolean}
+     */
     isValid: function() {
         var isValid = this.validateDtStart() && this.validateDtEnd();
         
@@ -320,7 +323,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 });
 
 /**
- * Event Edit Window
+ * Opens a new event edit dialog window
+ * 
+ * @return {Ext.ux.Window}
  */
 Tine.Calendar.EventEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
