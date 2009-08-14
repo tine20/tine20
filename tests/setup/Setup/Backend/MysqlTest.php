@@ -457,6 +457,35 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         $db->insert($tableName, array('name' => 'test3', 'price' => $value));
     }
     
+    public function testStringToFieldStatement_021() 
+    {
+        $string ="
+               <field>
+                    <name>geo_lattitude</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                </field>";
+            
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $this->_backend->addCol($this->_table->name, $field);
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('geo_lattitude', $newColumn->name);
+        $this->assertEquals(null, $newColumn->length);
+        $this->assertEquals(null, $newColumn->scale);
+        $this->assertEquals('float', $newColumn->type);
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+
+        $testValues = array(1.2, -1.2, 999.999999);
+        foreach ($testValues as $index => $value) {
+            $db->insert($tableName, array('name' => 'test', 'geo_lattitude' => $value));
+            $result = $db->fetchCol($db->select()->from($tableName, 'geo_lattitude'));
+            $this->assertEquals($value, $result[$index], 'Testing value ' . $value);
+        }
+    }
+    
     ##############################
     #    I     N     D     I    C     I     E    S 
     ##############################

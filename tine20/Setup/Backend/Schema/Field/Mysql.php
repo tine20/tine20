@@ -54,6 +54,12 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
                     $length = $_declaration['NUMERIC_PRECISION'];
                     $scale  = $_declaration['NUMERIC_SCALE'];
                     break;
+                
+                case('double unsigned'):
+                case('double'):
+                    $length = null;
+                    $type = 'float';
+                    break;
                     
                 case('enum'):
                     $this->value = explode(',', str_replace("'", '', substr($_declaration['COLUMN_TYPE'], 5, (strlen($_declaration['COLUMN_TYPE']) - 6))));
