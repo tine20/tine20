@@ -59,6 +59,30 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
         
         $this->objects['config'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
+            <dryrun>1</dryrun>
+            <encoding>ISO-8859-1</encoding>
+            <mapping>
+                <field>
+                    <source>firstname</source>
+                    <destination>accountFirstName</destination>
+                </field>
+                <field>
+                    <source>lastname</source>
+                    <destination>accountLastName</destination>
+                </field>
+                <field>
+                    <source>loginname</source>
+                    <destination>accountLoginName</destination>
+                </field>
+                <field>
+                    <source>password</source>
+                    <destination>password</destination>
+                </field>
+            </mapping>
+        </config>';
+        
+        $this->objects['configWithHeadline'] = '<?xml version="1.0" encoding="UTF-8"?>
+        <config>
             <headline>1</headline>
             <dryrun>1</dryrun>
             <encoding>ISO-8859-1</encoding>
@@ -99,25 +123,44 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testImportUsers()
     {
+        $this->_importUsers($this->objects['config'], dirname(__FILE__) . '/files/test.csv', 'admin_user_import_csv_test');
+    }
+
+    /**
+     * test to import admin users
+     *
+     */
+    public function testImportUsersWithHeadline()
+    {
+        $this->_importUsers($this->objects['configWithHeadline'], dirname(__FILE__) . '/files/testHeadline.csv', 'admin_user_import_csv_test_headline');
+    }
+    
+    /**
+     * import users
+     *
+     * @param string $_config xml config
+     */
+    protected function _importUsers($_config, $_filename, $_definition)
+    {
         // create definition / check if exists
         $definitionBackend = new Tinebase_ImportExportDefinition();
         
         try {
-            $definition = $definitionBackend->getByProperty('admin_user_import_csv_test');
-            $definition->plugin_options = $this->objects['config'];
+            $definition = $definitionBackend->getByProperty($_definition);
+            $definition->plugin_options = $_config;
         } catch(Tinebase_Exception_NotFound $e) {
             $definition = $definitionBackend->create(new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
-                'name'              => 'admin_user_import_csv_test',
+                'name'              => $_definition,
                 'type'              => 'import',
                 'model'             => 'Tinebase_Model_FullUser',
                 'plugin'            => 'Admin_Import_Csv',
-                'plugin_options'    => $this->objects['config']
+                'plugin_options'    => $_config
             ))); 
         }
         
         $opts = new Zend_Console_Getopt('abp:');
-        $opts->setArguments(array(dirname(__FILE__) . '/files/test.csv', 'admin_user_import_csv_test'));
+        $opts->setArguments(array($_filename, $_definition));
         
         ob_start();
         $this->_cli->importUser($opts);

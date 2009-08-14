@@ -156,6 +156,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                         // merge additional values (like group id, container id ...)
                         $recordData = array_merge($recordData, $this->_addData($recordData));
                         
+                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
+                        
                         // import record into tine!
                         $importedRecord = $this->_importRecord($recordData);
                         
@@ -205,29 +207,57 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      * @param array $_data
      * @param array $_headline [optional]
      * @return array
-     * 
-     * @todo add headline parsing again?
      */
     protected function _doMapping($_data, $_headline = array())
     {
         $data = array();
+        $_data_indexed = array();
+
+        if (! empty($_headline) && sizeof($_headline) == sizeof($_data)) {
+            $_data_indexed = array_combine($_headline, $_data);
+        }
+
         foreach ($this->_options['mapping']['field'] as $index => $field) {
-            if ($field['destination'] == '' || !isset($_data[$index])) {
-                continue;
-            }
-            
-            if (isset($field['replace'])) {
-                if ($field['replace'] === '\n') {
-                    $_data[$index] = str_replace("\\n", "\r\n", $_data[$index]);
+            if (empty($_data_indexed)) {
+                // use import definition order
+                
+                if ($field['destination'] == '' || !isset($_data[$index])) {
+                    continue;
                 }
-            }
             
-            if (isset($field['separator'])) {
-                $data[$field['destination']] = explode($field['separator'], $_data[$index]);
-            } else if (isset($field['fixed'])) {
-                $data[$field['destination']] = $field['fixed'];
+                if (isset($field['replace'])) {
+                    if ($field['replace'] === '\n') {
+                        $_data[$index] = str_replace("\\n", "\r\n", $_data[$index]);
+                    }
+                }
+            
+                if (isset($field['separator'])) {
+                    $data[$field['destination']] = explode($field['separator'], $_data[$index]);
+                } else if (isset($field['fixed'])) {
+                    $data[$field['destination']] = $field['fixed'];
+                } else {
+                    $data[$field['destination']] = $_data[$index];
+                }
             } else {
-                $data[$field['destination']] = $_data[$index];
+                // use order defined by headline
+                
+                if ($field['destination'] == '' || !isset($_data_indexed[$field['source']])) {
+                    continue;
+                }
+            
+                if (isset($field['replace'])) {
+                    if ($field['replace'] === '\n') {
+                        $_data_indexed[$field['source']] = str_replace("\\n", "\r\n", $_data_indexed[$field['source']]);
+                    }
+                }
+            
+                if (isset($field['separator'])) {
+                    $data[$field['destination']] = explode($field['separator'], $_data_indexed[$field['source']]);
+                } else if (isset($field['fixed'])) {
+                    $data[$field['destination']] = $field['fixed'];
+                } else {
+                    $data[$field['destination']] = $_data_indexed[$field['source']];
+                }
             }
         }
         
