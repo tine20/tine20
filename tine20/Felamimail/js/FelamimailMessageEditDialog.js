@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
@@ -7,12 +7,27 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         reload signature when account combo changed
  */
  
 Ext.namespace('Tine.Felamimail');
 
-Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+/**
+ * Message Compose Dialog
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.MessageEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ * @param       {Object} config
+ * @constructor
+ * 
+ * TODO         reload signature when account combo changed
+ */
+ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * @private
@@ -28,6 +43,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
+     * 
+     * @private
      */
     updateToolbars: function() {
 
@@ -37,6 +54,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * init record to edit
      * 
      * - overwritten to allow initialization from grid/onEditInNewWindow 
+     * 
+     * @private
      */
     initRecord: function() {
         if (this.record.id) {
@@ -48,6 +67,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * executed after record got updated from proxy
+     * 
+     * @private
      */
     onRecordLoad: function() {
         // interrupt process flow till dialog is rendered
@@ -77,10 +98,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.record.data.body = Ext.util.Format.nl2br(this.record.data.body);
         }
         
-        //console.log(this.record);
-        
         this.getForm().loadRecord(this.record);
-        //this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         
         this.loadMask.hide();
     },
@@ -88,6 +106,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * executed when record gets updated from form
      * - add attachments to record here
+     * 
+     * @private
      * 
      * TODO add recipients here as well?
      */
@@ -106,13 +126,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @param {} response
      * @param {} request
+     * @private
      * 
      * TODO mark field(s) invalid if for example email is incorrect
      * TODO add exception dialog on critical errors?
      */
     onRequestFailed: function(response, request) {
         var responseText = Ext.util.JSON.decode(response.responseText);
-        //console.log(responseText);
         Ext.MessageBox.alert(
             this.app.i18n._('Failed'), 
             String.format(this.app.i18n._('Could not send {0}.'), this.i18nRecordName) 
@@ -125,6 +145,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
+     * 
+     * @return {Object}
+     * @private
      * 
      * TODO get css definitions from extern stylesheet?
      */
@@ -151,7 +174,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             name: 'body',
             allowBlank: true,
             anchor: '100% 90%',
-            //height: 200,
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
@@ -267,6 +289,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
 /**
  * Felamimail Edit Popup
+ * 
+ * @param   {Object} config
+ * @return  {Ext.ux.Window}
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;

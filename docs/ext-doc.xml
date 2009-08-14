@@ -70,6 +70,7 @@
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
         <source src="../tine20/Felamimail/js/FelamimailGridPanel.js"/>
         <source src="../tine20/Felamimail/js/FelamimailRecipientGrid.js"/>
+        <source src="../tine20/Felamimail/js/FelamimailMessageEditDialog.js"/>
     </sources>
     <tags>
         <tag name="author" title="Author"/>
