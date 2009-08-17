@@ -61,12 +61,13 @@ function convertToBytes($_value)
 function getDevelopmentRevision()
 {
     $branch = '';
-    $rev = '';
+    $rev = 0;
     $date = '';
     
     try {
         $file = @fopen(dirname(dirname(__FILE__)) . '/.svn/entries', 'r');
         while ($line = @fgets($file)) {
+            
             if ((int)$line > 4700) {
                 $rev = (int)$line;
             }
@@ -74,11 +75,11 @@ function getDevelopmentRevision()
                 $date = trim($line);
             }
             
-            if (! isset($branch) && preg_match('/svn\.tine20\.org\/svn/', $line)) {
+            if (empty($branch) && preg_match('/svn\.tine20\.org\/svn/', $line)) {
                 $parts = explode('/', $line);
                 $branch = $parts[count($parts)-2];
             }
-            if (isset($branch) && isset($date) && $line) {
+            if (! empty($branch) && ! empty($date) && $line) {
                 break;
             }
         }
