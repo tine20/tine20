@@ -615,19 +615,8 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->createTable($table);        
         
         // add config settings for admin and user groups
-        $configBackend = Tinebase_Config::getInstance();
-        $configUserGroupName = new Tinebase_Model_Config(array(
-            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            "name"              => Tinebase_Config::DEFAULT_USER_GROUP,
-            "value"             => "Users",              
-        ));
-        $configBackend->setConfig($configUserGroupName);
-        $configAdminGroupName = new Tinebase_Model_Config(array(
-            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            "name"              => Tinebase_Config::DEFAULT_ADMIN_GROUP,
-            "value"             => "Administrators",              
-        ));
-        $configBackend->setConfig($configAdminGroupName);
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::DEFAULT_USER_GROUP, 'Users');
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::DEFAULT_ADMIN_GROUP, 'Administrators');
         
         $this->setApplicationVersion('Tinebase', '0.7');
     }    
@@ -1236,22 +1225,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
         $this->_backend->createTable($table);        
-        
-        // add default locale to config
-        $config = new Tinebase_Model_Config(array(
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name' => 'Locale',
-            'value' => 'auto'
-        ));
-        Tinebase_Config::getInstance()->setConfig($config);
-
-        // add default timezone to config
-        $config = new Tinebase_Model_Config(array(
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name' => 'Timezone',
-            'value' => 'Europe/Berlin'
-        ));
-        Tinebase_Config::getInstance()->setConfig($config);
         
         $this->setApplicationVersion('Tinebase', '0.14');
     }

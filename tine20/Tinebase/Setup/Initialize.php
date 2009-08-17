@@ -89,16 +89,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             Tinebase_Config::DEFAULT_ADMIN_GROUP    => $adminGroup,
         );
         
-        $configBackend = Tinebase_Config::getInstance();
-        $tinebaseAppId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-        
         foreach ($configSettings as $name => $value) {
-            $config = new Tinebase_Model_Config(array(
-                "application_id"    => $tinebaseAppId,
-                "name"              => $name,
-                "value"             => $value,              
-            ));            
-            $configBackend->setConfig($config);
+            Tinebase_Config::getInstance()->setConfigForApplication($name, $value);
         }
     }
     

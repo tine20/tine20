@@ -87,6 +87,19 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     }
         
     /**
+     * test set config for app
+     *
+     */
+    public function testSetConfigForApplication()
+    {
+        $config = $this->objects['config'];
+        $configSet = $this->_instance->setConfigForApplication($config->name, $config->value);
+        $configGet = $this->_instance->getConfig($configSet->name);
+            
+        $this->assertEquals($this->objects['config']->value, $configGet->value);
+    }
+        
+    /**
      * test get applicaton config
      *
      */

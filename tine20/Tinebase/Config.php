@@ -183,7 +183,26 @@ class Tinebase_Config
         $config = $this->getConfig($_config->name, $_config->application_id);
         
         return $config;
-    }     
+    }
+    
+    /**
+     * set config for application (simplified setConfig())
+     *
+     * @param string $_name
+     * @param string $_value
+     * @param string $_applicationName [optional]
+     * @return Tinebase_Model_Config
+     */
+    public function setConfigForApplication($_name, $_value, $_applicationName = 'Tinebase')
+    {
+        $configRecord = new Tinebase_Model_Config(array(
+            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId(),
+            "name"              => $_name,
+            "value"             => $_value,              
+        ));
+        
+        return $this->setConfig($configRecord);
+    }
 
     /**
      * deletes one config setting
