@@ -175,7 +175,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
                 'encoding'                  => 'ISO8859-1'            
             )
         );
-        $importer->import(dirname(dirname(__FILE__)) . '/Admin/files/test.csv');
+        $importer->import(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv');
         $courseData = $this->_json->getCourse($courseData['id']);
         
         // checks
