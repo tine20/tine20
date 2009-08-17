@@ -444,7 +444,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $this->_addAttachments($mail, $_message, $originalMessage);
         
         // add user agent
-        $mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING);
+        $mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
         
         // set organization
         if (isset($account->organization) && ! empty($account->organization)) {
