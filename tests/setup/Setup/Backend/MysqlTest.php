@@ -701,6 +701,19 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         $this->assertEquals($existingSchema2->fields[1]->name, $newColumnName);     
     }
     
+    public function testAlterCol()
+    {
+        $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
+        $testCol = $existingSchema1->fields[1];
+
+        $testCol->type = 'integer';
+        $testCol->length = 8;  
+        $this->_backend->alterCol($this->_table->name, $testCol, $testCol->name);
+        $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals($existingSchema2->fields[1]->type, 'integer');
+        $this->assertEquals($existingSchema2->fields[1]->length, 8);
+    }
+    
     public function testDropCol()
     {
         $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);

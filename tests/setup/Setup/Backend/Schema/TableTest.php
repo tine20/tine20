@@ -118,6 +118,53 @@ class Setup_Backend_Schema_TableTest extends Setup_Backend_AbstractTest
           'This test has not been implemented yet.'
         );
     }
+    
+    public function testEquals_001()
+    {
+        $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertTrue($this->_table->equals($existingSchema));
+        $this->assertTrue($existingSchema->equals($this->_table));
+        
+        $this->_table->setName('new_name');
+        $this->assertFalse($this->_table->equals($existingSchema));
+        $this->assertFalse($existingSchema->equals($this->_table));
+        
+    }
+    
+    public function testEquals_002()
+    {
+        $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
+        
+        $fieldString ="
+        <field>
+            <name>account_id</name>
+            <type>integer</type>
+        </field>";
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_table->addField($field);
+        
+        $this->assertFalse($this->_table->equals($existingSchema));
+        $this->assertFalse($existingSchema->equals($this->_table));
+        
+    }
+    
+    public function testEquals_003()
+    {
+        $fieldString ="
+        <field>
+            <name>name</name>
+            <type>integer</type>
+            <length>8</length>
+        </field>";
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->alterCol($this->_table->name, $field, 'name');
+        $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
+
+        $this->assertFalse($this->_table->equals($existingSchema));
+        //$this->assertFalse($existingSchema->equals($this->_table));
+        
+    }
+
 }
 
 // Call Setup_Backend_Schema_TableTest::main() if this source file is executed directly.

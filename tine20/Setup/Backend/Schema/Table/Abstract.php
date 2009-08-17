@@ -97,6 +97,23 @@ abstract class Setup_Backend_Schema_Table_Abstract extends Setup_Backend_Schema_
         parent::setName($name);
     }
     
+    public function equals(Setup_Backend_Schema_Table_Abstract $_table)
+    {
+        if (
+            $this->name != $_table->name ||
+            count($this->fields) !== count($_table->fields)
+        ) {
+            return false;
+        }
+
+        foreach ($this->fields as $index => $field) {
+            if (!$field->equals($_table->fields[$index])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     /**
      * put information whether field is key or not to all fields definitions
      *
