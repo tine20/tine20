@@ -120,4 +120,24 @@ class Felamimail_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Felamimail', '0.5');
         $this->setTableVersion('felamimail_account', 5);
     }
+
+    /**
+     * update function 5 -> 2.0
+     * - add display format option
+     *
+     */    
+    public function update_5()
+    {
+        $field = '<field>
+                    <name>display_format</name>
+                    <type>enum</type>
+                    <value>html</value>
+                    <value>plain</value>
+                </field>';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('felamimail_account', $declaration);
+        
+        $this->setApplicationVersion('Felamimail', '2.0');
+        $this->setTableVersion('felamimail_account', 6);
+    }
 }

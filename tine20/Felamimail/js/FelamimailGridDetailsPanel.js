@@ -99,6 +99,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * init single message template (this.tpl)
      */
     initTemplate: function() {
+        
         this.tpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-headers">',
@@ -113,7 +114,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     + this.i18n._('Attachments') + '")]}</div>',
                 '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values.headers, values.attachments)]}</div>',
             '</div>',{
-            
+            treePanel: this.grid.app.getMainScreen().getTreePanel(),
             encode: function(value) {
                 if (value) {
                     var encoded = Ext.util.Format.htmlEncode(value);
@@ -157,7 +158,6 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 return result;
             },
             
-            // -> check preference for mail content-type here
             showBody: function(value, headers, attachments) {
                 if (value) {
                     //console.log(headers);
@@ -170,7 +170,10 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                         // should be already purified ... but just as precaution
                         value = Ext.util.Format.stripScripts(value);
                     } else {
-                        //value = Ext.util.Format.htmlEncode(value);
+                        if (this.treePanel.getActiveAccount().get('display_format') == 'plain') {
+                            value = Ext.util.Format.htmlEncode(value);
+                        }
+
                         value = Ext.util.Format.nl2br(value);
                     }
                     

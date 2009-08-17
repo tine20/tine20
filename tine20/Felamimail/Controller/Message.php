@@ -232,13 +232,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * get complete message by id
      *
-     * @param string|Felamimail_ModelMessage $_id
+     * @param string|Felamimail_Model_Message $_id
      * @param int $_containerId
      * @return Tinebase_Record_Interface
      */
     public function getCompleteMessage($_id, $_withAttachments = FALSE, $_setSeen = FALSE)
     {
-        if ($_id instanceof Felamimail_ModelMessage) {
+        if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
         } else {
             $message = parent::get($_id);
@@ -252,7 +252,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if ($imapBackend = $this->_getBackendAndSelectFolder($message->folder_id, $folder)) {
             
             try {
-                $imapMessage = $imapBackend->getMessage($message->messageuid);
+                $message->message = $imapBackend->getMessage($message->messageuid);
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
                 if ($zmpe->getMessage() == 'the single id was not found in response') {
                     throw new Felamimail_Exception('Message not found. Maybe it was deleted by another client.', 404);
@@ -261,15 +261,24 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
             }
             
+            // get account
+            $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+            
             // add body
-            $message->body = $this->_getBody($imapMessage, $message->content_type);
+            if ($account->display_format == 'plain') {
+                $message->content_type = 'text/plain';
+                $replaceUriAndEmails = FALSE;
+            } else {
+                $replaceUriAndEmails = TRUE;
+            }
+            $message->body = $this->_getBody($message->message, $message->content_type, $replaceUriAndEmails);
             
             // add header
-            $message->headers = $imapMessage->getHeaders();
+            $message->headers = $message->message->getHeaders();
             
             if ($_withAttachments) {
                 // add attachments
-                $message->attachments = $this->getAttachments($imapMessage, $message, $folder);
+                $message->attachments = $this->getAttachments($message->message, $message, $folder);
             }
             
             // set \Seen flag
@@ -277,9 +286,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add \Seen flag to msg uid ' . $message->messageuid);
                 $this->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN), $folder);
             }
-            
-            // add the complete imap message object
-            $message->message = $imapMessage;
         }
 
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
@@ -548,6 +554,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @return array
      * 
      * @todo save images as tempfiles to show them inline the mail body?
+     * @todo check display_format setting from account (for rfc822 mails)
      */
     public function getAttachments(Felamimail_Message $_imapMessage, Felamimail_Model_Message $_message, $_folder = NULL, $_partId = NULL)
     {
@@ -734,11 +741,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param Felamimail_Message|string $_message
      * @param string $_contentType
+     * @param boolean $_replaceUriAndEmails
      * @return string
      * 
      * @todo check if we should replace email addresses in all cases (what if they are already in an anchor tag?)
      */
-    protected function _getBody($_message, $_contentType)
+    protected function _getBody($_message, $_contentType, $_replaceUriAndEmails = TRUE)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting mail body with content type: ' . $_contentType);
         
@@ -768,10 +776,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
 
             // add anchor tag to links
-            $body = $this->_replaceUriAndSpaces($body);
+            if ($_replaceUriAndEmails) {
+                $body = $this->_replaceUriAndSpaces($body);
+            }
         }
 
-        $body = $this->_replaceEmails($body);
+        if ($_replaceUriAndEmails) {
+            $body = $this->_replaceEmails($body);
+        }
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $body);
         
