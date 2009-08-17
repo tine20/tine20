@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-13 18:46+0100\n"
+"PO-Revision-Date: 2009-08-16 16:13+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr "Status"
 
 #: js/EditDialog.js:142
 msgid "Completed"
-msgstr "Zakończony"
+msgstr "Zakończone dnia"
 
 #: js/GridPanel.js:31
 msgid "Do you really want to delete the selected task?"
@@ -81,7 +81,7 @@ msgstr "Próba nieudana"
 
 #: js/GridPanel.js:87
 msgid "Could not save task."
-msgstr "Zapisanie zadania jest niemożliwe."
+msgstr "Zapisanie zadania było niemożliwe."
 
 #: js/GridPanel.js:131
 msgid "Add a task..."

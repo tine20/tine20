@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-13 19:08+0100\n"
+"PO-Revision-Date: 2009-08-16 16:28+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr[2] "Kont"
 
 #: js/FelamimailAccountEditDialog.js:63
 msgid "Account Name"
-msgstr "Nazwa konta"
+msgstr "Konto"
 
 #: js/FelamimailAccountEditDialog.js:67
 msgid "User Email"
@@ -35,7 +35,7 @@ msgstr "E-mail użytkownika"
 
 #: js/FelamimailAccountEditDialog.js:72
 msgid "User Name (From)"
-msgstr "Nazwa użytkownika (Od:)"
+msgstr "Użytkownik (Od:)"
 
 #: js/FelamimailAccountEditDialog.js:75
 msgid "Organization"
@@ -76,7 +76,7 @@ msgstr "SSL"
 
 #: js/FelamimailAccountEditDialog.js:124
 msgid "Username"
-msgstr "Nazwa użytkownika"
+msgstr "Użytkownik"
 
 #: js/FelamimailAccountEditDialog.js:128
 msgid "Password"
@@ -100,7 +100,7 @@ msgstr "Czysty tekst"
 
 #: js/FelamimailAccountEditDialog.js:186
 msgid "Username (optional)"
-msgstr "Nazwa użytkownika (opcjonalnie)"
+msgstr "Użytkownik (opcjonalnie)"
 
 #: js/FelamimailAccountEditDialog.js:189
 msgid "Password (optional)"
@@ -112,11 +112,11 @@ msgstr "Inne ustawienia"
 
 #: js/FelamimailAccountEditDialog.js:208
 msgid "Sent Folder Name"
-msgstr "Nazwa katalogu: Wysłane"
+msgstr "Katalog: Wysłane"
 
 #: js/FelamimailAccountEditDialog.js:212
 msgid "Trash Folder Name"
-msgstr "Nazwa katalogu: Kosz"
+msgstr "Katalog: Kosz"
 
 #: js/FelamimailAccountEditDialog.js:216
 #, fuzzy
@@ -152,8 +152,8 @@ msgid ""
 "Could not upload attachment. Filesize could be too big. Please notify your "
 "Administrator."
 msgstr ""
-"Wysłanie załącznika niemożliwe. Zbyt duży rozmiar pliku. Proszę powiadomić "
-"swojego administratora."
+"Wysłanie załącznika było niemożliwe. Zbyt duży rozmiar pliku. Proszę "
+"powiadomić swojego administratora."
 
 #: js/FelamimailAttachmentGrid.js:123
 msgid "Add Attachment"
@@ -310,7 +310,7 @@ msgstr "Redaguj wiadomość:"
 
 #: js/FelamimailMessageEditDialog.js:140
 msgid "Could not send {0}."
-msgstr "Wysłanie {0} niemożliwe."
+msgstr "Wysłanie {0} było niemożliwe."
 
 #: js/FelamimailMessageEditDialog.js:141
 msgid "Error:"
@@ -446,5 +446,5 @@ msgstr "Domyślne konto e-mail"
 msgid "The default email account to use when sending mails."
 msgstr "Domyślne konto e-mail dla wysyłanych wiadomości"
 
-#~ msgid "Mark Unread"
-#~ msgstr "Oznacz jako nieprzeczytane"
+msgid "Mark Unread"
+msgstr "Oznacz jako nieprzeczytane"

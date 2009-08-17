@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-13 18:39+0100\n"
+"PO-Revision-Date: 2009-08-16 16:21+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -141,9 +141,9 @@ msgstr[2] "list kart godzin"
 #: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:223
 msgid "Time Account"
 msgid_plural "Time Accounts"
-msgstr[0] "Konto czasu"
-msgstr[1] "Konta czasu"
-msgstr[2] "Kont czasu"
+msgstr[0] "Konto do przeliczenia czasu"
+msgstr[1] "Konta do przeliczenia czasu"
+msgstr[2] "Kont do przeliczenia czasu"
 
 #: js/Models.js:111
 msgid "timeaccount list"
@@ -254,7 +254,7 @@ msgstr "Pokaż zakończone"
 
 #: js/TimeaccountSelect.js:212
 msgid "Time Account - Status"
-msgstr "Status konta czasu"
+msgstr "Status konta do przeliczenia czasu"
 
 #: js/TimesheetEditDialog.js:86 js/TimesheetEditDialog.js:87
 msgid "Billed in ..."
@@ -262,7 +262,7 @@ msgstr "Przeliczone w ..."
 
 #: js/TimesheetEditDialog.js:132
 msgid "Select Time Account..."
-msgstr "Zaznacz konto czasu..."
+msgstr "Zaznacz konto do przeliczenia czasu..."
 
 #: js/TimesheetEditDialog.js:133
 msgid "Searching..."
@@ -319,7 +319,7 @@ msgstr "Czas rozpoczęcia"
 
 #: js/TimesheetGridPanel.js:233
 msgid "Time Account closed"
-msgstr "Konto czasu zostało zamknięte"
+msgstr "Konto do przeliczenia czasu zostało zamknięte"
 
 #: js/TimesheetGridPanel.js:304
 msgid "timeframe"

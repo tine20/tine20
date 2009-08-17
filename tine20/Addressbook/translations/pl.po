@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-13 19:27+0100\n"
+"PO-Revision-Date: 2009-08-16 16:35+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -146,7 +146,7 @@ msgstr "Kontakty wewnętrzne"
 
 #: js/Addressbook.js:142 js/Addressbook.js:144
 msgid "contacts"
-msgstr "Kontakty"
+msgstr "kontakty"
 
 #: js/Addressbook.js:143 js/Addressbook.js:483
 msgid "addressbook"
@@ -282,7 +282,7 @@ msgstr "Imię i nazwisko"
 #: js/ContactGrid.js:87 js/EditDialog.js:17 js/EditDialog.js:144
 #: js/EditDialog.js:183
 msgid "Display Name"
-msgstr "Pokaż nazwisko"
+msgstr "Wyświetlana nazwa"
 
 #: js/ContactGrid.js:89 js/EditDialog.js:133 js/EditDialog.js:201
 msgid "Unit"
@@ -354,12 +354,10 @@ msgstr "Komórka (prywatna)"
 msgid "Email (private)"
 msgstr "E-mail (prywatny)"
 
-# Prüfen
-# Ist schon richtig ;)
 #: js/ContactGrid.js:113 js/ContactGridDetailsPanel.js:149
 #: js/ContactGridDetailsPanel.js:173 js/EditDialog.js:274
 msgid "Web"
-msgstr "Internet"
+msgstr "WWW"
 
 #: js/ContactGrid.js:114
 msgid "URL (private)"
@@ -466,7 +464,7 @@ msgstr "Informacje o kontakcie"
 
 #: js/EditDialog.js:348 js/EditDialog.js:391
 msgid "Street 2"
-msgstr "Inna ulica"
+msgstr "Ulica 2"
 
 #: js/EditDialog.js:418
 msgid "Custom Fields"

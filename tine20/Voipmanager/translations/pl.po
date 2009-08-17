@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-13 19:54+0100\n"
+"PO-Revision-Date: 2009-08-16 16:23+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -280,7 +280,7 @@ msgstr "typ"
 
 #: js/Asterisk/SipPeerGridPanel.js:270
 msgid "username"
-msgstr "nazwa użytkownika"
+msgstr "użytkownik"
 
 #: js/Asterisk/SipPeerGridPanel.js:277
 msgid "disallow"
@@ -922,7 +922,7 @@ msgstr "resetuj uwierzytelnianie telefonu przez HTTP"
 
 #: js/Snom/PhoneGridPanel.js:50
 msgid "Open phones web gui"
-msgstr "Otwórz GUI telefonicznej strony internetowej"
+msgstr "Otwórz telefoniczną stronę WWW (GUI)"
 
 #: js/Snom/PhoneGridPanel.js:89
 msgid "MAC address"

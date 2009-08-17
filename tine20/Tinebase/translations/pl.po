@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-13 19:37+0100\n"
+"PO-Revision-Date: 2009-08-16 16:24+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -190,11 +190,11 @@ msgstr "Zarejestruj się"
 
 #: js/Login.js:61 js/Login.js:98
 msgid "Please enter your login data"
-msgstr "Proszę podać swoje dane logowania"
+msgstr "Proszę wprowadzić dane logowania"
 
 #: js/Login.js:79 js/widgets/dialog/CredentialsDialog.js:68
 msgid "Username"
-msgstr "Nazwa użytkownika"
+msgstr "Użytkownik"
 
 #: js/Login.js:86 js/widgets/dialog/CredentialsDialog.js:72
 msgid "Password"
@@ -202,7 +202,7 @@ msgstr "Hasło"
 
 #: js/Login.js:126
 msgid "Logging you in..."
-msgstr "Logowanie …"
+msgstr "Trwa logowanie …"
 
 #: js/Login.js:126 js/widgets/container/GrantsDialog.js:136
 #: js/widgets/grid/PersistentFilterPicker.js:126
@@ -221,11 +221,11 @@ msgstr "Proszę czekać!"
 
 #: js/Login.js:144
 msgid "Login failure"
-msgstr "Logowanie zakończone niepowodzeniem"
+msgstr "Błąd logowania"
 
 #: js/Login.js:145
 msgid "Your username and/or your password are wrong!!!"
-msgstr "Twój login oraz / lub hasło są błędne!!!"
+msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
 
 #: js/MainScreen.js:52
 msgid "Debug Console (Ctrl + F11)"
@@ -472,7 +472,7 @@ msgstr "Wysyłanie zakończone niepowodzeniem"
 #: js/ux/form/ImageField.js:150
 msgid "Could not upload image. Please notify your Administrator"
 msgstr ""
-"Wysłanie grafiki jest niemożliwe. Proszę powiadomić swojego administratora"
+"Wysłanie grafiki było niemożliwe. Proszę powiadomić swojego administratora"
 
 #: js/ux/form/ImageField.js:162
 msgid "Change Image"
@@ -497,7 +497,7 @@ msgstr "Przetwarzanie grafiki zakończone niepowodzeniem"
 #: js/ux/form/ImageField.js:257
 msgid "Could not load image. Please notify your Administrator"
 msgstr ""
-"Załadowanie grafiki jest niemożliwe. Proszę powiadomić swojego administratora"
+"Załadowanie grafiki było niemożliwe. Proszę powiadomić swojego administratora"
 
 #: js/ux/form/RecordsComboBox.js:27
 msgid "Software Version"
@@ -505,7 +505,7 @@ msgstr "Wersja oprogramowania"
 
 #: js/ux/grid/PagingToolbar.js:45
 msgid "{0} selected"
-msgstr "{0} zaznaczony"
+msgstr "{0} zaznaczonych"
 
 #: js/ux/grid/PagingToolbar.js:46
 msgid "Unselect all"
@@ -596,7 +596,7 @@ msgstr "Typ"
 
 #: js/widgets/ActivitiesPanel.js:394
 msgid "Created By"
-msgstr "Utworzone przez"
+msgstr "Utworzona przez"
 
 #: js/widgets/ActivitiesPanel.js:395
 msgid "Timestamp"
@@ -604,7 +604,7 @@ msgstr "Znacznik czasu"
 
 #: js/widgets/ActivitiesPanel.js:409
 msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Wyświetlanie zestawów danych {0} - {1} z {2}"
+msgstr "Wyświetlanie historii, wiersze {0} - {1} z {2}"
 
 #: js/widgets/ActivitiesPanel.js:410
 msgid "No history to display"
@@ -685,7 +685,7 @@ msgstr "Próba nieudana"
 
 #: js/widgets/app/GridPanel.js:571 js/widgets/dialog/EditDialog.js:441
 msgid "Could not delete {0}."
-msgstr "Usunięcie {0} jest niemożliwe."
+msgstr "Usunięcie {0} było niemożliwe."
 
 #: js/widgets/app/MainScreen.js:105
 msgid "Saved filter"
@@ -708,7 +708,7 @@ msgstr "osobisty"
 
 #: js/widgets/container/ContainerSelect.js:228
 msgid "shared"
-msgstr "wspólny"
+msgstr "wspólnych"
 
 #: js/widgets/container/ContainerSelect.js:360
 msgid "please select a {0}"
@@ -720,15 +720,15 @@ msgstr "Wszystkie {0}"
 
 #: js/widgets/container/ContainerTree.js:139
 msgid "My {0}"
-msgstr "Mój {0}"
+msgstr "Moja(e) {0}"
 
 #: js/widgets/container/ContainerTree.js:146
 msgid "Shared {0}"
-msgstr "Wspólny {0}"
+msgstr "Wspólne {0}"
 
 #: js/widgets/container/ContainerTree.js:154
 msgid "Other Users {0}"
-msgstr "Inni użytkownicy {0}"
+msgstr "{0} innych użytkowników"
 
 #: js/widgets/container/GrantsDialog.js:55
 msgid "Folder"
@@ -770,11 +770,11 @@ msgstr "Brak pól użytkownika"
 
 #: js/widgets/dialog/AlarmPanel.js:35
 msgid "Alarms"
-msgstr "Komunikaty alarmowe"
+msgstr "Przypomnienia"
 
 #: js/widgets/dialog/AlarmPanel.js:46
 msgid "Send Alarm"
-msgstr "Wyślij komunikat alarmowy"
+msgstr "Wyślij przypomnienie"
 
 #: js/widgets/dialog/AlarmPanel.js:56
 msgid "None"
@@ -841,7 +841,7 @@ msgstr "Transmisja {0}..."
 
 #: js/widgets/dialog/EditDialog.js:403
 msgid "Could not save {0}."
-msgstr "Zapisanie jest niemożliwe {0}."
+msgstr "Zapisanie było niemożliwe {0}."
 
 #: js/widgets/dialog/EditDialog.js:429
 msgid "Do you really want to delete this {0}?"
@@ -885,11 +885,11 @@ msgstr "równa się"
 
 #: js/widgets/grid/FilterModel.js:131
 msgid "is greater than"
-msgstr "jest większy"
+msgstr "większy od"
 
 #: js/widgets/grid/FilterModel.js:132
 msgid "is less than"
-msgstr "jest mniejszy od"
+msgstr "mniejszy od"
 
 #: js/widgets/grid/FilterModel.js:133
 msgid "is not"
@@ -993,11 +993,11 @@ msgstr "dodaj nowy filtr"
 
 #: js/widgets/grid/FilterToolbar.js:126
 msgid "reset all filters"
-msgstr "resetuj wszystkie filtry"
+msgstr "resetuj filtry"
 
 #: js/widgets/grid/FilterToolbar.js:132
 msgid "start search"
-msgstr "rozpocznij wyszukiwanie"
+msgstr "znajdź"
 
 #: js/widgets/grid/FilterToolbar.js:140 js/widgets/grid/FilterToolbar.js:568
 msgid "save filter"
@@ -1119,7 +1119,7 @@ msgstr "Dodaj nowy, osobisty znacznik"
 #: js/widgets/tags/TagsPanel.js:91
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr ""
-"Pamiętaj proszę, że utworzyłeś nowy, osobisty znacznik. Tylko Ty będziesz go "
+"Pamiętaj proszę, że tworzysz nowy, osobisty znacznik. Tylko Ty będziesz go "
 "widzeć!"
 
 #: js/widgets/tags/TagsPanel.js:91
