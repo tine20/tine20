@@ -240,7 +240,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         
         $statement .= $this->getFieldDeclarations($_declaration);
         
-        if ($_position != NULL) {
+        if ($_position !== NULL) {
             if ($_position == 0) {
                 $statement .= ' FIRST ';
             } else {
