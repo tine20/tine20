@@ -170,7 +170,9 @@ public function testEquals_001()
         $field3 = $this->_getLastField();
         
         $this->assertTrue($field3->equals($field2));
+        $this->assertTrue($field2->equals($field3));
         $this->assertFalse($field3->equals($field1));
+        $this->assertFalse($field1->equals($field3));
     }
     
     public function testEqualsExistingSchema_004()
@@ -188,6 +190,7 @@ public function testEquals_001()
         $field2 = $this->_getLastField();
         
         $this->assertTrue($field1->equals($field2));
+        $this->assertTrue($field2->equals($field1));
     }
 
 }

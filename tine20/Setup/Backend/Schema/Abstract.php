@@ -12,6 +12,13 @@
 
 abstract class Setup_Backend_Schema_Abstract
 {
+ 
+    /**
+     * Instance of Setup_Backend_Abstract with public getter {@see getBackend()}
+     * @var Setup_Backend_Abstract
+     */
+    protected $_backend;
+    
      /**
      * the name of the table
      *
@@ -67,5 +74,20 @@ abstract class Setup_Backend_Schema_Abstract
         }           
 
         return $isValid;
+    }
+    
+    /**
+     * Getter for {@see $_backend} property
+     * 
+     * Lazy loading: Initializes $_backend on first request
+     * 
+     * @return Setup_Backend_Abstract
+     */
+    public function getBackend()
+    {
+        if (!isset($this->_backend)) {
+            $this->_backend = Setup_Backend_Factory::factory();
+        }
+        return $this->_backend;
     }
 }

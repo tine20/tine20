@@ -143,18 +143,70 @@ abstract class Setup_Backend_Schema_Field_Abstract extends Setup_Backend_Schema_
      * @param Setup_Backend_Schema_Field_Abstract $field
      * @return unknown_type
      */
-    public function equals(Setup_Backend_Schema_Field_Abstract $field)
+    public function equals(Setup_Backend_Schema_Field_Abstract $_field)
     {
-	    //var_dump($this, $field);
         return (
-            $field->name == $this->name &&
-            $field->type == $this->type &&
+            $_field->name == $this->name &&
             (
-                (empty($field->length) && $this->length == Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH) ||
-                (empty($this->length) && $field->length == Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH) ||
-                $field->length == $this->length
+                (
+                    $_field->type == $this->type ||
+                    $this->_resemblesType($_field)
+                ) 
+                &&
+                (
+                    $_field->length == $this->length
+                    ||
+                    $this->_resemblesLength($_field)
+                )
             )
         );
     }
+    
+    protected function _resemblesLength(Setup_Backend_Schema_Field_Abstract $_field) {
+        if (!isset($this->length)) {
+            $thisTypeMap = $this->getBackend()->getTypeMapping($this->type);
+            return (isset($thisTypeMap['defaultLength']) && $_field->length == $thisTypeMap['defaultLength']);
+        }
+        
+            if (!isset($_field->length)) {
+            $fieldTypeMap = $this->getBackend()->getTypeMapping($_field->type);
+            return (isset($fieldTypeMap['defaultLength']) && $this->length == $fieldTypeMap['defaultLength']);
+        }
+        
+        return false;
+    }
+    
+    protected function _resemblesType(Setup_Backend_Schema_Field_Abstract $_field) {
+        $thisType = $this->type;
+        $fieldType = $_field->type;
+        if ($fieldType == $thisType) {
+            return true;
+        }
+        
+        $thisTypeMap = $this->getBackend()->getTypeMapping($thisType);
+        $fieldTypeMap = $this->getBackend()->getTypeMapping($fieldType);       
+        if ($this->_resemblesTypeCheck($thisTypeMap, $fieldType) ||
+            $this->_resemblesTypeCheck($fieldTypeMap, $thisType) ||
+            $this->_resemblesTypeCheck($fieldTypeMap, $thisTypeMap['defaultType']) ||
+            $this->_resemblesTypeCheck($thisTypeMap, $fieldTypeMap['defaultType'])) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    protected function _resemblesTypeCheck($fieldTypeMap, $expectedType)
+    {
+        if (isset($fieldTypeMap['lengthTypes'])) {
+            foreach ($fieldTypeMap['lengthTypes'] as $length => $type) {
+                if ($type == $expectedType) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    
 
 }
