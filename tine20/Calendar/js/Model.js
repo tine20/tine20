@@ -161,7 +161,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.Json
         p.deleteInstance = deleteInstance ? 1 : 0;
         p.deleteAllFollowing = deleteAllFollowing ? 1 : 0;
         
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     },
     
     deleteRecurSeries: function(event, options) {
@@ -172,7 +172,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.Json
         p.method = this.appName + '.deleteRecurSeries';
         p.recordData = Ext.util.JSON.encode(event.data);
         
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     },
     
     updateRecurSeries: function(event, options) {
@@ -186,7 +186,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.Json
         p.method = this.appName + '.updateRecurSeries';
         p.recordData = Ext.util.JSON.encode(event.data);
         
-        return this.request(options);
+        return this.doXHTTPRequest(options);
     }
 });
 
