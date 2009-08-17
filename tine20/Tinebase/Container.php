@@ -1106,8 +1106,8 @@ class Tinebase_Container
     protected function _removeFromCache($_containerId) 
     {        
         // remove container from cache
-        if (Tinebase_Core::getConfig()->caching) {
-            $cache = Tinebase_Core::get(Tinebase_Core::CACHE);        
+        if (Tinebase_Core::getConfig()->caching && Tinebase_Core::getConfig()->caching->active) {
+            $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
             if (ucfirst(Tinebase_Core::getConfig()->caching->backend) !== 'Memcached') {
                 try {
                     $accountId          = Tinebase_Model_User::convertUserIdToInt(Tinebase_Core::getUser());
