@@ -426,14 +426,31 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */    
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
     {
-        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " CHANGE COLUMN " ;
+        if (isset($_oldName) && $_oldName != $_declaration->name) {
+            $this->_renameCol($_tableName, $_oldName, $_declaration->name);
+        }
+
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " MODIFY " ;
         $oldName = $_oldName ;
         
         if ($_oldName == NULL) {
             $oldName = SQL_TABLE_PREFIX . $_declaration->name;
         }
         
-        $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration, $_tableName);
+        $statement .= $this->getFieldDeclarations($_declaration, $_tableName);
+        $this->execQueryVoid($statement);    
+    }
+    
+    /**
+     * rename column/field in database table
+     * 
+     * @param string $_tableName
+     * @param string $_oldName
+     * @param string $_newName 
+     */    
+    protected function _renameCol($_tableName, $_oldName, $_newName)
+    {
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " RENAME  COLUMN " . $this->_db->quoteIdentifier($_oldName) . ' TO ' . $this->_db->quoteIdentifier($_newName);
         $this->execQueryVoid($statement);    
     }
     
