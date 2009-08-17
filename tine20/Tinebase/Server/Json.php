@@ -51,7 +51,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             $method  = $request->getMethod();
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
-            $jsonKey = $_SERVER['HTTP_X_TINE20_JSONKEY'];
+            $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
             $this->_checkJsonKey($method, $jsonKey);
             
             // add json apis which require no auth
@@ -128,6 +128,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
         }
     }
     
+    /**
+     * check json key
+     *
+     * @param string $method
+     * @param string $jsonKey
+     */
     protected function _checkJsonKey($method, $jsonKey)
     {
         $anonymnousMethods = array(
