@@ -695,8 +695,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     onRequestFailed: function(response, request) {
         var responseText = Ext.util.JSON.decode(response.responseText);
         
-        console.log(responseText);
-
         if (responseText.message == 'cannot login, user or password wrong' ||
             responseText.message == 'need at least user in params') {
             
