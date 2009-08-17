@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
@@ -12,9 +12,21 @@
 Ext.namespace('Tine.Felamimail');
 
 /**
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.AccountEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
  * 
- * @class Tine.Felamimail.AccountEditDialog
- * @extends Tine.widgets.dialog.EditDialog
+ * <p>Account Edit Dialog</p>
+ * <p></p>
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Felamimail.AccountEditDialog
  */
 Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
@@ -31,6 +43,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
+     * @private
      */
     updateToolbars: function() {
 
@@ -40,6 +53,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
+     * @private
      */
     getFormItems: function() {
         return {
@@ -264,9 +278,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 });
 
 /**
- * Felamimail Edit Popup
+ * Felamimail Account Edit Popup
+ * 
+ * @param   {Object} config
+ * @return  {Ext.ux.Window}
  */
-Tine.Felamimail.AccountEditDialog.openWindow = function (config) {
+ Tine.Felamimail.AccountEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 400,

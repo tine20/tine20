@@ -69,7 +69,9 @@
         <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
         <source src="../tine20/Felamimail/js/Felamimail.js"/>
+        <source src="../tine20/Felamimail/js/FelamimailAccountEditDialog.js"/>
         <source src="../tine20/Felamimail/js/FelamimailGridPanel.js"/>
+        <source src="../tine20/Felamimail/js/FelamimailGridDetailsPanel.js"/>
         <source src="../tine20/Felamimail/js/FelamimailRecipientGrid.js"/>
         <source src="../tine20/Felamimail/js/FelamimailMessageEditDialog.js"/>
         <source src="../tine20/Felamimail/js/FelamimailTreePanel.js"/>

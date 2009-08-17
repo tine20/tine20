@@ -1,40 +1,53 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  *
- * TODO         replace telephone numbers in emails with 'call contact' link
- * TODO         make only text body scrollable (headers should be always visible)
- * TODO         don't show headers in tooltip, add collapsed panel or something like that
- * TODO         show image attachments inline
- * TODO         add 'download all' button
- * TODO         add preference to show mails in html or text?
- * TODO         'from' to contact: check for duplicates
- * 
  */
  
 Ext.namespace('Tine.Felamimail');
 
 /**
- * the details panel (shows message content)
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.GridDetailsPanel
+ * @extends     Tine.widgets.grid.DetailsPanel
  * 
- * @class Tine.Felamimail.GridDetailsPanel
- * @extends Tine.widgets.grid.DetailsPanel
+ * <p>Message Grid Details Panel</p>
+ * <p>the details panel (shows message content)</p>
+ * 
+ * TODO         replace telephone numbers in emails with 'call contact' link
+ * TODO         make only text body scrollable (headers should be always visible)
+ * TODO         show image attachments inline
+ * TODO         add 'download all' button
+ * TODO         'from' to contact: check for duplicates
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Felamimail.GridDetailsPanel
  */
-Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
+ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
+    /**
+     * config
+     * @private
+     */
     defaultHeight: 300,
     currentId: null,
     record: null,
     i18n: null,
     
-    
     /**
      * init
+     * @private
      */
     initComponent: function() {
 
@@ -53,6 +66,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
 
     /**
      * add on click event after render
+     * @private
      */
     afterRender: function() {
         Tine.Felamimail.GridDetailsPanel.superclass.afterRender.apply(this, arguments);
@@ -65,6 +79,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * 
      * @param {} record
      * @param {} body
+     * @private
      */
     updateDetails: function(record, body) {
         // check if new record has been selected
@@ -97,6 +112,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     /**
      * init single message template (this.tpl)
+     * @private
      */
     initTemplate: function() {
         
@@ -233,6 +249,7 @@ Tine.Felamimail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * on click for attachment download / compose dlg / edit contact dlg
      * 
      * @param {} e
+     * @private
      */
     onClick: function(e) {
         var selectors = [
