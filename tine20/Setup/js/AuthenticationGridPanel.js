@@ -60,7 +60,7 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
      * save config and update setup registry
      */
     onApplyChanges: function() {
-        if (this.getForm().isValid()) {
+        if (this.isValid()) {
 
             var authenticationData = this.form2config();
             
@@ -484,5 +484,26 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                 this.action_applyChanges
             ]
         });
+    },
+    
+    /**
+     * checks if form is valid
+     * - password fields are equal
+     * 
+     * @return {Boolean}
+     */
+    isValid: function() {
+        // check if passwords match
+        var form = this.getForm();
+        if (form.findField('authentication_sql_admin_password').getValue() != form.findField('authentication_sql_admin_passwordConfirmation').getValue()) {
+            form.markInvalid([{
+                id: 'authentication_sql_admin_passwordConfirmation',
+                msg: this.app.i18n._("Passwords don't match")
+            }]);
+            return false;
+        }
+        
+        return form.isValid();
     }
+    
 }); 
