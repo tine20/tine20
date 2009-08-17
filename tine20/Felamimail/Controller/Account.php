@@ -135,12 +135,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $record = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray());
             
             if (! isset(Tinebase_Core::getConfig()->smtp)) {
-                throw new Felamimail_Exception('No default smtp account defined in config.inc.php!');
+                // just warn
+                //throw new Felamimail_Exception('No default smtp account defined in config.inc.php!');
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No default smtp account defined in config.inc.php!');
+            } else {
+                $record->smtp_hostname  = Tinebase_Core::getConfig()->smtp->hostname;
+                $record->smtp_user      = Tinebase_Core::getConfig()->smtp->username;
+                $record->smtp_password  = Tinebase_Core::getConfig()->smtp->password;
             }
-            
-            $record->smtp_hostname  = Tinebase_Core::getConfig()->smtp->hostname;
-            $record->smtp_user      = Tinebase_Core::getConfig()->smtp->username;
-            $record->smtp_password  = Tinebase_Core::getConfig()->smtp->password;
             
             $record->setId(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID);
         } else {
