@@ -619,7 +619,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         foreach ($accounts as $account) {
             $accountObject = $this->_ldap2User($account, $_accountClass);
             
-            $result->addRecord($accountObject);
+            if ($accountObject) {
+                $result->addRecord($accountObject);
+            }
+            
         }
         
         return $result;
@@ -659,6 +662,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             'accountStatus'  => 'enabled'
         );
         
+        $errors = false;
         foreach ($_userData as $key => $value) {
             if (is_int($key)) {
                 continue;
@@ -673,7 +677,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
                     case 'accountStatus':
                         break;
                     case 'accountPrimaryGroup':
-                        $accountArray[$keyMapping] = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($value[0]);
+                        try {
+                            $accountArray[$keyMapping] = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($value[0]);
+                        } catch (Tinebase_Exception_NotFound $e) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to resolve group Id ' . $value[0]);
+                            $errors = true;
+                        }
+                        
                         break;
                     default: 
                         $accountArray[$keyMapping] = $value[0];
@@ -682,7 +692,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             }
         }
         
-        $accountObject = new $_accountClass($accountArray);
+        if ($errors) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not instantiate account object for ldap user ' . print_r($_userData, 1));
+            $accountObject = null;
+        } else {
+            $accountObject = new $_accountClass($accountArray);
+        }        
         
         return $accountObject;
     }
