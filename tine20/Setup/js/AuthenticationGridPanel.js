@@ -378,6 +378,18 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                     }, {
                         name: 'accounts_ldap_maxGroupId',
                         fieldLabel: this.app.i18n._('Max Group Id')
+                    }, {
+                        name: 'accounts_ldap_groupUUIDAttribute',
+                        fieldLabel: this.app.i18n._('Group UUID Attribute name')
+                    }, {
+                        name: 'accounts_ldap_userUUIDAttribute',
+                        fieldLabel: this.app.i18n._('User UUID Attribute name')
+                    }, {
+                        name: 'accounts_ldap_userGroupName',
+                        fieldLabel: this.app.i18n._('User group name')
+                    }, {
+                        name: 'accounts_ldap_adminGroupName',
+                        fieldLabel: this.app.i18n._('Admin group name')
                     } ]
                 }]
             } ]

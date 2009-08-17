@@ -565,28 +565,69 @@ class Setup_Controller
             $this->_updateAuthentication($_authenticationData);
         } else {
             $installationOptions = array();
-            $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
-            if (!empty($_authenticationData['authentication'][$sqlKey]['admin'])) {
-                $admin = $_authenticationData['authentication'][$sqlKey]['admin'];
-                $installationOptions['admin_login_name'] = $admin['loginName'];
-                $installationOptions['admin_login_password'] = $admin['password'];
-            }
             $installationOptions['authenticationData'] = $_authenticationData;
+            
+            //SQL DEFAULT ADMIN SETTINGS
+            $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
+            if ($_authenticationData['authentication']['backend'] == $sqlKey) {
+                if (!empty($_authenticationData['authentication'][$sqlKey]['admin'])) {
+                    $admin = $_authenticationData['authentication'][$sqlKey]['admin'];
+                    $installationOptions['admin_login_name'] = $admin['loginName'];
+                    $installationOptions['admin_login_password'] = $admin['password'];
+                }
+            }
+
+            //LDAP DEFAULT ADMIN-/USER GROUP NAME SETTINGS
+            $ldapKey = strtolower(Tinebase_Auth_Factory::LDAP);
+            if ($_authenticationData['accounts']['backend'] == $ldapKey) {
+                if (!empty($_authenticationData['accounts'][$ldapKey]['userGroupName'])) {
+                    $installationOptions['user_group_name'] = $_authenticationData['accounts'][$ldapKey]['userGroupName'];
+                }
+                if (!empty($_authenticationData['accounts'][$ldapKey]['adminGroupName'])) {
+                    $installationOptions['admin_group_name'] = $_authenticationData['accounts'][$ldapKey]['adminGroupName'];
+                }
+            }
+
             $this->installApplications(array('Tinebase'), $installationOptions);
         }
     }
 
     /**
+     * Save {@param $_authenticationData} to config file
+     * @todo save to config table instead of config file!
      * 
      * @param array $_authenticationData [hash containing settings for authentication and accountsStorage]
      * @return void
      */
     protected function _updateAuthentication($_authenticationData)
     {
-        $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
-        if (isset($_authenticationData['authentication'][$sqlKey]['admin'])) {
-             unset($_authenticationData['authentication'][$sqlKey]['admin']);
+         $authenticationProviderData = $_authenticationData['authentication'];
+         $accountsStorageData        = $_authenticationData['accounts'];
+         
+         switch (strtolower($authenticationProviderData['backend'])) {
+             case strtolower(Tinebase_Auth_Factory::SQL):
+                 $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
+                 if (isset($_authenticationData['authentication'][$sqlKey]['admin'])) {
+                      unset($_authenticationData['authentication'][$sqlKey]['admin']);
+                 }
+                 break;
         }
+        
+        switch (strtolower($accountsStorageData['backend'])) {
+             case strtolower(Tinebase_Auth_Factory::LDAP):
+                $ldapOptions = $accountsStorageData[strtolower(Tinebase_Auth_Factory::LDAP)];
+                if (!empty($ldapOptions['groupUUIDAttribute'])) {
+                    Tinebase_Config::getInstance()->setConfigForApplication('groupUUIDAttribute', $ldapOptions['groupUUIDAttribute']);
+                    unset($ldapOptions['groupUUIDAttribute']);
+                }
+                
+                if (!empty($ldapOptions['userUUIDAttribute'])) {
+                    Tinebase_Config::getInstance()->setConfigForApplication('userUUIDAttribute', $ldapOptions['userUUIDAttribute']);
+                    $ldapOptions['userUUIDAttribute'];
+                }
+                break;
+        }
+
 //        if ($_authenticationData['authentication']['backend'] === Tinebase_Auth_Factory::LDAP) {
 //            unset($_authenticationData['authentication'][Tinebase_Auth_Factory::SQL]);
 //        } else {
@@ -634,6 +675,11 @@ class Setup_Controller
             $result[Tinebase_Auth_Factory::LDAP]['maxUserId'] = 29999;
             $result[Tinebase_Auth_Factory::LDAP]['minGroupId'] = 11000;
             $result[Tinebase_Auth_Factory::LDAP]['maxGroupId'] = 11099;
+            $result[Tinebase_Auth_Factory::LDAP]['groupUUIDAttribute'] = 'entryUUID';
+            $result[Tinebase_Auth_Factory::LDAP]['userUUIDAttribute'] = 'entryUUID';
+            $result[Tinebase_Auth_Factory::LDAP]['userGroupName'] = 'Users';
+            $result[Tinebase_Auth_Factory::LDAP]['adminGroupName'] = 'Administrators';
+            
             
             $result[Tinebase_Auth_Factory::LDAP]['accountCanonicalForm'] = 2;
         }

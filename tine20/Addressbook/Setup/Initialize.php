@@ -26,8 +26,18 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
-    {    	
-    	$this->_createInitialAdminAccount($_options); //needed to give anyone read rights to the internal addressbook (see _createInitialRights) 
+    {
+        switch(Tinebase_Core::getAuthType()) {
+            case Tinebase_Auth_Factory::SQL:
+                $this->_createInitialAdminAccount($_options); //needed to give anyone read rights to the internal addressbook (see _createInitialRights)
+                break;
+            case Tinebase_Auth_Factory::LDAP:
+                Tinebase_User::getInstance()->importUsers();
+                Tinebase_Group::getInstance()->importGroupMembers();
+                break;
+            //$import = new Setup_Import_Egw14();
+        }
+    	 
         parent::_initialize($_application, $_options);
     }
     /**
@@ -107,8 +117,6 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         ));
 
         $accountsBackend->addUser($account);
-
-        Tinebase_Core::set('currentAccount', $account);
 
         // set the password for the account
         Tinebase_User::getInstance()->setPassword($_loginName, $_password);

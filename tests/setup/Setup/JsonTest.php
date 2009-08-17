@@ -178,7 +178,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($authentication[strtolower(Tinebase_Auth_Factory::LDAP)]));
     }
     
-    public function testSaveAuthentication()
+    public function testSaveAuthenticationSql()
     {
         $originalAuthenticationData = $this->_json->loadAuthenticationData();
 
@@ -199,6 +199,37 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(empty($savedAuthenticationData['authentication']['sql']['admin']), 'admin loginname/password must not be stored in authentication config');
         $this->assertEquals($savedAuthenticationData, $originalAuthenticationData);
         
+        //test if Tinebase stack was installed
+        $apps = $this->_json->searchApplications();
+        $baseApplicationStack = array('Tinebase', 'Admin', 'Addressbook');
+        foreach ($apps['results'] as $app) {
+            if ($app['install_status'] === 'uptodate' &&
+                false !== ($index = array_search($app['name'], $baseApplicationStack))) {
+                unset($baseApplicationStack[$index]);
+            }
+        }
+
+        $this->assertTrue(empty($baseApplicationStack), 'Assure that base application stack was installed after saving authentication');
+        
+        $this->_uninstallAllApps(); //Ensure that all aps get re-installed with default username/password because some tests rely on these values
+    }
+    
+    public function testSaveAuthenticationLdap()
+    {
+        $originalAuthenticationData = $this->_json->loadAuthenticationData();
+
+        $testAuthenticationData = $originalAuthenticationData;
+        $testAuthenticationData['authentication']['backend'] = 'ldap';
+        
+        $this->_uninstallAllApps();
+        
+        $result = $this->_json->saveAuthentication(Zend_Json::encode($testAuthenticationData));
+        
+        $this->assertEquals($testAuthenticationData['accounts']['ldap']['groupUUIDAttribute'], Tinebase_Config::getInstance()->getConfig('groupUUIDAttribute')->value);
+        $this->assertEquals($testAuthenticationData['accounts']['ldap']['userUUIDAttribute'], Tinebase_Config::getInstance()->getConfig('userUUIDAttribute')->value);
+        
+        $savedAuthenticationData = $this->_json->loadAuthenticationData();
+       
         //test if Tinebase stack was installed
         $apps = $this->_json->searchApplications();
         $baseApplicationStack = array('Tinebase', 'Admin', 'Addressbook');

@@ -37,8 +37,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
 			    break;
 			case Tinebase_Auth_Factory::LDAP:
 			    Tinebase_Group::getInstance()->importGroups();
-			    Tinebase_User::getInstance()->importUsers();
-			    Tinebase_Group::getInstance()->importGroupMembers();
 			    break;
 			//$import = new Setup_Import_Egw14();
 		}
@@ -89,8 +87,16 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             Tinebase_Config::DEFAULT_ADMIN_GROUP    => $adminGroup,
         );
         
+        $configBackend = Tinebase_Config::getInstance();
+        $tinebaseAppId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        
         foreach ($configSettings as $name => $value) {
-            Tinebase_Config::getInstance()->setConfigForApplication($name, $value);
+            $config = new Tinebase_Model_Config(array(
+                "application_id"    => $tinebaseAppId,
+                "name"              => $name,
+                "value"             => $value,              
+            ));            
+            $configBackend->setConfig($config);
         }
     }
     
