@@ -64,7 +64,13 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
                 case('enum'):
                     $this->value = explode(',', str_replace("'", '', substr($_declaration['COLUMN_TYPE'], 5, (strlen($_declaration['COLUMN_TYPE']) - 6))));
                     break;
+                    
+                case('longblob'):
+                    $type = 'blob';
+                    $length = null;
+                    break;
                 
+                case('longtext'): //@todo should return clob?
                 case('varchar'):
                     $type = 'text';
                     break;

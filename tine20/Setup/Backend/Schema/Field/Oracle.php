@@ -61,6 +61,11 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
                     $type = 'text';
                     break;
                     
+                case('BLOB'):
+                    $type = 'blob';
+                    $length = null;
+                    break;
+                    
                 case('CLOB'):
                     $type = 'text'; //@todo set type to CLOB?
                     $length = null;

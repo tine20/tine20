@@ -204,6 +204,24 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     }
     
     /**
+     * checks if a given table exists
+     *
+     * @param string $_tableSchema
+     * @param string $_tableName
+     * @return boolean return true if the table exists, otherwise false
+     */
+    public function tableExists($_tableName)
+    {
+        $tableName = SQL_TABLE_PREFIX . $_tableName;
+        try {
+            $tableInfo = $this->_db->describeTable($tableName);
+        } catch (Zend_Db_Statement_Exception $e) {
+            $tableInfo = null;
+        }
+        return !empty($tableInfo);
+    }
+    
+    /**
      * takes the xml stream and creates a table
      *
      * @param object $_table xml stream
@@ -212,7 +230,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     {
         $statement = $this->getCreateStatement($_table);
         $this->execQueryVoid($statement);
-    }    
+    }
     
     /**
      * removes table from database
@@ -235,6 +253,20 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     {
         $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' RENAME TO ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_newName);
         $this->execQueryVoid($statement);
+    }
+    
+    /**
+     * checks if a given column {@param $_columnName} exists in table {@param $_tableName}.
+     *
+     * @param string $_columnName
+     * @param string $_tableName
+     * @return boolean
+     */
+    public function columnExists($_columnName, $_tableName)
+    {
+        $tableName = SQL_TABLE_PREFIX . $_tableName;
+        $tableInfo = $this->_db->describeTable($tableName);
+        return array_key_exists($_columnName, $tableInfo);
     }
     
     /**

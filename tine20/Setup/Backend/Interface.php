@@ -124,6 +124,16 @@ interface Setup_Backend_Interface
      * @return boolean return true if the table exists, otherwise false
      */
     public function tableExists($_tableName);
+    
+    
+    /**
+     * checks if a given column {@param $_columnName} exists in table {@param $_tableName}.
+     *
+     * @param string $_columnName
+     * @param string $_tableName
+     * @return boolean
+     */
+    public function columnExists($_columnName, $_tableName);    
 
     /**
      * /***checks a given database table version 

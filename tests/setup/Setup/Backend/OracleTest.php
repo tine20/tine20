@@ -23,20 +23,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
 {
-    
-    public function testTableName() 
-    {
-        $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
-        $this->assertEquals($this->_table->name, $existingSchema->name);
-    }
-    
-    public function testRenameTable()
-    {
-    	$newTableName = 'renamed_test_table';
-    	$this->_backend->renameTable($this->_table->name, $newTableName);
-    	$this->_tableNames[] = $newTableName; //cleanup with tearDown
-    	$this->assertTrue($this->_backend->tableExists($newTableName));
-    }
 
     public function testOracleDbAdapterIsQuoted()
     {
@@ -81,69 +67,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertTrue(false !== strpos($sqlConverted, ':' . $prefix . '0'));
         $this->assertEquals($bindConverted[$prefix . '0'], 'b');
     }
-    
-    public function testQuestionMarkInFieldValue()
-    {
-        $db = Tinebase_Core::getDb();
-        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
-        //$value = 'test ??  . ?=? ..';
-        $value = 'test?';
-        $db->insert($tableName, array('name' => $value));
-        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
-        $this->assertEquals($value, $result[0]);
-        
-        $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ') VALUES (' . $db->quote($value, 'text') . ')');
-        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
-        $this->assertEquals($value, $result[1]);
-        
-        $string ="
-                <field>
-                    <name>test</name>
-                    <type>text</type>
-                    <length>25</length>
-                </field>";
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->_backend->addCol($this->_table->name, $field);
 
-        $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ', ' . $db->quoteIdentifier('test') . ') VALUES (' . $db->quote($value, 'text') . ', ?)', array('test value for col 2'));
-        $result = $db->fetchCol($db->select()->from($tableName, 'name'));
-        $this->assertEquals($value, $result[1]);
-    }
-    
-    public function testGetCreateStatement()
-    {
-        $expected = 'CREATE TABLE "' . SQL_TABLE_PREFIX. 'oracle_test" ('."\n".'  "id" NUMBER(11,0) NOT NULL,'."\n".'  "name" VARCHAR2(128) NOT NULL,'."\n".'  CONSTRAINT "' . SQL_TABLE_PREFIX . 'pk_' . $this->_table->name .'" PRIMARY KEY ("id")'."\n".')';
-        $actual = $this->_backend->getCreateStatement(Setup_Backend_Schema_Table_Factory::factory('Xml', $this->_tableXml));
-
-        $this->assertEquals($expected, $actual);
-    }
-    
-    public function testTableExists()
-    {
-        $this->assertTrue($this->_backend->tableExists($this->_table->name));
-        $this->_backend->dropTable($this->_table->name);
-        $this->assertFalse($this->_backend->tableExists($this->_table->name));
-    }
-    
-    public function testColumnExists()
-    {
-    	$columntName = 'testColumnExists';
-        $string ="
-                <field>
-                    <name>$columntName</name>
-                    <type>text</type>
-                    <length>25</length>
-                    <notnull>true</notnull>
-                </field>";
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-
-        $this->assertFalse($this->_backend->columnExists($columntName, $this->_table->name));
-        $this->_backend->addCol($this->_table->name, $field);
-        $this->assertTrue($this->_backend->columnExists($columntName, $this->_table->name));
-    }
-    
     public function testGetConstraintsForTable()
     {
         //test without optional parameters
@@ -160,53 +84,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertEquals(0, count($constraints));
     }
     
-    public function testSequenceExists()
-    {
-        //Tests standard test table (with sequence)
-        $this->assertTrue($this->_backend->sequenceExists($this->_table->name));
-
-        //Tests table without sequence
-        $tableXml = '
-        <table>
-            <name>oracle_seq_test</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>128</length>
-                    <notnull>true</notnull>
-                </field>
-            </declaration>
-        </table>';
-        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
-        $this->_tableNames[] = $table->name;
-        $this->_backend->createTable($table);
-        $this->assertFalse($this->_backend->sequenceExists($table->name));
-    }
-    
-    public function testGetExistingSchema()
-    {
-    	$schema = $this->_backend->getExistingSchema($this->_table->name);
-    	
-    	$this->assertEquals($this->_table->name, $schema->name, 'Test table name');
-    	
-    	$this->assertEquals(1, count($schema->indices));
-    	$idIndex = $schema->indices[0];
-        $this->assertEquals('true', $idIndex->notnull, 'Test $idIndex->notnull');
-        $this->assertEquals('true', $idIndex->primary, 'Test $idIndex->primary');
-        $this->assertEquals('true', $idIndex->autoincrement, 'Test $idIndex->auto_increment');
-    	
-    	$this->assertEquals(2, count($schema->fields));
-    	$idField = $schema->fields[0];
-    	$this->assertEquals('true', $idField->notnull, 'Test idField->notnull');
-    	$this->assertEquals('true', $idField->primary, 'Test idField->primary');
-    	$this->assertEquals('true', $idField->autoincrement, 'Test idField->auto_increment');
-    	$this->assertTrue(empty($idField->unsigned), 'Test idField->unsigned');
-    	
-    }
-    
-    public function testAddCol() 
+    public function testAddColWithPositionParameter() 
     {
         $string ="
                 <field>
@@ -215,70 +93,11 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                     <length>25</length>
                     <notnull>true</notnull>
                 </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"testAddCol" VARCHAR2(25) NOT NULL');    
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-
-        $this->_backend->addCol($this->_table->name, $field);
-        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);       
         $this->setExpectedException('Setup_Backend_Exception_NotImplemented');
         
         $this->_backend->addCol($this->_table->name, $field, 1); //Cannot use 3rd parameter $_position in Oracle 
-    }
-    
-    public function testRenameCol()
-    {
-        $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
-        $testCol = $existingSchema1->fields[1];
-             
-        $oldColumnName = $testCol->name;
-        $newColumnName = "new_column_name";
-        $testCol->name = $newColumnName; 
-        $this->_backend->alterCol($this->_table->name, $testCol, $oldColumnName);
-        $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
-        $this->assertEquals($existingSchema2->fields[1]->name, $newColumnName);     
-    }
-    
-    public function testAlterCol()
-    {
-        $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
-        $testCol = $existingSchema1->fields[1];
-
-        $testCol->type = 'integer';
-        $testCol->length = 8;  
-        $this->_backend->alterCol($this->_table->name, $testCol, $testCol->name);
-        $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
-        $this->assertEquals($existingSchema2->fields[1]->type, 'integer');
-        $this->assertEquals($existingSchema2->fields[1]->length, 8);
-    }
-    
-    public function testDropCol()
-    {
-        $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
-        $testCol = $existingSchema1->fields[1];     
-        
-        $this->_backend->dropCol($this->_table->name, $testCol->name);
-        $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
-        $this->assertEquals(count($existingSchema1->fields), count($existingSchema2->fields)+1);
-    }
-    
-    public function testStringToFieldStatement_001() 
-    {
-        $string ="
-            <field>
-                <name>id</name>
-                <type>integer</type>
-            </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"id" NUMBER(11,0)');    
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->setExpectedException('Zend_Db_Statement_Exception', '1430'); //1060: Column "id" already exists - expecting Exception'
-        $this->_backend->addCol($this->_table->name, $field);
-        
     }
 
     public function testStringToFieldStatement_002() 
@@ -290,67 +109,12 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                 <autoincrement>true</autoincrement>
             </field>";
             
-        $statement = $this->_fixFieldDeclarationString('"id2" NUMBER(11,0) NOT NULL');    
-        
+
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
         
         $this->setExpectedException('Setup_Backend_Exception_NotImplemented');
         $this->_backend->addCol($this->_table->name, $field);
     }
-    
-    public function testStringToFieldStatement_003() 
-    {
-        $string ="
-                <field>
-                    <name>test</name>
-                    <type>text</type>
-                    <length>25</length>
-                    <notnull>true</notnull>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"test" VARCHAR2(25) NOT NULL');    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-
-        $this->_backend->addCol($this->_table->name, $field);
-        
-        $newColumn = $this->_getLastField();
-        $this->assertEquals('test', $newColumn->name);
-        $this->assertEquals('25', $newColumn->length);
-        $this->assertEquals('true', $newColumn->notnull);
-        $this->assertEquals('text', $newColumn->type);
-        $this->assertNotEquals('true', $newColumn->primary);
-        $this->assertNotEquals('true', $newColumn->unique);
-    }
-    
-    public function testStringToFieldStatement_004() 
-    {
-        $string ="
-                 <field>
-                    <name>test</name>
-                    <type>enum</type>
-                    <value>enabled</value>
-                    <value>disabled</value>
-                    <notnull>true</notnull>
-                </field>";
-   
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->_backend->addCol($this->_table->name, $field);
-        $newColumn = $this->_getLastField();
-        $this->assertEquals(array('enabled', 'disabled'), $newColumn->value);
-        $this->assertEquals('test', $newColumn->name);
-        $this->assertEquals('true', $newColumn->notnull);       
-        $this->assertEquals('enum', $newColumn->type);
-        $this->assertNotEquals('true', $newColumn->primary);
-        $this->assertNotEquals('true', $newColumn->unique);
-        
-        $db = Tinebase_Core::getDb();
-        $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'test' => 'enabled'));
-        $this->setExpectedException('Zend_Db_Statement_Exception', '2290'); //invalid enum value -> expect exception
-        $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'test' => 'deleted'));
-    }  
     
     public function testStringToFieldStatement_005() 
     {
@@ -361,12 +125,9 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                     <length>11</length>
                     <unsigned>true</unsigned>
                     <notnull>true</notnull>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString("`order` int(11)  unsigned  NOT NULL");    
+                </field>";   
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);       
         $this->_backend->addCol($this->_table->name, $field);
         
         $newColumn = $this->_getLastField();
@@ -378,68 +139,6 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $this->assertNotEquals('true', $newColumn->unique);
     }
     
-    public function testStringToFieldStatement_006() 
-    {
-        $string ="
-                
-                <field>
-                    <name>last_login</name>
-                    <type>datetime</type>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"last_login" VARCHAR2(25)');    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-        
-        $newColumn = $this->_getLastField();
-        $this->assertEquals('last_login', $newColumn->name);
-        $this->assertEquals('text', $newColumn->type);
-        $this->assertEquals('25', $newColumn->length);
-    }
-    
-    public function testStringToFieldStatement_007() 
-    {
-        $string ="
-                
-                <field>
-                    <name>email_sent</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"email_sent" NUMBER(1,0) DEFAULT 0');    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-        $newColumn = $this->_getLastField();
-        $this->assertEquals('email_sent', $newColumn->name);
-        $this->assertEquals('integer', $newColumn->type);
-        $this->assertEquals('1', $newColumn->length);
-        $this->assertEquals(0, $newColumn->default);
-    }
-    
-    public function testStringToFieldStatement_008() 
-    {
-        $string ="
-                <field>
-                    <name>account_id</name>
-                    <type>integer</type>
-                    <notnull>false</notnull>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"account_id" NUMBER(11,0)');    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-    }
-    
     public function testStringToFieldStatement_009() 
     {
         $string ="
@@ -449,116 +148,15 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                     <notnull>true</notnull>
                 </field>";
             
-        $statement = $this->_fixFieldDeclarationString('"last_modified_time" VARCHAR2(25) NOT NULL ');    
-        
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
         $this->_backend->addCol($this->_table->name, $field);
         $newColumn = $this->_getLastField();
         $this->assertEquals('last_modified_time', $newColumn->name);
         $this->assertEquals('text', $newColumn->type);
         $this->assertEquals('25', $newColumn->length);
+        $this->assertTrue($newColumn->equals($field));
     }
-    
-    public function testStringToFieldStatement_010() 
-    {
-        $string ="
-                <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <notnull>true</notnull>
-                    <default>false</default>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"is_deleted" NUMBER(1,0) DEFAULT 0 NOT NULL');
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-        $newColumn = $this->_getLastField();
-        $this->assertEquals('is_deleted', $newColumn->name);
-        $this->assertEquals('integer', $newColumn->type);
-        $this->assertEquals('1', $newColumn->length);
-        $this->assertEquals(0, $newColumn->default);
-    }    
 
-    public function testStringToFieldStatement_011() 
-    {
-        $string ="
-                <field>
-                    <name>new_value</name>
-                    <type>clob</type>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"new_value" CLOB ');    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-        $newColumn = $this->_getLastField();
-        $this->assertEquals('new_value', $newColumn->name);
-        $this->assertEquals('text', $newColumn->type);
-        $this->assertEquals(null, $newColumn->length);
-        $this->assertEquals(null, $newColumn->default);
-    }
-    
-    public function testStringToFieldStatement_012() 
-    {
-        $string ="
-                <field>
-                    <name>created_by</name>
-                    <type>integer</type>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"created_by" NUMBER(11,0)');    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-    }
-    
-    public function testStringToFieldStatement_013() 
-    {
-        $string ="
-                <field>
-                    <name>account_id</name>
-                    <type>integer</type>
-                    <comment>comment</comment>
-                </field>";
-            
-        
-        $statement = $this->_fixFieldDeclarationString('"account_id" NUMBER(11,0)'); //COMMENTS are ignored in Oracle Adapter    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-        $newColumn = $this->_getLastField();
-        $this->assertEquals('comment', $newColumn->comment);
-        $this->assertEquals('comment', $this->_backend->getFieldComment($this->_table->name, 'account_id'));       
-    }
-    
-    public function testStringToFieldStatement_014() 
-    {
-        $string ="
-               <field>
-                    <name>jpegphoto</name>
-                    <type>blob</type>
-                </field>";
-            
-        $statement = $this->_fixFieldDeclarationString('"jpegphoto" BLOB');    
-        
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->assertEquals($statement, $this->_backend->getFieldDeclarations($field, $this->_table->name));
-        
-        $this->_backend->addCol($this->_table->name, $field);
-        $newColumn = $this->_getLastField();
-        $this->assertEquals('BLOB', $newColumn->type);
-    }
     
     public function testStringToFieldStatement_015() 
     {

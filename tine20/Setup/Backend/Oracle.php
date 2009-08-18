@@ -176,43 +176,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         return $statement;
     }
     
-    /**
-     * check's if a given table exists
-     *
-     * @param string $_tableName
-     * @return boolean return true if the table exists, otherwise false
-     */
-    public function tableExists($_tableName)
-    {
-        $tableName = SQL_TABLE_PREFIX . $_tableName;
-        try {
-            $table = $this->_db->fetchOne('SELECT TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME=?', array($tableName));
-            return $table === $tableName;
-        } catch (Zend_Db_Exception $e){
-            Tinebase_Core::getLogger()->warn("An exception was thrown while checking if table $tableName exists: " . $e->getMessage() . "; returnbing false");
-        }
-        return false; 
-    }
-    
-    /**
-     * check's if a given column {@param $_columnName} exists in table {@param $_tableName}.
-     *
-     * @param string $_columnName
-     * @param string $_tableName
-     * @return boolean return true if the table exists, otherwise false
-     */
-    public function columnExists($_columnName, $_tableName)
-    {
-        $tableName = SQL_TABLE_PREFIX . $_tableName;
-        try {
-            $column = $this->_db->fetchOne('SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=:table_name AND COLUMN_NAME=:column_name', array('table_name' => $tableName, 'column_name' => $_columnName));
-            return $column === $_columnName;
-        } catch (Zend_Db_Exception $e){
-            Tinebase_Core::getLogger()->warn("An exception was thrown while checking if column $_columnName exists $tableName: " . $e->getMessage() . "; returnbing false");
-        }
-        return false; 
-    }
-    
     public function getExistingSchema($_tableName)
     {
         $tableInfo = $this->_getTableInfo($_tableName);       
@@ -276,7 +239,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         return $tableInfo;
     }
     
-    public function sequenceExists($_tableName)
+    protected function _sequenceExists($_tableName)
     {
         return (bool)$this->_db->fetchOne("SELECT SEQUENCE_NAME FROM USER_SEQUENCES WHERE SEQUENCE_NAME=?", array($this->_getIncrementSequenceName($_tableName)));
     }

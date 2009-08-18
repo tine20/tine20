@@ -97,30 +97,6 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         
         return $statement;
     }
-        
-    /**
-     * check's if a given table exists
-     *
-     * @param string $_tableSchema
-     * @param string $_tableName
-     * @return boolean return true if the table exists, otherwise false
-     */
-    public function tableExists($_tableName)
-    {
-        $select = $this->_db->select()
-            ->from('information_schema.tables')
-            ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
-            ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
-
-        $stmt = $select->query();
-        $table = $stmt->fetchObject();
-        
-        if ($table === false) {
-            return false;
-        }
-        
-        return true; 
-    }
     
     /**
      * Get schema of existing table
