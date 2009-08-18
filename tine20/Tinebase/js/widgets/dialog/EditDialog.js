@@ -301,7 +301,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 //itemName: this.recordClass.recordName,
                 containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                 containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
-                appName: this.app.appName
+                appName: this.app.appName,
+                requiredGrant: this.evalGrants ? 'addGrant' : false
             });
             this.getForm().add(ContainerForm);
             

@@ -50,6 +50,7 @@ Tine.Calendar.CalendarSelectWidget = function(EventEditDialog) {
         containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
         containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
         appName: this.app.appName,
+        requiredGrant: 'addGrant',
         hideTrigger2: false,
         trigger2Class: 'cal-invitation-trigger',
         onTrigger2Click: this.fakeCombo.onTriggerClick.createDelegate(this.fakeCombo),

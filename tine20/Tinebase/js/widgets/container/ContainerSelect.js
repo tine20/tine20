@@ -11,9 +11,8 @@
 Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 
 /**
+ * @namespace Tine.widgets.container
  * @class Tine.widgets.container.selectionComboBox
- * @package Tinebase
- * @subpackage Widgets
  * @extends Ext.form.ComboBox
  * 
  * Container select ComboBox widget
@@ -58,6 +57,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @cfg {String} startNode
      */
     startNode: 'all',
+    /**
+     * @cfg {String} requiredGrant
+     * grant which is required to select leaf node(s)
+     */
+    requiredGrant: 'readGrant',
     
     trigger2width: 100,
     
@@ -200,6 +204,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             //itemName: this.itemName,
             containerName: this.containerName,
             containersName: this.containersName,
+            requiredGrant: this.requiredGrant,
             TriggerField: this
         });
     },
@@ -312,11 +317,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionComboBox);
 
 /**
- * This widget shows a modal container selection dialog
+ * @namespace Tine.widgets.container
  * @class Tine.widgets.container.selectionDialog
  * @extends Ext.Component
- * @package Tinebase
- * @subpackage Widgets
+ * 
+ * This widget shows a modal container selection dialog
  */
 Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	/**
@@ -350,6 +355,11 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      * @property {Ext.tree.TreePanel}
      */
     tree: null,
+    /**
+     * @cfg {String} requiredGrant
+     * grant which is required to select leaf node(s)
+     */
+    requiredGrant: 'readGrant',
     
     /**
      * @private
@@ -404,7 +414,8 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
             containerName: this.TriggerField.containerName,
             containersName: this.TriggerField.containersName,
             appName: this.TriggerField.appName,
-            defaultContainer: this.TriggerField.defaultContainer
+            defaultContainer: this.TriggerField.defaultContainer,
+            requiredGrant: this.requiredGrant
         });
         
         this.tree.on('click', this.onTreeNodeClick, this);

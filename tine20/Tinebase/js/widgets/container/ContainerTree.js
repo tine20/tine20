@@ -11,9 +11,8 @@
 Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 
  /**
+  * @namespace   Tine.widgets.container
   * @class       Tine.containerTreePanel
-  * @package     Tine
-  * @subpackage  Widgets
   * @extends     Ext.tree.TreePanel
   * @param       {Object} config Configuration options
   * @description
@@ -56,6 +55,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @cfg {bool} allowMultiSelection
      */
     allowMultiSelection: false,
+    /**
+     * @cfg {String} requiredGrant
+     * grant which is required to select leaf node(s)
+     */
+    requiredGrant: 'readGrant',
     /**
      * @cfg {string} containerName name of container (singular)
      */
@@ -175,6 +179,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 		this.initContextMenu();
 		
         this.on('beforeclick', function(node, e) {
+            if (this.requiredGrant && node.isLeaf()) {
+                var accountGrants =  node.attributes.container.account_grants || {};
+                if (! accountGrants[this.requiredGrant]) {
+                    Ext.Msg.alert(_('Permission Denied'), String.format(translation._("You don't have the required grant to select this {0}"), this.containerName));
+                    return false;
+                }
+            }
+            
             
             // select clicked node
             if (! node.isSelected()) {
@@ -430,6 +442,7 @@ Tine.widgets.container.TreeLoader = function(config) {
         loader.baseParams.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
     }, this);
 }
+
 /**
  * Helper class for {Tine.widgets.container.TreePanel}
  * 
