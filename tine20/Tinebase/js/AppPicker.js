@@ -79,7 +79,7 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
     }
 });
 
-Tine.Tinebase.AppPile2 = Ext.extend(Ext.Panel, {
+Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Ext.util.Observable} apps (required)
      */
