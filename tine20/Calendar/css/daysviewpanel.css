@@ -236,6 +236,7 @@
 	position: absolute;
     top: -1px;
     height: 14px;
+    cursor: move;
     background-color: #808080;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -340,6 +341,7 @@
 	position: absolute;
     width: 100%;
     top: 1px;
+    cursor: move;
     padding: 0px 4px;
     white-space: normal;
 }

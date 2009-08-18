@@ -92,6 +92,11 @@ cal-monthview-wkcell-header {
 .cal-monthview-event {
 	margin: 0px 0px;
 	width: 100%;
+	cursor: pointer;
+}
+
+.cal-monthview-eventslice .cal-event-active {
+    cursor: move;
 }
 
 .cal-monthview-event-summary {
