@@ -277,7 +277,7 @@ Tine.Tinebase.tineInit = {
             }*/
             
             // convert non Ext.Direct request to jsonrpc
-            if (options.params) {
+            if (options.params && !options.isUpload) {
                 var params = {};
                 
                 var def = typeof Tine.Tinebase.registry.get == 'function' ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
