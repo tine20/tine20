@@ -102,6 +102,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected $_datetimeFields = array();
     
     /**
+     * alarm datetime field
+     *
+     * @var string
+     */
+    protected $_alarmDateTimeField = ''; 
+    
+    /**
      * name of fields containing time information
      *
      * @var array list of time fields
@@ -886,5 +893,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function getModlogOmmitFields()
     {
         return $this->_modlogOmmitFields;
+    }
+
+    /**
+     * returns alarm datetime field
+     *
+     * @return string
+     */
+    public function getAlarmDateTimeField()
+    {
+        return $this->_alarmDateTimeField;
     }
 }

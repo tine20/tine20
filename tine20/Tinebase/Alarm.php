@@ -169,20 +169,25 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 
                 $result->addIndices(array('record_id'));
                 foreach ($_recordId as $record) {
+                    $alarmField = $record->getAlarmDateTimeField();
                     $record->alarms = $result->filter('record_id', $record->getId());
                     
                     // calc minutes_before
-                    if ($record->has('dtstart')) {
-                        $record->alarms->setMinutesBefore($record->dtstart);
+                    if ($record->has($alarmField)) {
+                        $record->alarms->setMinutesBefore($record->{$alarmField});
                     }
                 }
                 
             } else if ($_recordId instanceof Tinebase_Record_Interface) {
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record.");
+                
+                $alarmField = $_recordId->getAlarmDateTimeField();
                 $_recordId->alarms = $result;
 
                 // calc minutes_before
-                if ($_recordId->has('dtstart')) {
-                    $_recordId->alarms->setMinutesBefore($_recordId->dtstart);
+                if ($_recordId->has($alarmField)) {
+                    $_recordId->alarms->setMinutesBefore($_recordId->{$alarmField});
                 }
             }
         }
@@ -198,6 +203,8 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      */
     public function saveAlarmsOfRecord($_model, Tinebase_Record_Abstract $_record)
     {
+        $alarmField = $_record->getAlarmDateTimeField();
+        
         $alarms = $_record->alarms instanceof Tinebase_Record_RecordSet ? 
             $_record->alarms : 
             new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
@@ -207,7 +214,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             return $alarms;
         }
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . " About to save " . count($alarms) . " alarms for event {$_record->id} " 
+            . " About to save " . count($alarms) . " alarms for $_model {$_record->id} " 
             //.  print_r($alarms->toArray(), true)
         );
         
@@ -220,8 +227,8 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             $id = $alarm->getId();
             
             if ($id) {
-                if ($_record->has('dtstart') && $alarm->minutes_before) {
-                    $alarm->setTime($_record->dtstart);
+                if ($_record->has($alarmField) && $alarm->minutes_before) {
+                    $alarm->setTime($_record->{$alarmField});
                 }
                 $alarm = Tinebase_Alarm::getInstance()->update($alarm);
                 
@@ -230,8 +237,8 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 if (! $alarm->model) {
                     $alarm->model = $_model;
                 }
-                if ($_record->has('dtstart') && ! $alarm->alarm_time) {
-                    $alarm->setTime($_record->dtstart);
+                if ($_record->has($alarmField) && ! $alarm->alarm_time) {
+                    $alarm->setTime($_record->{$alarmField});
                 }
                 $alarm = Tinebase_Alarm::getInstance()->create($alarm);
             }

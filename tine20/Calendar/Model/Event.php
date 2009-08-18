@@ -125,6 +125,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     );
     
     /**
+     * alarm datetime field
+     *
+     * @var string
+     */
+    protected $_alarmDateTimeField = 'dtstart'; 
+    
+    /**
      * sets record related properties
      * 
      * @param string _name of property
