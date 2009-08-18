@@ -90,7 +90,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(array_key_exists('minutes_before', $loadedEventData['alarms'][0]), 'minutes_before is missing');
         
         // try to send alarm
-        if (isset(Tinebase_Core::getConfig()->mail)) {
+        if (isset(Tinebase_Core::getConfig()->smtp)) {
             $event = new Tinebase_Event_Async_Minutely();
             Tinebase_Event::fireEvent($event);
             
