@@ -13,31 +13,16 @@
 Ext.namespace('Tine.Tinebase');
 
 Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
-    
-    /**
-     * @cfg {Array} appPanels
-     * @legacy
-     * ordered list of appPanels
-     */
-    appPanels: [],
-    /**
-     * @cfg {Ext.Panel} defaultAppPanel
-     * @legacy
-     */
-    defaultAppPanel: null,
-    
     /**
      * @cfg {Ext.util.Observable} apps (required)
      */
     apps: null,
+    
     /**
      * @cfg {String} defaultAppName (required)
      */
     defaultAppName: '',
     
-    /**
-     * @private
-     */
     layout: 'border',
     border: false,
     
@@ -64,6 +49,11 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
             layout: 'card',
             border: false
         }, new Tine.Tinebase.AppPile({
+            split: true,
+            width: 200,
+            collapsible:true,
+            collapseMode: 'mini',
+            region: 'south',
             apps: this.apps,
             defaultAppName: this.defaultAppName,
             scope: this,
@@ -89,7 +79,7 @@ Tine.Tinebase.AppPicker = Ext.extend(Ext.Panel, {
     }
 });
 
-Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
+Tine.Tinebase.AppPile2 = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Ext.util.Observable} apps (required)
      */
@@ -120,11 +110,6 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
      * @private
      */
     border: false,
-    split: true,
-    width: 200,
-    collapsible:true,
-    collapseMode: 'mini',
-    region: 'south',
     layout: 'fit',
     autoScroll: true,
     
