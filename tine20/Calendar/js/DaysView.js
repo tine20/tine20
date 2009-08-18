@@ -680,6 +680,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @private
      */
     onMouseDown: function(e) {
+        // only care for left mouse button
+        if (e.button !== 0) {
+            return;
+        }
+        
         if (! this.editing) {
             this.focusEl.focus();
         }
@@ -702,7 +707,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             event.isRangeAdd = true;
             
             e.stopEvent();
-            this.createEvent.defer(400, this, [e, event]);
+            this.createEvent.defer(100, this, [e, event]);
         }
     },
     
