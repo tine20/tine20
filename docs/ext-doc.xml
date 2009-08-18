@@ -75,6 +75,7 @@
         <source src="../tine20/Felamimail/js/FelamimailRecipientGrid.js"/>
         <source src="../tine20/Felamimail/js/FelamimailMessageEditDialog.js"/>
         <source src="../tine20/Felamimail/js/FelamimailTreePanel.js"/>
+        <source src="../tine20/Tasks/js/EditDialog.js"/>
     </sources>
     <tags>
         <tag name="author" title="Author"/>

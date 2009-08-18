@@ -1,10 +1,10 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -12,17 +12,33 @@
 Ext.namespace('Tine.Tasks');
 
 /**
- * Tasks Edit Dialog
+ * @namespace   Tine.Tasks
+ * @class       Tine.Tasks.EditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ * 
+ * <p>Tasks Edit Dialog</p>
+ * <p></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Tasks.EditDialog
  */
-Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
-     * @cfg {Number}
+     * @cfg {Number} containerId
      */
     containerId: -1,
+    
     /**
-     * @cfg {String}
+     * @cfg {String} relatedApp
      */
     relatedApp: '',
+    
     /**
      * @private
      */
@@ -38,6 +54,9 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
+    /**
+     * @private
+     */
     initRecord: function() {
         this.loadRequest = Ext.Ajax.request({
             scope: this,
@@ -56,6 +75,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * executed when record is loaded
+     * @private
      */
     onRecordLoad: function() {
         Tine.Tasks.EditDialog.superclass.onRecordLoad.call(this);
@@ -64,6 +84,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * handling for the completed field
+     * @private
      */
     handleCompletedDate: function() {
         var status = Tine.Tasks.status.getStatus(this.getForm().findField('status_id').getValue());
@@ -84,6 +105,7 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
+     * @private
      */
     getFormItems: function() { 
         return {
@@ -178,6 +200,9 @@ Tine.Tasks.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
 /**
  * Tasks Edit Popup
+ * 
+ * @param   {Object} config
+ * @return  {Ext.ux.Window}
  */
 Tine.Tasks.EditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
