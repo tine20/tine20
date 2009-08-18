@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -123,5 +123,59 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract
             }
         }
     }
-    
+
+    /**
+     * send an alarm (to responsible person and if it does not exist, to creator)
+     *
+     * @param  Tinebase_Model_Alarm $_alarm
+     * @return void
+     * 
+     * @todo implement
+     * @todo add test
+     */
+    public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
+        );
+
+        /*
+        $event = $this->get($_alarm->record_id);
+        
+        if ($event->organizer) {
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+            $organizer = Tinebase_User::getInstance()->getFullUserById($organizerContact->account_id);
+        } else {
+            // use creator as organizer
+            $organizer = Tinebase_User::getInstance()->getFullUserById($event->created_by);
+        }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
+        
+        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
+        
+        // create message
+        $messageSubject = $translate->_('Notification for Event ' . $event->summary);
+        //$messageBody = $translate->_('Event description:<br/>' . $event->description);
+        $messageBody = print_r($event->toArray(), TRUE);
+        
+        $notificationsBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
+        
+        // loop recipients
+        foreach ($event->attendee as $attender) {
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($attender->toArray(), TRUE));
+            
+            if ($attender->user_type == Calendar_Model_Attender::USERTYPE_USER) {
+                //$user = Tinebase_User::getInstance()->getUserById($attender->user_id);
+                $contact = Addressbook_Controller_Contact::getInstance()->get($attender->user_id);
+
+                // send message
+                if ($contact->email) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending alarm email to ' . $contact->email);
+                    $notificationsBackend->send($organizer, $contact, $messageSubject, $messageBody);
+                }
+            }
+        }
+        */
+    }
 }

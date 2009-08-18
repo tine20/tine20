@@ -57,6 +57,14 @@ Ext.namespace('Tine.Tasks');
     /**
      * @private
      */
+    initComponent: function() {
+        this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
+        Tine.Tasks.EditDialog.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * @private
+     */
     initRecord: function() {
         this.loadRequest = Ext.Ajax.request({
             scope: this,
@@ -80,6 +88,16 @@ Ext.namespace('Tine.Tasks');
     onRecordLoad: function() {
         Tine.Tasks.EditDialog.superclass.onRecordLoad.call(this);
         this.handleCompletedDate();
+        this.alarmPanel.onRecordLoad(this.record);
+    },
+    
+    /**
+     * executed when record is updated
+     * @private
+     */
+    onRecordUpdate: function() {
+        Tine.Tasks.EditDialog.superclass.onRecordUpdate.apply(this, arguments);
+        this.alarmPanel.onRecordUpdate(this.record);
     },
     
     /**
@@ -193,7 +211,8 @@ Ext.namespace('Tine.Tasks');
                 app: this.appName,
                 record_id: (this.record) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })]
+            }), this.alarmPanel
+            ]
         };
     }
 });

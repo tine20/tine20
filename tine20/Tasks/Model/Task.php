@@ -79,8 +79,9 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'exrule'                => array('allowEmpty' => true        ),
         'rdate'                 => array('allowEmpty' => true        ),
         'rrule'                 => array('allowEmpty' => true        ),
-        // tine 2.0 notes
+        // tine 2.0 notes and alarms
         'notes'                 => array('allowEmpty' => true        ),
+        'alarms'                => array('allowEmpty' => true        ), // RecordSet of Tinebase_Model_Alarm
     );
     
     /**
@@ -98,6 +99,13 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'exdate', 
         'rdate'
     );
+    
+    /**
+     * alarm datetime field
+     *
+     * @var string
+     */
+    protected $_alarmDateTimeField = 'due'; 
     
     /**
      * the constructor
@@ -135,6 +143,10 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         
         if (isset($data['organizer']) && is_array($data['organizer'])) {
             $data['organizer'] = $data['organizer']['accountId'];
+        }
+        
+        if (isset($data['alarms']) && is_array($data['alarms'])) {
+            $data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $data['alarms'], TRUE);
         }
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));

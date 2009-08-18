@@ -68,7 +68,9 @@ Tine.Tasks.TaskArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'rdate' },
     { name: 'rrule' },
     // tine 2.0 notes field
-    { name: 'notes'}
+    { name: 'notes'},
+    // tine 2.0 alarms field
+    { name: 'alarms'}
 ]);
 
 /**
