@@ -178,7 +178,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             maxSize: 300,
             border: false,
             collapsible:true,
-            containerScroll: true,
+            //containerScroll: true,
             collapseMode: 'mini',
             layout: 'fit',
             items: this.appPicker
