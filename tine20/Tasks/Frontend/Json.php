@@ -115,6 +115,21 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * returns record prepared for json transport
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     */
+    protected function _recordToJson($_record)
+    {
+        if ($_record instanceof Tasks_Model_Task) {
+            Tinebase_User::getInstance()->resolveUsers($_record, 'organizer', true); 
+        }
+        
+        return parent::_recordToJson($_record);
+    }    
+    
+    /**
      * returns multiple tasks prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_tasks Tasks_Model_Task
