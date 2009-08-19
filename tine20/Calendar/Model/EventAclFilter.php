@@ -101,7 +101,12 @@ class Calendar_Model_EventAclFilter extends Tinebase_Model_Filter_Container
                         // get personal containers for all this users
                         $freebusyContainers = array();
                         foreach ($freebusyUsers as $userId) {
-                            $freebusyContainers = array_merge($freebusyContainers, Tinebase_Container::getInstance()->getPersonalContainer($userId, 'Calendar', $userId, 0, true)->getId());
+                        	try {
+                                $freebusyContainers = array_merge($freebusyContainers, Tinebase_Container::getInstance()->getPersonalContainer($userId, 'Calendar', $userId, 0, true)->getId());
+                        	} catch (Tinebase_Exception_NotFound $e) {
+                        		// TODO is it realy nessesary for eadh user to be in one group at least?
+                        		Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Missconfiguration detected $userId does not belong to any group");
+                        	}
                         }
                         break;
                         
