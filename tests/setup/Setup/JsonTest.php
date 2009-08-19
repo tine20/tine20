@@ -29,7 +29,17 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * @var Setup_Frontend_Json
      */
-    protected $_json = array();
+    protected $_json;
+    
+    /**
+     * Authentication data as stored in config before a test runs.
+     * Needed to restore originakl state after a test ran. 
+     * @see setUp()
+     * @see teardown()
+     * 
+     * @var array
+     */
+    protected $_originalAuthenticationData;
     
     /**
      * Runs the test methods of this class.
@@ -52,6 +62,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_json = new Setup_Frontend_Json();
+        $this->_originalAuthenticationData = $this->_json->loadAuthenticationData();
     }
 
     /**
@@ -62,6 +73,10 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $authenticationData = $this->_json->loadAuthenticationData();
+        if ($this->_originalAuthenticationData !== $authenticationData) {
+            $this->_json->saveAuthentication(Zend_Json::encode($this->_originalAuthenticationData));
+        }
         $this->_installAllApps();
     }
     
@@ -180,9 +195,8 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     
     public function testSaveAuthenticationSql()
     {
-        $originalAuthenticationData = $this->_json->loadAuthenticationData();
+        $testAuthenticationData = $this->_json->loadAuthenticationData();
 
-        $testAuthenticationData = $originalAuthenticationData;
         $testAuthenticationData['authentication']['backend'] = 'sql';
         $testAuthenticationData['authentication']['sql']['admin']['loginName'] = 'phpunit-admin';
         $testAuthenticationData['authentication']['sql']['admin']['password'] = 'phpunit-password';
@@ -194,10 +208,11 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         
         $savedAuthenticationData = $this->_json->loadAuthenticationData();
 
-        $adminUser = Tinebase_Core::get('currentAccount');
-        $this->assertEquals($adminUser->accountLoginName, 'phpunit-admin', 'default admin user should be named as specified in authentication data');
+        $adminUser = Tinebase_User::getInstance()->getFullUserByLoginName('phpunit-admin');
+        $this->assertTrue($adminUser instanceof Tinebase_Model_User);
+
         $this->assertTrue(empty($savedAuthenticationData['authentication']['sql']['admin']), 'admin loginname/password must not be stored in authentication config');
-        $this->assertEquals($savedAuthenticationData, $originalAuthenticationData);
+        $this->assertEquals($this->_originalAuthenticationData, $savedAuthenticationData);
         
         //test if Tinebase stack was installed
         $apps = $this->_json->searchApplications();
@@ -210,38 +225,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue(empty($baseApplicationStack), 'Assure that base application stack was installed after saving authentication');
-        
-        $this->_uninstallAllApps(); //Ensure that all aps get re-installed with default username/password because some tests rely on these values
-    }
-    
-    public function testSaveAuthenticationLdap()
-    {
-        $originalAuthenticationData = $this->_json->loadAuthenticationData();
 
-        $testAuthenticationData = $originalAuthenticationData;
-        $testAuthenticationData['authentication']['backend'] = 'ldap';
-        
-        $this->_uninstallAllApps();
-        
-        $result = $this->_json->saveAuthentication(Zend_Json::encode($testAuthenticationData));
-        
-        $this->assertEquals($testAuthenticationData['accounts']['ldap']['groupUUIDAttribute'], Tinebase_Config::getInstance()->getConfig('groupUUIDAttribute')->value);
-        $this->assertEquals($testAuthenticationData['accounts']['ldap']['userUUIDAttribute'], Tinebase_Config::getInstance()->getConfig('userUUIDAttribute')->value);
-        
-        $savedAuthenticationData = $this->_json->loadAuthenticationData();
-       
-        //test if Tinebase stack was installed
-        $apps = $this->_json->searchApplications();
-        $baseApplicationStack = array('Tinebase', 'Admin', 'Addressbook');
-        foreach ($apps['results'] as $app) {
-            if ($app['install_status'] === 'uptodate' &&
-                false !== ($index = array_search($app['name'], $baseApplicationStack))) {
-                unset($baseApplicationStack[$index]);
-            }
-        }
-
-        $this->assertTrue(empty($baseApplicationStack), 'Assure that base application stack was installed after saving authentication');
-        
         $this->_uninstallAllApps(); //Ensure that all aps get re-installed with default username/password because some tests rely on these values
     }
 
