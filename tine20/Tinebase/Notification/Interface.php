@@ -28,5 +28,5 @@ interface Tinebase_Notification_Interface
      * @param string                    $_messageHtml the message as html
      * @param string|array              $_attachements
      */
-    public function send(Tinebase_Model_FullUser $_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL);
+    public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL);
 }

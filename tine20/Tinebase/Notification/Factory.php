@@ -20,6 +20,11 @@
  */
 class Tinebase_Notification_Factory
 {
+    /**
+     * smtp backend type
+     *
+     * @staticvar string
+     */
     const SMTP = 'Smtp';
     
     /**
@@ -32,6 +37,7 @@ class Tinebase_Notification_Factory
     {
         switch($_backendType) {
             case self::SMTP:
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get SMTP notifiaction backend.');
                 $result = new Tinebase_Notification_Backend_Smtp();
                 break;
                 

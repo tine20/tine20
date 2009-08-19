@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notification
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -38,6 +38,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      */
     public function __construct()
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ');
         $this->_fromAddress = 'webmaster@tine20.org';
     }
     
@@ -51,12 +52,11 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      * @param string                    $_messageHtml the message as html
      * @param string|array              $_attachements
      */
-    public function send(Tinebase_Model_FullUser $_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL)
+    public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL)
     {
+        // create mail object
         $mail = new Tinebase_Mail('UTF-8');
-        
         $mail->setSubject($_subject);
-        
         $mail->setBodyText($_messagePlain);
         
         if($_messageHtml !== NULL) {
@@ -65,7 +65,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         
-        if(!empty($_updater->accountEmailAddress)) {
+        if($_updater !== NULL && ! empty($_updater->accountEmailAddress)) {
             $mail->setFrom($_updater->accountEmailAddress, $_updater->accountDisplayName);
             $mail->setSender($this->_fromAddress, $this->_fromName);
         } else {
@@ -80,18 +80,18 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         } else {
             $attachements = array();
         }
-        
         foreach ($attachements as $attachement) {
             $mail->createAttachment($attachement);
         }
         
-        if(!empty($_recipient->email)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' send notification email to ' . $_recipient->email);
-
+        // send
+        if(! empty($_recipient->email)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $_recipient->email);
             $mail->addTo($_recipient->email, $_recipient->n_fileas);
-        
-            //$mail->send();
             Tinebase_Smtp::getInstance()->sendMessage($mail);
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Not sending notification email to ' . $_recipient->n_fn . '. No email address available.');
         }
     }
 }
