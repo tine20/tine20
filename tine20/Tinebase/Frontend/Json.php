@@ -344,8 +344,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
-                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                'region'   => $locale->getCountryTranslation($locale->getRegion()),
+                'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
+                'region'   => Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale),
             ),
             'version'          => array(
                 'buildType'     => TINE20_BUILDTYPE,
