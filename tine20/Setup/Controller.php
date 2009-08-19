@@ -639,19 +639,21 @@ class Setup_Controller
     
     protected function _getAuthProviderData()
     {
+        $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
+        $ldapKey = strtolower(Tinebase_Auth_Factory::LDAP);
         $result = Tinebase_Core::getConfig()->authentication;
         if (isset($result)) {
             $result = $result->toArray();
         } else {
             $result = array();
-            $result['backend'] = strtolower(Tinebase_Auth_Factory::SQL);
+            $result['backend'] = $sqlKey;
             
-            $result[Tinebase_Auth_Factory::SQL] = array();
-            $result[Tinebase_Auth_Factory::SQL]['admin']['loginName'] = 'tine20admin';
+            $result[$sqlKey] = array();
+            $result[$sqlKey]['admin']['loginName'] = 'tine20admin';
             
-            $result[Tinebase_Auth_Factory::LDAP] = array();
-            $result[Tinebase_Auth_Factory::LDAP]['bindRequiresDn'] = true;
-            $result[Tinebase_Auth_Factory::LDAP]['accountCanonicalForm'] = 2;
+            $result[$ldapKey] = array();
+            $result[$ldapKey]['bindRequiresDn'] = true;
+            $result[$ldapKey]['accountCanonicalForm'] = 2;
         }
         
         return $result;
@@ -659,33 +661,36 @@ class Setup_Controller
     
     protected function _getAccountsStorageData()
     {
+        $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
+        $ldapKey = strtolower(Tinebase_Auth_Factory::LDAP);
         $result = Tinebase_Core::getConfig()->accounts;
         if (isset($result)) {
             $result = $result->toArray();
         } else {
             $result = array();
-            $result['backend'] = strtolower(Tinebase_Auth_Factory::SQL);
+            $result['backend'] = strtolower($sqlKey);
             
             $result[Tinebase_Auth_Factory::SQL] = array();
             
-            $result[Tinebase_Auth_Factory::LDAP] = array();
-            $result[Tinebase_Auth_Factory::LDAP]['bindRequiresDn'] = true;
-            $result[Tinebase_Auth_Factory::LDAP]['pwEncType'] = 'CRYPT';
-            $result[Tinebase_Auth_Factory::LDAP]['minUserId'] = 10000;
-            $result[Tinebase_Auth_Factory::LDAP]['maxUserId'] = 29999;
-            $result[Tinebase_Auth_Factory::LDAP]['minGroupId'] = 11000;
-            $result[Tinebase_Auth_Factory::LDAP]['maxGroupId'] = 11099;
-            $result[Tinebase_Auth_Factory::LDAP]['groupUUIDAttribute'] = 'entryUUID';
-            $result[Tinebase_Auth_Factory::LDAP]['userUUIDAttribute'] = 'entryUUID';
-            $result[Tinebase_Auth_Factory::LDAP]['userGroupName'] = 'Users';
-            $result[Tinebase_Auth_Factory::LDAP]['adminGroupName'] = 'Administrators';
+            $result[$ldapKey] = array();
+            $result[$ldapKey]['bindRequiresDn'] = true;
+            $result[$ldapKey]['pwEncType'] = 'CRYPT';
+            $result[$ldapKey]['minUserId'] = 10000;
+            $result[$ldapKey]['maxUserId'] = 29999;
+            $result[$ldapKey]['minGroupId'] = 11000;
+            $result[$ldapKey]['maxGroupId'] = 11099;
+            $result[$ldapKey]['groupUUIDAttribute'] = 'entryUUID';
+            $result[$ldapKey]['userUUIDAttribute'] = 'entryUUID';
+            $result[$ldapKey]['userGroupName'] = 'Users';
+            $result[$ldapKey]['adminGroupName'] = 'Administrators';
             
             
-            $result[Tinebase_Auth_Factory::LDAP]['accountCanonicalForm'] = 2;
+            $result[$ldapKey]['accountCanonicalForm'] = 2;
         }
         
         return $result;
     }
+
     /**
      * create new setup user session
      *
