@@ -152,4 +152,23 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
         $this->setFromArray($data);
     }
+    
+    /**
+     * create notification message for task alarm
+     *
+     * @return string
+     */
+    public function getNotificationMessage()
+    {
+        $translate = Tinebase_Translation::getTranslation($this->_application);
+        
+        $text = $this->summary . "\n\n" 
+            . $translate->_('Due')          . ': ' . $this->due         . "\n" 
+            . $translate->_('Organizer')    . ': ' . $this->organizer   . "\n" 
+            . $translate->_('Description')  . ': ' . $this->description . "\n"
+            . $translate->_('Priority')     . ': ' . $this->priority    . "\n"
+            . $translate->_('Percent')      . ': ' . $this->percent     . "%\n";
+            
+        return $text;
+    }
 }

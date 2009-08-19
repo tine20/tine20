@@ -129,8 +129,6 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      *
      * @param  Tinebase_Model_Alarm $_alarm
      * @return void
-     * 
-     * @todo use another user/admin as sender?
      */
     public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
     {
@@ -142,27 +140,24 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         
         if ($task->organizer) {
             $organizerContact = Addressbook_Controller_Contact::getInstance()->get($task->organizer);
-            $organizer = Tinebase_User::getInstance()->getFullUserById($organizerContact->account_id);
         } else {
             // use creator as organizer
             $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($task->created_by);
-            $organizer = Tinebase_User::getInstance()->getFullUserById($task->created_by);
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($organizer->toArray(), TRUE));
-        
-        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
-        
         // create message
+        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $messageSubject = $translate->_('Notification for Task ' . $task->summary);
-        $messageBody = print_r($task->toArray(), TRUE);
+        $messageBody = $task->getNotificationMessage();
         
         $notificationsBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
         
         // send message
-        if ($organizer->accountEmailAddress) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending alarm email to ' . $organizer->accountEmailAddress);
-            $notificationsBackend->send($organizer, $contact, $messageSubject, $messageBody);
+        if ($organizerContact->email && ! empty($organizerContact->email)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to send alarm email to ' . $organizerContact->email);
+            $notificationsBackend->send(NULL, $organizerContact, $messageSubject, $messageBody);
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Organizer has no email address.');
         }
     }
 }
