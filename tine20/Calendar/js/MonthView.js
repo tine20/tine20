@@ -632,7 +632,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             return;
         }
         
-        if (Math.abs(e.getTime() - now) < 100) {
+        var dateTime = this.getTargetDateTime(e);
+        if (Math.abs(dateTime - now) < 100) {
             this.lastClickTime = now;
             return this.onClick.defer(400, this, [e, target]);
         }
