@@ -78,4 +78,75 @@ class Calendar_Setup_Update_Release0 extends Setup_Update_Abstract
     	
         $this->setApplicationVersion('Calendar', '0.3');
     }
+    
+    /**
+     * update to version 2.0
+     * - add resources table
+     */
+    public function update_3()
+    {
+        $tableDefinition = '
+        <table>
+            <name>cal_resources</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>email</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>is_location</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>name</name>
+                    <field>
+                        <name>name</name>
+                    </field>
+                </index>
+                <index>
+                    <name>email</name>
+                    <field>
+                        <name>email</name>
+                    </field>
+                </index>
+                <index>
+                    <name>is_location</name>
+                    <field>
+                        <name>is_location</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);
+        
+        $calendarApp = Tinebase_Application::getInstance()->getApplicationByName('Calendar');
+        Tinebase_Application::getInstance()->addApplicationTable($calendarApp, 'cal_resources', 1);
+        
+        $this->setApplicationVersion('Calendar', '2.0');
+    }
 }
