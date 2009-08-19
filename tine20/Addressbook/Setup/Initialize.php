@@ -117,7 +117,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         ));
 
         $accountsBackend->addUser($account);
-
+        Tinebase_Core::set('currentAccount', $account);
         // set the password for the account
         Tinebase_User::getInstance()->setPassword($_loginName, $_password);
 
