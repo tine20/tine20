@@ -60,9 +60,9 @@ Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
         this.store = Tine.widgets.Priority.getStore();
         
         if (this.autoExpand) {
+            this.lazyInit = false;
             this.on('focus', function(){
-                this.lazyInit = false;
-                this.expand();
+                this.onTriggerClick();
             });
         }
         if (this.blurOnSelect){

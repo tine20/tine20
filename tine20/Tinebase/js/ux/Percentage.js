@@ -58,10 +58,10 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
         });
         
         if (this.autoExpand) {
+            this.lazyInit = false;
             this.on('focus', function(){
-                this.lazyInit = false;
                 this.selectByValue(this.getValue());
-                this.expand();
+                this.onTriggerClick();
             });
         }
         

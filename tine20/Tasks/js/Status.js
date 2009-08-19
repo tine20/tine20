@@ -45,9 +45,9 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 			this.value = Tine.Tasks.status.getIdentifier(this.translation._('IN-PROCESS'));
 		}
 		if (this.autoExpand) {
+            this.lazyInit = false;
 			this.on('focus', function(){
-				this.lazyInit = false;
-                this.expand();
+                this.onTriggerClick();
             });
 		}
 		if (this.blurOnSelect){
