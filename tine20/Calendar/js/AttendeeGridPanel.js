@@ -136,7 +136,14 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             resizable: false,
             header: '&#160;',
             tooltip: this.app.i18n._('Type'),
-            renderer: this.renderAttenderType.createDelegate(this)
+            renderer: this.renderAttenderType.createDelegate(this),
+            editor: new Ext.ux.form.GridEditorComboBox({
+                store : [
+                    ['user',     this.app.i18n._('User')   ],
+                    ['group',    this.app.i18n._('Group')  ],
+                    ['resource', this.app.i18n._('Resouce')]
+                ]
+            })
         }, {
             id: 'user_id',
             dataIndex: 'user_id',
@@ -147,7 +154,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             editor: new Tine.Addressbook.SearchCombo({
                 blurOnSelect: true,
                 selectOnFocus: true,
-                renderAttenderName: this.renderAttenderName
+                renderAttenderName: this.renderAttenderName,
+                getValue: function() {
+                    return this.selectedRecord ? this.selectedRecord.data : null;
+                }
             })
         }, {
             id: 'status',
@@ -156,28 +166,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             sortable: true,
             header: this.app.i18n._('Status'),
             renderer: this.renderAttenderStatus.createDelegate(this),
-            editor: new Ext.form.ComboBox({
-                typeAhead     : false,
-                triggerAction : 'all',
-                lazyRender    : true,
-                editable      : false,
-                mode          : 'local',
-                value         : null,
-                forceSelection: true,
-                store         : [
+            editor: new Ext.ux.form.GridEditorComboBox({
+                store : [
                     ['NEEDS-ACTION', this.app.i18n._('No response')],
                     ['ACCEPTED',     this.app.i18n._('Accepted')   ],
                     ['DECLINED',     this.app.i18n._('Declined')   ],
                     ['TENTATIVE',    this.app.i18n._('Tentative')  ]
-                ], 
-                listeners: {
-                    scope: this,
-                    select: function(field) {
-                        field.blur(true);
-                        field.fireEvent('blur', field);
-                    }
-                }
-                
+                ]
             })
         }];
     },
@@ -298,6 +293,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     onStoreUpdate: function(store, updatedAttender) {
+        console.log(arguments);
         // check if we need to add a new row
         var needUpdate = true;
         var isDuplicate = false;
