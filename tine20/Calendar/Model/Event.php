@@ -177,9 +177,23 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        // free/busy only cleanup
+        // free/busy only cleanup / remove all fields except dtstart/dtend/id/modlog fields
         if ((! array_key_exists('readGrant', $_data) || ! (bool) $_data['readGrant']) && (! array_key_exists('editGrant', $_data) || ! (bool) $_data['editGrant'])) {
-            $_data = array_intersect_key($_data, array_flip(array('id', 'dtstart', 'dtend')));
+            $_data = array_intersect_key(
+                $_data, 
+                array_flip(array(
+                    'id', 
+                    'dtstart', 
+                    'dtend', 
+                    'created_by',
+                    'creation_time',
+                    'last_modified_by',
+                    'last_modified_time',
+                    'is_deleted',
+                    'deleted_time',
+                    'deleted_by',
+                ))
+            );
         }
         
         if (empty($_data['geo'])) {

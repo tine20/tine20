@@ -734,12 +734,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Tinebase_Model_Alarm $_alarm
      * @return void
      * 
+     * @todo add ignore acl to get() / setFromArray()
      * @todo throw exception on error
      * @todo make sending alarms to groups work
      * @todo use html mail template for body
      */
     public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
     {
+        $this->_doContainerACLChecks = FALSE;
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
         );
@@ -778,5 +781,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             }
         }
+        
+        $this->_doContainerACLChecks = TRUE;
     }
 }
