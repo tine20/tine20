@@ -20,7 +20,7 @@
  * @package Tasks
  * @subpackage  Controller
  */
-class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract
+class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implements Tinebase_Controller_Alarm_Interface
 {
     /**
      * the constructor
@@ -130,8 +130,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract
      * @param  Tinebase_Model_Alarm $_alarm
      * @return void
      * 
-     * @todo implement
-     * @todo add test
+     * @todo use another user/admin as sender?
      */
     public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
     {
@@ -139,43 +138,31 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract
             . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
         );
 
-        /*
-        $event = $this->get($_alarm->record_id);
+        $task = $this->get($_alarm->record_id);
         
-        if ($event->organizer) {
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+        if ($task->organizer) {
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($task->organizer);
             $organizer = Tinebase_User::getInstance()->getFullUserById($organizerContact->account_id);
         } else {
             // use creator as organizer
-            $organizer = Tinebase_User::getInstance()->getFullUserById($event->created_by);
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($task->created_by);
+            $organizer = Tinebase_User::getInstance()->getFullUserById($task->created_by);
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($organizer->toArray(), TRUE));
         
         $translate = Tinebase_Translation::getTranslation($this->_applicationName);
         
         // create message
-        $messageSubject = $translate->_('Notification for Event ' . $event->summary);
-        //$messageBody = $translate->_('Event description:<br/>' . $event->description);
-        $messageBody = print_r($event->toArray(), TRUE);
+        $messageSubject = $translate->_('Notification for Task ' . $task->summary);
+        $messageBody = print_r($task->toArray(), TRUE);
         
         $notificationsBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
         
-        // loop recipients
-        foreach ($event->attendee as $attender) {
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($attender->toArray(), TRUE));
-            
-            if ($attender->user_type == Calendar_Model_Attender::USERTYPE_USER) {
-                //$user = Tinebase_User::getInstance()->getUserById($attender->user_id);
-                $contact = Addressbook_Controller_Contact::getInstance()->get($attender->user_id);
-
-                // send message
-                if ($contact->email) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending alarm email to ' . $contact->email);
-                    $notificationsBackend->send($organizer, $contact, $messageSubject, $messageBody);
-                }
-            }
+        // send message
+        if ($organizer->accountEmailAddress) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending alarm email to ' . $organizer->accountEmailAddress);
+            $notificationsBackend->send($organizer, $contact, $messageSubject, $messageBody);
         }
-        */
     }
 }
