@@ -31,15 +31,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             Setup_Controller::getInstance()->saveAuthentication($_options['authenticationData']);
         }
         
-		switch(Tinebase_Core::getAuthType()) {
-			case Tinebase_Auth_Factory::SQL:
-			    $this->_createInitialGroups();
-			    break;
-			case Tinebase_Auth_Factory::LDAP:
-			    Tinebase_Group::getInstance()->importGroups();
-			    break;
-			//$import = new Setup_Import_Egw14();
-		}
+		Tinebase_Group::getInstance()->importGroups(); //import groups(ldap)/create initial groups(sql)
 		
         $this->_createInitialRoles();
 
@@ -98,29 +90,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             ));            
             $configBackend->setConfig($config);
         }
-    }
-    
-    /**
-     * create initial groups
-     *
-     */
-    protected function _createInitialGroups()
-    {
-        // add the admin group
-        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
-
-        $adminGroup = new Tinebase_Model_Group(array(
-            'name'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value,
-            'description'   => 'Group of administrative accounts'
-        ));
-        $adminGroup = $groupsBackend->addGroup($adminGroup);
-
-        // add the user group
-        $userGroup = new Tinebase_Model_Group(array(
-            'name'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value,
-            'description'   => 'Group of user accounts'
-        ));
-        $userGroup = $groupsBackend->addGroup($userGroup);
     }
     
     /**

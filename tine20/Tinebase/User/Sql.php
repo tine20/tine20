@@ -590,4 +590,65 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         return $result;
     }
+
+    /**
+     * create initial admin account
+     * 
+     * Method is called during Setup Initialization
+     * Methodname must euqal to LDAP equivalent {@see Tinebase_USer_Ldap::importUsers}
+     *
+     * @param array | optional $_options [hash that may contain override values for admin user name and password]
+     * 
+     * @example $_options may contain the following keys:
+     * <pre>
+     * $options = array(
+     *  'admin_login_name' => 'admin',
+     *  'admin_login_password' => 'lars',
+     *  'admin_first_name' => 'Tine 2.0',
+     *  'admin_last_name' => 'Admin Account',
+     * );
+     * </pre>
+     * 
+     * @return void
+     */
+    public function importUsers($_options = null)
+    {
+        $_loginName    = empty($_options['admin_login_name']) ? 'tine20admin' : $_options['admin_login_name'];
+        $_password     = empty($_options['admin_login_password']) ? 'lars' : $_options['admin_login_password'];
+        $_firstname    = empty($_options['admin_first_name']) ? 'Tine 2.0' : $_options['admin_first_name'];
+        $_lastname     = empty($_options['admin_last_name']) ? 'Admin Account' : $_options['admin_last_name'];
+        
+        if (Tinebase_Core::getAuthType() !== Tinebase_Auth_Factory::SQL) {
+            Tinebase_Core::getLogger()->info("Skip creation of initial admin account because the authtype is not " . Tinebase_Auth_Factory::SQL);
+            return;
+        }
+
+        // get admin & user groups
+        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
+        $adminGroup = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value);
+        $userGroup  = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value);
+        
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_loginName . ')');
+
+
+        $account = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => $_loginName,
+            'accountStatus'         => 'enabled',
+            'accountPrimaryGroup'   => $userGroup->getId(),
+            'accountLastName'       => $_lastname,
+            'accountDisplayName'    => $_lastname . ', ' . $_firstname,
+            'accountFirstName'      => $_firstname,
+            'accountExpires'        => NULL,
+            'accountEmailAddress'   => NULL,
+        ));
+
+        $this->addUser($account);
+        Tinebase_Core::set('currentAccount', $account);
+        // set the password for the account
+        Tinebase_User::getInstance()->setPassword($_loginName, $_password);
+
+        // add the admin account to all groups
+        Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
+        Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
+    }
 }

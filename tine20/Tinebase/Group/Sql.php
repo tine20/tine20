@@ -352,4 +352,38 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         return $result;
     }
+    
+    /**
+     * create initial groups
+     * 
+     * Method is called during Setup Initialization
+     * Methodname must euqal to LDAP equivalent {@see Tinebase_USer_Ldap::importGroups}
+     */
+    public function importGroups()
+    {
+        // add the admin group
+        $adminGroup = new Tinebase_Model_Group(array(
+            'name'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value,
+            'description'   => 'Group of administrative accounts'
+        ));
+        $adminGroup = $this->addGroup($adminGroup);
+
+        // add the user group
+        $userGroup = new Tinebase_Model_Group(array(
+            'name'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value,
+            'description'   => 'Group of user accounts'
+        ));
+        $userGroup = $this->addGroup($userGroup);
+    }
+    
+    /**
+     * Method called by {@see Addressbook_Setup_Initialize::_initilaize()}
+     * 
+     * @param $_options
+     * @return unknown_type
+     */
+    public function importGroupMembers($_options = null)
+    {
+        //nothing to do
+    }
 }

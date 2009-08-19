@@ -794,9 +794,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     
     /**
      * import users from ldap
+     * 
+     * @param array | optional $_options [options hash passed through the whole setup initialization process]
      *
      */
-    public function importUsers()
+    public function importUsers($_options = null)
     {
         $sqlGroupBackend = new Tinebase_Group_Sql();
         
