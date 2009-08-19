@@ -92,6 +92,37 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test create task with alarm
+     *
+     * @todo add send alarm test
+     */
+    public function testCreateTaskWithAlarm()
+    {
+        $task = $this->_getTaskWithAlarm();
+        
+        $persistentTaskData = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
+        
+        // check if alarms are created / returned
+        $this->assertGreaterThan(0, count($loadedTaskData['alarms']));
+        $this->assertEquals('Tasks_Model_Task', $loadedTaskData['alarms'][0]['model']);
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedTaskData['alarms'][0]['sent_status']);
+        $this->assertTrue(array_key_exists('minutes_before', $loadedTaskData['alarms'][0]), 'minutes_before is missing');
+        
+        // try to send alarm
+        /*
+        if (isset(Tinebase_Core::getConfig()->smtp)) {
+            $event = new Tinebase_Event_Async_Minutely();
+            Tinebase_Event::fireEvent($event);
+            
+            // check alarm status
+            $loadedTaskData = $this->_uit->getEvent($persistentTaskData['id']);
+            $this->assertEquals(Tinebase_Model_Alarm::STATUS_SUCCESS, $loadedTaskData['alarms'][0]['sent_status']);
+        }
+        */
+    }
+    
+    /**
      * test update of a task
      *
      */
@@ -269,6 +300,25 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         ));
     }
 
+    /**
+     * get task record
+     *
+     * @return Tasks_Model_Task
+     */
+    protected function _getTaskWithAlarm()
+    {
+        $task = new Tasks_Model_Task(array(
+            'summary'       => 'minimal task with alarm by PHPUnit::Tasks_ControllerTest',
+            'due'           => new Zend_Date()
+        ));
+        $task->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            array(
+                'minutes_before'    => 0
+            ),
+        ), TRUE);
+        return $task;
+    }
+    
     /**
      * get filter for task search
      *
