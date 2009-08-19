@@ -38,7 +38,6 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      */
     public function __construct()
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ');
         $this->_fromAddress = 'webmaster@tine20.org';
     }
     
