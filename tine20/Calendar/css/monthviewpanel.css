@@ -26,7 +26,7 @@
 
 .cal-monthview-wkcell:hover{
 	background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
-	cursor: pointer;
+	/*cursor: pointer; see ticket #1484*/
 }
 
 .cal-monthview-wkcell-header {
@@ -41,7 +41,7 @@
 
 .cal-monthview-dayheader:hover {
     background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
-    cursor: pointer;
+    /*cursor: pointer; see ticket #1484*/
 }
 
 .cal-monthview-inner-header,
@@ -69,7 +69,7 @@ cal-monthview-wkcell-header {
 	padding: 2px 5px;
 	border-collapse: separate;
 	color: #233D6D;
-	cursor: pointer;
+	/*cursor: pointer; see ticket #1484*/
 	text-align: right !important;
 }
 

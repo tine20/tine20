@@ -11,7 +11,7 @@
 
 .cal-daysviewpanel-dayheader-today, .cal-daysviewpanel-dayheader-day-wrap:hover {
     background:#EBF3FD url(../../library/ExtJS/resources/images/default/grid/grid3-hrow-over.gif) repeat-x scroll 0 bottom;
-    cursor: pointer;
+    /*cursor: pointer; see ticket #1484*/
 }
 
 .cal-daysviewpanel-header-offset {
@@ -102,7 +102,7 @@
 
 .cal-daysviewpanel-daycolumn-row:hover {
 	background-color:#DFE8F6;
-    cursor:pointer;
+    /*cursor: pointer; see ticket #1484*/
 }
 
 .cal-daysviewpanel-timeRow-time {
@@ -334,7 +334,7 @@
 
 .cal-daysviewpanel-body-wholedaycolumn-over:hover {
     background-color:#DFE8F6;
-    cursor:pointer;
+    /*cursor: pointer; see ticket #1484*/
 }
 
 .cal-daysviewpanel-wholedayevent-body {
