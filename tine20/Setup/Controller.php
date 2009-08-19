@@ -829,10 +829,10 @@ class Setup_Controller
         }
 
         $application = new Tinebase_Model_Application(array(
-            'name'      => $_xml->name,
-            'status'    => $_xml->status ? $_xml->status : Tinebase_Application::ENABLED,
-            'order'     => $_xml->order ? $_xml->order : 99,
-            'version'   => $_xml->version
+            'name'      => (string)$_xml->name,
+            'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
+            'order'     => $_xml->order ? (string)$_xml->order : 99,
+            'version'   => (string)$_xml->version
         ));
         
         Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);

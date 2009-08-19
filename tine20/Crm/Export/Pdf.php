@@ -198,7 +198,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         $postalcodeLocality = ( !empty($contact->adr_one_postalcode) ) ? $contact->adr_one_postalcode . " " . $contact->adr_one_locality : $contact->adr_one_locality;
                         $regionCountry = ( !empty($contact->adr_one_region) ) ? $contact->adr_one_region . " " : "";
                         if ( !empty($contact->adr_one_countryname) ) {
-                            $regionCountry .= $_locale->getCountryTranslation ( $contact->adr_one_countryname );
+                            $regionCountry .= Zend_Locale::getTranslation($contact->adr_one_countryname, 'country', $_locale);
                         }
                         $linkedObjects[] = array ($_translate->_('Address'), 
                                                 array( 

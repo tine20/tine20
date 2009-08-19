@@ -164,7 +164,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
                                 Tinebase_Core::get('locale'));
                         } elseif (!empty($_contact->$key) ) {
                             if (preg_match("/countryname/", $key)) {
-                                $content[] = $locale->getCountryTranslation($_contact->$key);
+                                $content[] = Zend_Locale::getTranslation($_contact->$key, 'country', $locale);
                             } else {
                                 $content[] = $_contact->$key;
                             }

@@ -90,8 +90,8 @@ class Tinebase_Translation
             $locale = new Zend_Locale($localestring);
             $availableTranslations[] = array(
                 'locale'   => $localestring,
-                'language' => $locale->getLanguageTranslation($locale->getLanguage()),
-                'region'   => $locale->getCountryTranslation($locale->getRegion())
+                'language' => Zend_Locale::getTranslationList('language', $locale),
+                'region'   => Zend_Locale::getTranslationList('territory', $locale, 2)
             );
         }
             
@@ -110,7 +110,7 @@ class Tinebase_Translation
     	
     	//try lazy loading of translated country list
     	if (empty(self::$_countryLists[$language])) {
-	        $countries = Zend_Locale::getCountryTranslationList($locale);
+	        $countries = Zend_Locale::getTranslationList('territory', $locale, 2);
 	        asort($countries);
 	        foreach($countries as $shortName => $translatedName) {
 	            $results[] = array(
