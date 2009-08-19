@@ -756,12 +756,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
         
-        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
-        
         // create message
+        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $messageSubject = $translate->_('Notification for Event ' . $event->summary);
-        //$messageBody = $translate->_('Event description:<br/>' . $event->description);
-        $messageBody = print_r($event->toArray(), TRUE);
+        $messageBody = $event->getNotificationMessage();
         
         $notificationsBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
         
