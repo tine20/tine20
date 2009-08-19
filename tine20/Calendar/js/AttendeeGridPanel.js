@@ -145,27 +145,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: this.app.i18n._('Name'),
             renderer: this.renderAttenderName.createDelegate(this),
             editor: new Tine.Addressbook.SearchCombo({
-                // at the moment we support accounts only
-                //internalContactsOnly: true,
-                
                 blurOnSelect: true,
                 selectOnFocus: true,
-                renderAttenderName: this.renderAttenderName,
-                setValue: function(value) {
-                    name = this.renderAttenderName(value) || '';
-                    Tine.Addressbook.SearchCombo.prototype.setValue.call(this, name);
-                },
-                getValue: function() {
-                    if (this.selectedRecord) {
-                        // NOTE: the store checks if data changed. If we don't overwrite to string, 
-                        //  the check only sees [Object Object] wich of course never changes...
-                        var user_id = this.selectedRecord.get('id');
-                        this.selectedRecord.toString = function() {return user_id;};
-                    }
-                    var value = this.selectedRecord;
-                    this.selectedRecord = null;
-                    return value;
-                }
+                renderAttenderName: this.renderAttenderName
             })
         }, {
             id: 'status',
@@ -215,6 +197,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         }
         
+        // for all other fields user need editGrant
         if (! this.record.get('editGrant')) {
             o.cancel = true;
             return;
@@ -228,6 +211,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
             return;
         }
+        
         
         if (o.field == 'user_id') {
             if (o.record.get('user_id')) {
@@ -384,6 +368,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
             if (name.accountDisplayName) {
                 return Ext.util.Format.htmlEncode(name.accountDisplayName);
+            }
+            if (Ext.isString(name)) {
+                return name;
             }
             // NOTE: this fn gets also called from other scopes
             return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
