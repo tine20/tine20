@@ -331,7 +331,8 @@ class Tinebase_Core
             $frontendOptions = array(
                 'cache_id_prefix' => SQL_TABLE_PREFIX,
                 'lifetime' => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
-                'automatic_serialization' => true // turn that off for more speed
+                'automatic_serialization' => true, // turn that off for more speed
+                'caching' => true
             );
                         
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';

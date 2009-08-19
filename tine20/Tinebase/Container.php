@@ -1105,23 +1105,25 @@ class Tinebase_Container
      */
     protected function _removeFromCache($_containerId) 
     {        
-        // remove container from cache
-        if (Tinebase_Core::getConfig()->caching && Tinebase_Core::getConfig()->caching->active) {
-            $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-            if (ucfirst(Tinebase_Core::getConfig()->caching->backend) !== 'Memcached') {
-                try {
-                    $accountId          = Tinebase_Model_User::convertUserIdToInt(Tinebase_Core::getUser());
-                    $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
-                    $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
-                } catch (Zend_Exception $ze) {
-                    // no user account set
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No user account set.');
-                }
-                $cache->remove('getContainerById' . $_containerId);
-                $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
-            } else {
-                $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        
+        if (!$cache || !$cache->getOption('caching')) {
+            return;
+        }
+
+        if (ucfirst(Tinebase_Core::getConfig()->caching->backend) !== 'Memcached') {
+            try {
+                $accountId          = Tinebase_Model_User::convertUserIdToInt(Tinebase_Core::getUser());
+                $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
+                $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
+            } catch (Zend_Exception $ze) {
+                // no user account set
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No user account set.');
             }
+            $cache->remove('getContainerById' . $_containerId);
+            $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
+        } else {
+            $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
         }
     }
 
