@@ -104,7 +104,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         Tinebase_Model_Container::READGRANT   => array('allowEmpty' => true),
         Tinebase_Model_Container::EDITGRANT   => array('allowEmpty' => true),
         Tinebase_Model_Container::DELETEGRANT => array('allowEmpty' => true),
-        Tinebase_Model_Container::ADMINGRANT  => array('allowEmpty' => true),
     );
     
     /**
