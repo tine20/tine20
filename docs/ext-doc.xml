@@ -50,6 +50,7 @@
         -->
 
     <sources>
+        <source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
         <!-- <source src="../tine20/library/ExtJS/src" match="*.js"/> -->
         <!-- <source src="../tine20/Tinebase/js/tineInit.js"/> -->
         <!-- <source src="../tine20/Calendar/js" match="*.js"/> -->
@@ -71,6 +72,7 @@
         <source src="../tine20/Felamimail/js" match="*.js"/>
         <source src="../tine20/Setup/js/ApplicationGridPanel.js"/>
         <source src="../tine20/Tasks/js/EditDialog.js"/>
+        
     </sources>
     <tags>
         <tag name="author" title="Author"/>

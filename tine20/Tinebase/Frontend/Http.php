@@ -113,7 +113,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/form/ColumnFormPanel.js',
             'Tinebase/js/ux/form/ExpandFieldSet.js',
             'Tinebase/js/ux/form/ClearableComboBox.js',
-            'Tinebase/js/ux/form/GridEditorComboBox.js',
             'Tinebase/js/ux/form/RecordsComboBox.js',
             'Tinebase/js/ux/form/DateTimeField.js',
             'Tinebase/js/ux/form/ClearableDateField.js',
@@ -169,6 +168,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/CountryCombo.js',
             'Tinebase/js/widgets/GridPicker.js',
             'Tinebase/js/widgets/ActivitiesPanel.js',        
+            'Tinebase/js/widgets/form/RecordPickerComboBox.js',        
             // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',
