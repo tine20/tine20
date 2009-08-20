@@ -19,6 +19,12 @@
 class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
     /**
+     * the right to manage resources
+     * @staticvar string
+     */
+	const MANAGE_RESOURCES = 'manage_resources';
+	
+    /**
      * holds the instance of the singleton
      *
      * @var Calendar_Acl_Rights
@@ -68,7 +74,8 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array(
-            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
+            self::MANAGE_RESOURCES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -88,6 +95,10 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
                 'text'          => $translate->_('manage shared calendars'),
                 'description'   => $translate->_('Create new shared calendars'),
+            ),
+            self::MANAGE_RESOURCES => array(
+                'text'          => $translate->_('manage resources'),
+                'description'   => $translate->_('All Rights to administrate resources')
             ),
         );
         

@@ -72,4 +72,26 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         }
         return self::$_instance;
     }
+    
+    /**
+     * check if user has the right to manage resources
+     * 
+     * @param $_action String {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        switch ($_action) {
+        	case 'create':
+        	case 'update':
+        	case 'delete':
+        		if (! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+        			throw new Tinebase_Exception_AccessDenied("You don't have the right to manage resources");
+        		}
+        		break;
+        	default;
+        	   break;
+        }
+    }
 }
