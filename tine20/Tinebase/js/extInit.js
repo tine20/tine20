@@ -73,6 +73,27 @@ Ext.apply(Ext.data.JsonStore.prototype, {
 });
 
 /**
+ * add more options to Ext.form.ComboBox
+ */
+Ext.form.ComboBox.prototype.initComponent = Ext.form.ComboBox.prototype.initComponent.createSequence(function() {
+    if (this.expandOnFocus) {
+        this.lazyInit = false;
+        this.on('focus', function(){
+            this.onTriggerClick();
+        });
+    }
+    
+    if (this.blurOnSelect){
+        this.on('select', function(){
+            this.blur(true);
+            this.fireEvent('blur', this);
+        }, this);
+    }
+});
+Ext.form.ComboBox.prototype.triggerAction = 'all';
+
+
+/**
  * additional date patterns
  * @see{Date}
  */
