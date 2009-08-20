@@ -109,14 +109,14 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     $appController->sendAlarm($alarm);
                     $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
                     
-                } catch (Tinebase_Exception $te) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $te->getTraceAsString());
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                     
-                    $alarm->sent_message = $te->getMessage();
+                    $alarm->sent_message = $e->getMessage();
                     $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
-                    //throw $te;
-                }
+                    //throw $e;
+                } 
                 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating alarm status: ' . $alarm->sent_status);
                 
