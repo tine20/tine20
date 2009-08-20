@@ -61,13 +61,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             sortInfo: {field: 'user_id', direction: 'ASC'},
             listeners: {
                 scope: this,
-                update: this.onStoreUpdate,
                 cellcontextmenu : this.onContextMenu,
                 keydown: this.onKeyDown
             }
         });
         
         this.on('beforeedit', this.onBeforeAttenderEdit, this);
+        this.on('afteredit', this.onAfterAttenderEdit, this);
         
         this.initColumns();
         
@@ -137,8 +137,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: '&#160;',
             tooltip: this.app.i18n._('Type'),
             renderer: this.renderAttenderType.createDelegate(this),
-            editor: new Ext.ux.form.GridEditorComboBox({
-                store : [
+            editor: new Ext.form.ComboBox({
+                blurOnSelect  : true,
+                expandOnFocus : true,
+                mode          : 'local',
+                store         : [
                     ['user',     this.app.i18n._('User')   ],
                     ['group',    this.app.i18n._('Group')  ],
                     ['resource', this.app.i18n._('Resouce')]
@@ -160,23 +163,24 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     return this.selectedRecord ? this.selectedRecord.data : null;
                 }
             }),
-            groupEditor: new Ext.ux.form.GridEditorComboBox({
-                store : [
+            groupEditor: new Ext.form.ComboBox({
+                blurOnSelect  : true,
+                expandOnFocus : true,
+                mode          : 'local',
+                store         : [
                     ['NEEDS-ACTION', this.app.i18n._('Group 1')],
                     ['ACCEPTED',     this.app.i18n._('Accepted')   ],
                     ['DECLINED',     this.app.i18n._('Declined')   ],
                     ['TENTATIVE',    this.app.i18n._('Tentative')  ]
                 ]
             }),
-            resourceEditor: new Ext.ux.form.GridEditorComboBox({
-                store : [
-                    ['NEEDS-ACTION', this.app.i18n._('Ressource 1')],
-                    ['ACCEPTED',     this.app.i18n._('Accepted')   ],
-                    ['DECLINED',     this.app.i18n._('Declined')   ],
-                    ['TENTATIVE',    this.app.i18n._('Tentative')  ]
-                ]
+            resourceEditor: new Tine.widgets.form.RecordPickerComboBox({
+                blurOnSelect: true,
+                model: Tine.Calendar.Model.Resouce,
+                getValue: function() {
+                    return this.selectedRecord ? this.selectedRecord.data : null;
+                }
             })
-            
         }, {
             id: 'status',
             dataIndex: 'status',
@@ -184,8 +188,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             sortable: true,
             header: this.app.i18n._('Status'),
             renderer: this.renderAttenderStatus.createDelegate(this),
-            editor: new Ext.ux.form.GridEditorComboBox({
-                store : [
+            editor: new Ext.form.ComboBox({
+                blurOnSelect  : true,
+                expandOnFocus : true,
+                mode          : 'local',
+                store         : [
                     ['NEEDS-ACTION', this.app.i18n._('No response')],
                     ['ACCEPTED',     this.app.i18n._('Accepted')   ],
                     ['DECLINED',     this.app.i18n._('Declined')   ],
@@ -193,6 +200,48 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 ]
             })
         }];
+    },
+    
+    onAfterAttenderEdit: function(o) {
+        
+        switch (o.field) {
+            case 'user_id' :
+                // detect duplicate entry
+                var isDuplicate = false;
+                this.store.each(function(attender) {
+                    if (o.record.getUserId() == attender.getUserId()
+                            && o.record.get('user_type') == attender.get('user_type')
+                            && o.record != attender) {
+                        var row = this.getView().getRow(this.store.indexOf(attender));
+                        Ext.fly(row).highlight();
+                        isDuplicate = true;
+                        return false;
+                    }
+                }, this);
+                
+                if (isDuplicate) {
+                    o.record.reject();
+                    this.startEditing(o.row, o.column);
+                } else if (o.value) {
+                    var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
+                    this.store.add([newAttender]);
+                    this.startEditing(o.row +1, o.column);
+                }
+                break;
+                
+            case 'user_type' :
+                this.startEditing(o.row, o.column +1);
+                break;
+            
+            case 'container_id':
+                // check if displaycontainer of owner got changed
+                if (o.record == this.eventOriginator) {
+                    this.record.set('container_id', '');
+                    this.record.set('container_id', o.record.get('displaycontainer_id'));
+                }
+                break;
+        }
+        
     },
     
     onBeforeAttenderEdit: function(o) {
@@ -216,8 +265,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         }
         
-        // don't allow to set anything besides quantity for persistent attendee
-        if (o.record.get('id')) {
+        // don't allow to set anything besides quantity for already set attendee
+        if (o.record.get('user_id')) {
             o.cancel = true;
             if (o.field == 'quantity' && o.record.get('user_type') == 'resource') {
                 o.cancel = false;
@@ -225,12 +274,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         }
         
-        
         if (o.field == 'user_id') {
-            if (o.record.get('user_id')) {
-                o.cancel = true;
-            }
-            
             // switch editor
             var userType = o.record.get('user_type');
             var colModel = o.grid.getColumnModel();
@@ -315,44 +359,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         record.set('attendee', attendee);
     },
     
-    onStoreUpdate: function(store, updatedAttender) {
-        // check if we need to add a new row
-        var needUpdate = true;
-        var isDuplicate = false;
-        
-        this.store.each(function(attender) {
-            if (! attender.get('user_id')) {
-                needUpdate = false;
-            }
-            
-            // detect duplicate entry
-            if (updatedAttender.getUserId() == attender.getUserId()
-                    && updatedAttender.get('user_type') == attender.get('user_type')
-                    && updatedAttender != attender) {
-                var row = this.getView().getRow(this.store.indexOf(attender));
-                Ext.fly(row).highlight();
-                isDuplicate = true;
-                return false;
-            }
-            
-        }, this);
-        
-        if (isDuplicate) {
-            updatedAttender.reject();
-            updatedAttender.isFluentAdd = true;
-        } else if (needUpdate && this.record.get('editGrant')) {
-            var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
-            newAttender.isFluentAdd = true;
-            this.store.add([newAttender]);
-        }
-        
-        // check if displaycontainer of owner got changed
-        if (updatedAttender == this.eventOriginator) {
-            this.record.set('container_id', '');
-            this.record.set('container_id', updatedAttender.get('displaycontainer_id'));
-        }
-    },
-    
     onKeyDown: function(e) {
         switch(e.getKey()) {
             
@@ -376,34 +382,55 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
     
-    renderAttenderName: function(name) {
+    renderAttenderName: function(name, metaData, record) {
         if (name) {
-            if (typeof name.get == 'function' && name.get('n_fn')) {
-                return Ext.util.Format.htmlEncode(name.get('n_fn'));
-            }
-            if (name.n_fn) {
-                return Ext.util.Format.htmlEncode(name.n_fn);
-            }
-            if (name.accountDisplayName) {
-                return Ext.util.Format.htmlEncode(name.accountDisplayName);
-            }
-            if (Ext.isString(name)) {
-                return name;
-            }
-            // NOTE: this fn gets also called from other scopes
-            return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
-            
+            var type = record ? record.get('user_type') : 'user';
+            return this['renderAttender' + Ext.util.Format.capitalize(type) + 'Name'].apply(this, arguments);
         }
+        
         // add new user:
         if (arguments[1]) {
             arguments[1].css = 'x-form-empty-field';
+            /*
             if (arguments[2] && arguments[2].isFluentAdd) {
                 arguments[2].isFluentAdd = false;
                 this.startEditing.defer(50, this, [arguments[3], arguments[4]]);
             }
+            */
             return this.app.i18n._('Click here to invite another attender...');
         }
     },
+    
+    renderAttenderUserName: function(name) {
+        if (typeof name.get == 'function' && name.get('n_fn')) {
+            return Ext.util.Format.htmlEncode(name.get('n_fn'));
+        }
+        if (name.n_fn) {
+            return Ext.util.Format.htmlEncode(name.n_fn);
+        }
+        if (name.accountDisplayName) {
+            return Ext.util.Format.htmlEncode(name.accountDisplayName);
+        }
+        if (Ext.isString(name)) {
+            return Ext.util.Format.htmlEncode(name);
+        }
+        // NOTE: this fn gets also called from other scopes
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+    },
+    
+    renderAttenderResourceName: function(name) {
+        if (typeof name.getTitle == 'function') {
+            return Ext.util.Format.htmlEncode(name.getTitle());
+        }
+        if (name.name) {
+            return Ext.util.Format.htmlEncode(name.name);
+        }
+        if (Ext.isString(name)) {
+            return Ext.util.Format.htmlEncode(name);
+        }
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+    },
+    
     
     renderAttenderDispContainer: function(displaycontainer_id, metadata, attender) {
         metadata.attr = 'style = "overflow: none;"';
