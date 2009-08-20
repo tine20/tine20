@@ -37,7 +37,7 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
      *
      * @var int
      */
-    protected $_initialNumber = 74;
+    protected $_initialNumber = 50;
     
     /**
      * folder backend
