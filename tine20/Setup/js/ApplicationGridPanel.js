@@ -53,6 +53,9 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         
         // activate local sort
         this.store.remoteSort = false;
+        
+        // add selection of updateable apps after store load
+        this.store.on('load', this.selectApps, this);
     },
     
     /**
@@ -130,19 +133,6 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
     },
 
     /**
-     * on render
-     * 
-     * @param {} ct
-     * @param {} position
-     * @private
-     */
-    onRender: function(ct, position) {
-        Tine.Setup.ApplicationGridPanel.superclass.onRender.call(this, ct, position);
-
-        this.selectApps.defer(1000, this);
-    },
-    
-    /**
 	 * @private
 	 */
     onSelectionChange: function(sm) {
@@ -187,40 +177,15 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
     selectApps: function() {
         
         var updateable = [];
-
+        
         this.store.each(function(record) {
+        	console.log(record);
             if (record.get('install_status') == 'updateable') {
                 updateable.push(record);
             }
         }, this);
         
-        console.log(updateable);
         this.selectionModel.selectRecords(updateable);
-
-        /*
-        var installable = [];
-        var updateable = [];
-        var firstInstall = true;
-        
-        this.store.each(function(record) {
-            if (record.get('install_status') == 'updateable') {
-                updateable.push(record);
-                firstInstall = false;
-            } else if (record.get('install_status') == 'uninstalled' 
-                && record.get('name').match(/Tinebase|Admin|Calendar|Addressbook|Tasks|Felamimail/)
-            ) {
-                installable.push(record);
-            } else if (record.get('install_status') == 'uptodate'){
-                firstInstall = false;
-            }
-        }, this);
-        
-        if (firstInstall) {
-            this.selectionModel.selectRecords(installable);
-        } else {
-            this.selectionModel.selectRecords(updateable);
-        }
-        */
     },
     
     /**
