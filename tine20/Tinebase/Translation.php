@@ -65,6 +65,7 @@ class Tinebase_Translation
      * 
      * @return array list of all available translation
      *
+     * @todo add test
      */
     public static function getAvailableTranslations()
     {
