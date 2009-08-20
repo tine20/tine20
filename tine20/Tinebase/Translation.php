@@ -216,13 +216,14 @@ class Tinebase_Translation
      * get zend translate for an application
      * 
      * @param  string $_applicationName
+     * @param  Zend_Locale $_locale [optional]
      * @return Zend_Translate
      * 
      * @todo return 'void' if locale = en
     */
-    public static function getTranslation($_applicationName)
+    public static function getTranslation($_applicationName, Zend_Locale $_locale = NULL)
     {
-        $locale = Tinebase_Core::get('locale');
+        $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get('locale');
         
         // check if translation exists
         if (isset(self::$_translations[(string)$locale][$_applicationName])) {
@@ -384,9 +385,9 @@ class Tinebase_Translation
     /**
      * convert zend date to string
      * 
-     * @param Zend_Date $_date
-     * @param string $_timezone
-     * @param Zend_Locale $_locale
+     * @param Zend_Date $_date [optional]
+     * @param string $_timezone [optional]
+     * @param Zend_Locale $_locale [optional]
      * @return string
      */
     public static function dateToStringInTzAndLocaleFormat(Zend_Date $_date = NULL, $_timezone = NULL, Zend_Locale $_locale = NULL)
