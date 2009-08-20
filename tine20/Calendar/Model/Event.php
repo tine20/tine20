@@ -240,20 +240,36 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract implements Tinebase_
      *
      * @return string
      * 
-     * @todo add dates in user timezone / locale
-     * @todo add attendee
+     * @todo why is $translate->_('Attendee') not working?
+     * @todo should we get the locale pref for each single user here instead of the default?
      */
     public function getNotificationMessage()
     {
-        $translate = Tinebase_Translation::getTranslation($this->_application);
+        // get locale from prefs
+        $localePref = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::LOCALE);
+        $locale = Tinebase_Translation::getLocale($localePref);
+        $translate = Tinebase_Translation::getTranslation($this->_application, $locale);
         
+        // get date strings
+        $timezone = ($this->originator_tz) ? $this->originator_tz : Tinebase_Core::get('userTimeZone');
+        $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($this->dtstart, $timezone, $locale);
+        $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($this->dtend, $timezone, $locale);
+        
+        // add values to text
         $text = $this->summary . "\n\n" 
-            . $translate->_('Start')        . ': ' . $this->dtstart     . "\n" 
-            . $translate->_('End')          . ': ' . $this->dtend       . "\n"
+            . $translate->_('Start')        . ': ' . $startDateString   . "\n" 
+            . $translate->_('End')          . ': ' . $endDateString     . "\n"
             . $translate->_('Organizer')    . ': ' . $this->organizer   . "\n" 
             . $translate->_('Location')     . ': ' . $this->location    . "\n"
-            . $translate->_('Description')  . ': ' . $this->description . "\n";
-            
+            . $translate->_('Description')  . ': ' . $this->description . "\n\n"
+            . $translate->_('Attendee')     . ":\n";
+        
+        // add attendee
+        Calendar_Model_Attender::resolveAttendee($this->attendee);
+        foreach ($this->attendee as $attender) {
+            $text .= $attender->user_id->n_fn . "\n";
+        }
+        
         return $text;
     }
 }
