@@ -11,10 +11,7 @@
  
 Ext.ns('Tine.Felamimail', 'Tine.Felamimail.Model');
 
-/**************************** message model *******************************/
-
 /**
- * @type {Array}
  * Message model fields
  */
 Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
@@ -37,9 +34,12 @@ Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
 ]);
 
 /**
- * @type {Tine.Tinebase.Message}
- * record definition
- */
+ * @namespace Tine.Felamimail.Model
+ * @class Tine.Felamimail.Model.Message
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Message Record Definition
+ */ 
 Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create(Tine.Felamimail.Model.MessageArray, {
     appName: 'Felamimail',
     modelName: 'Message',
@@ -69,9 +69,7 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
     };
 };
 
-/**************************** account model *******************************/
 /**
- * @type {Array}
  * Account model fields
  */
 Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
@@ -104,9 +102,12 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
 ]);
 
 /**
- * @type {Tine.Tinebase.Account}
- * record definition
- */
+ * @namespace Tine.Felamimail.Model
+ * @class Tine.Felamimail.Model.Account
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Account Record Definition
+ */ 
 Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Felamimail.Model.AccountArray, {
     appName: 'Felamimail',
     modelName: 'Account',
@@ -144,22 +145,16 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
         sent_folder: (defaults.sent_folder) ? defaults.sent_folder : 'Sent',
         trash_folder: (defaults.trash_folder) ? defaults.trash_folder : 'Trash',
         smtp_secure_connection: (defaults.smtp && defaults.smtp.ssl) ? defaults.smtp.ssl : 'none'
-        
-        // some more possible defaults
-        /*
-        name: 'new account',
-        email: 'test@tine20.org',
-        user: 'test@tine20.org',
-        */
     };
 };
 
-/**************************** attachment model *******************************/
-
 /**
- * @type {Tine.Tinebase.Message}
- * record definition
- */
+ * @namespace Tine.Felamimail.Model
+ * @class Tine.Felamimail.Model.Attachment
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Attachment Record Definition
+ */ 
 Tine.Felamimail.Model.Attachment = Tine.Tinebase.data.Record.create([
    { name: 'name' },
    { name: 'size' },

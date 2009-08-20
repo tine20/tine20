@@ -41,17 +41,21 @@ Ext.namespace('Tine.Felamimail');
 });
 
 /**
- * default mainscreen
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.MainScreen
+ * @extends Tine.Tinebase.widgets.app.MainScreen
  * 
- * @type Tine.Tinebase.widgets.app.MainScreen
- */
+ * MainScreen Definition (use default)
+ */ 
 Tine.Felamimail.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
 
 /**
- * message backend
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.messageBackend
+ * @extends Tine.Tinebase.widgets.app.JsonBackend
  * 
- * @type Tine.Tinebase.widgets.app.JsonBackend
- */
+ * Message Backend
+ */ 
 Tine.Felamimail.messageBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Felamimail',
     modelName: 'Message',
@@ -59,10 +63,12 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.widgets.app.JsonBackend({
 });
 
 /**
- * account backend
+ * @namespace Tine.Felamimail
+ * @class Tine.Felamimail.accountBackend
+ * @extends Tine.Tinebase.widgets.app.JsonBackend
  * 
- * @type Tine.Tinebase.widgets.app.JsonBackend
- */
+ * Account Backend
+ */ 
 Tine.Felamimail.accountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
     appName: 'Felamimail',
     modelName: 'Account',
@@ -72,7 +78,8 @@ Tine.Felamimail.accountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
 /**
  * get account store
  *
- * @return Ext.data.JsonStore with accounts
+ * @param {Boolean} reload
+ * @return {Ext.data.JsonStore}
  */
 Tine.Felamimail.loadAccountStore = function(reload) {
     
@@ -104,6 +111,9 @@ Tine.Felamimail.loadAccountStore = function(reload) {
 
 /**
  * add signature (get it from default account settings)
+ * 
+ * @param {String} id
+ * @return {Tine.Felamimail.Model.Account}
  */
 Tine.Felamimail.getSignature = function(id) {
         

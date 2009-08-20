@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Felamimail
@@ -12,20 +12,36 @@
 Ext.namespace('Tine.Felamimail');
 
 /**
- * attachment grid for compose dialog
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.AttachmentGrid
+ * @extends     Ext.grid.GridPanel
  * 
- * @class Tine.Felamimail.AttachmentGrid
- * @extends Ext.grid.GridPanel
+ * <p>Attachment grid for compose dialog</p>
+ * <p></p>
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * 
+ * @constructor
+ * Create a new  Tine.Felamimail.AttachmentGrid
  */
 Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     
+	/**
+	 * @private
+	 */
     id: 'felamimail-attachment-grid',
     i18n: null,
     
     /**
      * actions
      * 
-     * @type Object
+     * @type {Object}
+     * @private
      */
     actions: {
         add: null,
@@ -34,9 +50,9 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * config values
+     * @private
      */
     header: false,
-    //frame: true,
     border: false,
     deferredRender: false,
     loadMask: true,
@@ -44,6 +60,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * init
+     * @private
      */
     initComponent: function() {
         
@@ -55,10 +72,9 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
         Tine.Felamimail.AttachmentGrid.superclass.initComponent.call(this);
     },
     
-    /**************************************** event handlers ***************************************/
-    
     /**
      * button event handlers
+     * @private
      */
     handlers: {   
         
@@ -104,6 +120,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * on upload failure
+     * @private
      */
     onUploadFail: function() {
         Ext.MessageBox.alert(
@@ -113,10 +130,9 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
         this.loadMask.hide();
     },
 
-    /**************************************** init funcs ***************************************/
-    
     /**
      * init toolbar
+     * @private
      */
     initToolbar: function() {
         this.actions.add = new Ext.Action({
@@ -143,6 +159,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * init store
+     * @private
      */
     initStore: function() {
         this.store = new Ext.data.SimpleStore({
@@ -160,6 +177,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * init cm
+     * @private
      */
     initColumnModel: function() {
         this.cm = new Ext.grid.ColumnModel([
@@ -190,6 +208,7 @@ Tine.Felamimail.AttachmentGrid = Ext.extend(Ext.grid.GridPanel, {
 
     /**
      * init sel model
+     * @private
      */
     initSelectionModel: function() {
         this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
