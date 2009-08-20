@@ -69,6 +69,7 @@
         <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
         <source src="../tine20/Felamimail/js" match="*.js"/>
+        <source src="../tine20/Setup/js/ApplicationGridPanel.js"/>
         <source src="../tine20/Tasks/js/EditDialog.js"/>
     </sources>
     <tags>
