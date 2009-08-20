@@ -90,8 +90,8 @@ class Tinebase_Translation
             $locale = new Zend_Locale($localestring);
             $availableTranslations[] = array(
                 'locale'   => $localestring,
-                'language' => Zend_Locale::getTranslationList('language', $locale),
-                'region'   => Zend_Locale::getTranslationList('territory', $locale, 2)
+                'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
+                'region'   => Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale)
             );
         }
             
@@ -378,5 +378,26 @@ class Tinebase_Translation
         '), $po);
         $po = "({\n" . (string)$po . ($plural ? "]\n})" : "\n})");
         return $po;
+    }
+    
+    /**
+     * convert zend date to string
+     * 
+     * @param Zend_Date $_date
+     * @param string $_timezone
+     * @param Zend_Locale $_locale
+     * @return string
+     */
+    public static function dateToStringInTzAndLocaleFormat(Zend_Date $_date = NULL, $_timezone = NULL, Zend_Locale $_locale = NULL)
+    {
+        $date = ($_date !== NULL) ? clone($_date) : Zend_Date::now();
+        $timezone = ($_timezone !== NULL) ? $_timezone : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
+        
+        $date->setTimezone($timezone);
+        $result = $date->toString(Zend_Locale_Format::getDateFormat($locale), $locale) . ' ' .
+            $date->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
+            
+        return $result;
     }
 }
