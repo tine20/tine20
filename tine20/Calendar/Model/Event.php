@@ -240,6 +240,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      *
      * @return string
      * 
+     * @todo add dates in user timezone / locale
      * @todo add attendee
      */
     public function getNotificationMessage()
