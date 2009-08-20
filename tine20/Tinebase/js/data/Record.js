@@ -80,7 +80,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     getTitle: function() {
         return this.titleProperty ? this.get(this.titleProperty) : '';
-    }    
+    },
+    
+    toString: function() {
+        return Ext.encode(this.data);
+    }
 });
 
 /**
