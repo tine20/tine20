@@ -332,14 +332,14 @@ Tine.Calendar.Model.ResourceArray = [
  * @extends Tine.Tinebase.data.Record
  * Resouce Record Definition
  */
-Tine.Calendar.Model.Resouce = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.AttenderArray, {
+Tine.Calendar.Model.Resouce = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.ResourceArray, {
     appName: 'Calendar',
-    modelName: 'Resouce',
+    modelName: 'Resource',
     idProperty: 'id',
     titleProperty: 'name',
-    // ngettext('Resouce', 'Resources', n); gettext('Resources');
-    recordName: 'Resouce',
-    recordsName: 'Resouces',
+    // ngettext('Resource', 'Resources', n); gettext('Resources');
+    recordName: 'Resource',
+    recordsName: 'Resources',
     containerProperty: null
 });
 
