@@ -14,7 +14,7 @@
  * alarms controller interface
  *  
  * @package     Tinebase
- * @subpackage  Auth
+ * @subpackage  Alarm
  */
 interface Tinebase_Controller_Alarm_Interface
 {
