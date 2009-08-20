@@ -50,6 +50,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * deletes existing resources
+     *
+     * @param array $_ids 
+     * @return string
+     */
+    public function deleteResources($ids)
+    {
+        return $this->_delete($ids, Calendar_Controller_Resource::getInstance());
+    }
+    
+    /**
      * deletes a recur series
      *
      * @param  JSONstring $recordData
@@ -100,6 +111,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * Return a single resouece
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getResource($id)
+    {
+        return $this->_get($id, Calendar_Controller_Resource::getInstance());
+    }
+    
+    /**
      * Search for events matching given arguments
      *
      * @param string $_filter json encoded
@@ -112,7 +134,19 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * creates/updates a event
+     * Search for resources matching given arguments
+     *
+     * @param string $_filter json encoded
+     * @param string $_paging json encoded
+     * @return array
+     */
+    public function searchResources($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Calendar_Controller_Resource::getInstance(), 'Calendar_Model_ResourceFilter');
+    }
+    
+    /**
+     * creates/updates an event
      *
      * @param   $recordData
      * @return  array created/updated event
@@ -120,6 +154,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveEvent($recordData)
     {
         return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event');
+    }
+    
+    /**
+     * creates/updates a Resource
+     *
+     * @param   $recordData
+     * @return  array created/updated Resource
+     */
+    public function saveResource($recordData)
+    {
+        return $this->_save($recordData, Calendar_Controller_Resource::getInstance(), 'Resource');
     }
     
     /**
@@ -172,50 +217,55 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _recordToJson($_record)
     {
-    	Calendar_Model_Attender::resolveAttendee($_record->attendee);
-        $this->_resolveRrule($_record);
-        
-        $eventData = parent::_recordToJson($_record);
-        return $eventData;
+    	if ($_record instanceof Calendar_Model_Event) {
+	    	Calendar_Model_Attender::resolveAttendee($_record->attendee);
+	        $this->_resolveRrule($_record);
+    	}
+	        
+        $recordData = parent::_recordToJson($_record);
+        return $recordData;
     }
     
     /**
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Model_Filter_FilterGroup
      * @return array data
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
-    	if (is_null($_filter)) {
-    		throw new Tinebase_Exception_InvalidArgument('Required argument $_filter is missing');
+    	if ($_records->getRecordClassName() == 'Calendar_Model_Event') {
+	    	if (is_null($_filter)) {
+	    		throw new Tinebase_Exception_InvalidArgument('Required argument $_filter is missing');
+	    	}
+	
+	        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
+	        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
+	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
+	        $this->_resolveRrule($_records);
+	        
+	        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+	        
+	        //compute recurset
+	         $candidates = $_records->filter('rrule', "/^FREQ.*/", TRUE);
+	         $period = $_filter->getFilter('period');
+	         
+	         $fakeId = microtime();
+	         foreach ($candidates as $candidate) {
+	             try {
+	                 $exceptions = $_records->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
+	                 $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $period->getFrom(), $period->getUntil());
+	                 foreach ($recurSet as $event) {
+	                     $_records->addRecord($event);
+	                     $event->setId('fakeid' . $candidate->uid . $fakeId++);
+	                 }
+	             } catch (Exception $e) {
+	             	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
+	             	continue;
+	             }
+	         }
     	}
-
-        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
-        Calendar_Model_Attender::resolveAttendee($_records->attendee);
-        $this->_resolveRrule($_records);
-        
-        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
-        
-        //compute recurset
-         $candidates = $_records->filter('rrule', "/^FREQ.*/", TRUE);
-         $period = $_filter->getFilter('period');
-         
-         $fakeId = microtime();
-         foreach ($candidates as $candidate) {
-             try {
-                 $exceptions = $_records->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
-                 $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $period->getFrom(), $period->getUntil());
-                 foreach ($recurSet as $event) {
-                     $_records->addRecord($event);
-                     $event->setId('fakeid' . $candidate->uid . $fakeId++);
-                 }
-             } catch (Exception $e) {
-             	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
-             	continue;
-             }
-         }
           
         //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
         return parent::_multipleRecordsToJson($_records);

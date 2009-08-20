@@ -41,7 +41,6 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
     protected $_validators = array(
         // tine record fields
         'id'                   => array('allowEmpty' => true,  'Alnum'),
-        'container_id'         => array('allowEmpty' => true,  'Int'  ),
         'created_by'           => array('allowEmpty' => true,         ),
         'creation_time'        => array('allowEmpty' => true          ),
         'last_modified_by'     => array('allowEmpty' => true          ),
