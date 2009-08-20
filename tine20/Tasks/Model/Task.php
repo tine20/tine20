@@ -158,17 +158,32 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract implements Tinebase_Reco
      * create notification message for task alarm
      *
      * @return string
+     * 
+     * @todo should we get the locale pref for each single user here instead of the default?
      */
     public function getNotificationMessage()
     {
-        $translate = Tinebase_Translation::getTranslation($this->_application);
+        // get locale from prefs
+        $localePref = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::LOCALE);
+        $locale = Tinebase_Translation::getLocale($localePref);
+        
+        $translate = Tinebase_Translation::getTranslation($this->_application, $locale);
+        
+        // get date strings
+        $timezone = ($this->originator_tz) ? $this->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $dueDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($this->due, $timezone, $locale);
+        
+        // resolve values
+        Tinebase_User::getInstance()->resolveUsers($this, 'organizer', true);
+        $status = Tasks_Controller_Status::getInstance()->getTaskStatus($this->status_id);
         
         $text = $this->summary . "\n\n" 
-            . $translate->_('Due')          . ': ' . $this->due         . "\n" 
-            . $translate->_('Organizer')    . ': ' . $this->organizer   . "\n" 
-            . $translate->_('Description')  . ': ' . $this->description . "\n"
-            . $translate->_('Priority')     . ': ' . $this->priority    . "\n"
-            . $translate->_('Percent')      . ': ' . $this->percent     . "%\n";
+            . $translate->_('Due')          . ': ' . $dueDateString         . "\n" 
+            . $translate->_('Organizer')    . ': ' . $this->organizer->accountDisplayName       . "\n" 
+            . $translate->_('Description')  . ': ' . $this->description     . "\n"
+            . $translate->_('Priority')     . ': ' . $this->priority        . "\n"
+            . $translate->_('Status')       . ': ' . $status['status_name'] . "\n"
+            . $translate->_('Percent')      . ': ' . $this->percent         . "%\n";
             
         return $text;
     }
