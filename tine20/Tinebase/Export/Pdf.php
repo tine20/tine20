@@ -393,18 +393,13 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	protected function _CreateFooter ()
 	{
 		// get translations from tinebase
-		$locale = Tinebase_Core::get('locale');
 		$translate = Tinebase_Translation::getTranslation('Tinebase');
 		
 		$xPos = 50;
 		$yPos = 30;
 		
-		$now = Zend_Date::now();
-		$now->setTimezone(Tinebase_Core::get('userTimeZone'));
-		$creationDate = $translate->_('Export Date').": ".
-		  $now->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
-		  $now->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
-
+		$creationDate = Tinebase_Translation::dateToStringInTzAndLocaleFormat(); 
+		  
 		$creationURL = $translate->_('Created by').": ";
 		$creationURL .= 'http://www.tine20.org';
 		
@@ -453,8 +448,6 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     protected function _addActivities($record, $_notes)
     {
         $translate = Tinebase_Translation::getTranslation('Tinebase');
-        $locale = Tinebase_Core::get('locale');
-        
         
         if (!empty($_notes)) {
             
@@ -471,8 +464,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     $noteText = (strlen($note->note) > 100) ? substr($note->note, 0, 99) . '...' : $note->note;
                     $noteType = $noteTypes[$noteTypes->getIndexById($note->note_type_id)];
     
-                    $time = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($locale), $locale)." ".
-                        $note->creation_time->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
+                    $time = Tinebase_Translation::dateToStringInTzAndLocaleFormat($note->creation_time);
                       
                     $createdBy = '(' . $noteArray['created_by'] . ')';
                     $record[] = array(
