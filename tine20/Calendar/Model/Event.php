@@ -27,7 +27,7 @@
  * 
  * @package Calendar
  */
-class Calendar_Model_Event extends Tinebase_Record_Abstract
+class Calendar_Model_Event extends Tinebase_Record_Abstract implements Tinebase_Record_Alarm_Interface
 {
     const TRANSP_TRANSP        = 'TRANSPARENT';
     const TRANSP_OPAQUE        = 'OPAQUE';

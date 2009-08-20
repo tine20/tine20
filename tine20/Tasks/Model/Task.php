@@ -14,7 +14,7 @@
  * Task-Record Class
  * @package Tasks
  */
-class Tasks_Model_Task extends Tinebase_Record_Abstract
+class Tasks_Model_Task extends Tinebase_Record_Abstract implements Tinebase_Record_Alarm_Interface
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
