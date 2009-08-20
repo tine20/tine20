@@ -176,10 +176,13 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract implements Tinebase_Reco
         // resolve values
         Tinebase_User::getInstance()->resolveUsers($this, 'organizer', true);
         $status = Tasks_Controller_Status::getInstance()->getTaskStatus($this->status_id);
+        $organizerName = ($this->organizer) ? $this->organizer->accountDisplayName : '';
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
         
         $text = $this->summary . "\n\n" 
             . $translate->_('Due')          . ': ' . $dueDateString         . "\n" 
-            . $translate->_('Organizer')    . ': ' . $this->organizer->accountDisplayName       . "\n" 
+            . $translate->_('Organizer')    . ': ' . $organizerName         . "\n" 
             . $translate->_('Description')  . ': ' . $this->description     . "\n"
             . $translate->_('Priority')     . ': ' . $this->priority        . "\n"
             . $translate->_('Status')       . ': ' . $status['status_name'] . "\n"
