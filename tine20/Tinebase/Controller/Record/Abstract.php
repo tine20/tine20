@@ -84,6 +84,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
+    	$this->_checkRight('get');
         $this->_checkFilterACL($_filter);
         
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
@@ -122,6 +123,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function get($_id, $_containerId = NULL)
     {
+    	$this->_checkRight('get');
+    	
         if (!$_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
             
@@ -165,6 +168,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function getMultiple($_ids)
     {
+    	$this->_checkRight('get');
+    	
         $records = $this->_backend->getMultiple($_ids);
         
         foreach ($records as $record) {
@@ -186,6 +191,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') 
     {
+    	$this->_checkRight('get');
         return $this->_backend->getAll($_orderBy, $_orderDirection);
     }
     
@@ -200,7 +206,9 @@ abstract class Tinebase_Controller_Record_Abstract
      * @throws  Tinebase_Exception_Record_Validation
      */
     public function create(Tinebase_Record_Interface $_record)
-    {        
+    {
+        $this->_checkRight('create');
+    	
         //Tinebase_Core::getLogger()->debug(print_r($_record->toArray(),true));
         
         try {
@@ -294,10 +302,13 @@ abstract class Tinebase_Controller_Record_Abstract
             // ACL checks
             if ($currentRecord->has('container_id') && $currentRecord->container_id != $_record->container_id) {                
                 $this->_checkGrant($_record, 'create');
+                $this->_checkRight('create');
                 // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
                 $this->_checkGrant($currentRecord, 'delete');
+                $this->_checkRight('delete');
             } else {
                 $this->_checkGrant($_record, 'update', TRUE, 'No permission to update record.', $currentRecord);
+                $this->_checkRight('update');
             }
     
             // concurrency management & history log
@@ -362,8 +373,9 @@ abstract class Tinebase_Controller_Record_Abstract
      * @return  integer number of updated records
      */
     public function updateMultiple($_filter, $_data)
-    {        
+    {
         $this->_checkFilterACL($_filter, 'update');
+        $this->_checkRight('update');
         
         // get only ids
         $ids = $this->_backend->search($_filter, NULL, TRUE);
@@ -397,6 +409,7 @@ abstract class Tinebase_Controller_Record_Abstract
         try {        
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            $this->_checkRight('delete');
             
             foreach ($records as $record) {
                 $this->_checkGrant($record, 'delete');
@@ -548,7 +561,19 @@ abstract class Tinebase_Controller_Record_Abstract
         
         return $hasGrant;
     }
-
+    
+    /**
+     * overwrite this function to check rights
+     * 
+     * @param $_action String {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        return;
+    }
+    
     /**
      * Removes containers where current user has no access to
      * 
