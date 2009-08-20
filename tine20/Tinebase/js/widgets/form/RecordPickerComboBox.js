@@ -19,11 +19,11 @@ Ext.ns('Tine.widgets.form');
  * <p>Abstract base class for recordPickers like account/group pickers </p>
  * 
  * Usage:
- * <code><pre> 
-    var resourcePicker = new Tine.widgets.form.RecordPickerComboBox({
-        model: Tine.Calendar.Model.Resouce
-    });
-   </pre></code>
+ * <pre><code>
+var resourcePicker = new Tine.widgets.form.RecordPickerComboBox({
+    'model': Tine.Calendar.Model.Resouce
+});
+   </code></pre>
  */
 Tine.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
