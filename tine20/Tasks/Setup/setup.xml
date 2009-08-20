@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tasks</name>
-    <version>0.2</version>
+    <version>2.0</version>
     <order>30</order>
     <depends>
         <application>Admin</application>
@@ -148,7 +148,7 @@
         </table>    
         <table>
             <name>tasks</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -228,6 +228,11 @@
                     <name>organizer</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>originator_tz</name>
+                    <type>text</type>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>priority</name>

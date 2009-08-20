@@ -57,6 +57,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract implements Tinebase_Reco
         'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true         ),
         'organizer'            => array('allowEmpty' => true,        ),
+        'originator_tz'        => array('allowEmpty' => true         ),
         'priority'             => array('allowEmpty' => true, 'default' => 1),
         'status_id'            => array('allowEmpty' => true         ),
         'summary'              => array('presence' => 'required'     ),

@@ -67,4 +67,25 @@ class Tasks_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tasks', '0.2');
     }
+
+    /**
+     * add originator_tz to tasks table
+     * 0.2 -> 2.0
+     * 
+     * @return void
+     */
+    public function update_2()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>originator_tz</name>
+                <type>text</type>
+                <length>255</length>
+            </field>'
+        );
+        $this->_backend->addCol('tasks', $declaration, 16);
+        
+        $this->setTableVersion('tasks', 2);
+        $this->setApplicationVersion('Tasks', '2.0');
+    }
 }

@@ -4,7 +4,7 @@
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -45,6 +45,7 @@ Tine.Tasks.TaskArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'geo' },
     { name: 'location' },
     { name: 'organizer' },
+    { name: 'originator_tz' },
     { name: 'priority' },
     { name: 'status_id' },
     { name: 'summary' },
