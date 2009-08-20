@@ -251,7 +251,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract implements Tinebase_
         $translate = Tinebase_Translation::getTranslation($this->_application, $locale);
         
         // get date strings
-        $timezone = ($this->originator_tz) ? $this->originator_tz : Tinebase_Core::get('userTimeZone');
+        $timezone = ($this->originator_tz) ? $this->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($this->dtstart, $timezone, $locale);
         $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($this->dtend, $timezone, $locale);
         
