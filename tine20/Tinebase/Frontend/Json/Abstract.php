@@ -82,7 +82,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel)
     {
-        $decodedFilter = Zend_Json::decode($_filter);
+        $decodedFilter = is_array($_filter) ? $_filter : Zend_Json::decode($_filter);
+        $decodedPagination = is_array($_paging) ? $_paging : Zend_Json::decode($_paging);
         
         if (is_array($decodedFilter)) {
             $filter = new $_filterModel(array());
@@ -95,7 +96,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $filter = new $_filterModel(array());
         }
 
-        $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($_paging));
+        $pagination = new Tinebase_Model_Pagination($decodedPagination);
         
         $records = $_controller->search($filter, $pagination);
         
