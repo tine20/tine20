@@ -126,7 +126,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             if (array_key_exists('accountId', $_data['user_id'])) {
             	// NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
                 $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'])->getId();
-            } else if (array_key_exists('bday', $_data['user_id'])) {
+            } else if (array_key_exists('id', $_data['user_id'])) {
                 $_data['user_id'] = $_data['user_id']['id'];
             }
         }
@@ -303,10 +303,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     //Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
                     $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids));
                     break;
-                case 'group':
+                //case 'group':
                 //    Tinebase_Group::getInstance()->getM
+                case self::USERTYPE_RESOURCE:
+                	$typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids));
+                    break;
                 default:
-                    throw new Exception("type $type not yet supported");
+                    throw new Exception("type $type not supported");
                     break;
             }
         }
