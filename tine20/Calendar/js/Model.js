@@ -318,3 +318,35 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
         status: 'NEEDS-ACTION'
     };
 };
+
+Tine.Calendar.Model.ResourceArray = [
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'email'},
+    {name: 'is_location'}
+];
+
+/**
+ * @namespace Tine.Calendar.Model
+ * @class Tine.Calendar.Model.Resouce
+ * @extends Tine.Tinebase.data.Record
+ * Resouce Record Definition
+ */
+Tine.Calendar.Model.Resouce = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.AttenderArray, {
+    appName: 'Calendar',
+    modelName: 'Resouce',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Resouce', 'Resources', n); gettext('Resources');
+    recordName: 'Resouce',
+    recordsName: 'Resouces',
+    containerProperty: null
+});
+
+/* lets try it with Ext.Direct
+Tine.Calendar.backend = new Tine.Calendar.Model.EventJsonBackend({
+    appName: 'Calendar',
+    modelName: 'Resouce',
+    recordClass: Tine.Calendar.Model.Resouce
+});
+*/
