@@ -2,7 +2,7 @@
 <application>
     <name>Courses</name>
     <!-- gettext('Courses') -->   
-    <version>0.3</version>
+    <version>2.0</version>
     <order>50</order>
     <status>disabled</status>
     <depends>

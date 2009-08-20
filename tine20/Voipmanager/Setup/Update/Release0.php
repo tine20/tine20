@@ -428,4 +428,13 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Voipmanager', '0.26');
     }
+    
+    /**
+     * update to 2.0
+     * @return void
+     */
+    public function update_26()
+    {
+        $this->setApplicationVersion('Voipmanager', '2.0');
+    }
 }

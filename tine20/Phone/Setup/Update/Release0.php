@@ -219,4 +219,13 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setTableVersion('phone_extensions', 2);
         $this->setApplicationVersion('Phone', '0.7');
     }
+    
+    /**
+     * update to 2.0
+     * @return void
+     */
+    public function update_7()
+    {
+        $this->setApplicationVersion('Phone', '2.0');
+    }
 }

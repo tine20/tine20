@@ -55,4 +55,13 @@ class Erp_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Erp', '0.2');
     }
+    
+    /**
+     * update to 2.0
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Erp', '2.0');
+    }
 }

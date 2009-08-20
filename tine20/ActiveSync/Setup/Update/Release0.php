@@ -461,4 +461,13 @@ class ActiveSync_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '0.11');
     }
+    
+    /**
+     * update to 2.0
+     * @return void
+     */
+    public function update_11()
+    {
+        $this->setApplicationVersion('ActiveSync', '2.0');
+    }
 }

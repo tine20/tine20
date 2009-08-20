@@ -186,6 +186,18 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
      */
     selectApps: function() {
         
+        var updateable = [];
+
+        this.store.each(function(record) {
+            if (record.get('install_status') == 'updateable') {
+                updateable.push(record);
+            }
+        }, this);
+        
+        console.log(updateable);
+        this.selectionModel.selectRecords(updateable);
+
+        /*
         var installable = [];
         var updateable = [];
         var firstInstall = true;
@@ -208,6 +220,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         } else {
             this.selectionModel.selectRecords(updateable);
         }
+        */
     },
     
     /**

@@ -74,4 +74,13 @@ class Courses_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setTableVersion('courses', '3');
         $this->setApplicationVersion('Courses', '0.3');
     }
+    
+    /**
+     * update to 2.0
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Courses', '2.0');
+    }
 }

@@ -369,4 +369,13 @@ class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '0.11');
     }
+    
+    /**
+     * update to 2.0
+     * @return void
+     */
+    public function update_11()
+    {
+        $this->setApplicationVersion('Addressbook', '2.0');
+    }
 }
