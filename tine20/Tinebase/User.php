@@ -209,6 +209,29 @@ class Tinebase_User
         }
     }
     
+    /**
+     * Delete the given config setting or all config settings if {@param $_key} is not specified
+     * 
+     * @param string | optional $_key
+     * @return void
+     */
+    public static function deleteBackendConfiguration($_key = null)
+    {
+        if (is_null($_key)) {
+            self::$_backendConfiguration = array();
+        } elseif (array_key_exists($_key, self::$_backendConfiguration)) {
+            unset(self::$_backendConfiguration[$_key]);
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' configuration option does not exist: ' . $_key);
+        }
+    }
+    
+    /**
+     * Write backend configuration setting {@see $_backendConfigurationSettings} and {@see $_backendType} to
+     * db config table.
+     * 
+     * @return void
+     */
     public static function saveBackendConfiguration()
     {
         Tinebase_Config::getInstance()->setConfigForApplication('Tinebase_User_BackendConfiguration', serialize(self::getBackendConfiguration()));

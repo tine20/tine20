@@ -65,10 +65,11 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+        Tinebase_User::setBackendType($this->_originalBackendType);
+        Tinebase_User::deleteBackendConfiguration();
+        Tinebase_User::setBackendConfiguration($this->_originalBackendConfiguration);
+        Tinebase_User::saveBackendConfiguration();
     }
-       
-    
 
     public function testSaveBackendConfiguration()
     {
@@ -101,6 +102,27 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($testValue, Tinebase_User::getBackendConfiguration($key));
         }
     }
+    
+    public function testDeleteBackendConfiguration()
+    {
+        Tinebase_User::setBackendType(Tinebase_User::LDAP);   
+     
+        $key = 'host';
+        Tinebase_User::setBackendConfiguration('configured-host', $key);
+
+        Tinebase_User::deleteBackendConfiguration($key);
+        $this->assertEquals('default-host', Tinebase_User::getBackendConfiguration($key, 'default-host'));
+        
+        $configOptionsCount = count(Tinebase_User::getBackendConfiguration());
+        Tinebase_User::deleteBackendConfiguration('non-existing-key');
+        $this->assertEquals($configOptionsCount, count(Tinebase_User::getBackendConfiguration()));
+        
+        $this->assertTrue($configOptionsCount > 0);
+        Tinebase_User::deleteBackendConfiguration();
+        $this->assertTrue(count(Tinebase_User::getBackendConfiguration()) == 0);
+    }
+    
+    
     
     public function testGetBackendConfigurationDefaults()
     {
