@@ -123,7 +123,7 @@ abstract class Tinebase_Group_Abstract
     }
     
     /**
-     * Get multiple grups
+     * Get multiple groups
      *
      * @param string|array $_ids Ids
      * @return Tinebase_Record_RecordSet
