@@ -12,6 +12,25 @@
  
 Ext.namespace('Tine.Tinebase.widgets.app');
 
+/**
+ * tine 2.0 app grid panel widget
+ * 
+ * @namespace   Tine.Tinebase.widgets.app
+ * @class       Tine.Tinebase.widgets.app.GridPanel
+ * @extends     Ext.Panel
+ * 
+ * <p>Application Grid Panel</p>
+ * <p></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new GridPanel
+ */
 Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Tine.Tinebase.Application} app
@@ -61,7 +80,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     defaultSortInfo: {},
     /**
-     * @cfg {Object } defaultPaging 
+     * @cfg {Object} defaultPaging 
      */
     defaultPaging: {
         start: 0,
@@ -84,26 +103,30 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     i18nAddActionText: null,
     /**
      * @cfg {String} i18nEditRecordAction 
-     * spechialised strings for edit action button
+     * specialised strings for edit action button
      */
     i18nEditActionText: null,
     /**
      * @cfg {Array} i18nDeleteRecordAction 
-     * spechialised strings for delete action button
+     * specialised strings for delete action button
      */
     i18nDeleteActionText: null,
     
     /**
-     * @property {Ext.Tollbar} actionToolbar
+     * @type Ext.Toolbar
+     * @property actionToolbar
      */
     actionToolbar: null,
+
     /**
-     * @property {Ext.Menu} contextMenu
+     * @type Ext.Menu
+     * @property contextMenu
      */
     contextMenu: null,
     
     /**
-     * @cfg {function} 
+     * @type function
+     * @property getViewRowClass 
      */
     getViewRowClass: null,
     
@@ -464,9 +487,10 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     
     /**
      * row click handler
+     * 
+     * TODO check if we need this in
      */
     onRowClick: function(grid, row, e) {
-        /* @todo check if we need this in IE
         // hack to get percentage editor working
         var cell = Ext.get(grid.getView().getCell(row,1));
         var dom = cell.child('div:last');
