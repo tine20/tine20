@@ -248,6 +248,33 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $this->assertEquals($testCol->name, $existingSchema->fields[2]->name);
     }
     
+    public function testDatatypeTextReturnsPlainText() 
+    {
+        $string ="
+                <field>
+                    <name>test</name>
+                    <type>text</type>
+                </field>";
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->_backend->addCol($this->_table->name, $field);
+        
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('text', $newColumn->type);
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+        $testValues = array(
+            'some text',
+            str_pad('test', 4001, 'x') 
+        );
+
+        foreach ($testValues as $index => $value) {
+            $db->insert($tableName, array('name' => $index, 'test' => $value));
+            $result = $db->fetchOne($db->select()->from($tableName, array('test'))->where($db->quoteIdentifier('name') . '=?', $index));
+            $this->assertEquals($value, $result);
+        }
+    }
+    
     public function testStringToFieldStatement_001() 
     {
         $string ="
@@ -261,6 +288,50 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $this->setExpectedException('Zend_Db_Statement_Exception'); //Column "id" already exists - expecting Exception'
         $this->_backend->addCol($this->_table->name, $field);
         
+    }
+    
+    public function testExecQueryAndInsertStatement()
+    {
+        $testValue = 'test_exec_insert_statement';
+        $recordsXml = "
+            <defaultRecords>
+               <record>
+                    <table>
+                        <name>{$this->_table->name}</name>
+                    </table>
+                    <field>
+                        <name>id</name>
+                        <value>1</value>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <value>{$testValue}</value>
+                    </field>
+                </record>
+            </defaultRecords>";
+        $records = simplexml_load_string($recordsXml);
+        $this->_backend->execInsertStatement($records->record[0]);
+        
+        $db = Tinebase_Core::getDb();
+        $statement = 'SELECT * FROM ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_table->name);
+        $result = $this->_backend->execQuery($statement);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($testValue, $result[0]['name']);
+    }
+    
+    public function testCheckTable()
+    {
+        $this->assertTrue($this->_backend->checkTable($this->_table));
+        
+        $string ="
+            <field>
+                <name>test</name>
+                <type>integer</type>
+            </field>";
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->_table->addField($field);
+        $this->assertFalse($this->_backend->checkTable($this->_table));
     }
     
     public function testStringToFieldStatement_002() 
@@ -469,5 +540,272 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $this->assertTrue($newColumn->equals($field));
     }
     
- 
+    public function testStringToFieldStatement_015() 
+    {
+        $string ="
+                <field>
+                    <name>private</name>
+                    <type>integer</type>
+                    <default>0</default>
+                    <length>4</length>
+                </field>";  
+        
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        $this->_backend->addCol($this->_table->name, $field);
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('4', $newColumn->length);
+        $this->assertEquals(0, $newColumn->default);
+        $this->assertTrue($newColumn->equals($field));
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+        $db->insert($tableName, array('name' => 'test'));
+        $result = $db->fetchOne($db->select()->from($tableName, 'private')->where($db->quoteIdentifier('name') . '=?', array('test')));
+        $this->assertEquals(0, $result);
+    }
+    
+    public function testStringToFieldStatement_019() 
+    {
+        $string ="
+               <field>
+                    <name>bigint</name>
+                    <type>integer</type>
+                    <length>24</length>
+                </field>";
+            
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+
+        $this->_backend->addCol($this->_table->name, $field);
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('integer', $newColumn->type);
+        $this->assertEquals('24', $newColumn->length);
+        $this->assertTrue($newColumn->equals($field));
+    }
+
+    public function testStringToFieldStatement_020() 
+    {
+        $string ="
+               <field>
+                    <name>price</name>
+                    <type>decimal</type>
+                    <length>6</length>
+                    <scale>2</scale>
+                </field>";
+            
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $this->_backend->addCol($this->_table->name, $field);
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('price', $newColumn->name);
+        $this->assertEquals('6', $newColumn->length);
+        $this->assertEquals('2', $newColumn->scale);
+        $this->assertEquals('decimal', $newColumn->type);
+        $this->assertTrue($newColumn->equals($field));
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+
+        $value = 9999.99;
+        $db->insert($tableName, array('name' => 'test1', 'price' => $value));
+        $result = $db->fetchCol($db->select()->from($tableName, 'price'));
+        $this->assertEquals($value, $result[0]);
+        
+        $value = 1.999;
+        $db->insert($tableName, array('name' => 'test2', 'price' => $value));
+        $result = $db->fetchCol($db->select()->from($tableName, 'price'));
+        $this->assertEquals(round($value), $result[1], 'Test if too many scale digits get rounded');
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception'); //too many digits (maxim 4 + 2 precision)
+        $value = 99999;
+        $db->insert($tableName, array('name' => 'test3', 'price' => $value));
+    }
+
+    public function testStringToFieldStatement_021() 
+    {
+        $string ="
+               <field>
+                    <name>geo_lattitude</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                </field>";
+            
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
+        
+        $this->_backend->addCol($this->_table->name, $field);
+        $newColumn = $this->_getLastField();
+        $this->assertEquals('geo_lattitude', $newColumn->name);
+        $this->assertNull($newColumn->length);
+        $this->assertNull($newColumn->scale);
+        $this->assertEquals('float', $newColumn->type);
+        $this->assertTrue($newColumn->equals($field));
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+
+        $testValues = array(1.2, -1.2, 999.999999);
+        foreach ($testValues as $index => $value) {
+            $db->insert($tableName, array('name' => 'test', 'geo_lattitude' => $value));
+            $result = $db->fetchCol($db->select()->from($tableName, 'geo_lattitude'));
+            $this->assertEquals($value, $result[$index], 'Testing value ' . $value);
+        }
+    }
+    
+    public function testStringToForeignKeyStatement_001() 
+    {
+     
+     $referencedTableName = 'phpunit_foreign';
+     $referencedTableXml = "
+            <table>
+                <name>$referencedTableName</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>integer</type>
+                        <autoincrement>true</autoincrement>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>128</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>";
+        $referencedTable = Setup_Backend_Schema_Table_Factory::factory('Xml', $referencedTableXml);
+        $this->_tableNames[] = $referencedTableName;
+        $this->_backend->createTable($referencedTable);
+
+        $fieldString ="
+            <field>
+                <name>foreign_id</name>
+                <type>integer</type>
+            </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+     
+        $string ="
+                <index>
+                    <field>
+                        <name>foreign_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>$referencedTableName</table>
+                        <field>id</field>
+                    </reference>
+                </index>";  
+        
+        $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        
+        $this->_backend->addForeignKey($this->_table->name, $foreignKey);
+        
+        $schema = $this->_backend->getExistingSchema($this->_table->name);
+        $this->assertEquals(2, count($schema->indices));
+        $index = $schema->indices[1];
+        $this->assertEquals('true', $index->foreign);
+        $this->assertEquals('false', $index->primary);
+//        $this->assertFalse(empty($index->referencetable));
+//        $this->assertFalse(empty($index->referencefield));
+        
+        $db = Tinebase_Core::getDb();
+        $db->insert(SQL_TABLE_PREFIX . $referencedTableName, array('name' => 'test'));
+        $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 1));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception'); //foreign key constraint violation
+        $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 999));
+    }
+    
+    public function testStringToIndexStatement_001() 
+    {
+        $string ="
+                <index>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>";
+
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+
+        $this->setExpectedException('Zend_Db_Statement_Exception'); //ORA-02260: there can only be one primary key - expecting Exception
+        $this->_backend->addIndex($this->_table->name, $index);
+    }
+    
+    public function testStringToIndexStatement_002() 
+    {
+        $string ="
+                <index>
+                    <primary>true</primary>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                </index>";
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception'); //field application_id does not exist
+        $this->_backend->addIndex($this->_table->name, $index);
+    }
+    
+    public function testStringToIndexStatement_003() 
+    {
+        $fieldString ="
+                <field>
+                    <name>group_id</name>
+                    <type>integer</type>
+                </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+        
+        $fieldString ="
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                </field>";
+          
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $fieldString);
+        $this->_backend->addCol($this->_table->name, $field);
+     
+     
+        $string ="
+                <index>
+                    <name>group_id-account_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>group_id</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index> ";
+        
+        $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
+
+        $this->_backend->addIndex($this->_table->name, $index);
+        
+        $db = Tinebase_Core::getDb();
+        $tableName = SQL_TABLE_PREFIX . $this->_table->name;
+        $db->insert($tableName, array('name' => 'test1', 'group_id' => 1, 'account_id' => 1));
+        $db->insert($tableName, array('name' => 'test2', 'group_id' => 1, 'account_id' => 2));
+        $db->insert($tableName, array('name' => 'test3', 'group_id' => 2, 'account_id' => 1));
+        
+        $this->setExpectedException('Zend_Db_Statement_Exception'); //unique constraint violation
+        $db->insert($tableName, array('name' => 'test4', 'group_id' => 1, 'account_id' => 1));
+    }
+    
 }

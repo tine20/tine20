@@ -359,6 +359,16 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     }
     
     /**
+     * Concrete implementation of 
+     * @see tine20/Setup/Backend/Setup_Backend_Interface#checkTable($_table)
+     */
+    public function checkTable(Setup_Backend_Schema_Table_Abstract $_table)
+    {
+        $dbTable = $this->getExistingSchema($_table->name);
+        return $dbTable->equals($_table);
+    }
+    
+    /**
      * create the right mysql-statement-snippet for columns/fields
      *
      * @param Setup_Backend_Schema_Field_Abstract field / column

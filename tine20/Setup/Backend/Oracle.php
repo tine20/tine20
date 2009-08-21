@@ -275,54 +275,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     }
 
     /**
-     * checkTable
-     * 
-     * @param   Setup_Backend_Schema_Table_Abstract $_table
-     * @throws  Setup_Exception
-     */    
-    public function checkTable(Setup_Backend_Schema_Table_Abstract $_table)
-    {
-        $string = $this->getCreateStatement($_table);
-        $dump = $this->execQuery('SHOW CREATE TABLE ' . SQL_TABLE_PREFIX . $_table->name);
-        $compareString = preg_replace('/ AUTO_INCREMENT=\d*/', '', $dump[0]['Create Table']);
-        
-        if ($compareString != $string) {
-            // auto shutup by cweiss: echo "XML<br/>" . $string;
-            // auto shutup by cweiss: echo "<hr color=red>MYSQL<br/>";
-            for ($i = 0 ; $i < (strlen($compareString)+1) ; $i++) {
-                if ($compareString[$i] == $string[$i]) {
-                    // auto shutup by cweiss: echo $compareString[$i];
-                } else {
-                    // auto shutup by cweiss: echo "<font color=red>" . $compareString[$i] . "</font>";
-                }
-            }
-            throw new Setup_Exception("<h1>Failure</h1>");
-        }
-        
-        /*
-        foreach ($existentTable->fields as $existingFieldKey => $existingField) {
-            
-            foreach ($_table->fields as $spalte) {
-                if ($spalte->name == $existingField->name) {
-                
-                    if (NULL != (array_diff($spalte->toArray(), $existingField->toArray()))) {
-                        
-                        print_r("Differences between database and newest xml declarations\n");
-                        // auto shutup by cweiss: echo $_table->name . " database: ";
-                       // var_dump($existingField);
-                        var_dump($existingField->toArray());
-                        // auto shutup by cweiss: echo "XML field: ";
-                       // var_dump($spalte);
-                        var_dump($spalte->toArray());
-                        
-                    }
-                }
-            }
-        }
-        */
-    }
-        
-    /**
      * add column/field to database table
      * 
      * @param string tableName

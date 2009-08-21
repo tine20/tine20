@@ -154,6 +154,13 @@ interface Setup_Backend_Interface
 
     public function getExistingSchema($_tableName);
 
+    /**
+     * Compare Setup_Backend_Schema_Table_Abstract table schema with the corresponding schema 
+     * read from db using {@see getExistingSchema()}
+     * 
+     * @param Setup_Backend_Schema_Table_Abstract $_table
+     * @return bool
+     */
     public function checkTable(Setup_Backend_Schema_Table_Abstract $_table);
  
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '');
