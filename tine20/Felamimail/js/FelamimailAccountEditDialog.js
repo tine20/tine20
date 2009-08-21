@@ -265,7 +265,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     editable      : false,
                     mode          : 'local',
                     forceSelection: true,
-                    value: '0',
+                    value: 'html',
                     xtype: 'combo',
                     store: [
                         ['html', this.app.i18n._('HTML')],

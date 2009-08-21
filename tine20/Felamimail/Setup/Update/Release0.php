@@ -131,6 +131,7 @@ class Felamimail_Setup_Update_Release0 extends Setup_Update_Abstract
         $field = '<field>
                     <name>display_format</name>
                     <type>enum</type>
+                    <default>html</default>
                     <value>html</value>
                     <value>plain</value>
                 </field>';
