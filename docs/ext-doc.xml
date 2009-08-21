@@ -50,7 +50,9 @@
         -->
 
     <sources>
+        <source src="../tine20/Tinebase/js/data/Record.js"/>
         <source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
+        
         <!-- <source src="../tine20/library/ExtJS/src" match="*.js"/> -->
         <!-- <source src="../tine20/Tinebase/js/tineInit.js"/> -->
         <!-- <source src="../tine20/Calendar/js" match="*.js"/> -->
@@ -63,9 +65,9 @@
         <source src="../tine20/Calendar/js/EventEditDialog.js"/> 
         <!-- <source src="../tine20/Calendar/js/EventSelectionModel.js"/> 
         <source src="../tine20/Calendar/js/EventUI.js"/> 
-        <source src="../tine20/Calendar/js/MainScreenCenterPanel.js"/> 
-        <source src="../tine20/Calendar/js/Model.js"/> 
-        <source src="../tine20/Calendar/js/MonthView.js"/> 
+        <source src="../tine20/Calendar/js/MainScreenCenterPanel.js"/> -->
+        <source src="../tine20/Calendar/js/Model.js"/>
+        <!-- <source src="../tine20/Calendar/js/MonthView.js"/> 
         <source src="../tine20/Calendar/js/PagingToolbar.js"/> 
         <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
