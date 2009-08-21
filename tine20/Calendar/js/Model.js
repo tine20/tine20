@@ -9,11 +9,6 @@
 
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
 
-/**
- * @namespace Tine.Calendar.Model
- * @type {Array}
- * Event record definition array
- */
 Tine.Calendar.Model.EventArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'dtend', type: 'date', dateFormat: Date.patterns.ISO8601Long },
@@ -55,14 +50,13 @@ Tine.Calendar.Model.EventArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'editGrant'   , type: 'bool'},
     {name: 'deleteGrant' , type: 'bool'},
     {name: 'editGrant'   , type: 'bool'}
-    
 ]);
 
 /**
- * Event record definition
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.Event
  * @extends Tine.Tinebase.data.Record
+ * Event record definition
  */
 Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.EventArray, {
     appName: 'Calendar',
@@ -77,18 +71,9 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model
     containerName: 'Calendar',
     containersName: 'Calendars',
     
-    
-    isRecurInstance: function() {
-        return this.id && this.id.match(/^fakeid/);
-    },
-    isRecurBase: function() {
-        return !!this.get('rrule') && !this.get('recurid');
-    },
-    isRecurException: function() {
-        return !!this.get('recurid') && !( this.idProperty && this.id.match(/^fakeid/));
-    },
     /**
      * returns displaycontainer with orignialcontainer as fallback
+     * 
      * @return {Array}
      */
     getDisplayContainer: function() {
@@ -106,14 +91,44 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model
         }, this);
         
         return displayContainer;
+    },
+    
+    /**
+     * is this event a recuring base event?
+     * 
+     * @return {Boolean}
+     */
+    isRecurBase: function() {
+        return !!this.get('rrule') && !this.get('recurid');
+    },
+    
+    /**
+     * is this event a recuring exception?
+     * 
+     * @return {Boolean}
+     */
+    isRecurException: function() {
+        return !!this.get('recurid') && !( this.idProperty && this.id.match(/^fakeid/));
+    },
+    
+    /**
+     * is this event an recuring event instance?
+     * 
+     * @return {Boolean}
+     */
+    isRecurInstance: function() {
+        return this.id && this.id.match(/^fakeid/);
     }
 });
 
 /**
- * @todo:
- *  - set attendee according to calendar selection
+ * @namespace Tine.Calendar.Model
+ * 
+ * get default data for a new event
+ * @todo: attendee according to calendar selection
  *  
- * @return {Object}
+ * @return {Object} default data
+ * @static
  */ 
 Tine.Calendar.Model.Event.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar');
@@ -146,8 +161,24 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     return data;
 };
 
+/**
+ * @namespace Tine.Calendar.Model
+ * @class Tine.Calendar.Model.EventJsonBackend
+ * @extends Tine.Tinebase.widgets.app.JsonBackend
+ * 
+ * JSON backend for events
+ */
 Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, {
     
+    /**
+     * Creates a recuring event exception
+     * 
+     * @param {Tine.Calendar.Model.Event} event
+     * @param {Boolean} deleteInstance
+     * @param {Boolean} deleteAllFollowing
+     * @param {Object} options
+     * @return {String} transaction id
+     */
     createRecurException: function(event, deleteInstance, deleteAllFollowing, options) {
         options = options || {};
         options.params = options.params || {};
@@ -164,6 +195,13 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.Json
         return this.doXHTTPRequest(options);
     },
     
+    /**
+     * delete a recuring event series
+     * 
+     * @param {Tine.Calendar.Model.Event} event
+     * @param {Object} options
+     * @return {String} transaction id
+     */
     deleteRecurSeries: function(event, options) {
         options = options || {};
         options.params = options.params || {};
@@ -175,6 +213,13 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.Json
         return this.doXHTTPRequest(options);
     },
     
+    /**
+     * updates a recuring event series
+     * 
+     * @param {Tine.Calendar.Model.Event} event
+     * @param {Object} options
+     * @return {String} transaction id
+     */
     updateRecurSeries: function(event, options) {
         options = options || {};
         options.params = options.params || {};
@@ -190,7 +235,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.Json
     }
 });
 
-/**
+/*
  * default event backend
  */
 if (Tine.Tinebase.widgets) {
@@ -207,6 +252,8 @@ if (Tine.Tinebase.widgets) {
     });
 }
 
+
+
 Tine.Calendar.Model.AttenderArray = [
     {name: 'id'},
     {name: 'cal_event_id'},
@@ -219,10 +266,10 @@ Tine.Calendar.Model.AttenderArray = [
 ];
 
 /**
- * Attender Record Definition
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.Attender
  * @extends Tine.Tinebase.data.Record
+ * Attender Record Definition
  */
 Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.AttenderArray, {
     appName: 'Calendar',
@@ -310,6 +357,14 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Mo
     }
 });
 
+/**
+ * @namespace Tine.Calendar.Model
+ * 
+ * get default data for a new attender
+ *  
+ * @return {Object} default data
+ * @static
+ */ 
 Tine.Calendar.Model.Attender.getDefaultData = function() {
     return {
         user_type: 'user',
