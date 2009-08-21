@@ -130,14 +130,12 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      */
     getViewRowClass: null,
     
-    /**
-     * @private
-     */
     layout: 'border',
     border: false,
     
     /**
      * extend standart initComponent chain
+     * 
      * @private
      */
     initComponent: function(){
@@ -282,19 +280,26 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initStore: function() {
-        this.store = new Ext.data.Store({
-            fields: this.recordClass,
-            proxy: this.recordProxy,
-            reader: this.recordProxy.getReader(),
-            remoteSort: true,
-            sortInfo: this.defaultSortInfo,
-            listeners: {
-                scope: this,
-                'update': this.onStoreUpdate,
-                'beforeload': this.onStoreBeforeload,
-                'load': this.onStoreLoad
-            }
-        });
+        if (this.recordProxy) {
+            this.store = new Ext.data.Store({
+                fields: this.recordClass,
+                proxy: this.recordProxy,
+                reader: this.recordProxy.getReader(),
+                remoteSort: true,
+                sortInfo: this.defaultSortInfo,
+                listeners: {
+                    scope: this,
+                    'update': this.onStoreUpdate,
+                    'beforeload': this.onStoreBeforeload,
+                    'load': this.onStoreLoad
+                }
+            });
+        } else {
+            this.store = new Tine.Tinebase.data.RecordStore({
+                autoLoad: true,
+                recordClass: this.recordClass
+            });
+        }
     },
     
     /**
