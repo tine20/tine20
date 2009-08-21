@@ -292,6 +292,28 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
     }
 
+    /**
+     * check if user has the right to manage accounts
+     * 
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        switch ($_action) {
+            case 'create':
+            case 'update':
+            case 'delete':
+                if (! Tinebase_Core::getUser()->hasRight('Felamimail', Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
+                    throw new Tinebase_Exception_AccessDenied("You don't have the right to manage accounts!");
+                }
+                break;
+            default;
+               break;
+        }
+    }
+    
     /******************************** public funcs ************************************/
     
     /**
