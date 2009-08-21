@@ -53,6 +53,8 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
     labelSeparator: ':',
     labelWidth: 150,
     
+    autoScroll: true,
+
     // fake a store to satisfy grid panel
     store: {load: Ext.emptyFn},
     

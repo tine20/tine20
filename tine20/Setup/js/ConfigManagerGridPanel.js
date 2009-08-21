@@ -39,6 +39,8 @@ Tine.Setup.ConfigManagerGridPanel = Ext.extend(Ext.FormPanel, {
         defaultType: 'textfield'
     },
     
+    autoScroll: true,
+    
     // fake a store to satisfy grid panel
     store: {load: Ext.emptyFn},
     
