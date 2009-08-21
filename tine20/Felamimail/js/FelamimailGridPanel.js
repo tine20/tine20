@@ -19,12 +19,12 @@ Ext.namespace('Tine.Felamimail');
  * @extends     Tine.Tinebase.widgets.app.GridPanel
  * 
  * <p>Message Grid Panel</p>
- * <p>
+ * <p><pre>
  * TODO         add flagged/'starred' filter
  * TODO         add show source code function
  * TODO         make doubleclick work again: show mail in new window (no edit dialog)
  * TODO         add pdf export
- * </p>
+ * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -38,9 +38,7 @@ Ext.namespace('Tine.Felamimail');
 Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
 	/**
 	 * record class
-	 * 
-	 * @type Tine.Felamimail.Model.Message
-	 * @property recordClass
+	 * @cfg {Tine.Felamimail.Model.Message} recordClass
 	 */
     recordClass: Tine.Felamimail.Model.Message,
     
@@ -201,7 +199,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             text: this.app.i18n._('Add Account'),
             handler: this.onAddAccount,
             iconCls: 'action_add',
-            scope: this
+            scope: this,
+            disabled: ! Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail')
         });
 
         this.actions = [

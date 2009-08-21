@@ -18,6 +18,13 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
+ * <pre>
+ * TODO         add unread count to intelligent folders?
+ * TODO         reload folder status (and number of unread messages) every x minutes 
+ *              -> via ping or ext.util.delayedtask ?
+ * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
+ * TODO         make inbox/drafts/templates configurable in account
+ * </pre>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -28,29 +35,25 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new Tine.Felamimail.TreePanel
  * 
- * TODO         add unread count to intelligent folders?
- * TODO         reload folder status (and number of unread messages) every x minutes 
- *              -> via ping or ext.util.delayedtask ?
- * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
- * TODO         make inbox/drafts/templates configurable in account
  */
 Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
 	
     /**
-     * @cfg {Tine.Felamimail.Application} app
+     * @property app
+     * @type Tine.Felamimail.Application
      */
     app: null,
+    
+    /**
+     * @property accountStore
+     * @type Ext.data.JsonStore
+     */
+    accountStore: null,
     
     /**
      * @cfg {String} containerName
      */
     containerName: 'Folder',
-    
-    /**
-     * account store
-     * @type Ext.data.JsonStore
-     */
-    accountStore: null,
     
     /**
      * TreePanel config
@@ -116,7 +119,6 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      * add account record to root node
      * 
      * @param {Tine.Felamimail.Model.Account} record
-     * @private
      */
     addAccount: function(record) {
         
@@ -182,6 +184,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     /**
      * init context menu
+     * 
      * @private
      */
     initContextMenus: function() {
@@ -273,6 +276,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             text: this.app.i18n._('Edit Account'),
             iconCls: 'FelamimailIconCls',
             scope: this,
+            disabled: ! Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail'),
             handler: function() {
                 var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
                 var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({

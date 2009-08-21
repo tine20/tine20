@@ -78,7 +78,7 @@ class Felamimail_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array(
-            Tinebase_Acl_Rights::MANAGE_ACCOUNTS
+            self::MANAGE_ACCOUNTS
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -95,7 +95,7 @@ class Felamimail_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('Felamimail');
         
         $rightDescriptions = array(
-            Tinebase_Acl_Rights::MANAGE_ACCOUNTS => array(
+            self::MANAGE_ACCOUNTS => array(
                 'text'          => $translate->_('manage email accounts'),
                 'description'   => $translate->_('Create and edit email accounts'),
             ),

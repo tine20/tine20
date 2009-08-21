@@ -36,6 +36,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected $_addedDefaultAccount = FALSE;
     
     /**
+     * do right checks - can be enabled/disabled by _setRightChecks
+     * 
+     * @var boolean
+     */
+    protected $_doRightChecks = TRUE;
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Felamimail_Controller_Account
@@ -301,6 +308,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkRight($_action)
     {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+        
         switch ($_action) {
             case 'create':
             case 'update':
@@ -335,7 +346,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $account->password = $_password;
         
         // update account
+        $this->_setRightChecks(FALSE);
         $this->update($account);
+        $this->_setRightChecks(TRUE);
         
         return TRUE;
     }
@@ -397,7 +410,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if (! $_account->id || $_account->id == Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
             $result = $_account;
         } else {
+            $this->_setRightChecks(FALSE);
             $result = $this->update($_account);
+            $this->_setRightChecks(TRUE);
         }
         
         return $result;
@@ -504,5 +519,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         );
         
         return $accountCredentials->getId();
+    }
+    
+    /**
+     * enable / disable right checks
+     * 
+     * @param boolean $_value
+     * @return void
+     */
+    private function _setRightChecks($_value)
+    {
+        $this->_doRightChecks = (bool) $_value;
     }
 }
