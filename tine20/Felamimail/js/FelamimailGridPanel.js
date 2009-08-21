@@ -17,23 +17,50 @@ Ext.namespace('Tine.Felamimail');
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.GridPanel
  * @extends     Tine.Tinebase.widgets.app.GridPanel
- * @param       {Object} config
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
- * @constructor
  * 
+ * <p>Message Grid Panel</p>
+ * <p>
  * TODO         add flagged/'starred' filter
  * TODO         add show source code function
  * TODO         make doubleclick work again: show mail in new window (no edit dialog)
  * TODO         add pdf export
+ * </p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new MessageEditDialog
  */
 Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
-    // model generics
+	/**
+	 * record class
+	 * 
+	 * @type Tine.Felamimail.Model.Message
+	 * @property recordClass
+	 */
     recordClass: Tine.Felamimail.Model.Message,
+    
+	/**
+	 * message detail panel
+	 * 
+	 * @type Tine.Felamimail.GridDetailsPanel
+	 * @property detailsPanel
+	 */
+    detailsPanel: null,
+    
+    /**
+     * @private model cfg
+     */
     evalGrants: false,
     filterSelectionDelete: true,
     
-    // grid specific
+    /**
+     * @private grid cfg
+     */
     defaultSortInfo: {field: 'received', direction: 'DESC'},
     gridConfig: {
         loadMask: true,
@@ -42,9 +69,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         enableDragDrop: true,
         ddGroup: 'mailToTreeDDGroup'
     },
-    
-    // other vars
-    detailsPanel: null,
     
     /**
      * Return CSS class to apply to rows depending upon flags
@@ -74,6 +98,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * init message grid
+     * @private
      */
     initComponent: function() {
         this.recordProxy = Tine.Felamimail.messageBackend;
@@ -321,8 +346,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * attachment column renderer
-     * @param {string} value
-     * @return {string}
+     * 
+     * @param {String} value
+     * @return {String}
+     * @private
      */
     attachmentRenderer: function(value) {
         var result = '';
@@ -337,8 +364,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * get flag icon
      * 
-     * @param {} flags
-     * @return {}
+     * @param {String} flags
+     * @return {String}
+     * @private
      * 
      * TODO  use spacer if first flag(s) is/are not set?
      */
@@ -371,10 +399,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * - mark mail as read
      * - check if it was unread -> update tree and remove \Seen flag
      * 
-     * @param {} selModel
-     * @param {} rowIndex
-     * @param {} r
-     * 
+     * @param {SelectionModel} selModel
+     * @param {Number} rowIndex
+     * @param {Tine.Felamimail.Model.Message} r
      */
     onRowSelection: function(selModel, rowIndex, record) {
         // toggle read/seen flag of mail (only if 1 selected row)
@@ -395,9 +422,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * row doubleclick handler
      * - overwrite default behaviour: do nothing
      * 
-     * @param {} grid
-     * @param {} row
-     * @param {} e
+     * @param {Tine.Felamimail.GridPanel} grid
+     * @param {Row} row
+     * @param {Event} e
      */
     onRowDblClick: function(grid, row, e) {
         return false;
@@ -406,8 +433,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * key down handler
      * 
-     * @private
-     * @param {} e
+     * @param {Event} e
      */
     onKeyDown: function(e) {
         if (e.ctrlKey) {
@@ -441,9 +467,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * - overwritten parent func
      * - action type edit: reply/replyAll/forward
      * 
-     * @param {} button
-     * @param {} event
-     * @private
+     * @param {Button} button
+     * @param {Event} event
      */
     onEditInNewWindow: function(button, event) {
         
@@ -558,8 +583,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * toggle flagged status of mail(s)
      * - Flagged/Seen
      * 
-     * @param {} button
-     * @param {} event
+     * @param {Button} button
+     * @param {Event} event
      */
     onToggleFlag: function(button, event) {
         
@@ -648,6 +673,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * called before store queries for data
      * - overwritten from parent to reset details panel currentId
+     * 
+     * @param  {Ext.data.Store} store
+     * @param  {Tine.Felamimail.Model.Message} record
+     * @param  {Operation} operation
+     * @return {Void}
      */
     onStoreBeforeload: function(store, record, operation) {
         Tine.Felamimail.GridPanel.superclass.onStoreBeforeload.call(this, store, record, operation);
@@ -658,7 +688,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * called after a new set of Records has been loaded
      * 
-     * @param  {Ext.data.Store} this.store
+     * @param  {Ext.data.Store} store
      * @param  {Array}          loaded records
      * @param  {Array}          load options
      * @return {Void}
@@ -681,8 +711,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * add new account button
      * 
-     * @param {} button
-     * @param {} event
+     * @param {Button} button
+     * @param {Event} event
      */
     onAddAccount: function(button, event) {
         var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
@@ -701,6 +731,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         });        
     },
     
+    /**
+     * get update folder status after delete
+     */
     onAfterDelete: function() {
         // get update folder status
         this.app.getMainScreen().getTreePanel().updateFolderStatus(false);

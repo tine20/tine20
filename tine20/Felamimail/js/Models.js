@@ -12,35 +12,30 @@
 Ext.ns('Tine.Felamimail', 'Tine.Felamimail.Model');
 
 /**
- * Message model fields
- */
-Tine.Felamimail.Model.MessageArray = Tine.Tinebase.Model.genericFields.concat([
-    { name: 'id' },
-    { name: 'subject' },
-    { name: 'from' },
-    { name: 'to' },
-    { name: 'cc' },
-    { name: 'bcc' },
-    { name: 'sent',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    { name: 'received', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    { name: 'flags' },
-    { name: 'size' },
-    { name: 'body' },
-    { name: 'headers' },
-    { name: 'content_type' },
-    { name: 'attachments' },
-    { name: 'original_id' },
-    { name: 'note' }
-]);
-
-/**
  * @namespace Tine.Felamimail.Model
  * @class Tine.Felamimail.Model.Message
  * @extends Tine.Tinebase.data.Record
  * 
  * Message Record Definition
  */ 
-Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create(Tine.Felamimail.Model.MessageArray, {
+Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
+      { name: 'id' },
+      { name: 'subject' },
+      { name: 'from' },
+      { name: 'to' },
+      { name: 'cc' },
+      { name: 'bcc' },
+      { name: 'sent',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
+      { name: 'received', type: 'date', dateFormat: Date.patterns.ISO8601Long },
+      { name: 'flags' },
+      { name: 'size' },
+      { name: 'body' },
+      { name: 'headers' },
+      { name: 'content_type' },
+      { name: 'attachments' },
+      { name: 'original_id' },
+      { name: 'note' }
+    ], {
     appName: 'Felamimail',
     modelName: 'Message',
     idProperty: 'id',
