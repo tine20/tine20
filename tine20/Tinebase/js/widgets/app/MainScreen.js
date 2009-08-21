@@ -169,7 +169,6 @@ Ext.extend(Tine.Tinebase.widgets.app.MainScreen, Ext.util.Observable, {
             menu.removeAll();
     
             var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
-            adminButton.setIconClass('TasksTreePanel');
             adminButton.setDisabled(true);
         //}
     }
