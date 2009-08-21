@@ -8,8 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        this isn't used yet because the group backends don't have search / filter functionality
  */
 
 /**
