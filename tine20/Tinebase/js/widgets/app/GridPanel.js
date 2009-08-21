@@ -488,9 +488,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     /**
      * row click handler
      * 
-     * TODO check if we need this in
      */
     onRowClick: function(grid, row, e) {
+        /* TODO check if we need this in IE
         // hack to get percentage editor working
         var cell = Ext.get(grid.getView().getCell(row,1));
         var dom = cell.child('div:last');
