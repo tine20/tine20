@@ -23,8 +23,11 @@ Tine.Tinebase.data.Record = function(data, id){
 };
 
 /**
- * @class Tine.Tinebase.data.Record
- * @extends {Ext.data.Record}
+ * @namespace Tine.Tinebase.data
+ * @class     Tine.Tinebase.data.Record
+ * @extends   Ext.data.Record
+ * 
+ * Baseclass of Tine 2.0 models
  */
 Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
     /**
@@ -82,6 +85,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         return this.titleProperty ? this.get(this.titleProperty) : '';
     },
     
+    /**
+     * converts data to String
+     * 
+     * @return {String}
+     */
     toString: function() {
         return Ext.encode(this.data);
     }
@@ -113,6 +121,7 @@ var TopicRecord = Tine.Tinebase.data.Record.create([
     containesrName: 'to do lists'
 });
 </code></pre>
+ * @static
  */
 Tine.Tinebase.data.Record.create = function(o, meta) {
     var f = Ext.extend(Tine.Tinebase.data.Record, {});
@@ -133,6 +142,8 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.getDefaultData = function() {
         return {};
     };
-
+    f.getFieldDefinitions = function() {
+        return p.fields.items;
+    };
     return f;
 };
