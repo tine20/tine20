@@ -303,8 +303,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     //Tinebase_Core::getLogger()->debug(print_r(array_unique($ids), true));
                     $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids));
                     break;
-                //case 'group':
-                //    Tinebase_Group::getInstance()->getM
+                case self::USERTYPE_GROUP:
+                    $typeMap[$type] = Tinebase_Group::getInstance()->getMultiple(array_unique($ids));
+                	break;
                 case self::USERTYPE_RESOURCE:
                 	$typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids));
                     break;
