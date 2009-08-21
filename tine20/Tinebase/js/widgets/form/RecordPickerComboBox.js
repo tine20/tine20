@@ -33,10 +33,10 @@ Tine.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, {
     blurOnSelect: false,
     
     /**
-     * @cfg {Tine.Tinebase.data.Record} model
+     * @cfg {Tine.Tinebase.data.Record} recordClass
      * model of record to be picked (required) 
      */
-    model: null,
+    recordClass: null,
     
     /**
      * @type Tine.Tinebase.data.Record selectedRecord
@@ -51,31 +51,16 @@ Tine.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, {
     forceSelection: true,
     
     initComponent: function() {
-        this.appName = this.model.getMeta('appName');
-        this.modelName = this.model.getMeta('modelName');
-        this.displayField = this.model.getMeta('titleProperty');
-        this.valueField = this.model.getMeta('idProperty');
+        //this.appName = this.model.getMeta('appName');
+        //this.modelName = this.model.getMeta('modelName');
+        this.displayField = this.recordClass.getMeta('titleProperty');
+        this.valueField = this.recordClass.getMeta('idProperty');
         
-        this.initStore();
+        this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({readOnly: true}, this, 'totalProperty,root,recordClass'));
         
         this.on('beforequery', this.onBeforeQuery, this);
         
         this.supr().initComponent.call(this);
-    },
-    
-    initStore: function() {
-        this.store = new Ext.data.DirectStore({
-            directFn: Tine[this.appName]['search' + this.modelName + 's'],
-            reader: new Ext.data.JsonReader({
-                root: this.root || 'results',
-                totalProperty: this.totalProperty || 'totalcount',
-                id: this.model.getMeta('idProperty')
-            },this.model),
-            listeners: {
-                scope: this,
-                beforeload: this.onBeforeLoad
-            }
-        });
     },
     
     /**
