@@ -172,7 +172,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }),
             resourceEditor: new Tine.widgets.form.RecordPickerComboBox({
                 blurOnSelect: true,
-                model: Tine.Calendar.Model.Resouce,
+                model: Tine.Calendar.Model.Resource,
                 getValue: function() {
                     return this.selectedRecord ? this.selectedRecord.data : null;
                 }

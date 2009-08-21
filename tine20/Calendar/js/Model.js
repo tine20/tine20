@@ -371,11 +371,11 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
 
 /**
  * @namespace Tine.Calendar.Model
- * @class Tine.Calendar.Model.Resouce
+ * @class Tine.Calendar.Model.Resource
  * @extends Tine.Tinebase.data.Record
  * Resouce Record Definition
  */
-Tine.Calendar.Model.Resouce = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'name'},
     {name: 'email'},
