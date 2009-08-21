@@ -565,7 +565,7 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * overwrite this function to check rights
      * 
-     * @param $_action String {get|create|update|delete}
+     * @param string $_action {get|create|update|delete}
      * @return void
      * @throws Tinebase_Exception_AccessDenied
      */

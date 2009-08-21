@@ -76,7 +76,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     /**
      * check if user has the right to manage resources
      * 
-     * @param $_action String {get|create|update|delete}
+     * @param string $_action {get|create|update|delete}
      * @return void
      * @throws Tinebase_Exception_AccessDenied
      */
