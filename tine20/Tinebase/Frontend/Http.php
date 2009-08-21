@@ -179,6 +179,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             //'Tinebase/js/data/schemaProc/sqlGenerator.js',
             //'Tinebase/js/data/schemaProc/xmlReader.js',
             'Tinebase/js/data/Record.js',
+            'Tinebase/js/data/RecordStore.js',
             'Tinebase/js/data/AbstractBackend.js',
             //'Tinebase/js/data/MemoryBackend.js',
             'Tinebase/js/ExceptionDialog.js',
