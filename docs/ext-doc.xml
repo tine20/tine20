@@ -50,12 +50,13 @@
         -->
 
     <sources>
+        <!-- <source src="../tine20/library/ExtJS/src" match="*.js"/> -->
+        <!-- <source src="../tine20/Tinebase/js/tineInit.js"/> -->
         <source src="../tine20/Tinebase/js/data/Record.js"/>
+        <source src="../tine20/Tinebase/js/data/RecordStore.js"/>
         <source src="../tine20/Tinebase/js/widgets/app/GridPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
         
-        <!-- <source src="../tine20/library/ExtJS/src" match="*.js"/> -->
-        <!-- <source src="../tine20/Tinebase/js/tineInit.js"/> -->
         <!-- <source src="../tine20/Calendar/js" match="*.js"/> -->
         <source src="../tine20/Calendar/js/AttendeeGridPanel.js"/>
         <source src="../tine20/Calendar/js/Calendar.js"/>
