@@ -169,7 +169,18 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     {
         return $this->_sql->getGroups($_filter, $_sort, $_dir, $_start, $_limit);        
     }
-
+    
+    /**
+     * Get multiple groups
+     *
+     * @param  string|array $_ids Ids
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getMultiple($_ids) 
+    {
+        return $this->_sql->getMultiple($_ids);
+    }
+    
     /**
      * replace all current groupmembers with the new groupmembers list
      *

@@ -354,6 +354,29 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
     
     /**
+     * Get multiple grups
+     *
+     * @param string|array $_ids Ids
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getMultiple($_ids)
+    {
+    	$result = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
+    	
+    	if (! empty($_ids)) {
+	        $select = $this->groupsTable->select();
+	        $select->where($this->_db->quoteIdentifier('id') . ' IN (?)', array_unique((array) $_ids));
+	        
+	        $rows = $this->groupsTable->fetchAll($select);
+	        foreach ($rows as $row) {
+	        	$result->addRecord(new Tinebase_Model_Group($row->toArray()));
+	        }
+    	}
+    	
+    	return $result;
+    }
+    
+    /**
      * create initial groups
      * 
      * Method is called during Setup Initialization

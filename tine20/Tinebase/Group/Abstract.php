@@ -123,6 +123,14 @@ abstract class Tinebase_Group_Abstract
     }
     
     /**
+     * Get multiple grups
+     *
+     * @param string|array $_ids Ids
+     * @return Tinebase_Record_RecordSet
+     */
+    abstract public function getMultiple($_ids);
+    
+    /**
      * get list of groups
      *
      * @param string $_filter
