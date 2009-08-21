@@ -9,7 +9,13 @@
 
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
 
-Tine.Calendar.Model.EventArray = Tine.Tinebase.Model.genericFields.concat([
+/**
+ * @namespace Tine.Calendar.Model
+ * @class Tine.Calendar.Model.Event
+ * @extends Tine.Tinebase.data.Record
+ * Event record definition
+ */
+Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'dtend', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'transp' },
@@ -50,15 +56,7 @@ Tine.Calendar.Model.EventArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'editGrant'   , type: 'bool'},
     {name: 'deleteGrant' , type: 'bool'},
     {name: 'editGrant'   , type: 'bool'}
-]);
-
-/**
- * @namespace Tine.Calendar.Model
- * @class Tine.Calendar.Model.Event
- * @extends Tine.Tinebase.data.Record
- * Event record definition
- */
-Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.EventArray, {
+]), {
     appName: 'Calendar',
     modelName: 'Event',
     idProperty: 'id',
@@ -120,6 +118,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Calendar.Model
         return this.id && this.id.match(/^fakeid/);
     }
 });
+
 
 /**
  * @namespace Tine.Calendar.Model
@@ -252,9 +251,13 @@ if (Tine.Tinebase.widgets) {
     });
 }
 
-
-
-Tine.Calendar.Model.AttenderArray = [
+/**
+ * @namespace Tine.Calendar.Model
+ * @class Tine.Calendar.Model.Attender
+ * @extends Tine.Tinebase.data.Record
+ * Attender Record Definition
+ */
+Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'cal_event_id'},
     {name: 'user_id'},
@@ -263,15 +266,7 @@ Tine.Calendar.Model.AttenderArray = [
     {name: 'quantity'},
     {name: 'status'},
     {name: 'displaycontainer_id'}
-];
-
-/**
- * @namespace Tine.Calendar.Model
- * @class Tine.Calendar.Model.Attender
- * @extends Tine.Tinebase.data.Record
- * Attender Record Definition
- */
-Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.AttenderArray, {
+], {
     appName: 'Calendar',
     modelName: 'Attender',
     idProperty: 'id',
@@ -374,20 +369,18 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
     };
 };
 
-Tine.Calendar.Model.ResourceArray = [
-    {name: 'id'},
-    {name: 'name'},
-    {name: 'email'},
-    {name: 'is_location'}
-];
-
 /**
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.Resouce
  * @extends Tine.Tinebase.data.Record
  * Resouce Record Definition
  */
-Tine.Calendar.Model.Resouce = Tine.Tinebase.data.Record.create(Tine.Calendar.Model.ResourceArray, {
+Tine.Calendar.Model.Resouce = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'email'},
+    {name: 'is_location'}
+]), {
     appName: 'Calendar',
     modelName: 'Resource',
     idProperty: 'id',
