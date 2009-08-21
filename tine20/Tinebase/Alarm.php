@@ -218,9 +218,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             //.  print_r($alarms->toArray(), true)
         );
         
-        $currentAlarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($_model, $_record->id);
+        $currentAlarms = $this->getAlarmsOfRecord($_model, $_record->id);
         $diff = $currentAlarms->getMigration($alarms->getArrayOfIds());
-        Tinebase_Alarm::getInstance()->delete($diff['toDeleteIds']);
+        $this->_backend->delete($diff['toDeleteIds']);
         
         // create / update alarms
         foreach ($alarms as $alarm) {
@@ -230,7 +230,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 if ($_record->has($alarmField) && $alarm->minutes_before) {
                     $alarm->setTime($_record->{$alarmField});
                 }
-                $alarm = Tinebase_Alarm::getInstance()->update($alarm);
+                $alarm = $this->_backend->update($alarm);
                 
             } else {
                 $alarm->record_id = $_record->getId();
@@ -240,7 +240,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 if ($_record->has($alarmField) && ! $alarm->alarm_time) {
                     $alarm->setTime($_record->{$alarmField});
                 }
-                $alarm = Tinebase_Alarm::getInstance()->create($alarm);
+                $alarm = $this->_backend->create($alarm);
             }
         }
         
