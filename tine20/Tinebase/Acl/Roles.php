@@ -96,6 +96,8 @@ class Tinebase_Acl_Roles
      * @param   int $_right the right to check for
      * @return  bool
      * @throws  Tinebase_Exception_AccessDenied
+     * 
+     * @todo does the admin right include all other rights?
      */
     public function hasRight($_application, $_accountId, $_right) 
     {        
