@@ -55,14 +55,27 @@ Tine.Tinebase.Model.Timezone = Ext.data.Record.create([
 ]);
 
 /**
- * Model of a user group account
+ * @namespace Tine.Tinebase.Model
+ * @class     Tine.Tinebase.Model.Group
+ * @extends   Tine.Tinebase.data.Record
+ * 
+ * Model of a user group
  */
-Tine.Tinebase.Model.Group = Ext.data.Record.create([
+Tine.Tinebase.Model.Group = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'}
     //{name: 'groupMembers'}
-]);
+], {
+    appName: 'Tinebase',
+    modelName: 'Group',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Group', 'Groups', n); gettext('Groups');
+    recordName: 'Group',
+    recordsName: 'Groups',
+    containerProperty: null
+});
 
 /**
  * Model of a role
