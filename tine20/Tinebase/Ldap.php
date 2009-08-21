@@ -71,23 +71,6 @@ class Tinebase_Ldap extends Zend_Ldap
     }
     
     /**
-     * deletes an entry from ldap
-     *
-     * @param  string $_dn
-     * @return void
-     */
-    public function delete($_dn)
-    {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        if (! @ldap_delete($this->_resource, $_dn)) {
-            throw new Exception(ldap_error($this->_resource));
-        }
-    }
-    
-    /**
      * Removes one or more attributes from the specified dn
      *
      * @param  string $_dn
@@ -285,41 +268,6 @@ class Tinebase_Ldap extends Zend_Ldap
         
         self::convertEmpty($_data, NULL);
         if (! @ldap_mod_add($this->_resource, $_dn, $_data)) {
-            throw new Exception(ldap_error($this->_resource));
-        }
-    }
-    
-    /**
-     * Modify an LDAP entry
-     *
-     * @param  string $_dn
-     * @param  array $_data
-     * @return void
-     */
-    public function update($_dn, array $_data)
-    {
-        if(!is_resource($this->_resource)) {
-            throw new Exception('Not connected to ldap server.');
-        }
-        
-        $dnParts = explode(',', $_dn);
-        $rdn = $dnParts[0];
-        list ($rdnAttribute, $rdnValue) = explode('=', $rdn);
-        
-        // check if we need to rename entry
-        if (array_key_exists($rdnAttribute, $_data) && $_data[$rdnAttribute] != $rdnValue) {
-            $newRdn = $rdnAttribute . "=" . $_data[$rdnAttribute];
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  About to rename dn '{$_dn}' to new rdn '{$newRdn}'");
-            if (! @ldap_rename($this->_resource, $_dn, $newRdn, NULL, true)) {
-                throw new Exception(ldap_error($this->_resource));
-            }
-            
-            $dnParts[0] = $newRdn;
-            $_dn = implode(',', $dnParts);
-        }
-        
-        self::convertEmpty($_data);
-        if (! @ldap_modify($this->_resource, $_dn, $_data)) {
             throw new Exception(ldap_error($this->_resource));
         }
     }
