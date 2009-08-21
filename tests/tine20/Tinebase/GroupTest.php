@@ -274,6 +274,20 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         Tinebase_Model_Group::convertGroupIdToInt ( $this->objects['noIdGroup'] );
   
     }
+    
+    public function testGetDefaultGroup()
+    {
+        $group = Tinebase_Group::getInstance()->getDefaultGroup();
+        $expectedGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
+        $this->assertEquals($expectedGroupName, $group->name);
+    }
+    
+    public function testGetDefaultAdminGroup()
+    {
+        $group = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $expectedGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY);
+        $this->assertEquals($expectedGroupName, $group->name);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_GroupTest::main') {

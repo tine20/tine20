@@ -42,7 +42,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         parent::_createInitialRights($_application);
 
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
-        $adminGroup = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value);
+        $adminGroup = $groupsBackend->getDefaultAdminGroup();
         
         // give anyone read rights to the internal addressbook
         // give Adminstrators group read/edit/admin rights to the internal addressbook

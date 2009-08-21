@@ -25,11 +25,18 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
-        $this->_setDefaultGroups($_options);
-        
         if (isset($_options['authenticationData'])) {
             Setup_Controller::getInstance()->saveAuthentication($_options['authenticationData']);
+            $accountsBackendType = $_options['authenticationData']['accounts']['backend'];
+            $accountsBackendConfiguration = $_options['authenticationData']['accounts'][$accountsBackendType];
+        } else {
+            $accountsBackendType = Tinebase_User::getConfiguredBackend();
+            $accountsBackendConfiguration = Tinebase_User::getBackendConfigurationDefaults($accountsBackendType);
         }
+
+        Tinebase_User::setBackendType($accountsBackendType);
+        Tinebase_User::setBackendConfiguration($accountsBackendConfiguration);
+        Tinebase_User::saveBackendConfiguration();
         
 		Tinebase_Group::getInstance()->importGroups(); //import groups(ldap)/create initial groups(sql)
 		
@@ -63,36 +70,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     }
     
     /**
-     * set default group names in config
-     *
-     * @param array | optional $_options [may contain default 'user_group_name' and 'admin_group_name'
-     */
-    protected function _setDefaultGroups($_options = null)
-    {
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial config settings ...');
-
-        $userGroup  = isset($_options['user_group_name']) ? $_options['user_group_name'] : 'Users';
-        $adminGroup = isset($_options['admin_group_name']) ? $_options['admin_group_name'] : 'Administrators'; 
-
-        $configSettings = array(
-            Tinebase_Config::DEFAULT_USER_GROUP     => $userGroup,              
-            Tinebase_Config::DEFAULT_ADMIN_GROUP    => $adminGroup,
-        );
-        
-        $configBackend = Tinebase_Config::getInstance();
-        $tinebaseAppId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-        
-        foreach ($configSettings as $name => $value) {
-            $config = new Tinebase_Model_Config(array(
-                "application_id"    => $tinebaseAppId,
-                "name"              => $name,
-                "value"             => $value,              
-            ));            
-            $configBackend->setConfig($config);
-        }
-    }
-    
-    /**
      * @todo make hard coded role names ('user role' and 'admin role') configurable
      * 
      * @return void
@@ -101,8 +78,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     {
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
         
-        $adminGroup = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value);
-        $userGroup  = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value);
+        $adminGroup = $groupsBackend->getDefaultAdminGroup();
+        $userGroup  = $groupsBackend->getDefaultGroup();
         
         // add roles and add the groups to the roles
         $adminRole = new Tinebase_Model_Role(array(

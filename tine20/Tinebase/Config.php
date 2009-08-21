@@ -20,21 +20,6 @@
  */
 class Tinebase_Config
 {
-    /**************************** application config *****************/
-    
-    /**
-     * default user group const
-     *
-     */
-    const DEFAULT_USER_GROUP = 'Default User Group';
-    
-    /**
-     * default admin group const
-     *
-     */
-    const DEFAULT_ADMIN_GROUP = 'Default Admin Group';
-    
-    /**************************** protected vars *********************/
     
     /**
      * the table object for the SQL_TABLE_PREFIX . config table

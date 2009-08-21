@@ -38,12 +38,9 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
      */
     public function __construct()
     {
-            $ldapOptions = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
+            $ldapOptions = Tinebase_User::getBackendConfiguration();
             $machineOptions = Tinebase_Core::getConfig()->samba->toArray();
             $options = array_merge($ldapOptions, $machineOptions);
-
-            //$options = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
-            //$machineOptions = Tinebase_Core::getConfig()->samba->toArray();
             
             $options['userDn']    = $machineOptions['ldap']['machineDn'];
             $options['minUserId'] = $machineOptions['minMachineId'];

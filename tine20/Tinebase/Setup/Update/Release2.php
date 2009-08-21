@@ -91,4 +91,46 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.2');
     }
+    
+    /**
+     * update to 2.3
+     * - move accounts storage configuration from config.inc.php to config db table
+     * - changed the way the configuration for default user group name and default admin group name is stored
+     *  
+     */    
+    public function update_2()
+    {
+        $config = Setup_Controller::getInstance()->getConfigData();
+        if (!empty($config['accounts'])) {
+            $backendType = ucfirst($config['accounts']['backend']);
+            Tinebase_User::setBackendType($backendType);
+            
+            //copy existing config.inc.php settings to config table
+            if (!empty($config['accounts'][$backendType])) {
+                Tinebase_User::setBackendConfiguration($config['accounts'][$backendType]);
+            }            
+            
+            //add default values for missing config settings
+            $newAccountsConfig = Tinebase_User::getBackendConfigurationDefaults($backendType);
+            Tinebase_User::setBackendConfiguration($newAccountsConfig);
+            
+            //delete old config settings from config.inc.php
+            unset($config['accounts']);
+            Setup_Controller::getInstance()->saveConfigData($config);
+        }
+        
+        $defaultUserGroupName = Tinebase_Config::getInstance()->getConfig('Default User Group', null, 'Users');
+        $defaultAdminGroupName = Tinebase_Config::getInstance()->getConfig('Default Admin Group', null, 'Administrators');
+        Tinebase_User::setBackendConfiguration($defaultUserGroupName->value, Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
+        Tinebase_User::setBackendConfiguration($defaultAdminGroupName->value, Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY);
+        
+        
+        //write changes to config table
+        Tinebase_User::saveBackendConfiguration();
+        
+        Tinebase_Config::getInstance()->deleteConfig($defaultUserGroupName);
+        Tinebase_Config::getInstance()->deleteConfig($defaultAdminGroupName);
+        
+        $this->setApplicationVersion('Tinebase', '2.3');
+    }
 }

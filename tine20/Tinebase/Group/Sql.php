@@ -363,14 +363,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         // add the admin group
         $adminGroup = new Tinebase_Model_Group(array(
-            'name'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value,
+            'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY),
             'description'   => 'Group of administrative accounts'
         ));
         $adminGroup = $this->addGroup($adminGroup);
 
         // add the user group
         $userGroup = new Tinebase_Model_Group(array(
-            'name'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value,
+            'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY),
             'description'   => 'Group of user accounts'
         ));
         $userGroup = $this->addGroup($userGroup);

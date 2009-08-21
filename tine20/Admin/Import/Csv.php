@@ -79,9 +79,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 $groupId = $this->_options['group_id'];
             } else {
                 // add default user group
-                $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
-                    Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value
-                );
+                $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
                 $groupId = $defaultUserGroup->getId();
             }
             $result = array(

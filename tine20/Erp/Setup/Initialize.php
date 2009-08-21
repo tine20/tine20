@@ -26,8 +26,8 @@ class Erp_Setup_Initialize extends Setup_Initialize
         parent::_createInitialRights($_application);
 
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
-        $adminGroup = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value);
-        $userGroup  = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value);
+        $adminGroup = $groupsBackend->getDefaultAdminGroup();
+        $userGroup  = $groupsBackend->getDefaultGroup();
         
         try {
             $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);

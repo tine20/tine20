@@ -106,19 +106,20 @@ abstract class Tinebase_Group_Abstract
      * get default group
      *
      * @return Tinebase_Model_Group
-     * 
-     * @todo    add to unit tests
      */
     public function getDefaultGroup()
     {
-        // get default group name from config
-        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-        $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication($tinebase);
-        
-        //$result = $this->getGroupByName($defaultGroupName);
-        $result = $this->getGroupByName($tinebaseConfig[Tinebase_Config::DEFAULT_USER_GROUP]);
-        
-        return $result;
+        return $this->getGroupByName(Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY));
+    }
+    
+    /**
+     * get default admin group
+     *
+     * @return Tinebase_Model_Group
+     */
+    public function getDefaultAdminGroup()
+    {
+        return $this->getGroupByName(Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY));
     }
     
     /**

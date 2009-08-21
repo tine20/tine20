@@ -617,16 +617,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $_password     = empty($_options['admin_login_password']) ? 'lars' : $_options['admin_login_password'];
         $_firstname    = empty($_options['admin_first_name']) ? 'Tine 2.0' : $_options['admin_first_name'];
         $_lastname     = empty($_options['admin_last_name']) ? 'Admin Account' : $_options['admin_last_name'];
-        
-        if (Tinebase_Core::getAuthType() !== Tinebase_Auth_Factory::SQL) {
-            Tinebase_Core::getLogger()->info("Skip creation of initial admin account because the authtype is not " . Tinebase_Auth_Factory::SQL);
-            return;
-        }
 
         // get admin & user groups
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
-        $adminGroup = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value);
-        $userGroup  = $groupsBackend->getGroupByName(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value);
+        $adminGroup = $groupsBackend->getDefaultAdminGroup();
+        $userGroup  = $groupsBackend->getDefaultGroup();
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_loginName . ')');
 

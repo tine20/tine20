@@ -49,13 +49,9 @@ class Tinebase_Group
      */
     public static function getInstance() 
     {
+        $backendType = Tinebase_User::getConfiguredBackend();
         if (self::$_instance === NULL) {
-            if(isset(Tinebase_Core::getConfig()->accounts)) {
-                $backendType = Tinebase_Core::getConfig()->accounts->get('backend', self::SQL);
-                $backendType = ucfirst($backendType);
-            } else {
-                $backendType = self::SQL;
-            }
+            $backendType = Tinebase_User::getConfiguredBackend();
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' groups backend: ' . $backendType);
 
@@ -76,10 +72,7 @@ class Tinebase_Group
     {
         switch($_backendType) {
             case self::LDAP:
-                $options                       = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
-                $options['groupUUIDAttribute'] = Tinebase_Config::getInstance()->getConfig('groupUUIDAttribute', null, 'entryUUID')->value;
-                $options['userUUIDAttribute']  = Tinebase_Config::getInstance()->getConfig('userUUIDAttribute', null, 'entryUUID')->value;
-                
+                $options = Tinebase_User::getBackendConfiguration();
                 $result = new Tinebase_Group_Ldap($options);
                 break;
                 

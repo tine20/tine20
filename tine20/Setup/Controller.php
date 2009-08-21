@@ -602,8 +602,8 @@ class Setup_Controller
     protected function _updateAuthentication($_authenticationData)
     {
          $authenticationProviderData = $_authenticationData['authentication'];
-         $accountsStorageData        = $_authenticationData['accounts'];
-         
+         unset($_authenticationData['accounts']);
+
          switch (strtolower($authenticationProviderData['backend'])) {
              case strtolower(Tinebase_Auth_Factory::SQL):
                  $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
@@ -613,28 +613,14 @@ class Setup_Controller
                  break;
         }
         
-        switch (strtolower($accountsStorageData['backend'])) {
-             case strtolower(Tinebase_Auth_Factory::LDAP):
-                $ldapOptions = $accountsStorageData[strtolower(Tinebase_Auth_Factory::LDAP)];
-                if (!empty($ldapOptions['groupUUIDAttribute'])) {
-                    Tinebase_Config::getInstance()->setConfigForApplication('groupUUIDAttribute', $ldapOptions['groupUUIDAttribute']);
-                    unset($ldapOptions['groupUUIDAttribute']);
-                }
-                
-                if (!empty($ldapOptions['userUUIDAttribute'])) {
-                    Tinebase_Config::getInstance()->setConfigForApplication('userUUIDAttribute', $ldapOptions['userUUIDAttribute']);
-                    $ldapOptions['userUUIDAttribute'];
-                }
-                break;
-        }
+        $authenticationData = array(
+            'authentication' => array(
+                'backend' => $authenticationProviderData['backend'],
+                $authenticationProviderData['backend'] => $authenticationProviderData[$authenticationProviderData['backend']]
+            )
+        );
 
-//        if ($_authenticationData['authentication']['backend'] === Tinebase_Auth_Factory::LDAP) {
-//            unset($_authenticationData['authentication'][Tinebase_Auth_Factory::SQL]);
-//        } else {
-//            unset($_authenticationData['authentication'][Tinebase_Auth_Factory::LDAP]);
-//        }
-        
-        $this->saveConfigData($_authenticationData);
+        $this->saveConfigData($authenticationData);
     }
     
     protected function _getAuthProviderData()
@@ -661,33 +647,9 @@ class Setup_Controller
     
     protected function _getAccountsStorageData()
     {
-        $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
-        $ldapKey = strtolower(Tinebase_Auth_Factory::LDAP);
-        $result = Tinebase_Core::getConfig()->accounts;
-        if (isset($result)) {
-            $result = $result->toArray();
-        } else {
-            $result = array();
-            $result['backend'] = strtolower($sqlKey);
-            
-            $result[Tinebase_Auth_Factory::SQL] = array();
-            
-            $result[$ldapKey] = array();
-            $result[$ldapKey]['bindRequiresDn'] = true;
-            $result[$ldapKey]['pwEncType'] = 'CRYPT';
-            $result[$ldapKey]['minUserId'] = 10000;
-            $result[$ldapKey]['maxUserId'] = 29999;
-            $result[$ldapKey]['minGroupId'] = 11000;
-            $result[$ldapKey]['maxGroupId'] = 11099;
-            $result[$ldapKey]['groupUUIDAttribute'] = 'entryUUID';
-            $result[$ldapKey]['userUUIDAttribute'] = 'entryUUID';
-            $result[$ldapKey]['userGroupName'] = 'Users';
-            $result[$ldapKey]['adminGroupName'] = 'Administrators';
-            
-            
-            $result[$ldapKey]['accountCanonicalForm'] = 2;
-        }
-        
+        $result = Tinebase_User::getBackendConfigurationWithDefaults();
+        $result['backend'] = Tinebase_User::getConfiguredBackend();
+
         return $result;
     }
 

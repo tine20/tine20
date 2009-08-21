@@ -365,10 +365,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'userApplications' => Tinebase_Core::getUser()->getApplications()->toArray(),
                 'NoteTypes'        => $this->getNoteTypes(),
                 'stateInfo'        => Tinebase_State::getInstance()->loadStateInfo(),
-                'changepw'         => (isset(Tinebase_Core::getConfig()->accounts)
-                                        && isset(Tinebase_Core::getConfig()->accounts->changepw))
-                                            ? Tinebase_Core::getConfig()->accounts->changepw
-                                            : true
+                'changepw'         => Tinebase_User::getBackendConfiguration('changepw', true)
             );
         }
         

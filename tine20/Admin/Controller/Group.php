@@ -149,13 +149,13 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         
         // update default user group if name has changed
         $oldGroup = Tinebase_Group::getInstance()->getGroupById($_group->getId());
-        $defaultGroupConfig = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP);
-        if ($oldGroup->name == $defaultGroupConfig->value && $oldGroup->name != $_group->name) {
+        $defaultGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
+        if ($oldGroup->name == $defaultGroupName && $oldGroup->name != $_group->name) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Updated default group name: ' . $oldGroup->name . ' -> ' . $_group->name
             );
-            $defaultGroupConfig->value = $_group->name;
-            Tinebase_Config::getInstance()->setConfig($defaultGroupConfig);
+            Tinebase_User::setBackendConfiguration($_group->name, Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
+            Tinebase_User::saveBackendConfiguration();
         }
         
         $group = Tinebase_Group::getInstance()->updateGroup($_group);
@@ -206,9 +206,8 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $this->checkRight('MANAGE_ACCOUNTS');
         
         // check default user group / can't delete this group
-        $defaultUserGroup = Tinebase_Group::getInstance()->getGroupByName(
-            Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value
-        );
+        $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        
         if (in_array($defaultUserGroup->getId(), $_groupIds)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Can\'t delete default group: ' . $defaultUserGroup->name

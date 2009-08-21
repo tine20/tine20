@@ -173,10 +173,10 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                 allowEmpty: false,
                 triggerAction: 'all',
                 selectOnFocus:true,
-                store: [['sql', 'sql'], ['ldap','ldap']],
+                store: [['Sql', 'Sql'], ['Ldap','Ldap']],
                 name: 'accounts_backend',
                 fieldLabel: this.app.i18n._('Backend'),
-                value: 'sql',
+                value: 'Sql',
                 listeners: {
                     scope: this,
                     change: this.onChangeAccountsStorage,
@@ -275,33 +275,41 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                 {
                 id: this.accountsStorageIdPrefix + 'CardLayout',
                 layout: 'card',
-                activeItem: this.accountsStorageIdPrefix + 'sql',
+                activeItem: this.accountsStorageIdPrefix + 'Sql',
                 border: false,
                 defaults: {
                     border: false
                 },
                 items: [ {
-                    id: this.accountsStorageIdPrefix + 'sql',
+                    id: this.accountsStorageIdPrefix + 'Sql',
                     layout: 'form',
                     autoHeight: 'auto',
                     defaults: {
                         width: 300,
                         xtype: 'textfield',
-                        inputType: 'password'
-                    }/*,
+                    },
                     items: [ {
-                        inputType: 'text',
-                        name: 'accounts_sql_loginName',
-                        fieldLabel: this.app.i18n._('Login name')
+                        name: 'accounts_Sql_defaultUserGroupName',
+                        fieldLabel: this.app.i18n._('Default user group name')
                     }, {
-                        name: 'accounts_sql_password',
-                        fieldLabel: this.app.i18n._('Password')
+                        name: 'accounts_Sql_defaultAdminGroupName',
+                        fieldLabel: this.app.i18n._('Default admin group name')
                     }, {
-                        name: 'accounts_sql_passwordConfirmation',
-                        fieldLabel: this.app.i18n._('Password confirmation')
-                    } ] */
+                        xtype: 'combo',
+                        width: 300, //late rendering bug
+                        listWidth: 300,
+                        mode: 'local',
+                        forceSelection: true,
+                        allowEmpty: false,
+                        triggerAction: 'all',
+                        selectOnFocus:true,
+                        store: [['1', 'Yes'], ['0','No']],
+                        name: 'accounts_Sql_changepw',
+                        fieldLabel: this.app.i18n._('Allow user to change her password?'),
+                        value: '0'
+                    } ]
                 }, {
-                    id: this.accountsStorageIdPrefix + 'ldap',
+                    id: this.accountsStorageIdPrefix + 'Ldap',
                     layout: 'form',
                     autoHeight: 'auto',
                     defaults: {
@@ -310,15 +318,15 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                     },
                     items: [{
                         inputType: 'text',
-                        name: 'accounts_ldap_host',
+                        name: 'accounts_Ldap_host',
                         fieldLabel: this.app.i18n._('Host')
                     },
                     {
                         inputType: 'text',
-                        name: 'accounts_ldap_username',
+                        name: 'accounts_Ldap_username',
                         fieldLabel: this.app.i18n._('Login name')
                     },{
-                        name: 'accounts_ldap_password',
+                        name: 'accounts_Ldap_password',
                         fieldLabel: this.app.i18n._('Password'),
                         inputType: 'password'
                     }, {
@@ -331,14 +339,14 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                         triggerAction: 'all',
                         selectOnFocus:true,
                         store: [['1', 'Yes'], ['0','No']],
-                        name: 'accounts_ldap_bindRequiresDn',
+                        name: 'accounts_Ldap_bindRequiresDn',
                         fieldLabel: this.app.i18n._('Bind requires DN'),
                         value: '1'
                     }, {
-                        name: 'accounts_ldap_userDn',
+                        name: 'accounts_Ldap_userDn',
                         fieldLabel: this.app.i18n._('User DN')
                     }, {
-                        name: 'accounts_ldap_groupsDn',
+                        name: 'accounts_Ldap_groupsDn',
                         fieldLabel: this.app.i18n._('Groups DN')
                     }, {
                         xtype: 'combo',
@@ -350,7 +358,7 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                         triggerAction: 'all',
                         selectOnFocus:true,
                         store: [['CRYPT', 'CRYPT'], ['SHA','SHA'], ['MD5','MD5']],
-                        name: 'accounts_ldap_pwEncType',
+                        name: 'accounts_Ldap_pwEncType',
                         fieldLabel: this.app.i18n._('Password encoding'),
                         value: 'CRYPT'
                     }, {
@@ -363,33 +371,46 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                         triggerAction: 'all',
                         selectOnFocus:true,
                         store: [['1', 'Yes'], ['0','No']],
-                        name: 'accounts_ldap_useRfc2307bis',
+                        name: 'accounts_Ldap_useRfc2307bis',
                         fieldLabel: this.app.i18n._('Use Rfc 2307 bis'),
                         value: '0'
                     }, {
-                        name: 'accounts_ldap_minUserId',
+                        name: 'accounts_Ldap_minUserId',
                         fieldLabel: this.app.i18n._('Min User Id')
                     }, {
-                        name: 'accounts_ldap_maxUserId',
+                        name: 'accounts_Ldap_maxUserId',
                         fieldLabel: this.app.i18n._('Max User Id')
                     }, {
-                        name: 'accounts_ldap_minGroupId',
+                        name: 'accounts_Ldap_minGroupId',
                         fieldLabel: this.app.i18n._('Min Group Id')
                     }, {
-                        name: 'accounts_ldap_maxGroupId',
+                        name: 'accounts_Ldap_maxGroupId',
                         fieldLabel: this.app.i18n._('Max Group Id')
                     }, {
-                        name: 'accounts_ldap_groupUUIDAttribute',
+                        name: 'accounts_Ldap_groupUUIDAttribute',
                         fieldLabel: this.app.i18n._('Group UUID Attribute name')
                     }, {
-                        name: 'accounts_ldap_userUUIDAttribute',
+                        name: 'accounts_Ldap_userUUIDAttribute',
                         fieldLabel: this.app.i18n._('User UUID Attribute name')
                     }, {
-                        name: 'accounts_ldap_userGroupName',
-                        fieldLabel: this.app.i18n._('User group name')
+                        name: 'accounts_Ldap_defaultUserGroupName',
+                        fieldLabel: this.app.i18n._('Default user group name')
                     }, {
-                        name: 'accounts_ldap_adminGroupName',
-                        fieldLabel: this.app.i18n._('Admin group name')
+                        name: 'accounts_Ldap_defaultAdminGroupName',
+                        fieldLabel: this.app.i18n._('Default admin group name')
+                    }, {
+                        xtype: 'combo',
+                        width: 283, //late rendering bug
+                        listWidth: 300,
+                        mode: 'local',
+                        forceSelection: true,
+                        allowEmpty: false,
+                        triggerAction: 'all',
+                        selectOnFocus:true,
+                        store: [['1', 'Yes'], ['0','No']],
+                        name: 'accounts_Ldap_changepw',
+                        fieldLabel: this.app.i18n._('Allow user to change her password?'),
+                        value: '0'
                     } ]
                 }]
             } ]

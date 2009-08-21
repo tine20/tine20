@@ -79,7 +79,7 @@ class Tinebase_SambaSAM
     {
         switch($_backendType) {
             case self::LDAP:
-                $ldapOptions = Tinebase_Core::getConfig()->accounts->get('ldap')->toArray();
+                $ldapOptions = Tinebase_User::getBackendConfiguration();
                 $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
                 $options = array_merge($ldapOptions, $sambaOptions);
                 

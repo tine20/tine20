@@ -132,9 +132,7 @@ class Tinebase_Controller implements Tinebase_Event_Interface
         //error_log(print_r(Tinebase_Core::getUser()->toArray(), true));
         
         // check config setting 
-        if (    isset(Tinebase_Core::getConfig()->accounts)
-            &&  isset(Tinebase_Core::getConfig()->accounts->changepw)
-            &&  !Tinebase_Core::getConfig()->accounts->changepw) {
+        if (!Tinebase_User::getBackendConfiguration('changepw', true)) {
             throw new Tinebase_Exception_AccessDenied('Password change not allowed.');                
         }
         
