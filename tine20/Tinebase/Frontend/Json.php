@@ -126,6 +126,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * get list of groups
+     * 
+     * @legacy
      *
      * @param string $_filter
      * @param string $_sort
@@ -136,12 +138,36 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getGroups($filter, $sort, $dir, $start, $limit)
     {
-        $result = array(
+        $filter = array(
+            array('field' => 'query', 'operator' => 'contains', 'value' => $filter),
+        );
+        
+        $paging = array(
+            'sort'  => $sort,
+            'dir'   => $dir,
+            'start' => $start,
+            'limit' => $limit
+        );
+        
+        return $this->searchGroups($filter, $paging);
+    }
+    
+    /**
+     * Search for groups matching given arguments
+     *
+     * @param string $_filter json encoded
+     * @param string $_paging json encoded
+     * @return array
+     */
+    public function searchGroups($filter, $paging)
+    {
+    	$result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        $groups = Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
+        // old fn style yet
+        $groups = Tinebase_Group::getInstance()->getGroups($filter[0]['value'], $paging['sort'], $paging['dir'], $paging['start'], $paging['limit']);
 
         $result['results'] = $groups->toArray();
         $result['totalcount'] = count($groups);
