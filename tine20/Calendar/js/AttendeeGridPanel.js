@@ -163,16 +163,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     return this.selectedRecord ? this.selectedRecord.data : null;
                 }
             }),
-            groupEditor: new Ext.form.ComboBox({
-                blurOnSelect  : true,
-                expandOnFocus : true,
-                mode          : 'local',
-                store         : [
-                    ['NEEDS-ACTION', this.app.i18n._('Group 1')],
-                    ['ACCEPTED',     this.app.i18n._('Accepted')   ],
-                    ['DECLINED',     this.app.i18n._('Declined')   ],
-                    ['TENTATIVE',    this.app.i18n._('Tentative')  ]
-                ]
+            groupEditor: new Tine.widgets.form.RecordPickerComboBox({
+                blurOnSelect: true,
+                model: Tine.Tinebase.Model.Group,
+                getValue: function() {
+                    return this.selectedRecord ? this.selectedRecord.data : null;
+                }
             }),
             resourceEditor: new Tine.widgets.form.RecordPickerComboBox({
                 blurOnSelect: true,
@@ -409,6 +405,19 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return Ext.util.Format.htmlEncode(name);
         }
         // NOTE: this fn gets also called from other scopes
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+    },
+    
+    renderAttenderGroupName: function(name) {
+        if (typeof name.getTitle == 'function') {
+            return Ext.util.Format.htmlEncode(name.getTitle());
+        }
+        if (name.name) {
+            return Ext.util.Format.htmlEncode(name.name);
+        }
+        if (Ext.isString(name)) {
+            return Ext.util.Format.htmlEncode(name);
+        }
         return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
     },
     
