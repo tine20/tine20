@@ -42,7 +42,8 @@ Tine.Tinebase.data.RecordStore = function(c){
     }
     
     if (typeof(c.writer) == 'undefined' && ! c.readOnly) {
-        //c.writer = new Ext.data.JsonWriter({});
+        c.writer = new Ext.data.JsonWriter({
+        });
     }
     
     if (typeof(c.proxy) == 'undefined') {
