@@ -48,7 +48,10 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     private function __construct() {
         $this->_applicationName = 'Calendar';
         $this->_modelName       = 'Calendar_Model_Resource';
+        
         $this->_backend         = new Tinebase_Backend_Sql($this->_modelName, 'cal_resources');
+        $this->_backend->setModlogActive(TRUE);
+        
         $this->_currentAccount  = Tinebase_Core::getUser();
     }
 
