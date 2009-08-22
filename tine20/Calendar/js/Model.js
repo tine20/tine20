@@ -163,11 +163,11 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
 /**
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.EventJsonBackend
- * @extends Tine.Tinebase.widgets.app.JsonBackend
+ * @extends Tine.Tinebase.data.RecordProxy
  * 
  * JSON backend for events
  */
-Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, {
+Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, {
     
     /**
      * Creates a recuring event exception

@@ -42,7 +42,7 @@ Tine.Admin.Model.SambaMachine = Tine.Tinebase.data.Record.create(Tine.Admin.Mode
     recordsName: 'Computers'
 });
 
-Tine.Admin.sambaMachineBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Admin.sambaMachineBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'SambaMachine',
     recordClass: Tine.Admin.Model.SambaMachine,

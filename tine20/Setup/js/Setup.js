@@ -143,7 +143,7 @@ Tine.Setup.Model.Application = Tine.Tinebase.data.Record.create(Tine.Setup.Model
 /**
  * default tasks backend
  */
-Tine.Setup.ApplicationBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Setup.ApplicationBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Setup',
     modelName: 'Application',
     recordClass: Tine.Setup.Model.Application

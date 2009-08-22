@@ -101,7 +101,7 @@ Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker
 /**
  * default timesheets backend
  */
-Tine.Timetracker.timesheetBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Timetracker.timesheetBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Timetracker',
     modelName: 'Timesheet',
     recordClass: Tine.Timetracker.Model.Timesheet
@@ -110,7 +110,7 @@ Tine.Timetracker.timesheetBackend = new Tine.Tinebase.widgets.app.JsonBackend({
 /**
  * default timeaccounts backend
  */
-Tine.Timetracker.timeaccountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Timetracker.timeaccountBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Timetracker',
     modelName: 'Timeaccount',
     recordClass: Tine.Timetracker.Model.Timeaccount

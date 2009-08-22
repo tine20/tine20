@@ -94,7 +94,7 @@ Tine.Tasks.Task = Tine.Tinebase.data.Record.create(Tine.Tasks.TaskArray, {
 /**
  * default tasks backend
  */
-Tine.Tasks.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Tasks.JsonBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Tasks',
     modelName: 'Task',
     recordClass: Tine.Tasks.Task

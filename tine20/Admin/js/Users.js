@@ -532,21 +532,21 @@ Tine.Admin.Model.EmailUser = Tine.Tinebase.data.Record.create(Tine.Admin.Model.E
 
 /************** backends *****************/
 
-Tine.Admin.userBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Admin.userBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'User',
     recordClass: Tine.Admin.Model.User,
     idProperty: 'accountId'
 });
 
-Tine.Admin.samUserBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Admin.samUserBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'SAMUser',
     recordClass: Tine.Admin.Model.SAMUser,
     idProperty: 'sid'
 });
 
-Tine.Admin.emailUserBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Admin.emailUserBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'EmailUser',
     recordClass: Tine.Admin.Model.EmailUser,

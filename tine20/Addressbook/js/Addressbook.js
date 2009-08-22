@@ -492,7 +492,7 @@ Tine.Addressbook.Model.Contact.getDefaultData = function() {
 /**
  * default timesheets backend
  */
-Tine.Addressbook.contactBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Addressbook',
     modelName: 'Contact',
     recordClass: Tine.Addressbook.Model.Contact

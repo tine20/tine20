@@ -44,7 +44,7 @@ Tine.RequestTracker.Model.Ticket = Tine.Tinebase.data.Record.create(Tine.Request
     recordsName: 'Tickets'
 });
 
-Tine.RequestTracker.ticketBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.RequestTracker.ticketBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'RequestTracker',
     modelName: 'Ticket',
     recordClass: Tine.RequestTracker.Model.Ticket

@@ -92,7 +92,7 @@ Tine.Courses.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker, {
 /**
  * default backend
  */
-Tine.Courses.coursesBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Courses.coursesBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Courses',
     modelName: 'Course',
     recordClass: Tine.Courses.Model.Course
@@ -101,7 +101,7 @@ Tine.Courses.coursesBackend = new Tine.Tinebase.widgets.app.JsonBackend({
 /**
  * default backend
  */
-Tine.Courses.courseTypeBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Courses.courseTypeBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Courses',
     modelName: 'CourseType',
     recordClass: Tine.Courses.Model.CourseType

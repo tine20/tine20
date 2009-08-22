@@ -92,7 +92,7 @@ Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilte
 /**
  * default ExampleRecord backend
  */
-Tine.ExampleApplication.recordBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.ExampleApplication.recordBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'ExampleApplication',
     modelName: 'ExampleRecord',
     recordClass: Tine.ExampleApplication.Model.ExampleRecord

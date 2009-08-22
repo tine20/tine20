@@ -15,12 +15,12 @@ Ext.namespace('Tine.Tinebase.widgets.app');
 /**
  * Generic JSON Backdend for an model/datatype of an application
  * 
- * @class Tine.Tinebase.widgets.app.JsonBackend
+ * @class Tine.Tinebase.data.RecordProxy
  * @extends Ext.data.DataProxy
  * @constructor 
  */
-Tine.Tinebase.widgets.app.JsonBackend = function(config) {
-    Tine.Tinebase.widgets.app.JsonBackend.superclass.constructor.call(this);
+Tine.Tinebase.data.RecordProxy = function(config) {
+    Tine.Tinebase.data.RecordProxy.superclass.constructor.call(this);
     Ext.apply(this, config);
     
     this.jsonReader = new Ext.data.JsonReader({
@@ -30,7 +30,7 @@ Tine.Tinebase.widgets.app.JsonBackend = function(config) {
     }, this.recordClass);
 };
 
-Ext.extend(Tine.Tinebase.widgets.app.JsonBackend, Ext.data.DataProxy, {
+Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     /**
      * @cfg {String} appName
      * internal/untranslated app name (required)

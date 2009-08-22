@@ -98,7 +98,7 @@ Tine.Erp.Contract.getDefaultData = function() {
 /**
  * default contracts backend
  */
-Tine.Erp.JsonBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Erp.JsonBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Erp',
     modelName: 'Contract',
     recordClass: Tine.Erp.Contract

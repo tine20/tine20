@@ -52,11 +52,11 @@ Tine.Felamimail.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
 /**
  * @namespace Tine.Felamimail
  * @class Tine.Felamimail.messageBackend
- * @extends Tine.Tinebase.widgets.app.JsonBackend
+ * @extends Tine.Tinebase.data.RecordProxy
  * 
  * Message Backend
  */ 
-Tine.Felamimail.messageBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Felamimail',
     modelName: 'Message',
     recordClass: Tine.Felamimail.Model.Message
@@ -65,11 +65,11 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.widgets.app.JsonBackend({
 /**
  * @namespace Tine.Felamimail
  * @class Tine.Felamimail.accountBackend
- * @extends Tine.Tinebase.widgets.app.JsonBackend
+ * @extends Tine.Tinebase.data.RecordProxy
  * 
  * Account Backend
  */ 
-Tine.Felamimail.accountBackend = new Tine.Tinebase.widgets.app.JsonBackend({
+Tine.Felamimail.accountBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Felamimail',
     modelName: 'Account',
     recordClass: Tine.Felamimail.Model.Account
