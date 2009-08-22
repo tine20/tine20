@@ -328,14 +328,15 @@ Tine.Voipmanager.SnomSettingBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Voipmanager.Model.SnomSetting
 });
 
-/**
+/*
  * default Snom.Owner backend
- */
+ * @depricated
 Tine.Voipmanager.SnomOwnerBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Voipmanager',
     modelName: 'SnomOwner',
     recordClass: Tine.Voipmanager.Model.SnomOwner
 });
+*/
 
 
 
