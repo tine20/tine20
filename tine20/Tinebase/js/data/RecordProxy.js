@@ -20,12 +20,27 @@ Ext.namespace('Tine.Tinebase.data');
  * Generic record proxy for an model/datatype of an application
  * 
  * @constructor
- * @param {Object} Config Object
+ * @param {Object} config Config Object
  */
-Tine.Tinebase.data.RecordProxy = function(config) {
-    Tine.Tinebase.data.RecordProxy.superclass.constructor.call(this);
-    Ext.apply(this, config);
+Tine.Tinebase.data.RecordProxy = function(c) {
+    // we support all actions
+    c.api = {read: true, create: true, update: true, destroy: true};
     
+    Tine.Tinebase.data.RecordProxy.superclass.constructor.call(this, c);
+    
+    Ext.apply(this, c);
+    this.appName    = this.appName    ? this.appName    : c.recordClass.getMeta('appName');
+    this.modelName  = this.modelName  ? this.modelName  : c.recordClass.getMeta('modelName');
+    this.idProperty = this.idProperty ? this.idProperty : c.recordClass.getMeta('idProperty');
+    
+    /* NOTE: in ExtJS records always are part of a store. The store is
+             the only instance which triggers read/write actions.
+             
+             In our edit dialoges in contrast we work with single (store-less) 
+             records and the handlers itselve trigger the read/write actions.
+             This might change in future, but as long as we do so, we also need
+             the reader/writer here.
+     */
     this.jsonReader = new Ext.data.JsonReader({
         id: this.idProperty,
         root: 'results',
@@ -35,25 +50,31 @@ Tine.Tinebase.data.RecordProxy = function(config) {
 
 Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     /**
-     * @cfg {String} appName
-     * internal/untranslated app name (required)
-     */
-    appName: null,
-    /**
-     * @cfg {String} modelName
-     * name of the model/record  (required)
-     */
-    modelName: null,
-    /**
      * @cfg {Ext.data.Record} recordClass
      * record definition class  (required)
      */
     recordClass: null,
+    
     /**
-     * @cfg {String} idProperty
+     * @type String 
+     * @property appName
+     * internal/untranslated app name
+     */
+    appName: null,
+    
+    /**
+     * @type String 
+     * @property idProperty
      * property of the id of the record
      */
-    idProperty: 'id',
+    idProperty: null,
+    
+    /**
+     * @type String 
+     * @property modelName
+     * name of the model/record 
+     */
+    modelName: null,
     
     /**
      * loads a single 'full featured' record
@@ -235,6 +256,41 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             callback.call(scope||this, null, arg, false);
         }
     },
+    
+    /**
+     * do the request
+     * 
+     * @param {} action
+     * @param {} rs
+     * @param {} params
+     * @param {} reader
+     * @param {} callback
+     * @param {} scope
+     * @param {} options
+     */
+    doRequest : function(action, rs, params, reader, callback, scope, options) {
+        var opts = {
+            params: params, 
+            callback: callback,
+            scope: scope
+        };
+        
+        switch (action) {
+            case Ext.data.Api.actions.create:
+                this.saveRecord(rs, opts);
+                break;
+            case Ext.data.Api.actions.read:
+                this.load(params, reader, callback, scope, options);
+                break;
+            case Ext.data.Api.actions.update:
+                this.saveRecord(rs, opts);
+                break;
+            case Ext.data.Api.actions.destroy:
+                this.deleteRecords(rs, opts);
+                break;
+        }
+    },
+
     
     /**
      * returns reader
