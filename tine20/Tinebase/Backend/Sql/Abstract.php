@@ -91,6 +91,29 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_schema = $this->_db->describeTable($this->_tablePrefix . $this->_tableName);
     }
     
+    /*************************** getters and setters *********************************/
+    
+    /**
+     * sets modlog active flag
+     * 
+     * @param $_bool
+     * @return Tinebase_Backend_Sql_Abstract
+     */
+    public function setModlogActive($_bool)
+    {
+        $this->_modlogActive = (bool) $_bool;
+        return $this;
+    }
+    
+    /**
+     * checks if modlog is active or not
+     * 
+     * @return bool
+     */
+    public function ModlogActive()
+    {
+        return $this->_modlogActive;
+    }
     
     /*************************** get/search funcs ************************************/
 
