@@ -54,6 +54,7 @@
         <!-- <source src="../tine20/Tinebase/js/tineInit.js"/> -->
         <source src="../tine20/Tinebase/js/data/Record.js"/>
         <source src="../tine20/Tinebase/js/data/RecordStore.js"/>
+        <source src="../tine20/Tinebase/js/data/RecordProxy.js"/>
         <source src="../tine20/Tinebase/js/widgets/app/GridPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
         
