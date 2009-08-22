@@ -1,8 +1,6 @@
 /*
  * Tine 2.0
  * 
- * @package     Tinebase
- * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,14 +8,19 @@
  *
  */
  
-Ext.namespace('Tine.Tinebase.widgets.app');
+Ext.namespace('Tine.Tinebase.data');
 
 /**
- * Generic JSON Backdend for an model/datatype of an application
+ * @namespace   Tine.Tinebase.data
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ * @class       Tine.Tinebase.data.RecordProxy
+ * @extends     Ext.data.DataProxy
  * 
- * @class Tine.Tinebase.data.RecordProxy
- * @extends Ext.data.DataProxy
- * @constructor 
+ * Generic record proxy for an model/datatype of an application
+ * 
+ * @constructor
+ * @param {Object} Config Object
  */
 Tine.Tinebase.data.RecordProxy = function(config) {
     Tine.Tinebase.data.RecordProxy.superclass.constructor.call(this);
