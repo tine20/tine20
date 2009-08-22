@@ -20,12 +20,16 @@
  * @xtype     tinerecordstore
  * 
  * @constructor
- * @param {Object} c config object
+ * @param {Object} config config object
  */
 Tine.Tinebase.data.RecordStore = function(c){
     /**
      * @cfg {bool} readOnly
      * set to true to skip creation of a writer
+     */
+    /**
+     * @cfg {Tine.Tinebase.data.Record} recordClass
+     * model of this proxy (required)
      */
     
     c.batchTransactions = false;
@@ -47,16 +51,8 @@ Tine.Tinebase.data.RecordStore = function(c){
     }
     
     if (typeof(c.proxy) == 'undefined') {
-        var api = {
-            read    : Tine[c.appName]['search' + c.modelName + 's'],
-            create  : Tine[c.appName]['save'   + c.modelName      ],
-            update  : Tine[c.appName]['save'   + c.modelName      ],
-            destroy : Tine[c.appName]['delete' + c.modelName + 's']
-        };
-        
-        c.proxy = new Ext.data.DirectProxy({
-            paramsAsHash: true,
-            api: api
+        c.proxy = new Tine.Tinebase.data.RecordProxy({
+            recordClass: c.recordClass
         });
     }
     
