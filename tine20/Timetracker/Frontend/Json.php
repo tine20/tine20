@@ -116,12 +116,13 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
                 
-                Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'account_id', true);
-                               
                 foreach ($_records as $record) {
                     $record->timeaccount_id = $timeaccounts[$timeaccounts->getIndexById($record->timeaccount_id)];
                     $record->timeaccount_id->account_grants = $this->_resolveTimesheetGrantsByTimeaccountGrants($record->timeaccount_id->account_grants, $record->account_id);
                 }
+                
+                // resolve user afterwards because we compare ids in _resolveTimesheetGrantsByTimeaccountGrants()
+                Tinebase_User::getInstance()->resolveMultipleUsers($_records, 'account_id', true);
                 
                 break;
             case 'Timetracker_Model_Timeaccount':
