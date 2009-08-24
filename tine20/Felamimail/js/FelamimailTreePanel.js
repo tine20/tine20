@@ -714,6 +714,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                 appName: 'Felamimail',
                 credentialsId: accountId,
                 i18nRecordName: this.app.i18n._('Credentials'),
+                recordClass: Tine.Tinebase.Model.Credentials,
                 listeners: {
                     scope: this,
                     'update': function(data) {

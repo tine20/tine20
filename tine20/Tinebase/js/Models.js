@@ -225,3 +225,26 @@ Tine.Tinebase.Model.Alarm = Ext.data.Record.create([
     {name: 'sent_message'   },
     {name: 'options'        }
 ]);
+
+/**
+ * @namespace Tine.Tinebase.Model
+ * @class     Tine.Tinebase.Model.Credentials
+ * @extends   Tine.Tinebase.data.Record
+ * 
+ * Model of user credentials
+ */
+Tine.Tinebase.Model.Credentials = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'username'},
+    {name: 'password'}
+], {
+    appName: 'Tinebase',
+    modelName: 'Credentials',
+    idProperty: 'id',
+    titleProperty: 'username',
+    // ngettext('Credentials', 'Credentials', n); gettext('Credentials');
+    recordName: 'Credentials',
+    recordsName: 'Credentials',
+    containerProperty: null
+});
+
