@@ -921,24 +921,24 @@ body.x-body-masked .x-window-plain .x-window-mc {
 }	
 
 .preview-panel-timesheet-right {
-	border:none;
+	border:3px solid #E5E6FE;
 }
 
 .bordercorner_gray_1 {
 	background-color: transparent;
-	background-image:none;
+	background-image:url(images/tine20/preview/bordercorner_blue_1.gif);
 }
 
 .bordercorner_gray_2 {
 	background-color: transparent;
-	background-image:none;
+	background-image:url(images/tine20/preview/bordercorner_blue_2.gif);
 }
 
 .bordercorner_gray_3 {
 	background-color: transparent;
-	background-image:none;
+	background-image:url(images/tine20/preview/bordercorner_blue_3.gif);
 }
 .bordercorner_gray_4 {
 	background-color: transparent;
-	background-image:none;
+	background-image:url(images/tine20/preview/bordercorner_blue_4.gif);
 }
