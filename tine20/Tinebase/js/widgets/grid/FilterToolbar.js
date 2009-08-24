@@ -275,6 +275,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.filterStore.each(function(filter){
             var tr = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
             
+            if (! tr) {
+                continue;
+            }
+            
             // prefix
             tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('and');
             //filter.deleteRowButton.setVisible(filter.id != lastId);
