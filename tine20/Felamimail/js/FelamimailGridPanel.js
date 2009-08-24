@@ -33,7 +33,7 @@ Ext.namespace('Tine.Felamimail');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new MessageEditDialog
+ * Create a new Tine.Felamimail.GridPanel
  */
 Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
 	/**
