@@ -462,7 +462,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     e.preventDefault();
                     break;
                 case e.E:
-                    if (!this.action_editInNewWindow.isDisabled()) {
+                    if (this.action_editInNewWindow && !this.action_editInNewWindow.isDisabled()) {
                         this.onEditInNewWindow.call(this, {
                             actionType: 'edit'
                         });
@@ -470,7 +470,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     }
                     break;
                 case e.N:
-                    if (!this.action_addInNewWindow.isDisabled()) {
+                    if (this.action_addInNewWindow && !this.action_addInNewWindow.isDisabled()) {
                         this.onEditInNewWindow.call(this, {
                             actionType: 'add'
                         });
