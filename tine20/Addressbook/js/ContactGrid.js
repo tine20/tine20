@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Addressbook
@@ -13,12 +13,35 @@ Ext.namespace('Tine.Addressbook');
 
 /**
  * Contact grid panel
+ * 
+ * @namespace   Tine.Addressbook
+ * @class       Tine.Addressbook.ContactGridPanel
+ * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * 
+ * <p>Contact Grid Panel</p>
+ * <p><pre>
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Addressbook.ContactGridPanel
  */
 Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
-    // model generics
+    /**
+     * record class
+     * @cfg {Tine.Addressbook.Model.Contact} recordClass
+     */
     recordClass: Tine.Addressbook.Model.Contact,
     
-    // grid specific
+    /**
+     * grid specific
+     * @private
+     */ 
     defaultSortInfo: {field: 'n_fileas', direction: 'ASC'},
     gridConfig: {
         loadMask: true,
@@ -27,7 +50,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     
     /**
      * inits this cmp
-     * @privagte
+     * @private
      */
     initComponent: function() {
         this.recordProxy = Tine.Addressbook.contactBackend;
@@ -121,6 +144,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     
     /**
      * return additional tb items
+     * @private
      */
     getToolbarItems: function() {
         this.actions_exportContact = new Ext.Action({
@@ -188,7 +212,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     
     /**
      * updates call menu
-     * @param {} sm
+     * @param {SelectionModel} sm
      */
     onSelectionchange: function(sm) {
         var rowCount = sm.getCount();
@@ -240,6 +264,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         
     /**
      * calls a contact
+     * @param {Button} btn 
      */
     onCallContact: function(btn) {
         var number;
