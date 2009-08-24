@@ -34,7 +34,7 @@ Ext.namespace('Tine.Tasks');
 Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * record class
-     * @cfg {Tine.Felamimail.Model.Message} recordClass
+     * @cfg {Tine.Tasks.Task} recordClass
      */
     recordClass: Tine.Tasks.Task,
     
@@ -265,7 +265,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     /**
      * Return CSS class to apply to rows depending upon due status
      * 
-     * @param {Tine.Felamimail.Model.Message} record
+     * @param {Tine.Tasks.Task} record
      * @param {Integer} index
      * @return {String}
      */
