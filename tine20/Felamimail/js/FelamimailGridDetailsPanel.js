@@ -176,11 +176,10 @@ Ext.namespace('Tine.Felamimail');
             
             showBody: function(value, headers, attachments) {
                 if (value) {
-                    //console.log(headers);
                     if (headers['content-type']
                         && (headers['content-type'].match(/text\/html/) 
                             || headers['content-type'].match(/multipart\/alternative/)
-                            || headers['content-type'].match(/multipart\/signed/)
+                            //|| headers['content-type'].match(/multipart\/signed/)
                         )
                     ) {
                         // should be already purified ... but just as precaution
@@ -192,6 +191,7 @@ Ext.namespace('Tine.Felamimail');
 
                         value = Ext.util.Format.nl2br(value);
                     }
+                    
                     
                     // add images inline
                     /*
