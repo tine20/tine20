@@ -356,6 +356,8 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     }
                 
                     options.failure.apply(options.scope, args);
+                } else {
+                    Ext.Ajax.fireEvent('requestexception', Ext.Ajax, response, options);
                 }
             }
         };
