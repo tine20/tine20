@@ -125,6 +125,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             'load'
         );
         
+        this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
+        this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
+        
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
@@ -133,6 +136,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.app.i18n && this.recordClass !== null) {
             this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
             this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
+        }
+    
+        if (! this.recordProxy) {
+            this.recordProxy = new Tine.Tinebase.data.RecordProxy({
+                recordClass: this.recordClass
+            });
         }
         
         // init actions
