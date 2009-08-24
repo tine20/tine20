@@ -17,3 +17,13 @@
     width: 12px;
 	height: 12px;
 }
+
+/***** tasks grid panel classes ******/
+
+.tasks-grid-overdue {
+    color: #aa0000;
+}
+
+.tasks-grid-duetoday {
+    color: #00aa00;
+}

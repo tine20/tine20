@@ -260,5 +260,30 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             new Ext.Toolbar.Separator(),
             this.action_showClosedToggle
         ];
+    },
+    
+    /**
+     * Return CSS class to apply to rows depending upon due status
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {Integer} index
+     * @return {String}
+     */
+    getViewRowClass: function(record, index) {
+        var due = record.get('due');
+        
+        var className = '';
+        if (due) {
+            var dueDay = due.format('Y-m-d');
+            var today = new Date().format('Y-m-d');
+
+            if (dueDay == today) {
+                className += 'tasks-grid-duetoday';
+            } else if (dueDay < today) {
+                className += 'tasks-grid-overdue';
+            }
+            
+        }
+        return className;
     }
 });
