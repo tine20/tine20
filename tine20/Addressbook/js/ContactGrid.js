@@ -145,6 +145,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     /**
      * return additional tb items
      * @private
+     * 
+     * TODO add toolbar items to context menu
      */
     getToolbarItems: function() {
         this.actions_exportContact = new Ext.Action({
@@ -188,7 +190,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         this.actions_callContact = new Ext.Action({
             requiredGrant: 'readGrant',
             id: 'Addressbook_Contacts_CallContact',
-            text: this.app.i18n._('call contact'),
+            text: this.app.i18n._('Call contact'),
             disabled: true,
             handler: this.onCallContact,
             iconCls: 'PhoneIconCls',
@@ -198,6 +200,17 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             scope: this
         });
         
+        this.actions_composeEmail = new Ext.Action({
+            requiredGrant: 'readGrant',
+            id: 'Addressbook_Contacts_ComposeMail',
+            text: this.app.i18n._('Compose email'),
+            disabled: true,
+            handler: this.onComposeEmail,
+            iconCls: 'action_composeEmail',
+            scope: this,
+            allowMultiple: true
+        });
+
         var items = [
             new Ext.Toolbar.Separator(),
             this.actions_exportContact
@@ -205,6 +218,10 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         
         if (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')) {
             items.push(new Ext.Button(this.actions_callContact));
+        }
+        
+        if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
+            items.push(new Ext.Button(this.actions_composeEmail));
         }
         
         return items;
@@ -298,6 +315,35 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         }
 
         Tine.Phone.dialNumber(number);
+    },
+    
+    /**
+     * compose an email to selected contacts
+     * 
+     * @param {Button} btn 
+     * 
+     * TODO make this work for filter selections (not only the first page)
+     */
+    onComposeEmail: function(btn) {
+        
+        var contacts = this.grid.getSelectionModel().getSelections();
+        
+        var defaults = Tine.Felamimail.Model.Message.getDefaultData();
+        defaults.body = Tine.Felamimail.getSignature();
+
+        defaults.to = [];
+        for (var i=0; i<contacts.length; i++) {
+            if (contacts[i].get('email') != '') {
+                defaults.to.push(contacts[i].get('email'));
+            } else if (contacts[i].get('email_home') != '') {
+                defaults.to.push(contacts[i].get('email_home'));
+            }
+        }
+        
+        var record = new Tine.Felamimail.Model.Message(defaults, 0);
+        var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
+            record: record
+        });
     },
     
     /**
