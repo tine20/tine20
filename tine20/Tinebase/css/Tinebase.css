@@ -100,6 +100,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
 }
 
+.action_composeEmail {
+    background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
+}
+
 /* ----- about dialog --------------------------------------------------------*/
 .tb-about-dlg {
     text-align: center;
