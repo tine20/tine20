@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Erp\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-16 00:20+0100\n"
+"PO-Revision-Date: 2009-08-19 20:31+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Proszę wprowadzić opis..."
 
 #: js/ContractGridPanel.js:47
 msgid "Summary"
-msgstr "Podsumowanie"
+msgstr "Streszczenie"
 
 #: js/ContractGridPanel.js:87
 msgid "Contract number"
@@ -57,5 +57,5 @@ msgstr[2] "list kontraktów"
 
 #: Setup/setup.xml:164
 msgid "Shared Contracts"
-msgstr "Kontrakty wspólne"
+msgstr "Wspólne kontrakty"
 

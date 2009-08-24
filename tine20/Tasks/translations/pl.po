@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-16 16:13+0100\n"
+"PO-Revision-Date: 2009-08-22 19:17+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,44 +23,48 @@ msgstr "Edytuj wspólną listę zadań"
 msgid "Create new shared tasks lists"
 msgstr "Utwórz nową, wspólną listę zadań"
 
+#: Controller/Task.php:152
+msgid "Notification for Task "
+msgstr ""
+
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s's zadania własne"
 
-#: js/EditDialog.js:113 js/GridPanel.js:64 js/GridPanel.js:123
+#: js/EditDialog.js:153 js/GridPanel.js:64 js/GridPanel.js:123
 msgid "Summary"
-msgstr "Podsumowanie"
+msgstr "Streszczenie"
 
-#: js/EditDialog.js:118
+#: js/EditDialog.js:158
 msgid "Due date"
 msgstr "Data ukończenia"
 
-#: js/EditDialog.js:121 js/GridPanel.js:144
+#: js/EditDialog.js:161 js/GridPanel.js:144 Model/Task.php:187
 msgid "Priority"
-msgstr "Ważność"
+msgstr "Priorytet"
 
-#: js/EditDialog.js:124 js/GridPanel.js:66 js/GridPanel.js:196
+#: js/EditDialog.js:164 js/GridPanel.js:66 js/GridPanel.js:196
 msgid "Responsible"
-msgstr "Odpowiedzialny"
+msgstr "Osoba odpowiedzialna"
 
-#: js/EditDialog.js:128
+#: js/EditDialog.js:168
 msgid "Notes"
 msgstr "Notatki"
 
-#: js/EditDialog.js:129
+#: js/EditDialog.js:169
 msgid "Enter description..."
 msgstr "Wprowadź opis..."
 
-#: js/EditDialog.js:134
+#: js/EditDialog.js:174
 msgid "Percentage"
 msgstr "Procentowo"
 
-#: js/EditDialog.js:138 js/GridPanel.js:173
+#: js/EditDialog.js:178 js/GridPanel.js:173 Model/Task.php:188
 msgid "Status"
 msgstr "Status"
 
-#: js/EditDialog.js:142
+#: js/EditDialog.js:182
 msgid "Completed"
 msgstr "Zakończone dnia"
 
@@ -73,7 +77,7 @@ msgstr[2] "Czy na pewno chcesz usunąć zaznaczonych zadań?"
 
 #: js/GridPanel.js:65 js/GridPanel.js:135
 msgid "Due Date"
-msgstr "Data ukończenia"
+msgstr "Data zakończenia"
 
 #: js/GridPanel.js:87
 msgid "Failed"
@@ -87,9 +91,9 @@ msgstr "Zapisanie zadania było niemożliwe."
 msgid "Add a task..."
 msgstr "Dodaj zadanie..."
 
-#: js/GridPanel.js:159
+#: js/GridPanel.js:159 Model/Task.php:189
 msgid "Percent"
-msgstr "Procent"
+msgstr "W procentach"
 
 #: js/GridPanel.js:188
 msgid "Creation Time"
@@ -99,43 +103,56 @@ msgstr "Czas utworzenia"
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
-#: js/Status.js:45 Setup/setup.xml:444
+#: js/Status.js:45 Setup/setup.xml:449
 msgid "IN-PROCESS"
-msgstr "W PRZETWARZANIU"
+msgstr "W OPRACOWANIU"
 
-#: js/Tasks.js:82
+#: js/Tasks.js:85
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Zadanie"
 msgstr[1] "Zadania"
 msgstr[2] "Zadań"
 
-#: js/Tasks.js:82
+#: js/Tasks.js:85
 msgid "Tasks"
 msgstr "Zadania"
 
-#: js/Tasks.js:86
+#: js/Tasks.js:89
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] "Lista do wykonania"
-msgstr[1] "Listy do wykonania"
-msgstr[2] "List do wykonania"
+msgstr[0] "lista zadań do wykonania"
+msgstr[1] "listy zadań do wykonania"
+msgstr[2] "list zadań do wykonania"
 
-#: js/Tasks.js:86
+#: js/Tasks.js:89
 msgid "to do lists"
-msgstr "Listy do wykonania"
+msgstr "listy zadań do wykonania"
 
-#: Setup/setup.xml:400
+#: Model/Task.php:184
+msgid "Due"
+msgstr ""
+
+#: Model/Task.php:185
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:186
+#, fuzzy
+msgid "Description"
+msgstr "Wprowadź opis..."
+
+#: Setup/setup.xml:405
 msgid "NEEDS-ACTION"
-msgstr "KONIECZNA EDYCJA"
+msgstr "WYMAGA DZIAŁANIA"
 
-#: Setup/setup.xml:422
+#: Setup/setup.xml:427
 msgid "COMPLETED"
-msgstr "ZAKOŃCZONY"
+msgstr "ZAKOŃCZONE"
 
-#: Setup/setup.xml:466
+#: Setup/setup.xml:471
 msgid "CANCELLED"
-msgstr "ODWOŁANY "
+msgstr "ODWOŁANE"
 
 #, fuzzy
 msgid "to to list"

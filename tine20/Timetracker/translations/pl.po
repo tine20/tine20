@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-16 16:21+0100\n"
+"PO-Revision-Date: 2009-08-22 20:17+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,11 +15,11 @@ msgstr ""
 
 #: Acl/Rights.php:98
 msgid "Manage timeaccounts"
-msgstr "Edytuj konta czasu"
+msgstr "Edytuj konta godzin"
 
 #: Acl/Rights.php:99
 msgid "Add, edit and delete timeaccounts"
-msgstr "Dodaj, edytuj i usuń konta czasu"
+msgstr "Dodaj, edytuj i usuń konta godzin"
 
 #: Export/Ods.php:89 js/Timetracker.js:29
 msgid "Timesheets"
@@ -58,13 +58,12 @@ msgstr "Opis"
 # I think, the word Number stands for a counter. Perhaps I am wrong.
 # I denke, das Wort Nummer steht fuer einen Zaehler. Vielleicht bin ich da falsch.
 #: Export/Ods.php:186
-#, fuzzy
 msgid "Timeaccount Number"
-msgstr "Ilość kont czasu"
+msgstr "Ilość kont godzin"
 
 #: Export/Ods.php:192
 msgid "Timeaccount"
-msgstr "Konto czasu"
+msgstr "Konto godzin"
 
 #: Export/Ods.php:199
 msgid "Staff Member"
@@ -124,9 +123,9 @@ msgstr "Nieprawidłowy czas"
 #: js/Models.js:46 js/TimesheetEditDialog.js:114 js/TimesheetGridPanel.js:180
 msgid "Timesheet"
 msgid_plural "Timesheets"
-msgstr[0] "Karta godzin"
-msgstr[1] "Karty godzin"
-msgstr[2] "Kart godzin"
+msgstr[0] "kartę godzin"
+msgstr[1] "karty godzin"
+msgstr[2] "kart godzin"
 
 #: js/Models.js:50
 msgid "timesheets list"
@@ -141,16 +140,16 @@ msgstr[2] "list kart godzin"
 #: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:223
 msgid "Time Account"
 msgid_plural "Time Accounts"
-msgstr[0] "Konto do przeliczenia czasu"
-msgstr[1] "Konta do przeliczenia czasu"
-msgstr[2] "Kont do przeliczenia czasu"
+msgstr[0] "konto godzin"
+msgstr[1] "konta godzin"
+msgstr[2] "kont godzin"
 
 #: js/Models.js:111
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
-msgstr[0] "lista kont czasu"
-msgstr[1] "listy kont czasu"
-msgstr[2] "list kont czasu"
+msgstr[0] "lista kont godzin"
+msgstr[1] "listy kont godzin"
+msgstr[2] "list kont godzin"
 
 #: js/TimeaccountEditDialog.js:99
 msgid "Unit"
@@ -179,12 +178,12 @@ msgstr "Przeliczone"
 #: js/TimeaccountEditDialog.js:127 js/TimeaccountSelect.js:235
 #: Setup/setup.xml:80
 msgid "not yet billed"
-msgstr "Jeszcze nieprzeliczone"
+msgstr "jeszcze nieprzeliczone"
 
 #: js/TimeaccountEditDialog.js:128 js/TimeaccountSelect.js:236
 #: Setup/setup.xml:82
 msgid "to bill"
-msgstr "do przeliczenia"
+msgstr "przelicz"
 
 #: js/TimeaccountEditDialog.js:129 js/TimeaccountSelect.js:237
 #: Setup/setup.xml:84
@@ -205,7 +204,7 @@ msgstr "Wprowadź opis"
 
 #: js/TimeaccountEditDialog.js:186
 msgid "Access"
-msgstr "Dostęp"
+msgstr "Dostępność"
 
 #: js/TimeaccountEditDialog.js:210
 msgid "Book Own"
@@ -254,7 +253,7 @@ msgstr "Pokaż zakończone"
 
 #: js/TimeaccountSelect.js:212
 msgid "Time Account - Status"
-msgstr "Status konta do przeliczenia czasu"
+msgstr "Status konta godzin"
 
 #: js/TimesheetEditDialog.js:86 js/TimesheetEditDialog.js:87
 msgid "Billed in ..."
@@ -262,7 +261,7 @@ msgstr "Przeliczone w ..."
 
 #: js/TimesheetEditDialog.js:132
 msgid "Select Time Account..."
-msgstr "Zaznacz konto do przeliczenia czasu..."
+msgstr "Zaznacz konto godzin..."
 
 #: js/TimesheetEditDialog.js:133
 msgid "Searching..."
@@ -307,7 +306,7 @@ msgstr "OK"
 
 #: js/TimesheetGridPanel.js:158
 msgid "Success"
-msgstr "Sukces"
+msgstr "Zakończone sukcesem"
 
 #: js/TimesheetGridPanel.js:159
 msgid "Updated {0} records"
@@ -319,7 +318,7 @@ msgstr "Czas rozpoczęcia"
 
 #: js/TimesheetGridPanel.js:233
 msgid "Time Account closed"
-msgstr "Konto do przeliczenia czasu zostało zamknięte"
+msgstr "Data zamknięcia konta godzin"
 
 #: js/TimesheetGridPanel.js:304
 msgid "timeframe"
@@ -327,7 +326,7 @@ msgstr "przedział czasu"
 
 #: js/TimesheetGridPanel.js:328
 msgid "summary"
-msgstr "podsumowanie"
+msgstr "streszczenie"
 
 #: js/TimesheetGridPanel.js:331
 msgid "Total Timesheets"
@@ -355,11 +354,11 @@ msgstr "Wszystkie karty godzin"
 
 #: js/Timetracker.js:39
 msgid "Timeaccounts"
-msgstr "Konta czasu"
+msgstr "Konta godzin"
 
 #: js/Timetracker.js:44
 msgid "All Timeaccounts"
-msgstr "Wszystkie konta czasu"
+msgstr "Wszystkie konta godzin"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"

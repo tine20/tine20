@@ -12,232 +12,254 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ApplicationGridPanel.js:40
+#: js/ApplicationGridPanel.js:66
 msgid "Name"
 msgstr "Name"
 
-#: js/ApplicationGridPanel.js:41
+#: js/ApplicationGridPanel.js:67
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: js/ApplicationGridPanel.js:42
+#: js/ApplicationGridPanel.js:68
 msgid "Order"
 msgstr "Reihenfolge"
 
-#: js/ApplicationGridPanel.js:43
+#: js/ApplicationGridPanel.js:69
 msgid "Installed Version"
 msgstr "Installierte Version"
 
-#: js/ApplicationGridPanel.js:44
+#: js/ApplicationGridPanel.js:70
 msgid "Available Version"
 msgstr "Verfügbare Version"
 
-#: js/ApplicationGridPanel.js:45
+#: js/ApplicationGridPanel.js:71
 msgid "Status"
 msgstr "Status"
 
-#: js/ApplicationGridPanel.js:46
+#: js/ApplicationGridPanel.js:72
 msgid "Depends on"
 msgstr "Hängt ab von"
 
-#: js/ApplicationGridPanel.js:52 js/EnvCheckGridPanel.js:169
+#: js/ApplicationGridPanel.js:81 js/EnvCheckGridPanel.js:169
 msgid "Install application"
 msgstr "Anwendung installieren"
 
-#: js/ApplicationGridPanel.js:61
+#: js/ApplicationGridPanel.js:90
 msgid "Uninstall application"
 msgstr "Anwendung deinstallieren"
 
-#: js/ApplicationGridPanel.js:70
+#: js/ApplicationGridPanel.js:99
 msgid "Update application"
 msgstr "Anwendung aktualisieren"
 
-#: js/ApplicationGridPanel.js:138
+#: js/ApplicationGridPanel.js:163
 msgid "uninstall"
 msgstr "Deinstallieren"
 
-#: js/ApplicationGridPanel.js:138
+#: js/ApplicationGridPanel.js:163
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Möchten sie die Anwendung(en) wirklich deinstallieren?"
 
-#: js/ApplicationGridPanel.js:196
+#: js/ApplicationGridPanel.js:214
 msgid "This may take a while"
 msgstr "Dies kann eine einige Zeit in Anspruch nehmen"
 
-#: js/ApplicationGridPanel.js:222
+#: js/ApplicationGridPanel.js:240
 msgid "Shit"
 msgstr "Scheiße"
 
-#: js/ApplicationGridPanel.js:222
+#: js/ApplicationGridPanel.js:240
 msgid "Where are the backup tapes"
 msgstr "Wo sind nur die Backup Bänder"
 
-#: js/ApplicationGridPanel.js:230
+#: js/ApplicationGridPanel.js:248
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:86 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:88 js/ConfigManagerGridPanel.js:73
 msgid "Invalid configuration"
 msgstr "Fehlerhafte Konfiguration"
 
-#: js/AuthenticationGridPanel.js:86 js/ConfigManagerGridPanel.js:71
+#: js/AuthenticationGridPanel.js:88 js/ConfigManagerGridPanel.js:73
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr ""
 "Sie müssen die rot markierten Felder korrigieren bevor die Konfiguration "
 "gepeichert werden kann."
 
-#: js/AuthenticationGridPanel.js:132 js/ConfigManagerGridPanel.js:95
+#: js/AuthenticationGridPanel.js:134 js/ConfigManagerGridPanel.js:97
 msgid "Transfering Configuration..."
 msgstr "Übertrage Konfiguration..."
 
-#: js/AuthenticationGridPanel.js:158 js/AuthenticationGridPanel.js:178
+#: js/AuthenticationGridPanel.js:160 js/AuthenticationGridPanel.js:180
 msgid "Backend"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:191
+#: js/AuthenticationGridPanel.js:193
 msgid "Authentication provider"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:214
+#: js/AuthenticationGridPanel.js:216
 msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:218
+#: js/AuthenticationGridPanel.js:220
 msgid "Initial admin Password"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:222 js/AuthenticationGridPanel.js:301
+#: js/AuthenticationGridPanel.js:224
 msgid "Password confirmation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:236 js/AuthenticationGridPanel.js:314
+#: js/AuthenticationGridPanel.js:238 js/AuthenticationGridPanel.js:324
 msgid "Host"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:241 js/AuthenticationGridPanel.js:295
-#: js/AuthenticationGridPanel.js:319
+#: js/AuthenticationGridPanel.js:243 js/AuthenticationGridPanel.js:329
 msgid "Login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:244 js/AuthenticationGridPanel.js:298
-#: js/AuthenticationGridPanel.js:322 js/ConfigManagerGridPanel.js:118
-#: js/ConfigManagerGridPanel.js:144
+#: js/AuthenticationGridPanel.js:246 js/AuthenticationGridPanel.js:332
+#: js/ConfigManagerGridPanel.js:120 js/ConfigManagerGridPanel.js:146
 msgid "Password"
 msgstr "Kennwort"
 
-#: js/AuthenticationGridPanel.js:257 js/AuthenticationGridPanel.js:335
+#: js/AuthenticationGridPanel.js:259 js/AuthenticationGridPanel.js:345
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:261
+#: js/AuthenticationGridPanel.js:263
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:264
+#: js/AuthenticationGridPanel.js:266
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:272
+#: js/AuthenticationGridPanel.js:274
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:339
+#: js/AuthenticationGridPanel.js:295 js/AuthenticationGridPanel.js:399
+msgid "Default user group name"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:298 js/AuthenticationGridPanel.js:402
+msgid "Default admin group name"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:310 js/AuthenticationGridPanel.js:414
+msgid "Allow user to change her password?"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:349
 msgid "User DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:342
+#: js/AuthenticationGridPanel.js:352
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:354
+#: js/AuthenticationGridPanel.js:364
 msgid "Password encoding"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:367
+#: js/AuthenticationGridPanel.js:377
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:371
+#: js/AuthenticationGridPanel.js:381
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:374
+#: js/AuthenticationGridPanel.js:384
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:377
+#: js/AuthenticationGridPanel.js:387
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:380
+#: js/AuthenticationGridPanel.js:390
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:463
+#: js/AuthenticationGridPanel.js:393
+msgid "Group UUID Attribute name"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:396
+msgid "User UUID Attribute name"
+msgstr ""
+
+#: js/AuthenticationGridPanel.js:498
 msgid "Apply changes"
 msgstr ""
 
-#: js/ConfigManagerGridPanel.js:107
+#: js/AuthenticationGridPanel.js:524
+msgid "Passwords don't match"
+msgstr ""
+
+#: js/ConfigManagerGridPanel.js:109
 msgid "Informations"
 msgstr "Informationen"
 
-#: js/ConfigManagerGridPanel.js:111
+#: js/ConfigManagerGridPanel.js:113
 msgid "Setup Authentication"
 msgstr "Setup Authentifizierung"
 
-#: js/ConfigManagerGridPanel.js:114
+#: js/ConfigManagerGridPanel.js:116
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/ConfigManagerGridPanel.js:123 js/ConfigManagerGridPanel.js:136
+#: js/ConfigManagerGridPanel.js:125 js/ConfigManagerGridPanel.js:138
 msgid "Database"
 msgstr "Datenbank"
 
-#: js/ConfigManagerGridPanel.js:127
+#: js/ConfigManagerGridPanel.js:129
 msgid "Adapter"
 msgstr "Adapter"
 
-#: js/ConfigManagerGridPanel.js:132
+#: js/ConfigManagerGridPanel.js:134
 msgid "Hostname"
 msgstr "Hostname"
 
-#: js/ConfigManagerGridPanel.js:140
+#: js/ConfigManagerGridPanel.js:142
 msgid "User"
 msgstr "Benutzer"
 
-#: js/ConfigManagerGridPanel.js:148
+#: js/ConfigManagerGridPanel.js:150
 msgid "Prefix"
 msgstr "Prefix"
 
-#: js/ConfigManagerGridPanel.js:151
+#: js/ConfigManagerGridPanel.js:153
 msgid "Logging"
 msgstr "Logging"
 
-#: js/ConfigManagerGridPanel.js:157
+#: js/ConfigManagerGridPanel.js:159
 msgid "Filename"
 msgstr "Dateiname"
 
-#: js/ConfigManagerGridPanel.js:169
+#: js/ConfigManagerGridPanel.js:171
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/ConfigManagerGridPanel.js:173
+#: js/ConfigManagerGridPanel.js:175
 msgid "Caching"
 msgstr "Caching"
 
-#: js/ConfigManagerGridPanel.js:179
+#: js/ConfigManagerGridPanel.js:181
 msgid "Path"
 msgstr "Pfad"
 
-#: js/ConfigManagerGridPanel.js:182
+#: js/ConfigManagerGridPanel.js:184
 msgid "Lifetime (seconds)"
 msgstr "Lifetime (sekunden)"
 
-#: js/ConfigManagerGridPanel.js:275
+#: js/ConfigManagerGridPanel.js:277
 msgid "Save config"
 msgstr "Konfiguration speichern"
 
-#: js/ConfigManagerGridPanel.js:283
+#: js/ConfigManagerGridPanel.js:285
 msgid "Download config file"
 msgstr "Konfigurationsdatei herunterladen"
 

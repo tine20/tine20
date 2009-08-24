@@ -141,7 +141,7 @@ msgstr "Rollen"
 msgid "Admin"
 msgstr "Admin"
 
-#: js/Admin.js:284 js/Groups.js:50 js/Roles.js:47 js/Tags.js:56
+#: js/Admin.js:284 js/Groups.js:50 js/Roles.js:45 js/Tags.js:56
 #: js/Users.js:181
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -160,7 +160,7 @@ msgstr "Eintrag löschen"
 msgid "select all"
 msgstr "Alles auswählen"
 
-#: js/Admin.js:405 js/Applications.js:149 js/Groups.js:131 js/Roles.js:131
+#: js/Admin.js:405 js/Applications.js:149 js/Groups.js:131 js/Roles.js:129
 #: js/Tags.js:118 js/Users.js:220
 msgid "enter searchfilter"
 msgstr "Suchbegriff eingeben"
@@ -173,7 +173,7 @@ msgstr "Anzeigen von:"
 msgid "to:"
 msgstr "bis:"
 
-#: js/Admin.js:444 js/Applications.js:166 js/Groups.js:151 js/Roles.js:151
+#: js/Admin.js:444 js/Applications.js:166 js/Groups.js:151 js/Roles.js:149
 #: js/Tags.js:138 js/Users.js:236
 msgid "Search:"
 msgstr "Suche"
@@ -215,7 +215,7 @@ msgid "Login Name"
 msgstr "Benutzername"
 
 #: js/Admin.js:561 js/Applications.js:237 js/Groups.js:196 js/Groups.js:513
-#: js/Roles.js:198 js/SambaMachineGrid.js:87 js/Tags.js:180
+#: js/Roles.js:196 js/SambaMachineGrid.js:87 js/Tags.js:180
 msgid "Name"
 msgstr "Name"
 
@@ -291,8 +291,8 @@ msgstr "Die ausgewählten Gruppen wirklich löschen?"
 msgid "Deleting group(s)..."
 msgstr "Lösche Gruppe(n)..."
 
-#: js/Groups.js:72 js/Groups.js:403 js/Groups.js:431 js/Roles.js:69
-#: js/Roles.js:458 js/Roles.js:486 js/Tags.js:365 js/Users.js:201
+#: js/Groups.js:72 js/Groups.js:403 js/Groups.js:431 js/RoleEditDialog.js:161
+#: js/RoleEditDialog.js:189 js/Roles.js:67 js/Tags.js:365 js/Users.js:201
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
@@ -320,21 +320,21 @@ msgstr "Zeige Gruppen {0} - {1} von {2}"
 msgid "No groups to display"
 msgstr "Keine Gruppen anzuzeigen"
 
-#: js/Groups.js:195 js/Roles.js:197 js/SambaMachineGrid.js:80 js/Users.js:289
+#: js/Groups.js:195 js/Roles.js:195 js/SambaMachineGrid.js:80 js/Users.js:289
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:197 js/Groups.js:583 js/Roles.js:199 js/Roles.js:673
+#: js/Groups.js:197 js/Groups.js:583 js/RoleEditDialog.js:374 js/Roles.js:197
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:93 js/Tags.js:181
 #: js/Tags.js:502
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/Groups.js:364 js/Roles.js:420 js/Tags.js:320
+#: js/Groups.js:364 js/RoleEditDialog.js:123 js/Tags.js:320
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Groups.js:364 js/Roles.js:420
+#: js/Groups.js:364 js/RoleEditDialog.js:123
 msgid "Updating Memberships"
 msgstr "Mitgliedschaft erneuern"
 
@@ -342,11 +342,11 @@ msgstr "Mitgliedschaft erneuern"
 msgid "Could not save group."
 msgstr "Konnte Gruppe nicht speichern."
 
-#: js/Groups.js:410 js/Roles.js:465 js/Tags.js:370
+#: js/Groups.js:410 js/RoleEditDialog.js:168 js/Tags.js:370
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/Groups.js:410 js/Roles.js:465 js/Tags.js:370
+#: js/Groups.js:410 js/RoleEditDialog.js:168 js/Tags.js:370
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die angezeigten Fehler."
 
@@ -378,77 +378,77 @@ msgstr "Neue Gruppe erstellen"
 msgid "Edit Group \"{0}\""
 msgstr "Gruppe \"{0}\" bearbeiten"
 
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Möchten Sie die ausgewählten Rollen wirklich löschen?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Lösche Rolle(n)..."
-
-#: js/Roles.js:69 js/Roles.js:486
-msgid "Some error occurred while trying to delete the role."
-msgstr "Beim Löschen der Rolle trat ein Fehler auf."
-
-#: js/Roles.js:102
-msgid "add role"
-msgstr "Rolle hinzufügen"
-
-#: js/Roles.js:110
-msgid "edit role"
-msgstr "Rolle bearbeiten"
-
-#: js/Roles.js:118
-msgid "delete role"
-msgstr "Rolle löschen"
-
-#: js/Roles.js:191
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Zeige Rollen {0} - {1} von {2}"
-
-#: js/Roles.js:192 js/Roles.js:243
-msgid "No roles to display"
-msgstr "Keine Rollen zum Anziegen"
-
-#: js/Roles.js:458
+#: js/RoleEditDialog.js:161
 msgid "Could not save role."
 msgstr "Konnte die Rolle nicht speichern"
 
-#: js/Roles.js:478
+#: js/RoleEditDialog.js:181
 msgid "Deleting role..."
 msgstr "Rolle löschen"
 
-#: js/Roles.js:613
+#: js/RoleEditDialog.js:189 js/Roles.js:67
+msgid "Some error occurred while trying to delete the role."
+msgstr "Beim Löschen der Rolle trat ein Fehler auf."
+
+#: js/RoleEditDialog.js:314
 msgid "Role members"
 msgstr "Rollenmitglieder"
 
-#: js/Roles.js:623
+#: js/RoleEditDialog.js:324
 msgid "Members"
 msgstr "Mitglieder"
 
-#: js/Roles.js:635 js/Tags.js:523
+#: js/RoleEditDialog.js:336 js/Tags.js:523
 msgid "Rights"
 msgstr "Rechte"
 
-#: js/Roles.js:665
+#: js/RoleEditDialog.js:366
 msgid "Role Name"
 msgstr "Rollennname"
 
-#: js/Roles.js:706
+#: js/RoleEditDialog.js:407
 msgid "Loading Role..."
 msgstr "Lade Rolle..."
 
-#: js/Roles.js:706 js/Tags.js:544
+#: js/RoleEditDialog.js:407 js/Tags.js:544
 msgid "Please Wait"
 msgstr "Bitte warten"
 
-#: js/Roles.js:746
+#: js/RoleEditDialog.js:447
 msgid "Add New Role"
 msgstr "Neue Rolle hinzufügen"
 
-#: js/Roles.js:748
+#: js/RoleEditDialog.js:449
 msgid "Edit Role \"{0}\""
 msgstr "Rolle \"{0}\" bearbeiten"
+
+#: js/Roles.js:45
+msgid "Do you really want to delete the selected roles?"
+msgstr "Möchten Sie die ausgewählten Rollen wirklich löschen?"
+
+#: js/Roles.js:62
+msgid "Deleting role(s)..."
+msgstr "Lösche Rolle(n)..."
+
+#: js/Roles.js:100
+msgid "add role"
+msgstr "Rolle hinzufügen"
+
+#: js/Roles.js:108
+msgid "edit role"
+msgstr "Rolle bearbeiten"
+
+#: js/Roles.js:116
+msgid "delete role"
+msgstr "Rolle löschen"
+
+#: js/Roles.js:189
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Zeige Rollen {0} - {1} von {2}"
+
+#: js/Roles.js:190 js/Roles.js:241
+msgid "No roles to display"
+msgstr "Keine Rollen zum Anziegen"
 
 #: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
 msgid "Computer Name"

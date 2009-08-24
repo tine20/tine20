@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-16 16:29+0100\n"
+"PO-Revision-Date: 2009-08-22 19:06+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -14,23 +14,23 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 
-# There is no word "leads" in the polish language. I think we can replace "leads" with "działania" or "akcje". I mean samething, that can start some process in the feature.
-# Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "działania" oder "akcje" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
+# There is no word "leads" in the polish language. I think we can replace "leads" with "zapytania" or "zapytania ofertowe". I mean samething, that can start some process in the feature.
+# Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "zapytania" oder "zapytania ofertowe" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
 #: Acl/Rights.php:106
 msgid "manage leads"
-msgstr "Edytuj działania"
+msgstr "Edytuj zapytania"
 
 #: Acl/Rights.php:107
 msgid "add, edit and delete leads"
-msgstr "dodaj, edytuj i usuń działania"
+msgstr "dodaj, edytuj i usuń zapytania"
 
 #: Acl/Rights.php:110
 msgid "manage shared lead folders"
-msgstr "edytuj wspólne katalogi działań"
+msgstr "edytuj wspólne katalogi zapytań"
 
 #: Acl/Rights.php:111
 msgid "Create new shared lead folders"
-msgstr "Utwórz nowe, wspólne katalogi działań"
+msgstr "Utwórz nowe, wspólne katalogi zapytań"
 
 #: Controller/Lead.php:235
 msgid "State"
@@ -85,33 +85,33 @@ msgstr "%s zmieniony z %s na %s."
 #: Controller/Lead.php:252
 #, python-format
 msgid "Lead %s has been changed"
-msgstr "Działanie %s zostało zmienione"
+msgstr "Zapytanie %s zostało zmienione"
 
 #: Controller/Lead.php:254
 #, python-format
 msgid "Lead %s has been creaded"
-msgstr "Działanie %s zostało zapoczątkowane"
+msgstr "Zapytanie %s zostało utworzone"
 
 #: Controller.php:100
 #, python-format
 msgid "%s's personal leads"
-msgstr "%s's własne działania"
+msgstr "%s's zapytania osobiste"
 
 #: Export/Pdf.php:74
 msgid "Lead Data"
-msgstr "Dane dot. działania"
+msgstr "Dane dot. zapytania"
 
 #: Export/Pdf.php:77 js/Crm.js:345 js/LeadEditDialog.js:41 js/LeadState.js:220
 msgid "Leadstate"
-msgstr "Stan działań"
+msgstr "Stan zapytania"
 
 #: Export/Pdf.php:80 js/LeadEditDialog.js:70
 msgid "Leadtype"
-msgstr "Typ działania"
+msgstr "Typ zapytania"
 
 #: Export/Pdf.php:83 js/LeadEditDialog.js:87
 msgid "Leadsource"
-msgstr "Źródło działania"
+msgstr "Źródło zapytania"
 
 #: Export/Pdf.php:98
 msgid "End Scheduled"
@@ -167,15 +167,15 @@ msgstr "pilne"
 
 #: js/Crm.js:145
 msgid "Are you sure you want to delete this lead?"
-msgstr "Czy na pewno chcesz usunąć to działanie?"
+msgstr "Czy na pewno chcesz usunąć to zapytanie?"
 
 #: js/Crm.js:161
 msgid "Deleting lead"
-msgstr "Usuwanie działania"
+msgstr "Usuwanie zapytania"
 
 #: js/Crm.js:166
 msgid "Some error occured while trying to delete the lead."
-msgstr "Podczas próby usunięcia działania wystąpił błąd."
+msgstr "Podczas próby usunięcia zapytania wystąpił błąd."
 
 #: js/Crm.js:251
 msgid "Show details"
@@ -183,32 +183,32 @@ msgstr "Pokaż szczegóły"
 
 #: js/Crm.js:259
 msgid "Show closed leads"
-msgstr "Pokaż zakończone działania"
+msgstr "Pokaż zrealizowane zapytania"
 
 #: js/Crm.js:295
 msgid "Lead"
-msgstr "Działanie wstępne"
+msgstr "Zapytanie wstępne"
 
 #: js/Crm.js:296 js/Crm.js:342
 msgid "Lead name"
-msgstr "Działanie wstępne"
+msgstr "Zapytanie wstępne"
 
 #: js/Crm.js:314
 msgid "Displaying leads {0} - {1} of {2}"
-msgstr "Wyświetlanie działania {0} - {1} z {2}"
+msgstr "Wyświetlanie zapytania {0} - {1} z {2}"
 
 #: js/Crm.js:315 js/Crm.js:379
 msgid "No leads found."
-msgstr "Nie znaleziono działań."
+msgstr "Nie znaleziono zapytań."
 
 #: js/Crm.js:341
 msgid "Lead id"
-msgstr "ID działania"
+msgstr "ID zapytania"
 
 #: js/Crm.js:343 js/Crm.js:1650 js/LeadEditDialog.js:322
 #: js/LeadEditDialog.js:365
 msgid "Partner"
-msgstr "Partnerzy"
+msgstr "Wspólnicy"
 
 #: js/Crm.js:344 js/Crm.js:1630 js/LeadEditDialog.js:321
 #: js/LeadEditDialog.js:361
@@ -217,30 +217,30 @@ msgstr "Klienci"
 
 #: js/Crm.js:444
 msgid "Add lead"
-msgstr "Dodaj działanie"
+msgstr "Dodaj zapytanie"
 
 #: js/Crm.js:445
 msgid "Add new lead"
-msgstr "Dodaj nowe działanie"
+msgstr "Dodaj nowe zapytanie"
 
 #: js/Crm.js:460
 msgid "Edit lead"
-msgstr "Edytuj działanie"
+msgstr "Edytuj zapytanie"
 
 #: js/Crm.js:461
 msgid "Edit selected lead"
-msgstr "Edytuj zaznaczone działanie"
+msgstr "Edytuj zaznaczone zapytanie"
 
 #: js/Crm.js:474
 msgid "Delete lead"
 msgid_plural "Delete leads"
-msgstr[0] "Usuń działanie"
-msgstr[1] "Usuń działania"
-msgstr[2] "Usuń działań"
+msgstr[0] "Usuń zapytanie"
+msgstr[1] "Usuń zapytania"
+msgstr[2] "Usuń zapytań"
 
 #: js/Crm.js:475
 msgid "Delete selected leads"
-msgstr "Usuń zaznaczone działania"
+msgstr "Usuń zaznaczone zapytania"
 
 #: js/Crm.js:485 js/Crm.js:1737 js/Crm.js:1738
 msgid "Export as PDF"
@@ -248,7 +248,7 @@ msgstr "Exportuj jako PDF"
 
 #: js/Crm.js:486
 msgid "Export selected lead as PDF"
-msgstr "Eksportuj zaznaczone działania jako PDF"
+msgstr "Eksportuj zaznaczone zapytania jako PDF"
 
 #: js/Crm.js:495 js/Crm.js:1682 js/Crm.js:1701
 msgid "Add task"
@@ -256,15 +256,15 @@ msgstr "Dodaj zadanie"
 
 #: js/Crm.js:496
 msgid "Add task for selected lead"
-msgstr "Dodaj zadanie do zaznaczonego działania"
+msgstr "Dodaj zadanie do zaznaczonego zapytania"
 
 #: js/Crm.js:615
 msgid "Lead states"
-msgstr "Status działania"
+msgstr "Status zapytania"
 
 #: js/Crm.js:616
 msgid "Lead sources"
-msgstr "Źródła działania"
+msgstr "Źródła zapytania"
 
 #: js/Crm.js:617
 msgid "Lead types"
@@ -284,7 +284,7 @@ msgstr "Proszę czekać"
 
 #: js/Crm.js:844
 msgid "Saving lead"
-msgstr "Zapisywanie działania"
+msgstr "Zapisywanie zapytania"
 
 # The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
@@ -294,7 +294,7 @@ msgstr "Próba nieudana"
 
 #: js/Crm.js:870
 msgid "Could not save lead."
-msgstr "Zapisanie działania było niemożliwe."
+msgstr "Zapisanie zapytania było niemożliwe."
 
 #: js/Crm.js:874
 msgid "Please fix the errors noted."
@@ -314,7 +314,7 @@ msgstr "Znajdź kontakty do dodania ..."
 
 #: js/Crm.js:1119
 msgid "Summary"
-msgstr "Podsumowanie"
+msgstr "Streszczenie"
 
 #: js/Crm.js:1127
 msgid "Add a task..."
@@ -322,7 +322,7 @@ msgstr "Dodaj zadanie…"
 
 #: js/Crm.js:1160
 msgid "Percent"
-msgstr "Procent"
+msgstr "W procentach"
 
 #: js/Crm.js:1174
 msgid "Status"
@@ -374,7 +374,7 @@ msgstr "Zmień typ na wartość: Osoba odpowiedzialna"
 
 #: js/Crm.js:1651
 msgid "Change type to Partner"
-msgstr "Zmień typ na wartość: Partner"
+msgstr "Zmień typ na wartość: Wspólnik"
 
 #: js/Crm.js:1659
 msgid "Edit contact"
@@ -406,7 +406,7 @@ msgstr "Edytuj zaznaczone zadanie"
 
 #: js/Crm.js:1702
 msgid "Add existing task to lead"
-msgstr "Dodaj istniejące zadanie do działania"
+msgstr "Dodaj istniejące zadanie do zapytania"
 
 #: js/Crm.js:1711
 msgid "Remove tasks"
@@ -426,11 +426,11 @@ msgstr "Usuń wybrane produkty"
 
 #: js/Crm.js:1766 js/Crm.js:1767
 msgid "Leads"
-msgstr "Działania wstępne"
+msgstr "Wstępne zapytania"
 
 #: js/Crm.js:1812
 msgid "Loading Lead..."
-msgstr "Ładowanie działania wstępnego..."
+msgstr "Ładowanie wstępnego zapytania..."
 
 #: js/Crm.js:1812
 msgid "Please Wait"
@@ -438,11 +438,11 @@ msgstr "Proszę czekać"
 
 #: js/Crm.js:1843
 msgid "Add New Lead"
-msgstr "Dodaj nowe działanie"
+msgstr "Dodaj nowe zapytanie"
 
 #: js/Crm.js:1845
 msgid "Edit Lead \"{0}\""
-msgstr "Edytuj działanie \"{0}\""
+msgstr "Edytuj zapytanie \"{0}\""
 
 #: js/LeadEditDialog.js:32
 msgid "Enter short name"
@@ -486,7 +486,7 @@ msgstr "klient"
 
 #: Setup/setup.xml:442
 msgid "partner"
-msgstr "partner"
+msgstr "wspólnik"
 
 #: Setup/setup.xml:456
 msgid "reseller"
@@ -510,11 +510,11 @@ msgstr "kwota wysłana"
 
 #: Setup/setup.xml:542
 msgid "accepted"
-msgstr "zaakceptowany"
+msgstr "zaakceptowane"
 
 #: Setup/setup.xml:564
 msgid "lost"
-msgstr "stracony"
+msgstr "stracone"
 
 msgid "folder"
 msgstr "folder"

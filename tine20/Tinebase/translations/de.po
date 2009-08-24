@@ -55,31 +55,27 @@ msgstr "Filter"
 msgid "Tags"
 msgstr "Tags"
 
-#: Export/Pdf.php:404
-msgid "Export Date"
-msgstr "Export Datum"
-
-#: Export/Pdf.php:408
+#: Export/Pdf.php:403
 msgid "Created by"
 msgstr "Angelegt von"
 
-#: Export/Pdf.php:464
+#: Export/Pdf.php:457
 msgid "Activities"
 msgstr "Aktivitäten"
 
-#: Frontend/Http.php:324 js/tineInit.js:365
+#: Frontend/Http.php:326 js/tineInit.js:365
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
-#: Frontend/Http.php:325
+#: Frontend/Http.php:327
 msgid "Your session is not valid. You need to login again."
 msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
 
-#: Frontend/Http.php:351 js/ExceptionDialog.js:46
+#: Frontend/Http.php:353 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Programmabbruch"
 
-#: Frontend/Http.php:352 js/ExceptionDialog.js:71
+#: Frontend/Http.php:354 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
 
@@ -101,13 +97,13 @@ msgid_plural "{0} workdays"
 msgstr[0] "{0} Arbeitstag"
 msgstr[1] "{0} Arbeitstage"
 
-#: js/data/Record.js:103
+#: js/data/Record.js:115
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Aufgabe"
 msgstr[1] "Aufgaben"
 
-#: js/data/Record.js:107
+#: js/data/Record.js:119
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
@@ -115,8 +111,8 @@ msgstr[1] "Aufgabenlisten"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:448
 #: js/widgets/AccountpickerPanel.js:164
-#: js/widgets/container/ContainerSelect.js:363
-#: js/widgets/dialog/EditDialog.js:173
+#: js/widgets/container/ContainerSelect.js:373
+#: js/widgets/dialog/EditDialog.js:182
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -282,8 +278,8 @@ msgid "Repeat new Password"
 msgstr "Wiederholung neues Passwort"
 
 #: js/MainScreen.js:454 js/widgets/AccountpickerPanel.js:156
-#: js/widgets/container/ContainerSelect.js:372
-#: js/widgets/dialog/EditDialog.js:156
+#: js/widgets/container/ContainerSelect.js:382
+#: js/widgets/dialog/EditDialog.js:165
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ok"
@@ -322,8 +318,8 @@ msgstr ""
 "Die Installation von Gears wird die Geschwindigkeit von Tine 2.0 erhöhen "
 "indem alle benötigten Dateien local auf dem Computer gespeichert werden."
 
-#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:552
-#: js/widgets/dialog/EditDialog.js:429
+#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:581
+#: js/widgets/dialog/EditDialog.js:439
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
@@ -336,6 +332,16 @@ msgstr "Wollen sie sich wirklich Abmelden?"
 #: js/MainScreen.js:533
 msgid "Logging you out..."
 msgstr "Sie werden abgemeldet..."
+
+#: js/Models.js:74
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:74
+msgid "Groups"
+msgstr ""
 
 #: js/tineInit.js:348
 msgid "Connection lost, please check your network!"
@@ -616,30 +622,30 @@ msgstr "Zeit"
 msgid "User"
 msgstr "Benutzer"
 
-#: js/widgets/app/GridPanel.js:201
+#: js/widgets/app/GridPanel.js:222
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
-#: js/widgets/app/GridPanel.js:212 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:233 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "{0} hinzufügen"
 
-#: js/widgets/app/GridPanel.js:222 js/widgets/app/GridPanel.js:223
-#: js/widgets/app/GridPanel.js:225
+#: js/widgets/app/GridPanel.js:243 js/widgets/app/GridPanel.js:244
+#: js/widgets/app/GridPanel.js:246
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "{0} löschen"
 msgstr[1] "{0} löschen"
 
-#: js/widgets/app/GridPanel.js:296
+#: js/widgets/app/GridPanel.js:324
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zeige Datensätze {0} - {1} von {2}"
 
-#: js/widgets/app/GridPanel.js:297
+#: js/widgets/app/GridPanel.js:325
 msgid "No {0} to display"
 msgstr "Keine {0} gefunden"
 
-#: js/widgets/app/GridPanel.js:318
+#: js/widgets/app/GridPanel.js:346
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -647,35 +653,35 @@ msgstr ""
 "Keine {0} gefunden. Versuchen Sie die Suchkriterien, Anzeigeoptionen oder "
 "{1} in denen Sie suchen zu ändern."
 
-#: js/widgets/app/GridPanel.js:537
+#: js/widgets/app/GridPanel.js:566
 msgid "Not Allowed"
 msgstr "Mangelnde Erlaubnis"
 
-#: js/widgets/app/GridPanel.js:538
+#: js/widgets/app/GridPanel.js:567
 msgid "You are not allowed to delete all pages at once"
 msgstr "Es ist ihnen nicht erlaubt alle Seiten auf einmal zu löschen"
 
-#: js/widgets/app/GridPanel.js:550
+#: js/widgets/app/GridPanel.js:579
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Möchten sie den ausgewählten Eintrag wirklich löschen?"
 msgstr[1] "Möchten Sie die ausgewählten Einträge wirklich löschen?"
 
-#: js/widgets/app/GridPanel.js:555 js/widgets/dialog/EditDialog.js:431
+#: js/widgets/app/GridPanel.js:585 js/widgets/dialog/EditDialog.js:441
 msgid "Deleting {0}"
 msgstr "Lösche {0}"
 
-#: js/widgets/app/GridPanel.js:557
+#: js/widgets/app/GridPanel.js:587
 msgid " ... This may take a long time!"
 msgstr "... Das kann eine ganze Weile dauern!"
 
-#: js/widgets/app/GridPanel.js:571 js/widgets/dialog/EditDialog.js:403
-#: js/widgets/dialog/EditDialog.js:441 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/app/GridPanel.js:601 js/widgets/dialog/EditDialog.js:413
+#: js/widgets/dialog/EditDialog.js:451 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/widgets/app/GridPanel.js:571 js/widgets/dialog/EditDialog.js:441
+#: js/widgets/app/GridPanel.js:601 js/widgets/dialog/EditDialog.js:451
 msgid "Could not delete {0}."
 msgstr "Konnte {0} nicht löschen."
 
@@ -683,44 +689,54 @@ msgstr "Konnte {0} nicht löschen."
 msgid "Saved filter"
 msgstr "Gespeicherte Filter"
 
-#: js/widgets/container/ContainerSelect.js:119
-#: js/widgets/container/ContainerSelect.js:216
+#: js/widgets/container/ContainerSelect.js:123
+#: js/widgets/container/ContainerSelect.js:221
 msgid "choose other {0}..."
 msgstr "Andere {0} wählen..."
 
-#: js/widgets/container/ContainerSelect.js:120
+#: js/widgets/container/ContainerSelect.js:124
 msgid "Recently used {0}:"
 msgstr "Kürzlich genutzte {0}:"
 
-#: js/widgets/container/ContainerSelect.js:228
+#: js/widgets/container/ContainerSelect.js:233
 #: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:411
 #: js/widgets/tags/TagsPanel.js:415
 msgid "personal"
 msgstr "Persönlich"
 
-#: js/widgets/container/ContainerSelect.js:228
+#: js/widgets/container/ContainerSelect.js:233
 msgid "shared"
 msgstr "geteilt"
 
-#: js/widgets/container/ContainerSelect.js:360
+#: js/widgets/container/ContainerSelect.js:370
 msgid "please select a {0}"
 msgstr "Bitte {0} auswählen"
 
-#: js/widgets/container/ContainerTree.js:134
+#: js/widgets/container/ContainerTree.js:138
 msgid "All {0}"
 msgstr "Alle {0}"
 
-#: js/widgets/container/ContainerTree.js:139
+#: js/widgets/container/ContainerTree.js:143
 msgid "My {0}"
 msgstr "Meine {0}"
 
-#: js/widgets/container/ContainerTree.js:146
+#: js/widgets/container/ContainerTree.js:150
 msgid "Shared {0}"
 msgstr "Gemeinsame {0}"
 
-#: js/widgets/container/ContainerTree.js:154
+#: js/widgets/container/ContainerTree.js:158
 msgid "Other Users {0}"
 msgstr "{0} anderer Benutzer"
+
+#: js/widgets/container/ContainerTree.js:185
+#, fuzzy
+msgid "Permission Denied"
+msgstr "Berechtigungen"
+
+#: js/widgets/container/ContainerTree.js:185
+#, fuzzy
+msgid "You don't have the required grant to select this {0}"
+msgstr "Möchten Sie diesen {0} wirklich löschen?"
 
 #: js/widgets/container/GrantsDialog.js:55
 msgid "Folder"
@@ -797,45 +813,45 @@ msgid "1 day before"
 msgstr "1 Tag davor"
 
 #: js/widgets/dialog/CredentialsDialog.js:116
-#: js/widgets/dialog/EditDialog.js:421
+#: js/widgets/dialog/EditDialog.js:431
 #: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr "Fehler"
 
 #: js/widgets/dialog/CredentialsDialog.js:116
-#: js/widgets/dialog/EditDialog.js:421
+#: js/widgets/dialog/EditDialog.js:431
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben sie die gekennzeichneten Fehler"
 
-#: js/widgets/dialog/EditDialog.js:165 js/widgets/EditRecord.js:126
+#: js/widgets/dialog/EditDialog.js:174 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "Anwenden"
 
-#: js/widgets/dialog/EditDialog.js:182 js/widgets/EditRecord.js:146
+#: js/widgets/dialog/EditDialog.js:191 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "Löschen"
 
-#: js/widgets/dialog/EditDialog.js:252
+#: js/widgets/dialog/EditDialog.js:261
 msgid "Add New {0}"
 msgstr "Neuen {0} hinzufügen"
 
-#: js/widgets/dialog/EditDialog.js:254
+#: js/widgets/dialog/EditDialog.js:263
 msgid "Edit {0} \"{1}\""
 msgstr "{0} \"{1}\" bearbeiten"
 
-#: js/widgets/dialog/EditDialog.js:298 js/widgets/EditRecord.js:185
+#: js/widgets/dialog/EditDialog.js:307 js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "Gespeichert in"
 
-#: js/widgets/dialog/EditDialog.js:317
+#: js/widgets/dialog/EditDialog.js:327
 msgid "Transfering {0}..."
 msgstr "Übertrage {0}..."
 
-#: js/widgets/dialog/EditDialog.js:403
+#: js/widgets/dialog/EditDialog.js:413
 msgid "Could not save {0}."
 msgstr "Konnte {0} nicht speichern."
 
-#: js/widgets/dialog/EditDialog.js:429
+#: js/widgets/dialog/EditDialog.js:439
 msgid "Do you really want to delete this {0}?"
 msgstr "Möchten Sie diesen {0} wirklich löschen?"
 
@@ -1369,6 +1385,9 @@ msgstr "geändert"
 #: Setup/setup.xml:2519
 msgid "record changed"
 msgstr "Eintrag geändert"
+
+#~ msgid "Export Date"
+#~ msgstr "Export Datum"
 
 #~ msgid ""
 #~ "Sorry, your requested could not be completed because the required data "

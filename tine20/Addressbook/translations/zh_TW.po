@@ -218,8 +218,8 @@ msgstr "姓名"
 msgid "Last Name"
 msgstr "姓氏"
 
-#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:600
+#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/ContactGridDetailsPanel.js:136
+#: js/EditDialog.js:128 js/EditDialog.js:197 Setup/setup.xml:600
 msgid "Company"
 msgstr "公司名稱"
 
@@ -377,7 +377,7 @@ msgstr "撥打聯絡人"
 msgid "Work"
 msgstr "工作"
 
-#: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
+#: js/ContactGrid.js:214
 msgid "Home"
 msgstr "家裡"
 
@@ -393,14 +393,15 @@ msgstr "個人手機號碼"
 msgid "Select contact"
 msgstr "選取聯絡人"
 
-#: js/ContactGridDetailsPanel.js:136
-msgid "Office"
-msgstr ""
-
 #: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
 #: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "電子郵件"
+
+#: js/ContactGridDetailsPanel.js:160
+#, fuzzy
+msgid "Private"
+msgstr "個人地址"
 
 #: js/ContactGridDetailsPanel.js:183
 msgid "Info"

@@ -55,31 +55,27 @@ msgstr "失败"
 msgid "Tags"
 msgstr "标签"
 
-#: Export/Pdf.php:404
-msgid "Export Date"
-msgstr "输出日期"
-
-#: Export/Pdf.php:408
+#: Export/Pdf.php:403
 msgid "Created by"
 msgstr "创建者"
 
-#: Export/Pdf.php:464
+#: Export/Pdf.php:457
 msgid "Activities"
 msgstr "活动"
 
-#: Frontend/Http.php:324 js/tineInit.js:365
+#: Frontend/Http.php:326 js/tineInit.js:365
 msgid "Authorisation Required"
 msgstr "需要授权"
 
-#: Frontend/Http.php:325
+#: Frontend/Http.php:327
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Frontend/Http.php:351 js/ExceptionDialog.js:46
+#: Frontend/Http.php:353 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "非正常结束"
 
-#: Frontend/Http.php:352 js/ExceptionDialog.js:71
+#: Frontend/Http.php:354 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -98,20 +94,20 @@ msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0}工作日"
 
-#: js/data/Record.js:103
+#: js/data/Record.js:115
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "任务"
 
-#: js/data/Record.js:107
+#: js/data/Record.js:119
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
 
 #: js/ExceptionDialog.js:54 js/MainScreen.js:448
 #: js/widgets/AccountpickerPanel.js:164
-#: js/widgets/container/ContainerSelect.js:363
-#: js/widgets/dialog/EditDialog.js:173
+#: js/widgets/container/ContainerSelect.js:373
+#: js/widgets/dialog/EditDialog.js:182
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "取消"
@@ -279,8 +275,8 @@ msgid "Repeat new Password"
 msgstr "重复新密码"
 
 #: js/MainScreen.js:454 js/widgets/AccountpickerPanel.js:156
-#: js/widgets/container/ContainerSelect.js:372
-#: js/widgets/dialog/EditDialog.js:156
+#: js/widgets/container/ContainerSelect.js:382
+#: js/widgets/dialog/EditDialog.js:165
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "确认"
@@ -315,8 +311,8 @@ msgid ""
 "needed files locally on this computer."
 msgstr "安装 Gears 可以通过缓存所有需要的文件到本地电脑来提高 Tine 2.0 的性能"
 
-#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:552
-#: js/widgets/dialog/EditDialog.js:429
+#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:581
+#: js/widgets/dialog/EditDialog.js:439
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
@@ -329,6 +325,15 @@ msgstr "确实想登出？"
 #: js/MainScreen.js:533
 msgid "Logging you out..."
 msgstr "正在登出 ..."
+
+#: js/Models.js:74
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+
+#: js/Models.js:74
+msgid "Groups"
+msgstr ""
 
 #: js/tineInit.js:348
 msgid "Connection lost, please check your network!"
@@ -595,62 +600,62 @@ msgstr "时间"
 msgid "User"
 msgstr "用户"
 
-#: js/widgets/app/GridPanel.js:201
+#: js/widgets/app/GridPanel.js:222
 msgid "Edit {0}"
 msgstr "编辑{0}"
 
-#: js/widgets/app/GridPanel.js:212 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:233 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "添加{0}"
 
-#: js/widgets/app/GridPanel.js:222 js/widgets/app/GridPanel.js:223
-#: js/widgets/app/GridPanel.js:225
+#: js/widgets/app/GridPanel.js:243 js/widgets/app/GridPanel.js:244
+#: js/widgets/app/GridPanel.js:246
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "删除"
 
-#: js/widgets/app/GridPanel.js:296
+#: js/widgets/app/GridPanel.js:324
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "显示记录 {0} - {1} of {2}"
 
-#: js/widgets/app/GridPanel.js:297
+#: js/widgets/app/GridPanel.js:325
 msgid "No {0} to display"
 msgstr "没有{0}要显示"
 
-#: js/widgets/app/GridPanel.js:318
+#: js/widgets/app/GridPanel.js:346
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr "没有找到 {0}，请修改过滤条件，视图选项或搜索词 {1}"
 
-#: js/widgets/app/GridPanel.js:537
+#: js/widgets/app/GridPanel.js:566
 msgid "Not Allowed"
 msgstr "不允许"
 
-#: js/widgets/app/GridPanel.js:538
+#: js/widgets/app/GridPanel.js:567
 msgid "You are not allowed to delete all pages at once"
 msgstr "你不允许一次地删除所有页面"
 
-#: js/widgets/app/GridPanel.js:550
+#: js/widgets/app/GridPanel.js:579
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "真的想删除选中的记录？"
 
-#: js/widgets/app/GridPanel.js:555 js/widgets/dialog/EditDialog.js:431
+#: js/widgets/app/GridPanel.js:585 js/widgets/dialog/EditDialog.js:441
 msgid "Deleting {0}"
 msgstr "正删除{0}"
 
-#: js/widgets/app/GridPanel.js:557
+#: js/widgets/app/GridPanel.js:587
 msgid " ... This may take a long time!"
 msgstr ""
 
-#: js/widgets/app/GridPanel.js:571 js/widgets/dialog/EditDialog.js:403
-#: js/widgets/dialog/EditDialog.js:441 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/app/GridPanel.js:601 js/widgets/dialog/EditDialog.js:413
+#: js/widgets/dialog/EditDialog.js:451 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "失败"
 
-#: js/widgets/app/GridPanel.js:571 js/widgets/dialog/EditDialog.js:441
+#: js/widgets/app/GridPanel.js:601 js/widgets/dialog/EditDialog.js:451
 msgid "Could not delete {0}."
 msgstr "不能删除{0}"
 
@@ -658,44 +663,54 @@ msgstr "不能删除{0}"
 msgid "Saved filter"
 msgstr "保存过滤器"
 
-#: js/widgets/container/ContainerSelect.js:119
-#: js/widgets/container/ContainerSelect.js:216
+#: js/widgets/container/ContainerSelect.js:123
+#: js/widgets/container/ContainerSelect.js:221
 msgid "choose other {0}..."
 msgstr "选择其它的{0}..."
 
-#: js/widgets/container/ContainerSelect.js:120
+#: js/widgets/container/ContainerSelect.js:124
 msgid "Recently used {0}:"
 msgstr "当前使用的 {0}:"
 
-#: js/widgets/container/ContainerSelect.js:228
+#: js/widgets/container/ContainerSelect.js:233
 #: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:411
 #: js/widgets/tags/TagsPanel.js:415
 msgid "personal"
 msgstr "个人的"
 
-#: js/widgets/container/ContainerSelect.js:228
+#: js/widgets/container/ContainerSelect.js:233
 msgid "shared"
 msgstr "共享的"
 
-#: js/widgets/container/ContainerSelect.js:360
+#: js/widgets/container/ContainerSelect.js:370
 msgid "please select a {0}"
 msgstr "请选择一个{0}"
 
-#: js/widgets/container/ContainerTree.js:134
+#: js/widgets/container/ContainerTree.js:138
 msgid "All {0}"
 msgstr "所有{0}"
 
-#: js/widgets/container/ContainerTree.js:139
+#: js/widgets/container/ContainerTree.js:143
 msgid "My {0}"
 msgstr "我的 {0}"
 
-#: js/widgets/container/ContainerTree.js:146
+#: js/widgets/container/ContainerTree.js:150
 msgid "Shared {0}"
 msgstr "共享的{0}"
 
-#: js/widgets/container/ContainerTree.js:154
+#: js/widgets/container/ContainerTree.js:158
 msgid "Other Users {0}"
 msgstr "其它用户{0}"
+
+#: js/widgets/container/ContainerTree.js:185
+#, fuzzy
+msgid "Permission Denied"
+msgstr "许可"
+
+#: js/widgets/container/ContainerTree.js:185
+#, fuzzy
+msgid "You don't have the required grant to select this {0}"
+msgstr "真的想删除这个{0}？"
 
 #: js/widgets/container/GrantsDialog.js:55
 msgid "Folder"
@@ -779,45 +794,45 @@ msgid "1 day before"
 msgstr "是以前"
 
 #: js/widgets/dialog/CredentialsDialog.js:116
-#: js/widgets/dialog/EditDialog.js:421
+#: js/widgets/dialog/EditDialog.js:431
 #: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr "错误"
 
 #: js/widgets/dialog/CredentialsDialog.js:116
-#: js/widgets/dialog/EditDialog.js:421
+#: js/widgets/dialog/EditDialog.js:431
 msgid "Please fix the errors noted."
 msgstr "请修改注释的错误。"
 
-#: js/widgets/dialog/EditDialog.js:165 js/widgets/EditRecord.js:126
+#: js/widgets/dialog/EditDialog.js:174 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "应用"
 
-#: js/widgets/dialog/EditDialog.js:182 js/widgets/EditRecord.js:146
+#: js/widgets/dialog/EditDialog.js:191 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "删除"
 
-#: js/widgets/dialog/EditDialog.js:252
+#: js/widgets/dialog/EditDialog.js:261
 msgid "Add New {0}"
 msgstr "添加新的{0}"
 
-#: js/widgets/dialog/EditDialog.js:254
+#: js/widgets/dialog/EditDialog.js:263
 msgid "Edit {0} \"{1}\""
 msgstr "编辑{0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:298 js/widgets/EditRecord.js:185
+#: js/widgets/dialog/EditDialog.js:307 js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "保存到"
 
-#: js/widgets/dialog/EditDialog.js:317
+#: js/widgets/dialog/EditDialog.js:327
 msgid "Transfering {0}..."
 msgstr "正传递{0}..."
 
-#: js/widgets/dialog/EditDialog.js:403
+#: js/widgets/dialog/EditDialog.js:413
 msgid "Could not save {0}."
 msgstr "不能保存{0}。"
 
-#: js/widgets/dialog/EditDialog.js:429
+#: js/widgets/dialog/EditDialog.js:439
 msgid "Do you really want to delete this {0}?"
 msgstr "真的想删除这个{0}？"
 
@@ -1349,3 +1364,6 @@ msgstr "已修改"
 #: Setup/setup.xml:2519
 msgid "record changed"
 msgstr "记录已修改"
+
+#~ msgid "Export Date"
+#~ msgstr "输出日期"

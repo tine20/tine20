@@ -219,8 +219,8 @@ msgstr "First Name"
 msgid "Last Name"
 msgstr "Last Name"
 
-#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:600
+#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/ContactGridDetailsPanel.js:136
+#: js/EditDialog.js:128 js/EditDialog.js:197 Setup/setup.xml:600
 msgid "Company"
 msgstr "Company"
 
@@ -378,7 +378,7 @@ msgstr "call contact"
 msgid "Work"
 msgstr "Work"
 
-#: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
+#: js/ContactGrid.js:214
 msgid "Home"
 msgstr "Home"
 
@@ -394,14 +394,14 @@ msgstr "Cell private"
 msgid "Select contact"
 msgstr "Select contact"
 
-#: js/ContactGridDetailsPanel.js:136
-msgid "Office"
-msgstr "Office"
-
 #: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
 #: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "E-Mail"
+
+#: js/ContactGridDetailsPanel.js:160
+msgid "Private"
+msgstr "Private"
 
 #: js/ContactGridDetailsPanel.js:183
 msgid "Info"

@@ -217,8 +217,8 @@ msgstr "姓"
 msgid "Last Name"
 msgstr "名"
 
-#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:600
+#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/ContactGridDetailsPanel.js:136
+#: js/EditDialog.js:128 js/EditDialog.js:197 Setup/setup.xml:600
 msgid "Company"
 msgstr "会社"
 
@@ -376,7 +376,7 @@ msgstr "コールコンタクト"
 msgid "Work"
 msgstr "仕事"
 
-#: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
+#: js/ContactGrid.js:214
 msgid "Home"
 msgstr "自宅"
 
@@ -392,14 +392,15 @@ msgstr "個人携帯"
 msgid "Select contact"
 msgstr "コンタクトの選択"
 
-#: js/ContactGridDetailsPanel.js:136
-msgid "Office"
-msgstr ""
-
 #: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
 #: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "Eメール"
+
+#: js/ContactGridDetailsPanel.js:160
+#, fuzzy
+msgid "Private"
+msgstr "自宅の住所"
 
 #: js/ContactGridDetailsPanel.js:183
 msgid "Info"

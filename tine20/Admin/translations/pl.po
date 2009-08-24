@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-16 16:34+0100\n"
+"PO-Revision-Date: 2009-08-19 22:00+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -152,7 +152,7 @@ msgstr "Funkcje"
 msgid "Admin"
 msgstr "Administrator"
 
-#: js/Admin.js:284 js/Groups.js:50 js/Roles.js:47 js/Tags.js:56
+#: js/Admin.js:284 js/Groups.js:50 js/Roles.js:45 js/Tags.js:56
 #: js/Users.js:181
 msgid "Confirm"
 msgstr "Potwierdź"
@@ -169,7 +169,7 @@ msgstr "usuń wpis"
 msgid "select all"
 msgstr "zaznacz wszystko"
 
-#: js/Admin.js:405 js/Applications.js:149 js/Groups.js:131 js/Roles.js:131
+#: js/Admin.js:405 js/Applications.js:149 js/Groups.js:131 js/Roles.js:129
 #: js/Tags.js:118 js/Users.js:220
 msgid "enter searchfilter"
 msgstr "wprowadź szukaną frazę"
@@ -182,7 +182,7 @@ msgstr "Wyświetl od:"
 msgid "to:"
 msgstr "do:"
 
-#: js/Admin.js:444 js/Applications.js:166 js/Groups.js:151 js/Roles.js:151
+#: js/Admin.js:444 js/Applications.js:166 js/Groups.js:151 js/Roles.js:149
 #: js/Tags.js:138 js/Users.js:236
 msgid "Search:"
 msgstr "Znajdź:"
@@ -205,7 +205,7 @@ msgstr "błąd"
 
 #: js/Admin.js:533
 msgid "success"
-msgstr "sukces"
+msgstr "zakończone sukcesem"
 
 #: js/Admin.js:554
 msgid "Displaying access log entries {0} - {1} of {2}"
@@ -224,9 +224,9 @@ msgid "Login Name"
 msgstr "Login"
 
 #: js/Admin.js:561 js/Applications.js:237 js/Groups.js:196 js/Groups.js:513
-#: js/Roles.js:198 js/SambaMachineGrid.js:87 js/Tags.js:180
+#: js/Roles.js:196 js/SambaMachineGrid.js:87 js/Tags.js:180
 msgid "Name"
-msgstr "Imię i nazwisko"
+msgstr "Nazwa"
 
 #: js/Admin.js:562
 msgid "IP Address"
@@ -302,8 +302,8 @@ msgstr "Usuwanie grup(y)..."
 
 # The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
-#: js/Groups.js:72 js/Groups.js:403 js/Groups.js:431 js/Roles.js:69
-#: js/Roles.js:458 js/Roles.js:486 js/Tags.js:365 js/Users.js:201
+#: js/Groups.js:72 js/Groups.js:403 js/Groups.js:431 js/RoleEditDialog.js:161
+#: js/RoleEditDialog.js:189 js/Roles.js:67 js/Tags.js:365 js/Users.js:201
 msgid "Failed"
 msgstr "Próba nieudana"
 
@@ -331,21 +331,21 @@ msgstr "Wyświetlanie grup {0} - {1} z {2}"
 msgid "No groups to display"
 msgstr "Brak grup"
 
-#: js/Groups.js:195 js/Roles.js:197 js/SambaMachineGrid.js:80 js/Users.js:289
+#: js/Groups.js:195 js/Roles.js:195 js/SambaMachineGrid.js:80 js/Users.js:289
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:197 js/Groups.js:583 js/Roles.js:199 js/Roles.js:673
+#: js/Groups.js:197 js/Groups.js:583 js/RoleEditDialog.js:374 js/Roles.js:197
 #: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:93 js/Tags.js:181
 #: js/Tags.js:502
 msgid "Description"
 msgstr "Opis"
 
-#: js/Groups.js:364 js/Roles.js:420 js/Tags.js:320
+#: js/Groups.js:364 js/RoleEditDialog.js:123 js/Tags.js:320
 msgid "Please wait"
 msgstr "Proszę czekać"
 
-#: js/Groups.js:364 js/Roles.js:420
+#: js/Groups.js:364 js/RoleEditDialog.js:123
 msgid "Updating Memberships"
 msgstr "Aktualizacja uczestnictwa"
 
@@ -353,11 +353,11 @@ msgstr "Aktualizacja uczestnictwa"
 msgid "Could not save group."
 msgstr "Zapisanie grupy było niemożliwe."
 
-#: js/Groups.js:410 js/Roles.js:465 js/Tags.js:370
+#: js/Groups.js:410 js/RoleEditDialog.js:168 js/Tags.js:370
 msgid "Errors"
 msgstr "Błędy"
 
-#: js/Groups.js:410 js/Roles.js:465 js/Tags.js:370
+#: js/Groups.js:410 js/RoleEditDialog.js:168 js/Tags.js:370
 msgid "Please fix the errors noted."
 msgstr "Proszę poprawić wskazane błędy."
 
@@ -371,7 +371,7 @@ msgstr "Uczestnicy przypisani do grupy"
 
 #: js/Groups.js:576
 msgid "Group Name"
-msgstr "Nazwa grupy"
+msgstr "Nazwę grupy"
 
 #: js/Groups.js:619 js/Users.js:388
 msgid "add account"
@@ -389,85 +389,85 @@ msgstr "Dodaj nową grupę"
 msgid "Edit Group \"{0}\""
 msgstr "Edytuj grupę \"{0}\""
 
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Czy na pewno chcesz usunąć wybrane funkcje?"
+#: js/RoleEditDialog.js:161
+msgid "Could not save role."
+msgstr "Zapisanie funkcji było niemożliwe."
 
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
+#: js/RoleEditDialog.js:181
+msgid "Deleting role..."
 msgstr "Usuwanie funkcji…"
 
 # The word "Roli" could not be clearly understood. The word "funkcji" is the better choice.
 # Das Wort "Roli" koennte missverstanden werden. Das Wort "funkcji" passt besser.
-#: js/Roles.js:69 js/Roles.js:486
+#: js/RoleEditDialog.js:189 js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
 msgstr "Podczas próby usunięcia funkcji wystąpił błąd."
 
-#: js/Roles.js:102
+#: js/RoleEditDialog.js:314
+msgid "Role members"
+msgstr "Przypisani do funkcji"
+
+#: js/RoleEditDialog.js:324
+msgid "Members"
+msgstr "Uczestnicy"
+
+#: js/RoleEditDialog.js:336 js/Tags.js:523
+msgid "Rights"
+msgstr "Uprawnienia"
+
+#: js/RoleEditDialog.js:366
+msgid "Role Name"
+msgstr "Nazwę funkcji"
+
+#: js/RoleEditDialog.js:407
+msgid "Loading Role..."
+msgstr "Ładowanie funkcji…"
+
+#: js/RoleEditDialog.js:407 js/Tags.js:544
+msgid "Please Wait"
+msgstr "Proszę czekać"
+
+#: js/RoleEditDialog.js:447
+msgid "Add New Role"
+msgstr "Dodaj nową funkcję"
+
+#: js/RoleEditDialog.js:449
+msgid "Edit Role \"{0}\""
+msgstr "Edytuj funkcję \"{0}\""
+
+#: js/Roles.js:45
+msgid "Do you really want to delete the selected roles?"
+msgstr "Czy na pewno chcesz usunąć wybrane funkcje?"
+
+#: js/Roles.js:62
+msgid "Deleting role(s)..."
+msgstr "Usuwanie funkcji…"
+
+#: js/Roles.js:100
 msgid "add role"
 msgstr "dodaj funkcję"
 
-#: js/Roles.js:110
+#: js/Roles.js:108
 msgid "edit role"
 msgstr "edytuj funkcję"
 
-#: js/Roles.js:118
+#: js/Roles.js:116
 msgid "delete role"
 msgstr "usuń funkcję"
 
 # The word "Role" could not be clearly understood. The word "Funkcji" is a better choice.
 # Das Wort "Role" koennte missverstanden werden. Das Wort "Funkcji" passt besser.
-#: js/Roles.js:191
+#: js/Roles.js:189
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Wyświetlanie funkcji {0} - {1} z {2}"
 
-#: js/Roles.js:192 js/Roles.js:243
+#: js/Roles.js:190 js/Roles.js:241
 msgid "No roles to display"
 msgstr "Brak funkcji"
 
-#: js/Roles.js:458
-msgid "Could not save role."
-msgstr "Zapisanie funkcji było niemożliwe."
-
-#: js/Roles.js:478
-msgid "Deleting role..."
-msgstr "Usuwanie funkcji…"
-
-#: js/Roles.js:613
-msgid "Role members"
-msgstr "Przypisani do funkcji"
-
-#: js/Roles.js:623
-msgid "Members"
-msgstr "Uczestnicy"
-
-#: js/Roles.js:635 js/Tags.js:523
-msgid "Rights"
-msgstr "Uprawnienia"
-
-#: js/Roles.js:665
-msgid "Role Name"
-msgstr "Nazwa funkcji"
-
-#: js/Roles.js:706
-msgid "Loading Role..."
-msgstr "Ładowanie funkcji…"
-
-#: js/Roles.js:706 js/Tags.js:544
-msgid "Please Wait"
-msgstr "Proszę czekać"
-
-#: js/Roles.js:746
-msgid "Add New Role"
-msgstr "Dodaj nową funkcję"
-
-#: js/Roles.js:748
-msgid "Edit Role \"{0}\""
-msgstr "Edytuj funkcję \"{0}\""
-
 #: js/SambaMachineEditDialog.js:38 js/SambaMachineGrid.js:65
 msgid "Computer Name"
-msgstr "Nazwa komputera"
+msgstr "Nazwę komputera"
 
 #: js/SambaMachineModel.js:40
 msgid "Computer"
@@ -534,7 +534,7 @@ msgstr "Użyj"
 
 #: js/Tags.js:495
 msgid "Tag Name"
-msgstr "Nazwa znacznika"
+msgstr "Nazwę znacznika"
 
 #: js/Tags.js:526
 msgid "Context"
@@ -576,11 +576,9 @@ msgstr "nigdy"
 msgid "Last login at"
 msgstr "Ostatnie logowanie o"
 
-# The other possibility would be: "nie znam". It depends on the context.
-# Die andere Moeglichkeit waere "nie znam". Das haengt vom Kontext ab.
 #: js/UserEditDialog.js:125 js/UserEditDialog.js:140
 msgid "don't know"
-msgstr "nieznany"
+msgstr "nie znam"
 
 #: js/UserEditDialog.js:125 js/UserEditDialog.js:140 js/UserEditDialog.js:205
 msgid "never logged in"

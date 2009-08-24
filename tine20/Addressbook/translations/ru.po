@@ -226,8 +226,8 @@ msgstr "Имя"
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:600
+#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/ContactGridDetailsPanel.js:136
+#: js/EditDialog.js:128 js/EditDialog.js:197 Setup/setup.xml:600
 msgid "Company"
 msgstr "Фирма"
 
@@ -385,7 +385,7 @@ msgstr "позвонить контакту"
 msgid "Work"
 msgstr "Работа "
 
-#: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
+#: js/ContactGrid.js:214
 msgid "Home"
 msgstr "Домашний URL"
 
@@ -401,14 +401,15 @@ msgstr "Мобильный телефон (личный)"
 msgid "Select contact"
 msgstr "Выберите контакт"
 
-#: js/ContactGridDetailsPanel.js:136
-msgid "Office"
-msgstr ""
-
 #: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
 #: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "Электронная почта"
+
+#: js/ContactGridDetailsPanel.js:160
+#, fuzzy
+msgid "Private"
+msgstr "Личный адрес"
 
 #: js/ContactGridDetailsPanel.js:183
 msgid "Info"

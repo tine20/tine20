@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-16 16:23+0100\n"
+"PO-Revision-Date: 2009-08-19 21:39+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -383,7 +383,7 @@ msgid "saydurationm"
 msgstr "czas rozmowy m."
 
 # The other possibility would be: "Załącz". Perhaps it would be even better.
-# Die andere Moeglichkeit waere: "Załącz". Vielleicht waere es sogar besser.
+# Die andere Moeglichkeit waere: "Załącz". Vielleicht waere es sogar besser so.
 #: js/Asterisk/VoicemailEditDialog.js:149
 #: js/Asterisk/VoicemailGridPanel.js:116
 msgid "attach"

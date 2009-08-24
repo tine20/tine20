@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-16 16:35+0100\n"
+"PO-Revision-Date: 2009-08-19 21:47+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 # Wenn der uebersetzte Text zu lang ist, wir koennen den gesamten Satz einfach ohne das Wort 'shared' ueberschreiben: "Zarządzaj książkami adresowymi".
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
-msgstr "Edytuj wspólne książki adresowe"
+msgstr "edytuj wspólne książki adresowe"
 
 # It is also possible to use "wspólne" instead of "współdzielone".
 # Es is auch moeglich, "wspólne" statt "współdzielone" zu verwenden.
@@ -224,7 +224,7 @@ msgstr "Kontakty"
 
 #: js/Addressbook.js:483
 msgid "addressbooks"
-msgstr "Książki adresowe"
+msgstr "książki adresowe"
 
 #: js/ContactGrid.js:57 js/ContactGrid.js:85 js/EditDialog.js:106
 #: js/EditDialog.js:167
@@ -236,8 +236,8 @@ msgstr "Imię"
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/EditDialog.js:128
-#: js/EditDialog.js:197 Setup/setup.xml:600
+#: js/ContactGrid.js:59 js/ContactGrid.js:88 js/ContactGridDetailsPanel.js:136
+#: js/EditDialog.js:128 js/EditDialog.js:197 Setup/setup.xml:600
 msgid "Company"
 msgstr "Firma"
 
@@ -403,7 +403,7 @@ msgstr "Wywołaj kontakt"
 msgid "Work"
 msgstr "Praca"
 
-#: js/ContactGrid.js:214 js/ContactGridDetailsPanel.js:160
+#: js/ContactGrid.js:214
 msgid "Home"
 msgstr "Prywatnie"
 
@@ -419,14 +419,15 @@ msgstr "Komórka prywatna"
 msgid "Select contact"
 msgstr "Wybierz kontakt"
 
-#: js/ContactGridDetailsPanel.js:136
-msgid "Office"
-msgstr ""
-
 #: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
 #: js/EditDialog.js:261
 msgid "E-Mail"
 msgstr "E-mail"
+
+#: js/ContactGridDetailsPanel.js:160
+#, fuzzy
+msgid "Private"
+msgstr "Adres prywatny"
 
 #: js/ContactGridDetailsPanel.js:183
 msgid "Info"

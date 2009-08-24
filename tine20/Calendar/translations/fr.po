@@ -12,28 +12,34 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: Acl/Rights.php:89
+#: Acl/Rights.php:96
 msgid "manage shared calendars"
 msgstr "gérer les calendriers partagés"
 
-#: Acl/Rights.php:90
+#: Acl/Rights.php:97
 msgid "Create new shared calendars"
 msgstr "Créer de nouveaux calendriers partagés"
 
-#: Controller/Event.php:762
+#: Acl/Rights.php:100
+#, fuzzy
+msgid "manage resources"
+msgstr "gérer les calendriers partagés"
+
+#: Acl/Rights.php:101
+msgid "All Rights to administrate resources"
+msgstr ""
+
+#: Controller/Event.php:764
 msgid "Notification for Event "
 msgstr "Notification d'évènement"
-
-#: Controller/Event.php:763
-msgid "Event description:<br/>"
-msgstr "Description:<br/>"
 
 #: Controller.php:85
 #, python-format
 msgid "%s's personal calendar"
 msgstr "Calendrier de %s"
 
-#: js/AttendeeGridPanel.js:55 js/Model.js:232
+#: js/AttendeeGridPanel.js:55 js/Model.js:274 Model/Event.php:243
+#: Model/Event.php:265
 msgid "Attendee"
 msgstr "Participant"
 
@@ -54,56 +60,74 @@ msgid "Type"
 msgstr "Type"
 
 #: js/AttendeeGridPanel.js:145
+msgid "User"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:146
+msgid "Group"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:147
+msgid "Resouce"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:155 js/ResourceEditDialog.js:58
+#: js/ResourcesGridPanel.js:41
 msgid "Name"
 msgstr "Nom"
 
-#: js/AttendeeGridPanel.js:175
+#: js/AttendeeGridPanel.js:185
 msgid "Status"
 msgstr "Statut"
 
-#: js/AttendeeGridPanel.js:186 js/AttendeeGridPanel.js:447
+#: js/AttendeeGridPanel.js:192 js/AttendeeGridPanel.js:482
 msgid "No response"
 msgstr "Pas de réponse"
 
-#: js/AttendeeGridPanel.js:187 js/AttendeeGridPanel.js:450
+#: js/AttendeeGridPanel.js:193 js/AttendeeGridPanel.js:485
 msgid "Accepted"
 msgstr "Accepté"
 
-#: js/AttendeeGridPanel.js:188 js/AttendeeGridPanel.js:453
+#: js/AttendeeGridPanel.js:194 js/AttendeeGridPanel.js:488
 msgid "Declined"
 msgstr "Refusé"
 
-#: js/AttendeeGridPanel.js:189 js/AttendeeGridPanel.js:456
+#: js/AttendeeGridPanel.js:195 js/AttendeeGridPanel.js:491
 msgid "Tentative"
 msgstr "Tentative"
 
-#: js/AttendeeGridPanel.js:253
+#: js/AttendeeGridPanel.js:295
 msgid "Remove Attender"
 msgstr "supprimer le participant"
 
-#: js/AttendeeGridPanel.js:389 js/AttendeeGridPanel.js:411
-msgid "No Information"
-msgstr "Pas d'informations"
-
-#: js/AttendeeGridPanel.js:399
+#: js/AttendeeGridPanel.js:390
 msgid "Click here to invite another attender..."
 msgstr "Cliquez ici pour ajouter un participant..."
 
-#: js/AttendeeGridPanel.js:423
+#: js/AttendeeGridPanel.js:408 js/AttendeeGridPanel.js:421
+#: js/AttendeeGridPanel.js:434 js/AttendeeGridPanel.js:446
+msgid "No Information"
+msgstr "Pas d'informations"
+
+#: js/AttendeeGridPanel.js:458
 msgid "Required"
 msgstr "Requis"
 
-#: js/AttendeeGridPanel.js:426
+#: js/AttendeeGridPanel.js:461
 msgid "Optional"
 msgstr "Optionnel"
 
-#: js/Calendar.js:36 js/Model.js:76 Setup/setup.xml:4
+#: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Calendrier"
 msgstr[1] "Calendriers"
 
-#: js/Calendar.js:151 js/MonthView.js:87
+#: js/Calendar.js:105
+msgid "Manage Resources"
+msgstr ""
+
+#: js/Calendar.js:177 js/MonthView.js:87
 msgid "WK"
 msgstr "WK"
 
@@ -147,7 +171,7 @@ msgstr "Mettre à jour cet évènement seulement"
 msgid "Failed not update event"
 msgstr "Impossible de mettre à jour l'évenement"
 
-#: js/CalendarSelectWidget.js:157
+#: js/CalendarSelectWidget.js:158
 #, fuzzy
 msgid "Originally"
 msgstr "A l'origine"
@@ -164,7 +188,7 @@ msgstr "{0} {1} {2}"
 msgid "Summary"
 msgstr "Résumé"
 
-#: js/EventEditDialog.js:100
+#: js/EventEditDialog.js:100 js/ResourcesGridPanel.js:52 Model/Event.php:263
 msgid "Location"
 msgstr "Lieu"
 
@@ -180,7 +204,7 @@ msgstr "Date de fin"
 msgid "whole day"
 msgstr "toute la journée"
 
-#: js/EventEditDialog.js:161
+#: js/EventEditDialog.js:161 js/ResourceEditDialog.js:74 Model/Event.php:264
 msgid "Description"
 msgstr "Description"
 
@@ -258,35 +282,62 @@ msgstr "Supprimer cet évènement et tous les suivants"
 msgid "Delete this event only"
 msgstr "Supprimer cet évènement seulement"
 
-#: js/MainScreenCenterPanel.js:374
+#: js/MainScreenCenterPanel.js:375
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer l'évènement sélectionné?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les {0} évènements sélectionnés?"
 
-#: js/Model.js:72 js/Model.js:236
+#: js/Model.js:64 js/Model.js:278
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Évènement"
 msgstr[1] "Évènements"
 
-#: js/Model.js:72 js/Model.js:236
+#: js/Model.js:64 js/Model.js:278
 msgid "Events"
 msgstr "Évènements"
 
-#: js/Model.js:76
+#: js/Model.js:68
 msgid "Calendars"
 msgstr "Calendriers"
 
-#: js/Model.js:232
+#: js/Model.js:274
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Participant"
 msgstr[1] "Participants"
 
+#: js/Model.js:391
+#, fuzzy
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Récurrences"
+msgstr[1] "Récurrences"
+
+#: js/Model.js:391
+#, fuzzy
+msgid "Resources"
+msgstr "Récurrences"
+
 #: js/MonthView.js:92
 msgid "{0} more..."
 msgstr "{0} de plus..."
+
+#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:47
+#, fuzzy
+msgid "Email"
+msgstr "Quotidien"
+
+#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
+#, fuzzy
+msgid "Is a location"
+msgstr "Lieu"
+
+#: js/ResourceEditDialog.js:75
+#, fuzzy
+msgid "Enter description..."
+msgstr "Saisir une description"
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
@@ -386,6 +437,19 @@ msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Ce contact a été ajouté automatiquement comme participant"
 
+#: Model/Event.php:260
+#, fuzzy
+msgid "Start"
+msgstr "Statut"
+
+#: Model/Event.php:261
+msgid "End"
+msgstr ""
+
+#: Model/Event.php:262
+msgid "Organizer"
+msgstr ""
+
 #: Preference.php:66
 msgid "Publish Free/Busy Information"
 msgstr "Publier son statut (libre/occupé)"
@@ -401,6 +465,9 @@ msgstr "Calendrier par défaut"
 #: Preference.php:71
 msgid "The defualt calendar for invitations and new events"
 msgstr "Calendrier par défaut pour les invitations et les nouveau évènements"
+
+#~ msgid "Event description:<br/>"
+#~ msgstr "Description:<br/>"
 
 #~ msgid ""
 #~ "Do you realy want to update all events of this recuring event series?"

@@ -21,44 +21,48 @@ msgstr "Gemeinsame Aufgabenlisten verwalten"
 msgid "Create new shared tasks lists"
 msgstr "Neue gemeinse Aufgabenliste anlegen"
 
+#: Controller/Task.php:152
+msgid "Notification for Task "
+msgstr ""
+
 #: Controller.php:97
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%ss persönliche Aufgaben"
 
-#: js/EditDialog.js:113 js/GridPanel.js:64 js/GridPanel.js:123
+#: js/EditDialog.js:153 js/GridPanel.js:64 js/GridPanel.js:123
 msgid "Summary"
 msgstr "Beschreibung"
 
-#: js/EditDialog.js:118
+#: js/EditDialog.js:158
 msgid "Due date"
 msgstr "Fälligkeitsdatum"
 
-#: js/EditDialog.js:121 js/GridPanel.js:144
+#: js/EditDialog.js:161 js/GridPanel.js:144 Model/Task.php:187
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/EditDialog.js:124 js/GridPanel.js:66 js/GridPanel.js:196
+#: js/EditDialog.js:164 js/GridPanel.js:66 js/GridPanel.js:196
 msgid "Responsible"
 msgstr "Verantwortlich"
 
-#: js/EditDialog.js:128
+#: js/EditDialog.js:168
 msgid "Notes"
 msgstr "Anmerkungen"
 
-#: js/EditDialog.js:129
+#: js/EditDialog.js:169
 msgid "Enter description..."
 msgstr "Beschreibung eingeben..."
 
-#: js/EditDialog.js:134
+#: js/EditDialog.js:174
 msgid "Percentage"
 msgstr "Prozent"
 
-#: js/EditDialog.js:138 js/GridPanel.js:173
+#: js/EditDialog.js:178 js/GridPanel.js:173 Model/Task.php:188
 msgid "Status"
 msgstr "Status"
 
-#: js/EditDialog.js:142
+#: js/EditDialog.js:182
 msgid "Completed"
 msgstr "Abgeschlossen"
 
@@ -84,7 +88,7 @@ msgstr "Konnte Aufgabe nicht speichern."
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/GridPanel.js:159
+#: js/GridPanel.js:159 Model/Task.php:189
 msgid "Percent"
 msgstr "Prozent"
 
@@ -96,39 +100,52 @@ msgstr "Angelegt am"
 msgid "Show closed"
 msgstr "Geschlossene Aufgaben anzeigen"
 
-#: js/Status.js:45 Setup/setup.xml:444
+#: js/Status.js:45 Setup/setup.xml:449
 msgid "IN-PROCESS"
 msgstr "IN BEARBEITUNG"
 
-#: js/Tasks.js:82
+#: js/Tasks.js:85
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Aufgabe"
 msgstr[1] "Aufgaben"
 
-#: js/Tasks.js:82
+#: js/Tasks.js:85
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: js/Tasks.js:86
+#: js/Tasks.js:89
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Aufgabenliste"
 msgstr[1] "Aufgabenlisten"
 
-#: js/Tasks.js:86
+#: js/Tasks.js:89
 msgid "to do lists"
 msgstr "Aufgabenlisten"
 
-#: Setup/setup.xml:400
+#: Model/Task.php:184
+msgid "Due"
+msgstr ""
+
+#: Model/Task.php:185
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:186
+#, fuzzy
+msgid "Description"
+msgstr "Beschreibung eingeben..."
+
+#: Setup/setup.xml:405
 msgid "NEEDS-ACTION"
 msgstr "ZU BEARBEITEN"
 
-#: Setup/setup.xml:422
+#: Setup/setup.xml:427
 msgid "COMPLETED"
 msgstr "ERLEDIGT"
 
-#: Setup/setup.xml:466
+#: Setup/setup.xml:471
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
 
