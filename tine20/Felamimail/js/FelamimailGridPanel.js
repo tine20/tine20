@@ -437,6 +437,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     onKeyDown: function(e) {
         if (e.ctrlKey) {
             switch (e.getKey()) {
+                case e.N:
                 case e.M:
                     this.onEditInNewWindow({
                         actionType: 'add'
