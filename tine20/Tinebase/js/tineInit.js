@@ -250,6 +250,8 @@ Tine.Tinebase.tineInit = {
         
         /**
          * send custom headers and json key on Ext.Ajax.requests
+         * 
+         * @legacy implicitly transform requests for JSONRPC
          */
         Ext.Ajax.on('beforerequest', function(connection, options){
             options.headers = options.headers || {};
@@ -277,6 +279,8 @@ Tine.Tinebase.tineInit = {
             }*/
             
             // convert non Ext.Direct request to jsonrpc
+            // - convert params
+            // - convert error handling
             if (options.params && !options.isUpload) {
                 var params = {};
                 
@@ -302,13 +306,22 @@ Tine.Tinebase.tineInit = {
                     id: ++Ext.Ajax.requestId
                 });
                 
+                options.cbs = {};
+                options.cbs.success  = options.success  || null;
+                options.cbs.failure  = options.failure  || null;
+                options.cbs.callback = options.callback || null;
+                
                 options.isImplicitJsonRpc = true;
                 delete options.params;
+                delete options.success;
+                delete options.failure;
             }
         });
         
         /**
-         * Fetch HTML in JSON responses, which indicate response errors.
+         * detect resoponse errors (e.g. html from xdebug)
+         * 
+         * @legacy implicitly transform requests from JSONRPC
          */
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
             // detect resoponse errors (e.g. html from xdebug)
@@ -327,19 +340,33 @@ Tine.Tinebase.tineInit = {
                 var jsonrpc = Ext.decode(response.responseText);
                 if (jsonrpc.result) {
                     response.responseText = Ext.encode(jsonrpc.result);
+                    
+                    if(options.cbs.success){
+                        options.cbs.success.call(options.scope, response, options);
+                    }
+                    if(options.cbs.callback){
+                        options.cbs.callback.call(options.scope, options, true, response);
+                    }
                 } else {
+                    
                     response.responseText = Ext.encode(jsonrpc.error);
-                    connection.fireEvent('requestexception', connection, response, options);
+                    
+                    if(options.cbs.failure){
+                        options.cbs.failure.call(options.scope, response, options);
+                    } else if(options.cbs.callback){
+                        options.cbs.callback.call(options.scope, options, false, response);
+                    } else {
+                        // generic error handling
+                        connection.fireEvent('requestexception', connection, response, options);
+                    }
                 }
             }
         });
         
         /**
-         * Fetch exceptions
+         * generic error handling
          * 
-         * Exceptions which come to the client signal a software failure.
-         * So we display the message and trace here for the devs.
-         * @todo In production mode there should be a 'report bug' wizzard here
+         * executed on requestexceptions and error states which are not handled by failure/callback functions
          */
         Ext.Ajax.on('requestexception', function(connection, response, options){
             
@@ -361,7 +388,6 @@ Tine.Tinebase.tineInit = {
             // error data
             var data = rpcData.data;
             
-            console.log(data);
             switch(data.code) {
                 // not authorised
                 case 401:
@@ -410,6 +436,9 @@ Tine.Tinebase.tineInit = {
                 
                 // generic failure -> notify developers / only if no custom exception handler has been defined in options
                 default:
+                
+                // NOTE: exceptionHandler is depricated use the failure function of the request or listen to the exception events
+                //       of the Ext.Direct framework
                 if (typeof options.exceptionHandler !== 'function' || 
                     false === options.exceptionHandler.call(options.scope, response, options)) {
                     var windowHeight = 400;
@@ -439,6 +468,7 @@ Tine.Tinebase.tineInit = {
         });
     },
     
+        
     /**
      * init a global error handler
      */
