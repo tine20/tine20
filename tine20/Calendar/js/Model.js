@@ -378,8 +378,11 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
 Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'name'},
+    {name: 'description'},
     {name: 'email'},
-    {name: 'is_location', type: 'bool'}
+    {name: 'is_location', type: 'bool'},
+    {name: 'tags'},
+    {name: 'notes'}
 ]), {
     appName: 'Calendar',
     modelName: 'Resource',

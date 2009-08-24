@@ -141,6 +141,10 @@ class Calendar_Setup_Update_Release0 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>description</name>
+                    <type>text</type>
+                </field>
+                <field>
                     <name>email</name>
                     <type>text</type>
                     <length>255</length>

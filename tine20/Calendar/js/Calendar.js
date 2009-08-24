@@ -106,7 +106,7 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
                 iconCls: 'cal-attendee-type-resource',
                 handler: function() {
                     var window = Tine.WindowFactory.getWindow({
-                        width: 800,
+                        width: 500,
                         height: 470,
                         name: 'cal-mange-resources',
                         contentPanelConstructor: 'Tine.Calendar.ResourcesGridPanel'

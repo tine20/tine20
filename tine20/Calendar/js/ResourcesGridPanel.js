@@ -32,19 +32,20 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPane
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
+        
         this.gridConfig = {
         };
         
         this.gridConfig.columns = [{
             id: 'name',
             header: this.app.i18n._("Name"),
-            width: 400,
+            width: 150,
             sortable: true,
             dataIndex: 'name'
         }, {
             id: 'email',
             header: this.app.i18n._("Email"),
-            width: 400,
+            width: 150,
             sortable: true,
             dataIndex: 'email'
         }, new Ext.ux.grid.CheckColumn({
@@ -54,5 +55,15 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPane
         })];
         
         this.supr().initComponent.call(this);
+    },
+    
+    initLayout: function() {
+        this.supr().initLayout.call(this);
+        
+        this.items.push({
+            region : 'north',
+            border : false,
+            items  : this.actionToolbar
+        });
     }
 });

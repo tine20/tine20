@@ -51,8 +51,11 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'seq'                  => array('allowEmpty' => true,  'Int'  ),
         // resource specific fields
         'name'                 => array('allowEmpty' => true          ),
+        'description'          => array('allowEmpty' => true          ),
         'email'                => array('allowEmpty' => true          ),
         'is_location'          => array('allowEmpty' => true          ),
+        'tags'                 => array('allowEmpty' => true          ),
+        'notes'                => array('allowEmpty' => true          ),
     );
     
     /**
