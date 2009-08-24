@@ -19,18 +19,6 @@
  */
 class Tinebase_Server_Json extends Tinebase_Server_Abstract
 {
-	const ERROR_NOT_AUTHORIZED       = -32001;
-	const ERROR_INSUFFICIENT_RIGHTS  = -32003;
-	const ERROR_MISSING_DATA         = -32004;
-	const ERROR_CONCURRENCY_CONFILCT = -32009;
-	
-    protected $_errorMap = array(
-        401 => self::ERROR_NOT_AUTHORIZED,
-        403 => self::ERROR_INSUFFICIENT_RIGHTS,
-        404 => self::ERROR_MISSING_DATA,
-        409 => self::ERROR_CONCURRENCY_CONFILCT
-    );
-    
     /**
      * handler for JSON api requests
      * @todo session expire handling
@@ -108,11 +96,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             	$request = new Zend_Json_Server_Request_Http();
             }
             
-            $code = $exception->getCode();
-            if (array_key_exists($code, $this->_errorMap)) {
-            	$code = $this->_errorMap[$code];
-            }
-            $server->fault($exception->getMessage(), $code, $exception->getTrace());
+            $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
+            $exceptionData['message'] = $exception->getMessage();
+            $exceptionData['code']    = $exception->getCode();
+            $exceptionData['trace']   = $exception->getTrace();
+            
+            $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
             
             $response = $server->getResponse();
 	        if (null !== ($id = $request->getId())) {

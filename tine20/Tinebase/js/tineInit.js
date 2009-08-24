@@ -349,17 +349,22 @@ Tine.Tinebase.tineInit = {
                 return false;
             }
             
-            var data = response ? Ext.util.JSON.decode(response.responseText) : null;
+            // decode JSONRPC response
+            var rpcData = response ? Ext.util.JSON.decode(response.responseText) : null;
             
             // server did not responde anything
-            if (! data) {
+            if (! rpcData) {
                 alert(_('The server did not respond to your request. Please check your network or contact your administrator.'));
                 return false;
             }
             
+            // error data
+            var data = rpcData.data;
+            
+            console.log(data);
             switch(data.code) {
                 // not authorised
-                case -32001:
+                case 401:
                 if (! options.params || options.params.method != 'Tinebase.logout') {
                     Ext.MessageBox.show({
                         title: _('Authorisation Required'), 
@@ -374,7 +379,7 @@ Tine.Tinebase.tineInit = {
                 break;
                 
                 // insufficient rights
-                case -32003:
+                case 403:
                 Ext.MessageBox.show({
                     title: _('Insufficient Rights'), 
                     msg: _('Sorry, you are not permitted to perform this action'),
@@ -384,7 +389,7 @@ Tine.Tinebase.tineInit = {
                 break;
                 
                 // not found
-                case -32004:
+                case 404:
                 Ext.MessageBox.show({
                     title: _('Not Found'), 
                     msg: _('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
@@ -394,7 +399,7 @@ Tine.Tinebase.tineInit = {
                 break;
                 
                 // concurrency conflict
-                case -32009:
+                case 409:
                 Ext.MessageBox.show({
                     title: _('Concurrent Updates'), 
                     msg: _('Someone else saved this record while you where editing the data. You need to reload and make your changes again.'),
@@ -417,7 +422,7 @@ Tine.Tinebase.tineInit = {
                             height: windowHeight,
                             exceptionInfo: {
                                 msg   : data.message,
-                                trace : data.data
+                                trace : data.trace
                             },
                             listeners: {
                                 close: function() {
