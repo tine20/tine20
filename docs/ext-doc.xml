@@ -57,9 +57,7 @@
         <source src="../tine20/Tinebase/js/data/RecordProxy.js"/>
         <source src="../tine20/Tinebase/js/widgets/app/GridPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
-
         <source src="../tine20/Addressbook/js/ContactGrid.js"/>
-        
         <!-- <source src="../tine20/Calendar/js" match="*.js"/> -->
         <source src="../tine20/Calendar/js/AttendeeGridPanel.js"/>
         <source src="../tine20/Calendar/js/Calendar.js"/>
@@ -79,7 +77,7 @@
         <source src="../tine20/Felamimail/js" match="*.js"/>
         <source src="../tine20/Setup/js/ApplicationGridPanel.js"/>
         <source src="../tine20/Tasks/js/EditDialog.js"/>
-        
+        <source src="../tine20/Tasks/js/GridPanel.js"/>
     </sources>
     <tags>
         <tag name="author" title="Author"/>

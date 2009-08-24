@@ -13,12 +13,34 @@ Ext.namespace('Tine.Tasks');
 
 /**
  * Tasks grid panel
+ * 
+ * @namespace   Tine.Tasks
+ * @class       Tine.Tasks.GridPanel
+ * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * 
+ * <p>Tasks Grid Panel</p>
+ * <p><pre>
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Tasks.GridPanel
  */
 Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
-    // model generics
+    /**
+     * record class
+     * @cfg {Tine.Felamimail.Model.Message} recordClass
+     */
     recordClass: Tine.Tasks.Task,
     
-    // grid specific
+    /**
+     * @private grid cfg
+     */
     defaultSortInfo: {field: 'due', dir: 'ASC'},
     gridConfig: {
         clicksToEdit: 'auto',
@@ -27,10 +49,13 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         autoExpandColumn: 'summary'
     },
     
-    // spechialised translations
+    // specialised translations
     // ngettext('Do you really want to delete the selected task?', 'Do you really want to delete the selected tasks?', n);
     i18nDeleteQuestion: ['Do you really want to delete the selected task?', 'Do you really want to delete the selected tasks?'],
     
+    /**
+     * @private
+     */
     initComponent: function() {
         this.recordProxy = Tine.Tasks.JsonBackend;
         
@@ -56,6 +81,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * initialises filter toolbar
+     * @private
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
@@ -91,6 +117,12 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }, this);
     },
     
+    /**
+     * edit in new window
+     * 
+     * @param {Button} _button
+     * @param {Event} _event
+     */
     onEditInNewWindow: function(_button, _event){
         var taskId = -1;
         if (_button.actionType == 'edit') {
@@ -215,6 +247,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * return additional tb items
+     * @private
      */
     getToolbarItems: function(){
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
