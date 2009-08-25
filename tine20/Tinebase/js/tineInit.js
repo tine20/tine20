@@ -315,6 +315,7 @@ Tine.Tinebase.tineInit = {
                 delete options.params;
                 delete options.success;
                 delete options.failure;
+                delete options.callback;
             }
         });
         
