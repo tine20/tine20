@@ -90,14 +90,13 @@ class Tinebase_Acl_Roles
 
     /**
      * check if one of the roles the user is in has a given right for a given application
+     * - admin right includes all other rights
      *
      * @param   string $_application the name of the application
      * @param   int $_accountId the numeric id of a user account
      * @param   int $_right the right to check for
      * @return  bool
      * @throws  Tinebase_Exception_AccessDenied
-     * 
-     * @todo does the admin right include all other rights?
      */
     public function hasRight($_application, $_accountId, $_right) 
     {        
@@ -114,7 +113,8 @@ class Tinebase_Acl_Roles
 
         $select = $this->_roleRightsTable->select();
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right))
+               ->where('(' .    $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right) 
+                     . ' OR ' . $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', Tinebase_Acl_Rights::ADMIN) . ')')
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $application->getId()));
                
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
@@ -122,6 +122,8 @@ class Tinebase_Acl_Roles
         } else {
             $result = true;
         }
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         return $result;
     }
