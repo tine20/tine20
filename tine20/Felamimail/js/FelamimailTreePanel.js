@@ -710,9 +710,13 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             
             // remove intelligent folders
             accountNode.attributes.show_intelligent_folders = 0;
-                
+            
+            // cancel loading
+            accountNode.loading = false;
+            accountNode.ui.afterLoad(accountNode);
+                        
             var credentialsWindow = Tine.widgets.dialog.CredentialsDialog.openWindow({
-                title: String.format(this.app.i18n._('IMAP Credentials for {0}'), accountNode.text),
+                windowTitle: String.format(this.app.i18n._('IMAP Credentials for {0}'), accountNode.text),
                 appName: 'Felamimail',
                 credentialsId: accountId,
                 i18nRecordName: this.app.i18n._('Credentials'),
@@ -720,15 +724,11 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                 listeners: {
                     scope: this,
                     'update': function(data) {
-                        //console.log('update');
                         // update account node
                         var account = Tine.Felamimail.loadAccountStore().getById(accountId);
                         accountNode.attributes.show_intelligent_folders = account.get('show_intelligent_folders');
-                        //console.log(accountNode);
-                        //console.log(account);
                         accountNode.reload(function(callback) {
-                            //console.log('reload');
-                        });
+                        }, this);
                     }
                 }
             });
