@@ -22,6 +22,10 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.dialog');
  * @param {Object} config The configuration options.
  */
 Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+    /**
+     * @cfg {String} title of window
+     */
+    windowTitle: '',
     
     credentialsId: null,
     
@@ -42,6 +46,10 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     initRecord: function() {
     },
     
+    onRender: function() {
+        this.supr().onRender.apply(this, arguments);
+        this.window.setTitle(this.windowTitle);
+    },
     /**
      * returns dialog
      */
