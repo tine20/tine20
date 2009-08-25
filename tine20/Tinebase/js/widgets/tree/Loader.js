@@ -58,11 +58,9 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
                     filter: Ext.util.JSON.encode(this.filter)
                 },
                 success: this.handleResponse,
-                // TODO do we need this function any longer?
                 failure: this.handleFailure,
                 scope: this,
-                argument: {callback: callback, node: node},
-                exceptionHandler: this.onRequestFailed
+                argument: {callback: callback, node: node}
             });
         } else {
             // if the load is cancelled, make sure we notify

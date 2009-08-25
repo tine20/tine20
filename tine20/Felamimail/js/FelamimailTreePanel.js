@@ -603,6 +603,8 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @private
      */
     requestData: function(node, callback){
+        console.log('request');
+        
     	// add globalname to filter
     	this.filter = [
             {field: 'account_id', operator: 'equals', value: node.attributes.account_id},
@@ -690,20 +692,20 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     },
     
     /**
-     * request failed
+     * handle failure to show credentials dialog if imap login failed
      * 
-     * @param {} response
-     * @param {} request
-     * @private
+     * @param {String} response
+     * @param {Object} options
      */
-    onRequestFailed: function(response, request) {
+    handleFailure: function(response, options) {
+        //console.log(options);
         var responseText = Ext.util.JSON.decode(response.responseText);
         
         if (responseText.message == 'cannot login, user or password wrong' ||
             responseText.message == 'need at least user in params') {
             
             // get account id and update username/password
-            var accountNode = request.argument.node;
+            var accountNode = options.argument.node;
             var accountId = accountNode.attributes.account_id;
             
             // remove intelligent folders
@@ -718,21 +720,21 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                 listeners: {
                     scope: this,
                     'update': function(data) {
+                        //console.log('update');
                         // update account node
-                        var account = Tine.Felamimail.loadAccountStore().getById(accountNode.attributes.account_id);
+                        var account = Tine.Felamimail.loadAccountStore().getById(accountId);
                         accountNode.attributes.show_intelligent_folders = account.get('show_intelligent_folders');
+                        //console.log(accountNode);
+                        //console.log(account);
                         accountNode.reload(function(callback) {
+                            //console.log('reload');
                         });
                     }
                 }
             });
             
-            return true;
-
         } else {
-            
-            // call standard exception handler
-        	return false;
+            Ext.Ajax.fireEvent('requestexception', Ext.Ajax, response, options);
         }
     }
 });
