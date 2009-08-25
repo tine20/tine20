@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        make it possible to switch back to smtp creds = imap creds even if extra smtp creds have been created
- * @todo        reset default account preference if default account has been deleted
  */
 
 /**
@@ -178,6 +177,24 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $result = $this->updateCapabilities($result);
         
         return $result;
+    }
+    
+    /**
+     * Deletes a set of records.
+     * 
+     * @param   array array of record identifiers
+     * @return  void
+     */
+    public function delete($_ids)
+    {
+        parent::delete($_ids);
+        
+        // check if default account got deleted and set new default account
+        if (in_array(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, $_ids)) {
+            $accounts = $this->search();
+            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = 
+                (count($accounts) > 0) ? $accounts->getFirstRecord()->getId() : NULL;
+        }
     }
     
     /**
