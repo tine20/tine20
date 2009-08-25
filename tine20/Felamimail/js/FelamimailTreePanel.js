@@ -603,8 +603,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @private
      */
     requestData: function(node, callback){
-        console.log('request');
-        
     	// add globalname to filter
     	this.filter = [
             {field: 'account_id', operator: 'equals', value: node.attributes.account_id},
@@ -698,7 +696,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @param {Object} options
      */
     handleFailure: function(response, options) {
-        //console.log(options);
         var responseText = Ext.util.JSON.decode(response.responseText);
         
         if (responseText.message == 'cannot login, user or password wrong' ||
