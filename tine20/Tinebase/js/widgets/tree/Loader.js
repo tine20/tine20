@@ -49,7 +49,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
      * @param {} callback
      * @private
      */
-    requestData: function(node, callback){
+    requestData: function(node, callback, scope){
         if(this.fireEvent("beforeload", this, node, callback) !== false){
             
             this.transId = Ext.Ajax.request({
@@ -60,14 +60,12 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
                 success: this.handleResponse,
                 failure: this.handleFailure,
                 scope: this,
-                argument: {callback: callback, node: node}
+                argument: {callback: callback, node: node, scope: scope}
             });
         } else {
             // if the load is cancelled, make sure we notify
             // the node that we are done
-            if(typeof callback == "function"){
-                callback();
-            }
+            this.runCallback(callback, scope || node, []);
         }
     },
     
