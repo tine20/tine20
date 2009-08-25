@@ -29,6 +29,9 @@ class Tinebase_User_AllTests
         $suite->addTestSuite('Tinebase_User_RegistrationTest');
         $suite->addTestSuite('Tinebase_User_ModelTest');
         $suite->addTestSuite('Tinebase_User_AbstractTest');
+        if (isset(Tinebase_Core::getConfig()->dbmail)) {
+            $suite->addTestSuite('Tinebase_User_EmailTest');
+        }
         return $suite;
     }
 }

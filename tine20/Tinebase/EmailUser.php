@@ -3,86 +3,68 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Ldap
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        test it!
- * @todo        add forward / alias
- * @todo        add support for qmail
- * @todo        add factory / different backends?
+ * @todo        add Ldap support?
  */
 
 /**
  * class Tinebase_EmailUser
  * 
- * Email User Settings Managing for dbmail attributes in ldap backend
+ * Email Account Managing
  * 
  * @package Tinebase
- * @subpackage Ldap
+ * @subpackage Samba
  */
 class Tinebase_EmailUser
 {
+    /**
+     * dbmail backend const
+     * 
+     * @staticvar string
+     */
+    const DBMAIL    = 'Dbmail';
 
     /**
-     * @var Tinebase_Ldap
+     * ldap backend const
+     * 
+     * @staticvar string
      */
-    protected $_ldap = NULL;
+    const LDAP      = 'Ldap';
 
-    /**
-     * user properties mapping
-     *
-     * @var array
-     */
-    protected $_userPropertyNameMapping = array(
-        'emailUID'      => 'dbmailUID', 
-        'emailGID'      => 'dbmailGID', 
-        'emailQuota'    => 'mailQuota',
-        //'emailAliases'  => 'alias',
-        //'emailForward'  => 'forward',
-    );
-    
-    /**
-     * objectclasses required for users
-     *
-     * @var array
-     */
-    protected $_requiredObjectClass = array(
-        'dbmailUser',
-    );
-    
-    /**
-     * ldap / email user options array
-     *
-     * @var array
-     */
-    protected $_options = array();
-    
     /**
      * holds the instance of the singleton
      *
      * @var Tinebase_EmailUser
      */
-    private static $instance = NULL;
+    private static $_instance = NULL;
+    
+    /**
+     * backend object instances
+     * 
+     * @var array
+     */
+    private static $_backends = array();
     
     /**
      * the constructor
      *
+     * don't use the constructor. use the singleton 
      */
-    private function __construct()
+    private function __construct() 
     {
-        if (Tinebase_User::getConfiguredBackend() != Tinebase_User::LDAP) {
-            throw new Tinebase_Exception('No LDAP config found.');
-        }
-
-        $ldapOptions = Tinebase_User::getBackendConfiguration();
-        $emailOptions = Tinebase_Core::getConfig()->emailUser->toArray();
-        $this->_options = array_merge($ldapOptions, $emailOptions);
-
-        $this->_ldap = new Tinebase_Ldap($this->_options);
-        $this->_ldap->bind();
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() 
+    {
     }
     
     /**
@@ -92,186 +74,63 @@ class Tinebase_EmailUser
      */
     public static function getInstance() 
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Tinebase_EmailUser();
+        if (self::$_instance === NULL) {
+            $backendType = self::getConfiguredBackend();
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
+            
+            self::$_instance = self::factory($backendType);
         }
-        return self::$instance;
+        
+        return self::$_instance;
     }
     
     /**
-     * get user by id
+     * return an instance of the current backend
      *
-     * @param   int         $_userId
-     * @return  Tinebase_Model_EmailUser user
+     * @param   string $_type name of the backend
+     * @return  Tinebase_EmailUser_Abstract
+     * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function getUserById($_userId) 
+    public static function factory($_type) 
     {
-        // @todo remove that later
-        /*
-        return new Tinebase_Model_EmailUser(array(
-            'emailUID'      => 'uid',
-            'emailGID'      => 'gid',
-            'emailQuota'    => 10000,
-        ));
-        */
-        
-        try {
-            $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $ldapData = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId);
-            $user = $this->_ldap2User($ldapData);
-        } catch (Exception $e) {
-            throw new Exception('User not found');
-        }
-        
-        return $user;
-    }
-
-    /**
-     * adds sam properties for a new user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
-     * 
-     * @todo add defaults?
-     */
-	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
-	{
-        $metaData = $this->_getUserMetaData($_user);
-        $ldapData = $this->_user2ldap($_emailUser);
-        
-        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredUserObjectClass));
+        switch($_type) {
+            /*
+            case self::LDAP:
+                $ldapOptions = Tinebase_User::getBackendConfiguration();
+                $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
+                $options = array_merge($ldapOptions, $sambaOptions);
                 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-        
-        $this->_ldap->update($metaData['dn'], $ldapData);
-        
-        return $this->getUserById($_user->getId());
-	}
-	
-	/**
-     * updates sam properties for an existing user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
-     */
-	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
-	{
-	    // @todo remove that later
-	    /*
-	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_emailUser->toArray(), TRUE));
-	    return $this->getUserById($_user->getId());
-        */
-	    
-        $metaData = $this->_getUserMetaData($_user);
-        $ldapData = $this->_user2ldap($_emailUser);
-        
-        // check if user has all required object classes.
-        foreach ($this->_requiredUserObjectClass as $className) {
-            if (! in_array($className, $metaData['objectClass'])) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no email objectclass.');
-
-                return $this->addUser($_user, $_emailUser);
-            }
+                $result = new Tinebase_EmailUser_Ldap($options);
+                break;
+            */
+                
+            case self::DBMAIL:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Dbmail();
+                }
+                $result = self::$_backends[$_type];
+                
+                break;
+            
+            default:
+                throw new Tinebase_Exception_InvalidArgument("Backend type $_type not implemented.");
         }
-
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_ldap->update($metaData['dn'], $ldapData);
-        
-        return $this->getUserById($_user->getId());
-	}
-
-    /**
-     * get metatada of existing account
-     *
-     * @param  int         $_userId
-     * @return string 
-     */
-    protected function _getUserMetaData($_userId)
-    {
-        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        $result = $this->_ldap->getMetaData($this->_options['userDn'], 'uidnumber=' . $userId);
         return $result;
     }
     
     /**
-     * Returns a user obj with raw data from ldap
-     *
-     * @param array $_userData
-     * @param string $_accountClass
-     * @return Tinebase_Record_Abstract
+     * returns the configured backend
      * 
-     * @todo add generic function for this?
+     * @return string
      */
-    protected function _ldap2User($_userData, $_accountClass = 'Tinebase_Model_EmailUser')
+    public static function getConfiguredBackend()
     {
-        $accountArray = array();
-        
-        foreach ($_userData as $key => $value) {
-            if (is_int($key)) {
-                continue;
-            }
-            $keyMapping = array_search($key, $this->_userPropertyNameMapping);
-            if ($keyMapping !== FALSE) {
-                switch($keyMapping) {
-                    /*
-                    case 'pwdLastSet':
-                    case 'logonTime':
-                    case 'logoffTime':
-                    case 'kickoffTime':
-                    case 'pwdCanChange':
-                    case 'pwdMustChange':
-                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
-                        break;
-                    */
-                    default: 
-                        $accountArray[$keyMapping] = $value[0];
-                        break;
-                }
-            }
+        if(isset(Tinebase_Core::getConfig()->dbmail)) {
+            $backendType = Tinebase_Core::getConfig()->dbmail->get('backend', self::DBMAIL); 
+            $backendType = ucfirst($backendType);
+        } else {
+            throw new Tinebase_Exception_NotFound("DBmail config not found.");
         }
-        
-        $accountObject = new $_accountClass($accountArray);
-        
-        return $accountObject;
     }
-    
-    /**
-     * returns array of ldap data
-     *
-     * @param  Tinebase_Model_EmailUser $_user
-     * @return array
-     * 
-     * @todo add generic function for this?
-     */
-    protected function _user2ldap(Tinebase_Model_EmailUser $_user)
-    {
-        $ldapData = array();
-        foreach ($_user as $key => $value) {
-            $ldapProperty = array_key_exists($key, $this->_userPropertyNameMapping) ? $this->_userPropertyNameMapping[$key] : false;
-            if ($ldapProperty) {
-                switch ($key) {
-                    /*
-                    case 'pwdLastSet':
-                    case 'logonTime':
-                    case 'logoffTime':
-                    case 'kickoffTime':
-                    case 'pwdCanChange':
-                    case 'pwdMustChange':
-                        $ldapData[$ldapProperty] = $value instanceof Zend_Date ? $value->getTimestamp() : '';
-                        break;
-                    */
-                    default:
-                        $ldapData[$ldapProperty] = $value;
-                        break;
-                }
-            }
-        }
-        
-        return $ldapData;
-    }
-}  
+}
