@@ -107,6 +107,69 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::ROLE_OPTIONAL, $secondUpdatedEvent->attendee->getFirstRecord()->role);
     }
     
+    public function testAttendeeFilter()
+    {
+        $event1 = $this->_getEvent();
+        $event1->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => Tinebase_Core::getUser()->contact_id),
+            array('user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        $persistentEvent1 = $this->_controller->create($event1);
+        
+        $event2 = $this->_getEvent();
+        $event2->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => Tinebase_Core::getUser()->contact_id),
+            array('user_id' => $this->_personasContacts['sclever']->getId()),
+        ));
+        $persistentEvent2 = $this->_controller->create($event2);
+        
+        $event3 = $this->_getEvent();
+        $event3->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => Tinebase_Core::getUser()->contact_id),
+            array('user_id' => $this->_personasContacts['sclever']->getId()),
+        ));
+        $persistentEvent3 = $this->_controller->create($event3);
+        
+        // test sclever
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => $this->_personasContacts['sclever']->getId()
+            )),
+        ));
+        $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
+        $this->assertEquals(2, count($eventsFound), 'sclever attends to two events');
+        
+        // test pwulf
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => $this->_personasContacts['pwulf']->getId()
+            )),
+        ));
+        $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
+        $this->assertEquals(1, count($eventsFound), 'pwulf attends to one events');
+        
+        // test sclever OR pwulf
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'attender'    , 'operator' => 'in',     'value' => array(
+                array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => $this->_personasContacts['sclever']->getId()
+                ),
+                array (
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => $this->_personasContacts['pwulf']->getId()
+                )
+            )),
+        ));
+        $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
+        $this->assertEquals(3, count($eventsFound), 'sclever OR pwulf attends to tree events');
+    }
+    
     public function testAttendeeAuthKeyPreserv()
     {
         $event = $this->_getEvent();
