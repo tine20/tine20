@@ -163,14 +163,14 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     return this.selectedRecord ? this.selectedRecord.data : null;
                 }
             }),
-            groupEditor: new Tine.widgets.form.RecordPickerComboBox({
+            groupEditor: new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                 blurOnSelect: true,
                 recordClass: Tine.Tinebase.Model.Group,
                 getValue: function() {
                     return this.selectedRecord ? this.selectedRecord.data : null;
                 }
             }),
-            resourceEditor: new Tine.widgets.form.RecordPickerComboBox({
+            resourceEditor: new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                 blurOnSelect: true,
                 recordClass: Tine.Calendar.Model.Resource,
                 getValue: function() {

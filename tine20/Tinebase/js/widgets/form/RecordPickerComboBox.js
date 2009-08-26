@@ -7,25 +7,25 @@
  * @version     $Id$
  */
  
-Ext.ns('Tine.widgets.form');
+Ext.ns('Tine.Tinebase.widgets.form');
 
 /**
- * @namespace   Tine.widgets.form
+ * @namespace   Tine.Tinebase.widgets.form
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
- * @class       Tine.widgets.form.RecordPickerComboBox
+ * @class       Tine.Tinebase.widgets.form.RecordPickerComboBox
  * @extends     Ext.form.ComboBox
  * 
  * <p>Abstract base class for recordPickers like account/group pickers </p>
  * 
  * Usage:
  * <pre><code>
-var resourcePicker = new Tine.widgets.form.RecordPickerComboBox({
+var resourcePicker = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
     'model': Tine.Calendar.Model.Resouce
 });
    </code></pre>
  */
-Tine.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, {
+Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {bool} blurOnSelect
      * blur this combo when record got selected, usefull to be used in editor grids (defaults to false)
