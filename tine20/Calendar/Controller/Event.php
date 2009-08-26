@@ -81,12 +81,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function checkBusyConficts($_event)
     {
-        //$busyException = new Calendar_Exception_AttendeeBusy();
-        //$busyException->setAttendeeStatus(array(
-        //    array('user_type'=> 'user', 'user_id' => 1, 'status' => 'busy')
-        //));
-        
-        //throw $busyException;
+        $fbInfo = $this->getFreeBusyInfo($_event->dtstart, $_event->dtend, $_event->attendee);
+        if (count($fbInfo) > 0) {
+            $busyException = new Calendar_Exception_AttendeeBusy();
+            $busyException->setFreeBusyInfo($fbInfo);
+            throw $busyException;
+        }
     }
     
     /**

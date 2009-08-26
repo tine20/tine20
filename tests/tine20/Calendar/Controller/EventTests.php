@@ -170,6 +170,45 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(3, count($eventsFound), 'sclever OR pwulf attends to tree events');
     }
     
+    public function testGetFreeBusyInfo()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        $persistentEvent = $this->_controller->create($event);
+        
+        $fbinfo = $this->_controller->getFreeBusyInfo($persistentEvent->dtstart, $persistentEvent->dtend, $persistentEvent->attendee);
+        $this->assertGreaterThanOrEqual(2, count($fbinfo));
+        
+    }
+    
+    public function testCreateEventWithConfict()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        $persistentEvent = $this->_controller->create($event);
+        
+        $conflictEvent = $this->_getEvent();
+        $conflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        
+        try {
+        	$this->_controller->create($conflictEvent, TRUE);
+        } catch (Calendar_Exception_AttendeeBusy $busyException) {
+            $fbData = $busyException->toArray();
+            $this->assertGreaterThanOrEqual(2, count($fbData['freebusyinfo']));
+        }
+        
+        $persitentConflictEvent = $this->_controller->create($conflictEvent, FALSE);
+    }
+    
     public function testAttendeeAuthKeyPreserv()
     {
         $event = $this->_getEvent();
