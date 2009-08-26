@@ -527,8 +527,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     recordData.flags = '\\Answered';
                     break;
                 case 'forward':
-                    //console.log(selectedRecord);
-                
                     if (selectedRecord.get('attachments').length > 0) {
                         // add message/rfc822 attachment if original message has attachments
                         recordData.attachments = [{
@@ -541,7 +539,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     } else {
                         // only show original message in body if it has no attachments
                         recordData.body = '<br/>-----' + _('Original message') + '-----<br/>'
-                            + this.formatHeaders(selectedRecord.get('headers'), false) + '<br/><br/>'
+                            + this.formatHeaders(selectedRecord.get('headers'), false, true) + '<br/><br/>'
                             + body + '<br/>';
                     }
                     recordData.subject = _('Fwd: ') + selectedRecord.get('subject');
@@ -745,12 +743,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * 
      * @param {Object} headers
      * @param {Bool} ellipsis
+     * @param {Bool} onlyImportant
      * @return {String}
      */
-    formatHeaders: function(headers, ellipsis) {
+    formatHeaders: function(headers, ellipsis, onlyImportant) {
         var result = '';
         for (header in headers) {
-            if (headers.hasOwnProperty(header)) {
+            if (headers.hasOwnProperty(header) && 
+                    (! onlyImportant || header == 'from' || header == 'to' || header == 'subject' || header == 'date')) 
+            {
                 result += '<b>' + header + ':</b> ' 
                     + Ext.util.Format.htmlEncode(
                         (ellipsis) 
