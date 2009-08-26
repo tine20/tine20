@@ -75,11 +75,7 @@
         <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
         <source src="../tine20/Felamimail/js" match="*.js"/>
-        <source src="../tine20/Setup/js/AuthenticationPanel.js"/>
-        <source src="../tine20/Setup/js/ApplicationGridPanel.js"/>
-        <source src="../tine20/Setup/js/ConfigManagerPanel.js"/>
-        <source src="../tine20/Setup/js/MainScreen.js"/>
-        <source src="../tine20/Setup/js/Setup.js"/>
+        <source src="../tine20/Setup/js" match="*.js"/>
         <source src="../tine20/Tasks/js/EditDialog.js"/>
         <source src="../tine20/Tasks/js/GridPanel.js"/>
     </sources>

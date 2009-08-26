@@ -11,14 +11,37 @@
  
 Ext.ns('Tine', 'Tine.Setup');
 
-Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
+/**
+ * Environment Check Grid Panel
+ * 
+ * @namespace   Tine.Setup
+ * @class       Tine.Setup.EnvCheckGridPanel
+ * @extends     Ext.Panel
+ * 
+ * <p>Environment Check Grid Panel</p>
+ * <p><pre>
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Setup.EnvCheckGridPanel
+ */
+ Tine.Setup.EnvCheckGridPanel = Ext.extend(Ext.Panel, {
 	
     /**
-     * @property {Ext.Tollbar} actionToolbar
+     * @property actionToolbar
+     * @type Ext.Toolbar
      */
     actionToolbar: null,
+    
     /**
-     * @property {Ext.Menu} contextMenu
+     * @property contextMenu
+     * @type Ext.Menu
      */
     contextMenu: null,
     
