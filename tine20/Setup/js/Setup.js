@@ -68,6 +68,12 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 id: 'AuthenticationPanel',
                 leaf: true
             }, {
+                text: this.app.i18n._('Email'),
+                iconCls: 'action_composeEmail',
+                disabled: testsFailed || configMissing || dbMissing || setupRequired,
+                id: 'EmailPanel',
+                leaf: true
+            }, {
                 text: this.app.i18n._('Application Manager'),
                 iconCls: 'setup_application_manager',
                 disabled: testsFailed || configMissing || dbMissing || setupRequired,
