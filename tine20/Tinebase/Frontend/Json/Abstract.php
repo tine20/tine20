@@ -116,9 +116,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param   Tinebase_Controller_Record_Interface $_controller the record controller
      * @param   $_modelName for example: 'Task' for Tasks_Model_Task
      * @param   $_identifier of the record (default: id)
+     * @param   array $_additionalArguments
      * @return  array created/updated record
      */
-    protected function _save($_recordData, Tinebase_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id')
+    protected function _save($_recordData, Tinebase_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id', $_additionalArguments = array())
     {
         $modelClass = $this->_applicationName . "_Model_" . $_modelName;
         $record = new $modelClass(array(), TRUE);
@@ -126,9 +127,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "recordData: ". print_r($record->toArray(), true));
         
-        $savedRecord = (empty($record->$_identifier)) ? 
-            $_controller->create($record): 
-            $_controller->update($record);
+        $method = (empty($record->$_identifier)) ? 'create' : 'update';
+        $args = array_merge(array($record), $_additionalArguments);
+            
+        $savedRecord = call_user_func_array(array($_controller, $method), $args);
 
         return $this->_recordToJson($savedRecord);
     }
