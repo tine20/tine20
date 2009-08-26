@@ -39,6 +39,12 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
      */
     saveMethod: 'Setup.saveConfig',
     registryKey: 'configData',
+    defaults: {
+        xtype: 'fieldset',
+        autoHeight: 'auto',
+        defaults: {width: 300},
+        defaultType: 'textfield'
+    },
     
     /**
      * returns config manager form

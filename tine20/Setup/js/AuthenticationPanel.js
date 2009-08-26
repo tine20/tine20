@@ -7,88 +7,87 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: ConfigManagerGridPanel.js 7153 2009-03-03 20:21:52Z c.weiss@metaways.de $
  *
- * TODO         add to extdoc
- * TODO         extend Tine.Tinebase.widgets.form.ConfigPanel
  */
  
 Ext.ns('Tine', 'Tine.Setup');
  
 /**
- * Setup Configuration Manager
+ * Setup Authentication Manager
  * 
- * @package Setup
+ * @namespace   Tine.Setup
+ * @class       Tine.Setup.AuthenticationPanel
+ * @extends     Tine.Tinebase.widgets.form.ConfigPanel
  * 
- * @class Tine.Setup.AuthenticationPanel
- * @extends Ext.FormPanel
+ * <p>Authentication Panel</p>
+ * <p><pre>
+ * TODO         move to next step after install?
+ * </pre></p>
  * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: ConfigManagerGridPanel.js 7153 2009-03-03 20:21:52Z c.weiss@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Setup.AuthenticationPanel
  */
-Tine.Setup.AuthenticationPanel = Ext.extend(Ext.FormPanel, {
+Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     
     /**
      * @property idPrefix DOM Id prefix
+     * @type String
      */
     idPrefix: null,
     
     /**
-     * @property authProviderPrefix DOM Id prefix
+     * authProviderPrefix DOM Id prefix
+     * 
+     * @property authProviderIdPrefix
+     * @type String
      */
     authProviderIdPrefix: null,
     
     /**
-     * @property accountsStorageIdPrefix DOM Id prefix
+     * accountsStorageIdPrefix DOM Id prefix
+     * 
+     * @property accountsStorageIdPrefix
+     * @type String
      */
     accountsStorageIdPrefix: null,
     
     /**
-     * @property Ext.form.ComboBox combo box containing the authentication backend selection 
+     * combo box containing the authentication backend selection
+     * 
+     * @property authenticationBackendCombo
+     * @type Ext.form.ComboBox 
      */
     authenticationBackendCombo: null,
 
     /**
-     * @property Ext.form.ComboBox combo box containing the accounts storage selection 
+     * combo box containing the accounts storage selection
+     * 
+     * @property accountsStorageCombo
+     * @type Ext.form.ComboBox
      */
     accountsStorageCombo: null,
-    
-    border: false,
-    bodyStyle:'padding:5px 5px 0',
-    labelAlign: 'left',
-    labelSeparator: ':',
-    labelWidth: 150,
-    
-    autoScroll: true,
 
-    // fake a store to satisfy grid panel
-    store: {load: Ext.emptyFn},
+    /**
+     * @private
+     * panel cfg
+     */
+    saveMethod: 'Setup.saveAuthentication',
+    registryKey: 'authenticationData',
     
     /**
-     * save config and update setup registry
+     * @private
      */
-    onApplyChanges: function() {
-        if (this.isValid()) {
-
-            var authenticationData = this.form2config();
-            
-            this.loadMask.show();
-            Ext.Ajax.request({
-                scope: this,
-                params: {
-                    method: 'Setup.saveAuthentication',
-                    data: Ext.util.JSON.encode(authenticationData)
-                },
-                success: function(response) {
-                    var regData = Ext.util.JSON.decode(response.responseText);
-                    // replace some registry data
-                    for (key in regData) {
-                        if (key != 'status') {
-                            Tine.Setup.registry.replace(key, regData[key]);
-                        }
-                    }
-                    this.loadMask.hide();
-                }
-            });
-        } else {
-            Ext.Msg.alert(this.app.i18n._('Invalid configuration'), this.app.i18n._('You need to correct the red marked fields before config could be saved'));
-        }
+    initComponent: function() {
+        this.idPrefix                   = Ext.id();
+        this.authProviderIdPrefix       = this.idPrefix + '-authProvider-',
+        this.accountsStorageIdPrefix    = this.idPrefix + '-accountsStorage-',
+        
+        Tine.Setup.AuthenticationPanel.superclass.initComponent.call(this);
     },
     
     /**
@@ -96,6 +95,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Ext.FormPanel, {
      */
     onChangeAuthProvider: function() {
         var authProvider = this.authenticationBackendCombo.getValue();
+        
         var cardLayout = Ext.getCmp(this.authProviderIdPrefix + 'CardLayout').getLayout();
         cardLayout.setActiveItem(this.authProviderIdPrefix + authProvider);
     },
@@ -108,20 +108,6 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Ext.FormPanel, {
         var cardLayout = Ext.getCmp(this.accountsStorageIdPrefix + 'CardLayout').getLayout();
         cardLayout.setActiveItem(this.accountsStorageIdPrefix + AccountsStorage);
     },
-
-    
-    /**
-     * @private
-     */
-    initComponent: function() {
-        this.idPrefix                   = Ext.id();
-        this.authProviderIdPrefix       = this.idPrefix + '-authProvider-',
-        this.accountsStorageIdPrefix    = this.idPrefix + '-accountsStorage-',
-        this.initActions();
-        this.items = this.getFormItems();
-        
-        Tine.Setup.AuthenticationPanel.superclass.initComponent.call(this);
-    },
     
     /**
      * @private
@@ -129,18 +115,11 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Ext.FormPanel, {
     onRender: function(ct, position) {
         Tine.Setup.AuthenticationPanel.superclass.onRender.call(this, ct, position);
         
-        // always the same shit! when form panel is rendered, the form fields itselv are not yet rendered ;-(
-        this.config2form.defer(250, this, [Tine.Setup.registry.get('authenticationData')]);
-        
-        //Tine.Setup.registry.on('replace', this.applyRegistryState, this);
-        this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Transfering Configuration...')});
-        
         this.onChangeAuthProvider.defer(250, this);
         this.onChangeAccountsStorage.defer(250, this);
-
     },
     
-    /**
+   /**
      * returns config manager form
      * 
      * @private
@@ -422,93 +401,19 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * transforms form data into a config object
-     * 
-     * @param  {Object} formData
-     * @return {Object} configData
-     */
-    form2config: function() {
-        // getValues only returns RAW HTML content... and we don't want to 
-        // define a record here
-        var formData = {};
-        this.getForm().items.each(function(field) {
-            formData[field.name] = field.getValue();
-        });
-        
-        var configData = {};
-        var keyParts, keyPart, keyGroup, dataPath;
-        for (key in formData) {
-            keyParts = key.split('_');
-            dataPath = configData;
-            
-            while (keyPart = keyParts.shift()) {
-                if (keyParts.length == 0) {
-                    dataPath[keyPart] = formData[key];
-                } else {
-                    if (!dataPath[keyPart]) {
-                        dataPath[keyPart] = {};
-                    }
-                
-                    dataPath = dataPath[keyPart];
-                }
-            }
-        }
-        return configData;
-    },
-    
-    /**
-     * loads form with config data
-     * 
-     * @param  {Object} configData
-     */
-    config2form: function(configData) {
-        var formData = arguments[1] ? arguments[1] : {};
-        var currKey  = arguments[2] ? arguments[2] : '';
-        
-        for (key in configData) {
-            if(typeof configData[key] == 'object') {
-                this.config2form(configData[key], formData, currKey ? currKey + '_' + key : key);
-            } else {
-                formData[currKey + '_' + key] = configData[key];
-            }
-        }
-
-        // skip transform calls
-        if (! currKey) {
-            this.getForm().setValues(formData);
-            this.applyRegistryState();
-        }
-    },
-    
-    /**
      * applies registry state to this cmp
      */
     applyRegistryState: function() {
-        this.action_applyChanges.setDisabled(!this.isValid());
-    },
-    
-    isValid: function() {
-        return this.getForm().isValid();
-    },
-    
-    /**
-     * @private
-     */
-    initActions: function() {
+        this.action_saveConfig.setDisabled(!this.isValid());
         
-        this.action_applyChanges = new Ext.Action({
-            text: this.app.i18n._('Apply changes'),
-            iconCls: 'setup_action_save_config',
-            scope: this,
-            handler: this.onApplyChanges,
-            disabled: true
-        });
-        
-        this.actionToolbar = new Ext.Toolbar({
-            items: [
-                this.action_applyChanges
-            ]
-        });
+        if (Tine.Setup.registry.get('setupRequired')) {
+            this.action_saveConfig.setText(this.app.i18n._('Save config and install'));
+        } else {
+            this.action_saveConfig.setText(this.app.i18n._('Save config'));
+            this.getForm().findField('authentication_sql_admin_password').setDisabled(true);
+            this.getForm().findField('authentication_sql_admin_passwordConfirmation').setDisabled(true);
+            this.getForm().findField('authentication_sql_admin_loginName').setDisabled(true);
+        }
     },
     
     /**
@@ -518,9 +423,11 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Ext.FormPanel, {
      * @return {Boolean}
      */
     isValid: function() {
-        // check if passwords match
         var form = this.getForm();
-        if (form.findField('authentication_sql_admin_password').getValue() != form.findField('authentication_sql_admin_passwordConfirmation').getValue()) {
+
+        if (form.findField('authentication_sql_admin_password') 
+            && form.findField('authentication_sql_admin_password').getValue() != form.findField('authentication_sql_admin_passwordConfirmation').getValue()) 
+        {
             form.markInvalid([{
                 id: 'authentication_sql_admin_passwordConfirmation',
                 msg: this.app.i18n._("Passwords don't match")
@@ -530,5 +437,4 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Ext.FormPanel, {
         
         return form.isValid();
     }
-    
-}); 
+});

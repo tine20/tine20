@@ -68,12 +68,6 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
     labelAlign: 'left',
     labelSeparator: ':',
     labelWidth: 150,
-    defaults: {
-        xtype: 'fieldset',
-        autoHeight: 'auto',
-        defaults: {width: 300},
-        defaultType: 'textfield'
-    },
     autoScroll: true,
     
     /**
@@ -88,7 +82,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
      * save config and update setup registry
      */
     onSaveConfig: function() {
-        if (this.getForm().isValid()) {
+        if (this.isValid()) {
             var configData = this.form2config();
             
             this.loadMask.show();
@@ -101,6 +95,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                 success: function(response) {
                     var regData = Ext.util.JSON.decode(response.responseText);
                     // replace some registry data
+                    console.log(regData);
                     for (key in regData) {
                         if (key != 'status') {
                             Tine.Setup.registry.replace(key, regData[key]);
@@ -134,6 +129,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
         var formData = this.config2form.defer(250, this, [Tine.Setup.registry.get(this.registryKey)]);
         
         Tine.Setup.registry.on('replace', this.applyRegistryState, this);
+        
         this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Transfering Configuration...')});
     },
     
@@ -244,5 +240,15 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
         this.actionToolbar = new Ext.Toolbar({
             items: this.actions.concat(this.actionToolbarItems)
         });
+    },
+    
+    /**
+     * checks if form is valid
+     * 
+     * @return {Boolean}
+     */
+    isValid: function() {
+        var form = this.getForm();
+        return form.isValid();
     }
 });
