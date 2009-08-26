@@ -179,7 +179,6 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         var updateable = [];
         
         this.store.each(function(record) {
-        	console.log(record);
             if (record.get('install_status') == 'updateable') {
                 updateable.push(record);
             }

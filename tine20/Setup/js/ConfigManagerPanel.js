@@ -136,7 +136,6 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
      * applies registry state to this cmp
      */
     applyRegistryState: function() {
-        console.log('apply');
         this.action_saveConfig.setDisabled(!Tine.Setup.registry.get('configWritable'));
         Ext.getCmp('setup-database-group').setIconClass(Tine.Setup.registry.get('checkDB') ? 'setup_checks_success' : 'setup_checks_fail');
     },

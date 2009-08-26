@@ -131,8 +131,6 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
         Tine.Tinebase.widgets.form.ConfigPanel.superclass.onRender.call(this, ct, position);
         
         // always the same shit! when form panel is rendered, the form fields are not yet rendered ;-(
-        console.log(Tine.Setup.registry);
-        console.log(this.registryKey);
         var formData = this.config2form.defer(250, this, [Tine.Setup.registry.get(this.registryKey)]);
         
         Tine.Setup.registry.on('replace', this.applyRegistryState, this);
@@ -202,8 +200,6 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
      * @param  {Object} configData
      */
     config2form: function(configData) {
-        console.log(configData);
-        
         var formData = arguments[1] ? arguments[1] : {};
         var currKey  = arguments[2] ? arguments[2] : '';
         

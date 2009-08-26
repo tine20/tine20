@@ -48,8 +48,6 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var dbMissing     = !Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
         
-        console.log(Tine.Setup.registry);
-        
         this.root = {
             id: '/',
             children: [{
@@ -124,8 +122,6 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var configExists = Tine.Setup.registry.get('configExists');
         var checkDB      = Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
-        
-        console.log(Tine.Setup.registry);
         
         var envNode = this.getNodeById('EnvCheckGridPanel');
         var envIconCls = setupChecks ? 'setup_checks_success' : 'setup_checks_fail';
