@@ -9,10 +9,9 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        implement user add/update/mailbox creation on add
+ * @todo        password/quota/client_id = crc32(tinebase id)/user idnr = crc32(user id)/user id = loginname
  * @todo        test it!
- * @todo        add forward / alias
- * @todo        add support for qmail
- * @todo        add factory / different backends?
  */
 
 /**
