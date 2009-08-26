@@ -21,9 +21,12 @@
 
     <!-- EXT JS -->
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />
-    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /><?php /*
+    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-blue.css" />
+    <?php /*
+    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" />
     <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/yui-utilities.js"></script> -->
-    <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/ext-yui-adapter.js"></script> --> */?>
+    <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/ext-yui-adapter.js"></script> --> 
+    */?>
     
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
