@@ -136,14 +136,66 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * returns freebusy information for given period and given attendee
      * 
+     * @todo merge overlapping events to one freebusy entry
+     * 
      * @param  Zend_Date                                            $_from
      * @param  Zend_Date                                            $_until
      * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
      * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
      */
-    public function getFreeBusyInfo($from, $until, $_attendee)
+    public function getFreeBusyInfo($_from, $_until, $_attendee)
     {
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'period',   'operator' => 'within', 'value' => array('from' => $_from, 'until' => $_until)),
+            array('field' => 'attender', 'operator' => 'in',     'value' => $_attendee)
+        ));
         
+        $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
+        Calendar_Model_Rrule::mergeRecuranceSet($events, $_from, $_until);
+        
+        // create a typemap
+        $typeMap = array();
+        foreach($_attendee as $attender) {
+            if (! array_key_exists($attender['user_type'], $typeMap)) {
+                $typeMap[$attender['user_type']] = array();
+            }
+            
+            $typeMap[$attender['user_type']][$attender['user_id']] = array();
+        }
+        
+        // sort freebusy info into tyepmap
+        foreach($events as $event) {
+        	// skip recuring base events
+        	if ($event->dtend->isEarlier($_from)) {
+        	    continue;
+        	}
+        	
+            foreach ($event->attendee as $attender) {
+            	// skip declined events
+                if ($attender->status == Calendar_Model_Attender::STATUS_DECLINED) {
+                    continue;
+                }
+                
+                if (array_key_exists($attender->user_type, $typeMap) && array_key_exists($attender->user_id, $typeMap[$attender->user_type])) {
+                    $typeMap[$attender->user_type][$attender->user_id][] = new Calendar_Model_FreeBusy(array(
+                        'user_type' => $attender->user_type,
+				        'user_id'   => $attender->user_id,
+				        'dtstart'   => clone $event->dtstart,
+				        'dtend'     => clone $event->dtend,
+				        'type'      => Calendar_Model_FreeBusy::FREEBUSY_BUSY
+                    ), true);
+                }
+            }
+        }
+        
+        $resultArray = array();
+        foreach ($typeMap as $type => $typeEntries) {
+            foreach ($typeEntries as $id => $fbslice) {
+                $resultArray = array_merge($resultArray, $fbslice);
+            }
+        }
+        
+        return new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy', $resultArray);
     }
     
     /**
