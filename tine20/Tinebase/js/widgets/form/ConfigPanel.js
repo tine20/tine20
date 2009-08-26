@@ -26,7 +26,7 @@ Ext.namespace('Tine.Tinebase.widgets.form');
  * - Enabling and Disabling of sections is handled automatically if you give the id 'setup-<section>-group' 
  *   to the checkboxToggle enabled fieldset
  *   
- * TODO         extend this in setup config manager + authentication grid
+ * TODO         make TABS work
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -77,14 +77,6 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
     autoScroll: true,
     
     /**
-     * fake a store to satisfy grid panel
-     * 
-     * @property store
-     * @type Ext.Store
-     */
-    store: {load: Ext.emptyFn},
-    
-    /**
      * application object
      * 
      * @property app
@@ -129,22 +121,31 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
         this.initActions();
         this.items = this.getFormItems();
 
-        Tine.Setup.ConfigManagerGridPanel.superclass.initComponent.call(this);
+        Tine.Tinebase.widgets.form.ConfigPanel.superclass.initComponent.call(this);
     },
     
     /**
      * @private
      */
     onRender: function(ct, position) {
-        Tine.Setup.ConfigManagerGridPanel.superclass.onRender.call(this, ct, position);
+        Tine.Tinebase.widgets.form.ConfigPanel.superclass.onRender.call(this, ct, position);
         
         // always the same shit! when form panel is rendered, the form fields are not yet rendered ;-(
+        console.log(Tine.Setup.registry);
+        console.log(this.registryKey);
         var formData = this.config2form.defer(250, this, [Tine.Setup.registry.get(this.registryKey)]);
         
         Tine.Setup.registry.on('replace', this.applyRegistryState, this);
         this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Transfering Configuration...')});
     },
     
+    /**
+     * applies registry state to this cmp
+     */
+    applyRegistryState: function() {
+    
+    },
+
     /**
      * returns config form (extending classes need to overwrite this)
      * 
@@ -158,7 +159,6 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
     /**
      * transforms form data into a config object
      * 
-     * @param  {Object} formData
      * @return {Object} configData
      */
     form2config: function() {
@@ -202,6 +202,8 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
      * @param  {Object} configData
      */
     config2form: function(configData) {
+        console.log(configData);
+        
         var formData = arguments[1] ? arguments[1] : {};
         var currKey  = arguments[2] ? arguments[2] : '';
         

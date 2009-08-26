@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: ConfigManagerGridPanel.js 7153 2009-03-03 20:21:52Z c.weiss@metaways.de $
  *
+ * TODO         add to extdoc
+ * TODO         extend Tine.Tinebase.widgets.form.ConfigPanel
  */
  
 Ext.ns('Tine', 'Tine.Setup');
@@ -16,11 +18,11 @@ Ext.ns('Tine', 'Tine.Setup');
  * 
  * @package Setup
  * 
- * @class Tine.Setup.AuthenticationGridPanel
+ * @class Tine.Setup.AuthenticationPanel
  * @extends Ext.FormPanel
  * 
  */
-Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
+Tine.Setup.AuthenticationPanel = Ext.extend(Ext.FormPanel, {
     
     /**
      * @property idPrefix DOM Id prefix
@@ -118,14 +120,14 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
         this.initActions();
         this.items = this.getFormItems();
         
-        Tine.Setup.AuthenticationGridPanel.superclass.initComponent.call(this);
+        Tine.Setup.AuthenticationPanel.superclass.initComponent.call(this);
     },
     
     /**
      * @private
      */
     onRender: function(ct, position) {
-        Tine.Setup.AuthenticationGridPanel.superclass.onRender.call(this, ct, position);
+        Tine.Setup.AuthenticationPanel.superclass.onRender.call(this, ct, position);
         
         // always the same shit! when form panel is rendered, the form fields itselv are not yet rendered ;-(
         this.config2form.defer(250, this, [Tine.Setup.registry.get('authenticationData')]);
@@ -288,7 +290,7 @@ Tine.Setup.AuthenticationGridPanel = Ext.extend(Ext.FormPanel, {
                     autoHeight: 'auto',
                     defaults: {
                         width: 300,
-                        xtype: 'textfield',
+                        xtype: 'textfield'
                     },
                     items: [ {
                         name: 'accounts_Sql_defaultUserGroupName',

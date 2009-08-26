@@ -11,11 +11,35 @@
  
 Ext.ns('Tine', 'Tine.Setup');
 
-/**************************** Tree Panel *****************************/
+/**
+ * @namespace   Tine.Setup
+ * @class       Tine.Setup.TreePanel
+ * @extends     Ext.tree.TreePanel
+ * 
+ * <p>Setup TreePanel</p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Setup.TreePanel
+ */
 Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
+    
+    /**
+     * tree panel cfg
+     * 
+     * @private
+     */
     border: false,
     rootVisible: false, 
     
+    /**
+     * @private
+     */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Setup');
         
@@ -24,30 +48,32 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var dbMissing     = !Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
         
+        console.log(Tine.Setup.registry);
+        
         this.root = {
             id: '/',
             children: [{
                 text: this.app.i18n._('Setup Checks'),
                 iconCls: testsFailed ? 'setup_checks_fail' : 'setup_checks_success',
-                id: 'EnvCheck',
+                id: 'EnvCheckGridPanel',
                 leaf: true
             }, {
                 text: this.app.i18n._('Config Manager'),
                 iconCls: 'setup_config_manager',
                 disabled: testsFailed,
-                id: 'ConfigManager',
+                id: 'ConfigManagerPanel',
                 leaf: true
             }, {
                 text: this.app.i18n._('Authentication/Accounts'),
                 iconCls: 'setup_config_manager',
                 disabled: testsFailed || configMissing || dbMissing,
-                id: 'Authentication',
+                id: 'AuthenticationPanel',
                 leaf: true
             }, {
                 text: this.app.i18n._('Application Manager'),
                 iconCls: 'setup_application_manager',
                 disabled: testsFailed || configMissing || dbMissing || setupRequired,
-                id: 'Application',
+                id: 'ApplicationGridPanel',
                 leaf: true
             }]
         };
@@ -62,7 +88,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onNodeClick: function(node) {
         if (! node.disabled) {
-            this.app.getMainScreen().activeContentType = node.id;
+            this.app.getMainScreen().activePanel = node.id;
             this.app.getMainScreen().show();
         } else {
             return false;
@@ -85,18 +111,23 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         }
         
         activeType.select();
-        this.app.getMainScreen().activeContentType = activeType.id;
+        this.app.getMainScreen().activePanel = activeType.id;
         
         Tine.Setup.registry.on('replace', this.applyRegistryState, this);
     },
     
+    /**
+     * apply registry state
+     */
     applyRegistryState: function() {
         var setupChecks  = Tine.Setup.registry.get('setupChecks').success;
         var configExists = Tine.Setup.registry.get('configExists');
         var checkDB      = Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
         
-        var envNode = this.getNodeById('EnvCheck');
+        console.log(Tine.Setup.registry);
+        
+        var envNode = this.getNodeById('EnvCheckGridPanel');
         var envIconCls = setupChecks ? 'setup_checks_success' : 'setup_checks_fail';
         if (envNode.rendered) {
             var envIconEl = Ext.get(envNode.ui.iconNode);
@@ -107,16 +138,22 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             envNode.iconCls = envIconCls;
         }
         
-        this.getNodeById('ConfigManager')[setupChecks ? 'enable': 'disable']();
-        this.getNodeById('Authentication')[setupChecks && configExists && checkDB ? 'enable': 'disable']();
-        this.getNodeById('Application')[setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
+        this.getNodeById('ConfigManagerPanel')[setupChecks ? 'enable': 'disable']();
+        this.getNodeById('AuthenticationPanel')[setupChecks && configExists && checkDB ? 'enable': 'disable']();
+        this.getNodeById('ApplicationGridPanel')[setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
     }
 });
 
-/**************************** Models *****************************/
 Ext.ns('Tine', 'Tine.Setup', 'Tine.Setup.Model');
 
-Tine.Setup.Model.ApplicationArray = Tine.Tinebase.Model.genericFields.concat([
+/**
+ * @namespace   Tine.Setup.Model
+ * @class       Tine.Setup.Model.Application
+ * @extends     Tine.Tinebase.data.Record
+ * 
+ * Application Record Definition
+ */ 
+Tine.Setup.Model.Application = Tine.Tinebase.data.Record.create([
     { name: 'id'              },
     { name: 'name'            },
     { name: 'status'          },
@@ -125,12 +162,7 @@ Tine.Setup.Model.ApplicationArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'current_version' },
     { name: 'install_status'  },
     { name: 'depends'         }
-]);
-
-/**
- * Task record definition
- */
-Tine.Setup.Model.Application = Tine.Tinebase.data.Record.create(Tine.Setup.Model.ApplicationArray, {
+], {
     appName: 'Setup',
     modelName: 'Application',
     idProperty: 'name',
@@ -141,8 +173,12 @@ Tine.Setup.Model.Application = Tine.Tinebase.data.Record.create(Tine.Setup.Model
 });
 
 /**
- * default tasks backend
- */
+ * @namespace   Tine.Setup
+ * @class       Tine.Setup.ApplicationBackend
+ * @extends     Tine.Tinebase.data.RecordProxy
+ * 
+ * default application backend
+ */ 
 Tine.Setup.ApplicationBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Setup',
     modelName: 'Application',
@@ -150,8 +186,12 @@ Tine.Setup.ApplicationBackend = new Tine.Tinebase.data.RecordProxy({
 });
 
 /**
- * Model of a grant
- */
+ * @namespace   Tine.Setup.Model
+ * @class       Tine.Setup.Model.EnvCheck
+ * @extends     Ext.data.Record
+ * 
+ * env check Record Definition
+ */ 
 Tine.Setup.Model.EnvCheck = Ext.data.Record.create([
     {name: 'key'},
     {name: 'value'},

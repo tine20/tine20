@@ -167,7 +167,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/CountryCombo.js',
             'Tinebase/js/widgets/GridPicker.js',
             'Tinebase/js/widgets/ActivitiesPanel.js',        
-            'Tinebase/js/widgets/form/RecordPickerComboBox.js',        
+            'Tinebase/js/widgets/form/RecordPickerComboBox.js',
+            'Tinebase/js/widgets/form/ConfigPanel.js',
             // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',

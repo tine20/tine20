@@ -11,58 +11,73 @@
  
 Ext.ns('Tine', 'Tine.Setup');
 
-// default mainscreen
+/**
+ * @namespace   Tine.Setup
+ * @class       Tine.Setup.MainScreen
+ * @extends     Tine.Tinebase.widgets.app.MainScreen
+ * 
+ * <p>MainScreen Definition</p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Setup.MainScreen
+ */
 Tine.Setup.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     
-    activeContentType: 'EnvCheck',
+    /**
+     * active panel
+     * 
+     * @property activePanel
+     * @type String
+     */
+    activePanel: 'EnvCheckGridPanel',
     
-    /*
-    show: function() {
-        if(this.fireEvent("beforeshow", this) !== false){
-            this.setTreePanel();
-            this.setContentPanel();
-            this.setToolbar();
-            this.updateMainToolbar();
-            
-            this.fireEvent('show', this);
-        }
-        return this;
-    },*/
-    
+    /**
+     * set content panel
+     */
     setContentPanel: function() {
         
         // which content panel?
-        var type = this.activeContentType;
+        var panel = this.activePanel;
         
-        if (! this[type + 'GridPanel']) {
-            this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
+        if (! this[panel]) {
+            this[panel] = new Tine.Setup[panel]({
                 app: this.app
             });
         }
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this[type + 'GridPanel'], true);
-        this[type + 'GridPanel'].store.load();
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this[panel], true);
+        
+        if (this[panel].hasOwnProperty('store')) {
+            this[panel].store.load();
+        }
     },
     
+    /**
+     * get content panel
+     * 
+     * @return {Ext.Panel}
+     */
     getContentPanel: function() {
-        // which content panel?
-        var type = this.activeContentType;
-        
-        // we always return timesheet grid panel as a quick hack for saving filters
-        return this[type + 'GridPanel'];
+        return this[this.activePanel];
     },
     
     /**
      * sets toolbar in mainscreen
      */
     setToolbar: function() {
-        var type = this.activeContentType;
+        var panel = this.activePanel;
         
-        if (! this[type + 'ActionToolbar']) {
-            this[type + 'ActionToolbar'] = this[type + 'GridPanel'].actionToolbar;
+        if (! this[panel + 'ActionToolbar']) {
+            this[panel + 'ActionToolbar'] = this[panel].actionToolbar;
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
+        Tine.Tinebase.MainScreen.setActiveToolbar(this[panel + 'ActionToolbar'], true);
         
         // disable preferences in main menu
         var preferences = Ext.getCmp('Tinebase_System_PreferencesButton');
