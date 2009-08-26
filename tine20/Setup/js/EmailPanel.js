@@ -20,7 +20,9 @@ Ext.ns('Tine', 'Tine.Setup');
  * 
  * <p>Email Config Panel</p>
  * <p><pre>
- * TODO         make it work
+ * TODO         add more fields
+ * TODO         add dbmail fields
+ * TODO         make loading from registry/db work
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -38,8 +40,14 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * @private
      * panel cfg
      */
-    saveMethod: 'Setup.saveEmail',
+    saveMethod: 'Setup.saveEmailConfig',
     registryKey: 'emailData',
+    defaults: {
+        xtype: 'fieldset',
+        autoHeight: 'auto',
+        defaults: {width: 300},
+        defaultType: 'textfield'
+    },
     
     /**
      * @private
@@ -55,13 +63,68 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * @return {Array} items
      */
     getFormItems: function() {
-        return [];
+        return [{
+            title: this.app.i18n._('Imap'),
+            id: 'setup-imap-group',
+            checkboxToggle:true,
+            collapsed: true,
+            items: [{
+                xtype: 'combo',
+                listWidth: 300,
+                mode: 'local',
+                forceSelection: true,
+                allowEmpty: false,
+                triggerAction: 'all',
+                selectOnFocus:true,
+                value: 'standard',
+                store: [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail']],
+                name: 'imap_backend',
+                fieldLabel: this.app.i18n._('Backend')
+            }, {
+                name: 'imap_host',
+                fieldLabel: this.app.i18n._('Hostname')
+            }, {
+                name: 'imap_user',
+                fieldLabel: this.app.i18n._('Username')
+            }, {
+                name: 'imap_password',
+                fieldLabel: this.app.i18n._('Password'),
+                inputType: 'password'
+            }, {
+                name: 'imap_port',
+                fieldLabel: this.app.i18n._('Port')
+            }, {
+                name: 'imap_name',
+                fieldLabel: this.app.i18n._('Default account name')
+            }]
+    //'useAsDefault' => true,
+    //'secure_connection' => 'tls',
+        }, {
+            title: this.app.i18n._('Smtp'),
+            id: 'setup-smtp-group',
+            checkboxToggle:true,
+            collapsed: true,
+            items: [{
+                name: 'smtp_host',
+                fieldLabel: this.app.i18n._('Hostname')
+            }, {
+                name: 'smtp_user',
+                fieldLabel: this.app.i18n._('Username')
+            }, {
+                name: 'smtp_password',
+                fieldLabel: this.app.i18n._('Password'),
+                inputType: 'password'
+            }, {
+                name: 'smtp_port',
+                fieldLabel: this.app.i18n._('Port')
+            }]
+        }];
     },
     
     /**
      * applies registry state to this cmp
      */
     applyRegistryState: function() {
-        //this.action_saveConfig.setDisabled(!this.isValid());
+        this.action_saveConfig.setDisabled(!this.isValid());
     }
 });
