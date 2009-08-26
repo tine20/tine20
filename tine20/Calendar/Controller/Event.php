@@ -73,18 +73,50 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * checks if all attendee of given event are not busy for given event
+     * 
+     * @param Calendar_Model_Event $_event
+     * @return void
+     * @throws 
+     */
+    public function checkBusyConficts($_event)
+    {
+        //$busyException = new Calendar_Exception_AttendeeBusy();
+        //$busyException->setAttendeeStatus(array(
+        //    array('user_type'=> 'user', 'user_id' => 1, 'status' => 'busy')
+        //));
+        
+        //throw $busyException;
+    }
+    
+    /**
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   bool                      $_checkBusyConficts
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_checkBusyConficts = FALSE)
     {
-        $event = parent::create($_record);
-        
-        $this->_saveAttendee($_record);
+    	try {
+	    	$db = $this->_backend->getAdapter();
+	        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+	        
+	        if ($_checkBusyConficts) {
+		        // ensure that all attendee are free
+		        $this->checkBusyConficts($_record);
+	        }
+	        
+	        $event = parent::create($_record);
+	        $this->_saveAttendee($_record);
+	        
+	        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+    	} catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
+        }
         
         return $this->get($event->getId());
     }
@@ -102,28 +134,56 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * returns freebusy information for given period and given attendee
+     * 
+     * @param  Zend_Date                                            $_from
+     * @param  Zend_Date                                            $_until
+     * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
+     * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
+     */
+    public function getFreeBusyInfo($from, $until, $_attendee)
+    {
+        
+    }
+    
+    /**
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   bool                      $_checkBusyConficts
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_checkBusyConficts = FALSE)
     {
-        $event = $this->get($_record->getId());
-        if ($event->editGrant) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "updating event: {$_record->id} ");
-            $event = parent::update($_record);
+    	try {
+            $db = $this->_backend->getAdapter();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $this->_saveAttendee($_record);
-        } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
-            foreach ($_record->attendee as $attender) {
-                if ($attender->status_authkey) {
-                    $this->attenderStatusUpdate($event, $attender, $attender->status_authkey);
-                }
-            }
+	        $event = $this->get($_record->getId());
+	        if ($event->editGrant) {
+	            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "updating event: {$_record->id} ");
+		        if ($_checkBusyConficts) {
+	                // ensure that all attendee are free
+	                $this->checkBusyConficts($_record);
+	            }
+	            $event = parent::update($_record);
+	            
+	            $this->_saveAttendee($_record);
+	        } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
+	            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
+	            foreach ($_record->attendee as $attender) {
+	                if ($attender->status_authkey) {
+	                    $this->attenderStatusUpdate($event, $attender, $attender->status_authkey);
+	                }
+	            }
+	        }
+	        
+    	    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
         }
         
         return $this->get($event->getId());
@@ -132,10 +192,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * updates a recur series
      *
-     * @param Calendar_Model_Event $_recurInstance
+     * @param  Calendar_Model_Event $_recurInstance
+     * @param  bool                 $_checkBusyConficts
      * @return Calendar_Model_Event
      */
-    public function updateRecurSeries($_recurInstance)
+    public function updateRecurSeries($_recurInstance, $_checkBusyConficts = FALSE)
     {
         $baseEvent = $this->_getRecurBaseEvent($_recurInstance);
         
@@ -161,7 +222,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $newBaseEvent->exdate      = $baseEvent->exdate;
         
-        return $this->update($newBaseEvent);
+        return $this->update($newBaseEvent, $_checkBusyConficts);
     }
     
     /**
@@ -173,9 +234,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Calendar_Model_Event  $_event
      * @param  bool                  $_deleteInstance
      * @param  bool                  $_deleteAllFollowing (technically croppes rrule_until)
+     * @param  bool                  $_checkBusyConficts
      * @return Calendar_Model_Event  exception Event | updated baseEvent
      */
-    public function createRecurException($_event, $_deleteInstance = FALSE, $_deleteAllFollowing = FALSE)
+    public function createRecurException($_event, $_deleteInstance = FALSE, $_deleteAllFollowing = FALSE, $_checkBusyConficts = FALSE)
     {
         // NOTE: recurid is computed by rrule recur computations and therefore is already part of the event.
         if (empty($_event->recurid)) {
@@ -212,11 +274,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $_event->notes->setId(NULL);
             }
             
+            // mhh how to preserv the attendee status stuff
+            $event = $this->create($_event, $_checkBusyConficts);
+            
             // we need to touch the recur base event, so that sync action find the updates
             $this->_backend->update($baseEvent);
             
-            // mhh how to preserv the attendee status stuff
-            return $this->create($_event);
+            return $event;
             
         } else {
             $exdate = new Zend_Date(substr($_event->recurid, -19), Tinebase_Record_Abstract::ISO8601LONG);
@@ -240,7 +304,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             }
             
-            return $this->update($baseEvent);
+            return $this->update($baseEvent, FALSE);
         }
     }
     
@@ -270,7 +334,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
         $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
-        
     }
     
     /**
