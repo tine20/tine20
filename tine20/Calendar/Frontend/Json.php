@@ -247,24 +247,11 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        
 	        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
 	        
-	        //compute recurset
-	         $candidates = $_records->filter('rrule', "/^FREQ.*/", TRUE);
-	         $period = $_filter->getFilter('period');
-	         
-	         $fakeId = microtime();
-	         foreach ($candidates as $candidate) {
-	             try {
-	                 $exceptions = $_records->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
-	                 $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $period->getFrom(), $period->getUntil());
-	                 foreach ($recurSet as $event) {
-	                     $_records->addRecord($event);
-	                     $event->setId('fakeid' . $candidate->uid . $fakeId++);
-	                 }
-	             } catch (Exception $e) {
-	             	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
-	             	continue;
-	             }
-	         }
+	        // merge recurset
+	        $period = $_filter->getFilter('period');
+	        if ($period) {
+		        Calendar_Model_Rrule::mergeRecuranceSet($_records, $period->getFrom(), $period->getUntil());
+	        }
     	}
           
         //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));

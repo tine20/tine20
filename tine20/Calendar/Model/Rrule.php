@@ -198,6 +198,35 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     /************************* recurance computation *****************************/
     
     /**
+     * merges recurances of given events into the given event set
+     * 
+     * @param  Tinebase_Record_RecordSet    $_events
+     * @param  Zend_Date                    $_from
+     * @param  Zend_Date                    $_until
+     * @return void
+     */
+    public static function mergeRecuranceSet($_events, $_from, $_until)
+    {
+        //compute recurset
+        $candidates = $_events->filter('rrule', "/^FREQ.*/", TRUE);
+        
+        $fakeId = microtime();
+        foreach ($candidates as $candidate) {
+            try {
+                $exceptions = $_events->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
+                $recurSet = Calendar_Model_Rrule::computeRecuranceSet($candidate, $exceptions, $_from, $_until);
+                foreach ($recurSet as $event) {
+                    $_events->addRecord($event);
+                    $event->setId('fakeid' . $candidate->uid . $fakeId++);
+                }
+            } catch (Exception $e) {
+               Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
+               continue;
+            }
+        }
+    }
+    
+    /**
      * Computes the recurance set of the given event leaving out $_event->exdate and $_exceptions
      * 
      * @todo respect rrule_until!
