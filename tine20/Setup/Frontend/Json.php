@@ -214,6 +214,11 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         return $result;        
     }
     
+    /**
+     * load auth config data
+     * 
+     * @return array
+     */
     public function loadAuthenticationData()
     {
         return $this->_controller->loadAuthenticationData();
@@ -223,12 +228,11 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * Update authentication data (needs Tinebase tables to store the data)
      * 
      * Installs Tinebase if not already installed
-     *  
+     * 
      * 
      * @todo validate $data
      * 
      * @param String $data [Json encoded string]
-     * 
      * @return array [success status]
      */
     public function saveAuthentication($data)
@@ -237,6 +241,34 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         return array(
             'success' => true,
             'setupRequired' => $this->_controller->setupRequired()
+        );
+    }
+    
+    /**
+     * load email config data
+     * 
+     * @todo implement controller function
+     * 
+     * @return array
+     */
+    public function getEmailConfig()
+    {
+        return $this->_controller->getEmailConfig();
+    }
+    
+    /**
+     * Update email config data
+     * 
+     * @todo implement controller function
+     * 
+     * @param string $data [Json encoded string]
+     * @return array [success status]
+     */
+    public function saveEmailConfig($data)
+    {
+        $this->_controller->saveEmailConfig(Zend_Json::decode($data));
+        return array(
+            'success' => true,
         );
     }
     
@@ -263,12 +295,13 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         // authenticated or non existent config
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
         	$registryData = array_merge($registryData, array(
-	            'configWritable'     => Setup_Core::configFileWritable(),
-	            'checkDB'            => Setup_Core::get(Setup_Core::CHECKDB),
-	            'setupChecks'        => $this->envCheck(),
-        	    'setupRequired'      => $this->_controller->setupRequired(),
-	            'configData'         => $this->loadConfig(),
-        	    'authenticationData' => $this->loadAuthenticationData(),
+	            'configWritable'       => Setup_Core::configFileWritable(),
+	            'checkDB'              => Setup_Core::get(Setup_Core::CHECKDB),
+	            'setupChecks'          => $this->envCheck(),
+        	    'setupRequired'        => $this->_controller->setupRequired(),
+	            'configData'           => $this->loadConfig(),
+        	    'authenticationData'   => $this->loadAuthenticationData(),
+        	    'emailData'            => $this->getEmailConfig(),
 	        ));
         }
         

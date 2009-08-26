@@ -539,6 +539,11 @@ class Setup_Controller
         Setup_Core::set(Setup_Core::CONFIG, $config);
     }
     
+    /**
+     * load authentication data
+     * 
+     * @return array
+     */
     public function loadAuthenticationData()
     {
         return array(
@@ -653,6 +658,39 @@ class Setup_Controller
         return $result;
     }
 
+    
+    /**
+     * get email config
+     * 
+     * @return array
+     * 
+     * @todo implement
+     */
+    public function getEmailConfig()
+    {
+        $result = array();
+        
+        //-- get from db
+        //-- get from config.inc.php
+        
+        return $result;
+    }
+    
+    /**
+     * save email config
+     * 
+     * @param array $_data
+     * @return void
+     * 
+     * @todo implement
+     */
+    public function saveEmailConfig($_data)
+    {
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE)); 
+                    
+        //-- save in db
+    }
+    
     /**
      * create new setup user session
      *
