@@ -27,14 +27,6 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
     );
 
     /**
-     * @var array maps abstract operators to sql operators
-     */
-    protected $_opSqlMap = array(
-        'equals'     => array('sqlop' => ' = ?'   ,     'wildcards' => '?'  ),
-        'in'         => array('sqlop' => ' IN (?)',     'wildcards' => '?'  ),
-    );
-    
-    /**
      * sets value
      *
      * @param mixed $_value
@@ -56,16 +48,15 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $_select->joinLeft(
-            /* table  */ array('attendee' => $_backend->getTablePrefix() . 'cal_attendee'), 
-            /* on     */ $_backend->getAdapter()->quoteIdentifier('attendee.cal_event_id') . ' = ' . $_backend->getAdapter()->quoteIdentifier($_backend->getTableName() . '.id'),
-            /* select */ array());
+        $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+        $adapter = $_backend->getAdapter();
         
-        foreach ($this->_value as $attendee) {
-            
+        foreach ($this->_value as $attender) {
+        	$gs->orWhere(
+        	    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_type') . ' = ?', $attender['user_type']) . ' AND ' .
+                $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_id') .   ' = ?', $attender['user_id'])
+        	);
         }
-        
-        
+        $gs->appendWhere(Zend_Db_Select::SQL_OR);
     }
-    
 }
