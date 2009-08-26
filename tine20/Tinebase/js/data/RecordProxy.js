@@ -353,6 +353,8 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     var args = [];
                     if (typeof options.beforeFailure == 'function') {
                         args = options.beforeFailure.call(this, response);
+                    } else {
+                        args = [Ext.decode(response.responseText)];
                     }
                 
                     options.failure.apply(options.scope, args);
