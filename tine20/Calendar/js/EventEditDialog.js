@@ -238,6 +238,17 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
     
+    /*
+    onApplyChanges: function(button, event, closeWindow) {
+        if(this.isValid()) {
+            //this.loadMask.show();
+            this.onRecordUpdate();
+            
+            this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+        }
+    },
+    */
+    
     onDtEndChange: function(dtEndField, newValue, oldValue) {
         this.validateDtEnd();
     },

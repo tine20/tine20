@@ -118,7 +118,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         return this.view;
     },
     
-    onAddEvent: function(event) {
+    onAddEvent: function(event, checkBusyConficts) {
         this.setLoading(true);
         
         // remove temporary id
@@ -141,7 +141,10 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                     this.setLoading(false);
                     this.view.getSelectionModel().select(createdEvent);
                 }
-            }
+            },
+            failure: this.onProxyFail.createDelegate(this, [event], true)
+        }, {
+            checkBusyConficts: checkBusyConficts === false ? 0 : 1
         });
     },
     
@@ -165,9 +168,87 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         }
     },
     
+    onProxyFail: function(error, event) {
+        if (error.code == 901) {
+            // get names of busy attendee
+            // TODO refactore name handling of attendee
+            //      -> attender model needs knowlege of how to get names!
+            var attendeeStore = new Ext.data.Store();
+            Ext.each(event.get('attendee'), function(attender) {
+                var record = new Tine.Calendar.Model.Attender(attender, attender.id);
+                attendeeStore.add(record);
+            });
+            
+            var busyAttendee = [];
+            var names = [];
+            Ext.each(error.freebusyinfo, function(fbinfo) {
+                var user_id = fbinfo.user_id;
+                var user_type = fbinfo.user_type;
+                
+                attendeeStore.each(function(a) {
+                    if (a.get('user_type') == user_type && a.getUserId() == user_id) {
+                        if (busyAttendee.indexOf(a) < 0) {
+                            busyAttendee.push(a);
+                            names.push(Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, a.get('user_id'), false, a));
+                        }
+                    }
+                })
+            }, this);
+            
+            this.conflictConfirmWin = new Ext.Window({
+                modal: true,
+                cls: 'x-window-dlg',
+                closable: false,
+                title: this.app.i18n._('Scheduling Conflict'),
+                html: '<div class="ext-mb-icon ext-mb-question"></div>' +
+                      '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
+                          String.format(
+                            this.app.i18n.n_(
+                                '{0} is busy at the requested time', 
+                                'The follwing attendee are busy at the requested time: "{0}"',
+                                names.length) + "<br />", 
+                           names.join(', ')) +
+                      '<br /><div class="ext-mb-fix-cursor"></div></div>',
+                buttons: [{
+                    text: this.app.i18n._('Ignore Conflict'),
+                    scope: this,
+                    handler: function() {
+                        this.onAddEvent(event, false);
+                        this.conflictConfirmWin.close();
+                    }
+                }, {
+                    text: this.app.i18n._('Edit Event'),
+                    scope: this,
+                    handler: function() {
+                        this.view.getSelectionModel().select(event);
+                        this.view.fireEvent('dblclick', this.view, event);
+                        this.conflictConfirmWin.close();
+                    }
+                }]
+            });
+            this.conflictConfirmWin.show();
+            /*
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Scheduling Conflict'),
+                String.format(this.app.i18n.n_('{0} is busy at the requested time', 'The follwing attendee are busy at the requested time: "{0}"', names.length) + "<br />"  +
+                this.app.i18n._('Ignore Scheduling Conflict?'), names.join(', ')),
+                function(btn) {
+                    if(btn == 'yes') {
+                        this.onAddEvent(event, false)
+                    } else {
+                        this.setLoading(false);
+                        this.store.remove(event);
+                        //this.loadMask.show();
+                        //this.store.load({refresh: true});
+                    }
+                }, this
+            );
+            */
+        }
+    },
+    
     onUpdateEvent: function(event) {
         this.setLoading(true);
-        //console.log('A existing event has been updated -> call backend saveRecord');
         
         if (event.isRecurBase()) {
             this.loadMask.show();
@@ -218,10 +299,10 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                             success: function() {
                                 this.store.load({refresh: true});
                             },
-                            failure: function () {
+                            failure: this.onProxyFail.createDelegate(this, [event], true) /*function () {
                                 this.loadMask.hide();;
                                 Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), this.app.i18n._('Failed not update recurring event series')); 
-                            }
+                            }*/
                         };
                         
                         Tine.Calendar.backend.updateRecurSeries(event, options);
@@ -241,9 +322,9 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                                 this.setLoading(false);
                                 this.view.getSelectionModel().select(updatedEvent);
                             },
-                            failure: function () {
+                            failure: this.onProxyFail.createDelegate(this, [event], true) /* function () {
                                 Ext.MessageBox.alert(Tine.Tinebase.tranlation._hidden('Failed'), this.app.i18n._('Failed not update event')); 
-                            }
+                            }*/
                         };
                         
                         Tine.Calendar.backend.createRecurException(event, false, false, options);
@@ -272,7 +353,10 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                     this.setLoading(false);
                     this.view.getSelectionModel().select(updatedEvent);
                 }
-            }
+            },
+            failure: this.onProxyFail.createDelegate(this, [event], true)
+        }, {
+            checkBusyConficts: 1
         });
     },
     
