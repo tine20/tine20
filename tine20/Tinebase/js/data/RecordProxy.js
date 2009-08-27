@@ -135,7 +135,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * @return  {Number} Ext.Ajax transaction id
      * @success {Ext.data.Record}
      */
-    saveRecord: function(record, options) {
+    saveRecord: function(record, options, additionalArguments) {
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
@@ -145,6 +145,9 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         var p = options.params;
         p.method = this.appName + '.save' + this.modelName;
         p.recordData = Ext.util.JSON.encode(record.data);
+        if (additionalArguments) {
+            Ext.apply(p, additionalArguments);
+        }
         
         return this.doXHTTPRequest(options);
     },
