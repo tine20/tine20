@@ -516,17 +516,22 @@ class Setup_Controller
      * save data to config file
      *
      * @param array $_data
+     * @param boolean $_merge
      */
-    public function saveConfigData($_data)
+    public function saveConfigData($_data, $_merge = TRUE)
     {
         if (Setup_Core::configFileExists() && !Setup_Core::configFileWritable()) {
             throw new Setup_Exception('Config File is not writeable.');
         }
             
         // merge config data and active config
-        $activeConfig = Setup_Core::getConfig();
-        $config = new Zend_Config($activeConfig->toArray(), true);
-        $config->merge(new Zend_Config($_data));
+        if ($_merge) {
+            $activeConfig = Setup_Core::getConfig();
+            $config = new Zend_Config($activeConfig->toArray(), true);
+            $config->merge(new Zend_Config($_data));
+        } else {
+            $config = new Zend_Config($_data);
+        }
         
         // write to file
         $writer = new Zend_Config_Writer_Array(array(
@@ -663,15 +668,16 @@ class Setup_Controller
      * get email config
      * 
      * @return array
-     * 
-     * @todo implement
      */
     public function getEmailConfig()
     {
-        $result = array();
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray('Tinebase_Smtp_Config');
         
-        //-- get from db
-        //-- get from config.inc.php
+        $result = array(
+            'imap' => $imapConfig,
+            'smtp' => $smtpConfig
+        );
         
         return $result;
     }
@@ -681,14 +687,15 @@ class Setup_Controller
      * 
      * @param array $_data
      * @return void
-     * 
-     * @todo implement
      */
     public function saveEmailConfig($_data)
     {
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE)); 
-                    
-        //-- save in db
+        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE)); 
+
+        if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
+            Tinebase_Config::getInstance()->setConfigForApplication('Felamimail_Imap_Config', Zend_Json::encode($_data['imap']), 'Felamimail');
+        }
+        Tinebase_Config::getInstance()->setConfigForApplication('Tinebase_Smtp_Config', Zend_Json::encode($_data['smtp']));
     }
     
     /**

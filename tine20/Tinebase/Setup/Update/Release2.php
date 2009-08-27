@@ -133,4 +133,38 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.3');
     }
+    
+    /**
+     * update to 2.4
+     * - move email configuration from config.inc.php to config db table
+     * 
+     * @todo use constants for config names?
+     */    
+    public function update_3()
+    {
+        $config = Setup_Controller::getInstance()->getConfigData();
+        
+        // get imap settings -> felamimail config
+        if (isset($config['imap']) && Setup_Controller::getInstance()->isInstalled('Felamimail')) {
+            $config['imap']['active'] = 1;
+            if (isset($config['imap']['secure_connection'])) {
+                $config['imap']['ssl'] = $config['imap']['secure_connection'];
+                unset($config['imap']['secure_connection']);
+            }
+            Tinebase_Config::getInstance()->setConfigForApplication('Felamimail_Imap_Config', Zend_Json::encode($config['imap']), 'Felamimail');
+            unset($config['imap']);
+        }
+        
+        // get smtp settings -> tinebase config
+        if (isset($config['smtp'])) {
+            $config['smtp']['active'] = 1;
+            Tinebase_Config::getInstance()->setConfigForApplication('Tinebase_Smtp_Config', Zend_Json::encode($config['smtp']));
+            unset($config['smtp']);
+        }
+        
+        // delete old config settings from config.inc.php
+        Setup_Controller::getInstance()->saveConfigData($config, FALSE);
+        
+        $this->setApplicationVersion('Tinebase', '2.4');
+    }
 }

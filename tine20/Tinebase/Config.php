@@ -113,6 +113,22 @@ class Tinebase_Config
     }
 
     /**
+     * returns one config value identified by config name and application name as array (it was json encoded in db)
+     * 
+     * @param   string      $_name config name/key
+     * @param   string      $_applicationName
+     * @param   array       $_default the default value
+     * @return  array       the config array
+     */
+    public function getConfigAsArray($_name, $_applicationName = 'Tinebase', $_default = array())
+    {
+        $config = $this->getConfig($_name, Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId(), $_default);
+        
+        $result = (is_array($config->value)) ? $config->value : Zend_Json::decode($config->value);
+        return $result;
+    }
+    
+    /**
      * returns all config settings for one application
      * 
      * @param   string $_applicationId application id
@@ -149,6 +165,8 @@ class Tinebase_Config
      */
     public function setConfig(Tinebase_Model_Config $_config)
     {
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . $_config->name); 
+        
         // check if already in
         try {
             $config = $this->getConfig($_config->name, $_config->application_id);
