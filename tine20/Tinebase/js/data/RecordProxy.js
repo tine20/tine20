@@ -354,7 +354,8 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     if (typeof options.beforeFailure == 'function') {
                         args = options.beforeFailure.call(this, response);
                     } else {
-                        args = [Ext.decode(response.responseText)];
+                        var responseData = Ext.decode(response.responseText)
+                        args = [responseData.data ? responseData.data : responseData];
                     }
                 
                     options.failure.apply(options.scope, args);
