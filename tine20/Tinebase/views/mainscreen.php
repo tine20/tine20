@@ -73,7 +73,7 @@
         
         if (Tinebase_Core::getConfig()->customMainscreenHeaders) {echo "\n" . Tinebase_Core::getConfig()->customMainscreenHeaders;} ?>
         
-		 <link rel="stylesheet" type="text/css" href="styles/tine20.css" />
+		 <!--  link rel="stylesheet" type="text/css" href="styles/tine20.css" / -->
 </head>
 <body>
     <noscript>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></noscript>
