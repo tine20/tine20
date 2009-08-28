@@ -557,6 +557,27 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(18, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart after DST shoud be 18');
     }
     
+    public function testBrokenRrule()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'weekly with out interval',
+            'dtstart'       => '2009-08-28 08:00:00',
+            'dtend'         => '2009-08-28 10:00:00',
+            'rrule'         => 'FREQ=WEEKLY;BYDAY=TU',
+            'originator_tz' => 'Europe/Berlin',
+            'editGrant'     => true,
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Zend_Date('2009-08-28 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Zend_Date('2009-09-28 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        $this->assertEquals(4, count($recurSet));
+        
+    }
+    
     /************************** date helper tests ***************************/
     
     public function testSkipWday()
