@@ -34,10 +34,21 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'emailUID'      => array('allowEmpty' => true),
-        'emailGID'      => array('allowEmpty' => true),
-        'emailForward'  => array('allowEmpty' => true),
-        'emailAliases'  => array('allowEmpty' => true),
-        'emailQuota'    => array('allowEmpty' => true),
+        'emailUID'          => array('allowEmpty' => true),
+        'emailGID'          => array('allowEmpty' => true),
+        'emailQuota'        => array('allowEmpty' => true),
+        'emailMailSize'     => array('allowEmpty' => true),
+        'emailUserId'       => array('allowEmpty' => true),
+        'emailLastLogin'    => array('allowEmpty' => true),
+        'emailPassword'     => array('allowEmpty' => true),
+    );
+    
+    /**
+     * datetime fields
+     *
+     * @var array
+     */
+    protected $_datetimeFields = array(
+        'emailLastLogin'
     );
 } 

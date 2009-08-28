@@ -18,7 +18,7 @@
  * Email Account Managing
  * 
  * @package Tinebase
- * @subpackage Samba
+ * @subpackage User
  */
 class Tinebase_EmailUser
 {
@@ -70,14 +70,13 @@ class Tinebase_EmailUser
     /**
      * the singleton pattern
      *
-     * @return Tinebase_EmailUser
+     * @return Tinebase_EmailUser_Abstract
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
-            
             self::$_instance = self::factory($backendType);
         }
         
@@ -91,7 +90,7 @@ class Tinebase_EmailUser
      * @return  Tinebase_EmailUser_Abstract
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public static function factory($_type) 
+    public static function factory($_type = NULL) 
     {
         switch($_type) {
             /*
@@ -126,11 +125,12 @@ class Tinebase_EmailUser
      */
     public static function getConfiguredBackend()
     {
-        if(isset(Tinebase_Core::getConfig()->dbmail)) {
-            $backendType = Tinebase_Core::getConfig()->dbmail->get('backend', self::DBMAIL); 
-            $backendType = ucfirst($backendType);
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        
+        if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == self::DBMAIL) {
+            return self::DBMAIL;
         } else {
-            throw new Tinebase_Exception_NotFound("DBmail config not found.");
+            throw new Tinebase_Exception_NotFound("Felamimail config not found.");
         }
     }
 }

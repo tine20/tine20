@@ -40,7 +40,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected $_manageEmailUser = FALSE;
     
     /**
-     * @var Tinebase_EmailUser
+     * @var Tinebase_EmailUser_Abstract
      */
     protected $_emailUserBackend = NULL;
 
@@ -65,7 +65,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 		}
 
         // manage email user settings
-        if(isset(Tinebase_Core::getConfig()->emailUser)) {
+		$imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
             $this->_manageEmailUser = TRUE; 
             if ($this->_manageEmailUser) {
                 $this->_emailUserBackend = Tinebase_EmailUser::getInstance();
@@ -195,6 +196,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         if ($this->_manageSAM) {
             $samResult = $this->_samBackend->setPassword($_account, $_password, TRUE, $_mustChange);
+        }
+        
+        if ($this->_manageEmailUser) {
+            $this->_emailUserBackend->setPassword($_account->getId(), $_password);
         }
         
         // fire change password event

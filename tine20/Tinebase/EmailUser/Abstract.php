@@ -46,6 +46,22 @@ abstract class Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
      */
-	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser);
+	abstract public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser);
 
+    /**
+     * delete user by id
+     *
+     * @param   string         $_userId
+     */
+    abstract public function deleteUser($_userId);
+	
+    /**
+     * update/set email user password
+     * 
+     * @param string $_userId
+     * @param string $_password
+     * @return void
+     */
+    abstract public function setPassword($_userId, $_password);
+    
 }  

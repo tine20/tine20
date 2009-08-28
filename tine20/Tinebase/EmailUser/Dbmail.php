@@ -9,9 +9,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        implement user add/update/mailbox creation on add
- * @todo        password/quota/client_id = crc32(tinebase id)/user idnr = crc32(user id)/user id = loginname
- * @todo        test it!
+ * @todo        support username@domain
+ * @todo        mailbox creation on add
  */
 
 /**
@@ -28,6 +27,33 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      * @var Zend_Db_Adapter
      */
     protected $_db = NULL;
+    
+    /**
+     * table name with prefix
+     *
+     * @var string
+     */
+    protected $_tableName = NULL;
+
+    /**
+     * client id
+     *
+     * @var string
+     */
+    protected $_clientId = NULL;
+    
+    /**
+     * dbmail config
+     * 
+     * @var array 
+     * 
+     * @todo add those to imap config?
+     */
+    protected $_config = array(
+        'prefix'            => 'dbmail_',
+        'userTable'         => 'users',
+        'encryptionType'    => 'md5',
+    );
 
     /**
      * user properties mapping
@@ -35,11 +61,11 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      * @var array
      */
     protected $_userPropertyNameMapping = array(
-        'emailUID'      => 'dbmailUID', 
-        'emailGID'      => 'dbmailGID', 
-        'emailQuota'    => 'mailQuota',
-        //'emailAliases'  => 'alias',
-        //'emailForward'  => 'forward',
+        'emailUID'          => 'user_idnr', 
+        'emailPassword'     => 'passwd', 
+        'emailQuota'        => 'maxmail_size',
+        'emailUserId'       => 'userid',
+        'emailLastLogin'    => 'last_login',
     );
     
     /**
@@ -48,35 +74,44 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      */
     public function __construct()
     {
-        //-- get db adapter
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        $this->_config = array_merge($imapConfig['dbmail'], $this->_config);
+        $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
+        
+        $this->_db = Zend_Db::factory('Pdo_Mysql', $this->_config);
+        
+        $this->_clientId = $this->_convertToInt(Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId());
     }
     
     /**
      * get user by id
      *
-     * @param   int         $_userId
+     * @param   string         $_userId
      * @return  Tinebase_Model_EmailUser user
      */
     public function getUserById($_userId) 
     {
-        // @todo remove that later
-        return new Tinebase_Model_EmailUser(array(
-            'emailUID'      => 'uid',
-            'emailGID'      => 'gid',
-            'emailQuota'    => 10000,
-        ));
+        $select = $this->_db->select();
+        $select->from($this->_tableName);
         
-        /*
-        try {
-            $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $ldapData = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId);
-            $user = $this->_ldap2User($ldapData);
-        } catch (Exception $e) {
-            throw new Exception('User not found');
+        $select->where($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_userId))
+               ->where($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
+               ->limit(1);
+
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+                
+        if (!$queryResult) {
+            throw new Tinebase_Exception_NotFound('DBmail config for user ' . $_userId . ' not found!');
         }
         
-        return $user;
-        */
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
+        $result = $this->_rawDataToRecord($queryResult);
+        
+        return $result;
     }
 
     /**
@@ -86,23 +121,19 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
      * 
-     * @todo add defaults?
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    /*
-        $metaData = $this->_getUserMetaData($_user);
-        $ldapData = $this->_user2ldap($_emailUser);
+	    $_emailUser->emailUserId = $_user->accountLoginName;
+	    $_emailUser->emailUID = $this->_convertToInt($_user->getId());
+	    
+        $recordArray = $this->_recordToRawData($_emailUser);
         
-        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredUserObjectClass));
-                
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));  
         
-        $this->_ldap->update($metaData['dn'], $ldapData);
+        $this->_db->insert($this->_tableName, $recordArray);
         
         return $this->getUserById($_user->getId());
-        */
 	}
 	
 	/**
@@ -111,9 +142,13 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
+     * 
+     * @todo implement
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
+	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' IMPLEMENT THIS');
+	    
 	    // @todo remove that later
 	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_emailUser->toArray(), TRUE));
 	    return $this->getUserById($_user->getId());
@@ -139,4 +174,99 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
         return $this->getUserById($_user->getId());
         */
 	}
+	
+	/**
+	 * update/set email user password
+	 * 
+	 * @param string $_userId
+	 * @param string $_password
+	 * @return void
+	 * 
+	 * @todo implement
+	 */
+	public function setPassword($_userId, $_password)
+	{
+	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' IMPLEMENT THIS');
+	}
+	
+    /**
+     * delete user by id
+     *
+     * @param   string         $_userId
+     */
+    public function deleteUser($_userId) 
+    {
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_userId)),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
+        );
+        
+        $this->_db->delete($this->_tableName, $where);
+    }
+	
+    /**
+     * converts raw data from adapter into a single record / do mapping
+     *
+     * @param  array $_data
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _rawDataToRecord(array $_rawdata)
+    {
+        $data = array();
+        foreach ($_rawdata as $key => $value) {
+            $keyMapping = array_search($key, $this->_userPropertyNameMapping);
+            if ($keyMapping !== FALSE) {
+                switch($keyMapping) {
+                    default: 
+                        $data[$keyMapping] = $value;
+                        break;
+                }
+            }
+        }
+        
+        return new Tinebase_Model_EmailUser($data, true);
+    }
+    
+    /**
+     * returns array of raw dbmail data
+     *
+     * @param  Tinebase_Model_EmailUser $_user
+     * @return array
+     */
+    protected function _recordToRawData(Tinebase_Model_EmailUser $_user)
+    {
+        $data = array();
+        foreach ($_user as $key => $value) {
+            $property = array_key_exists($key, $this->_userPropertyNameMapping) ? $this->_userPropertyNameMapping[$key] : false;
+            if ($property) {
+                switch ($key) {
+                    case 'emailPassword':
+                        if ($this->_config['encryptionType'] == 'md5') {
+                            $data[$property] = md5($value);
+                        } else {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  encryptionType not supported!');
+                        }
+                        break;
+                    default:
+                        $data[$property] = $value;
+                }
+            }
+        }
+        
+        $data['client_idnr'] = $this->_clientId;
+        $data['encryption_type'] = $this->_config['encryptionType'];
+        
+        return $data;
+    }
+    
+    /**
+     * convert some string to absolute int with crc32 and abs
+     * 
+     * @param $_string
+     * @return integer
+     */
+    protected function _convertToInt($_string)
+    {
+        return abs(crc32($_string));
+    }
 }  
