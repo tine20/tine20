@@ -671,7 +671,9 @@ class Setup_Controller
      */
     public function getEmailConfig()
     {
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
+            $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        }
         $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray('Tinebase_Smtp_Config');
         
         $result = array(

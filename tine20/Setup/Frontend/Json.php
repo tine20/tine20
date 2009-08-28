@@ -206,9 +206,10 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         Setup_Core::setupDatabaseConnection();
         
         $result = array(
-            'configExists'     => Setup_Core::configFileExists(),
-            'configWritable'   => Setup_Core::configFileWritable(),
-            'checkDB'          => Setup_Core::get(Setup_Core::CHECKDB),
+            'configExists'    => Setup_Core::configFileExists(),
+            'configWritable'  => Setup_Core::configFileWritable(),
+            'checkDB'         => Setup_Core::get(Setup_Core::CHECKDB),
+        	'setupRequired'	  => $this->_controller->setupRequired(),
         );
         
         return $result;        

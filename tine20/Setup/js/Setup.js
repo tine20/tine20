@@ -143,6 +143,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.getNodeById('ConfigManagerPanel')[setupChecks ? 'enable': 'disable']();
         this.getNodeById('AuthenticationPanel')[setupChecks && configExists && checkDB ? 'enable': 'disable']();
         this.getNodeById('ApplicationGridPanel')[setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
+        this.getNodeById('EmailPanel')[setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
     }
 });
 
