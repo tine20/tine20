@@ -20,9 +20,6 @@ Ext.ns('Tine', 'Tine.Setup');
  * 
  * <p>Email Config Panel</p>
  * <p><pre>
- * TODO         add more fields
- * TODO         add dbmail fields
- * TODO         make loading from registry/db work
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
