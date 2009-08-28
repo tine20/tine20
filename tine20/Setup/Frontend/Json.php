@@ -294,14 +294,15 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         // authenticated or non existent config
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
+        	$checkDB = Setup_Core::get(Setup_Core::CHECKDB);
         	$registryData = array_merge($registryData, array(
 	            'configWritable'       => Setup_Core::configFileWritable(),
-	            'checkDB'              => Setup_Core::get(Setup_Core::CHECKDB),
+	            'checkDB'              => $checkDB,
 	            'setupChecks'          => $this->envCheck(),
         	    'setupRequired'        => $this->_controller->setupRequired(),
 	            'configData'           => $this->loadConfig(),
-        	    'authenticationData'   => $this->loadAuthenticationData(),
-        	    'emailData'            => $this->getEmailConfig(),
+        	    'authenticationData'   => ($checkDB) ? $this->loadAuthenticationData() : array(),
+        	    'emailData'            => ($checkDB) ? $this->getEmailConfig() : array(),
 	        ));
         }
         
