@@ -64,6 +64,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/system-shutdown.png) !important;
 }
 
+.action_login {
+    background-image:url(../../images/oxygen/16x16/actions/view-refresh.png) !important;
+}
+
 .action_selectUser {
     background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
 }

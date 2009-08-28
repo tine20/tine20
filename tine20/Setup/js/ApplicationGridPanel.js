@@ -104,10 +104,19 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
             scope: this
         });
         
+        this.action_gotoLogin = new Ext.Action({
+            text: this.app.i18n._('Go to Tine 2.0 login'),
+            handler: this.onGotoLogin,
+            iconCls: 'action_login',
+            scope: this
+        });
+        
         this.actions = [
             this.action_installApplications,
             this.action_uninstallApplications,
-            this.action_updateApplications
+            this.action_updateApplications,
+            '-',
+            this.action_gotoLogin
         ];
         
         this.actionToolbar = new Ext.Toolbar({
@@ -168,6 +177,16 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         } else {
             this.alterApps(btn.actionType);
         }
+    },
+    
+    /**
+     * goto tine 2.0 login screen
+     * 
+     * @param {Button} btn
+     * @param {Event} e
+     */
+    onGotoLogin: function(btn, e) {
+        window.location = window.location.href.replace(/setup\.php/, '');
     },
     
     /**
