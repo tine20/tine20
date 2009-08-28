@@ -134,6 +134,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * Gets all entries
+     *
+     * @param string $_orderBy Order result by
+     * @param string $_orderDirection Order direction - allowed are ASC and DESC
+     * @throws Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') 
+    {
+        throw new Tinebase_Exception_NotImplemented('not implemented');
+    }
+    
+    /**
      * returns freebusy information for given period and given attendee
      * 
      * @todo merge overlapping events to one freebusy entry
@@ -196,6 +209,28 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         return new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy', $resultArray);
+    }
+    
+    /**
+     * get list of records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param bool $_getRelations
+     * @param boolean $_onlyIds
+     * @return Tinebase_Record_RecordSet|array
+     * 
+     * @todo create filter group if it is NULL to make sure that acl filter is applied correctly ?
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    {
+        $events = parent::search($_filter, $_pagination, $_onlyIds);
+        
+        if (! $_onlyIds) {
+        	$events->doFreeBusyCleanup();
+        }
+        
+        return $events;
     }
     
     /**
@@ -508,6 +543,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             case 'get':
                 // NOTE: free/busy is not a read grant!
                 $hasGrant = (bool) $_record->readGrant;
+                if (! $hasGrant) {
+                	$_record->doFreeBusyCleanup();
+                }
                 break;
             case 'create':
                 $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Container::GRANT_ADD);

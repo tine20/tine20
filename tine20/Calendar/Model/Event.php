@@ -168,6 +168,32 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract implements Tinebase_
     }
     
     /**
+     * cleans up data to only contain freebusy infos
+     * removes all fields except dtstart/dtend/id/modlog fields
+     * 
+     * @return void
+     */
+    public function doFreeBusyCleanup()
+    {
+    	if ($this->readGrant || $this->editGrant) {
+    	   return;
+    	}
+    	
+        $this->_properties = array_intersect_key($this->_properties, array_flip(array(
+            'id', 
+            'dtstart', 
+            'dtend', 
+            'created_by',
+            'creation_time',
+            'last_modified_by',
+            'last_modified_time',
+            'is_deleted',
+            'deleted_time',
+            'deleted_by',
+        )));
+    }
+    
+    /**
      * sets the record related properties from user generated input.
      * 
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
@@ -177,25 +203,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract implements Tinebase_
      */
     public function setFromArray(array $_data)
     {
-        // free/busy only cleanup / remove all fields except dtstart/dtend/id/modlog fields
-        if ((! array_key_exists('readGrant', $_data) || ! (bool) $_data['readGrant']) && (! array_key_exists('editGrant', $_data) || ! (bool) $_data['editGrant'])) {
-            $_data = array_intersect_key(
-                $_data, 
-                array_flip(array(
-                    'id', 
-                    'dtstart', 
-                    'dtend', 
-                    'created_by',
-                    'creation_time',
-                    'last_modified_by',
-                    'last_modified_time',
-                    'is_deleted',
-                    'deleted_time',
-                    'deleted_by',
-                ))
-            );
-        }
-        
         if (empty($_data['geo'])) {
             $_data['geo'] = NULL;
         }
