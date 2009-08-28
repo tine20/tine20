@@ -37,24 +37,68 @@ Ext.ns('Tine', 'Tine.Setup');
 Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     
     /**
+     * @property idPrefix DOM Id prefix
+     * @type String
+     */
+    idPrefix: null,
+    
+    /**
+     * imapBackend DOM Id prefix
+     * 
+     * @property imapBackendIdPrefix
+     * @type String
+     */
+    imapBackendIdPrefix: null,
+    
+    /**
+     * combo box containing the imap backend selection
+     * 
+     * @property imapBackendCombo
+     * @type Ext.form.ComboBox 
+     */
+    imapBackendCombo: null,
+
+    /**
+     * @private
+     * panel cfg
+     */
+    saveMethod: 'Setup.saveAuthentication',
+    registryKey: 'authenticationData',
+    
+    /**
      * @private
      * panel cfg
      */
     saveMethod: 'Setup.saveEmailConfig',
     registryKey: 'emailData',
+    
     defaults: {
         xtype: 'fieldset',
         autoHeight: 'auto',
-        defaults: {width: 300},
-        defaultType: 'textfield'
+        defaults: {width: 300}
+        //defaultType: 'textfield'
     },
     
     /**
      * @private
      */
     initComponent: function() {
+        this.idPrefix                  = Ext.id();
+        this.imapBackendIdPrefix       = this.idPrefix + '-imapBackend-',
+
         Tine.Setup.EmailPanel.superclass.initComponent.call(this);
     },
+    
+    /**
+     * Change card layout depending on selected combo box entry
+     */
+    onChangeImapBackend: function() {
+        var imapBackend = this.imapBackendCombo.getValue();
+        
+        var cardLayout = Ext.getCmp(this.imapBackendIdPrefix + 'CardLayout').getLayout();
+        cardLayout.setActiveItem(this.imapBackendIdPrefix + imapBackend);
+    },
+
     
    /**
      * returns config manager form
@@ -63,36 +107,50 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * @return {Array} items
      */
     getFormItems: function() {
+        
+        this.imapBackendCombo = new Ext.form.ComboBox({
+            width: 300,
+            listWidth: 300,
+            mode: 'local',
+            forceSelection: true,
+            allowEmpty: false,
+            triggerAction: 'all',
+            selectOnFocus:true,
+            value: 'standard',
+            store: [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail']],
+            name: 'imap_backend',
+            fieldLabel: this.app.i18n._('Backend'),
+            listeners: {
+                scope: this,
+                change: this.onChangeImapBackend,
+                select: this.onChangeImapBackend
+            }
+        });
+
         return [{
             title: this.app.i18n._('Imap'),
             id: 'setup-imap-group',
             checkboxToggle:true,
             collapsed: true,
-            items: [{
-                xtype: 'combo',
-                listWidth: 300,
-                mode: 'local',
-                forceSelection: true,
-                allowEmpty: false,
-                triggerAction: 'all',
-                selectOnFocus:true,
-                value: 'standard',
-                store: [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail']],
-                name: 'imap_backend',
-                fieldLabel: this.app.i18n._('Backend')
-            }, {
+            items: [
+                this.imapBackendCombo, 
+            {
                 name: 'imap_host',
-                fieldLabel: this.app.i18n._('Hostname')
+                fieldLabel: this.app.i18n._('Hostname'),
+                xtype: 'textfield'
             }, {
                 name: 'imap_user',
-                fieldLabel: this.app.i18n._('Username')
+                fieldLabel: this.app.i18n._('Username'),
+                xtype: 'textfield'
             }, {
                 name: 'imap_password',
                 fieldLabel: this.app.i18n._('Password'),
+                xtype: 'textfield',
                 inputType: 'password'
             }, {
                 name: 'imap_port',
-                fieldLabel: this.app.i18n._('Port')
+                fieldLabel: this.app.i18n._('Port'),
+                xtype: 'textfield'
             }, {
                 fieldLabel: this.app.i18n._('Secure Connection'),
                 name: 'imap_ssl',
@@ -123,13 +181,53 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 fieldLabel: this.app.i18n._('Use as default account')
             }, {
                 name: 'imap_name',
-                fieldLabel: this.app.i18n._('Default account name')
+                fieldLabel: this.app.i18n._('Default account name'),
+                xtype: 'textfield'
+            }, {
+                id: this.imapBackendIdPrefix + 'CardLayout',
+                layout: 'card',
+                activeItem: this.imapBackendIdPrefix + 'standard',
+                border: false,
+                width: '100%',
+                defaults: {
+                    border: false
+                },
+                items: [{
+                    // nothing in here yet
+                    id: this.imapBackendIdPrefix + 'standard',
+                    layout: 'form',
+                    items: []
+                }, {
+                    // dbmail config options
+                    id: this.imapBackendIdPrefix + 'dbmail',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: [{
+                        name: 'imap_dbmail_host',
+                        fieldLabel: this.app.i18n._('DBmail Hostname')
+                    }, {
+                        name: 'imap_dbmail_dbname',
+                        fieldLabel: this.app.i18n._('DBmail Database')
+                    }, {
+                        name: 'imap_dbmail_username',
+                        fieldLabel: this.app.i18n._('DBmail User')
+                    }, {
+                        name: 'imap_dbmail_password',
+                        fieldLabel: this.app.i18n._('DBmail Password'),
+                        inputType: 'password'
+                    }]
+                }]
             }]
         }, {
             title: this.app.i18n._('Smtp'),
             id: 'setup-smtp-group',
             checkboxToggle:true,
             collapsed: true,
+            defaultType: 'textfield',
             items: [{
                 name: 'smtp_hostname',
                 fieldLabel: this.app.i18n._('Hostname')
