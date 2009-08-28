@@ -95,7 +95,6 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                 success: function(response) {
                     var regData = Ext.util.JSON.decode(response.responseText);
                     // replace some registry data
-                    console.log(regData);
                     for (key in regData) {
                         if (key != 'status') {
                             Tine.Setup.registry.replace(key, regData[key]);
