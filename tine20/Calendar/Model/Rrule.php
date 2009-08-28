@@ -189,12 +189,30 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     }
                 }
                 break;
-            case 'interval':
-            	$_value = (int) $_value > 1 ? (int) $_value : 1;
-                // fallthrough            	
             default:
                 parent::__set($_name, $_value);
                 break;
+        }
+    }
+    
+    /**
+     * gets record related properties
+     * 
+     * @param string _name of property
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @return mixed value of property
+     */
+    public function __get($_name)
+    {
+        $value = parent::__get($_name);
+        
+        switch ($_name) {
+        	case 'interval':
+        		return (int) $value > 1 ? (int) $value : 1;
+        		break;
+        	default:
+        		return $value;
+        		break;
         }
     }
     
