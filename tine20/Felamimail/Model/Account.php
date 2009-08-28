@@ -72,7 +72,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     // imap server config
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
-        'secure_connection'     => array(
+        'ssl'                   => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
             'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
@@ -105,7 +105,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'smtp_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 25),
         'smtp_hostname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'smtp_auth'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'login'),
-        'smtp_secure_connection'=> array(
+        'smtp_ssl'=> array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
             'InArray' => array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)
@@ -166,8 +166,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result[$field] = $this->{$field};
         }
         
-        if ($this->secure_connection && $this->secure_connection != 'none') {
-            $result['ssl'] = strtoupper($this->secure_connection);
+        if ($this->ssl && $this->ssl != 'none') {
+            $result['ssl'] = strtoupper($this->ssl);
         }
         
         return $result;
@@ -185,11 +185,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         }
         
         // add values from config to empty fields
-        if (isset(Tinebase_Core::getConfig()->smtp)) {
-            $result = Tinebase_Core::getConfig()->smtp->toArray();
-        } else {
-            $result = array();
-        }
+        $result = Tinebase_Config::getInstance()->getConfigAsArray('Tinebase_Smtp_Config');
         
         if ($this->smtp_hostname) {
             $result['hostname'] = $this->smtp_hostname; 
@@ -213,11 +209,11 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             }
         }
         
-        if ($this->smtp_secure_connection) {
-            if ($this->smtp_secure_connection == 'none') {
+        if ($this->smtp_ssl) {
+            if ($this->smtp_ssl == 'none') {
                 unset($result['ssl']);
             } else {
-                $result['ssl'] = $this->smtp_secure_connection;
+                $result['ssl'] = $this->smtp_ssl;
             } 
         }
 

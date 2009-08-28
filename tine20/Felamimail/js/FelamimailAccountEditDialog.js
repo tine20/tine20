@@ -120,7 +120,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'numberfield'
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
-                    name: 'secure_connection',
+                    name: 'ssl',
                     typeAhead     : false,
                     triggerAction : 'all',
                     lazyRender    : true,
@@ -168,7 +168,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
-                    name: 'smtp_secure_connection',
+                    name: 'smtp_ssl',
                     typeAhead     : false,
                     triggerAction : 'all',
                     lazyRender    : true,

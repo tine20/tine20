@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>2.0</version>
+    <version>2.1</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -58,7 +58,7 @@
                     <type>integer</type>
                 </field>
                 <field>
-                    <name>secure_connection</name>
+                    <name>ssl</name>
                     <type>enum</type>
                     <value>none</value>
                     <value>TLS</value>
@@ -134,7 +134,7 @@
                     <value>plain</value>
                 </field>
                 <field>
-                    <name>smtp_secure_connection</name>
+                    <name>smtp_ssl</name>
                     <type>enum</type>
                     <value>none</value>
                     <value>TLS</value>

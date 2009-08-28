@@ -78,7 +78,7 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'from' },
     { name: 'organization' },
     { name: 'port' },
-    { name: 'secure_connection' },
+    { name: 'ssl' },
     { name: 'sent_folder' },
     { name: 'trash_folder' },
     { name: 'show_intelligent_folders' },
@@ -91,7 +91,7 @@ Tine.Felamimail.Model.AccountArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'smtp_port' },
     { name: 'smtp_hostname' },
     { name: 'smtp_auth' },
-    { name: 'smtp_secure_connection' },
+    { name: 'smtp_ssl' },
     { name: 'smtp_user' },
     { name: 'smtp_password' }
 ]);
@@ -139,7 +139,7 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
             + 'Please visit <a href="http://tine20.org">http://tine20.org</a>',
         sent_folder: (defaults.sent_folder) ? defaults.sent_folder : 'Sent',
         trash_folder: (defaults.trash_folder) ? defaults.trash_folder : 'Trash',
-        smtp_secure_connection: (defaults.smtp && defaults.smtp.ssl) ? defaults.smtp.ssl : 'none'
+        smtp_ssl: (defaults.smtp && defaults.smtp.ssl) ? defaults.smtp.ssl : 'none'
     };
 };
 

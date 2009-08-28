@@ -42,6 +42,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected $_doRightChecks = TRUE;
     
     /**
+     * imap config
+     * 
+     * @var array
+     */
+    protected $_imapConfig = array();
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Felamimail_Controller_Account
@@ -59,6 +66,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_backend = new Felamimail_Backend_Account();
         
         $this->_currentAccount = Tinebase_Core::getUser();
+        
+        $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
     }
     
     /**
@@ -133,21 +142,23 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_containerId = NULL)
     {
         if ($_id === Felamimail_Model_Account::DEFAULT_ACCOUNT_ID) {
-            if (! isset(Tinebase_Core::getConfig()->imap)) {
+            
+            if (empty($this->_imapConfig) || ! $this->_imapConfig['useAsDefault']) {
                 throw new Felamimail_Exception('No default imap account defined in config.inc.php!');
             }
             
-            // get account data from config file    
-            $record = new Felamimail_Model_Account(Tinebase_Core::getConfig()->imap->toArray());
+            // create new default account with imap config data
+            $record = new Felamimail_Model_Account($this->_imapConfig);
             
-            if (! isset(Tinebase_Core::getConfig()->smtp)) {
+            // add smtp settings
+            $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray('Tinebase_Smtp_Config');
+            if (empty($smtpConfig)) {
                 // just warn
-                //throw new Felamimail_Exception('No default smtp account defined in config.inc.php!');
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No default smtp account defined in config.inc.php!');
             } else {
-                $record->smtp_hostname  = Tinebase_Core::getConfig()->smtp->hostname;
-                $record->smtp_user      = Tinebase_Core::getConfig()->smtp->username;
-                $record->smtp_password  = Tinebase_Core::getConfig()->smtp->password;
+                $record->smtp_hostname  = $smtpConfig['hostname'];
+                $record->smtp_user      = $smtpConfig['username'];
+                $record->smtp_password  = $smtpConfig['password'];
             }
             
             $record->setId(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID);
@@ -447,13 +458,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _addDefaultAccount($_accounts)
     {
         // add account from config.inc.php if available
-        if (isset(Tinebase_Core::getConfig()->imap) && Tinebase_Core::getConfig()->imap->useAsDefault) {
+        if (! empty($this->_imapConfig) && $this->_imapConfig['useAsDefault']) {
             
             try {
-                $defaultAccount = new Felamimail_Model_Account(
-                    Tinebase_Core::getConfig()->imap->toArray()
-                );
-                $defaultAccount->setId('default');
+                $defaultAccount = new Felamimail_Model_Account($this->_imapConfig);
+                $defaultAccount->setId(Felamimail_Model_Account::DEFAULT_ACCOUNT_ID);
                 $_accounts->addRecord($defaultAccount);
                 $this->_addedDefaultAccount = TRUE;
                 
@@ -464,8 +473,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         // create new account with user credentials (if preference is set)
         } else if (count($_accounts) == 0 && Tinebase_Core::getPreference('Felamimail')->userEmailAccount) {
             
-            $accountData = (Tinebase_Core::getConfig()->imap) ? Tinebase_Core::getConfig()->imap->toArray() : array();
-            $defaultAccount = new Felamimail_Model_Account($accountData, TRUE);
+            $defaultAccount = new Felamimail_Model_Account($this->_imapConfig, TRUE);
             
             $userId = $this->_currentAccount->getId();
             $defaultAccount->user_id = $userId;
@@ -484,12 +492,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $defaultAccount->smtp_credentials_id = $defaultAccount->credentials_id;
 
                 // add smtp server settings
-                if (Tinebase_Core::getConfig()->smtp) {
-                    $smtpConfig = Tinebase_Core::getConfig()->smtp;
-                    $defaultAccount->smtp_port              = $smtpConfig->port;
-                    $defaultAccount->smtp_hostname          = $smtpConfig->hostname;
-                    $defaultAccount->smtp_auth              = $smtpConfig->auth;
-                    $defaultAccount->smtp_secure_connection = $smtpConfig->ssl;             
+                $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray('Tinebase_Smtp_Config');
+                if (! empty($smtpConfig)) {
+                    $defaultAccount->smtp_port              = $smtpConfig['port'];
+                    $defaultAccount->smtp_hostname          = $smtpConfig['hostname'];
+                    $defaultAccount->smtp_auth              = $smtpConfig['auth'];
+                    $defaultAccount->smtp_ssl               = $smtpConfig['ssl'];             
                 }
                 
                 // create new account
