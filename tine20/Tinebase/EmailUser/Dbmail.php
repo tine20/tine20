@@ -147,32 +147,20 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' IMPLEMENT THIS');
+        $_emailUser->emailUserId = $_user->accountLoginName;
 	    
-	    // @todo remove that later
-	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_emailUser->toArray(), TRUE));
-	    return $this->getUserById($_user->getId());
-	    
-	    /*
-        $metaData = $this->_getUserMetaData($_user);
-        $ldapData = $this->_user2ldap($_emailUser);
+        $recordArray = $this->_recordToRawData($_emailUser);
         
-        // check if user has all required object classes.
-        foreach ($this->_requiredUserObjectClass as $className) {
-            if (! in_array($className, $metaData['objectClass'])) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no email objectclass.');
-
-                return $this->addUser($_user, $_emailUser);
-            }
-        }
-
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));  
         
-        $this->_ldap->update($metaData['dn'], $ldapData);
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_user->getId())),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
+        );
+        
+        $this->_db->update($this->_tableName, $recordArray, $where);
         
         return $this->getUserById($_user->getId());
-        */
 	}
 	
 	/**
@@ -180,13 +168,17 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
 	 * 
 	 * @param string $_userId
 	 * @param string $_password
-	 * @return void
-	 * 
-	 * @todo implement
+	 * @return Tinebase_Model_EmailUser
 	 */
 	public function setPassword($_userId, $_password)
 	{
-	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' IMPLEMENT THIS');
+	    $user = Tinebase_User::getInstance()->getUserById($_userId);
+	    $emailUser = new Tinebase_Model_EmailUser(array(
+            'emailUID'      => $this->_convertToInt($_user->getId()),
+	        'emailPassword' => $_password   
+        ));
+	    
+        return $this->updateUser($user, $emailUser);
 	}
 	
     /**

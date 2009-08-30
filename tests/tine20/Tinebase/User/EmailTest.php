@@ -34,7 +34,7 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
     /**
      * @var array test objects
      */
-    protected $objects = array();
+    protected $_objects = array();
 
     /**
      * Runs the test methods of this class.
@@ -57,6 +57,8 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_backend = Tinebase_EmailUser::getInstance();
+
+        $this->_objects['addedUser'] = $this->_addUser();
     }
 
     /**
@@ -67,7 +69,8 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    
+        // delete email account
+        $this->_backend->deleteUser(Tinebase_Core::getUser()->getId());
     }
     
     /**
@@ -76,40 +79,55 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
      */
     public function testAddEmailAccount()
     {
-        $user = Tinebase_Core::getUser();
-        $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailQuota'    => 1000000
-        ));
-        $addedUser = $this->_backend->addUser($user, $emailUser);
-        
         $this->assertEquals(array(
-            'emailUID' => abs(crc32($user->getId())),
-            'emailUserId' => $user->accountLoginName,
+            'emailUID' => abs(crc32(Tinebase_Core::getUser()->getId())),
+            'emailUserId' => Tinebase_Core::getUser()->accountLoginName,
             'emailPassword' => '',
             'emailQuota' => 1000000,
             'emailLastLogin' => '1979-11-03 22:05:58'
-        ), $addedUser->toArray());
-        
-        // delete email account
-        $this->_backend->deleteUser($user->getId());
+        ), $this->_objects['addedUser']->toArray());
     }
     
     /**
      * try to update an email account
      * 
-     * @todo implement
      */
     public function testUpdateAccount()
     {
+        // update user
+        $this->_objects['addedUser']->emailQuota = 2000000;
+        
+        $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
+        
+        $this->assertEquals(2000000, $updatedUser->emailQuota);
     }
     
     /**
      * try to update an email account
      * 
-     * @todo implement
      */
     public function testSetPassword()
     {
+        // set pw
+        $this->_objects['addedUser']->emailPassword = 'password';
+        
+        $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
+        
+        $this->assertEquals(md5('password'), $updatedUser->emailPassword);
     }
     
+    /**
+     * add new email user
+     * 
+     * @return Tinebase_Model_EmailUser
+     */
+    protected function _addUser()
+    {
+        $emailUser = new Tinebase_Model_EmailUser(array(
+            'emailQuota'    => 1000000
+        ));
+        $addedUser = $this->_backend->addUser(Tinebase_Core::getUser(), $emailUser);
+        
+        return $addedUser;
+    }
 }	
