@@ -1,6 +1,17 @@
+/*
+ * Tine 2.0
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+ 
 Ext.ns('Ext.ux', 'Ext.ux.tree');
 
 /**
+ * @namespace Ext.ux.tree
  * @class Ext.ux.tree.CheckboxSelectionModel
  * @extends Ext.util.Observable
  * Ceckbox multi selection for a TreePanel.
@@ -34,6 +45,12 @@ Ext.ux.tree.CheckboxSelectionModel = Ext.extend(Ext.ux.tree.CheckboxSelectionMod
     activateLeafNodesOnly : false,
     
     /**
+     * @cfg {bool} optimizeSelection
+     * true to optimize selection
+     */
+    optimizeSelection: false,
+    
+    /**
      * @type Ext.tree.TreeNode
      * currently active node
      */
@@ -46,6 +63,10 @@ Ext.ux.tree.CheckboxSelectionModel = Ext.extend(Ext.ux.tree.CheckboxSelectionMod
      * @return {Boolean}
      */
     activate: function(node) {
+        if (! node) {
+            return;
+        }
+        
         if (this.activateLeafNodesOnly && ! node.isLeaf()) {
             return false;
         }
@@ -105,7 +126,9 @@ Ext.ux.tree.CheckboxSelectionModel = Ext.extend(Ext.ux.tree.CheckboxSelectionMod
      * @return {Boolean}
      */
     isSelected : function(node){
-        return node.isChecked();  
+        if (node && node.ui) {
+            return node.ui.isChecked();
+        }
     },
     
     onBeforeAppend: function(tree, parent, node) {
@@ -115,6 +138,11 @@ Ext.ux.tree.CheckboxSelectionModel = Ext.extend(Ext.ux.tree.CheckboxSelectionMod
     onCheckChange: function(node, checked) {
         if (checked) {
             this.activate(node);
+            
+            if (this.optimizeSelection) {
+                this.optimize(node);
+            }
+            
         } else {
             
         }
@@ -144,6 +172,41 @@ Ext.ux.tree.CheckboxSelectionModel = Ext.extend(Ext.ux.tree.CheckboxSelectionMod
      */
     unselect : function(node){
         node.ui.toggleCheck(false);
+    },
+    
+    /**
+     * optimizes the selection
+     */
+    optimize: function(node) {
+        this.suspendEvents();
+            
+        this.unselectChildNodes(node);
+        
+        // recursivly unselect parent nodes
+        while(node = node.parentNode) {
+            if (this.isSelected(node)) {
+                console.log(node);
+                node.unselect();
+            }
+        }
+        
+        this.resumeEvents();
+    },
+    
+    /**
+     * unselect child nodes of given node
+     * 
+     * @param {Ext.tree.TreeNode} node
+     */
+    unselectChildNodes: function(node) {
+        if (node.isExpandable() && node.isExpanded()) {
+            for (var i=0; i<node.childNodes.length; i++) {
+                if (node.childNodes[i].isExpandable()) {
+                    this.unselectChildNodes(node.childNodes[i]);
+                }
+                node.childNodes[i].unselect();
+            }
+        }
     },
     
     onKeyDown : Ext.tree.DefaultSelectionModel.prototype.onKeyDown,
