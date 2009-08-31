@@ -234,7 +234,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                         filters.push(this.node2Filter(node));
                     }, this);
                     
-                    return filters.length == 1 ? filters[0] : {condition: 'OR', filters: filters};
+                    if (filters.length == 0) {
+                        return {field: 'container_id', operator: 'equals', value: ''};
+                    } else if (filters.length == 1) {
+                        return filters[0];
+                    } else  {
+                        return {condition: 'OR', filters: filters};
+                    }
                 },
                 
                 node2Filter: function(node) {
