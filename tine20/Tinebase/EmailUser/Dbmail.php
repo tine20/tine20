@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        support username@domain
  * @todo        mailbox creation on add (INBOX)
  */
 
@@ -63,7 +62,10 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
     protected $_userPropertyNameMapping = array(
         'emailUID'          => 'user_idnr', 
         'emailPassword'     => 'passwd', 
-        'emailQuota'        => 'maxmail_size',
+        'emailMailQuota'    => 'maxmail_size',
+        'emailMailSize'     => 'curmail_size',
+        'emailSieveQuota'   => 'maxsieve_size',
+        'emailSieveSize'    => 'cursieve_size',
         'emailUserId'       => 'userid',
         'emailLastLogin'    => 'last_login',
     );

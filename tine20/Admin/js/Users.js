@@ -515,9 +515,11 @@ Tine.Admin.Model.SAMUser = Tine.Tinebase.data.Record.create(Tine.Admin.Model.SAM
 Tine.Admin.Model.EmailUserArray = [
     { name: 'emailUID' },
     { name: 'emailGID' },
-    { name: 'emailForward' },
-    { name: 'emailAliases' },
-    { name: 'emailQuota' },
+    { name: 'emailMailQuota' },
+    { name: 'emailMailSize' },
+    { name: 'emailSieveQuota' },
+    { name: 'emailSieveSize' },
+    { name: 'emailLastLogin', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'emailUserId' }
 ];
 

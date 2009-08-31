@@ -274,7 +274,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     emptyText: this.app.i18n._('not set')
                 })]]
             }, {
-                title: this.app.i18n._('Email'),
+                title: this.app.i18n._('IMAP'),
                 disabled: ! Tine.Admin.registry.get('manageEmailUser'),
                 border: false,
                 frame: true,
@@ -284,7 +284,8 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype:'textfield',
                     anchor: '100%',
                     labelSeparator: '',
-                    columnWidth: .333
+                    columnWidth: .333,
+                    readOnly: true
                 },
                 items: [[{
                     fieldLabel: this.app.i18n._('Email Username'),
@@ -292,21 +293,26 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: .666
                 }], [{
                     fieldLabel: this.app.i18n._('Quota'),
-                    name: 'emailQuota',
-                    columnWidth: .666
-                }]/*, [{
-                    fieldLabel: this.app.i18n._('Email GID'),
-                    name: 'emailGID',
+                    name: 'emailMailQuota',
+                    columnWidth: .666,
+                    readOnly: false
+                }], [{
+                    fieldLabel: this.app.i18n._('Current Mail Size'),
+                    name: 'emailMailSize',
                     columnWidth: .666
                 }], [{
-                    fieldLabel: this.app.i18n._('Forward'),
-                    name: 'emailForward',
+                    fieldLabel: this.app.i18n._('Sieve Quota'),
+                    name: 'emailSieveQuota',
                     columnWidth: .666
                 }], [{
-                    fieldLabel: this.app.i18n._('Aliases'),
-                    name: 'emailAliases',
+                    fieldLabel: this.app.i18n._('Current Sieve Size'),
+                    name: 'emailSieveSize',
                     columnWidth: .666
-                }]*/]
+                }], [{
+                    fieldLabel: this.app.i18n._('Last Login'),
+                    name: 'emailLastLogin',
+                    columnWidth: .666
+                }]]
             }]
         };
     },

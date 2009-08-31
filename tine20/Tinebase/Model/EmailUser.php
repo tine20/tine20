@@ -36,8 +36,10 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
     protected $_validators = array(
         'emailUID'          => array('allowEmpty' => true),
         'emailGID'          => array('allowEmpty' => true),
-        'emailQuota'        => array('allowEmpty' => true),
+        'emailMailQuota'    => array('allowEmpty' => true),
         'emailMailSize'     => array('allowEmpty' => true),
+        'emailSieveQuota'   => array('allowEmpty' => true),
+        'emailSieveSize'    => array('allowEmpty' => true),
         'emailUserId'       => array('allowEmpty' => true),
         'emailLastLogin'    => array('allowEmpty' => true),
         'emailPassword'     => array('allowEmpty' => true),
