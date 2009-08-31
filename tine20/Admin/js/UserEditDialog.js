@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Admin
@@ -12,6 +12,23 @@
  
 Ext.namespace('Tine.Admin', 'Tine.Admin.Users');
 
+/**
+ * @namespace   Tine.Admin.Users
+ * @class       Tine.Admin.Users.EditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ * 
+ * <p>User Edit Dialog</p>
+ * <p></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Admin.Users.EditDialog
+ */
 Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
@@ -23,6 +40,9 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Admin.userBackend,
     evalGrants: false,
     
+    /**
+     * @private
+     */
     initComponent: function() {
         var accountBackend = Tine.Tinebase.registry.get('accountBackend');
         this.ldapBackend = (accountBackend == 'Ldap');
@@ -30,6 +50,9 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Admin.Users.EditDialog.superclass.initComponent.call(this);
     },
 
+    /**
+     * @private
+     */
     onRecordLoad: function() {
         // samba user
         var response = {
@@ -48,6 +71,9 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Admin.Users.EditDialog.superclass.onRecordLoad.call(this);
     },
     
+    /**
+     * @private
+     */
     onRecordUpdate: function() {
         Tine.Admin.Users.EditDialog.superclass.onRecordUpdate.call(this);
         
@@ -62,6 +88,9 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('emailUser', this.emailRecord.data);
     },
 
+    /**
+     * @private
+     */
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
@@ -303,7 +332,10 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 });
 
 /**
- * User edit popup
+ * User Edit Popup
+ * 
+ * @param   {Object} config
+ * @return  {Ext.ux.Window}
  */
 Tine.Admin.Users.EditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
