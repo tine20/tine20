@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        make settings from config.inc.php overwrite db config? 
- * @todo        replace Zend_Db_Table_Abstract with Zend_Db_Adapter_Abstract
  */
 
 /**
@@ -21,20 +20,10 @@
  */
 class Tinebase_Config
 {
-    
     /**
-     * the table object for the SQL_TABLE_PREFIX . config table
-     *
-     * @var Zend_Db_Table_Abstract
+     * @var Tinebase_Backend_Sql
      */
-    protected $_configTable;
-
-    /**
-     * the db adapter
-     *
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db = NULL;
+    protected $_backend;
     
     /**
      * holds the instance of the singleton
@@ -50,8 +39,7 @@ class Tinebase_Config
      */    
     private function __construct() 
     {
-        $this->_configTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'config'));
-        $this->_db = $this->_configTable->getAdapter();
+        $this->_backend = new Tinebase_Backend_Sql('Tinebase_Model_Config', 'config');
     }
 
     /**
@@ -80,26 +68,38 @@ class Tinebase_Config
     /**
      * returns one config value identified by config name and application id
      * 
-     * @param   string          $_name config name/key
-     * @param   string          $_applicationId application id
-     * @param   mixed|optional  $_default the default value
+     * @param   string      $_name config name/key
+     * @param   string      $_applicationId application id [optional]
+     * @param   mixed       $_default the default value [optional]
+     * @param   boolean     $_fromFile get from config.inc.php if not found [optional]
      * @return  Tinebase_Model_Config  the config record
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getConfig($_name, $_applicationId = NULL, $_default = NULL)
+    public function getConfig($_name, $_applicationId = NULL, $_default = NULL, $_fromFile = TRUE)
     {
         $applicationId = ($_applicationId !== NULL ) 
             ? Tinebase_Model_Application::convertApplicationIdToInt($_applicationId) 
             : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-                
-        $select = $this->_configTable->select();
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId))
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name));
+            
+        $filter = new Tinebase_Model_ConfigFilter(array(
+            array(
+                'field'     => 'application_id', 
+                'operator'  => 'equals', 
+                'value'     => $applicationId
+            ),
+            array(
+                'field'     => 'name', 
+                'operator'  => 'equals', 
+                'value'     => $_name
+            ),
+        ));
         
-        if (!$row = $this->_configTable->fetchRow($select)) {
+        $records = $this->_backend->search($filter);
+        
+        if (count($records) == 0) {
             
             // check config.inc.php and get value from there
-            if (isset(Tinebase_Core::getConfig()->{$_name})) {
+            if ($_fromFile && isset(Tinebase_Core::getConfig()->{$_name})) {
                 $value = Tinebase_Core::getConfig()->{$_name}->toArray();
             } else {
                 if ($_default === NULL) {
@@ -112,11 +112,11 @@ class Tinebase_Config
             $result = new Tinebase_Model_Config(array(
                 'application_id'    => $applicationId,
                 'name'              => $_name,
-                'value'             => $value
+                'value'             => $value,
             ));
             
         } else {
-            $result = new Tinebase_Model_Config($row->toArray());
+            $result = $records->getFirstRecord();
         }
         
         return $result;
@@ -143,25 +143,24 @@ class Tinebase_Config
      * 
      * @param   string $_applicationId application id
      * @return  array with config name => value pairs
-     * //@throws  Tinebase_Exception_NotFound
      */
     public function getConfigForApplication($_applicationId)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
-
-        $select = $this->_db->select();
-        $select->from(SQL_TABLE_PREFIX . 'config')
-               ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId);
-        $rows = $this->_db->fetchAssoc($select);
-        //$result = new Tinebase_Record_RecordSet('Tinebase_Model_Config', $rows, true);
-
-        //if (empty($rows)) {
-        //    throw new Tinebase_Exception_NotFound("application $_applicationName config settings not found!");
-        //}
+            
+        $filter = new Tinebase_Model_ConfigFilter(array(
+            array(
+                'field'     => 'application_id', 
+                'operator'  => 'equals', 
+                'value'     => $applicationId
+            ),
+        ));
+        
+        $records = $this->_backend->search($filter);
         
         $result = array();
-        foreach ( $rows as $row ) {
-            $result[$row['name']] = $row['value'];
+        foreach ($records as $config) {
+            $result[$config->name] = $config->value;
         }
 
         return $result;
@@ -175,27 +174,21 @@ class Tinebase_Config
      */
     public function setConfig(Tinebase_Model_Config $_config)
     {
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . $_config->name); 
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . $_config->name);
         
-        // check if already in
         try {
-            $config = $this->getConfig($_config->name, $_config->application_id);
-            $config->value = $_config->value;
+            $config = $this->getConfig($_config->name, $_config->application_id, NULL, FALSE);
 
             // update
-            $this->_configTable->update($config->toArray(), $this->_db->quoteInto('id = ?', $config->getId()));             
+            $config->value = $_config->value;
+            $result = $this->_backend->update($config);
             
         } catch (Tinebase_Exception_NotFound $e) {
-            $newId = $_config->generateUID();
-            $_config->setId($newId);
-            
             // create new
-            $this->_configTable->insert($_config->toArray()); 
+            $result = $this->_backend->create($_config);
         }
-
-        $config = $this->getConfig($_config->name, $_config->application_id);
         
-        return $config;
+        return $result;
     }
     
     /**
@@ -224,6 +217,6 @@ class Tinebase_Config
      */
     public function deleteConfig(Tinebase_Model_Config $_config)
     {
-        $this->_configTable->delete($this->_db->quoteInto('id = ?', $_config->getId()));
+        $this->_backend->delete($_config->getId());
     }
 }
