@@ -63,7 +63,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 leaf: true
             }, {
                 text: this.app.i18n._('Authentication/Accounts'),
-                iconCls: 'setup_config_manager',
+                iconCls: 'setup_authentication_manager',
                 disabled: testsFailed || configMissing || dbMissing,
                 id: 'AuthenticationPanel',
                 leaf: true

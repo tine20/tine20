@@ -37,8 +37,12 @@
     background-image:url(../../images/oxygen/16x16/actions/dialog-error.png) !important;
 }
 
-.setup_config_manager {
+.setup_authentication_manager {
     background-image:url(../../images/oxygen/16x16/status/dialog-password.png) !important;
+}
+
+.setup_config_manager {
+    background-image:url(../../images/oxygen/16x16/apps/package-utilities.png) !important;
 }
 
 .setup_application_manager {
