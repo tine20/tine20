@@ -51,10 +51,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @cfg {string} appName name of application
      */
     appName: '',
-	/**
-     * @cfg {bool} allowMultiSelection
-     */
-    allowMultiSelection: false,
     /**
      * @cfg {String} requiredGrant
      * grant which is required to select leaf node(s)
@@ -90,14 +86,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	initComponent: function(){
         var translation = new Locale.Gettext();
         translation.textdomain('Tinebase');
-		
-        if (this.allowMultiSelection && ! this.selModel) {
-            this.selModel = new Ext.tree.MultiSelectionModel();
-        }
-        
-        if (this.selModel) {
-            this.allowMultiSelection = typeof this.selModel.getSelectedNodes == 'function';
-        }
 		
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
 		this.addEvents(
@@ -164,7 +152,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 				owner: null
 	        }]
 	    }];
-	    
+        
         if(this.extraItems !== null) {
             Ext.each(this.extraItems, function(_item){
             	initialTree[0].children.push(_item);
@@ -178,43 +166,20 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 		
 		this.initContextMenu();
 		
-        this.on('beforeclick', function(node, e) {
-            if (this.requiredGrant && node.isLeaf()) {
-                var accountGrants =  node.attributes.container.account_grants || {};
+        // permit selection of nodes with missing required grant
+        this.getSelectionModel().on('beforeselect', function(sm, newSelection, oldSelection) {
+            if (this.requiredGrant && newSelection.isLeaf()) {
+                var accountGrants =  newSelection.attributes.container.account_grants || {};
                 if (! accountGrants[this.requiredGrant]) {
                     Ext.Msg.alert(_('Permission Denied'), String.format(translation._("You don't have the required grant to select this {0}"), this.containerName));
                     return false;
                 }
             }
-            
-            
-            // select clicked node
-            if (! node.isSelected()) {
-                node.getOwnerTree().getSelectionModel().select(node, e, e.ctrlKey);
-            } else if (this.allowMultiSelection && node.getOwnerTree().getSelectionModel().getSelectedNodes().length > 1) {
-                if (e.ctrlKey) {
-                    node.unselect();
-                    this.fireEvent('click', node.getOwnerTree().getSelectionModel().getSelectedNodes()[0], e);
-                    return false;
-                } else {
-                    node.select();
-                }
-            }
-            
-            // expand (folders) automatically on select
+        }, this);
+        
+        // expand automatically on node click
+        this.on('click', function(node, e) {
             node.expand();
-            
-            if ( this.allowMultiSelection) {
-                // recursivly unselect child nodes
-                this.unselectChildNodes(node);
-                
-                // recursivly unselect parent nodes
-                while(node = node.parentNode) {
-                    if (node.isSelected()) {
-                        node.unselect();
-                    }
-                }
-            }
         }, this);
         
 	    this.on('contextmenu', function(node, event){
@@ -249,17 +214,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         }
 	},
     
-    unselectChildNodes: function(node) {
-        if (node.isExpandable() && node.isExpanded()) {
-            for (var i=0; i<node.childNodes.length; i++) {
-                if (node.childNodes[i].isExpandable()) {
-                    this.unselectChildNodes(node.childNodes[i]);
-                }
-                node.childNodes[i].unselect();
-            }
-        }
-    },
-    
     /**
      * returns a filter plugin to be used in a grid
      */
@@ -272,7 +226,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                  * gets value of this container filter
                  */
                 getValue: function() {
-                    var selection =  scope.allowMultiSelection ? scope.getSelectionModel().getSelectedNodes() : [scope.getSelectionModel().getSelectedNode()];
+                    var sm = scope.getSelectionModel();
+                    var selection =  typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
                     
                     var filters = [];
                     Ext.each(selection, function(node) {
@@ -280,15 +235,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                     }, this);
                     
                     return filters.length == 1 ? filters[0] : {condition: 'OR', filters: filters};
-                    
-                    /*
-                    var nodeAttributes = scope.getSelectionModel().getSelectedNode().attributes || {};
-                    return [
-                        {field: 'containerType', operator: 'equals', value: nodeAttributes.containerType ? nodeAttributes.containerType : 'all' },
-                        {field: 'container',     operator: 'equals', value: nodeAttributes.container ? nodeAttributes.container.id : null       },
-                        {field: 'owner',         operator: 'equals', value: nodeAttributes.owner ? nodeAttributes.owner.accountId : null        }
-                    ];
-                    */
                 },
                 
                 node2Filter: function(node) {
@@ -379,7 +325,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 }
             });
             
-            this.on('click', function(node){
+            this.getSelectionModel().on('selectionchange', function(sm, node){
                 this.filterPlugin.onFilterChange();
             }, this);
         }
