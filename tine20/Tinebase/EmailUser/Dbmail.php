@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        mailbox creation on add (INBOX)
  */
 
 /**
@@ -52,6 +51,7 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
         'prefix'            => 'dbmail_',
         'userTable'         => 'users',
         'encryptionType'    => 'md5',
+        'mailboxTable'      => 'mailboxes'
     );
 
     /**
@@ -68,6 +68,18 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
         'emailSieveSize'    => 'cursieve_size',
         'emailUserId'       => 'userid',
         'emailLastLogin'    => 'last_login',
+    );
+    
+    /**
+     * dbmail readonly
+     * 
+     * @var array
+     */
+    protected $_readOnlyFields = array(
+        'emailMailSize',
+        'emailSieveQuota',
+        'emailSieveSize',
+        'emailLastLogin',
     );
     
     /**
@@ -140,7 +152,12 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
         
         $this->_db->insert($this->_tableName, $recordArray);
         
-        return $this->getUserById($_user->getId());
+        $emailUser = $this->getUserById($_user->getId());
+        
+        // create INBOX for new user
+        $this->_createMailbox($emailUser);
+        
+        return $emailUser;
 	}
 	
 	/**
@@ -236,7 +253,7 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
         $data = array();
         foreach ($_user as $key => $value) {
             $property = array_key_exists($key, $this->_userPropertyNameMapping) ? $this->_userPropertyNameMapping[$key] : false;
-            if ($property) {
+            if ($property && ! in_array($key, $this->_readOnlyFields)) {
                 switch ($key) {
                     case 'emailPassword':
                         if ($this->_config['encryptionType'] == 'md5') {
@@ -266,5 +283,28 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
     protected function _convertToInt($_string)
     {
         return abs(crc32($_string));
+    }
+    
+    /**
+     * create mailbox for user
+     * 
+     * @param Tinebase_Model_EmailUser $_emailUser
+     * @param string $_mailboxName
+     * @return void
+     */
+    protected function _createMailbox(Tinebase_Model_EmailUser $_emailUser, $_mailboxName = 'INBOX')
+    {
+        $data = array(
+            'owner_idnr'    => $_emailUser->emailUID,
+            'name'          => $_mailboxName,
+            'seen_flag'     => 1,
+            'answered_flag' => 1,
+            'deleted_flag'  => 1,
+            'flagged_flag'  => 1,
+            'recent_flag'   => 1,
+            'draft_flag'    => 1,
+        );
+        
+        $this->_db->insert($this->_config['prefix'] . $this->_config['mailboxTable'], $data);
     }
 }  
