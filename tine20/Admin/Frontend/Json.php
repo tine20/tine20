@@ -31,6 +31,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	 * @var bool
 	 */
 	protected $_manageSAM = false;
+	
+    /**
+     * @var bool
+     */
+    protected $_manageEmailUser = FALSE;
     
     /**
      * constructs Admin_Frontend_Json
@@ -41,6 +46,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 		if(isset(Tinebase_Core::getConfig()->samba)) {
 			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
 		}
+		
+        // manage email user settings
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
+            $this->_manageEmailUser = TRUE; 
+        }		
     }
     
     /**
@@ -53,6 +64,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {   
         $registryData = array(
             'manageSAM' => $this->_manageSAM,
+            'manageEmailUser' => $this->_manageEmailUser,
         );        
         return $registryData;    
     }
@@ -77,7 +89,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $from (date format example: 2008-03-31T00:00:00)
      * @param string $to (date format example: 2008-03-31T00:00:00)
      * @param string $filter
-     * @param string $paging json encoded pagin data (Tinebase_Model_Pagination)
+     * @param string $paging json encoded paging data (Tinebase_Model_Pagination)
      * @return array with results array & totalcount (int)
      * 
      * @todo switch to new api with only filter and paging params

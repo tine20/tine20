@@ -275,7 +275,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 })]]
             }, {
                 title: this.app.i18n._('Email'),
-                disabled: !this.ldapBackend,
+                disabled: ! Tine.Admin.registry.get('manageEmailUser'),
                 border: false,
                 frame: true,
                 xtype: 'columnform',
@@ -287,10 +287,14 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: .333
                 },
                 items: [[{
-                    fieldLabel: this.app.i18n._('Email UID'),
-                    name: 'emailUID',
+                    fieldLabel: this.app.i18n._('Email Username'),
+                    name: 'emailUserId',
                     columnWidth: .666
                 }], [{
+                    fieldLabel: this.app.i18n._('Quota'),
+                    name: 'emailQuota',
+                    columnWidth: .666
+                }]/*, [{
                     fieldLabel: this.app.i18n._('Email GID'),
                     name: 'emailGID',
                     columnWidth: .666
@@ -302,11 +306,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Aliases'),
                     name: 'emailAliases',
                     columnWidth: .666
-                }], [{
-                    fieldLabel: this.app.i18n._('Quota'),
-                    name: 'emailQuota',
-                    columnWidth: .666
-                }]]
+                }]*/]
             }]
         };
     },

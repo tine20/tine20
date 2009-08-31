@@ -517,7 +517,8 @@ Tine.Admin.Model.EmailUserArray = [
     { name: 'emailGID' },
     { name: 'emailForward' },
     { name: 'emailAliases' },
-    { name: 'emailQuota' }
+    { name: 'emailQuota' },
+    { name: 'emailUserId' }
 ];
 
 Tine.Admin.Model.EmailUser = Tine.Tinebase.data.Record.create(Tine.Admin.Model.EmailUserArray, {

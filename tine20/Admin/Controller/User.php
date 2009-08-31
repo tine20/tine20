@@ -141,7 +141,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         // add email user data here
         if ($this->_manageEmailUser) {
-            $user->emailUser = $this->_emailUserBackend->getUserById($_accountId);;
+            try {
+                $user->emailUser = $this->_emailUserBackend->getUserById($_accountId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                
+                // @todo set password here?
+                
+                // no email settings yet
+                $user->emailUser = new Tinebase_Model_EmailUser(array(
+                    'emailUserId' => $user->accountLoginName
+                ));
+            }
         }
         
         return $user;
@@ -238,7 +248,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         // update email user data here
         if ($this->_manageEmailUser) {
-            $account->emailUser = $this->_emailUserBackend->updateUser($_account, $_account->emailUser);
+            if ($_account->emailUser->emailUID) {
+                $account->emailUser = $this->_emailUserBackend->updateUser($_account, $_account->emailUser);
+            } else {
+                $account->emailUser = $this->_emailUserBackend->addUser($_account, $_account->emailUser);
+            }
         }
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
