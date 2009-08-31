@@ -142,8 +142,6 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
-     * 
-     * @todo implement
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
@@ -172,9 +170,9 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
 	 */
 	public function setPassword($_userId, $_password)
 	{
-	    $user = Tinebase_User::getInstance()->getUserById($_userId);
+	    $user = Tinebase_User::getInstance()->getFullUserById($_userId);
 	    $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailUID'      => $this->_convertToInt($_user->getId()),
+            'emailUID'      => $this->_convertToInt($user->getId()),
 	        'emailPassword' => $_password   
         ));
 	    
