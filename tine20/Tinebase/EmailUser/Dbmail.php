@@ -10,7 +10,7 @@
  * @version     $Id$
  * 
  * @todo        support username@domain
- * @todo        mailbox creation on add
+ * @todo        mailbox creation on add (INBOX)
  */
 
 /**
@@ -76,6 +76,7 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
     {
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         $this->_config = array_merge($imapConfig['dbmail'], $this->_config);
+        $this->_config['domain'] = $imapConfig['domain'];
         $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
         
         $this->_db = Zend_Db::factory('Pdo_Mysql', $this->_config);
@@ -124,7 +125,11 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    $_emailUser->emailUserId = $_user->accountLoginName;
+	    $userId = $_user->accountLoginName;
+	    if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
+            $userId .= '@' . $imapConfig['domain'];
+        }
+	    $_emailUser->emailUserId = $userId;
 	    $_emailUser->emailUID = $this->_convertToInt($_user->getId());
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
@@ -194,6 +199,7 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
         $this->_db->delete($this->_tableName, $where);
     }
 	
+    
     /**
      * converts raw data from adapter into a single record / do mapping
      *

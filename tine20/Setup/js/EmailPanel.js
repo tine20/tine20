@@ -173,6 +173,10 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     ['ssl',  this.app.i18n._('SSL')]
                 ]
             }, {
+                name: 'imap_domain',
+                fieldLabel: this.app.i18n._('Domain'),
+                xtype: 'textfield'
+            }, {
                 xtype: 'combo',
                 listWidth: 300,
                 mode: 'local',

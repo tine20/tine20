@@ -22,6 +22,13 @@
 abstract class Tinebase_EmailUser_Abstract
 {
     /**
+     * email user config
+     * 
+     * @var array 
+     */
+    protected $_config = array();
+    
+    /**
      * get email user by id
      *
      * @param   int         $_userId
@@ -64,4 +71,24 @@ abstract class Tinebase_EmailUser_Abstract
      */
     abstract public function setPassword($_userId, $_password);
     
+    /**
+     * get new email user
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @return Tinebase_Model_EmailUser
+     */
+    public function getNewUser(Tinebase_Model_FullUser $_user)
+    {
+        $userId = $_user->accountLoginName;
+        
+        if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
+            $userId .= '@' . $this->_config['domain'];
+        }
+        
+        $result = new Tinebase_Model_EmailUser(array(
+            'emailUserId' => $userId
+        ));
+        
+        return $result;
+    }
 }  

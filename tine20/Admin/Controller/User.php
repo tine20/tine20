@@ -144,13 +144,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             try {
                 $user->emailUser = $this->_emailUserBackend->getUserById($_accountId);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                
-                // @todo set password here?
-                
                 // no email settings yet
-                $user->emailUser = new Tinebase_Model_EmailUser(array(
-                    'emailUserId' => $user->accountLoginName
-                ));
+                $user->emailUser = $this->_emailUserBackend->getNewUser($user);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting new imap user ' . print_r($user->emailUser->toArray(), TRUE));
             }
         }
         

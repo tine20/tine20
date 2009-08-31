@@ -170,6 +170,12 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result['ssl'] = strtoupper($this->ssl);
         }
         
+        // add domain
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        if (isset($imapConfig['domain'])) {
+            $result['password'] .= '@' . $imapConfig['domain'];
+        }
+        
         return $result;
     }
     
