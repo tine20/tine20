@@ -49,7 +49,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 		
         // manage email user settings
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
+        if (isset($imapConfig['backend']) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
             $this->_manageEmailUser = TRUE; 
         }		
     }
