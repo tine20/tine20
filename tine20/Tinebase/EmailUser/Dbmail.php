@@ -14,10 +14,10 @@
 /**
  * class Tinebase_EmailUser
  * 
- * Email User Settings Managing for dbmail attributes in ldap backend
+ * Email User Settings Managing for dbmail attributes
  * 
  * @package Tinebase
- * @subpackage Ldap
+ * @subpackage User
  */
 class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
 {
@@ -141,7 +141,7 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
 	{
 	    $userId = $_user->accountLoginName;
 	    if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
-            $userId .= '@' . $imapConfig['domain'];
+            $userId .= '@' . $this->_config['domain'];
         }
 	    $_emailUser->emailUserId = $userId;
 	    $_emailUser->emailUID = $this->_convertToInt($_user->getId());
@@ -207,6 +207,7 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      * delete user by id
      *
      * @param   string         $_userId
+     * @return  void
      */
     public function deleteUser($_userId) 
     {
