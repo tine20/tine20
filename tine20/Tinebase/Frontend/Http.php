@@ -128,6 +128,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/state/JsonProvider.js',
             'Tinebase/js/ux/GMapPanel.js',
             'Tinebase/js/ux/DatepickerRange.js',
+            'Tinebase/js/ux/tree/CheckboxSelectionModel.js',
             // Tine 2.0 specific widgets
             'Tinebase/js/widgets/LangChooser.js',
             'Tinebase/js/widgets/ActionUpdater.js',
