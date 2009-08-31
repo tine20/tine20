@@ -294,19 +294,23 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }], [{
                     fieldLabel: this.app.i18n._('Quota'),
                     name: 'emailMailQuota',
+                    xtype:'numberfield',
                     columnWidth: .666,
                     readOnly: false
                 }], [{
                     fieldLabel: this.app.i18n._('Current Mail Size'),
                     name: 'emailMailSize',
+                    xtype:'numberfield',
                     columnWidth: .666
                 }], [{
                     fieldLabel: this.app.i18n._('Sieve Quota'),
                     name: 'emailSieveQuota',
+                    xtype:'numberfield',
                     columnWidth: .666
                 }], [{
                     fieldLabel: this.app.i18n._('Current Sieve Size'),
                     name: 'emailSieveSize',
+                    xtype:'numberfield',
                     columnWidth: .666
                 }], [{
                     fieldLabel: this.app.i18n._('Last Login'),
