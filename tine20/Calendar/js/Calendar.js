@@ -150,18 +150,21 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
             width: 200,
             app: Tine.Tinebase.appMgr.get('Calendar'),
             recordClass: Tine.Calendar.Model.Event,
-            allowMultiSelection: true,
+            selModel: new Ext.ux.tree.CheckboxSelectionModel({
+                activateLeafNodesOnly : true,
+                optimizeSelection: true
+            }),
             afterRender: Tine.widgets.container.TreePanel.prototype.afterRender.createSequence(function() {
                 this.selectPath('/root/all/user');
-            }),
-            listeners: {
-                scope: this,
-                click: function() {
-                    var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
-                    contentPanel.refresh();
-                }
-            }
+            })
         });
+        
+        this.calSelector.getSelectionModel().on('selectionchange', function(sm, node) {
+            var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getContentPanel();
+            if (contentPanel) {
+                contentPanel.refresh();
+            }
+        }, this);
         
         this.items = [this.calSelector, {
             xtype:'spacer',
