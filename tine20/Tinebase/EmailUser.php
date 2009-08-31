@@ -125,7 +125,7 @@ class Tinebase_EmailUser
      */
     public static function getConfiguredBackend()
     {
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         
         if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == self::DBMAIL) {
             return self::DBMAIL;

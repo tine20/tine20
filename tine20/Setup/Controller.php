@@ -671,10 +671,8 @@ class Setup_Controller
      */
     public function getEmailConfig()
     {
-        if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
-            $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
-        }
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray('Tinebase_Smtp_Config');
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
         
         $result = array(
             'imap' => $imapConfig,
@@ -694,10 +692,8 @@ class Setup_Controller
     {
         //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE)); 
 
-        if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
-            Tinebase_Config::getInstance()->setConfigForApplication('Felamimail_Imap_Config', Zend_Json::encode($_data['imap']), 'Felamimail');
-        }
-        Tinebase_Config::getInstance()->setConfigForApplication('Tinebase_Smtp_Config', Zend_Json::encode($_data['smtp']));
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::IMAP, Zend_Json::encode($_data['imap']));
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, Zend_Json::encode($_data['smtp']));
     }
     
     /**

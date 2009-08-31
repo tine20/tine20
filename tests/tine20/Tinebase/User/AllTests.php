@@ -30,7 +30,7 @@ class Tinebase_User_AllTests
         $suite->addTestSuite('Tinebase_User_ModelTest');
         $suite->addTestSuite('Tinebase_User_AbstractTest');
         
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
             $suite->addTestSuite('Tinebase_User_EmailTest');
         }

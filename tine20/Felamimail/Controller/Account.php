@@ -67,7 +67,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $this->_currentAccount = Tinebase_Core::getUser();
         
-        $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
     }
     
     /**
@@ -151,7 +151,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $record = new Felamimail_Model_Account($this->_imapConfig);
             
             // add smtp settings
-            $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray('Tinebase_Smtp_Config');
+            $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
             if (empty($smtpConfig)) {
                 // just warn
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No default smtp account defined in config.inc.php!');
@@ -492,7 +492,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $defaultAccount->smtp_credentials_id = $defaultAccount->credentials_id;
 
                 // add smtp server settings
-                $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray('Tinebase_Smtp_Config');
+                $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
                 if (! empty($smtpConfig)) {
                     $defaultAccount->smtp_port              = $smtpConfig['port'];
                     $defaultAccount->smtp_hostname          = $smtpConfig['hostname'];

@@ -17,7 +17,26 @@
  * @subpackage  Record
  */
 class Tinebase_Model_Config extends Tinebase_Record_Abstract 
-{    
+{   
+    /**
+     * imap conf name
+     * 
+     * @var string
+     */
+    const IMAP = 'imap';
+    
+    /**
+     * smtp conf name
+     * 
+     * @var string
+     */
+    const SMTP = 'smtp';
+    
+    /**
+     * identifier
+     * 
+     * @var string
+     */ 
     protected $_identifier = 'id';
     
     /**

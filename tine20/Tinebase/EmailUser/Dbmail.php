@@ -74,7 +74,7 @@ class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
      */
     public function __construct()
     {
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray('Felamimail_Imap_Config', 'Felamimail');
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         $this->_config = array_merge($imapConfig['dbmail'], $this->_config);
         $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
         
