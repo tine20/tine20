@@ -93,7 +93,10 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         var imapBackend = this.imapBackendCombo.getValue();
         
         var cardLayout = Ext.getCmp(this.imapBackendIdPrefix + 'CardLayout').getLayout();
-        cardLayout.setActiveItem(this.imapBackendIdPrefix + imapBackend);
+        console.log(cardLayout);
+        if (cardLayout !== 'card') {
+            cardLayout.setActiveItem(this.imapBackendIdPrefix + imapBackend);
+        }
     },
 
     /**
