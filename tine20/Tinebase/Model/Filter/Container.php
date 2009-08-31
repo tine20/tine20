@@ -137,18 +137,22 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             $cc = Tinebase_Container::getInstance();
             switch ($this->_operator) {
                 case 'equals':
-                    $container = $cc->getContainerById($this->_value);
-                    $result['value'] = $container->toArray();
-                    $result['value']['path'] = $cc->getPath($container);
+                	if ($this->_value) {
+	                    $container = $cc->getContainerById($this->_value);
+	                    $result['value'] = $container->toArray();
+	                    $result['value']['path'] = $cc->getPath($container);
+                	}
                     break;
                 case 'in':
                     $result['value'] = array();
                     foreach ($this->_value as $containerId) {
-                        $container = $cc->getContainerById($containerId);
-                        $contaienrArray = $container->toArray();
-                        $contaienrArray['path'] = $cc->getPath($container);
-                        
-                        $result['value'][] = $contaienrArray;
+                    	if ($this->_value) {
+	                        $container = $cc->getContainerById($containerId);
+	                        $contaienrArray = $container->toArray();
+	                        $contaienrArray['path'] = $cc->getPath($container);
+	                        
+	                        $result['value'][] = $contaienrArray;
+                    	}
                     }
                     break;
                 default:
