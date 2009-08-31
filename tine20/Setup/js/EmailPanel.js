@@ -96,6 +96,14 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         cardLayout.setActiveItem(this.imapBackendIdPrefix + imapBackend);
     },
 
+    /**
+     * @private
+     */
+    onRender: function(ct, position) {
+        Tine.Setup.EmailPanel.superclass.onRender.call(this, ct, position);
+        
+        this.onChangeImapBackend.defer(250, this);
+    },
     
    /**
      * returns config manager form
