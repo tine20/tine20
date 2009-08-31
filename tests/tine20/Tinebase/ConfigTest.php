@@ -128,4 +128,17 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         
         $config = $this->_instance->getConfig($this->objects['config']->name);        
     }
+    
+    /**
+     * test get config from config.inc.php
+     *
+     */
+    public function testGetConfigFromFile()
+    {
+        $result = $this->_instance->getConfigAsArray('logger');
+            
+        $this->assertGreaterThan(0, count($result));
+        $this->assertTrue($result['active']);
+    }
+    
 }

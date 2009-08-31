@@ -9,6 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        make settings from config.inc.php overwrite db config? 
  * @todo        replace Zend_Db_Table_Abstract with Zend_Db_Adapter_Abstract
  */
 
@@ -96,15 +97,24 @@ class Tinebase_Config
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name));
         
         if (!$row = $this->_configTable->fetchRow($select)) {
-            if ($_default === NULL) {
-                throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found and no default value given!");
+            
+            // check config.inc.php and get value from there
+            if (isset(Tinebase_Core::getConfig()->{$_name})) {
+                $value = Tinebase_Core::getConfig()->{$_name}->toArray();
             } else {
-                $result = new Tinebase_Model_Config(array(
-                    'application_id'    => $applicationId,
-                    'name'              => $_name,
-                    'value'             => $_default
-                ));
+                if ($_default === NULL) {
+                    throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found and no default value given!");
+                } else {
+                    $value = $_default;
+                }
             }
+            
+            $result = new Tinebase_Model_Config(array(
+                'application_id'    => $applicationId,
+                'name'              => $_name,
+                'value'             => $value
+            ));
+            
         } else {
             $result = new Tinebase_Model_Config($row->toArray());
         }
