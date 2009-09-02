@@ -239,6 +239,12 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      */
     forceSelection: false,
     
+    /**
+     * add additional filter to show only contacts with email addresses
+     * @private 
+     */
+    additionalFilters: [{field: 'email_query', operator: 'contains', value: '@' }],
+    
     //private
     initComponent: function() {
         this.tpl = new Ext.XTemplate(
