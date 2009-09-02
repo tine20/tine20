@@ -201,7 +201,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         parent::delete($_ids);
         
         // check if default account got deleted and set new default account
-        if (in_array(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, $_ids)) {
+        if (in_array(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
             $accounts = $this->search();
             Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = 
                 (count($accounts) > 0) ? $accounts->getFirstRecord()->getId() : NULL;
