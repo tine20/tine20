@@ -19,23 +19,46 @@
  */
 class Tinebase_Server_Json extends Tinebase_Server_Abstract
 {
+	
+	public function handle()
+	{
+	    $this->_initFramework();
+            
+        $server = new Zend_Json_Server();
+        $server->setAutoEmitResponse(false);
+        $server->setAutoHandleExceptions(false);
+        //$server->setUseNamedParams(true);
+        
+        $json = file_get_contents('php://input');
+        if (substr($json, 0, 1) == '[') {
+        	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' batched request'); 
+        	$isBatchedRequest = true;
+        	$requests = Zend_Json::decode($json);
+        } else {
+        	$isBatchedRequest = false;
+        	$requests = array(Zend_Json::decode($json));
+        }
+        
+        $response = array();
+        foreach ($requests as $requestOptions) {
+        	$request = new Zend_Json_Server_Request();
+        	$request->setOptions($requestOptions);
+        	
+        	$response[] = $this->_handle($server, $request);
+        }
+        
+        echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
+	}
+	
     /**
      * handler for JSON api requests
      * @todo session expire handling
      * 
      * @return JSON
      */
-    public function handle()
+    protected function _handle($server, $request)
     {
         try {
-            $this->_initFramework();
-            
-            $server = new Zend_Json_Server();
-            $server->setAutoHandleExceptions(false);
-            //$server->setUseNamedParams(true);
-            
-            $request = new Zend_Json_Server_Request_Http();
-            
             $method  = $request->getMethod();
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
@@ -49,12 +72,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
             // register additional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
                 //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user data: " . print_r(Tinebase_Core::getUser()->toArray(), true));
-                
-                if (array_key_exists('stateInfo', $_REQUEST) && ! empty($_REQUEST['stateInfo'])) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save clients appended stateInfo ... ");
-                    // save state info here (and return in with getAllRegistryData)
-                    Tinebase_State::getInstance()->saveStateInfo($_REQUEST['stateInfo']);
-                }
                 
                 $applicationParts = explode('.', $method);
                 $applicationName = ucfirst($applicationParts[0]);
@@ -80,7 +97,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 }
             }
             
-            $server->handle($request);
+            return $server->handle($request);
             
         } catch (Exception $exception) {
             
@@ -111,9 +128,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
 	            $response->setVersion($version);
 	        }
         
-            echo $response;
+            return $response;
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
-            exit;
+            //exit;
         }
     }
     
