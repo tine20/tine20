@@ -295,7 +295,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
             if(!$_record->isValid()) {
-                throw new Tinebase_Exception_Record_Validation('Record is not valid:' . print_r($_record->getValidationErrors(), true));
+                throw new Tinebase_Exception_Record_Validation('Record is not valid. Invalid fields: ' . implode(',', $_record->getValidationErrors()));
             }
             $currentRecord = $this->_backend->get($_record->getId());
             
