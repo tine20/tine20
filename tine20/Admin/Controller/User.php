@@ -66,7 +66,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
         // manage email user settings
 		$imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
+        if (isset($imapConfig['backend']) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
             $this->_manageEmailUser = TRUE; 
             if ($this->_manageEmailUser) {
                 $this->_emailUserBackend = Tinebase_EmailUser::getInstance();
