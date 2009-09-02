@@ -116,7 +116,8 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             
             //delete old config settings from config.inc.php
             unset($config['accounts']);
-            Setup_Controller::getInstance()->saveConfigData($config);
+            // do we want that?
+            //Setup_Controller::getInstance()->saveConfigData($config);
         }
         
         $defaultUserGroupName = Tinebase_Config::getInstance()->getConfig('Default User Group', null, 'Users');
@@ -161,7 +162,8 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         }
         
         // delete old config settings from config.inc.php
-        Setup_Controller::getInstance()->saveConfigData($config, FALSE);
+        // do we want that?
+        //Setup_Controller::getInstance()->saveConfigData($config, FALSE);
         
         $this->setApplicationVersion('Tinebase', '2.4');
     }
