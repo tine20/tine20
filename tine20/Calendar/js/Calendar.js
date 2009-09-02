@@ -136,8 +136,9 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.Tinebase.widgets.app.MainScreen, {
  */
 Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     border: false,
-    layout: 'vbox',
-    align: 'stretch',
+    //layout: 'vbox',
+    //align: 'stretch',
+    layout: 'border',
     cls: 'cal-tree',
     defaults: {
         border: false
@@ -146,7 +147,10 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         
         this.calSelector = new Tine.widgets.container.TreePanel({
-            //region: 'center',
+            //stateEvents: ['expandnode', 'collapsenode', 'checkchange'],
+            //stateful: true,
+            //stateId: 'cal-calendartree-containers',
+            region: 'center',
             width: 200,
             app: Tine.Tinebase.appMgr.get('Calendar'),
             recordClass: Tine.Calendar.Model.Event,
@@ -155,8 +159,24 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
                 optimizeSelection: true
             }),
             afterRender: Tine.widgets.container.TreePanel.prototype.afterRender.createSequence(function() {
+                //Ext.each(this.expandPaths, function(path) {
+                //    this.expandPath(path);
+                //    console.log(path);
+                //}, this);
+                
                 this.selectPath('/root/all/user');
-            })
+            }),
+            getState: function() {
+                var checkedPaths = [];
+                Ext.each(this.getChecked(), function(node) {
+                    checkedPaths.push(node.getPath());
+                }, this);
+                
+                return checkedPaths;
+            },
+            applyState: function(state) {
+                this.expandPaths = state;
+            }
         });
         
         this.calSelector.getSelectionModel().on('selectionchange', function(sm, node) {
@@ -166,12 +186,14 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
             }
         }, this);
         
-        this.items = [this.calSelector, {
+        this.items = [this.calSelector, /*{
             xtype:'spacer',
             flex:1
-        }, {
-            //region: 'south',
-            //collapsible: true,
+        },*/ {
+            region: 'south',
+            split: true,
+            collapsible: true,
+            collapseMode: 'mini',
             height: 190,
             width: 200,
             items: new Ext.DatePicker({
@@ -217,22 +239,26 @@ Tine.Calendar.TreePanel = Ext.extend(Ext.Panel, {
     /**
      * returns a calendar to take for an add event action
      * 
-     * @todo add more sophisticated logic
-     * 
      * @return {Tine.Model.Container}
      */
     getAddCalendar: function() {
         var selections = this.getCalSelector().getSelectionModel().getSelectedNodes();
         
         var addCalendar = Tine.Calendar.registry.get('defaultCalendar');
-        // take first container with add grant
+        
+        //active calendar
+        var activeNode = this.getCalSelector().getSelectionModel().getActiveNode();
+        if (activeNode && this.getCalSelector().hasGrant(activeNode, 'addGrant')) {
+            return activeNode.attributes.container;
+        }
+        
+        //first container with add grant
         Ext.each(selections, function(node){
-            var attr = node.attributes;
-            if (attr.containerType == "singleContainer" && attr.container.account_grants.addGrant) {
-                addCalendar = attr.container;
+            if (this.getCalSelector().hasGrant(node, 'addGrant')) {
+                addCalendar = node.attributes.container;
                 return false;
             }
-        });
+        }, this);
         
         return addCalendar
     }
