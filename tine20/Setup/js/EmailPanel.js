@@ -56,12 +56,21 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     imapBackendCombo: null,
 
     /**
-     * @private
-     * panel cfg
+     * smtpBackend DOM Id prefix
+     * 
+     * @property smtpBackendIdPrefix
+     * @type String
      */
-    saveMethod: 'Setup.saveAuthentication',
-    registryKey: 'authenticationData',
+    smtpBackendIdPrefix: null,
     
+    /**
+     * combo box containing the smtp backend selection
+     * 
+     * @property smtpBackendCombo
+     * @type Ext.form.ComboBox 
+     */
+    smtpBackendCombo: null,
+
     /**
      * @private
      * panel cfg
@@ -82,20 +91,32 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     initComponent: function() {
         this.idPrefix                  = Ext.id();
         this.imapBackendIdPrefix       = this.idPrefix + '-imapBackend-',
+        this.smtpBackendIdPrefix       = this.idPrefix + '-smtpBackend-',
 
         Tine.Setup.EmailPanel.superclass.initComponent.call(this);
     },
     
     /**
-     * Change card layout depending on selected combo box entry
+     * Change IMAP card layout depending on selected combo box entry
      */
     onChangeImapBackend: function() {
         var imapBackend = this.imapBackendCombo.getValue();
         
         var cardLayout = Ext.getCmp(this.imapBackendIdPrefix + 'CardLayout').getLayout();
-        console.log(cardLayout);
         if (cardLayout !== 'card') {
             cardLayout.setActiveItem(this.imapBackendIdPrefix + imapBackend);
+        }
+    },
+
+    /**
+     * Change SMTP card layout depending on selected combo box entry
+     */
+    onChangeSmtpBackend: function() {
+        var smtpBackend = this.smtpBackendCombo.getValue();
+        
+        var cardLayout = Ext.getCmp(this.smtpBackendIdPrefix + 'CardLayout').getLayout();
+        if (cardLayout !== 'card') {
+            cardLayout.setActiveItem(this.smtpBackendIdPrefix + smtpBackend);
         }
     },
 
@@ -106,6 +127,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         Tine.Setup.EmailPanel.superclass.onRender.call(this, ct, position);
         
         this.onChangeImapBackend.defer(250, this);
+        this.onChangeSmtpBackend.defer(250, this);
     },
     
    /**
@@ -116,7 +138,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      */
     getFormItems: function() {
         
-        this.imapBackendCombo = new Ext.form.ComboBox({
+        var backendComboConfig = {
             width: 300,
             listWidth: 300,
             mode: 'local',
@@ -125,15 +147,28 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             triggerAction: 'all',
             selectOnFocus:true,
             value: 'standard',
-            store: [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail']],
-            name: 'imap_backend',
-            fieldLabel: this.app.i18n._('Backend'),
-            listeners: {
-                scope: this,
-                change: this.onChangeImapBackend,
-                select: this.onChangeImapBackend
-            }
-        });
+            fieldLabel: this.app.i18n._('Backend')
+        }
+        
+        // imap combo
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail']];
+        backendComboConfig.name = 'imap_backend';
+        backendComboConfig.listeners = {
+            scope: this,
+            change: this.onChangeImapBackend,
+            select: this.onChangeImapBackend
+        };
+        this.imapBackendCombo = new Ext.form.ComboBox(backendComboConfig);
+        
+        // smtp combo
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard SMTP')], ['postfix', 'Postfix']];
+        backendComboConfig.name = 'smtp_backend';
+        backendComboConfig.listeners = {
+            scope: this,
+            change: this.onChangeSmtpBackend,
+            select: this.onChangeSmtpBackend
+        };
+        this.smtpBackendCombo = new Ext.form.ComboBox(backendComboConfig);
 
         return [{
             title: this.app.i18n._('Imap'),
@@ -158,7 +193,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             }, {
                 name: 'imap_port',
                 fieldLabel: this.app.i18n._('Port'),
-                xtype: 'textfield'
+                xtype: 'numberfield'
             }, {
                 fieldLabel: this.app.i18n._('Secure Connection'),
                 name: 'imap_ssl',
@@ -218,20 +253,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         width: 300,
                         xtype: 'textfield'
                     },
-                    items: [{
-                        name: 'imap_dbmail_host',
-                        fieldLabel: this.app.i18n._('DBmail Hostname')
-                    }, {
-                        name: 'imap_dbmail_dbname',
-                        fieldLabel: this.app.i18n._('DBmail Database')
-                    }, {
-                        name: 'imap_dbmail_username',
-                        fieldLabel: this.app.i18n._('DBmail User')
-                    }, {
-                        name: 'imap_dbmail_password',
-                        fieldLabel: this.app.i18n._('DBmail Password'),
-                        inputType: 'password'
-                    }]
+                    items: this.getDbConfigFields('dbmail')
                 }]
             }]
         }, {
@@ -239,20 +261,25 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             id: 'setup-smtp-group',
             checkboxToggle:true,
             collapsed: true,
-            defaultType: 'textfield',
-            items: [{
+            items: [
+                this.smtpBackendCombo,
+            {
                 name: 'smtp_hostname',
-                fieldLabel: this.app.i18n._('Hostname')
+                fieldLabel: this.app.i18n._('Hostname'),
+                xtype: 'textfield'
             }, {
                 name: 'smtp_username',
-                fieldLabel: this.app.i18n._('Username')
+                fieldLabel: this.app.i18n._('Username'),
+                xtype: 'textfield'
             }, {
                 name: 'smtp_password',
                 fieldLabel: this.app.i18n._('Password'),
-                inputType: 'password'
+                inputType: 'password',
+                xtype: 'textfield'
             }, {
                 name: 'smtp_port',
-                fieldLabel: this.app.i18n._('Port')
+                fieldLabel: this.app.i18n._('Port'),
+                xtype: 'numberfield'
             }, {
                 fieldLabel: this.app.i18n._('Secure Connection'),
                 name: 'smtp_ssl',
@@ -285,6 +312,31 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     ['login',   this.app.i18n._('Login')],
                     ['plain',   this.app.i18n._('Plain')]
                 ]
+            }, {
+                id: this.smtpBackendIdPrefix + 'CardLayout',
+                layout: 'card',
+                activeItem: this.smtpBackendIdPrefix + 'standard',
+                border: false,
+                width: '100%',
+                defaults: {
+                    border: false
+                },
+                items: [{
+                    // nothing in here yet
+                    id: this.smtpBackendIdPrefix + 'standard',
+                    layout: 'form',
+                    items: []
+                }, {
+                    // postfix config options
+                    id: this.smtpBackendIdPrefix + 'postfix',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: this.getDbConfigFields('postfix')
+                }]
             }]
         }];
     },
@@ -294,5 +346,28 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      */
     applyRegistryState: function() {
         this.action_saveConfig.setDisabled(!this.isValid());
+    },
+    
+    /**
+     * get db config fields
+     * 
+     * @param {String} type
+     * @return {Array}
+     */
+    getDbConfigFields: function(type) {
+        return [{
+            name: 'imap_' + type + '_host',
+            fieldLabel: Ext.util.Format.capitalize(type) + ' ' + this.app.i18n._('Hostname')
+        }, {
+            name: 'imap_' + type + '_dbname',
+            fieldLabel: Ext.util.Format.capitalize(type) + ' ' + this.app.i18n._('Database')
+        }, {
+            name: 'imap_' + type + '_username',
+            fieldLabel: Ext.util.Format.capitalize(type) + ' ' + this.app.i18n._('User')
+        }, {
+            name: 'imap_' + type + '_password',
+            fieldLabel: Ext.util.Format.capitalize(type) + ' ' + this.app.i18n._('Password'),
+            inputType: 'password'
+        }];
     }
 });
