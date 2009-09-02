@@ -56,6 +56,26 @@ class Tinebase_State
     /**************************** public functions *********************************/
     
     /**
+     * saves a single state entry
+     * 
+     * @param string $_name
+     * @param string $_value
+     * @return void
+     */
+    public function setState($_name, $_value)
+    {
+        $stateInfo = $this->loadStateInfo();
+        
+        if (empty($_value) && array_key_exists($_name, $stateInfo)) {
+            unset($stateInfo[$_name]);
+        } else {
+        	$stateInfo[$_name] = $_value;
+        }
+        
+        $this->saveStateInfo($stateInfo);
+    }
+    
+    /**
      * save state data
      *
      * @param JSONstring $_stateData
@@ -69,12 +89,12 @@ class Tinebase_State
         } catch (Tinebase_Exception_NotFound $tenf) {
             $stateRecord = new Tinebase_Model_State(array(
                 'user_id'   => $userId,
-                'data'      => $_stateData
+                'data'      => Zend_Json::encode($_stateData)
             ));
             $this->_backend->create($stateRecord);
         }
         
-        $stateRecord->data = $_stateData;
+        $stateRecord->data = Zend_Json::encode($_stateData);
         $this->_backend->update($stateRecord);
     }
 
