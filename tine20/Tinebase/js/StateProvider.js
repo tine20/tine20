@@ -27,8 +27,8 @@ Ext.extend(Tine.Tinebase.StateProvider, Ext.state.Provider, {
     // private
     readRegistry: function() {
         var states = {};
-        var stateInfo = Tine.Tinebase.registry.get('stateInfo'); 
-        for (name in stateInfo) {
+        var stateInfo = Tine.Tinebase.registry.get('stateInfo');
+        for (var name in stateInfo) {
             states[name] = this.decodeValue(stateInfo[name]);
         };
         
