@@ -257,27 +257,6 @@ Tine.Tinebase.tineInit = {
             options.headers = options.headers || {};
             options.headers['X-Tine20-JsonKey'] = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
             
-            // append updated state info if state has changes
-            /*
-            if (typeof Ext.state.Manager.getProvider().getStateStore == 'function') {
-                var stateStore = Ext.state.Manager.getProvider().getStateStore();
-                if (stateStore.hasChanges) {
-                    var stateInfo = [];
-                    stateStore.each(function(stateRecord) {
-                        // only save color manager state
-                        // all other stuff needs rethinking
-                        if (stateRecord.get('name') == 'cal-color-mgr-containers') {
-                            stateInfo.push(stateRecord.data);
-                        }
-                    }, this);
-                    
-                    // mark changes as saved
-                    stateStore.hasChanges = false;
-                    
-                    options.params.stateInfo = Ext.util.JSON.encode(stateInfo);
-                }
-            }*/
-            
             // convert non Ext.Direct request to jsonrpc
             // - convert params
             // - convert error handling
@@ -760,18 +739,10 @@ Tine.Tinebase.tineInit = {
     },
     
     /**
-    * initialise state provider
-    */
+     * initialise state provider
+     */
     initState: function() {
-        Ext.state.Manager.setProvider(new Ext.ux.state.JsonProvider());
-        if (window.isMainWindow) {
-            // fill store from registry / initial data
-            var stateInfo = Tine.Tinebase.registry.get('stateInfo');
-            Ext.state.Manager.getProvider().loadStateData(stateInfo);
-        } else {
-            // take main windows store
-            Ext.state.Manager.getProvider().setStateStore(Ext.ux.PopupWindowGroup.getMainWindow().Ext.state.Manager.getProvider().getStateStore());
-        }
+        Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
     },
     
     /**
