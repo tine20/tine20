@@ -96,11 +96,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getAccessLogEntries($from, $to, $filter, $paging)
     {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
         $fromDateObject = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
         $toDateObject = new Zend_Date($to, Tinebase_Record_Abstract::ISO8601LONG);
         $pagination = new Tinebase_Model_Pagination(Zend_Json::decode($paging));
@@ -236,27 +231,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getUsers($filter, $sort, $dir, $start, $limit)
     {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
         $accounts = Admin_Controller_User::getInstance()->searchFullUsers($filter, $sort, $dir, $start, $limit);
 
-        /*foreach($accounts as $key => $account) {
-            if ($account['last_login'] !== NULL) {
-                 $accounts[$key]['last_login'] = $account['last_login']->get(Tinebase_Record_Abstract::ISO8601LONG);
-            }
-            if ($account['last_password_change'] !== NULL) {
-                 $accounts[$key]['last_password_change'] = $account['last_password_change']->get(Tinebase_Record_Abstract::ISO8601LONG);
-            }
-            if ($account['expires_at'] !== NULL) {
-                 $accounts[$key]['expires_at'] = $account['expires_at']->get(Tinebase_Record_Abstract::ISO8601LONG);
-            }
-        }*/
-        
-        $result['results'] = $accounts->toArray();
-        $result['totalcount'] = count($accounts);
+        $result = array(
+            'results'     => $this->_multipleRecordsToJson($accounts),
+            'totalcount'  => count($accounts)
+        );
         
         return $result;
     }
