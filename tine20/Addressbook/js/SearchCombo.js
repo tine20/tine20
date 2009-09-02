@@ -41,6 +41,11 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     internalContactsOnly: false,
     
     /**
+     * @cfg {Array} additionalFilters
+     */
+    additionalFilters: null,
+    
+    /**
      * @property {Ext.data.Record} selectedRecord
      */
     selectedRecord: null,
@@ -73,6 +78,13 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
         } else {
             filter.push({field: 'container_id', operator: 'specialNode', value: 'all' });
         }
+        
+        if (this.additionalFilters !== null && this.additionalFilters.length > 0) {
+            for (var i = 0; i < this.additionalFilters.length; i++) {
+                filter.push(this.additionalFilters[i]);
+            }
+        }
+        
         this.store.baseParams.filter = Ext.util.JSON.encode(filter);
     },
     
