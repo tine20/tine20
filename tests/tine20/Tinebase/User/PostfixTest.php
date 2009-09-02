@@ -7,7 +7,9 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id: EmailTest.php 9112 2009-07-06 06:12:09Z l.kneschke@metaways.de $
+ * @version     $Id$
+ * 
+ * @todo        finish
  */
 
 /**
@@ -20,9 +22,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test class for Tinebase_EmailUser
+ * Test class for Tinebase_PostfixTest
  */
-class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
 {
     /**
      * email user backend
@@ -44,7 +46,7 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_EmailTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_PostfixTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -56,9 +58,9 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = Tinebase_EmailUser::getInstance();
+        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_EmailUser::POSTFIX);
 
-        $this->_objects['addedUser'] = $this->_addUser();
+        //$this->_objects['addedUser'] = $this->_addUser();
     }
 
     /**
@@ -70,7 +72,7 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // delete email account
-        $this->_backend->deleteUser(Tinebase_Core::getUser()->getId());
+        //$this->_backend->deleteUser(Tinebase_Core::getUser()->getId());
     }
     
     /**
@@ -79,6 +81,7 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
      */
     public function testAddEmailAccount()
     {
+        /*
         $this->assertEquals(array(
             'emailUID' => abs(crc32(Tinebase_Core::getUser()->getId())),
             'emailUserId' => Tinebase_Core::getUser()->accountLoginName,
@@ -86,6 +89,7 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
             'emailQuota' => 1000000,
             'emailLastLogin' => '1979-11-03 22:05:58'
         ), $this->_objects['addedUser']->toArray());
+        */
     }
     
     /**
@@ -95,11 +99,13 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
     public function testUpdateAccount()
     {
         // update user
+        /*
         $this->_objects['addedUser']->emailQuota = 2000000;
         
         $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
         
         $this->assertEquals(2000000, $updatedUser->emailQuota);
+        */
     }
     
     /**
@@ -109,11 +115,13 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
     public function testSetPassword()
     {
         // set pw
+        /*
         $this->_objects['addedUser']->emailPassword = 'password';
         
         $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
         
         $this->assertEquals(md5('password'), $updatedUser->emailPassword);
+        */
     }
     
     /**
@@ -123,11 +131,13 @@ class Tinebase_User_EmailTest extends PHPUnit_Framework_TestCase
      */
     protected function _addUser()
     {
+        /*
         $emailUser = new Tinebase_Model_EmailUser(array(
             'emailQuota'    => 1000000
         ));
         $addedUser = $this->_backend->addUser(Tinebase_Core::getUser(), $emailUser);
         
         return $addedUser;
+        */
     }
 }	

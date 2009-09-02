@@ -31,8 +31,13 @@ class Tinebase_User_AllTests
         $suite->addTestSuite('Tinebase_User_AbstractTest');
         
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
-            $suite->addTestSuite('Tinebase_User_EmailTest');
+        if (isset($imapConfig['backend']) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
+            $suite->addTestSuite('Tinebase_User_DbmailTest');
+        }
+
+        $stmpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        if (isset($stmpConfig['backend']) && ucfirst($stmpConfig['backend']) == Tinebase_EmailUser::POSTFIX) {
+            $suite->addTestSuite('Tinebase_User_PostfixTest');
         }
         return $suite;
     }
