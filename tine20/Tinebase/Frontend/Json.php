@@ -201,6 +201,30 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }    
     
     /**
+     * retuns all states
+     * 
+     * @return array of name => value
+     */
+    public function loadState()
+    {
+        return Tinebase_State::getInstance()->loadStateInfo();
+    }
+    
+    /**
+     * set state
+     * 
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    public function setState($name, $value)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
+        Tinebase_State::getInstance()->setState($name, $value);
+    }
+    
+    
+    /**
      * adds a new personal tag
      */
     public function saveTag($tag)
