@@ -81,7 +81,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function checkBusyConficts($_event)
     {
-        $fbInfo = $this->getFreeBusyInfo($_event->dtstart, $_event->dtend, $_event->attendee);
+    	$ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
+    	
+        $fbInfo = $this->getFreeBusyInfo($_event->dtstart, $_event->dtend, $_event->attendee, $ignoreUIDs);
         if (count($fbInfo) > 0) {
             $busyException = new Calendar_Exception_AttendeeBusy();
             $busyException->setFreeBusyInfo($fbInfo);
@@ -154,9 +156,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Zend_Date                                            $_from
      * @param  Zend_Date                                            $_until
      * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
+     * @param  array of UIDs                                        $_ignoreUIDs
      * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
      */
-    public function getFreeBusyInfo($_from, $_until, $_attendee)
+    public function getFreeBusyInfo($_from, $_until, $_attendee, $_ignoreUIDs = array())
     {
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'period',   'operator' => 'within', 'value' => array('from' => $_from, 'until' => $_until)),
@@ -178,6 +181,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // sort freebusy info into tyepmap
         foreach($events as $event) {
+        	// skip events with ignoreUID
+        	if (in_array($event->uid, $_ignoreUIDs)) {
+        	    continue;
+        	}
+        	
         	// skip recuring base events
         	if ($event->dtend->isEarlier($_from)) {
         	    continue;
