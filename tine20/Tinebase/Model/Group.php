@@ -57,8 +57,10 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      * converts a int, string or Tinebase_Model_Group to a groupid
      *
      * @param   int|string|Tinebase_Model_Group $_groupId the groupid to convert
-     * @return  int
+     * @return  string
      * @throws  Tinebase_Exception_InvalidArgument
+     * 
+     * @todo rename this function because we now have string ids
      */
     static public function convertGroupIdToInt($_groupId)
     {
