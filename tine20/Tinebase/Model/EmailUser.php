@@ -13,6 +13,8 @@
 /**
  * class Tinebase_Model_EmailUser
  * 
+ * - this class contains all email specific user settings like quota, forwards, ...
+ * 
  * @package     Tinebase
  * @subpackage  LDAP
  */
@@ -43,6 +45,9 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
         'emailUserId'       => array('allowEmpty' => true),
         'emailLastLogin'    => array('allowEmpty' => true),
         'emailPassword'     => array('allowEmpty' => true),
+        'emailForwards'     => array('allowEmpty' => true),
+        'emailForwardOnly'  => array('allowEmpty' => true),
+        'emailAliases'      => array('allowEmpty' => true),
     );
     
     /**
