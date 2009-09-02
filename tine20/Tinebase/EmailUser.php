@@ -30,6 +30,13 @@ class Tinebase_EmailUser
     const DBMAIL    = 'Dbmail';
 
     /**
+     * postfix backend const
+     * 
+     * @staticvar string
+     */
+    const POSTFIX    = 'Postfix';
+
+    /**
      * ldap backend const
      * 
      * @staticvar string
@@ -105,12 +112,20 @@ class Tinebase_EmailUser
                 
             case self::DBMAIL:
                 if (!isset(self::$_backends[$_type])) {
-                    self::$_backends[$_type] = new Tinebase_EmailUser_Dbmail();
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Dbmail();
                 }
                 $result = self::$_backends[$_type];
                 
                 break;
             
+            case self::POSTFIX:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_Postfix();
+                }
+                $result = self::$_backends[$_type];
+                
+                break;
+                
             default:
                 throw new Tinebase_Exception_InvalidArgument("Backend type $_type not implemented.");
         }
@@ -121,16 +136,35 @@ class Tinebase_EmailUser
     /**
      * returns the configured backend
      * 
+     * @param string $_configType
      * @return string
+     * @throws Tinebase_Exception_NotFound
      */
-    public static function getConfiguredBackend()
+    public static function getConfiguredBackend($_configType = Tinebase_Model_Config::IMAP)
     {
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $result = '';        
         
-        if (! empty($imapConfig) && ucfirst($imapConfig['backend']) == self::DBMAIL) {
-            return self::DBMAIL;
-        } else {
-            throw new Tinebase_Exception_NotFound("Felamimail config not found.");
+        $config = Tinebase_Config::getInstance()->getConfigAsArray($_configType);
+        if (isset($config['backend'])) {
+            switch ($_configType) {
+                case Tinebase_Model_Config::IMAP:
+                    if (ucfirst($config['backend']) == self::DBMAIL) {
+                        $result = self::DBMAIL;
+                    }
+                    break;
+                case Tinebase_Model_Config::SMTP:
+                    if (ucfirst($config['backend']) == self::POSTFIX) {
+                        $result = self::POSTFIX;
+                    }
+                    break;
+            }
+            
         }
+
+        if (empty($result)) {
+            throw new Tinebase_Exception_NotFound("Config for type $_configType not found.");
+        }
+        
+        return $result;
     }
 }

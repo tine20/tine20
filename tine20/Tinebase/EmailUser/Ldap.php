@@ -12,8 +12,6 @@
  * @todo        is this needed?
  * @todo        test it!
  * @todo        add forward / alias
- * @todo        add support for qmail
- * @todo        add factory / different backends?
  */
 
 /**

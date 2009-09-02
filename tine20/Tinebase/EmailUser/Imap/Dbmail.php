@@ -12,14 +12,14 @@
  */
 
 /**
- * class Tinebase_EmailUser
+ * class Tinebase_EmailUser_Imap_Dbmail
  * 
  * Email User Settings Managing for dbmail attributes
  * 
  * @package Tinebase
  * @subpackage User
  */
-class Tinebase_EmailUser_Dbmail extends Tinebase_EmailUser_Abstract
+class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
 {
     /**
      * @var Zend_Db_Adapter
