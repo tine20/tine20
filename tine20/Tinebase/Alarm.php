@@ -224,6 +224,12 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         
         // create / update alarms
         foreach ($alarms as $alarm) {
+            
+            // check if alarm field is Zend_Date
+            if (! $_record->{$alarmField} instanceof Zend_Date) {
+                continue;
+            }
+            
             $id = $alarm->getId();
             
             if ($id) {
