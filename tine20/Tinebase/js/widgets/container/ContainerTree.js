@@ -78,6 +78,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	rootVisible: false,
 	border: false,
     autoScroll: true,
+    //style: 'overflow-x: hidden; overflow-y: auto',
 	
 	// holds treenode which got a contextmenu
 	ctxNode: null,
@@ -357,7 +358,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 	// private
 	afterRender: function() {
 		Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
-		//console.log(this);
+        this.getEl().first().first().applyStyles('overflow-x: hidden');
 		this.expandPath('/root/all');
 		this.selectPath('/root/all');
 	},
@@ -380,7 +381,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             backend: 'Tinebase_Container',
             backendModel: 'Container'
 	    });
-	}
+	},
+    
+    hasGrant: function(node, grant) {
+        var attr = node.attributes;
+        return (attr.containerType == "singleContainer" && attr.container.account_grants[grant]);
+    }
 });
 
 Tine.widgets.container.TreeLoader = function(config) {
