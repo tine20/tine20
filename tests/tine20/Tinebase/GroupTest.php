@@ -50,13 +50,13 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objects['initialGroup'] = new Tinebase_Model_Group(array(
-            'id'            => 'test-group-lkfdshew7fdfwo8efw',
+            'id'            => 'testgrouplkfdshew7fdfwo8efw',
             'name'          => 'tine20phpunit',
             'description'   => 'initial group'
         )); 
         
         $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
-            'id'            => 'test-group-lkfdshew7fdfwo8efw',
+            'id'            => 'testgrouplkfdshew7fdfwo8efw',
             'name'          => 'tine20phpunit updated',
             'description'   => 'updated group'
         )); 
@@ -67,7 +67,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         )); 
 
         $this->objects['account1'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 'test-account-dsjdsud8hjd10',
+            'accountId'             => 'testaccountdsjdsud8hjd10',
             'accountLoginName'      => 'tine20phpunit1',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
@@ -78,7 +78,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         )); 
         
         $this->objects['account2'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 'test-account-dsjdsud8hjd11',
+            'accountId'             => 'testaccountdsjdsud8hjd11',
             'accountLoginName'      => 'tine20phpunit2',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
@@ -89,7 +89,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         )); 
 
         $this->objects['account3'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 'test-account-dsjdsud8hjd12',
+            'accountId'             => 'testaccountdsjdsud8hjd12',
             'accountLoginName'      => 'tine20phpunit3',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
