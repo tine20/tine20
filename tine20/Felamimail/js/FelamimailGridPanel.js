@@ -24,6 +24,7 @@ Ext.namespace('Tine.Felamimail');
  * TODO         add show source code function
  * TODO         make doubleclick work again: show mail in new window (no edit dialog)
  * TODO         add pdf export
+ * TODO         enable preview panel update after ctx menu itemclick (only for non-delete actions)?
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -67,6 +68,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         enableDragDrop: true,
         ddGroup: 'mailToTreeDDGroup'
     },
+    // we don't want to update the preview panel on context menu
+    updateDetailsPanelOnCtxMenu: false,
     
     /**
      * Return CSS class to apply to rows depending upon flags

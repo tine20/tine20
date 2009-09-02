@@ -3,50 +3,86 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
  
-Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
+Ext.namespace('Tine.Tinebase.widgets', 'Tine.Tinebase.widgets.grid');
 
 /**
- * details panel
+ * grid details panel
  * 
- * @class Tine.widgets.grid.DetailsPanel
- * @extends Ext.Panel
+ * @namespace   Tine.Tinebase.widgets.grid
+ * @class       Tine.Tinebase.widgets.grid.DetailsPanel
+ * @extends     Ext.Panel
+ * 
+ * <p>Grid Details Panel</p>
+ * <p><pre>
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Tinebase.widgets.grid.DetailsPanel
  */
-Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
+Tine.Tinebase.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     /**
-     * @cfg {Number}
+     * @cfg {Number} defaultHeight
      * default Heights
      */
     defaultHeight: 125,
     
     /**
-     * @property {Tine.Tinebase.widgets.app.GridPanel}
+     * @property grid
+     * @type Tine.Tinebase.widgets.app.GridPanel
      */
     grid: null,
 
     /**
-     * @property {}
+     * @property record
+     * @type Tine.Tinebase.data.Record
      */
     record: null,
     
+    /**
+     * @private
+     */
     border: false,
     autoScroll: true,
     layout: 'fit',
     
+    /**
+     * update template
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {Mixed} body
+     */
     updateDetails: function(record, body) {
         this.tpl.overwrite(body, record.data);
     },
     
+    /**
+     * show default template
+     * 
+     * @param {Mixed} body
+     */
     showDefault: function(body) {
         if (this.defaultTpl) {
             this.defaultTpl.overwrite(body);
         }
     },
     
+    /**
+     * show template for multiple rows
+     * 
+     * @param {Ext.grid.RowSelectionModel} sm
+     * @param {Mixed} body
+     */
     showMulti: function(sm, body) {
         if (this.multiTpl) {
             this.multiTpl.overwrite(body);
@@ -54,15 +90,20 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     },
     
     /**
+     * bind grid to details panel
      * 
-     * @param grid
+     * @param {Tine.Tinebase.widgets.app.GridPanel} grid
      */
     doBind: function(grid) {
         this.grid = grid;
         
+        /*
         grid.getSelectionModel().on('selectionchange', function(sm) {
-            this.onDetailsUpdate(sm);
+            if (this.updateOnSelectionChange) {
+                this.onDetailsUpdate(sm);
+            }
         }, this);
+        */
         
         grid.store.on('load', function(store) {
             this.onDetailsUpdate(grid.getSelectionModel());
@@ -70,8 +111,9 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     },
     
     /**
+     * update details panel
      * 
-     * @param sm selection model
+     * @param {Ext.grid.RowSelectionModel} sm
      */
     onDetailsUpdate: function(sm) {
         var count = sm.getCount();
@@ -87,6 +129,11 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         }
     },
     
+    /**
+     * get load mask
+     * 
+     * @return {Ext.LoadMask}
+     */
     getLoadMask: function() {
         if (! this.loadMask) {
             this.loadMask = new Ext.LoadMask(this.el);
@@ -94,5 +141,4 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         
         return this.loadMask;
     }
-    
 });

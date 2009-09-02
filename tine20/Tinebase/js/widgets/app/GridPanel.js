@@ -87,7 +87,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         limit: 50
     },
     /**
-     * @cfg {Tine.widgets.grid.DetailsPanel} detailsPanel
+     * @cfg {Tine.Tinebase.widgets.grid.DetailsPanel} detailsPanel
      * if set, it becomes rendered in region south 
      */
     detailsPanel: null,
@@ -111,7 +111,19 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * specialised strings for delete action button
      */
     i18nDeleteActionText: null,
+
+    /**
+     * @cfg {Bool} i18nDeleteRecordAction 
+     * update details panel if context menu is shown
+     */
+    updateDetailsPanelOnCtxMenu: true,
     
+    /**
+     * @type Bool
+     * @property updateOnSelectionChange
+     */
+    updateOnSelectionChange: false,
+
     /**
      * @type Ext.Toolbar
      * @property actionToolbar
@@ -313,7 +325,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         });
         this.selectionModel.on('selectionchange', function(sm) {
             Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
-            
+            if (this.updateOnSelectionChange && this.detailsPanel) {
+                this.detailsPanel.onDetailsUpdate(sm);
+            }
         }, this);
         
         // we allways have a paging toolbar
@@ -385,11 +399,16 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         
         this.grid.on('rowcontextmenu', function(grid, row, e) {
             e.stopEvent();
-            if(!grid.getSelectionModel().isSelected(row)) {
-                grid.getSelectionModel().selectRow(row);
+            var selModel = grid.getSelectionModel();
+            if(!selModel.isSelected(row)) {
+                // disable preview update if config option is set to false
+                this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
+                selModel.selectRow(row);
             }
             
             this.contextMenu.showAt(e.getXY());
+            // reset preview update
+            this.updateOnSelectionChange = true;
         }, this);
         
     },
