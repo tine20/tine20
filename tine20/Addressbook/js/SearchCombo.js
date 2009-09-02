@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * contacts combo box and store
  * 
@@ -15,13 +15,29 @@ Ext.namespace('Tine.Addressbook');
 /**
  * contact selection combo box
  * 
- * @class Tine.Addressbook.SearchCombo
- * @extends Ext.form.ComboBox
+ * @namespace   Tine.Addressbook
+ * @class       Tine.Addressbook.SearchCombo
+ * @extends     Ext.form.ComboBox
+ * 
+ * <p>Contact Search Combobox</p>
+ * <p><pre></pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Addressbook.SearchCombo
  */
 Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
 
+    /**
+     * combobox cfg
+     * @private
+     */
 	id: 'contactSearchCombo',
-	
     typeAhead: false,
     //hideTrigger: true, // IE7 doesn't like that!
     triggerAction: 'all',
@@ -31,7 +47,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     minChars: 3,
     
     /**
-     * @cfg blurOnSelect
+     * @cfg {Boolean} blurOnSelect
      */
     blurOnSelect: false,
     
@@ -41,12 +57,14 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     internalContactsOnly: false,
     
     /**
-     * @cfg {Array} additionalFilters
+     * @property additionalFilters
+     * @type Array
      */
     additionalFilters: null,
     
     /**
-     * @property {Ext.data.Record} selectedRecord
+     * @property selectedRecord
+     * @type Tine.Addressbook.Model.Contact
      */
     selectedRecord: null,
     
@@ -66,7 +84,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     /**
      * use beforequery to set query filter
      * 
-     * @param {} qevent
+     * @param {Event} qevent
      */
     onBeforeQuery: function(qevent){
         var filter = [
@@ -92,7 +110,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * on select handler
      * - this needs to be overwritten in most cases
      * 
-     * @param {} record
+     * @param {Tine.Addressbook.Model.Contact} record
      */
     onSelect: function(record){
         this.selectedRecord = record;
@@ -107,6 +125,9 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     
     /**
      * on keypressed("enter") event to add record
+     * 
+     * @param {Tine.Addressbook.SearchCombo} combo
+     * @param {Event} event
      */ 
     onSpecialkey: function(combo, event){
         if(event.getKey() == event.ENTER){
@@ -118,6 +139,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     
     /**
      * init template
+     * @private
      */
     initTemplate: function() {
         // Custom rendering Template
@@ -154,6 +176,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * get contact store
      *
      * @return Ext.data.JsonStore with contacts
+     * @private
      */
     initStore: function() {
         

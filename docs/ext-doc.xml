@@ -59,6 +59,7 @@
         <source src="../tine20/Tinebase/js/widgets/grid/DetailsPanel.js"/>
         <source src="../tine20/Tinebase/js/widgets/form/" match="*.js"/>
         <source src="../tine20/Addressbook/js/ContactGrid.js"/>
+        <source src="../tine20/Addressbook/js/SearchCombo.js"/>
         <source src="../tine20/Admin/js/UserEditDialog.js"/>
         <!-- <source src="../tine20/Calendar/js" match="*.js"/> -->
         <source src="../tine20/Calendar/js/AttendeeGridPanel.js"/>
