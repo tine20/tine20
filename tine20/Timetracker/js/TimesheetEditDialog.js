@@ -46,20 +46,25 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     	var manageRight = Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
     	
         var notBillable = false;
+        var notClearable = false;
 
         var grants = timeaccount ? timeaccount.get('account_grants') : (this.record.get('timeaccount_id') ? this.record.get('timeaccount_id').account_grants : {});
         if (grants) {
             this.getForm().findField('account_id').setDisabled(! (grants.book_all || grants.manage_all || manageRight));
             notBillable = ! (grants.manage_billable || grants.manage_all || manageRight);
-            this.getForm().findField('is_cleared').setDisabled(! (/*grants.manage_billable ||*/ grants.manage_all || manageRight));
+            notClearable = ! (/*grants.manage_billable ||*/ grants.manage_all || manageRight);
             this.getForm().findField('billed_in').setDisabled(! (grants.manage_all || manageRight));
         }
 
         if (timeaccount) {
             notBillable = notBillable || timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0";
+            
+            // clearable depends on timeaccount is_billable as well (changed by ps / 2009-09-01, behaviour was inconsistent)
+            notClearable = notClearable || timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0";
         }
         
         this.getForm().findField('is_billable').setDisabled(notBillable);
+        this.getForm().findField('is_cleared').setDisabled(notClearable);
         
     	if (this.record.id == 0 && timeaccount) {
     	    // set is_billable for new records according to the timeaccount setting
