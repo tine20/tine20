@@ -12,20 +12,27 @@
 Ext.namespace('Tine.Felamimail');
 
 /**
- * grid panel for to/cc/bcc recipients
- * 
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.RecipientGrid
  * @extends     Ext.grid.EditorGridPanel
- * @param       {Object} config
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
- * @constructor
  * 
+ * <p>Recipient Grid Panel</p>
+ * <p>grid panel for to/cc/bcc recipients</p>
+ * <pre>
  * TODO         add 'x' to remove recipient / grid row
  * TODO         add name to email address for display
  * TODO         disable horizontal scrollbar
  * TODO         use 'standard' template for adb search combo with image and both email addresses
+ * </pre>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Felamimail.RecipientGrid
  */
 Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
@@ -221,16 +228,22 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 });
 
 /**
- * contact email search combo
- * 
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.ContactSearchCombo
  * @extends     Tine.Addressbook.SearchCombo
- * @param       {Object} config
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
- * @constructor
  * 
+ * <p>Email Search ComboBox</p>
+ * <p></p>
+ * <pre></pre>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Felamimail.ContactSearchCombo
  */
 Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
 
@@ -240,13 +253,12 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     forceSelection: false,
     
     /**
-     * add additional filter to show only contacts with email addresses
-     * @private 
+     * @private
      */
-    additionalFilters: [{field: 'email_query', operator: 'contains', value: '@' }],
-    
-    //private
     initComponent: function() {
+        // add additional filter to show only contacts with email addresses
+        this.additionalFilters = [{field: 'email_query', operator: 'contains', value: '@' }];
+        
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
                 '{[this.encode(values.n_fileas)]}',
@@ -302,4 +314,3 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         this.fireEvent('blur', this);
     }    
 });
-
