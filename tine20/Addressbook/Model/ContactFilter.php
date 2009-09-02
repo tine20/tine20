@@ -54,6 +54,13 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
                 'tel_work'
             ))
         ),
+        'email_query'          => array(
+            'filter' => 'Tinebase_Model_Filter_Query', 
+            'options' => array('fields' => array(
+                'email',
+                'email_home',
+            ))
+        ),
         'n_given'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'n_family'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'org_name'             => array('filter' => 'Tinebase_Model_Filter_Text'),
