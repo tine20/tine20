@@ -202,7 +202,7 @@ class Tinebase_User
                 self::setBackendConfiguration($value, $key);
             }
         } else {
-            if (!array_key_exists($_key, $defaultValues)) {
+            if (! is_array($defaultValues) || ! array_key_exists($_key, $defaultValues)) {
                 throw new Tinebase_Exception_InvalidArgument("Cannot set backend configuration option '$_key' for accounts storage " . self::getConfiguredBackend());
             }
             self::$_backendConfiguration[$_key] = $_value;
