@@ -161,13 +161,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchGroups($filter, $paging)
     {
+    	$filterData = Zend_Json::decode($filter);
+    	$pagingData = Zend_Json::decode($paging);
+    	
     	$result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
         // old fn style yet
-        $groups = Tinebase_Group::getInstance()->getGroups($filter[0]['value'], $paging['sort'], $paging['dir'], $paging['start'], $paging['limit']);
+        $groups = Tinebase_Group::getInstance()->getGroups($filterData[0]['value'], $pagingData['sort'], $pagingData['dir'], $pagingData['start'], $pagingData['limit']);
 
         $result['results'] = $groups->toArray();
         $result['totalcount'] = count($groups);
