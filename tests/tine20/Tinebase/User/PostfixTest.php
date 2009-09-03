@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
- * 
- * @todo        finish
  */
 
 /**
@@ -84,6 +82,7 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(array(
             'emailAddress'      => Tinebase_Core::getUser()->accountEmailAddress,
+            'emailPassword'     => '',
             'emailUserId'       => Tinebase_Core::getUser()->accountLoginName,
             'emailForwardOnly'  => 0,
             'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
@@ -107,6 +106,7 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(array(
             'emailAddress'      => Tinebase_Core::getUser()->accountEmailAddress,
+            'emailPassword'     => '',
             'emailUserId'       => Tinebase_Core::getUser()->accountLoginName,
             'emailForwardOnly'  => 1,
             'emailAliases'      => array(),
@@ -116,18 +116,15 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to update an email account
-     * @todo implement
      */
     public function testSetPassword()
     {
         // set pw
-        /*
         $this->_objects['addedUser']->emailPassword = 'password';
         
         $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
         
         $this->assertEquals(md5('password'), $updatedUser->emailPassword);
-        */
     }
     
     /**

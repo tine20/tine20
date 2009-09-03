@@ -213,20 +213,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 	 * @param string $_userId
 	 * @param string $_password
 	 * @return Tinebase_Model_EmailUser
-	 * 
-	 * @todo    implement
 	 */
 	public function setPassword($_userId, $_password)
 	{
-	    /*
 	    $user = Tinebase_User::getInstance()->getFullUserById($_userId);
-	    $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailUID'      => $this->_convertToInt($user->getId()),
-	        'emailPassword' => $_password   
-        ));
+	    $emailUser = $this->getUserById($user->getId());
+	    $emailUser->emailPassword = $_password;
 	    
         return $this->updateUser($user, $emailUser);
-        */
 	}
 	
     /**
