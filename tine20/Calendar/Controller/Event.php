@@ -106,6 +106,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 	    	$db = $this->_backend->getAdapter();
 	        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 	        
+	        // we need to resolve groupmembers before free/busy checking
+	        $this->_resolveAttendeeGroupMembers($_record->attendee);
+	        
 	        if ($_checkBusyConficts) {
 		        // ensure that all attendee are free
 		        $this->checkBusyConficts($_record);
@@ -259,7 +262,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 	        $event = $this->get($_record->getId());
 	        if ($event->editGrant) {
 	            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "updating event: {$_record->id} ");
-		        if ($_checkBusyConficts) {
+		        
+	            // we need to resolve groupmembers before free/busy checking
+	            $this->_resolveAttendeeGroupMembers($_record->attendee);
+		        
+	            if ($_checkBusyConficts) {
 	                // ensure that all attendee are free
 	                $this->checkBusyConficts($_record);
 	            }
@@ -580,49 +587,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /****************************** attendee functions ************************/
     
     /**
-     * sets attendee status for an attendee on the given event
-     * 
-     * NOTE: for recur events we implicitly create an exceptions on demand
-     *
-     * @param  Calendar_Model_Event    $_event
-     * @param  Calendar_Model_Attender $_attender
-     * @param  string                  $_authKey
-     * @return Calendar_Model_Attender updated attender
-     *
-    public function setAttenderStatus($_event, $_attender, $_authKey)
-    {
-        $eventId = $_event->getId();
-        if (! $eventId) {
-            if ($_event->recurid) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating recur exception for a exceptional attendee status");
-                $this->_doContainerACLChecks = FALSE;
-                $event = $this->createRecurException($_event);
-                $this->_doContainerACLChecks = TRUE;
-            } else {
-                throw new Exception("cant set status, invalid event given");
-            }
-        } else {
-            $event = $this->get($eventId);
-        }
-        
-        $currentAttender = $event->attendee[$event->attendee->getIndexById($_attender->getId())];
-        $currentAttender->status = $_attender->status;
-        
-        if ($currentAttender->status_authkey == $_authKey) {
-            $updatedAttender = $this->_backend->updateAttendee($currentAttender);
-            
-            // touch event
-            $event = $_event->recurid ? $this->_getRecurBaseEvent($_event) : $this->_backend->get($_event->getId());
-            $this->_backend->update($event);
-        } else {
-            $updatedAttender = $currentAttender;
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no permissions to update status for {$currentAttender->user_type} {$currentAttender->user_id}");
-        }
-        
-        return $updatedAttender;
-    }*/
-    
-    /**
      * creates an attender status exception of a recurring event series
      * 
      * NOTE: Recur exceptions are implicitly created
@@ -763,6 +727,46 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         return $updatedAttender;
     }
     
+    /**
+     * resolves group members and adds/removes them if nesesary
+     * 
+     * NOTE: The role to assign to a new group member is not always clear, as multiple groups
+     *       might be the 'source' of the group member. To deal with this, we take the role of
+     *       the first group when we add new group members
+     *       
+     * @todo  do we need handling for users added as members and coming from a group?
+     *       
+     * @param Tinebase_Record_RecordSet $_attendee
+     * @return void
+     */
+    protected function _resolveAttendeeGroupMembers($_attendee)
+    {
+        $groupAttendee = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
+        
+        $allCurrContacts = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
+        $allCurrContactIds = $allCurrContacts->user_id;
+        $allGroupContactIds = array();
+        foreach ($groupAttendee as $groupAttender) {
+            $groupAttenderMemberIds = Tinebase_Group::getInstance()->getGroupMembers($groupAttender->user_id);
+            $groupAttenderContactIds = Tinebase_User::getInstance()->getMultiple($groupAttenderMemberIds)->contact_id;
+            $allGroupContactIds = array_merge($allGroupContactIds, $groupAttenderContactIds);
+            
+            $toAdd = array_diff($groupAttenderContactIds, $allCurrContactIds);
+            foreach($toAdd as $userId) {
+                $_attendee->addRecord(new Calendar_Model_Attender(array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                    'user_id'   => $userId,
+                    'role'      => $groupAttender->role
+                )));
+            }
+        }
+        
+        $toDel = array_diff($allCurrContactIds, $allGroupContactIds);
+        foreach ($toDel as $idx => $contactId) {
+            $attender = $allCurrContacts->find('user_id', $contactId);
+            $_attendee->removeRecord($attender);
+        }
+    }
     
     /**
      * saves all attendee of given event
