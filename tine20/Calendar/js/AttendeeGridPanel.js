@@ -415,6 +415,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
     },
     
+    renderAttenderGroupmemberName: function(name) {
+        return Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName.apply(this, arguments);
+    },
+    
     renderAttenderGroupName: function(name) {
         if (typeof name.getTitle == 'function') {
             return Ext.util.Format.htmlEncode(name.getTitle());
