@@ -77,12 +77,13 @@ class Tinebase_EmailUser
     /**
      * the singleton pattern
      *
+     * @param string $_configType
      * @return Tinebase_EmailUser_Abstract
      */
-    public static function getInstance() 
+    public static function getInstance($_configType = Tinebase_Model_Config::IMAP) 
     {
         if (self::$_instance === NULL) {
-            $backendType = self::getConfiguredBackend();
+            $backendType = self::getConfiguredBackend($_configType);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
             self::$_instance = self::factory($backendType);
         }
@@ -145,6 +146,7 @@ class Tinebase_EmailUser
         $result = '';        
         
         $config = Tinebase_Config::getInstance()->getConfigAsArray($_configType);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
         if (isset($config['backend'])) {
             switch ($_configType) {
                 case Tinebase_Model_Config::IMAP:
