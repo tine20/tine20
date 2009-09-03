@@ -27,7 +27,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
     protected $_db = NULL;
     
     /**
-     * table name with prefix
+     * user table name with prefix
      *
      * @var string
      */
@@ -90,7 +90,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
     {
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         $this->_config = array_merge($imapConfig['dbmail'], $this->_config);
-        $this->_config['domain'] = $imapConfig['domain'];
+        $this->_config['domain'] = (isset($imapConfig['domain'])) ? $imapConfig['domain'] : '';
         $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
         
         $this->_db = Zend_Db::factory('Pdo_Mysql', $this->_config);
