@@ -144,6 +144,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     
     layout: 'border',
     border: false,
+    stateful: true,
     
     /**
      * extend standart initComponent chain
@@ -175,7 +176,12 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 }
             }, this);
         }
-
+        
+        // autogenerate stateId
+        if (this.stateful !== false && ! this.stateId) {
+            this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
+        }
+        
         Tine.Tinebase.widgets.app.GridPanel.superclass.initComponent.call(this);
     },
     
@@ -384,6 +390,11 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
         this.gridConfig.enableHdMenu = false;
+        
+        if (this.stateful) {
+            this.gridConfig.stateful = true,
+            this.gridConfig.stateId  = this.stateId + '-Grid';
+        }
         
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
