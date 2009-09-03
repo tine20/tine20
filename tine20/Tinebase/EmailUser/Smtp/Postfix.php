@@ -217,6 +217,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 	public function setPassword($_userId, $_password)
 	{
 	    $user = Tinebase_User::getInstance()->getFullUserById($_userId);
+	    
+	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set postfix password for user ' . $user->accountLoginName);
+	    
 	    $emailUser = $this->getUserById($user->getId());
 	    $emailUser->emailPassword = $_password;
 	    
