@@ -10,8 +10,7 @@
  * @version     $Id$
  * 
  * @todo        extend Tinebase_Controller_Record_Abstract
- * @todo        make smtp email users work
- * @todo        add 'merge' of email users
+ * @todo        make email user settings work
  */
 
 /**
@@ -155,18 +154,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         // add email user data here
-        try {
-            if ($this->_manageImapEmailUser) {
-                    $user->emailUser = $this->_imapUserBackend->getUserById($_accountId);
-            }
-            if ($this->_manageSmtpEmailUser) {
-                    $user->emailUser = $this->_smtpUserBackend->getUserById($_accountId/*, $user->emailUser*/);
-            }
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // no email settings yet
-            $user->emailUser = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getNewUser($user) : $this->_smtpUserBackend->getNewUser($user);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting new imap/smtp user ' . print_r($user->emailUser->toArray(), TRUE));
-        }
+        $user->emailUser = $this->_getEmailUser($user);
         
         return $user;
     }
@@ -225,6 +213,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if ($this->_manageImapEmailUser) {
             $this->_imapUserBackend->setPassword($_account->getId(), $_password);
         }
+
+        if ($this->_manageSmtpEmailUser) {
+            $this->_imapUserBackend->setPassword($_account->getId(), $_password);
+        }
         
         // fire change password event
         /*
@@ -260,14 +252,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $account->sambaSAM = $samResult;
         }
         
-        // update email user data here
-        if ($this->_manageImapEmailUser) {
-            if ($_account->emailUser->emailUID) {
-                $account->emailUser = $this->_imapUserBackend->updateUser($_account, $_account->emailUser);
-            } else {
-                $account->emailUser = $this->_imapUserBackend->addUser($_account, $_account->emailUser);
-            }
-        }
+        // update email user settings
+        $account->emailUser = $_account->emailUser;
+        $this->_updateEmailUser($account);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($_account, $_password, $_passwordRepeat);
@@ -304,9 +291,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         // create email user data here
-        if ($this->_manageImapEmailUser) {
-            $account->emailUser = $this->_imapUserBackend->addUser($_account, $_account->emailUser);
-        }
+        $account->emailUser = $_account->emailUser;
+        $this->_createEmailUser($account);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($account, $_password, $_passwordRepeat);
@@ -320,6 +306,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      *
      * @param   array $_accountIds  array of account ids
      * @return  array with success flag
+     * 
+     * @todo    delete email user settings?
      */
     public function delete(array $_accountIds)
     {
@@ -341,5 +329,87 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 $this->_samBackend->deleteUser($accountId);
             }
         }
+    }
+    
+    /**
+     * get email user settings
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @return Tinebase_Model_EmailUser
+     */
+    protected function _getEmailUser($_user)
+    {
+        if (! $this->_manageImapEmailUser && ! $this->_manageSmtpEmailUser) {
+            return new Tinebase_Model_EmailUser();
+        }
+        
+        try {
+            $imapUser = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getUserById($_user->getId()) : NULL;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No imap email user settings yet');
+            $imapUser = NULL;
+        }            
+        
+        try {
+            $smtpUser = ($this->_manageSmtpEmailUser) ? $this->_smtpUserBackend->getUserById($_user->getId()) : NULL;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No smtp email user settings yet');
+            $smtpUser = NULL;
+        }
+            
+        // merge
+        $result = Tinebase_EmailUser::merge($imapUser, $smtpUser);
+        if ($result === NULL) {
+            // no email settings yet
+            $result = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getNewUser($_user) : $this->_smtpUserBackend->getNewUser($_user);
+        }
+        
+        return $result;
+    }
+
+    /**
+     * create email user settings
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @return void
+     */
+    protected function _createEmailUser($_user)
+    {
+        // update email user data here
+        if ($this->_manageImapEmailUser) {
+            $this->_imapUserBackend->addUser($_user, $_user->emailUser);
+        }
+        if ($this->_manageSmtpEmailUser) {
+            $this->_smtpUserBackend->addUser($_user, $_user->emailUser);
+        }
+        
+        $_user->emailUser = $this->_getEmailUser($_user);
+    }
+    
+    /**
+     * update email user settings
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @return void
+     */
+    protected function _updateEmailUser($_user)
+    {
+        // update email user data here
+        if ($this->_manageImapEmailUser) {
+            if ($_user->emailUser->emailUID) {
+                $this->_imapUserBackend->updateUser($_user, $_user->emailUser);
+            } else {
+                $this->_imapUserBackend->addUser($_user, $_user->emailUser);
+            }
+        }
+        if ($this->_manageSmtpEmailUser) {
+            if ($_user->emailUser->emailAddress) {
+                $this->_smtpUserBackend->updateUser($_user, $_user->emailUser);
+            } else {
+                $this->_smtpUserBackend->addUser($_user, $_user->emailUser);
+            }
+        }
+
+        $_user->emailUser = $this->_getEmailUser($_user);
     }
 }
