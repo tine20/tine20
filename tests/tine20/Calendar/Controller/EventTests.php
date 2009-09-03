@@ -316,6 +316,31 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(2, count($events));
     }
     
+    public function testAttendeeGroupMembers()
+    {
+        $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+            'user_id'   => $defaultUserGroup->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+        ));
+        
+        $persitentEvent = $this->_controller->create($event);
+        $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
+        // all members + group + user as attender
+        $this->assertEquals(count($defaultUserGroupMembers) + 2, count($persitentEvent->attendee));
+        
+        $groupAttender = $persitentEvent->attendee->find('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
+        $persitentEvent->attendee->removeRecord($groupAttender);
+        
+        $updatedPersistentEvent = $this->_controller->update($persitentEvent);
+        $this->assertEquals(1, count($updatedPersistentEvent->attendee));
+    }
+    
     public function testUpdateRecuingDtstart()
     {
         $event = $this->_getEvent();
@@ -559,7 +584,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ),
             array(
                 'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             )
         ));
     }
