@@ -12,7 +12,7 @@
  */
 
 /**
- * controller for State management
+ * controller for Extjs client State management
  *
  * @package     Tinebase
  * @subpackage  State
@@ -56,6 +56,22 @@ class Tinebase_State
     /**************************** public functions *********************************/
     
     /**
+     * clears a single state entry
+     * 
+     * @param string $_name
+     * @return void
+     */
+    public function clearState($_name)
+    {
+        $stateInfo = $this->loadStateInfo();
+        
+        if (array_key_exists($_name, $stateInfo)) {
+            unset($stateInfo[$_name]);
+            $this->saveStateInfo($stateInfo);
+        }
+    }
+    
+    /**
      * saves a single state entry
      * 
      * @param string $_name
@@ -66,12 +82,7 @@ class Tinebase_State
     {
         $stateInfo = $this->loadStateInfo();
         
-        if (empty($_value) && array_key_exists($_name, $stateInfo)) {
-            unset($stateInfo[$_name]);
-        } else {
-        	$stateInfo[$_name] = $_value;
-        }
-        
+    	$stateInfo[$_name] = $_value;
         $this->saveStateInfo($stateInfo);
     }
     
