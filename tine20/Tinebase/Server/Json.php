@@ -128,8 +128,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
 	            $response->setVersion($version);
 	        }
         
-            return $response;
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
+            return $response;
             //exit;
         }
     }
