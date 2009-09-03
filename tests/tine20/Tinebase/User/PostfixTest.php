@@ -77,8 +77,6 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to add an email account
-     *
-     * @todo implement
      */
     public function testAddEmailAccount()
     {
@@ -95,18 +93,25 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to update an email account
-     * @todo implement
      */
     public function testUpdateAccount()
     {
         // update user
-        /*
-        $this->_objects['addedUser']->emailQuota = 2000000;
+        $this->_objects['addedUser']->emailForwardOnly = 1;
+        $this->_objects['addedUser']->emailAliases = array();
+        $this->_objects['addedUser']->emailForwards =  array('test@tine20.org');
         
         $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
         
-        $this->assertEquals(2000000, $updatedUser->emailQuota);
-        */
+        //print_r($updatedUser->toArray());
+        
+        $this->assertEquals(array(
+            'emailAddress'      => Tinebase_Core::getUser()->accountEmailAddress,
+            'emailUserId'       => Tinebase_Core::getUser()->accountLoginName,
+            'emailForwardOnly'  => 1,
+            'emailAliases'      => array(),
+            'emailForwards'     => array('test@tine20.org'),
+        ), $this->_objects['addedUser']->toArray());
     }
     
     /**

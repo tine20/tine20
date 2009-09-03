@@ -179,10 +179,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
+     * @throws Tinebase_Exception_UnexpectedValue
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    /*
+        if (! $_user->accountEmailAddress) {
+            throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for adding him or her to postfix table.');
+        }
+	    
         $_emailUser->emailUserId = $_user->accountLoginName;
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
@@ -190,14 +194,17 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));
         
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_user->getId())),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' = ?', $_user->accountEmailAddress),
             $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
         );
         
         $this->_db->update($this->_tableName, $recordArray, $where);
         
+        // add forwards and aliases
+        $this->_setAliases($_emailUser, TRUE);
+        $this->_setForwards($_emailUser, TRUE);
+        
         return $this->getUserById($_user->getId());
-        */
 	}
 	
 	/**
@@ -253,7 +260,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     protected function _setAliases($_emailUser, $_deleteFirst = FALSE)
     {
         if ($_deleteFirst) {
-            $this->_deleteAliases($_emailUser->emailAddress);
+            $this->_deleteAliases($_emailUser->emailAddress, $_emailUser->emailUserId);
         }
         
         foreach ($_emailUser->emailAliases as $aliasAddress) {
@@ -271,11 +278,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param string $_emailAddress
      * @return void
      */
-    protected function _deleteAliases($_emailAddress)
+    protected function _deleteAliases($_emailAddress, $_emailUserId)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') . ' = ?', $_emailAddress),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' <> ?', $_emailAddress),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') . ' = ?', $_emailUserId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' != ?', $_emailAddress),
         );
         
         $this->_db->delete($this->_tableName, $where);
