@@ -117,6 +117,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         return $index;
     }
     
+    public function removeRecord(Tinebase_Record_Interface $_record)
+    {
+        $idx = array_search($_record, $this->_listOfRecords);
+        if ($idx !== false) {
+            $this->offsetUnset($idx);
+        }
+    }
+    
     /**
      * checks if each member record of this set is valid
      * 
@@ -415,6 +423,37 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function filter($_field, $_value, $_valueIsRegExp = FALSE)
     {
+        $matchingRecords = $this->_getMatchingRecords($_field, $_value, $_valueIsRegExp);
+        
+        
+        $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
+        $result->addIndices(array_keys($this->_indices));
+        
+        return $result;
+    }
+    
+    /**
+     * Finds the first matching record in this store by a specific property/value.
+     *
+     * @param string $_field
+     * @param string $_value
+     * @return Tinebase_Record_RecordSet
+     */
+    public function find($_field, $_value, $_valueIsRegExp = FALSE)
+    {
+        $matchingRecords = array_values($this->_getMatchingRecords($_field, $_value, $_valueIsRegExp));
+        return count($matchingRecords) > 0 ? $matchingRecords[0] : NULL;
+    }
+    
+    /**
+     * filter recordset and return matching records
+     *
+     * @param string $_field
+     * @param string $_value
+     * @return array
+     */
+    protected function _getMatchingRecords($_field, $_value, $_valueIsRegExp = FALSE)
+    {
         if (array_key_exists($_field, $this->_indices)) {
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering with indices, expecting fast results ;-)');
             $valueMap = $this->_indices[$_field];
@@ -428,12 +467,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         } else {
             $matchingMap = array_flip((array)array_keys($valueMap, $_value));
         }
+        
         $matchingRecords = array_intersect_key($this->_listOfRecords, $matchingMap);
-        
-        $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
-        $result->addIndices(array_keys($this->_indices));
-        
-        return $result;
+        return $matchingRecords;
     }
     
     /**
