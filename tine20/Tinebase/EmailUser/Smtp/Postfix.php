@@ -30,6 +30,13 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     protected $_db = NULL;
     
     /**
+     * user table name with prefix
+     *
+     * @var string
+     */
+    protected $_tableName = NULL;
+
+    /**
      * client id
      *
      * @var string
@@ -44,9 +51,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @todo add those to smtp config?
      */
     protected $_config = array(
-        'prefix'            => 'postfix_',
+        'prefix'            => '',
         'userTable'         => 'users',
-        'forwardTable'      => 'forwards',
+        'forwardTable'      => 'forwardings',
         'encryptionType'    => 'md5',
     );
 
@@ -56,16 +63,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @var array
      */
     protected $_userPropertyNameMapping = array(
-    /*
-        'emailUID'          => 'user_idnr', 
         'emailPassword'     => 'passwd', 
-        'emailMailQuota'    => 'maxmail_size',
-        'emailMailSize'     => 'curmail_size',
-        'emailSieveQuota'   => 'maxsieve_size',
-        'emailSieveSize'    => 'cursieve_size',
         'emailUserId'       => 'userid',
-        'emailLastLogin'    => 'last_login',
-    */
+        'emailAddress'      => 'email',
+        'emailForwardOnly'  => 'forward_only',
     );
     
     /**
@@ -91,7 +92,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     {
         $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
         $this->_config = array_merge($smtpConfig['postfix'], $this->_config);
-        $this->_config['domain'] = $smtpConfig['domain'];
+        $this->_config['domain'] = (isset($smtpConfig['domain'])) ? $smtpConfig['domain'] : '';
+        $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
         
         $this->_db = Zend_Db::factory('Pdo_Mysql', $this->_config);
         
@@ -103,32 +105,46 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      *
      * @param   string         $_userId
      * @return  Tinebase_Model_EmailUser user
+     * 
+     * @todo add forwards
      */
     public function getUserById($_userId) 
     {
-        /*
+        $user = Tinebase_User::getInstance()->getFullUserById($_userId);
+        
         $select = $this->_db->select();
         $select->from($this->_tableName);
         
-        $select->where($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_userId))
+        $select->where($this->_db->quoteIdentifier('userid') . ' = ?', $user->accountLoginName)
                ->where($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
-               ->limit(1);
+               ->order('email');
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
+        $queryResult = $stmt->fetchAll();
                 
         if (!$queryResult) {
             throw new Tinebase_Exception_NotFound('DBmail config for user ' . $_userId . ' not found!');
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
-        $result = $this->_rawDataToRecord($queryResult);
+        // add aliases
+        $aliases = array();
+        foreach ($queryResult as $row) {
+            if ($row['email'] !== $user->accountEmailAddress) {
+                $aliases[] = $row['email'];
+            } else {
+                $result = $this->_rawDataToRecord($row);
+            }
+        }
+        $result->emailAliases = $aliases;
+        
+        // add forwards
+        $result->emailForwards = $this->_getForwards($user->accountEmailAddress);
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         
         return $result;
-        */
     }
 
     /**
@@ -141,27 +157,40 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    /*
+	    if (! $_user->accountEmailAddress) {
+	        throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for adding him or her to postfix table.');
+	    }
+	    
 	    $userId = $_user->accountLoginName;
 	    if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
             $userId .= '@' . $this->_config['domain'];
         }
 	    $_emailUser->emailUserId = $userId;
-	    $_emailUser->emailUID = $this->_convertToInt($_user->getId());
+	    $_emailUser->emailAddress = $_user->accountEmailAddress;
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));  
-        
         $this->_db->insert($this->_tableName, $recordArray);
+        
+        // add aliases
+        foreach ($_emailUser->emailAliases as $aliasAddress) {
+            $alias = clone($_emailUser);
+            $alias->emailAddress = $aliasAddress;
+            
+            $aliasArray = $this->_recordToRawData($alias);
+            $this->_db->insert($this->_tableName, $aliasArray);
+        }
+        // add forwards
+        foreach ($_emailUser->emailForwards as $forwardAddress) {
+            $forwardArray = array(
+                'source'        => $_emailUser->emailAddress,
+                'destination'   => $forwardAddress,
+            );
+            $this->_db->insert($this->_config['prefix'] . $this->_config['forwardTable'], $forwardArray);
+        }
         
         $emailUser = $this->getUserById($_user->getId());
         
-        // create INBOX for new user
-        $this->_createMailbox($emailUser);
-        
         return $emailUser;
-        */
 	}
 	
 	/**
@@ -170,6 +199,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
+     * 
+     * @todo    implement
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
@@ -197,6 +228,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 	 * @param string $_userId
 	 * @param string $_password
 	 * @return Tinebase_Model_EmailUser
+	 * 
+	 * @todo    implement
 	 */
 	public function setPassword($_userId, $_password)
 	{
@@ -219,13 +252,46 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      */
     public function deleteUser($_userId) 
     {
-        /*
+        $user = Tinebase_User::getInstance()->getFullUserById($_userId);
+        
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_userId)),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') . ' = ?', $user->accountLoginName),
             $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
         );
         
         $this->_db->delete($this->_tableName, $where);
-        */
+
+        // delete forwards
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('source') . ' = ?', $user->accountEmailAddress),
+        );
+        
+        $this->_db->delete($this->_config['prefix'] . $this->_config['forwardTable'], $where);
+    }
+    
+    /**
+     * get email forwards
+     * 
+     * @param $_emailAddress
+     * @return array
+     */
+    protected function _getForwards($_emailAddress)
+    {
+        $select = $this->_db->select();
+        $select->from($this->_config['prefix'] . $this->_config['forwardTable'])
+                ->order('destination')
+                ->where($this->_db->quoteIdentifier('source') . ' = ?', $_emailAddress);
+
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+        
+        $result = array();
+        foreach ($queryResult as $forward) {
+            $result[] = $forward['destination'];
+        }
+        
+        return $result;
     }
 }  

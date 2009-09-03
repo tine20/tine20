@@ -58,9 +58,9 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_EmailUser::POSTFIX);
+        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
 
-        //$this->_objects['addedUser'] = $this->_addUser();
+        $this->_objects['addedUser'] = $this->_addUser();
     }
 
     /**
@@ -72,29 +72,30 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // delete email account
-        //$this->_backend->deleteUser(Tinebase_Core::getUser()->getId());
+        $this->_backend->deleteUser(Tinebase_Core::getUser()->getId());
     }
     
     /**
      * try to add an email account
      *
+     * @todo implement
      */
     public function testAddEmailAccount()
     {
-        /*
+        //print_r($this->_objects['addedUser']->toArray());
+        
         $this->assertEquals(array(
-            'emailUID' => abs(crc32(Tinebase_Core::getUser()->getId())),
-            'emailUserId' => Tinebase_Core::getUser()->accountLoginName,
-            'emailPassword' => '',
-            'emailQuota' => 1000000,
-            'emailLastLogin' => '1979-11-03 22:05:58'
+            'emailAddress'      => Tinebase_Core::getUser()->accountEmailAddress,
+            'emailUserId'       => Tinebase_Core::getUser()->accountLoginName,
+            'emailForwardOnly'  => 0,
+            'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
+            'emailForwards'     => array('test@tine20.org', 'unittest@tine20.org'),
         ), $this->_objects['addedUser']->toArray());
-        */
     }
     
     /**
      * try to update an email account
-     * 
+     * @todo implement
      */
     public function testUpdateAccount()
     {
@@ -110,7 +111,7 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to update an email account
-     * 
+     * @todo implement
      */
     public function testSetPassword()
     {
@@ -131,13 +132,12 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
      */
     protected function _addUser()
     {
-        /*
         $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailQuota'    => 1000000
+            'emailForwards'     => array('unittest@tine20.org', 'test@tine20.org'),
+            'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
         ));
         $addedUser = $this->_backend->addUser(Tinebase_Core::getUser(), $emailUser);
         
         return $addedUser;
-        */
     }
 }	

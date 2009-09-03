@@ -45,9 +45,10 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
         'emailUserId'       => array('allowEmpty' => true),
         'emailLastLogin'    => array('allowEmpty' => true),
         'emailPassword'     => array('allowEmpty' => true),
-        'emailForwards'     => array('allowEmpty' => true),
-        'emailForwardOnly'  => array('allowEmpty' => true),
-        'emailAliases'      => array('allowEmpty' => true),
+        'emailForwards'     => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'emailForwardOnly'  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'emailAliases'      => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'emailAddress'      => array('allowEmpty' => true),
     );
     
     /**
