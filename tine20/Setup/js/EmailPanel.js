@@ -253,7 +253,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         width: 300,
                         xtype: 'textfield'
                     },
-                    items: this.getDbConfigFields('dbmail')
+                    items: this.getDbConfigFields('imap', 'dbmail')
                 }]
             }]
         }, {
@@ -313,6 +313,10 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     ['plain',   this.app.i18n._('Plain')]
                 ]
             }, {
+                name: 'smtp_domain',
+                fieldLabel: this.app.i18n._('Domain'),
+                xtype: 'textfield'
+            }, {
                 id: this.smtpBackendIdPrefix + 'CardLayout',
                 layout: 'card',
                 activeItem: this.smtpBackendIdPrefix + 'standard',
@@ -335,7 +339,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         width: 300,
                         xtype: 'textfield'
                     },
-                    items: this.getDbConfigFields('postfix')
+                    items: this.getDbConfigFields('smtp', 'postfix')
                 }]
             }]
         }];
@@ -351,22 +355,23 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     /**
      * get db config fields
      * 
-     * @param {String} type
+     * @param {String} type1 (imap, smtp)
+     * @param {String} type2 (dbmail, postfix, ...)
      * @return {Array}
      */
-    getDbConfigFields: function(type) {
+    getDbConfigFields: function(type1, type2) {
         return [{
-            name: 'imap_' + type + '_host',
-            fieldLabel: Ext.util.Format.capitalize(type) + ' ' + this.app.i18n._('Hostname')
+            name: type1 + '_' + type2 + '_host',
+            fieldLabel: Ext.util.Format.capitalize(type2) + ' ' + this.app.i18n._('Hostname')
         }, {
-            name: 'imap_' + type + '_dbname',
-            fieldLabel: Ext.util.Format.capitalize(type) + ' ' + this.app.i18n._('Database')
+            name: type1 + '_' + type2 + '_dbname',
+            fieldLabel: Ext.util.Format.capitalize(type2) + ' ' + this.app.i18n._('Database')
         }, {
-            name: 'imap_' + type + '_username',
-            fieldLabel: Ext.util.Format.capitalize(type) + ' ' + this.app.i18n._('User')
+            name: type1 + '_' + type2 + '_username',
+            fieldLabel: Ext.util.Format.capitalize(type2) + ' ' + this.app.i18n._('User')
         }, {
-            name: 'imap_' + type + '_password',
-            fieldLabel: Ext.util.Format.capitalize(type) + ' ' + this.app.i18n._('Password'),
+            name: type1 + '_' + type2 + '_password',
+            fieldLabel: Ext.util.Format.capitalize(type2) + ' ' + this.app.i18n._('Password'),
             inputType: 'password'
         }];
     }
