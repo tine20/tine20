@@ -223,7 +223,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var dtStartField = this.getForm().findField('dtstart');
         var dtEndField = this.getForm().findField('dtend');
         dtStartField.setDisabled(isChecked, 'time');
-        dtEndField.setDisabled(isChecked, 'all');
+        dtEndField.setDisabled(isChecked, 'time');
         
         if (isChecked) {
             dtStartField.clearTime();
