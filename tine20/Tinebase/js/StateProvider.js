@@ -20,7 +20,13 @@ Ext.extend(Tine.Tinebase.StateProvider, Ext.state.Provider, {
     
     // private
     clear: function(name){
+        // persistent clear
         Tine.Tinebase.clearState(name);
+        
+        // store back in registry (as needed for popups)
+        var stateInfo = Tine.Tinebase.registry.get('stateInfo');
+        delete stateInfo[name];
+        
         Tine.Tinebase.StateProvider.superclass.clear.call(this, name);
     },
     
@@ -41,7 +47,15 @@ Ext.extend(Tine.Tinebase.StateProvider, Ext.state.Provider, {
             this.clear(name);
             return;
         }
-        Tine.Tinebase.setState(name, this.encodeValue(value));
+        
+        var encodedValue = this.encodeValue(value);
+        // persistent save
+        Tine.Tinebase.setState(name, encodedValue);
+        
+        // store back in registry (as needed for popups)
+        var stateInfo = Tine.Tinebase.registry.get('stateInfo');
+        stateInfo[name] = encodedValue;
+        
         Tine.Tinebase.StateProvider.superclass.set.call(this, name, value);
     }
 });
