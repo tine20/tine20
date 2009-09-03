@@ -201,6 +201,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }    
     
     /**
+     * clears state
+     * 
+     * @param string $name
+     * @return void
+     */
+    public function clearState($name)
+    {
+    	Tinebase_State::getInstance()->clearState($name);
+    }
+    
+    /**
      * retuns all states
      * 
      * @return array of name => value
