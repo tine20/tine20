@@ -9,9 +9,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        add smtp fields to Tinebase_Model_EmailUser
- * @todo        finish implementation
- * @todo        add tests
+ * @todo        check domain handling
+ * @todo        remove verbose debug output
  */
 
 /**
@@ -73,14 +72,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * postfix readonly
      * 
      * @var array
+     * @deprecated ?
      */
     protected $_readOnlyFields = array(
-    /*
-        'emailMailSize',
-        'emailSieveQuota',
-        'emailSieveSize',
-        'emailLastLogin',
-    */
     );
     
     /**
@@ -105,8 +99,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      *
      * @param   string         $_userId
      * @return  Tinebase_Model_EmailUser user
-     * 
-     * @todo add forwards
+     * @throws Tinebase_Exception_NotFound
      */
     public function getUserById($_userId) 
     {
@@ -125,7 +118,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         $queryResult = $stmt->fetchAll();
                 
         if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound('DBmail config for user ' . $_userId . ' not found!');
+            throw new Tinebase_Exception_NotFound('Postfix config for user ' . $_userId . ' not found!');
         }
         
         // add aliases
@@ -153,7 +146,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
-     * 
+     * @throws Tinebase_Exception_UnexpectedValue
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
@@ -168,29 +161,16 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 	    $_emailUser->emailUserId = $userId;
 	    $_emailUser->emailAddress = $_user->accountEmailAddress;
 	    
+	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new postfix user ' . $_emailUser->emailUserId);
+	    
         $recordArray = $this->_recordToRawData($_emailUser);
         $this->_db->insert($this->_tableName, $recordArray);
         
-        // add aliases
-        foreach ($_emailUser->emailAliases as $aliasAddress) {
-            $alias = clone($_emailUser);
-            $alias->emailAddress = $aliasAddress;
-            
-            $aliasArray = $this->_recordToRawData($alias);
-            $this->_db->insert($this->_tableName, $aliasArray);
-        }
-        // add forwards
-        foreach ($_emailUser->emailForwards as $forwardAddress) {
-            $forwardArray = array(
-                'source'        => $_emailUser->emailAddress,
-                'destination'   => $forwardAddress,
-            );
-            $this->_db->insert($this->_config['prefix'] . $this->_config['forwardTable'], $forwardArray);
-        }
+        // add forwards and aliases
+        $this->_setAliases($_emailUser);
+        $this->_setForwards($_emailUser);
         
-        $emailUser = $this->getUserById($_user->getId());
-        
-        return $emailUser;
+        return $this->getUserById($_user->getId());
 	}
 	
 	/**
@@ -199,8 +179,6 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
-     * 
-     * @todo    implement
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
@@ -209,7 +187,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));  
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('user_idnr') . ' = ?', $this->_convertToInt($_user->getId())),
@@ -262,17 +240,73 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         $this->_db->delete($this->_tableName, $where);
 
         // delete forwards
+        $this->_deleteForwards($user->accountEmailAddress);
+    }
+    
+    /**
+     * set email aliases
+     * 
+     * @param Tinebase_Model_EmailUser $_emailUser
+     * @param boolean $_deleteFirst
+     * @return array
+     */
+    protected function _setAliases($_emailUser, $_deleteFirst = FALSE)
+    {
+        if ($_deleteFirst) {
+            $this->_deleteAliases($_emailUser->emailAddress);
+        }
+        
+        foreach ($_emailUser->emailAliases as $aliasAddress) {
+            $alias = clone($_emailUser);
+            $alias->emailAddress = $aliasAddress;
+            
+            $aliasArray = $this->_recordToRawData($alias);
+            $this->_db->insert($this->_tableName, $aliasArray);
+        }
+    }
+    
+    /**
+     * delete aliases
+     * 
+     * @param string $_emailAddress
+     * @return void
+     */
+    protected function _deleteAliases($_emailAddress)
+    {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('source') . ' = ?', $user->accountEmailAddress),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('userid') . ' = ?', $_emailAddress),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' <> ?', $_emailAddress),
         );
         
-        $this->_db->delete($this->_config['prefix'] . $this->_config['forwardTable'], $where);
+        $this->_db->delete($this->_tableName, $where);
+    }
+    
+    /**
+     * set email forwards
+     * 
+     * @param Tinebase_Model_EmailUser $_emailUser
+     * @param boolean $_deleteFirst
+     * @return array
+     */
+    protected function _setForwards($_emailUser, $_deleteFirst = FALSE)
+    {
+        if ($_deleteFirst) {
+            $this->_deleteForwards($_emailUser->emailAddress);
+        }
+        
+        foreach ($_emailUser->emailForwards as $forwardAddress) {
+            $forwardArray = array(
+                'source'        => $_emailUser->emailAddress,
+                'destination'   => $forwardAddress,
+            );
+            $this->_db->insert($this->_config['prefix'] . $this->_config['forwardTable'], $forwardArray);
+        }
     }
     
     /**
      * get email forwards
      * 
-     * @param $_emailAddress
+     * @param string $_emailAddress
      * @return array
      */
     protected function _getForwards($_emailAddress)
@@ -293,5 +327,20 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
         }
         
         return $result;
+    }
+    
+    /**
+     * delete forwards
+     * 
+     * @param string $_emailAddress
+     * @return void
+     */
+    protected function _deleteForwards($_emailAddress)
+    {
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('source') . ' = ?', $_emailAddress),
+        );
+        
+        $this->_db->delete($this->_config['prefix'] . $this->_config['forwardTable'], $where);
     }
 }  
