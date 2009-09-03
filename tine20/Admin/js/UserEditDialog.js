@@ -275,7 +275,7 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 })]]
             }, {
                 title: this.app.i18n._('IMAP'),
-                disabled: ! Tine.Admin.registry.get('manageEmailUser'),
+                disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
                 border: false,
                 frame: true,
                 xtype: 'columnform',
@@ -316,6 +316,41 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Last Login'),
                     name: 'emailLastLogin',
                     columnWidth: .666
+                }]]
+            }, {
+                title: this.app.i18n._('SMTP'),
+                disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                labelAlign: 'top',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '100%',
+                    labelSeparator: '',
+                    columnWidth: .333,
+                    readOnly: true
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n._('Email Username'),
+                    name: 'emailUserId',
+                    columnWidth: .666
+                }], [{
+                    fieldLabel: this.app.i18n._('Aliases'),
+                    name: 'emailAliases',
+                    columnWidth: .666,
+                    readOnly: false
+                }], [{
+                    fieldLabel: this.app.i18n._('Forwards'),
+                    name: 'emailForwards',
+                    columnWidth: .666,
+                    readOnly: false
+                }], [{
+                    fieldLabel: this.app.i18n._('Forward Only'),
+                    name: 'emailForwardOnly',
+                    xtype:'checkbox',
+                    columnWidth: .666,
+                    readOnly: false
                 }]]
             }]
         };

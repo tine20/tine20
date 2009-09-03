@@ -35,7 +35,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * @var bool
      */
-    protected $_manageEmailUser = FALSE;
+    protected $_manageImapEmailUser = FALSE;
+    
+    /**
+     * @var bool
+     */
+    protected $_manageSmtpEmailUser = FALSE;
     
     /**
      * constructs Admin_Frontend_Json
@@ -50,8 +55,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // manage email user settings
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         if (isset($imapConfig['backend']) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
-            $this->_manageEmailUser = TRUE; 
+            $this->_manageImapEmailUser = TRUE; 
         }		
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        if (isset($smtpConfig['backend']) && ucfirst($smtpConfig['backend']) == Tinebase_EmailUser::POSTFIX) {
+            $this->_manageSmtpEmailUser = TRUE; 
+        }
     }
     
     /**
@@ -64,7 +73,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {   
         $registryData = array(
             'manageSAM' => $this->_manageSAM,
-            'manageEmailUser' => $this->_manageEmailUser,
+            'manageImapEmailUser' => $this->_manageImapEmailUser,
+            'manageSmtpEmailUser' => $this->_manageSmtpEmailUser,
         );        
         return $registryData;    
     }

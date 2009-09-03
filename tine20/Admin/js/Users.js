@@ -520,7 +520,10 @@ Tine.Admin.Model.EmailUserArray = [
     { name: 'emailSieveQuota' },
     { name: 'emailSieveSize' },
     { name: 'emailLastLogin', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    { name: 'emailUserId' }
+    { name: 'emailUserId' },
+    { name: 'emailAliases' },
+    { name: 'emailForwards' },
+    { name: 'emailForwardOnly' }
 ];
 
 Tine.Admin.Model.EmailUser = Tine.Tinebase.data.Record.create(Tine.Admin.Model.EmailUserArray, {

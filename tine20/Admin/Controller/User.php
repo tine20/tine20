@@ -10,6 +10,8 @@
  * @version     $Id$
  * 
  * @todo        extend Tinebase_Controller_Record_Abstract
+ * @todo        make smtp email users work
+ * @todo        add 'merge' of email users
  */
 
 /**
@@ -37,14 +39,24 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     /**
      * @var bool
      */
-    protected $_manageEmailUser = FALSE;
+    protected $_manageImapEmailUser = FALSE;
+    
+    /**
+     * @var bool
+     */
+    protected $_manageSmtpEmailUser = FALSE;
     
     /**
      * @var Tinebase_EmailUser_Abstract
      */
-    protected $_emailUserBackend = NULL;
+    protected $_imapUserBackend = NULL;
 
-	/**
+    /**
+     * @var Tinebase_EmailUser_Abstract
+     */
+    protected $_smtpUserBackend = NULL;
+
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -67,10 +79,13 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         // manage email user settings
 		$imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         if (isset($imapConfig['backend']) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
-            $this->_manageEmailUser = TRUE; 
-            if ($this->_manageEmailUser) {
-                $this->_emailUserBackend = Tinebase_EmailUser::getInstance();
-            }
+            $this->_manageImapEmailUser = TRUE; 
+            $this->_imapUserBackend = Tinebase_EmailUser::factory(Tinebase_EmailUser::DBMAIL);
+        }
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        if (isset($smtpConfig['backend']) && ucfirst($smtpConfig['backend']) == Tinebase_EmailUser::POSTFIX) {
+            $this->_manageSmtpEmailUser = TRUE; 
+            $this->_smtpUserBackend = Tinebase_EmailUser::factory(Tinebase_EmailUser::POSTFIX);
         }
     }
 
@@ -140,14 +155,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         // add email user data here
-        if ($this->_manageEmailUser) {
-            try {
-                $user->emailUser = $this->_emailUserBackend->getUserById($_accountId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // no email settings yet
-                $user->emailUser = $this->_emailUserBackend->getNewUser($user);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting new imap user ' . print_r($user->emailUser->toArray(), TRUE));
+        try {
+            if ($this->_manageImapEmailUser) {
+                    $user->emailUser = $this->_imapUserBackend->getUserById($_accountId);
             }
+            if ($this->_manageSmtpEmailUser) {
+                    $user->emailUser = $this->_smtpUserBackend->getUserById($_accountId/*, $user->emailUser*/);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // no email settings yet
+            $user->emailUser = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getNewUser($user) : $this->_smtpUserBackend->getNewUser($user);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting new imap/smtp user ' . print_r($user->emailUser->toArray(), TRUE));
         }
         
         return $user;
@@ -204,8 +222,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $samResult = $this->_samBackend->setPassword($_account, $_password, TRUE, $_mustChange);
         }
         
-        if ($this->_manageEmailUser) {
-            $this->_emailUserBackend->setPassword($_account->getId(), $_password);
+        if ($this->_manageImapEmailUser) {
+            $this->_imapUserBackend->setPassword($_account->getId(), $_password);
         }
         
         // fire change password event
@@ -243,11 +261,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         // update email user data here
-        if ($this->_manageEmailUser) {
+        if ($this->_manageImapEmailUser) {
             if ($_account->emailUser->emailUID) {
-                $account->emailUser = $this->_emailUserBackend->updateUser($_account, $_account->emailUser);
+                $account->emailUser = $this->_imapUserBackend->updateUser($_account, $_account->emailUser);
             } else {
-                $account->emailUser = $this->_emailUserBackend->addUser($_account, $_account->emailUser);
+                $account->emailUser = $this->_imapUserBackend->addUser($_account, $_account->emailUser);
             }
         }
         
@@ -286,8 +304,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         // create email user data here
-        if ($this->_manageEmailUser) {
-            $account->emailUser = $this->_emailUserBackend->addUser($_account, $_account->emailUser);
+        if ($this->_manageImapEmailUser) {
+            $account->emailUser = $this->_imapUserBackend->addUser($_account, $_account->emailUser);
         }
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
