@@ -9,6 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        think about splitting email user model in two (imap + smtp)
  * @todo        add Ldap support?
  */
 
@@ -165,6 +166,35 @@ class Tinebase_EmailUser
 
         if (empty($result)) {
             throw new Tinebase_Exception_NotFound("Config for type $_configType not found.");
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * merge two email users
+     * 
+     * @param Tinebase_Model_EmailUser $_emailUserImap
+     * @param Tinebase_Model_EmailUser $_emailUserSmtp
+     * @return Tinebase_Model_EmailUser|NULL
+     */
+    public static function merge($_emailUserImap, $_emailUserSmtp)
+    {
+        $result = NULL;
+        
+        if ($_emailUserImap !== NULL && $_emailUserSmtp !== NULL) {
+            // merge
+            $_emailUserImap->emailAliases = $_emailUserSmtp->emailAliases;
+            $_emailUserImap->emailForwards = $_emailUserSmtp->emailForwards;
+            $_emailUserImap->emailForwardOnly = $_emailUserSmtp->emailForwardOnly;
+            $_emailUserImap->emailAddress = $_emailUserSmtp->emailAddress;
+            $result = $_emailUserImap;
+            
+        } else if ($_emailUserImap !== NULL) {
+            $result =  $_emailUserImap;
+            
+        } else if ($_emailUserSmtp !== NULL) {
+            $result =  $_emailUserSmtp;
         }
         
         return $result;
