@@ -112,7 +112,7 @@ class Tinebase_User
     public static function getInstance() 
     {
         $backendType = self::getConfiguredBackend();
-     
+		
         if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' accounts backend: ' . $backendType);
@@ -202,7 +202,7 @@ class Tinebase_User
                 self::setBackendConfiguration($value, $key);
             }
         } else {
-            if (! is_array($defaultValues) || ! array_key_exists($_key, $defaultValues)) {
+            if ( ! array_key_exists($_key, $defaultValues)) {
                 throw new Tinebase_Exception_InvalidArgument("Cannot set backend configuration option '$_key' for accounts storage " . self::getConfiguredBackend());
             }
             self::$_backendConfiguration[$_key] = $_value;
