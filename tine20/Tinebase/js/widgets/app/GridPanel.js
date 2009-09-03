@@ -122,7 +122,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @type Bool
      * @property updateOnSelectionChange
      */
-    updateOnSelectionChange: false,
+    updateOnSelectionChange: true,
 
     /**
      * @type Ext.Toolbar
