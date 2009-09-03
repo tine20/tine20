@@ -47,6 +47,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     attendeeStore: null,
     
+    stateful: true,
+    stateId: 'cal-attendeegridpanel',
+    //stateEvents: ['sortchange', ],
+    //applyState: function(state) {
+    //    console.log(state);
+    //},
+    
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Calendar');
         
@@ -57,7 +64,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
         
         this.store = new Ext.data.SimpleStore({
-            fields: Tine.Calendar.Model.AttenderArray,
+            fields: Tine.Calendar.Model.Attender.getFieldDefinitions(),
             sortInfo: {field: 'user_id', direction: 'ASC'},
             listeners: {
                 scope: this,
@@ -83,7 +90,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             hidden: true,
             header: this.app.i18n._('Role'),
             renderer: this.renderAttenderRole.createDelegate(this)
-        }, {
+        },/* {
             id: 'quantity',
             dataIndex: 'quantity',
             width: 40,
@@ -92,7 +99,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: '&#160;',
             tooltip: this.app.i18n._('Quantity'),
             renderer: this.renderAttenderQuantity.createDelegate(this)
-        }, {
+        },*/ {
             id: 'displaycontainer_id',
             dataIndex: 'displaycontainer_id',
             width: 200,
