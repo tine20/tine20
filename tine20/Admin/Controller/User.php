@@ -9,8 +9,8 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        catch error (and show alert) if postfix email already exists
  * @todo        extend Tinebase_Controller_Record_Abstract
- * @todo        make email user settings work
  */
 
 /**
@@ -215,7 +215,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
 
         if ($this->_manageSmtpEmailUser) {
-            $this->_imapUserBackend->setPassword($_account->getId(), $_password);
+            $this->_smtpUserBackend->setPassword($_account->getId(), $_password);
         }
         
         // fire change password event
@@ -346,14 +346,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         try {
             $imapUser = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getUserById($_user->getId()) : NULL;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No imap email user settings yet');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No imap email user settings yet');
             $imapUser = NULL;
         }            
         
         try {
             $smtpUser = ($this->_manageSmtpEmailUser) ? $this->_smtpUserBackend->getUserById($_user->getId()) : NULL;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No smtp email user settings yet');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No smtp email user settings yet');
             $smtpUser = NULL;
         }
             
@@ -394,6 +394,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     protected function _updateEmailUser($_user)
     {
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->emailUser->toArray(), true));
+        
         // update email user data here
         if ($this->_manageImapEmailUser) {
             if ($_user->emailUser->emailUID) {
