@@ -102,6 +102,9 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
     {
         $config = Setup_Controller::getInstance()->getConfigData();
         if (!empty($config['accounts'])) {
+			if (empty($config['accounts']['backend'])) {
+				$config['accounts']['backend'] = 'Sql';
+			}
             $backendType = ucfirst($config['accounts']['backend']);
             Tinebase_User::setBackendType($backendType);
             
