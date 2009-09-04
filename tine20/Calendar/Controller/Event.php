@@ -164,6 +164,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function getFreeBusyInfo($_from, $_until, $_attendee, $_ignoreUIDs = array())
     {
+        // map groupmembers to users
+        $attendee = clone $_attendee;
+        $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
+        $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
+        
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'period',   'operator' => 'within', 'value' => array('from' => $_from, 'until' => $_until)),
             array('field' => 'attender', 'operator' => 'in',     'value' => $_attendee)
@@ -174,7 +179,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // create a typemap
         $typeMap = array();
-        foreach($_attendee as $attender) {
+        foreach($attendee as $attender) {
             if (! array_key_exists($attender['user_type'], $typeMap)) {
                 $typeMap[$attender['user_type']] = array();
             }
@@ -194,6 +199,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         	    continue;
         	}
         	
+        	// map groupmembers to users
+        	$groupmembers = $event->attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
+            $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
+        
             foreach ($event->attendee as $attender) {
             	// skip declined events
                 if ($attender->status == Calendar_Model_Attender::STATUS_DECLINED) {
