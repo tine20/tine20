@@ -51,11 +51,28 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $adapter = $_backend->getAdapter();
         
-        foreach ($this->_value as $attender) {
-        	$gs->orWhere(
-        	    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_type') . ' = ?', $attender['user_type']) . ' AND ' .
-                $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_id') .   ' = ?', $attender['user_id'])
-        	);
+        foreach ($this->_value as $attenderValue) {
+            if (in_array($attenderValue['user_type'], array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+                $attendee = array(
+                    array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                        'user_id'   => $attenderValue['user_id']
+                    ),
+                    array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                        'user_id'   => $attenderValue['user_id']
+                    )
+                );
+            } else {
+                $attendee = array($attenderValue);
+            }
+            
+            foreach ($attendee as $attender) {
+            	$gs->orWhere(
+            	    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_type') . ' = ?', $attender['user_type']) . ' AND ' .
+                    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_id') .   ' = ?', $attender['user_id'])
+            	);
+            }
         }
         $gs->appendWhere(Zend_Db_Select::SQL_OR);
     }
