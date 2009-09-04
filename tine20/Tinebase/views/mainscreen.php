@@ -23,7 +23,6 @@
 
     <!-- EXT JS -->
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />
-    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-blue.css" />
     
     <!--  http://extjs.com/forum/showthread.php?t=65694
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /> --><?php /*
@@ -71,9 +70,9 @@
                 break;
         }
         
-        if (Tinebase_Core::getConfig()->customMainscreenHeaders) {echo "\n" . Tinebase_Core::getConfig()->customMainscreenHeaders;} ?>
+        if (Tinebase_Core::getConfig()->customMainscreenHeaders) {echo "\n" . Tinebase_Core::getConfig()->customMainscreenHeaders;}?>
         
-		 <!--  link rel="stylesheet" type="text/css" href="styles/tine20.css" / -->
+        <link rel="stylesheet" type="text/css" href="styles/tine20.css" />
 </head>
 <body>
     <noscript>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></noscript>
