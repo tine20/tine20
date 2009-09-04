@@ -107,7 +107,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 	        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 	        
 	        // we need to resolve groupmembers before free/busy checking
-	        $this->_resolveAttendeeGroupMembers($_record->attendee);
+	        Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
 	        
 	        if ($_checkBusyConficts) {
 		        // ensure that all attendee are free
@@ -264,7 +264,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 	            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "updating event: {$_record->id} ");
 		        
 	            // we need to resolve groupmembers before free/busy checking
-	            $this->_resolveAttendeeGroupMembers($_record->attendee);
+	            Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
 		        
 	            if ($_checkBusyConficts) {
 	                // ensure that all attendee are free
@@ -725,47 +725,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         return $updatedAttender;
-    }
-    
-    /**
-     * resolves group members and adds/removes them if nesesary
-     * 
-     * NOTE: The role to assign to a new group member is not always clear, as multiple groups
-     *       might be the 'source' of the group member. To deal with this, we take the role of
-     *       the first group when we add new group members
-     *       
-     * @todo  do we need handling for users added as members and coming from a group?
-     *       
-     * @param Tinebase_Record_RecordSet $_attendee
-     * @return void
-     */
-    protected function _resolveAttendeeGroupMembers($_attendee)
-    {
-        $groupAttendee = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
-        
-        $allCurrContacts = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
-        $allCurrContactIds = $allCurrContacts->user_id;
-        $allGroupContactIds = array();
-        foreach ($groupAttendee as $groupAttender) {
-            $groupAttenderMemberIds = Tinebase_Group::getInstance()->getGroupMembers($groupAttender->user_id);
-            $groupAttenderContactIds = Tinebase_User::getInstance()->getMultiple($groupAttenderMemberIds)->contact_id;
-            $allGroupContactIds = array_merge($allGroupContactIds, $groupAttenderContactIds);
-            
-            $toAdd = array_diff($groupAttenderContactIds, $allCurrContactIds);
-            foreach($toAdd as $userId) {
-                $_attendee->addRecord(new Calendar_Model_Attender(array(
-                    'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
-                    'user_id'   => $userId,
-                    'role'      => $groupAttender->role
-                )));
-            }
-        }
-        
-        $toDel = array_diff($allCurrContactIds, $allGroupContactIds);
-        foreach ($toDel as $idx => $contactId) {
-            $attender = $allCurrContacts->find('user_id', $contactId);
-            $_attendee->removeRecord($attender);
-        }
     }
     
     /**

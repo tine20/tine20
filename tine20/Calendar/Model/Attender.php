@@ -264,6 +264,61 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     }
     
     /**
+     * resolves group members and adds/removes them if nesesary
+     * 
+     * NOTE: If a user is listed as user and as groupmember, we supress the groupmember
+     * 
+     * NOTE: The role to assign to a new group member is not always clear, as multiple groups
+     *       might be the 'source' of the group member. To deal with this, we take the role of
+     *       the first group when we add new group members
+     *       
+     * @param Tinebase_Record_RecordSet $_attendee
+     * @return void
+     */
+    public static function resolveGroupMembers($_attendee)
+    {
+        if (! $_attendee instanceof Tinebase_Record_RecordSet) {
+            return;
+        }
+        
+        $groupAttendee = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
+        
+        $allCurrGroupMembers = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
+        $allCurrGroupMembersContactIds = $allCurrGroupMembers->user_id;
+        
+        $allGroupMembersContactIds = array();
+        foreach ($groupAttendee as $groupAttender) {
+            $groupAttenderMemberIds = Tinebase_Group::getInstance()->getGroupMembers($groupAttender->user_id);
+            $groupAttenderContactIds = Tinebase_User::getInstance()->getMultiple($groupAttenderMemberIds)->contact_id;
+            $allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
+            
+            $toAdd = array_diff($groupAttenderContactIds, $allCurrGroupMembersContactIds);
+            foreach($toAdd as $userId) {
+                $_attendee->addRecord(new Calendar_Model_Attender(array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                    'user_id'   => $userId,
+                    'role'      => $groupAttender->role
+                )));
+            }
+        }
+        
+        $toDel = array_diff($allCurrGroupMembersContactIds, $allGroupMembersContactIds);
+        foreach ($toDel as $idx => $contactId) {
+            $attender = $allCurrGroupMembers->find('user_id', $contactId);
+            $_attendee->removeRecord($attender);
+        }
+        
+        // calculate double members (groupmember + user)
+        $groupmembers = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
+        $users        = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_USER);
+        $doublicates = array_intersect($users->user_id, $groupmembers->user_id);
+        foreach ($doublicates as $user_id) {
+            $attender = $groupmembers->find('user_id', $user_id);
+            $_attendee->removeRecord($attender);
+        }
+    }
+    
+    /**
      * resolves given attendee for json representation
      *
      * @param array|Tinebase_Record_RecordSet $_attendee 
