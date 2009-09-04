@@ -79,6 +79,17 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * clone records
+     */
+    public function __clone()
+    {
+        foreach ($this->_listOfRecords as $key => $record) {
+            $this->_listOfRecords[$key] = clone $record;
+        }
+        $this->_buildIndices();
+    }
+    
+    /**
      * returns name of record class this recordSet contains
      * 
      * @returns string
