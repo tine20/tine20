@@ -20,6 +20,42 @@
  * 
  * @package Tinebase
  * @subpackage User
+ * 
+ * example postfix db schema:
+ * 
+--
+-- Database: `postfix`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forwardings`
+--
+
+CREATE TABLE IF NOT EXISTS `forwardings` (
+  `source` varchar(80) NOT NULL,
+  `destination` text NOT NULL,
+  KEY `source` (`source`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `email` varchar(80) NOT NULL,
+  `passwd` varchar(34) default NULL,
+  `quota` int(10) default '10485760',
+  `userid` varchar(100) NOT NULL,
+  `encryption_type` varchar(20) NOT NULL default 'md5',
+  `client_idnr` bigint(20) NOT NULL,
+  `forward_only` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`email`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
  */
 class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
 {
