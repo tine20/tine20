@@ -212,6 +212,28 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentConflictEvent = $this->_controller->create($conflictEvent, FALSE);
     }
     
+    public function testCreateEventWithConfictFromGroupMember()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $persistentEvent = $this->_controller->create($event);
+        
+        $conflictEvent = $this->_getEvent();
+        $conflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+        ));
+        
+        try {
+            $this->_controller->create($conflictEvent, TRUE);
+            $this->assertTrue(false, 'Failed to detect conflict from groupmember');
+        } catch (Calendar_Exception_AttendeeBusy $busyException) {
+            $fbData = $busyException->toArray();
+            $this->assertGreaterThanOrEqual(2, count($fbData['freebusyinfo']));
+        }
+        
+    }
+    
     public function testAttendeeAuthKeyPreserv()
     {
         $event = $this->_getEvent();
@@ -587,7 +609,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             ),
             array(
-                'user_id'   => Tinebase_Core::getUser()->accountPrimaryGroup,
+                'user_id'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
                 'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             )
