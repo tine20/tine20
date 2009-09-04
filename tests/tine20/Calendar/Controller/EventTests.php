@@ -92,6 +92,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_personasContacts['pwulf']->getId()
+        ));
         
         $persistendEvent = $this->_controller->create($event);
         $this->assertEquals(2, count($persistendEvent->attendee));
@@ -100,7 +104,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent = $this->_controller->update($persistendEvent);
         $this->assertEquals(1, count($updatedEvent->attendee));
         
-        sleep(1);
         $updatedEvent->attendee->getFirstRecord()->role = Calendar_Model_Attender::ROLE_OPTIONAL;
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
         $this->assertEquals(1, count($secondUpdatedEvent->attendee));
@@ -331,8 +334,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $persitentEvent = $this->_controller->create($event);
         $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
-        // all members + group + user as attender
-        $this->assertEquals(count($defaultUserGroupMembers) + 2, count($persitentEvent->attendee));
+        // user as attender + group + all members - supressed user 
+        $this->assertEquals(1 + 1 + count($defaultUserGroupMembers) -1, count($persitentEvent->attendee));
         
         $groupAttender = $persitentEvent->attendee->find('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
         $persitentEvent->attendee->removeRecord($groupAttender);
@@ -580,6 +583,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_id'   => Tinebase_Core::getUser()->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             ),
             array(
