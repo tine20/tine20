@@ -59,7 +59,7 @@
 /*** container select widget
  * @todo move to container
  */
-.tw-containerselect-trigger2 .tw-containerselect-trigger2-bg {
+span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     background:url(../../images/trigger2-bg.gif) repeat-x;
     width: 150px;
     cursor:pointer;
