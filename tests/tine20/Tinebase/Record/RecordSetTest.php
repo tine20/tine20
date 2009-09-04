@@ -61,6 +61,37 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown ()
     {}
+    
+    public function testCloneRecordSet()
+    {
+        $obj = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $obj->addRecord(new Tinebase_Record_DummyRecord(array('date_single' => Zend_Date::now()), true));
+        
+        $clone = clone $obj;
+        
+        $this->assertFalse($obj->getFirstRecord() === $clone->getFirstRecord(), 'recordSet is not cloned');
+        $this->assertFalse($obj->getFirstRecord()->date_single === $clone->getFirstRecord()->date_single, 'member var of record is not cloned');
+    }
+    
+    public function testFind()
+    {
+        $toFind = new Tinebase_Record_DummyRecord(array('string' => 'toFind'), true);
+        $this->object->addRecord($toFind);
+        
+        $found = $this->object->find('string', 'toFind');
+        $this->assertTrue($toFind === $found);
+    }
+    
+    public function testRemoveRecord()
+    {
+        $idLess1 = $this->object->find('string', 'idLess1');
+        $this->object->removeRecord($idLess1);
+        
+        foreach($this->object as $record) {
+            $this->assertFalse($record === $idLess1, 'idLess1 is still in set');
+        }
+    }
+    
     /**
      * Tests exception if wrong record type given in the initial data array
      */
@@ -109,6 +140,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         }
         $this->fail('An expected exception has not been raised.');
     }
+    
     /**
      * checkes if isValid of of member records is called
      */
