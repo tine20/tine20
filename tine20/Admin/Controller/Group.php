@@ -134,6 +134,10 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $samResult = $this->_samBackend->addGroup($group);
         }
         
+        $event = new Admin_Event_CreateGroup();
+        $event->group = $group;
+        Tinebase_Event::fireEvent($event);
+        
         return $group;            
     }  
 
@@ -166,6 +170,10 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $samResult = $this->_samBackend->updateGroup($group);
         }
         
+        $event = new Admin_Event_UpdateGroup();
+        $event->group = $group;
+        Tinebase_Event::fireEvent($event);
+        
         return $group;            
     }
     
@@ -180,6 +188,11 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         Tinebase_Group::getInstance()->addGroupMember($_groupId, $_userId);
+        
+        $event = new Admin_Event_AddGroupMember();
+        $event->groupId = $_groupId;
+        $event->userId  = $_userId;
+        Tinebase_Event::fireEvent($event);
     }
     
     /**
@@ -193,6 +206,12 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         Tinebase_Group::getInstance()->removeGroupMember($_groupId, $_userId);
+        
+        $event = new Admin_Event_RemoveGroupMember();
+        $event->groupId = $_groupId;
+        $event->userId  = $_userId;
+        Tinebase_Event::fireEvent($event);
+        
     }
     
     /**
@@ -219,13 +238,20 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             }
         }
         
-        if (! empty($_groupIds)) {
-            Tinebase_Group::getInstance()->deleteGroups($_groupIds);
+        if (empty($_groupIds)) {
+            return;
         }
+        
+        Tinebase_Group::getInstance()->deleteGroups($_groupIds);
         
         if ($this->_manageSAM) {
             $this->_samBackend->deleteGroups($_groupIds);
         }
+        
+        $event = new Admin_Event_DeleteGroup();
+        $event->groupIds = $_groupIds;
+        Tinebase_Event::fireEvent($event);
+        
     }    
     
     /**
