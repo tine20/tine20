@@ -341,7 +341,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             // send notifications
             if ($this->_sendNotifications && $record->has('created_by') && count($currentMods) > 0) {
-                $this->sendNotifications($record, $this->_currentAccount, 'changed', $currentMods);
+                $this->sendNotifications($record, $this->_currentAccount, 'changed', $currentRecord);
             }        
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);

@@ -196,10 +196,10 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @param Crm_Model_Lead            $_lead
      * @param Tinebase_Model_FullUser   $_updater
      * @param string                    $_action   {created|changed}
-     * @param Tinebase_Record_RecordSet $_updates
+     * @param Crm_Model_Lead            $_oldLead
      * @return void
      */
-    protected function sendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_updates=array())
+    protected function sendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_oldLead = NULL)
     {
         $view = new Zend_View();
         $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
@@ -212,7 +212,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $view->leadType = Crm_Controller_LeadTypes::getInstance()->getLeadType($_lead->leadtype_id);
         $view->leadSource = Crm_Controller_LeadSources::getInstance()->getLeadSource($_lead->leadsource_id);
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
-        $view->updates = $_updates;
+        //$view->updates = $_updates;
         
         if($_lead->start instanceof Zend_Date) {
             $view->start = $_lead->start->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale'));
