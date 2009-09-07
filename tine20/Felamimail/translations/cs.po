@@ -22,7 +22,7 @@ msgid "Create and edit email accounts"
 msgstr ""
 
 #: Controller/Message.php:1030 js/FelamimailGridDetailsPanel.js:122
-#: js/FelamimailGridPanel.js:251 js/FelamimailGridPanel.js:303
+#: js/FelamimailGridPanel.js:254 js/FelamimailGridPanel.js:306
 #: js/FelamimailMessageEditDialog.js:258
 msgid "Subject"
 msgstr "Předmět"
@@ -191,8 +191,8 @@ msgstr "Připojit přílohu"
 msgid "Remove Attachment"
 msgstr "Odebrat přílohu"
 
-#: js/FelamimailGridDetailsPanel.js:123 js/FelamimailGridPanel.js:252
-#: js/FelamimailGridPanel.js:309 js/FelamimailMessageEditDialog.js:226
+#: js/FelamimailGridDetailsPanel.js:123 js/FelamimailGridPanel.js:255
+#: js/FelamimailGridPanel.js:312 js/FelamimailMessageEditDialog.js:226
 msgid "From"
 msgstr "Od"
 
@@ -212,113 +212,113 @@ msgstr "Zobrazit nebo skrýt informace ze záhlaví"
 msgid "Attachments"
 msgstr "Přílohy"
 
-#: js/FelamimailGridPanel.js:126
+#: js/FelamimailGridPanel.js:129
 msgid "Write"
 msgstr "Napsat"
 
-#: js/FelamimailGridPanel.js:135
+#: js/FelamimailGridPanel.js:138
 msgid "Reply"
 msgstr "Odpovědět"
 
-#: js/FelamimailGridPanel.js:145
+#: js/FelamimailGridPanel.js:148
 msgid "Reply To All"
 msgstr "Odpovědět všem"
 
-#: js/FelamimailGridPanel.js:155
+#: js/FelamimailGridPanel.js:158
 msgid "Forward"
 msgstr "Přeposlat"
 
-#: js/FelamimailGridPanel.js:164
+#: js/FelamimailGridPanel.js:167
 msgid "Toggle Flag"
 msgstr "Překlopit příznak"
 
-#: js/FelamimailGridPanel.js:175
+#: js/FelamimailGridPanel.js:178
 #, fuzzy
 msgid "Mark read/unread"
 msgstr "Označit jako nepřečtené"
 
-#: js/FelamimailGridPanel.js:187 js/FelamimailGridPanel.js:188
-#: js/FelamimailGridPanel.js:190
+#: js/FelamimailGridPanel.js:190 js/FelamimailGridPanel.js:191
+#: js/FelamimailGridPanel.js:193
 msgid "Delete"
 msgstr "Smazat"
 
-#: js/FelamimailGridPanel.js:199
+#: js/FelamimailGridPanel.js:202
 msgid "Add Account"
 msgstr "Přidat účet"
 
-#: js/FelamimailGridPanel.js:253 js/FelamimailGridPanel.js:315
+#: js/FelamimailGridPanel.js:256 js/FelamimailGridPanel.js:318
 msgid "To"
 msgstr "Komu"
 
-#: js/FelamimailGridPanel.js:254
+#: js/FelamimailGridPanel.js:257
 msgid "Cc"
 msgstr "Kopie"
 
-#: js/FelamimailGridPanel.js:255
+#: js/FelamimailGridPanel.js:258
 msgid "Bcc"
 msgstr "Skrytá kopie"
 
-#: js/FelamimailGridPanel.js:256 js/FelamimailGridPanel.js:330
+#: js/FelamimailGridPanel.js:259 js/FelamimailGridPanel.js:333
 msgid "Received"
 msgstr "Přijaté"
 
-#: js/FelamimailGridPanel.js:284
+#: js/FelamimailGridPanel.js:287
 msgid "Id"
 msgstr "Id"
 
-#: js/FelamimailGridPanel.js:322
+#: js/FelamimailGridPanel.js:325
 msgid "Sent"
 msgstr "Odeslané"
 
-#: js/FelamimailGridPanel.js:337
+#: js/FelamimailGridPanel.js:340
 msgid "Size"
 msgstr "Velikost"
 
-#: js/FelamimailGridPanel.js:379
+#: js/FelamimailGridPanel.js:382
 msgid "Answered"
 msgstr "Odpovězené"
 
-#: js/FelamimailGridPanel.js:382
+#: js/FelamimailGridPanel.js:385
 msgid "Forwarded"
 msgstr "Přeposlané"
 
-#: js/FelamimailGridPanel.js:385
+#: js/FelamimailGridPanel.js:388
 msgid "Recent"
 msgstr "Nedávné"
 
-#: js/FelamimailGridPanel.js:478
+#: js/FelamimailGridPanel.js:481
 msgid "Error"
 msgstr "Chyba"
 
-#: js/FelamimailGridPanel.js:478
+#: js/FelamimailGridPanel.js:481
 msgid "No Account configured"
 msgstr "Žádný účet není nakonfigurován"
 
-#: js/FelamimailGridPanel.js:524
+#: js/FelamimailGridPanel.js:527
 msgid "wrote"
 msgstr "napsal(a)"
 
-#: js/FelamimailGridPanel.js:526
+#: js/FelamimailGridPanel.js:529
 msgid "Re: "
 msgstr "Re:"
 
-#: js/FelamimailGridPanel.js:535
+#: js/FelamimailGridPanel.js:536
 msgid "Original Message"
 msgstr "Původní zpráva"
 
-#: js/FelamimailGridPanel.js:543
+#: js/FelamimailGridPanel.js:544
 msgid "Original message"
 msgstr "Původní zpráva"
 
-#: js/FelamimailGridPanel.js:547
+#: js/FelamimailGridPanel.js:548
 msgid "Fwd: "
 msgstr "Fwd:"
 
-#: js/FelamimailGridPanel.js:664 js/FelamimailMessageEditDialog.js:139
+#: js/FelamimailGridPanel.js:665 js/FelamimailMessageEditDialog.js:139
 msgid "Failed"
 msgstr "Nezdařilo se"
 
-#: js/FelamimailGridPanel.js:665
+#: js/FelamimailGridPanel.js:666
 msgid "Some error occured while trying to update the messages."
 msgstr "Při aktualizaci zpráv došlo k chybě."
 
@@ -346,15 +346,15 @@ msgstr "Příjemci"
 msgid "Save contact note"
 msgstr ""
 
-#: js/FelamimailRecipientGrid.js:123 js/FelamimailRecipientGrid.js:144
+#: js/FelamimailRecipientGrid.js:130 js/FelamimailRecipientGrid.js:151
 msgid "To:"
 msgstr "Komu:"
 
-#: js/FelamimailRecipientGrid.js:126 js/FelamimailRecipientGrid.js:145
+#: js/FelamimailRecipientGrid.js:133 js/FelamimailRecipientGrid.js:152
 msgid "Cc:"
 msgstr "Kopie:"
 
-#: js/FelamimailRecipientGrid.js:129 js/FelamimailRecipientGrid.js:146
+#: js/FelamimailRecipientGrid.js:136 js/FelamimailRecipientGrid.js:153
 msgid "Bcc:"
 msgstr "Skrytá kopie:"
 
@@ -428,11 +428,11 @@ msgstr "Celkem"
 msgid "Cache"
 msgstr "Cache"
 
-#: js/FelamimailTreePanel.js:713
+#: js/FelamimailTreePanel.js:716
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP přihlášovací údaje pro {0}"
 
-#: js/FelamimailTreePanel.js:716
+#: js/FelamimailTreePanel.js:719
 msgid "Credentials"
 msgstr "Přihlašovací údaje"
 

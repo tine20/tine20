@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-13 19:02+0100\n"
+"PO-Revision-Date: 2009-09-05 11:10+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -85,7 +85,7 @@ msgstr "czas"
 #: js/MyPhoneEditDialog.js:428
 #: js/MyPhoneEditDialog.js:899
 msgid "redirect_number"
-msgstr "Numer dla przekierowania"
+msgstr "Przekierowanie na numer"
 
 #: js/MyPhoneEditDialog.js:432
 #: js/MyPhoneEditDialog.js:911
@@ -356,11 +356,11 @@ msgstr "Połączenie wychodzące"
 
 #: js/Phone.js:515
 msgid "unknown number"
-msgstr "Nieznany numer"
+msgstr "nieznany numer"
 
 #: js/Phone.js:526
 msgid "enter searchfilter"
-msgstr "Wprowadź szukaną frazę"
+msgstr "wpisz szukaną frazę"
 
 #: js/Phone.js:540
 msgid "Search:"
@@ -413,7 +413,7 @@ msgstr "Czas połączenia"
 
 #: js/Phone.js:655
 msgid "Ringing"
-msgstr "Dzwonienie"
+msgstr "Dzwoni"
 
 #: js/Phone.js:656
 msgid "Call ID"

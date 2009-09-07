@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-22 20:17+0100\n"
+"PO-Revision-Date: 2009-09-05 14:25+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgid "Not billable"
 msgstr "Nie gotowe do przeliczenia"
 
 #: Export/Ods.php:141 Export/Ods.php:212 Export/Ods.php:264
-#: js/TimesheetEditDialog.js:184 js/TimesheetGridPanel.js:48
+#: js/TimesheetEditDialog.js:189 js/TimesheetGridPanel.js:48
 #: js/TimesheetGridPanel.js:188 js/TimesheetGridPanel.js:254
 msgid "Billable"
 msgstr "Gotowe do przeliczenia"
@@ -43,13 +43,13 @@ msgstr "Gotowe do przeliczenia"
 msgid "Total"
 msgstr "Ogółem"
 
-#: Export/Ods.php:176 js/TimesheetEditDialog.js:146
+#: Export/Ods.php:176 js/TimesheetEditDialog.js:151
 #: js/TimesheetGridPanel.js:186 js/TimesheetGridPanel.js:208
 msgid "Date"
 msgstr "Data"
 
 #: Export/Ods.php:181 Export/Ods.php:242 js/TimeaccountEditDialog.js:156
-#: js/TimeaccountGridPanel.js:54 js/TimesheetEditDialog.js:168
+#: js/TimeaccountGridPanel.js:54 js/TimesheetEditDialog.js:173
 #: js/TimesheetGridPanel.js:187 js/TimesheetGridPanel.js:244
 #: js/TimesheetGridPanel.js:391
 msgid "Description"
@@ -69,12 +69,12 @@ msgstr "Konto godzin"
 msgid "Staff Member"
 msgstr "Współpracownicy"
 
-#: Export/Ods.php:205 js/TimesheetEditDialog.js:141
+#: Export/Ods.php:205 js/TimesheetEditDialog.js:146
 #: js/TimesheetGridPanel.js:283
 msgid "Duration"
 msgstr "Czas przeliczania"
 
-#: Export/Ods.php:217 js/TimesheetEditDialog.js:191
+#: Export/Ods.php:217 js/TimesheetEditDialog.js:196
 #: js/TimesheetGridPanel.js:53 js/TimesheetGridPanel.js:189
 #: js/TimesheetGridPanel.js:262
 msgid "Cleared"
@@ -104,7 +104,7 @@ msgid "Status"
 msgstr "Status"
 
 #: Export/Ods.php:269 js/TimeaccountEditDialog.js:134
-#: js/TimesheetEditDialog.js:202
+#: js/TimesheetEditDialog.js:207
 msgid "Cleared In"
 msgstr "Przeliczone w"
 
@@ -120,36 +120,36 @@ msgstr "{0}"
 msgid "Not a valid time"
 msgstr "Nieprawidłowy czas"
 
-#: js/Models.js:46 js/TimesheetEditDialog.js:114 js/TimesheetGridPanel.js:180
+#: js/Models.js:46 js/TimesheetEditDialog.js:119 js/TimesheetGridPanel.js:180
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "kartę godzin"
 msgstr[1] "karty godzin"
-msgstr[2] "kart godzin"
+msgstr[2] "karty godzin"
 
 #: js/Models.js:50
 msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] "lista kart godzin"
 msgstr[1] "listy kart godzin"
-msgstr[2] "list kart godzin"
+msgstr[2] "listy kart godzin"
 
 #: js/Models.js:107 js/TimeaccountEditDialog.js:69
 #: js/TimeaccountGridPanel.js:53 js/TimeaccountSelect.js:166
-#: js/TimesheetEditDialog.js:131 js/TimesheetGridPanel.js:182
+#: js/TimesheetEditDialog.js:136 js/TimesheetGridPanel.js:182
 #: js/TimesheetGridPanel.js:183 js/TimesheetGridPanel.js:223
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "konto godzin"
 msgstr[1] "konta godzin"
-msgstr[2] "kont godzin"
+msgstr[2] "konta godzin"
 
 #: js/Models.js:111
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "lista kont godzin"
 msgstr[1] "listy kont godzin"
-msgstr[2] "list kont godzin"
+msgstr[2] "listy kont godzin"
 
 #: js/TimeaccountEditDialog.js:99
 msgid "Unit"
@@ -190,7 +190,7 @@ msgstr "przelicz"
 msgid "billed"
 msgstr "przeliczone"
 
-#: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:201
+#: js/TimeaccountEditDialog.js:133 js/TimesheetEditDialog.js:206
 msgid "not cleared yet..."
 msgstr "jeszcze nieprzeliczone..."
 
@@ -255,31 +255,31 @@ msgstr "Pokaż zakończone"
 msgid "Time Account - Status"
 msgstr "Status konta godzin"
 
-#: js/TimesheetEditDialog.js:86 js/TimesheetEditDialog.js:87
+#: js/TimesheetEditDialog.js:91 js/TimesheetEditDialog.js:92
 msgid "Billed in ..."
 msgstr "Przeliczone w ..."
 
-#: js/TimesheetEditDialog.js:132
+#: js/TimesheetEditDialog.js:137
 msgid "Select Time Account..."
 msgstr "Zaznacz konto godzin..."
 
-#: js/TimesheetEditDialog.js:133
+#: js/TimesheetEditDialog.js:138
 msgid "Searching..."
 msgstr "Wyszukiwanie..."
 
-#: js/TimesheetEditDialog.js:151
+#: js/TimesheetEditDialog.js:156
 msgid "Start"
 msgstr "Start"
 
-#: js/TimesheetEditDialog.js:152
+#: js/TimesheetEditDialog.js:157
 msgid "not set"
 msgstr "nieustawiony"
 
-#: js/TimesheetEditDialog.js:169
+#: js/TimesheetEditDialog.js:174
 msgid "Enter description..."
 msgstr "Wprowadź opis..."
 
-#: js/TimesheetEditDialog.js:178 js/TimesheetGridPanel.js:185
+#: js/TimesheetEditDialog.js:183 js/TimesheetGridPanel.js:185
 #: js/TimesheetGridPanel.js:276
 msgid "Account"
 msgstr "Konto"

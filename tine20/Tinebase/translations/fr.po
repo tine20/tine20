@@ -61,19 +61,19 @@ msgstr "Auteur"
 msgid "Activities"
 msgstr "Activités"
 
-#: Frontend/Http.php:326 js/tineInit.js:365
+#: Frontend/Http.php:328 js/tineInit.js:376
 msgid "Authorisation Required"
 msgstr "Authentification requise"
 
-#: Frontend/Http.php:327
+#: Frontend/Http.php:329
 msgid "Your session is not valid. You need to login again."
 msgstr "Votre session n'est pas valide, veuillez vous reconnecter."
 
-#: Frontend/Http.php:353 js/ExceptionDialog.js:46
+#: Frontend/Http.php:355 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Fin anormale"
 
-#: Frontend/Http.php:354 js/ExceptionDialog.js:71
+#: Frontend/Http.php:356 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 "Une erreur s'est produite, le programme s'est terminé de façon inattendue"
@@ -111,7 +111,7 @@ msgstr[1] "listes \"à faire\""
 #: js/ExceptionDialog.js:54 js/MainScreen.js:448
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:373
-#: js/widgets/dialog/EditDialog.js:182
+#: js/widgets/dialog/EditDialog.js:184
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 msgid "Cancel"
 msgstr "Annuler"
@@ -177,11 +177,11 @@ msgstr "S'enregistrer"
 msgid "Please enter your login data"
 msgstr "Saisissez votre login"
 
-#: js/Login.js:79 js/widgets/dialog/CredentialsDialog.js:68
+#: js/Login.js:79 js/widgets/dialog/CredentialsDialog.js:76
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: js/Login.js:86 js/widgets/dialog/CredentialsDialog.js:72
+#: js/Login.js:86 js/widgets/dialog/CredentialsDialog.js:80
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -276,7 +276,7 @@ msgstr "Confirmer le nouveau mot de passe"
 
 #: js/MainScreen.js:454 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:382
-#: js/widgets/dialog/EditDialog.js:165
+#: js/widgets/dialog/EditDialog.js:167
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 msgid "Ok"
 msgstr "Ok"
@@ -313,8 +313,8 @@ msgstr ""
 "Installer Gears améliore les performances de Tine 2.0 en mettant en cache "
 "les fichiers nécessaires sur votre ordinateur."
 
-#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:581
-#: js/widgets/dialog/EditDialog.js:439
+#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:611
+#: js/widgets/dialog/EditDialog.js:441
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
@@ -338,11 +338,17 @@ msgstr[1] ""
 msgid "Groups"
 msgstr ""
 
-#: js/tineInit.js:348
+#: js/Models.js:245
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/tineInit.js:355
 msgid "Connection lost, please check your network!"
 msgstr "Connexion perdue, vérifiez la connexion réseau!"
 
-#: js/tineInit.js:356
+#: js/tineInit.js:364
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -350,23 +356,23 @@ msgstr ""
 "Le serveur n'a pas répondu à votre requête. Vérifiez la connexion réseau ou "
 "contactez votre administrateur."
 
-#: js/tineInit.js:366
+#: js/tineInit.js:377
 msgid "Your session timed out. You need to login again."
 msgstr "Votre session a expiré, veuillez vous reconnecter."
 
-#: js/tineInit.js:379
+#: js/tineInit.js:390
 msgid "Insufficient Rights"
 msgstr "Droits inssufisants"
 
-#: js/tineInit.js:380
+#: js/tineInit.js:391
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Désolé, vous n'êtes pas autorisé à effectuer cette action"
 
-#: js/tineInit.js:389
+#: js/tineInit.js:400
 msgid "Not Found"
 msgstr "Non trouvé"
 
-#: js/tineInit.js:390
+#: js/tineInit.js:401
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
@@ -376,11 +382,11 @@ msgstr ""
 "plupart du temps, c'est que quelqu'un a déjà effacé l'information. Veuillez "
 "rafraîchir votre affichage."
 
-#: js/tineInit.js:399
+#: js/tineInit.js:410
 msgid "Concurrent Updates"
 msgstr "Mises à jour simultanées"
 
-#: js/tineInit.js:400
+#: js/tineInit.js:411
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -388,7 +394,7 @@ msgstr ""
 "Un autre utilisateur a sauvegardé cet enregistrement pendant votre "
 "modification. Vous devez le recharger et ressaisir vos modifications."
 
-#: js/tineInit.js:652
+#: js/tineInit.js:667
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -612,30 +618,30 @@ msgstr "Heure"
 msgid "User"
 msgstr "Utilistateur"
 
-#: js/widgets/app/GridPanel.js:222
+#: js/widgets/app/GridPanel.js:240
 msgid "Edit {0}"
 msgstr "Éditer {0}"
 
-#: js/widgets/app/GridPanel.js:233 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:251 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "Ajouter {0}"
 
-#: js/widgets/app/GridPanel.js:243 js/widgets/app/GridPanel.js:244
-#: js/widgets/app/GridPanel.js:246
+#: js/widgets/app/GridPanel.js:261 js/widgets/app/GridPanel.js:262
+#: js/widgets/app/GridPanel.js:264
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Supprimer {0}"
 msgstr[1] "Supprimer {0}"
 
-#: js/widgets/app/GridPanel.js:324
+#: js/widgets/app/GridPanel.js:344
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Afficher enregistrement {0} - {1} de {2}"
 
-#: js/widgets/app/GridPanel.js:325
+#: js/widgets/app/GridPanel.js:345
 msgid "No {0} to display"
 msgstr "Aucun {0} à afficher"
 
-#: js/widgets/app/GridPanel.js:346
+#: js/widgets/app/GridPanel.js:366
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -643,35 +649,35 @@ msgstr ""
 "Aucun {0} trouvé. Changez vos critères de recherche, les options d'affichage "
 "ou votre recherche de {1}."
 
-#: js/widgets/app/GridPanel.js:566
+#: js/widgets/app/GridPanel.js:596
 msgid "Not Allowed"
 msgstr "Non autorisé"
 
-#: js/widgets/app/GridPanel.js:567
+#: js/widgets/app/GridPanel.js:597
 msgid "You are not allowed to delete all pages at once"
 msgstr "Vous ne pouvez pas supprimer toutes les pages d'un coup"
 
-#: js/widgets/app/GridPanel.js:579
+#: js/widgets/app/GridPanel.js:609
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Êtes-vous de vouloir supprimer l'enregistrement sélectionné"
 msgstr[1] "Êtes-vous de vouloir supprimer les enregistrements sélectionnés"
 
-#: js/widgets/app/GridPanel.js:585 js/widgets/dialog/EditDialog.js:441
+#: js/widgets/app/GridPanel.js:615 js/widgets/dialog/EditDialog.js:443
 msgid "Deleting {0}"
 msgstr "Suppression de {0}"
 
-#: js/widgets/app/GridPanel.js:587
+#: js/widgets/app/GridPanel.js:617
 msgid " ... This may take a long time!"
 msgstr "...Cela peut être long!"
 
-#: js/widgets/app/GridPanel.js:601 js/widgets/dialog/EditDialog.js:413
-#: js/widgets/dialog/EditDialog.js:451 js/widgets/tags/TagsPanel.js:255
+#: js/widgets/app/GridPanel.js:631 js/widgets/dialog/EditDialog.js:415
+#: js/widgets/dialog/EditDialog.js:453 js/widgets/tags/TagsPanel.js:255
 #: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
 msgid "Failed"
 msgstr "Échoué"
 
-#: js/widgets/app/GridPanel.js:601 js/widgets/dialog/EditDialog.js:451
+#: js/widgets/app/GridPanel.js:631 js/widgets/dialog/EditDialog.js:453
 msgid "Could not delete {0}."
 msgstr "Impossible de supprimer {0}."
 
@@ -702,28 +708,28 @@ msgstr "Partagé"
 msgid "please select a {0}"
 msgstr "Veuillez choisir {0}"
 
-#: js/widgets/container/ContainerTree.js:138
+#: js/widgets/container/ContainerTree.js:127
 msgid "All {0}"
 msgstr "Tout {0}"
 
-#: js/widgets/container/ContainerTree.js:143
+#: js/widgets/container/ContainerTree.js:132
 msgid "My {0}"
 msgstr "Mes {0}"
 
-#: js/widgets/container/ContainerTree.js:150
+#: js/widgets/container/ContainerTree.js:139
 msgid "Shared {0}"
 msgstr "{0} partagé(e)s"
 
-#: js/widgets/container/ContainerTree.js:158
+#: js/widgets/container/ContainerTree.js:147
 msgid "Other Users {0}"
 msgstr "Autres utilisateurs {0}"
 
-#: js/widgets/container/ContainerTree.js:185
+#: js/widgets/container/ContainerTree.js:175
 #, fuzzy
 msgid "Permission Denied"
 msgstr "Permissions"
 
-#: js/widgets/container/ContainerTree.js:185
+#: js/widgets/container/ContainerTree.js:175
 #, fuzzy
 msgid "You don't have the required grant to select this {0}"
 msgstr "Êtes-vous sûr de vouloir supprimer {0}?"
@@ -802,46 +808,46 @@ msgstr "2 heures avant"
 msgid "1 day before"
 msgstr "1 jour avant"
 
-#: js/widgets/dialog/CredentialsDialog.js:116
-#: js/widgets/dialog/EditDialog.js:431
+#: js/widgets/dialog/CredentialsDialog.js:124
+#: js/widgets/dialog/EditDialog.js:433
 #: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr "Erreurs"
 
-#: js/widgets/dialog/CredentialsDialog.js:116
-#: js/widgets/dialog/EditDialog.js:431
+#: js/widgets/dialog/CredentialsDialog.js:124
+#: js/widgets/dialog/EditDialog.js:433
 msgid "Please fix the errors noted."
 msgstr "Veuillez corriger les erreurs."
 
-#: js/widgets/dialog/EditDialog.js:174 js/widgets/EditRecord.js:126
+#: js/widgets/dialog/EditDialog.js:176 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "Appliquer"
 
-#: js/widgets/dialog/EditDialog.js:191 js/widgets/EditRecord.js:146
+#: js/widgets/dialog/EditDialog.js:193 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "Supprimer"
 
-#: js/widgets/dialog/EditDialog.js:261
+#: js/widgets/dialog/EditDialog.js:263
 msgid "Add New {0}"
 msgstr "Créer {0}"
 
-#: js/widgets/dialog/EditDialog.js:263
+#: js/widgets/dialog/EditDialog.js:265
 msgid "Edit {0} \"{1}\""
 msgstr "Editer {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:307 js/widgets/EditRecord.js:185
+#: js/widgets/dialog/EditDialog.js:309 js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "Sauvegardé"
 
-#: js/widgets/dialog/EditDialog.js:327
+#: js/widgets/dialog/EditDialog.js:329
 msgid "Transfering {0}..."
 msgstr "Transfert de {0}..."
 
-#: js/widgets/dialog/EditDialog.js:413
+#: js/widgets/dialog/EditDialog.js:415
 msgid "Could not save {0}."
 msgstr "Échec de sauvegarde de {0}."
 
-#: js/widgets/dialog/EditDialog.js:439
+#: js/widgets/dialog/EditDialog.js:441
 msgid "Do you really want to delete this {0}?"
 msgstr "Êtes-vous sûr de vouloir supprimer {0}?"
 
@@ -872,6 +878,24 @@ msgstr "Pas de préférences pour cette application."
 #: js/widgets/dialog/PreferencesTreePanel.js:60
 msgid "General Preferences"
 msgstr "Préférences générales"
+
+#: js/widgets/form/ConfigPanel.js:107
+msgid "Invalid configuration"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:107
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:132
+#, fuzzy
+msgid "Transfering Configuration..."
+msgstr "Transfert de {0}..."
+
+#: js/widgets/form/ConfigPanel.js:228
+#, fuzzy
+msgid "Save config"
+msgstr "Sauvegardé"
 
 #: js/widgets/grid/FilterModel.js:129
 msgid "contains"

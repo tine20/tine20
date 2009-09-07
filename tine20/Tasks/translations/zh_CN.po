@@ -30,7 +30,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s 的个人任务"
 
-#: js/EditDialog.js:153 js/GridPanel.js:64 js/GridPanel.js:123
+#: js/EditDialog.js:153 js/GridPanel.js:90 js/GridPanel.js:155
 msgid "Summary"
 msgstr "摘要"
 
@@ -38,11 +38,11 @@ msgstr "摘要"
 msgid "Due date"
 msgstr "过期日期"
 
-#: js/EditDialog.js:161 js/GridPanel.js:144 Model/Task.php:187
+#: js/EditDialog.js:161 js/GridPanel.js:176 Model/Task.php:187
 msgid "Priority"
 msgstr "优先"
 
-#: js/EditDialog.js:164 js/GridPanel.js:66 js/GridPanel.js:196
+#: js/EditDialog.js:164 js/GridPanel.js:92 js/GridPanel.js:228
 msgid "Responsible"
 msgstr "有责任的"
 
@@ -58,7 +58,7 @@ msgstr "输入描述"
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/EditDialog.js:178 js/GridPanel.js:173 Model/Task.php:188
+#: js/EditDialog.js:178 js/GridPanel.js:205 Model/Task.php:188
 msgid "Status"
 msgstr "状态"
 
@@ -66,36 +66,36 @@ msgstr "状态"
 msgid "Completed"
 msgstr "完成的"
 
-#: js/GridPanel.js:31
+#: js/GridPanel.js:53
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "你确实想删除选中的任务？"
 
-#: js/GridPanel.js:65 js/GridPanel.js:135
+#: js/GridPanel.js:91 js/GridPanel.js:167
 msgid "Due Date"
 msgstr "过期日期"
 
-#: js/GridPanel.js:87
+#: js/GridPanel.js:113
 msgid "Failed"
 msgstr "失败"
 
-#: js/GridPanel.js:87
+#: js/GridPanel.js:113
 msgid "Could not save task."
 msgstr "不能保存任务"
 
-#: js/GridPanel.js:131
+#: js/GridPanel.js:163
 msgid "Add a task..."
 msgstr "添加任务"
 
-#: js/GridPanel.js:159 Model/Task.php:189
+#: js/GridPanel.js:191 Model/Task.php:189
 msgid "Percent"
 msgstr "百分比"
 
-#: js/GridPanel.js:188
+#: js/GridPanel.js:220
 msgid "Creation Time"
 msgstr "创建时间"
 
-#: js/GridPanel.js:221
+#: js/GridPanel.js:254
 msgid "Show closed"
 msgstr "显示关闭的"
 

@@ -29,91 +29,91 @@ msgstr "gérer les calendriers partagés"
 msgid "All Rights to administrate resources"
 msgstr ""
 
-#: Controller/Event.php:764
+#: Controller/Event.php:897
 msgid "Notification for Event "
 msgstr "Notification d'évènement"
 
-#: Controller.php:85
+#: Controller.php:106
 #, python-format
 msgid "%s's personal calendar"
 msgstr "Calendrier de %s"
 
-#: js/AttendeeGridPanel.js:55 js/Model.js:274 Model/Event.php:243
-#: Model/Event.php:265
+#: js/AttendeeGridPanel.js:62 js/Model.js:274 Model/Event.php:250
+#: Model/Event.php:272
 msgid "Attendee"
 msgstr "Participant"
 
-#: js/AttendeeGridPanel.js:84
+#: js/AttendeeGridPanel.js:91
 msgid "Role"
 msgstr "Rôle"
 
-#: js/AttendeeGridPanel.js:93
+#: js/AttendeeGridPanel.js:100
 msgid "Quantity"
 msgstr "Quantité"
 
-#: js/AttendeeGridPanel.js:102
+#: js/AttendeeGridPanel.js:109
 msgid "This is the calendar where the attender has saved this event in"
 msgstr "Calendrier où le participant a enregistré cet évènement"
 
-#: js/AttendeeGridPanel.js:138
+#: js/AttendeeGridPanel.js:145
 msgid "Type"
 msgstr "Type"
 
-#: js/AttendeeGridPanel.js:145
+#: js/AttendeeGridPanel.js:152
 msgid "User"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:146
+#: js/AttendeeGridPanel.js:153
 msgid "Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:147
+#: js/AttendeeGridPanel.js:154
 msgid "Resouce"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:155 js/ResourceEditDialog.js:58
+#: js/AttendeeGridPanel.js:162 js/ResourceEditDialog.js:58
 #: js/ResourcesGridPanel.js:41
 msgid "Name"
 msgstr "Nom"
 
-#: js/AttendeeGridPanel.js:185
+#: js/AttendeeGridPanel.js:192
 msgid "Status"
 msgstr "Statut"
 
-#: js/AttendeeGridPanel.js:192 js/AttendeeGridPanel.js:482
+#: js/AttendeeGridPanel.js:199 js/AttendeeGridPanel.js:493
 msgid "No response"
 msgstr "Pas de réponse"
 
-#: js/AttendeeGridPanel.js:193 js/AttendeeGridPanel.js:485
+#: js/AttendeeGridPanel.js:200 js/AttendeeGridPanel.js:496
 msgid "Accepted"
 msgstr "Accepté"
 
-#: js/AttendeeGridPanel.js:194 js/AttendeeGridPanel.js:488
+#: js/AttendeeGridPanel.js:201 js/AttendeeGridPanel.js:499
 msgid "Declined"
 msgstr "Refusé"
 
-#: js/AttendeeGridPanel.js:195 js/AttendeeGridPanel.js:491
+#: js/AttendeeGridPanel.js:202 js/AttendeeGridPanel.js:502
 msgid "Tentative"
 msgstr "Tentative"
 
-#: js/AttendeeGridPanel.js:295
+#: js/AttendeeGridPanel.js:302
 msgid "Remove Attender"
 msgstr "supprimer le participant"
 
-#: js/AttendeeGridPanel.js:390
+#: js/AttendeeGridPanel.js:397
 msgid "Click here to invite another attender..."
 msgstr "Cliquez ici pour ajouter un participant..."
 
-#: js/AttendeeGridPanel.js:408 js/AttendeeGridPanel.js:421
-#: js/AttendeeGridPanel.js:434 js/AttendeeGridPanel.js:446
+#: js/AttendeeGridPanel.js:415 js/AttendeeGridPanel.js:432
+#: js/AttendeeGridPanel.js:445 js/AttendeeGridPanel.js:457
 msgid "No Information"
 msgstr "Pas d'informations"
 
-#: js/AttendeeGridPanel.js:458
+#: js/AttendeeGridPanel.js:469
 msgid "Required"
 msgstr "Requis"
 
-#: js/AttendeeGridPanel.js:461
+#: js/AttendeeGridPanel.js:472
 msgid "Optional"
 msgstr "Optionnel"
 
@@ -127,7 +127,7 @@ msgstr[1] "Calendriers"
 msgid "Manage Resources"
 msgstr ""
 
-#: js/Calendar.js:177 js/MonthView.js:87
+#: js/Calendar.js:202 js/MonthView.js:87
 msgid "WK"
 msgstr "WK"
 
@@ -135,39 +135,56 @@ msgstr "WK"
 msgid "Loading events, please wait..."
 msgstr "Chargement, veuillez patienter..."
 
-#: js/CalendarPanel.js:178
+#: js/CalendarPanel.js:202 js/CalendarPanel.js:232
+msgid "Scheduling Conflict"
+msgstr ""
+
+#: js/CalendarPanel.js:213
+msgid "Ignore Conflict"
+msgstr ""
+
+#: js/CalendarPanel.js:220
+#, fuzzy
+msgid "Edit Event"
+msgstr "Mettre à jour un évènement"
+
+#: js/CalendarPanel.js:234
+msgid "Ignore Scheduling Conflict?"
+msgstr ""
+
+#: js/CalendarPanel.js:259
 msgid "Confirm Update of Series"
 msgstr "Confirmer la mise à jour de la série"
 
-#: js/CalendarPanel.js:179
+#: js/CalendarPanel.js:260
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr ""
 
-#: js/CalendarPanel.js:196
+#: js/CalendarPanel.js:277
 msgid "Update Event"
 msgstr "Mettre à jour un évènement"
 
-#: js/CalendarPanel.js:199 js/CalendarPanel.js:201
+#: js/CalendarPanel.js:280 js/CalendarPanel.js:282
 msgid "Do you want to update the whole series, or just this event"
 msgstr "Voulez-vous mettre à jour toute la série, ou juste cet évènement?"
 
-#: js/CalendarPanel.js:203
+#: js/CalendarPanel.js:284
 msgid "Update nothing"
 msgstr "Ne rien mettre à jour"
 
-#: js/CalendarPanel.js:211
+#: js/CalendarPanel.js:292
 msgid "Update whole series"
 msgstr "Mettre à jour toute la série"
 
-#: js/CalendarPanel.js:223
+#: js/CalendarPanel.js:304
 msgid "Failed not update recurring event series"
 msgstr ""
 
-#: js/CalendarPanel.js:231
+#: js/CalendarPanel.js:312
 msgid "Update this event only"
 msgstr "Mettre à jour cet évènement seulement"
 
-#: js/CalendarPanel.js:245
+#: js/CalendarPanel.js:326
 msgid "Failed not update event"
 msgstr "Impossible de mettre à jour l'évenement"
 
@@ -188,7 +205,7 @@ msgstr "{0} {1} {2}"
 msgid "Summary"
 msgstr "Résumé"
 
-#: js/EventEditDialog.js:100 js/ResourcesGridPanel.js:52 Model/Event.php:263
+#: js/EventEditDialog.js:100 js/ResourcesGridPanel.js:52 Model/Event.php:270
 msgid "Location"
 msgstr "Lieu"
 
@@ -204,7 +221,7 @@ msgstr "Date de fin"
 msgid "whole day"
 msgstr "toute la journée"
 
-#: js/EventEditDialog.js:161 js/ResourceEditDialog.js:74 Model/Event.php:264
+#: js/EventEditDialog.js:161 js/ResourceEditDialog.js:74 Model/Event.php:271
 msgid "Description"
 msgstr "Description"
 
@@ -212,15 +229,15 @@ msgstr "Description"
 msgid "Enter description"
 msgstr "Saisir une description"
 
-#: js/EventEditDialog.js:299
+#: js/EventEditDialog.js:310
 msgid "End date is not valid"
 msgstr "Date de fin non valide"
 
-#: js/EventEditDialog.js:302
+#: js/EventEditDialog.js:313
 msgid "End date must be after start date"
 msgstr "La date de fin doit être postérieure à la date de début"
 
-#: js/EventEditDialog.js:315
+#: js/EventEditDialog.js:326
 msgid "Start date is not valid"
 msgstr "Date de début non valide"
 
@@ -432,21 +449,21 @@ msgstr ". Année"
 msgid "of"
 msgstr "de"
 
-#: Model/Attender.php:242
+#: Model/Attender.php:240
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Ce contact a été ajouté automatiquement comme participant"
 
-#: Model/Event.php:260
+#: Model/Event.php:267
 #, fuzzy
 msgid "Start"
 msgstr "Statut"
 
-#: Model/Event.php:261
+#: Model/Event.php:268
 msgid "End"
 msgstr ""
 
-#: Model/Event.php:262
+#: Model/Event.php:269
 msgid "Organizer"
 msgstr ""
 

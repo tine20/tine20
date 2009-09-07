@@ -41,7 +41,7 @@ msgstr "狀態"
 msgid "Depends on"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:81 js/EnvCheckGridPanel.js:169
+#: js/ApplicationGridPanel.js:81 js/EnvCheckGridPanel.js:192
 msgid "Install application"
 msgstr "安裝應用程式"
 
@@ -53,259 +53,328 @@ msgstr "移除應用程式"
 msgid "Update application"
 msgstr "更新應用程式"
 
-#: js/ApplicationGridPanel.js:163
+#: js/ApplicationGridPanel.js:108
+msgid "Go to Tine 2.0 login"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:172
 msgid "uninstall"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:163
+#: js/ApplicationGridPanel.js:172
 msgid "Do you really want to uninstall the application(s)?"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:214
+#: js/ApplicationGridPanel.js:232
 msgid "This may take a while"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:240
+#: js/ApplicationGridPanel.js:258
 msgid "Shit"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:240
+#: js/ApplicationGridPanel.js:258
 msgid "Where are the backup tapes"
 msgstr "磁帶備份位置"
 
-#: js/ApplicationGridPanel.js:248
+#: js/ApplicationGridPanel.js:266
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:88 js/ConfigManagerGridPanel.js:73
-msgid "Invalid configuration"
-msgstr ""
-
-#: js/AuthenticationGridPanel.js:88 js/ConfigManagerGridPanel.js:73
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-
-#: js/AuthenticationGridPanel.js:134 js/ConfigManagerGridPanel.js:97
-msgid "Transfering Configuration..."
-msgstr ""
-
-#: js/AuthenticationGridPanel.js:160 js/AuthenticationGridPanel.js:180
+#: js/AuthenticationPanel.js:141 js/AuthenticationPanel.js:161
+#: js/EmailPanel.js:150
 msgid "Backend"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:193
+#: js/AuthenticationPanel.js:174
 msgid "Authentication provider"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:216
+#: js/AuthenticationPanel.js:197
 msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:220
+#: js/AuthenticationPanel.js:201
 msgid "Initial admin Password"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:224
+#: js/AuthenticationPanel.js:205
 msgid "Password confirmation"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:238 js/AuthenticationGridPanel.js:324
+#: js/AuthenticationPanel.js:219 js/AuthenticationPanel.js:305
 msgid "Host"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:243 js/AuthenticationGridPanel.js:329
+#: js/AuthenticationPanel.js:224 js/AuthenticationPanel.js:310
 msgid "Login name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:246 js/AuthenticationGridPanel.js:332
-#: js/ConfigManagerGridPanel.js:120 js/ConfigManagerGridPanel.js:146
+#: js/AuthenticationPanel.js:227 js/AuthenticationPanel.js:313
+#: js/ConfigManagerPanel.js:69 js/ConfigManagerPanel.js:95
+#: js/EmailPanel.js:190 js/EmailPanel.js:276 js/EmailPanel.js:374
 msgid "Password"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:259 js/AuthenticationGridPanel.js:345
+#: js/AuthenticationPanel.js:240 js/AuthenticationPanel.js:326
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:263
+#: js/AuthenticationPanel.js:244
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:266
+#: js/AuthenticationPanel.js:247
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:274
+#: js/AuthenticationPanel.js:255
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:295 js/AuthenticationGridPanel.js:399
+#: js/AuthenticationPanel.js:276 js/AuthenticationPanel.js:380
 msgid "Default user group name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:298 js/AuthenticationGridPanel.js:402
+#: js/AuthenticationPanel.js:279 js/AuthenticationPanel.js:383
 msgid "Default admin group name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:310 js/AuthenticationGridPanel.js:414
+#: js/AuthenticationPanel.js:291 js/AuthenticationPanel.js:395
 msgid "Allow user to change her password?"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:349
+#: js/AuthenticationPanel.js:330
 msgid "User DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:352
+#: js/AuthenticationPanel.js:333
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:364
+#: js/AuthenticationPanel.js:345
 msgid "Password encoding"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:377
+#: js/AuthenticationPanel.js:358
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:381
+#: js/AuthenticationPanel.js:362
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:384
+#: js/AuthenticationPanel.js:365
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:387
+#: js/AuthenticationPanel.js:368
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:390
+#: js/AuthenticationPanel.js:371
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:393
+#: js/AuthenticationPanel.js:374
 msgid "Group UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:396
+#: js/AuthenticationPanel.js:377
 msgid "User UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:498
-msgid "Apply changes"
+#: js/AuthenticationPanel.js:410
+msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationGridPanel.js:524
-msgid "Passwords don't match"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:109
-msgid "Informations"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:113
-msgid "Setup Authentication"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:116
-msgid "Username"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:125 js/ConfigManagerGridPanel.js:138
-msgid "Database"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:129
-msgid "Adapter"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:134
-msgid "Hostname"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:142
-msgid "User"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:150
-msgid "Prefix"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:153
-msgid "Logging"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:159
-msgid "Filename"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:171
-msgid "Priority"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:175
-msgid "Caching"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:181
-msgid "Path"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:184
-msgid "Lifetime (seconds)"
-msgstr ""
-
-#: js/ConfigManagerGridPanel.js:277
+#: js/AuthenticationPanel.js:412
 msgid "Save config"
 msgstr ""
 
-#: js/ConfigManagerGridPanel.js:285
+#: js/AuthenticationPanel.js:433
+msgid "Passwords don't match"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:58
+msgid "Informations"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:62
+msgid "Setup Authentication"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:65 js/EmailPanel.js:186 js/EmailPanel.js:272
+msgid "Username"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:74 js/ConfigManagerPanel.js:87
+#: js/EmailPanel.js:368
+msgid "Database"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:78
+msgid "Adapter"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:83 js/EmailPanel.js:182 js/EmailPanel.js:268
+#: js/EmailPanel.js:365
+msgid "Hostname"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:91 js/EmailPanel.js:371
+msgid "User"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:99
+msgid "Prefix"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:102
+msgid "Logging"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:108
+msgid "Filename"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:120
+msgid "Priority"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:124
+msgid "Caching"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:130
+msgid "Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:133
+msgid "Lifetime (seconds)"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:155
 msgid "Download config file"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:69
+#: js/EmailPanel.js:154
+msgid "Standard IMAP"
+msgstr ""
+
+#: js/EmailPanel.js:164
+msgid "Standard SMTP"
+msgstr ""
+
+#: js/EmailPanel.js:174
+msgid "Imap"
+msgstr ""
+
+#: js/EmailPanel.js:195 js/EmailPanel.js:281
+msgid "Port"
+msgstr ""
+
+#: js/EmailPanel.js:198 js/EmailPanel.js:284
+msgid "Secure Connection"
+msgstr ""
+
+#: js/EmailPanel.js:209 js/EmailPanel.js:295 js/EmailPanel.js:311
+msgid "None"
+msgstr ""
+
+#: js/EmailPanel.js:210 js/EmailPanel.js:296
+msgid "TLS"
+msgstr ""
+
+#: js/EmailPanel.js:211 js/EmailPanel.js:297
+msgid "SSL"
+msgstr ""
+
+#: js/EmailPanel.js:215 js/EmailPanel.js:317
+msgid "Domain"
+msgstr ""
+
+#: js/EmailPanel.js:226
+msgid "No"
+msgstr ""
+
+#: js/EmailPanel.js:226
+msgid "Yes"
+msgstr ""
+
+#: js/EmailPanel.js:228
+msgid "Use as default account"
+msgstr ""
+
+#: js/EmailPanel.js:231
+msgid "Default account name"
+msgstr ""
+
+#: js/EmailPanel.js:260
+msgid "Smtp"
+msgstr ""
+
+#: js/EmailPanel.js:300
+#, fuzzy
+msgid "Authentication"
+msgstr "應用程式"
+
+#: js/EmailPanel.js:312
+msgid "Login"
+msgstr ""
+
+#: js/EmailPanel.js:313
+msgid "Plain"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:92
 msgid "Performing Environment Checks..."
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:110
+#: js/EnvCheckGridPanel.js:133
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:140
+#: js/EnvCheckGridPanel.js:163
 msgid "Check"
 msgstr "檢查"
 
-#: js/EnvCheckGridPanel.js:141
+#: js/EnvCheckGridPanel.js:164
 msgid "Result"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:142
+#: js/EnvCheckGridPanel.js:165
 msgid "Error"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:160
+#: js/EnvCheckGridPanel.js:183
 msgid "Run setup tests"
 msgstr ""
 
-#: js/Setup.js:30
+#: js/Setup.js:54
 msgid "Setup Checks"
 msgstr "檢查設定"
 
-#: js/Setup.js:35
+#: js/Setup.js:59
 msgid "Config Manager"
 msgstr ""
 
-#: js/Setup.js:41
+#: js/Setup.js:65
 #, fuzzy
 msgid "Authentication/Accounts"
 msgstr "應用程式"
 
-#: js/Setup.js:47
+#: js/Setup.js:71
+msgid "Email"
+msgstr ""
+
+#: js/Setup.js:77
 msgid "Application Manager"
 msgstr ""
 
-#: js/Setup.js:138
+#: js/Setup.js:173
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "應用程式"

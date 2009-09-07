@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-08-22 19:06+0100\n"
+"PO-Revision-Date: 2009-09-05 14:14+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -11,8 +11,7 @@ msgstr ""
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 # There is no word "leads" in the polish language. I think we can replace "leads" with "zapytania" or "zapytania ofertowe". I mean samething, that can start some process in the feature.
 # Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "zapytania" oder "zapytania ofertowe" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
@@ -36,7 +35,8 @@ msgstr "Utwórz nowe, wspólne katalogi zapytań"
 msgid "State"
 msgstr "Kraj"
 
-#: Controller/Lead.php:236 js/Crm.js:1042
+#: Controller/Lead.php:236
+#: js/Crm.js:1042
 msgid "Type"
 msgstr "Typ"
 
@@ -44,7 +44,9 @@ msgstr "Typ"
 msgid "Source"
 msgstr "Źródło"
 
-#: Controller/Lead.php:238 Export/Pdf.php:92 js/LeadEditDialog.js:112
+#: Controller/Lead.php:238
+#: Export/Pdf.php:92
+#: js/LeadEditDialog.js:112
 msgid "Start"
 msgstr "Start"
 
@@ -52,15 +54,23 @@ msgstr "Start"
 msgid "Scheduled end"
 msgstr "Planowane zakończenie"
 
-#: Controller/Lead.php:240 Export/Pdf.php:95 js/LeadEditDialog.js:125
+#: Controller/Lead.php:240
+#: Export/Pdf.php:95
+#: js/LeadEditDialog.js:125
 msgid "End"
 msgstr "Koniec"
 
-#: Controller/Lead.php:241 Export/Pdf.php:86 js/Crm.js:299 js/Crm.js:347
+#: Controller/Lead.php:241
+#: Export/Pdf.php:86
+#: js/Crm.js:299
+#: js/Crm.js:347
 msgid "Turnover"
 msgstr "Obroty"
 
-#: Controller/Lead.php:242 Export/Pdf.php:89 js/Crm.js:298 js/Crm.js:346
+#: Controller/Lead.php:242
+#: Export/Pdf.php:89
+#: js/Crm.js:298
+#: js/Crm.js:346
 #: js/LeadEditDialog.js:104
 msgid "Probability"
 msgstr "Prawdopodobieństwo"
@@ -101,15 +111,20 @@ msgstr "%s's zapytania osobiste"
 msgid "Lead Data"
 msgstr "Dane dot. zapytania"
 
-#: Export/Pdf.php:77 js/Crm.js:345 js/LeadEditDialog.js:41 js/LeadState.js:220
+#: Export/Pdf.php:77
+#: js/Crm.js:345
+#: js/LeadEditDialog.js:41
+#: js/LeadState.js:220
 msgid "Leadstate"
 msgstr "Stan zapytania"
 
-#: Export/Pdf.php:80 js/LeadEditDialog.js:70
+#: Export/Pdf.php:80
+#: js/LeadEditDialog.js:70
 msgid "Leadtype"
 msgstr "Typ zapytania"
 
-#: Export/Pdf.php:83 js/LeadEditDialog.js:87
+#: Export/Pdf.php:83
+#: js/LeadEditDialog.js:87
 msgid "Leadsource"
 msgstr "Źródło zapytania"
 
@@ -117,11 +132,13 @@ msgstr "Źródło zapytania"
 msgid "End Scheduled"
 msgstr "Planowany koniec"
 
-#: Export/Pdf.php:176 js/Crm.js:1073
+#: Export/Pdf.php:176
+#: js/Crm.js:1073
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: Export/Pdf.php:203 js/Crm.js:1020
+#: Export/Pdf.php:203
+#: js/Crm.js:1020
 msgid "Address"
 msgstr "Adres"
 
@@ -133,19 +150,24 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "E-mail"
 
-#: Export/Pdf.php:224 js/Crm.js:1207
+#: Export/Pdf.php:224
+#: js/Crm.js:1207
 msgid "Tasks"
 msgstr "Zadania"
 
-#: Export/Pdf.php:243 js/Crm.js:1131
+#: Export/Pdf.php:243
+#: js/Crm.js:1131
 msgid "Due Date"
 msgstr "Termin"
 
-#: Export/Pdf.php:248 js/Crm.js:1145
+#: Export/Pdf.php:248
+#: js/Crm.js:1145
 msgid "Priority"
 msgstr "Priorytet"
 
-#: Export/Pdf.php:262 js/Crm.js:618 js/Crm.js:1347
+#: Export/Pdf.php:262
+#: js/Crm.js:618
+#: js/Crm.js:1347
 msgid "Products"
 msgstr "Produkty"
 
@@ -163,7 +185,7 @@ msgstr "wysoki"
 
 #: Export/Pdf.php:303
 msgid "urgent"
-msgstr "pilne"
+msgstr "pilny"
 
 #: js/Crm.js:145
 msgid "Are you sure you want to delete this lead?"
@@ -189,7 +211,8 @@ msgstr "Pokaż zrealizowane zapytania"
 msgid "Lead"
 msgstr "Zapytanie wstępne"
 
-#: js/Crm.js:296 js/Crm.js:342
+#: js/Crm.js:296
+#: js/Crm.js:342
 msgid "Lead name"
 msgstr "Zapytanie wstępne"
 
@@ -197,7 +220,8 @@ msgstr "Zapytanie wstępne"
 msgid "Displaying leads {0} - {1} of {2}"
 msgstr "Wyświetlanie zapytania {0} - {1} z {2}"
 
-#: js/Crm.js:315 js/Crm.js:379
+#: js/Crm.js:315
+#: js/Crm.js:379
 msgid "No leads found."
 msgstr "Nie znaleziono zapytań."
 
@@ -205,12 +229,16 @@ msgstr "Nie znaleziono zapytań."
 msgid "Lead id"
 msgstr "ID zapytania"
 
-#: js/Crm.js:343 js/Crm.js:1650 js/LeadEditDialog.js:322
+#: js/Crm.js:343
+#: js/Crm.js:1650
+#: js/LeadEditDialog.js:322
 #: js/LeadEditDialog.js:365
 msgid "Partner"
 msgstr "Wspólnicy"
 
-#: js/Crm.js:344 js/Crm.js:1630 js/LeadEditDialog.js:321
+#: js/Crm.js:344
+#: js/Crm.js:1630
+#: js/LeadEditDialog.js:321
 #: js/LeadEditDialog.js:361
 msgid "Customer"
 msgstr "Klienci"
@@ -236,13 +264,15 @@ msgid "Delete lead"
 msgid_plural "Delete leads"
 msgstr[0] "Usuń zapytanie"
 msgstr[1] "Usuń zapytania"
-msgstr[2] "Usuń zapytań"
+msgstr[2] "Usuń zapytania"
 
 #: js/Crm.js:475
 msgid "Delete selected leads"
 msgstr "Usuń zaznaczone zapytania"
 
-#: js/Crm.js:485 js/Crm.js:1737 js/Crm.js:1738
+#: js/Crm.js:485
+#: js/Crm.js:1737
+#: js/Crm.js:1738
 msgid "Export as PDF"
 msgstr "Exportuj jako PDF"
 
@@ -250,7 +280,9 @@ msgstr "Exportuj jako PDF"
 msgid "Export selected lead as PDF"
 msgstr "Eksportuj zaznaczone zapytania jako PDF"
 
-#: js/Crm.js:495 js/Crm.js:1682 js/Crm.js:1701
+#: js/Crm.js:495
+#: js/Crm.js:1682
+#: js/Crm.js:1701
 msgid "Add task"
 msgstr "Dodaj zadanie"
 
@@ -270,11 +302,13 @@ msgstr "Źródła zapytania"
 msgid "Lead types"
 msgstr "Typy zapytań"
 
-#: js/Crm.js:673 js/Crm.js:1034
+#: js/Crm.js:673
+#: js/Crm.js:1034
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/Crm.js:674 js/Crm.js:1035
+#: js/Crm.js:674
+#: js/Crm.js:1035
 msgid "Cellphone"
 msgstr "Komórka"
 
@@ -340,7 +374,8 @@ msgstr "Produkt"
 msgid "Add a product..."
 msgstr "Dodaj produkt"
 
-#: js/Crm.js:1294 js/LeadEditDialog.js:152
+#: js/Crm.js:1294
+#: js/LeadEditDialog.js:152
 msgid "Description"
 msgstr "Opis"
 
@@ -364,7 +399,9 @@ msgstr "Dodaj nowego klienta"
 msgid "Change type to Customer"
 msgstr "Zmień typ na wartość: Klient"
 
-#: js/Crm.js:1640 js/LeadEditDialog.js:320 js/LeadEditDialog.js:357
+#: js/Crm.js:1640
+#: js/LeadEditDialog.js:320
+#: js/LeadEditDialog.js:357
 msgid "Responsible"
 msgstr "Osoba odpowiedzialna"
 
@@ -424,7 +461,8 @@ msgstr "Usuń produkty"
 msgid "Remove selected products"
 msgstr "Usuń wybrane produkty"
 
-#: js/Crm.js:1766 js/Crm.js:1767
+#: js/Crm.js:1766
+#: js/Crm.js:1767
 msgid "Leads"
 msgstr "Wstępne zapytania"
 
@@ -446,11 +484,11 @@ msgstr "Edytuj zapytanie \"{0}\""
 
 #: js/LeadEditDialog.js:32
 msgid "Enter short name"
-msgstr "Wprowadź skróconą nazwę"
+msgstr "wpisz skróconą nazwę"
 
 #: js/LeadEditDialog.js:119
 msgid "Estimated end"
-msgstr "Szacowany koniec"
+msgstr "Szacowane zakończenie"
 
 #: js/LeadEditDialog.js:133
 msgid "Overview"
@@ -477,6 +515,7 @@ msgid "website"
 msgstr "strona WWW"
 
 #: Setup/setup.xml:414
+#, fuzzy
 msgid "fair"
 msgstr "rynek"
 
@@ -517,42 +556,41 @@ msgid "lost"
 msgstr "stracone"
 
 msgid "folder"
-msgstr "folder"
+msgstr "katalog"
 
 msgid "Enter searchfilter"
-msgstr "Wprowadzenie filtra szukania"
+msgstr "wpisz szukaną frazę"
 
 msgid "Search Contacts"
-msgstr "Szukanie Kontaktów"
+msgstr "Znajdź kontakty"
 
 msgid "Add existing contact"
 msgstr "Utwórz istniejący kontakt"
 
 msgid "Add existing contact to lead"
-msgstr "Dodaj istniejący kontakt do wprowadzenia"
+msgstr "Dodaj istniejący kontakt do zapytania"
 
 msgid "Organisation"
 msgstr "Organizacja"
 
-#, fuzzy
 msgid "Lead updated"
-msgstr "Realizacjia zaktualizwana"
+msgstr "Zapytanie zaktualizowane"
 
-#, fuzzy
 msgid "Lead added"
-msgstr "Realizacjia utworzona"
+msgstr "Zapytanie dodane"
 
 msgid "Add responsible"
-msgstr "Utwórz odpowiedzialnego"
+msgstr "Dodaj osobę odpowiedzialną"
 
 msgid "Add new responsible contact"
-msgstr "Utwórz nowy kontakt odpowiedzialnego"
+msgstr "Dodaj nowy kontakt jako osobę odpowiedzialną"
 
 msgid "Add customer"
-msgstr "Utwórz klienta"
+msgstr "Dodaj klienta"
 
 msgid "Add partner"
-msgstr "Utwórz partnera"
+msgstr "Dodaj wspólnika"
 
 msgid "Add new partner contact"
-msgstr "Utwórz nowy kontakt partnera"
+msgstr "Dodaj nowy kontakt jako wspólnika"
+

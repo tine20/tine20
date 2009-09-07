@@ -30,7 +30,7 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "Tâches personnelles de %s"
 
-#: js/EditDialog.js:153 js/GridPanel.js:64 js/GridPanel.js:123
+#: js/EditDialog.js:153 js/GridPanel.js:90 js/GridPanel.js:155
 msgid "Summary"
 msgstr "Résumé"
 
@@ -38,11 +38,11 @@ msgstr "Résumé"
 msgid "Due date"
 msgstr "Date de fin"
 
-#: js/EditDialog.js:161 js/GridPanel.js:144 Model/Task.php:187
+#: js/EditDialog.js:161 js/GridPanel.js:176 Model/Task.php:187
 msgid "Priority"
 msgstr "Priorité"
 
-#: js/EditDialog.js:164 js/GridPanel.js:66 js/GridPanel.js:196
+#: js/EditDialog.js:164 js/GridPanel.js:92 js/GridPanel.js:228
 msgid "Responsible"
 msgstr "Responsable"
 
@@ -58,7 +58,7 @@ msgstr "Saisissez une description..."
 msgid "Percentage"
 msgstr "Pourcentage"
 
-#: js/EditDialog.js:178 js/GridPanel.js:173 Model/Task.php:188
+#: js/EditDialog.js:178 js/GridPanel.js:205 Model/Task.php:188
 msgid "Status"
 msgstr "Statut"
 
@@ -66,37 +66,37 @@ msgstr "Statut"
 msgid "Completed"
 msgstr "Terminé"
 
-#: js/GridPanel.js:31
+#: js/GridPanel.js:53
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer la tâche sélectionnée?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
 
-#: js/GridPanel.js:65 js/GridPanel.js:135
+#: js/GridPanel.js:91 js/GridPanel.js:167
 msgid "Due Date"
 msgstr "Date de fin"
 
-#: js/GridPanel.js:87
+#: js/GridPanel.js:113
 msgid "Failed"
 msgstr "Échoué"
 
-#: js/GridPanel.js:87
+#: js/GridPanel.js:113
 msgid "Could not save task."
 msgstr "Erreur de sauvegarde."
 
-#: js/GridPanel.js:131
+#: js/GridPanel.js:163
 msgid "Add a task..."
 msgstr "Ajouter"
 
-#: js/GridPanel.js:159 Model/Task.php:189
+#: js/GridPanel.js:191 Model/Task.php:189
 msgid "Percent"
 msgstr "Pourcent"
 
-#: js/GridPanel.js:188
+#: js/GridPanel.js:220
 msgid "Creation Time"
 msgstr "Date de création"
 
-#: js/GridPanel.js:221
+#: js/GridPanel.js:254
 msgid "Show closed"
 msgstr "Afficher terminées"
 

@@ -211,7 +211,7 @@ msgstr "Žádné záznamy přístupového logu ke zobrazení"
 msgid "Session ID"
 msgstr "ID relace"
 
-#: js/Admin.js:560 js/UserEditDialog.js:116
+#: js/Admin.js:560 js/UserEditDialog.js:145
 msgid "Login Name"
 msgstr "Přihlašovací jméno"
 
@@ -252,11 +252,11 @@ msgstr "zakázat aplikaci"
 msgid "settings"
 msgstr "nastavení"
 
-#: js/Applications.js:195 js/UserEditDialog.js:103
+#: js/Applications.js:195 js/UserEditDialog.js:132
 msgid "disabled"
 msgstr "zakázáno"
 
-#: js/Applications.js:198 js/UserEditDialog.js:103
+#: js/Applications.js:198 js/UserEditDialog.js:132
 msgid "enabled"
 msgstr "povoleno"
 
@@ -276,7 +276,7 @@ msgstr "Žádné aplikace ke zobrazení"
 msgid "Order"
 msgstr "Pořadí"
 
-#: js/Applications.js:238 js/UserEditDialog.js:97 js/Users.js:290
+#: js/Applications.js:238 js/UserEditDialog.js:126 js/Users.js:290
 msgid "Status"
 msgstr "Stav"
 
@@ -539,153 +539,173 @@ msgstr "Přidat nový štítek"
 msgid "Edit Tag \"{0}\""
 msgstr "Editovat štítek \"{0}\""
 
-#: js/UserEditDialog.js:74
+#: js/UserEditDialog.js:103
 msgid "Account"
 msgstr "Účet"
 
-#: js/UserEditDialog.js:90
+#: js/UserEditDialog.js:119
 msgid "First Name"
 msgstr "Křestní jméno"
 
-#: js/UserEditDialog.js:106
+#: js/UserEditDialog.js:135
 msgid "Last Name"
 msgstr "Příjmení"
 
-#: js/UserEditDialog.js:112 js/Users.js:299
+#: js/UserEditDialog.js:141 js/Users.js:299
 msgid "Expires"
 msgstr "Vyprší"
 
-#: js/UserEditDialog.js:114 js/UserEditDialog.js:154 js/UserEditDialog.js:227
+#: js/UserEditDialog.js:143 js/UserEditDialog.js:183 js/UserEditDialog.js:256
 msgid "never"
 msgstr "nikdy"
 
-#: js/UserEditDialog.js:123 js/Users.js:296
+#: js/UserEditDialog.js:152 js/Users.js:296
 msgid "Last login at"
 msgstr "Poslední přihlášení v"
 
-#: js/UserEditDialog.js:125 js/UserEditDialog.js:140
+#: js/UserEditDialog.js:154 js/UserEditDialog.js:169
 msgid "don't know"
 msgstr "nevím"
 
-#: js/UserEditDialog.js:125 js/UserEditDialog.js:140 js/UserEditDialog.js:205
+#: js/UserEditDialog.js:154 js/UserEditDialog.js:169 js/UserEditDialog.js:234
 msgid "never logged in"
 msgstr "nikdy nepřihlášen"
 
-#: js/UserEditDialog.js:130
+#: js/UserEditDialog.js:159
 msgid "Password"
 msgstr "Heslo"
 
-#: js/UserEditDialog.js:133 js/UserEditDialog.js:147
+#: js/UserEditDialog.js:162 js/UserEditDialog.js:176
 msgid "no password set"
 msgstr "heslo nebylo nastaveno"
 
-#: js/UserEditDialog.js:138 js/Users.js:297
+#: js/UserEditDialog.js:167 js/Users.js:297
 msgid "Last login from"
 msgstr "Poslední přihlášení z"
 
-#: js/UserEditDialog.js:144
+#: js/UserEditDialog.js:173
 msgid "Password again"
 msgstr "Zopakovat heslo"
 
-#: js/UserEditDialog.js:152
+#: js/UserEditDialog.js:181
 msgid "Password set"
 msgstr "Heslo nastaveno"
 
-#: js/UserEditDialog.js:159
+#: js/UserEditDialog.js:188
 msgid "Primary group"
 msgstr "Primární skupina"
 
-#: js/UserEditDialog.js:167
+#: js/UserEditDialog.js:196
 msgid "Emailaddress"
 msgstr "Emailová adresa"
 
-#: js/UserEditDialog.js:172
+#: js/UserEditDialog.js:201
 msgid "Home Directory"
 msgstr "Domovský adresář"
 
-#: js/UserEditDialog.js:177
+#: js/UserEditDialog.js:206
 msgid "Login Shell"
 msgstr "Přihlašovací shell"
 
-#: js/UserEditDialog.js:185
+#: js/UserEditDialog.js:214
 msgid "Fileserver"
 msgstr "Souborový server"
 
-#: js/UserEditDialog.js:198
+#: js/UserEditDialog.js:227
 msgid "Home Drive"
 msgstr "Domovský disk"
 
-#: js/UserEditDialog.js:203
+#: js/UserEditDialog.js:232
 msgid "Logon Time"
 msgstr "Čas přihlášení"
 
-#: js/UserEditDialog.js:209
+#: js/UserEditDialog.js:238
 msgid "Home Path"
 msgstr "Domovská cesta"
 
-#: js/UserEditDialog.js:214
+#: js/UserEditDialog.js:243
 msgid "Logoff Time"
 msgstr "Čas odhlášení"
 
-#: js/UserEditDialog.js:216
+#: js/UserEditDialog.js:245
 msgid "never logged off"
 msgstr "nikdy neodhlášen"
 
-#: js/UserEditDialog.js:220
+#: js/UserEditDialog.js:249
 msgid "Profile Path"
 msgstr "Cesta k profilu"
 
-#: js/UserEditDialog.js:225
+#: js/UserEditDialog.js:254
 msgid "Password Last Set"
 msgstr "Heslo naposledy nastaveno"
 
-#: js/UserEditDialog.js:231
+#: js/UserEditDialog.js:260
 msgid "Logon Script"
 msgstr "Přihlašovací skript"
 
-#: js/UserEditDialog.js:235
+#: js/UserEditDialog.js:264
 msgid "Password Can Change"
 msgstr "Může změnit heslo"
 
-#: js/UserEditDialog.js:237 js/UserEditDialog.js:241 js/UserEditDialog.js:245
+#: js/UserEditDialog.js:266 js/UserEditDialog.js:270 js/UserEditDialog.js:274
 msgid "not set"
 msgstr "není nastaveno"
 
-#: js/UserEditDialog.js:239
+#: js/UserEditDialog.js:268
 msgid "Password Must Change"
 msgstr "Musí změnit heslo"
 
-#: js/UserEditDialog.js:243
+#: js/UserEditDialog.js:272
 msgid "Kick Off Time"
 msgstr "Čas automatického odhlášení"
 
-#: js/UserEditDialog.js:248 js/Users.js:295
-msgid "Email"
-msgstr "Email"
-
-#: js/UserEditDialog.js:261
-#, fuzzy
-msgid "Email UID"
-msgstr "Email"
-
-#: js/UserEditDialog.js:265
-#, fuzzy
-msgid "Email GID"
-msgstr "Email"
-
-#: js/UserEditDialog.js:269
-msgid "Forward"
-msgstr ""
-
-#: js/UserEditDialog.js:273
-msgid "Aliases"
-msgstr ""
-
 #: js/UserEditDialog.js:277
+msgid "IMAP"
+msgstr ""
+
+#: js/UserEditDialog.js:291 js/UserEditDialog.js:335
+#, fuzzy
+msgid "Email Username"
+msgstr "Uživatel Samby"
+
+#: js/UserEditDialog.js:295
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:296
+#: js/UserEditDialog.js:301
+msgid "Current Mail Size"
+msgstr ""
+
+#: js/UserEditDialog.js:306
+msgid "Sieve Quota"
+msgstr ""
+
+#: js/UserEditDialog.js:311
+msgid "Current Sieve Size"
+msgstr ""
+
+#: js/UserEditDialog.js:316
+#, fuzzy
+msgid "Last Login"
+msgstr "Poslední přihlášení v"
+
+#: js/UserEditDialog.js:321
+msgid "SMTP"
+msgstr ""
+
+#: js/UserEditDialog.js:339
+msgid "Aliases"
+msgstr ""
+
+#: js/UserEditDialog.js:344
+msgid "Forwards"
+msgstr ""
+
+#: js/UserEditDialog.js:349
+msgid "Forward Only"
+msgstr ""
+
+#: js/UserEditDialog.js:370
 #, fuzzy
 msgid "Passwords don't match"
 msgstr "Hesla se neshodují!"
@@ -734,6 +754,10 @@ msgstr "Příjmení"
 msgid "First name"
 msgstr "Křestní jméno"
 
+#: js/Users.js:295
+msgid "Email"
+msgstr "Email"
+
 #: js/Users.js:298
 msgid "Password changed"
 msgstr "Heslo změněno"
@@ -765,13 +789,21 @@ msgstr[0] "Uživatel Samby"
 msgstr[1] "Uživatelé Samby"
 msgstr[2] "Uživatelů Samby"
 
-#: js/Users.js:528
+#: js/Users.js:535
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Uživatel Samby"
 msgstr[1] "Uživatelé Samby"
 msgstr[2] "Uživatelů Samby"
+
+#, fuzzy
+#~ msgid "Email UID"
+#~ msgstr "Email"
+
+#, fuzzy
+#~ msgid "Email GID"
+#~ msgstr "Email"
 
 #~ msgid "Deleting tag..."
 #~ msgstr "Mažu štítek..."

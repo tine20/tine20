@@ -210,7 +210,7 @@ msgstr "Kein(e) Zugriffslog(s) anzuzeigen"
 msgid "Session ID"
 msgstr "Session-ID"
 
-#: js/Admin.js:560 js/UserEditDialog.js:116
+#: js/Admin.js:560 js/UserEditDialog.js:145
 msgid "Login Name"
 msgstr "Benutzername"
 
@@ -251,11 +251,11 @@ msgstr "Anwendung deaktivieren"
 msgid "settings"
 msgstr "Einstellungen"
 
-#: js/Applications.js:195 js/UserEditDialog.js:103
+#: js/Applications.js:195 js/UserEditDialog.js:132
 msgid "disabled"
 msgstr "deaktiviert"
 
-#: js/Applications.js:198 js/UserEditDialog.js:103
+#: js/Applications.js:198 js/UserEditDialog.js:132
 msgid "enabled"
 msgstr "aktiviert"
 
@@ -275,7 +275,7 @@ msgstr "Keine Anwendungen anzuzeigen"
 msgid "Order"
 msgstr "Reihenfolge"
 
-#: js/Applications.js:238 js/UserEditDialog.js:97 js/Users.js:290
+#: js/Applications.js:238 js/UserEditDialog.js:126 js/Users.js:290
 msgid "Status"
 msgstr "Status"
 
@@ -537,153 +537,173 @@ msgstr "Neuen Tag hinzufügen"
 msgid "Edit Tag \"{0}\""
 msgstr "Tag \"{0}\" bearbeiten"
 
-#: js/UserEditDialog.js:74
+#: js/UserEditDialog.js:103
 msgid "Account"
 msgstr "Benutzer"
 
-#: js/UserEditDialog.js:90
+#: js/UserEditDialog.js:119
 msgid "First Name"
 msgstr "Vorname"
 
-#: js/UserEditDialog.js:106
+#: js/UserEditDialog.js:135
 msgid "Last Name"
 msgstr "Nachname"
 
-#: js/UserEditDialog.js:112 js/Users.js:299
+#: js/UserEditDialog.js:141 js/Users.js:299
 msgid "Expires"
 msgstr "Verfällt"
 
-#: js/UserEditDialog.js:114 js/UserEditDialog.js:154 js/UserEditDialog.js:227
+#: js/UserEditDialog.js:143 js/UserEditDialog.js:183 js/UserEditDialog.js:256
 msgid "never"
 msgstr "nie"
 
-#: js/UserEditDialog.js:123 js/Users.js:296
+#: js/UserEditDialog.js:152 js/Users.js:296
 msgid "Last login at"
 msgstr "Zuletzt eingeloggt um"
 
-#: js/UserEditDialog.js:125 js/UserEditDialog.js:140
+#: js/UserEditDialog.js:154 js/UserEditDialog.js:169
 msgid "don't know"
 msgstr "unbekannt"
 
-#: js/UserEditDialog.js:125 js/UserEditDialog.js:140 js/UserEditDialog.js:205
+#: js/UserEditDialog.js:154 js/UserEditDialog.js:169 js/UserEditDialog.js:234
 msgid "never logged in"
 msgstr "war niemals eingeloggt"
 
-#: js/UserEditDialog.js:130
+#: js/UserEditDialog.js:159
 msgid "Password"
 msgstr "Passwort"
 
-#: js/UserEditDialog.js:133 js/UserEditDialog.js:147
+#: js/UserEditDialog.js:162 js/UserEditDialog.js:176
 msgid "no password set"
 msgstr "kein Passwort gesetzt"
 
-#: js/UserEditDialog.js:138 js/Users.js:297
+#: js/UserEditDialog.js:167 js/Users.js:297
 msgid "Last login from"
 msgstr "Letzter Login von "
 
-#: js/UserEditDialog.js:144
+#: js/UserEditDialog.js:173
 msgid "Password again"
 msgstr "Passwort wiederholen"
 
-#: js/UserEditDialog.js:152
+#: js/UserEditDialog.js:181
 msgid "Password set"
 msgstr "Passwort gesetzt"
 
-#: js/UserEditDialog.js:159
+#: js/UserEditDialog.js:188
 msgid "Primary group"
 msgstr "Stammgrupe"
 
-#: js/UserEditDialog.js:167
+#: js/UserEditDialog.js:196
 msgid "Emailaddress"
 msgstr "E-Mailadresse"
 
-#: js/UserEditDialog.js:172
+#: js/UserEditDialog.js:201
 msgid "Home Directory"
 msgstr "Home-Verzeichnis"
 
-#: js/UserEditDialog.js:177
+#: js/UserEditDialog.js:206
 msgid "Login Shell"
 msgstr "Login-Shell"
 
-#: js/UserEditDialog.js:185
+#: js/UserEditDialog.js:214
 msgid "Fileserver"
 msgstr "Fileserver"
 
-#: js/UserEditDialog.js:198
+#: js/UserEditDialog.js:227
 msgid "Home Drive"
 msgstr "Home-Festplatte"
 
-#: js/UserEditDialog.js:203
+#: js/UserEditDialog.js:232
 msgid "Logon Time"
 msgstr "Einlogzeit"
 
-#: js/UserEditDialog.js:209
+#: js/UserEditDialog.js:238
 msgid "Home Path"
 msgstr "Home-Verzeichnis"
 
-#: js/UserEditDialog.js:214
+#: js/UserEditDialog.js:243
 msgid "Logoff Time"
 msgstr "Ausloggzeit"
 
-#: js/UserEditDialog.js:216
+#: js/UserEditDialog.js:245
 msgid "never logged off"
 msgstr "hat sich niemals ausgeloggt"
 
-#: js/UserEditDialog.js:220
+#: js/UserEditDialog.js:249
 msgid "Profile Path"
 msgstr "Profilverzeichnis"
 
-#: js/UserEditDialog.js:225
+#: js/UserEditDialog.js:254
 msgid "Password Last Set"
 msgstr "Passwort zuletzt gesetzt"
 
-#: js/UserEditDialog.js:231
+#: js/UserEditDialog.js:260
 msgid "Logon Script"
 msgstr "Login Skript"
 
-#: js/UserEditDialog.js:235
+#: js/UserEditDialog.js:264
 msgid "Password Can Change"
 msgstr "Passwort kann geändert werden"
 
-#: js/UserEditDialog.js:237 js/UserEditDialog.js:241 js/UserEditDialog.js:245
+#: js/UserEditDialog.js:266 js/UserEditDialog.js:270 js/UserEditDialog.js:274
 msgid "not set"
 msgstr "nicht gesetzt"
 
-#: js/UserEditDialog.js:239
+#: js/UserEditDialog.js:268
 msgid "Password Must Change"
 msgstr "Passwort muss geändert werden"
 
-#: js/UserEditDialog.js:243
+#: js/UserEditDialog.js:272
 msgid "Kick Off Time"
 msgstr "Abmeldezeit"
 
-#: js/UserEditDialog.js:248 js/Users.js:295
-msgid "Email"
-msgstr "Email"
-
-#: js/UserEditDialog.js:261
-#, fuzzy
-msgid "Email UID"
-msgstr "Email"
-
-#: js/UserEditDialog.js:265
-#, fuzzy
-msgid "Email GID"
-msgstr "Email"
-
-#: js/UserEditDialog.js:269
-msgid "Forward"
-msgstr ""
-
-#: js/UserEditDialog.js:273
-msgid "Aliases"
-msgstr ""
-
 #: js/UserEditDialog.js:277
+msgid "IMAP"
+msgstr ""
+
+#: js/UserEditDialog.js:291 js/UserEditDialog.js:335
+#, fuzzy
+msgid "Email Username"
+msgstr "Samba Benutzer"
+
+#: js/UserEditDialog.js:295
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:296
+#: js/UserEditDialog.js:301
+msgid "Current Mail Size"
+msgstr ""
+
+#: js/UserEditDialog.js:306
+msgid "Sieve Quota"
+msgstr ""
+
+#: js/UserEditDialog.js:311
+msgid "Current Sieve Size"
+msgstr ""
+
+#: js/UserEditDialog.js:316
+#, fuzzy
+msgid "Last Login"
+msgstr "Zuletzt eingeloggt um"
+
+#: js/UserEditDialog.js:321
+msgid "SMTP"
+msgstr ""
+
+#: js/UserEditDialog.js:339
+msgid "Aliases"
+msgstr ""
+
+#: js/UserEditDialog.js:344
+msgid "Forwards"
+msgstr ""
+
+#: js/UserEditDialog.js:349
+msgid "Forward Only"
+msgstr ""
+
+#: js/UserEditDialog.js:370
 #, fuzzy
 msgid "Passwords don't match"
 msgstr "Passwörter stimmen nicht überein!"
@@ -732,6 +752,10 @@ msgstr "Nachname"
 msgid "First name"
 msgstr "Vorname"
 
+#: js/Users.js:295
+msgid "Email"
+msgstr "Email"
+
 #: js/Users.js:298
 msgid "Password changed"
 msgstr "Passwort geändert"
@@ -762,12 +786,20 @@ msgid_plural "Samba Users"
 msgstr[0] "Samba Benutzer"
 msgstr[1] "Samba Benutzer"
 
-#: js/Users.js:528
+#: js/Users.js:535
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Samba Benutzer"
 msgstr[1] "Samba Benutzer"
+
+#, fuzzy
+#~ msgid "Email UID"
+#~ msgstr "Email"
+
+#, fuzzy
+#~ msgid "Email GID"
+#~ msgstr "Email"
 
 #~ msgid "Deleting tag..."
 #~ msgstr "Lösche Tag..."

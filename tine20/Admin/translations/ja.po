@@ -210,7 +210,7 @@ msgstr "表示するアクセスログエントリがありません"
 msgid "Session ID"
 msgstr "セッションＩＤ"
 
-#: js/Admin.js:560 js/UserEditDialog.js:116
+#: js/Admin.js:560 js/UserEditDialog.js:145
 msgid "Login Name"
 msgstr "ログイン名"
 
@@ -251,11 +251,11 @@ msgstr "無効なアプリケーション"
 msgid "settings"
 msgstr "設定"
 
-#: js/Applications.js:195 js/UserEditDialog.js:103
+#: js/Applications.js:195 js/UserEditDialog.js:132
 msgid "disabled"
 msgstr "無効"
 
-#: js/Applications.js:198 js/UserEditDialog.js:103
+#: js/Applications.js:198 js/UserEditDialog.js:132
 msgid "enabled"
 msgstr "有効"
 
@@ -276,7 +276,7 @@ msgstr "表示するアプリケーションがありません"
 msgid "Order"
 msgstr "オーダー"
 
-#: js/Applications.js:238 js/UserEditDialog.js:97 js/Users.js:290
+#: js/Applications.js:238 js/UserEditDialog.js:126 js/Users.js:290
 msgid "Status"
 msgstr "ステータス"
 
@@ -538,153 +538,173 @@ msgstr "タグの新規追加"
 msgid "Edit Tag \"{0}\""
 msgstr "タグの編集 \"{0}\""
 
-#: js/UserEditDialog.js:74
+#: js/UserEditDialog.js:103
 msgid "Account"
 msgstr ""
 
-#: js/UserEditDialog.js:90
+#: js/UserEditDialog.js:119
 msgid "First Name"
 msgstr "名"
 
-#: js/UserEditDialog.js:106
+#: js/UserEditDialog.js:135
 msgid "Last Name"
 msgstr "姓"
 
-#: js/UserEditDialog.js:112 js/Users.js:299
+#: js/UserEditDialog.js:141 js/Users.js:299
 msgid "Expires"
 msgstr "期間"
 
-#: js/UserEditDialog.js:114 js/UserEditDialog.js:154 js/UserEditDialog.js:227
+#: js/UserEditDialog.js:143 js/UserEditDialog.js:183 js/UserEditDialog.js:256
 msgid "never"
 msgstr "未"
 
-#: js/UserEditDialog.js:123 js/Users.js:296
+#: js/UserEditDialog.js:152 js/Users.js:296
 msgid "Last login at"
 msgstr "前回のログイン"
 
-#: js/UserEditDialog.js:125 js/UserEditDialog.js:140
+#: js/UserEditDialog.js:154 js/UserEditDialog.js:169
 msgid "don't know"
 msgstr ""
 
-#: js/UserEditDialog.js:125 js/UserEditDialog.js:140 js/UserEditDialog.js:205
+#: js/UserEditDialog.js:154 js/UserEditDialog.js:169 js/UserEditDialog.js:234
 msgid "never logged in"
 msgstr "ログインしていません"
 
-#: js/UserEditDialog.js:130
+#: js/UserEditDialog.js:159
 msgid "Password"
 msgstr "パスワード"
 
-#: js/UserEditDialog.js:133 js/UserEditDialog.js:147
+#: js/UserEditDialog.js:162 js/UserEditDialog.js:176
 msgid "no password set"
 msgstr "パスワードが設定されていません"
 
-#: js/UserEditDialog.js:138 js/Users.js:297
+#: js/UserEditDialog.js:167 js/Users.js:297
 msgid "Last login from"
 msgstr "前回のログイン（From)"
 
-#: js/UserEditDialog.js:144
+#: js/UserEditDialog.js:173
 msgid "Password again"
 msgstr "もう一度パスワードを入力してください"
 
-#: js/UserEditDialog.js:152
+#: js/UserEditDialog.js:181
 msgid "Password set"
 msgstr "パスワード設定"
 
-#: js/UserEditDialog.js:159
+#: js/UserEditDialog.js:188
 msgid "Primary group"
 msgstr "プライマリーグループ"
 
-#: js/UserEditDialog.js:167
+#: js/UserEditDialog.js:196
 msgid "Emailaddress"
 msgstr "Eメールアドレス"
 
-#: js/UserEditDialog.js:172
+#: js/UserEditDialog.js:201
 msgid "Home Directory"
 msgstr ""
 
-#: js/UserEditDialog.js:177
+#: js/UserEditDialog.js:206
 msgid "Login Shell"
 msgstr ""
 
-#: js/UserEditDialog.js:185
+#: js/UserEditDialog.js:214
 msgid "Fileserver"
 msgstr ""
 
-#: js/UserEditDialog.js:198
+#: js/UserEditDialog.js:227
 msgid "Home Drive"
 msgstr ""
 
-#: js/UserEditDialog.js:203
+#: js/UserEditDialog.js:232
 msgid "Logon Time"
 msgstr ""
 
-#: js/UserEditDialog.js:209
+#: js/UserEditDialog.js:238
 msgid "Home Path"
 msgstr ""
 
-#: js/UserEditDialog.js:214
+#: js/UserEditDialog.js:243
 msgid "Logoff Time"
 msgstr ""
 
-#: js/UserEditDialog.js:216
+#: js/UserEditDialog.js:245
 msgid "never logged off"
 msgstr ""
 
-#: js/UserEditDialog.js:220
+#: js/UserEditDialog.js:249
 msgid "Profile Path"
 msgstr ""
 
-#: js/UserEditDialog.js:225
+#: js/UserEditDialog.js:254
 msgid "Password Last Set"
 msgstr ""
 
-#: js/UserEditDialog.js:231
+#: js/UserEditDialog.js:260
 msgid "Logon Script"
 msgstr ""
 
-#: js/UserEditDialog.js:235
+#: js/UserEditDialog.js:264
 msgid "Password Can Change"
 msgstr ""
 
-#: js/UserEditDialog.js:237 js/UserEditDialog.js:241 js/UserEditDialog.js:245
+#: js/UserEditDialog.js:266 js/UserEditDialog.js:270 js/UserEditDialog.js:274
 msgid "not set"
 msgstr ""
 
-#: js/UserEditDialog.js:239
+#: js/UserEditDialog.js:268
 msgid "Password Must Change"
 msgstr ""
 
-#: js/UserEditDialog.js:243
+#: js/UserEditDialog.js:272
 msgid "Kick Off Time"
 msgstr ""
 
-#: js/UserEditDialog.js:248 js/Users.js:295
-msgid "Email"
-msgstr "Eメール"
-
-#: js/UserEditDialog.js:261
-#, fuzzy
-msgid "Email UID"
-msgstr "Eメール"
-
-#: js/UserEditDialog.js:265
-#, fuzzy
-msgid "Email GID"
-msgstr "Eメール"
-
-#: js/UserEditDialog.js:269
-msgid "Forward"
-msgstr ""
-
-#: js/UserEditDialog.js:273
-msgid "Aliases"
-msgstr ""
-
 #: js/UserEditDialog.js:277
+msgid "IMAP"
+msgstr ""
+
+#: js/UserEditDialog.js:291 js/UserEditDialog.js:335
+#, fuzzy
+msgid "Email Username"
+msgstr "Eメール"
+
+#: js/UserEditDialog.js:295
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:296
+#: js/UserEditDialog.js:301
+msgid "Current Mail Size"
+msgstr ""
+
+#: js/UserEditDialog.js:306
+msgid "Sieve Quota"
+msgstr ""
+
+#: js/UserEditDialog.js:311
+msgid "Current Sieve Size"
+msgstr ""
+
+#: js/UserEditDialog.js:316
+#, fuzzy
+msgid "Last Login"
+msgstr "前回のログイン"
+
+#: js/UserEditDialog.js:321
+msgid "SMTP"
+msgstr ""
+
+#: js/UserEditDialog.js:339
+msgid "Aliases"
+msgstr ""
+
+#: js/UserEditDialog.js:344
+msgid "Forwards"
+msgstr ""
+
+#: js/UserEditDialog.js:349
+msgid "Forward Only"
+msgstr ""
+
+#: js/UserEditDialog.js:370
 #, fuzzy
 msgid "Passwords don't match"
 msgstr "パスワードが一致していません"
@@ -733,6 +753,10 @@ msgstr "姓"
 msgid "First name"
 msgstr "名"
 
+#: js/Users.js:295
+msgid "Email"
+msgstr "Eメール"
+
 #: js/Users.js:298
 msgid "Password changed"
 msgstr "パスワード変更"
@@ -762,11 +786,19 @@ msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
 
-#: js/Users.js:528
+#: js/Users.js:535
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Eメール"
+
+#, fuzzy
+#~ msgid "Email UID"
+#~ msgstr "Eメール"
+
+#, fuzzy
+#~ msgid "Email GID"
+#~ msgstr "Eメール"
 
 #~ msgid "Deleting tag..."
 #~ msgstr "タグを削除しています..."

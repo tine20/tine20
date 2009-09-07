@@ -2,93 +2,103 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - RequestTracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2009-09-05 14:19+0100\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
-"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/Model.js:42 js/TicketGridPanel.js:43
+# I am not sure. Perhaps it is a reminder like "Przypomnienie".
+# Ich bin mir nicht ganz sicher. Vielleicht wird damit eine Ermahnung / "Przypomnienie" gemeint.
+#: js/Model.js:42
+#: js/TicketGridPanel.js:43
 msgid "Ticket"
 msgid_plural "Tickets"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Upomnienie"
+msgstr[1] "upomnienia"
+msgstr[2] "upomnień"
 
 #: js/StatusCombo.js:26
 msgid "New"
-msgstr ""
+msgstr "Nowy"
 
 #: js/StatusCombo.js:27
 msgid "Open"
-msgstr ""
+msgstr "Otwórz"
 
+# Perhaps also "Składowane".
+# Vielleicht auch "Składowane".
 #: js/StatusCombo.js:28
 msgid "Stalled"
-msgstr ""
+msgstr "Na stanie"
 
 #: js/StatusCombo.js:29
 msgid "Waiting"
-msgstr ""
+msgstr "Oczekujące"
 
 #: js/StatusCombo.js:30
 msgid "Pending"
-msgstr ""
+msgstr "Wstrzymane"
 
 #: js/StatusCombo.js:31
 msgid "Resolved"
-msgstr ""
+msgstr "Załatwione"
 
 #: js/StatusCombo.js:32
 msgid "Rejected"
-msgstr ""
+msgstr "Odrzucone"
 
 #: js/StatusCombo.js:33
 msgid "Deleted"
-msgstr ""
+msgstr "Usunięte"
 
-#: js/StatusCombo.js:51 js/TicketGridPanel.js:93
+#: js/StatusCombo.js:51
+#: js/TicketGridPanel.js:93
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
-#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:66
+#: js/TicketGridPanel.js:44
+#: js/TicketGridPanel.js:66
 msgid "Ticket ID"
-msgstr ""
+msgstr "ID upomnienia"
 
-#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:69
+#: js/TicketGridPanel.js:45
+#: js/TicketGridPanel.js:69
 msgid "Queue"
-msgstr ""
+msgstr "Kolejka"
 
-#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:75
+#: js/TicketGridPanel.js:46
+#: js/TicketGridPanel.js:75
 msgid "Subject"
-msgstr ""
+msgstr "Temat"
 
-#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:81
+#: js/TicketGridPanel.js:47
+#: js/TicketGridPanel.js:81
 msgid "Requestors"
-msgstr ""
+msgstr "Zamawiający"
 
-#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:87
+#: js/TicketGridPanel.js:48
+#: js/TicketGridPanel.js:87
 msgid "Owner"
-msgstr ""
+msgstr "Właściciel"
 
 #: js/TicketGridPanel.js:50
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: js/TicketGridPanel.js:99
 msgid "Final Priority"
-msgstr ""
+msgstr "Końcowy priorytet"
 
 #: js/TicketGridPanel.js:105
 msgid "Due"
-msgstr ""
+msgstr "Termin"
 
 #: js/TreePanel.js:24
 msgid "All Queues"
-msgstr ""
+msgstr "Wszystkie kolejki"
+
