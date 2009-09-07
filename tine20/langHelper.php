@@ -413,8 +413,8 @@ function statistics($_verbose)
                 
                 $poFileStats = array(
                     'locale'       => $langCode,
-                    'language'     => $locale->getLanguageTranslation($langLocale->getLanguage()),
-                    'region'       => $locale->getCountryTranslation($langLocale->getRegion()),
+                    'language'     => $locale->getTranslation($langLocale->getLanguage(), 'language'),
+                    'region'       => $locale->getTranslation($langLocale->getRegion(), 'country'),
                     'appname'      => $appName,
                     'translated'   => (int)$translated,
                     'fuzzy'        => (int)$fuzzy,
@@ -427,7 +427,7 @@ function statistics($_verbose)
                 $langStats[$langCode] = array_key_exists($langCode,$langStats) ? $langStats[$langCode] : array(
                     'locale'       => '',
                     'language'     => '',
-                    'region'       => $locale->getCountryTranslation($langLocale->getRegion()),
+                    'region'       => $locale->getTranslation($langLocale->getRegion(), 'country'),
                     'translated'   => 0,
                     'fuzzy'        => 0,
                     'untranslated' => 0,
@@ -435,8 +435,8 @@ function statistics($_verbose)
                 );
                 
                 $langStats[$langCode]['locale']        = $langCode;
-                $langStats[$langCode]['language']      = $locale->getLanguageTranslation($langLocale->getLanguage());
-                $langStats[$langCode]['region']        = $locale->getCountryTranslation($langLocale->getRegion());
+                $langStats[$langCode]['language']      = $locale->getTranslation($langLocale->getLanguage(), 'language');
+                $langStats[$langCode]['region']        = $locale->getTranslation($langLocale->getRegion(), 'country');
                 $langStats[$langCode]['appname']       = 'all';
                 $langStats[$langCode]['translated']   += $poFileStats['translated'];
                 $langStats[$langCode]['fuzzy']        += $poFileStats['fuzzy'];
