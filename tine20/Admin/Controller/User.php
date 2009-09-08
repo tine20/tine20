@@ -253,8 +253,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         // update email user settings
-        $account->emailUser = $_account->emailUser;
-        $this->_updateEmailUser($account);
+        $this->_updateEmailUser($account, $_account->emailUser);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($_account, $_password, $_passwordRepeat);
@@ -291,8 +290,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         // create email user data here
-        $account->emailUser = $_account->emailUser;
-        $this->_createEmailUser($account);
+        $this->_createEmailUser($account, $_account->emailUser);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($account, $_password, $_passwordRepeat);
@@ -371,16 +369,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * create email user settings
      * 
      * @param Tinebase_Model_FullUser $_user
+     * @param Tinebase_Model_EmailUser $_emailUser
      * @return void
      */
-    protected function _createEmailUser($_user)
+    protected function _createEmailUser($_user, $_emailUser)
     {
         // update email user data here
         if ($this->_manageImapEmailUser) {
-            $this->_imapUserBackend->addUser($_user, $_user->emailUser);
+            $this->_imapUserBackend->addUser($_user, $_emailUser);
         }
         if ($this->_manageSmtpEmailUser) {
-            $this->_smtpUserBackend->addUser($_user, $_user->emailUser);
+            $this->_smtpUserBackend->addUser($_user, $_emailUser);
         }
         
         $_user->emailUser = $this->_getEmailUser($_user);
@@ -390,25 +389,26 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * update email user settings
      * 
      * @param Tinebase_Model_FullUser $_user
+     * @param Tinebase_Model_EmailUser $_emailUser
      * @return void
      */
-    protected function _updateEmailUser($_user)
+    protected function _updateEmailUser($_user, $_emailUser)
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->emailUser->toArray(), true));
         
         // update email user data here
         if ($this->_manageImapEmailUser) {
-            if ($_user->emailUser->emailUID) {
-                $this->_imapUserBackend->updateUser($_user, $_user->emailUser);
+            if ($_emailUser->emailUID) {
+                $this->_imapUserBackend->updateUser($_user, $_emailUser);
             } else {
-                $this->_imapUserBackend->addUser($_user, $_user->emailUser);
+                $this->_imapUserBackend->addUser($_user, $_emailUser);
             }
         }
         if ($this->_manageSmtpEmailUser) {
-            if ($_user->emailUser->emailAddress) {
-                $this->_smtpUserBackend->updateUser($_user, $_user->emailUser);
+            if ($_emailUser->emailAddress) {
+                $this->_smtpUserBackend->updateUser($_user, $_emailUser);
             } else {
-                $this->_smtpUserBackend->addUser($_user, $_user->emailUser);
+                $this->_smtpUserBackend->addUser($_user, $_emailUser);
             }
         }
 
