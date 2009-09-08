@@ -34,7 +34,9 @@ class Setup_Server_Cli extends Setup_Server_Abstract
                 'config|c=w'            => 'Path to config.inc.php file',
                 'check_requirements'    => 'Check if all requirements are met to install and run tine20',
             
-                'install-s'             => 'Install applications [All] or comma separated list; To specify the login name and login password of the admin user that is created during installation, append \' -- admin_login_name="admin" admin_login_password="password"\'',
+                'install-s'             => 'Install applications [All] or comma separated list;'
+                    . ' To specify the login name and login password of the admin user that is created during installation, append \' -- admin_login_name="admin" admin_login_password="password"\''
+                    . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
                 'update-s'              => 'Update applications [All] or comma separated list',             
                 'uninstall-s'           => 'Uninstall application [All] or comma separated list',
                 'list-s'                => 'List installed applications',

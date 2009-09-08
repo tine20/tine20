@@ -33,6 +33,11 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             $accountsBackendType = Tinebase_User::getConfiguredBackend();
             $accountsBackendConfiguration = Tinebase_User::getBackendConfigurationDefaults($accountsBackendType);
         }
+        
+        if (isset($_options['imap']) || isset($_options['smtp'])) {
+            $data = $this->_parseEmailOptions($_options);
+            Setup_Controller::getInstance()->saveEmailConfig($data);
+        }
 
         Tinebase_User::setBackendType($accountsBackendType);
         Tinebase_User::setBackendConfiguration($accountsBackendConfiguration);
@@ -41,7 +46,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
 		Tinebase_Group::getInstance()->importGroups(); //import groups(ldap)/create initial groups(sql)
 		
         $this->_createInitialRoles();
-
+        
     	parent::_initialize($_application, $_options);
     }
     
@@ -105,5 +110,35 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
                 'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
             )
         ));
+    }
+    
+    /**
+     * parse email options
+     * 
+     * @param array $_options
+     * @return array
+     */
+    protected function _parseEmailOptions($_options)
+    {
+        $result = array('imap' => array(), 'smtp' => array());
+        
+        foreach (array_keys($result) as $group) {
+            if (isset($_options[$group])) {
+                $_options[$group] = preg_replace('/\s*/', '', $_options[$group]);
+                $parts = explode(',', $_options[$group]);
+                foreach ($parts as $part) {
+                    if (preg_match('/_/', $part)) {
+                        list($key, $sub) = explode('_', $part);
+                        list($subKey, $value) = explode(':', $sub);
+                        $result[$group][$key][$subKey] = $value;
+                    } else {
+                        list($key, $value) = explode(':', $part);
+                        $result[$group][$key] = $value;
+                    }
+                }
+            }
+        }
+        
+        return $result;
     }
 }
