@@ -98,44 +98,44 @@
     font-weight: bold;
 }
 
-.felamimail-node-trash .x-tree-node-icon {
+.felamimail-node-trash img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/user-trash.png);
 }
 
-.felamimail-node-trash-full .x-tree-node-icon {
+.felamimail-node-trash-full img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/user-trash-full.png);
 }
 
-.felamimail-node-sent .x-tree-node-icon {
+.felamimail-node-sent img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/mail-folder-sent.png);
 }
 
-.felamimail-node-inbox .x-tree-node-icon {
+.felamimail-node-inbox img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/mail-folder-inbox.png);
 }
 
-.felamimail-node-drafts .x-tree-node-icon {
+.felamimail-node-drafts img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-txt.png);
 }
 
-.felamimail-node-templates .x-tree-node-icon {
+.felamimail-node-templates img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-tar.png);
 }
 
-.felamimail-node-junk .x-tree-node-icon {
+.felamimail-node-junk img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/trashcan-empty-alt.png);
 }
 
-.felamimail-node-intelligent-marked .x-tree-node-icon {
+.felamimail-node-intelligent-marked img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-important.png);
 }
 
-.felamimail-node-intelligent-unread .x-tree-node-icon {
+.felamimail-node-intelligent-unread img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-bookmarks.png);
     /* background-image:url(../../images/oxygen/16x16/places/mail-folder-sent.png); */
 }
 
-.felamimail-node-account .x-tree-node-icon {
+.felamimail-node-account img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/user-home.png);
 }
 
