@@ -143,8 +143,6 @@ class Tinebase_Acl_Roles
     {  
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_anyRight);
         
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
         
         if (empty($roleMemberships)) {
@@ -195,8 +193,6 @@ class Tinebase_Acl_Roles
         if ($application->status != 'enabled') {
             throw new Tinebase_Exception_AccessDenied('User has no rights. the application is disabled.');
         }
-        
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
                         
