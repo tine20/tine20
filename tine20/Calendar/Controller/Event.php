@@ -303,7 +303,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 	            $sendNotifications = $this->_sendNotifications;
 	            $this->_sendNotifications = FALSE;
 	            
-                $event = parent::update($_record);
+                parent::update($_record);
                 $this->_saveAttendee($_record);
                 
                 $this->_sendNotifications = $sendNotifications;
@@ -941,28 +941,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 break;
             case 'changed':
-                /*
                 $attendeeMigration = $_oldEvent->attendee->getMigration($_event->attendee->getArrayOfIds());
-                print_r($attendeeMigration);
                 
-                $actionMap = array(
-                    'toDeleteIds' => 'deleted',
-                    'toCreateIds' => 'created',
-                    'toUpdateIds' => 'changed'
-                );
-                
-                $updates = $_oldEvent->diff($_event);
-                
-                foreach($actionMap as $migrationKey => $action) {
-                    foreach ($attendeeMigration[$migrationKey] as $attenderId) {
-                        $idx = $_event->attendee->getIndexById($attenderId);
-                        $attender = $_event->attendee[$idx];
-                        
-                        $this->sendNotificationToAttender($attender, $_event, $_updater, $action, $updates);
-                    }
-                    
+                foreach ($attendeeMigration['toCreateIds'] as $attenderId) {
+                    $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
+                    $this->sendNotificationToAttender($attender, $_event, $_updater, 'created');
                 }
-                */
+                
+                foreach ($attendeeMigration['toDeleteIds'] as $attenderId) {
+                    $attender = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
+                    $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted');
+                }
+                
+                if (! empty($attendeeMigration['toUpdateIds'])) {
+                    $updates = $_event->diff($_oldEvent);
+                    
+                    foreach ($attendeeMigration['toUpdateIds'] as $attenderId) {
+                        $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $updates);
+                    }
+                }
+                
                 break;
                 
             default:
@@ -1025,9 +1024,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $messageBody = $translate->_('The following event has been cancled:') . "\n\n";
                 break;
             case 'changed':
-                if (in_array(array_keys($_updates), array('dtstart', 'dtend'))) {
+                if (count(array_intersect(array('dtstart', 'dtend'), array_keys($_updates))) > 0) {
                     $messageSubject = sprintf($translate->_('Event "%s" at %s has been rescheduled' ), $_event->summary, $startDateString);
-                    $messageBody = $translate->_('The following event has been rescheduled:') . "\n\n";
+                    $messageBody  = $translate->_('The following event has been rescheduled:') . "\n";
+                    $messageBody .= $translate->_('From') . ': ' . 
+                        (array_key_exists('dtstart', $_updates) ? Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtstart'], $timezone, $locale) : $startDateString) . " - " .
+                        (array_key_exists('dtstart', $_updates) ? Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtend'], $timezone, $locale) : $endDateString) . "\n";
+                    $messageBody .= $translate->_('To') . ': ' . $startDateString . ' - ' . $endDateString . "\n\n";
                 } else {
                     $messageSubject = sprintf($translate->_('Event "%s" at %s has been updated' ), $_event->summary, $startDateString);
                     $messageBody = $translate->_('The following event has been updated:') . "\n\n";
