@@ -37,6 +37,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const STATUS_TENTATIVE     = 'TENTATIVE';
     
     /**
+     * cache for already resolved attendee
+     * 
+     * @var array type => array of id => object
+     */
+    protected static $_resovedAttendeeCache = array();
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -141,14 +148,25 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public static function getAttenderEmail(Calendar_Model_Attender $_attender)
     {
     	try {
-	    	switch ($_attender->type) {
+	    	switch ($_attender->user_type) {
 	    		case self::USERTYPE_USER:
+	    		case self::USERTYPE_GROUPMEMBER:
 	    			$contact = $_attender->user_id instanceof Addressbook_Model_Contact ?
 	    			    $_attender->user_id :
 	    			    Addressbook_Controller_Contact::getInstance()->get($_attender->user_id);
 	    			    
     			    return $contact->getPreferedEmailAddress();
 	    			break;
+	    		case self::USERTYPE_GROUP:
+	    		    return 'nogroupmail@example.com';
+	    		    break;
+	    		case self::USERTYPE_RESOURCE:
+	    		    $resource = $_attender->user_id instanceof Calendar_Model_Resource ?
+                        $_attender->user_id :
+                        Calendar_Model_Resource::getInstance()->get($_attender->user_id);
+                        
+                    return $resource->name;
+                    break;
 	    		default:
 	    			throw new Exception("type $type not yet supported");
 	                break;
@@ -156,6 +174,47 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     	} catch (Exeption $e) {
     		return NULL;
     	}
+    }
+    
+    /**
+     * returns name of given attender
+     * 
+     * @param Calendar_Model_Attender $_attender
+     * @return string
+     */
+    public static function getAttenderName(Calendar_Model_Attender $_attender)
+    {
+    try {
+            switch ($_attender->user_type) {
+                case self::USERTYPE_USER:
+                case self::USERTYPE_GROUPMEMBER:
+                    $contact = $_attender->user_id instanceof Addressbook_Model_Contact ?
+                        $_attender->user_id :
+                        Addressbook_Controller_Contact::getInstance()->get($_attender->user_id);
+                    return $contact->n_fn;
+                    break;
+                    
+                case self::USERTYPE_GROUP:
+                    $group = $_attender->user_id instanceof Tinebase_Model_Group ?
+                        $_attender->user_id :
+                        Tinebase_Group::getInstance()->getGroupById($_attender->user_id);
+                    return $group->name;
+                    break;
+                    
+                case self::USERTYPE_RESOURCE:
+                    $resource = $_attender->user_id instanceof Calendar_Model_Resource ?
+                        $_attender->user_id :
+                        Calendar_Model_Resource::getInstance()->get($_attender->user_id);
+                    return $resource->name;
+                    break;
+                    
+                default:
+                    throw new Exception("type $type not yet supported");
+                    break;
+            }
+        } catch (Exeption $e) {
+            return NULL;
+        }
     }
     
     /**
@@ -337,10 +396,18 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             
             foreach ($attendee as $attender) {
                 $type = $attender->$_typeProperty;
-                if (! array_key_exists($type, $typeMap)) {
-                    $typeMap[$type] = array();
+                if ($attender->$_idProperty instanceof Tinebase_Record_Abstract) {
+                    // already resolved
+                    continue;
+                } elseif (array_key_exists($type, self::$_resovedAttendeeCache) && array_key_exists($attender->$_idProperty, self::$_resovedAttendeeCache[$type])){
+                    // already in cache
+                    $attender->$_idProperty = self::$_resovedAttendeeCache[$type][$attender->$_idProperty];
+                } else {
+                    if (! array_key_exists($type, $typeMap)) {
+                        $typeMap[$type] = array();
+                    }
+                    $typeMap[$type][] = $attender->$_idProperty;
                 }
-                $typeMap[$type][] = $attender->$_idProperty;
                 
                 // remove status_authkey when editGrant for displaycontainer_id is missing
                 if (! is_array($attender->displaycontainer_id) || ! (bool) $attender['displaycontainer_id']['account_grants']['editGrant']) {
@@ -372,9 +439,20 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // sort entries in
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
+                if ($attender->$_idProperty instanceof Tinebase_Record_Abstract) {
+                    // allready resolved from cache
+                    continue;
+                }
+                
                 $attendeeTypeSet = $typeMap[$attender->$_typeProperty];
                 $idx = $attendeeTypeSet->getIndexById($attender->$_idProperty);
                 if ($idx !== false) {
+                    // copy to cache
+                    if (! array_key_exists($attender->$_typeProperty, self::$_resovedAttendeeCache)) {
+                        self::$_resovedAttendeeCache[$attender->$_typeProperty] = array();
+                    }
+                    self::$_resovedAttendeeCache[$attender->$_typeProperty][$attender->$_idProperty] = $attendeeTypeSet[$idx];
+                    
                     $attender->$_idProperty = $attendeeTypeSet[$idx];
                 }
             }
