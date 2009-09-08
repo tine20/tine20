@@ -30,6 +30,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected $_purgeRecords = FALSE;
     
     /**
+     * send notifications?
+     * - the controller has to define a sendNotifications() function
+     *
+     * @var boolean
+     */
+    protected $_sendNotifications = TRUE;
+    
+    /**
      * @var Calendar_Controller_Event
      */
     private static $_instance = NULL;
@@ -102,28 +110,40 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function create(Tinebase_Record_Interface $_record, $_checkBusyConficts = FALSE)
     {
-    	try {
-	    	$db = $this->_backend->getAdapter();
-	        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-	        
-	        // we need to resolve groupmembers before free/busy checking
-	        Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
-	        
+        try {
+            $db = $this->_backend->getAdapter();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            
+            // we need to resolve groupmembers before free/busy checking
+            Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
+            
 	        if ($_checkBusyConficts) {
-		        // ensure that all attendee are free
-		        $this->checkBusyConficts($_record);
-	        }
-	        
-	        $event = parent::create($_record);
-	        $this->_saveAttendee($_record);
-	        
-	        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-    	} catch (Exception $e) {
+                // ensure that all attendee are free
+                $this->checkBusyConficts($_record);
+            }
+            
+            $sendNotifications = $this->_sendNotifications;
+            $this->_sendNotifications = FALSE;
+                
+            $event = parent::create($_record);
+            $this->_saveAttendee($_record);
+            
+            $this->_sendNotifications = $sendNotifications;
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
         
-        return $this->get($event->getId());
+        $createdEvent = $this->get($event->getId());
+        
+        // send notifications
+        if ($this->_sendNotifications) {
+            $this->sendNotifications($createdEvent, $this->_currentAccount, 'created');
+        }
+            
+        return $createdEvent;
     }
     
     /**
@@ -270,7 +290,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
 	        $event = $this->get($_record->getId());
 	        if ($event->editGrant) {
-	            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "updating event: {$_record->id} ");
+	            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
 		        
 	            // we need to resolve groupmembers before free/busy checking
 	            Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
@@ -279,25 +299,38 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 	                // ensure that all attendee are free
 	                $this->checkBusyConficts($_record);
 	            }
-	            $event = parent::update($_record);
+                
+	            $sendNotifications = $this->_sendNotifications;
+	            $this->_sendNotifications = FALSE;
 	            
-	            $this->_saveAttendee($_record);
-	        } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
-	            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
-	            foreach ($_record->attendee as $attender) {
-	                if ($attender->status_authkey) {
-	                    $this->attenderStatusUpdate($event, $attender, $attender->status_authkey);
-	                }
-	            }
-	        }
-	        
+                $event = parent::update($_record);
+                $this->_saveAttendee($_record);
+                
+                $this->_sendNotifications = $sendNotifications;
+                
+            } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
+                foreach ($_record->attendee as $attender) {
+                    if ($attender->status_authkey) {
+                        $this->attenderStatusUpdate($event, $attender, $attender->status_authkey);
+                    }
+                }
+            }
+            
     	    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
         
-        return $this->get($event->getId());
+        $updatedEvent = $this->get($event->getId());
+        
+        // send notifications
+        if ($this->_sendNotifications) {
+            $this->sendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
+        }
+            
+        return $updatedEvent;
     }
     
     /**
@@ -867,54 +900,164 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Tinebase_Model_Alarm $_alarm
      * @return void
      * 
-     * @todo add ignore acl to get() / setFromArray()
+     * @todo make this working with recuring events
      * @todo throw exception on error
-     * @todo make sending alarms to groups work
      * @todo use html mail template for body
      */
     public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to send alarm " . print_r($_alarm->toArray(), TRUE));
+        
+        $doContainerACLChecks = $this->_doContainerACLChecks;
         $this->_doContainerACLChecks = FALSE;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
-        );
-        
         $event = $this->get($_alarm->record_id);
+        $this->_doContainerACLChecks = $doContainerACLChecks;
         
-        if ($event->organizer) {
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+        $this->sendNotifications($event, $this->_currentAccount, 'alarm');
+    }
+    
+    /**
+     * send notifications 
+     * 
+     * @param Calendar_Model_Event       $_event
+     * @param Tinebase_Model_FullAccount $_updater
+     * @param Sting                      $_action
+     * @param Calendar_Model_Event       $_oldEvent
+     * @return void
+     */
+    public function sendNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
+    {
+        // lets resolve attendee once as batch to fill cache
+        $attendee = clone $_event->attendee;
+        Calendar_Model_Attender::resolveAttendee($attendee);
+        
+        switch ($_action) {
+            case 'alarm':
+            case 'created':
+            case 'deleted':
+                foreach($_event->attendee as $attender) {
+                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action);
+                }
+                break;
+            case 'changed':
+                /*
+                $attendeeMigration = $_oldEvent->attendee->getMigration($_event->attendee->getArrayOfIds());
+                print_r($attendeeMigration);
+                
+                $actionMap = array(
+                    'toDeleteIds' => 'deleted',
+                    'toCreateIds' => 'created',
+                    'toUpdateIds' => 'changed'
+                );
+                
+                $updates = $_oldEvent->diff($_event);
+                
+                foreach($actionMap as $migrationKey => $action) {
+                    foreach ($attendeeMigration[$migrationKey] as $attenderId) {
+                        $idx = $_event->attendee->getIndexById($attenderId);
+                        $attender = $_event->attendee[$idx];
+                        
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, $action, $updates);
+                    }
+                    
+                }
+                */
+                break;
+                
+            default:
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
+                break;
+                
+        }
+    }
+    
+    /**
+     * send notification to a single attender
+     * 
+     * @param Calendar_Model_Attender    $_attender
+     * @param Calendar_Model_Event       $_event
+     * @param Tinebase_Model_FullAccount $_updater
+     * @param Sting                      $_action
+     * @param array                      $_updates
+     * @return void
+     */
+    public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_updates=NULL)
+    {
+        if (! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+            // don't send notifications to non persons
+            return;
+        }
+        
+        // find organizer account
+        if ($_event->organizer) {
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->get($_event->organizer);
             $organizer = Tinebase_User::getInstance()->getFullUserById($organizerContact->account_id);
         } else {
             // use creator as organizer
-            $organizer = Tinebase_User::getInstance()->getFullUserById($event->created_by);
+            $organizer = Tinebase_User::getInstance()->getFullUserById($_event->created_by);
         }
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
-        
-        // create message
-        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
-        $messageSubject = $translate->_('Notification for Event ' . $event->summary);
-        $messageBody = $event->getNotificationMessage();
-        
-        $notificationsBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
-        
-        // loop recipients
-        foreach ($event->attendee as $attender) {
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($attender->toArray(), TRUE));
-            
-            if ($attender->user_type == Calendar_Model_Attender::USERTYPE_USER) {
-                //$user = Tinebase_User::getInstance()->getUserById($attender->user_id);
-                $contact = Addressbook_Controller_Contact::getInstance()->get($attender->user_id);
+        // get prefered language and timezone
+        $prefUser = $_attender->getUserAccountId();
+        if (! $prefUser) {
+            $prefUser = $organizer;
+        }
+        $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser));
+        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser);
+        $translate = Tinebase_Translation::getTranslation($this->_applicationName, $locale);
 
-                // send message
-                if ($contact->email) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending alarm email to ' . $contact->email);
-                    $notificationsBackend->send($organizer, $contact, $messageSubject, $messageBody);
+        // get date strings
+        $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
+        $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
+        
+        switch ($_action) {
+            case 'alarm':
+                $messageSubject = sprintf($translate->_('Alarm for event "%s" at %s'), $_event->summary, $startDateString);
+                $messageBody = $translate->_('Here is your requested alarm for to following event:') . "\n\n";
+                break;
+            case 'created':
+                $messageSubject = sprintf($translate->_('Event inivitation "%s" at %s'), $_event->summary, $startDateString);
+                $messageBody = $translate->_('You have been invited to the following event:') . "\n\n";
+                break;
+            case 'deleted':
+                $messageSubject = sprintf($translate->_('Event "%s" at %s has been cancled' ), $_event->summary, $startDateString);
+                $messageBody = $translate->_('The following event has been cancled:') . "\n\n";
+                break;
+            case 'changed':
+                if (in_array(array_keys($_updates), array('dtstart', 'dtend'))) {
+                    $messageSubject = sprintf($translate->_('Event "%s" at %s has been rescheduled' ), $_event->summary, $startDateString);
+                    $messageBody = $translate->_('The following event has been rescheduled:') . "\n\n";
+                } else {
+                    $messageSubject = sprintf($translate->_('Event "%s" at %s has been updated' ), $_event->summary, $startDateString);
+                    $messageBody = $translate->_('The following event has been updated:') . "\n\n";
                 }
-            }
+                break;
+            default:
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
+                break;
         }
         
-        $this->_doContainerACLChecks = TRUE;
+        // add values to text
+        $messageBody .= $_event->summary . "\n\n" 
+            . $translate->_('Start')        . ': ' . $startDateString   . "\n" 
+            . $translate->_('End')          . ': ' . $endDateString     . "\n"
+            //. $translate->_('Organizer')    . ': ' . $_event->organizer   . "\n" 
+            . $translate->_('Location')     . ': ' . $_event->location    . "\n"
+            . $translate->_('Description')  . ': ' . $_event->description . "\n\n"
+            
+            . $translate->plural('Attender', 'Attendee', count($_event->attendee)). ":\n";
+        
+        foreach ($_event->attendee as $attender) {
+            $messageBody .= $attender->getName(). "\n";
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
+        
+        // NOTE: this is a contact as we only support users and groupmembers
+        $contact = $_attender->getResolvedUser();
+        Tinebase_Notification::getInstance()->send($organizer, array($contact), $messageSubject, $messageBody);
     }
 }
