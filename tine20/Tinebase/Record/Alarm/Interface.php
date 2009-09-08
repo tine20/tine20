@@ -19,13 +19,6 @@
 interface Tinebase_Record_Alarm_Interface
 {
     /**
-     * create notification message for task alarm
-     *
-     * @return string
-     */
-    public function getNotificationMessage();
-
-    /**
      * returns alarm datetime field
      *
      * @return string
