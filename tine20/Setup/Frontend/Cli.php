@@ -219,6 +219,12 @@ class Setup_Frontend_Cli
         }
     }
     
+    /**
+     * parse remaining args
+     * 
+     * @param string $_args
+     * @return array
+     */
     protected function _parseRemainingArgs($_args)
     {
     	$options = array();
