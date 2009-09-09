@@ -248,7 +248,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
 	        $this->_resolveRrule($_records);
 	        
-	        //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
+            // get/resolve alarms
+            Calendar_Controller_Event::getInstance()->getAlarms($_records);
+	        
+            //Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
 	        
 	        // merge recurset
 	        $period = $_filter->getFilter('period');

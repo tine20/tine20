@@ -32,6 +32,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         $this->_modelName = 'Tasks_Model_Task';
         $this->_backend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);
         $this->_currentAccount = Tinebase_Core::getUser();
+        $this->_recordAlarmField = 'due';
     }
 
     /**

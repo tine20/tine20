@@ -69,6 +69,13 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected $_relatedObjectsToDelete = array();
     
+    /**
+     * record alarm field
+     * 
+     * @var string
+     */
+    protected $_recordAlarmField = 'dtstart';
+    
     /*********** get / search / count leads **************/
     
     /**
@@ -153,7 +160,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
             }
             if ($record->has('alarms')) {
-                $record->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $record->getId());
+                //$record->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $record->getId());
+                $this->getAlarms($record);
             }
         }
         
@@ -641,7 +649,7 @@ abstract class Tinebase_Controller_Record_Abstract
         // create / update alarms
         foreach ($_record->alarms as $alarm) {
             try {
-                $this->_inspectAlarm($_record, $alarm);
+                $this->_inspectAlarmSet($_record, $alarm);
                 $alarms->addRecord($alarm);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getMessage());
@@ -665,24 +673,71 @@ abstract class Tinebase_Controller_Record_Abstract
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _inspectAlarm(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
+    protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
     {
-        // @todo move that to controller?
-        $alarmField = $_record->getAlarmDateTimeField();
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $alarmField 
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField 
             //. ' ' . print_r($_alarm->toArray(), true)
             //. print_r($_record->toArray(), true)
         );
         
         // check if alarm field is Zend_Date
-        if ($_record->{$alarmField} instanceof Zend_Date && isset($_alarm->minutes_before)) {
-            $_alarm->setTime($_record->{$alarmField});
+        if ($_record->{$this->_recordAlarmField} instanceof Zend_Date && isset($_alarm->minutes_before)) {
+            $_alarm->setTime($_record->{$this->_recordAlarmField});
         } else {
             throw new Tinebase_Exception_InvalidArgument('Record has no alarm field or minutes before are missing.');
         }
     }
+    
+    /**
+     * get and resolve all alarms of given record(s)
+     * 
+     * @param  Tinebase_Record_Interface|Tinebase_Record_RecordSet $_record
+     */
+    public function getAlarms($_record)
+    {
+        $alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $_record);
+        
+        if ($_record instanceof Tinebase_Record_RecordSet) {
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
+            
+            $alarms->addIndices(array('record_id'));
+            foreach ($_record as $record) {
+                
+                $record->alarms = $alarms->filter('record_id', $record->getId());
+                
+                // calc minutes_before
+                if ($record->has($this->_recordAlarmField)) {
+                    $this->_inspectAlarmGet($record);
+                }
+            }
+            
+        } else if ($_record instanceof Tinebase_Record_Interface) {
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record.");
+            
+            $_record->alarms = $alarms;
 
+            // calc minutes_before
+            if ($_record->has($this->_recordAlarmField)) {
+                $this->_inspectAlarmGet($_record);
+            }
+        }
+    }
+
+    /**
+     * inspect alarm and set time
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Model_Alarm $_alarm
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _inspectAlarmGet(Tinebase_Record_Abstract $_record)
+    {
+        $_record->alarms->setMinutesBefore($_record->{$this->_recordAlarmField});
+    }
+    
     /**
      * delete alarms for records
      *

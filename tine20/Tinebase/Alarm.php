@@ -126,17 +126,14 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * get all alarms of a given record
+     * get all alarms of given record(s)
      * 
      * @param  string $_model model to get alarms for
      * @param  string|array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_recordId record id(s) to get alarms for
      * @param  boolean $_onlyIds
-     * @param  boolean $_resolve
-     * @return Tinebase_Record_RecordSet|array of Tinebase_Model_Alarm|ids
-     * 
-     * @todo add grants?
+     * @return Tinebase_Record_RecordSet|array of ids
      */
-    public function getAlarmsOfRecord($_model, $_recordId, $_onlyIds = FALSE, $_resolve = FALSE)
+    public function getAlarmsOfRecord($_model, $_recordId, $_onlyIds = FALSE)
     {
         if ($_recordId instanceof Tinebase_Record_RecordSet) {
             $recordId = $_recordId->getArrayOfIds();
@@ -161,36 +158,6 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             ),
         ));
         $result = $this->_backend->search($filter, NULL, $_onlyIds);
-
-        if ($_resolve) {
-            if ($_recordId instanceof Tinebase_Record_RecordSet) {
-                
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
-                
-                $result->addIndices(array('record_id'));
-                foreach ($_recordId as $record) {
-                    $alarmField = $record->getAlarmDateTimeField();
-                    $record->alarms = $result->filter('record_id', $record->getId());
-                    
-                    // calc minutes_before
-                    if ($record->has($alarmField)) {
-                        $record->alarms->setMinutesBefore($record->{$alarmField});
-                    }
-                }
-                
-            } else if ($_recordId instanceof Tinebase_Record_Interface) {
-                
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record.");
-                
-                $alarmField = $_recordId->getAlarmDateTimeField();
-                $_recordId->alarms = $result;
-
-                // calc minutes_before
-                if ($_recordId->has($alarmField)) {
-                    $_recordId->alarms->setMinutesBefore($_recordId->{$alarmField});
-                }
-            }
-        }
         
         return $result;
     }

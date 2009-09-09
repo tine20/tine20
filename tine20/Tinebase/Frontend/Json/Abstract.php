@@ -203,12 +203,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $_record->setTimezone(Tinebase_Core::get('userTimeZone'));
         $_record->bypassFilters = true;
         
-        // add alarms
-        if ($_record->has('alarms')) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get alarms for record ... ');
-            Tinebase_Alarm::getInstance()->getAlarmsOfRecord(get_class($_record), $_record, FALSE, TRUE);
-        }
-        
         $recordArray = $_record->toArray();
 
         if ($_record->has('container_id')) {
@@ -239,12 +233,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         // get acls for records
         if ($_records[0]->has('container_id')) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
-        }
-        
-        // add alarms
-        if ($_records[0]->has('alarms')) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get alarms for multiple records ... ');
-            Tinebase_Alarm::getInstance()->getAlarmsOfRecord($_records->getRecordClassName(), $_records, FALSE, TRUE);
         }
         
         $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
