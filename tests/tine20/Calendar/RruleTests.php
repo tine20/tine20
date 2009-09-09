@@ -578,6 +578,31 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
     }
     
+    public function testComputeNextOccurrence()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'weekly',
+            'dtstart'       => '2009-09-09 08:00:00',
+            'dtend'         => '2009-09-09 10:00:00',
+            'rrule'         => 'FREQ=WEEKLY;BYDAY=WE,FR;INTERVAL=1;UNTIL=2009-09-27 10:00:00',
+            'originator_tz' => 'Europe/Berlin',
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Zend_Date('2008-01-21 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $from);
+        $this->assertTrue($event === $nextOccurrence, 'given event is next occurrence');
+        
+        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtstart);
+        $this->assertEquals('2009-09-11 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtstart);
+        $this->assertEquals('2009-09-16 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        
+    }
+    
     /************************** date helper tests ***************************/
     
     public function testSkipWday()

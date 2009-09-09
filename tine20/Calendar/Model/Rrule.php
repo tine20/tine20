@@ -248,6 +248,67 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
+     * returns next occurrence _ignoring exceptions_ or NULL if there is none/not computable
+     * 
+     * NOTE: computing the next occurrence of an open end rrule can be dangoures, as it might result
+     *       in a endless loop. Therefore we only make a limited number of attempts before giving up.
+     * 
+     * @param  Calendar_Model_Event         $_event
+     * @param  Tinebase_Record_RecordSet    $_exceptions
+     * @param  Zend_Date                    $_from
+     * @return Calendar_Model_Event
+     */
+    public static function computeNextOccurrence($_event, $_exceptions, $_from)
+    {
+        $freqMap = array(
+            self::FREQ_DAILY   => Zend_Date::DAY,
+            self::FREQ_WEEKLY  => Zend_Date::WEEK,
+            self::FREQ_MONTHLY => Zend_Date::MONTH,
+            self::FREQ_YEARLY  => Zend_Date::YEAR
+        );
+        
+        $rrule = new Calendar_Model_Rrule();
+        $rrule->setFromString($_event->rrule);
+        
+        $from  = clone $_from;
+        $until = clone $from;
+        
+        if ($_from->isEarlier($_event->dtstart)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' from is ealier dtstart -> given event is next occurrence');
+            return $_event;
+        }
+        
+        $until->add($rrule->interval, $freqMap[$rrule->freq]);
+        $attempts = 0;
+        while (TRUE) {
+            if ($rrule->until instanceof Zend_Date && $from->isLater($rrule->until)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' passed rrule_until -> no furthor occurrences');
+                return NULL;
+            }
+            
+            $until   = ($rrule->until instanceof Zend_Date && $until->isLater($rrule->until)) ? $rrule->until : $until;
+            $recurSet = self::computeRecuranceSet($_event, $_exceptions, $from, $until);
+            $attempts++;
+            
+            if (count($recurSet) > 0) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found next occurrence after $attempts attempt(s)");
+                break;
+            }
+            
+            if ($attempts > count($_exceptions) + 5) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not find the next occurrence after $attempts attempts, giving up");
+                return NULL;
+            }
+            
+            $from->add($rrule->interval, $freqMap[$rrule->freq]);
+            $until->add($rrule->interval, $freqMap[$rrule->freq]);
+        }
+        
+        $recurSet->sort('dtstart', 'ASC');
+        return $recurSet->getFirstRecord();
+    }
+    
+    /**
      * Computes the recurance set of the given event leaving out $_event->exdate and $_exceptions
      * 
      * @todo respect rrule_until!
