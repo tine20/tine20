@@ -786,7 +786,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         $attendee->cal_event_id = $_event->getId();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} " .  print_r($attendee->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} " .  print_r($attendee->toArray(), true));
         
         $currentAttendee = $this->_backend->getEventAttendee($_event);
         
@@ -874,7 +874,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // preserv old authkey
         $_attender->status_authkey = $_currentAttender->status_authkey;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r("updating atternder: " . $_attender->toArray(), true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attender: " . print_r($_attender->toArray(), TRUE));
         
         // update display calendar if attender has/is a useraccount
         if ($userAccountId) {
@@ -898,12 +898,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Tinebase_Model_Group $_group
      * @return void
      */
-    public function onUpdateGroup(Tinebase_Model_Group $_group)
+    public function onUpdateGroup($_groupId)
     {
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'equals', 'value' => array(
                 'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
-                'user_id'   => $_group->getId()
+                'user_id'   => $_groupId
             ))
         ));
         
@@ -915,6 +915,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         foreach($events as $event) {
             Calendar_Model_Attender::resolveGroupMembers($event->attendee);
+            //print_r($event->attendee->toArray());
             $this->_saveAttendee($event);
             
             // touch event

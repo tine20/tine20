@@ -70,7 +70,16 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
                 
             case 'Admin_Event_UpdateGroup':
                 Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $_eventObject->group->name);
-                Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->group);
+                Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->group->getId());
+                break;
+            case 'Admin_Event_AddGroupMember':
+                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') add groupmember ' . (string) $_eventObject->userId . ' to group ' . (string) $_eventObject->groupId);
+                Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
+                break;
+                
+            case 'Admin_Event_RemoveGroupMember':
+                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
+                Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
                 break;
         }
     }
