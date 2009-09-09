@@ -160,7 +160,6 @@ abstract class Tinebase_Controller_Record_Abstract
                 $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
             }
             if ($record->has('alarms')) {
-                //$record->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $record->getId());
                 $this->getAlarms($record);
             }
         }
@@ -729,9 +728,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * inspect alarm and set time
      * 
      * @param Tinebase_Record_Abstract $_record
-     * @param Tinebase_Model_Alarm $_alarm
      * @return void
-     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _inspectAlarmGet(Tinebase_Record_Abstract $_record)
     {
@@ -746,7 +743,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _deleteAlarmsForIds($_recordIds)
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . " Deleting alarms for events " . print_r($_recordIds, TRUE)
+            . " Deleting alarms for records " . print_r($_recordIds, TRUE)
         );
         
         Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord($this->_modelName, $_recordIds);
