@@ -196,61 +196,36 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * save alarms of record
+     * set alarms of record
      *
-     * @param string $_model
      * @param Tinebase_Record_Abstract $_record
+     * @param string $_alarmsProperty
+     * @return void
      */
-    public function saveAlarmsOfRecord($_model, Tinebase_Record_Abstract $_record)
+    public function setAlarmsOfRecord(Tinebase_Record_Abstract $_record, $_alarmsProperty = 'alarms')
     {
-        $alarmField = $_record->getAlarmDateTimeField();
+        $model = get_class($_record);
+        $alarms = $_record->{$_alarmsProperty};
         
-        $alarms = $_record->alarms instanceof Tinebase_Record_RecordSet ? 
-            $_record->alarms : 
-            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-        
-        if (count($alarms) == 0) {
-            // no alarms
-            return $alarms;
-        }
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . " About to save " . count($alarms) . " alarms for $_model {$_record->id} " 
-            //.  print_r($alarms->toArray(), true)
-        );
-        
-        $currentAlarms = $this->getAlarmsOfRecord($_model, $_record->id);
+        $currentAlarms = $this->getAlarmsOfRecord($model, $_record);
         $diff = $currentAlarms->getMigration($alarms->getArrayOfIds());
         $this->_backend->delete($diff['toDeleteIds']);
         
         // create / update alarms
         foreach ($alarms as $alarm) {
-            
-            // check if alarm field is Zend_Date
-            if (! $_record->{$alarmField} instanceof Zend_Date) {
-                continue;
-            }
-            
             $id = $alarm->getId();
             
             if ($id) {
-                if ($_record->has($alarmField) && $alarm->minutes_before) {
-                    $alarm->setTime($_record->{$alarmField});
-                }
                 $alarm = $this->_backend->update($alarm);
                 
             } else {
                 $alarm->record_id = $_record->getId();
                 if (! $alarm->model) {
-                    $alarm->model = $_model;
-                }
-                if ($_record->has($alarmField) && ! $alarm->alarm_time) {
-                    $alarm->setTime($_record->{$alarmField});
+                    $alarm->model = $model;
                 }
                 $alarm = $this->_backend->create($alarm);
             }
         }
-        
-        $_record->alarms = $alarms;
     }
     
     /**

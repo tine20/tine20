@@ -626,13 +626,57 @@ abstract class Tinebase_Controller_Record_Abstract
     }     
 
     /**
-     * saves alarm of given record
+     * saves alarms of given record
      * 
-     * @param Tinebase_Record_Abstract $_event
+     * @param Tinebase_Record_Abstract $_record
+     * @return void
      */
     protected function _saveAlarms(Tinebase_Record_Abstract $_record)
     {
-        return Tinebase_Alarm::getInstance()->saveAlarmsOfRecord($this->_modelName, $_record);
+        $alarms = $_record->alarms instanceof Tinebase_Record_RecordSet ? 
+            $_record->alarms : 
+            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        
+        if (count($alarms) == 0) {
+            // no alarms
+            return;
+        }
+        
+        // create / update alarms
+        foreach ($alarms as $alarm) {
+            $this->_inspectAlarm($_record, $alarm);
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " About to save " . count($alarms) . " alarms for {$_record->id} " 
+            .  print_r($alarms->toArray(), true)
+        );
+        $_record->alarms = $alarms;
+        
+        Tinebase_Alarm::getInstance()->setAlarmsOfRecord($_record);
+    }
+    
+    /**
+     * inspect alarm and set time
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Model_Alarm $_alarm
+     * @return void
+     */
+    protected function _inspectAlarm(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
+    {
+        // @todo move that to controller?
+        $alarmField = $_record->getAlarmDateTimeField();
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $alarmField 
+            //. ' ' . print_r($_alarm->toArray(), true)
+            //. print_r($_record->toArray(), true)
+        );
+        
+        // check if alarm field is Zend_Date
+        if ($_record->{$alarmField} instanceof Zend_Date && isset($_alarm->minutes_before)) {
+            $_alarm->setTime($_record->{$alarmField});
+        }
     }
 
     /**

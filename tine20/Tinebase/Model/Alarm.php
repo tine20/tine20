@@ -106,6 +106,8 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      */
     public function setMinutesBefore(Zend_Date $_date)
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
+        
         $dtStartTS = $_date->getTimestamp();
         $alarmTimeTS = $this->alarm_time->getTimestamp();
         
