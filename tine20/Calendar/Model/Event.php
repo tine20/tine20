@@ -27,7 +27,7 @@
  * 
  * @package Calendar
  */
-class Calendar_Model_Event extends Tinebase_Record_Abstract implements Tinebase_Record_Alarm_Interface
+class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
     const TRANSP_TRANSP        = 'TRANSPARENT';
     const TRANSP_OPAQUE        = 'OPAQUE';
@@ -122,13 +122,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract implements Tinebase_
         //'rdate',
         'rrule_until',
     );
-    
-    /**
-     * alarm datetime field
-     *
-     * @var string
-     */
-    protected $_alarmDateTimeField = 'dtstart'; 
     
     /**
      * sets record related properties

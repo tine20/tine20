@@ -895,13 +895,4 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         return $this->_modlogOmmitFields;
     }
 
-    /**
-     * returns alarm datetime field
-     *
-     * @return string
-     */
-    public function getAlarmDateTimeField()
-    {
-        return $this->_alarmDateTimeField;
-    }
 }
