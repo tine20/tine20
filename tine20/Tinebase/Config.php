@@ -111,7 +111,7 @@ class Tinebase_Config
                 }
             }
             
-            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . print_r($value, TRUE));
+            //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . print_r($value, TRUE));
             
             // ommit validation because more dimensional arrays are not accepted :-/
             $result = new Tinebase_Model_Config(array(
