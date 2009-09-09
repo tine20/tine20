@@ -1051,7 +1051,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $messageBody = $translate->_('You have been invited to the following event:') . "\n\n";
                 break;
             case 'deleted':
-                $messageSubject = sprintf($translate->_('Event "%s" at %s has been cancled' ), $_event->summary, $startDateString);
+                $messageSubject = sprintf($translate->_('Event "%s" at %s has been canceled' ), $_event->summary, $startDateString);
                 $messageBody = $translate->_('The following event has been canceled:') . "\n\n";
                 break;
             case 'changed':
