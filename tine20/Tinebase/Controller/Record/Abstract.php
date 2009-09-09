@@ -637,11 +637,6 @@ abstract class Tinebase_Controller_Record_Abstract
             $_record->alarms : 
             new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
-        if (count($alarms) == 0) {
-            // no alarms
-            return;
-        }
-        
         // create / update alarms
         foreach ($alarms as $alarm) {
             $this->_inspectAlarm($_record, $alarm);
