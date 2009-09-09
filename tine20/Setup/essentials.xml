@@ -16,5 +16,6 @@
         <extension name="ctype" />
         <extension name="dom" />
         <extension name="mcrypt" />
+        <extension name="iconv" />
     </extensions>	
 </essential>	
