@@ -633,18 +633,24 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _saveAlarms(Tinebase_Record_Abstract $_record)
     {
-        $alarms = $_record->alarms instanceof Tinebase_Record_RecordSet ? 
-            $_record->alarms : 
-            new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        if (! $_record->alarms instanceof Tinebase_Record_RecordSet) {
+            $_record->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        }
+        $alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
         // create / update alarms
-        foreach ($alarms as $alarm) {
-            $this->_inspectAlarm($_record, $alarm);
+        foreach ($_record->alarms as $alarm) {
+            try {
+                $this->_inspectAlarm($_record, $alarm);
+                $alarms->addRecord($alarm);
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getMessage());
+            }
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . " About to save " . count($alarms) . " alarms for {$_record->id} " 
-            .  print_r($alarms->toArray(), true)
+            //.  print_r($alarms->toArray(), true)
         );
         $_record->alarms = $alarms;
         
@@ -657,6 +663,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_Abstract $_record
      * @param Tinebase_Model_Alarm $_alarm
      * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _inspectAlarm(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
     {
@@ -671,6 +678,8 @@ abstract class Tinebase_Controller_Record_Abstract
         // check if alarm field is Zend_Date
         if ($_record->{$alarmField} instanceof Zend_Date && isset($_alarm->minutes_before)) {
             $_alarm->setTime($_record->{$alarmField});
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Record has no alarm field or minutes before are missing.');
         }
     }
 

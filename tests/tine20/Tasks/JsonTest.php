@@ -117,6 +117,11 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
             $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
             $this->assertEquals(Tinebase_Model_Alarm::STATUS_SUCCESS, $loadedTaskData['alarms'][0]['sent_status']);
         }
+
+        // try to save task without due (alarm should be removed)
+        unset($task->due);
+        $persistentTaskData = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
     
     /**
