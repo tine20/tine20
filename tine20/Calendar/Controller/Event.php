@@ -788,7 +788,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} " .  print_r($attendee->toArray(), true));
         
-        $currentAttendee = $this->_backend->getEventAttendee($_event);
+        $currentEvent = $this->get($_event->getId());
+        $currentAttendee = $currentEvent->attendee;
+        //$currentAttendee = $this->_backend->getEventAttendee($_event);
         
         $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
         $this->_backend->deleteAttendee($diff['toDeleteIds']);
@@ -915,15 +917,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         foreach($events as $event) {
             Calendar_Model_Attender::resolveGroupMembers($event->attendee);
-            //print_r($event->attendee->toArray());
-            $this->_saveAttendee($event);
-            
-            // touch event
-            $event->last_modified_time = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
-            $event->last_modified_by = Tinebase_Core::getUser()->getId();
-            $event->seq = (int)$event->seq + 1;
-            
-            $this->_backend->update($event);
+            $this->update($event, FALSE);
         }
         
         $this->_doContainerACLChecks = $doContainerACLChecks;
