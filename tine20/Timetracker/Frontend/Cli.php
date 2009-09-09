@@ -1,13 +1,12 @@
- <?php
+<?php
 /**
  * Tine 2.0
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        extend Tinebase_Frontend_Cli_Abstract
  * @todo        add verbose + dryrun to updateTimeaccountGrants()
  */
 
@@ -18,17 +17,19 @@
  *
  * @package     Addressbook
  */
-class Timetracker_Frontend_Cli
+class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application
-     *
+     * 
      * @var string
      */
     protected $_applicationName = 'Timetracker';
     
     /**
      * help array with function names and param descriptions
+     * 
+     * @return void
      */
     protected $_help = array(
         'allBillable' => array(
@@ -42,23 +43,9 @@ class Timetracker_Frontend_Cli
     );
     
     /**
-     * echos usage information
-     *
-     */
-    public function getHelp()
-    {
-        foreach ($this->_help as $functionHelp) {
-            echo $functionHelp['description']."\n";
-            echo "parameters:\n";
-            foreach ($functionHelp['params'] as $param => $description) {
-                echo "$param \t $description \n";
-            }
-        }
-    }
-    
-    /**
      * add manage billable to all users of all timeaccounts
-     *
+     * 
+     * @return void
      */
     public function allBillable()
     {
@@ -83,7 +70,8 @@ class Timetracker_Frontend_Cli
 
     /**
      * replace single user accounts with one or more groups for each timeaccount in filter
-     *
+     * 
+     * @return void
      */
     public function updateTimeaccountGrants()
     {
@@ -118,4 +106,24 @@ class Timetracker_Frontend_Cli
         echo "done.\n";
     }
     
+
+    /**
+     * search and show duplicate timeaccounts
+     * 
+     * @return void
+     */
+    public function searchDuplicateTimeaccounts()
+    {
+        $filter = new Timetracker_Model_TimeaccountFilter(array(array(
+            'field' => 'showClosed', 
+            'operator' => 'equals', 
+            'value' => FALSE
+        )));
+        
+        $duplicates = parent::_searchDuplicates(Timetracker_Controller_Timeaccount::getInstance(), $filter, 'title');
+        
+        echo 'Found ' . (count($duplicates) / 2) . ' Timeaccount duplicate(s):' . "\n";
+        
+        print_r($duplicates);
+    }
 }

@@ -106,4 +106,41 @@ class Tinebase_Frontend_Cli_Abstract
             } 
         }
     }
+
+    /**
+     * search for duplicates
+     * @param Tinebase_Controller_Record_Interface $_controller
+     * @param  Tinebase_Model_Filter_FilterGroup
+     * @param string $_field
+     * @return array with ids / field
+     * 
+     * @todo add more options (like soundex, what do do with duplicates/delete/merge them, ...)
+     */
+    function _searchDuplicates(Tinebase_Controller_Record_Abstract $_controller, $_filter, $_field)
+    {
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => 0,
+            'limit' => 100,
+        ));
+        $results = array();
+        $allRecords = array();
+        $totalCount = $_controller->searchCount($_filter);
+        echo 'Searching ' . $totalCount . " record(s) for duplicates\n";
+        while ($pagination->start < $totalCount) {
+            $records = $_controller->search($_filter, $pagination);
+            foreach ($records as $record) {
+                if (in_array($record->{$_field}, $allRecords)) {
+                    $allRecordsFlipped = array_flip($allRecords);
+                    $duplicateId = $allRecordsFlipped[$record->{$_field}];
+                    $results[] = array('id' => $duplicateId, 'value' => $record->{$_field});
+                    $results[] = array('id' => $record->getId(), 'value' => $record->{$_field});
+                }
+                
+                $allRecords[$record->getId()] = $record->{$_field};
+            }
+            $pagination->start += 100;
+        }
+        
+        return $results;
+    }
 }
