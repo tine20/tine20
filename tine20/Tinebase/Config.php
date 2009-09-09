@@ -74,6 +74,8 @@ class Tinebase_Config
      * @param   boolean     $_fromFile get from config.inc.php if not found [optional]
      * @return  Tinebase_Model_Config  the config record
      * @throws  Tinebase_Exception_NotFound
+     * 
+     * @todo    check if validation can be enabled again when getting config from file/default
      */
     public function getConfig($_name, $_applicationId = NULL, $_default = NULL, $_fromFile = TRUE)
     {
@@ -109,11 +111,14 @@ class Tinebase_Config
                 }
             }
             
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . print_r($value, TRUE));
+            
+            // ommit validation because more dimensional arrays are not accepted :-/
             $result = new Tinebase_Model_Config(array(
                 'application_id'    => $applicationId,
                 'name'              => $_name,
                 'value'             => $value,
-            ));
+            ), TRUE);
             
         } else {
             $result = $records->getFirstRecord();
