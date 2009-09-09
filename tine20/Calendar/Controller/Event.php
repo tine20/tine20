@@ -892,6 +892,42 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_backend->updateAttendee($_attender);
     }
     
+    /**
+     * event handler for group updates
+     * 
+     * @param Tinebase_Model_Group $_group
+     * @return void
+     */
+    public function onUpdateGroup(Tinebase_Model_Group $_group)
+    {
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'attender', 'operator' => 'equals', 'value' => array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+                'user_id'   => $_group->getId()
+            ))
+        ));
+        
+        $doContainerACLChecks = $this->_doContainerACLChecks;
+        $this->_doContainerACLChecks = FALSE;
+        
+        $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $events);
+        
+        foreach($events as $event) {
+            Calendar_Model_Attender::resolveGroupMembers($event->attendee);
+            $this->_saveAttendee($event);
+            
+            // touch event
+            $event->last_modified_time = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+            $event->last_modified_by = Tinebase_Core::getUser()->getId();
+            $event->seq = (int)$event->seq + 1;
+            
+            $this->_backend->update($event);
+        }
+        
+        $this->_doContainerACLChecks = $doContainerACLChecks;
+    }
+    
     /****************************** alarm functions ************************/
     
     /**

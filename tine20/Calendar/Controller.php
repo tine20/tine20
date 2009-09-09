@@ -68,24 +68,9 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
                 //$this->deletePersonalFolder($_eventObject->account);
                 break;
                 
-            case 'Admin_Event_CreateGroup':
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') created group ' . $_eventObject->group->name);
-                break;
-                
             case 'Admin_Event_UpdateGroup':
                 Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $_eventObject->group->name);
-                break;
-                
-            case 'Admin_Event_DeleteGroup':
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') deleted group ' . print_r($_eventObject->groupIds, true));
-                break;
-                
-            case 'Admin_Event_AddGroupMember':
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') add groupmember ' . (string) $_eventObject->userId . ' to group ' . (string) $_eventObject->groupId);
-                break;
-                
-            case 'Admin_Event_RemoveGroupMember':
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
+                Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->group);
                 break;
         }
     }
