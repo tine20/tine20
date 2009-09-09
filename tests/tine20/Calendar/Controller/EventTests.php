@@ -366,6 +366,45 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(1, count($updatedPersistentEvent->attendee));
     }
     
+    public function testAttendeeGroupMembersChange()
+    {
+        $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        
+        // create event and invite admin group
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+            'user_id'   => $defaultAdminGroup->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+        ));
+        $persitentEvent = $this->_controller->create($event);
+        
+        // assert test condition
+        $pwulf = $persitentEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+        $this->assertEquals(0, count($pwulf), 'invalid test condition, pwulf should not be member or admin group');
+        
+        Admin_Controller_Group::getInstance()->addGroupMember($defaultAdminGroup->getId(), $this->_personasContacts['pwulf']->account_id);
+        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        // assert pwulf is in
+        $pwulf = $loadedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+        $this->assertEquals(1, count($pwulf), 'pwulf is not attender of event, but should be');
+        
+        
+        Admin_Controller_Group::getInstance()->removeGroupMember($defaultAdminGroup->getId(), $this->_personasContacts['pwulf']->account_id);
+        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        // assert pwulf is missing
+        $pwulf = $loadedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+        $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
+        
+    }
+    
     public function testUpdateRecuingDtstart()
     {
         $event = $this->_getEvent();
