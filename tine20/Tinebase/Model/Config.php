@@ -31,6 +31,20 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
      * @var string
      */
     const SMTP = 'smtp';
+
+    /**
+     * user backend config
+     * 
+     * @var string
+     */
+    const USERBACKEND = 'Tinebase_User_BackendConfiguration';
+    
+    /**
+     * user backend type config
+     * 
+     * @var string
+     */
+    const USERBACKENDTYPE = 'Tinebase_User_BackendType';
     
     /**
      * identifier
