@@ -104,7 +104,9 @@ Tine.Phone.getPanel = function(){
     treePanel.getSelectionModel().on('selectionchange', function(_selectionModel) {
     	var node = _selectionModel.getSelectedNode();
 
+        // TODO reactivate that
         // update toolbar
+        /*
         var settingsButton = Ext.getCmp('phone-settings-button');
         if (settingsButton) {
             if(node && node.id != 'root') {
@@ -113,6 +115,7 @@ Tine.Phone.getPanel = function(){
                 settingsButton.setDisabled(true);
             }
         }
+        */
 
         //node.getOwnerTree().selectPath(node.getPath());
         Tine.Phone.Main.show(node);
@@ -465,10 +468,13 @@ Tine.Phone.Main = {
         	text: this.translation._('Edit phone settings'),
             iconCls: 'PhoneIconCls',
             handler: function() {
+                Ext.Msg.alert('Sorry, this function is disabled at the moment');
+                /*
             	// get selected node id
             	var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode();
             	
                 Tine.Tinebase.common.openWindow('myPhonesWindow', 'index.php?method=Phone.editMyPhone&phoneId=' + node.id, 700, 300);
+                */
             },
             scope: this,
             disabled: true
