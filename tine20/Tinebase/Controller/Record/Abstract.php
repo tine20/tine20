@@ -725,7 +725,7 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * inspect alarm and set time
+     * inspect alarms of record (all alarms minutes_before fields are set here by default)
      * 
      * @param Tinebase_Record_Abstract $_record
      * @return void
