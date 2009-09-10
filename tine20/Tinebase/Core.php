@@ -287,6 +287,7 @@ class Tinebase_Core
     
     /**
      * setup temp dir registry setting
+     *  - config.inc.php > session_save_path > sys_get_temp_dir > /tmp
      *  
      * @return void
      */
