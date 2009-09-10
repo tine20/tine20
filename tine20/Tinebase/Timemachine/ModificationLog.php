@@ -317,7 +317,8 @@ class Tinebase_Timemachine_ModificationLog
             'grants',
             'customfields',
             'exdate',
-            'attendee'
+            'attendee',
+            'alarms'
         ));
         $toOmmit = array_merge($toOmmit, $_curRecord->getModlogOmmitFields());
         
