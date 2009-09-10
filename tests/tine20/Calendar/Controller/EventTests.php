@@ -621,6 +621,94 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(1, count($events));
     }
     
+    public function testSetAlarm()
+    {
+        $event = $this->_getEvent();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        $persitentEvent = $this->_controller->create($event);
+        $alarmTime = clone $persitentEvent->dtstart;
+        $alarmTime->subMinute(30);
+        $this->assertTrue($alarmTime->equals($persitentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
+        
+        
+        $persitentEvent->dtstart->addHour(5);
+        $persitentEvent->dtend->addHour(5);
+        $updatedEvent = $this->_controller->update($persitentEvent);
+        $alarmTime = clone $updatedEvent->dtstart;
+        $alarmTime->subMinute(30);
+        $this->assertTrue($alarmTime->equals($updatedEvent->alarms->getFirstRecord()->alarm_time), 'alarm of updated event is not adjusted');
+    }
+    
+    public function testSetAlarmOfRecurSeries()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;INTERVAL=1';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        $persitentEvent = $this->_controller->create($event);
+        
+        // assert alarm time is just before next occurence
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persitentEvent, $exceptions, Zend_Date::now());
+        
+        $alarmTime = clone $nextOccurance->dtstart;
+        $alarmTime->subMinute(30);
+        $this->assertTrue($alarmTime->equals($persitentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
+        
+        
+        // move whole series
+        $persitentEvent->dtstart->addHour(5);
+        $persitentEvent->dtend->addHour(5);
+        $updatedEvent = $this->_controller->update($persitentEvent);
+
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, Zend_Date::now());
+        
+        $alarmTime = clone $nextOccurance->dtstart;
+        $alarmTime->subMinute(30);
+        $this->assertTrue($alarmTime->equals($updatedEvent->alarms->getFirstRecord()->alarm_time), 'updated alarm is not at expected time');
+    }
+    
+    public function testSetAlarmOfRecurSeriesException()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;INTERVAL=1';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        $persitentEvent = $this->_controller->create($event);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $exception = Calendar_Model_Rrule::computeNextOccurrence($persitentEvent, $exceptions, Zend_Date::now());
+        $exception->dtstart->subHour(6);
+        $exception->dtend->subHour(6);
+        $persistentException = $this->_controller->createRecurException($exception);
+        
+        $baseEvent = $this->_controller->getRecurBaseEvent($persistentException);
+        $this->_controller->getAlarms($baseEvent);
+        
+        
+        $exceptions = $this->_controller->getRecurExceptions($persistentException);
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, Zend_Date::now());
+        
+        $alarmTime = clone $nextOccurance->dtstart;
+        $alarmTime->subMinute(30);
+        $this->assertTrue($alarmTime->equals($baseEvent->alarms->getFirstRecord()->alarm_time), 'next alarm got not adjusted');
+        
+        $alarmTime = clone $persistentException->dtstart;
+        $alarmTime->subMinute(30);
+        $this->assertTrue($alarmTime->equals($persistentException->alarms->getFirstRecord()->alarm_time), 'alarmtime of persistent exception is not correnct/set');
+    }
+    
     /**
      * returns a simple event
      *
