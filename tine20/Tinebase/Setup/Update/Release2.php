@@ -170,4 +170,19 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.4');
     }
+
+    /**
+     * update to 2.5
+     * - replace serialized data in config with json encoded data
+     */    
+    public function update_4()
+    {
+        $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKEND, null, array())->value;
+        if (substr($rawBackendConfiguration,0, 1) != '{') {
+            $decodedConfig = unserialize($rawBackendConfiguration);
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::USERBACKEND, Zend_Json::encode($decodedConfig));
+        }
+        
+        $this->setApplicationVersion('Tinebase', '2.5');
+    }
 }

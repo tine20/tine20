@@ -158,7 +158,7 @@ class Tinebase_User
     {
         if (!isset(self::$_backendType)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                self::$_backendType = Tinebase_Config::getInstance()->getConfig('Tinebase_User_BackendType', null, self::SQL)->value;
+                self::$_backendType = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKENDTYPE, null, self::SQL)->value;
             } else {
                 self::$_backendType = self::SQL; 
             }
@@ -234,8 +234,8 @@ class Tinebase_User
      */
     public static function saveBackendConfiguration()
     {
-        Tinebase_Config::getInstance()->setConfigForApplication('Tinebase_User_BackendConfiguration', serialize(self::getBackendConfiguration()));
-        Tinebase_Config::getInstance()->setConfigForApplication('Tinebase_User_BackendType', self::getConfiguredBackend());
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::USERBACKEND, Zend_Json::encode(self::getBackendConfiguration()));
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::USERBACKENDTYPE, self::getConfiguredBackend());
     }
     
     /**
@@ -249,11 +249,11 @@ class Tinebase_User
         //lazy loading for $_backendConfiguration
         if (!isset(self::$_backendConfiguration)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig('Tinebase_User_BackendConfiguration', null, array())->value;
+                $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKEND, null, array())->value;
             } else {
                 $rawBackendConfiguration = array();
             }
-            self::$_backendConfiguration = is_array($rawBackendConfiguration) ? $rawBackendConfiguration : unserialize($rawBackendConfiguration);
+            self::$_backendConfiguration = is_array($rawBackendConfiguration) ? $rawBackendConfiguration : Zend_Json::decode($rawBackendConfiguration);
         }
 
         if (isset($_key)) {
@@ -276,10 +276,14 @@ class Tinebase_User
         $defaultConfig = self::getBackendConfigurationDefaults();
         foreach ($defaultConfig as $backendType => $backendConfig) {
             $config[$backendType] = ($backendType == self::getConfiguredBackend() ? self::getBackendConfiguration() : array());
-            foreach ($backendConfig as $key => $value) {
-                if (!array_key_exists($key, $config[$backendType])) {
-                    $config[$backendType][$key] = $value;
+            if (is_array($config[$backendType])) {
+                foreach ($backendConfig as $key => $value) {
+                    if (! array_key_exists($key, $config[$backendType])) {
+                        $config[$backendType][$key] = $value;
+                    }
                 }
+            } else {
+                $config[$backendType] = $backendConfig;
             }
         }
         return $config;
