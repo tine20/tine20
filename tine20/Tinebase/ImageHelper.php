@@ -45,12 +45,10 @@ class Tinebase_ImageHelper
      * @param   blob  $_blob
      * @return  array
      * @throws  Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo use session_save_path or another configurable path here instead of /tmp?
      */
     public static function getImageInfoFromBlob($_blob)
     {
-        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+        $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
         
         if ($tmpPath === FALSE) {
             throw new Tinebase_Exception('Could not generate temporary file.');

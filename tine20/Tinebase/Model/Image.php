@@ -123,7 +123,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
      */
     public function resize($_width, $_height, $_ratiomode)
     {
-        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+        $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
         file_put_contents($tmpPath, $this->blob);
         
         switch ($this->mime) {
@@ -197,7 +197,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     {
         $img = @imagecreatefromstring($this->blob);
         
-        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+        $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
         switch ($_mime) {
             case ('image/png'):
                 imagepng($img, $tmpPath);

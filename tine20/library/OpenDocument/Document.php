@@ -39,6 +39,13 @@ class OpenDocument_Document
     protected $_document;
     
     /**
+     * temp dir
+     * 
+     * @var string
+     */
+    protected $_tmpdir = '/tmp';
+    
+    /**
      * document body
      *
      * @var OpenDocument_SpreadSheet
@@ -157,7 +164,7 @@ class OpenDocument_Document
     
     protected $_userStyles = array();
     
-    public function __construct($_type, $_fileName = null)
+    public function __construct($_type, $_fileName = null, $_tmpdir = '/tmp')
     {
         if($_fileName !== null) {
             $this->_content     = file_get_contents('zip://' . $_fileName . '#content.xml');
@@ -169,6 +176,8 @@ class OpenDocument_Document
         
         $this->_document = new SimpleXMLElement($this->_content);
         
+        $this->_tmpdir = $_tmpdir;
+        
         switch ($_type) {
             case self::SPREADSHEET:
                 $body = $this->_document->xpath('//office:body');
@@ -178,7 +187,7 @@ class OpenDocument_Document
             default:
                 throw new Exception('unsupported documenttype: ' . $_type);
                 break;
-        }        
+        }
     }    
     
     /**
@@ -202,7 +211,7 @@ class OpenDocument_Document
         
         $this->_addStyles();
         
-        $filename = '/tmp' . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
+        $filename =  $this->_tmpdir . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.ods';
             
         if(class_exists('ZipArchive', false)) {
             $zip = new ZipArchive();
@@ -220,7 +229,7 @@ class OpenDocument_Document
             
             $zip->close();
         } else {
-            $tmp = '/tmp';
+            $tmp = $this->_tmpdir;
             $uid = uniqid();
             mkdir($tmp.'/'.$uid);
             file_put_contents($tmp.'/'.$uid.'/content.xml', $this->_document->saveXML());

@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        replace $_downloadPath with configurable temp path setting
  */
 
 /**
@@ -21,13 +20,6 @@
  */
 class Tinebase_Export_Csv
 {
-    /**
-     * download path for csv file
-     *
-     * @var string
-     */
-    protected $_downloadPath = '/tmp';
-
     /**
      * The php build in fputcsv function is buggy, so we need an own one :-(
      *
@@ -64,7 +56,7 @@ class Tinebase_Export_Csv
      */
     public function exportRecords(Tinebase_Record_RecordSet $_records, $_toStdout = FALSE, $_skipFields = array()) {
         
-        $filename = ($_toStdout) ? 'STDOUT' : $this->_downloadPath . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.csv';
+        $filename = ($_toStdout) ? 'STDOUT' : Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.csv';
         
         if (count($_records) < 1) {
             return FALSE;

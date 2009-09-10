@@ -129,7 +129,7 @@ class Tinebase_Export_Ods extends OpenDocument_Document
      */
     public function __construct()
     {
-        parent::__construct(OpenDocument_Document::SPREADSHEET);
+        parent::__construct(OpenDocument_Document::SPREADSHEET, NULL, Tinebase_Core::getTempDir());
         
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = $this->_getExportConfig();
