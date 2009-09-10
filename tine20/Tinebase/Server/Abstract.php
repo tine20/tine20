@@ -27,6 +27,8 @@ abstract class Tinebase_Server_Abstract
     {
         Tinebase_Core::setupConfig();
         
+        Tinebase_Core::setupTempDir();
+        
         // Server Timezone must be setup before logger, as logger has timehandling!
         Tinebase_Core::setupServerTimezone();
         

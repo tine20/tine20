@@ -806,7 +806,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $config = Tinebase_Core::getConfig();
         $path = ($config->caching && $config->caching->active && $config->caching->path) 
-            ? $config->caching->path : session_save_path();
+            ? $config->caching->path : Tinebase_Core::getTempDir();
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
         

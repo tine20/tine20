@@ -72,7 +72,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
     {
         $uploadedFile = $_FILES['file'];
         
-        $path = tempnam(session_save_path(), 'tine_tempfile_');
+        $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
         if ($uploadedFile['error'] == UPLOAD_ERR_FORM_SIZE) {
             throw new Tinebase_Exception('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.');
         }

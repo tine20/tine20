@@ -25,8 +25,9 @@ abstract class Setup_Server_Abstract
      */
     protected function _initFramework()
     {
-        
         Setup_Core::setupConfig();
+        
+        Setup_Core::setupTempDir();
                 
         // Server Timezone must be setup before logger, as logger has timehandling!
         Setup_Core::setupServerTimezone();

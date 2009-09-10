@@ -21,23 +21,18 @@
 class Tinebase_Server_Cli extends Tinebase_Server_Abstract
 {
     /**
-     * cli session path
-     *
-     */
-    const CLI_SESSION_PATH = '/tmp/tine20_cli_session';
-    
-    /**
      * init tine framework
      *
      */
     protected function _initFramework()
     {
+        Tinebase_Core::setupTempDir();
         $this->_setupCliConfig();
         Tinebase_Core::setupServerTimezone();
         Tinebase_Core::setupLogger();
         Tinebase_Core::setupSession();
-        Tinebase_Core::set('locale', new Zend_Locale('en_US'));
-        Tinebase_Core::set('userTimeZone', 'UTC');
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
+        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, 'UTC');
         Tinebase_Core::setupMailer();
         Tinebase_Core::setupDatabaseConnection();
         Tinebase_Core::setupCache();
@@ -56,7 +51,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract
         if($configData === false) {
             die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
         }
-        $configData['session.save_path'] = self::CLI_SESSION_PATH;
+        $configData['session.save_path'] = Tinebase_Core::getTempDir() . PATH_SEPARATOR . 'tine20_cli_session';
         
         $config = new Zend_Config($configData);
         

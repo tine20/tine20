@@ -10,6 +10,7 @@
  *
  * @todo        move $this->_db calls to backend class
  * @todo        add role rights (run, admin) to all new installed apps
+ * @todo        test user defined paths (logger/cache/tmpdir)
  */
 
 /**
@@ -471,7 +472,7 @@ class Setup_Controller
      */
     public function getConfigDefaults()
     {
-        $defaultPath = ini_get('session.save_path');
+        $defaultPath = Setup_Core::getTempDir();
         
         $result = array(
             'database' => array(
@@ -483,7 +484,7 @@ class Setup_Controller
                 'tableprefix' => 'tine20_'
             ),
             'logger' => array(
-                'filename' => $defaultPath . '/tine20.log',
+                'filename' => $defaultPath . PATH_SEPARATOR . 'tine20.log',
                 'priority' => '7'    
             ),
             'setupuser' => array(
@@ -495,7 +496,8 @@ class Setup_Controller
                    'lifetime' => 3600,
                    'backend' => 'File',
                    'path' => $defaultPath,
-            ),        
+            ),
+            'tmpdir' => $defaultPath
         );
         
         return $result;

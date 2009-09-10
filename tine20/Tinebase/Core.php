@@ -88,6 +88,12 @@ class Tinebase_Core
      */
     const PREFERENCES = 'preferences';
     
+    /**
+     * constant temp dir registry
+     *
+     */
+    const TMPDIR = 'tmpdir';
+    
     /**************** other consts *************************/
     
     /**
@@ -280,6 +286,27 @@ class Tinebase_Core
     }
     
     /**
+     * setup temp dir registry setting
+     *  
+     * @return void
+     */
+    public static function setupTempDir()
+    {
+        $config = self::getConfig();
+        
+        $defaultPath = session_save_path();
+        if (empty($defaultPath)) {
+            $defaultPath = sys_get_temp_dir();
+        }
+        if (empty($defaultPath)) {
+            $defaultPath = '/tmp';
+        }
+        $tmpdir = $config->get('tmpdir', $defaultPath);
+        
+        self::set(self::TMPDIR, $tmpdir);
+    }
+    
+    /**
      * initializes the logger
      *
      * @param $_defaultWriter Zend_Log_Writer_Abstract default log writer
@@ -319,7 +346,7 @@ class Tinebase_Core
     /**
      * setup the cache and add it to zend registry
      *
-     * @param bool $_enabled diabled cache regradles what's configured in config.inc.php
+     * @param bool $_enabled disabled cache regardless what's configured in config.inc.php
      */
     public static function setupCache($_enabled = true)
     {
@@ -340,7 +367,7 @@ class Tinebase_Core
             switch ($backendType) {
                 case 'File':
                     $backendOptions = array(
-                        'cache_dir' => ($config->caching->path) ? $config->caching->path : session_save_path()  // Directory where to put the cache files
+                        'cache_dir' => ($config->caching->path) ? $config->caching->path : Tinebase_Core::getTempDir()  
                     );
                 break;
                 case 'Memcached':                        
@@ -401,6 +428,7 @@ class Tinebase_Core
         }
     }
     
+
     /**
      * initializes the session
      *
@@ -427,8 +455,8 @@ class Tinebase_Core
         ini_set('session.gc_maxlifetime', $maxLifeTime);
         
         // set the session save path
-        $iniPath = ini_get('session.save_path');
-        $defaultPath = (! empty($iniPath)) ? $iniPath . '/tine20_sessions' : '/tmp/tine20_sessions';
+        $iniPath = session_save_path();
+        $defaultPath = (! empty($iniPath)) ? $iniPath . '/tine20_sessions' : self::getTempDir() . PATH_SEPARATOR . 'tine20_sessions';
         $sessionSavepath = $config->get('session.save_path', $defaultPath);
         if(ini_set('session.save_path', $sessionSavepath) !== false) { 
             if (!is_dir($sessionSavepath)) { 
@@ -757,5 +785,15 @@ class Tinebase_Core
     public static function getDb()
     {
         return self::get(self::DB);
+    }
+
+    /**
+     * get temp dir string (without PATH_SEP at the end)
+     *
+     * @return string
+     */
+    public static function getTempDir()
+    {
+        return self::get(self::TMPDIR);
     }
 }

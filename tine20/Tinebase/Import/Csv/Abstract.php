@@ -343,7 +343,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
      */
     protected function _getConfig($_configString, $_options = array())
     {
-        $tmpfname = tempnam(session_save_path(), "tine20");
+        $tmpfname = tempnam(Tinebase_Core::getTempDir(), "tine_tempfile_");
         
         $handle = fopen($tmpfname, "w");
         fwrite($handle, $_configString);
