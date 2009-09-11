@@ -83,7 +83,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->objects['accountUpdate'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
-            'accountLoginName'      => 'tine20phpunitup',
+            'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
@@ -217,7 +217,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $account = $this->_backend->saveUser($encodedData);
         
         $this->assertTrue(is_array($account));
-        $this->assertEquals('tine20phpunitup', $account['accountLoginName']);
+        $this->assertEquals('PHPUnitup', $account['accountFirstName']);
         $this->assertEquals(Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId(), $account['accountPrimaryGroup']['id']);
         // check password
         $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], 'test');
