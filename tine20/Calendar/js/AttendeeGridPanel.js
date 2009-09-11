@@ -416,7 +416,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderGroupmemberName: function(name) {
-        return Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName.apply(this, arguments);
+        var name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName.apply(this, arguments);
+        return name + ' ' + Tine.Tinebase.appMgr.get('Calendar').i18n._('(as a group member)');
     },
     
     renderAttenderGroupName: function(name) {
