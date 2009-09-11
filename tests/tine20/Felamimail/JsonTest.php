@@ -101,14 +101,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         foreach ($foldersToClear as $folderName) {
             $folder = $this->_getFolder($folderName);
-            Felamimail_Controller_Cache::getInstance()->clear($folder->getId());
             Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
-        }
 
-        $filter = $this->_getMessageFilter($folder->getId());
-        $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
-        
-        $this->assertEquals(0, $result['totalcount']);
+            $filter = $this->_getMessageFilter($folder->getId());
+            $result = $this->_json->searchMessages(Zend_Json::encode($filter), '');
+            
+            $this->assertEquals(0, $result['totalcount'], 'Found too many messages in folder ' . $folderName);
+        }
     }
 
     /**

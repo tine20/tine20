@@ -303,23 +303,47 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         return $result;
     }    
     /**
-     * delete all messages in one folder
+     * delete all messages in one folder -> be careful, they are completly removed and not moved to trash
      *
      * @param string $_folderId
      * @return void
      */
     public function emptyFolder($_folderId)
     {
+        $folder = $this->_folderBackend->get($_folderId);
+        $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+        Felamimail_Controller_Cache::getInstance()->clear($_folderId);
+        
+        try {
+            // try to delete messages in imap folder
+            $imap = Felamimail_Backend_ImapFactory::factory($account);    
+            
+            $imap->selectFolder($folder->globalname);
+            $messageUids = $imap->getUniqueId();
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to delete ' 
+                . count($messageUids) . ' messages from folder ' . $folder->globalname . '.'
+                //. print_r($messageUids, TRUE)
+            );
+            
+            foreach ($messageUids as $uid) {
+                $imap->removeMessage($uid);
+            }
+
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+        }    
+        
+        // this does not work because of the message caching (if more than 50/initial count mails are in folder, only the initial messages are deleted)
+        /*
         $filter = new Felamimail_Model_MessageFilter(array(
             array('field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId)
         ));
         
         $messages = Felamimail_Controller_Message::getInstance()->search($filter);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to delete ' 
-            . count($messages) . ' messages from folder with id ' . $_folderId . '.'
-        );
         return Felamimail_Controller_Message::getInstance()->delete($messages->getArrayOfIds());
+        */
     }
     
     /**
