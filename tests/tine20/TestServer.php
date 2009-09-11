@@ -76,7 +76,7 @@ class TestServer extends Tinebase_Server_Abstract
         
         foreach ($personas as $login => $fullName) {
             try {
-                $user = Tinebase_User::getInstance()->getUserByLoginName($login);
+                $user = Tinebase_User::getInstance()->getFullUserByLoginName($login);
             } catch (Tinebase_Exception_NotFound $e) {
                 list($given, $last) = explode(' ', $fullName);
                 $group = Tinebase_Group::getInstance()->getGroupByName('Users')->getId();
