@@ -153,6 +153,11 @@ class Tinebase_Core
         ) {
             $server = new Voipmanager_Server_Snom();
             
+        /**************************** ASTERISK API *****************************/
+
+        } elseif(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == 'asterisk-libcurl-agent/1.0') {
+            $server = new Voipmanager_Server_Asterisk();
+            
         /**************************** ActiveSync API *****************************/
             
         } elseif($_SERVER['PHP_SELF'] == '/Microsoft-Server-ActiveSync' || 
