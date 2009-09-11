@@ -304,8 +304,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      *
      * @param   array $_accountIds  array of account ids
      * @return  array with success flag
-     * 
-     * @todo    delete email user settings?
      */
     public function delete(array $_accountIds)
     {
@@ -320,6 +318,13 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
             foreach ((array)$memberships as $groupId) {
                 $groupsBackend->removeGroupMember($groupId, $accountId);
+            }
+            
+            if ($this->_manageImapEmailUser) {
+                $this->_imapUserBackend->deleteUser($accountId);
+            }
+            if ($this->_manageSmtpEmailUser) {
+                $this->_smtpUserBackend->deleteUser($accountId);
             }
             
             $this->_userBackend->deleteUser($accountId);
@@ -374,6 +379,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     protected function _createEmailUser($_user, $_emailUser)
     {
+        if (! $_emailUser) {
+            $_emailUser = new Tinebase_Model_EmailUser();
+        }
+        
         // update email user data here
         if ($this->_manageImapEmailUser) {
             $this->_imapUserBackend->addUser($_user, $_emailUser);
