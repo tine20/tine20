@@ -133,7 +133,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             qtip: record.get('host'),
             leaf: false,
             cls: 'felamimail-node-account',
-            show_intelligent_folders: (record.get('show_intelligent_folders')) ? record.get('show_intelligent_folders') : 0,
+            intelligent_folders: (record.get('intelligent_folders')) ? record.get('intelligent_folders') : 0,
             delimiter: record.get('delimiter'),
             ns_personal: record.get('ns_personal'),
             account_id: record.data.id,
@@ -142,7 +142,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 load: function(node) {
                     
                     // add 'intelligent' folders
-                    if (node.attributes.show_intelligent_folders == 1/* || node.attributes.show_intelligent_folders == '1'*/) {
+                    if (node.attributes.intelligent_folders == 1/* || node.attributes.intelligent_folders == '1'*/) {
                         var markedNode = new Ext.tree.TreeNode({
                             id: record.data.id + '/marked',
                             localname: 'marked', //this.app.i18n._('Marked'),
@@ -288,7 +288,7 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                             
                             // update tree node + store
                             this.ctxNode.setText(account.get('name'));
-                            this.ctxNode.attributes.show_intelligent_folders = account.get('show_intelligent_folders');
+                            this.ctxNode.attributes.intelligent_folders = account.get('intelligent_folders');
                             this.accountStore.reload();
                             
                             // reload tree node
@@ -706,7 +706,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             var accountId = accountNode.attributes.account_id;
             
             // remove intelligent folders
-            accountNode.attributes.show_intelligent_folders = 0;
+            accountNode.attributes.intelligent_folders = 0;
             
             // cancel loading
             accountNode.loading = false;
@@ -723,7 +723,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
                     'update': function(data) {
                         // update account node
                         var account = Tine.Felamimail.loadAccountStore().getById(accountId);
-                        accountNode.attributes.show_intelligent_folders = account.get('show_intelligent_folders');
+                        accountNode.attributes.intelligent_folders = account.get('intelligent_folders');
                         accountNode.reload(function(callback) {
                         }, this);
                     }

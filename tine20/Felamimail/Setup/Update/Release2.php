@@ -42,4 +42,22 @@ class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->setApplicationVersion('Felamimail', '2.1');
         $this->setTableVersion('felamimail_account', '7');
     }
+
+    /**
+     * update function (2.1 -> 2.2)
+     * - rename show_intelligent_folders to intelligent_folders (string has been too long)
+     */    
+    public function update_0()
+    {
+        $field = '<field>
+            <name>intelligent_folders</name>
+            <type>boolean</type>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('felamimail_account', $declaration, 'show_intelligent_folders');
+        
+        $this->setApplicationVersion('Felamimail', '2.2');
+        $this->setTableVersion('felamimail_account', '8');
+    }
 }
