@@ -45,13 +45,6 @@ class Tinebase_EmailUser
     const LDAP      = 'Ldap';
 
     /**
-     * holds the instance of the singleton
-     *
-     * @var Tinebase_EmailUser
-     */
-    private static $_instance = NULL;
-    
-    /**
      * backend object instances
      * 
      * @var array
@@ -83,13 +76,10 @@ class Tinebase_EmailUser
      */
     public static function getInstance($_configType = Tinebase_Model_Config::IMAP) 
     {
-        if (self::$_instance === NULL) {
-            $backendType = self::getConfiguredBackend($_configType);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
-            self::$_instance = self::factory($backendType);
-        }
+        $backendType = self::getConfiguredBackend($_configType);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
         
-        return self::$_instance;
+        return self::factory($backendType);
     }
     
     /**
