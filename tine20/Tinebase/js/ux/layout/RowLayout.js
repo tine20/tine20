@@ -1,11 +1,11 @@
 /*
- * Ext JS Library 2.2
- * Copyright(c) 2006-2008, Ext JS, LLC.
+ * Ext JS Library 3.0.0
+ * Copyright(c) 2006-2009 Ext JS, LLC
  * licensing@extjs.com
- * 
- * http://extjs.com/license
+ * http://www.extjs.com/license
  */
-
+// We are adding these custom layouts to a namespace that does not
+// exist by default in Ext, so we have to add the namespace first:
 Ext.ns('Ext.ux.layout');
 
 /**
@@ -37,7 +37,7 @@ var p = new Ext.Panel({
     layout:'ux.row',
     items: [{
         title: 'Row 1',
-        rowHeight: .25 
+        rowHeight: .25
     },{
         title: 'Row 2',
         rowHeight: .6
@@ -98,10 +98,10 @@ Ext.ux.layout.RowLayout = Ext.extend(Ext.layout.ContainerLayout, {
             ph = h;
 
         this.innerCt.setSize({height:h});
-        
+
         // some rows can be percentages while others are fixed
         // so we need to make 2 passes
-        
+
         for(i = 0; i < len; i++){
             r = rs[i];
             if(!r.rowHeight){
@@ -118,11 +118,11 @@ Ext.ux.layout.RowLayout = Ext.extend(Ext.layout.ContainerLayout, {
             }
         }
     }
-    
+
     /**
      * @property activeItem
      * @hide
      */
 });
-Ext.Container.LAYOUTS['ux.row'] = Ext.ux.layout.RowLayout;
 
+Ext.Container.LAYOUTS['ux.row'] = Ext.ux.layout.RowLayout;
