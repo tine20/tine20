@@ -56,7 +56,7 @@ class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_EmailUser::DBMAIL);
+        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::IMAP);
 
         $this->_objects['addedUser'] = $this->_addUser();
     }
@@ -83,7 +83,10 @@ class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
             'emailUID' => abs(crc32(Tinebase_Core::getUser()->getId())),
             'emailUserId' => Tinebase_Core::getUser()->accountLoginName,
             'emailPassword' => '',
-            'emailQuota' => 1000000,
+            'emailMailQuota' => 1000000,
+            'emailMailSize' => 0,
+            'emailSieveQuota' => 0,
+            'emailSieveSize' => 0,
             'emailLastLogin' => '1979-11-03 22:05:58'
         ), $this->_objects['addedUser']->toArray());
     }
@@ -95,11 +98,11 @@ class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
     public function testUpdateAccount()
     {
         // update user
-        $this->_objects['addedUser']->emailQuota = 2000000;
+        $this->_objects['addedUser']->emailMailQuota = 2000000;
         
         $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
         
-        $this->assertEquals(2000000, $updatedUser->emailQuota);
+        $this->assertEquals(2000000, $updatedUser->emailMailQuota);
     }
     
     /**
@@ -124,7 +127,7 @@ class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
     protected function _addUser()
     {
         $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailQuota'    => 1000000
+            'emailMailQuota'    => 1000000
         ));
         $addedUser = $this->_backend->addUser(Tinebase_Core::getUser(), $emailUser);
         

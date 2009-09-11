@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
+ * @version     $Id: Ldap.php 10296 2009-09-02 14:12:35Z p.schuele@metaways.de $
  * 
  * @todo        is this needed?
  * @todo        test it!
@@ -38,7 +38,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
     protected $_userPropertyNameMapping = array(
         'emailUID'      => 'dbmailUID', 
         'emailGID'      => 'dbmailGID', 
-        'emailQuota'    => 'mailQuota',
+        'emailMailQuota'    => 'mailQuota',
         //'emailAliases'  => 'alias',
         //'emailForward'  => 'forward',
     );
@@ -90,7 +90,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
         return new Tinebase_Model_EmailUser(array(
             'emailUID'      => 'uid',
             'emailGID'      => 'gid',
-            'emailQuota'    => 10000,
+            'emailMailQuota'    => 10000,
         ));
         */
         

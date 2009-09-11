@@ -86,7 +86,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
     public function setFromArray(array $_data)
     {
         foreach (array('emailForwards', 'emailAliases') as $arrayField) {
-            if (! is_array($_data[$arrayField])) {
+            if (isset($_data[$arrayField]) && ! is_array($_data[$arrayField])) {
                 $_data[$arrayField] = explode(',', preg_replace('/ /', '', $_data[$arrayField]));
             }
         }
