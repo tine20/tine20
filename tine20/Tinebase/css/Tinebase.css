@@ -142,6 +142,12 @@ html, body {
     background-position: 2px 2px;
 }
 
+.renderer_accountGroupmemberIcon {
+    background-image:url(../../images/groupmember.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
+
 .renderer_accountContactIcon {
     background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
     background-repeat: no-repeat;

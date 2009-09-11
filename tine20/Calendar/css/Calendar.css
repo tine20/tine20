@@ -28,6 +28,12 @@
     background-repeat:no-repeat;
 }
 
+.cal-attendee-type-groupmember {
+    background-image:url(../../images/groupmember.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
+
 /**** colendar select widget ****/
 .cal-calselectwidget-faketriggerwrap {
     position: absolute;
