@@ -403,6 +403,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     protected function _updateEmailUser($_user, $_emailUser)
     {
+        if (! $_emailUser) {
+            $_emailUser = new Tinebase_Model_EmailUser();
+        }
+        
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->emailUser->toArray(), true));
         
         // update email user data here
