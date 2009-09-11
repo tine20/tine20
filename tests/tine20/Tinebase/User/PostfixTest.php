@@ -57,6 +57,10 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
+        
+        $personas = Zend_Registry::get('personas');
+        $user = $personas['jsmith'];
+        $this->_objects['jsmith'] = $user;
 
         $this->_objects['addedUser'] = $this->_addUser();
     }
@@ -70,7 +74,7 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // delete email account
-        $this->_backend->deleteUser(Tinebase_Core::getUser()->getId());
+        $this->_backend->deleteUser($this->_objects['jsmith']->getId());
     }
     
     /**
@@ -81,9 +85,9 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
         //print_r($this->_objects['addedUser']->toArray());
         
         $this->assertEquals(array(
-            'emailAddress'      => Tinebase_Core::getUser()->accountEmailAddress,
+            'emailAddress'      => $this->_objects['jsmith']->accountEmailAddress,
             'emailPassword'     => '',
-            'emailUserId'       => Tinebase_Core::getUser()->accountLoginName,
+            'emailUserId'       => $this->_objects['jsmith']->accountLoginName,
             'emailForwardOnly'  => 0,
             'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
             'emailForwards'     => array('test@tine20.org', 'unittest@tine20.org'),
@@ -100,14 +104,14 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
         $this->_objects['addedUser']->emailAliases = array();
         $this->_objects['addedUser']->emailForwards =  array('test@tine20.org');
         
-        $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
+        $updatedUser = $this->_backend->updateUser($this->_objects['jsmith'], $this->_objects['addedUser']);
         
         //print_r($updatedUser->toArray());
         
         $this->assertEquals(array(
-            'emailAddress'      => Tinebase_Core::getUser()->accountEmailAddress,
+            'emailAddress'      => $this->_objects['jsmith']->accountEmailAddress,
             'emailPassword'     => '',
-            'emailUserId'       => Tinebase_Core::getUser()->accountLoginName,
+            'emailUserId'       => $this->_objects['jsmith']->accountLoginName,
             'emailForwardOnly'  => 1,
             'emailAliases'      => array(),
             'emailForwards'     => array('test@tine20.org'),
@@ -122,13 +126,13 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
         // set pw
         $this->_objects['addedUser']->emailPassword = 'password';
         
-        $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
+        $updatedUser = $this->_backend->updateUser($this->_objects['jsmith'], $this->_objects['addedUser']);
         
         $this->assertEquals(md5('password'), $updatedUser->emailPassword);
     }
     
     /**
-     * add new email user
+     * add new email user / use jsmith persona as user
      * 
      * @return Tinebase_Model_EmailUser
      */
@@ -138,7 +142,7 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
             'emailForwards'     => array('unittest@tine20.org', 'test@tine20.org'),
             'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
         ));
-        $addedUser = $this->_backend->addUser(Tinebase_Core::getUser(), $emailUser);
+        $addedUser = $this->_backend->addUser($this->_objects['jsmith'], $emailUser);
         
         return $addedUser;
     }
