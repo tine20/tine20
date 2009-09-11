@@ -137,6 +137,22 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     }
     
     /**
+     * count users
+     *
+     * @param string $_filter string to search user accounts for
+     * @return int total user count
+     */
+    public function searchCount($_filter)
+    {
+        $this->checkRight('VIEW_ACCOUNTS');
+        
+        $users = $this->_userBackend->getUsers($_filter);
+        $result = count($users);
+        
+        return $result;
+    }
+    
+    /**
      * get account
      *
      * @param   int $_accountId account id to get

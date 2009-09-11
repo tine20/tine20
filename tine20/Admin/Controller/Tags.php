@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        refactoring: use functions from Tinebase_Controller_Record_Abstract
@@ -62,28 +62,24 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     /**
      * get list of tags
      *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
+     * @param Tinebase_Model_TagFilter $_filter
+     * @param Tinebase_Model_Pagination $_paging
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Tag
      */
-    public function search($query, $sort, $dir, $start, $limit)
+    public function search(Tinebase_Model_TagFilter $_filter, Tinebase_Model_Pagination $_paging)
     {
-        $filter = new Tinebase_Model_TagFilter(array(
-            'name'        => '%' . $query . '%',
-            'description' => '%' . $query . '%',
-            'type'        => Tinebase_Model_Tag::TYPE_SHARED
-        ));
-        $paging = new Tinebase_Model_Pagination(array(
-            'start' => $start,
-            'limit' => $limit,
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
-        
-        return Tinebase_Tags::getInstance()->searchTags($filter, $paging);
+        return Tinebase_Tags::getInstance()->searchTags($_filter, $_paging);
+    }
+    
+    /**
+     * get count of tags
+     *
+     * @param Tinebase_Model_TagFilter $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_TagFilter $_filter)
+    {
+        return Tinebase_Tags::getInstance()->getSearchTagsCount($_filter);
     }
    
     /**

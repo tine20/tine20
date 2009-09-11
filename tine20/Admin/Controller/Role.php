@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        extend Tinebase_Controller_Record_Abstract
@@ -60,32 +60,30 @@ class Admin_Controller_Role extends Tinebase_Controller_Abstract
     }
 
     /**
-     * get list of roles
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
+     * search roles
+     * 
+     * @param Tinebase_Model_RoleFilter $_filter
+     * @param Tinebase_Model_Pagination $_paging
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Role
      */
-    public function search($query, $sort, $dir, $start, $limit)
+    public function search(Tinebase_Model_RoleFilter $_filter, Tinebase_Model_Pagination $_paging)
     {
         $this->checkRight('VIEW_ROLES');
        
-        $filter = new Tinebase_Model_RoleFilter(array(
-            'name'        => '%' . $query . '%',
-            'description' => '%' . $query . '%'
-        ));
-        $paging = new Tinebase_Model_Pagination(array(
-            'start' => $start,
-            'limit' => $limit,
-            'sort'  => $sort,
-            'dir'   => $dir
-        ));
+        return Tinebase_Acl_Roles::getInstance()->searchRoles($_filter, $_paging);
+    }
+    
+    /**
+     * count roles
+     *
+     * @param Tinebase_Model_RoleFilter $_filter
+     * @return int total roles count
+     */
+    public function searchCount(Tinebase_Model_RoleFilter $_filter)
+    {
+        $this->checkRight('VIEW_ROLES');
         
-        return Tinebase_Acl_Roles::getInstance()->searchRoles($filter, $paging);
-        
+        return Tinebase_Acl_Roles::getInstance()->searchCount($_filter);
     }
     
     /**

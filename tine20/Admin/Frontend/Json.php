@@ -5,7 +5,7 @@
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
@@ -245,7 +245,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $result = array(
             'results'     => $this->_multipleRecordsToJson($accounts),
-            'totalcount'  => count($accounts)
+            'totalcount'  => Admin_Controller_User::getInstance()->searchCount($filter)
         );
         
         return $result;
@@ -441,15 +441,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getGroups($filter, $sort, $dir, $start, $limit)
     {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
         $groups = Admin_Controller_Group::getInstance()->search($filter, $sort, $dir, $start, $limit);
-
-        $result['results'] = $groups->toArray();
-        $result['totalcount'] = count($groups);
+        
+        $result = array(
+            'results'     => $this->_multipleRecordsToJson($groups),
+            'totalcount'  => Admin_Controller_Group::getInstance()->searchCount($filter)
+        );
         
         return $result;
     }
@@ -631,15 +628,24 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getTags($query, $sort, $dir, $start, $limit)
     {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
+        $filter = new Tinebase_Model_TagFilter(array(
+            'name'        => '%' . $query . '%',
+            'description' => '%' . $query . '%',
+            'type'        => Tinebase_Model_Tag::TYPE_SHARED
+        ));
+        $paging = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
         
-        $tags = Admin_Controller_Tags::getInstance()->search($query, $sort, $dir, $start, $limit);
-
-        $result['results'] = $tags->toArray();
-        $result['totalcount'] = count($tags);
+        $tags = Admin_Controller_Tags::getInstance()->search($filter, $paging);
+        
+        $result = array(
+            'results'     => $this->_multipleRecordsToJson($tags),
+            'totalcount'  => Admin_Controller_Tags::getInstance()->searchCount($filter)
+        );
         
         return $result;
     }
@@ -650,7 +656,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param   string $tagData
      * 
      * @return  array with success, message, tag data and tag members
-     * 
      */
     public function saveTag($tagData)
     {
@@ -718,18 +723,23 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRoles($query, $sort, $dir, $start, $limit)
     {
+        $filter = new Tinebase_Model_RoleFilter(array(
+            'name'        => '%' . $query . '%',
+            'description' => '%' . $query . '%'
+        ));
+        $paging = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        $roles = Admin_Controller_Role::getInstance()->search($filter, $paging);
+        
         $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
+            'results'     => $this->_multipleRecordsToJson($roles),
+            'totalcount'  => Admin_Controller_Role::getInstance()->searchCount($filter)
         );
-        
-        $roles = Admin_Controller_Role::getInstance()->search($query, $sort, $dir, $start, $limit);
-
-        //$result['results'] = array ( array("name" => "role1", "description" => "blabla", "id" => 1) );
-        //$result['totalcount'] = 1;
-        
-        $result['totalcount'] = count($roles);
-        $result['results'] = $roles->toArray();
         
         return $result;
     }

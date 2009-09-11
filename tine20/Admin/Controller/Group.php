@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        make it possible to change default groups
+ * @todo        extend abstract record controller
  */
 
 /**
@@ -94,6 +95,22 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         return Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
     }
    
+    /**
+     * count groups
+     *
+     * @param string $_filter string to search groups for
+     * @return int total group count
+     */
+    public function searchCount($_filter)
+    {
+        $this->checkRight('VIEW_ACCOUNTS');
+        
+        $groups = Tinebase_Group::getInstance()->getGroups($_filter);
+        $result = count($groups);
+        
+        return $result;
+    }
+    
     /**
      * fetch one group identified by groupid
      *
