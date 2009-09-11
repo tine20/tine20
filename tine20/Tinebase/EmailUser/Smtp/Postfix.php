@@ -182,12 +182,17 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
-     * @throws Tinebase_Exception_UnexpectedValue
+     * //@throws Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo    throw exception or not?
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
 	    if (! $_user->accountEmailAddress) {
-	        throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for adding him or her to postfix table.');
+	        //throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for adding him or her to postfix table.');
+	        // just report this, don't throw expection
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User has no email address. This is mandatory for adding him or her to postfix table: ' . $_emailUser->emailUserId);
+            return $_emailUser;
 	    }
 	    
 	    $userId = $_user->accountLoginName;
@@ -215,12 +220,17 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
-     * @throws Tinebase_Exception_UnexpectedValue
+     * //@throws Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo    throw exception or not?
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
         if (! $_user->accountEmailAddress) {
-            throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for adding him or her to postfix table.');
+            //throw new Tinebase_Exception_UnexpectedValue('User has no email address. This is mandatory for updating the postfix table.');
+            // just report this, don't throw expection
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User has no email address. This is mandatory for updating the postfix table: ' . $_emailUser->emailUserId);
+            return $_emailUser;
         }
 	    
         $_emailUser->emailUserId = $_user->accountLoginName;
