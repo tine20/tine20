@@ -272,6 +272,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     {
         $user = Tinebase_User::getInstance()->getFullUserById($_userId);
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete postfix settings for user ' . $user->accountLoginName);
+        
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('userid') . ' = ?', $user->accountLoginName),
             $this->_db->quoteInto($this->_db->quoteIdentifier('client_idnr') . ' = ?', $this->_clientId)
