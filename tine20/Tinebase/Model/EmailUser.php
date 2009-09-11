@@ -72,6 +72,8 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
     {
         $this->_filters['emailForwardOnly'] = new Zend_Filter_Empty(0);
         $this->_filters['emailMailSize'] = new Zend_Filter_Empty(0);
+        $this->_filters['emailForwards'] = new Zend_Filter_Empty(array());
+        $this->_filters['emailAliases'] = new Zend_Filter_Empty(array());
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
