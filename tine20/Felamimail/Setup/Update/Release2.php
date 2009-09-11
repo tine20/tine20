@@ -47,7 +47,7 @@ class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
      * update function (2.1 -> 2.2)
      * - rename show_intelligent_folders to intelligent_folders (string has been too long)
      */    
-    public function update_0()
+    public function update_1()
     {
         $field = '<field>
             <name>intelligent_folders</name>
