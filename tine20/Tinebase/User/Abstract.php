@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @deprecated  user backends should be refactored
+ * @todo        add searchCount function
  */
 
 /**
