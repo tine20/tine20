@@ -288,12 +288,16 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * 
      * @param Tinebase_Model_EmailUser $_emailUser
      * @param boolean $_deleteFirst
-     * @return array
+     * @return void
      */
     protected function _setAliases($_emailUser, $_deleteFirst = FALSE)
     {
         if ($_deleteFirst) {
             $this->_deleteAliases($_emailUser->emailAddress, $_emailUser->emailUserId);
+        }
+        
+        if (! is_array($_emailUser->emailAliases)) {
+            return;
         }
         
         foreach ($_emailUser->emailAliases as $aliasAddress) {
@@ -332,6 +336,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
     {
         if ($_deleteFirst) {
             $this->_deleteForwards($_emailUser->emailAddress);
+        }
+        
+        if (! is_array($_emailUser->emailForwards)) {
+            return;
         }
         
         foreach ($_emailUser->emailForwards as $forwardAddress) {

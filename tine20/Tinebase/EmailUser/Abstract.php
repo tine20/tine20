@@ -40,7 +40,7 @@ abstract class Tinebase_EmailUser_Abstract
      * adds email properties for a new user
      * 
      * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
+     * @param  Tinebase_Model_EmailUser $_emailUser
      * @return Tinebase_Model_EmailUser
      * 
      */
