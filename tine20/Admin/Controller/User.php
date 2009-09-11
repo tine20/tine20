@@ -210,13 +210,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $samResult = $this->_samBackend->setPassword($_account, $_password, TRUE, $_mustChange);
         }
         
-        if ($this->_manageImapEmailUser) {
-            $this->_imapUserBackend->setPassword($_account->getId(), $_password);
-        }
-
-        if ($this->_manageSmtpEmailUser) {
-            $this->_smtpUserBackend->setPassword($_account->getId(), $_password);
-        }
+        $this->_setEmailUserPassword($_account->getId(), $_password);
         
         // fire change password event
         /*
@@ -426,5 +420,27 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
 
         $_user->emailUser = $this->_getEmailUser($_user);
+    }
+    
+    /**
+     * set email user password
+     * 
+     * @param string $_accountId
+     * @param string $_password
+     * @return void
+     */
+    protected function _setEmailUserPassword($_accountId, $_password)
+    {
+        try {
+            if ($this->_manageImapEmailUser) {
+                $this->_imapUserBackend->setPassword($_accountId, $_password);
+            }
+    
+            if ($this->_manageSmtpEmailUser) {
+                $this->_smtpUserBackend->setPassword($_accountId, $_password);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Tried to set password of non-existant email user. user id: ' . $_accountId);
+        }
     }
 }
