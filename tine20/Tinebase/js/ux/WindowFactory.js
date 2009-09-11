@@ -75,6 +75,7 @@ Ext.ux.WindowFactory.prototype = {
     getExtWindow: function(c) {
         // add titleBar
         c.height = c.height + 20;
+        c.layout = c.layout || 'fit';
         
         c.items = this.getContentPanel(c);
         
