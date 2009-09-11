@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        extend/use sql abstract backend
  */
 
 /**
@@ -227,8 +229,8 @@ class Tinebase_Acl_Roles
     /**
      * Searches roles according to filter and paging
      * 
-     * @param  Tinebase_Model_RoleFilter    $_filter
-     * @param  Tinebase_Model_Pagination        $_paging
+     * @param  Tinebase_Model_RoleFilter  $_filter
+     * @param  Tinebase_Model_Pagination  $_paging
      * @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Role
      */
     public function searchRoles($_filter, $_paging)
@@ -240,6 +242,19 @@ class Tinebase_Acl_Roles
         return new Tinebase_Record_RecordSet('Tinebase_Model_Role', $this->_db->fetchAssoc($select));
     }
 
+    /**
+     * Returns roles count
+     * 
+     * @param Tinebase_Model_RoleFilter $_filter
+     * @return int
+     */
+    public function searchCount($_filter)
+    {
+        $select = $_filter->getSelect();
+        
+        $roles = new Tinebase_Record_RecordSet('Tinebase_Model_Role', $this->_db->fetchAssoc($select));
+        return count($roles);
+    }
     
     /**
      * Returns role identified by its id
