@@ -233,7 +233,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         })
                     ]
                 }]
-            }, new Tine.widgets.customfields.CustomfieldsPanel ({
+            }, new Tine.Tinebase.widgets.customfields.CustomfieldsPanel ({
                 recordClass: this.recordClass,
                 disabled: (Tine[this.appName].registry.get('customfields').length == 0),
                 quickHack: this

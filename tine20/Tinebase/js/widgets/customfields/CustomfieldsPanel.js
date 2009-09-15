@@ -8,13 +8,13 @@
  *
  */
  
-Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
+Ext.ns('Tine.Tinebase', 'Tine.Tinebase.widgets', 'Tine.Tinebase.widgets.customfields');
 
 /**
  * Customfields Panel
  * 
- * @namespace   Tine.widgets.customfields
- * @class       Tine.widgets.customfields.CustomfieldsPanel
+ * @namespace   Tine.Tinebase.widgets.customfields
+ * @class       Tine.Tinebase.widgets.customfields.CustomfieldsPanel
  * @extends     Ext.Panel
  * 
  * <p>Customfields Panel</p>
@@ -29,9 +29,9 @@ Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.widgets.customfields.CustomfieldsPanel
+ * Create a new Tine.Tinebase.widgets.customfields.CustomfieldsPanel
  */
-Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
+Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     
     /**
      * @cfg {Tine.Tinebase.data.Record} recordClass
@@ -97,7 +97,7 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                 
             }, this);
             
-            this.formField = new Tine.widgets.customfields.CustomfieldsPanelFormField({
+            this.formField = new Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField({
                 cfStore: cfStore
             });
             
@@ -107,7 +107,7 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
             this.html = '<div class="x-grid-empty">' + _('There are no custom fields yet') + "</div>";
         }
         
-        Tine.widgets.customfields.CustomfieldsPanel.superclass.initComponent.call(this);
+        Tine.Tinebase.widgets.customfields.CustomfieldsPanel.superclass.initComponent.call(this);
         
         // added support for defered rendering as a quick hack: it would be better to 
         // let cfpanel be a plugin of editDialog
@@ -190,7 +190,7 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
 /**
  * @private Helper class to have customfields processing in the standard form/record cycle
  */
-Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field, {
+Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {Ext.data.store} cfObject
      * Custom field Objects
@@ -203,7 +203,7 @@ Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field
     /*
     // @private
     initComponent: function() {
-        Tine.widgets.customfields.CustomfieldsPanelFormField.superclass.initComponent.call(this);
+        Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField.superclass.initComponent.call(this);
         //this.hide();
     },
     */
@@ -212,7 +212,7 @@ Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field
      * returns cf data of the current record
      */
     getValue: function() {
-        var values = new Tine.widgets.customfields.Cftransport();
+        var values = new Tine.Tinebase.widgets.customfields.Cftransport();
         this.cfStore.each(function(def) {
             values[def.get('name')] = def.fieldObj.getValue();
         }, this);
@@ -236,10 +236,10 @@ Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field
 /**
  * @private helper class to workaround String Casts in record class
  * 
- * @class Tine.widgets.customfields.Cftransport
+ * @class Tine.Tinebase.widgets.customfields.Cftransport
  * @extends Object
  */
-Tine.widgets.customfields.Cftransport = Ext.extend(Object , {
+Tine.Tinebase.widgets.customfields.Cftransport = Ext.extend(Object , {
     toString: function() {
         return Ext.util.JSON.encode(this);
     }

@@ -742,7 +742,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function(_contact) {
                 record_id: _contact.id,
                 record_model: 'Addressbook_Model_Contact'
             }),
-            new Tine.widgets.customfields.CustomfieldsPanel({
+            new Tine.Tinebase.widgets.customfields.CustomfieldsPanel({
                 id: 'adbEditDialogCfPanel',
                 recordClass: Tine.Addressbook.Model.Contact,
                 disabled: (Tine.Addressbook.registry.get('customfields').length == 0),
