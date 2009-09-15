@@ -108,7 +108,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
             'color' => '#009B31',
         );
         
-        $this->_instance->attachTagToMultipleRecords($filter, 'Addressbook_Model_Contact', $tagData);
+        $this->_instance->attachTagToMultipleRecords($filter, $tagData);
         
         $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
         
