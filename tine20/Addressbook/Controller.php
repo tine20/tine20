@@ -142,4 +142,5 @@ class Addressbook_Controller extends Tinebase_Controller_Abstract implements Tin
             'data'         => $image
         ));
     }
+    
 }
