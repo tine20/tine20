@@ -76,15 +76,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 		}
 
         // manage email user settings
-		$imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        if (isset($imapConfig['backend']) && ucfirst($imapConfig['backend']) == Tinebase_EmailUser::DBMAIL) {
+        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
             $this->_manageImapEmailUser = TRUE; 
-            $this->_imapUserBackend = Tinebase_EmailUser::factory(Tinebase_EmailUser::DBMAIL);
+            $this->_imapUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::IMAP);
         }
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-        if (isset($smtpConfig['backend']) && ucfirst($smtpConfig['backend']) == Tinebase_EmailUser::POSTFIX) {
+
+        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::SMTP)) {
             $this->_manageSmtpEmailUser = TRUE; 
-            $this->_smtpUserBackend = Tinebase_EmailUser::factory(Tinebase_EmailUser::POSTFIX);
+            $this->_imapUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
         }
     }
 
