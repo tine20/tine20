@@ -10,7 +10,6 @@
  * @version     $Id$
  * 
  * @todo        think about splitting email user model in two (imap + smtp)
- * @todo        add Ldap support?
  */
 
 /**
@@ -38,11 +37,11 @@ class Tinebase_EmailUser
     const POSTFIX    = 'Postfix';
 
     /**
-     * ldap backend const
+     * imap ldap backend const
      * 
      * @staticvar string
      */
-    const LDAP      = 'Ldap';
+    const LDAP_IMAP      = 'Ldap_imap';
 
     /**
      * backend object instances
@@ -50,6 +49,13 @@ class Tinebase_EmailUser
      * @var array
      */
     private static $_backends = array();
+    
+    /**
+     * configs as static class var to minimize db queries
+     *  
+     * @var array
+     */
+    private static $_configs = array();
     
     /**
      * the constructor
@@ -92,35 +98,29 @@ class Tinebase_EmailUser
     public static function factory($_type = NULL) 
     {
         switch($_type) {
-            /*
-            case self::LDAP:
-                $ldapOptions = Tinebase_User::getBackendConfiguration();
-                $sambaOptions = Tinebase_Core::getConfig()->samba->toArray();
-                $options = array_merge($ldapOptions, $sambaOptions);
-                
-                $result = new Tinebase_EmailUser_Ldap($options);
+            case self::LDAP_IMAP:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Ldap();
+                }
                 break;
-            */
                 
             case self::DBMAIL:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Dbmail();
                 }
-                $result = self::$_backends[$_type];
-                
                 break;
             
             case self::POSTFIX:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_Postfix();
                 }
-                $result = self::$_backends[$_type];
-                
                 break;
                 
             default:
                 throw new Tinebase_Exception_InvalidArgument("Backend type $_type not implemented.");
         }
+        
+        $result = self::$_backends[$_type];
         
         return $result;
     }
@@ -136,13 +136,16 @@ class Tinebase_EmailUser
     {
         $result = '';        
         
-        $config = Tinebase_Config::getInstance()->getConfigAsArray($_configType);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
+        $config = self::getConfig($_configType);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
+        
         if (isset($config['backend'])) {
             switch ($_configType) {
                 case Tinebase_Model_Config::IMAP:
                     if (ucfirst($config['backend']) == self::DBMAIL) {
                         $result = self::DBMAIL;
+                    } else if (ucfirst($config['backend']) == self::LDAP_IMAP) {
+                        $result = self::LDAP_IMAP;
                     }
                     break;
                 case Tinebase_Model_Config::SMTP:
@@ -188,5 +191,35 @@ class Tinebase_EmailUser
         }
         
         return $result;
+    }
+    
+    /**
+     * check if email users are managed for backend/config type
+     * 
+     * @param string $_configType IMAP/SMTP
+     * @return boolean
+     */
+    public static function manages($_configType)
+    {
+        $config = self::getConfig($_configType);
+        
+        $result = (isset($config['backend']) && ! empty($config['backend']) && $config['backend'] != 'standard');
+        
+        return $result;
+    }
+    
+    /**
+     * get config for type IMAP/SMTP
+     * 
+     * @param string $_configType
+     * @return array
+     */
+    public static function getConfig($_configType)
+    {
+        if (!isset(self::$_configs[$_configType])) {
+            self::$_configs[$_configType] = Tinebase_Config::getInstance()->getConfigAsArray($_configType);
+        }
+        
+        return self::$_configs[$_configType];
     }
 }
