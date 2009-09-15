@@ -506,6 +506,21 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     */
     
     /**
+     * merges records from given record set
+     * 
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @return void
+     */
+    public function merge(Tinebase_Record_RecordSet $_recordSet)
+    {
+        foreach ($_recordSet as $record) {
+            if (! in_array($record, $this->_listOfRecords, true)) {
+                $this->addRecord($record);
+            }
+        }
+    }
+    
+    /**
      * sorts this recordset
      *
      * @param string $_field
