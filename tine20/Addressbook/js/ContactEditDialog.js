@@ -311,13 +311,13 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 app: this.appName,
                 record_id: (this.record) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })/* quick hacks suck!,
+            }),
             new Tine.widgets.customfields.CustomfieldsPanel({
                 //id: 'adbEditDialogCfPanel',
                 recordClass: Tine.Addressbook.Model.Contact,
                 disabled: (Tine.Addressbook.registry.get('customfields').length == 0),
-                quickHack: {record: _contact}
-            })*/]
+                quickHack: {record: this.record}
+            })]
         };
     },
     
