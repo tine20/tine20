@@ -10,6 +10,8 @@
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
  * @todo        make this a real controller + singleton (create extra sql backend)
+ * @todo        add getAllprefsForApp (similar to config) to get all prefs for the registry in one request
+ * @todo        add getPreference function that returns the complete record 
  */
 
 
