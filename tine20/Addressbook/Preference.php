@@ -81,9 +81,6 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                 $addressbooks       = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Addressbook', $accountId, 0, true);
                 $preference->value  = $addressbooks->getFirstRecord()->getId();
                 
-                // make sure we never come back here again ;-)
-                $this->setValueForUser(self::DEFAULTADDRESSBOOK, $preference->value, $accountId, TRUE);
-                
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
