@@ -275,6 +275,41 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * attach tag to multiple records identified by a filter
+     * 
+     * @param array  $filterData
+     * @param string $filterName
+     * @param mixed  $tag       string|array existing and non-existing tag
+     * @return void
+     */
+    public function attachTagToMultipleRecords($filterData, $filterName, $tag)
+    {
+        // NOTE: this functino makes a new instance of a class whose name is given by user input.
+        //       we need to do some sanitising first!
+        list($appName, $modelString, $filterGroupName) = explode('_', $filterName);
+        if($modelString !== 'Model') {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
+            die('go away!');
+        }
+        
+        if (! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+            throw new Tinebase_Exception_AccessDenied('No right to access application');
+        }
+        
+        $filterGroup = new $filterName();
+        if (! $filterGroup instanceof Tinebase_Model_Filter_FilterGroup) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
+            die('go away!');
+        }
+        
+        // at this point we are shure request is save ;-)
+        $filterGroup->setFromArray($filterData);
+        
+        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filterGroup, $tag);
+        return array('success' => true);
+    }
+    
+    /**
      * search / get notes
      * - used by activities grid
      *
