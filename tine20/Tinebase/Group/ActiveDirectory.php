@@ -42,7 +42,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Abstract
     public function getGroupMemberships($_accountId)
     {
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'getLdapGroupMemberships' . (($_accountId instanceof Tinebase_Model_FullUser) ? $_accountId->getId() : $_accountId);
+        $cacheId = convertCacheId('getLdapGroupMemberships' . (($_accountId instanceof Tinebase_Model_FullUser) ? $_accountId->getId() : $_accountId));
         $result = $cache->load($cacheId);
         
         if (!$result) {

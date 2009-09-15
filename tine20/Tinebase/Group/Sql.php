@@ -57,7 +57,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = 'getGroupMemberships' . $accountId;
+        $cacheId = convertCacheId('getGroupMemberships' . $accountId);
         $memberships = $cache->load($cacheId);
 
         if (! $memberships) {
@@ -89,7 +89,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = 'getGroupMembers' . $groupId;
+        $cacheId = convertCacheId('getGroupMembers' . $groupId);
         $members = $cache->load($cacheId);
 
         if (! $members) {

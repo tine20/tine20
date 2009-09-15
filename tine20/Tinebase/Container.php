@@ -260,7 +260,7 @@ class Tinebase_Container
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
         $cache = Tinebase_Core::get('cache');
-        $cacheId = 'getContainerByACL' . $accountId . $_application . $_grant . $_onlyIds;
+        $cacheId = convertCacheId('getContainerByACL' . $accountId . $_application . $_grant . $_onlyIds);
         $result = $cache->load($cacheId);
         
         if (!$result) {
@@ -820,7 +820,7 @@ class Tinebase_Container
         $grant = (int)$_grant;
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = 'hasGrant' . $accountId . $containerId . $grant;
+        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $grant);
         $result = $cache->load($cacheId);
         
         if (! $result) {
@@ -926,7 +926,7 @@ class Tinebase_Container
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        $cacheKey = 'getGrantsOfAccount' . $containerId . $accountId . (int)$_ignoreAcl;
+        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . (int)$_ignoreAcl);
         // load from cache
         $cache = Tinebase_Core::get('cache');
         $grants = $cache->load($cacheKey);

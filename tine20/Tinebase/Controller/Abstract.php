@@ -58,7 +58,7 @@ abstract class Tinebase_Controller_Abstract
         $right = strtoupper($_right);
         
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'checkRight' . $this->_currentAccount->getId() . $_right . $this->_applicationName;
+        $cacheId = convertCacheId('checkRight' . $this->_currentAccount->getId() . $_right . $this->_applicationName);
         $result = $cache->load($cacheId);
         
         if (!$result) {        
