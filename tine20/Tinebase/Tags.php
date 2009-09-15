@@ -391,6 +391,56 @@ class Tinebase_Tags
     }
     
     /**
+     * attach tag to multiple records identified by a filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string                            $_model
+     * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
+     * @return void
+     */
+    public function attachTagToMultipleRecords($_filter, $_model, $_tag)
+    {
+        // check/create tag on the fly
+        $tagId = $this->_createTagsOnTheFly(array($_tag))->getFirstRecord()->getId();
+        
+        list($appName, $i, $modelName) = explode('_', $_model);
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
+        $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
+        
+        // only get records user has update rights to
+        $controller->checkFilterACL($_filter, 'update');
+        $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
+        
+        if (empty($recordIds)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' there are no records we could attach the tag to');
+            return;
+        }
+        
+        // fetch ids of records already having the tag
+        $allreadyAttachedIds = array();
+        $select = $this->_db->select()
+            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
+            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
+            ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId);
+            
+        foreach ($this->_db->fetchAssoc($select) as $tagArray){
+            $allreadyAttachedIds[] = $tagArray['record_id'];
+        }
+        
+        $toAttachIds = array_diff($recordIds, $allreadyAttachedIds);
+        foreach ($toAttachIds as $recordId) {
+            $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
+                'tag_id'         => $tagId,
+                'application_id' => $appId,
+                'record_id'      => $recordId,
+                // backend property not supported by record yet
+                'record_backend_id' => ''
+            ));
+        }
+        $this->_addOccurrence($tagId, count($toAttachIds));
+    }
+    
+    /**
      * Creates missing tags on the fly and returns complete list of tags the current
      * user has use rights for.
      * Allways respects the current acl of the current user!
