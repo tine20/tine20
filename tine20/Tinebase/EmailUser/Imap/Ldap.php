@@ -9,20 +9,20 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id: Ldap.php 10296 2009-09-02 14:12:35Z p.schuele@metaways.de $
  * 
- * @todo        is this needed?
- * @todo        test it!
- * @todo        add forward / alias
+ * @todo        finish + test it!
+ * @todo        add Tinebase_EmailUser_Smtp_Ldap with forward / alias
+ * @todo        add other schemas (qmail, ...)?
  */
 
 /**
  * class Tinebase_EmailUser
  * 
- * Email User Settings Managing for dbmail attributes in ldap backend
+ * Email User Settings Managing for dbmail (+ ...) attributes in ldap backend
  * 
  * @package Tinebase
  * @subpackage Ldap
  */
-class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
+class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
 {
 
     /**
@@ -70,10 +70,13 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
         }
 
         $ldapOptions = Tinebase_User::getBackendConfiguration();
-        $emailOptions = Tinebase_Core::getConfig()->emailUser->toArray();
-        $this->_options = array_merge($ldapOptions, $emailOptions);
+        $imapConfig = Tinebase_EmailUser::getConfig(Tinebase_Model_Config::IMAP);
+        $this->_options = array_merge($ldapOptions, $imapConfig);
 
-        $this->_ldap = new Tinebase_Ldap($this->_options);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Binding to ldap server ' . $ldapOptions['host']);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ldapOptions, TRUE));
+        
+        $this->_ldap = new Tinebase_Ldap($ldapOptions);
         $this->_ldap->bind();
     }
     
@@ -85,22 +88,17 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      */
     public function getUserById($_userId) 
     {
-        // @todo remove that later
-        /*
-        return new Tinebase_Model_EmailUser(array(
-            'emailUID'      => 'uid',
-            'emailGID'      => 'gid',
-            'emailMailQuota'    => 10000,
-        ));
-        */
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Trying to get ldap user with id ' . $_userId);
         
         try {
             $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $ldapData = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId);
+            $ldapData = $this->_ldap->fetch($this->_options['userDn'], $this->_options['userUUIDAttribute'] . '=' . $userId);
             $user = $this->_ldap2User($ldapData);
         } catch (Exception $e) {
-            throw new Exception('User not found');
+            throw new Exception('User not found: ' . $e->getMessage());
         }
+
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
         
         return $user;
     }
@@ -164,6 +162,28 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
         return $this->getUserById($_user->getId());
 	}
 
+	/**
+     * delete user by id
+     *
+     * @param   string         $_userId
+     */
+    public function deleteUser($_userId)
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' This does nothing at the moment.');
+    }
+    
+    /**
+     * update/set email user password
+     * 
+     * @param string $_userId
+     * @param string $_password
+     * @return void
+     */
+    public function setPassword($_userId, $_password)
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' This does nothing at the moment.');
+    }
+	
     /**
      * get metatada of existing account
      *
