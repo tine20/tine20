@@ -394,16 +394,15 @@ class Tinebase_Tags
      * attach tag to multiple records identified by a filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string                            $_model
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
      * @return void
      */
-    public function attachTagToMultipleRecords($_filter, $_model, $_tag)
+    public function attachTagToMultipleRecords($_filter, $_tag)
     {
         // check/create tag on the fly
         $tagId = $this->_createTagsOnTheFly(array($_tag))->getFirstRecord()->getId();
         
-        list($appName, $i, $modelName) = explode('_', $_model);
+        list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
         $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
         $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
         
