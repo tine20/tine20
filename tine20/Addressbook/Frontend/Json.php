@@ -32,18 +32,17 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get one contact identified by contactId
      *
-     * @param int $contactId
+     * @param int $id
      * @return array
      */
-    public function getContact($contactId)
+    public function getContact($id)
     {
         $result = array();
                
-        $contact = Addressbook_Controller_Contact::getInstance()->get($contactId);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($id);
         $result = $this->_contactToJson($contact);
         
         return $result;
-        //return $this->_get($contactId, Addressbook_Controller_Contact::getInstance());
     }
     
     /**
@@ -74,15 +73,15 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save one contact
      *
-     * if $contactData['id'] is empty the contact gets added, otherwise it gets updated
+     * if $recordData['id'] is empty the contact gets added, otherwise it gets updated
      *
-     * @param string $contactData a JSON encoded array of contact properties
+     * @param string $recordData a JSON encoded array of contact properties
      * @return array
      */
-    public function saveContact($contactData)
+    public function saveContact($recordData)
     {
         $contact = new Addressbook_Model_Contact();
-        $contact->setFromJsonInUsersTimezone($contactData);
+        $contact->setFromJsonInUsersTimezone($recordData);
         
         if (empty($contact->id)) {
             $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
@@ -92,6 +91,22 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $result =  $this->getContact($contact->getId());
         return $result;
+    }
+    
+    /****************************************** get default adb ****************************/
+    
+    /**
+     * get defautl addressbook
+     * 
+     * @return array
+     */
+    public function getDefaultAddressbook()
+    {
+        $defaultAddressbook = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+        $defaultAddressbookArray = $defaultAddressbook->toArray();
+        $defaultAddressbookArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultAddressbook->getId())->toArray();
+        
+        return $defaultAddressbookArray;
     }
     
     /****************************************** get salutations ****************************/
@@ -184,9 +199,10 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return mixed array 'variable name' => 'data'
      */
     public function getRegistryData()
-    {   
+    {
         $registryData = array(
-            'Salutations' => $this->getSalutations(),
+            'Salutations'        => $this->getSalutations(),
+            'defaultAddressbook' => $this->getDefaultAddressbook()
         );        
         return $registryData;    
     }
