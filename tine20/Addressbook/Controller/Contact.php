@@ -75,6 +75,28 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         return $image;
     }
     
+    /**
+     * returns the default addressbook
+     * 
+     * @return Tinebase_Model_Container
+     */
+    public function getDefaultAddressbook()
+    {
+        $defaultAddressbookId = Tinebase_Core::getPreference('Addressbook')->getValue(Addressbook_Preference::DEFAULTADDRESSBOOK);
+        //try {
+            $defaultAddressbook = Tinebase_Container::getInstance()->getContainerById($defaultAddressbookId);
+        //} catch (Tinebase_Exception_NotFound $tenf) {
+            // default may be gone -> remove default adb pref
+        //    Tinebase_Core::getPreference('Addressbook')->deleteUserPref(Addressbook_Preference::DEFAULTADDRESSBOOK);
+            
+            // generate a new one
+        //    $defaultAddressbookId = Tinebase_Core::getPreference('Addressbook')->getValue(Addressbook_Preference::DEFAULTADDRESSBOOK);
+        //    $defaultAddressbook = Tinebase_Container::getInstance()->getContainerById($defaultAddressbookId);
+        //}
+        
+        return $defaultAddressbook;
+    }
+    
     /****************************** overwritten functions ************************/
     
     /**
