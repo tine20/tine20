@@ -158,7 +158,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     getToolbarItems: function() {
         this.actions_exportContact = new Ext.Action({
             text: _('Export'),
-            iconCls: 'action_exportAsPdf',
+            iconCls: 'action_export',
             scope: this,
             requiredGrant: 'readGrant',
             disabled: true,
@@ -174,6 +174,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                     }),
                     new Tine.widgets.grid.ExportButton({
                         text: this.app.i18n._('Export as CSV'),
+                        iconCls: 'action_export',
                         format: 'csv',
                         exportFunction: 'Addressbook.exportContacts',
                         gridPanel: this
@@ -181,18 +182,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                 ]
             }
         });
-        
-        /*
-        this.actions_exportContact = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: true,
-            text: this.app.i18n._('export as pdf'),
-            disabled: true,
-            handler: this.onExportPdf,
-            iconCls: 'action_exportAsPdf',
-            scope: this
-        });
-        */
         
         this.actions_callContact = new Ext.Action({
             requiredGrant: 'readGrant',
