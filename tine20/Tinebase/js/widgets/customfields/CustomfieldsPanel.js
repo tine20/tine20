@@ -38,6 +38,7 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         this.fieldset = [];
         
         var cfStore = this.getCustomFieldDefinition();
+        var order = 1;
         if (cfStore) {
             this.items = [];
             this.getFieldSet(_('General'));
@@ -51,17 +52,18 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                 
                 try {
                     var fieldObj = Ext.ComponentMgr.create(fieldDef);
-                    //this.items.push(fieldObj);
+                    order = (def.get('order')) ? def.get('order') : order++;
                     
-                    if (def.get('group') == '') {
-                        this.getFieldSet(_('General')).insert(def.get('order'),fieldObj);
+                    if (! def.get('group') || def.get('group') == '') {
+                        this.getFieldSet(_('General')).insert(order,fieldObj);
                     } else {
-                        this.getFieldSet(def.get('group')).insert(def.get('order'),fieldObj);
+                        this.getFieldSet(def.get('group')).insert(order,fieldObj);
                     }
                     
                     // ugh a bit ugly
                     def.fieldObj = fieldObj;
                 } catch (e) {
+                    //console.log(e);
                     console.error('unable to create custom field "' + def.get('name') + '". Check definition!');
                     cfStore.remove(def);
                 }
