@@ -366,7 +366,9 @@ Tine.Tinebase.tineInit = {
             }
             
             // error data
-            var data = (rpcData.data) ? rpcData.data : {code: 0, message: rpcData.msg};
+            var data = (rpcData.data) 
+                ? rpcData.data 
+                : {code: 0, message: (rpcData.msg) ? rpcData.msg : rpcData.message};
             
             switch(data.code) {
                 // not authorised
