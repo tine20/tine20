@@ -11,7 +11,25 @@
 Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
 
 /**
- * Customfields panel
+ * Customfields Panel
+ * 
+ * @namespace   Tine.widgets.customfields
+ * @class       Tine.widgets.customfields.CustomfieldsPanel
+ * @extends     Ext.Panel
+ * 
+ * <p>Customfields Panel</p>
+ * <p><pre>
+ * TODO         remove 'quickHack': use onRecordLoad/Update or convert this to a plugin
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.widgets.customfields.CustomfieldsPanel
  */
 Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     
@@ -20,6 +38,12 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
      * the recordClass this customfields panel is for
      */
     recordClass: null,
+    
+    /**
+     * @property fieldset
+     * @type Array of Ext.form.FieldSet
+     */
+    fieldset: null,
     
     //private
     layout: 'form',
@@ -33,6 +57,9 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         labelSeparator: ''
     },
     
+    /**
+     * @private
+     */
     initComponent: function() {
         this.title = _('Custom Fields');
         this.fieldset = [];
@@ -94,8 +121,8 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     /**
      * sort custom fields into groups
      * 
-     * @param {} name
-     * @return {}
+     * @param {String} name
+     * @return {Ext.form.FieldSet}
      * @author Mihail Panayotov
      */
     getFieldSet: function(name) {
@@ -117,6 +144,11 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         return this.fieldset[system_name];
     },    
     
+    /**
+     * get cf definitions from registry
+     * 
+     * @return {Ext.data.JsonStore}
+     */
     getCustomFieldDefinition: function() {
         var appName = this.recordClass.getMeta('appName');
         var modelName = this.recordClass.getMeta('modelName');
@@ -135,6 +167,11 @@ Tine.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         }
     },
     
+    /**
+     * set form field cf values
+     * 
+     * @param {Array} customfields
+     */
     setAllCfValues: function(customfields) {
         // check if all cfs are already rendered
         var allRendered = false;
@@ -163,13 +200,13 @@ Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field
     name: 'customfields',
     hidden: true,
     labelSeparator: '',
-    /**
-     * @private
-     *
+    /*
+    // @private
     initComponent: function() {
         Tine.widgets.customfields.CustomfieldsPanelFormField.superclass.initComponent.call(this);
         //this.hide();
-    },*/
+    },
+    */
     
     /**
      * returns cf data of the current record
@@ -197,7 +234,7 @@ Tine.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.form.Field
 });
 
 /**
- * helper class to workaround String Casts in record class
+ * @private helper class to workaround String Casts in record class
  * 
  * @class Tine.widgets.customfields.Cftransport
  * @extends Object
