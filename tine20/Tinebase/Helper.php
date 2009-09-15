@@ -92,4 +92,16 @@ function getDevelopmentRevision()
     
     return $revision;
 }
-    
+
+/**
+ * converts cache id
+ * cache id strings can only contain the chars [a-zA-Z0-9_]
+ * 
+ * @param string $_cacheId
+ * @return string
+ */
+function convertCacheId($_cacheId) {
+    $result = preg_replace('/[^a-z^A-Z^0-9^_]/', '', $_cacheId);
+
+    return $result;
+}
