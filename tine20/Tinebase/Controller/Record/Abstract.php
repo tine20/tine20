@@ -76,6 +76,17 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected $_recordAlarmField = 'dtstart';
     
+    /**
+     * returns controller for records of given model
+     * 
+     * @param string $_model
+     */
+    public static function getController($_model)
+    {
+        list($appName, $i, $modelName) = explode('_', $_model);
+        return Tinebase_Core::getApplicationInstance($appName, $modelName);
+    }
+    
     /*********** get / search / count leads **************/
     
     /**
