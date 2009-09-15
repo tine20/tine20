@@ -103,7 +103,9 @@ abstract class Tinebase_Controller_Record_Abstract
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
     	$this->_checkRight('get');
-        self::checkFilterACL($_filter);
+    	if ($this->_doContainerACLChecks) {
+            self::checkFilterACL($_filter);
+    	}
         
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
@@ -122,7 +124,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
     {
-        self::checkFilterACL($_filter);
+        if ($this->_doContainerACLChecks) {
+            self::checkFilterACL($_filter);
+        }
 
         $count = $this->_backend->searchCount($_filter);
         
@@ -393,7 +397,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function updateMultiple($_filter, $_data)
     {
-        self::checkFilterACL($_filter, 'update');
+        if ($this->_doContainerACLChecks) {
+            self::checkFilterACL($_filter, 'update');
+        }
         $this->_checkRight('update');
         
         // get only ids
@@ -603,43 +609,32 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public static function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
     {
-        if ($this->_doContainerACLChecks) {
-            $containerFilters = $_filter->getAclFilters();
-            
-            if (! $containerFilters) {
-                // force a $containerFilter filter (ACL)
-                $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all', array('applicationName' => $this->_applicationName));
-                $_filter->addFilter($containerFilter);
-            }
-            
-            // do something like that
-            switch ($_action) {
-                case 'get':
-                    $_filter->setRequiredGrants(array(
-                        Tinebase_Model_Container::GRANT_READ,
-                        Tinebase_Model_Container::GRANT_ADMIN,
-                        //Tinebase_Model_Container::GRANT_ANY
-                    ));
-                    break;
-                case 'update':
-                    $_filter->setRequiredGrants(array(
-                        Tinebase_Model_Container::GRANT_EDIT,
-                        Tinebase_Model_Container::GRANT_ADMIN,
-                        //Tinebase_Model_Container::GRANT_ANY
-                    ));
-                    break;
-                default:
-                    throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
-            }
-            
+        $containerFilters = $_filter->getAclFilters();
         
-            /*
-            $containerProperty = 'container_id';
-    
-            if (! array_key_exists($containerProperty, $_filter->getFilterModel())) {
-                $_filter->addFilter(new Tinebase_Model_Filter_Container($containerProperty, 'specialNode', 'all', array('applicationName' => $this->_applicationName)));
-            }
-            */
+        if (! $containerFilters) {
+            // force a $containerFilter filter (ACL)
+            $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all', array('applicationName' => $_filter->getApplicationName()));
+            $_filter->addFilter($containerFilter);
+        }
+        
+        // do something like that
+        switch ($_action) {
+            case 'get':
+                $_filter->setRequiredGrants(array(
+                    Tinebase_Model_Container::GRANT_READ,
+                    Tinebase_Model_Container::GRANT_ADMIN,
+                    //Tinebase_Model_Container::GRANT_ANY
+                ));
+                break;
+            case 'update':
+                $_filter->setRequiredGrants(array(
+                    Tinebase_Model_Container::GRANT_EDIT,
+                    Tinebase_Model_Container::GRANT_ADMIN,
+                    //Tinebase_Model_Container::GRANT_ANY
+                ));
+                break;
+            default:
+                throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
     }     
 
