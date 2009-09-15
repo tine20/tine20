@@ -77,12 +77,38 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         
         this.initSearchField();
         
+        this.bottomBar = new Ext.Container({
+            layout: 'column',
+            items: [
+                Ext.apply(this.searchField, {columnWidth: .99}),
+                new Ext.Button({
+                    text: '',
+                    width: 16,
+                    iconCls: 'action_add',
+                    tooltip: _('Add a new personal tag'),
+                    scope: this,
+                    handler: function() {
+                        Ext.Msg.prompt(_('Add New Personal Tag'),
+                                       _('Please note: You create a personal tag. Only you can see it!') + ' <br />' + _('Enter tag name:'), 
+                            function(btn, text) {
+                                if (btn == 'ok'){
+                                    this.onTagAdd(text);
+                                }
+                            }, 
+                        this, false, this.searchField.lastQuery);
+                    }
+                })
+            ]
+        
+        });
+        /*
         this.bottomBar = new Ext.Toolbar({
             style: 'border: 0px;',
             items:[
-                this.searchField, '->',
-                new Ext.Button({
+                this.searchField,
+                new Ext.Action({
                     text: '',
+                    width: 16,
                     iconCls: 'action_add',
                     tooltip: _('Add a new personal tag'),
                     scope: this,
@@ -99,6 +125,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 })
             ]
         });
+        */
         
         var tagTpl = new Ext.XTemplate(
             '<tpl for=".">',
@@ -295,17 +322,18 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     },
     /**
      * @private
-     */
+     *
     onResize : function(w,h){
         Tine.widgets.tags.TagPanel.superclass.onResize.call(this, w, h);
         // maximize search field and let space for add button
-        if (this.searchField.rendered && w) {
+        if (this.searchField.rendered) {
             
-            w = this.getSize().width - 12;
+            w = this.getSize().width - 48;
             this.searchField.setWidth(w);
             this.searchField.syncSize();
         }
-    },
+    },*/
+    
     
     /**
      * @private
