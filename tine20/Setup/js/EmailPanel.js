@@ -151,7 +151,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         }
         
         // imap combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail'], ['ldap_imap', 'Ldap']];
         backendComboConfig.name = 'imap_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -254,6 +254,11 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         xtype: 'textfield'
                     },
                     items: this.getDbConfigFields('imap', 'dbmail')
+                }, {
+                    // nothing in here yet
+                    id: this.imapBackendIdPrefix + 'ldap_imap',
+                    layout: 'form',
+                    items: []
                 }]
             }]
         }, {
