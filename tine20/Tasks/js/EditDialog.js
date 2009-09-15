@@ -227,7 +227,7 @@ Tine.Tasks.EditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 470,
+        height: 490,
         name: Tine.Tasks.EditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Tasks.EditDialog',
         contentPanelConstructorConfig: config
