@@ -980,7 +980,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     getTargetEvent: function(e) {
         var target = e.getTarget();
         var el = Ext.fly(target);
-        if (el.hasClass('cal-daysviewpanel-event') || (el = el.up('[class^=cal-daysviewpanel-event]', 10))) {
+        
+        if (el.hasClass('cal-daysviewpanel-event') || (el = el.up('[id*=event:]', 10))) {
             var parts = el.dom.id.split(':');
             
             return this.ds.getById(parts[1]);
