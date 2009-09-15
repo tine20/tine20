@@ -83,5 +83,39 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         
     }
     
+    public function testAttachTagToMultipleRecords()
+    {
+        $personas = Zend_Registry::get('personas');
+        $personasContactIds = array();
+        foreach ($personas as $persona) {
+            $personasContactIds[] = $persona->contact_id;
+        }
+        
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
+        foreach ($contacts as $contact) {
+            $contact->tags = array();
+            $this->_instance->setTagsOfRecord($contact);
+        }
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => $personasContactIds)
+        ));
+        
+        $tagData = array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'tag::testAttachTagToMultipleRecords',
+            'description' => 'testAttachTagToMultipleRecords',
+            'color' => '#009B31',
+        );
+        
+        $this->_instance->attachTagToMultipleRecords($filter, 'Addressbook_Model_Contact', $tagData);
+        
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
+        
+        $this->_instance->getMultipleTagsOfRecords($contacts);
+        foreach ($contacts as $contact) {
+            $this->assertEquals(1, count($contact->tags));
+        }
+    }
 }
 
