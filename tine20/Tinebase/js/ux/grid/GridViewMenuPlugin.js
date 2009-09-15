@@ -244,7 +244,9 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
         if(this.colMenu){
             this.colMenu.removeAll();
             Ext.menu.MenuMgr.unregister(this.colMenu);
-            this.colMenu.getEl().remove();
+            if (this.colMenu.getEl()) {
+                this.colMenu.getEl().remove();
+            }
             delete this.colMenu;
         }
 
