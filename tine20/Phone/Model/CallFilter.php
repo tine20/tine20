@@ -23,6 +23,11 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Phone';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Phone_Model_Call';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

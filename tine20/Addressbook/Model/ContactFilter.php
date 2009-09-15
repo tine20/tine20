@@ -30,6 +30,11 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Addressbook';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Addressbook_Model_Contact';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

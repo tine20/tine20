@@ -22,6 +22,11 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Courses';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Courses_Model_Course';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

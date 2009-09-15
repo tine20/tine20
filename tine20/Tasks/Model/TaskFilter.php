@@ -22,6 +22,11 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Tasks';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Tasks_Model_Task';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

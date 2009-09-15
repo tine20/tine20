@@ -23,6 +23,11 @@ class Voipmanager_Model_Asterisk_SipPeerFilter extends Tinebase_Model_Filter_Fil
     protected $_applicationName = 'Voipmanager';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Voipmanager_Model_Asterisk_SipPeer';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

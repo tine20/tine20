@@ -23,6 +23,11 @@ class Voipmanager_Model_Asterisk_ContextFilter extends Tinebase_Model_Filter_Fil
      */
     protected $_applicationName = 'Voipmanager';
     
+    /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Voipmanager_Model_Asterisk_Context';
+    
     protected $_filterModel = array(
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 

@@ -24,6 +24,11 @@ class Tinebase_Model_GroupFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Tinebase';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Tinebase_Model_Group';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

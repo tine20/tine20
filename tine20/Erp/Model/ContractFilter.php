@@ -29,6 +29,11 @@ class Erp_Model_ContractFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Erp';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Erp_Model_Contract';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

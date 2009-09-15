@@ -25,6 +25,11 @@ class Admin_Model_SambaMachineFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_applicationName = 'Admin';
     
+    /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Admin_Model_SambaMachine';
+    
     protected $_filterModel = array(
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 

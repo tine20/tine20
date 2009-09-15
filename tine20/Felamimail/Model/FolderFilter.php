@@ -22,6 +22,11 @@ class Felamimail_Model_FolderFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Felamimail';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Felamimail_Model_Folder';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

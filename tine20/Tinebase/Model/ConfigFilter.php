@@ -23,7 +23,12 @@ class Tinebase_Model_ConfigFilter extends Tinebase_Model_Filter_FilterGroup
      * @var string application of this filter group
      */
     protected $_applicationName = 'Tinebase';
-
+    
+    /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Tinebase_Model_Config';
+    
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding

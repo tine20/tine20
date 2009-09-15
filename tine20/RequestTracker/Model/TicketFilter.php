@@ -23,6 +23,11 @@ class RequestTracker_Model_TicketFilter extends Tinebase_Model_Filter_FilterGrou
     protected $_applicationName = 'RequestTracker';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'RequestTracker_Model_Ticket';
+    
+    /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3

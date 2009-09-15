@@ -23,6 +23,11 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Calendar';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Calendar_Model_Event';
+    
+    /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3

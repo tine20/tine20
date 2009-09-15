@@ -85,6 +85,11 @@ class Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = NULL;
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = NULL;
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array();
@@ -281,6 +286,26 @@ class Tinebase_Model_Filter_FilterGroup
     public function getCondition()
     {
         return $this->_concatenationCondition;
+    }
+    
+    /**
+     * returns application name of this filtergroup
+     *
+     * @return string
+     */
+    public function getApplicationName()
+    {
+        return $this->_applicationName;
+    }
+    
+    /**
+     * returns name of model this filtergroup is for
+     *
+     * @return string
+     */
+    public function getModelName()
+    {
+        return $this->_modelName;
     }
     
     /**

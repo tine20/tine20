@@ -22,6 +22,11 @@ class ExampleApplication_Model_ExampleRecordFilter extends Tinebase_Model_Filter
     protected $_applicationName = 'ExampleApplication';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'ExampleApplication_Model_ExampleRecord';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

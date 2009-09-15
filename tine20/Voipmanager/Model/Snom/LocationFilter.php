@@ -24,6 +24,11 @@ class Voipmanager_Model_Snom_LocationFilter extends Tinebase_Model_Filter_Filter
     protected $_applicationName = 'Voipmanager';
     
     /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Voipmanager_Model_Snom_Location';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

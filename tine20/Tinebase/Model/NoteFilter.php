@@ -24,6 +24,11 @@ class Tinebase_Model_NoteFilter extends Tinebase_Model_Filter_FilterGroup
      * @var string application of this filter group
      */
     protected $_applicationName = 'Tinebase';
+
+    /**
+     * @var string name of model this filter group is designed for
+     */
+    protected $_modelName = 'Tinebase_Model_Note';
     
     /**
      * @var array filter model fieldName => definition
