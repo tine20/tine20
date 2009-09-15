@@ -103,7 +103,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     {
         try {
             $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $ldapData = $this->_ldap->fetch($this->_options['userDn'], 'uidnumber=' . $userId);
+            $ldapData = $this->_ldap->fetch($this->_options['userDn'], $this->_options['userUUIDAttribute'] . '=' . $userId);
             $user = $this->_ldap2User($ldapData);
         } catch (Exception $e) {
             throw new Exception('User not found');
