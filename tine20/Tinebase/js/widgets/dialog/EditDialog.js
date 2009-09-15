@@ -89,10 +89,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     // private
     bodyStyle:'padding:5px',
     layout: 'fit',
+    border: false,
     cls: 'tw-editdialog',
     anchor:'100% 100%',
     deferredRender: false,
     buttonAlign: 'right',
+    bufferResize: 500,
     
     //private
     initComponent: function(){
@@ -228,7 +230,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     initRecord: function() {
         // note: in local mode we expect a valid record
         if (this.mode !== 'local') {
-            
             if (this.record && this.record.id) {
                 this.loadRequest = this.recordProxy.loadRecord(this.record, {
                     scope: this,
@@ -299,8 +300,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         ]);
 
-        // recalculate height, as autoHeight fails for Ext.Window ;-(
-        this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
+        // should be fixed in WindowFactory
+        //this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
         
         if (this.showContainerSelector) {
             this.recordContainerEl = this.footer.first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
