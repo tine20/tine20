@@ -49,6 +49,9 @@
     /*font-weight: bold;*/
     margin-bottom: 2px;
 }
+.ext-gecko .x-window-body .x-form-item {
+	overflow: hidden;
+}
 
 .x-fieldset {
     padding: 5px 5px 0px 5px;
