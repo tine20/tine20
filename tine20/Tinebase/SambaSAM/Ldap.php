@@ -345,7 +345,7 @@ class Tinebase_SambaSAM_Ldap extends Tinebase_SambaSAM_Abstract
     protected function _getUserMetaData($_userId)
     {
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        $result = $this->_ldap->getMetaData($this->_options['userDn'], 'uidnumber=' . $userId);
+        $result = $this->_ldap->getMetaData($this->_options['userDn'], $this->_options['userUUIDAttribute'] . '=' . $userId);
         return $result;
         
         /*
