@@ -429,6 +429,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             });
         }
     },
+    
     /**
      * @private
      */
