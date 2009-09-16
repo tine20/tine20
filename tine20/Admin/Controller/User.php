@@ -83,7 +83,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
         if (Tinebase_EmailUser::manages(Tinebase_Model_Config::SMTP)) {
             $this->_manageSmtpEmailUser = TRUE; 
-            $this->_imapUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
+            $this->_smtpUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
         }
     }
 
