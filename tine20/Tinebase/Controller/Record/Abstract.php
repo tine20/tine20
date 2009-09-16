@@ -104,7 +104,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
     	$this->_checkRight('get');
     	if ($this->_doContainerACLChecks) {
-            self::checkFilterACL($_filter);
+            $this->checkFilterACL($_filter);
     	}
         
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
@@ -125,7 +125,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
     {
         if ($this->_doContainerACLChecks) {
-            self::checkFilterACL($_filter);
+            $this->checkFilterACL($_filter);
         }
 
         $count = $this->_backend->searchCount($_filter);
@@ -398,7 +398,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public function updateMultiple($_filter, $_data)
     {
         if ($this->_doContainerACLChecks) {
-            self::checkFilterACL($_filter, 'update');
+            $this->checkFilterACL($_filter, 'update');
         }
         $this->_checkRight('update');
         
@@ -607,7 +607,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @todo add type hint again
      */
-    public static function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
+    public function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
     {
         $containerFilters = $_filter->getAclFilters();
         
