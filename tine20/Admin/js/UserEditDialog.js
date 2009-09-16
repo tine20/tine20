@@ -288,6 +288,14 @@ Tine.Admin.Users.EditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     readOnly: true
                 },
                 items: [[{
+                    fieldLabel: this.app.i18n._('Email UID'),
+                    name: 'emailUID',
+                    columnWidth: .666
+                }], [{
+                    fieldLabel: this.app.i18n._('Email GID'),
+                    name: 'emailGID',
+                    columnWidth: .666
+                }], [{
                     fieldLabel: this.app.i18n._('Email Username'),
                     name: 'emailUserId',
                     columnWidth: .666
