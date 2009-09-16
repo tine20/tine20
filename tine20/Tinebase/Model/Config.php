@@ -47,6 +47,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const USERBACKENDTYPE = 'Tinebase_User_BackendType';
     
     /**
+     * cronjob user id
+     * 
+     * @var string
+     */
+    const CRONUSERID = 'cronuserid';
+    
+    /**
      * identifier
      * 
      * @var string

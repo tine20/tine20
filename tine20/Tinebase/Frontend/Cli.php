@@ -92,8 +92,6 @@ class Tinebase_Frontend_Cli
      *
      * @param Zend_Console_Getopt $_opts
      * @return boolean success
-     * 
-     * @todo set group membership of cronuser somehow (use accountPrimaryGroup as group membership?)
      */
     public function triggerAsyncEvents($_opts)
     {
@@ -102,14 +100,11 @@ class Tinebase_Frontend_Cli
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // create dummy user for cronjob / set default admin group
-            $cronuser = new Tinebase_Model_FullUser(array(
-                'accountLoginName'      => 'cronuser',
-                'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
-                'accountDisplayName'    => 'cronuser',
-                'accountLastName'       => 'cronuser',
-                'accountFullName'       => 'cronuser',
-            ));
+            // get user for cronjob from config / set default admin group
+            $cronuserId = Tinebase_Config::getConfig(Tinebase_Model_Config::CRONUSERID)->value;
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting user with id ' . $cronuserId . ' as cronuser.');
+            $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
         }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
