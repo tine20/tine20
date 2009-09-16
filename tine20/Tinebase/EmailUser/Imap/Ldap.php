@@ -9,7 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id: Ldap.php 10296 2009-09-02 14:12:35Z p.schuele@metaways.de $
  * 
- * @todo        finish + test it!
+ * @todo        how to get emailGID / dbmailGID?
  * @todo        add Tinebase_EmailUser_Smtp_Ldap with forward / alias
  * @todo        add other schemas (qmail, ...)?
  */
@@ -31,16 +31,20 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
     protected $_ldap = NULL;
 
     /**
-     * user properties mapping
+     * user properties mapping 
+     * -> we need to use lowercase for ldap fields because ldap_fetch returns lowercase keys
      *
      * @var array
      */
     protected $_userPropertyNameMapping = array(
-        'emailUID'      => 'dbmailUID', 
-        'emailGID'      => 'dbmailGID', 
+        'emailUID'          => 'dbmailuid', 
+        'emailGID'          => 'dbmailgid', 
+        'emailMailQuota'    => 'mailquota',
+    /*
+        'emailUID'          => 'dbmailUID', 
+        'emailGID'          => 'dbmailGID', 
         'emailMailQuota'    => 'mailQuota',
-        //'emailAliases'  => 'alias',
-        //'emailForward'  => 'forward',
+        */
     );
     
     /**
@@ -72,9 +76,12 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
         $ldapOptions = Tinebase_User::getBackendConfiguration();
         $imapConfig = Tinebase_EmailUser::getConfig(Tinebase_Model_Config::IMAP);
         $this->_options = array_merge($ldapOptions, $imapConfig);
+        
+        // set emailGID
+        $this->_options['emailGID'] = 1208394888;
 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Binding to ldap server ' . $ldapOptions['host']);
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ldapOptions, TRUE));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ldapOptions, TRUE));
         
         $this->_ldap = new Tinebase_Ldap($ldapOptions);
         $this->_ldap->bind();
@@ -109,15 +116,16 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_FullUser $_user
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
-     * 
-     * @todo add defaults?
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
+	    $_emailUser->emailGID = $this->_options['emailGID'];
+	    $_emailUser->emailUID = $_user->accountLoginName;
+	    
         $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_emailUser);
         
-        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredUserObjectClass));
+        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectClass'], $this->_requiredObjectClass));
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
@@ -136,17 +144,13 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    // @todo remove that later
-	    /*
-	    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_emailUser->toArray(), TRUE));
-	    return $this->getUserById($_user->getId());
-        */
+        $_emailUser->emailUID = $_user->accountLoginName;
 	    
         $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_emailUser);
         
         // check if user has all required object classes.
-        foreach ($this->_requiredUserObjectClass as $className) {
+        foreach ($this->_requiredObjectClass as $className) {
             if (! in_array($className, $metaData['objectClass'])) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no email objectclass.');
 
@@ -193,7 +197,7 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
     protected function _getUserMetaData($_userId)
     {
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        $result = $this->_ldap->getMetaData($this->_options['userDn'], 'uidnumber=' . $userId);
+        $result = $this->_ldap->getMetaData($this->_options['userDn'], $this->_options['userUUIDAttribute'] . '=' . $userId);
         return $result;
     }
     
@@ -204,7 +208,7 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
      * @param string $_accountClass
      * @return Tinebase_Record_Abstract
      * 
-     * @todo add generic function for this?
+     * @todo add generic function for this in Tinebase_User_Ldap or Tinebase_Ldap?
      */
     protected function _ldap2User($_userData, $_accountClass = 'Tinebase_Model_EmailUser')
     {
@@ -217,16 +221,6 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
             $keyMapping = array_search($key, $this->_userPropertyNameMapping);
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
-                    /*
-                    case 'pwdLastSet':
-                    case 'logonTime':
-                    case 'logoffTime':
-                    case 'kickoffTime':
-                    case 'pwdCanChange':
-                    case 'pwdMustChange':
-                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
-                        break;
-                    */
                     default: 
                         $accountArray[$keyMapping] = $value[0];
                         break;
@@ -254,16 +248,6 @@ class Tinebase_EmailUser_Imap_Ldap extends Tinebase_EmailUser_Abstract
             $ldapProperty = array_key_exists($key, $this->_userPropertyNameMapping) ? $this->_userPropertyNameMapping[$key] : false;
             if ($ldapProperty) {
                 switch ($key) {
-                    /*
-                    case 'pwdLastSet':
-                    case 'logonTime':
-                    case 'logoffTime':
-                    case 'kickoffTime':
-                    case 'pwdCanChange':
-                    case 'pwdMustChange':
-                        $ldapData[$ldapProperty] = $value instanceof Zend_Date ? $value->getTimestamp() : '';
-                        break;
-                    */
                     default:
                         $ldapData[$ldapProperty] = $value;
                         break;

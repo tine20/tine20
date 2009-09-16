@@ -13,16 +13,16 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Group_SqlTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_EmailUser_PostfixTest::main');
 }
 
 /**
  * Test class for Tinebase_PostfixTest
  */
-class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
 {
     /**
      * email user backend
@@ -44,7 +44,7 @@ class Tinebase_User_PostfixTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_PostfixTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_EmailUser_PostfixTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 

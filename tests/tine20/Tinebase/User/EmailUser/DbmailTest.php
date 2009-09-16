@@ -13,29 +13,17 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Group_SqlTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_EmailUser_DbmailTest::main');
 }
 
 /**
  * Test class for Tinebase_EmailUser_Imap_Dbmail
  */
-class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_EmailUser_DbmailTest extends Tinebase_User_EmailUser_ImapAbstractTest
 {
-    /**
-     * email user backend
-     *
-     * @var Tinebase_EmailUser_Abstract
-     */
-    protected $_backend = NULL;
-        
-    /**
-     * @var array test objects
-     */
-    protected $_objects = array();
-
     /**
      * Runs the test methods of this class.
      *
@@ -44,7 +32,7 @@ class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_DbmailTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_EmailUser_DbmailTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -56,21 +44,8 @@ class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::IMAP);
-
+        $this->_backend = Tinebase_EmailUser::factory(Tinebase_EmailUser::DBMAIL);
         $this->_objects['addedUser'] = $this->_addUser();
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        // delete email account
-        $this->_backend->deleteUser(Tinebase_Core::getUser()->getId());
     }
     
     /**
@@ -95,20 +70,6 @@ class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
      * try to update an email account
      * 
      */
-    public function testUpdateAccount()
-    {
-        // update user
-        $this->_objects['addedUser']->emailMailQuota = 2000000;
-        
-        $updatedUser = $this->_backend->updateUser(Tinebase_Core::getUser(), $this->_objects['addedUser']);
-        
-        $this->assertEquals(2000000, $updatedUser->emailMailQuota);
-    }
-    
-    /**
-     * try to update an email account
-     * 
-     */
     public function testSetPassword()
     {
         // set pw
@@ -118,19 +79,4 @@ class Tinebase_User_DbmailTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(md5('password'), $updatedUser->emailPassword);
     }
-    
-    /**
-     * add new email user
-     * 
-     * @return Tinebase_Model_EmailUser
-     */
-    protected function _addUser()
-    {
-        $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailMailQuota'    => 1000000
-        ));
-        $addedUser = $this->_backend->addUser(Tinebase_Core::getUser(), $emailUser);
-        
-        return $addedUser;
-    }
-}	
+}
