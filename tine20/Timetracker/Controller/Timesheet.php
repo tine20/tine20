@@ -198,7 +198,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
      */
-    protected function _checkFilterACL(/*Tinebase_Model_Filter_FilterGroup*/ $_filter, $_action = 'get')
+    public function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup*/ $_filter, $_action = 'get')
     {
         switch ($_action) {
             case 'get':
