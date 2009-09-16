@@ -580,7 +580,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
             $allUidNumbers[] = $userData['uidnumber'][0];
         }
         sort($allUidNumbers);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
         
         $numUsers = count($allUidNumbers);
         if ($numUsers == 0 || $allUidNumbers[$numUsers-1] < $this->_options['minUserId']) {
