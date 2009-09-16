@@ -268,7 +268,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     {
         // not supported by standart ldap schemas
         $user = $this->getFullUserById($_accountId);
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  User '{$user->accountLoginName}' loged in from {$_ipAddress}");
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  User '{$user->accountLoginName}' logged in from {$_ipAddress}");
     }
     
     /**
