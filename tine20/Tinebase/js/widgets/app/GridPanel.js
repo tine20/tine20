@@ -55,7 +55,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @cfg {Array} actionToolbarItems
      * additional items for actionToolbar
      */
-    actionToolbarItems: [],
+    actionToolbarItems: null,
     /**
      * @cfg {Tine.widgets.grid.FilterToolbar} filterToolbar
      */
@@ -64,7 +64,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @cfg {Array} contextMenuItems
      * additional items for contextMenu
      */
-    contextMenuItems: [],
+    contextMenuItems: null,
     /**
      * @cfg {Bool} evalGrants
      * should grants of a grant-aware records be evaluated (defaults to true)
@@ -158,12 +158,12 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         
-        // init actions with actionToolbar and contextMenu
-        this.initActions();
         // init store
         this.initStore();
         // init (ext) grid
         this.initGrid();
+        // init actions with actionToolbar and contextMenu
+        this.initActions();
         
         this.initLayout();
         
@@ -235,6 +235,9 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initActions: function() {
+        this.actionToolbarItems = this.actionToolbarItems || [];
+        this.contextMenuItems = this.contextMenuItems || [];
+        
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(_('Edit {0}'), this.i18nRecordName),
@@ -273,6 +276,16 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
             this.action_editInNewWindow,
             this.action_deleteRecord
         ];
+
+        if (this.recordClass.getField('tags')) {
+            this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
+                store:          this.store,
+                selectionModel: this.grid.getSelectionModel(),
+                recordClass:    this.recordClass
+            });
+            
+            this.contextMenuItems.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);
+        }
         
         this.actionToolbar = new Ext.Toolbar({
             split: false,
