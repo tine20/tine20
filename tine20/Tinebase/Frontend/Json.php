@@ -296,7 +296,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_AccessDenied('No right to access application');
         }
         
-        $filterGroup = new $filterName();
+        $filterGroup = new $filterName(array());
         if (! $filterGroup instanceof Tinebase_Model_Filter_FilterGroup) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
             die('go away!');
