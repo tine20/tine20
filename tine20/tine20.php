@@ -46,9 +46,15 @@ try {
    exit;
 }
 
-if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method) || empty($opts->username) || empty($opts->password)) {
+if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method) || empty($opts->username) /*|| empty($opts->password)*/) {
     echo $opts->getUsageMessage();
     exit;
+}
+
+if (empty($opts->password)) {
+    fwrite(STDOUT, PHP_EOL . 'password> ');
+    $passwordInput = fgets(STDIN);
+    $opts->password = rtrim($passwordInput);
 }
 
 Tinebase_Core::set('opts', $opts);
