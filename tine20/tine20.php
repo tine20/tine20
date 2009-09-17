@@ -53,7 +53,15 @@ if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method) || empty($
 
 if (empty($opts->password)) {
     fwrite(STDOUT, PHP_EOL . 'password> ');
-    $passwordInput = fgets(STDIN);
+    if (preg_match('/^win/i', PHP_OS)) {
+        $pwObj = new Com('ScriptPW.Password');
+        $passwordInput = $pwObj->getPassword();
+    } else {
+        system('stty -echo');
+        $passwordInput = fgets(STDIN);
+        system('stty echo');
+    }
+    
     $opts->password = rtrim($passwordInput);
 }
 
