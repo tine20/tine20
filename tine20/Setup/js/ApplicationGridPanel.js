@@ -122,13 +122,12 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         this.actionToolbar = new Ext.Toolbar({
             split: false,
             height: 26,
-            items: this.actions.concat(this.actionToolbarItems)
+            items: this.actions
         });
         
         this.contextMenu = new Ext.menu.Menu({
-            items: this.actions.concat(this.contextMenuItems)
+            items: this.actions
         });
-        
     },
     
     /**
