@@ -163,6 +163,8 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         // init (ext) grid
         this.initGrid();
         // init actions with actionToolbar and contextMenu
+        this.actionToolbarItems = this.actionToolbarItems || [];
+        this.contextMenuItems = this.contextMenuItems || [];
         this.initActions();
         
         this.initLayout();
@@ -235,9 +237,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initActions: function() {
-        this.actionToolbarItems = this.actionToolbarItems || [];
-        this.contextMenuItems = this.contextMenuItems || [];
-        
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(_('Edit {0}'), this.i18nRecordName),
