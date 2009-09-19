@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/MyPhoneEditDialog.js:272 js/Phone.js:58 js/Phone.js:254
+#: js/MyPhoneEditDialog.js:272 js/Phone.js:58 js/Phone.js:257
 msgid "Phone"
 msgstr "電話"
 
@@ -243,7 +243,7 @@ msgstr ""
 msgid "Rights"
 msgstr ""
 
-#: js/Phone.js:28 js/Phone.js:464 js/Phone.js:465
+#: js/Phone.js:28 js/Phone.js:467 js/Phone.js:468
 msgid "Edit phone settings"
 msgstr "設定電話簿"
 
@@ -251,102 +251,102 @@ msgstr "設定電話簿"
 msgid "Phones"
 msgstr "電話"
 
-#: js/Phone.js:197
+#: js/Phone.js:200
 msgid "Dial phone number"
 msgstr "撥打電話"
 
-#: js/Phone.js:277
+#: js/Phone.js:280
 msgid "Line"
 msgstr "分機"
 
-#: js/Phone.js:286
+#: js/Phone.js:289
 msgid "Number"
 msgstr "號碼"
 
-#: js/Phone.js:295
+#: js/Phone.js:298
 msgid "Cancel"
 msgstr "取消"
 
-#: js/Phone.js:305
+#: js/Phone.js:308
 msgid "Dial"
 msgstr "撥打"
 
-#: js/Phone.js:454
+#: js/Phone.js:457
 msgid "Dial number"
 msgstr "撥號"
 
-#: js/Phone.js:455
+#: js/Phone.js:458
 msgid "Initiate a new outgoing call"
 msgstr "啟動新的撥出號碼"
 
-#: js/Phone.js:503
+#: js/Phone.js:509
 msgid "Incoming call"
 msgstr "來電號碼"
 
-#: js/Phone.js:507
+#: js/Phone.js:513
 msgid "Outgoing call"
 msgstr "撥出號碼"
 
-#: js/Phone.js:515
+#: js/Phone.js:521
 msgid "unknown number"
 msgstr "未知號碼"
 
-#: js/Phone.js:526
+#: js/Phone.js:532
 msgid "enter searchfilter"
 msgstr "輸入搜尋條件"
 
-#: js/Phone.js:540
+#: js/Phone.js:546
 msgid "Search:"
 msgstr "搜尋 :"
 
-#: js/Phone.js:625
+#: js/Phone.js:631
 msgid "Source or Destination"
 msgstr "來源或目的端"
 
-#: js/Phone.js:641
+#: js/Phone.js:647
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "顯示通數 {0} - {1} of {2}"
 
-#: js/Phone.js:642 js/Phone.js:680
+#: js/Phone.js:648 js/Phone.js:686
 msgid "No calls to display"
 msgstr "無通話記錄"
 
-#: js/Phone.js:647
+#: js/Phone.js:653
 msgid "Direction"
 msgstr ""
 
-#: js/Phone.js:648
+#: js/Phone.js:654
 msgid "Source"
 msgstr "來源"
 
-#: js/Phone.js:649
+#: js/Phone.js:655
 msgid "Caller Id"
 msgstr "來電ID"
 
-#: js/Phone.js:650
+#: js/Phone.js:656
 msgid "Destination"
 msgstr "目的端"
 
-#: js/Phone.js:651
+#: js/Phone.js:657
 msgid "Start"
 msgstr "開始"
 
-#: js/Phone.js:652
+#: js/Phone.js:658
 msgid "Connected"
 msgstr "已連線"
 
-#: js/Phone.js:653
+#: js/Phone.js:659
 msgid "Disconnected"
 msgstr "通話完畢"
 
-#: js/Phone.js:654
+#: js/Phone.js:660
 msgid "Duration"
 msgstr ""
 
-#: js/Phone.js:655
+#: js/Phone.js:661
 msgid "Ringing"
 msgstr "響鈴中"
 
-#: js/Phone.js:656
+#: js/Phone.js:662
 msgid "Call ID"
 msgstr "來電ID"

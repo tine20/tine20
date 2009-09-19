@@ -638,47 +638,55 @@ msgstr ""
 msgid "IMAP"
 msgstr ""
 
-#: js/UserEditDialog.js:291 js/UserEditDialog.js:335
-msgid "Email Username"
+#: js/UserEditDialog.js:291
+msgid "Email UID"
 msgstr ""
 
 #: js/UserEditDialog.js:295
+msgid "Email GID"
+msgstr ""
+
+#: js/UserEditDialog.js:299 js/UserEditDialog.js:343
+msgid "Email Username"
+msgstr ""
+
+#: js/UserEditDialog.js:303
 msgid "Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:301
+#: js/UserEditDialog.js:309
 msgid "Current Mail Size"
 msgstr ""
 
-#: js/UserEditDialog.js:306
+#: js/UserEditDialog.js:314
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:311
+#: js/UserEditDialog.js:319
 msgid "Current Sieve Size"
 msgstr ""
 
-#: js/UserEditDialog.js:316
+#: js/UserEditDialog.js:324
 msgid "Last Login"
 msgstr ""
 
-#: js/UserEditDialog.js:321
+#: js/UserEditDialog.js:329
 msgid "SMTP"
 msgstr ""
 
-#: js/UserEditDialog.js:339
+#: js/UserEditDialog.js:347
 msgid "Aliases"
 msgstr ""
 
-#: js/UserEditDialog.js:344
+#: js/UserEditDialog.js:352
 msgid "Forwards"
 msgstr ""
 
-#: js/UserEditDialog.js:349
+#: js/UserEditDialog.js:357
 msgid "Forward Only"
 msgstr ""
 
-#: js/UserEditDialog.js:370
+#: js/UserEditDialog.js:378
 msgid "Passwords don't match"
 msgstr ""
 

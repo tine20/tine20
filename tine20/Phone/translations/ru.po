@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/MyPhoneEditDialog.js:272 js/Phone.js:58 js/Phone.js:254
+#: js/MyPhoneEditDialog.js:272 js/Phone.js:58 js/Phone.js:257
 msgid "Phone"
 msgstr "Телефон"
 
@@ -246,7 +246,7 @@ msgstr "Пользователи"
 msgid "Rights"
 msgstr "Права"
 
-#: js/Phone.js:28 js/Phone.js:464 js/Phone.js:465
+#: js/Phone.js:28 js/Phone.js:467 js/Phone.js:468
 msgid "Edit phone settings"
 msgstr "Изменить настройки телефона"
 
@@ -254,103 +254,103 @@ msgstr "Изменить настройки телефона"
 msgid "Phones"
 msgstr "Телефоны"
 
-#: js/Phone.js:197
+#: js/Phone.js:200
 msgid "Dial phone number"
 msgstr "Набрать телефонный номер"
 
-#: js/Phone.js:277
+#: js/Phone.js:280
 msgid "Line"
 msgstr "Линия"
 
-#: js/Phone.js:286
+#: js/Phone.js:289
 msgid "Number"
 msgstr "Номер"
 
-#: js/Phone.js:295
+#: js/Phone.js:298
 msgid "Cancel"
 msgstr "Отменить"
 
-#: js/Phone.js:305
+#: js/Phone.js:308
 msgid "Dial"
 msgstr "Набрать"
 
-#: js/Phone.js:454
+#: js/Phone.js:457
 msgid "Dial number"
 msgstr "Наберите номер"
 
-#: js/Phone.js:455
+#: js/Phone.js:458
 msgid "Initiate a new outgoing call"
 msgstr "Начните новый исходящий звонок"
 
-#: js/Phone.js:503
+#: js/Phone.js:509
 msgid "Incoming call"
 msgstr "Входящий звонок"
 
-#: js/Phone.js:507
+#: js/Phone.js:513
 msgid "Outgoing call"
 msgstr "Исходящий звонок"
 
-#: js/Phone.js:515
+#: js/Phone.js:521
 msgid "unknown number"
 msgstr "неизвестный номер"
 
-#: js/Phone.js:526
+#: js/Phone.js:532
 msgid "enter searchfilter"
 msgstr "ввести поисковый фильтр"
 
-#: js/Phone.js:540
+#: js/Phone.js:546
 msgid "Search:"
 msgstr "Поиск:"
 
-#: js/Phone.js:625
+#: js/Phone.js:631
 msgid "Source or Destination"
 msgstr "Источник или Назначение"
 
-#: js/Phone.js:641
+#: js/Phone.js:647
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Показаны звонки {0} - {1} из {2}"
 
-#: js/Phone.js:642 js/Phone.js:680
+#: js/Phone.js:648 js/Phone.js:686
 msgid "No calls to display"
 msgstr "Нет звонков"
 
-#: js/Phone.js:647
+#: js/Phone.js:653
 msgid "Direction"
 msgstr "Направление"
 
-#: js/Phone.js:648
+#: js/Phone.js:654
 msgid "Source"
 msgstr "Источник"
 
-#: js/Phone.js:649
+#: js/Phone.js:655
 msgid "Caller Id"
 msgstr "Id звонящего по телефону"
 
-#: js/Phone.js:650
+#: js/Phone.js:656
 msgid "Destination"
 msgstr "Назначение"
 
-#: js/Phone.js:651
+#: js/Phone.js:657
 msgid "Start"
 msgstr "Старт"
 
-#: js/Phone.js:652
+#: js/Phone.js:658
 msgid "Connected"
 msgstr "Соединение"
 
-#: js/Phone.js:653
+#: js/Phone.js:659
 msgid "Disconnected"
 msgstr "Разъединение"
 
-#: js/Phone.js:654
+#: js/Phone.js:660
 msgid "Duration"
 msgstr "Продолжительность"
 
-#: js/Phone.js:655
+#: js/Phone.js:661
 msgid "Ringing"
 msgstr "Звонок"
 
-#: js/Phone.js:656
+#: js/Phone.js:662
 msgid "Call ID"
 msgstr "ID звонка"
 

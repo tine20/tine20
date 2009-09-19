@@ -39,7 +39,7 @@ msgstr "單位 / 組織"
 msgid "Business Address"
 msgstr "公司地址"
 
-#: Export/Pdf.php:53 js/ContactGrid.js:126
+#: Export/Pdf.php:53 js/ContactGrid.js:133
 msgid "Email"
 msgstr "公司電子郵件"
 
@@ -71,7 +71,8 @@ msgstr "網址"
 msgid "Role"
 msgstr "角色"
 
-#: Export/Pdf.php:77 js/ContactGrid.js:115 js/EditDialog.js:40
+#: Export/Pdf.php:77 js/ContactEditDialog.js:142 js/ContactGrid.js:122
+#: js/EditDialog.js:329 js/EditDialog.js:447
 msgid "Room"
 msgstr "房號"
 
@@ -87,8 +88,8 @@ msgstr "助理電話"
 msgid "Private Contact Data"
 msgstr "個人聯絡資料"
 
-#: Export/Pdf.php:89 js/ContactGrid.js:91 js/ContactGrid.js:92
-#: js/ContactGrid.js:93 js/EditDialog.js:375
+#: Export/Pdf.php:89 js/ContactEditDialog.js:240 js/ContactGrid.js:98
+#: js/ContactGrid.js:99 js/ContactGrid.js:100 js/EditDialog.js:613
 msgid "Private Address"
 msgstr "個人地址"
 
@@ -116,13 +117,13 @@ msgstr "個人網址"
 msgid "Other Data"
 msgstr "其他資料"
 
-#: Export/Pdf.php:115 js/ContactGrid.js:87 js/ContactGrid.js:141
-#: js/EditDialog.js:155 js/EditDialog.js:206
+#: Export/Pdf.php:115 js/ContactEditDialog.js:126 js/ContactGrid.js:94
+#: js/ContactGrid.js:148 js/EditDialog.js:429
 msgid "Birthday"
 msgstr "生日"
 
-#: Export/Pdf.php:118 js/ContactGrid.js:84 js/ContactGrid.js:113
-#: js/EditDialog.js:150 js/EditDialog.js:189
+#: Export/Pdf.php:118 js/ContactEditDialog.js:121 js/ContactGrid.js:91
+#: js/ContactGrid.js:120 js/EditDialog.js:424
 msgid "Job Title"
 msgstr "職稱"
 
@@ -130,279 +131,281 @@ msgstr "職稱"
 msgid "Addressbook"
 msgstr "通訊錄"
 
-#: js/Addressbook.js:67 js/ContactGrid.js:358 Setup/setup.xml:538
+#: js/Addressbook.js:67 js/ContactGrid.js:354 Setup/setup.xml:538
 msgid "Internal Contacts"
 msgstr "分機號碼"
 
-#: js/Addressbook.js:142 js/Addressbook.js:144
-msgid "contacts"
-msgstr "聯絡人"
-
-#: js/Addressbook.js:143 js/Addressbook.js:483
-msgid "addressbook"
-msgid_plural "addressbooks"
-msgstr[0] "通訊錄"
-
-#: js/Addressbook.js:149 js/ContactGrid.js:182
-msgid "export as pdf"
-msgstr "匯出成pdf"
-
-#: js/Addressbook.js:174
-msgid "Loading Contact..."
-msgstr "載入聯絡人"
-
-#: js/Addressbook.js:174
-msgid "Please Wait"
-msgstr "請稍後..."
-
-#: js/Addressbook.js:194
-msgid "Add new contact"
-msgstr "新增聯絡人"
-
-#: js/Addressbook.js:196
-msgid "Edit Contact \"{0}\""
-msgstr "編輯聯絡人 \"{0}\""
-
-#: js/Addressbook.js:226
-msgid "Please wait a moment..."
-msgstr "請稍後..."
-
-#: js/Addressbook.js:226
-msgid "Saving Contact"
-msgstr "儲存聯絡人"
-
-#: js/Addressbook.js:251 js/Addressbook.js:276
-msgid "Failed"
-msgstr ""
-
-#: js/Addressbook.js:251
-msgid "Could not save contact."
-msgstr "資料無法儲存"
-
-#: js/Addressbook.js:257
-msgid "Errors"
-msgstr ""
-
-#: js/Addressbook.js:257
-msgid "Please fix the errors noted."
-msgstr ""
-
-#: js/Addressbook.js:270
-msgid "Deleting contact..."
-msgstr "刪除聯絡人"
-
-#: js/Addressbook.js:276
-msgid "Some error occured while trying to delete the contact."
-msgstr ""
-
-#: js/Addressbook.js:479
+#: js/Addressbook.js:208
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "聯絡人"
 
-#: js/Addressbook.js:479 js/ContactGridDetailsPanel.js:67
+#: js/Addressbook.js:208 js/ContactGridDetailsPanel.js:67
 msgid "Contacts"
 msgstr "聯絡人"
 
-#: js/Addressbook.js:483
+#: js/Addressbook.js:212 js/EditDialog.js:52
+msgid "addressbook"
+msgid_plural "addressbooks"
+msgstr[0] "通訊錄"
+
+#: js/Addressbook.js:212
 msgid "addressbooks"
 msgstr "通訊錄"
 
-#: js/ContactGrid.js:80 js/ContactGrid.js:108 js/EditDialog.js:106
-#: js/EditDialog.js:167
+#: js/ContactEditDialog.js:49 js/EditDialog.js:337
+msgid "Personal Information"
+msgstr "個人資料"
+
+#: js/ContactEditDialog.js:69 js/EditDialog.js:370
+msgid "Salutation"
+msgstr ""
+
+#: js/ContactEditDialog.js:79 js/EditDialog.js:381
+msgid "Title"
+msgstr "職稱"
+
+#: js/ContactEditDialog.js:86 js/ContactGrid.js:87 js/ContactGrid.js:115
+#: js/EditDialog.js:389
 msgid "First Name"
 msgstr "姓名"
 
-#: js/ContactGrid.js:81 js/ContactGrid.js:107 js/EditDialog.js:114
-#: js/EditDialog.js:171
+#: js/ContactEditDialog.js:90 js/EditDialog.js:393
+msgid "Middle Name"
+msgstr ""
+
+#: js/ContactEditDialog.js:94 js/ContactEditDialog.js:354 js/ContactGrid.js:88
+#: js/ContactGrid.js:114 js/EditDialog.js:397
 msgid "Last Name"
 msgstr "姓氏"
 
-#: js/ContactGrid.js:82 js/ContactGrid.js:111
-#: js/ContactGridDetailsPanel.js:136 js/EditDialog.js:128 js/EditDialog.js:197
-#: Setup/setup.xml:600
+#: js/ContactEditDialog.js:102 js/ContactEditDialog.js:354
+#: js/ContactGrid.js:89 js/ContactGrid.js:118
+#: js/ContactGridDetailsPanel.js:136 js/EditDialog.js:405 Setup/setup.xml:600
 msgid "Company"
 msgstr "公司名稱"
 
-#: js/ContactGrid.js:83 js/ContactGrid.js:127
-#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
-#: js/EditDialog.js:227
-msgid "Phone"
-msgstr "電話"
-
-#: js/ContactGrid.js:85 js/ContactGrid.js:114 js/EditDialog.js:35
-msgid "Job Role"
-msgstr ""
-
-#: js/ContactGrid.js:88 js/ContactGrid.js:91 js/ContactGrid.js:116
-#: js/EditDialog.js:344 js/EditDialog.js:387
-msgid "Street"
-msgstr "街"
-
-#: js/ContactGrid.js:88 js/ContactGrid.js:89 js/ContactGrid.js:90
-#: js/EditDialog.js:328
-msgid "Company Address"
-msgstr "公司地址"
-
-#: js/ContactGrid.js:89 js/ContactGrid.js:92 js/EditDialog.js:358
-#: js/EditDialog.js:401
-msgid "Postal Code"
-msgstr "郵遞區號"
-
-#: js/ContactGrid.js:90 js/ContactGrid.js:93 js/ContactGrid.js:117
-#: js/EditDialog.js:362 js/EditDialog.js:405
-msgid "City"
-msgstr "縣市"
-
-#: js/ContactGrid.js:106
-msgid "Type"
-msgstr ""
-
-#: js/ContactGrid.js:109
-msgid "Full Name"
-msgstr "全名"
-
-#: js/ContactGrid.js:110 js/EditDialog.js:17 js/EditDialog.js:144
-#: js/EditDialog.js:183
-msgid "Display Name"
-msgstr "顯示名稱"
-
-#: js/ContactGrid.js:112 js/EditDialog.js:133 js/EditDialog.js:201
+#: js/ContactEditDialog.js:107 js/ContactGrid.js:119 js/EditDialog.js:410
 msgid "Unit"
 msgstr ""
 
-#: js/ContactGrid.js:118 js/EditDialog.js:352 js/EditDialog.js:395
-msgid "Region"
+#: js/ContactEditDialog.js:116 js/ContactGrid.js:117 js/EditDialog.js:306
+#: js/EditDialog.js:419
+msgid "Display Name"
+msgstr "顯示名稱"
+
+#: js/ContactEditDialog.js:134 js/EditDialog.js:319 js/EditDialog.js:437
+msgid "Suffix"
 msgstr ""
 
-#: js/ContactGrid.js:119
-msgid "Postalcode"
-msgstr "郵遞區號"
-
-#: js/ContactGrid.js:120 js/EditDialog.js:367 js/EditDialog.js:410
-msgid "Country"
-msgstr "國別"
-
-#: js/ContactGrid.js:121
-msgid "Street (private)"
-msgstr "街 (個人)"
-
-#: js/ContactGrid.js:122
-msgid "City (private)"
-msgstr "縣市 (個人)"
-
-#: js/ContactGrid.js:123
-msgid "Region (private)"
+#: js/ContactEditDialog.js:138 js/ContactGrid.js:92 js/ContactGrid.js:121
+#: js/EditDialog.js:324 js/EditDialog.js:442
+msgid "Job Role"
 msgstr ""
 
-#: js/ContactGrid.js:124
-msgid "Postalcode (private)"
-msgstr "郵遞區號 (個人)"
+#: js/ContactEditDialog.js:148 js/EditDialog.js:536
+msgid "Contact Information"
+msgstr "聯絡資料"
 
-#: js/ContactGrid.js:125
-msgid "Country (private)"
-msgstr "國別 (個人)"
+#: js/ContactEditDialog.js:152 js/ContactGrid.js:90 js/ContactGrid.js:134
+#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
+#: js/EditDialog.js:465
+msgid "Phone"
+msgstr "電話"
 
-#: js/ContactGrid.js:128 js/ContactGridDetailsPanel.js:145
-#: js/ContactGridDetailsPanel.js:169 js/EditDialog.js:232
+#: js/ContactEditDialog.js:156 js/ContactGrid.js:135
+#: js/ContactGridDetailsPanel.js:145 js/ContactGridDetailsPanel.js:169
+#: js/EditDialog.js:470
 msgid "Mobile"
 msgstr "手機號碼"
 
-#: js/ContactGrid.js:129 js/ContactGridDetailsPanel.js:146
-#: js/ContactGridDetailsPanel.js:170 js/EditDialog.js:237
+#: js/ContactEditDialog.js:160 js/ContactGrid.js:136
+#: js/ContactGridDetailsPanel.js:146 js/ContactGridDetailsPanel.js:170
+#: js/EditDialog.js:475
 msgid "Fax"
 msgstr "傳真號碼"
 
-#: js/ContactGrid.js:130
-msgid "Car phone"
-msgstr "車用電話"
-
-#: js/ContactGrid.js:131
-msgid "Pager"
-msgstr "呼叫器"
-
-#: js/ContactGrid.js:132 js/EditDialog.js:244
+#: js/ContactEditDialog.js:164 js/ContactGrid.js:139 js/EditDialog.js:482
 msgid "Phone (private)"
 msgstr "電話 (個人)"
 
-#: js/ContactGrid.js:133 js/EditDialog.js:254
-msgid "Fax (private)"
-msgstr "傳真號碼 (個人)"
-
-#: js/ContactGrid.js:134 js/EditDialog.js:249
+#: js/ContactEditDialog.js:168 js/ContactGrid.js:141 js/EditDialog.js:487
 msgid "Mobile (private)"
 msgstr "手機號碼 (個人)"
 
-#: js/ContactGrid.js:135
-msgid "Email (private)"
+#: js/ContactEditDialog.js:172 js/ContactGrid.js:140 js/EditDialog.js:492
+msgid "Fax (private)"
+msgstr "傳真號碼 (個人)"
+
+#: js/ContactEditDialog.js:176 js/ContactGridDetailsPanel.js:147
+#: js/ContactGridDetailsPanel.js:171 js/EditDialog.js:499
+msgid "E-Mail"
+msgstr "電子郵件"
+
+#: js/ContactEditDialog.js:181 js/EditDialog.js:505
+msgid "E-Mail (private)"
 msgstr "電子郵件 (個人)"
 
-#: js/ContactGrid.js:136 js/ContactGridDetailsPanel.js:149
-#: js/ContactGridDetailsPanel.js:173 js/EditDialog.js:274
+#: js/ContactEditDialog.js:187 js/ContactGrid.js:143
+#: js/ContactGridDetailsPanel.js:149 js/ContactGridDetailsPanel.js:173
+#: js/EditDialog.js:512
 msgid "Web"
 msgstr "網址"
 
+#: js/ContactEditDialog.js:217 js/ContactGrid.js:95 js/ContactGrid.js:96
+#: js/ContactGrid.js:97 js/EditDialog.js:566
+msgid "Company Address"
+msgstr "公司地址"
+
+#: js/ContactEditDialog.js:220 js/ContactEditDialog.js:243
+#: js/ContactGrid.js:95 js/ContactGrid.js:98 js/ContactGrid.js:123
+#: js/EditDialog.js:582 js/EditDialog.js:625
+msgid "Street"
+msgstr "街"
+
+#: js/ContactEditDialog.js:223 js/ContactEditDialog.js:246
+#: js/EditDialog.js:586 js/EditDialog.js:629
+msgid "Street 2"
+msgstr "街道2"
+
+#: js/ContactEditDialog.js:226 js/ContactEditDialog.js:249
+#: js/ContactGrid.js:125 js/EditDialog.js:590 js/EditDialog.js:633
+msgid "Region"
+msgstr ""
+
+#: js/ContactEditDialog.js:229 js/ContactEditDialog.js:252
+#: js/ContactGrid.js:96 js/ContactGrid.js:99 js/EditDialog.js:596
+#: js/EditDialog.js:639
+msgid "Postal Code"
+msgstr "郵遞區號"
+
+#: js/ContactEditDialog.js:232 js/ContactEditDialog.js:255
+#: js/ContactGrid.js:97 js/ContactGrid.js:100 js/ContactGrid.js:124
+#: js/EditDialog.js:600 js/EditDialog.js:643
+msgid "City"
+msgstr "縣市"
+
+#: js/ContactEditDialog.js:236 js/ContactEditDialog.js:259
+#: js/ContactGrid.js:127 js/EditDialog.js:605 js/EditDialog.js:648
+msgid "Country"
+msgstr "國別"
+
+#: js/ContactEditDialog.js:278 js/EditDialog.js:696
+msgid "Description"
+msgstr "說明"
+
+#: js/ContactEditDialog.js:292 js/EditDialog.js:710
+msgid "Enter description"
+msgstr "輸入說明"
+
+#: js/ContactEditDialog.js:329 js/EditDialog.js:58
+msgid "export as pdf"
+msgstr "匯出成pdf"
+
+#: js/ContactEditDialog.js:354
+msgid "Either {0} or {1} must be given"
+msgstr ""
+
+#: js/ContactGrid.js:113
+msgid "Type"
+msgstr ""
+
+#: js/ContactGrid.js:116
+msgid "Full Name"
+msgstr "全名"
+
+#: js/ContactGrid.js:126
+msgid "Postalcode"
+msgstr "郵遞區號"
+
+#: js/ContactGrid.js:128
+msgid "Street (private)"
+msgstr "街 (個人)"
+
+#: js/ContactGrid.js:129
+msgid "City (private)"
+msgstr "縣市 (個人)"
+
+#: js/ContactGrid.js:130
+msgid "Region (private)"
+msgstr ""
+
+#: js/ContactGrid.js:131
+msgid "Postalcode (private)"
+msgstr "郵遞區號 (個人)"
+
+#: js/ContactGrid.js:132
+msgid "Country (private)"
+msgstr "國別 (個人)"
+
 #: js/ContactGrid.js:137
+msgid "Car phone"
+msgstr "車用電話"
+
+#: js/ContactGrid.js:138
+msgid "Pager"
+msgstr "呼叫器"
+
+#: js/ContactGrid.js:142
+msgid "Email (private)"
+msgstr "電子郵件 (個人)"
+
+#: js/ContactGrid.js:144
 msgid "URL (private)"
 msgstr "網址 (個人)"
 
-#: js/ContactGrid.js:138
+#: js/ContactGrid.js:145
 msgid "Note"
 msgstr "備註"
 
-#: js/ContactGrid.js:139
+#: js/ContactGrid.js:146
 msgid "Timezone"
 msgstr "時區"
 
-#: js/ContactGrid.js:140
+#: js/ContactGrid.js:147
 msgid "Geo"
 msgstr ""
 
-#: js/ContactGrid.js:153
+#: js/ContactGrid.js:160
 msgid "Export"
 msgstr "匯出"
 
-#: js/ContactGrid.js:162
+#: js/ContactGrid.js:169
 msgid "Export as PDF"
 msgstr "匯出成 PDF"
 
-#: js/ContactGrid.js:169
+#: js/ContactGrid.js:176
 msgid "Export as CSV"
 msgstr "匯出成 CSV"
 
-#: js/ContactGrid.js:193
+#: js/ContactGrid.js:189
 #, fuzzy
 msgid "Call contact"
 msgstr "撥打聯絡人"
 
-#: js/ContactGrid.js:206
+#: js/ContactGrid.js:202
 msgid "Compose email"
 msgstr ""
 
-#: js/ContactGrid.js:246
+#: js/ContactGrid.js:242
 msgid "Work"
 msgstr "工作"
 
-#: js/ContactGrid.js:255
+#: js/ContactGrid.js:251
 msgid "Home"
 msgstr "家裡"
 
-#: js/ContactGrid.js:264
+#: js/ContactGrid.js:260
 msgid "Cell"
 msgstr "手機號碼"
 
-#: js/ContactGrid.js:273
+#: js/ContactGrid.js:269
 msgid "Cell private"
 msgstr "個人手機號碼"
 
 #: js/ContactGridDetailsPanel.js:70
 msgid "Select contact"
 msgstr "選取聯絡人"
-
-#: js/ContactGridDetailsPanel.js:147 js/ContactGridDetailsPanel.js:171
-#: js/EditDialog.js:261
-msgid "E-Mail"
-msgstr "電子郵件"
 
 #: js/ContactGridDetailsPanel.js:160
 #, fuzzy
@@ -413,51 +416,71 @@ msgstr "個人地址"
 msgid "Info"
 msgstr ""
 
-#: js/EditDialog.js:30
-msgid "Suffix"
+#: js/EditDialog.js:51 js/EditDialog.js:53
+msgid "contacts"
+msgstr "聯絡人"
+
+#: js/EditDialog.js:83
+msgid "Loading Contact..."
+msgstr "載入聯絡人"
+
+#: js/EditDialog.js:83
+msgid "Please Wait"
+msgstr "請稍後..."
+
+#: js/EditDialog.js:121
+msgid "Add new contact"
+msgstr "新增聯絡人"
+
+#: js/EditDialog.js:123
+msgid "Edit Contact \"{0}\""
+msgstr "編輯聯絡人 \"{0}\""
+
+#: js/EditDialog.js:153
+msgid "Please wait a moment..."
+msgstr "請稍後..."
+
+#: js/EditDialog.js:153
+msgid "Saving Contact"
+msgstr "儲存聯絡人"
+
+#: js/EditDialog.js:178 js/EditDialog.js:203
+msgid "Failed"
 msgstr ""
 
-#: js/EditDialog.js:48
-msgid "Personal Information"
-msgstr "個人資料"
+#: js/EditDialog.js:178
+msgid "Could not save contact."
+msgstr "資料無法儲存"
 
-#: js/EditDialog.js:85
-msgid "Salutation"
+#: js/EditDialog.js:182
+msgid "Either "
 msgstr ""
 
-#: js/EditDialog.js:96 js/EditDialog.js:162
-msgid "Title"
-msgstr "職稱"
-
-#: js/EditDialog.js:110
-msgid "Middle Name"
+#: js/EditDialog.js:183
+msgid "Start date is not valid"
 msgstr ""
 
-#: js/EditDialog.js:267
-msgid "E-Mail (private)"
-msgstr "電子郵件 (個人)"
+#: js/EditDialog.js:184
+msgid "Errors"
+msgstr ""
 
-#: js/EditDialog.js:298
-msgid "Contact Information"
-msgstr "聯絡資料"
+#: js/EditDialog.js:184
+msgid "Please fix the errors noted."
+msgstr ""
 
-#: js/EditDialog.js:348 js/EditDialog.js:391
-msgid "Street 2"
-msgstr "街道2"
+#: js/EditDialog.js:197
+msgid "Deleting contact..."
+msgstr "刪除聯絡人"
 
-#: js/EditDialog.js:418
+#: js/EditDialog.js:203
+msgid "Some error occured while trying to delete the contact."
+msgstr ""
+
+#: js/EditDialog.js:656
 msgid "Custom Fields"
 msgstr "自定欄位"
 
-#: js/EditDialog.js:458
-msgid "Description"
-msgstr "說明"
-
-#: js/EditDialog.js:472
-msgid "Enter description"
-msgstr "輸入說明"
-
-#: js/EditDialog.js:514
+#: js/EditDialog.js:751
 #, python-format
 msgid "Link"
 msgid_plural "Links [%d]"
@@ -465,6 +488,15 @@ msgstr[0] ""
 
 #: js/SearchCombo.js:74
 msgid "Searching..."
+msgstr ""
+
+#: Preference.php:60
+#, fuzzy
+msgid "Default Addressbook"
+msgstr "通訊錄"
+
+#: Preference.php:61
+msgid "The defualt addressbook for new contacts"
 msgstr ""
 
 #: Setup/setup.xml:564

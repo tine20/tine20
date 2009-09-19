@@ -64,19 +64,19 @@ msgstr "Vytvořil(a)"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: Frontend/Http.php:328 js/tineInit.js:376
+#: Frontend/Http.php:329 js/tineInit.js:378
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Frontend/Http.php:329
+#: Frontend/Http.php:330
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:355 js/ExceptionDialog.js:46
+#: Frontend/Http.php:356 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:356 js/ExceptionDialog.js:71
+#: Frontend/Http.php:357 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
@@ -118,8 +118,9 @@ msgstr[2] "seznamů úkolů"
 #: js/ExceptionDialog.js:54 js/MainScreen.js:448
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:373
-#: js/widgets/dialog/EditDialog.js:184
+#: js/widgets/dialog/EditDialog.js:186
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
+#: js/widgets/tags/TagsMassAttachAction.js:70
 msgid "Cancel"
 msgstr "Storno"
 
@@ -140,7 +141,7 @@ msgstr ""
 "Pomozte prosím vylepšit tento software a upozorněte prodejce. Do hlášení "
 "uveďte stručný popis to co jste dělal(a), když došlo k chybě."
 
-#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:561
+#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:590
 msgid "Description"
 msgstr "Popis"
 
@@ -283,8 +284,9 @@ msgstr "Zopakujte nové heslo"
 
 #: js/MainScreen.js:454 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:382
-#: js/widgets/dialog/EditDialog.js:167
+#: js/widgets/dialog/EditDialog.js:169
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
+#: js/widgets/tags/TagsMassAttachAction.js:76
 msgid "Ok"
 msgstr "OK"
 
@@ -320,8 +322,8 @@ msgstr ""
 "Instalace Google Gears zvýší výkon Tine 2.0 diky lokálnímu kešování všech "
 "potřebných souborů na tomto počítači."
 
-#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:611
-#: js/widgets/dialog/EditDialog.js:441
+#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:623
+#: js/widgets/dialog/EditDialog.js:442
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
@@ -365,23 +367,23 @@ msgstr ""
 "Server neodpověděl na Váš požadavek. Zkontrolujte prosím své síťové "
 "připojení nebo kontaktujte administrátora."
 
-#: js/tineInit.js:377
+#: js/tineInit.js:379
 msgid "Your session timed out. You need to login again."
 msgstr "Vaše relace vypršela. Musíte se přihlásit znovu."
 
-#: js/tineInit.js:390
+#: js/tineInit.js:392
 msgid "Insufficient Rights"
 msgstr "Nedostatečná oprávnění"
 
-#: js/tineInit.js:391
+#: js/tineInit.js:393
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Lituji, nemáte oprávnění k této akci."
 
-#: js/tineInit.js:400
+#: js/tineInit.js:402
 msgid "Not Found"
 msgstr "Nebylo nalezeno"
 
-#: js/tineInit.js:401
+#: js/tineInit.js:403
 #, fuzzy
 msgid ""
 "Sorry, your request could not be completed because the required data could "
@@ -392,11 +394,11 @@ msgstr ""
 "nalezena. Ve většině případů to znamená, že je někdo již smazal. Obnovte "
 "prosím aktuální zobrazení."
 
-#: js/tineInit.js:410
+#: js/tineInit.js:412
 msgid "Concurrent Updates"
 msgstr "Kolidující aktualizace"
 
-#: js/tineInit.js:411
+#: js/tineInit.js:413
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -404,7 +406,7 @@ msgstr ""
 "Někdo jiný záznam uložil v době, kdy jste editoval(a) údaje. Musíte záznam "
 "znovu načíst a opětovně provést Vaše změny."
 
-#: js/tineInit.js:667
+#: js/tineInit.js:669
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -452,8 +454,8 @@ msgstr "online"
 msgid "offline"
 msgstr "offline"
 
-#: js/ux/ConnectionStatus.js:54 User/Abstract.php:241 User/Abstract.php:242
-#: User/Abstract.php:243 User/Abstract.php:244 User/Abstract.php:245
+#: js/ux/ConnectionStatus.js:54 User/Abstract.php:242 User/Abstract.php:243
+#: User/Abstract.php:244 User/Abstract.php:245 User/Abstract.php:246
 msgid "unknown"
 msgstr "neznámý"
 
@@ -628,31 +630,36 @@ msgstr "Čas"
 msgid "User"
 msgstr "Uživatel"
 
-#: js/widgets/app/GridPanel.js:240
+#: js/widgets/app/GridPanel.js:242
 msgid "Edit {0}"
 msgstr "Editovat {0}"
 
-#: js/widgets/app/GridPanel.js:251 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:253 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
-#: js/widgets/app/GridPanel.js:261 js/widgets/app/GridPanel.js:262
-#: js/widgets/app/GridPanel.js:264
+#: js/widgets/app/GridPanel.js:263 js/widgets/app/GridPanel.js:264
+#: js/widgets/app/GridPanel.js:266
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Smazat {0}"
 msgstr[1] "Smazat {0}"
 msgstr[2] "Smazat {0}"
 
-#: js/widgets/app/GridPanel.js:344
+#: js/widgets/app/GridPanel.js:286
+#, fuzzy
+msgid "Tagging"
+msgstr "Štítek"
+
+#: js/widgets/app/GridPanel.js:356
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zobrazuji záznamy {0} - {1} z {2}"
 
-#: js/widgets/app/GridPanel.js:345
+#: js/widgets/app/GridPanel.js:357
 msgid "No {0} to display"
 msgstr "Žádné {0} ke zobrazení"
 
-#: js/widgets/app/GridPanel.js:366
+#: js/widgets/app/GridPanel.js:378
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -660,36 +667,36 @@ msgstr ""
 "Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby "
 "zobrazování nebo {1} ve kterém hledáte."
 
-#: js/widgets/app/GridPanel.js:596
+#: js/widgets/app/GridPanel.js:608
 msgid "Not Allowed"
 msgstr "Není povoleno"
 
-#: js/widgets/app/GridPanel.js:597
+#: js/widgets/app/GridPanel.js:609
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nemáte oprávnění smazat všechny stránky najednou."
 
-#: js/widgets/app/GridPanel.js:609
+#: js/widgets/app/GridPanel.js:621
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Opravdu chcete smazat vybraný záznam"
 msgstr[1] "Opravdu chcete smazat vybrané záznamy"
 msgstr[2] "Opravdu chcete smazat vybrané záznamy"
 
-#: js/widgets/app/GridPanel.js:615 js/widgets/dialog/EditDialog.js:443
+#: js/widgets/app/GridPanel.js:627 js/widgets/dialog/EditDialog.js:444
 msgid "Deleting {0}"
 msgstr "Mažu {0}"
 
-#: js/widgets/app/GridPanel.js:617
+#: js/widgets/app/GridPanel.js:629
 msgid " ... This may take a long time!"
 msgstr "... Toto může trvat dlouho!"
 
-#: js/widgets/app/GridPanel.js:631 js/widgets/dialog/EditDialog.js:415
-#: js/widgets/dialog/EditDialog.js:453 js/widgets/tags/TagsPanel.js:255
-#: js/widgets/tags/TagsPanel.js:364 js/widgets/tags/TagsPanel.js:397
+#: js/widgets/app/GridPanel.js:643 js/widgets/dialog/EditDialog.js:416
+#: js/widgets/dialog/EditDialog.js:454 js/widgets/tags/TagsPanel.js:282
+#: js/widgets/tags/TagsPanel.js:392 js/widgets/tags/TagsPanel.js:425
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/app/GridPanel.js:631 js/widgets/dialog/EditDialog.js:453
+#: js/widgets/app/GridPanel.js:643 js/widgets/dialog/EditDialog.js:454
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat {0}."
 
@@ -707,8 +714,8 @@ msgid "Recently used {0}:"
 msgstr "Naposledy použité {0}:"
 
 #: js/widgets/container/ContainerSelect.js:233
-#: js/widgets/tags/TagsPanel.js:109 js/widgets/tags/TagsPanel.js:411
-#: js/widgets/tags/TagsPanel.js:415
+#: js/widgets/tags/TagsPanel.js:136 js/widgets/tags/TagsPanel.js:440
+#: js/widgets/tags/TagsPanel.js:444
 msgid "personal"
 msgstr "osobní"
 
@@ -770,17 +777,17 @@ msgstr "Oprávnění"
 msgid "Updating Grants"
 msgstr "Aktualizuji oprávnění"
 
-#: js/widgets/customfields/CustomfieldsPanel.js:37
+#: js/widgets/customfields/CustomfieldsPanel.js:64
 msgid "Custom Fields"
 msgstr "Uživatelské položky"
 
-#: js/widgets/customfields/CustomfieldsPanel.js:43
-#: js/widgets/customfields/CustomfieldsPanel.js:57
+#: js/widgets/customfields/CustomfieldsPanel.js:71
+#: js/widgets/customfields/CustomfieldsPanel.js:85
 #, fuzzy
 msgid "General"
 msgstr "normální"
 
-#: js/widgets/customfields/CustomfieldsPanel.js:78
+#: js/widgets/customfields/CustomfieldsPanel.js:107
 msgid "There are no custom fields yet"
 msgstr "Zatím nejsou žádné uživatelské položky"
 
@@ -821,45 +828,45 @@ msgid "1 day before"
 msgstr "1 den před"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:433
+#: js/widgets/dialog/EditDialog.js:434
 #: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr "Chyby"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:433
+#: js/widgets/dialog/EditDialog.js:434
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím uvedené chyby."
 
-#: js/widgets/dialog/EditDialog.js:176 js/widgets/EditRecord.js:126
+#: js/widgets/dialog/EditDialog.js:178 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "Použít"
 
-#: js/widgets/dialog/EditDialog.js:193 js/widgets/EditRecord.js:146
+#: js/widgets/dialog/EditDialog.js:195 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "smazat"
 
-#: js/widgets/dialog/EditDialog.js:263
+#: js/widgets/dialog/EditDialog.js:264
 msgid "Add New {0}"
 msgstr "Přidat nový {0}"
 
-#: js/widgets/dialog/EditDialog.js:265
+#: js/widgets/dialog/EditDialog.js:266
 msgid "Edit {0} \"{1}\""
 msgstr "Editovat {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:309 js/widgets/EditRecord.js:185
+#: js/widgets/dialog/EditDialog.js:310 js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "Uloženo v"
 
-#: js/widgets/dialog/EditDialog.js:329
+#: js/widgets/dialog/EditDialog.js:330
 msgid "Transfering {0}..."
 msgstr "Přesouvám {0}..."
 
-#: js/widgets/dialog/EditDialog.js:415
+#: js/widgets/dialog/EditDialog.js:416
 msgid "Could not save {0}."
 msgstr "Nepodařilo se uložit {0}."
 
-#: js/widgets/dialog/EditDialog.js:441
+#: js/widgets/dialog/EditDialog.js:442
 msgid "Do you really want to delete this {0}?"
 msgstr "Opravdu chcete smazat {0}?"
 
@@ -1142,122 +1149,136 @@ msgstr "název štítku"
 msgid "Tag"
 msgstr "Štítek"
 
-#: js/widgets/tags/TagsPanel.js:87
+#: js/widgets/tags/TagsMassAttachAction.js:15
+#, fuzzy
+msgid "Add Tag"
+msgstr "Editovat štítek"
+
+#: js/widgets/tags/TagsMassAttachAction.js:53
+msgid "Attach the following tag to all selected items:"
+msgstr ""
+
+#: js/widgets/tags/TagsMassAttachAction.js:64
+#, fuzzy
+msgid "Select Tag"
+msgstr "Smazat štítek"
+
+#: js/widgets/tags/TagsPanel.js:88 js/widgets/tags/TagsPanel.js:113
 msgid "Add a new personal tag"
 msgstr "Přidat nový osobní štítek"
 
-#: js/widgets/tags/TagsPanel.js:90
+#: js/widgets/tags/TagsPanel.js:91 js/widgets/tags/TagsPanel.js:116
 msgid "Add New Personal Tag"
 msgstr "Přidat nový osobní štítek"
 
-#: js/widgets/tags/TagsPanel.js:91
+#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Pamatujte prosím, že vytváříte osobní štítek. Uvidíte ho jen Vy!"
 
-#: js/widgets/tags/TagsPanel.js:91
+#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
 msgid "Enter tag name:"
 msgstr "Zadejte název štítku:"
 
-#: js/widgets/tags/TagsPanel.js:131
+#: js/widgets/tags/TagsPanel.js:158
 msgid "No Tags to display"
 msgstr "Žádné štítky ke zobrazení"
 
-#: js/widgets/tags/TagsPanel.js:154
+#: js/widgets/tags/TagsPanel.js:181
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Odpojit štítek"
 msgstr[1] "Odpojit štítky"
 msgstr[2] "Odpojit štítky"
 
-#: js/widgets/tags/TagsPanel.js:164
+#: js/widgets/tags/TagsPanel.js:191
 msgid "Edit tag"
 msgstr "Editovat štítek"
 
-#: js/widgets/tags/TagsPanel.js:169 js/widgets/tags/TagsPanel.js:174
+#: js/widgets/tags/TagsPanel.js:196 js/widgets/tags/TagsPanel.js:201
 msgid "Rename Tag"
 msgstr "Přejmenovat štítek"
 
-#: js/widgets/tags/TagsPanel.js:174
+#: js/widgets/tags/TagsPanel.js:201
 msgid "Please enter a new name:"
 msgstr "Zadejte prosím nový název:"
 
-#: js/widgets/tags/TagsPanel.js:183
+#: js/widgets/tags/TagsPanel.js:210
 msgid "Edit Description"
 msgstr "Editovat popis"
 
-#: js/widgets/tags/TagsPanel.js:188
+#: js/widgets/tags/TagsPanel.js:215
 msgid "Description for tag"
 msgstr "Popis štítku"
 
-#: js/widgets/tags/TagsPanel.js:188
+#: js/widgets/tags/TagsPanel.js:215
 msgid "Please enter new description:"
 msgstr "Zadejte prosím nový popis:"
 
-#: js/widgets/tags/TagsPanel.js:197
+#: js/widgets/tags/TagsPanel.js:224
 msgid "Change Color"
 msgstr "Změnit barvu"
 
-#: js/widgets/tags/TagsPanel.js:221
+#: js/widgets/tags/TagsPanel.js:248
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Smazat štítek"
 msgstr[1] "Smazat štítky"
 msgstr[2] "Smazat štítky"
 
-#: js/widgets/tags/TagsPanel.js:234
+#: js/widgets/tags/TagsPanel.js:261
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Opravdu chcete smazat vybraný štítek?"
 msgstr[1] "Opravdu chcete smazat vybrané štítky?"
 msgstr[2] "Opravdu chcete smazat vybrané štítky?"
 
-#: js/widgets/tags/TagsPanel.js:235
+#: js/widgets/tags/TagsPanel.js:262
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Vybraný štítek bude smazán a zmizí u všech záznamů"
 msgstr[1] "Vybrané štítky budou smazány a zmizí u všech záznamů"
 msgstr[2] "Vybrané štítky budou smazány a zmizí u všech záznamů"
 
-#: js/widgets/tags/TagsPanel.js:239
+#: js/widgets/tags/TagsPanel.js:266
 msgid "Please wait a moment..."
 msgstr "Počkejte prosím okamžik..."
 
-#: js/widgets/tags/TagsPanel.js:239
+#: js/widgets/tags/TagsPanel.js:266
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Mažu štítek"
 msgstr[1] "Mažu štítky"
 msgstr[2] "Mažu štítky"
 
-#: js/widgets/tags/TagsPanel.js:255
+#: js/widgets/tags/TagsPanel.js:282
 msgid "Could not delete Tag(s)."
 msgstr "Nepodařilo se smazat štítek/štítky."
 
-#: js/widgets/tags/TagsPanel.js:316 js/widgets/tags/TagsPanel.js:378
+#: js/widgets/tags/TagsPanel.js:344 js/widgets/tags/TagsPanel.js:406
 msgid "Notice"
 msgstr "Upozornění"
 
-#: js/widgets/tags/TagsPanel.js:317 js/widgets/tags/TagsPanel.js:379
+#: js/widgets/tags/TagsPanel.js:345 js/widgets/tags/TagsPanel.js:407
 msgid "The minimum tag length is three."
 msgstr "Minimální délka štítku jsou tři znaky."
 
-#: js/widgets/tags/TagsPanel.js:364
+#: js/widgets/tags/TagsPanel.js:392
 msgid "Could not create tag."
 msgstr "Nepodařilo se vytvořit štítek."
 
-#: js/widgets/tags/TagsPanel.js:397
+#: js/widgets/tags/TagsPanel.js:425
 msgid "Could not update tag."
 msgstr "Nepodařilo se aktualizovat štítek."
 
-#: js/widgets/tags/TagsPanel.js:430 js/widgets/tags/TagsPanel.js:488
+#: js/widgets/tags/TagsPanel.js:459 js/widgets/tags/TagsPanel.js:517
 msgid "Enter tag name"
 msgstr "Zadejte název štítku"
 
-#: js/widgets/tags/TagsPanel.js:431
+#: js/widgets/tags/TagsPanel.js:460
 msgid "Searching..."
 msgstr "Vyhledávám..."
 
-#: js/widgets/tags/TagsPanel.js:565
+#: js/widgets/tags/TagsPanel.js:594
 msgid "Color"
 msgstr "Barva"
 
@@ -1729,10 +1750,6 @@ msgstr "záznam byl změněn"
 #, fuzzy
 #~ msgid "Deleting tag(s)..."
 #~ msgstr "Mažu štítek"
-
-#, fuzzy
-#~ msgid "add tag"
-#~ msgstr "Editovat štítek"
 
 #, fuzzy
 #~ msgid "edit tag"

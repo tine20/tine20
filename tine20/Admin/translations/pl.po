@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-05 14:56+0100\n"
+"PO-Revision-Date: 2009-09-12 22:24+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -674,51 +674,57 @@ msgstr "Czas wylogowania"
 
 #: js/UserEditDialog.js:277
 msgid "IMAP"
-msgstr ""
+msgstr "IMAP"
 
-#: js/UserEditDialog.js:291 js/UserEditDialog.js:335
-#, fuzzy
-msgid "Email Username"
-msgstr "Email"
+#: js/UserEditDialog.js:291
+msgid "Email UID"
+msgstr "E-mail UID"
 
 #: js/UserEditDialog.js:295
+msgid "Email GID"
+msgstr "E-mail GID"
+
+#: js/UserEditDialog.js:299 js/UserEditDialog.js:343
+msgid "Email Username"
+msgstr "E-mail Użytkownik"
+
+#: js/UserEditDialog.js:303
 msgid "Quota"
 msgstr "Kwota"
 
-#: js/UserEditDialog.js:301
+#: js/UserEditDialog.js:309
 msgid "Current Mail Size"
-msgstr ""
+msgstr "Rozmiar wiadomości"
 
-#: js/UserEditDialog.js:306
+#: js/UserEditDialog.js:314
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/UserEditDialog.js:311
+#: js/UserEditDialog.js:319
 msgid "Current Sieve Size"
 msgstr ""
 
-#: js/UserEditDialog.js:316
-#, fuzzy
+#: js/UserEditDialog.js:324
 msgid "Last Login"
 msgstr "Ostatnie logowanie o"
 
-#: js/UserEditDialog.js:321
+#: js/UserEditDialog.js:329
 msgid "SMTP"
-msgstr ""
+msgstr "SMTP"
 
-#: js/UserEditDialog.js:339
+#: js/UserEditDialog.js:347
 msgid "Aliases"
 msgstr "Aliasy"
 
-#: js/UserEditDialog.js:344
+#: js/UserEditDialog.js:352
 msgid "Forwards"
-msgstr ""
+msgstr "Przesłane dalej"
 
-#: js/UserEditDialog.js:349
+#: js/UserEditDialog.js:357
 msgid "Forward Only"
-msgstr ""
+msgstr "Tylko prześlij dalej"
 
-#: js/UserEditDialog.js:370
+#: js/UserEditDialog.js:378
 msgid "Passwords don't match"
 msgstr "Nieprawidłowe hasło"
 
@@ -808,12 +814,6 @@ msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
 
-msgid "Email UID"
-msgstr "E-mail UID"
-
-msgid "Email GID"
-msgstr "E-mail GID"
-
 msgid "Deleting tag..."
 msgstr "Usuwanie znacznika..."
 
@@ -841,5 +841,5 @@ msgstr "Utwórz nowego użytkownika"
 msgid "Edit User Account \"{0}\""
 msgstr "Edytuj konto użytkownika \"{0}\""
 
-#~ msgid "Forward"
-#~ msgstr "Prześlij dalej"
+msgid "Forward"
+msgstr "Prześlij dalej"

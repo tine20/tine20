@@ -56,27 +56,27 @@ msgstr "Mettre à jour une application"
 msgid "Go to Tine 2.0 login"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:172
+#: js/ApplicationGridPanel.js:171
 msgid "uninstall"
 msgstr "désinstaller"
 
-#: js/ApplicationGridPanel.js:172
+#: js/ApplicationGridPanel.js:171
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Êtes-vous sûr de vouloir désinstaller l'application?"
 
-#: js/ApplicationGridPanel.js:232
+#: js/ApplicationGridPanel.js:231
 msgid "This may take a while"
 msgstr "Cela peut être long"
 
-#: js/ApplicationGridPanel.js:258
+#: js/ApplicationGridPanel.js:257
 msgid "Shit"
 msgstr "Oups"
 
-#: js/ApplicationGridPanel.js:258
+#: js/ApplicationGridPanel.js:257
 msgid "Where are the backup tapes"
 msgstr "Où sont les bandes de sauvegarde?"
 
-#: js/ApplicationGridPanel.js:266
+#: js/ApplicationGridPanel.js:265
 msgid "Dependency Violation"
 msgstr ""
 
@@ -111,7 +111,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:227 js/AuthenticationPanel.js:313
 #: js/ConfigManagerPanel.js:69 js/ConfigManagerPanel.js:95
-#: js/EmailPanel.js:190 js/EmailPanel.js:276 js/EmailPanel.js:374
+#: js/EmailPanel.js:190 js/EmailPanel.js:281 js/EmailPanel.js:379
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -204,12 +204,12 @@ msgstr "Informations"
 msgid "Setup Authentication"
 msgstr "Paramétrer l'authentification"
 
-#: js/ConfigManagerPanel.js:65 js/EmailPanel.js:186 js/EmailPanel.js:272
+#: js/ConfigManagerPanel.js:65 js/EmailPanel.js:186 js/EmailPanel.js:277
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
 #: js/ConfigManagerPanel.js:74 js/ConfigManagerPanel.js:87
-#: js/EmailPanel.js:368
+#: js/EmailPanel.js:373
 msgid "Database"
 msgstr "Base de données"
 
@@ -217,12 +217,12 @@ msgstr "Base de données"
 msgid "Adapter"
 msgstr "Connecteur"
 
-#: js/ConfigManagerPanel.js:83 js/EmailPanel.js:182 js/EmailPanel.js:268
-#: js/EmailPanel.js:365
+#: js/ConfigManagerPanel.js:83 js/EmailPanel.js:182 js/EmailPanel.js:273
+#: js/EmailPanel.js:370
 msgid "Hostname"
 msgstr "Nom d'hôte"
 
-#: js/ConfigManagerPanel.js:91 js/EmailPanel.js:371
+#: js/ConfigManagerPanel.js:91 js/EmailPanel.js:376
 msgid "User"
 msgstr "Utilisateur"
 
@@ -270,28 +270,28 @@ msgstr ""
 msgid "Imap"
 msgstr ""
 
-#: js/EmailPanel.js:195 js/EmailPanel.js:281
+#: js/EmailPanel.js:195 js/EmailPanel.js:286
 #, fuzzy
 msgid "Port"
 msgstr "Priorité"
 
-#: js/EmailPanel.js:198 js/EmailPanel.js:284
+#: js/EmailPanel.js:198 js/EmailPanel.js:289
 msgid "Secure Connection"
 msgstr ""
 
-#: js/EmailPanel.js:209 js/EmailPanel.js:295 js/EmailPanel.js:311
+#: js/EmailPanel.js:209 js/EmailPanel.js:300 js/EmailPanel.js:316
 msgid "None"
 msgstr ""
 
-#: js/EmailPanel.js:210 js/EmailPanel.js:296
+#: js/EmailPanel.js:210 js/EmailPanel.js:301
 msgid "TLS"
 msgstr ""
 
-#: js/EmailPanel.js:211 js/EmailPanel.js:297
+#: js/EmailPanel.js:211 js/EmailPanel.js:302
 msgid "SSL"
 msgstr ""
 
-#: js/EmailPanel.js:215 js/EmailPanel.js:317
+#: js/EmailPanel.js:215 js/EmailPanel.js:322
 msgid "Domain"
 msgstr ""
 
@@ -311,21 +311,21 @@ msgstr ""
 msgid "Default account name"
 msgstr ""
 
-#: js/EmailPanel.js:260
+#: js/EmailPanel.js:265
 msgid "Smtp"
 msgstr ""
 
-#: js/EmailPanel.js:300
+#: js/EmailPanel.js:305
 #, fuzzy
 msgid "Authentication"
 msgstr "Paramétrer l'authentification"
 
-#: js/EmailPanel.js:312
+#: js/EmailPanel.js:317
 #, fuzzy
 msgid "Login"
 msgstr "Journalisation"
 
-#: js/EmailPanel.js:313
+#: js/EmailPanel.js:318
 msgid "Plain"
 msgstr ""
 

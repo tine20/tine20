@@ -21,7 +21,7 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:152
+#: Controller/Task.php:153
 msgid "Notification for Task "
 msgstr ""
 
@@ -38,7 +38,7 @@ msgstr "Общо"
 msgid "Due date"
 msgstr "Краен срок"
 
-#: js/EditDialog.js:161 js/GridPanel.js:176 Model/Task.php:187
+#: js/EditDialog.js:161 js/GridPanel.js:176 Model/Task.php:180
 msgid "Priority"
 msgstr "Приоритет"
 
@@ -58,7 +58,7 @@ msgstr "Напиши описание"
 msgid "Percentage"
 msgstr "Процент"
 
-#: js/EditDialog.js:178 js/GridPanel.js:205 Model/Task.php:188
+#: js/EditDialog.js:178 js/GridPanel.js:205 Model/Task.php:181
 msgid "Status"
 msgstr "Статус"
 
@@ -88,7 +88,7 @@ msgstr "Задачата не може да бъде запаметена."
 msgid "Add a task..."
 msgstr "Добави задача"
 
-#: js/GridPanel.js:191 Model/Task.php:189
+#: js/GridPanel.js:191 Model/Task.php:182
 msgid "Percent"
 msgstr "Процент"
 
@@ -124,15 +124,15 @@ msgstr[1] "списъка със задачи"
 msgid "to do lists"
 msgstr "списъци със задачи"
 
-#: Model/Task.php:184
+#: Model/Task.php:177
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:185
+#: Model/Task.php:178
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:186
+#: Model/Task.php:179
 #, fuzzy
 msgid "Description"
 msgstr "Напиши описание"

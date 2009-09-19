@@ -21,7 +21,7 @@ msgstr ""
 msgid "Create new shared tasks lists"
 msgstr ""
 
-#: Controller/Task.php:152
+#: Controller/Task.php:153
 msgid "Notification for Task "
 msgstr ""
 
@@ -38,7 +38,7 @@ msgstr "摘要"
 msgid "Due date"
 msgstr "过期日期"
 
-#: js/EditDialog.js:161 js/GridPanel.js:176 Model/Task.php:187
+#: js/EditDialog.js:161 js/GridPanel.js:176 Model/Task.php:180
 msgid "Priority"
 msgstr "优先"
 
@@ -58,7 +58,7 @@ msgstr "输入描述"
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/EditDialog.js:178 js/GridPanel.js:205 Model/Task.php:188
+#: js/EditDialog.js:178 js/GridPanel.js:205 Model/Task.php:181
 msgid "Status"
 msgstr "状态"
 
@@ -87,7 +87,7 @@ msgstr "不能保存任务"
 msgid "Add a task..."
 msgstr "添加任务"
 
-#: js/GridPanel.js:191 Model/Task.php:189
+#: js/GridPanel.js:191 Model/Task.php:182
 msgid "Percent"
 msgstr "百分比"
 
@@ -121,15 +121,15 @@ msgstr[0] "要做的事项列表"
 msgid "to do lists"
 msgstr "to do 列表"
 
-#: Model/Task.php:184
+#: Model/Task.php:177
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:185
+#: Model/Task.php:178
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:186
+#: Model/Task.php:179
 #, fuzzy
 msgid "Description"
 msgstr "输入描述"

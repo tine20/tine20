@@ -21,7 +21,7 @@ msgstr "gérer les listes de tâches partagées"
 msgid "Create new shared tasks lists"
 msgstr "Ajouter une liste de tâches partagées"
 
-#: Controller/Task.php:152
+#: Controller/Task.php:153
 msgid "Notification for Task "
 msgstr ""
 
@@ -38,7 +38,7 @@ msgstr "Résumé"
 msgid "Due date"
 msgstr "Date de fin"
 
-#: js/EditDialog.js:161 js/GridPanel.js:176 Model/Task.php:187
+#: js/EditDialog.js:161 js/GridPanel.js:176 Model/Task.php:180
 msgid "Priority"
 msgstr "Priorité"
 
@@ -58,7 +58,7 @@ msgstr "Saisissez une description..."
 msgid "Percentage"
 msgstr "Pourcentage"
 
-#: js/EditDialog.js:178 js/GridPanel.js:205 Model/Task.php:188
+#: js/EditDialog.js:178 js/GridPanel.js:205 Model/Task.php:181
 msgid "Status"
 msgstr "Statut"
 
@@ -88,7 +88,7 @@ msgstr "Erreur de sauvegarde."
 msgid "Add a task..."
 msgstr "Ajouter"
 
-#: js/GridPanel.js:191 Model/Task.php:189
+#: js/GridPanel.js:191 Model/Task.php:182
 msgid "Percent"
 msgstr "Pourcent"
 
@@ -124,15 +124,15 @@ msgstr[1] "listes \"à faire\""
 msgid "to do lists"
 msgstr "listes \"à faire\""
 
-#: Model/Task.php:184
+#: Model/Task.php:177
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:185
+#: Model/Task.php:178
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:186
+#: Model/Task.php:179
 #, fuzzy
 msgid "Description"
 msgstr "Saisissez une description..."
