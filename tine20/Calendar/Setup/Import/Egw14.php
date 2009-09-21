@@ -91,21 +91,30 @@ class Calendar_Setup_Import_Egw14 {
         $this->_migrationStartTime = Zend_Date::now();
         $this->_calEventBackend = new Calendar_Backend_Sql();
         
-        $eventPage = $this->_getRawEgwEventPage(1, 1);
+        $eventPage = $this->_getRawEgwEventPage(1, 1000);
         
         foreach ($eventPage as $egwEventData) {
-            $event = $this->_getTineEventRecord($egwEventData);
-            /*
-            $event = $this->_calEventBackend->create($event);
-            
-            // save attendee
-            $attendee = $this->_getEventAttendee($egwEventData);
-            $attendee->cal_event_id = $event->getId();
-            foreach ($attendee as $attender) {
-                $this->_calEventBackend->createAttendee($attender);
+            try {
+                $event = $this->_getTineEventRecord($egwEventData);
+                
+                if ($event->rrule) {
+                    $exceptions = $this->_getRecurExceptions($egwEventData['cal_id']);
+                    $exceptions->merge($this->_getRecurImplicitExceptions($egwEventData));
+                }
+                /*
+                $event = $this->_calEventBackend->create($event);
+                
+                // save attendee
+                $attendee = $this->_getEventAttendee($egwEventData);
+                $attendee->cal_event_id = $event->getId();
+                foreach ($attendee as $attender) {
+                    $this->_calEventBackend->createAttendee($attender);
+                }
+                */
+                //exdate in egw are fallouts and edits
+            } catch (Exception $e) {
+                $this->_log->err('could not migrate event "' . $egwEventData['cal_id'] . '" cause: ' . $e->getMessage());
             }
-            */
-            //exdate in egw are fallouts and edits
             
         }
     }
@@ -142,6 +151,7 @@ class Calendar_Setup_Import_Egw14 {
         if ($_egwEventData['rrule']) {
             $tineEventData['rrule'] = $this->_convertRrule($_egwEventData);
         }
+        
         // handle alarms
         
         
@@ -313,6 +323,127 @@ class Calendar_Setup_Import_Egw14 {
     }
     
     /**
+     * gets implicit exceptions due to status settings
+     * 
+     * @param  array                $_egwEventAttendee
+     * @return Tinebase_Record_RecordSet of Calendar_Model_Event
+     */
+    protected function _getRecurImplicitExceptions($_egwEventData)
+    {
+        $implictExceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        if (empty($_egwEventData['attendee'])) {
+            return $implictExceptions;
+        }
+        
+        $select = $this->_egwDb->select()
+            ->from(array('attendee' => 'egw_cal_user'), 'DISTINCT('. $this->_egwDb->quoteIdentifier('attendee.cal_recur_date') . ')')
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_id') . ' = ?', $_egwEventData['attendee'][0]['cal_id']))
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_recur_date') . ' != ?', 0));
+        $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($select);
+        foreach($_egwEventData['attendee'] as $attender) {
+            $groupSelect->orWhere(
+                $this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('attendee.cal_user_type') . ' = ?', $attender['cal_user_type']) . ' AND ' .
+                $this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('attendee.cal_user_id') . ' = ?', $attender['cal_user_id']) . ' AND ' .
+                $this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('attendee.cal_status') . ' NOT LIKE ?', $attender['cal_status'])
+            );
+        }
+        $groupSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        
+        $egwExceptionDates = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        if (count($egwExceptionDates) > 0) {
+            $this->_log->debug('found ' . count($egwExceptionDates) . ' implicit exceptions for event ' . $_egwEventData['attendee'][0]['cal_id']);
+            //print_r($_egwEventAttendee);
+        }
+        
+        if (count($egwExceptionDates) > 500) {
+            $this->_log->err("egw's horizont for event " . $_egwEventData['attendee'][0]['cal_id'] . " seems to be broken. Status exceptions will not be considered/migrated");
+            return $implictExceptions;
+        }
+        
+        //print_r($egwExceptionDates);
+        $eventDuration = $_egwEventData['cal_end'] - $_egwEventData['cal_start'];
+        foreach ($egwExceptionDates as $exdate) {
+            $select = $this->_egwDb->select()
+                ->from(array('attendee' => 'egw_cal_user'))
+                ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_recur_date') . ' = ?', $exdate['cal_recur_date']));
+            $egwExceptionEventAttendee = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+            
+            $exEventData = $_egwEventData;
+            $exEventData['cal_start'] = $exdate['cal_recur_date'];
+            $exEventData['cal_end']   = $exdate['cal_recur_date'] + $eventDuration;
+            $exEventData['attendee']  = $egwExceptionEventAttendee;
+            
+            $event = $this->_getTineEventRecord($exEventData);
+            $event->attendee = $this->_getEventAttendee($exEventData);
+            
+            $implictExceptions->addRecord($event);
+        }
+        
+        return $implictExceptions;
+    }
+    
+    /**
+     * get (persistent) exceptions for given event
+     * 
+     * NOTE: this does not get the implicit exceptions from stats settings
+     * 
+     * @param  int $_egwEventId
+     * @return Tinebase_Record_RecordSet of Calendar_Model_Event
+     */
+    protected function _getRecurExceptions($_egwEventId)
+    {
+        $tineExceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        // get base event data
+        $select = $this->_egwDb->select()
+            ->from(array('events' => 'egw_cal'))
+            ->join(array('dates'  => 'egw_cal_dates'), 'events.cal_id = dates.cal_id')
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_reference') . ' = ?', $_egwEventId));
+            
+        $egwExceptions = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        if (count($egwExceptions) == 0) {
+            return $tineExceptions;
+        }
+        
+        $this->_log->debug('found ' . count($egwExceptions) . ' explict exceptions for event ' . $_egwEventId);
+        
+        $egwExceptionsIdMap = array();
+        foreach ($egwExceptions as $idx => $egwEventData) {
+            $egwExceptionsIdMap[$egwEventData['cal_id']] = $idx;
+            // preset attendee
+            $egwEventData['attendee'] = array();
+        }
+        
+        // collect attendee
+        $select = $this->_egwDb->select()
+            ->from(array('attendee' => 'egw_cal_user'))
+            ->joinLeft(array('contacts' => 'egw_addressbook'), 
+                $this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('attendee.cal_user_type') . ' = ?', 'c') . ' AND ' .
+                $this->_egwDb->quoteIdentifier('attendee.cal_user_id') . ' = ' . $this->_egwDb->quoteIdentifier('contacts.contact_id'), 
+                array('contacts.contact_email AS email'))
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_recur_date') . ' = ?', 0))
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_id') . ' IN (?)', array_keys($egwExceptionsIdMap)));
+        
+        $egwExceptionsAttendee = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        
+        foreach ($egwExceptionsAttendee as $eventAttendee) {
+            $idx = $eventPageIdMap[$eventAttendee['cal_id']];
+            $eventPage[$idx]['attendee'][] = $eventAttendee;
+        }
+        unset($egwExceptionsAttendee);
+        
+        
+        foreach ($egwExceptions as $egwExceptionData) {
+            $tineEvent = $this->_getTineEventRecord($egwExceptionData);
+            $tineEvent->attendee = $this->_getEventAttendee($egwException);
+            
+            $tineExceptions->addRecord($tineEvent);
+        }
+        
+        return $tineExceptions;
+    }
+    
+    /**
      * gets tine cal recource by egw resource id
      * 
      * @param  int $_egwResourceId
@@ -427,12 +558,16 @@ class Calendar_Setup_Import_Egw14 {
         $select = $this->_egwDb->select()
             ->from(array('events' => 'egw_cal'))
             ->join(array('dates'  => 'egw_cal_dates'), 'events.cal_id = dates.cal_id', array('MIN(cal_start) AS cal_start', 'MIN(cal_end) AS cal_end'))
+            ->join(array('repeats'  => 'egw_cal_repeats'), 'events.cal_id = repeats.cal_id')
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_reference') . ' = ?', 0))
             //->where('cal_owner = ' . 3144)
-            ->where('events.cal_id = ' . 414)
+            //->where('events.cal_id = ' . 414)
             //->where('events.cal_id = ' . 9090)
             //->where('events.cal_id = ' . 1241)
-            ->group('cal_id')
+            //->where('events.cal_id = ' . 496) // > 1000 status exceptions
+            //->where('events.cal_id = ' . 831)
+            ->group('events.cal_id')
+            ->order('events.cal_id ASC')
             ->limitPage($pageNumber, $pageSize);
             
         $eventPage = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
@@ -478,9 +613,6 @@ class Calendar_Setup_Import_Egw14 {
         
         return $eventPage;
     }
-    
-    
-    
     
     
     
