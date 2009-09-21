@@ -35,6 +35,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
 	 */
 	recordClass: Tine.Setup.Model.Application,
     recordProxy: Tine.Setup.ApplicationBackend,
+    stateful: false,
     evalGrants: false,
     defaultSortInfo: {field: 'name', dir: 'ASC'},
     gridConfig: {
