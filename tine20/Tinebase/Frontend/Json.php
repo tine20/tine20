@@ -619,7 +619,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($decodedData as $applicationName => $data) {
             
             $backend = Tinebase_Core::getPreference($applicationName); 
-            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+            
+            if (! $backend instanceof Tinebase_Preference_Abstract) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No preferences class found for app ' . $applicationName);
+                continue;
+            }
             
             if ($adminMode == TRUE) {
                 // only admins are allowed to update app pref defaults/forced prefs
