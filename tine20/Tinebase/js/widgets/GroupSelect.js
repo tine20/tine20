@@ -61,13 +61,18 @@ Tine.widgets.group.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     setValue: function(group) {
         if (group.hasOwnProperty('id') && typeof group.get != 'function') {
-            group = new Tine.Tinebase.Model.Group(group, group.id);
+            var groupRecord = new Tine.Tinebase.Model.Group(group, group.id);
         } else {
-            group = this.store.getById(group);
+            var groupRecord = this.store.getById(group);
         }
-        this.group = group;
-        this.value = group.id;
-        this.setRawValue(group.get('name'));
+        
+        if (groupRecord) {
+            this.group = groupRecord;
+            this.value = groupRecord.id;
+            this.setRawValue(groupRecord.get('name'));
+        } else {
+            this.setRawValue(group);
+        }
     }
     
 });
