@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * TODO         add all actions to toolbar (some are only in ctx menu at the moment) 
  */
 Ext.namespace('Tine.Admin.Users');
 Tine.Admin.Users.Main = function() {
@@ -231,7 +232,12 @@ Tine.Admin.Users.Main = function() {
                     this.actionAddAccount,
                     this.actionEditAccount,
                     this.actionDeleteAccount,
+                    /*
                     '-',
+                    this.actionEnable,
+                    this.actionDisable,
+                    this.actionResetPassword,
+                    */                    
                     '->',
                     this.translation.gettext('Search:'), ' ',
     /*                new Ext.ux.SelectBox({
@@ -263,10 +269,11 @@ Tine.Admin.Users.Main = function() {
                 /*id:'AdminAccountContextMenu',*/ 
                 items: [
                     this.actionEditAccount,
+                    this.actionDeleteAccount,
+                    '-',
                     this.actionEnable,
                     this.actionDisable,
                     this.actionResetPassword,
-                    this.actionDeleteAccount,
                     '-',
                     this.actionAddAccount 
                 ]
