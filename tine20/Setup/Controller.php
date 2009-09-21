@@ -631,10 +631,17 @@ class Setup_Controller
                 $authenticationProviderData['backend'] => $authenticationProviderData[$authenticationProviderData['backend']]
             )
         );
-
         $this->saveConfigData($authenticationData);
     }
     
+    /**
+     * 
+     * get auth provider data
+     * 
+     * @return array
+     * 
+     * @todo get this from config table instead of file!
+     */
     protected function _getAuthProviderData()
     {
         $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
