@@ -682,11 +682,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         switch ($_records->getRecordClassName()) {
             case 'Tinebase_Model_Preference':
-                // get application name from first record
-                $firstPref = $_records->getFirstRecord();
-                $app = Tinebase_Application::getInstance()->getApplicationById($firstPref->application_id);
-                
                 foreach ($_records as $record) {
+                    // get application
+                    if (! isset($app) || $record->application_id != $app->getId()) {
+                        $app = Tinebase_Application::getInstance()->getApplicationById($record->application_id);
+                    }
+                    
                     // convert options xml to array
                     $preference = Tinebase_Core::getPreference($app->name);
                     if ($preference) {
