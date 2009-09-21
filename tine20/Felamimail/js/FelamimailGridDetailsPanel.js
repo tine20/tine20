@@ -312,9 +312,9 @@ Ext.namespace('Tine.Felamimail');
                     listeners: {
                         scope: this,
                         'load': function(editdlg) {
-                            editdlg.contact.set('email', parts[1]);
-                            editdlg.contact.set('n_given', parts[2]);
-                            editdlg.contact.set('n_family', parts[3]);
+                            editdlg.record.set('email', parts[1]);
+                            editdlg.record.set('n_given', parts[2]);
+                            editdlg.record.set('n_family', parts[3]);
                         }
                     }
                 });
