@@ -53,7 +53,15 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         ));
         $egwDb->query("SET NAMES $charset");
         
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $logger = new Zend_Log($writer);
+
+        
         $config = new Zend_Config(array(
+            /**
+             * egw stores its events in server timezone
+             */
+            'egwServerTimezone'           => 'UTC',
             /**
              * convert egw owner grants to tine container 
              * grants for newly created calendars
@@ -64,6 +72,6 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
              */ 
             'forcePersonalCalendarGrants' => FALSE,
         ));
-        $importer = new Calendar_Setup_Import_Egw14($egwDb, $config);
+        $importer = new Calendar_Setup_Import_Egw14($egwDb, $config, $logger);
     }
 }
