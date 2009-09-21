@@ -13,6 +13,8 @@
 /**
  * class to import calendars/events from egw14
  * 
+ * @todo find out organizer tz
+ * 
  * @package     Calendar
  * @subpackage  Setup
  */
@@ -29,7 +31,12 @@ class Calendar_Setup_Import_Egw14 {
     protected $_config = NULL;
     
     /**
-     * mapps egw attender status to tine attender status
+     * @var Zend_Log
+     */
+    protected $_log = NULL;
+    
+    /**
+     * maps egw attender status to tine attender status
      * 
      * @var array
      */
@@ -41,24 +48,65 @@ class Calendar_Setup_Import_Egw14 {
     );
     
     /**
+     * maps egw/mcal recur freqs to tine/ical requr freqs
+     * 
+     * @var array
+     */
+    protected $_rruleFreqMap = array(
+        1 => Calendar_Model_Rrule::FREQ_DAILY,
+        2 => Calendar_Model_Rrule::FREQ_WEEKLY,
+        3 => Calendar_Model_Rrule::FREQ_MONTHLY,
+        4 => Calendar_Model_Rrule::FREQ_MONTHLY,
+        5 => Calendar_Model_Rrule::FREQ_YEARLY,
+    );
+    
+    /**
+     * maps egw/mcal recur wdays to tine/ical recur wdays
+     * 
+     * @var array (bitmap)
+     */
+    protected $_rruleWdayMap = array(
+         1 => Calendar_Model_Rrule::WDAY_SUNDAY,
+         2 => Calendar_Model_Rrule::WDAY_MONDAY,
+         4 => Calendar_Model_Rrule::WDAY_TUESDAY,
+         8 => Calendar_Model_Rrule::WDAY_WEDNESDAY,
+        16 => Calendar_Model_Rrule::WDAY_THURSDAY,
+        32 => Calendar_Model_Rrule::WDAY_FRIDAY,
+        64 => Calendar_Model_Rrule::WDAY_SATURDAY,
+    );
+    
+    /**
      * constructs a calendar import for egw14 data
      * 
      * @param Zend_Db_Adapter_Abstract  $_egwDb
      * @param Zend_Config               $_config
+     * @param Zend_Log                  $_log
      */
-    public function __construct($_egwDb, $_config)
+    public function __construct($_egwDb, $_config, $_log)
     {
         $this->_egwDb  = $_egwDb;
         $this->_config = $_config;
+        $this->_log    = $_log;
         
         $this->_migrationStartTime = Zend_Date::now();
+        $this->_calEventBackend = new Calendar_Backend_Sql();
         
-        $eventPage = $this->_getRawEgwEventPage(1, 100);
-        
+        $eventPage = $this->_getRawEgwEventPage(1, 1);
         
         foreach ($eventPage as $egwEventData) {
-            print_r($egwEventData);
             $event = $this->_getTineEventRecord($egwEventData);
+            /*
+            $event = $this->_calEventBackend->create($event);
+            
+            // save attendee
+            $attendee = $this->_getEventAttendee($egwEventData);
+            $attendee->cal_event_id = $event->getId();
+            foreach ($attendee as $attender) {
+                $this->_calEventBackend->createAttendee($attender);
+            }
+            */
+            //exdate in egw are fallouts and edits
+            
         }
     }
     
@@ -71,6 +119,8 @@ class Calendar_Setup_Import_Egw14 {
             'creation_time' => $_egwEventData['cal_modified'],
             'created_by'    => $_egwEventData['cal_modifier'],
             // 'tags'
+            'dtstart'       => $_egwEventData['cal_start'],
+            'dtend'         => $_egwEventData['cal_end'],
             'summary'       => $_egwEventData['cal_title'],
             'description'   => $_egwEventData['cal_description'],
             'location'      => $_egwEventData['cal_location'],
@@ -80,22 +130,79 @@ class Calendar_Setup_Import_Egw14 {
             // 'class_id'
         );
         
+        // ;-)
+        $tineEventData['originator_tz'] = 'Europe/Berlin';
+        
         // find calendar
         $tineEventData['container_id'] = $_egwEventData['cal_public'] ? 
             $this->_getPersonalCalendar($_egwEventData['cal_owner'])->getId() :
             $this->_getPrivateCalendar($_egwEventData['cal_owner'])->getId();
-            
-        // handle attendee
-        $attendee = $this->_handleEventAttendee($_egwEventData);
-        
+
         // handle recuring
+        if ($_egwEventData['rrule']) {
+            $tineEventData['rrule'] = $this->_convertRrule($_egwEventData);
+        }
+        // handle alarms
         
-        print_r($tineEventData);
-        print_r($attendee->toArray());
-        //$rrule = 
+        
+        // finally create event record
+        date_default_timezone_set($this->_config->egwServerTimezone);
+        $tineEvent = new Calendar_Model_Event($tineEventData, FALSE, Zend_Date::TIMESTAMP);
+        
+        $tineEvent->dateConversionFormat = Calendar_Model_Event::ISO8601LONG;
+        date_default_timezone_set('UTC');
+        
+        return $tineEvent;
     }
     
-    protected function _handleEventAttendee($_egwEventData)
+    /**
+     * converts egw rrule into tine/iCal rrule
+     * 
+     * @param  array $egwRrule
+     * @return Calendar_Model_Rrule
+     */
+    protected function _convertRrule($_egwEventData)
+    {
+        $egwRrule = $_egwEventData['rrule'];
+        
+        $rrule = new Calendar_Model_Rrule(array());
+        
+        if (! array_key_exists($egwRrule['recur_type'], $this->_rruleFreqMap)) {
+            throw new Exception('unsupported rrule freq');
+        }
+        
+        $rrule->freq        = $this->_rruleFreqMap[$egwRrule['recur_type']];
+        $rrule->interval    = $egwRrule['recur_interval'];
+        $rrule->until       = $this->convertDate($egwRrule['recur_enddate']);
+        
+        // weekly/monthly by wday
+        if ($egwRrule['recur_type'] == 2 || $egwRrule['recur_type'] == 4) {
+            $wdays = array();
+            foreach($this->_rruleWdayMap as $egwBit => $iCalString) {
+                if ($egwRrule['recur_data'] & $egwBit) {
+                    $wdays[] = $iCalString;
+                }
+            }
+            
+            $rrule->byday = implode(',', $wdays);
+        }
+        
+        // monthly byday/yearly bymonthday
+        if ($egwRrule['recur_type'] == 3 || $egwRrule['recur_type'] == 5) {
+            $dtstart = $this->convertDate($_egwEventData['cal_start']);
+            $dateArray = Calendar_Model_Rrule::date2array($dtstart);
+            
+            $rrule->bymonthday = $dateArray['day'];
+            
+            if ($egwRrule['recur_type'] == 5) {
+                $rrule->bymonth    = $dateArray['month'];
+            }
+        }
+        
+        return $rrule;
+    }
+    
+    protected function _getEventAttendee($_egwEventData)
     {
         $tineAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         foreach ($_egwEventData['attendee'] as $idx => $egwAttender) {
@@ -153,6 +260,7 @@ class Calendar_Setup_Import_Egw14 {
                 
                 $tineAttendee->addRecord(new Calendar_Model_Attender($tineAttenderArray));
             } catch (Exception $e) {
+                $this->_log->warn(' catched exception -> skipping attender');
                 // skip attender
             }
         }
@@ -184,6 +292,7 @@ class Calendar_Setup_Import_Egw14 {
     {
         if (! $_email) {
             // contact not resolveable
+            $this->_log->warn('no mail for contact given, contact not resolveable');
             return NULL;
         }
         
@@ -218,6 +327,7 @@ class Calendar_Setup_Import_Egw14 {
         $egwResouces = $tineDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
         
         if (count($egwResouces) !== 1) {
+            $this->_log->warn('egw resource not found');
             return NULL;
         }
         $egwResouce = $egwResouces[0];
@@ -229,6 +339,8 @@ class Calendar_Setup_Import_Egw14 {
         
         if (count($tineResouces) === 0) {
             // migrate on the fly
+            $this->_log->info("migrating resource {$egwResouce['name']}");
+            
             $resource = new Calendar_Model_Resource(array(
                 'name'        => $egwResouce['name'],
                 'description' => $egwResouce['short_description'],
@@ -317,7 +429,8 @@ class Calendar_Setup_Import_Egw14 {
             ->join(array('dates'  => 'egw_cal_dates'), 'events.cal_id = dates.cal_id', array('MIN(cal_start) AS cal_start', 'MIN(cal_end) AS cal_end'))
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_reference') . ' = ?', 0))
             //->where('cal_owner = ' . 3144)
-            //->where('events.cal_id = ' . 414)
+            ->where('events.cal_id = ' . 414)
+            //->where('events.cal_id = ' . 9090)
             //->where('events.cal_id = ' . 1241)
             ->group('cal_id')
             ->limitPage($pageNumber, $pageSize);
@@ -400,6 +513,26 @@ class Calendar_Setup_Import_Egw14 {
         4 => Tinebase_Model_Container::EDITGRANT,
         8 => Tinebase_Model_Container::DELETEGRANT,
     );
+    
+    /**
+     * converts egw date to Zend_Date
+     * 
+     * @param  int $_egwTS
+     * @param  string $_tz timezone
+     * @return Zend_Date
+     */
+    public function convertDate($_egwTS, $_tz)
+    {
+        if (! $_egwTS) {
+            return NULL;
+        }
+        
+        date_default_timezone_set($_tz);
+        $date = new Zend_Date($_egwTS, Zend_Date::TIMESTAMP);
+        date_default_timezone_set('UTC');
+        
+        return $date;
+    }
     
     /**
      * converts egw -> tine priority
