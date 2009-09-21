@@ -232,14 +232,18 @@ Tine.Admin.Applications.Main = function() {
             emptyMsg: this.translation.gettext("No applications to display")
         }); 
         
-        var cm_applications = new Ext.grid.ColumnModel([
-            {resizable: true, header: this.translation.gettext('Order'),   id: 'order', dataIndex: 'order', width: 50},
-            {resizable: true, header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name'},
-            {resizable: true, header: this.translation.gettext('Status'),  id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
-            {resizable: true, header: this.translation.gettext('Version'), id: 'version', dataIndex: 'version', width: 70}
-        ]);
-        
-        cm_applications.defaultSortable = true; // by default columns are sortable
+        var cm_applications = new Ext.grid.ColumnModel({
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            columns: [
+                { header: this.translation.gettext('Order'),   id: 'order', dataIndex: 'order', width: 50},
+                { header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name'},
+                { header: this.translation.gettext('Status'),  id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
+                { header: this.translation.gettext('Version'), id: 'version', dataIndex: 'version', width: 70}
+            ]
+        });
 
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         

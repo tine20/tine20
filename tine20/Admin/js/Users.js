@@ -292,22 +292,26 @@ Tine.Admin.Users.Main = function() {
             var accountBackend = Tine.Tinebase.registry.get('accountBackend');
             var ldapBackend = (accountBackend == 'Ldap');
             
-            var columnModel = new Ext.grid.ColumnModel([
-                {resizable: true, header: this.translation.gettext('ID'), id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
-                {resizable: true, header: this.translation.gettext('Status'), id: 'accountStatus', dataIndex: 'accountStatus', hidden: ldapBackend, width: 50, renderer: _renderStatus},
-                {resizable: true, header: this.translation.gettext('Displayname'), id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
-                {resizable: true, header: this.translation.gettext('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 200},
-                {resizable: true, header: this.translation.gettext('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
-                {resizable: true, header: this.translation.gettext('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
-                {resizable: true, header: this.translation.gettext('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
-                {resizable: true, header: this.translation.gettext('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: ldapBackend, width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
-                {resizable: true, header: this.translation.gettext('Last login from'), id: 'accountLastLoginfrom', hidden: ldapBackend, dataIndex: 'accountLastLoginfrom'},
-                {resizable: true, header: this.translation.gettext('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
-                {resizable: true, header: this.translation.gettext('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer}
-            ]);
+            var columnModel = new Ext.grid.ColumnModel({
+                defaults: {
+                    sortable: true,
+                    resizable: true
+                },
+                columns: [
+                    { header: this.translation.gettext('ID'), id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
+                    { header: this.translation.gettext('Status'), id: 'accountStatus', dataIndex: 'accountStatus', hidden: ldapBackend, width: 50, renderer: _renderStatus},
+                    { header: this.translation.gettext('Displayname'), id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
+                    { header: this.translation.gettext('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 200},
+                    { header: this.translation.gettext('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
+                    { header: this.translation.gettext('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
+                    { header: this.translation.gettext('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
+                    { header: this.translation.gettext('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: ldapBackend, width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+                    { header: this.translation.gettext('Last login from'), id: 'accountLastLoginfrom', hidden: ldapBackend, dataIndex: 'accountLastLoginfrom'},
+                    { header: this.translation.gettext('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+                    { header: this.translation.gettext('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer}
+                ]
+            });
             
-            columnModel.defaultSortable = true; // by default columns are sortable
-    
             var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
             
             rowSelectionModel.on('selectionchange', function(_selectionModel) {

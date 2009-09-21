@@ -191,13 +191,17 @@ Tine.Admin.Groups.Main = {
         }); 
         
         // the columnmodel
-        var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 10, hidden: true },
-            { resizable: true, id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
-            { resizable: true, id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' }
-        ]);
-        
-        columnModel.defaultSortable = true; // by default columns are sortable
+        var columnModel = new Ext.grid.ColumnModel({
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            columns: [
+                { id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 10, hidden: true },
+                { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
+                { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' }
+            ]
+        });
         
         // the rowselection model
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});

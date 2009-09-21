@@ -175,13 +175,17 @@ Tine.Admin.Tags.Main = {
         }); 
         
         // the columnmodel
-        var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function(color){return '<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</div>';} },
-            { resizable: true, id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 200 },
-            { resizable: true, id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500}
-        ]);
-        
-        columnModel.defaultSortable = true; // by default columns are sortable
+        var columnModel = new Ext.grid.ColumnModel({
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            columns: [
+                { id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function(color){return '<div style="width: 8px; height: 8px; background-color:' + color + '; border: 1px solid black;">&#160;</div>';} },
+                { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 200 },
+                { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500}
+            ]
+        });
         
         // the rowselection model
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});

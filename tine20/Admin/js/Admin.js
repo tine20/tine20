@@ -555,18 +555,22 @@ Tine.Admin.AccessLog.Main = function() {
             emptyMsg: this.translation.gettext("No access log entries to display")
         }); 
         
-        var columnModel = new Ext.grid.ColumnModel([
-            {resizable: true, header: this.translation.gettext('Session ID'), id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
-            {resizable: true, header: this.translation.gettext('Login Name'), id: 'login_name', dataIndex: 'login_name'},
-            {resizable: true, header: this.translation.gettext('Name'), id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.common.usernameRenderer},
-            {resizable: true, header: this.translation.gettext('IP Address'), id: 'ip', dataIndex: 'ip', width: 150},
-            {resizable: true, header: this.translation.gettext('Login Time'), id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
-            {resizable: true, header: this.translation.gettext('Logout Time'), id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
-            {resizable: true, header: this.translation.gettext('Account ID'), id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
-            {resizable: true, header: this.translation.gettext('Result'), id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
-        ]);
-        
-        columnModel.defaultSortable = true; // by default columns are sortable
+        var columnModel = new Ext.grid.ColumnModel({
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            columns: [
+                { header: this.translation.gettext('Session ID'), id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
+                { header: this.translation.gettext('Login Name'), id: 'login_name', dataIndex: 'login_name'},
+                { header: this.translation.gettext('Name'), id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.common.usernameRenderer},
+                { header: this.translation.gettext('IP Address'), id: 'ip', dataIndex: 'ip', width: 150},
+                { header: this.translation.gettext('Login Time'), id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+                { header: this.translation.gettext('Logout Time'), id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.common.dateTimeRenderer},
+                { header: this.translation.gettext('Account ID'), id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
+                { header: this.translation.gettext('Result'), id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
+            ]
+        });
         
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         
