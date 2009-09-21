@@ -601,6 +601,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                             }
                         }
                         Ext.Msg.hide();
+                        
+                        // reload grid store
+                        this.onFilterChange();
                     }
                 });
             }
