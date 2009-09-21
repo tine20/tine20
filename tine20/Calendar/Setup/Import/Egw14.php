@@ -29,6 +29,18 @@ class Calendar_Setup_Import_Egw14 {
     protected $_config = NULL;
     
     /**
+     * mapps egw attender status to tine attender status
+     * 
+     * @var array
+     */
+    protected $_attenderStatusMap = array(
+        'U' => Calendar_Model_Attender::STATUS_NEEDSACTION,
+        'A' => Calendar_Model_Attender::STATUS_ACCEPTED,
+        'R' => Calendar_Model_Attender::STATUS_DECLINED,
+        'T' => Calendar_Model_Attender::STATUS_TENTATIVE
+    );
+    
+    /**
      * constructs a calendar import for egw14 data
      * 
      * @param Zend_Db_Adapter_Abstract  $_egwDb
@@ -41,7 +53,7 @@ class Calendar_Setup_Import_Egw14 {
         
         $this->_migrationStartTime = Zend_Date::now();
         
-        $eventPage = $this->_getRawEgwEventPage(1, 1);
+        $eventPage = $this->_getRawEgwEventPage(1, 100);
         
         
         foreach ($eventPage as $egwEventData) {
@@ -62,6 +74,7 @@ class Calendar_Setup_Import_Egw14 {
             'summary'       => $_egwEventData['cal_title'],
             'description'   => $_egwEventData['cal_description'],
             'location'      => $_egwEventData['cal_location'],
+            'organizer'     => $_egwEventData['cal_owner'],
             'transp'        => $_egwEventData['cal_non_blocking'] ? Calendar_Model_Event::TRANSP_TRANSP : Calendar_Model_Event::TRANSP_OPAQUE,
             'priority'      => $this->getPriority($_egwEventData['cal_priority']),
             // 'class_id'
@@ -72,12 +85,162 @@ class Calendar_Setup_Import_Egw14 {
             $this->_getPersonalCalendar($_egwEventData['cal_owner'])->getId() :
             $this->_getPrivateCalendar($_egwEventData['cal_owner'])->getId();
             
-        // manage attendee
+        // handle attendee
+        $attendee = $this->_handleEventAttendee($_egwEventData);
         
-        // manage recuring
+        // handle recuring
         
         print_r($tineEventData);
+        print_r($attendee->toArray());
         //$rrule = 
+    }
+    
+    protected function _handleEventAttendee($_egwEventData)
+    {
+        $tineAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        foreach ($_egwEventData['attendee'] as $idx => $egwAttender) {
+            try {
+                $tineAttenderArray = array(
+                    'quantity'          => $egwAttender['cal_quantity'],
+                    'role'              => Calendar_Model_Attender::ROLE_REQUIRED,
+                    'status'            => array_key_exists($egwAttender['cal_status'], $this->_attenderStatusMap) ? 
+                                               $this->_attenderStatusMap[$egwAttender['cal_status']] : 
+                                               Calendar_Model_Attender::STATUS_NEEDSACTION,
+                    'status_authkey'    => Calendar_Model_Attender::generateUID(),
+                );
+                
+                switch($egwAttender['cal_user_type']) {
+                    case 'u':
+                        // user and group
+                        if ($egwAttender['cal_user_id'] > 0) {
+                            $tineAttenderArray['user_type'] = Calendar_Model_Attender::USERTYPE_USER;
+                            $tineAttenderArray['user_id']   = Tinebase_User::getInstance()->getUserById($egwAttender['cal_user_id'])->contact_id;
+                            
+                            $tineAttenderArray['displaycontainer_id'] = $_egwEventData['cal_public'] ? 
+                                $this->_getPersonalCalendar($egwAttender['cal_user_id'])->getId() :
+                                $this->_getPrivateCalendar($egwAttender['cal_user_id'])->getId();
+                        
+                        } else {
+                            $tineAttenderArray['user_type'] = Calendar_Model_Attender::USERTYPE_GROUP;
+                            $tineAttenderArray['user_id']   = abs($egwAttender['cal_user_id']);
+                        }
+                        break;
+                    case 'c':
+                        // try to find contact in tine (NOTE: id is useless, as contacts get new ids during migration)
+                        $contact_id = $this->_getContactIdByEmail($egwAttender['email'], $_egwEventData['cal_owner']);
+                        if (! $contact_id) {
+                            continue 2;
+                        }
+                        
+                        $tineAttenderArray['user_type'] = Calendar_Model_Attender::USERTYPE_USER;
+                        $tineAttenderArray['user_id']   = $contact_id;
+                        break;
+                        
+                    case 'r':
+                        $resource_id = $this->_getResourceId($egwAttender['cal_user_id']);
+                        if (! $resource_id) {
+                            continue 2;
+                        }
+                        
+                        $tineAttenderArray['user_type'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
+                        $tineAttenderArray['user_id']   = $resource_id;
+                        break;
+                        
+                    default: 
+                        throw new Exception("unsupported attender type: {$egwAttender['cal_user_type']}");
+                        break;
+                }
+                
+                $tineAttendee->addRecord(new Calendar_Model_Attender($tineAttenderArray));
+            } catch (Exception $e) {
+                // skip attender
+            }
+        }
+
+        // resolve groupmembers
+        Calendar_Model_Attender::resolveGroupMembers($tineAttendee);
+        $groupMembers = $tineAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
+        foreach ($groupMembers as $groupMember) {
+            $contact = Addressbook_Controller_Contact::getInstance()->get($groupMember->user_id);
+            $groupMember->displaycontainer_id = $_egwEventData['cal_public'] ? 
+                $this->_getPersonalCalendar($contact->account_id)->getId() :
+                $this->_getPrivateCalendar($contact->account_id)->getId();
+        }
+        
+        return $tineAttendee;
+    }
+    
+    /**
+     * gets contact id of given email address
+     * 
+     * NOTE: if we find more than one contact, we could spend hours of smart guessing which one is the right one...
+     *       but we don't do so yet
+     *       
+     * @param  string $_email
+     * @param  string $_organizer
+     * @return string
+     */
+    protected function _getContactIdByEmail($_email, $_organizer)
+    {
+        if (! $_email) {
+            // contact not resolveable
+            return NULL;
+        }
+        
+        $tineDb = Tinebase_Core::getDb();
+        $select = $tineDb->select()
+            ->from(array('contacts' => $tineDb->table_prefix . 'addressbook'))
+            ->join(array('container' => $tineDb->table_prefix . 'container'), 
+                $tineDb->quoteIdentifier('contacts.container_id') . ' = ' . $tineDb->quoteIdentifier('container.id'))
+            /*->join(array('container_acl' => $tineDb->table_prefix . 'container_acl'), 
+                $tineDb->quoteIdentifier('addressbook.container_id') . ' = ' . $tineDb->quoteIdentifier('container.id'))
+            */
+            ->where($tineDb->quoteInto($tineDb->quoteIdentifier('contacts.email') . ' LIKE ?', $_email));
+            //->where($tineDb->quoteInto($tineDb->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED));
+        
+        $contacts = $tineDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+
+        return count($contacts) === 1 ? $contacts[0]['id'] : NULL;
+    }
+    
+    /**
+     * gets tine cal recource by egw resource id
+     * 
+     * @param  int $_egwResourceId
+     * @return string
+     */
+    protected function _getResourceId($_egwResourceId)
+    {
+        $select = $this->_egwDb->select()
+            ->from(array('resouces' => 'egw_resources'))
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('res_id') . ' = ?', $_egwResourceId));
+        
+        $egwResouces = $tineDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        
+        if (count($egwResouces) !== 1) {
+            return NULL;
+        }
+        $egwResouce = $egwResouces[0];
+        
+        // find tine resouce
+        $tineResouces = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
+            array('field' => 'name', 'operator' => 'equals', 'value' => $egwResouce['name'])
+        )));
+        
+        if (count($tineResouces) === 0) {
+            // migrate on the fly
+            $resource = new Calendar_Model_Resource(array(
+                'name'        => $egwResouce['name'],
+                'description' => $egwResouce['short_description'],
+                'email'       => preg_replace('/[^A-Za-z0-9.\-]/', '', $egwResouce['name'])
+            ));
+            
+            $tineResouce = Calendar_Controller_Resource::getInstance()->create($resource);
+        } else {
+            $tineResouce->getFirstRecord();
+        }
+        
+        return $tineResouce->getId();
     }
     
     /**
@@ -155,7 +318,7 @@ class Calendar_Setup_Import_Egw14 {
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_reference') . ' = ?', 0))
             //->where('cal_owner = ' . 3144)
             //->where('events.cal_id = ' . 414)
-            ->where('events.cal_id = ' . 1241)
+            //->where('events.cal_id = ' . 1241)
             ->group('cal_id')
             ->limitPage($pageNumber, $pageSize);
             
