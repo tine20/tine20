@@ -313,9 +313,9 @@ if ($opts->a || $opts->m) {
     $files = array_unique($files);
     foreach($files as $file) {
         if (! is_file("$tine20path/$file")) {
-            echo "WARNING $file not found, remoing it from manifest.\n";
+            echo "WARNING $file not found, removing it from manifest.\n";
         } else if (substr(basename($file), 0, 1) == '.' || ! in_array(array_value(1, explode('.', basename($file))), array('js', 'css', 'gif', 'png', 'jpg')))  {
-            echo "INFO $file is unwanted, remoing it from manifest.\n";
+            echo "INFO $file is unwanted, removing it from manifest.\n";
         } else {
             $manifest['entries'][] = array(
                 'url'           => '../../' . $file,
