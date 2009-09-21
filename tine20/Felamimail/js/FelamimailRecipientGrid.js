@@ -19,7 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Recipient Grid Panel</p>
  * <p>grid panel for to/cc/bcc recipients</p>
  * <pre>
- * TODO         add 'x' to remove recipient / grid row
  * TODO         add name to email address for display
  * TODO         disable horizontal scrollbar
  * TODO         use 'standard' template for adb search combo with image and both email addresses
@@ -44,8 +43,21 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * the message record
      * @type Tine.Felamimail.Model.Message
+     * @property record
      */
     record: null,
+    
+    /**
+     * @type Ext.Menu
+     * @property contextMenu
+     */
+    contextMenu: null,
+    
+    /**
+     * @type Ext.data.SimpleStore
+     * @property store
+     */
+    store: null,
     
     /**
      * @cfg {String} autoExpandColumn
@@ -85,10 +97,19 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         //this.view = new Ext.grid.GridView({});
         this.initStore();
         this.initColumnModel();
-        
-        //console.log(this.record);
+        this.initActions();
+        this.sm = new Ext.grid.RowSelectionModel();
         
         Tine.Felamimail.RecipientGrid.superclass.initComponent.call(this);
+
+        this.on('rowcontextmenu', function(grid, row, e) {
+            e.stopEvent();
+            var selModel = grid.getSelectionModel();
+            if(!selModel.isSelected(row)) {
+                selModel.selectRow(row);
+            }
+            this.contextMenu.showAt(e.getXY());
+        }, this);
     },
     
     /**
@@ -166,6 +187,23 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     /**
+     * init actions / ctx menu
+     * @private
+     */
+    initActions: function() {
+        this.action_remove = new Ext.Action({
+            text: _('Remove'),
+            handler: this.onDelete,
+            iconCls: 'action_delete',
+            scope: this
+        });
+        
+        this.contextMenu = new Ext.menu.Menu({
+            items:  this.action_remove
+        });        
+    },
+    
+    /**
      * start editing after render
      * @private
      */
@@ -207,6 +245,19 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             
             store.commitChanges();
         }
+    },
+    
+    /**
+     * delete handler
+     */
+    onDelete: function(btn, e) {
+        var sm = this.getSelectionModel();
+        var records = sm.getSelections();
+        Ext.each(records, function(record) {
+            if (record.get('address') != '') {
+                this.store.remove(record);
+            }
+        });
     },
     
     /**
