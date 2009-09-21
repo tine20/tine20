@@ -131,7 +131,13 @@ class Felamimail_Controller_Cache extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
             return $folder;
         }
-        $backendFolderValues = $backend->selectFolder($folder->globalname);
+        try {
+            $backendFolderValues = $backend->selectFolder($folder->globalname);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Folder ' . $folder->globalname . ' not found ... Error: ' . $zmse->getMessage());
+            $folder->totalcount = 0;
+            return $folder;
+        }
         
         // init uidnext if empty
         if (! isset($backendFolderValues['uidnext'])) {
