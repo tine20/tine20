@@ -36,6 +36,25 @@ class Calendar_Setup_Import_Egw14 {
     protected $_log = NULL;
     
     /**
+     * @var Zend_Date
+     */
+    protected $_migrationStartTime = NULL;
+    
+    /**
+     * in class calendar/container cache
+     * 
+     * @var array
+     */
+    protected $_personalCalendarCache = array();
+    
+    /**
+     * in class calendar/container cache
+     * 
+     * @var array
+     */
+    protected $_privateCalendarCache = array();
+    
+    /**
      * maps egw attender status to tine attender status
      * 
      * @var array
@@ -91,27 +110,50 @@ class Calendar_Setup_Import_Egw14 {
         $this->_migrationStartTime = Zend_Date::now();
         $this->_calEventBackend = new Calendar_Backend_Sql();
         
+        /*
+        $tineDb = Tinebase_Core::getDb();
+        Tinebase_TransactionManager::getInstance()->startTransaction($tineDb);
+        */
+        
         $eventPage = $this->_getRawEgwEventPage(1, 1000);
         
         foreach ($eventPage as $egwEventData) {
             try {
                 $event = $this->_getTineEventRecord($egwEventData);
+                $event->attendee = $this->_getEventAttendee($egwEventData);
                 
                 if ($event->rrule) {
                     $exceptions = $this->_getRecurExceptions($egwEventData['cal_id']);
                     $exceptions->merge($this->_getRecurImplicitExceptions($egwEventData));
+                    
+                    foreach ($exceptions as $exception) {
+                        $exception['exdate'] = NULL;
+                        $exception['rrule'] = NULL;
+                        
+                        $exception->uid = $event->uid;
+                        $exception->setRecurId();
+                        
+                        $exdateKey = array_search($exception->dtstart, $event->exdate);
+                        if ($exdateKey !== FALSE) {
+                            $this->_log->debug("removing persistent exception at {$exception->dtstart} from exdate of {$event->getId()}");
+                            unset($event->exdate[$exdateKey]);
+                        }
+                        
+                        if (count($exception->alarms == 0) && count($event->alarms > 0)) {
+                            $exception->alarms = clone $event->alarms;
+                        }
+                        
+                        $this->_saveTineEvent($exception);
+                    }
+                    
+                    $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $this->_migrationStartTime);
+                    $event->alarms->setTime($nextOccurrence->dtstart);
                 }
-                /*
-                $event = $this->_calEventBackend->create($event);
                 
-                // save attendee
-                $attendee = $this->_getEventAttendee($egwEventData);
-                $attendee->cal_event_id = $event->getId();
-                foreach ($attendee as $attender) {
-                    $this->_calEventBackend->createAttendee($attender);
-                }
-                */
-                //exdate in egw are fallouts and edits
+                // save baseevent 
+                $this->_saveTineEvent($event);
+                
+
             } catch (Exception $e) {
                 $this->_log->err('could not migrate event "' . $egwEventData['cal_id'] . '" cause: ' . $e->getMessage());
             }
@@ -150,10 +192,11 @@ class Calendar_Setup_Import_Egw14 {
         // handle recuring
         if ($_egwEventData['rrule']) {
             $tineEventData['rrule'] = $this->_convertRrule($_egwEventData);
+            $tineEventData['exdate'] = $_egwEventData['rrule']['recur_exception'];
         }
         
         // handle alarms
-        
+        $tineEventData['alarms'] = $this->_convertAlarms($_egwEventData);
         
         // finally create event record
         date_default_timezone_set($this->_config->egwServerTimezone);
@@ -166,9 +209,88 @@ class Calendar_Setup_Import_Egw14 {
     }
     
     /**
+     * saves an event to tine db
+     * 
+     * @param Calendar_Model_Event $_event
+     * @return void
+     */
+    protected function _saveTineEvent($_event)
+    {
+        $savedEvent = $this->_calEventBackend->create($_event);
+        $savedEvent->attendee->cal_event_id = $savedEvent->getId();
+        foreach ($savedEvent->attendee as $attender) {
+            $this->_calEventBackend->createAttendee($attender);
+        }
+        
+        // handle alarms
+        foreach ($_event->alarms as $alarm) {
+            $alarm->record_id = $savedEvent->getId();
+            $alarm->model     = 'Calendar_Model_Event';
+            $alarm->options   = Zend_Json::encode(array(
+                'minutes_before' => $alarm->minutes_before,
+                'recurid'        => $_event->recurid
+            ));
+            
+            // NOTE: alarm_time for recur base events is already set at this point
+            if(! $alarm->alarm_time instanceof Zend_Date) {
+                $alarm->setTime($_event->dtstart);
+            }
+            
+            if ($alarm->alarm_time->isEarlier($this->_migrationStartTime)) {
+                $this->_log->debug('skipping alarm for event ' . $_event->getId() . ' at ' . $alarm->alarm_time . ' as it is in the past');
+                continue;
+            }
+            
+            // save alarm
+            Tinebase_Alarm::getInstance()->create($alarm);
+        }
+    }
+    
+    /**
+     * converts egw alarms into tine alarms
+     * 
+     * @param  array $_egwEventData
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Alarm
+     */
+    protected function _convertAlarms($_egwEventData)
+    {
+        $alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        
+        $select = $this->_egwDb->select()
+            ->from(array('alarms' => 'egw_async'))
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('async_id') . ' LIKE ?', "cal:{$_egwEventData['cal_id']}:%"));
+        
+        $egwAlarms = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        
+        if (count($egwAlarms) == 0) {
+            return $alarms;
+        }
+        
+        foreach ($egwAlarms as $egwAlarm) {
+            $egwAlarmData = unserialize($egwAlarm['async_data']);
+            
+            $alarms->addRecord(new Tinebase_Model_Alarm(array(
+                'minutes_before' => $egwAlarmData['offset']/60
+            ), TRUE));
+        }
+        
+        // at the moment tine only handles one alarm
+        if (count($alarms) > 1) {
+            $this->_log->warn('only one alarm of event ' . $_egwEventData['cal_id'] . ' got migrated');
+            
+            $alarms->sort('minutes_before', 'ASC');
+            $alarm = $alarms->getFirstRecord();
+            
+            $alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array($alarm));
+        }
+        
+        return $alarms;
+    }
+    
+    /**
      * converts egw rrule into tine/iCal rrule
      * 
-     * @param  array $egwRrule
+     * @param  array $_egwEventData
      * @return Calendar_Model_Rrule
      */
     protected function _convertRrule($_egwEventData)
@@ -186,7 +308,7 @@ class Calendar_Setup_Import_Egw14 {
         $rrule->until       = $this->convertDate($egwRrule['recur_enddate']);
         
         // weekly/monthly by wday
-        if ($egwRrule['recur_type'] == 2 || $egwRrule['recur_type'] == 4) {
+        if ($egwRrule['recur_type'] == 2 || $egwRrule['recur_type'] == 3) {
             $wdays = array();
             foreach($this->_rruleWdayMap as $egwBit => $iCalString) {
                 if ($egwRrule['recur_data'] & $egwBit) {
@@ -198,7 +320,7 @@ class Calendar_Setup_Import_Egw14 {
         }
         
         // monthly byday/yearly bymonthday
-        if ($egwRrule['recur_type'] == 3 || $egwRrule['recur_type'] == 5) {
+        if ($egwRrule['recur_type'] == 4 || $egwRrule['recur_type'] == 5) {
             $dtstart = $this->convertDate($_egwEventData['cal_start']);
             $dateArray = Calendar_Model_Rrule::date2array($dtstart);
             
@@ -270,7 +392,7 @@ class Calendar_Setup_Import_Egw14 {
                 
                 $tineAttendee->addRecord(new Calendar_Model_Attender($tineAttenderArray));
             } catch (Exception $e) {
-                $this->_log->warn(' catched exception -> skipping attender');
+                $this->_log->warn('skipping attender for event "' . $_egwEventData['cal_id'] . '"cause: ' . $e->getMessage());
                 // skip attender
             }
         }
@@ -369,6 +491,7 @@ class Calendar_Setup_Import_Egw14 {
             $egwExceptionEventAttendee = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
             
             $exEventData = $_egwEventData;
+            $exEventData['cal_id']    = Calendar_Model_Event::generateUID();
             $exEventData['cal_start'] = $exdate['cal_recur_date'];
             $exEventData['cal_end']   = $exdate['cal_recur_date'] + $eventDuration;
             $exEventData['attendee']  = $egwExceptionEventAttendee;
@@ -455,7 +578,7 @@ class Calendar_Setup_Import_Egw14 {
             ->from(array('resouces' => 'egw_resources'))
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('res_id') . ' = ?', $_egwResourceId));
         
-        $egwResouces = $tineDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        $egwResouces = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
         
         if (count($egwResouces) !== 1) {
             $this->_log->warn('egw resource not found');
@@ -480,7 +603,7 @@ class Calendar_Setup_Import_Egw14 {
             
             $tineResouce = Calendar_Controller_Resource::getInstance()->create($resource);
         } else {
-            $tineResouce->getFirstRecord();
+            $tineResouce = $tineResouces->getFirstRecord();
         }
         
         return $tineResouce->getId();
@@ -494,23 +617,27 @@ class Calendar_Setup_Import_Egw14 {
      */
     protected function _getPersonalCalendar($_userId)
     {
-        // get calendar by preference to ensure its the default personal
-        $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $_userId, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
-        $calendar = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
-        
-        // detect if container just got created
-        $isNewContainer = false;
-        if ($calendar->creation_time instanceof Zend_Date) {
-            $isNewContainer = $this->_migrationStartTime->isEarlier($calendar->creation_time);
+        if (! array_key_exists($_userId, $this->_personalCalendarCache)) {
+            // get calendar by preference to ensure its the default personal
+            $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $_userId, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
+            $calendar = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
+            
+            // detect if container just got created
+            $isNewContainer = false;
+            if ($calendar->creation_time instanceof Zend_Date) {
+                $isNewContainer = $this->_migrationStartTime->isEarlier($calendar->creation_time);
+            }
+            
+            if (($isNewContainer && $this->_config->setPersonalCalendarGrants) || $this->_config->forcePersonalCalendarGrants) {
+                // resolve grants based on user/groupmemberships
+                $grants = $this->getGrantsByOwner('Calendar', $_userId);
+                Tinebase_Container::getInstance()->setGrants($calendar->getId(), $grants, TRUE);
+            }
+            
+            $this->_personalCalendarCache[$_userId] = $calendar;
         }
         
-        if (($isNewContainer && $this->_config->setPersonalCalendarGrants) || $this->_config->forcePersonalCalendarGrants) {
-            // resolve grants based on user/groupmemberships
-            $grants = $this->getGrantsByOwner('Calendar', $_userId);
-            Tinebase_Container::getInstance()->setGrants($calendar->getId(), $grants, TRUE);
-        }
-        
-        return $calendar;
+        return $this->_personalCalendarCache[$_userId];
     }
     
     /**
@@ -525,24 +652,28 @@ class Calendar_Setup_Import_Egw14 {
     {
         $privateString = 'private events';
         
-        $personalCalendars = Tinebase_Container::getInstance()->getPersonalContainer($_userId, 'Calendar', $_userId, Tinebase_Model_Container::GRANT_ADMIN, TRUE);
-        $privateCalendar = $personalCalendars->filter('name', $privateString);
-        
-        if (count($privateCalendar) < 1) {
-            $container = new Tinebase_Model_Container(array(
-                'name'           => $privateString,
-                'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'backend'        => 'sql',
-            ));
+        if (! array_key_exists($_userId, $this->_privateCalendarCache)) {
+            $personalCalendars = Tinebase_Container::getInstance()->getPersonalContainer($_userId, 'Calendar', $_userId, Tinebase_Model_Container::GRANT_ADMIN, TRUE);
+            $privateCalendar = $personalCalendars->filter('name', $privateString);
             
-            // NOTE: if no grants are given, container class gives all grants to accountId
-            $privateCalendar = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE, $_userId);
-        } else {
-            $privateCalendar = $personalCalendars->getFirstRecord();
+            if (count($privateCalendar) < 1) {
+                $container = new Tinebase_Model_Container(array(
+                    'name'           => $privateString,
+                    'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+                    'backend'        => 'sql',
+                ));
+                
+                // NOTE: if no grants are given, container class gives all grants to accountId
+                $privateCalendar = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE, $_userId);
+            } else {
+                $privateCalendar = $personalCalendars->getFirstRecord();
+            }
+            
+            $this->_privateCalendarCache[$_userId] = $privateCalendar;
         }
         
-        return $privateCalendar;
+        return $this->_privateCalendarCache[$_userId];
     }
     
     /**
@@ -558,14 +689,10 @@ class Calendar_Setup_Import_Egw14 {
         $select = $this->_egwDb->select()
             ->from(array('events' => 'egw_cal'))
             ->join(array('dates'  => 'egw_cal_dates'), 'events.cal_id = dates.cal_id', array('MIN(cal_start) AS cal_start', 'MIN(cal_end) AS cal_end'))
-            ->join(array('repeats'  => 'egw_cal_repeats'), 'events.cal_id = repeats.cal_id')
+            //->join(array('repeats'  => 'egw_cal_repeats'), 'events.cal_id = repeats.cal_id')
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_reference') . ' = ?', 0))
-            //->where('cal_owner = ' . 3144)
-            //->where('events.cal_id = ' . 414)
-            //->where('events.cal_id = ' . 9090)
-            //->where('events.cal_id = ' . 1241)
-            //->where('events.cal_id = ' . 496) // > 1000 status exceptions
-            //->where('events.cal_id = ' . 831)
+            //->where('events.cal_id < ' . 190)
+            ->where('events.cal_id >= ' . 190)
             ->group('events.cal_id')
             ->order('events.cal_id ASC')
             ->limitPage($pageNumber, $pageSize);
