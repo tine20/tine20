@@ -38,7 +38,7 @@ try {
     
         'method=s'              => 'Method to call [required]',              
         'username=s'            => 'Username [required]',              
-        'password=s'            => 'Password [required]',              
+        'password=s'            => 'Password',              
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
