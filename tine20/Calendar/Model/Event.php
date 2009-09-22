@@ -161,6 +161,22 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     }
     
     /**
+     * sets recurId of this model
+     * 
+     * @return string recurid which was set
+     */
+    public function setRecurId()
+    {
+        if (! ($this->uid && $this->dtstart)) {
+            throw new Exception ('uid _and_ dtstart must be set to generate recurid');
+        }
+        
+        $this->recurid = $this->uid . '-' . $this->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        
+        return $this->recurid;
+    }
+    
+    /**
      * cleans up data to only contain freebusy infos
      * removes all fields except dtstart/dtend/id/modlog fields
      * 
