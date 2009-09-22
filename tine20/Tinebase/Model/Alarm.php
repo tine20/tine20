@@ -96,7 +96,9 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calculating alarm_time ...');
         
-        $this->alarm_time = $_date->subMinute($this->minutes_before);
+        $date = clone $_date;
+        
+        $this->alarm_time = $date->subMinute($this->minutes_before);
     }
 
     /**
