@@ -33,4 +33,23 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
 
         return $result;
     }
+    
+    /**
+     * do conversions
+     * -> sanitize account_id
+     *
+     * @param array $_data
+     * @return array
+     */
+    protected function _doConversions($_data)
+    {
+        $result = parent::_doConversions($_data);
+        
+        // unset account id
+        if (isset($result['account_id']) && empty($result['account_id'])) {
+            unset($result['account_id']);
+        }
+        
+        return $result;
+    }    
 }
