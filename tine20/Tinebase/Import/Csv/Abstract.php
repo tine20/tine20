@@ -129,9 +129,12 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             $_resource = fopen($_filename, 'r');
         }
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Importing from file ' . $_filename);
+        
         // get headline
         if (isset($this->_options['headline']) && $this->_options['headline']) {
             $headline = $this->_getRawData($_resource);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got headline: ' . implode(', ', $headline));
         } else {
             $headline = array();
         }
@@ -197,6 +200,11 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             // escape param is only available in PHP >= 5.3.0
             // $this->_options['escape']
         );
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($lineData, TRUE));
+        if (is_array($lineData) && count($lineData) == 1) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Only got 1 field in line. Wrong delimiter?');
+        }
         
         return $lineData;
     }
