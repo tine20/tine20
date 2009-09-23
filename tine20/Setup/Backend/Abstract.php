@@ -150,7 +150,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                         break;
                     
                     case 'application_id':
-                        $application = Tinebase_Application::getInstance()->getApplicationByName($field->value);
+                        $application = Tinebase_Application::getInstance()->getApplicationByName((string) $field->value);
                         $value = $application->id;
                         break;
                     
