@@ -142,8 +142,8 @@ class Tinebase_Application
      */
     public function getApplicationByName($_applicationName)
     {
-        if(empty($_applicationName)) {
-            throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty.');
+        if(empty($_applicationName) || ! is_string($_applicationName)) {
+            throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
         
         if (isset($this->_applicationCache[$_applicationName])) {
