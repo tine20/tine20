@@ -114,7 +114,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         
         $this->_instance->getMultipleTagsOfRecords($contacts);
         foreach ($contacts as $contact) {
-            $this->assertEquals(1, count($contact->tags));
+            $this->assertEquals(1, count($contact->tags), 'Tag not found in contact ' . $contact->n_fn);
         }
     }
 }
