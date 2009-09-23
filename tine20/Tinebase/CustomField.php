@@ -37,6 +37,13 @@ class Tinebase_CustomField
     protected $_backendValue;
     
     /**
+     * custom fields by application cache
+     * 
+     * @var array (app id + modelname => Tinebase_Record_RecordSet with cfs)
+     */
+    protected $_cfByApplicationCache = array();
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Tinebase_CustomField
@@ -103,6 +110,7 @@ class Tinebase_CustomField
 
     /**
      * get custom fields for an application
+     * - results are cached in class cache $_cfByApplicationCache
      * - results are cached if caching is active (with cache tag 'customfields')
      *
      * @param string|Tinebase_Model_Application $_applicationId
@@ -113,8 +121,13 @@ class Tinebase_CustomField
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
+        $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '');
+        if (isset($this->_cfByApplicationCache[$cfIndex])) {
+            return $this->_cfByApplicationCache[$cfIndex];
+        } 
+        
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'getCustomFieldsForApplication' . $applicationId . (($_modelName !== NULL) ? $_modelName : '');
+        $cacheId = 'getCustomFieldsForApplication' . $cfIndex;
         $result = $cache->load($cacheId);
         
         if (!$result) {
@@ -144,6 +157,8 @@ class Tinebase_CustomField
 
             $cache->save($result, $cacheId, array('customfields'));
         }
+        
+        $this->_cfByApplicationCache[$cfIndex] = $result;
             
         return $result;
     }
