@@ -105,7 +105,9 @@ Tine.Tinebase.common = {
      * Returns rendered tags for grids
      * 
      * @param {mixed} tags
-     * @return {String} tags as colored squares (?) with qtips
+     * @return {String} tags as colored squares with qtips
+     * 
+     * TODO add style for tag divs
      */
     tagsRenderer: function(tags) {
         var result = '';
