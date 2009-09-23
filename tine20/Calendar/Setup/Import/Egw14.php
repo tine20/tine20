@@ -115,7 +115,7 @@ class Calendar_Setup_Import_Egw14 {
         Tinebase_TransactionManager::getInstance()->startTransaction($tineDb);
         */
         
-        $eventPage = $this->_getRawEgwEventPage(1, 1000);
+        $eventPage = $this->_getRawEgwEventPage(1, 10000);
         
         foreach ($eventPage as $egwEventData) {
             try {
@@ -165,23 +165,24 @@ class Calendar_Setup_Import_Egw14 {
     {
         // basic datas
         $tineEventData = array(
-            'id'           => $_egwEventData['cal_id'],
-            'uid'           => substr($_egwEventData['cal_uid'], 0, 40),
-            'creation_time' => $_egwEventData['cal_modified'],
-            'created_by'    => $_egwEventData['cal_modifier'],
+            'id'                => $_egwEventData['cal_id'],
+            'uid'               => substr($_egwEventData['cal_uid'], 0, 40),
+            'creation_time'     => $_egwEventData['cal_modified'],
+            'created_by'        => $_egwEventData['cal_modifier'],
             // 'tags'
-            'dtstart'       => $_egwEventData['cal_start'],
-            'dtend'         => $_egwEventData['cal_end'],
-            'summary'       => $_egwEventData['cal_title'],
-            'description'   => $_egwEventData['cal_description'],
-            'location'      => $_egwEventData['cal_location'],
-            'organizer'     => $_egwEventData['cal_owner'],
-            'transp'        => $_egwEventData['cal_non_blocking'] ? Calendar_Model_Event::TRANSP_TRANSP : Calendar_Model_Event::TRANSP_OPAQUE,
-            'priority'      => $this->getPriority($_egwEventData['cal_priority']),
+            'dtstart'           => $_egwEventData['cal_start'],
+            'dtend'             => $_egwEventData['cal_end'],
+            'is_all_day_event'  => ($_egwEventData['cal_end'] - $_egwEventData['cal_start']) % 86400 == 86399,
+            'summary'           => $_egwEventData['cal_title'],
+            'description'       => $_egwEventData['cal_description'],
+            'location'          => $_egwEventData['cal_location'],
+            'organizer'         => $_egwEventData['cal_owner'],
+            'transp'            => $_egwEventData['cal_non_blocking'] ? Calendar_Model_Event::TRANSP_TRANSP : Calendar_Model_Event::TRANSP_OPAQUE,
+            'priority'          => $this->getPriority($_egwEventData['cal_priority']),
             // 'class_id'
         );
         
-        // ;-)
+        // TODO: figure out users tz
         $tineEventData['originator_tz'] = 'Europe/Berlin';
         
         // find calendar
@@ -217,8 +218,8 @@ class Calendar_Setup_Import_Egw14 {
     protected function _saveTineEvent($_event)
     {
         $savedEvent = $this->_calEventBackend->create($_event);
-        $savedEvent->attendee->cal_event_id = $savedEvent->getId();
-        foreach ($savedEvent->attendee as $attender) {
+        $_event->attendee->cal_event_id = $savedEvent->getId();
+        foreach ($_event->attendee as $attender) {
             $this->_calEventBackend->createAttendee($attender);
         }
         
@@ -401,10 +402,13 @@ class Calendar_Setup_Import_Egw14 {
         Calendar_Model_Attender::resolveGroupMembers($tineAttendee);
         $groupMembers = $tineAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         foreach ($groupMembers as $groupMember) {
+            $groupMember->status_authkey = Calendar_Model_Attender::generateUID();
+            
             $contact = Addressbook_Controller_Contact::getInstance()->get($groupMember->user_id);
             $groupMember->displaycontainer_id = $_egwEventData['cal_public'] ? 
                 $this->_getPersonalCalendar($contact->account_id)->getId() :
                 $this->_getPrivateCalendar($contact->account_id)->getId();
+           
         }
         
         return $tineAttendee;
@@ -692,7 +696,8 @@ class Calendar_Setup_Import_Egw14 {
             //->join(array('repeats'  => 'egw_cal_repeats'), 'events.cal_id = repeats.cal_id')
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_reference') . ' = ?', 0))
             //->where('events.cal_id < ' . 190)
-            ->where('events.cal_id >= ' . 190)
+            //->where('events.cal_id >= ' . 190)
+            //->where('events.cal_owner = ' . 3144)
             ->group('events.cal_id')
             ->order('events.cal_id ASC')
             ->limitPage($pageNumber, $pageSize);
