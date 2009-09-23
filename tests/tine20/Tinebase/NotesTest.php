@@ -219,20 +219,13 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
         
         // add note to contacts
-        $mods = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
-        $mods->addRecord(new Tinebase_Model_ModificationLog(array(
-            'modified_attribute'    => 'unittestnote_field',
-            'old_value'             => 'old',
-            'new_value'             => 'new',
-        ), TRUE));
-        
         foreach ($contacts as $contact) {
-            $this->_instance->addSystemNote(
-                $contact, 
-                Zend_Registry::get('currentAccount')->getId(), 
-                Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,
-                $mods
-            );
+            $this->_instance->addNote(new Tinebase_Model_Note(array(
+                'note'          => 'very important note!',
+                'note_type_id'  => Tinebase_Notes::getInstance()->getNoteTypes()->getFirstRecord()->getId(),
+                'record_id'     => $contact->getId(),
+                'record_model'  => 'Addressbook_Model_Contact',
+            )));
         }
         
         $this->_instance->getMultipleNotesOfRecords($contacts);
