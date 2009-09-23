@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * TODO make initial color work again in Ext.menu.ColorMenu
  */
  
 Ext.namespace('Tine.widgets', 'Tine.widgets.tags');
@@ -224,7 +225,11 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                     text: _('Change Color'),
                                     scope: this,
                                     menu: new Ext.menu.ColorMenu({
-                                        value: selectedTag ? selectedTag.get('color') : '#FFFFFF',
+                                        // not working any longer ->
+                                        //value: selectedTag ? selectedTag.get('color') : '#FFFFFF',
+                                        // something like this should work -> 
+                                        // (from extjs api doc: (value) The initial color to highlight (should be a valid 6-digit color hex code without the # symbol). Note that the hex codes are case-sensitive.)
+                                        //value: selectedTag ? Ext.util.Format.lowercase(selectedTag.get('color').substr(1)) : 'ffffff',
                                         scope: this,
                                         listeners: {
                                             select: function(menu, color) {
