@@ -115,9 +115,32 @@ class Calendar_Setup_Import_Egw14 {
         Tinebase_TransactionManager::getInstance()->startTransaction($tineDb);
         */
         
-        $eventPage = $this->_getRawEgwEventPage(1, 10000);
+        $estimate = $this->_getEgwEventsCount();
+        $this->_log->info("found {$estimate} events for migration");
         
-        foreach ($eventPage as $egwEventData) {
+        $pageSize = 100;
+        $numPages = ceil($estimate/$pageSize);
+        
+        for ($page=1; $page <= $numPages; $page++) {
+            $this->_log->info("starting migration page {$page} of {$numPages}");
+            
+            // NOTE: recur events with lots of exceptions might consume LOTS of time!
+            Tinebase_Core::setExecutionLifeTime($pageSize*10);
+            
+            $eventPage = $this->_getRawEgwEventPage($page, $pageSize);
+            $this->_migrateEventPage($eventPage);
+        }
+    }
+    
+    /**
+     * migrates given event page
+     * 
+     * @param array $_eventPage
+     * @return void
+     */
+    public function _migrateEventPage($_eventPage)
+    {
+            foreach ($_eventPage as $egwEventData) {
             try {
                 $event = $this->_getTineEventRecord($egwEventData);
                 $event->attendee = $this->_getEventAttendee($egwEventData);
@@ -681,6 +704,33 @@ class Calendar_Setup_Import_Egw14 {
     }
     
     /**
+     * appends filter to egw14 select obj. for raw event retirval
+     * 
+     * @param Zend_Db_Select $_select
+     * @return void
+     */
+    protected function _appendFilter($_select)
+    {
+        //$_select
+            //->join(array('repeats'  => 'egw_cal_repeats'), 'events.cal_id = repeats.cal_id')
+            //->where('events.cal_id < ' . 190)
+            //->where('events.cal_id >= ' . 190)
+            //->where('events.cal_owner = ' . 3144);
+    }
+    
+    protected function _getEgwEventsCount()
+    {
+        $select = $this->_egwDb->select()
+            ->from(array('events' => 'egw_cal'), 'COUNT(*) AS count')
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_reference') . ' = ?', 0));
+            
+        $this->_appendFilter($select);
+        
+        $eventsCount = array_value(0, $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC));
+        return $eventsCount['count'];
+    }
+    
+    /**
      * gets a page of raw egw event data
      * 
      * @param  int $pageNumber
@@ -693,15 +743,13 @@ class Calendar_Setup_Import_Egw14 {
         $select = $this->_egwDb->select()
             ->from(array('events' => 'egw_cal'))
             ->join(array('dates'  => 'egw_cal_dates'), 'events.cal_id = dates.cal_id', array('MIN(cal_start) AS cal_start', 'MIN(cal_end) AS cal_end'))
-            //->join(array('repeats'  => 'egw_cal_repeats'), 'events.cal_id = repeats.cal_id')
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cal_reference') . ' = ?', 0))
-            //->where('events.cal_id < ' . 190)
-            //->where('events.cal_id >= ' . 190)
-            //->where('events.cal_owner = ' . 3144)
             ->group('events.cal_id')
             ->order('events.cal_id ASC')
             ->limitPage($pageNumber, $pageSize);
             
+        $this->_appendFilter($select);
+        
         $eventPage = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
         $eventPageIdMap = array();
         foreach ($eventPage as $idx => $egwEventData) {
