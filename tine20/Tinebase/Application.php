@@ -263,7 +263,7 @@ class Tinebase_Application
         
         $affectedRows = $this->_applicationTable->update($data, $where);
         
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
+        $this->_cleanCache();
         //error_log("AFFECTED:: $affectedRows");
     }
     
@@ -395,7 +395,8 @@ class Tinebase_Application
         );
         
         $this->_db->delete(SQL_TABLE_PREFIX . 'applications', $where);
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
+        
+        $this->_cleanCache();
     }
     
     /**
@@ -417,5 +418,16 @@ class Tinebase_Application
         );
         
         $this->_db->insert(SQL_TABLE_PREFIX . 'application_tables', $applicationData);
-    }        
+    }
+    
+    /**
+     * clean cache
+     * 
+     * @return void
+     */
+    protected function _cleanCache()
+    {
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
+        $this->_applicationCache = array();
+    }
 }
