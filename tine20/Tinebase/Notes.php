@@ -136,14 +136,15 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Note
      */
-    public function searchNotes(Tinebase_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    public function searchNotes(Tinebase_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL)
     {
         $select = $this->_db->select()
             ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'));
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
-        //$_filter->appendFilterSql($select);
-        $_pagination->appendPaginationSql($select);
+        if ($_pagination !== NULL) {
+            $_pagination->appendPaginationSql($select);
+        }
         
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
@@ -196,6 +197,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  string $_id        id of record
      * @param  string $_backend   backend of record
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
+     * 
+     * @todo remove caching?
      */
     public function getNotesOfRecord($_model, $_id, $_backend = 'Sql')
     {
@@ -206,28 +209,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $result = $cache->load($cacheId);
         
         if (!$result) {
-            $filter = new Tinebase_Model_NoteFilter(array(
-                array(
-                    'field' => 'record_model',
-                    'operator' => 'equals',
-                    'value' => $_model
-                ),
-                array(
-                    'field' => 'record_backend',
-                    'operator' => 'equals',
-                    'value' => $backend
-                ),
-                array(
-                    'field' => 'record_id',
-                    'operator' => 'equals',
-                    'value' => $_id
-                ),
-                array(
-                    'field' => 'note_type_id',
-                    'operator' => 'in',
-                    'value' => $this->getNoteTypes(TRUE)->getArrayOfIds()
-                )
-            ));
+            $filter = $this->_getNotesFilter($_id, $_model, $backend);
             
             $pagination = new Tinebase_Model_Pagination(array(
                 'limit' => Tinebase_Notes::NUMBER_RECORD_NOTES,
@@ -246,21 +228,30 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * get all notes of all given records (calls searchNotes)
      * 
-     * @todo implement this in one sql query!
-     * 
      * @param  Tinebase_Record_RecordSet  $_records       the recordSet
      * @param  string                     $_notesProperty  the property in the record where the notes are in (defaults: 'notes')
      * @param  string                     $_backend   backend of record
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
+     * @return void
      */
-    public function getMultipleNotesOfRecords($_records, $_notesProperty='notes', $_backend = 'Sql')
+    public function getMultipleNotesOfRecords($_records, $_notesProperty = 'notes', $_backend = 'Sql')
     {
-        $modelName = $_records->getRecordClassName();
-        
-        foreach($_records as $record) {
-            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
+        if (count($_records) == 0) {
+            return;
         }
         
+        $modelName = $_records->getRecordClassName();
+        $filter = $this->_getNotesFilter($_records->getArrayOfIds(), $modelName, $_backend, FALSE);
+        
+        // search and add index
+        $notesOfRecords = $this->searchNotes($filter);
+        $notesOfRecords->addIndices(array('record_id'));
+        
+        // add notes to records
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($notesOfRecords) . ' notes for ' . count($_records) . ' records.');
+        foreach($_records as $record) {
+            //$record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
+            $record->{$_notesProperty} = $notesOfRecords->filter('record_id', $record->getId());
+        }
     }
     
     /************************** set / add / delete notes ************************/
@@ -381,13 +372,15 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         if ($_mods !== NULL && count($_mods) > 0) {
             
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' mods to log: ' . $_mods);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Adding "' . $_type . '" system note note to record.');
             
             $noteText .= ' | ' .$translate->_('Changed fields:');
             foreach ($_mods as $mod) {
                 $noteText .= ' ' . $translate->_($mod->modified_attribute) .' (' . $mod->old_value . ' -> ' . $mod->new_value . ')';
             }
-        } else if ($_type === 'changed') {
+        } else if ($_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED) {
             // nothing changed -> don't add note
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Nothing changed -> don\'t add "changed" note.');
             return FALSE;
         }
         
@@ -432,6 +425,45 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         // invalidate cache
         Tinebase_Core::get('cache')->remove('getNotesOfRecord' . $_model . $_id . $backend);
+    }
+    
+    /**
+     * get note filter
+     * 
+     * @param string|array $_id
+     * @param string $_model
+     * @param string $_backend
+     * @param boolean|optional $onlyNonSystemNotes
+     * @return Tinebase_Model_NoteFilter
+     */
+    protected function _getNotesFilter($_id, $_model, $_backend, $onlyNonSystemNotes = FALSE)
+    {
+        $backend = ucfirst(strtolower($_backend));
+        
+        $filter = new Tinebase_Model_NoteFilter(array(
+            array(
+                'field' => 'record_model',
+                'operator' => 'equals',
+                'value' => $_model
+            ),
+            array(
+                'field' => 'record_backend',
+                'operator' => 'equals',
+                'value' => $backend
+            ),
+            array(
+                'field' => 'record_id',
+                'operator' => 'in',
+                'value' => (array) $_id
+            ),
+            array(
+                'field' => 'note_type_id',
+                'operator' => 'in',
+                'value' => $this->getNoteTypes($onlyNonSystemNotes)->getArrayOfIds()
+            )
+        ));
+        
+        return $filter;
     }
     
     /************************** note types *******************/

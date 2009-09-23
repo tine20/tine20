@@ -19,6 +19,20 @@
 class Tinebase_Model_Note extends Tinebase_Record_Abstract
 {
     /**
+     * system note type: changed
+     * 
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_NAME_CREATED = 'created';
+    
+    /**
+     * system note type: changed
+     * 
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_NAME_CHANGED = 'changed';
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 

@@ -118,7 +118,11 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $translatedNoteString = $translate->_('created') . ' ' . $translate->_('by');
         
-        $this->_instance->addSystemNote($this->_objects['contact'], Zend_Registry::get('currentAccount')->getId(), 'created');
+        $this->_instance->addSystemNote(
+            $this->_objects['contact'], 
+            Zend_Registry::get('currentAccount')->getId(), 
+            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED
+        );
         
         $filter = new Tinebase_Model_NoteFilter(array(array(
             'field' => 'query',
@@ -199,5 +203,41 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         
         $this->assertLessThan(count($noteTypesPre), count($noteTypesPost));
     }
+    
+    /**
+     * try to get notes of multiple records (adding 'changed' note first)
+     * 
+     * @return void
+     */
+    public function testGetMultipleNotes()
+    {
+        $personas = Zend_Registry::get('personas');
+        $personasContactIds = array();
+        foreach ($personas as $persona) {
+            $personasContactIds[] = $persona->contact_id;
+        }
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
+        
+        // add note to contacts
+        $mods = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+        $mods->addRecord(new Tinebase_Model_ModificationLog(array(
+            'modified_attribute'    => 'unittestnote_field',
+            'old_value'             => 'old',
+            'new_value'             => 'new',
+        ), TRUE));
+        
+        foreach ($contacts as $contact) {
+            $this->_instance->addSystemNote(
+                $contact, 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,
+                $mods
+            );
+        }
+        
+        $this->_instance->getMultipleNotesOfRecords($contacts);
+        foreach ($contacts as $contact) {
+            $this->assertGreaterThan(0, count($contact->notes), 'No notes found for contact ' . $contact->n_fn);
+        }
+    }
 }
-
