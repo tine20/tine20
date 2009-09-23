@@ -93,6 +93,7 @@ class Tinebase_CustomField
     {
         // invalidate cache (no memcached support yet)
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+        $this->_cfByApplicationCache = array();
         
         return $this->_backendConfig->create($_record);
     }
@@ -170,8 +171,9 @@ class Tinebase_CustomField
      */
     public function deleteCustomField($_customField)
     {
-        // invalidate cache (no memcached support yet)
+        // invalidate caches (no memcached support yet)
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+        $this->_cfByApplicationCache = array();
 
         $this->_backendConfig->delete($_customField);
     }
