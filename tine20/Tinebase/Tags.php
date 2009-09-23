@@ -311,12 +311,7 @@ class Tinebase_Tags
         $recordId = $_record->getId();
         $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         if (!empty($recordId)) {
-            $select = $this->_db->select()
-                ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
-                ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
-                ->where($this->_db->quoteIdentifier('application_id') . ' = ?', Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId())
-                ->where($this->_db->quoteIdentifier('record_id') . ' = ? ', $recordId)
-                ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
+            $select = $this->_getSelect($recordId, Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId()); 
             Tinebase_Model_TagRight::applyAclSql($select, $_right, 'tagging.tag_id');
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Model_Tag($tagArray, true));
@@ -331,8 +326,6 @@ class Tinebase_Tags
      * Gets tags of a given records where user has the required right to
      * The tags are stored in the records $_tagsProperty.
      * 
-     * @todo implement this in one sql query!
-     * 
      * @param Tinebase_Record_RecordSet  $_records       the recordSet
      * @param string                     $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
      * @param string                     $_right         the required right current user must have on the tags
@@ -340,8 +333,35 @@ class Tinebase_Tags
      */
     public function getMultipleTagsOfRecords($_records, $_tagsProperty='tags', $_right=Tinebase_Model_TagRight::VIEW_RIGHT)
     {
-        foreach($_records as $record) {
-            $this->getTagsOfRecord($record, $_tagsProperty, $_right);
+        if (count($_records) == 0) {
+            // do nothing
+            return;
+        }
+        
+        // get first record to determine application
+        $first = $_records->getFirstRecord();
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($first->getApplication())->getId();
+        
+        $select = $this->_getSelect($_records->getArrayOfIds(), $appId); 
+        Tinebase_Model_TagRight::applyAclSql($select, $_right, 'tagging.tag_id');
+        
+        $queryResult = $this->_db->fetchAll($select);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($queryResult) . ' tags to ' . count($_records) . ' records.');
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE)); 
+        
+        foreach ($queryResult as $tagArray) {
+            // add tags to records by record id (use $_records->setByIndices()?)
+            $record = $_records[$_records->getIndexById($tagArray['record_id'])];
+            
+            if (! $record) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Record not found.');
+            }
+            
+            if (! isset($record[$_tagsProperty]) || ! $record[$_tagsProperty] instanceof Tinebase_Record_RecordSet) {
+                $record[$_tagsProperty] = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
+            }
+            $record[$_tagsProperty]->addRecord(new Tinebase_Model_Tag($tagArray, true));
         }
     }
     
@@ -614,5 +634,24 @@ class Tinebase_Tags
                 'application_id' => $context
             ));
         }
+    }
+    
+    /**
+     * get select for tags query
+     * 
+     * @param string|array $_recordId
+     * @param string $_applicationId
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_recordId, $_applicationId)
+    {
+        $select = $this->_db->select()
+            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
+            ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
+            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId)
+            ->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', (array) $_recordId)
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
+            
+        return $select;
     }
 }
