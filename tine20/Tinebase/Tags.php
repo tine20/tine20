@@ -347,7 +347,7 @@ class Tinebase_Tags
         
         $queryResult = $this->_db->fetchAll($select);
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($queryResult) . ' tags to ' . count($_records) . ' records.');
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($queryResult) . ' tags for ' . count($_records) . ' records.');
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE)); 
         
         foreach ($queryResult as $tagArray) {
