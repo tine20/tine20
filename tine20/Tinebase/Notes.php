@@ -240,7 +240,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         }
         
         $modelName = $_records->getRecordClassName();
-        $filter = $this->_getNotesFilter($_records->getArrayOfIds(), $modelName, $_backend, FALSE);
+        $filter = $this->_getNotesFilter($_records->getArrayOfIds(), $modelName, $_backend);
         
         // search and add index
         $notesOfRecords = $this->searchNotes($filter);
@@ -436,7 +436,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param boolean|optional $onlyNonSystemNotes
      * @return Tinebase_Model_NoteFilter
      */
-    protected function _getNotesFilter($_id, $_model, $_backend, $onlyNonSystemNotes = FALSE)
+    protected function _getNotesFilter($_id, $_model, $_backend, $onlyNonSystemNotes = TRUE)
     {
         $backend = ucfirst(strtolower($_backend));
         
