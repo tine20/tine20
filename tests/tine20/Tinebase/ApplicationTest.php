@@ -95,6 +95,7 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
         $admin = Tinebase_Application::getInstance()->getApplicationByName('Admin');
         $adminById = Tinebase_Application::getInstance()->getApplicationById($admin->getId());
         
+        $this->assertTrue($adminById instanceof Tinebase_Model_Application);
         $this->assertEquals($admin, $adminById);
     }
 }		
