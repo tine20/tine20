@@ -84,4 +84,17 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, count($rights));
     }
+    
+    /**
+     * test get application by name and id
+     * 
+     * @return void
+     */
+    public function testGetApplicationById()
+    {
+        $admin = Tinebase_Application::getInstance()->getApplicationByName('Admin');
+        $adminById = Tinebase_Application::getInstance()->getApplicationById($admin->getId());
+        
+        $this->assertEquals($admin, $adminById);
+    }
 }		

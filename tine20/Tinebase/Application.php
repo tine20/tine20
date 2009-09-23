@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
- * 
+ *
  * @todo        add 'getTitleTranslation' function?
  * @todo        migrate from Zend_Db_Table to plain Zend_Db
  */
@@ -46,6 +46,13 @@ class Tinebase_Application
      * @var string
      */
     protected $_tableName;
+
+    /**
+     * application objects cache
+     * 
+     * @var array (id/name => Tinebase_Model_Application)
+     */
+    protected $_applicationCache = array();
     
     /**
      * the db adapter
@@ -99,19 +106,27 @@ class Tinebase_Application
      * returns one application identified by id
      *
      * @param Tinebase_Model_Application|string $_applicationId the id of the application
-     * @throws Tinebase_Exception_InvalidArgument if $_applicationId is not integer and not greater 0
+     * @throws Tinebase_Exception_NotFound
      * @return Tinebase_Model_Application the information about the application
-     * 
-     * @todo code still needs some testing
      */
     public function getApplicationById($_applicationId)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
+        if (isset($this->_applicationCache[$applicationId])) {
+            return $this->_applicationCache[$applicationId];
+        }
+        
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?' , $applicationId);
         $rows = $this->_applicationTable->fetchAll($where)->toArray();
         
+        if (empty($rows)) {
+            throw new Tinebase_Exception_NotFound('Application not found.');
+        }
+        
         $result = new Tinebase_Model_Application($rows[0]);
+        
+        $this->_applicationCache[$applicationId] = $result;
         
         return $result;
     }
@@ -130,14 +145,14 @@ class Tinebase_Application
         if(empty($_applicationName)) {
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty.');
         }
-
-        if (Tinebase_Core::isRegistered(Tinebase_Core::CACHE)) {
-            $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-            $cacheId = 'getApplicationByName' . $_applicationName;
-            $result = $cache->load($cacheId);
-        } else {
-            $result = FALSE;
-        }
+        
+        if (isset($this->_applicationCache[$_applicationName])) {
+            return $this->_applicationCache[$_applicationName];
+        } 
+        
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cacheId = 'getApplicationByName' . $_applicationName;
+        $result = $cache->load($cacheId);
         
         if (!$result) {
 
@@ -158,6 +173,8 @@ class Tinebase_Application
                 $cache->save($result, $cacheId, array('applications'));
             }
         }
+        
+        $this->_applicationCache[$_applicationName] = $result;
         
         return $result;
     }
