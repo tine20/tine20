@@ -102,6 +102,24 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * Returns rendered tags for grids
+     * 
+     * @param {mixed} tags
+     * @return {String} tags as colored squares (?) with qtips
+     */
+    tagsRenderer: function(tags) {
+        var result = '';
+        if (tags) {
+            for (var i=0; i < tags.length; i++) {
+                result += '<div ext:qtip="' + tags[i].name + ' | ' + tags[i].description + '" style="width: 8px; height: 8px; background-color:' 
+                    + tags[i].color 
+                    + '; border: 1px solid black; float: left; margin-right: 2px;">&#160;</div>';
+            }
+        }
+        return result;
+    },
+    
+    /**
      * Returns prettyfied minutes
      * @param  {Number} minutes
      * @return {String}

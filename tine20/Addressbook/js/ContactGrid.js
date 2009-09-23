@@ -111,6 +111,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     getColumns: function(){
         return [
             { resizable: true, sortable: true, id: 'tid', header: this.app.i18n._('Type'), dataIndex: 'tid', width: 30, renderer: this.contactTidRenderer.createDelegate(this) },
+            { resizable: true, sortable: true, id: 'tags', header: this.app.i18n._('Tags'), dataIndex: 'tags', width: 60, renderer: Tine.Tinebase.common.tagsRenderer },
             { resizable: true, sortable: true, id: 'n_family', header: this.app.i18n._('Last Name'), dataIndex: 'n_family', hidden: true },
             { resizable: true, sortable: true, id: 'n_given', header: this.app.i18n._('First Name'), dataIndex: 'n_given', width: 80, hidden: true },
             { resizable: true, sortable: true, id: 'n_fn', header: this.app.i18n._('Full Name'), dataIndex: 'n_fn', hidden: true },
