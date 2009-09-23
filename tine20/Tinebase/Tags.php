@@ -346,22 +346,27 @@ class Tinebase_Tags
         Tinebase_Model_TagRight::applyAclSql($select, $_right, 'tagging.tag_id');
         
         $queryResult = $this->_db->fetchAll($select);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($queryResult) . ' tags for ' . count($_records) . ' records.');
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE)); 
+        // argh: Tinebase_Model_Tag has no record_id
+        /*
+        $tagsOfRecords = new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $queryResult);
+        $tagsOfRecords->addIndices(array('record_id'));
+        */
         
-        foreach ($queryResult as $tagArray) {
-            // add tags to records by record id (use $_records->setByIndices()?)
-            $record = $_records[$_records->getIndexById($tagArray['record_id'])];
-            
-            if (! $record) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Record not found.');
-            }
-            
-            if (! isset($record[$_tagsProperty]) || ! $record[$_tagsProperty] instanceof Tinebase_Record_RecordSet) {
-                $record[$_tagsProperty] = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
-            }
-            $record[$_tagsProperty]->addRecord(new Tinebase_Model_Tag($tagArray, true));
+        // build array with tags (record_id => array of Tinebase_Model_Tag)
+        $tagsOfRecords = array();
+        foreach ($queryResult as $result) {
+            $tagsOfRecords[$result['record_id']][] = new Tinebase_Model_Tag($result, true);
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
+        foreach($_records as $record) {
+            //$record->{$_tagsProperty} = $tagsOfRecords->filter('record_id', $record->getId());
+            $record->{$_tagsProperty} = new Tinebase_Record_RecordSet(
+                'Tinebase_Model_Tag', 
+                (isset($tagsOfRecords[$record->getId()])) ? $tagsOfRecords[$record->getId()] : array()
+            );
         }
     }
     
