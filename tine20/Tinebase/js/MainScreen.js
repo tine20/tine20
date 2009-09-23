@@ -138,7 +138,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 height: 26,
                 border: false,
                 id:     'north-panel-2',
-                items: new Ext.Toolbar({})
+                items: []
             }]
         }, {
             region: 'south',
