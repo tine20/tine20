@@ -198,7 +198,7 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             if (empty($config['authentication']['backend'])) {
                 $config['authentication']['backend'] = 'Sql';
             }
-            $backendType = $config['authentication']['backend'];
+            $backendType = ucfirst($config['authentication']['backend']);
             Tinebase_Auth::setBackendType($backendType);
             
             //add default config settings
