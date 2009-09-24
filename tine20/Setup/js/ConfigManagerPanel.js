@@ -140,6 +140,12 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 minValue: 0,
                 maxValue: 3600
             }]
+        }, {
+            title: this.app.i18n._('Other'),
+            items: [{
+                name: 'tmpdir',
+                fieldLabel: this.app.i18n._('Temporary Files Path')
+            }]
         }];
     },
     
