@@ -424,7 +424,8 @@ class Setup_ExtCheck
                 case 'MySQL':
                     // get setup controller for database connection
                     $dbConfig = Tinebase_Core::getConfig()->database;
-                    $link = @mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
+                    $hostnameWithPort = (isset($dbConfig->port)) ? $dbConfig->host . ':' . $dbConfig->port : $dbConfig->host;
+                    $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
                     if (!$link) {
                         //die('Could not connect to mysql database: ' . mysql_error());
                         Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Could not connect to mysql database: ' . mysql_error());
