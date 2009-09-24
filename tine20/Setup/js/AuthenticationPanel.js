@@ -136,10 +136,10 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 allowEmpty: false,
                 triggerAction: 'all',
                 selectOnFocus:true,
-                store: [['sql', 'sql'], ['ldap','ldap']],
+                store: [['Sql', 'Sql'], ['Ldap','Ldap']],
                 name: 'authentication_backend',
                 fieldLabel: this.app.i18n._('Backend'),
-                value: 'sql',
+                value: 'Sql',
                 listeners: {
                     scope: this,
                     change: this.onChangeAuthProvider,
@@ -177,13 +177,13 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 {
                 id: this.authProviderIdPrefix + 'CardLayout',
                 layout: 'card',
-                activeItem: this.authProviderIdPrefix + 'sql',
+                activeItem: this.authProviderIdPrefix + 'Sql',
                 border: false,
                 defaults: {
                     border: false
                 },
                 items: [ {
-                    id: this.authProviderIdPrefix + 'sql',
+                    id: this.authProviderIdPrefix + 'Sql',
                     layout: 'form',
                     autoHeight: 'auto',
                     defaults: {
@@ -193,20 +193,20 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     },
                     items: [ {
                         inputType: 'text',
-                        name: 'authentication_sql_admin_loginName',
+                        name: 'authentication_Sql_adminLoginName',
                         fieldLabel: this.app.i18n._('Initial admin login name'),
                         disabled: !setupRequired
                     }, {
-                        name: 'authentication_sql_admin_password',
+                        name: 'authentication_Sql_adminPassword',
                         fieldLabel: this.app.i18n._('Initial admin Password'),
                         disabled: !setupRequired
                     }, {
-                        name: 'authentication_sql_admin_passwordConfirmation',
+                        name: 'authentication_Sql_adminPasswordConfirmation',
                         fieldLabel: this.app.i18n._('Password confirmation'),
                         disabled: !setupRequired
                     } ]
                 }, {
-                    id: this.authProviderIdPrefix + 'ldap',
+                    id: this.authProviderIdPrefix + 'Ldap',
                     layout: 'form',
                     autoHeight: 'auto',
                     defaults: {
@@ -215,15 +215,15 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     },
                     items: [{
                         inputType: 'text',
-                        name: 'authentication_ldap_host',
+                        name: 'authentication_Ldap_host',
                         fieldLabel: this.app.i18n._('Host')
                     },
                     {
                         inputType: 'text',
-                        name: 'authentication_ldap_username',
+                        name: 'authentication_Ldap_username',
                         fieldLabel: this.app.i18n._('Login name')
                     },{
-                        name: 'authentication_ldap_password',
+                        name: 'authentication_Ldap_password',
                         fieldLabel: this.app.i18n._('Password'),
                         inputType: 'password'
                     }, {
@@ -236,14 +236,14 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         triggerAction: 'all',
                         selectOnFocus:true,
                         store: [['1', 'Yes'], ['0','No']],
-                        name: 'authentication_ldap_bindRequiresDn',
+                        name: 'authentication_Ldap_bindRequiresDn',
                         fieldLabel: this.app.i18n._('Bind requires DN'),
                         value: '1'
                     }, {
-                        name: 'authentication_ldap_baseDn',
+                        name: 'authentication_Ldap_baseDn',
                         fieldLabel: this.app.i18n._('Base DN')
                     }, {
-                        name: 'authentication_ldap_accountCanonicalForm',
+                        name: 'authentication_Ldap_accountCanonicalForm',
                         fieldLabel: this.app.i18n._('Account canonical form')
                     }]
                 }]
@@ -410,9 +410,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             this.action_saveConfig.setText(this.app.i18n._('Save config and install'));
         } else {
             this.action_saveConfig.setText(this.app.i18n._('Save config'));
-            this.getForm().findField('authentication_sql_admin_password').setDisabled(true);
-            this.getForm().findField('authentication_sql_admin_passwordConfirmation').setDisabled(true);
-            this.getForm().findField('authentication_sql_admin_loginName').setDisabled(true);
+            this.getForm().findField('authentication_Sql_adminPassword').setDisabled(true);
+            this.getForm().findField('authentication_Sql_adminPasswordConfirmation').setDisabled(true);
+            this.getForm().findField('authentication_Sql_adminLoginName').setDisabled(true);
         }
     },
     
@@ -425,11 +425,11 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
     isValid: function() {
         var form = this.getForm();
 
-        if (form.findField('authentication_sql_admin_password') 
-            && form.findField('authentication_sql_admin_password').getValue() != form.findField('authentication_sql_admin_passwordConfirmation').getValue()) 
+        if (form.findField('authentication_Sql_adminPassword') 
+            && form.findField('authentication_Sql_adminPassword').getValue() != form.findField('authentication_Sql_adminPasswordConfirmation').getValue()) 
         {
             form.markInvalid([{
-                id: 'authentication_sql_admin_passwordConfirmation',
+                id: 'authentication_Sql_adminPasswordConfirmation',
                 msg: this.app.i18n._("Passwords don't match")
             }]);
             return false;

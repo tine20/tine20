@@ -24,26 +24,18 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
-    {
-        if (isset($_options['authenticationData'])) {
-            Setup_Controller::getInstance()->saveAuthentication($_options['authenticationData']);
-            $accountsBackendType = $_options['authenticationData']['accounts']['backend'];
-            $accountsBackendConfiguration = $_options['authenticationData']['accounts'][$accountsBackendType];
-        } else {
-            $accountsBackendType = Tinebase_User::getConfiguredBackend();
-            $accountsBackendConfiguration = Tinebase_User::getBackendConfigurationDefaults($accountsBackendType);
-        }
-        
+    {     
+        $authenticationData = empty($_options['authenticationData']) ? Setup_Controller::getInstance()->loadAuthenticationData() : $_options['authenticationData'];
+        $defaultGroupNames = $this->_parseDefaultGroupNameOptions($_options);
+        $authenticationData['accounts'][Tinebase_User::getConfiguredBackend()] = array_merge($authenticationData['accounts'][Tinebase_User::getConfiguredBackend()], $defaultGroupNames);
+        Setup_Controller::getInstance()->saveAuthentication($authenticationData);       
+
         if (isset($_options['imap']) || isset($_options['smtp'])) {
             $data = $this->_parseEmailOptions($_options);
             Setup_Controller::getInstance()->saveEmailConfig($data);
         }
-
-        Tinebase_User::setBackendType($accountsBackendType);
-        Tinebase_User::setBackendConfiguration($accountsBackendConfiguration);
-        Tinebase_User::saveBackendConfiguration();
         
-		Tinebase_Group::getInstance()->importGroups(); //import groups(ldap)/create initial groups(sql)
+        Tinebase_Group::getInstance()->importGroups(); //import groups(ldap)/create initial groups(sql)
 		
         $this->_createInitialRoles();
         
@@ -63,15 +55,15 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     	$roles = Tinebase_Acl_Roles::getInstance();
         $userRole = $roles->getRoleByName('user role');
 		$roles->addSingleRight(
-		    $userRole->getId(), 
-		    $_application->getId(), 
-		    Tinebase_Acl_Rights::CHECK_VERSION
+            $userRole->getId(), 
+	        $_application->getId(), 
+            Tinebase_Acl_Rights::CHECK_VERSION
 		);
 		$roles->addSingleRight(
-		    $userRole->getId(), 
-		    $_application->getId(), 
-		    Tinebase_Acl_Rights::REPORT_BUGS
-		);
+            $userRole->getId(), 
+            $_application->getId(), 
+            Tinebase_Acl_Rights::REPORT_BUGS
+        );
     }
     
     /**
@@ -137,6 +129,26 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
                     }
                 }
             }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Extract default group name settings from {@param $_options}
+     * 
+     * @param array $_options
+     * @return array
+     */
+    protected function _parseDefaultGroupNameOptions($_options)
+    {
+        $result = array();
+        if (isset($_options['defaultAdminGroupName'])) {
+          $result['defaultAdminGroupName'] = $_options['defaultAdminGroupName'];
+        }
+        
+        if (isset($_options['defaultUserGroupName'])) {
+          $result['defaultUserGroupName'] = $_options['defaultUserGroupName'];
         }
         
         return $result;

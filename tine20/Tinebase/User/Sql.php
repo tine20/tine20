@@ -604,10 +604,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function importUsers($_options = null)
     {
-        $_loginName    = empty($_options['admin_login_name']) ? 'tine20admin' : $_options['admin_login_name'];
-        $_password     = empty($_options['admin_login_password']) ? 'lars' : $_options['admin_login_password'];
-        $_firstname    = empty($_options['admin_first_name']) ? 'Tine 2.0' : $_options['admin_first_name'];
-        $_lastname     = empty($_options['admin_last_name']) ? 'Admin Account' : $_options['admin_last_name'];
+        $_loginName    = empty($_options['adminLoginName']) ? 'tine20admin' : $_options['adminLoginName'];
+        $_password     = empty($_options['adminPassword']) ? 'lars' : $_options['adminPassword'];
+        $_firstname    = empty($_options['adminFirstName']) ? 'Tine 2.0' : $_options['adminFirstName'];
+        $_lastname     = empty($_options['adminLastName']) ? 'Admin Account' : $_options['adminLastName'];
 
         // get admin & user groups
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);

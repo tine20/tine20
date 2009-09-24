@@ -49,9 +49,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Json Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+  }
 
     /**
      * Sets up the fixture.
@@ -82,28 +82,27 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     
     public function testUninstallApplications()
     {
-    	try {
-    		$result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
-    	} catch (Tinebase_Exception_NotFound $e) {
-    		$this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
-    		$result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
-    	}
-    	        
+      try {
+        $result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
+      } catch (Tinebase_Exception_NotFound $e) {
+        $this->_json->installApplications(Zend_Json::encode(array('ActiveSync')));
+        $result = $this->_json->uninstallApplications(Zend_Json::encode(array('ActiveSync')));
+      }
+              
         $this->assertTrue($result['success']);
 
-	    $this->_json->installApplications(Zend_Json::encode(array('ActiveSync'))); //cleanup
+      $this->_json->installApplications(Zend_Json::encode(array('ActiveSync'))); //cleanup
     }
 
     public function testUninstallTinebaseShouldThrowDependencyException()
     {
         $this->setExpectedException('Setup_Exception_Dependency');
-    	$result = $this->_json->uninstallApplications(Zend_Json::encode(array('Tinebase')));
+        $result = $this->_json->uninstallApplications(Zend_Json::encode(array('Tinebase')));
     }
     
     public function testSearchApplications()
     {
         $apps = $this->_json->searchApplications();
-        
         $this->assertGreaterThan(0, $apps['totalcount']);
     }
 
@@ -144,8 +143,8 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     
     public function testLoginWithWrongUsernameAndPassword()
     {
-    	$result = $this->_json->login('unknown_user_xxyz', 'wrong_password');
-    	$this->assertTrue(is_array($result));
+        $result = $this->_json->login('unknown_user_xxyz', 'wrong_password');
+        $this->assertTrue(is_array($result));
         $this->assertFalse($result['success']);
         $this->assertTrue(isset($result['errorMessage']));
         
@@ -169,10 +168,10 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     
     public function testGetRegistryData()
     {
-    	$result = $this->_json->getRegistryData();
-    	
-    	$this->assertTrue(is_array($result));
-    	$this->assertTrue(isset($result['configExists']));
+      $result = $this->_json->getRegistryData();
+      
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(isset($result['configExists']));
         $this->assertTrue(isset($result['configWritable']));
         $this->assertTrue(isset($result['checkDB']));
         $this->assertTrue(isset($result['setupChecks']));
@@ -188,19 +187,19 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('authentication', $result));
         $this->assertTrue(array_key_exists('accounts', $result));
         $authentication = $result['authentication'];
-        $this->assertContains($authentication['backend'], array(strtolower(Tinebase_Auth_Factory::SQL), strtolower(Tinebase_Auth_Factory::LDAP)));
-        $this->assertTrue(is_array($authentication[strtolower(Tinebase_Auth_Factory::SQL)]));
-        $this->assertTrue(is_array($authentication[strtolower(Tinebase_Auth_Factory::LDAP)]));
+        $this->assertContains($authentication['backend'], array(Tinebase_Auth_Factory::SQL, Tinebase_Auth_Factory::LDAP));
+        $this->assertTrue(is_array($authentication[Tinebase_Auth_Factory::SQL]));
+        $this->assertTrue(is_array($authentication[Tinebase_Auth_Factory::LDAP]));
     }
     
     public function testSaveAuthenticationSql()
     {
         $testAuthenticationData = $this->_json->loadAuthenticationData();
 
-        $testAuthenticationData['authentication']['backend'] = 'sql';
-        $testAuthenticationData['authentication']['sql']['admin']['loginName'] = 'phpunit-admin';
-        $testAuthenticationData['authentication']['sql']['admin']['password'] = 'phpunit-password';
-        $testAuthenticationData['authentication']['sql']['admin']['passwordConfirmation'] = 'phpunit-password';
+        $testAuthenticationData['authentication']['backend'] = Tinebase_Auth::SQL;
+        $testAuthenticationData['authentication'][Tinebase_Auth::SQL]['adminLoginName'] = 'phpunit-admin';
+        $testAuthenticationData['authentication'][Tinebase_Auth::SQL]['adminPassword'] = 'phpunit-password';
+        $testAuthenticationData['authentication'][Tinebase_Auth::SQL]['adminPasswordConfirmation'] = 'phpunit-password';
         
         $this->_uninstallAllApps();
         
@@ -211,8 +210,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $adminUser = Tinebase_User::getInstance()->getFullUserByLoginName('phpunit-admin');
         $this->assertTrue($adminUser instanceof Tinebase_Model_User);
 
-        $this->assertTrue(empty($savedAuthenticationData['authentication']['sql']['admin']), 'admin loginname/password must not be stored in authentication config');
-        $this->assertEquals($this->_originalAuthenticationData, $savedAuthenticationData);
+        $this->assertEquals($testAuthenticationData, $savedAuthenticationData, 'JONAS');
         
         //test if Tinebase stack was installed
         $apps = $this->_json->searchApplications();

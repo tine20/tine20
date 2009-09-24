@@ -41,9 +41,7 @@ class Tinebase_Auth_Factory
     {
         switch($_type) {
             case self::LDAP:
-                $options = Tinebase_Core::getConfig()->authentication->toArray();
-                $options = array('ldap' => $options['ldap']); //only pass ldap options without e.g. sql options
-
+                $options = array('ldap' => Tinebase_Auth::getBackendConfiguration()); //only pass ldap options without e.g. sql options
                 $instance = new Tinebase_Auth_Ldap($options);
                 break;
                 

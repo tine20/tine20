@@ -561,14 +561,12 @@ class Setup_Controller
     }
     
     /**
-     * Update authentication data (needs Tinebase tables to store the data)
+     * Update authentication data
      * 
-     * Installs Tinebase if not already installed
-     *  
+     * Needs Tinebase tables to store the data, therefore
+     * installs Tinebase if it is not already installed
      * 
-     * @todo validate $data
-     * 
-     * @param String $data [Json encoded string]
+     * @param array $_authenticationData
      * 
      * @return bool
      */
@@ -577,30 +575,7 @@ class Setup_Controller
         if ($this->isInstalled('Tinebase')) {
             $this->_updateAuthentication($_authenticationData);
         } else {
-            $installationOptions = array();
-            $installationOptions['authenticationData'] = $_authenticationData;
-            
-            //SQL DEFAULT ADMIN SETTINGS
-            $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
-            if ($_authenticationData['authentication']['backend'] == $sqlKey) {
-                if (!empty($_authenticationData['authentication'][$sqlKey]['admin'])) {
-                    $admin = $_authenticationData['authentication'][$sqlKey]['admin'];
-                    $installationOptions['admin_login_name'] = $admin['loginName'];
-                    $installationOptions['admin_login_password'] = $admin['password'];
-                }
-            }
-
-            //LDAP DEFAULT ADMIN-/USER GROUP NAME SETTINGS
-            $ldapKey = strtolower(Tinebase_Auth_Factory::LDAP);
-            if ($_authenticationData['accounts']['backend'] == $ldapKey) {
-                if (!empty($_authenticationData['accounts'][$ldapKey]['userGroupName'])) {
-                    $installationOptions['user_group_name'] = $_authenticationData['accounts'][$ldapKey]['userGroupName'];
-                }
-                if (!empty($_authenticationData['accounts'][$ldapKey]['adminGroupName'])) {
-                    $installationOptions['admin_group_name'] = $_authenticationData['accounts'][$ldapKey]['adminGroupName'];
-                }
-            }
-
+            $installationOptions = array('authenticationData' => $_authenticationData);
             $this->installApplications(array('Tinebase'), $installationOptions);
         }
     }
@@ -614,25 +589,15 @@ class Setup_Controller
      */
     protected function _updateAuthentication($_authenticationData)
     {
-         $authenticationProviderData = $_authenticationData['authentication'];
-         unset($_authenticationData['accounts']);
-
-         switch (strtolower($authenticationProviderData['backend'])) {
-             case strtolower(Tinebase_Auth_Factory::SQL):
-                 $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
-                 if (isset($_authenticationData['authentication'][$sqlKey]['admin'])) {
-                      unset($_authenticationData['authentication'][$sqlKey]['admin']);
-                 }
-                 break;
-        }
+        $authenticationProviderData = $_authenticationData['authentication'];
+        Tinebase_Auth::setBackendType($authenticationProviderData['backend']);
+        Tinebase_Auth::setBackendConfiguration($authenticationProviderData[$authenticationProviderData['backend']]);
+        Tinebase_Auth::saveBackendConfiguration();
         
-        $authenticationData = array(
-            'authentication' => array(
-                'backend' => $authenticationProviderData['backend'],
-                $authenticationProviderData['backend'] => $authenticationProviderData[$authenticationProviderData['backend']]
-            )
-        );
-        $this->saveConfigData($authenticationData);
+        $accountsStorageData = $_authenticationData['accounts'];       
+        Tinebase_User::setBackendType($accountsStorageData['backend']);
+        Tinebase_User::setBackendConfiguration($accountsStorageData[$accountsStorageData['backend']]);
+        Tinebase_User::saveBackendConfiguration();
     }
     
     /**
@@ -645,23 +610,9 @@ class Setup_Controller
      */
     protected function _getAuthProviderData()
     {
-        $sqlKey = strtolower(Tinebase_Auth_Factory::SQL);
-        $ldapKey = strtolower(Tinebase_Auth_Factory::LDAP);
-        $result = Tinebase_Core::getConfig()->authentication;
-        if (isset($result)) {
-            $result = $result->toArray();
-        } else {
-            $result = array();
-            $result['backend'] = $sqlKey;
-            
-            $result[$sqlKey] = array();
-            $result[$sqlKey]['admin']['loginName'] = 'tine20admin';
-            
-            $result[$ldapKey] = array();
-            $result[$ldapKey]['bindRequiresDn'] = true;
-            $result[$ldapKey]['accountCanonicalForm'] = 2;
-        }
-        
+        $result = Tinebase_Auth::getBackendConfigurationWithDefaults();
+        $result['backend'] = Tinebase_Auth::getConfiguredBackend();
+
         return $result;
     }
     

@@ -32,6 +32,7 @@ class Tinebase_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
         $suite->addTestSuite('Tinebase_Record_RecordTest');
         $suite->addTestSuite('Tinebase_Record_RecordSetTest');
+        $suite->addTestSuite('Tinebase_AuthTest');
         $suite->addTestSuite('Tinebase_UserTest');
         $suite->addTestSuite('Tinebase_GroupTest');
         $suite->addTestSuite('Tinebase_ZendFilterTest');

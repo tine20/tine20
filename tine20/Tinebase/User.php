@@ -158,9 +158,9 @@ class Tinebase_User
     {
         if (!isset(self::$_backendType)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                self::$_backendType = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKENDTYPE, null, self::SQL)->value;
+                self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKENDTYPE, null, self::SQL)->value);
             } else {
-                self::$_backendType = self::SQL; 
+                self::setBackendType(self::SQL); 
             }
         }
         

@@ -27,7 +27,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
-        Tinebase_User::getInstance()->importUsers($_options); //import users(ldap)/create initial users(sql)
+        $initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
+        Tinebase_User::getInstance()->importUsers($initialAdminUserOptions); //import users(ldap)/create initial users(sql)
         Tinebase_Group::getInstance()->importGroupMembers(); //import groups members(ldap)
 
         parent::_initialize($_application, $_options);
@@ -56,6 +57,27 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Tinebase_Model_Container::GRANT_EDIT,
             Tinebase_Model_Container::GRANT_ADMIN
         ), TRUE);               
+    }
+    
+    /**
+     * Extract default group name settings from {@param $_options}
+     * 
+     * @param array $_options
+     * @return array
+     */
+    protected function _parseInitialAdminUserOptions($_options)
+    {
+        $result = array();
+        $accounts = isset($_options['authenticationData']['authentication'][Tinebase_User::getConfiguredBackend()]) ? $_options['authenticationData']['authentication'][Tinebase_User::getConfiguredBackend()] : array();
+        $keys = array('adminLoginName', 'adminPassword');
+        foreach ($keys as $key) {
+            if (isset($_options[$key])) {
+                $result[$key] = $_options[$key];
+            } elseif (isset($accounts[$key])) {
+                $result[$key] = $accounts[$key];
+            }
+        }
+        return $result;
     }
 
 }

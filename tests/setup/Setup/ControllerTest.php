@@ -98,7 +98,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     public function testInstallAdminAccountOptions()
     {
     	$this->_uninstallAllApplications();
-    	$this->_installAllApplications(array('admin_login_name' => 'phpunit-admin', 'admin_login_password' => 'phpunit-password'));
+    	$this->_installAllApplications(array('adminLoginName' => 'phpunit-admin', 'adminPassword' => 'phpunit-password'));
     	$adminUser = Tinebase_User::getInstance()->getFullUserByLoginName('phpunit-admin');
     	$this->assertTrue($adminUser instanceof Tinebase_Model_User);
     	
@@ -109,10 +109,10 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     public function testInstallGoupNameOptions()
     {
         $this->_uninstallAllApplications();
-        $this->_installAllApplications(array('admin_group_name' => 'phpunit-admins', 'user_group_name' => 'phpunit-users'));
+        $this->_installAllApplications(array('defaultAdminGroupName' => 'phpunit-admins', 'defaultUserGroupName' => 'phpunit-users'));
         $adminUser = Tinebase_Core::get('currentAccount');
-        $this->assertEquals('phpunit-admins', Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_ADMIN_GROUP)->value);
-        $this->assertEquals('phpunit-users', Tinebase_Config::getInstance()->getConfig(Tinebase_Config::DEFAULT_USER_GROUP)->value);
+        $this->assertEquals('phpunit-admins', Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY));
+        $this->assertEquals('phpunit-users', Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY));
         
         //cleanup
         $this->_uninstallAllApplications();

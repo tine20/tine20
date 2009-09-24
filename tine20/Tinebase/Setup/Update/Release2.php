@@ -108,14 +108,14 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             $backendType = ucfirst($config['accounts']['backend']);
             Tinebase_User::setBackendType($backendType);
             
-            //copy existing config.inc.php settings to config table
+            //add default settings
+            $defaultConfig = Tinebase_User::getBackendConfigurationDefaults($backendType);
+            Tinebase_User::setBackendConfiguration($defaultConfig);
+            
+            //override default settings with config.inc.php settings
             if (!empty($config['accounts'][$backendType])) {
                 Tinebase_User::setBackendConfiguration($config['accounts'][$backendType]);
             }            
-            
-            //add default values for missing config settings
-            $newAccountsConfig = Tinebase_User::getBackendConfigurationDefaults($backendType);
-            Tinebase_User::setBackendConfiguration($newAccountsConfig);
             
             //delete old config settings from config.inc.php
             unset($config['accounts']);
@@ -184,5 +184,35 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Tinebase', '2.5');
+    }
+    
+    /**
+     * update to 2.6
+     * - move authentication storage configuration from config.inc.php to config db table
+     *  
+     */    
+    public function update_5()
+    {
+        $config = Setup_Controller::getInstance()->getConfigData();
+        if (!empty($config['authentication'])) {
+            if (empty($config['authentication']['backend'])) {
+                $config['authentication']['backend'] = 'Sql';
+            }
+            $backendType = $config['authentication']['backend'];
+            Tinebase_Auth::setBackendType($backendType);
+            
+            //add default config settings
+            $defaultConfig = Tinebase_Auth::getBackendConfigurationDefaults($backendType);
+            Tinebase_Auth::setBackendConfiguration($defaultConfig);
+            
+            //override default settings with config.inc.php settings
+            if (!empty($config['authentication'][$backendType])) {
+                Tinebase_Auth::setBackendConfiguration($config['authentication'][$backendType]);
+            }
+
+            Tinebase_Auth::saveBackendConfiguration();
+        }
+        
+        $this->setApplicationVersion('Tinebase', '2.6');
     }
 }
