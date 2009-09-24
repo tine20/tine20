@@ -81,7 +81,7 @@ class Tinebase_Auth
      *
      * @var string
      */
-    protected static $_backendType = Tinebase_Auth_Factory::SQL;
+    protected static $_backendType;
     
     /**
      * Holds the backend configuration options.
