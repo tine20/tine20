@@ -481,7 +481,8 @@ class Setup_Controller
                 'username' => 'tine20',
                 'password' => '',
                 'adapter' => 'pdo_mysql',
-                'tableprefix' => 'tine20_'
+                'tableprefix' => 'tine20_',
+                'port'          => 3306
             ),
             'logger' => array(
                 'filename' => $defaultPath . PATH_SEPARATOR . 'tine20.log',

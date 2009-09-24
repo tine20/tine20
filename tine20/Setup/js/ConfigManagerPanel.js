@@ -83,6 +83,11 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 fieldLabel: this.app.i18n._('Hostname'),
                 allowBlank: false
             }, {
+                name: 'database_port',
+                fieldLabel: this.app.i18n._('Port'),
+                allowBlank: false,
+                xtype: 'numberfield'
+            }, {
                 name: 'database_dbname',
                 fieldLabel: this.app.i18n._('Database'),
                 allowBlank: false
