@@ -106,7 +106,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
         });
         
         this.action_gotoLogin = new Ext.Action({
-            text: String.format(this.app.i18n._('Go to {0} login'), Tine.clientVersion.title),
+            text: String.format(this.app.i18n._('Go to {0} login'), Tine.title),
             handler: this.onGotoLogin,
             iconCls: 'action_login',
             scope: this

@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: tineInit.js 7831 2009-04-22 22:37:18Z c.weiss@metaways.de $
  *
- * TODO         allow to add user defined part to Tine.clientVersion.title
+ * TODO         allow to add user defined part to Tine.title
  * TODO         move locale/timezone registry values to preferences MixedCollection?
  */
 
@@ -63,7 +63,13 @@ Tine.clientVersion.buildType        = 'none';
 Tine.clientVersion.buildDate        = 'none';
 Tine.clientVersion.packageString    = 'none';
 Tine.clientVersion.releaseTime      = 'none';
-Tine.clientVersion.title            = 'Tine 2.0';
+
+/**
+ * title of app (gets set at build time)
+ * 
+ * @type String
+ */
+Tine.title = 'Tine 2.0';
 
 Ext.namespace('Tine.Tinebase');
 

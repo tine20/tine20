@@ -81,7 +81,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 	 */
 	initComponent: function(){
         if (! this.title) {
-            this.title = Tine.clientVersion.title;
+            this.title = Tine.title;
         }
         
         this.windowManager = Ext.ux.PopupWindowMgr;
