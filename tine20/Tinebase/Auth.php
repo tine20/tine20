@@ -208,7 +208,7 @@ class Tinebase_Auth
     {
         if (!isset(self::$_backendType)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKENDTYPE, null, self::SQL)->value);
+                self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::AUTHENTICATIONBACKENDTYPE, null, self::SQL)->value);
             } else {
                 self::setBackendType(self::SQL); 
             }
