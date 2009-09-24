@@ -58,7 +58,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     /**
      * @cfg {String}
      */
-    title: 'Tine 2.0',
+    title: null,
     /**
      * @cfg {String} Name of a constructor to create item property
      */
@@ -72,7 +72,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     popup: null,
     /**
-     * @prperty {Ext.ux.PopupWindowMgr}
+     * @property {Ext.ux.PopupWindowMgr}
      */
     windowManager: null,
     
@@ -80,6 +80,10 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 	 * @private
 	 */
 	initComponent: function(){
+        if (! this.title) {
+            this.title = Tine.clientVersion.title;
+        }
+        
         this.windowManager = Ext.ux.PopupWindowMgr;
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
 

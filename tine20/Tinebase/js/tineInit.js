@@ -8,7 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: tineInit.js 7831 2009-04-22 22:37:18Z c.weiss@metaways.de $
  *
- * @todo        move locale/timezone registry values to preferences MixedCollection?
+ * TODO         allow to add user defined part to Tine.clientVersion.title
+ * TODO         move locale/timezone registry values to preferences MixedCollection?
  */
 
 Ext.onReady(function() {
@@ -47,11 +48,12 @@ Ext.namespace('Tine', 'Tine.Tinebase', 'Tine.Calendar');
  * version of Tine 2.0 javascript client version, gets set a build time <br>
  * <b>Supported Properties:</b>
  * <table>
- *   <tr><td><b>codeName</b></td>  <td> codename of release</td></tr>
- *   <tr><td><b>buildType</b></td> <td> buildType? of release</td></tr>
- *   <tr><td><b>buildDate</b></td> <td> buildDate of release</td></tr>
- *   <tr><td><b>packageString</b>  </td><td> packageString of release</td></tr>
- *   <tr><td><b>releaseTime</b>    </td><td> releaseTime of release</td></tr>
+ *   <tr><td><b>codeName</b></td><td> codename of release</td></tr>
+ *   <tr><td><b>buildType</b></td><td> buildType? of release</td></tr>
+ *   <tr><td><b>buildDate</b></td><td> buildDate of release</td></tr>
+ *   <tr><td><b>packageString</b></td><td> packageString of release</td></tr>
+ *   <tr><td><b>releaseTime</b></td><td> releaseTime of release</td></tr>
+ *   <tr><td><b>title</b></td><td> title of release</td></tr>
  * </table>
  * @type {Object}
  */
@@ -61,6 +63,7 @@ Tine.clientVersion.buildType        = 'none';
 Tine.clientVersion.buildDate        = 'none';
 Tine.clientVersion.packageString    = 'none';
 Tine.clientVersion.releaseTime      = 'none';
+Tine.clientVersion.title            = 'Tine 2.0';
 
 Ext.namespace('Tine.Tinebase');
 

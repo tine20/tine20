@@ -39,7 +39,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             id: 'tineMenu',
             height: 26,
             items:[{
-                text: 'Tine 2.0',
+                text: Tine.clientVersion.title,
                 menu: {
                     id: 'Tinebase_System_Menu',     
                     items: [
@@ -205,7 +205,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      */
     initActions: function() {
         this.action_aboutTine = new Ext.Action({
-            text: _('About Tine 2.0'),
+            text: String.format(_('About {0}'), Tine.clientVersion.title),
             handler: this.onAboutTine20,
             iconCls: 'action_about'
         });
@@ -235,7 +235,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
 
         this.action_logout = new Ext.Action({
             text: _('Logout'),
-            tooltip:  _('Logout from Tine 2.0'),
+            tooltip:  String.format(_('Logout from {0}'), Tine.clientVersion.title),
             iconCls: 'action_logOut',
             handler: this.onLogout
         });
@@ -256,7 +256,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         if (this.appPicker.getTreeCardPanel().rendered) {
             var defaultApp = Tine.Tinebase.appMgr.get(this.defaultAppName);
         	defaultApp.getMainScreen().show();
-            document.title = 'Tine 2.0 - ' + defaultApp.getTitle();
+            document.title = Tine.clientVersion.title + ' - ' + defaultApp.getTitle();
         } else {
             this.activateDefaultApp.defer(10, this);
         }

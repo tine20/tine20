@@ -95,7 +95,7 @@ Tine.Login = {
             
         });
         this.originalTitle = window.document.title;
-        window.document.title = 'Tine 2.0 - ' + _('Please enter your login data');
+        window.document.title = Tine.clientVersion.title + ' - ' + _('Please enter your login data');
         this.loginWindow.show();
         Ext.getCmp('username').focus(false, 250);
                     
@@ -135,7 +135,7 @@ Tine.Login = {
                 callback: function(request, httpStatus, response) {
                     var responseData = Ext.util.JSON.decode(response.responseText);
                     if (responseData.success === true) {
-                        Ext.MessageBox.wait(_('Login successful. Loading Tine 2.0...'), _('Please wait!'));
+                        Ext.MessageBox.wait(String.format(_('Login successful. Loading {0}...'), Tine.clientVersion.title), _('Please wait!'));
                         this.loginWindow.hide();
                         window.document.title = this.originalTitle;
                         this.onLogin.call(this.scope);
