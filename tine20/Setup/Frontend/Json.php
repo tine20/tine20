@@ -279,6 +279,8 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
+     * 
+     * @todo add 'titlePostfix'    => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value here?
      */
     public function getRegistryData()
     {
