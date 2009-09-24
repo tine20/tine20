@@ -20,7 +20,6 @@ Ext.namespace('Tine.Addressbook');
  * 
  * <p>Contact Grid Panel</p>
  * <p><pre>
- * TODO         add email/call contact actions to context menu
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -60,9 +59,9 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         this.actionToolbarItems = this.getToolbarItems();
         this.contextMenuItems = [
             '-',
-            this.actions_exportContact
-            //this.actions_callContact
-            //this.actions_composeEmail
+            this.actions_exportContact,
+            this.actions_callContact,
+            this.actions_composeEmail
         ];
         
         this.gridConfig.cm = this.getColumnModel();
@@ -195,7 +194,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         
         this.actions_callContact = new Ext.Action({
             requiredGrant: 'readGrant',
-            id: 'Addressbook_Contacts_CallContact',
             text: this.app.i18n._('Call contact'),
             disabled: true,
             handler: this.onCallContact,
@@ -208,7 +206,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         
         this.actions_composeEmail = new Ext.Action({
             requiredGrant: 'readGrant',
-            id: 'Addressbook_Contacts_ComposeMail',
             text: this.app.i18n._('Compose email'),
             disabled: true,
             handler: this.onComposeEmail,
