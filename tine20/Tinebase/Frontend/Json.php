@@ -450,10 +450,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'buildType'     => TINE20_BUILDTYPE,
                 'codeName'      => TINE20_CODENAME,
                 'packageString' => TINE20_PACKAGESTRING,
-                'releaseTime'   => TINE20_RELEASETIME
+                'releaseTime'   => TINE20_RELEASETIME,
             ),
             'defaultUsername' => $defaultUsername,
             'defaultPassword' => $defaultPassword,
+            'titlePostfix'    => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
         );
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {

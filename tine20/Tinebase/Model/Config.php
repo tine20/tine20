@@ -54,6 +54,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const CRONUSERID = 'cronuserid';
     
     /**
+     * user defined page title postfix for browser page title
+     * 
+     * @var string
+     */
+    const PAGETITLEPOSTFIX = 'pagetitlepostfix';
+    
+    /**
      * identifier
      * 
      * @var string
