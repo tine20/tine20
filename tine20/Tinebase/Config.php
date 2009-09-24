@@ -102,7 +102,9 @@ class Tinebase_Config
             
             // check config.inc.php and get value from there
             if ($_fromFile && isset(Tinebase_Core::getConfig()->{$_name})) {
-                $value = Tinebase_Core::getConfig()->{$_name}->toArray();
+                $value = (is_object(Tinebase_Core::getConfig()->{$_name}))
+                    ? Tinebase_Core::getConfig()->{$_name}->toArray() 
+                    : Tinebase_Core::getConfig()->{$_name};
             } else {
                 if ($_default === NULL) {
                     throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found and no default value given!");
