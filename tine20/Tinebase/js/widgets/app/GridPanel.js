@@ -558,7 +558,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                 return;
             }
             
-            var selections = sm.getSelection()
             sm.clearSelections();
             sm.selectRow(row, false);
             grid.view.focusRow(row);
