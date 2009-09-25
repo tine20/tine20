@@ -138,7 +138,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->getConfigAsArray('logger');
             
         $this->assertGreaterThan(0, count($result));
-        $this->assertTrue($result['active']);
+        $this->assertTrue($result['active'] || $result['active'] == 1, 'could not get logger config');
     }
     
 }
