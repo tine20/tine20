@@ -180,6 +180,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         );
          
         $this->groupMembersTable->delete($where);
+        
+        // invalidate cache (no memcached support yet)
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
     }
     
     /**
