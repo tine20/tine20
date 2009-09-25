@@ -243,7 +243,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
             resizable: true
         },
         columns: [
-            { id: 'tags',               header: this.app.i18n._('Tags'),                width: 50,  dataIndex: 'tags', sortable: false, hidden: true, 
+            { id: 'tags',               header: this.app.i18n._('Tags'),                width: 50,  dataIndex: 'tags', sortable: false,
                 renderer: Tine.Tinebase.common.tagsRenderer },
             { id: 'start_date',         header: this.app.i18n._("Date"),                width: 120, dataIndex: 'start_date',            
                 renderer: Tine.Tinebase.common.dateRenderer },
