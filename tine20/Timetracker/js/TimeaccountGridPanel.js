@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Timetracker
@@ -13,6 +13,23 @@ Ext.namespace('Tine.Timetracker');
 
 /**
  * Timeaccount grid panel
+ * 
+ * @namespace   Tine.Timetracker
+ * @class       Tine.Timetracker.TimeaccountGridPanel
+ * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * 
+ * <p>Timeaccount Grid Panel</p>
+ * <p><pre>
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Timetracker.TimeaccountGridPanel
  */
 Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics

@@ -1,10 +1,10 @@
-﻿/**
+﻿/*
  * Tine 2.0
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -13,6 +13,23 @@ Ext.namespace('Tine.Timetracker');
 
 /**
  * Timesheet grid panel
+ * 
+ * @namespace   Tine.Timetracker
+ * @class       Tine.Timetracker.TimesheetGridPanel
+ * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * 
+ * <p>Timesheet Grid Panel</p>
+ * <p><pre>
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Timetracker.TimesheetGridPanel
  */
 Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
@@ -33,8 +50,8 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         this.actionToolbarItems = this.getToolbarItems();
         this.initDetailsPanel();
         
-        /********** Quick hack for mass update, to be generalized!!! **************/
-        /********** NOTE: The comment above means: do not CnP ;-) *****************/
+        // Quick hack for mass update, to be generalized!!! **************
+        // NOTE: The comment above means: do not CnP ;-) *****************
         this.contextMenuItems = [
             '-', this.exportButton, '-', {
             text: _('Mass Update'),
@@ -168,7 +185,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridP
         });
         win.show();
     },
-    /********** END OF QUICK HACK *****************/
+    // END OF QUICK HACK *****************
     
     /**
      * initialises filter toolbar

@@ -82,6 +82,8 @@
         <source src="../tine20/Setup/js" match="*.js"/>
         <source src="../tine20/Tasks/js/EditDialog.js"/>
         <source src="../tine20/Tasks/js/GridPanel.js"/>
+        <source src="../tine20/Timetracker/js/TimesheetGridPanel.js"/>
+        <source src="../tine20/Timetracker/js/TimeaccountGridPanel.js"/>
     </sources>
     <tags>
         <tag name="author" title="Author"/>
