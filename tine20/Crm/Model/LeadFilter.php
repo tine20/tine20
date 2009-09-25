@@ -37,6 +37,7 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('lead_name', 'description'))),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'lead_name'      => array('filter' => 'Tinebase_Model_Filter_Text'),
