@@ -60,7 +60,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.recordProxy = Tine.Tasks.JsonBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
-        this.gridConfig.columns = this.getColumns();
+        this.gridConfig.cm = this.getColumnModel();
         this.initFilterToolbar();
         
         this.plugins.push(this.action_showClosedToggle, this.filterToolbar);
@@ -147,14 +147,21 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * returns cm
+     * @return Ext.grid.ColumnModel
      * @private
      */
-    getColumns: function(){
-        return  [{
+    getColumnModel: function(){
+        return new Ext.grid.ColumnModel({
+        defaults: {
+            sortable: true,
+            resizable: true
+        },
+        columns: [
+        {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },
+        {
             id: 'summary',
             header: this.app.i18n._("Summary"),
             width: 400,
-            sortable: true,
             dataIndex: 'summary',
             //editor: new Ext.form.TextField({
             //  allowBlank: false
@@ -166,7 +173,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             id: 'due',
             header: this.app.i18n._("Due Date"),
             width: 60,
-            sortable: true,
             dataIndex: 'due',
             renderer: Tine.Tinebase.common.dateRenderer,
             editor: new Ext.ux.form.ClearableDateField({}),
@@ -175,7 +181,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             id: 'priority',
             header: this.app.i18n._("Priority"),
             width: 45,
-            sortable: true,
             dataIndex: 'priority',
             renderer: Tine.widgets.Priority.renderer,
             editor: new Tine.widgets.Priority.Combo({
@@ -190,7 +195,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             id: 'percent',
             header: this.app.i18n._("Percent"),
             width: 50,
-            sortable: true,
             dataIndex: 'percent',
             renderer: Ext.ux.PercentRenderer,
             editor: new Ext.ux.PercentCombo({
@@ -204,7 +208,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             id: 'status_id',
             header: this.app.i18n._("Status"),
             width: 45,
-            sortable: true,
             dataIndex: 'status_id',
             renderer: Tine.Tasks.status.getStatusIcon,
             editor: new Tine.Tasks.status.ComboBox({
@@ -220,14 +223,12 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             header: this.app.i18n._("Creation Time"),
             hidden: true,
             width: 90,
-            sortable: true,
             dataIndex: 'creation_time',
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }, {
             id: 'organizer',
             header: this.app.i18n._('Responsible'),
             width: 150,
-            sortable: true,
             dataIndex: 'organizer',
             renderer: Tine.Tinebase.common.accountRenderer,
             quickaddField: new Tine.Addressbook.SearchCombo({
@@ -242,7 +243,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                     }
                 }
             })
-        }];
+        }]
+        });
     },
     
     /**

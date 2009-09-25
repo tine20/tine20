@@ -134,6 +134,8 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param Tinebase_Record_RecordSet $_tasks Tasks_Model_Task
      * @return array tasks data
+     * 
+     * @todo use parent::_multipleRecordsToJson?
      */
     protected function _multipleTasksToJson(Tinebase_Record_RecordSet $_tasks)
     {        
@@ -144,6 +146,8 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         Tinebase_User::getInstance()->resolveMultipleUsers($_tasks, 'organizer', true);
 
+        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_tasks);
+        
         $result = $_tasks->toArray();
         
         return $result;
