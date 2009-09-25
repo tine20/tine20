@@ -186,7 +186,7 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel
      * @param {Event} e
      */
     onGotoLogin: function(btn, e) {
-        window.location = window.location.href.replace(/setup\.php/, '');
+        window.location = window.location.href.replace(/setup(\.php)*/, '');
     },
     
     /**
