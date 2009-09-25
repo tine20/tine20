@@ -402,7 +402,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $this->_personasContacts['pwulf']->getId());
         $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
-        
     }
     
     public function testUpdateRecuingDtstart()
