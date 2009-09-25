@@ -132,7 +132,12 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
         }
         
-        $result = parent::_multipleRecordsToJson($_records, $_filter);
+        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
+        
+        $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $_records->convertDates = true;
+        
+        $result = $_records->toArray();
         
         return $result;
     }
