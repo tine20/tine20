@@ -97,6 +97,7 @@ Ext.namespace('Tine.Felamimail');
                     record.data.to          = message.data.to;
                     record.data.cc          = message.data.cc;
                     record.data.bcc         = message.data.bcc;
+                    record.data.received    = message.data.received;
                     
                     this.tpl.overwrite(body, message.data);
                     this.getEl().down('div').down('div').scrollTo('top', 0, false);
@@ -122,7 +123,8 @@ Ext.namespace('Tine.Felamimail');
                     '<b>' + this.i18n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
                     '<b>' + this.i18n._('From') + ':</b>',
                     ' {[this.showFrom(values.from, "' + this.i18n._('Add') + '", "' 
-                        + this.i18n._('Add contact to addressbook') + '")]}',
+                        + this.i18n._('Add contact to addressbook') + '")]}<br/>',
+                    '<b>' + this.i18n._('Date') + ':</b> {[this.encode(values.received)]}',
                     '{[this.showRecipients(values.headers)]}',
                     '{[this.showHeaders("' + this.i18n._('Show or hide header information') + '")]}',
                 '</div>',
