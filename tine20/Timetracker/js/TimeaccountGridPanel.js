@@ -46,7 +46,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
         this.recordProxy = Tine.Timetracker.timeaccountBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
-        this.gridConfig.columns = this.getColumns();
+        this.gridConfig.cm = this.getColumnModel();
         this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
@@ -82,44 +82,47 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
     
     /**
      * returns cm
-     * @private
      * 
-     * @todo    add more columns
+     * @return Ext.grid.ColumnModel
+     * @private
      */
-    getColumns: function(){
-        return [{
-            id: 'number',
-            header: this.app.i18n._("Number"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'number'
-        },{
-            id: 'title',
-            header: this.app.i18n._("Title"),
-            width: 350,
-            sortable: true,
-            dataIndex: 'title'
-        },{
-            id: 'status',
-            header: this.app.i18n._("Status"),
-            width: 150,
-            sortable: true,
-            dataIndex: 'status',
-            renderer: this.statusRenderer.createDelegate(this)
-        },{
-            id: 'budget',
-            header: this.app.i18n._("Budget"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'budget'
-        },{
-            id: 'billed_in',
-            hidden: true,
-            header: this.app.i18n._("Cleared in"),
-            width: 150,
-            sortable: true,
-            dataIndex: 'billed_in'
-        }];
+    getColumnModel: function(){
+        return new Ext.grid.ColumnModel({ 
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            columns: [
+            {   id: 'tags', header: this.app.i18n._('Tags'), width: 50,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },
+            {
+                id: 'number',
+                header: this.app.i18n._("Number"),
+                width: 100,
+                dataIndex: 'number'
+            },{
+                id: 'title',
+                header: this.app.i18n._("Title"),
+                width: 350,
+                dataIndex: 'title'
+            },{
+                id: 'status',
+                header: this.app.i18n._("Status"),
+                width: 150,
+                dataIndex: 'status',
+                renderer: this.statusRenderer.createDelegate(this)
+            },{
+                id: 'budget',
+                header: this.app.i18n._("Budget"),
+                width: 100,
+                dataIndex: 'budget'
+            },{
+                id: 'billed_in',
+                hidden: true,
+                header: this.app.i18n._("Cleared in"),
+                width: 150,
+                dataIndex: 'billed_in'
+            }]
+        });
     },
     
     /**
