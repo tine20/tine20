@@ -20,7 +20,8 @@
     border-right: 3px double #E1E1E1;
     text-align: center;
     vertical-align: middle;
-    background:#F0F0F0 url(../../library/ExtJS/resources/images/gray/toolbar/bg.gif) repeat-x scroll left top;
+    /*background:#F0F0F0 url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;*/
+    background-color: #F0F0F0;
     border-color:#D0D0D0;
 }
 
