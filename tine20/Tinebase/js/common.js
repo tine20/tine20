@@ -113,7 +113,11 @@ Tine.Tinebase.common = {
         var result = '';
         if (tags) {
             for (var i=0; i < tags.length; i++) {
-                result += '<div ext:qtip="' + tags[i].name + ' | ' + tags[i].description + '" style="width: 8px; height: 8px; background-color:' 
+                var qtipText = tags[i].name;
+                if (tags[i].description) {
+                    qtipText += ' | ' + tags[i].description;
+                }
+                result += '<div ext:qtip="' + qtipText + '" style="width: 8px; height: 8px; background-color:' 
                     + tags[i].color 
                     + '; border: 1px solid black; float: left; margin-right: 2px;">&#160;</div>';
             }
