@@ -257,7 +257,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             var defaultApp = Tine.Tinebase.appMgr.get(this.defaultAppName);
         	defaultApp.getMainScreen().show();
             var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
-            console.log(postfix);
             document.title = Tine.title + postfix  + ' - ' + defaultApp.getTitle();
         } else {
             this.activateDefaultApp.defer(10, this);
