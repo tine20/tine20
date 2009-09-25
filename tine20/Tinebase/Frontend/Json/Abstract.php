@@ -234,6 +234,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if ($_records[0]->has('container_id')) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
+
+        if ($_records[0]->has('tags')) {
+            Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
+        }
         
         $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
         $_records->convertDates = true;

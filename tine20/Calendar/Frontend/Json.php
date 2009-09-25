@@ -243,7 +243,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	    		throw new Tinebase_Exception_InvalidArgument('Required argument $_filter is missing');
 	    	}
 	
-	        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
 	        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
 	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
 	        $this->_resolveRrule($_records);

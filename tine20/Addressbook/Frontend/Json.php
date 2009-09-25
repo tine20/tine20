@@ -143,8 +143,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
-        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        
         $result = parent::_multipleRecordsToJson($_records, $_filter);
         
         foreach ($result as &$contact) {
