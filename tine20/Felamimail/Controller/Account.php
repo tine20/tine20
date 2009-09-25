@@ -109,7 +109,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $_filter = new Felamimail_Model_AccountFilter(array());
         }
         
-        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
+        $this->_checkRight('get');
+        $this->checkFilterACL($_filter);
+        $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
         // check preference / config if we should add default account with tine user credentials or from config.inc.php 
         $this->_addDefaultAccount($result);
@@ -125,7 +127,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
     {
-        $count = parent::searchCount($_filter);        
+        $this->checkFilterACL($_filter);
+        $count = $this->_backend->searchCount($_filter);
+        
         if ($this->_addedDefaultAccount) {
             $count++;
         }
