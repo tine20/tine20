@@ -132,11 +132,10 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
         }
         
+        // we can't use parent::_multipleRecordsToJson here because of the different container handling
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        
         $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
         $_records->convertDates = true;
-        
         $result = $_records->toArray();
         
         return $result;
