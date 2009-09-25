@@ -31,7 +31,29 @@ Ext.namespace('Tine.Tinebase.widgets.app');
  * @constructor
  * Create a new GridPanel
  */
-Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
+Tine.Tinebase.widgets.app.GridPanel = function(config) {
+    Ext.apply(this, config);
+    
+    
+    this.gridConfig = this.gridConfig || {};
+    this.defaultSortInfo = this.defaultSortInfo || {};
+    this.defaultPaging = this.defaultPaging || {
+        start: 0,
+        limit: 50
+    };
+    
+    this.actionToolbarItems = this.actionToolbarItems || [];
+    this.contextMenuItems = this.contextMenuItems || [];
+    
+    // autogenerate stateId
+    if (this.stateful !== false && ! this.stateId) {
+        this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
+    }
+        
+    Tine.Tinebase.widgets.app.GridPanel.superclass.constructor.call(this);
+};
+
+Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
     /**
      * @cfg {Tine.Tinebase.Application} app
      * instance of the app object (required)
@@ -41,7 +63,7 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
      * @cfg {Object} gridConfig
      * Config object for the Ext.grid.GridPanel
      */
-    gridConfig: {},
+    gridConfig: null,
     /**
      * @cfg {Ext.data.Record} recordClass
      * record definition class  (required)
@@ -78,14 +100,11 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Object} defaultSortInfo
      */
-    defaultSortInfo: {},
+    defaultSortInfo: null,
     /**
      * @cfg {Object} defaultPaging 
      */
-    defaultPaging: {
-        start: 0,
-        limit: 50
-    },
+    defaultPaging: null,
     /**
      * @cfg {Tine.Tinebase.widgets.grid.DetailsPanel} detailsPanel
      * if set, it becomes rendered in region south 
@@ -163,8 +182,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
         // init (ext) grid
         this.initGrid();
         // init actions with actionToolbar and contextMenu
-        this.actionToolbarItems = this.actionToolbarItems || [];
-        this.contextMenuItems = this.contextMenuItems || [];
         this.initActions();
         
         this.initLayout();
@@ -177,11 +194,6 @@ Tine.Tinebase.widgets.app.GridPanel = Ext.extend(Ext.Panel, {
                     this.layout.south.split.setCurrentSize(height);
                 }
             }, this);
-        }
-        
-        // autogenerate stateId
-        if (this.stateful !== false && ! this.stateId) {
-            this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
         }
         
         Tine.Tinebase.widgets.app.GridPanel.superclass.initComponent.call(this);
