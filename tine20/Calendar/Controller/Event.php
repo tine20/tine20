@@ -117,7 +117,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
             
-	        if ($_checkBusyConficts) {
+            if ($_checkBusyConficts) {
                 // ensure that all attendee are free
                 $this->checkBusyConficts($_record);
             }
