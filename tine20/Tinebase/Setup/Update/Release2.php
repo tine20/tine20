@@ -113,21 +113,19 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             Tinebase_User::setBackendConfiguration($defaultConfig);
             
             //override default settings with config.inc.php settings
-            if (!empty($config['accounts'][$backendType])) {
-                Tinebase_User::setBackendConfiguration($config['accounts'][$backendType]);
-            }            
+            if (!empty($config['accounts'][$config['accounts']['backend']])) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config: ' . print_r($config['accounts'][$config['accounts']['backend']], TRUE));
+                Tinebase_User::setBackendConfiguration($config['accounts'][$config['accounts']['backend']]);
+            } 
             
             //delete old config settings from config.inc.php
             unset($config['accounts']);
-            // do we want that?
-            //Setup_Controller::getInstance()->saveConfigData($config);
         }
         
         $defaultUserGroupName = Tinebase_Config::getInstance()->getConfig('Default User Group', null, 'Users');
         $defaultAdminGroupName = Tinebase_Config::getInstance()->getConfig('Default Admin Group', null, 'Administrators');
         Tinebase_User::setBackendConfiguration($defaultUserGroupName->value, Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
         Tinebase_User::setBackendConfiguration($defaultAdminGroupName->value, Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY);
-        
         
         //write changes to config table
         Tinebase_User::saveBackendConfiguration();
@@ -206,8 +204,9 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             Tinebase_Auth::setBackendConfiguration($defaultConfig);
             
             //override default settings with config.inc.php settings
-            if (!empty($config['authentication'][$backendType])) {
-                Tinebase_Auth::setBackendConfiguration($config['authentication'][$backendType]);
+            if (!empty($config['authentication'][$config['authentication']['backend']])) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config: ' . print_r($config['authentication'][$config['authentication']['backend']], TRUE));
+                Tinebase_Auth::setBackendConfiguration($config['authentication'][$config['authentication']['backend']]);
             }
 
             Tinebase_Auth::saveBackendConfiguration();
