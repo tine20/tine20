@@ -342,7 +342,8 @@ class Tinebase_Tags
         $first = $_records->getFirstRecord();
         $appId = Tinebase_Application::getInstance()->getApplicationByName($first->getApplication())->getId();
         
-        $select = $this->_getSelect($_records->getArrayOfIds(), $appId); 
+        $select = $this->_getSelect($_records->getArrayOfIds(), $appId);
+        $select->group('tagging.tag_id');
         Tinebase_Model_TagRight::applyAclSql($select, $_right, 'tagging.tag_id');
         
         $queryResult = $this->_db->fetchAll($select);
