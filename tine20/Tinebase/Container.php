@@ -591,6 +591,7 @@ class Tinebase_Container
         $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id'))
             ->join(array('user' => SQL_TABLE_PREFIX . 'container_acl'),'owner.container_id = user.container_id', array())
+            ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'),'owner.account_id = contacts.account_id', array())
             ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array())
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant = ?', Tinebase_Model_Container::GRANT_ADMIN)
@@ -605,7 +606,7 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
             ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container.is_deleted') . ' = 0')
             
-            ->order(SQL_TABLE_PREFIX . 'container.name')
+            ->order('contacts.n_fileas')
             ->group('owner.account_id');
             
         //error_log("getContainer:: " . $select->__toString());
