@@ -269,13 +269,12 @@ library/ExtJS/resources/css/xtheme-gray.css
 if ($opts->a || $opts->m) {
     $files = array(
         'Tinebase/css/tine-all.css',                               
-        'Tinebase/js/tine-all.js',                                 
+        'Tinebase/js/tine-all.js',
+        'styles/tine20.css',                             
         'library/ExtJS/ext-all.js',
         'library/ExtJS/adapter/ext/ext-base.js',   
         'library/ExtJS/resources/css/ext-all.css',
-        'library/ExtJS/resources/css/xtheme-gray.css',
-        //'images/empty_photo.png',
-        'images/oxygen/16x16/actions/knewstuff.png'
+        'images/oxygen/16x16/actions/knewstuff.png' // ???
     );
     
     // no subdirs! => solaris does not know find -maxdeps 1
