@@ -79,6 +79,10 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         return $result;    
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase/Controller/Record/Tinebase_Controller_Record_Abstract#create($_record)
+     */
     public function create(Tinebase_Record_Interface $_record)
     {
         $this->_cache->clean('all', array('asteriskSipPeer'));
@@ -92,6 +96,10 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         return $result;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase/Controller/Record/Tinebase_Controller_Record_Abstract#delete($_ids)
+     */
     public function delete($_ids)
     {
         $this->_cache->clean('all', array('asteriskSipPeer'));
@@ -104,6 +112,11 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         return $result;
     }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase/Controller/Record/Tinebase_Controller_Record_Abstract#update($_record)
+     */
     public function update(Tinebase_Record_Interface $_record)
     {
         $this->_cache->clean('all', array('asteriskSipPeer'));
@@ -117,6 +130,11 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         return $result;
     }
     
+    /**
+     * create sip.conf and upload to asterisk server
+     * 
+     * @return void
+     */
     public function publishConfiguration()
     {   
         if(isset(Tinebase_Core::getConfig()->asterisk)) {
