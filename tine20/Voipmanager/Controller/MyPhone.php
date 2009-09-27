@@ -33,9 +33,10 @@ class Voipmanager_Controller_MyPhone extends Voipmanager_Controller_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        $this->_backend      = new Voipmanager_Backend_Snom_Phone($this->getDatabaseBackend());
-        $this->_currentAccount = Tinebase_Core::getUser();
+    private function __construct() 
+    {
+        $this->_backend         = new Voipmanager_Backend_Snom_Phone();
+        $this->_currentAccount  = Tinebase_Core::getUser();
     }
     
     /**
