@@ -390,7 +390,7 @@ class Ajam_Connection extends Zend_Http_Client
             var_dump($xml->response->generic);
         }
         
-        if($xml->response->generic['response'] != 'Success' || $xml->response->generic['response'] != 'Follows') {
+        if($xml->response->generic['response'] != 'Success' && $xml->response->generic['response'] != 'Follows') {
             throw new Ajam_Exception($xml->response->generic['message']);
         }        
     }
