@@ -20,13 +20,21 @@
 class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abstract
 {   
     /**
+     * holds the instance of the singleton
+     *
+     * @var Voipmanager_Controller_Asterisk_Context
+     */
+    private static $_instance = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        $this->_modelName = 'Voipmanager_Model_Asterisk_Context';        
-        $this->_backend      = new Voipmanager_Backend_Asterisk_Context($this->getDatabaseBackend());          
+    private function __construct() 
+    {
+        $this->_modelName   = 'Voipmanager_Model_Asterisk_Context';        
+        $this->_backend     = new Voipmanager_Backend_Asterisk_Context();          
     }
     
     /**
@@ -37,13 +45,6 @@ class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abs
     {        
     }
             
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Voipmanager_Controller_Asterisk_Context
-     */
-    private static $_instance = NULL;
-    
     /**
      * the singleton pattern
      *
@@ -57,5 +58,4 @@ class Voipmanager_Controller_Asterisk_Context extends Voipmanager_Controller_Abs
         
         return self::$_instance;
     }
-    
 }

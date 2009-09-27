@@ -20,13 +20,21 @@
 class Voipmanager_Controller_Asterisk_Meetme extends Voipmanager_Controller_Abstract
 {    
     /**
+     * holds the instance of the singleton
+     *
+     * @var Voipmanager_Controller_Asterisk_Meetme
+     */
+    private static $_instance = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        $this->_modelName = 'Voipmanager_Model_Asterisk_Meetme';
-		$this->_backend		= new Voipmanager_Backend_Asterisk_Meetme($this->getDatabaseBackend());
+    private function __construct() 
+    {
+        $this->_modelName   = 'Voipmanager_Model_Asterisk_Meetme';
+        $this->_backend     = new Voipmanager_Backend_Asterisk_Meetme();
     }
         
     /**
@@ -37,13 +45,6 @@ class Voipmanager_Controller_Asterisk_Meetme extends Voipmanager_Controller_Abst
     {        
     }
             
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Voipmanager_Controller_Asterisk_Meetme
-     */
-    private static $_instance = NULL;
-    
     /**
      * the singleton pattern
      *

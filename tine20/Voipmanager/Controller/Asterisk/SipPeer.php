@@ -17,17 +17,25 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abstract
+class Voipmanager_Controller_Asterisk_SipPeer
 {
+    /**
+     * holds the instance of the singleton
+     *
+     * @var Voipmanager_Controller_Asterisk_SipPeer
+     */
+    private static $_instance = NULL;
+    
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        $this->_modelName = 'Voipmanager_Model_Asterisk_SipPeer';
-        $this->_backend      = new Voipmanager_Backend_Asterisk_SipPeer($this->getDatabaseBackend());
-        $this->_cache        = Zend_Registry::get('cache');        
+    private function __construct() 
+    {
+        $this->_modelName   = 'Voipmanager_Model_Asterisk_SipPeer';
+        $this->_backend     = new Voipmanager_Backend_Asterisk_SipPeer();
+        $this->_cache       = Zend_Registry::get('cache');        
     }
         
     /**
@@ -38,13 +46,6 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     {        
     }
             
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Voipmanager_Controller_Asterisk_SipPeer
-     */
-    private static $_instance = NULL;
-    
     /**
      * the singleton pattern
      *
@@ -81,7 +82,25 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     public function update(Tinebase_Record_Interface $_record)
     {
         $this->_cache->clean('all', array('asteriskSipPeer'));
-        return parent::update($_record);
+        
+        $result =  parent::update($_record);
+        
+        return $result;
     }
     
+    public function publishConfigFiles()
+    {
+        $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
+            array(
+                'field'     => 'name',
+                'operator'  => 'equals',
+                'value'     => $name
+            )
+        ));
+        $sipPeers = $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);     
+
+        foreach($sipPeers as $sipPeer) {
+            
+        }
+    }
 }
