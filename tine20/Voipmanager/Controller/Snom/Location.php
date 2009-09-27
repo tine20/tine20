@@ -20,14 +20,22 @@
 class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstract
 {    
     /**
+     * holds the instance of the singleton
+     *
+     * @var Voipmanager_Controller_Snom_Location
+     */
+    private static $_instance = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        $this->_modelName = 'Voipmanager_Model_Snom_Location';
-        $this->_backend      = new Voipmanager_Backend_Snom_Location($this->getDatabaseBackend());
-        $this->_cache        = Zend_Registry::get('cache');        
+    private function __construct() 
+    {
+        $this->_modelName   = 'Voipmanager_Model_Snom_Location';
+        $this->_backend     = new Voipmanager_Backend_Snom_Location();
+        $this->_cache       = Zend_Registry::get('cache');        
     }
         
     /**
@@ -38,13 +46,6 @@ class Voipmanager_Controller_Snom_Location extends Voipmanager_Controller_Abstra
     {        
     }
             
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Voipmanager_Controller_Snom_Location
-     */
-    private static $_instance = NULL;
-    
     /**
      * the singleton pattern
      *

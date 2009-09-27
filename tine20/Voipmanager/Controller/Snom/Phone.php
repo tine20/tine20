@@ -20,6 +20,13 @@
 class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
 {
     /**
+     * holds the instance of the singleton
+     *
+     * @var Voipmanager_Controller_Snom_Phone
+     */
+    private static $_instance = NULL;
+    
+    /**
      * Voipmanager backend class
      *
      * @var Voipmanager_Backend_Snom_Phone
@@ -32,8 +39,8 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_modelName = 'Voipmanager_Model_Snom_Phone';
-        $this->_backend      = new Voipmanager_Backend_Snom_Phone($this->getDatabaseBackend());
+        $this->_modelName   = 'Voipmanager_Model_Snom_Phone';
+        $this->_backend     = new Voipmanager_Backend_Snom_Phone();
     }
         
     /**
@@ -44,13 +51,6 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     {        
     }
             
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Voipmanager_Controller_Snom_Phone
-     */
-    private static $_instance = NULL;
-    
     /**
      * the singleton pattern
      *
