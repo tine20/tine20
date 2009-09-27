@@ -39,41 +39,4 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Controller_Recor
      */
     protected $_cache;
     
-    /**
-     * initialize the database backend
-     *
-     * @return Zend_Db_Adapter_Abstract
-     * @throws  Voipmanager_Exception_UnexpectedValue
-     */
-    public function getDatabaseBackend() 
-    {
-        if(isset(Zend_Registry::get('configFile')->voipmanager) && isset(Zend_Registry::get('configFile')->voipmanager->database)) {
-            $dbConfig = Tinebase_Core::get('configFile')->voipmanager->database;
-        
-            $dbBackend = constant('Tinebase_Core::' . strtoupper($dbConfig->get('backend', Tinebase_Core::PDO_MYSQL)));
-            
-            //Tinebase_Core::set('voipdbTablePrefix', (isset($dbConfig->tableprefix)) ? $dbConfig->tableprefix : SQL_TABLE_PREFIX);
-            
-            switch($dbBackend) {
-                case Tinebase_Core::PDO_MYSQL:
-                    $db = Zend_Db::factory('Pdo_Mysql', $dbConfig->toArray());
-                    break;
-                case Tinebase_Core::PDO_OCI:
-                    $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
-                    break;
-                default:
-                    throw new Voipmanager_Exception_UnexpectedValue('Invalid database backend type defined. Please set backend to ' . Tinebase_Core::PDO_MYSQL . ' or ' . Tinebase_Core::PDO_OCI . ' in config file.');
-                    break;
-            }
-            
-            // add table prefix to adapter
-            $db->table_prefix = (isset($dbConfig->tableprefix)) ? $dbConfig->tableprefix : SQL_TABLE_PREFIX;
-            
-        } else {
-            //Tinebase_Core::set('voipdbTablePrefix', SQL_TABLE_PREFIX);
-            $db = Zend_Registry::get('dbAdapter');
-        }
-        
-        return $db;
-    }
 }
