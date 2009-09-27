@@ -17,7 +17,7 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Asterisk_Voicemail
+class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_Abstract
 {
     /**
      * holds the instance of the singleton

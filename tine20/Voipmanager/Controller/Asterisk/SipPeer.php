@@ -17,7 +17,7 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Asterisk_SipPeer
+class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abstract
 {
     /**
      * holds the instance of the singleton
@@ -85,10 +85,12 @@ class Voipmanager_Controller_Asterisk_SipPeer
         
         $result =  parent::update($_record);
         
+        $this->publishConfiguration();
+        
         return $result;
     }
     
-    public function publishConfigFiles()
+    public function publishConfiguration()
     {
         $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
             array(
@@ -98,9 +100,20 @@ class Voipmanager_Controller_Asterisk_SipPeer
             )
         ));
         $sipPeers = $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);     
-
+        
+        $fp = fopen("php://temp/maxmemory:$fiveMBs", 'r+');
         foreach($sipPeers as $sipPeer) {
-            
+            fputs($fp, "[" . $sipPeer->name . "]\n");
+            foreach($sipPeer as $key => $value) {
+                fputs($fp, " $key = $value\n");
+            }
+            fputs($fp, "\n");
         }
+        rewind($fp);
+        
+        $ajam = new Ajam_Connection('http://phonebox01.hh.metaways.de:8088/mxml');
+        $ajam->login('tine20', 'tine20');
+        $ajam->upload('http://phonebox01.hh.metaways.de:8088/config', 'ssip.conf', stream_get_contents($fp));
+        $ajam->logout();
     }
 }

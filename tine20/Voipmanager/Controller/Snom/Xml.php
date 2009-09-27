@@ -20,6 +20,13 @@
 class Voipmanager_Controller_Snom_Xml extends Voipmanager_Controller_Abstract
 {
     /**
+     * holds the instance of the singleton
+     *
+     * @var Voipmanager_Controller_Snom_Xml
+     */
+    private static $_instance = NULL;
+    
+    /**
      * Voipmanager backend class
      *
      * @var Voipmanager_Backend_Snom_Xml
@@ -31,8 +38,9 @@ class Voipmanager_Controller_Snom_Xml extends Voipmanager_Controller_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        $this->_backend     = new Voipmanager_Backend_Snom_Xml($this->getDatabaseBackend());
+    private function __construct() 
+    {
+        $this->_backend     = new Voipmanager_Backend_Snom_Xml();
     }
         
     /**
@@ -43,13 +51,6 @@ class Voipmanager_Controller_Snom_Xml extends Voipmanager_Controller_Abstract
     {        
     }
             
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Voipmanager_Controller_Snom_Xml
-     */
-    private static $_instance = NULL;
-    
     /**
      * the singleton pattern
      *

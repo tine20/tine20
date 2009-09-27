@@ -17,7 +17,7 @@
  * @package     Voipmanager
  * @subpackage  Controller
  */
-class Voipmanager_Controller_Snom_Line
+class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
 {
     /**
      * holds the instance of the singleton
