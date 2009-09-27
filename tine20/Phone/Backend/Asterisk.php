@@ -18,9 +18,9 @@
 class Phone_Backend_Asterisk
 {
     /**
-     * Enter description here...
+     * the ajam connection
      *
-     * @var Voipmanager_Ajam_Connection
+     * @var Ajam_Connection
      */
     protected $_ajam;
     
@@ -35,7 +35,7 @@ class Phone_Backend_Asterisk
      */
     private function __construct($_url, $_username, $_password) 
     {
-        $this->_ajam = new Voipmanager_Ajam_Connection($_url);
+        $this->_ajam = new Ajam_Connection($_url);
         $this->_username = $_username;
         $this->_password = $_password;
     }
