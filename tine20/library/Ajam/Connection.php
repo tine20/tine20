@@ -390,7 +390,7 @@ class Ajam_Connection extends Zend_Http_Client
             var_dump($xml->response->generic);
         }
         
-        if($xml->response->generic['response'] != 'Success') {
+        if($xml->response->generic['response'] != 'Success' || $xml->response->generic['response'] != 'Follows') {
             throw new Ajam_Exception($xml->response->generic['message']);
         }        
     }
@@ -467,16 +467,6 @@ class Ajam_Connection extends Zend_Http_Client
             throw new Ajam_Exception('HTTP request failed');
         }
 
-        $xml = new SimpleXMLElement($response->getBody());
-        
-        if($this->debug === true) {
-            var_dump($xml->response->generic);
-        }
-        
-        if($xml->response->generic['response'] != 'Success') {
-            throw new Ajam_Exception($xml->response->generic['message']);
-        }        
-                
         $this->setUri($oldUri);
     }
     
