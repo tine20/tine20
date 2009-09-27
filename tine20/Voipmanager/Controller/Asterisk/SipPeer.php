@@ -79,41 +79,77 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         return $result;    
     }
     
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        $this->_cache->clean('all', array('asteriskSipPeer'));
+        
+        $result =  parent::create($_record);
+        
+        if(isset(Tinebase_Core::getConfig()->asterisk)) {
+            $this->publishConfiguration();
+        }
+        
+        return $result;
+    }
+
+    public function delete($_ids)
+    {
+        $this->_cache->clean('all', array('asteriskSipPeer'));
+        
+        $result = parent::delete($_ids);
+        
+        if(isset(Tinebase_Core::getConfig()->asterisk)) {
+            $this->publishConfiguration();
+        }
+        
+        return $result;
+    }
     public function update(Tinebase_Record_Interface $_record)
     {
         $this->_cache->clean('all', array('asteriskSipPeer'));
         
         $result =  parent::update($_record);
         
-        $this->publishConfiguration();
+        if(isset(Tinebase_Core::getConfig()->asterisk)) {
+            $this->publishConfiguration();
+        }
         
         return $result;
     }
     
     public function publishConfiguration()
-    {
-        $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
-            array(
-                'field'     => 'name',
-                'operator'  => 'equals',
-                'value'     => $name
-            )
-        ));
+    {   
+        if(isset(Tinebase_Core::getConfig()->asterisk)) {
+            $asteriskConfig = Tinebase_Core::getConfig()->asterisk;
+            $url = $asteriskConfig->managerbaseurl;
+            $username = $asteriskConfig->managerusername;
+            $password = $asteriskConfig->managerpassword;
+        } else {
+            throw new Voipmanager_Exception_NotFound('No settings found for asterisk backend in config file!');
+        }
+        
+        
+        $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array());
+        
         $sipPeers = $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);     
         
         $fp = fopen("php://temp/maxmemory:$fiveMBs", 'r+');
         foreach($sipPeers as $sipPeer) {
             fputs($fp, "[" . $sipPeer->name . "]\n");
             foreach($sipPeer as $key => $value) {
+                if(empty($value) || $key == 'id' || $key == 'name') {
+                    continue;
+                }
                 fputs($fp, " $key = $value\n");
             }
             fputs($fp, "\n");
         }
         rewind($fp);
         
-        $ajam = new Ajam_Connection('http://phonebox01.hh.metaways.de:8088/mxml');
-        $ajam->login('tine20', 'tine20');
-        $ajam->upload('http://phonebox01.hh.metaways.de:8088/config', 'ssip.conf', stream_get_contents($fp));
+        $ajam = new Ajam_Connection($url);
+        $ajam->login($username, $password);
+        $ajam->upload($url . '/tine20config', 'sip.conf', stream_get_contents($fp));
+        $ajam->command('sip reload');
         $ajam->logout();
     }
 }
