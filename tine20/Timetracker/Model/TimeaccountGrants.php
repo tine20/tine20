@@ -172,7 +172,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         foreach ($_timeaccounts as $timeaccount) {
             //Tinebase_Core::getLogger()->debug(print_r($timeaccount->toArray(), true));
             
-            if (isset($timeaccount->container_id['account_grants'])) {
+            if (isset($timeaccount->container_id['account_grants']) && is_array($timeaccount->container_id['account_grants'])) {
                 $containerGrantsArray = $timeaccount->container_id['account_grants'];
                 // mapping
                 foreach ($containerGrantsArray as $grantName => $grantValue) {
