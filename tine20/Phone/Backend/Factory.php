@@ -55,9 +55,9 @@ class Phone_Backend_Factory
                 if (!isset(self::$_backends[$_type])) {
                     if(isset(Tinebase_Core::getConfig()->asterisk)) {
                         $asteriskConfig = Tinebase_Core::getConfig()->asterisk;
-                        $url = $asteriskConfig->managerurl;
-                        $username = $asteriskConfig->managerusername;
-                        $password = $asteriskConfig->managerpassword;
+                        $url        = $asteriskConfig->managerbaseurl;
+                        $username   = $asteriskConfig->managerusername;
+                        $password   = $asteriskConfig->managerpassword;
                     } else {
                         throw new Phone_Exception_NotFound('No settings found for asterisk backend in config file!');
                     }
