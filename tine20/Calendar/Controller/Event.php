@@ -1162,7 +1162,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             . $translate->plural('Attender', 'Attendee', count($_event->attendee)). ":\n";
         
         foreach ($_event->attendee as $attender) {
-            $messageBody .= $attender->getName(). "\n";
+            $status = $translate->translate($attender->getStatusString());
+            
+            $messageBody .= "{$attender->getName()} ($status) \n";
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
