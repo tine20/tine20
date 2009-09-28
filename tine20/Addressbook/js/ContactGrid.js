@@ -317,7 +317,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                 break;
         }
 
-        Tine.Phone.dialNumber(number);
+        Tine.Phone.dialPhoneNumber(number);
     },
     
     /**

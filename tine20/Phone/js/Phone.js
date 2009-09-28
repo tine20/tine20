@@ -166,11 +166,11 @@ Tine.Phone.updatePhoneTree = function(store){
  * 
  * @todo use window factory later
  */
-Tine.Phone.dialNumber = function(number) {
+Tine.Phone.dialPhoneNumber = function(number) {
 	
 	var phonesStore = Tine.Phone.loadPhoneStore();
 	var lines = phonesStore.getAt(0).data.lines;
-
+    
     // check if only one phone / one line exists and numer is set
 	if (phonesStore.getTotalCount() == 1 && lines.length == 1 && number) {
 		// call Phone.dialNumber
@@ -495,7 +495,7 @@ Tine.Phone.Main = {
     		    }
     		}
     		
-    		Tine.Phone.dialNumber(number);
+    		Tine.Phone.dialPhoneNumber(number);
     	}
     },
     
@@ -718,7 +718,7 @@ Tine.Phone.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             var number = record.data.destination;
             
-            Tine.Phone.dialNumber(number);
+            Tine.Phone.dialPhoneNumber(number);
         }, this);
 
         // add the grid to the layout
