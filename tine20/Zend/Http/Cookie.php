@@ -258,7 +258,11 @@ class Zend_Http_Cookie
      */
     public function __toString()
     {
-        return $this->name . '=' . urlencode($this->value) . ';';
+        // bugfix to make Asterisk happy
+        // we receive a cookie like this: "sdfsdfs" and sent back a cookie like this %22sdfsdfs%22 otherwise
+        $value = urlencode($this->value);
+        $value = str_replace('%22', '"', $value);
+        return $this->name . '=' . $value . ';';
     }
 
     /**
@@ -291,9 +295,6 @@ class Zend_Http_Cookie
         list($name, $value) = explode('=', trim(array_shift($parts)), 2);
         $name  = trim($name);
         $value = urldecode(trim($value));
-        // bugfix to make Asterisk happy
-        // we receive a cookie like this: "sdfsdfs" and sent back a cookie like this %22sdfsdfs%22 otherwise
-        $value = trim($value, '"');
 
         // Set default domain and path
         if ($ref_uri instanceof Zend_Uri_Http) {
