@@ -37,6 +37,18 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const STATUS_TENTATIVE     = 'TENTATIVE';
     
     /**
+     * maps status constatns to human readable names
+     * 
+     * @var array
+     */
+    protected $_statusNameMap = array(
+        self::STATUS_NEEDSACTION    => 'No response',   // _('No response')
+        self::STATUS_ACCEPTED       => 'Accepted',      // _('Accepted')
+        self::STATUS_DECLINED       => 'Declined',      // _('Declined')
+        self::STATUS_TENTATIVE      => 'Tentative'      // _('Tentative')
+    );
+    
+    /**
      * cache for already resolved attendee
      * 
      * @var array type => array of id => object
@@ -175,6 +187,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         self::resolveAttendee($resolvable);
         
         return $clone->user_id;
+    }
+    
+    public function getStatusString()
+    {
+        $statusName = array_key_exists($this->status, $this->_statusNameMap) ? 
+            $this->_statusNameMap[$this->status] :
+            'unknown'; // _('unknown)
+            
+        return $statusName;
     }
     
     /**
