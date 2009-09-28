@@ -129,7 +129,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     	// check if all quickadd fields are blured
     	var hasFocus;
     	Ext.each(this.getVisibleCols(), function(item){
-    	    if(item.quickaddField.hasFocus){
+    	    if(item.quickaddField && item.quickaddField.hasFocus){
     	    	hasFocus = true;
     	    }
     	}, this);
@@ -138,8 +138,10 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     	if (!hasFocus) {
     		var data = {};
     		Ext.each(this.getVisibleCols(), function(item){
-                data[item.id] = item.quickaddField.getValue();
-                item.quickaddField.setDisabled(item.id != this.quickaddMandatory);
+                if(item.quickaddField){
+                    data[item.id] = item.quickaddField.getValue();
+                    item.quickaddField.setDisabled(item.id != this.quickaddMandatory);
+                }
             }, this);
             
             if (this.colModel.getColumnById(this.quickaddMandatory).quickaddField.getValue() != '') {
@@ -235,7 +237,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onMandatoryFocus: function() {
         this.adding = true;
         Ext.each(this.getVisibleCols(), function(item){
-            item.quickaddField.setDisabled(false);
+            if(item.quickaddField){
+                item.quickaddField.setDisabled(false);
+            }
         }, this);
     }
         
