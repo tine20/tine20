@@ -959,7 +959,7 @@ class Tinebase_Container
                 ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
                 ->group(SQL_TABLE_PREFIX . 'container_acl.account_grant');
     
-            //error_log("getContainer:: " . $select->__toString());
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
     
             $stmt = $this->_db->query($select);
     
@@ -1137,6 +1137,7 @@ class Tinebase_Container
      */
     protected function _getGrantsFromArray(array $_grantsArray, $_accountId)
     {
+        $grants = array();
         foreach($_grantsArray as $key => $value) {
             $grantValue = (is_array($value)) ? $value['account_grant'] : $value; 
             $grants[Tinebase_Model_Container::$GRANTNAMEMAP[$grantValue]] = TRUE;
