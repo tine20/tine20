@@ -1,7 +1,7 @@
 ﻿.x-form-spinner-proxy{
 	/*background-color:#ff00cc;*/
 }
-.x-form-field-wrap .x-form-spinner-trigger {
+.x-form-field-wrap img.x-form-spinner-trigger {
     background:transparent url(../../../../images/spinner.gif) no-repeat 0 0;
 }
 
