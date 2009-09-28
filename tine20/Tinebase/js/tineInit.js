@@ -25,7 +25,6 @@ Ext.onReady(function() {
             waitForInits.defer(100);
         } else {
             Tine.Tinebase.tineInit.initExtDirect();
-            Tine.Tinebase.tineInit.initState();
             Tine.Tinebase.tineInit.initWindowMgr();
             Tine.Tinebase.tineInit.onLangFilesLoad();
             Tine.Tinebase.tineInit.checkSelfUpdate();
@@ -599,7 +598,10 @@ Tine.Tinebase.tineInit = {
                             Tine.WindowFactory.windowType = windowType;
                         }
                     }
-
+                    
+                    // init state with data from reg
+                    Tine.Tinebase.tineInit.initState();
+                    
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
             });
