@@ -114,6 +114,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         },this);
         
         // rezise quickeditor fields according to parent column
+        this.colModel.on('widthchange', this.syncFields, this);
+        this.colModel.on('hiddenchange', this.syncFields, this);
         this.on('resize', this.syncFields);
         this.on('columnresize', this.syncFields);
         this.syncFields();
@@ -186,7 +188,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var ts = this.getView().templates;
         
         var newRows = '';
-    	Ext.each(this.getVisibleCols(), function(item){
+    	Ext.each(this.colModel.columns, function(item){
     	    newRows += '<td><div class="x-small-editor" id="' + this.idPrefix + item.id + '"></div></td>';
     	}, this);
         
@@ -198,25 +200,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             '</tr></tbody>',
             '</table>'
         );
-        
-        
-        /*
-        ts.master = new Ext.Template(
-            '<div class="x-grid3" hidefocus="true">',
-                '<div class="x-grid3-viewport">',
-                    '<div class="x-grid3-header x-grid3-quickadd"><div class="x-grid3-header-inner"><div class="x-grid3-header-offset">{header}</div></div><div class="x-clear"></div></div>',
-                    '<div class="x-grid3-scroller"><div class="x-grid3-body">{body}</div><a href="#" class="x-grid3-focus" tabIndex="-1"></a></div>',
-                "</div>",
-                '<div class="x-grid3-resize-marker">&#160;</div>',
-                '<div class="x-grid3-resize-proxy">&#160;</div>',
-            "</div>"
-            );
-        
-        this.getView().templates = {
-            header: this.makeHeaderTemplate()
-        };
-        */
     },
+    
     /**
      * @private
      */
@@ -225,12 +210,24 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (Ext.isSafari) {pxToSubstract = 11;}
 
         var cm = this.colModel;
-        Ext.each(this.getVisibleCols(), function(item){
-            if(item.quickaddField){
-            	item.quickaddField.setSize(cm.getColumnWidth(cm.getIndexById(item.id))-pxToSubstract);
+        var visCols = this.getVisibleCols();
+        
+        var newRow = Ext.DomQuery.selectNode('tr[class=new-row]', this.getView().mainHd.dom);
+        
+        for (var col, i=0; i<cm.columns.length; i++) {
+            col = cm.columns[i];
+            
+            if (visCols.indexOf(col) < 0) {
+                newRow.childNodes[i].style.display = 'none';
+            } else {
+                newRow.childNodes[i].style.display = '';
+                if (col.quickaddField) {
+                    col.quickaddField.setSize(cm.getColumnWidth(cm.getIndexById(col.id))-pxToSubstract);
+                }
             }
-        }, this);
+        }
     },
+    
     /**
      * @private
      */
