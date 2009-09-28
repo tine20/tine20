@@ -79,7 +79,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
             
             // use first phone and first line
             $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
-                array('field' => 'accountId', 'operator' => 'equals', 'value' => $accountId)
+                array('field' => 'account_id', 'operator' => 'equals', 'value' => $accountId)
             ));
             $phones = $vmController->search($filter);
 
