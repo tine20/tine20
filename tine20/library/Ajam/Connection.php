@@ -26,17 +26,26 @@ class Ajam_Connection extends Zend_Http_Client
     protected $debug = false;
     
     /**
+     * keeps value of baseUri
+     * 
+     * @var string
+     */
+    protected $_baseUri;
+    
+    /**
      * the constructor
      *
      * @param string $_uri the url to connect to
      * @param array $_config see Zend_Http_Client for details
      */    
-    public function __construct($_uri, array $_config = array())
+    public function __construct($_baseUri, array $_config = array())
     {
+        $this->_baseUri = $_baseUri;
+        
         $_config['useragent'] = 'PHP ajam remote client (rev: 0.2)';
         $_config['keepalive'] = TRUE;
         
-        parent::__construct($_uri, $_config);
+        parent::__construct($_baseUri, $_config);
         
         // enable cookie handling
         $this->setCookieJar();
@@ -54,6 +63,8 @@ class Ajam_Connection extends Zend_Http_Client
     public function login($_username, $_secret)
     {
         $this->resetParameters();
+
+        $this->setUri($this->_baseUri . '/mxml');
         
         $this->setParameterGet(array(
             'action'    => 'login',
@@ -96,6 +107,8 @@ class Ajam_Connection extends Zend_Http_Client
     {
         $this->resetParameters();
         
+        $this->setUri($this->_baseUri . '/mxml');
+        
         $this->setParameterGet(array(
             'action'    => 'hangup',
             'channel'  	=> $_channel
@@ -135,6 +148,8 @@ class Ajam_Connection extends Zend_Http_Client
     public function redirect($_channel, $_exten)
     {
         $this->resetParameters();
+
+        $this->setUri($this->_baseUri . '/mxml');
         
         $this->setParameterGet(array(
             'action'    => 'redirect',
@@ -177,6 +192,8 @@ class Ajam_Connection extends Zend_Http_Client
     public function status($_channel)
     {
         $this->resetParameters();
+        
+        $this->setUri($this->_baseUri . '/mxml');
         
         $this->setParameterGet(array(
             'action'    => 'status',
@@ -230,6 +247,8 @@ class Ajam_Connection extends Zend_Http_Client
     {
         $this->resetParameters();
         
+        $this->setUri($this->_baseUri . '/mxml');
+        
         $this->setParameterGet(array(
             'action'   => 'logoff'
         ));
@@ -267,6 +286,8 @@ class Ajam_Connection extends Zend_Http_Client
     public function sippeers()
     {
         $this->resetParameters();
+        
+        $this->setUri($this->_baseUri . '/mxml');
         
         $this->setParameterGet(array(
             'action'   => 'sippeers'
@@ -324,6 +345,8 @@ class Ajam_Connection extends Zend_Http_Client
     {
         $this->resetParameters();
         
+        $this->setUri($this->_baseUri . '/mxml');
+        
         $this->setParameterGet(array(
             'action'    => 'originate',
             'channel'	=> $_channel,
@@ -368,6 +391,8 @@ class Ajam_Connection extends Zend_Http_Client
     {
         $this->resetParameters();
         
+        $this->setUri($this->_baseUri . '/mxml');
+        
         $this->setParameterGet(array(
             'action'   => 'command',
             'command'	=> $_command
@@ -406,6 +431,8 @@ class Ajam_Connection extends Zend_Http_Client
     public function getConfigJson($_filename)
     {
         $this->resetParameters();
+        
+        $this->setUri($this->_baseUri . '/mxml');
         
         $this->setParameterGet(array(
             'action'   => 'GetConfigJSON',
@@ -448,10 +475,7 @@ class Ajam_Connection extends Zend_Http_Client
     public function upload($_uri, $_filename, $_content = null)
     {
         $this->resetParameters();
-
-        // store current uri
-        $oldUri = $this->getUri();
-                
+        
         $this->setUri($_uri);
         
         $this->setFileUpload($_filename, 'upload', $_content);
@@ -466,8 +490,6 @@ class Ajam_Connection extends Zend_Http_Client
         if(!$response->isSuccessful()) {
             throw new Ajam_Exception('HTTP request failed');
         }
-
-        $this->setUri($oldUri);
     }
     
     /**
