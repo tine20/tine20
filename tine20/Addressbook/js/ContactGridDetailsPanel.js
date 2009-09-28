@@ -196,7 +196,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.Tinebase.widgets.grid
                         if (type) {
                             switch (type) {
                                 case 'country':
-                                    value = Locale.getTranslationData('Territory', value);
+                                    value = Locale.getTranslationData('CountryList', value);
                                     break;
                                 case 'longtext':
                                     value = Ext.util.Format.ellipsis(value, 135);
