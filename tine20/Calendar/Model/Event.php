@@ -192,8 +192,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'id', 
             'dtstart', 
             'dtend', 
-            'is_all_day_event', 
+            'is_all_day_event',
+            'rrule',
+            'rrule_until',
             'attendee', // if we remove this, we need to adopt attendee resolveing
+            'container_id',
             'created_by',
             'creation_time',
             'last_modified_by',
