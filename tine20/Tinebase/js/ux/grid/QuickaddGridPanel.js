@@ -104,7 +104,6 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * renders the quick add fields
      */
     renderQuickAddFields: function() {
-        
         Ext.each(this.getVisibleCols(), function(item){
             if (item.quickaddField) {
                 item.quickaddField.render(this.idPrefix + item.id);
@@ -188,9 +187,13 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var ts = this.getView().templates;
         
         var newRows = '';
-    	Ext.each(this.colModel.columns, function(item){
-    	    newRows += '<td><div class="x-small-editor" id="' + this.idPrefix + item.id + '"></div></td>';
-    	}, this);
+        
+        var cm = this.colModel;
+        var ncols = cm.getColumnCount();
+        for (var i=0; i<ncols; i++) {
+            var colId = cm.getColumnId(i);
+            newRows += '<td><div class="x-small-editor" id="' + this.idPrefix + colId + '"></div></td>';
+        }
         
     	ts.header = new Ext.Template(
             '<table border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
@@ -214,8 +217,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         var newRow = Ext.DomQuery.selectNode('tr[class=new-row]', this.getView().mainHd.dom);
         
-        for (var col, i=0; i<cm.columns.length; i++) {
-            col = cm.columns[i];
+        var ncols = cm.getColumnCount();
+        for (var col, i=0; i<ncols; i++) {
+            col = cm.getColumnAt(i);
             
             if (visCols.indexOf(col) < 0) {
                 newRow.childNodes[i].style.display = 'none';
