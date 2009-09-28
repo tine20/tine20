@@ -71,6 +71,7 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
     {
         $accountIdFilter = $this->_findFilter('account_id');
         if($accountIdFilter !== NULL) {
+            $db = Tinebase_Core::getDb();
             $backend = new Voipmanager_Backend_Snom_Phone();
             $_validPhoneIds = $backend->getValidPhoneIds($accountIdFilter->getValue());   
             if(empty($_validPhoneIds)) {
