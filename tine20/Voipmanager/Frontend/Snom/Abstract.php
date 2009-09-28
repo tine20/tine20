@@ -33,9 +33,7 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' authenticate ' . $_SERVER['PHP_AUTH_USER']);
         
-        $vmController = Voipmanager_Controller_Snom_Phone::getInstance();
-        
-        $authAdapter = new Zend_Auth_Adapter_DbTable($vmController->getDatabaseBackend());
+        $authAdapter = new Zend_Auth_Adapter_DbTable(Tinebase_Core::getDb());
         $authAdapter->setTableName(SQL_TABLE_PREFIX . 'snom_phones')
             ->setIdentityColumn('http_client_user')
             ->setCredentialColumn('http_client_pass')
