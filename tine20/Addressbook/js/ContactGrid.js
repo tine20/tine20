@@ -196,7 +196,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Call contact'),
             disabled: true,
-            handler: this.onCallContact,
+            //handler: this.onCallContact,
             iconCls: 'PhoneIconCls',
             menu: new Ext.menu.Menu({
                 id: 'Addressbook_Contacts_CallContact_Menu'
