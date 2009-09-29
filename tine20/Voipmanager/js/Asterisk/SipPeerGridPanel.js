@@ -266,9 +266,9 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
 				width: 30,
                 sortable: true
 			},{ 
-				id: 'username', 
-				header: this.app.i18n._('username'), 
-				dataIndex: 'username', 
+				id: 'defaultuser', 
+				header: this.app.i18n._('defaultuser'), 
+				dataIndex: 'defaultuser', 
 				width: 30, 
                 sortable: true,
 				hidden: true 
