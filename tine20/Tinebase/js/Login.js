@@ -35,6 +35,8 @@ Tine.Login = {
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';  
 
+        console.log(Tine);
+        
     	var loginButtons = [{
             id: 'loginbutton',
             text: _('Login'),
@@ -95,7 +97,8 @@ Tine.Login = {
             
         });
         this.originalTitle = window.document.title;
-        window.document.title = Tine.title + ' - ' + _('Please enter your login data');
+        var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
+        window.document.title = Tine.title + postfix + ' - ' + _('Please enter your login data');
         this.loginWindow.show();
         Ext.getCmp('username').focus(false, 250);
                     
