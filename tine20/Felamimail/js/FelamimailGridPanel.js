@@ -24,6 +24,7 @@ Ext.namespace('Tine.Felamimail');
  * TODO         add show source code function
  * TODO         make doubleclick work again: show mail in new window (no edit dialog)
  * TODO         add pdf export
+ * TODO         make 'from' column non-(line-)breaking
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -309,7 +310,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         },{
             id: 'from',
             header: this.app.i18n._("From"),
-            width: 150,
+            width: 200,
             sortable: true,
             dataIndex: 'from'
         },{
@@ -322,7 +323,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         },{
             id: 'sent',
             header: this.app.i18n._("Sent"),
-            width: 150,
+            width: 100,
             sortable: true,
             dataIndex: 'sent',
             hidden: true,
@@ -330,7 +331,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         },{
             id: 'received',
             header: this.app.i18n._("Received"),
-            width: 150,
+            width: 100,
             sortable: true,
             dataIndex: 'received',
             renderer: Tine.Tinebase.common.dateTimeRenderer
