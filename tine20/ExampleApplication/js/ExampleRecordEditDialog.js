@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     ExampleApplication
@@ -11,6 +11,23 @@
  
 Ext.namespace('Tine.ExampleApplication');
 
+/**
+ * @namespace   Tine.ExampleApplication
+ * @class       Tine.ExampleApplication.ExampleRecordEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ * 
+ * <p>ExampleRecord Compose Dialog</p>
+ * <p></p>
+ * 
+ *  @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id:ExampleRecordEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.ExampleApplication.ExampleRecordEditDialog
+ */
 Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
@@ -26,17 +43,29 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
+     * @private
      */
     updateToolbars: function() {
 
     },
     
+    /**
+     * executed after record got updated from proxy
+     * 
+     * @private
+     */
     onRecordLoad: function() {
     	// you can do something here
 
     	Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onRecordLoad.call(this);        
     },
     
+    /**
+     * executed when record gets updated from form
+     * - add attachments to record here
+     * 
+     * @private
+     */
     onRecordUpdate: function() {
         Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onRecordUpdate.call(this);
         
@@ -47,6 +76,9 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
+     * 
+     * @return {Object}
+     * @private
      */
     getFormItems: function() {
         return {
@@ -159,6 +191,9 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
 
 /**
  * ExampleApplication Edit Popup
+ * 
+ * @param   {Object} config
+ * @return  {Ext.ux.Window}
  */
 Tine.ExampleApplication.ExampleRecordEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
