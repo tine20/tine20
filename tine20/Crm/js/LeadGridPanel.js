@@ -20,6 +20,8 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Grid Panel</p>
  * <p><pre>
+ * TODO         add export button again
+ * TODO         show closed leads button again
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -82,7 +84,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                // @todo add filtes
+                // TODO add filtes
                 /*
                 {label: this.app.i18n._('Lead'),    field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
@@ -103,7 +105,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @return Ext.grid.ColumnModel
      * @private
      * 
-     * TODO    add more columns
+     * TODO add LeadState.Renderer
      */
     getColumnModel: function(){
         return new Ext.grid.ColumnModel({ 
@@ -111,32 +113,15 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 sortable: true,
                 resizable: true
             },
-            columns: [/*{
-                id: 'number',
-                header: this.app.i18n._("Number"),
-                width: 100,
-                sortable: true,
-                dataIndex: 'number'
-            },{
-                id: 'title',
-                header: this.app.i18n._("Title"),
-                width: 350,
-                sortable: true,
-                dataIndex: 'title'
-            },{
-                id: 'status',
-                header: this.app.i18n._("Status"),
-                width: 150,
-                sortable: true,
-                dataIndex: 'status',
-                renderer: this.statusRenderer.createDelegate(this)
-            },{
-                id: 'budget',
-                header: this.app.i18n._("Budget"),
-                width: 100,
-                sortable: true,
-                dataIndex: 'budget'
-            }*/]
+            columns: [
+                {header: this.app.i18n._('Lead id'), id: 'id', dataIndex: 'id', width: 20, hidden: true},
+                {header: this.app.i18n._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
+                {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'partner', width: 175, sortable: false, renderer: this.shortContactRenderer},
+                {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'customer', width: 175, sortable: false, renderer: this.shortContactRenderer},
+                {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100/*, renderer: Tine.Crm.LeadState.Renderer*/},
+                {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
+                {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney }
+            ]
         });
     },
     
@@ -147,6 +132,18 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      */
     statusRenderer: function(value) {
         return this.app.i18n._hidden(value);
+    },
+    
+    /**
+     * contact column renderer
+     * @param {string} value
+     * @return {string}
+     */
+    shortContactRenderer: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {            
+        if( Ext.isArray(_data) && _data.length > 0 ) {
+            var org = ( _data[0].org_name !== null ) ? _data[0].org_name : '';
+            return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(_data[0].n_fileas);
+        }
     },
     
     /**
