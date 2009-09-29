@@ -17,7 +17,10 @@ Ext.namespace('Tine.Crm');
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>Lead Edit Dialog</p>
- * <p></p>
+ * <p>
+ * TODO         add form fields + comboboxes
+ * TODO         add export button
+ * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -90,74 +93,86 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             items:[{               
                 title: this.app.i18n._('Lead'),
                 autoScroll: true,
-                border: false,
+                border: true,
                 frame: true,
                 layout: 'border',
+                id: 'editCenterPanel',
+                defaults: {
+                    border: true,
+                    frame: true            
+                },
                 items: [{
                     region: 'center',
-                    xtype: 'columnform',
                     labelAlign: 'top',
-                    formDefaults: {
+                    layout: 'form',
+                    height: '100%',
+                    defaults: {
                         xtype:'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333
+                        columnWidth: 1
                     },
-                    items: [/*[{
-                        fieldLabel: this.app.i18n._('Number'),
-                        name: 'number',
-                        allowBlank: false
-                        }, {
-                        columnWidth: .666,
-                        fieldLabel: this.app.i18n._('Title'),
-                        name: 'title',
-                        allowBlank: false
-                        }], [{
-                        columnWidth: 1,
-                        xtype: 'textarea',
-                        name: 'description',
-                        height: 150
-                        }], [{
-                            fieldLabel: this.app.i18n._('Unit'),
-                            name: 'price_unit'
-                        }, {
-                            xtype: 'numberfield',
-                            fieldLabel: this.app.i18n._('Unit Price'),
-                            name: 'price',
-                            allowNegative: false
-                            //decimalSeparator: ','
-                        }, {
-                            fieldLabel: this.app.i18n._('Budget'),
-                            name: 'budget'
-                        }, {
+                    items: [
+                        {
                             hideLabel: true,
-                            boxLabel: this.app.i18n._('Timesheets are billable'),
-                            name: 'is_billable',
-                            xtype: 'checkbox'
-                        }, {
-                            fieldLabel: this.app.i18n._('Status'),
-                            name: 'is_open',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
-                        }, {
-                            fieldLabel: this.app.i18n._('Billed'),
-                            name: 'status',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            value: 'not yet billed',
-                            store: [
-                                ['not yet billed', this.app.i18n._('not yet billed')], 
-                                ['to bill', this.app.i18n._('to bill')],
-                                ['billed', this.app.i18n._('billed')]
-                            ]
-                        }]*/] 
+                            id: 'lead_name',
+                            emptyText: this.app.i18n._('Enter short name'),
+                            name:'lead_name',
+                            allowBlank: false,
+                            selectOnFocus: true
+                        }/*,
+                        {
+                            xtype: 'panel',
+                            id: 'linkPanelTop',
+                            height: 210,
+                            items: [ _linkTabpanels.contactsPanel ]
+                        },
+                        {
+                        layout:'column',
+                        height: 140,
+                        id: 'lead_combos',
+                        anchor:'100%',                        
+                        items: [{
+                            columnWidth: 0.33,
+                            items:[{
+                                layout: 'form',
+                                items: [
+                                    combo_leadstatus, 
+                                    combo_leadtyp,
+                                    combo_leadsource
+                                ]
+                            }]                          
+                        },{
+                            columnWidth: 0.33,
+                            items:[{
+                                layout: 'form',
+                                border:false,
+                                items: [
+                                {
+                                    xtype:'numberfield',
+                                    fieldLabel: translation._('Expected turnover'), 
+                                    name: 'turnover',
+                                    selectOnFocus: true,
+                                    anchor: '95%'
+                                },  
+                                    combo_probability//,
+                                    //folderTrigger 
+                                ]
+                            }]              
+                        },{
+                            columnWidth: 0.33,
+                            items:[{
+                                layout: 'form',
+                                border:false,
+                                items: [
+                                    date_start,
+                                    date_scheduledEnd,
+                                    date_end   
+                                ]
+                            }]
+                        }*/
+                    ]
                 }, {
-                    // activities and tags
                     layout: 'accordion',
                     animate: true,
                     region: 'east',
@@ -168,17 +183,36 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Crm',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    }),
-                    new Tine.widgets.tags.TagPanel({
-                        app: 'Crm',
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    })]
+                        new Ext.Panel({
+                            title: this.app.i18n._('Description'),
+                            iconCls: 'descriptionIcon',
+                            layout: 'form',
+                            labelAlign: 'top',
+                            border: false,
+                            items: [{
+                                style: 'margin-top: -4px; border 0px;',
+                                labelSeparator: '',
+                                xtype:'textarea',
+                                name: 'description',
+                                hideLabel: true,
+                                grow: false,
+                                preventScrollbars:false,
+                                anchor:'100% 100%',
+                                emptyText: this.app.i18n._('Enter description')                        
+                            }]
+                        }),
+                        new Tine.widgets.activities.ActivitiesPanel({
+                            app: 'Crm',
+                            showAddNoteForm: false,
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        }),
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Crm',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        })
+                    ]
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
@@ -199,7 +233,7 @@ Tine.Crm.LeadEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 470,
+        height: 750,
         name: Tine.Crm.LeadEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Crm.LeadEditDialog',
         contentPanelConstructorConfig: config
