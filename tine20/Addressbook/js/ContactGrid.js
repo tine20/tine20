@@ -161,8 +161,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     /**
      * return additional tb items
      * @private
-     * 
-     * TODO add toolbar items to context menu
      */
     getToolbarItems: function() {
         this.actions_exportContact = new Ext.Action({
