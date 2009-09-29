@@ -443,6 +443,14 @@ abstract class Tinebase_Controller_Record_Abstract
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
+            // send notifications
+            if ($this->_sendNotifications) {
+                foreach ($records as $record) {
+                    $this->sendNotifications($record, $this->_currentAccount, 'deleted');
+                }
+            }
+            
+            
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
