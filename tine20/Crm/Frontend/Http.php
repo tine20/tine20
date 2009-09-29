@@ -5,7 +5,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Http.php 5090 2008-10-24 10:30:05Z p.schuele@metaways.de $
  */
 
@@ -28,14 +28,16 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
+            'Crm/js/Models.js',
             'Crm/js/Crm.js',
+            'Crm/js/LeadGridPanel.js',
             'Crm/js/LeadEditDialog.js',
-            'Crm/js/LeadState.js',
-            'Crm/js/LeadSource.js',
-            'Crm/js/LeadType.js',
-            'Crm/js/Product.js',
-            'Addressbook/js/SearchCombo.js',
-            'Crm/js/Contact.js',
+            //'Crm/js/LeadState.js',
+            //'Crm/js/LeadSource.js',
+            //'Crm/js/LeadType.js',
+            //'Crm/js/Product.js',
+            //'Addressbook/js/SearchCombo.js',
+            //'Crm/js/Contact.js',
         );
     }
     

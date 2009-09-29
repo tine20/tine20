@@ -78,9 +78,10 @@
         <source src="../tine20/Calendar/js/PagingToolbar.js"/> 
         <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
-        <!--<source src="../tine20/Crm/js/Crm.js"/>
+        <source src="../tine20/Crm/js/Crm.js"/>
         <source src="../tine20/Crm/js/Models.js"/>
-        <source src="../tine20/Crm/js/LeadGridPanel.js"/>-->
+        <source src="../tine20/Crm/js/LeadGridPanel.js"/>
+        <source src="../tine20/Crm/js/LeadEditDialog.js"/>
         <source src="../tine20/ExampleApplication/js/ExampleRecordGridPanel.js"/>
         <source src="../tine20/ExampleApplication/js/ExampleRecordEditDialog.js"/>
         <source src="../tine20/Felamimail/js" match="*.js"/>
