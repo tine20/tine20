@@ -94,7 +94,10 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         'useclientcode'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'authuser'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'call-limit'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'busy-level'            => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'busy-level'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'regserver'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'useragent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lastms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**
