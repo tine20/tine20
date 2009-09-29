@@ -35,8 +35,6 @@ Tine.Login = {
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';  
 
-        console.log(Tine);
-        
     	var loginButtons = [{
             id: 'loginbutton',
             text: _('Login'),
