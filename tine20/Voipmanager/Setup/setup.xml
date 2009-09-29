@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>2.0</version>
+    <version>2.1</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -497,6 +497,7 @@
                     <value>inband</value>
                     <value>info</value>
                     <value>rfc2833</value>
+                    <value>auto</value>
                     <default>rfc2833</default>
                 </field>
                 <field>
@@ -628,7 +629,7 @@
                     <default>friend</default>
                 </field>
                 <field>
-                    <name>username</name>
+                    <name>defaultuser</name>
                     <type>text</type>
                     <length>80</length>
                     <notnull>false</notnull>
@@ -707,6 +708,24 @@
                     <type>integer</type>
                     <length>11</length>
                     <default>1</default>
+                </field>
+                <field>
+                    <name>regserver</name>
+                    <type>text</type>
+                    <length>254</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>useragent</name>
+                    <type>text</type>
+                    <length>254</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>lastms</name>
+                    <type>integer</type>
+                    <length>11</length>
+                    <notnull>false</notnull>
                 </field>
                 <index>
                     <name>id</name>
