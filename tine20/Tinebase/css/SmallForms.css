@@ -25,6 +25,8 @@
 
 .ext-safari .x-form-text {
     height: 17px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .x-form-field {
@@ -69,6 +71,11 @@
 
 .ext-safari .x-small-editor .x-form-trigger {
     height: 17px;
+}
+
+.ext-safari .x-small-editor .x-form-text {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .x-tab-strip-top .x-tab-strip-active .x-tab-right span.x-tab-strip-text {
