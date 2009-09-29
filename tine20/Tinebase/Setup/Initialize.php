@@ -109,6 +109,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      * 
      * @param array $_options
      * @return array
+     * 
+     * @todo generalize this to allow to add other options during cli setup
      */
     protected function _parseEmailOptions($_options)
     {
@@ -128,6 +130,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
                         $result[$group][$key] = $value;
                     }
                 }
+                $result[$group]['active'] = 1;
             }
         }
         
