@@ -452,7 +452,28 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             }
             
-            return $this->update($baseEvent, FALSE);
+            $sendNotifications = $this->_sendNotifications;
+            $this->_sendNotifications = FALSE;
+                
+            $updatedEvent = $this->update($baseEvent, FALSE);
+            
+            $this->_sendNotifications = $sendNotifications;
+            
+            // send notifications
+            if ($this->_sendNotifications) {
+                // NOTE: recur exception is a fake event from client. 
+                //       this might lead to problems, so we wrap the calls
+                try {
+                    $_event->attendee->bypassFilters = TRUE;
+                    $_event->created_by = $baseEvent->created_by;
+                    
+                    $this->sendNotifications($_event, $this->_currentAccount, 'deleted');
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not send notification {$e->getMessage()}");
+                }
+            }
+            
+            return $updatedEvent;
         }
     }
     
