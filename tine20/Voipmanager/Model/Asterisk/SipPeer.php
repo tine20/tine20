@@ -81,7 +81,7 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         'rtpholdtimeout'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'secret'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'username'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'defaultuser'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'disallow'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'allow'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'musiconhold'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
