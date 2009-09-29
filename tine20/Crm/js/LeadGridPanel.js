@@ -20,6 +20,7 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Grid Panel</p>
  * <p><pre>
+ * TODO         add filters again
  * TODO         add export button again
  * TODO         show closed leads button again
  * </pre></p>
@@ -84,7 +85,6 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                // TODO add filtes
                 /*
                 {label: this.app.i18n._('Lead'),    field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
