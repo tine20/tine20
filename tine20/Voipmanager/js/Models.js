@@ -435,7 +435,7 @@ Tine.Voipmanager.Model.AsteriskSipPeerArray = Tine.Tinebase.Model.genericFields.
     {name: 'rtpholdtimeout'},
     {name: 'secret'},
     {name: 'type'},
-    {name: 'username'},
+    {name: 'defaultuser'},
     {name: 'disallow'},
     {name: 'allow'},
     {name: 'musiconhold'},
