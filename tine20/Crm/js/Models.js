@@ -74,6 +74,7 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
  * @static
  * 
  * TODO get default leadstate/source/type from registry
+ * TODO add default container id?
  */ 
 Tine.Crm.Model.Lead.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Crm');
@@ -83,8 +84,11 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
     
     var data = {
         start: new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
-        //container_id: app.getMainScreen().getTreePanel().getAddCalendar(),
-        //editGrant: true,
+        container_id: {
+            account_grants: {
+                editGrant: true
+            }
+        },
         leadstate_id: 1,
         leadtype_id: 1,
         leadsource_id: 1,
@@ -95,7 +99,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
             type: 'responsible',
             related_record: {
                 n_fileas: currentAccount.accountDisplayName,
-                id: currentAccount.contact_id,
+                id: currentAccount.contact_id
             }
         }]
     };
