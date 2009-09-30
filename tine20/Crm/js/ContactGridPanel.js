@@ -19,9 +19,10 @@ Ext.ns('Tine.Crm');
  * Lead Dialog Contact Grid Panel
  * 
  * <p>
- * TODO         make actions work
+ * TODO         make edit + add new actions work
  * TODO         add ctx menu
  * TODO         move contact search combo into grid (like attendee/recipient grid)
+ * TODO         generalize this and use it for tasks/products
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -65,6 +66,15 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initStore();
         this.initActions();
         this.cm = this.getColumnModel();
+        
+        this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+        this.selModel.on('selectionchange', function(_selectionModel) {
+            var rowCount = _selectionModel.getCount();
+            if (this.record && (this.record.get('container_id') && this.record.get('container_id').account_grants)) {
+                this.actionUnlink.setDisabled(!this.record.get('container_id').account_grants.editGrant || rowCount != 1);
+            }
+            //this.actionEdit.setDisabled(rowCount != 1);
+        }, this);
         
         Tine.Crm.ContactGridPanel.superclass.initComponent.call(this);
     },
@@ -144,17 +154,13 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.store.setDefaultSort('type', 'asc');   
         
-        // TODO focus+select new record
-        /*
-        this.store.on('add', function(store, records, index){
-            var grid = Ext.getCmp('crmGridContacts');
-            
+        // focus+select new record
+        this.store.on('add', function(store, records, index) {
             (function() {
-                grid.getView().focusRow(index);
-                grid.getSelectionModel().selectRow(index); 
-            }).defer(300);
-        });
-        */
+                this.getView().focusRow(index);
+                this.getSelectionModel().selectRow(index); 
+            }).defer(100, this);
+        }, this);
         
         // TODO remove that later
         Ext.StoreMgr.add('ContactsStore', this.store);
@@ -164,31 +170,29 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initActions: function() {
-        this.actionsAddContact = new Ext.Action({
+        this.actionsAdd = new Ext.Action({
             requiredGrant: 'editGrant',
             contactType: 'customer',
             text: this.app.i18n._('Add new contact'),
             tooltip: this.app.i18n._('Add new customer contact'),
             iconCls: 'actionAdd',
             scope: this,
-            handler: this.onAddContact
+            handler: this.onAdd
         }); 
         
-        this.actionUnlinkContact = new Ext.Action({
+        this.actionUnlink = new Ext.Action({
             requiredGrant: 'editGrant',
             text: this.app.i18n._('Unlink contact'),
             tooltip: this.app.i18n._('Unlink selected contacts'),
             disabled: true,
             iconCls: 'actionRemove',
             scope: this,
-            gridId: 'crmGridContacts',
-            storeName: 'ContactsStore',
-            handler: this.onUnlinkContact
+            handler: this.onUnlink
         });
 
         this.bbar = [                
-            this.actionsAddContact,
-            this.actionUnlinkContact
+            this.actionsAdd,
+            this.actionUnlink
         ];
             
         this.tbar = new Ext.Panel({
@@ -206,7 +210,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * onclick handler for onAddContact
      */
-    onAddContact: function(_button, _event) {
+    onAdd: function(_button, _event) {
         var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
             listeners: {
                 scope: this,
@@ -218,7 +222,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * onclick handler for editContact
      */
-    editContact: function(_button, _event) {
+    onEdit: function(_button, _event) {
         var selectedRows = this.getSelectionModel().getSelections();
         
         var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
@@ -228,6 +232,21 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 'update': this.onContactUpdate
             }
         });         
+    },
+    
+    /**
+     * unlink action handler for linked objects
+     * 
+     * remove selected objects from store
+     * needs _button.gridId and _button.storeName
+     */
+    onUnlink: function(_button, _event) {                       
+        console.log('unlink');
+        
+        var selectedRows = this.getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            this.store.remove(selectedRows[i]);
+        }           
     },
 
     /**
