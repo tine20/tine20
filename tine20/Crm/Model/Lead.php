@@ -178,6 +178,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     $data['related_id'] = $relation['related_record']['id'];
                 }                
                 
+                $relation['type'] = strtoupper($relation['type']);
                 switch ($relation['type']) {
                     case 'RESPONSIBLE':                        
                         $data['related_model'] = 'Addressbook_Model_Contact';
@@ -196,7 +197,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         $data['related_backend'] = Tasks_Backend_Factory::SQL;
                         break;                    
                     default:
-                        throw new Crm_Exception_UnexpectedValue('Relation type not supported.');
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE)); 
+                        throw new Crm_Exception_UnexpectedValue('Relation type ' . $relation['type'] . ' not supported.');
                 }
 
                 // sanitize container id
