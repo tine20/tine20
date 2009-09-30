@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * lead type edit dialog and model
  * 
@@ -8,14 +8,18 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo translate
+ * TODO         remove/refactor admin lead source
  */
 
 Ext.namespace('Tine.Crm', 'Tine.Crm.LeadType');
 
 /**
+ * @namespace Tine.Crm.LeadType
+ * @class Tine.Crm.LeadType.Model
+ * @extends Ext.data.Record
+ * 
  * lead type model
- */
+ */ 
 Tine.Crm.LeadType.Model = Ext.data.Record.create([
    {name: 'id', type: 'int'},
    {name: 'leadtype'}
@@ -23,9 +27,8 @@ Tine.Crm.LeadType.Model = Ext.data.Record.create([
 
 /**
  * get lead type store
- * if available, load data from LeadTypes
  * 
- * @return Ext.data.JsonStore with lead types
+ * @return  {Ext.data.JsonStore}
  */
 Tine.Crm.LeadType.getStore = function() {
 	
@@ -54,6 +57,9 @@ Tine.Crm.LeadType.getStore = function() {
 	return store;
 };
 
+/**
+ * @deprecated
+ */
 Tine.Crm.LeadType.EditDialog = function() {
     var Dialog = new Ext.Window({
         title: 'Leadtypes',

@@ -68,7 +68,7 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
 /**
  * @namespace Tine.Crm.Model
  * @class Tine.Crm.Model.ProductLink
- * @extends Tine.Tinebase.data.Record
+ * @extends Ext.data.Record
  * 
  * Product Link Record Definition
  * 

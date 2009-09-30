@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * lead state edit dialog and model
  * 
@@ -8,14 +8,18 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo translate
+ * TODO         remove/refactor admin lead state 
  */
 
 Ext.namespace('Tine.Crm', 'Tine.Crm.LeadState');
 
 /**
+ * @namespace Tine.Crm.LeadState
+ * @class Tine.Crm.LeadState.Model
+ * @extends Ext.data.Record
+ * 
  * lead state model
- */
+ */ 
 Tine.Crm.LeadState.Model = Ext.data.Record.create([
     {name: 'id'},
     {name: 'leadstate'},
@@ -27,7 +31,7 @@ Tine.Crm.LeadState.Model = Ext.data.Record.create([
  * get lead state store
  * if available, load data from Tine.Crm.registry.get('LeadStates')
  *
- * @return Ext.data.JsonStore with lead states
+ * @return {Ext.data.JsonStore}
  */
 Tine.Crm.LeadState.getStore = function() {
 	var store = Ext.StoreMgr.get('CrmLeadstateStore');
@@ -59,8 +63,8 @@ Tine.Crm.LeadState.getStore = function() {
 /**
  * lead state renderer
  * 
- * @param   int _leadstateId
- * @return  string leadstate
+ * @param   {Number} _leadstateId
+ * @return  {String} leadstate
  */
 Tine.Crm.LeadState.Renderer = function(_leadstateId) {
 	leadstateStore = Tine.Crm.LeadState.getStore();		
@@ -75,6 +79,8 @@ Tine.Crm.LeadState.Renderer = function(_leadstateId) {
 
 /**
  * lead states edit dialog
+ * 
+ * @deprecated
  */
 Tine.Crm.LeadState.EditDialog = function() {
     var isXlead = new Ext.ux.grid.CheckColumn({
@@ -206,6 +212,11 @@ Tine.Crm.LeadState.EditDialog = function() {
     Dialog.show();
 };
 
+/**
+ * @namespace Tine.Crm.LeadState
+ * @class Tine.Crm.LeadState.Filter
+ * @extends Tine.widgets.grid.FilterModel
+ */
 Tine.Crm.LeadState.Filter = Ext.extend(Tine.widgets.grid.FilterModel, {
     field: 'leadstate_id',
     valueType: 'number',    

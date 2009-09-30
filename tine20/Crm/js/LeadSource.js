@@ -1,4 +1,4 @@
-/**
+/*
  * Tine 2.0
  * lead source edit dialog and model
  * 
@@ -8,14 +8,18 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo translate
+ * TODO         remove/refactor admin lead source
  */
 
 Ext.namespace('Tine.Crm', 'Tine.Crm.LeadSource');
 
 /**
+ * @namespace Tine.Crm.LeadSource
+ * @class Tine.Crm.LeadSource.Model
+ * @extends Ext.data.Record
+ * 
  * lead source model
- */
+ */ 
 Tine.Crm.LeadSource.Model = Ext.data.Record.create([
    {name: 'id', type: 'int'},
    {name: 'leadsource'}
@@ -25,7 +29,7 @@ Tine.Crm.LeadSource.Model = Ext.data.Record.create([
  * get lead source store
  * if available, load data from LeadSources
  * 
- * @return Ext.data.JsonStore with lead sources
+ * @return {Ext.data.JsonStore}
  */
 Tine.Crm.LeadSource.getStore = function() {
     
@@ -54,6 +58,9 @@ Tine.Crm.LeadSource.getStore = function() {
     return store;
 };
 
+/**
+ * @deprecated
+ */
 Tine.Crm.LeadSource.EditDialog = function() {
     var Dialog = new Ext.Window({
         title: 'Leadsources',
