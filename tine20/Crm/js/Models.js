@@ -59,12 +59,10 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
     containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'Leads',
-    containersName: 'Leads'
-    /*,
+    containersName: 'Leads',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
+        return this.get('lead_name') ? this.get('lead_name') : false;
     }
-    */
 });
 
 /**
