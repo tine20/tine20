@@ -19,7 +19,9 @@ Ext.namespace('Tine.Crm');
  * <p>Lead Edit Dialog</p>
  * <p>
  * TODO         make marking of invalid fields work again
- * TODO         add link grids
+ * TODO         add tasks grid
+ * TODO         add products grid
+ * TODO         make grants work
  * TODO         add export button
  * </p>
  * 
@@ -41,7 +43,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Crm',
     recordClass: Tine.Crm.Model.Lead,
     recordProxy: Tine.Crm.leadBackend,
-    loadRecord: true,
+    loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     
@@ -59,10 +61,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-        // you can do something here
-        
-        //console.log(this.record);
-        this.splitRelations();
+        if (! this.record.data.contacts) {
+            // load contacts into contacts grid
+            this.splitRelations();
+            if (this.record.get('contacts')) {
+                this.contactGrid.store.loadData(this.record.get('contacts'), true);
+            }
+        }
 
         Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);        
     },
@@ -76,7 +81,88 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Crm.LeadEditDialog.superclass.onRecordUpdate.call(this);
         
-        // you can do something here    
+        delete this.record.data.contacts;
+        this.record = this.getAdditionalData(this.record);
+    },
+    
+    /**
+     * getRelationData
+     * get the record relation data (switch relation and related record)
+     * 
+     * @param   Object record with relation data
+     * @return  Object relation with record data
+     */
+    getRelationData: function(record) {
+        var relation = null; 
+        
+        if (record.data.relation) {
+            relation = record.data.relation;
+        } else {
+            // empty relation for new record
+            relation = {};
+        }
+
+        // set the relation type
+        if (!relation.type) {
+            relation.type = record.data.relation_type.toUpperCase();
+        }
+        
+        // do not do recursion!
+        delete record.data.relation;
+        //delete record.data.relation_type;
+        
+        // save record data        
+        relation.related_record = record.data;
+        
+        return relation;
+    },
+
+    /**
+     * getAdditionalData
+     * collects additional data (start/end dates, linked contacts, ...)
+     * 
+     * @param   Tine.Crm.Model.Lead lead
+     * @return  Tine.Crm.Model.Lead lead
+     * 
+     * TODO add tasks and products again
+     */
+    getAdditionalData: function(lead) {
+        // collect data of relations
+        var relations = [];
+        
+        // contacts
+        var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+        //console.log(storeContacts);
+        storeContacts.each(function(record) {                     
+            relations.push(this.getRelationData(record));
+        }, this);
+        
+        // tasks
+        /*
+        var storeTasks = Ext.StoreMgr.lookup('TasksStore');    
+        //console.log(storeTasks);
+        storeTasks.each(function(record) {
+            relations.push(this.getRelationData(record));
+        }, this);
+        */
+        
+        //console.log(relations);
+        //lead.data.relations = {};
+        lead.data.relations = relations;
+        
+        // add products
+        /*
+        var linksProducts = [];
+        var storeProducts = Ext.StoreMgr.lookup('ProductsStore');       
+
+        storeProducts.each(function(record) {
+            linksProducts.push(record.data);
+        });
+        
+        lead.data.products = linksProducts;
+        */
+        
+        return lead;
     },
     
     /**
@@ -95,7 +181,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             newLinkObject.relation = relations[i];
             newLinkObject.relation_type = relations[i]['type'].toLowerCase();
     
-            console.log(newLinkObject);
+            //console.log(newLinkObject);
             if ((newLinkObject.relation_type === 'responsible' 
               || newLinkObject.relation_type === 'customer' 
               || newLinkObject.relation_type === 'partner')) {

@@ -23,6 +23,7 @@ Ext.ns('Tine.Crm');
  * TODO         add ctx menu
  * TODO         move contact search combo into grid (like attendee/recipient grid)
  * TODO         generalize this and use it for tasks/products
+ * TODO         make grants work
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -70,10 +71,13 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         this.selModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
+            /*
             if (this.record && (this.record.get('container_id') && this.record.get('container_id').account_grants)) {
                 this.actionUnlink.setDisabled(!this.record.get('container_id').account_grants.editGrant || rowCount != 1);
             }
-            //this.actionEdit.setDisabled(rowCount != 1);
+            this.actionEdit.setDisabled(rowCount != 1);
+            */
+            this.actionUnlink.setDisabled(rowCount != 1);
         }, this);
         
         Tine.Crm.ContactGridPanel.superclass.initComponent.call(this);
@@ -147,10 +151,6 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             id: 'id',
             fields: contactFields
         });
-
-        // get contacts from record
-        //console.log(this.record);
-        this.store.loadData(this.record.get('contacts'), true);                    
 
         this.store.setDefaultSort('type', 'asc');   
         
@@ -241,8 +241,6 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * needs _button.gridId and _button.storeName
      */
     onUnlink: function(_button, _event) {                       
-        console.log('unlink');
-        
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
             this.store.remove(selectedRows[i]);

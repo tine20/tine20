@@ -74,7 +74,8 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
  * @static
  * 
  * TODO get default leadstate/source/type from registry
- * TODO add default container id?
+ * TODO add default container id / account grants?
+ * TODO get responsible contact from registry
  */ 
 Tine.Crm.Model.Lead.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Crm');
@@ -84,11 +85,13 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
     
     var data = {
         start: new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
+        /*
         container_id: {
             account_grants: {
                 editGrant: true
             }
         },
+        */
         leadstate_id: 1,
         leadtype_id: 1,
         leadsource_id: 1,
