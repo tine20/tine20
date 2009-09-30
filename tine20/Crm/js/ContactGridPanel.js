@@ -19,6 +19,7 @@ Ext.ns('Tine.Crm');
  * Lead Dialog Contact Grid Panel
  * 
  * <p>
+ * TODO         make actions work
  * TODO         add ctx menu
  * TODO         move contact search combo into grid (like attendee/recipient grid)
  * </p>
@@ -60,13 +61,6 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
-        //this.title = this.app.i18n._('Contacts');
-        /*
-        this.plugins = this.plugins || [];
-        this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-        this.on('beforeedit', this.onBeforeAttenderEdit, this);
-        this.on('afteredit', this.onAfterAttenderEdit, this);
-        */
 
         this.initStore();
         this.initActions();
@@ -86,7 +80,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             },
             columns: [            
                 {id:'id', header: "id", dataIndex: 'id', width: 25, hidden: true },
-                {id:'n_fileas', header: this.app.i18n._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
+                {id:'n_fileas', header: this.app.i18n._('Name'), dataIndex: 'n_fileas', width: 200, sortable: true, renderer: 
                     function(val, meta, record) {
                         var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : ' ';
                         var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : ' ';                            
@@ -95,7 +89,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         return formated_return;
                     }
                 },
-                {id:'contact_one', header: this.app.i18n._("Address"), dataIndex: 'adr_one_locality', width: 160, sortable: false, renderer: function(val, meta, record) {
+                {id:'contact_one', header: this.app.i18n._("Address"), dataIndex: 'adr_one_locality', width: 140, sortable: false, renderer: function(val, meta, record) {
                         var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : ' ';
                         var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : ' ';
                         var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : ' ';
@@ -106,7 +100,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         return formated_return;
                     }
                 },
-                {id:'tel_work', header: this.app.i18n._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
+                {id:'tel_work', header: this.app.i18n._("Data"), dataIndex: 'tel_work', width: 140, sortable: false, renderer: function(val, meta, record) {
                         var translation = new Locale.Gettext();
                         translation.textdomain('Crm');
                         var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? translation._('Phone') + ': ' + record.data.tel_work : ' ';
@@ -118,7 +112,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     id:'relation_type', 
                     header: this.app.i18n._("Type"), 
                     dataIndex: 'relation_type', 
-                    width: 75, 
+                    width: 60, 
                     sortable: true,
                     renderer: Tine.Crm.contactType.Renderer,
                     editor: new Tine.Crm.contactType.ComboBox({
@@ -136,7 +130,6 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     initStore: function() {
         var contactFields = Tine.Addressbook.Model.ContactArray;
-        //console.log(contactFields);
         contactFields.push({name: 'relation'});   // the relation object           
         contactFields.push({name: 'relation_type'});     
         
@@ -145,12 +138,9 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             fields: contactFields
         });
 
-        // TODO get contacts from record
-        /*
-        if(_contacts) {
-            storeContacts.loadData(_contacts, true);                    
-        }
-        */
+        // get contacts from record
+        //console.log(this.record);
+        this.store.loadData(this.record.get('contacts'), true);                    
 
         this.store.setDefaultSort('type', 'asc');   
         
@@ -170,6 +160,9 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.StoreMgr.add('ContactsStore', this.store);
     },
     
+    /**
+     * @private
+     */
     initActions: function() {
         this.actionsAddContact = new Ext.Action({
             requiredGrant: 'editGrant',
@@ -245,8 +238,8 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var store = Ext.StoreMgr.lookup('ContactsStore');
         
         for (var i = 0; i < selectedRows.length; ++i) {
-            selectedRows[i].data.relation_type = _button.contactType;                
-        }                       
+            selectedRows[i].data.relation_type = _button.contactType;
+        }
         
         store.fireEvent('dataChanged', store);
     },

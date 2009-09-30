@@ -67,6 +67,45 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
 
 /**
  * @namespace Tine.Crm.Model
+ * 
+ * get default data for a new lead
+ *  
+ * @return {Object} default data
+ * @static
+ * 
+ * TODO get default leadstate/source/type from registry
+ */ 
+Tine.Crm.Model.Lead.getDefaultData = function() {
+    var app = Tine.Tinebase.appMgr.get('Crm');
+    
+    //console.log(Tine.Tinebase.registry.get('currentAccount'));
+    var currentAccount = Tine.Tinebase.registry.get('currentAccount');
+    
+    var data = {
+        start: new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
+        //container_id: app.getMainScreen().getTreePanel().getAddCalendar(),
+        //editGrant: true,
+        leadstate_id: 1,
+        leadtype_id: 1,
+        leadsource_id: 1,
+        probability: 0,
+        turnover: 0,
+        relations: [
+        {
+            type: 'responsible',
+            related_record: {
+                n_fileas: currentAccount.accountDisplayName,
+                id: currentAccount.contact_id,
+            }
+        }]
+    };
+    
+    return data;
+};
+
+
+/**
+ * @namespace Tine.Crm.Model
  * @class Tine.Crm.Model.ProductLink
  * @extends Ext.data.Record
  * 

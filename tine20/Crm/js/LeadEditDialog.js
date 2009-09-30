@@ -41,7 +41,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Crm',
     recordClass: Tine.Crm.Model.Lead,
     recordProxy: Tine.Crm.leadBackend,
-    loadRecord: false,
+    loadRecord: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     
@@ -60,6 +60,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function() {
         // you can do something here
+        
+        //console.log(this.record);
+        this.splitRelations();
 
         Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);        
     },
@@ -76,6 +79,87 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // you can do something here    
     },
     
+    /**
+     * split the relations array in contacts and tasks and switch related_record and relation objects
+     * 
+     */
+    splitRelations: function() {
+        
+        var contacts = [];
+        var tasks = []
+        
+        var relations = this.record.get('relations');
+        
+        for (var i=0; i < relations.length; i++) {
+            var newLinkObject = relations[i]['related_record'];
+            newLinkObject.relation = relations[i];
+            newLinkObject.relation_type = relations[i]['type'].toLowerCase();
+    
+            console.log(newLinkObject);
+            if ((newLinkObject.relation_type === 'responsible' 
+              || newLinkObject.relation_type === 'customer' 
+              || newLinkObject.relation_type === 'partner')) {
+                contacts.push(newLinkObject);
+            } else if (newLinkObject.relation_type === 'task') {                
+                tasks.push(newLinkObject);
+            }
+        }
+
+        //console.log(contacts);
+        
+        this.record.data.contacts = contacts;
+        
+        //this.record.set('contacts', contacts);
+        //this.record.set('tasks', tasks);
+        
+        /*
+         * @param array _relations
+        * @param boolean _splitAll if set, all different relation types are splitted into arrays
+        * @return Object with arrays containing the different relation types
+        */
+        /*
+        if (_splitAll) {
+            result = {responsible: [], customer: [], partner: [], tasks: []};
+        } else {
+            result = {contacts: [], tasks: []};
+        }
+    
+        if (!_relations) {
+            return result;
+        }
+        
+        for (var i=0; i < _relations.length; i++) {
+            var newLinkObject = _relations[i]['related_record'];
+            newLinkObject.relation = _relations[i];
+            newLinkObject.relation_type = _relations[i]['type'].toLowerCase();
+    
+            if (!_splitAll && (newLinkObject.relation_type === 'responsible' 
+              || newLinkObject.relation_type === 'customer' 
+              || newLinkObject.relation_type === 'partner')) {
+                result.contacts.push(newLinkObject);
+            } else if (newLinkObject.relation_type === 'task') {                
+                result.tasks.push(newLinkObject);
+            } else {
+                switch(newLinkObject.relation_type) {
+                    case 'responsible':
+                        result.responsible.push(newLinkObject);
+                        break;
+                    case 'customer':
+                        result.customer.push(newLinkObject);
+                        break;
+                    case 'partner':
+                        result.partner.push(newLinkObject);
+                        break;
+                }
+            }
+        }
+        
+        console.log(result);
+           
+        return result;
+        */
+    },
+
     /**
      * returns dialog
      * 
