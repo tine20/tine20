@@ -18,7 +18,8 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Edit Dialog</p>
  * <p>
- * TODO         add form fields + comboboxes
+ * TODO         make marking of invalid fields work again
+ * TODO         add link grids
  * TODO         add export button
  * </p>
  * 
@@ -84,13 +85,27 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+        
+        this.combo_probability = new Ext.ux.PercentCombo({
+            fieldLabel: this.app.i18n._('Probability'), 
+            id: 'combo_probability',
+            anchor:'95%',            
+            name:'probability'
+        });
+        
+        this.date_end = new Ext.ux.form.ClearableDateField({
+            fieldLabel: this.app.i18n._('End'), 
+            id: 'end',
+            anchor: '95%'
+        });
+    
         return {
             xtype: 'tabpanel',
             border: false,
             plain:true,
             activeTab: 0,
             border: false,
-            items:[{               
+            items:[{
                 title: this.app.i18n._('Lead'),
                 autoScroll: true,
                 border: true,
@@ -107,42 +122,83 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     layout: 'form',
                     height: '100%',
                     defaults: {
-                        xtype:'textfield',
                         anchor: '100%',
                         labelSeparator: '',
                         columnWidth: 1
                     },
-                    items: [
-                        {
-                            hideLabel: true,
-                            id: 'lead_name',
-                            emptyText: this.app.i18n._('Enter short name'),
-                            name:'lead_name',
-                            allowBlank: false,
-                            selectOnFocus: true
-                        }/*,
-                        {
-                            xtype: 'panel',
-                            id: 'linkPanelTop',
-                            height: 210,
-                            items: [ _linkTabpanels.contactsPanel ]
-                        },
-                        {
+                    items: [{
+                        xtype:'textfield',
+                        hideLabel: true,
+                        id: 'lead_name',
+                        emptyText: this.app.i18n._('Enter short name'),
+                        name:'lead_name',
+                        allowBlank: false,
+                        selectOnFocus: true
+                    }, {
+                        xtype: 'panel',
+                        id: 'linkPanelTop',
+                        height: 210,
+                        items: [
+                        // _linkTabpanels.contactsPanel 
+                        ]
+                    }, {
+                        xtype: 'panel',
                         layout:'column',
                         height: 140,
                         id: 'lead_combos',
-                        anchor:'100%',                        
+                        anchor:'100%',
                         items: [{
                             columnWidth: 0.33,
                             items:[{
                                 layout: 'form',
-                                items: [
-                                    combo_leadstatus, 
-                                    combo_leadtyp,
-                                    combo_leadsource
-                                ]
-                            }]                          
-                        },{
+                                defaults: {
+                                    valueField:'id',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    editable: false,
+                                    allowBlank: false,
+                                    forceSelection: true,
+                                    anchor:'95%',
+                                    xtype: 'combo'
+                                },
+                                items: [{
+                                    fieldLabel: this.app.i18n._('Leadstate'), 
+                                    id:'leadstatus',
+                                    name:'leadstate_id',
+                                    store: Tine.Crm.LeadState.getStore(),
+                                    displayField:'leadstate',
+                                    lazyInit: false,
+                                    value: Tine.Crm.LeadState.getStore().getAt(0).id,
+                                    listeners: {
+                                        'select': function(combo, record, index) {
+                                            if (this.record.data.probability !== null) {
+                                                this.combo_probability.setValue(record.data.probability);
+                                            }
+                                    
+                                            if (this.record.data.endslead == '1') {
+                                                this.combo_endDate.setValue(new Date());
+                                            }
+                                        },
+                                        scope: this
+                                    }
+                                }, {
+                                    fieldLabel: this.app.i18n._('Leadtype'), 
+                                    id:'leadtype',
+                                    name:'leadtype_id',
+                                    store: Tine.Crm.LeadType.getStore(),
+                                    value: Tine.Crm.LeadType.getStore().getAt(0).id,
+                                    displayField:'leadtype'
+                                }, {
+                                    fieldLabel: this.app.i18n._('Leadsource'), 
+                                    id:'leadsource',
+                                    name:'leadsource_id',
+                                    store: Tine.Crm.LeadSource.getStore(),
+                                    value: Tine.Crm.LeadSource.getStore().getAt(0).id,
+                                    displayField:'leadsource'
+                                }]
+                            }]
+                        }, {
                             columnWidth: 0.33,
                             items:[{
                                 layout: 'form',
@@ -150,77 +206,95 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 items: [
                                 {
                                     xtype:'numberfield',
-                                    fieldLabel: translation._('Expected turnover'), 
+                                    fieldLabel: this.app.i18n._('Expected turnover'), 
                                     name: 'turnover',
                                     selectOnFocus: true,
                                     anchor: '95%'
                                 },  
-                                    combo_probability//,
-                                    //folderTrigger 
+                                    this.combo_probability
                                 ]
-                            }]              
-                        },{
+                            }]
+                        }, {
                             columnWidth: 0.33,
                             items:[{
                                 layout: 'form',
                                 border:false,
                                 items: [
-                                    date_start,
-                                    date_scheduledEnd,
-                                    date_end   
+                                    new Ext.form.DateField({
+                                        fieldLabel: this.app.i18n._('Start'), 
+                                        allowBlank: false,
+                                        id: 'start',             
+                                        anchor: '95%'
+                                    }),
+                                    new Ext.ux.form.ClearableDateField({
+                                        fieldLabel: this.app.i18n._('Estimated end'), 
+                                        id: 'end_scheduled',
+                                        anchor: '95%'
+                                    }),
+                                    this.date_end   
                                 ]
                             }]
-                        }*/
-                    ]
-                }, {
-                    layout: 'accordion',
-                    animate: true,
-                    region: 'east',
-                    width: 210,
-                    split: true,
-                    collapsible: true,
-                    collapseMode: 'mini',
-                    margins: '0 5 0 5',
-                    border: true,
-                    items: [
-                        new Ext.Panel({
-                            title: this.app.i18n._('Description'),
-                            iconCls: 'descriptionIcon',
-                            layout: 'form',
-                            labelAlign: 'top',
-                            border: false,
-                            items: [{
-                                style: 'margin-top: -4px; border 0px;',
-                                labelSeparator: '',
-                                xtype:'textarea',
-                                name: 'description',
-                                hideLabel: true,
-                                grow: false,
-                                preventScrollbars:false,
-                                anchor:'100% 100%',
-                                emptyText: this.app.i18n._('Enter description')                        
-                            }]
-                        }),
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Crm',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Crm',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        })
-                    ]
-                }]
+                        }]
+                    }, {
+                        xtype: 'tabpanel',
+                        id: 'linkPanelBottom',
+                        activeTab: 0,
+                        height: 250,
+                        items: [
+                            //_linkTabpanels.tasksPanel,
+                            //_linkTabpanels.productsPanel
+                        ]
+                    }] // end of center lead panel
+                    }, {
+                        layout: 'accordion',
+                        animate: true,
+                        region: 'east',
+                        width: 210,
+                        split: true,
+                        collapsible: true,
+                        collapseMode: 'mini',
+                        margins: '0 5 0 5',
+                        border: true,
+                        items: [
+                            new Ext.Panel({
+                                title: this.app.i18n._('Description'),
+                                iconCls: 'descriptionIcon',
+                                layout: 'form',
+                                labelAlign: 'top',
+                                border: false,
+                                items: [{
+                                    style: 'margin-top: -4px; border 0px;',
+                                    labelSeparator: '',
+                                    xtype:'textarea',
+                                    name: 'description',
+                                    hideLabel: true,
+                                    grow: false,
+                                    preventScrollbars:false,
+                                    anchor:'100% 100%',
+                                    emptyText: this.app.i18n._('Enter description')                        
+                                }]
+                            }),
+                            new Tine.widgets.activities.ActivitiesPanel({
+                                app: 'Crm',
+                                showAddNoteForm: false,
+                                border: false,
+                                bodyStyle: 'border:1px solid #B5B8C8;'
+                            }),
+                            new Tine.widgets.tags.TagPanel({
+                                app: 'Crm',
+                                border: false,
+                                bodyStyle: 'border:1px solid #B5B8C8;'
+                            })
+                        ]} // end of accordion panel (east)
+                    ] // end of lead tabpanel items
             }, new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })]
-        };
-    }
+                    app: this.appName,
+                    record_id: this.record.id,
+                    record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+               }) // end of activities tabpanel
+            ] // end of main tabpanel items
+        }; // end of return
+    } // end of getFormItems
 });
 
 /**
