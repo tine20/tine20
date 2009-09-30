@@ -85,4 +85,120 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_delete($ids, $this->_controller);
     }    
 
+    /**
+     * Returns registry data of crm.
+     * @see Tinebase_Application_Json_Abstract
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {   
+        $registryData = array(
+            'LeadTypes'   => $this->getLeadtypes('leadtype','ASC'),
+            'LeadStates'  => $this->getLeadStates('leadstate','ASC'),
+            'LeadSources' => $this->getLeadSources('leadsource','ASC'),
+            'Products'    => $this->getProducts('productsource','ASC'),
+        );
+        
+        return $registryData;    
+    }
+    
+    /**
+     * get lead sources
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     * 
+     * @deprecated -> move leadsources to config?
+     */
+    public function getLeadsources($sort, $dir)
+    {     
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller_LeadSources::getInstance()->getLeadSources($sort, $dir)) {
+            $rows->translate();
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    } 
+
+    /**
+     * get lead types
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     * 
+     * @deprecated -> move lead types to config?
+     */
+   public function getLeadtypes($sort, $dir)
+    {
+         $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller_LeadTypes::getInstance()->getLeadTypes($sort, $dir)) {
+            $rows->translate();
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }  
+    
+    /**
+     * get lead states
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     * 
+     * @deprecated -> move lead states to config?
+     */   
+    public function getLeadstates($sort, $dir)
+    {
+         $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller_LeadStates::getInstance()->getLeadStates($sort, $dir)) {
+            $rows->translate();
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;   
+    }  
+    
+    /**
+     * get available products
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     * 
+     * @deprecated -> move producets to sales management
+     */
+    public function getProducts($sort, $dir)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller_LeadProducts::getInstance()->getProducts($sort, $dir)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;  
+    }    
 }
