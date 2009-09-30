@@ -37,6 +37,14 @@ Ext.namespace('Tine.Crm');
 Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
+     * linked contacts grid
+     * 
+     * @type Tine.Crm.ContactGridPanel
+     * @property contactGrid
+     */
+    contactGrid: null,
+    
+    /**
      * @private
      */
     windowNamePrefix: 'LeadEditWindow_',
@@ -61,14 +69,15 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-        if (! this.record.data.contacts) {
-            // load contacts into contacts grid
-            this.splitRelations();
-            if (this.record.get('contacts')) {
+
+        if (this.contactGrid) {
+            if (! this.record.data.contacts) {
+                // load contacts into contacts grid
+                this.splitRelations();
                 this.contactGrid.store.loadData(this.record.get('contacts'), true);
             }
         }
-
+        
         Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);        
     },
     
