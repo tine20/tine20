@@ -98,6 +98,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             id: 'end',
             anchor: '95%'
         });
+        
+        this.contactGrid = new Tine.Crm.ContactGridPanel({
+            record: this.record,
+            height: 210
+        });
     
         return {
             xtype: 'tabpanel',
@@ -134,14 +139,15 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name:'lead_name',
                         allowBlank: false,
                         selectOnFocus: true
-                    }, {
+                    }, this.contactGrid 
+                    /*{
                         xtype: 'panel',
                         id: 'linkPanelTop',
                         height: 210,
                         items: [
-                        // _linkTabpanels.contactsPanel 
+                            this.contactGrid
                         ]
-                    }, {
+                    }*/, {
                         xtype: 'panel',
                         layout:'column',
                         height: 140,

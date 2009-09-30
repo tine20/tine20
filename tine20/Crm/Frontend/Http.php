@@ -32,12 +32,18 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Crm/js/Crm.js',
             'Crm/js/LeadGridPanel.js',
             'Crm/js/LeadEditDialog.js',
+        // lead state/source/type
             'Crm/js/LeadState.js',
             'Crm/js/LeadSource.js',
             'Crm/js/LeadType.js',
-            //'Crm/js/Product.js',
-            //'Addressbook/js/SearchCombo.js',
-            //'Crm/js/Contact.js',
+        // contact grid
+            'Addressbook/js/SearchCombo.js',
+            'Crm/js/ContactCombo.js',
+            'Crm/js/ContactGridPanel.js',
+        // product grid
+            //'Crm/js/ProductGrid.js',
+        // task grid
+            //'Crm/js/TaskGrid.js',
         );
     }
     
