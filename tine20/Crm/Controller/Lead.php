@@ -133,55 +133,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         return $leads;
     }
     
-    /*********** other public functions **************/
     
-    /**
-     * returns an empty lead with some defaults set
-     * - add creator as internal contact
-     *
-     * @return Crm_Model_Lead
-     * 
-     * @todo make use of Tinebase_Config possible here
-     * @deprecated
-     */
-    public function getEmptyLead()
-    {
-        $defaultState  = (isset(Tinebase_Core::getConfig()->crm->defaultstate) ? Tinebase_Core::getConfig()->crm->defaultstate : 1);
-        $defaultType   = (isset(Tinebase_Core::getConfig()->crm->defaulttype) ? Tinebase_Core::getConfig()->crm->defaulttype : 1);
-        $defaultSource = (isset(Tinebase_Core::getConfig()->crm->defaultsource) ? Tinebase_Core::getConfig()->crm->defaultsource : 1);
-        
-        $defaultData = array(
-            'leadstate_id'   => $defaultState,
-            'leadtype_id'    => $defaultType,
-            'leadsource_id'  => $defaultSource,
-            'start'          => Zend_Date::now(),
-            'probability'    => 0,
-            'turnover'       => 0
-        );
-        $emptyLead = new Crm_Model_Lead($defaultData, true);
-        
-        // add creator as RESPONSIBLE
-        try {
-            $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_currentAccount->getId());
-            $emptyLead->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
-            $emptyLead->relations->addRecord(new Tinebase_Model_Relation(array(
-                'own_id'                 => '',
-                'own_model'              => 'Crm_Model_Lead',
-                'own_backend'            => Crm_Backend_Factory::SQL,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model'          => 'Addressbook_Model_Contact',
-                'related_backend'        => Addressbook_Backend_Factory::SQL,
-                'related_id'             => $userContact->getId(),
-                'type'                   => 'RESPONSIBLE',
-                'related_record'         => $userContact->toArray()
-            )));
-        } catch (Addressbook_Exception_AccessDenied $aea) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add responsible user: ' . $aea->getMessage());
-        }
-        
-        return $emptyLead;
-    }
-
     /********************* notifications ***************************/
     
     /**
