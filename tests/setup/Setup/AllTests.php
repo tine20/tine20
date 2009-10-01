@@ -32,6 +32,7 @@ class Setup_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup All Tests');
         //$suite->addTest(Setup_Backend_AllTests::suite());
+        $suite->addTestSuite('Setup_CoreTest');
         $suite->addTestSuite('Setup_ControllerTest');
         $suite->addTestSuite('Setup_JsonTest');
         $suite->addTestSuite('Setup_Backend_AllTests');

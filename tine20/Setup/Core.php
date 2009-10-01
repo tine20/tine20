@@ -67,7 +67,7 @@ class Setup_Core extends Tinebase_Core
     public static function setupConfig()
     {
         if(self::configFileExists()) {
-            $config = new Zend_Config(require dirname(__FILE__) . '/../config.inc.php');
+            $config = new Zend_Config(require self::getConfigFilePath());
         } else {
             $config = new Zend_Config(array());
         }
@@ -81,7 +81,25 @@ class Setup_Core extends Tinebase_Core
      */
     public static function configFileExists()
     {
-        return file_exists(dirname(__FILE__) . '/../config.inc.php');
+        return (bool)self::getConfigFilePath();
+    }
+    
+    /**
+     * Searches for config.inc.php in include paths and returnes the first match
+     *
+     * @return String
+     */
+    public static function getConfigFilePath()
+    {
+        $includePaths = explode(PATH_SEPARATOR, get_include_path());
+        foreach ($includePaths as $includePath) {
+            $path = $includePath . '/config.inc.php';
+            if (file_exists($path)) {
+                return $path;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -90,12 +108,12 @@ class Setup_Core extends Tinebase_Core
      * @return bool
      */
     public static function configFileWritable()
-    {
-        $path = dirname(dirname(__FILE__));
-        
+    {        
         if (self::configFileExists()) {
-            return is_writable($path . DIRECTORY_SEPARATOR . 'config.inc.php');
+            $configFilePath = self::getConfigFilePath();
+            return is_writable($configFilePath);
         } else {
+            $path = dirname(dirname(__FILE__));
             $testfilename = $path . DIRECTORY_SEPARATOR . uniqid(mt_rand()).'.tmp';
             if (!($f = @fopen($testfilename, 'w'))) {
                 error_log(__METHOD__ . '::' . __LINE__ . ' Your tine root dir ' . $path . ' is not writable for the webserver! Config file can\'t be created.');
