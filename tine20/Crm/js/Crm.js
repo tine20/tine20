@@ -32,7 +32,7 @@ Tine.Crm.MainScreen = Tine.Tinebase.widgets.app.MainScreen;
  * @extends Tine.widgets.container.TreePanel
  * Left Crm Panel including Tree<br>
  * 
- * TODO add d&d support to tree (change calendar)
+ * TODO add d&d support to tree
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>

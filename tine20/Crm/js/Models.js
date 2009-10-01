@@ -80,8 +80,12 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
 Tine.Crm.Model.Lead.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Crm');
     
-    //console.log(Tine.Tinebase.registry.get('currentAccount'));
-    var currentAccount = Tine.Tinebase.registry.get('currentAccount');
+    //var currentAccount = Tine.Tinebase.registry.get('currentAccount');
+    //var userContact = new Tine.Addressbook.Model.Contact(Tine.Tinebase.registry.get('userContact'));
+
+    var userContact = Tine.Tinebase.registry.get('userContact');
+    //console.log(userContact);
+    var defaults = Tine.Crm.registry.get('defaults');
     
     var data = {
         start: new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
@@ -92,18 +96,18 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
             }
         },
         */
-        leadstate_id: 1,
-        leadtype_id: 1,
-        leadsource_id: 1,
+        leadstate_id: defaults.leadstate_id,
+        leadtype_id: defaults.leadtype_id,
+        leadsource_id: defaults.leadsource_id,
         probability: 0,
         turnover: 0,
-        relations: [
-        {
+        relations: [{
             type: 'responsible',
-            related_record: {
+            related_record: userContact
+            /* {
                 n_fileas: currentAccount.accountDisplayName,
                 id: currentAccount.contact_id
-            }
+            } */
         }]
     };
     

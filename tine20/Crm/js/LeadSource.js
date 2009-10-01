@@ -49,8 +49,8 @@ Tine.Crm.LeadSource.getStore = function() {
             remoteSort: false
         });
         
-        if ( Tine.Crm.registry.get('LeadSources') ) {
-            store.loadData(Tine.Crm.registry.get('LeadSources'));
+        if ( Tine.Crm.registry.get('leadsources') ) {
+            store.loadData(Tine.Crm.registry.get('leadsources'));
         }
             
         Ext.StoreMgr.add('CrmLeadSourceStore', store);

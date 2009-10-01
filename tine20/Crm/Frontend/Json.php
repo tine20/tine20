@@ -90,17 +90,27 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
+     * 
+     * @todo get defaults from config
+     * @todo add update script to move default config values to db
      */
     public function getRegistryData()
     {   
-        $registryData = array(
-            'LeadTypes'   => $this->getLeadtypes('leadtype','ASC'),
-            'LeadStates'  => $this->getLeadStates('leadstate','ASC'),
-            'LeadSources' => $this->getLeadSources('leadsource','ASC'),
-            'Products'    => $this->getProducts('productsource','ASC'),
+        $defaults = array(
+            'leadstate_id'  => (isset(Tinebase_Core::getConfig()->crm->defaultstate)) ? Tinebase_Core::getConfig()->crm->defaultstate : 1,
+            'leadtype_id'   => (isset(Tinebase_Core::getConfig()->crm->defaulttype)) ? Tinebase_Core::getConfig()->crm->defaulttype : 1,
+            'leadsource_id' => (isset(Tinebase_Core::getConfig()->crm->defaultsource)) ? Tinebase_Core::getConfig()->crm->defaultsource : 1
         );
         
-        return $registryData;    
+        $registryData = array(
+            'leadtypes'     => $this->getLeadtypes('leadtype','ASC'),
+            'leadstates'    => $this->getLeadStates('leadstate','ASC'),
+            'leadsources'   => $this->getLeadSources('leadsource','ASC'),
+            'products'      => $this->getProducts('productsource','ASC'),
+            'defaults'      => $defaults,
+        );
+        
+        return $registryData;
     }
     
     /**
