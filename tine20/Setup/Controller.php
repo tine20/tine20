@@ -114,6 +114,36 @@ class Setup_Controller
     }
     
     /**
+     * Check if logger is propperly configured (or not configured at all)
+     * 
+     * @return bool
+     */
+    public function checkConfigLogger()
+    {
+        $config = Setup_Core::getConfig();
+        if (!isset($config->logger) || !$config->logger->active) {
+            return true;
+        } else {
+            return (isset($config->logger->filename) && is_writable($config->logger->filename));
+        }
+    }
+    
+    /**
+     * Check if caching is propperly configured (or not configured at all)
+     * 
+     * @return bool
+     */
+    public function checkConfigCaching()
+    {
+        $config = Setup_Core::getConfig();
+        if (!isset($config->caching) || !$config->caching->active) {
+            return true;
+        } else {
+            return (isset($config->caching->path) && is_writable($config->caching->path));
+        }
+    }
+    
+    /**
      * get list of applications as found in the filesystem
      *
      * @return array appName => setupXML

@@ -209,9 +209,11 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             'configExists'    => Setup_Core::configFileExists(),
             'configWritable'  => Setup_Core::configFileWritable(),
             'checkDB'         => Setup_Core::get(Setup_Core::CHECKDB),
-        	'setupRequired'	  => $this->_controller->setupRequired(),
+            'checkLogger'     => $this->_controller->checkConfigLogger(),
+            'checkCaching'    => $this->_controller->checkConfigCaching(),
+            'setupRequired'	  => $this->_controller->setupRequired(),
         );
-        
+
         return $result;        
     }
     
@@ -297,13 +299,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         // authenticated or non existent config
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
-        	$checkDB = Setup_Core::get(Setup_Core::CHECKDB);
-        	$setupRequired = $this->_controller->setupRequired();
+            $registryData = array_merge($registryData, $this->checkConfig());
         	$registryData = array_merge($registryData, array(
-	            'configWritable'       => Setup_Core::configFileWritable(),
-	            'checkDB'              => $checkDB,
 	            'setupChecks'          => $this->envCheck(),
-        	    'setupRequired'        => $setupRequired,
 	            'configData'           => $this->loadConfig(),
         	    'authenticationData'   => ($checkDB) ? $this->loadAuthenticationData() : array(),
         	    'emailData'            => ($checkDB && ! $setupRequired) ? $this->getEmailConfig() : array(),
