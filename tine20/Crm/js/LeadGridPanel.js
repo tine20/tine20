@@ -110,11 +110,11 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     getColumnModel: function(){
         return new Ext.grid.ColumnModel({ 
             defaults: {
-                sortable: true,
-                resizable: true
+                sortable: true
             },
             columns: [
                 {header: this.app.i18n._('Lead id'), id: 'id', dataIndex: 'id', width: 20, hidden: true},
+                {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
                 {header: this.app.i18n._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
                 {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'partner', width: 175, sortable: false, renderer: this.shortContactRenderer},
                 {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'customer', width: 175, sortable: false, renderer: this.shortContactRenderer},
