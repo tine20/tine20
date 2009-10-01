@@ -458,14 +458,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $user = Tinebase_Core::getUser();
             $registryData += array(    
-                'currentAccount'   => Tinebase_Core::getUser()->toArray(),
-                'accountBackend'   => Tinebase_User::getConfiguredBackend(),
-                'jsonKey'          => Tinebase_Core::get('jsonKey'),
-                'userApplications' => Tinebase_Core::getUser()->getApplications()->toArray(),
-                'NoteTypes'        => $this->getNoteTypes(),
-                'stateInfo'        => Tinebase_State::getInstance()->loadStateInfo(),
-                'changepw'         => Tinebase_User::getBackendConfiguration('changepw', true)
+                'currentAccount'    => $user->toArray(),
+                'userContact'       => Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId())->toArray(),
+                'accountBackend'    => Tinebase_User::getConfiguredBackend(),
+                'jsonKey'           => Tinebase_Core::get('jsonKey'),
+                'userApplications'  => $user->getApplications()->toArray(),
+                'NoteTypes'         => $this->getNoteTypes(),
+                'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
+                'changepw'          => Tinebase_User::getBackendConfiguration('changepw', true)
             );
         }
         

@@ -356,6 +356,26 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         //$registryData = $this->_instance->getAllRegistryData();
     }
     
+    /**
+     * test get all registry data
+     * 
+     * @return void
+     * 
+     * @todo add more assertions
+     */
+    public function testGetAllRegistryData()
+    {
+        $registryData = $this->_instance->getAllRegistryData();
+        $currentUser = Tinebase_Core::getUser();
+        
+        $this->assertEquals($currentUser->toArray(), $registryData['Tinebase']['currentAccount']);
+        $this->assertEquals(
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId($currentUser->getId())->toArray(), 
+            $registryData['Tinebase']['userContact']
+        );
+        //print_r($registryData['Tinebase']['userContact']);
+    }
+    
     /******************** protected helper funcs ************************/
     
     /**
