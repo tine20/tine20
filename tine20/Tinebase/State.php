@@ -116,13 +116,16 @@ class Tinebase_State
      */
     public function loadStateInfo()
     {
-        $userId = Tinebase_Core::getUser()->getId();
+        $result = array();
         
-        try {
-            $state = $this->_backend->getByProperty($userId, 'user_id');
-            $result = Zend_Json::decode($state->data);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $result = array();
+        if (Tinebase_Core::getUser()) {
+            $userId = Tinebase_Core::getUser()->getId();
+            try {
+                $state = $this->_backend->getByProperty($userId, 'user_id');
+                $result = Zend_Json::decode($state->data);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // no state found
+            }
         }
         
         return $result;
