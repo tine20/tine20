@@ -258,6 +258,24 @@ class Tinebase_Relation_Backend_Sql
             $this->_dbTable->delete($where);
         }
     }
+    
+    /**
+     * Search for records matching given filter
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @param boolean $_onlyIds
+     * @return Tinebase_Record_RecordSet|array
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
+    {
+        $backend = new Tinebase_Backend_Sql('Tinebase_Model_Relation', 'relations');
+        
+        $_filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals', FALSE));
+        
+        return $backend->search($_filter, $_pagination, $_onlyIds);
+    }
+    
     /**
      * swaps roles own/related
      * 
