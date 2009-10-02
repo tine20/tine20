@@ -52,7 +52,11 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
          if (! empty($this->_options['fields'])) {
              foreach ((array) $this->_options['fields'] as $fieldName) {
                  $quotedField = $db->quoteIdentifier(strpos($fieldName, '.') === false ? $_backend->getTableName() . '.' . $fieldName : $fieldName);
-                 $_select->where($quotedField . $action['sqlop'], $value); 
+                 if ($value) {
+                     $_select->where($quotedField . $action['sqlop'], $value);
+                 } else {
+                     $_select->orwhere($quotedField . $action['sqlop'], $value);
+                 }
              }
          } else {  
              $_select->where($this->_getQuotedFieldName($_backend) . $action['sqlop'], $value);
