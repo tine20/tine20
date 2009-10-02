@@ -278,6 +278,28 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         
     }
     
+    public function testSearchRelations()
+    {
+        // fetch a set of addressbook ids
+        $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $relatedContacts = $relations->filter('related_model', 'Addressbook_Model_Contact');
+        $adbFilterResult = $relatedContacts->related_id;
+        
+        // get all lead relations wehre the set of adbids is related to
+        $filter = new Tinebase_Model_RelationFilter(array(
+            array('field' => 'own_model',     'operator' => 'equals', 'value' => 'Crm_Model_Lead'),
+            array('field' => 'related_model', 'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
+            array('field' => 'related_id',    'operator' => 'in'    , 'value' => $adbFilterResult)
+        ));
+        
+        $db = Tinebase_Core::getDb();
+        $db->query("\n /* fetch relations */ \n");
+        $relations = $this->_object->search($filter, NULL);
+        
+        $this->assertEquals(count($adbFilterResult), count($relations), ' search relsult does not fit');
+        
+    }
+    
     public function testBreakRelations()
     {
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], array());
