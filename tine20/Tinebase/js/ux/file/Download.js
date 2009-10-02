@@ -44,39 +44,25 @@ Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {
             cls:'x-hidden'
         });
 
-        // firefox specific problem -> see http://www.extjs.com/forum/archive/index.php/t-44862.html
-        //  "It appears that this is because the "load" is completing once the initial download dialog is displayed, 
-        //  but the frame is then destroyed before the "save as" dialog is shown."
-        //
-        // TODO check if we can handle firefox event 'onSaveAsSubmit' (or something like that)
-        //
-        if (Ext.isGecko()) {
-            // use Ext.data.Connection instead of Ext.Ajax.request
-            var con = new Ext.data.Connection({
-                // don't remove the iframe with this param
-                debugUploads: true
-            });
-            
-            this.transactionId = con.request({
-                isUpload: true,
-                form: this.form,
-                params: this.params,
-                scope: this,
-                success: this.onSuccess,
-                failure: this.onFailure,
-                url: 'index.php'
-            });
-        } else {
-            this.transactionId = Ext.Ajax.request({
-                isUpload: true,
-                form: this.form,
-                params: this.params,
-                scope: this,
-                success: this.onSuccess,
-                failure: this.onFailure,
-                debugUploads: true
-            });
-        }
+        var con = new Ext.data.Connection({
+            // firefox specific problem -> see http://www.extjs.com/forum/archive/index.php/t-44862.html
+            //  "It appears that this is because the "load" is completing once the initial download dialog is displayed, 
+            //  but the frame is then destroyed before the "save as" dialog is shown."
+            //
+            // TODO check if we can handle firefox event 'onSaveAsSubmit' (or something like that)
+            //
+            debugUploads: Ext.isGecko()
+        });
+        
+        this.transactionId = con.request({
+            isUpload: true,
+            form: this.form,
+            params: this.params,
+            scope: this,
+            success: this.onSuccess,
+            failure: this.onFailure,
+            url: 'index.php'
+        });
     },
     
     /**
