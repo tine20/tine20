@@ -250,8 +250,8 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     setValue: function(container){
-        // element which is allready in this.store 
-        if (typeof(container) == 'string') {
+        // element which is already in this.store 
+        if (typeof(container) == 'string' && this.store.getById(container)) {
             container = this.store.getById(container).data;
         }
         
