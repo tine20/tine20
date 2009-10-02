@@ -78,6 +78,8 @@
         <source src="../tine20/Calendar/js/PagingToolbar.js"/> 
         <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
+        <source src="../tine20/Crm/js/ContactCombo.js"/>
+        <source src="../tine20/Crm/js/ContactGridPanel.js"/>
         <source src="../tine20/Crm/js/Crm.js"/>
         <source src="../tine20/Crm/js/Models.js"/>
         <source src="../tine20/Crm/js/LeadGridPanel.js"/>
