@@ -12,8 +12,9 @@
 class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
 {
     /**
-     * change all fields which store account ids from integer to string
-     * 
+     * rename username to defaultuser
+     * add auto to dtmfmode enum
+     * add column regserver, useragent and lastms
      */
     public function update_0()
     {
