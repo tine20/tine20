@@ -92,6 +92,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     	$ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
     	
         $fbInfo = $this->getFreeBusyInfo($_event->dtstart, $_event->dtend, $_event->attendee, $ignoreUIDs);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($fbInfo->toArray(), true));
+        
         if (count($fbInfo) > 0) {
             $busyException = new Calendar_Exception_AttendeeBusy();
             $busyException->setFreeBusyInfo($fbInfo);
@@ -196,6 +198,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
         Calendar_Model_Rrule::mergeRecuranceSet($events, $_from, $_until);
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($events->toArray(), true));
         
         // create a typemap
         $typeMap = array();
@@ -206,6 +209,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $typeMap[$attender['user_type']][$attender['user_id']] = array();
         }
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($typeMap, true));
         
         // sort freebusy info into tyepmap
         foreach($events as $event) {
@@ -240,6 +244,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             }
         }
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($typeMap, true));
         
         $resultArray = array();
         foreach ($typeMap as $type => $typeEntries) {
@@ -247,6 +252,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $resultArray = array_merge($resultArray, $fbslice);
             }
         }
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($resultArray, true));
         
         return new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy', $resultArray);
     }
@@ -543,6 +549,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($_record->rrule) {
             $exceptions = $this->getRecurExceptions($_record);
             $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, Zend_Date::now());
+            if (! $nextOccurrence) {
+                $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
+                $_alarm->sent_message = 'Noting to send, series is over';
+                return;
+            }
             $eventStart = clone $nextOccurrence->dtstart;
         } else {
             $eventStart = clone $_record->dtstart;
