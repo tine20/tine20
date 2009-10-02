@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>2.1</version>
+    <version>2.2</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -818,7 +818,7 @@
             </declaration>
         </table>
         
-       <table>
+        <table>
             <name>asterisk_context</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
@@ -852,7 +852,7 @@
             </declaration>
         </table>        
         
-       <table>
+        <table>
             <name>asterisk_voicemail</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
@@ -1004,7 +1004,7 @@
            </declaration>
         </table>            
         
-      <table>
+        <table>
             <name>snom_default_settings</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
@@ -1214,7 +1214,7 @@
             </declaration>
         </table>          
 
-       <table>
+        <table>
             <name>asterisk_meetme</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
@@ -1254,7 +1254,7 @@
             </declaration>
         </table> 
         
-      <table>
+        <table>
             <name>snom_phone_settings</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
@@ -1472,6 +1472,90 @@
                 </index>
             </declaration>
         </table>
+        
+        <table>
+            <name>asterisk_redirects</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>sippeer_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfi_mode</name>
+                    <type>enum</type>
+                    <value>off</value>
+                    <value>number</value>
+                    <value>voicemail</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfi_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfb_mode</name>
+                    <type>enum</type>
+                    <value>off</value>
+                    <value>number</value>
+                    <value>voicemail</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfb_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfd_mode</name>
+                    <type>enum</type>
+                    <value>off</value>
+                    <value>number</value>
+                    <value>voicemail</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cfd_number</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>cfd_time</name>
+                    <type>integer</type>
+                    <length>11</length>
+                </field>                                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>asterisk_redirect::sippeer_id--asterisk_sip_peers::id</name>
+                    <field>
+                        <name>sippeer_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>asterisk_sip_peers</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
+            </declaration>
+        </table> 
+        
         
      </tables>    
 </application>

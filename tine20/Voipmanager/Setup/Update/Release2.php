@@ -68,4 +68,100 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Voipmanager', '2.1');
     }    
+    
+    /**
+     * add the asterisk_redirects table
+     */    
+    public function update_1()
+    {
+        $tableDefinition = '        
+            <table>
+                <name>asterisk_redirects</name>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>sippeer_id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>cfi_mode</name>
+                        <type>enum</type>
+                        <value>off</value>
+                        <value>number</value>
+                        <value>voicemail</value>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>cfi_number</name>
+                        <type>text</type>
+                        <length>80</length>
+                    </field>
+                    <field>
+                        <name>cfb_mode</name>
+                        <type>enum</type>
+                        <value>off</value>
+                        <value>number</value>
+                        <value>voicemail</value>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>cfb_number</name>
+                        <type>text</type>
+                        <length>80</length>
+                    </field>
+                    <field>
+                        <name>cfd_mode</name>
+                        <type>enum</type>
+                        <value>off</value>
+                        <value>number</value>
+                        <value>voicemail</value>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>cfd_number</name>
+                        <type>text</type>
+                        <length>80</length>
+                    </field>
+                    <field>
+                        <name>cfd_time</name>
+                        <type>integer</type>
+                        <length>11</length>
+                    </field>                                
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>asterisk_redirects::sippeer_id--asterisk_sip_peers::id</name>
+                        <field>
+                            <name>sippeer_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>asterisk_sip_peers</table>
+                            <field>id</field>
+                        </reference>
+                    </index>   
+                </declaration>
+            </table>
+        ';
+
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+
+        $this->setApplicationVersion('Voipmanager', '2.2');
+    }       
 }
