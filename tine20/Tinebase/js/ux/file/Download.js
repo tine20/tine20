@@ -51,7 +51,7 @@ Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {
             //
             // TODO check if we can handle firefox event 'onSaveAsSubmit' (or something like that)
             //
-            debugUploads: Ext.isGecko()
+            debugUploads: Ext.isGecko
         });
         
         this.transactionId = con.request({
