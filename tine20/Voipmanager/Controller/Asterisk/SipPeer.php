@@ -89,9 +89,9 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         $result =  parent::create($_record);
         
-        if(isset(Tinebase_Core::getConfig()->asterisk)) {
+        /*if(isset(Tinebase_Core::getConfig()->asterisk)) {
             $this->publishConfiguration();
-        }
+        }*/
         
         return $result;
     }
@@ -106,9 +106,9 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         $result = parent::delete($_ids);
         
-        if(isset(Tinebase_Core::getConfig()->asterisk)) {
+        /*if(isset(Tinebase_Core::getConfig()->asterisk)) {
             $this->publishConfiguration();
-        }
+        }*/
         
         return $result;
     }
@@ -123,9 +123,9 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         
         $result =  parent::update($_record);
         
-        if(isset(Tinebase_Core::getConfig()->asterisk)) {
+        /*if(isset(Tinebase_Core::getConfig()->asterisk)) {
             $this->publishConfiguration();
-        }
+        }*/
         
         return $result;
     }
@@ -135,27 +135,34 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
      * 
      * @return void
      */
-    public function publishConfiguration()
+    
+    /*
+     
+    currently unused
+    
+    public static function publishConfiguration()
     {   
         if(isset(Tinebase_Core::getConfig()->asterisk)) {
             $asteriskConfig = Tinebase_Core::getConfig()->asterisk;
-            $url = $asteriskConfig->managerbaseurl;
-            $username = $asteriskConfig->managerusername;
-            $password = $asteriskConfig->managerpassword;
+            
+            $url        = $asteriskConfig->managerbaseurl;
+            $username   = $asteriskConfig->managerusername;
+            $password   = $asteriskConfig->managerpassword;
         } else {
             throw new Voipmanager_Exception_NotFound('No settings found for asterisk backend in config file!');
         }
-        
         
         $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array());
         
         $sipPeers = $controller = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);     
         
-        $fp = fopen("php://temp/maxmemory:$fiveMBs", 'r+');
+        $fieldsToSkip = array('id', 'name');
+        
+        $fp = fopen("php://temp", 'r+');
         foreach($sipPeers as $sipPeer) {
             fputs($fp, "[" . $sipPeer->name . "]\n");
             foreach($sipPeer as $key => $value) {
-                if(empty($value) || $key == 'id' || $key == 'name') {
+                if(empty($value) || in_array($key, $fieldsToSkip)) {
                     continue;
                 }
                 fputs($fp, " $key = $value\n");
@@ -170,4 +177,5 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         $ajam->command('sip reload');
         $ajam->logout();
     }
+     */
 }
