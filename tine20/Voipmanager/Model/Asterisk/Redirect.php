@@ -18,6 +18,24 @@
 class Voipmanager_Model_Asterisk_Redirect extends Tinebase_Record_Abstract
 {
     /**
+     * set call forward off
+     * @var string
+     */
+    const CFMODE_OFF        = 'off';
+    
+    /**
+     * forward call to number
+     * @var string
+     */
+    const CFMODE_NUMBER     = 'number';
+    
+    /**
+     * forward call to voicemail
+     * @var string
+     */
+    const CFMODE_VOICEMAIL  = 'voicemail';
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -40,7 +58,7 @@ class Voipmanager_Model_Asterisk_Redirect extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'                     => 'StringTrim'
+        '*'             => 'StringTrim'
     );
     
     /**
@@ -53,13 +71,13 @@ class Voipmanager_Model_Asterisk_Redirect extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'sippeer_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cfi_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cfi_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL)),
         'cfi_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cfb_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cfb_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL)),
         'cfb_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cfd_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cfd_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL)),
         'cfd_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cfd_time'      => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'cfd_time'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int')
     );
 
     /**
