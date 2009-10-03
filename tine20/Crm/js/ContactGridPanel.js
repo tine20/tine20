@@ -21,8 +21,7 @@ Ext.ns('Tine.Crm');
  * <p>
  * TODO         make edit + add new actions work
  * TODO         add ctx menu
- * TODO         move contact search combo into grid (like attendee/recipient grid)
- * TODO         generalize this and use it for tasks/products
+ * TODO         generalize this and use it for tasks/products?
  * TODO         make grants work
  * </p>
  * 
