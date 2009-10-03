@@ -58,7 +58,7 @@ class Tinebase_Config
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Config;
+            self::$_instance = new Tinebase_Config();
         }
         
         return self::$_instance;
