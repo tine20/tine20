@@ -171,10 +171,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
      * add column regserver, useragent and lastms
      */
     public function update_2()
-    {
-        $this->_backend->dropIndex('asterisk_voicemail', 'mailbox-context');
-        $this->_backend->dropCol('asterisk_voicemail', 'context');
-        
+    {        
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>context_id</name>
@@ -183,6 +180,19 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
                 <notnull>true</notnull>
             </field>');
         $this->_backend->addCol('asterisk_voicemail', $declaration);
+        
+        $select = $this->_db->select()
+            ->distinct()
+            ->from(SQL_TABLE_PREFIX . 'asterisk_context', array('id', 'name'));
+        $contextes = $this->_db->fetchAll($select);
+        
+        foreach($contextes as $context) {
+            $this->_db->update(
+                SQL_TABLE_PREFIX . 'asterisk_voicemail', 
+                array('context_id' => $context['id']), 
+                $this->_db->quoteInto($this->_db->quoteIdentifier('context') .' = ?', $context['name'])
+            );
+        }
         
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
@@ -196,8 +206,11 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
                     <field>id</field>
                 </reference>
             </index>');
-        $this->_backend->addForeignKey('asterisk_voicemail', $declaration);
-                
+        $this->_backend->addForeignKey('asterisk_voicemail', $declaration);       
+        
+        $this->_backend->dropIndex('asterisk_voicemail', 'mailbox-context');
+        $this->_backend->dropCol('asterisk_voicemail', 'context');
+        
         $this->setApplicationVersion('Voipmanager', '2.3');
     }    
 }
