@@ -26,6 +26,11 @@ $autoloader->setFallbackAutoloader(true);
 $tine20path = dirname(__FILE__);
 
 /**
+ * anonymous methods (no pw/user required)
+ */
+$anonymousMethods = array('Tinebase.triggerAsyncEvents');
+
+/**
  * options
  */
 try {
@@ -46,12 +51,12 @@ try {
    exit;
 }
 
-if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method) || empty($opts->username) /*|| empty($opts->password)*/) {
+if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method) || (empty($opts->username) && ! in_array($opts->method, $anonymousMethods)) /*|| empty($opts->password)*/) {
     echo $opts->getUsageMessage();
     exit;
 }
 
-if (empty($opts->password)) {
+if (empty($opts->password) && ! in_array($opts->method, $anonymousMethods)) {
     fwrite(STDOUT, PHP_EOL . 'password> ');
     if (preg_match('/^win/i', PHP_OS)) {
         $pwObj = new Com('ScriptPW.Password');
