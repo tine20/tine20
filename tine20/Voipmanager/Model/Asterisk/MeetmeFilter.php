@@ -29,11 +29,12 @@ class Voipmanager_Model_Asterisk_MeetmeFilter extends Tinebase_Model_Filter_Filt
     protected $_modelName = 'Voipmanager_Model_Asterisk_Meetme';
     
     protected $_filterModel = array(
-        'query'                => array(
+        'query'     => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array(
                 'fields' => array('confno', 'pin', 'adminpin')
             )
         ),
+        'confno'    => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }
