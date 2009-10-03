@@ -516,7 +516,7 @@ Tine.Voipmanager.Model.AsteriskContext.getDefaultData = function() {
 
 Tine.Voipmanager.Model.AsteriskVoicemailArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
-    {name: 'context'},
+    {name: 'context_id'},
     {name: 'mailbox'},
     {name: 'password'},
     {name: 'fullname'},
@@ -547,7 +547,7 @@ Tine.Voipmanager.Model.AsteriskVoicemail = Tine.Tinebase.data.Record.create(Tine
     appName: 'Voipmanager',
     modelName: 'AsteriskVoicemail',
     idProperty: 'id',
-    titleProperty: 'context',
+    titleProperty: 'mailbox',
     // ngettext('Voicemail', 'Voicemails', n);
     recordName: 'AsteriskVoicemail',
     recordsName: 'AsteriskVoicemails',
@@ -556,7 +556,7 @@ Tine.Voipmanager.Model.AsteriskVoicemail = Tine.Tinebase.data.Record.create(Tine
     containerName: 'voicemails list',
     containersName: 'voicemails lists',
     getTitle: function() {
-        return this.get('number') ? (this.get('number') + ' ' + this.get('context')) : false;
+        return this.get('mailbox') ? this.get('mailbox') : false;
     }
 });
 Tine.Voipmanager.Model.AsteriskVoicemail.getDefaultData = function() { 
