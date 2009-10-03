@@ -125,7 +125,7 @@ class Tinebase_Model_Filter_FilterGroup
      * @param  string $_condition {AND|OR}
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct(array $_data, $_condition='', $_options = array())
+    public function __construct(array $_data = array(), $_condition='', $_options = array())
     {
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         $this->_setOptions($_options);
