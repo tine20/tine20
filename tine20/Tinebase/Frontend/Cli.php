@@ -101,7 +101,7 @@ class Tinebase_Frontend_Cli
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
             // get user for cronjob from config / set default admin group
-            $cronuserId = Tinebase_Config::getConfig(Tinebase_Model_Config::CRONUSERID)->value;
+            $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting user with id ' . $cronuserId . ' as cronuser.');
             $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
