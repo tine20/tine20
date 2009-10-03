@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:  $
+ * @version     $Id$
  *
  */
 
@@ -52,7 +52,7 @@ class Voipmanager_Model_Asterisk_Voicemail extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'context'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'context_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'mailbox'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'fullname'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
