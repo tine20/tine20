@@ -226,7 +226,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
-     * @throws  Tinebase_Exception_Record_Validation
      */
     public function create(Tinebase_Record_Interface $_record)
     {
@@ -309,7 +308,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
-     * @throws  Tinebase_Exception_Record_Validation
      */
     public function update(Tinebase_Record_Interface $_record)
     {
@@ -317,9 +315,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            if(!$_record->isValid()) {
-                throw new Tinebase_Exception_Record_Validation('Record is not valid. Invalid fields: ' . implode(',', $_record->getValidationErrors()));
-            }
+            $_record->isValid(TRUE);
+            
             $currentRecord = $this->_backend->get($_record->getId());
             
             // ACL checks
