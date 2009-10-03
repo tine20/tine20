@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>2.3</version>
+    <version>2.4</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -1245,6 +1245,18 @@
                     <length>80</length>
                     <notnull>true</notnull>
                 </field>								
+                <field>
+                    <name>members</name>
+                    <type>integer</type>
+                </field>                                
+                <field>
+                    <name>starttime</name>
+                    <type>datetime</type>
+                </field>                                
+                <field>
+                    <name>endtime</name>
+                    <type>datetime</type>
+                </field>                                
                 <index>
                     <name>id</name>
                     <primary>true</primary>

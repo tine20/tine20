@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:  $
+ * @version     $Id$
  *
  */
 
@@ -39,9 +39,9 @@ class Voipmanager_Model_Asterisk_Meetme extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_filters = array(
-        '*'                     => 'StringTrim'
-    );
+    #protected $_filters = array(
+    #    '*'                     => 'StringTrim'
+    #);
     
     /**
      * list of zend validator
@@ -54,9 +54,22 @@ class Voipmanager_Model_Asterisk_Meetme extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'confno'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pin'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adminpin'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'adminpin'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'members'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'starttime'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'endtime'               => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
-
+    
+    /**
+     * name of fields containing datetime or or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'startime',
+        'endtime'
+    );
+    
     /**
      * converts a int, string or Voipmanager_Model_Asterisk_Meetme to an meetme id
      *
