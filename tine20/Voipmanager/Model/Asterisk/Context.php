@@ -40,7 +40,7 @@ class Voipmanager_Model_Asterisk_Context extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'                     => 'StringTrim'
+        '*'             => 'StringTrim'
     );
     
     /**
@@ -51,9 +51,9 @@ class Voipmanager_Model_Asterisk_Context extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'            => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'name'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**
@@ -61,7 +61,7 @@ class Voipmanager_Model_Asterisk_Context extends Tinebase_Record_Abstract
      *
      * @param int|string|Voipmanager_Model_Asterisk_Context $_contextId the context id to convert
      * @return int
-     * @throws  Voipmanager_Exception_InvalidArgument
+     * @throws Voipmanager_Exception_InvalidArgument
      */
     static public function convertAsteriskContextIdToInt($_contextId)
     {
@@ -80,5 +80,4 @@ class Voipmanager_Model_Asterisk_Context extends Tinebase_Record_Abstract
         
         return $id;
     }
-
 }
