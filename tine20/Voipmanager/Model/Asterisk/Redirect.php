@@ -71,13 +71,13 @@ class Voipmanager_Model_Asterisk_Redirect extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'sippeer_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cfi_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL)),
+        'cfi_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL), 'default' => self::CFMODE_OFF),
         'cfi_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cfb_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL)),
+        'cfb_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL), 'default' => self::CFMODE_OFF),
         'cfb_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cfd_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL)),
+        'cfd_mode'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::CFMODE_OFF, self::CFMODE_NUMBER, self::CFMODE_VOICEMAIL), 'default' => self::CFMODE_OFF),
         'cfd_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cfd_time'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int')
+        'cfd_time'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int', 'default' => 30)
     );
 
     /**
