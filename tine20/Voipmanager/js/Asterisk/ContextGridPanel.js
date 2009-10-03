@@ -20,7 +20,7 @@ Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.Tinebase.widgets.app
     evalGrants: false,
     
     // grid specific
-    defaultSortInfo: {field: 'description', direction: 'ASC'},
+    defaultSortInfo: {field: 'name', direction: 'ASC'},
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'description'
