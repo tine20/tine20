@@ -34,6 +34,7 @@ class Voipmanager_Server_Asterisk extends Tinebase_Server_Abstract
             $server->setClass('Voipmanager_Frontend_Asterisk_SipPeers',    'Voipmanager_SipPeers');
             $server->setClass('Voipmanager_Frontend_Asterisk_SipRegs',     'Voipmanager_SipRegs');
             $server->setClass('Voipmanager_Frontend_Asterisk_CallForward', 'Voipmanager_CallForward');
+            $server->setClass('Voipmanager_Frontend_Asterisk_MeetMe',      'Voipmanager_MeetMe');
             
             list($class, $method) = explode('.', $_REQUEST['method']);
             
