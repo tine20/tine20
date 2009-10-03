@@ -163,5 +163,41 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->_backend->createTable($table);        
 
         $this->setApplicationVersion('Voipmanager', '2.2');
-    }       
+    }
+           
+    /**
+     * rename context to context_id and add foreign key for context
+     * add auto to dtmfmode enum
+     * add column regserver, useragent and lastms
+     */
+    public function update_2()
+    {
+        $this->_backend->dropIndex('asterisk_voicemail', 'mailbox-context');
+        $this->_backend->dropCol('asterisk_voicemail', 'context');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>context_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->addCol('asterisk_voicemail', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>asterisk_voicemail::context_id--asterisk_context::id</name>
+                <field>
+                    <name>context_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>asterisk_context</table>
+                    <field>id</field>
+                </reference>
+            </index>');
+        $this->_backend->addForeignKey('asterisk_voicemail', $declaration);
+                
+        $this->setApplicationVersion('Voipmanager', '2.3');
+    }    
 }
