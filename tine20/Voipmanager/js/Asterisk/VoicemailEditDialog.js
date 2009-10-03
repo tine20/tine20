@@ -53,9 +53,9 @@ Tine.Voipmanager.AsteriskVoicemailEditDialog = Ext.extend(Tine.widgets.dialog.Ed
                   }, {
                       xtype: 'combo',
                       fieldLabel: this.app.i18n._('Context'),
-                      name: 'context',
+                      name: 'context_id',
                       displayField: 'name',
-                      valueField: 'name',
+                      valueField: 'id',
                       anchor: '100%',
                       triggerAction: 'all',
                       editable: false,

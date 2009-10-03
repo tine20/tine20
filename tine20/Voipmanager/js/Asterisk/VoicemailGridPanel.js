@@ -81,9 +81,9 @@ Tine.Voipmanager.AsteriskVoicemailGridPanel = Ext.extend(Tine.Tinebase.widgets.a
 	       	width: 50, 
             sortable: true
        },{ 
-	       	id: 'context', 
+	       	id: 'context_id', 
 	       	header: this.app.i18n._('context'), 
-	       	dataIndex: 'context', 
+	       	dataIndex: 'context_id', 
 	       	width: 70, 
             sortable: true
        },{ 
