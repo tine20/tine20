@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -65,7 +65,7 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         'fromdomain'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'fullcontact'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'dynamic'),
-        'insecure'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'insecure'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'no'),
         'language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'mailbox'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'md5secret'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
