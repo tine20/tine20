@@ -20,6 +20,7 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Grid Panel</p>
  * <p><pre>
+ * TODO         show related contacts in grid again
  * TODO         add filters again
  * TODO         add export button again
  * TODO         show closed leads button again
