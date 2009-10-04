@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>2.4</version>
+    <version>2.5</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -724,6 +724,7 @@
                 <field>
                     <name>lastms</name>
                     <type>integer</type>
+                    <unsigned>false</unsigned>
                     <length>11</length>
                     <notnull>false</notnull>
                 </field>

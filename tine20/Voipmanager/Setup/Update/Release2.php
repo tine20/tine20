@@ -243,5 +243,25 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->_backend->addCol('asterisk_meetme', $declaration);
         
         $this->setApplicationVersion('Voipmanager', '2.4');
+    }
+        
+    /**
+     * rename context to context_id and add foreign key for context
+     * add auto to dtmfmode enum
+     * add column regserver, useragent and lastms
+     */
+    public function update_4()
+    {        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>lastms</name>
+                <type>integer</type>
+                <unsigned>false</unsigned>
+                <length>11</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+        
+        $this->setApplicationVersion('Voipmanager', '2.5');
     }    
 }
