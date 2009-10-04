@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>2.5</version>
+    <version>2.6</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -480,10 +480,10 @@
                     <default>NULL</default>
                 </field>
                 <field>
-                    <name>context</name>
+                    <name>context_id</name>
                     <type>text</type>
-                    <length>80</length>
-                    <notnull>false</notnull>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>defaultip</name>
@@ -735,6 +735,17 @@
                         <name>id</name>
                     </field>
                 </index>
+	            <index>
+	                <name>asterisk_sip_peers::context_id--asterisk_context::id</name>
+	                <field>
+	                    <name>context_id</name>
+	                </field>
+	                <foreign>true</foreign>
+	                <reference>
+	                    <table>asterisk_context</table>
+	                    <field>id</field>
+	                </reference>
+	            </index>
             </declaration>
         </table>          
 

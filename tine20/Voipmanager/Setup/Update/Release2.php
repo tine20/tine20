@@ -166,7 +166,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
     }
            
     /**
-     * rename context to context_id and add foreign key for context
+     * rename context to context_id and add foreign key for context in voicemail table
      * add auto to dtmfmode enum
      * add column regserver, useragent and lastms
      */
@@ -261,5 +261,51 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->_backend->alterCol('asterisk_sip_peers', $declaration);
         
         $this->setApplicationVersion('Voipmanager', '2.5');
+    }
+        
+    /**
+     * rename context to context_id and add foreign key for context in sippeers table
+     */
+    public function update_5()
+    {        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>context_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->addCol('asterisk_sip_peers', $declaration);
+        
+        $select = $this->_db->select()
+            ->distinct()
+            ->from(SQL_TABLE_PREFIX . 'asterisk_context', array('id', 'name'));
+        $contextes = $this->_db->fetchAll($select);
+        
+        foreach($contextes as $context) {
+            $this->_db->update(
+                SQL_TABLE_PREFIX . 'asterisk_sip_peers', 
+                array('context_id' => $context['id']), 
+                $this->_db->quoteInto($this->_db->quoteIdentifier('context') .' = ?', $context['name'])
+            );
+        }
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>asterisk_sip_peers::context_id--asterisk_context::id</name>
+                <field>
+                    <name>context_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>asterisk_context</table>
+                    <field>id</field>
+                </reference>
+            </index>');
+        $this->_backend->addForeignKey('asterisk_sip_peers', $declaration);       
+        
+        $this->_backend->dropCol('asterisk_sip_peers', 'context');
+        
+        $this->setApplicationVersion('Voipmanager', '2.6');
     }    
 }
