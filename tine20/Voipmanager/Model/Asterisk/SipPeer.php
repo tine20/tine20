@@ -39,9 +39,9 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_filters = array(
-        '*'                     => 'StringTrim'
-    );
+    #protected $_filters = array(
+    #    '*'                     => 'StringTrim'
+    #);
     
     /**
      * list of zend validator
@@ -65,7 +65,7 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         'fromdomain'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'fullcontact'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'dynamic'),
-        'insecure'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'no'),
+        'insecure'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'language'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'mailbox'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'md5secret'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -97,7 +97,7 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         'busy-level'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'regserver'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'useragent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lastms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'lastms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => -1)
     );
 
     /**
