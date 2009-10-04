@@ -246,9 +246,7 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
     }
         
     /**
-     * rename context to context_id and add foreign key for context
-     * add auto to dtmfmode enum
-     * add column regserver, useragent and lastms
+     * make lastms a signed integer
      */
     public function update_4()
     {        
