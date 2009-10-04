@@ -18,6 +18,7 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Edit Dialog</p>
  * <p>
+ * TODO         simplify relation handling (move init of stores to relation grids and get data from there later?)
  * TODO         make marking of invalid fields work again
  * TODO         add tasks grid
  * TODO         add products grid
@@ -51,10 +52,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Crm',
     recordClass: Tine.Crm.Model.Lead,
     recordProxy: Tine.Crm.leadBackend,
-    loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
-    
+    showContainerSelector: true,
+
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private
@@ -71,10 +72,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordLoad: function() {
 
         if (this.contactGrid) {
-            if (! this.record.data.contacts) {
-                // load contacts into contacts grid
-                this.splitRelations();
-                this.contactGrid.store.loadData(this.record.get('contacts'), true);
+            if (this.contactGrid.store.getCount() == 0) {
+                // load contacts into contacts grid (only first time this function gets called/store is empty)
+                var contacts = this.splitRelations();
+                this.contactGrid.store.loadData(contacts, true);
             }
         }
         
@@ -90,7 +91,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Crm.LeadEditDialog.superclass.onRecordUpdate.call(this);
         
-        delete this.record.data.contacts;
+        //delete this.record.data.contacts;
         this.record = this.getAdditionalData(this.record);
     },
     
@@ -177,6 +178,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * split the relations array in contacts and tasks and switch related_record and relation objects
      * 
+     * @return {Array}
      */
     splitRelations: function() {
         
@@ -187,6 +189,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         for (var i=0; i < relations.length; i++) {
             var newLinkObject = relations[i]['related_record'];
+            delete relations[i]['related_record']['relation'];
             newLinkObject.relation = relations[i];
             newLinkObject.relation_type = relations[i]['type'].toLowerCase();
     
@@ -202,7 +205,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         //console.log(contacts);
         
-        this.record.data.contacts = contacts;
+        //this.record.data.contacts = contacts;
+        
+        return contacts;
         
         //this.record.set('contacts', contacts);
         //this.record.set('tasks', tasks);
@@ -318,15 +323,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name:'lead_name',
                         allowBlank: false,
                         selectOnFocus: true
-                    }, this.contactGrid 
-                    /*{
-                        xtype: 'panel',
-                        id: 'linkPanelTop',
-                        height: 210,
-                        items: [
-                            this.contactGrid
-                        ]
-                    }*/, {
+                    }, 
+                        this.contactGrid, 
+                    {
                         xtype: 'panel',
                         layout:'column',
                         height: 140,
