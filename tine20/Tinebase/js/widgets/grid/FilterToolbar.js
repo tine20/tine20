@@ -40,6 +40,12 @@ Tine.widgets.grid.FilterToolbar = function(config) {
     
 };
 
+/**
+ * Filter registry
+ * @type Object
+ */
+Tine.widgets.grid.FilterToolbar.FILTERS = {};
+
 Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     /**
@@ -366,14 +372,23 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 
         // init filter models
         this.filterModelMap = {};
+        var filters = [];
+        
         for (var i=0; i<this.filterModels.length; i++) {
             var fm = this.filterModels[i];
             if (! fm.isFilterModel) {
                 var modelConfig = fm;
-                fm = new Tine.widgets.grid.FilterModel(modelConfig);
+                
+                if (fm.filtertype) {
+                    // filter from reg
+                    fm = new Tine.widgets.grid.FilterToolbar.FILTERS[fm.filtertype](modelConfig);
+                } else {
+                    fm = new Tine.widgets.grid.FilterModel(modelConfig);
+                }
             }
             // store reference in internal map
             this.filterModelMap[fm.field] = fm;
+            filters.push(fm);
             
             // register trigger events
             fm.on('filtertrigger', this.onFiltertrigger, this);
@@ -382,7 +397,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // init filter selection
         this.fieldStore = new Ext.data.JsonStore({
             fields: ['field', 'label'],
-            data: this.filterModels
+            data: filters
         });
     },
     
