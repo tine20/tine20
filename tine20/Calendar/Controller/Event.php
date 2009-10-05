@@ -551,7 +551,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, Zend_Date::now());
             if (! $nextOccurrence) {
                 $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
-                $_alarm->sent_message = 'Noting to send, series is over';
+                $_alarm->sent_message = 'Nothing to send, series is over';
                 return;
             }
             $eventStart = clone $nextOccurrence->dtstart;
