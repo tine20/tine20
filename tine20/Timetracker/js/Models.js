@@ -115,12 +115,36 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timet
         return this.get('number') ? (this.get('number') + ' ' + this.get('title')) : false;
     }
 });
+
 Tine.Timetracker.Model.Timeaccount.getDefaultData = function() { 
     return {
         is_open: 1,
         is_billable: true
     };
 };
+
+Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Timetracker');
+    return [
+        {label: app.i18n._('Time Account'),   field: 'query',       operators: ['contains']},
+        {label: app.i18n._('Description'),    field: 'description', operators: ['contains']},
+        {label: app.i18n._('Created By'),     field: 'created_by',  valueType: 'user'},
+        {label: app.i18n._('Status'),         field: 'status',      filtertype: 'timetracker.timeaccountstatus'},
+        {filtertype: 'tinebase.tag', app: app}
+    ];
+}
+/**
+ * filter model for timeaccounts
+ *
+Tine.Timetracker.Model.TimeaccountFilter = [
+    {field: 'query',        filter: Tine.Tinebase.Model.filter.Query},
+    {field: 'tags',         filter: Tine.Tinebase.Model.filter.Tag, options: {appName: 'Timetracker'} },
+    {field: 'description',  filter: Tine.Tinebase.Model.filter.Text, options: {operators: ['contains']} },
+    {field: 'created_by',   filter: Tine.Tinebase.Model.filter.User},
+    {field: 'status',       filter: Tine.Timetracker.TimeAccountStatusGridFilter}
+];
+*/
+
 /**
  * Model of a grant
  */
