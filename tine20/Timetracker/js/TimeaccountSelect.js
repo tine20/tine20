@@ -196,6 +196,7 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
         return value;
     }
 });
+Tine.widgets.grid.FilterToolbar.FILTERS['timetracker.timeaccountselect'] = Tine.Timetracker.TimeAccountGridFilter;
 
 Tine.Timetracker.TimeAccountStatusGridFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
 	field: 'timeaccount_status',
@@ -209,7 +210,7 @@ Tine.Timetracker.TimeAccountStatusGridFilter = Ext.extend(Tine.widgets.grid.Filt
         Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
         
         this.app = Tine.Tinebase.appMgr.get('Timetracker');
-        this.label = this.app.i18n._("Time Account - Status");
+        this.label = this.label ? this.label : this.app.i18n._("Time Account - Status");
         this.operators = ['equals'];
     },
    
@@ -246,3 +247,4 @@ Tine.Timetracker.TimeAccountStatusGridFilter = Ext.extend(Tine.widgets.grid.Filt
         return value;
     }
 });
+Tine.widgets.grid.FilterToolbar.FILTERS['timetracker.timeaccountstatus'] = Tine.Timetracker.TimeAccountStatusGridFilter;
