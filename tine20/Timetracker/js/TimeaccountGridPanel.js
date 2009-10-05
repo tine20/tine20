@@ -70,10 +70,8 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
                 {label: this.app.i18n._('Time Account'),   field: 'query',       operators: ['contains']},
                 {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
                 {label: this.app.i18n._('Created By'),     field: 'created_by',  valueType: 'user'},
-                new Tine.Timetracker.TimeAccountStatusGridFilter({
-                    field: 'status'
-                }),
-                new Tine.widgets.tags.TagFilter({app: this.app})
+                {label: this.app.i18n._('Status'),         field: 'status',      filtertype: 'timetracker.timeaccountstatus'},
+                {filtertype: 'tinebase.tag', app: this.app}
              ],
              defaultFilter: 'query',
              filters: []
