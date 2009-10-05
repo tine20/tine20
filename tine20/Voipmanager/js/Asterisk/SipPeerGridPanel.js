@@ -20,7 +20,7 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
     evalGrants: false,
     
     // grid specific
-    defaultSortInfo: {field: 'callerid', direction: 'ASC'},
+    defaultSortInfo: {field: 'name', direction: 'ASC'},
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'callerid'
@@ -109,9 +109,9 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
                 sortable: true,
 	            hidden: true 
             },{ 
-	            id: 'context', 
+	            id: 'context_id', 
 	            header: this.app.i18n._('context'), 
-	            dataIndex: 'context',
+	            dataIndex: 'context_id',
 	            width: 50,
                 sortable: true
             },{ 
