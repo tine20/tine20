@@ -38,7 +38,6 @@ class Voipmanager_Model_Asterisk_SipPeerFilter extends Tinebase_Model_Filter_Fil
             )
         ),
         'name'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'context'      => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'username'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'defaultuser'  => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }
