@@ -55,4 +55,5 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         return value;
     }
 });
+Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.tag'] = Tine.widgets.tags.TagFilter;
 
