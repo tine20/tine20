@@ -76,11 +76,12 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
 
             case 'Voipmanager_Model_Asterisk_SipPeer':
+            case 'Voipmanager_Model_Asterisk_Voicemail':
                 $recordArray = parent::_recordToJson($_record);
                 
                 // add snom templates (no filter + no pagination)
-                $recordArray['context'] = array(
-                    'value'     => $_record->context,
+                $recordArray['context_id'] = array(
+                    'value'     => $_record->context_id,
                     'records'   => $this->searchAsteriskContexts('', '')
                 );
                 break;
@@ -113,9 +114,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         foreach ($result['results'] as &$phone) {
             // resolve location and template names
-            $phoneTemplate = $this->getSnomTemplate($phone['template_id']);
-            $phoneLocation = $this->getSnomLocation($phone['location_id']);
-            
+
             if($location = Voipmanager_Controller_Snom_Location::getInstance()->get($phone['location_id'])) {
                 $phone['location'] = $location->name;
             }
