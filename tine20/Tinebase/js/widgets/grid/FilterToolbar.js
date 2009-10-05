@@ -449,6 +449,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         //var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
         var isLast = this.filterStore.getCount() == 1;
         this.filterStore.remove(this.filterStore.getById(filter.id));
+        filter.formFields.field.destroy();
+        filter.formFields.operator.destroy();
+        filter.formFields.value.destroy();        
         
         if (isLast) {
             // add a new first row
