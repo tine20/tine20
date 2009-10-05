@@ -38,7 +38,7 @@ class Tinebase_Relations
      */
     private function __construct()
     {
-        $this->_backend = new Tinebase_Relation_Backend_Sql;
+        $this->_backend = new Tinebase_Relation_Backend_Sql();
     }
     /**
      * the singleton pattern
@@ -287,6 +287,19 @@ class Tinebase_Relations
                 }
             }
         }
+    }
+    
+    /**
+     * get list of relations
+     *
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param boolean $_onlyIds
+     * @return Tinebase_Record_RecordSet|array
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_onlyIds = FALSE)
+    {
+        return $this->_backend->search($_filter, $_pagination, $_onlyIds);
     }
     
     /**
