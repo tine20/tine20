@@ -102,7 +102,9 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         }
 
         $asteriskLine = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($asteriskLineId);
-        $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskLine->context, $_number, 1, "WD <$_number>");
+        $asteriskContext = Voipmanager_Controller_Asterisk_Context::getInstance()->get($asteriskLine->context_id);
+        
+        $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskContext->name, $_number, 1, "WD <$_number>");
     }    
     
     /**
