@@ -412,7 +412,7 @@ Tine.Voipmanager.Model.AsteriskSipPeerArray = Tine.Tinebase.Model.genericFields.
     {name: 'callgroup'},
     {name: 'callerid'},
     {name: 'canreinvite'},
-    {name: 'context'},
+    {name: 'context_id'},
     {name: 'defaultip'},
     {name: 'dtmfmode'},
     {name: 'fromuser'},
