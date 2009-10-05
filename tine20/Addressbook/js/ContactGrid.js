@@ -90,7 +90,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
                 {label: this.app.i18n._('Phone'), field: 'telephone', operators: ['contains']},
                 {label: this.app.i18n._('Job Title'),    field: 'title'},
                 {label: this.app.i18n._('Job Role'),    field: 'role'},
-                new Tine.widgets.tags.TagFilter({app: this.app}),
+                {filtertype: 'tinebase.tag', app: this.app},
                 //{label: this.app.i18n._('Birthday'),    field: 'bday', valueType: 'date'},
                 {label: this.app.i18n._('Street') + ' (' + this.app.i18n._('Company Address') + ')',      field: 'adr_one_street', defaultOperator: 'equals'},
                 {label: this.app.i18n._('Postal Code') + ' (' + this.app.i18n._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals'},
