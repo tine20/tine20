@@ -7,7 +7,7 @@
  * @version     $Id$
  *
  */
- 
+
 Ext.namespace('Ext.ux.form');
 
 /**
@@ -36,11 +36,10 @@ Ext.namespace('Ext.ux.form');
  * }
  */ 
 Ext.ux.form.RecordsComboBox = Ext.extend(Ext.form.ComboBox, {
-	
     /**
      * default config
      */
-	triggerAction: 'all',
+    triggerAction: 'all',
     editable: false,
     forceSelection: true,
     valueField: 'id',
