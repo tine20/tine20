@@ -109,7 +109,7 @@ class Voipmanager_Frontend_Asterisk_SipRegs
         
         try {
             Voipmanager_Controller_Asterisk_SipPeer::getInstance()->update($sipPeer);
-        } catch (Exception $e) {
+        } catch (Zend_Db_Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' update failed' . $e->getMessage());
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' update failed' . $e->getTraceAsString());
         }
