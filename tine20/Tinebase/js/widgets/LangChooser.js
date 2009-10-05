@@ -26,15 +26,6 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     width: 100,
     listWidth: 200,
     
-    /**
-     * @private
-     */
-    locationLoaded: {
-        'generic': true,
-        'tine' : true,
-        'ext' : true
-    },
-    
     initComponent: function() {
         this.value = Tine.Tinebase.registry.get('locale').language;
         this.fieldLabel = this.fieldLabel ? this.fieldLabel : _('Language');
@@ -64,6 +55,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
         
         this.on('select', this.onLangSelect, this);
     },
+    
     onLangSelect: function(combo, localeRecord, idx) {
         var currentLocale = Tine.Tinebase.registry.get('locale').locale;
         var newLocale = localeRecord.get('locale');
@@ -80,64 +72,15 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
                     setcookie: true
                 },
                 success: function(result, request){
-                    var responseData = Ext.util.JSON.decode(result.responseText);
+                    if (window.google && google.gears && google.gears.localServer) {
+                        var pkgStore = google.gears.localServer.openStore('tine20-package-store');
+                        if (pkgStore) {
+                            google.gears.localServer.removeStore('tine20-package-store');
+                        }
+                    }
                     window.location = window.location.href.replace(/#+.*/, '');
-                    //this.loadNewLang(responseData.locale, responseData.translationFiles);
                 }
             });
-        }
-    },
-    /**
-     * @too introduce timeout!
-     */
-    loadNewLang: function(locale, translationFiles) {
-        Ext.MessageBox.wait(_('loading new language...'), _('Please Wait'));
-        
-        Tine.Tinebase.registry.add('locale', locale);
-        for (var location in this.locationLoaded) {
-            this.locationLoaded[location] = false;
-        }
-        
-        var headEl = Ext.get(document.getElementsByTagName("head")[0]);
-        var file;
-        var script = {};
-        for (var location in translationFiles) {
-            file = translationFiles[location];
-            script[location] = Ext.DomHelper.insertFirst(headEl, {tag: 'script', src: file, type: 'text/javascript'}, true);
-            script[location].on('load', this.onLangFileLoad, this);
-        }
-    },
-    onLangFileLoad: function(e, scriptTag) {
-        var path = scriptTag.src;
-        if (path.match(/\/Tinebase\/js\/Locale\/static\/generic/)) {
-            this.locationLoaded.generic = true;
-        } else if (path.match(/\/Tinebase\/js\/Locale\/build\//)) {
-            this.locationLoaded.tine = true;
-        } else if (path.match(/\/library\/ExtJS\/build\/locale\/ext-lang/)) {
-            this.locationLoaded.ext = true;
-        }
-        
-        // en has no tine translations!
-        if (Tine.Tinebase.registry.get('locale').locale == 'en') {
-            this.locationLoaded.tine = true;
-        }
-        
-        // wait till all translations are loaded
-        var loadingCompleted = true;
-        for (var location in this.locationLoaded) {
-            if (! this.locationLoaded[location]) {
-                loadingCompleted = false;
-            }
-        }
-        
-        if (loadingCompleted) {
-            // not working, it might have something to do with all the existing 
-            // elements :-(
-            var body = document.getElementsByTagName("body")[0];
-            body.innerHTML = '';
-            Tine.Tinebase.MainScreen = new Tine.Tinebase.MainScreenClass();
-            Tine.Tinebase.MainScreen.render();
-            window.focus();
         }
     }
 });
