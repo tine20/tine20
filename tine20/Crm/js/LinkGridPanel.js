@@ -16,20 +16,18 @@ Ext.ns('Tine.Crm.LinkGridPanel');
 /**
  * @namespace   Tine.Crm.LinkGridPanel
  * 
- * TODO         generalize
  * TODO         move change contact type functions
  */
 Tine.Crm.LinkGridPanel.initActions = function() {
-    
+
     this.actionAdd = new Ext.Action({
         requiredGrant: 'editGrant',
-        contactType: 'customer',
-        text: this.app.i18n._('Add new contact'),
-        tooltip: this.app.i18n._('Add new customer contact'),
+        text: String.format(this.app.i18n._('Add new {0}'), this.recordClass.getMeta('recordName')),
+        tooltip: String.format(this.app.i18n._('Add new {0}'), this.recordClass.getMeta('recordName')),
         iconCls: 'actionAdd',
         scope: this,
         handler: function(_button, _event) {
-            var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
+            var editWindow = this.recordEditDialogOpener({
                 listeners: {
                     scope: this,
                     'update': this.onUpdate
@@ -40,8 +38,8 @@ Tine.Crm.LinkGridPanel.initActions = function() {
     
     this.actionUnlink = new Ext.Action({
         requiredGrant: 'editGrant',
-        text: this.app.i18n._('Unlink contact'),
-        tooltip: this.app.i18n._('Unlink selected contacts'),
+        text: String.format(this.app.i18n._('Unlink {0}'), this.recordClass.getMeta('recordName')),
+        tooltip: String.format(his.app.i18n._('Unlink selected {0}'), this.recordClass.getMeta('recordName')),
         disabled: true,
         iconCls: 'actionRemove',
         scope: this,
@@ -55,21 +53,21 @@ Tine.Crm.LinkGridPanel.initActions = function() {
     
     this.actionEdit = new Ext.Action({
         requiredGrant: 'editGrant',
-        text: this.app.i18n._('Edit contact'),
-        tooltip: this.app.i18n._('Edit selected contact'),
+        text: String.format(this.app.i18n._('Edit {0}'), this.recordClass.getMeta('recordName')),
+        tooltip: String.format(this.app.i18n._('Edit selected {0}'), this.recordClass.getMeta('recordName')),
         //disabled: true,
         iconCls: 'actionEdit',
         scope: this,
         handler: function(_button, _event) {
             var selectedRows = this.getSelectionModel().getSelections();
             
-            var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
+            var editWindow = this.recordEditDialogOpener({
                 record: selectedRows[0],
                 listeners: {
                     scope: this,
                     'update': this.onUpdate
                 }
-            });         
+            });
         }
     });
 

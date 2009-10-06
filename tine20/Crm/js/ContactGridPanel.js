@@ -33,8 +33,6 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     autoExpandColumn: 'n_fileas',
     clicksToEdit: 1,
-    //enableHdMenu: false,
-    
     baseCls: 'contact-grid',
     
     /**
@@ -66,10 +64,24 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     otherActions: null,
     
     /**
+     * @type function
+     * @property recordEditDialogOpener
+     */
+    recordEditDialogOpener: null,
+    
+    /**
+     * record class
+     * @cfg {Tine.Addressbook.Model.Contact} recordClass
+     */
+    recordClass: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
+        this.recordEditDialogOpener = Tine.Addressbook.ContactEditDialog.openWindow;
+        this.recordClass = Tine.Addressbook.Model.Contact;
         
         // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
@@ -84,6 +96,9 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initStore();
         this.initActions();
         this.initGrid();
+        
+        // add contact type to "add" action
+        this.actionAdd.contactType = 'customer';
         
         Tine.Crm.ContactGridPanel.superclass.initComponent.call(this);
     },
@@ -131,6 +146,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             ]
         }];
 
+        /*
         this.tbar = new Ext.Panel({
             layout: 'fit',
             width: '100%',
@@ -141,6 +157,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 })
             ]
         });
+        */
     },
     
     /**
