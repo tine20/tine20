@@ -60,22 +60,87 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     contextMenu: null,
 
     /**
+     * @type Array
+     * @property otherActions
+     */
+    otherActions: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
         
-        // delegates
+        // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
         this.initActions = Tine.Crm.LinkGridPanel.initActions.createDelegate(this);
         this.initGrid = Tine.Crm.LinkGridPanel.initGrid.createDelegate(this);
         this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
 
+        // init other actions (changeContactType)
+        this.initOtherActions();
+
+        // call delegates
         this.initStore();
         this.initActions();
         this.initGrid();
         
         Tine.Crm.ContactGridPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * init other actions and tbar
+     */
+    initOtherActions: function() {
+        this.actionChangeContactTypeCustomer = new Ext.Action({
+            requiredGrant: 'editGrant',
+            contactType: 'customer',
+            text: this.app.i18n._('Customer'),
+            tooltip: this.app.i18n._('Change type to Customer'),
+            iconCls: 'contactIconCustomer',
+            scope: this,
+            handler: this.onChangeContactType
+        }); 
+        
+        this.actionChangeContactTypeResponsible = new Ext.Action({
+            requiredGrant: 'editGrant',
+            contactType: 'responsible',
+            text: this.app.i18n._('Responsible'),
+            tooltip: this.app.i18n._('Change type to Responsible'),
+            iconCls: 'contactIconResponsible',
+            scope: this,
+            handler: this.onChangeContactType
+        }); 
+    
+        this.actionChangeContactTypePartner = new Ext.Action({
+            requiredGrant: 'editGrant',
+            contactType: 'partner',
+            text: this.app.i18n._('Partner'),
+            tooltip: this.app.i18n._('Change type to Partner'),
+            iconCls: 'contactIconPartner',
+            scope: this,
+            handler: this.onChangeContactType
+        });
+        
+        this.otherActions = [{
+            text: this.app.i18n._('Change contact type'),
+            menu: [
+               this.actionChangeContactTypeCustomer,
+               this.actionChangeContactTypeResponsible,
+               this.actionChangeContactTypePartner
+            ]
+        }];
+
+        this.tbar = new Ext.Panel({
+            layout: 'fit',
+            width: '100%',
+            items: [
+                // TODO perhaps we could add an icon/button (i.e. edit-find.png) here
+                new Tine.Crm.ContactCombo({
+                    emptyText: this.app.i18n._('Search for Contacts to add ...')
+                })
+            ]
+        });
     },
     
     /**
