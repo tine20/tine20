@@ -47,9 +47,9 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * store to hold all contacts
      * 
      * @type Ext.data.Store
-     * @property contactStore
+     * @property store
      */
-    contactStore: null,
+    store: null,
     
     /**
      * @type Ext.Menu
