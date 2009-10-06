@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         generalize this
  * TODO         make grants work
  * TODO         add to extdoc
  */
@@ -115,7 +114,6 @@ Tine.Crm.LinkGridPanel.initStore = function() {
 /**
  * init ext grid panel
  * 
- * TODO         generalize
  * TODO         add grants again for all actions with required grants
  */
 Tine.Crm.LinkGridPanel.initGrid = function() {
@@ -145,25 +143,23 @@ Tine.Crm.LinkGridPanel.initGrid = function() {
 };
 
 /**
- * update event handler for related contacts
+ * update event handler for related records
  * 
- * TODO         generalize
  */
-Tine.Crm.LinkGridPanel.onUpdate = function(contact) {
+Tine.Crm.LinkGridPanel.onUpdate = function(record) {
     var response = {
-        responseText: contact
+        responseText: record
     };
-    contact = Tine.Addressbook.contactBackend.recordReader(response);
+    record = this.recordProxy.recordReader(response);
     
-    var myContact = this.store.getById(contact.id);
-    if (myContact) {
-        myContact.beginEdit();
-        for (var p in contact.data) { 
-            myContact.set(p, contact.get(p));
+    var myRecord = this.store.getById(record.id);
+    if (myRecord) {
+        myRecord.beginEdit();
+        for (var p in record.data) { 
+            myRecord.set(p, record.get(p));
         }
-        myContact.endEdit();
+        myRecord.endEdit();
     } else {
-        contact.data.relation_type = 'customer';
-        this.store.add(contact);
-    }        
+        this.store.add(record);
+    }
 };

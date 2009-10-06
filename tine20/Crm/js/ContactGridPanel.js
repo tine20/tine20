@@ -92,7 +92,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
         this.initActions = Tine.Crm.LinkGridPanel.initActions.createDelegate(this);
         this.initGrid = Tine.Crm.LinkGridPanel.initGrid.createDelegate(this);
-        this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
+        //this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
 
         // init other actions (changeContactType)
         this.initOtherActions();
@@ -238,6 +238,29 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         store.fireEvent('dataChanged', store);
+    },
+    
+    /**
+     * update event handler for related contacts
+     * 
+     */
+    onUpdate: function(contact) {
+        var response = {
+            responseText: contact
+        };
+        contact = Tine.Addressbook.contactBackend.recordReader(response);
+        
+        var myContact = this.store.getById(contact.id);
+        if (myContact) {
+            myContact.beginEdit();
+            for (var p in contact.data) { 
+                myContact.set(p, contact.get(p));
+            }
+            myContact.endEdit();
+        } else {
+            contact.data.relation_type = 'customer';
+            this.store.add(contact);
+        }        
     }
 });
 
