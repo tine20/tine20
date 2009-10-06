@@ -113,7 +113,8 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
 	            header: this.app.i18n._('context'), 
 	            dataIndex: 'context_id',
 	            width: 50,
-                sortable: true
+                sortable: true,
+                renderer: this.contextIdRenderer.createDelegate(this)
             },{ 
 	            id: 'defaultip', 
 	            header: this.app.i18n._('default ip'), 
@@ -374,9 +375,18 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
      * @todo move export buttons to single menu/split button
      */
     getToolbarItems: function(){
-       
         return [
 
         ];
-    } 
+    },
+    
+    /**
+     * context_id renderer
+     * 
+     * @private
+     * @return {String} HTML
+     */
+    contextIdRenderer: function(data, cell, record) {
+    	return record.get('context_id').name;
+    }
 });
