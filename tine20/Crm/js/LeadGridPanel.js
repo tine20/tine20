@@ -21,7 +21,6 @@ Ext.namespace('Tine.Crm');
  * <p>Lead Grid Panel</p>
  * <p><pre>
  * TODO         show related contacts in grid again
- * TODO         add filters again
  * TODO         add export button again
  * TODO         show closed leads button again
  * </pre></p>
@@ -65,12 +64,12 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initComponent: function() {
         this.recordProxy = Tine.Crm.recordBackend;
         
-        //this.actionToolbarItems = this.getToolbarItems();
+        this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.cm = this.getColumnModel();
-        //this.initFilterToolbar();
+        this.filterToolbar = this.getFilterToolbar();
         
         this.plugins = this.plugins || [];
-        //this.plugins.push(this.filterToolbar);
+        this.plugins.push(this.filterToolbar);
         
         Tine.Crm.GridPanel.superclass.initComponent.call(this);
         
@@ -81,24 +80,24 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     
     /**
      * initialises filter toolbar
-     *  @private
+     * 
+     * @return Tine.widgets.grid.FilterToolbar
+     * @private
      */
-    initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+    getFilterToolbar: function() {
+        return new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                /*
-                {label: this.app.i18n._('Lead'),    field: 'query',       operators: ['contains']},
-                {label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
-                new Tine.Crm.TimeAccountStatusGridFilter({
-                    field: 'status'
-                }),
-                */
+                {label: this.app.i18n._('Lead'),        field: 'query',    operators: ['contains']},
+                {label: this.app.i18n._('Lead name'),   field: 'lead_name' },
+                new Tine.Crm.LeadState.Filter({}),
+                {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
+                {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
                 new Tine.widgets.tags.TagFilter({app: this.app})
              ],
              defaultFilter: 'query',
              filters: []
         });
-    },    
+    },
     
     /**
      * returns cm
