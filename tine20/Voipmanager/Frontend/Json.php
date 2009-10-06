@@ -33,26 +33,10 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _recordToJson($_record)
     {
+        $recordArray = parent::_recordToJson($_record);
+        
         switch (get_class($_record)) {
-            case 'Voipmanager_Model_Snom_Template':
-                $recordArray = parent::_recordToJson($_record);
-                
-                // add snom softwares (no filter + no pagination)
-                $recordArray['software_id'] = array(
-                    'value'     => $_record->software_id,
-                    'records'   => $this->searchSnomSoftwares('', '')
-                );
-
-                // add snom settings (no filter + no pagination)
-                $recordArray['setting_id'] = array(
-                    'value'     => $_record->setting_id,
-                    'records'   => $this->searchSnomSettings('', '')
-                );
-                break;
-                
             case 'Voipmanager_Model_Snom_Phone':
-                $recordArray = parent::_recordToJson($_record);
-                
                 // add settings
                 $recordArray = array_merge($recordArray, $this->getSnomPhoneSettings($_record->getId()));
                 
@@ -75,24 +59,92 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 break;
 
-            case 'Voipmanager_Model_Asterisk_SipPeer':
-            case 'Voipmanager_Model_Asterisk_Voicemail':
-                $recordArray = parent::_recordToJson($_record);
-                
-                // add snom templates (no filter + no pagination)
-                $recordArray['context_id'] = array(
-                    'value'     => $_record->context_id,
-                    'records'   => $this->searchAsteriskContexts('', '')
-                );
+            default:
+                $this->_resolveRecordIds(get_class($_record), $recordArray);
                 break;
             
-            default:
-                $recordArray = parent::_recordToJson($_record);
         }
         
         return $recordArray;
     }
+
+    /**
+     * resolve ids
+     * 
+     * @param string $_className the classname
+     * @param array $_record
+     * @return void
+     */
+    protected function _resolveRecordIds($_className, array &$_record)
+    {
+        switch ($_className) {
+            case 'Voipmanager_Model_Snom_Template':
+                // add snom softwares (no filter + no pagination)
+                $_record['software_id'] = array(
+                    'value'     => $_record['software_id'],
+                    'records'   => $this->searchSnomSoftwares('', '')
+                );
+
+                // add snom settings (no filter + no pagination)
+                $_record['setting_id'] = array(
+                    'value'     => $_record['setting_id'],
+                    'records'   => $this->searchSnomSettings('', '')
+                );
+                break;
+                
+            case 'Voipmanager_Model_Snom_Phone':
+                // add settings
+                $_record = array_merge($_record, $this->getSnomPhoneSettings($_record['id']));
+                
+                // resolve snom template_id
+                $_record['template_id'] = array(
+                    'value'     => $_record['template_id'],
+                    'records'   => $this->searchSnomTemplates('', '')
+                );
+
+                // resolve snom location_id
+                $_record['location_id'] = array(
+                    'value'     => $_record['location_id'],
+                    'records'   => $this->searchSnomLocations('', '')
+                );
+                
+                // add names to lines
+                foreach ($_record['lines'] as &$line) {
+                    $line['name'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($line['asteriskline_id'])->name;
+                }
+                
+                break;
+
+            case 'Voipmanager_Model_Asterisk_SipPeer':
+            case 'Voipmanager_Model_Asterisk_Voicemail':
+                // resolve context_id
+                $_record['context_id'] = array(
+                    'value'     => $_record['context_id'],
+                    'name'      => Voipmanager_Controller_Asterisk_Context::getInstance()->get($_record['context_id'])->name,
+                    'records'   => $this->searchAsteriskContexts('', '')
+                );
+                break;
+            
+        }
+    }
     
+    /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_leads Crm_Model_Lead
+     * @return array data
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+    {
+        $result = parent::_multipleRecordsToJson($_records, $_filter);
+
+        foreach ($result as &$singleEntry) {
+            $this->_resolveRecordIds($_records->getRecordClassName(), $singleEntry);
+            
+        }
+
+        return $result;
+    }
     
 /****************************************
  * SNOM PHONE / PHONESETTINGS FUNCTIONS
