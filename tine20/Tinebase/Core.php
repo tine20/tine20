@@ -139,10 +139,11 @@ class Tinebase_Core
         $server = NULL;
         
         /**************************** JSON API *****************************/
-
-        if (( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
-              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
-            )) {
+        
+        if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
+             (isset($_SERVER['CONTENT_TYPE']) && substr($_SERVER['CONTENT_TYPE'],0,16) == 'application/json')  ||
+             (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
+            ) {
             $server = new Tinebase_Server_Json();
 
         /**************************** SNOM API *****************************/
