@@ -431,7 +431,39 @@
                 </index>
             </declaration>
         </table>
-        
+        <table>
+            <name>asterisk_context</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>150</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>            
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>        
         <table>
             <name>asterisk_sip_peers</name>
             <engine>InnoDB</engine>
@@ -735,20 +767,19 @@
                         <name>id</name>
                     </field>
                 </index>
-	            <index>
-	                <name>asterisk_sip_peers::context_id--asterisk_context::id</name>
-	                <field>
-	                    <name>context_id</name>
-	                </field>
-	                <foreign>true</foreign>
-	                <reference>
-	                    <table>asterisk_context</table>
-	                    <field>id</field>
-	                </reference>
-	            </index>
+                <index>
+                    <name>asterisk_sip_peers::context_id--asterisk_context::id</name>
+                    <field>
+                        <name>context_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>asterisk_context</table>
+                        <field>id</field>
+                    </reference>
+                </index>
             </declaration>
         </table>          
-
         <table>
             <name>snom_lines</name>
             <engine>InnoDB</engine>
@@ -829,41 +860,6 @@
                 </index>   
             </declaration>
         </table>
-        
-        <table>
-            <name>asterisk_context</name>
-            <engine>InnoDB</engine>
-            <charset>utf8</charset>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>150</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>description</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>            
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>        
-        
         <table>
             <name>asterisk_voicemail</name>
             <engine>InnoDB</engine>
