@@ -46,6 +46,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     contactGrid: null,
     
     /**
+     * linked tasks grid
+     * 
+     * @type Tine.Crm.TaskGridPanel
+     * @property tasksGrid
+     */
+    tasksGrid: null,
+    
+    /**
      * @private
      */
     windowNamePrefix: 'LeadEditWindow_',
@@ -287,7 +295,12 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             record: this.record,
             height: 210
         });
-    
+
+        this.tasksGrid = new Tine.Crm.TaskGridPanel({
+            record: this.record,
+            height: '100%'
+        });
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -425,7 +438,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         activeTab: 0,
                         height: 250,
                         items: [
-                            //_linkTabpanels.tasksPanel,
+                            this.tasksGrid
                             //_linkTabpanels.productsPanel
                         ]
                     }] // end of center lead panel

@@ -24,6 +24,8 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * Returns all JS files which must be included for this app
      *
      * @return array Array of filenames
+     * 
+     * @todo    make js include order depend on app depencies and remove redundant js files from other apps
      */
     public function getJsFilesToInclude()
     {
@@ -44,7 +46,7 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // product grid
             //'Crm/js/ProductGrid.js',
         // task grid
-            //'Crm/js/TaskGrid.js',
+            'Crm/js/TaskGridPanel.js',
         );
     }
     
