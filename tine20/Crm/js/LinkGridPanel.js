@@ -39,7 +39,7 @@ Tine.Crm.LinkGridPanel.initActions = function() {
     this.actionUnlink = new Ext.Action({
         requiredGrant: 'editGrant',
         text: String.format(this.app.i18n._('Unlink {0}'), this.recordClass.getMeta('recordName')),
-        tooltip: String.format(his.app.i18n._('Unlink selected {0}'), this.recordClass.getMeta('recordName')),
+        tooltip: String.format(this.app.i18n._('Unlink selected {0}'), this.recordClass.getMeta('recordName')),
         disabled: true,
         iconCls: 'actionRemove',
         scope: this,
@@ -99,7 +99,7 @@ Tine.Crm.LinkGridPanel.initStore = function() {
     
     this.store = new Ext.data.JsonStore({
         id: 'id',
-        fields: this.storeFields
+        fields: (this.storeFields) ? this.storeFields : this.recordClass
     });
 
     // focus+select new record
