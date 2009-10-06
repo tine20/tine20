@@ -79,9 +79,14 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initComponent: function() {
+        // init properties
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
         this.recordEditDialogOpener = Tine.Addressbook.ContactEditDialog.openWindow;
         this.recordClass = Tine.Addressbook.Model.Contact;
+
+        this.storeFields = Tine.Addressbook.Model.ContactArray;
+        this.storeFields.push({name: 'relation'});   // the relation object           
+        this.storeFields.push({name: 'relation_type'});     
         
         // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
@@ -99,6 +104,11 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         // add contact type to "add" action
         this.actionAdd.contactType = 'customer';
+
+        // init store stuff
+        // TODO remove that later
+        Ext.StoreMgr.add('ContactsStore', this.store);
+        this.store.setDefaultSort('type', 'asc');   
         
         Tine.Crm.ContactGridPanel.superclass.initComponent.call(this);
     },

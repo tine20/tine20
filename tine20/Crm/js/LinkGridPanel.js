@@ -9,6 +9,7 @@
  *
  * TODO         generalize this
  * TODO         make grants work
+ * TODO         add to extdoc
  */
  
 Ext.ns('Tine.Crm.LinkGridPanel');
@@ -94,20 +95,14 @@ Tine.Crm.LinkGridPanel.initActions = function() {
 /**
  * init store
  * 
- * TODO         generalize
  */ 
 Tine.Crm.LinkGridPanel.initStore = function() {
-    var contactFields = Tine.Addressbook.Model.ContactArray;
-    contactFields.push({name: 'relation'});   // the relation object           
-    contactFields.push({name: 'relation_type'});     
     
     this.store = new Ext.data.JsonStore({
         id: 'id',
-        fields: contactFields
+        fields: this.storeFields
     });
 
-    this.store.setDefaultSort('type', 'asc');   
-    
     // focus+select new record
     this.store.on('add', function(store, records, index) {
         (function() {
@@ -115,9 +110,6 @@ Tine.Crm.LinkGridPanel.initStore = function() {
             this.getSelectionModel().selectRow(index); 
         }).defer(100, this);
     }, this);
-    
-    // TODO remove that later
-    Ext.StoreMgr.add('ContactsStore', this.store);
 };
 
 /**
