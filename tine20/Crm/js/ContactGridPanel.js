@@ -19,8 +19,6 @@ Ext.ns('Tine.Crm');
  * Lead Dialog Contact Grid Panel
  * 
  * <p>
- * TODO         make grants work
- * TODO         generalize this and use it for tasks/products?
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3

@@ -8,6 +8,7 @@
  * @version     $Id$
  *
  * TODO         generalize this
+ * TODO         make grants work
  */
  
 Ext.ns('Tine.Crm.LinkGridPanel');
