@@ -66,6 +66,12 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
+        
+        // delegates
+        this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
+        this.initActions = Tine.Crm.LinkGridPanel.initActions.createDelegate(this);
+        this.initGrid = Tine.Crm.LinkGridPanel.initGrid.createDelegate(this);
+        this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
 
         this.initStore();
         this.initActions();
@@ -131,204 +137,6 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     /**
-     * @private
-     */
-    initStore: function() {
-        var contactFields = Tine.Addressbook.Model.ContactArray;
-        contactFields.push({name: 'relation'});   // the relation object           
-        contactFields.push({name: 'relation_type'});     
-        
-        this.store = new Ext.data.JsonStore({
-            id: 'id',
-            fields: contactFields
-        });
-
-        this.store.setDefaultSort('type', 'asc');   
-        
-        // focus+select new record
-        this.store.on('add', function(store, records, index) {
-            (function() {
-                this.getView().focusRow(index);
-                this.getSelectionModel().selectRow(index); 
-            }).defer(100, this);
-        }, this);
-        
-        // TODO remove that later
-        Ext.StoreMgr.add('ContactsStore', this.store);
-    },
-    
-    /**
-     * @private
-     */
-    initActions: function() {
-        this.actionAdd = new Ext.Action({
-            requiredGrant: 'editGrant',
-            contactType: 'customer',
-            text: this.app.i18n._('Add new contact'),
-            tooltip: this.app.i18n._('Add new customer contact'),
-            iconCls: 'actionAdd',
-            scope: this,
-            handler: this.onAdd
-        }); 
-        
-        this.actionUnlink = new Ext.Action({
-            requiredGrant: 'editGrant',
-            text: this.app.i18n._('Unlink contact'),
-            tooltip: this.app.i18n._('Unlink selected contacts'),
-            disabled: true,
-            iconCls: 'actionRemove',
-            scope: this,
-            handler: this.onUnlink
-        });
-        
-        this.actionChangeContactTypeCustomer = new Ext.Action({
-            requiredGrant: 'editGrant',
-            contactType: 'customer',
-            text: this.app.i18n._('Customer'),
-            tooltip: this.app.i18n._('Change type to Customer'),
-            iconCls: 'contactIconCustomer',
-            scope: this,
-            handler: this.onChangeContactType
-        }); 
-        
-        this.actionChangeContactTypeResponsible = new Ext.Action({
-            requiredGrant: 'editGrant',
-            contactType: 'responsible',
-            text: this.app.i18n._('Responsible'),
-            tooltip: this.app.i18n._('Change type to Responsible'),
-            iconCls: 'contactIconResponsible',
-            scope: this,
-            handler: this.onChangeContactType
-        }); 
-
-        this.actionChangeContactTypePartner = new Ext.Action({
-            requiredGrant: 'editGrant',
-            contactType: 'partner',
-            text: this.app.i18n._('Partner'),
-            tooltip: this.app.i18n._('Change type to Partner'),
-            iconCls: 'contactIconPartner',
-            scope: this,
-            handler: this.onChangeContactType
-        }); 
-
-        this.actionEdit = new Ext.Action({
-            requiredGrant: 'editGrant',
-            text: this.app.i18n._('Edit contact'),
-            tooltip: this.app.i18n._('Edit selected contact'),
-            //disabled: true,
-            iconCls: 'actionEdit',
-            scope: this,
-            handler: this.onEdit
-        });
-
-        // init toolbars and ctx menut / add actions
-        this.bbar = [                
-            this.actionAdd,
-            this.actionUnlink
-        ];
-            
-        this.tbar = new Ext.Panel({
-            layout: 'fit',
-            width: '100%',
-            items: [
-                // TODO perhaps we could add an icon/button (i.e. edit-find.png) here
-                new Tine.Crm.ContactCombo({
-                    emptyText: this.app.i18n._('Search for Contacts to add ...')
-                })
-            ]
-        });
-        
-        this.contextMenu = new Ext.menu.Menu({
-            items: [
-                this.actionEdit,
-                this.actionUnlink,
-                {
-                    text: this.app.i18n._('Change contact type'),
-                    menu: [
-                       this.actionChangeContactTypeCustomer,
-                       this.actionChangeContactTypeResponsible,
-                       this.actionChangeContactTypePartner
-                    ]
-                },
-                '-',
-                this.actionAdd
-            ]
-        });
-    },
-    
-    /**
-     * init ext grid panel
-     * @private
-     * 
-     * TODO add grants again for all actions with required grants
-     */
-    initGrid: function() {
-        this.cm = this.getColumnModel();
-        
-        this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-        this.selModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-            /*
-            if (this.record && (this.record.get('container_id') && this.record.get('container_id').account_grants)) {
-                this.actionUnlink.setDisabled(!this.record.get('container_id').account_grants.editGrant || rowCount != 1);
-            }
-            this.actionEdit.setDisabled(rowCount != 1);
-            */
-            this.actionUnlink.setDisabled(rowCount != 1);
-        }, this);
-        
-        this.on('rowcontextmenu', function(grid, row, e) {
-            e.stopEvent();
-            var selModel = grid.getSelectionModel();
-            if(!selModel.isSelected(row)) {
-                selModel.selectRow(row);
-            }
-            
-            this.contextMenu.showAt(e.getXY());
-        }, this);
-    },
-
-    /**
-     * onclick handler for onAddContact
-     */
-    onAdd: function(_button, _event) {
-        var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
-            listeners: {
-                scope: this,
-                'update': this.onUpdate
-            }
-        });         
-    },
-        
-    /**
-     * onclick handler for editContact
-     */
-    onEdit: function(_button, _event) {
-        var selectedRows = this.getSelectionModel().getSelections();
-        
-        var contactWindow = Tine.Addressbook.ContactEditDialog.openWindow({
-            record: selectedRows[0],
-            listeners: {
-                scope: this,
-                'update': this.onUpdate
-            }
-        });         
-    },
-    
-    /**
-     * unlink action handler for linked objects
-     * 
-     * remove selected objects from store
-     * needs _button.gridId and _button.storeName
-     */
-    onUnlink: function(_button, _event) {                       
-        var selectedRows = this.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            this.store.remove(selectedRows[i]);
-        }           
-    },
-
-    /**
      * onclick handler for changeContactType
      */
     onChangeContactType: function(_button, _event) {          
@@ -340,28 +148,6 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         store.fireEvent('dataChanged', store);
-    },
-    
-    /**
-     * update event handler for related contacts
-     */
-    onUpdate: function(contact) {
-        var response = {
-            responseText: contact
-        };
-        contact = Tine.Addressbook.contactBackend.recordReader(response);
-        
-        var myContact = this.store.getById(contact.id);
-        if (myContact) {
-            myContact.beginEdit();
-            for (var p in contact.data) { 
-                myContact.set(p, contact.get(p));
-            }
-            myContact.endEdit();
-        } else {
-            contact.data.relation_type = 'customer';
-            this.store.add(contact);
-        }        
     }
 });
 
