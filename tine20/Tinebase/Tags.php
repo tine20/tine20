@@ -426,7 +426,12 @@ class Tinebase_Tags
     public function attachTagToMultipleRecords($_filter, $_tag)
     {
         // check/create tag on the fly
-        $tagId = $this->_createTagsOnTheFly(array($_tag))->getFirstRecord()->getId();
+        $tags = $this->_createTagsOnTheFly(array($_tag));
+        if (empty($tags)) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No tags created.');
+            return;
+        }
+        $tagId = $tags->getFirstRecord()->getId();
         
         list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
         $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
@@ -437,7 +442,7 @@ class Tinebase_Tags
         $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
         
         if (empty($recordIds)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' there are no records we could attach the tag to');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' There are no records we could attach the tag to');
             return;
         }
         
