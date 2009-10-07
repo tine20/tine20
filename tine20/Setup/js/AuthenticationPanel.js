@@ -288,7 +288,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         selectOnFocus:true,
                         store: [['1', 'Yes'], ['0','No']],
                         name: 'accounts_Sql_changepw',
-                        fieldLabel: this.app.i18n._('Allow user to change her password?'),
+                        fieldLabel: this.app.i18n._('User can change password'),
                         value: '0'
                     } ]
                 }, {
