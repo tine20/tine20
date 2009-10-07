@@ -82,23 +82,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
      */
     getFilterToolbar: function() {
         return new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: this.app.i18n.n_('Contact', 'Contacts', 1),    field: 'query',    operators: ['contains']},
-                {label: this.app.i18n._('First Name'), field: 'n_given' },
-                {label: this.app.i18n._('Last Name'),  field: 'n_family'},
-                {label: this.app.i18n._('Company'),    field: 'org_name'},
-                {label: this.app.i18n._('Phone'), field: 'telephone', operators: ['contains']},
-                {label: this.app.i18n._('Job Title'),    field: 'title'},
-                {label: this.app.i18n._('Job Role'),    field: 'role'},
-                {filtertype: 'tinebase.tag', app: this.app},
-                //{label: this.app.i18n._('Birthday'),    field: 'bday', valueType: 'date'},
-                {label: this.app.i18n._('Street') + ' (' + this.app.i18n._('Company Address') + ')',      field: 'adr_one_street', defaultOperator: 'equals'},
-                {label: this.app.i18n._('Postal Code') + ' (' + this.app.i18n._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals'},
-                {label: this.app.i18n._('City') + '  (' + this.app.i18n._('Company Address') + ')',       field: 'adr_one_locality'},
-                {label: this.app.i18n._('Street') + ' (' + this.app.i18n._('Private Address') + ')',      field: 'adr_two_street', defaultOperator: 'equals'},
-                {label: this.app.i18n._('Postal Code') + ' (' + this.app.i18n._('Private Address') + ')', field: 'adr_two_postalcode', defaultOperator: 'equals'},
-                {label: this.app.i18n._('City') + '  (' + this.app.i18n._('Private Address') + ')',       field: 'adr_two_locality'}
-             ],
+            filterModels: Tine.Addressbook.Model.Contact.getFilterModel(),
              defaultFilter: 'query',
              filters: []
         });
