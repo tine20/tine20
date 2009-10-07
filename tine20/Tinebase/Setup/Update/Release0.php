@@ -2283,7 +2283,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
                         
                         // try to convert strings if failure
-                        if (preg_match('/(description|title|note|old_value)/', $zdse->getMessage(), $match)) {
+                        if (preg_match('/(description|title|note|old_value|org_name|adr_one_street)/', $zdse->getMessage(), $match)) {
                             $field = $match[1];
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                                 . ' Converting field ' . $field 

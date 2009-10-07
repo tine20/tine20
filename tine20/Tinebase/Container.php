@@ -1117,9 +1117,9 @@ class Tinebase_Container
                 $accountId          = Tinebase_Model_User::convertUserIdToInt(Tinebase_Core::getUser());
                 $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
                 $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
-            } catch (Zend_Exception $ze) {
+            } catch (Exception $e) {
                 // no user account set
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No user account set.');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No user account set. Error: ' . $e->getMessage());
             }
             $cache->remove('getContainerById' . $_containerId);
             $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
