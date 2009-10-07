@@ -122,9 +122,14 @@ class Setup_Frontend_Cli
         }
         
         foreach($applications as $key => &$application) {
-            if(!$controller->updateNeeded($application)) {
-                //echo "Application $application is already up to date! Skipped...\n";
-                unset($applications[$key]);
+            try {
+                if(!$controller->updateNeeded($application)) {
+                    //echo "Application $application is already up to date! Skipped...\n";
+                    unset($applications[$key]);
+                }
+            } catch (Setup_Exception_NotFound $e) {
+              Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to check if an application needs an update:' . $e->getMessage());
+              unset($applications[$key]);
             }
         }
 
