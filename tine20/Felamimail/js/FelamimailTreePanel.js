@@ -24,6 +24,7 @@ Ext.namespace('Tine.Felamimail');
  *              -> via ping or ext.util.delayedtask ?
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  * TODO         make inbox/drafts/templates configurable in account
+ * TODO         only allow nodes as drop target (not 'between')
  * </pre>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -66,6 +67,8 @@ Tine.Felamimail.TreePanel = Ext.extend(Ext.tree.TreePanel, {
     enableDrop: true,
     ddGroup: 'mailToTreeDDGroup',
     border: false,
+    // somehow this does not work as expected (only allow nodes as drop target)
+    //dropConfig: {appendOnly:true},
 	
     /**
      * init
