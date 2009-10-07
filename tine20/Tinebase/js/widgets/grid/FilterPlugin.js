@@ -93,13 +93,13 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
     onBeforeLoad: function(store, options) {
         options = options || {};
         options.params = options.params || {};
-        var filter = options.params.filter ? options.params.filter : [];
+        options.params.filter = options.params.filter ? options.params.filter : [];
         
         var value = this.getValue();
-        if (value && Ext.isArray(filter)) {
+        if (value && Ext.isArray(options.params.filter)) {
             value = Ext.isArray(value) ? value : [value];
             for (var i=0; i<value.length; i++) {
-                filter.push(value[i]);
+                options.params.filter.push(value[i]);
             }
         }
     },
