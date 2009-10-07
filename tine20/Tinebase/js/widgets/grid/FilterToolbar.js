@@ -372,32 +372,41 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 
         // init filter models
         this.filterModelMap = {};
-        var filters = [];
+        var filtersFields = [];
         
         for (var i=0; i<this.filterModels.length; i++) {
-            var fm = this.filterModels[i];
-            if (! fm.isFilterModel) {
-                var modelConfig = fm;
-                
-                if (fm.filtertype) {
-                    // filter from reg
-                    fm = new Tine.widgets.grid.FilterToolbar.FILTERS[fm.filtertype](modelConfig);
-                } else {
-                    fm = new Tine.widgets.grid.FilterModel(modelConfig);
-                }
-            }
-            // store reference in internal map
-            this.filterModelMap[fm.field] = fm;
-            filters.push(fm);
+            var config = this.filterModels[i];
+            var fm = this.createFilterModel(config);
             
-            // register trigger events
+            if (fm.isForeignFilter) {
+                fm.field = fm.ownField + ':' + fm.foreignField;
+            }
+            
+            this.filterModelMap[fm.field] = fm;
+            filtersFields.push(fm);
+            
             fm.on('filtertrigger', this.onFiltertrigger, this);
+            
+            // handle subfilters "inline" at the moment
+            if (typeof fm.getSubFilters == 'function') {
+                var subfilters = fm.getSubFilters();
+                Ext.each(subfilters, function(sfm) {
+                    sfm.isSubfilter = true;
+                    
+                    sfm.field = fm.ownField + ':' + sfm.field;
+                    sfm.label = fm.label + ' - ' + sfm.label;
+                    
+                    this.filterModelMap[sfm.field] = sfm;
+                    filtersFields.push(sfm);
+                    sfm.on('filtertrigger', this.onFiltertrigger, this);
+                }, this);
+            }
         }
         
         // init filter selection
         this.fieldStore = new Ext.data.JsonStore({
             fields: ['field', 'label'],
-            data: filters
+            data: filtersFields
         });
     },
     
@@ -413,6 +422,19 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             //this.setSize(size.width, size.height);
             //this.syncSize();
             this.fireEvent('bodyresize', this, size.width, size.height);
+        }
+    },
+    
+    createFilterModel: function(config) {
+        if (config.isFilterModel) {
+            return config;
+        }
+        
+        if (config.filtertype) {
+            // filter from reg
+            return new Tine.widgets.grid.FilterToolbar.FILTERS[config.filtertype](config);
+        } else {
+            return new Tine.widgets.grid.FilterModel(config);
         }
     },
     
@@ -501,26 +523,34 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.onFilterRowsChange();
     },
     
-    /**
-     * @todo generalise TA quick hack ;-)
-     */
     getValue: function() {
         var filters = [];
-        var ta_filters = [];
+        var foreignFilters = {};
         this.filterStore.each(function(filter) {
             var line = {};
-            for (formfield in filter.formFields) {
+            for (var formfield in filter.formFields) {
                 line[formfield] = filter.formFields[formfield].getValue();
             }
-            if (line.field && line.field.match(/^timeaccount_/)) {
-                line.field = line.field.replace(/^timeaccount_/, '');
-                ta_filters.push(line);
+            
+            if (line.field && line.field.match(/:/)) {
+                // subfilter handling
+                var parts = line.field.split(':');
+                var ownField = parts[0];
+                var foreignField = parts[1];
+                
+                line.field = foreignField;
+                foreignFilters[ownField] = foreignFilters[ownField] || [];
+                foreignFilters[ownField].push(line);
+                
             } else {
                 filters.push(line);
             }
         }, this);
-        if (ta_filters.length > 0) {
-            filters.push({field: 'timeaccount_id', operator: 'AND', value: ta_filters});
+        
+        for (var ownField in foreignFilters) {
+            if (foreignFilters.hasOwnProperty(ownField)) {
+                filters.push({field: ownField, operator: 'AND', value: foreignFilters[ownField]});
+            }
         }
         return filters;
     },
@@ -533,23 +563,18 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         var filterData, filter, existingFilterPos, existingFilter;
         
-        /**** foreign timeaccount_id hack ****/
+        // subfilter handling
         for (var i=0; i<filters.length; i++) {
             filterData = filters[i];
             
-            if (filterData.field.match(/^timeaccount_/)) {
-                filters.remove(filters[i]);
-                
-                var taFilters = filterData.value;
-                for (var j=taFilters.length -1; j>=0; j--) {
-                    taFilters[j].field = 'timeaccount_' + taFilters[j].field;
-                    filters.splice(i, 0, taFilters[j]);
+            if (filterData.operator == 'AND' || filterData.operator == 'OR') {
+                var subFilters = filterData.value;
+                for (var j=subFilters.length -1; j>=0; j--) {
+                    subFilters[j].field = filterData.field + ':' + subFilters[j].field;
+                    filters.splice(i+1, 0, subFilters[j]);
                 }
-
-                break;
             }
         }
-        /**** end of foreign timeaccount_id hack ****/
         
         for (var i=0; i<filters.length; i++) {
             filterData = filters[i];
