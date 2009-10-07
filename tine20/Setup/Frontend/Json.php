@@ -211,6 +211,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             'checkDB'         => Setup_Core::get(Setup_Core::CHECKDB),
             'checkLogger'     => $this->_controller->checkConfigLogger(),
             'checkCaching'    => $this->_controller->checkConfigCaching(),
+            'checkTmpDir'     => $this->_controller->checkConfigTmpDir(),
             'setupRequired'	  => $this->_controller->setupRequired(),
         );
 

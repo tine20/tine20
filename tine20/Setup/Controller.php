@@ -144,6 +144,21 @@ class Setup_Controller
     }
     
     /**
+     * Check if tmpdir is propperly configured (or not configured at all)
+     * 
+     * @return bool
+     */
+    public function checkConfigTmpDir()
+    {
+        $config = Setup_Core::getConfig();
+        if (!isset($config->tmpdir) || empty($config->tmpdir)) {
+            return true;
+        } else {
+            return @is_writable($config->tmpdir);
+        }
+    }
+    
+    /**
      * get list of applications as found in the filesystem
      *
      * @return array appName => setupXML
