@@ -59,6 +59,8 @@ class Setup_Frontend_Cli
             $this->_importAccounts($_opts);
         } elseif(isset($_opts->check_requirements)) {
             $this->_checkRequirements($_opts);
+        } elseif(isset($_opts->setconfig)) {
+            $this->_setConfig($_opts);
         }
     }
     
@@ -208,15 +210,75 @@ class Setup_Frontend_Cli
     {
         $results = Setup_Controller::getInstance()->checkRequirements();
         if ($results['success']) {
-        	echo "OK - All requirements are met\n";
+          echo "OK - All requirements are met\n";
         } else {
-        	echo "ERRORS - The following requirements are not met: \n";
-        	foreach ($results['results'] as $result) {
-        		if (!empty($result['message'])) {
-        			echo "- " . strip_tags($result['message']) . "\n";
-        		}
-        	}
+          echo "ERRORS - The following requirements are not met: \n";
+          foreach ($results['results'] as $result) {
+            if (!empty($result['message'])) {
+              echo "- " . strip_tags($result['message']) . "\n";
+            }
+          }
         }
+    }
+    
+    /**
+     * do the environment check
+     *
+     * @return array
+     */
+    protected function _setConfig(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        $errors = array();
+        if (empty($options['configkey'])) {
+            $errors[] = 'Missing argument: configkey';
+        }
+        if (empty($options['configvalue'])) {
+            $errors[] = 'Missing argument: configvalue';
+        }
+        $configKey = (string)$options['configkey'];
+        $configValue = $this->_parseConfigValue($options['configvalue']);
+        //Setup_Controller::getInstance()->setConfig()
+        //$results = Setup_Controller::getInstance()->checkRequirements();
+        if (empty($errors)) {
+           Setup_Controller::setConfigOption($configKey, $configValue);
+           echo "OK - Updated configuration option $configKey\n";
+        } else {
+            echo "ERRORS - The following errors occured: \n";
+            foreach ($errors as $error) {
+                echo "- " . $error . "\n";
+            }
+        }
+    }
+    
+    /**
+     * parse email options
+     * 
+     * @param array $_options
+     * @return array
+     * 
+     * @todo generalize this to allow to add other options during cli setup
+     */
+    protected function _parseConfigValue($_value)
+    {
+        $result = $_value;
+        $_value = preg_replace('/\s*/', '', $_value);
+        $parts = explode(',', $_value);
+        if (count($parts) > 1) {
+            $result = array();
+            foreach ($parts as $part) {
+                if (preg_match('/_/', $part)) {
+                    list($key, $sub) = explode('_', $part);
+                    list($subKey, $value) = explode(':', $sub);
+                    $result[$key][$subKey] = $value;
+                } else {
+                    list($key, $value) = explode(':', $part);
+                    $result[$key] = $value;
+                }
+            }
+        }
+
+        return $result;
     }
     
     /**

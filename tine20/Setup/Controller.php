@@ -726,6 +726,19 @@ class Setup_Controller
     }
     
     /**
+     * save config option in db using {@see Tinebase_Config::setConfigForApplication}
+     * 
+     * @param String $_key
+     * @param String || array $_value
+     * @return void
+     */
+    public function setConfigOption($_key, $_value)
+    {
+        $value = is_string($_value) ? $_value : Zend_Json::encode($_value);
+        Tinebase_Config::getInstance()->setConfigForApplication($_key, $value);
+    }
+    
+    /**
      * create new setup user session
      *
      * @param   string $_username
