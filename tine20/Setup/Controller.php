@@ -549,10 +549,6 @@ class Setup_Controller
                 'filename' => $defaultPath . DIRECTORY_SEPARATOR . 'tine20.log',
                 'priority' => '7'    
             ),
-            'setupuser' => array(
-                'username'      => 'tine20admin',
-                'password'      => 'lars' 
-            ),
             'caching' => array(
                    'active' => 1,
                    'lifetime' => 3600,
