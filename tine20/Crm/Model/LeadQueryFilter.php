@@ -33,18 +33,22 @@ class Crm_Model_LeadQueryFilter extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if (empty($this->_value)) {
+            // nothing to filter
+            return;
+        }
+        
         $filterData = array(
             array('field' => 'lead_name',   'operator' => 'contains', 'value' => $this->_value),
             array('field' => 'description', 'operator' => 'contains', 'value' => $this->_value),
+            
             // hack to supress custom stuff
             array('field' => 'showClosed',  'operator' => 'equals',   'value' => TRUE),
         );
         
         $filter = new Crm_Model_LeadFilter($filterData, 'OR');
         
-        
-        
-        /*** also filter for contacts ***/
+        /*** also filter for related contacts ***/
         $contactFilter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'query',   'operator' => 'contains', 'value' => $this->_value),
         ));
@@ -58,7 +62,6 @@ class Crm_Model_LeadQueryFilter extends Tinebase_Model_Filter_Abstract
         $leadIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
         
         $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'in', $leadIds));
-        
         
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $filter, $_backend);
