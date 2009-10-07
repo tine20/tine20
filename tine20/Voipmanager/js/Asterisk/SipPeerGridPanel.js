@@ -46,11 +46,12 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: this.app.i18n._('Sip Peer'),    field: 'query',    operators: ['contains']}
-             ],
-             defaultFilter: 'query',
-             filters: []
+        	filterModels: [
+        	    {label: this.app.i18n._('Sip Peer'),    field: 'query',    operators: ['contains']},
+        	    {label: this.app.i18n._('Name'), field: 'name' }
+        	],
+            defaultFilter: 'query',
+            filters: []
         });
     },    
     
@@ -109,12 +110,11 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
                 sortable: true,
 	            hidden: true 
             },{ 
-	            id: 'context_id', 
+	            id: 'context', 
 	            header: this.app.i18n._('context'), 
-	            dataIndex: 'context_id',
+	            dataIndex: 'context',
 	            width: 50,
-                sortable: true,
-                renderer: this.contextIdRenderer.createDelegate(this)
+                sortable: true
             },{ 
 	            id: 'defaultip', 
 	            header: this.app.i18n._('default ip'), 
@@ -378,15 +378,6 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
         return [
 
         ];
-    },
-    
-    /**
-     * context_id renderer
-     * 
-     * @private
-     * @return {String} HTML
-     */
-    contextIdRenderer: function(data, cell, record) {
-    	return record.get('context_id').name;
     }
+    
 });

@@ -413,6 +413,7 @@ Tine.Voipmanager.Model.AsteriskSipPeerArray = Tine.Tinebase.Model.genericFields.
     {name: 'callerid'},
     {name: 'canreinvite'},
     {name: 'context_id'},
+    {name: 'context'},
     {name: 'defaultip'},
     {name: 'dtmfmode'},
     {name: 'fromuser'},
@@ -517,6 +518,7 @@ Tine.Voipmanager.Model.AsteriskContext.getDefaultData = function() {
 Tine.Voipmanager.Model.AsteriskVoicemailArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'context_id'},
+    {name: 'context'},
     {name: 'mailbox'},
     {name: 'password'},
     {name: 'fullname'},

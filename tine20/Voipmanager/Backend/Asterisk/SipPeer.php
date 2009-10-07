@@ -30,4 +30,40 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Voipmanager_Model_Asterisk_SipPeer';
+    
+    /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {        
+        $select = parent::_getSelect($_cols, $_getDeleted);
+
+        $select->joinLeft(
+            array('contexts'  => $this->_tablePrefix . 'asterisk_context'), 
+            'context_id = contexts.id', 
+            array('context' => 'name')
+        );
+        
+        return $select;
+    }
+    
+    /**
+     * converts record into raw data for adapter
+     *
+     * @param  Tinebase_Record_Abstract $_record
+     * @return array
+     */
+    protected function _recordToRawData($_record)
+    {
+        $result = parent::_recordToRawData($_record);
+        
+        // context is joined from the asterisk_context table and can not be set here
+        unset($result['context']);
+        
+        return $result;
+    }
 }

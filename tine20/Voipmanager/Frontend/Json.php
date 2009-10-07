@@ -59,57 +59,38 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 break;
 
-            default:
-                $this->_resolveRecordIds(get_class($_record), $recordArray);
-                break;
-            
-        }
-        
-        return $recordArray;
-    }
-
-    /**
-     * resolve ids
-     * 
-     * @param string $_className the classname
-     * @param array $_record
-     * @return void
-     */
-    protected function _resolveRecordIds($_className, array &$_record)
-    {
-        switch ($_className) {
             case 'Voipmanager_Model_Snom_Template':
                 // add snom softwares (no filter + no pagination)
-                $_record['software_id'] = array(
-                    'value'     => $_record['software_id'],
+                $recordArray['software_id'] = array(
+                    'value'     => $recordArray['software_id'],
                     'records'   => $this->searchSnomSoftwares('', '')
                 );
 
                 // add snom settings (no filter + no pagination)
-                $_record['setting_id'] = array(
-                    'value'     => $_record['setting_id'],
+                $recordArray['setting_id'] = array(
+                    'value'     => $recordArray['setting_id'],
                     'records'   => $this->searchSnomSettings('', '')
                 );
                 break;
                 
             case 'Voipmanager_Model_Snom_Phone':
                 // add settings
-                $_record = array_merge($_record, $this->getSnomPhoneSettings($_record['id']));
+                $recordArray = array_merge($recordArray, $this->getSnomPhoneSettings($recordArray['id']));
                 
                 // resolve snom template_id
-                $_record['template_id'] = array(
-                    'value'     => $_record['template_id'],
+                $recordArray['template_id'] = array(
+                    'value'     => $recordArray['template_id'],
                     'records'   => $this->searchSnomTemplates('', '')
                 );
 
                 // resolve snom location_id
-                $_record['location_id'] = array(
-                    'value'     => $_record['location_id'],
+                $recordArray['location_id'] = array(
+                    'value'     => $recordArray['location_id'],
                     'records'   => $this->searchSnomLocations('', '')
                 );
                 
                 // add names to lines
-                foreach ($_record['lines'] as &$line) {
+                foreach ($recordArray['lines'] as &$line) {
                     $line['name'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($line['asteriskline_id'])->name;
                 }
                 
@@ -118,33 +99,16 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             case 'Voipmanager_Model_Asterisk_SipPeer':
             case 'Voipmanager_Model_Asterisk_Voicemail':
                 // resolve context_id
-                $_record['context_id'] = array(
-                    'value'     => $_record['context_id'],
-                    'name'      => Voipmanager_Controller_Asterisk_Context::getInstance()->get($_record['context_id'])->name,
+                $recordArray['context_id'] = array(
+                    'value'     => $recordArray['context_id'],
                     'records'   => $this->searchAsteriskContexts('', '')
                 );
                 break;
-            
         }
+        
+        return $recordArray;
     }
-    
-    /**
-     * returns multiple records prepared for json transport
-     *
-     * @param Tinebase_Record_RecordSet $_leads Crm_Model_Lead
-     * @return array data
-     */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
-    {
-        $result = parent::_multipleRecordsToJson($_records, $_filter);
 
-        foreach ($result as &$singleEntry) {
-            $this->_resolveRecordIds($_records->getRecordClassName(), $singleEntry);
-            
-        }
-
-        return $result;
-    }
     
 /****************************************
  * SNOM PHONE / PHONESETTINGS FUNCTIONS

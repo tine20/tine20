@@ -59,6 +59,7 @@ class Voipmanager_Model_Asterisk_SipPeer extends Tinebase_Record_Abstract
         'callerid'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'canreinvite'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'context_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'context'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'defaultip'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'dtmfmode'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'fromuser'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),

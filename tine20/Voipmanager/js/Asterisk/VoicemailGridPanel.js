@@ -81,12 +81,11 @@ Tine.Voipmanager.AsteriskVoicemailGridPanel = Ext.extend(Tine.Tinebase.widgets.a
 	       	width: 50, 
             sortable: true
        },{ 
-	       	id: 'context_id', 
+	       	id: 'context', 
 	       	header: this.app.i18n._('context'), 
-	       	dataIndex: 'context_id', 
+	       	dataIndex: 'context', 
 	       	width: 70, 
-            sortable: true,
-            renderer: this.contextIdRenderer.createDelegate(this)
+            sortable: true
        },{ 
 	       	id: 'fullname', 
 	       	header: this.app.i18n._('fullname'), 
@@ -233,15 +232,6 @@ Tine.Voipmanager.AsteriskVoicemailGridPanel = Ext.extend(Tine.Tinebase.widgets.a
         return [
 
         ];
-    },
+    }
     
-    /**
-     * context_id renderer
-     * 
-     * @private
-     * @return {String} HTML
-     */
-    contextIdRenderer: function(data, cell, record) {
-    	return record.get('context_id').name;
-    } 
 });
