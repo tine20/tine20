@@ -140,16 +140,17 @@ class Tinebase_EmailUser
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
         
         if (isset($config['backend'])) {
+            $backend = ucfirst(strtolower($config['backend']));
             switch ($_configType) {
                 case Tinebase_Model_Config::IMAP:
-                    if (ucfirst($config['backend']) == self::DBMAIL) {
+                    if ($backend == self::DBMAIL) {
                         $result = self::DBMAIL;
-                    } else if (ucfirst($config['backend']) == self::LDAP_IMAP) {
+                    } else if ($backend == self::LDAP_IMAP) {
                         $result = self::LDAP_IMAP;
                     }
                     break;
                 case Tinebase_Model_Config::SMTP:
-                    if (ucfirst($config['backend']) == self::POSTFIX) {
+                    if ($backend == self::POSTFIX) {
                         $result = self::POSTFIX;
                     }
                     break;
