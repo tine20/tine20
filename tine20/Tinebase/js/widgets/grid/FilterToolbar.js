@@ -512,7 +512,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             for (formfield in filter.formFields) {
                 line[formfield] = filter.formFields[formfield].getValue();
             }
-            if (line.field.match(/^timeaccount_/)) {
+            if (line.field && line.field.match(/^timeaccount_/)) {
                 line.field = line.field.replace(/^timeaccount_/, '');
                 ta_filters.push(line);
             } else {
