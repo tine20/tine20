@@ -47,6 +47,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
     
     /**
+     * save automatic alarms when creating new record
+     * 
+     * @var string
+     */
+    const AUTOMATICALARM = 'automaticalarm';
+    
+    /**
      * user backend config
      * 
      * @var string

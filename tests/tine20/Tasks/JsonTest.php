@@ -123,6 +123,42 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $persistentTaskData = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
         $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
+
+    /**
+     * test create task with automatic alarm
+     *
+     */
+    public function testCreateTaskWithAutomaticAlarm()
+    {
+        $task = $this->_getTask();
+        
+        // set config for automatic alarms
+        Tinebase_Config::getInstance()->setConfigForApplication(
+            Tinebase_Model_Config::AUTOMATICALARM,
+            Zend_Json::encode(array(
+                2*24*60,    // 2 days before
+                //0           // 0 minutes before
+            )),
+            'Tasks'
+        );
+        
+        $persistentTaskData = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
+        $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
+        
+        // check if alarms are created / returned
+        $this->assertGreaterThan(0, count($loadedTaskData['alarms']));
+        $this->assertEquals('Tasks_Model_Task', $loadedTaskData['alarms'][0]['model']);
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedTaskData['alarms'][0]['sent_status']);
+        $this->assertTrue(array_key_exists('minutes_before', $loadedTaskData['alarms'][0]), 'minutes_before is missing');
+        $this->assertEquals(2*24*60, $loadedTaskData['alarms'][0]['minutes_before']);
+
+        // reset automatic alarms config
+        Tinebase_Config::getInstance()->setConfigForApplication(
+            Tinebase_Model_Config::AUTOMATICALARM,
+            Zend_Json::encode(array()),
+            'Tasks'
+        );
+    }
     
     /**
      * test update of a task
