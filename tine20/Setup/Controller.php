@@ -159,6 +159,22 @@ class Setup_Controller
     }
     
     /**
+     * Check if session save path is propperly configured (or not configured at all)
+     * 
+     * @return bool
+     */
+    public function checkConfigSessionDir()
+    {
+        $config = Setup_Core::getConfig();
+        $sessionSavePath = $config->get('sessiondir', null);
+        if (empty($sessionSavePath)) {
+            return true;
+        } else {
+            return @is_writable($sessionSavePath);
+        }
+    }
+    
+    /**
      * get list of applications as found in the filesystem
      *
      * @return array appName => setupXML
@@ -544,7 +560,7 @@ class Setup_Controller
                    'path' => $defaultPath,
             ),
             'tmpdir' => $defaultPath,
-            'session.save_path' => Setup_Core::getSessionDir(),
+            'sessiondir' => Setup_Core::getSessionDir(),
         );
         
         return $result;
@@ -558,6 +574,16 @@ class Setup_Controller
     public function getConfigData()
     {
         $configArray = Setup_Core::getConfig()->toArray();
+        
+        #####################################
+        # LEGACY/COMPATIBILITY: had to rename session.save_path key to sessiondir because otherwise the 
+        # generic save config method would interpret the "_" as array key/value seperator
+        if (empty($configArray['sessiondir']) && !empty($configArray['session.save_path'])) {
+          $configArray['sessiondir'] = $configArray['session.save_path'];
+          Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'session.save_path' should be renamed to 'sessiondir'");
+        }
+        #####################################
+        
         return $configArray;
     }
     

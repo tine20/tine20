@@ -825,7 +825,20 @@ class Tinebase_Core
         $sessionDirName ='tine20_sessions';
         $config = self::getConfig();
 
-        $sessionDir = $config->get('session.save_path', null);
+        $sessionDir = $config->get('sessiondir', null);
+        
+        #####################################
+        # LEGACY/COMPATIBILITY: had to rename session.save_path key to sessiondir because otherwise the 
+        # generic save config method would interpret the "_" as array key/value seperator
+        if (empty($sessionDir)) {
+          $sessionDir = $config->get('session.save_path', null);
+          if ($sessionDir) {
+            self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'session.save_path' should be renamed to 'sessiondir'");
+          }
+        }
+        #####################################
+        
+        
         if (empty($sessionDir) || !@is_writable($sessionDir)) {
         
             $sessionDir = session_save_path();
@@ -833,7 +846,7 @@ class Tinebase_Core
                 $sessionDir = self::guessTempDir();
             }
             
-            $sessionDir .= PATH_SEPARATOR . $sessionDirName;
+            $sessionDir .= DIRECTORY_SEPARATOR . $sessionDirName;
         }
         return $sessionDir;        
     }

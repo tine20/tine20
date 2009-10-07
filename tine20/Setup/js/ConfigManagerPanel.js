@@ -148,6 +148,14 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 value: Tine.Setup.registry.get(this.registryKey).tmpdir,
                 fieldLabel: this.app.i18n._('Temporary Files Path')
             }]
+        }, {
+            title: this.app.i18n._('Session files'),
+            id: 'setup-sessionDir-group',
+            items: [{
+                name: 'sessiondir',
+                value: Tine.Setup.registry.get(this.registryKey)['sessiondir'],
+                fieldLabel: this.app.i18n._('Session Files Path')
+            }]
         }];
     },
     
@@ -160,6 +168,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         Ext.getCmp('setup-logger-group').setIconClass(Tine.Setup.registry.get('checkLogger') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-caching-group').setIconClass(Tine.Setup.registry.get('checkCaching') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-tmpDir-group').setIconClass(Tine.Setup.registry.get('checkTmpDir') ? 'setup_checks_success' : 'setup_checks_fail');
+        Ext.getCmp('setup-sessionDir-group').setIconClass(Tine.Setup.registry.get('checkSessionDir') ? 'setup_checks_success' : 'setup_checks_fail');
     },
     
     /**
