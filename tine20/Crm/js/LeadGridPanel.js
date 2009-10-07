@@ -62,7 +62,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * @private
      */
     initComponent: function() {
-        this.recordProxy = Tine.Crm.recordBackend;
+        this.recordProxy = Tine.Crm.leadBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.cm = this.getColumnModel();
