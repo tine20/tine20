@@ -38,7 +38,7 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('lead_name', 'description'))),
+        'query'          => array('filter' => 'Crm_Model_LeadQueryFilter'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'lead_name'      => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'metacrm_lead.id')),
@@ -47,6 +47,11 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         'leadstate_id'   => array('filter' => 'Tinebase_Model_Filter_Int'),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Crm')),
         'showClosed'     => array('custom' => true),
+    
+        'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+            'related_model'     => 'Addressbook_Model_Contact',
+            'related_filter'    => 'Addressbook_Model_ContactFilter'
+        )),
     );
 
     /**
