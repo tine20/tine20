@@ -151,7 +151,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 store         : [
                     ['user',     this.app.i18n._('User')   ],
                     ['group',    this.app.i18n._('Group')  ],
-                    ['resource', this.app.i18n._('Resouce')]
+                    ['resource', this.app.i18n._('Resource')]
                 ]
             })
         }, {

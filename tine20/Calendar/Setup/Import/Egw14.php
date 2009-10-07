@@ -602,38 +602,38 @@ class Calendar_Setup_Import_Egw14 {
     protected function _getResourceId($_egwResourceId)
     {
         $select = $this->_egwDb->select()
-            ->from(array('resouces' => 'egw_resources'))
+            ->from(array('resources' => 'egw_resources'))
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('res_id') . ' = ?', $_egwResourceId));
         
-        $egwResouces = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        $egwResources = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
         
-        if (count($egwResouces) !== 1) {
+        if (count($egwResources) !== 1) {
             $this->_log->warn('egw resource not found');
             return NULL;
         }
-        $egwResouce = $egwResouces[0];
+        $egwResource = $egwResources[0];
         
-        // find tine resouce
-        $tineResouces = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
-            array('field' => 'name', 'operator' => 'equals', 'value' => $egwResouce['name'])
+        // find tine resource
+        $tineResources = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
+            array('field' => 'name', 'operator' => 'equals', 'value' => $egwResource['name'])
         )));
         
-        if (count($tineResouces) === 0) {
+        if (count($tineResources) === 0) {
             // migrate on the fly
-            $this->_log->info("migrating resource {$egwResouce['name']}");
+            $this->_log->info("migrating resource {$egwResource['name']}");
             
             $resource = new Calendar_Model_Resource(array(
-                'name'        => $egwResouce['name'],
-                'description' => $egwResouce['short_description'],
-                'email'       => preg_replace('/[^A-Za-z0-9.\-]/', '', $egwResouce['name'])
+                'name'        => $egwResource['name'],
+                'description' => $egwResource['short_description'],
+                'email'       => preg_replace('/[^A-Za-z0-9.\-]/', '', $egwResource['name'])
             ));
             
-            $tineResouce = Calendar_Controller_Resource::getInstance()->create($resource);
+            $tineResource = Calendar_Controller_Resource::getInstance()->create($resource);
         } else {
-            $tineResouce = $tineResouces->getFirstRecord();
+            $tineResource = $tineResources->getFirstRecord();
         }
         
-        return $tineResouce->getId();
+        return $tineResource->getId();
     }
     
     /**

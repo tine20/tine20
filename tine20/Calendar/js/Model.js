@@ -373,7 +373,7 @@ Tine.Calendar.Model.Attender.getDefaultData = function() {
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.Resource
  * @extends Tine.Tinebase.data.Record
- * Resouce Record Definition
+ * Resource Record Definition
  */
 Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
@@ -397,7 +397,7 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
 /* lets try it with Ext.Direct
 Tine.Calendar.backend = new Tine.Calendar.Model.EventJsonBackend({
     appName: 'Calendar',
-    modelName: 'Resouce',
-    recordClass: Tine.Calendar.Model.Resouce
+    modelName: 'Resource',
+    recordClass: Tine.Calendar.Model.Resource
 });
 */
