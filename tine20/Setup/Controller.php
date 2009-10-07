@@ -517,7 +517,7 @@ class Setup_Controller
      */
     public function getConfigDefaults()
     {
-        $defaultPath = Setup_Core::getTempDir();
+        $defaultPath = Setup_Core::guessTempDir();
         
         $result = array(
             'database' => array(
@@ -530,7 +530,7 @@ class Setup_Controller
                 'port'          => 3306
             ),
             'logger' => array(
-                'filename' => $defaultPath . PATH_SEPARATOR . 'tine20.log',
+                'filename' => $defaultPath . DIRECTORY_SEPARATOR . 'tine20.log',
                 'priority' => '7'    
             ),
             'setupuser' => array(
@@ -543,7 +543,8 @@ class Setup_Controller
                    'backend' => 'File',
                    'path' => $defaultPath,
             ),
-            'tmpdir' => $defaultPath
+            'tmpdir' => $defaultPath,
+            'session.save_path' => Setup_Core::getSessionDir(),
         );
         
         return $result;

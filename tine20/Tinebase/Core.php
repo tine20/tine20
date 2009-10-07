@@ -292,26 +292,39 @@ class Tinebase_Core
     }
     
     /**
-     * setup temp dir registry setting
-     *  - config.inc.php > session_save_path > sys_get_temp_dir > /tmp
+     * setup temp dir registry setting retrieved by {@see _getTempDir()}
      *  
      * @return void
      */
     public static function setupTempDir()
+    {       
+        self::set(self::TMPDIR, self::guessTempDir());
+    }
+    
+    /**
+     * figure out temp directory:
+     * config.inc.php > sys_get_temp_dir > session_save_path > /tmp
+     *  
+     * @return String
+     */
+    public static function guessTempDir()
     {
         $config = self::getConfig();
         
-        $defaultPath = session_save_path();
-        if (empty($defaultPath)) {
-            $defaultPath = sys_get_temp_dir();
+        $tmpdir = $config->get('tmpdir', null);
+        if (empty($tmpdir) || !@is_writable($tmpdir)) {
+            $tmpdir = sys_get_temp_dir();
+            if (empty($tmpdir) || !@is_writable($tmpdir)) {
+                $tmpdir = session_save_path();
+                if (empty($tmpdir) || !@is_writable($tmpdir)) {
+                    $tmpdir = '/tmp';
+                }
+            }
         }
-        if (empty($defaultPath)) {
-            $defaultPath = '/tmp';
-        }
-        $tmpdir = $config->get('tmpdir', $defaultPath);
         
-        self::set(self::TMPDIR, $tmpdir);
+        return $tmpdir;
     }
+    
     
     /**
      * initializes the logger
@@ -462,9 +475,7 @@ class Tinebase_Core
         ini_set('session.gc_maxlifetime', $maxLifeTime);
         
         // set the session save path
-        $iniPath = session_save_path();
-        $defaultPath = (! empty($iniPath)) ? $iniPath . '/tine20_sessions' : self::getTempDir() . PATH_SEPARATOR . 'tine20_sessions';
-        $sessionSavepath = $config->get('session.save_path', $defaultPath);
+        $sessionSavepath = self::getSessionDir();
         if(ini_set('session.save_path', $sessionSavepath) !== false) { 
             if (!is_dir($sessionSavepath)) { 
                 mkdir($sessionSavepath, 0700); 
@@ -802,5 +813,28 @@ class Tinebase_Core
     public static function getTempDir()
     {
         return self::get(self::TMPDIR);
+    }
+    
+    /**
+     * get temp dir string (without PATH_SEP at the end)
+     *
+     * @return string
+     */
+    public static function getSessionDir()
+    {
+        $sessionDirName ='tine20_sessions';
+        $config = self::getConfig();
+
+        $sessionDir = $config->get('session.save_path', null);
+        if (empty($sessionDir) || !@is_writable($sessionDir)) {
+        
+            $sessionDir = session_save_path();
+            if (empty($sessionDir) || !@is_writable($sessionDir)) {
+                $sessionDir = self::guessTempDir();
+            }
+            
+            $sessionDir .= PATH_SEPARATOR . $sessionDirName;
+        }
+        return $sessionDir;        
     }
 }
