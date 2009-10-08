@@ -10,7 +10,7 @@
  *
  */
 
-Ext.namespace('Tine.Crm', 'Tine.Crm.Contact');
+Ext.namespace('Tine.Crm');
 
 /**
  * @namespace   Tine.Crm.Contact
