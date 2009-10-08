@@ -121,15 +121,25 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
  * @extends Ext.data.Record
  * 
  * Product Link Record Definition
- * 
- * TODO remove that?
  */ 
-Tine.Crm.Model.ProductLink = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'product_id'},
-    {name: 'product_desc'},
-    {name: 'product_price'}
-]);
+Tine.Crm.Model.ProductLink = Tine.Tinebase.data.Record.create([
+        {name: 'id'},
+        {name: 'product_id'},
+        {name: 'product_desc'},
+        {name: 'product_price'}
+    ], {
+    appName: 'Crm',
+    modelName: 'Product',
+    idProperty: 'id',
+    titleProperty: 'product_desc',
+    // ngettext('Product', 'Products', n);
+    recordName: 'Product',
+    recordsName: 'Products',
+    // ngettext('record list', 'record lists', n);
+    getTitle: function() {
+        return this.get('product_desc') ? this.get('product_desc') : false;
+    }
+});
 
 // work arround nasty ext date bug
 // TODO is that still needed?

@@ -8,7 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo translate
+ * TODO         translate
+ * TODO         remove deprecated code
  */
 
 Ext.namespace('Tine.Crm', 'Tine.Crm.Product');

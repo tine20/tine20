@@ -20,7 +20,6 @@ Ext.namespace('Tine.Crm');
  * <p>
  * TODO         simplify relation handling (move init of stores to relation grids and get data from there later?)
  * TODO         make marking of invalid fields work again
- * TODO         add products grid
  * TODO         make grants work
  * TODO         add export button
  * </p>
@@ -98,7 +97,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Crm.LeadEditDialog.superclass.onRecordUpdate.call(this);
         
         //delete this.record.data.contacts;
-        this.record = this.getAdditionalData(this.record);
+        this.getAdditionalData();
     },
     
     /**
@@ -137,40 +136,26 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * getAdditionalData
      * collects additional data (start/end dates, linked contacts, ...)
      * 
-     * @param   Tine.Crm.Model.Lead lead
-     * @return  Tine.Crm.Model.Lead lead
-     * 
-     * TODO add products again
      */
-    getAdditionalData: function(lead) {
+    getAdditionalData: function() {
+        
         // collect data of relations
         var relations = [];
-        
-        // contacts
         this.contactGrid.store.each(function(record) {                     
             relations.push(this.getRelationData(record));
         }, this);
-        
-        // tasks
         this.tasksGrid.store.each(function(record) {
             relations.push(this.getRelationData(record));
         }, this);
         
-        lead.data.relations = relations;
-        
         // add products
-        /*
         var linksProducts = [];
-        var storeProducts = Ext.StoreMgr.lookup('ProductsStore');       
-
-        storeProducts.each(function(record) {
+        this.productsGrid.store.each(function(record) {
             linksProducts.push(record.data);
         });
-        
-        lead.data.products = linksProducts;
-        */
-        
-        return lead;
+
+        this.record.data.relations = relations;
+        this.record.data.products = linksProducts;
     },
     
     /**
@@ -240,9 +225,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             height: '100%'
         });
         
-        this.productsGrid = new Ext.Panel({
-            title: 'Products',
-            html: ''
+        this.productsGrid = new Tine.Crm.ProductGridPanel({
+            record: this.record,
+            height: '100%'
         });
         
         return {

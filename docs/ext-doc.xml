@@ -79,7 +79,6 @@
         <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
         <source src="../tine20/Crm/js/ContactCombo.js"/>
-        <source src="../tine20/Crm/js/ContactGridPanel.js"/>
         <source src="../tine20/Crm/js/Crm.js"/>
         <source src="../tine20/Crm/js/Models.js"/>
         <source src="../tine20/Crm/js/LeadGridPanel.js"/>
@@ -87,6 +86,8 @@
         <source src="../tine20/Crm/js/LeadSource.js"/>
         <source src="../tine20/Crm/js/LeadState.js"/>
         <source src="../tine20/Crm/js/LeadType.js"/>
+        <source src="../tine20/Crm/js/ContactGridPanel.js"/>
+        <source src="../tine20/Crm/js/ProductGridPanel.js"/>
         <source src="../tine20/Crm/js/TaskGridPanel.js"/>
         <source src="../tine20/ExampleApplication/js/ExampleRecordGridPanel.js"/>
         <source src="../tine20/ExampleApplication/js/ExampleRecordEditDialog.js"/>

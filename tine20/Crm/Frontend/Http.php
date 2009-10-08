@@ -44,7 +44,8 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Crm/js/ContactCombo.js',
             'Crm/js/ContactGridPanel.js',
         // product grid
-            //'Crm/js/ProductGrid.js',
+            'Crm/js/Product.js',
+            'Crm/js/ProductGridPanel.js',
         // task grid
             'Crm/js/TaskGridPanel.js',
         );
