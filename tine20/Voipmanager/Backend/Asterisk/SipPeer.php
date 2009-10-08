@@ -41,12 +41,15 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
         $select = parent::_getSelect($_cols, $_getDeleted);
-
-        $select->joinLeft(
-            array('contexts'  => $this->_tablePrefix . 'asterisk_context'), 
-            'context_id = contexts.id', 
-            array('context' => 'name')
-        );
+        
+        // add join only if needed and allowed
+        if (($_cols == '*') || (is_array($_cols) && isset($_cols['context']))) {
+            $select->joinLeft(
+                array('contexts'  => $this->_tablePrefix . 'asterisk_context'),
+                'context_id = contexts.id',
+                array('context' => 'name')
+            );
+        }
         
         return $select;
     }
