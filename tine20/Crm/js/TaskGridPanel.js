@@ -37,6 +37,9 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     autoExpandColumn: 'summary',
     quickaddMandatory: 'summary',
     clicksToEdit: 1,
+    enableColumnHide:false,
+    enableColumnMove:false,
+    loadMask: true,
     
     /**
      * The record currently being edited
@@ -87,7 +90,10 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.title = this.app.i18n._('Tasks');
         this.recordEditDialogOpener = Tine.Tasks.EditDialog.openWindow;
         this.recordClass = Tine.Tasks.Task;
-        //this.storeFields = Tine.Tasks.TaskArray;
+        
+        this.storeFields = Tine.Tasks.TaskArray;
+        this.storeFields.push({name: 'relation'});   // the relation object           
+        this.storeFields.push({name: 'relation_type'});     
         
         // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
@@ -101,7 +107,7 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.initGrid();
         
         // init store stuff
-        //this.store.setDefaultSort('type', 'asc');
+        this.store.setDefaultSort('due', 'asc');
         
         this.view = new Ext.grid.GridView({
             autoFill: true,
@@ -118,6 +124,28 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }
             }
         });
+        
+        this.on('newentry', function(taskData){
+            // add new task to store
+            var newTask = taskData;
+            newTask.relation_type = 'task';
+            this.store.loadData([newTask], true);
+            
+            return true;
+        }, this);
+        
+        // hack to get percentage editor working
+        this.on('rowclick', function(grid,row,e) {
+            var cell = Ext.get(grid.getView().getCell(row,1));
+            var dom = cell.child('div:last');
+            while (cell.first()) {
+                cell = cell.first();
+                cell.on('click', function(e){
+                    e.stopPropagation();
+                    grid.fireEvent('celldblclick', grid, row, 1, e);
+                });
+            }
+        }, this);        
         
         Tine.Crm.TaskGridPanel.superclass.initComponent.call(this);
     },
