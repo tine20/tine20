@@ -216,17 +216,19 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 2.4
+     * update to 2.7
      * - rename config.inc.php parameter session.save_path to sessiondir
      */    
     public function update_6()
     {
-        $config = Setup_Controller::getInstance()->getConfigData();
-        
-        if (empty($config['sessiondir']) && !empty($config['session.save_path'])) {
-          $config['sessiondir'] = $config['session.save_path'];
+        if (Setup_Core::configFileWritable()) {
+            $config = Setup_Controller::getInstance()->getConfigData();
+            
+            if (empty($config['sessiondir']) && !empty($config['session.save_path'])) {
+                $config['sessiondir'] = $config['session.save_path'];
+            }
+            Setup_Controller::getInstance()->saveConfigData($config, FALSE);
         }
-        Setup_Controller::getInstance()->saveConfigData($config, FALSE);
         
         $this->setApplicationVersion('Tinebase', '2.7');
     }
