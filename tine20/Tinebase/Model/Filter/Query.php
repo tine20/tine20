@@ -54,6 +54,11 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
+         if ( empty($this->_value)) {
+             $_select->where('1=1/* empty query */');
+             return;
+         }
+        
          $db = Tinebase_Core::getDb();
          
          $queries = explode(' ', $this->_value);
