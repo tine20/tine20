@@ -20,7 +20,6 @@ Ext.ns('Tine.Crm');
  * 
  * <p>
  * TODO         extend Ext.ux.grid.QuickaddGridPanel or Tine.Tasks.GridPanel?
- * TODO         make it work
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
