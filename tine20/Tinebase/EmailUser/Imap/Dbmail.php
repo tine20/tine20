@@ -128,7 +128,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
         
         return $result;
     }
-
+    
     /**
      * adds email properties for a new user
      * 
@@ -139,12 +139,8 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    $userId = $_user->accountLoginName;
-	    if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
-            $userId .= '@' . $this->_config['domain'];
-        }
-	    $_emailUser->emailUserId = $userId;
-	    $_emailUser->emailUID = $this->_convertToInt($_user->getId());
+        $_emailUser->emailUserId    = $this->_generateUserId($_user->accountLoginName);
+        $_emailUser->emailUID       = $this->_convertToInt($_user->getId());
 	    
         $recordArray = $this->_recordToRawData($_emailUser);
         
@@ -169,8 +165,8 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
      */
 	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-        $_emailUser->emailUserId = $_user->accountLoginName;
-	    
+        $_emailUser->emailUserId = $this->_generateUserId($_user->accountLoginName);
+        
         $recordArray = $this->_recordToRawData($_emailUser);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));  
@@ -263,6 +259,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
                             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  encryptionType not supported!');
                         }
                         break;
+                        
                     default:
                         $data[$property] = $value;
                 }
@@ -307,5 +304,22 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
         );
         
         $this->_db->insert($this->_config['prefix'] . $this->_config['mailboxTable'], $data);
+    }
+    
+    /**
+     * append domain name to userid if required
+     * 
+     * @param string $_userId the login name
+     * @return string
+     */
+    protected function _generateUserId($_userId)
+    {
+        $result = $_userId;
+        
+        if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
+             $result .= '@' . $this->_config['domain'];
+        }
+        
+        return $result;
     }
 }  
