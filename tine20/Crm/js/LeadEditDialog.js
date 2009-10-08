@@ -156,8 +156,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             relations.push(this.getRelationData(record));
         }, this);
         
-        //console.log(relations);
-        //lead.data.relations = {};
         lead.data.relations = relations;
         
         // add products
@@ -203,64 +201,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
 
-        //console.log(contacts);
-        
-        //this.record.data.contacts = contacts;
-        
         return {
             contacts: contacts,
             tasks: tasks
         };
-        
-        //this.record.set('contacts', contacts);
-        //this.record.set('tasks', tasks);
-        
-        /*
-         * @param array _relations
-        * @param boolean _splitAll if set, all different relation types are splitted into arrays
-        * @return Object with arrays containing the different relation types
-        */
-        /*
-        if (_splitAll) {
-            result = {responsible: [], customer: [], partner: [], tasks: []};
-        } else {
-            result = {contacts: [], tasks: []};
-        }
-    
-        if (!_relations) {
-            return result;
-        }
-        
-        for (var i=0; i < _relations.length; i++) {
-            var newLinkObject = _relations[i]['related_record'];
-            newLinkObject.relation = _relations[i];
-            newLinkObject.relation_type = _relations[i]['type'].toLowerCase();
-    
-            if (!_splitAll && (newLinkObject.relation_type === 'responsible' 
-              || newLinkObject.relation_type === 'customer' 
-              || newLinkObject.relation_type === 'partner')) {
-                result.contacts.push(newLinkObject);
-            } else if (newLinkObject.relation_type === 'task') {                
-                result.tasks.push(newLinkObject);
-            } else {
-                switch(newLinkObject.relation_type) {
-                    case 'responsible':
-                        result.responsible.push(newLinkObject);
-                        break;
-                    case 'customer':
-                        result.customer.push(newLinkObject);
-                        break;
-                    case 'partner':
-                        result.partner.push(newLinkObject);
-                        break;
-                }
-            }
-        }
-        
-        console.log(result);
-           
-        return result;
-        */
     },
 
     /**
