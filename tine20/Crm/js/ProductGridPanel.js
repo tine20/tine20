@@ -178,4 +178,16 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             }]
         });
     }
+    
+    // obsolete (?) code
+    /*
+    // update price if new product is chosen
+            storeProducts.on('update', function(store, record, index) {
+                if(record.data.product_id && !arguments[1].modified.product_price) {          
+                    var st_productsAvailable = Tine.Crm.Product.getStore();
+                    var preset_price = st_productsAvailable.getById(record.data.product_id);
+                    record.data.product_price = preset_price.data.price;
+                }
+            }); 
+     */
 });

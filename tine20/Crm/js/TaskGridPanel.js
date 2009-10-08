@@ -222,5 +222,30 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }
             ]}
         );
+    },
+    
+    /**
+     * update event handler for related tasks
+     */
+    onUpdate: function(task) {
+        var response = {
+            responseText: task
+        };
+        task = Tine.Tasks.JsonBackend.recordReader(response);
+        
+        var myTask = this.store.getById(task.id);
+        
+        if (myTask) { 
+            // copy values from edited task
+            myTask.beginEdit();
+            for (var p in task.data) { 
+                myTask.set(p, task.get(p));
+            }
+            myTask.endEdit();
+            
+        } else {
+            task.data.relation_type = 'task';
+            this.store.add(task);        
+        }
     }
 });
