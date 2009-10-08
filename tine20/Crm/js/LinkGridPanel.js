@@ -8,6 +8,7 @@
  * @version     $Id$
  *
  * TODO         make grants work
+ * TODO         make row dblclick work
  * TODO         add to extdoc
  */
  
@@ -98,16 +99,16 @@ Tine.Crm.LinkGridPanel.initActions = function() {
 Tine.Crm.LinkGridPanel.initStore = function() {
     
     this.store = new Ext.data.JsonStore({
-        id: 'id',
         fields: (this.storeFields) ? this.storeFields : this.recordClass
     });
 
     // focus+select new record
     this.store.on('add', function(store, records, index) {
+        console.log(records);
         (function() {
             this.getView().focusRow(index);
             this.getSelectionModel().selectRow(index); 
-        }).defer(100, this);
+        }).defer(300, this);
     }, this);
 };
 
@@ -140,6 +141,8 @@ Tine.Crm.LinkGridPanel.initGrid = function() {
         
         this.contextMenu.showAt(e.getXY());
     }, this);
+    
+    //this.on('rowdblclick', this.actionEdit, this);
 };
 
 /**
