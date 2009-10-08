@@ -19,7 +19,6 @@ Ext.ns('Tine.Crm');
  * Lead Dialog Tasks Grid Panel
  * 
  * <p>
- * TODO         extend Ext.ux.grid.QuickaddGridPanel or Tine.Tasks.GridPanel?
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -27,7 +26,6 @@ Ext.ns('Tine.Crm');
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
-//Tine.Crm.TaskGridPanel = Ext.extend(Tine.Tasks.GridPanel, {
 Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     /**
      * grid config
