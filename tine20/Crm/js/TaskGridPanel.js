@@ -84,6 +84,7 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     initComponent: function() {
         // init properties
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
+        this.title = this.app.i18n._('Tasks');
         this.recordEditDialogOpener = Tine.Tasks.EditDialog.openWindow;
         this.recordClass = Tine.Tasks.Task;
         //this.storeFields = Tine.Tasks.TaskArray;
@@ -100,8 +101,6 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.initGrid();
         
         // init store stuff
-        // TODO remove that later
-        //Ext.StoreMgr.add('ContactsStore', this.store);
         //this.store.setDefaultSort('type', 'asc');
         
         this.view = new Ext.grid.GridView({

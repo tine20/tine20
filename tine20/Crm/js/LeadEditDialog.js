@@ -20,7 +20,6 @@ Ext.namespace('Tine.Crm');
  * <p>
  * TODO         simplify relation handling (move init of stores to relation grids and get data from there later?)
  * TODO         make marking of invalid fields work again
- * TODO         add tasks grid
  * TODO         add products grid
  * TODO         make grants work
  * TODO         add export button
@@ -79,12 +78,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function() {
 
-        if (this.contactGrid) {
-            if (this.contactGrid.store.getCount() == 0) {
-                // load contacts into contacts grid (only first time this function gets called/store is empty)
-                var contacts = this.splitRelations();
-                this.contactGrid.store.loadData(contacts, true);
-            }
+        // load contacts/tasks into link grid (only first time this function gets called/store is empty)
+        if (this.contactGrid && this.tasksGrid && this.contactGrid.store.getCount() == 0 && this.tasksGrid.store.getCount() == 0) {
+            var relations = this.splitRelations();
+            this.contactGrid.store.loadData(relations.contacts, true);
+            this.tasksGrid.store.loadData(relations.tasks, true);
         }
         
         Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);        
@@ -142,27 +140,21 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param   Tine.Crm.Model.Lead lead
      * @return  Tine.Crm.Model.Lead lead
      * 
-     * TODO add tasks and products again
+     * TODO add products again
      */
     getAdditionalData: function(lead) {
         // collect data of relations
         var relations = [];
         
         // contacts
-        var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
-        //console.log(storeContacts);
-        storeContacts.each(function(record) {                     
+        this.contactGrid.store.each(function(record) {                     
             relations.push(this.getRelationData(record));
         }, this);
         
         // tasks
-        /*
-        var storeTasks = Ext.StoreMgr.lookup('TasksStore');    
-        //console.log(storeTasks);
-        storeTasks.each(function(record) {
+        this.tasksGrid.store.each(function(record) {
             relations.push(this.getRelationData(record));
         }, this);
-        */
         
         //console.log(relations);
         //lead.data.relations = {};
@@ -215,7 +207,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         //this.record.data.contacts = contacts;
         
-        return contacts;
+        return {
+            contacts: contacts,
+            tasks: tasks
+        };
         
         //this.record.set('contacts', contacts);
         //this.record.set('tasks', tasks);
@@ -299,6 +294,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.tasksGrid = new Tine.Crm.TaskGridPanel({
             record: this.record,
             height: '100%'
+        });
+        
+        this.productsGrid = new Ext.Panel({
+            title: 'Products',
+            html: ''
         });
         
         return {
@@ -438,8 +438,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         activeTab: 0,
                         height: 250,
                         items: [
-                            this.tasksGrid
-                            //_linkTabpanels.productsPanel
+                            this.tasksGrid,
+                            this.productsGrid
                         ]
                     }] // end of center lead panel
                     }, {
