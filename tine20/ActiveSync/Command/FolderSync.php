@@ -210,8 +210,8 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
             'device_id'         => $this->_device->getId(),
             'class'             => $_class,
             'folderid'          => $_folderId,
-            'creation_time'     => $this->_syncTimeStamp,
-            'lastfiltertype'    => 0
+            'creation_time'     => $this->_syncTimeStamp/*,
+            'lastfiltertype'    => '0'*/
         ));
         
         /**
