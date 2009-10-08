@@ -48,7 +48,7 @@ class ActiveSync_Model_FolderState extends Tinebase_Record_Abstract
         'class'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'folderid'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'creation_time'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'lastfiltertype'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required', 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'lastfiltertype'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, /*'presence'=>'required',*/ 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
     
     /**
