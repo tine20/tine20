@@ -28,6 +28,14 @@ Tine.Crm.ContactCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
 
     valueField: 'id',
     
+    /**
+     * store to hold all contacts of grid
+     * 
+     * @type Ext.data.Store
+     * @property contactsStore
+     */
+    contactsStore: null,
+    
     //private
     initComponent: function(){
         this.contactFields = Tine.Addressbook.Model.ContactArray;
@@ -40,15 +48,13 @@ Tine.Crm.ContactCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     /**
      * override default onSelect
      * 
-     * TODO add the ContactsStore to the combo box config?
      */
     onSelect: function(record){  
         record.data.relation_type = 'customer';            
-        var store = Ext.StoreMgr.lookup('ContactsStore');
         
         // check if already in
-        if (!store.getById(record.id)) {
-            store.add([record]);
+        if (! this.contactsStore.getById(record.id)) {
+            this.contactsStore.add([record]);
         }
             
         this.collapse();

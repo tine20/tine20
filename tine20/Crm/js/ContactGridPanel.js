@@ -94,20 +94,18 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initGrid = Tine.Crm.LinkGridPanel.initGrid.createDelegate(this);
         //this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
 
-        // init other actions (changeContactType)
-        this.initOtherActions();
-
         // call delegates
         this.initStore();
         this.initActions();
         this.initGrid();
         
+        // init other actions (changeContactType)
+        this.initOtherActions();
+
         // add contact type to "add" action
         this.actionAdd.contactType = 'customer';
 
         // init store stuff
-        // TODO remove that later
-        Ext.StoreMgr.add('ContactsStore', this.store);
         this.store.setDefaultSort('type', 'asc');   
         
         Tine.Crm.ContactGridPanel.superclass.initComponent.call(this);
@@ -156,18 +154,17 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             ]
         }];
 
-        /*
         this.tbar = new Ext.Panel({
             layout: 'fit',
             width: '100%',
             items: [
                 // TODO perhaps we could add an icon/button (i.e. edit-find.png) here
                 new Tine.Crm.ContactCombo({
+                    contactsStore: this.store,
                     emptyText: this.app.i18n._('Search for Contacts to add ...')
                 })
             ]
         });
-        */
     },
     
     /**
@@ -231,13 +228,12 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onChangeContactType: function(_button, _event) {          
         var selectedRows = this.getSelectionModel().getSelections();
-        var store = Ext.StoreMgr.lookup('ContactsStore');
         
         for (var i = 0; i < selectedRows.length; ++i) {
             selectedRows[i].data.relation_type = _button.contactType;
         }
         
-        store.fireEvent('dataChanged', store);
+        store.fireEvent('dataChanged', this.store);
     },
     
     /**
