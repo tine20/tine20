@@ -291,7 +291,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * login from HTTP post 
      * 
      * renders the tine main screen if authentication is successfull
-     * otherwise redirects back to logout url 
+     * otherwise redirects back to login url 
      */
     public function loginFromPost($username, $password)
     {
