@@ -410,7 +410,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         
-        setcookie('usercredentialcache');
+        setcookie('usercredentialcache', '', time() - 3600);
+                
         $result = array(
 			'success'=> true,
         );
