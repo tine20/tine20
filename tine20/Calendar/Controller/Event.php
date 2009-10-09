@@ -270,7 +270,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
-        $events = parent::search($_filter, $_pagination, $_onlyIds);
+        $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
         
         if (! $_onlyIds) {
         	$events->doFreeBusyCleanup();
