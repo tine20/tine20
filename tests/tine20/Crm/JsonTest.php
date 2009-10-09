@@ -34,23 +34,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     protected $_instance;
     
     /**
-     * @var bool allow the use of GLOBALS to exchange data between tests
-     */
-    //protected $backupGlobals = false;
-    
-    /**
-     * @var array test objects
-     */
-    //protected $objects = array();
-    
-    /**
-     * container to use for the tests
-     *
-     * @var Tinebase_Model_Container
-     */
-    //protected $container;
-
-    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -162,55 +145,16 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $task = Tasks_Controller_Task::getInstance()->get($savedLead['relations'][1]['related_id']);
         
+        // obsolete / only as reminder
         /*
-        // create test task
-        $task = Tasks_Controller_Task::getInstance()->create($this->objects['task']);
-        $GLOBALS['Crm_JsonTest']['taskId'] = $task->getId();
-        
-        //print_r($task->toArray());
-
-        $leadData = $this->objects['initialLead']->toArray();
         $note = array(
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',            
         );
         $leadData['notes'] = array($note);        
         
-        $leadData['relations'] = array(
-            array(
-                'own_model'              => 'Crm_Model_Lead',
-                'own_json'            => Crm_Backend_Factory::SQL,
-                'own_id'                 => $this->objects['initialLead']->getId(),
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model'          => 'Tasks_Model_Task',
-                'related_json'        => Tasks_Backend_Factory::SQL,
-                'related_id'             => $GLOBALS['Crm_JsonTest']['taskId'],
-                'type'                   => 'TASK',
-                //'related_record'         => $this->objects['task']->toArray()
-            ),
-            array(
-                'own_model'              => 'Crm_Model_Lead',
-                'own_json'            => Crm_Backend_Factory::SQL,
-                'own_id'                 => $this->objects['initialLead']->getId(),
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model'          => 'Addressbook_Model_Contact',
-                'related_json'        => Addressbook_Backend_Factory::SQL,
-                'related_id'             => $this->objects['contact']->getId(),
-                'type'                   => 'PARTNER',
-                //'related_record'         => $this->objects['contact']->toArray()
-            )        
-        );
-        $leadData['tags'] = array();
         $leadData['products'] = array($this->objects['productLink']);
         
-        $encodedData = Zend_Json::encode($leadData);
-        
-        $result = $this->_instance->saveLead($encodedData);
-
-        //print_r ( $result );
-        
-        $this->assertEquals($this->objects['initialLead']->description, $result['description']);
-
         // check linked contacts / tasks
         $this->assertGreaterThan(0, count($result['relations']));
         $this->assertEquals($this->objects['contact']->getId(), $result['relations'][0]['related_id']);
@@ -233,6 +177,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to update a lead and remove linked contact 
      *
+     * @todo add update test again
      */
     public function testUpdateLead()
     {
@@ -267,6 +212,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test leadsources
+     * 
+     * @deprecated
      */
     public function testLeadSources()
     {
@@ -285,6 +232,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test leadstates
+     * 
+     * @deprecated
      */
     public function testLeadStates()
     {
@@ -303,6 +252,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test leadtypes
+     * 
+     * @deprecated
      */
     public function testLeadTypes()
     {
@@ -321,6 +272,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test products
+     * 
+     * @deprecated
      */
     public function testProducts()
     {
