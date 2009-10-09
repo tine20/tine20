@@ -335,7 +335,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             Tinebase_Core::get(Tinebase_Core::CACHE)
         );
         
-        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', $timeZoneConverter->encodeTinezone(
+        $_xmlNode->appendChild($_xmlDocument->createElementNS('uri:Calendar', 'Timezone', $timeZoneConverter->encodeTimezone(
             Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
         )));
         
