@@ -510,15 +510,22 @@ class Tinebase_Container
     
     /**
      * gets default container of given user for given app
+     *  - returns personal first container at the moment
      *
-     * @todo implement !
+     * @param string $_accountId
+     * @param string $_applicationName
+     * @return Tinebase_Model_Container
      * 
-     * @param unknown_type $_accountId
-     * @param unknown_type $_applicationId
+     * @todo return default container from preferences if available 
      */
-    public function getDefaultContainer($_accountId, $_applicationId)
+    public function getDefaultContainer($_accountId, $_applicationName)
     {
-        
+        return $this->getPersonalContainer(
+            $_accountId, 
+            $_applicationName, 
+            $_accountId, 
+            Tinebase_Model_Container::GRANT_ADD
+        )->getFirstRecord();
     }
     
     /**
