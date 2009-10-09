@@ -60,6 +60,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     showContainerSelector: true,
+    getDefaultsAgain: false,
 
     /**
      * overwrite update toolbars function (we don't have record grants yet)

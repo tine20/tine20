@@ -73,29 +73,14 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
  * @return {Object} default data
  * @static
  * 
- * TODO get default leadstate/source/type from registry
- * TODO add default container id / account grants?
- * TODO get responsible contact from registry
+ * TODO generalize default container id handling?
  */ 
 Tine.Crm.Model.Lead.getDefaultData = function() {
-    var app = Tine.Tinebase.appMgr.get('Crm');
     
-    //var currentAccount = Tine.Tinebase.registry.get('currentAccount');
-    //var userContact = new Tine.Addressbook.Model.Contact(Tine.Tinebase.registry.get('userContact'));
-
-    var userContact = Tine.Tinebase.registry.get('userContact');
-    //console.log(userContact);
     var defaults = Tine.Crm.registry.get('defaults');
     
     var data = {
         start: new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
-        /*
-        container_id: {
-            account_grants: {
-                editGrant: true
-            }
-        },
-        */
         leadstate_id: defaults.leadstate_id,
         leadtype_id: defaults.leadtype_id,
         leadsource_id: defaults.leadsource_id,
@@ -103,14 +88,21 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
         turnover: 0,
         relations: [{
             type: 'responsible',
-            related_record: userContact
-            /* {
-                n_fileas: currentAccount.accountDisplayName,
-                id: currentAccount.contact_id
-            } */
+            related_record: Tine.Tinebase.registry.get('userContact')
         }]
     };
     
+    // add default container
+    var app = Tine.Tinebase.appMgr.get('Crm');
+    if (app.getMainScreen().treePanel) {
+        var treeNode = app.getMainScreen().treePanel.getSelectionModel().getSelectedNode();
+        if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
+            data.container_id = treeNode.attributes.container;
+        } else {
+            data.container_id = defaults.container_id;
+        }
+    }
+
     return data;
 };
 
