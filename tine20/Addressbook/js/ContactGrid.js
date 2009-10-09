@@ -60,9 +60,11 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         this.contextMenuItems = [
             '-',
             this.actions_exportContact,
-            this.actions_callContact,
-            this.actions_composeEmail
+            this.actions_callContact
         ];
+        if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
+            this.contextMenuItems.push(this.actions_composeEmail);
+        }
         
         this.gridConfig.cm = this.getColumnModel();
         this.filterToolbar = this.getFilterToolbar();
