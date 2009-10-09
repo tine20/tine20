@@ -37,7 +37,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_controller = Crm_Controller_Lead::getInstance();
     }
     
-    /************************************** protected helper functions **************************************/
     
     /************************************** public API **************************************/
     
@@ -208,7 +207,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $dir
      * @return array
      * 
-     * @deprecated -> move producets to sales management
+     * @deprecated -> move products to sales management
      */
     public function getProducts($sort, $dir)
     {
@@ -230,7 +229,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param $optionsData
      * @return unknown_type
      * 
-     * @deprecated obsolete code (only as reminder)
+     * @deprecated -> move products to sales management / obsolete code (only as reminder)
      */
     public function saveProducts($optionsData)
     {
