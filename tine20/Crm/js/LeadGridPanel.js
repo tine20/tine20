@@ -115,8 +115,8 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 {header: this.app.i18n._('Lead id'), id: 'id', dataIndex: 'id', width: 20, hidden: true},
                 {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
                 {header: this.app.i18n._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
-                {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'partner', width: 175, sortable: false, renderer: this.shortContactRenderer},
-                {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'customer', width: 175, sortable: false, renderer: this.shortContactRenderer},
+                {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'relations', width: 175, sortable: false, renderer: this.partnerRenderer},
+                {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'relations', width: 175, sortable: false, renderer: this.customerRenderer},
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100/*, renderer: Tine.Crm.LeadState.Renderer*/},
                 {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
                 {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney }
@@ -128,22 +128,75 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * status column renderer
      * @param {string} value
      * @return {string}
+     * 
+     * TODO use that
      */
     statusRenderer: function(value) {
         return this.app.i18n._hidden(value);
     },
     
     /**
+     * 
+     * @param {Array} data
+     * @return {String}
+     * 
+     * TODO use generic shortContactRenderer
+     */
+    partnerRenderer: function(data) {
+        //return this.shortContactRenderer(value, 'PARTNER');
+        if( Ext.isArray(data) && data.length > 0 ) {
+            var index = 0;
+            while (index < data.length && data[index].type != 'PARTNER') {
+                index++;
+            }
+            if (data[index]) {
+                var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
+                return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
+            }
+        }
+    },
+    
+    /**
+     * 
+     * @param {Array} data
+     * @return {String}
+     * 
+     * TODO use generic shortContactRenderer
+     */
+    customerRenderer: function(data) {
+        //return this.shortContactRenderer(value, 'CUSTOMER');
+        if( Ext.isArray(data) && data.length > 0 ) {
+            var index = 0;
+            while (index < data.length && data[index].type != 'CUSTOMER') {
+                index++;
+            }
+            if (data[index]) {
+                var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
+                return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
+            }
+        }
+    },
+
+    /**
      * contact column renderer
      * @param {string} value
      * @return {string}
      */
-    shortContactRenderer: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {            
-        if( Ext.isArray(_data) && _data.length > 0 ) {
-            var org = ( _data[0].org_name !== null ) ? _data[0].org_name : '';
-            return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(_data[0].n_fileas);
+    /*
+    shortContactRenderer: function(data) {    
+        //console.log(_data);
+        if( Ext.isArray(data) && data.length > 0 ) {
+            var index = 0;
+            while (data[index].type != type && index < data.length) {
+                index++;
+            }
+            if (data[index]) {
+                var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
+                return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
+            }
         }
     },
+    */
     
     /**
      * return additional tb items
