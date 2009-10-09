@@ -104,7 +104,6 @@ Tine.Crm.LinkGridPanel.initStore = function() {
 
     // focus+select new record
     this.store.on('add', function(store, records, index) {
-        console.log(records);
         (function() {
             this.getView().focusRow(index);
             this.getSelectionModel().selectRow(index); 
