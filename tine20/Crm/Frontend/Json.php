@@ -83,7 +83,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteLeads($ids)
     {
-        $this->_delete($ids, $this->_controller);
+        return $this->_delete($ids, $this->_controller);
     }    
 
     /**

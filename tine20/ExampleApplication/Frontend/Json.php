@@ -82,7 +82,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteExampleRecords($ids)
     {
-        $this->_delete($ids, $this->_controller);
+        return $this->_delete($ids, $this->_controller);
     }    
 
 }
