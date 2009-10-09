@@ -276,7 +276,8 @@ class ActiveSync_TimezoneConverter
 	{
         $this->_setStartDate($_startDate);
         
-	    $cacheId = $this->_getCacheId(__METHOD__, array($_timezone));
+        // don't use __METHOD__ ":" is not allowed as cache identifier
+	    $cacheId = $this->_getCacheId(__CLASS__ . __FUNCTION__, array($_timezone));
 
 	    if (false === ($offsets = $this->_loadFromCache($cacheId))) {
 	        $offsets = $this->_getOffsetsTemplate();
