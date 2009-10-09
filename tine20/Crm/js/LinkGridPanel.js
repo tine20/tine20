@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         make grants work
  * TODO         make row dblclick work
  * TODO         add to extdoc
  */
@@ -26,6 +25,7 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         text: String.format(this.app.i18n._('Add new {0}'), this.recordClass.getMeta('recordName')),
         tooltip: String.format(this.app.i18n._('Add new {0}'), this.recordClass.getMeta('recordName')),
         iconCls: 'actionAdd',
+        disabled: true,
         scope: this,
         handler: function(_button, _event) {
             var editWindow = this.recordEditDialogOpener({
@@ -43,6 +43,7 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         tooltip: String.format(this.app.i18n._('Unlink selected {0}'), this.recordClass.getMeta('recordName')),
         disabled: true,
         iconCls: 'actionRemove',
+        onlySingle: true,
         scope: this,
         handler: function(_button, _event) {                       
             var selectedRows = this.getSelectionModel().getSelections();
@@ -56,8 +57,9 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         requiredGrant: 'editGrant',
         text: String.format(this.app.i18n._('Edit {0}'), this.recordClass.getMeta('recordName')),
         tooltip: String.format(this.app.i18n._('Edit selected {0}'), this.recordClass.getMeta('recordName')),
-        //disabled: true,
+        disabled: true,
         iconCls: 'actionEdit',
+        onlySingle: true,
         scope: this,
         handler: function(_button, _event) {
             var selectedRows = this.getSelectionModel().getSelections();
@@ -78,18 +80,20 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         this.actionUnlink
     ];
     
-    var actionItems = [
+    this.actions = [
         this.actionEdit,
         this.actionUnlink
     ];
     
     if (this.otherActions) {
-        actionItems = actionItems.concat(this.otherActions);
+        this.actions = this.actions.concat(this.otherActions);
     }
 
     this.contextMenu = new Ext.menu.Menu({
-        items: actionItems.concat(['-', this.actionAdd])
+        items: this.actions.concat(['-', this.actionAdd])
     });
+    
+    this.actions.push(this.actionAdd);
 };
 
 /**
@@ -114,21 +118,26 @@ Tine.Crm.LinkGridPanel.initStore = function() {
 /**
  * init ext grid panel
  * 
- * TODO         add grants again for all actions with required grants
+ * TODO         add grants for linked entries to disable EDIT?
+ * TODO         use action updater?
  */
 Tine.Crm.LinkGridPanel.initGrid = function() {
     this.cm = this.getColumnModel();
     
     this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-    this.selModel.on('selectionchange', function(_selectionModel) {
-        var rowCount = _selectionModel.getCount();
-        /*
+    this.selModel.on('selectionchange', function(sm) {
+        //Tine.widgets.actionUpdater(sm, this.actions, 'container_id', !this.evalGrants);
+        
+        var rowCount = sm.getCount();
         if (this.record && (this.record.get('container_id') && this.record.get('container_id').account_grants)) {
-            this.actionUnlink.setDisabled(!this.record.get('container_id').account_grants.editGrant || rowCount != 1);
+            for (var i=0; i < this.actions.length; i++) {
+                this.actions[i].setDisabled(
+                    ! this.record.get('container_id').account_grants.editGrant 
+                    || (this.actions[i].initialConfig.onlySingle && rowCount != 1)
+                );
+            }
         }
-        this.actionEdit.setDisabled(rowCount != 1);
-        */
-        this.actionUnlink.setDisabled(rowCount != 1);
+        
     }, this);
     
     this.on('rowcontextmenu', function(grid, row, e) {

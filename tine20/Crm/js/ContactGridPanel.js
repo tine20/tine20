@@ -94,13 +94,10 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initGrid = Tine.Crm.LinkGridPanel.initGrid.createDelegate(this);
         //this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
 
-        // call delegates
         this.initStore();
+        this.initOtherActions();
         this.initActions();
         this.initGrid();
-        
-        // init other actions (changeContactType)
-        this.initOtherActions();
 
         // add contact type to "add" action
         this.actionAdd.contactType = 'customer';
@@ -112,7 +109,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     /**
-     * init other actions and tbar
+     * init other actions and tbar (change contact type and contact search combo
      */
     initOtherActions: function() {
         this.actionChangeContactTypeCustomer = new Ext.Action({
@@ -144,16 +141,18 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             scope: this,
             handler: this.onChangeContactType
         });
-        
-        this.otherActions = [{
+        var otherActionItems = [
+           this.actionChangeContactTypeCustomer,
+           this.actionChangeContactTypeResponsible,
+           this.actionChangeContactTypePartner
+        ];
+        this.otherActions = [new Ext.Action({
             text: this.app.i18n._('Change contact type'),
-            menu: [
-               this.actionChangeContactTypeCustomer,
-               this.actionChangeContactTypeResponsible,
-               this.actionChangeContactTypePartner
-            ]
-        }];
-
+            requiredGrant: 'editGrant',
+            disabled: true,
+            menu: otherActionItems
+        })];
+        
         this.tbar = new Ext.Panel({
             layout: 'fit',
             width: '100%',
@@ -265,7 +264,6 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.contactType');
 /**
  * contact type select combo box
  * 
- * TODO     add extdoc
  */
 Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, { 
     /**
@@ -327,7 +325,6 @@ Ext.reg('leadcontacttypecombo', Tine.Crm.contactType.ComboBox);
  * @param   string type
  * @return  contact type icon
  * 
- * TODO     add extdoc
  */
 Tine.Crm.contactType.Renderer = function(type)
 {

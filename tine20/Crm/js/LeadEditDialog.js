@@ -20,7 +20,6 @@ Ext.namespace('Tine.Crm');
  * <p>
  * TODO         simplify relation handling (move init of stores to relation grids and get data from there later?)
  * TODO         make marking of invalid fields work again
- * TODO         make grants work
  * TODO         add export button
  * </p>
  * 
