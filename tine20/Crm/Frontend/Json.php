@@ -49,7 +49,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchLeads($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_controller, 'Crm_Model_LeadFilter');
+        return $this->_search($filter, $paging, $this->_controller, 'Crm_Model_LeadFilter', TRUE);
     }     
     
     /**
