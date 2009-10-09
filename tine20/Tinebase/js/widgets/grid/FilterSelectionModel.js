@@ -72,7 +72,7 @@ Tine.Tinebase.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelecti
     
     storeOnBeforeload: function(store, options) {
         this.allFilterData = options.params.filter;
-        this.store.fireEvent('loadexception');
+        this.store.fireEvent('exception');
         return false;
     },
     
