@@ -299,7 +299,8 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
 				header: this.app.i18n._('reg seconds'), 
 				dataIndex: 'regseconds', 
 				width: 50,
-                sortable: true
+                sortable: true, 
+                renderer: Tine.Tinebase.common.dateTimeRenderer
 			},{ 
 				id: 'ipaddr', 
 				header: this.app.i18n._('ip address'), 

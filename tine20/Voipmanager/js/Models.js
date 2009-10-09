@@ -440,7 +440,7 @@ Tine.Voipmanager.Model.AsteriskSipPeerArray = Tine.Tinebase.Model.genericFields.
     {name: 'disallow'},
     {name: 'allow'},
     {name: 'musiconhold'},
-    {name: 'regseconds'},
+    {name: 'regseconds', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'ipaddr'},
     {name: 'regexten'},
     {name: 'cancallforward'},
