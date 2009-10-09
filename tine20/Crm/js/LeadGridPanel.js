@@ -20,7 +20,6 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Grid Panel</p>
  * <p><pre>
- * TODO         show related contacts in grid again
  * TODO         add toolbar buttons (export,  show closed leads, add task, ...) again
  * </pre></p>
  * 
