@@ -390,7 +390,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! $success) {
             
             // reset credentials cache
-            setcookie('usercredentialcache');
+            setcookie('usercredentialcache', '', time() - 3600);
             
             $response = array(
 				'success'      => FALSE,
