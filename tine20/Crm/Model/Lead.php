@@ -202,12 +202,18 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                 }
 
                 // sanitize container id
-                if (isset($relation['related_record']) && is_array($relation['related_record']['container_id'])) {
-                    $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
+                if (isset($relation['related_record'])) {
+                    if (! isset($relation['related_record']['container_id'])) {
+                        // use default container for app
+                        $data['related_record']['container_id'] = Tinebase_Container::getInstance()->getDefaultContainer(
+                            Tinebase_Core::getUser()->getId(),
+                            ($relation['type'] == 'TASK') ? 'Tasks' : 'Addressbook'
+                        )->getId();
+                    } elseif (is_array($relation['related_record']['container_id'])) {
+                        $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
+                    }
                 }
                     
-                //    $data['related_record']['tags'] = '';
-                
                 $decodedLead['relations'][$key] = $data;
             } else {
                 // update relation type                
