@@ -90,17 +90,29 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * Returns registry data of crm.
      * @see Tinebase_Application_Json_Abstract
      * 
-     * @return mixed array 'variable name' => 'data'
+     * @return  mixed array 'variable name' => 'data'
      * 
-     * @todo get defaults from config
-     * @todo add update script to move default config values to db
+     * @todo    get defaults from config
+     * @todo    add update script to move default config values to db
+     * @todo    add preference for default container_id
      */
     public function getRegistryData()
     {   
+        // get default container
+        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer(
+            Tinebase_Core::getUser()->getId(),
+            $this->_applicationName
+        )->toArray();
+        $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
+            Tinebase_Core::getUser(), 
+            $defaultContainerArray['id']
+        )->toArray();
+        
         $defaults = array(
             'leadstate_id'  => (isset(Tinebase_Core::getConfig()->crm->defaultstate)) ? Tinebase_Core::getConfig()->crm->defaultstate : 1,
             'leadtype_id'   => (isset(Tinebase_Core::getConfig()->crm->defaulttype)) ? Tinebase_Core::getConfig()->crm->defaulttype : 1,
-            'leadsource_id' => (isset(Tinebase_Core::getConfig()->crm->defaultsource)) ? Tinebase_Core::getConfig()->crm->defaultsource : 1
+            'leadsource_id' => (isset(Tinebase_Core::getConfig()->crm->defaultsource)) ? Tinebase_Core::getConfig()->crm->defaultsource : 1,
+            'container_id'  => $defaultContainerArray,
         );
         
         $registryData = array(

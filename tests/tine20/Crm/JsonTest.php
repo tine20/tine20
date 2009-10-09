@@ -237,7 +237,15 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-        ), $registry['defaults']);
+        ), array(
+            'leadstate_id' => $registry['defaults']['leadstate_id'],
+            'leadtype_id' => $registry['defaults']['leadtype_id'],
+            'leadsource_id' => $registry['defaults']['leadsource_id'],
+        ));
+        $this->assertEquals(
+            Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId(),
+            $registry['defaults']['container_id']['id']
+        );
         //print_r($registry);
     }
     
