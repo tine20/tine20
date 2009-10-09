@@ -8,9 +8,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        refactor this
- * @todo        make tests standalone
- * @todo        simplify relations tests: create related_records with relations class
+ * @todo        finish testAddGetSearchDeleteLead
+ * @todo        remove obsolete state/type/products/source tests (when the functions are removed from Json.php)
  */
 
 /**
@@ -72,135 +71,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_instance = new Crm_Frontend_Json();
-
-        /*
-        
-        // initialise global for this test suite
-        $GLOBALS['Crm_JsonTest'] = array_key_exists('Crm_JsonTest', $GLOBALS) ? $GLOBALS['Crm_JsonTest'] : array();
-        
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Crm', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Container::GRANT_EDIT
-        );
-        
-        if($personalContainer->count() === 0) {
-            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
-        } else {
-            $this->testContainer = $personalContainer[0];
-        }
-        
-        $this->objects['initialLead'] = new Crm_Model_Lead(array(
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container_id'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description',
-            'end'           => NULL,
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => NULL,
-        )); 
-        
-        $this->objects['updatedLead'] = new Crm_Model_Lead(array(
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container_id'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description updated',
-            'end'           => NULL,
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => NULL,
-        ));
-
-        $addressbookPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Container::GRANT_EDIT
-        );
-        
-        $addressbookContainer = $addressbookPersonalContainer[0];
-        
-        $this->objects['contact'] = new Addressbook_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'note'                  => 'Bla Bla Bla',
-            'container_id'          => $addressbookContainer->id,
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Kneschke',
-            'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
-        )); 
-        
-        $tasksPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Tasks', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Container::GRANT_EDIT
-        );
-        
-        $tasksContainer = $tasksPersonalContainer[0];
-        
-        // create test task
-        $this->objects['task'] = new Tasks_Model_Task(array(
-            'container_id'         => $tasksContainer->id,
-            'created_by'           => Zend_Registry::get('currentAccount')->getId(),
-            'creation_time'        => Zend_Date::now(),
-            'percent'              => 70,
-            'due'                  => Zend_Date::now()->addMonth(1),
-            'summary'              => 'phpunit: crm test task',        
-        ));
-        
-        // define filter
-        $this->objects['filter'] = array(
-            array('field' => 'container_id',    'operator' => 'specialNode',    'value' => 'all'),
-            array('field' => 'query',           'operator' => 'contains',       'value' => $this->objects['initialLead']->lead_name),
-        );
-
-        $this->objects['productLink'] = array(
-            'product_id'        => 1001,
-            'product_desc'      => 'test product',
-            'product_price'     => 4000.44
-        );
-        */
     }
 
     /**
@@ -211,7 +81,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {	
-        //Addressbook_Controller_Contact::getInstance()->delete($this->objects['contact']->getId());
     }    
     
     /**
@@ -252,14 +121,48 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to add a lead and link a contact
      *
-     * @todo move creation of task & contact to relations class (via related_record)
+     * @todo add note and product
+     * @todo check relations
      */
-    public function testAddLead()
+    public function testAddGetSearchDeleteLead()
     {
-        /*
-        // create contact
-        $this->objects['contact'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact']);        
+        // create lead with task and contact
+        $contact = $this->_getContact();
+        $task = $this->_getTask();
+        $lead = $this->_getLead();
         
+        $leadData = $lead->toArray();
+        $leadData['relations'] = array(
+            array('type'  => 'TASK',    'related_record' => $task->toArray()),
+            array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
+        );
+        
+        $savedLead = $this->_instance->saveLead(Zend_Json::encode($leadData));
+        
+        //print_r($savedLead);
+        
+        $searchLeads = $this->_instance->searchLeads(Zend_Json::encode($this->_getLeadFilter()), '');
+        
+        //print_r($searchLeads);
+        
+        // assertions
+        $this->assertTrue($searchLeads['totalcount'] > 0);
+        $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
+        //-- check relations
+        
+        // delete all
+        $this->_instance->deleteLeads($savedLead['id']);
+        Addressbook_Controller_Contact::getInstance()->delete($savedLead['relations'][0]['related_id']);
+        
+        // check if delete worked
+        $result = $this->_instance->searchLeads(Zend_Json::encode($this->_getLeadFilter()), '');
+        $this->assertEquals(0, $result['totalcount']);   
+        
+        // check if linked task got removed as well
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $task = Tasks_Controller_Task::getInstance()->get($savedLead['relations'][1]['related_id']);
+        
+        /*
         // create test task
         $task = Tasks_Controller_Task::getInstance()->create($this->objects['task']);
         $GLOBALS['Crm_JsonTest']['taskId'] = $task->getId();
@@ -326,43 +229,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         } 
         */                      
     }
-
-    /**
-     * try to get a lead (test searchLeads as well)
-     *
-     */
-    public function testGetLead()    
-    {
-        /*
-        $result = $this->_instance->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));
-        $leads = $result['results'];
-        $initialLead = $leads[0];
-        
-        $lead = $this->_instance->getLead($initialLead['id']);
-        
-        //print_r($lead);
-        
-        $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
-        $this->assertEquals($lead['relations'][0]['related_record']['assistent'], $this->objects['contact']->assistent);                
-        $this->assertEquals($lead['products'][0]['product_desc'], $this->objects['productLink']['product_desc']);
-        */
-    }
-
-    /**
-     * try to get all leads
-     *
-     */
-    public function testSearchLeads()    
-    {
-        /*
-        $result = $this->_instance->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));
-        $leads = $result['results'];
-        $initialLead = $leads[0];
-
-        $this->assertEquals($this->objects['initialLead']->description, $initialLead['description']);        
-        $this->assertEquals($this->objects['contact']->assistent, $initialLead['relations'][0]['related_record']['assistent']);
-        */
-    }
     
     /**
      * try to update a lead and remove linked contact 
@@ -400,54 +266,15 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to delete a lead (and if task is deleted as well)
-     *
-     */
-    public function testDeleteLead()
-    {
-        /*
-        $result = $this->_instance->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));        
-
-        $deleteIds = array();
-        
-        $backend = new Tinebase_Relation_Backend_Sql();        
-        foreach ($result['results'] as $lead) {
-            $deleteIds[] = $lead['id'];
-        }
-        
-        //print_r($deleteIds);
-        
-        $encodedLeadIds = Zend_Json::encode($deleteIds);
-        
-        $this->_instance->deleteLeads($encodedLeadIds);        
-                
-        $result = $this->_instance->searchLeads(Zend_Json::encode($this->objects['filter']), Zend_Json::encode(array()));
-        $this->assertEquals(0, $result['totalcount']);   
-
-        // check if linked task got removed as well
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        $task = Tasks_Controller_Task::getInstance()->get($GLOBALS['Crm_JsonTest']['taskId']);
-        
-        // purge relations
-        foreach ($deleteIds as $id) {
-            $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $id);            
-        }
-        
-        // delete contact
-        Addressbook_Controller_Contact::getInstance()->delete($this->objects['contact']->getId());
-        */
-    }    
-    
-    /**
      * test leadsources
      */
     public function testLeadSources()
     {
-        /*
         // test getLeadsources
         $leadsources = $this->_instance->getLeadsources('id', 'ASC');
         $this->assertEquals(4, $leadsources['totalcount']);
 
+        /*
         // test saveLeadsources
         $this->_instance->saveLeadsources(Zend_Json::encode($leadsources['results']));
 
@@ -461,11 +288,11 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testLeadStates()
     {
-        /*
         // test getLeadstates
         $leadstates = $this->_instance->getLeadstates('id', 'ASC');
         $this->assertEquals(6, $leadstates['totalcount']);
 
+        /*
         // test saveLeadstates
         $this->_instance->saveLeadstates(Zend_Json::encode($leadstates['results']));
 
@@ -479,11 +306,11 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testLeadTypes()
     {
-        /*
         // test getLeadtypes
         $leadtypes = $this->_instance->getLeadtypes('id', 'ASC');
         $this->assertEquals(3, $leadtypes['totalcount']);
 
+        /*
         // test saveLeadtypes
         $this->_instance->saveLeadtypes(Zend_Json::encode($leadtypes['results']));
 
@@ -509,5 +336,105 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         */
     }
     
+    /**
+     * get contact
+     * 
+     * @return Addressbook_Model_Contact
+     */
+    protected function _getContact()
+    {
+        return new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'DE',
+            'adr_one_locality'      => 'Hamburg',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'DE',
+            'adr_two_locality'      => 'Hamburg',
+            'adr_two_postalcode'    => '24xxx',
+            'adr_two_region'        => 'Hamburg',
+            'adr_two_street'        => 'Pickhuben 4',
+            'adr_two_street2'       => 'no second street2',
+            'assistent'             => 'Cornelius Weiß',
+            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'email'                 => 'unittests@tine20.org',
+            'email_home'            => 'unittests@tine20.org',
+            'note'                  => 'Bla Bla Bla',
+            //'container_id'          => $addressbookContainer->id,
+            'role'                  => 'Role',
+            'title'                 => 'Title',
+            'url'                   => 'http://www.tine20.org',
+            'url_home'              => 'http://www.tine20.com',
+            'n_family'              => 'Kneschke',
+            'n_fileas'              => 'Kneschke, Lars',
+            'n_given'               => 'Lars',
+            'n_middle'              => 'no middle name',
+            'n_prefix'              => 'no prefix',
+            'n_suffix'              => 'no suffix',
+            'org_name'              => 'Metaways Infosystems GmbH',
+            'org_unit'              => 'Tine 2.0',
+            'tel_assistent'         => '+49TELASSISTENT',
+            'tel_car'               => '+49TELCAR',
+            'tel_cell'              => '+49TELCELL',
+            'tel_cell_private'      => '+49TELCELLPRIVATE',
+            'tel_fax'               => '+49TELFAX',
+            'tel_fax_home'          => '+49TELFAXHOME',
+            'tel_home'              => '+49TELHOME',
+            'tel_pager'             => '+49TELPAGER',
+            'tel_work'              => '+49TELWORK',
+        ));        
+    }
+
+    /**
+     * get task
+     * 
+     * @return Tasks_Model_Task
+     */
+    protected function _getTask()
+    {
+        return new Tasks_Model_Task(array(
+            //'container_id'         => $tasksContainer->id,
+            'created_by'           => Zend_Registry::get('currentAccount')->getId(),
+            'creation_time'        => Zend_Date::now(),
+            'percent'              => 70,
+            'due'                  => Zend_Date::now()->addMonth(1),
+            'summary'              => 'phpunit: crm test task',        
+        ));        
+    }
+    
+    /**
+     * get lead
+     * 
+     * @return Crm_Model_Lead
+     */
+    protected function _getLead()
+    {
+        return new Crm_Model_Lead(array(
+            'lead_name'     => 'PHPUnit',
+            'leadstate_id'  => 1,
+            'leadtype_id'   => 1,
+            'leadsource_id' => 1,
+            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId(),
+            'start'         => Zend_Date::now(),
+            'description'   => 'Description',
+            'end'           => NULL,
+            'turnover'      => '200000',
+            'probability'   => 70,
+            'end_scheduled' => NULL,
+        ));
+    }
+    
+    /**
+     * get lead filter
+     * 
+     * @return array
+     */
+    protected function _getLeadFilter()
+    {
+        return array(
+            array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit'),
+        );
+        
+    }
 }		
-	
