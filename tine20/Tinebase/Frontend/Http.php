@@ -128,6 +128,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/GMapPanel.js',
             'Tinebase/js/ux/DatepickerRange.js',
             'Tinebase/js/ux/tree/CheckboxSelectionModel.js',
+            'Tinebase/js/ux/OpenLayers/Map.js',
+            'Tinebase/js/ux/OpenLayers/MapPanel.js',
             // Tine 2.0 specific widgets
             'Tinebase/js/widgets/LangChooser.js',
             'Tinebase/js/widgets/ActionUpdater.js',
@@ -268,6 +270,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         echo $view->render('mainscreen.php');
     }
     
+    
     /**
      * renders the setup/update required dialog
      *
@@ -284,7 +287,52 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         exit();        
     }
     
-	/**
+    /**
+     * login from HTTP post 
+     * 
+     * renders the tine main screen if authentication is successfull
+     * otherwise redirects back to logout url 
+     */
+    public function loginFromPost($username, $password)
+    {
+        // try to login user
+        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === TRUE); 
+        
+        if ($success === TRUE) {
+            if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
+                $cacheId = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE)->getCacheId();
+                setcookie('usercredentialcache', base64_encode(Zend_Json::encode($cacheId)));
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
+                $success = FALSE;
+                // reset credentials cache
+                setcookie('usercredentialcache', '', time() - 3600);
+            }
+        
+        }
+
+        // authentication failed
+        // redirect back to loginurl
+        if ($success !== TRUE) {
+            $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+            
+            $redirectUrl = Tinebase_Config::getInstance()->getConfig('loginUrl', $tinebase, $_SERVER["HTTP_REFERER"]);
+            
+            header('Location: ' . $redirectUrl);
+            
+            return;
+        }
+
+        $view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
+        
+        $view->registryData = array();
+
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
+    
+    /**
 	 * renders the tine main screen 
 	 */
     public function mainScreen()
