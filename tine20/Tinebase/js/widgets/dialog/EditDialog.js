@@ -68,7 +68,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * record in edit process.
      */
     record: null,
-
+    /**
+     * @cfg {Bool} getDefaultsAgain
+     * load record defaults if new record is created and mode != local
+     * 
+     * TODO is it required to load the defaults again here?
+     */
+    getDefaultsAgain: true,
+    
     /**
      * @cfg {String} saveAndCloseButtonText
      * text of save and close button
@@ -239,7 +246,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     }
                 });
             } else {
-                this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
+                if (this.getDefaultsAgain) {
+                    this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
+                }
                 this.onRecordLoad();
             }
         } else {
