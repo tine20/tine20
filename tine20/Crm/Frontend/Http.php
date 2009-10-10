@@ -33,6 +33,7 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Crm/js/Models.js',
             'Crm/js/Crm.js',
             'Crm/js/LinkGridPanel.js',
+            'Crm/js/LeadGridContactFilter.js',
             'Crm/js/LeadGridPanel.js',
             'Crm/js/LeadEditDialog.js',
         // lead state/source/type
