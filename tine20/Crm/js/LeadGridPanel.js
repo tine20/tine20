@@ -90,7 +90,8 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 new Tine.Crm.LeadState.Filter({}),
                 {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
                 {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
-                new Tine.widgets.tags.TagFilter({app: this.app})
+                {filtertype: 'tinebase.tag', app: this.app},
+                {filtertype: 'crm.contact'}
              ],
              defaultFilter: 'query',
              filters: []
