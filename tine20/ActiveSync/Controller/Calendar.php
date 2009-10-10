@@ -429,8 +429,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $alarm = clone $event->dtstart;
             
             $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(array(
-                'alarm_time'    => $alarm->subMinute((int)$xmlData->Reminder),
-                'model'         => 'Calendar_Model_Event',
+                'alarm_time'        => $alarm->subMinute((int)$xmlData->Reminder),
+                'minutes_before'    => (int)$xmlData->Reminder,
+                'model'             => 'Calendar_Model_Event'
             )));
         }
         
