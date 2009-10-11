@@ -150,7 +150,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
      */
     getToolbarItems: function() {
         this.actions_exportContact = new Ext.Action({
-            text: _('Export'),
+            text: _('Export Contact'),
             iconCls: 'action_export',
             scope: this,
             requiredGrant: 'readGrant',
