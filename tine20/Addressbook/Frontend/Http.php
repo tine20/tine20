@@ -32,6 +32,8 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @param	string JSON encoded string with contact ids for multi export or contact filter
      * @param	format	pdf or csv or ...
+     * 
+     * @todo    use generic _export() function
      */
     public function exportContacts($_filter, $_format = 'pdf')
     {        

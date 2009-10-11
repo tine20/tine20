@@ -46,8 +46,7 @@ class Timetracker_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param string $_filter json encoded
      * @param string $_format only csv implemented
      * 
-     * @todo use stream here instead of temp file
-     * @todo generalize this
+     * @todo use generic _export() function
      */
     public function exportTimesheets($_filter, $_format)
     {
