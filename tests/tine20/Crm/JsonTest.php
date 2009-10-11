@@ -131,8 +131,9 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         // assertions
         $this->assertTrue($searchLeads['totalcount'] > 0);
         $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
-        //-- check relations
-        
+        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 1);       
+        $this->assertEquals($contact->n_fn, $searchLeads['results'][0]['relations'][0]['related_record']['n_fn']);
+         
         // delete all
         $this->_instance->deleteLeads($savedLead['id']);
         Addressbook_Controller_Contact::getInstance()->delete($savedLead['relations'][0]['related_id']);

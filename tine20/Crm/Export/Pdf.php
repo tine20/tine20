@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
  */
 
 
@@ -25,9 +26,9 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
      *
      * @param	Crm_Model_Lead $_lead lead data
      * 
-     * @return	string	the contact pdf
+     * @return	string	the pdf
      */
-    public function generateLeadPdf(Crm_Model_Lead $_lead, $_pageNumber = 0)
+    public function generate(Crm_Model_Lead $_lead, $_pageNumber = 0)
     {
         $locale = Tinebase_Core::get('locale');
         $translate = Tinebase_Translation::getTranslation('Crm');    
@@ -53,7 +54,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
         
         /***************************** generate pdf now! ********************/
                     
-        $this->generatePdf($record, $title, $subtitle, $tags,
+        parent::generatePdf($record, $title, $subtitle, $tags,
             $description, $titleIcon, NULL, $linkedObjects, FALSE);
         
     }

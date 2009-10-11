@@ -376,23 +376,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
     }
     
-    /**
-     * try to get an empty lead
-     *
-     */
-    public function testGetEmptyLead()
-    {
-        $lead = Crm_Controller_Lead::getInstance()->getEmptyLead();
-                
-        $this->assertType('Crm_Model_Lead', $lead);
-
-        // check for linked internal contact
-        $this->assertEquals(Zend_Registry::get('currentAccount')->accountFullName, $lead->relations[0]->related_record['n_fn']);
-        $this->assertEquals('RESPONSIBLE', $lead->relations[0]->type);
-        
-        // empty lead can not be valid
-        $this->assertFalse($lead->isValid());
-    }
     
     /**
      * try to update a lead
@@ -470,9 +453,11 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * try to set / get linked contacts
      *
+     * @deprecated when we have the update test in jsonTest, remove that
      */
     public function testLinkedContacts()
     {
+        /*
         // create test contact
         try {
             $contact = Addressbook_Controller_Contact::getInstance()->get($this->_objects['user']->getId());
@@ -500,7 +485,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, count($updatedLead->relations));
         $this->assertEquals($contact->getId(), $updatedLead->relations[0]->related_id);
-    
+        */
     }
     
     /**

@@ -20,7 +20,10 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Grid Panel</p>
  * <p><pre>
- * TODO         add toolbar buttons (export,  show closed leads, add task, ...) again
+ * TODO         add 'add task' action again
+ * TODO         add ods export
+ * TODO         add manage crm right again
+ * TODO         add preview panel
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -63,11 +66,16 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.recordProxy = Tine.Crm.leadBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
+        this.contextMenuItems = [
+            '-',
+            this.actions_exportLead
+        ];
+
         this.gridConfig.cm = this.getColumnModel();
         this.filterToolbar = this.getFilterToolbar();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
+        this.plugins.push(this.action_showClosedToggle, this.filterToolbar);
         
         Tine.Crm.GridPanel.superclass.initComponent.call(this);
         
@@ -103,8 +111,6 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
      * 
      * @return Ext.grid.ColumnModel
      * @private
-     * 
-     * TODO add LeadState.Renderer
      */
     getColumnModel: function(){
         return new Ext.grid.ColumnModel({ 
@@ -117,87 +123,33 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 {header: this.app.i18n._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
                 {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'relations', width: 175, sortable: false, renderer: this.partnerRenderer},
                 {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'relations', width: 175, sortable: false, renderer: this.customerRenderer},
-                {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100/*, renderer: Tine.Crm.LeadState.Renderer*/},
+                {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100, renderer: Tine.Crm.LeadState.Renderer},
                 {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
                 {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney }
             ]
         });
     },
-    
-    /**
-     * status column renderer
-     * @param {string} value
-     * @return {string}
-     * 
-     * TODO use that
-     */
-    statusRenderer: function(value) {
-        return this.app.i18n._hidden(value);
-    },
-    
-    /**
-     * 
-     * @param {Array} data
-     * @return {String}
-     * 
-     * TODO use generic shortContactRenderer
-     */
-    partnerRenderer: function(data) {
-        //return this.shortContactRenderer(value, 'PARTNER');
-        if( Ext.isArray(data) && data.length > 0 ) {
-            var index = 0;
-            while (index < data.length && data[index].type != 'PARTNER') {
-                index++;
-            }
-            if (data[index]) {
-                var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
-                return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
-            }
-        }
-    },
-    
-    /**
-     * 
-     * @param {Array} data
-     * @return {String}
-     * 
-     * TODO use generic shortContactRenderer
-     */
-    customerRenderer: function(data) {
-        //return this.shortContactRenderer(value, 'CUSTOMER');
-        if( Ext.isArray(data) && data.length > 0 ) {
-            var index = 0;
-            while (index < data.length && data[index].type != 'CUSTOMER') {
-                index++;
-            }
-            if (data[index]) {
-                var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
-                return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
-            }
-        }
-    },
 
     /**
-     * contact column renderer
-     * @param {string} value
-     * @return {string}
+     * render partner contact
+     * 
+     * @param {Array} value
+     * @return {String}
      */
-    /*
-    shortContactRenderer: function(data) {    
-        //console.log(_data);
-        if( Ext.isArray(data) && data.length > 0 ) {
-            var index = 0;
-            while (data[index].type != type && index < data.length) {
-                index++;
-            }
-            if (data[index]) {
-                var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
-                return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
-            }
-        }
+    partnerRenderer: function(value) {
+        return Tine.Crm.GridPanel.shortContactRenderer(value, 'PARTNER');
     },
-    */
     
+    /**
+     * render customer contact
+     * 
+     * @param {Array} value
+     * @return {String}
+     */
+    customerRenderer: function(value) {
+        return Tine.Crm.GridPanel.shortContactRenderer(value, 'CUSTOMER');
+    },
+
     /**
      * return additional tb items
      * @private
@@ -205,54 +157,11 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     getToolbarItems: function(){
         
         /*
-        var toolbar = new Ext.Toolbar({
-            id: 'crmToolbar',
-            split: false,
-            height: 26,
-            items: [
-                this.actions.addLead,
-                this.actions.editLead,
-                this.actions.deleteLead,
-                //actions.actionAddTask,
-                this.actions.exportLead,
-                '-',
-                new Ext.Button({
-                    text: this.translation._('Show details'),
-                    enableToggle: true,
-                    id: 'crmShowDetailsButton',
-                    iconCls: 'showDetailsAction',
-                    //cls: 'x-btn-icon',
-                    handler: handlerToggleDetails
-                }),                    
-                new Ext.Button({
-                    text: this.translation._('Show closed leads'),
-                    enableToggle: true,
-                    iconCls: 'showEndedLeadsAction',
-                    //cls: 'x-btn-icon',
-                    id: 'crmShowClosedLeadsButton',
-                    handler: function(toggle) {                        
-                        Ext.getCmp('gridCrm').getStore().reload();
-                    }                    
-                })
-            ]
-        });
-        
         handlerAddTask: function(){
             Tine.Tasks.EditDialog.openWindow({
                 relatedApp: 'Crm'
             });
         }
-        
-        this.actions.exportLead = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: true,
-            text: this.translation._('Export as PDF'),
-            tooltip: this.translation._('Export selected lead as PDF'),
-            disabled: true,
-            handler: this.handlers.exportLead,
-            iconCls: 'action_exportAsPdf',
-            scope: this
-        });
         
         this.actions.addTask = new Ext.Action({
             requiredGrant: 'readGrant',
@@ -266,34 +175,56 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
 
         */
         
-        /*
+        this.actions_exportLead = new Ext.Action({
+            text: _('Export Lead'),
+            iconCls: 'action_export',
+            scope: this,
+            requiredGrant: 'readGrant',
+            disabled: true,
+            allowMultiple: true,
+            menu: {
+                items: [
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as PDF'),
+                        iconCls: 'action_exportAsPdf',
+                        format: 'pdf',
+                        exportFunction: 'Crm.exportLead',
+                        gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as CSV'),
+                        iconCls: 'action_export',
+                        format: 'csv',
+                        exportFunction: 'Crm.exportLead',
+                        gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ODS'),
+                        iconCls: 'action_export',
+                        format: 'ods',
+                        disabled: true,
+                        exportFunction: 'Crm.exportLead',
+                        gridPanel: this
+                    })
+                ]
+            }
+        });
+        
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.app.i18n._('Show closed'),
             iconCls: 'action_showArchived',
             field: 'showClosed'
         });
-        */
         
         return [
-            /*
             new Ext.Toolbar.Separator(),
+            this.actions_exportLead,
             this.action_showClosedToggle
-            */
         ];
     }    
     
     /// obsolete code follows
     /*
-        // get relations
-    this.store.on('datachanged', function(store) {
-            // get partner & customers from relations
-            store.each(function(record){
-                var relations = Tine.Crm.splitRelations(record.data.relations, true);
-                record.data.customer = relations.customer;
-                record.data.partner = relations.partner;
-            });        
-        });
-    
         // admin menu
     updateMainToolbar : function() 
     {
@@ -347,3 +278,28 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         }
      */
 });
+
+/**
+ * contact column renderer
+ * 
+ * @param       {String} value
+ * @param       {String} type (CUSTOMER|PARTNER)
+ * @return      {String}
+ * 
+ * @namespace   Tine.Crm
+ */
+Tine.Crm.GridPanel.shortContactRenderer = function(data, type) {    
+
+    if( Ext.isArray(data) && data.length > 0) {
+        var index = 0;
+        
+        // get correct relation type from data (contact) array and show first matching record (org_name + n_fileas)
+        while (index < data.length && data[index].type != type) {
+            index++;
+        }
+        if (data[index]) {
+            var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
+            return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
+        }
+    }
+};

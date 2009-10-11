@@ -185,15 +185,13 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testLeadPdf()
     {
-    	
 		$pdf = new Crm_Export_Pdf();
-		$pdf->generateLeadPdf($this->objects['lead']);
+		$pdf->generate($this->objects['lead']);
 		$pdfOutput = $pdf->render();
 		
 		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput)); 
 		$this->assertEquals(1, preg_match("/Lead Description/", $pdfOutput)); 
 		$this->assertEquals(1, preg_match("/PHPUnit/", $pdfOutput));
-				
     }
 
     /**
@@ -217,7 +215,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
     	$pdf = new Crm_Export_Pdf();
-        $pdf->generateLeadPdf($lead);
+        $pdf->generate($lead);
         $pdfOutput = $pdf->render();
         
         //$pdf->save("test.pdf");
@@ -253,7 +251,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
         $pdf = new Crm_Export_Pdf();
-        $pdf->generateLeadPdf($lead);
+        $pdf->generate($lead);
         $pdfOutput = $pdf->render();
                 
         //$pdf->save("test.pdf");

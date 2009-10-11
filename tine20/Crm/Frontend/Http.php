@@ -18,6 +18,11 @@
  */
 class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
+    /**
+     * application name
+     * 
+     * @var string
+     */
     protected $_applicationName = 'Crm';
     
     /**
@@ -57,40 +62,10 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @param	string JSON encoded string with lead ids for multi export
      * @param	format	pdf or csv or ...
-     * 
-     * @todo	implement csv/... export
      */
-	public function exportLead($_leadIds, $_format = 'pdf')
+	public function exportLead($_filter, $_format = 'pdf')
 	{
-        $leadIds = Zend_Json::decode($_leadIds);
-	    
-        switch ($_format) {
-		    case 'pdf':		        		        
-                $pdf = new Crm_Export_Pdf();
-		        
-		        foreach ($leadIds as $leadId) {
-                    $lead = Crm_Controller_Lead::getInstance()->get($leadId);
-                    $pdf->generateLeadPdf($lead);
-		        }
-                    
-                try {
-                    $pdfOutput = $pdf->render();
-                } catch ( Zend_Pdf_Exception $e ) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString() );
-                    echo "could not create pdf <br/>". $e->__toString();
-                    exit();            
-                }
-                
-                header("Pragma: public");
-                header("Cache-Control: max-age=0");
-                header("Content-Disposition: inline; filename=lead.pdf"); 
-                header("Content-type: application/x-pdf"); 
-                echo $pdfOutput;            
-                break;
-                
-		    default:
-		        echo "Format $_format not supported yet.";
-		        exit();
-		}
+        $filter = new Crm_Model_LeadFilter(Zend_Json::decode($_filter));
+	    parent::_export($filter, $_format, Crm_Controller_Lead::getInstance());
 	}    
 }
