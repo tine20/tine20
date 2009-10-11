@@ -51,6 +51,90 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     }
         
     /**
+     * generic export function
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_format
+     * @param Tinebase_Controller_Record_Abstract $_controller
+     * @return void
+     * 
+     * @todo add ods
+     * @todo add export interface for $export object with generate() method
+     * @todo support single ids as filter?
+     * @todo use stream here instead of temp file
+     */
+    protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_format, Tinebase_Controller_Record_Abstract $_controller)
+    { 
+        // create export object
+        $exportClass = $_filter->getApplicationName() . '_Export_' . ucfirst(strtolower($_format));
+        if (! class_exists($exportClass)) {
+            throw new Tinebase_Exception_NotFound('No ' . $_format . ' export class found for ' . $_filter->getApplicationName());
+        }
+        $export = new $exportClass();
+
+        // generic headers
+        header("Pragma: public");
+        header("Cache-Control: max-age=0");
+        
+        switch ($_format) {
+            case 'pdf':
+                
+                /*
+                if (is_array($decodedFilter)) {
+                    $filter = new Addressbook_Model_ContactFilter($decodedFilter);
+                    $paging = new Tinebase_Model_Pagination();
+                    $contactIds = Addressbook_Controller_Contact::getInstance()->search($filter, $paging, false, true);                
+                } else {
+                    $contactIds = (array) $decodedFilter;
+                }
+                */
+                
+                // get ids by filter
+                $ids = $_controller->search($_filter, NULL, FALSE, TRUE);
+                
+                // loop records
+                foreach ($ids as $id) {
+                    if (! empty($id)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating pdf for ' . $_filter->getModelName() . '  id ' . $id);
+                        $record = $_controller->get($id);
+                        $export->generate($record);
+                    } else {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $_filter->getModelName() . ' id empty!');
+                    }
+                }
+                    
+                // render pdf
+                try {
+                    $pdfOutput = $export->render();
+                } catch (Zend_Pdf_Exception $e) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
+                }
+                
+                // set pdf download headers
+                $filename = 'export.pdf';
+                header("Content-Disposition: inline; filename=$filename"); 
+                header("Content-type: application/x-pdf"); 
+                echo $pdfOutput;
+                break;
+                
+            case 'csv':
+                
+                $result = $export->generate($_filter);
+                
+                $filename = 'export.csv';
+                header("Content-Disposition: attachment; filename=$filename");
+                header("Content-Description: csv File");  
+                header("Content-type: text/csv"); 
+                readfile($result);
+                unlink($result);
+                break;
+                
+            default:
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Format not supported: ' . $_format);
+        }
+    }        
+    
+    /**
      * Helper function to coerce browsers to reload js files when changed.
      *
      * @param string $_file
