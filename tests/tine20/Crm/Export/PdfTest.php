@@ -7,24 +7,23 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
+ * @version     $Id: PdfTest.php 10879 2009-10-11 19:21:50Z p.schuele@metaways.de $
  * 
- * @todo        repair the relations tests
  */
 
 /**
  * Test helper
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_ControllerTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Crm_Export_PdfTest::main');
 }
 
 /**
  * Test class for Tinebase_Group
  */
-class Crm_PdfTest extends PHPUnit_Framework_TestCase
+class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -270,6 +269,6 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Addressbook_ControllerTest::main') {
+if (PHPUnit_MAIN_METHOD == 'Crm_Export_PdfTest::main') {
     Addressbook_ControllerTest::main();
 }
