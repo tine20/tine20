@@ -157,6 +157,8 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
      * get export config
      *
      * @return array
+     * 
+     * @todo    move config to db
      */
     protected function _getExportConfig()
     {
