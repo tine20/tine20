@@ -22,9 +22,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Crm_Json
  */
-class Crm_JsonTest extends PHPUnit_Framework_TestCase
+class Crm_JsonTest extends Crm_AbstractTest
 {
     /**
      * Backend

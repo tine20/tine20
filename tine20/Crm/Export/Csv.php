@@ -23,6 +23,13 @@
 class Crm_Export_Csv extends Tinebase_Export_Csv
 {
     /**
+     * lead relation types
+     * 
+     * @var array
+     */
+    protected $_relationsTypes = array('CUSTOMER', 'PARTNER', 'RESPONSIBLE', 'TASK');
+    
+    /**
      * export leads to csv file
      *
      * @param Crm_Model_LeadFilter $_filter
