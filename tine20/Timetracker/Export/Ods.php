@@ -21,7 +21,7 @@
 class Timetracker_Export_Ods extends Tinebase_Export_Ods
 {
     /**
-     * @var string application of this filter group
+     * @var string application of this export class
      */
     protected $_applicationName = 'Timetracker';
     

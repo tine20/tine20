@@ -36,7 +36,6 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
      */
     protected function setUp()
     {
-        $this->_instance = new Crm_Export_Csv();
         $this->_json = new Crm_Frontend_Json();
         
         $contact = $this->_getContact();

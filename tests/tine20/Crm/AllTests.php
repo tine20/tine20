@@ -33,6 +33,7 @@ class Crm_AllTests
         $suite->addTestSuite('Crm_JsonTest');
         $suite->addTestSuite('Crm_Export_PdfTest');
         $suite->addTestSuite('Crm_Export_CsvTest');
+        $suite->addTestSuite('Crm_Export_OdsTest');
         return $suite;
     }
 }
