@@ -416,6 +416,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     onFilterRowsChange: function() {
         this.arrangeButtons();
+        
         if (! this.supressEvents) {
             var size = this.tableEl.getSize();
             

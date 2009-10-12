@@ -75,6 +75,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         this.ftb.onFieldChange   = this.ftb.onFieldChange.createSequence(this.onFilterChange, this);
         this.ftb.deleteFilter    = this.ftb.deleteFilter.createInterceptor(this.onBeforeDeleteFilter, this);
         
+        this.ftb.onFilterRowsChange = this.ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
         this.ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
         
     },
@@ -107,6 +108,24 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         }
     },
     
+    /**
+     * called when the filterrows of the filtertoolbar changes
+     * 
+     * we detect the hidestatus of the filtertoolbar
+     */
+    onFilterRowsChange: function() {
+        this.ftb.searchButtonWrap.removeClass('x-btn-over');
+        
+        if (this.ftb.filterStore.getCount() <= 1 
+            && this.ftb.filterStore.getAt(0).get('field') == this.quickFilterField
+            && !this.ftb.filterStore.getAt(0).formFields.value.getValue()) {
+                
+            this.ftb.el.dom.style.display = 'none';
+        } else {
+            this.ftb.el.dom.style.display = '';
+        }
+    },
+    
     onBeforeDeleteFilter: function(filter) {
         if (filter == this.quickFilterRow) {
             this.quickFilter.setValue('');
@@ -132,6 +151,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     
     onQuickFilterTrigger: function() {
         this.ftb.onFiltertrigger.call(this.ftb);
+        this.ftb.onFilterRowsChange.call(this.ftb);
     },
     
     /**
