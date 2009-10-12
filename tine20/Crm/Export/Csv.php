@@ -9,8 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add relations / products / state / type / source
- * @todo        add test
+ * @todo        add products / state / type / source
  */
 
 /**
