@@ -8,6 +8,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
+ * @todo        refactor controller tests
  * @todo        resolve test dependencies - make them _stand-alone_
  */
 
