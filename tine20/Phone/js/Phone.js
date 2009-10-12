@@ -649,18 +649,24 @@ Tine.Phone.Main = {
         }); 
         
         // the columnmodel
-        var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'direction', header: this.translation._('Direction'), dataIndex: 'direction', width: 20, renderer: this.renderer.direction },
-            { resizable: true, id: 'source', header: this.translation._('Source'), dataIndex: 'source', hidden: true },
-            { resizable: true, id: 'callerid', header: this.translation._('Caller Id'), dataIndex: 'callerid' },
-            { resizable: true, id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination', renderer: this.renderer.destination },
-            { resizable: true, id: 'start', header: this.translation._('Start'), dataIndex: 'start', renderer: Tine.Tinebase.common.dateTimeRenderer },
-            { resizable: true, id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: true },
-            { resizable: true, id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: true  },
-            { resizable: true, id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 40 },
-            { resizable: true, id: 'ringing', header: this.translation._('Ringing'), dataIndex: 'ringing', width: 40, hidden: true },
-            { resizable: true, id: 'id', header: this.translation._('Call ID'), dataIndex: 'id', hidden: true}
-        ]);
+        var columnModel = new Ext.grid.ColumnModel({
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            columns: [
+                { id: 'direction', header: this.translation._('Direction'), dataIndex: 'direction', width: 20, renderer: this.renderer.direction },
+                { id: 'source', header: this.translation._('Source'), dataIndex: 'source', hidden: true },
+                { id: 'callerid', header: this.translation._('Caller Id'), dataIndex: 'callerid' },
+                { id: 'destination', header: this.translation._('Destination'), dataIndex: 'destination', renderer: this.renderer.destination },
+                { id: 'start', header: this.translation._('Start'), dataIndex: 'start', renderer: Tine.Tinebase.common.dateTimeRenderer },
+                { id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: true },
+                { id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: true  },
+                { id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 40 },
+                { id: 'ringing', header: this.translation._('Ringing'), dataIndex: 'ringing', width: 40, hidden: true },
+                { id: 'id', header: this.translation._('Call ID'), dataIndex: 'id', hidden: true}
+            ]
+        });
         
         columnModel.defaultSortable = true; // by default columns are sortable
         
