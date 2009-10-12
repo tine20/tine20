@@ -281,8 +281,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             case 'number':
             default:
                 value = new Ext.ux.form.ClearableTextField({
-                    //hideTrigger: true,
-                    //triggerClass: 'x-form-clear-trigger',
                     filter: filter,
                     width: 200,
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
@@ -292,27 +290,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                         scope: this,
                         specialkey: function(field, e){
                             if(e.getKey() == e.ENTER){
-                                //field.trigger.setVisible(field.getValue().length > 0);
                                 this.onFiltertrigger();
                             }
-                        }/*,
-                        change: function() {
-                            //console.log('change');
-                        }*/
-                    }/*,
-                    onTriggerClick: function() {
-                        value.setValue(null);
-                        //value.trigger.hide();
-                        this.fireEvent('change');
-                    }*/
+                        }
+                    }
                 });
-                /*
-                value.on('specialkey', function(field, e){
-                     if(e.getKey() == e.ENTER){
-                         this.onFiltertrigger();
-                     }
-                }, this);
-                */
                 break;
         }
         
