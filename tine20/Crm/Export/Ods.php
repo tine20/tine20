@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        make it work
+ * @todo        add relations / products / state / type / source
  */
 
 /**
@@ -31,7 +31,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
      *
      * @var array of Tinebase_Record_RecordSet
      */
-    protected $_resolvedRecords = array();
+    //protected $_resolvedRecords = array();
     
     /**
      * fields with special treatment in addBody
@@ -59,9 +59,6 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
         $this->_addHead($table, $this->_config['leads']);
         $this->_addBody($table, $leads, $this->_config['leads']);
         $this->_addFooter($table, $lastCell);
-        
-        // add overview table
-        //$this->_addOverviewTable($lastCell);
         
         // create file
         $filename = $this->getDocument();        
@@ -94,63 +91,20 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
     }
     
     /**
-     * add overview table
-     *
-     * @param integer $lastCell
-     */
-    protected function _addOverviewTable($lastCell)
-    {
-        /*
-        $table = $this->getBody()->appendTable('Overview');
-        
-        $row = $table->appendRow();
-        $row->appendCell('string', $this->_translate->_('Not billable'));
-        $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
-            $this->_config['leads']['billableColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['leads']['billableColumn'] . $lastCell . 
-            ';0;Timesheets.' . $this->_config['leads']['sumColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['leads']['sumColumn'] . $lastCell . ')');
-        #$cell->setStyle('ceBold');     
-        
-        $row = $table->appendRow();
-        $row->appendCell('string', $this->_translate->_('Billable'));
-        $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUMIF(Timesheets.' . 
-            $this->_config['leads']['billableColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['leads']['billableColumn'] . $lastCell . 
-            ';1;Timesheets.' . $this->_config['leads']['sumColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['leads']['sumColumn'] . $lastCell . ')');
-        #$cell->setStyle('ceBold');     
-        
-        $row = $table->appendRow();
-        $row->appendCell('string', $this->_translate->_('Total'));
-        $cell = $row->appendCell('float', 0);
-        $cell->setFormula('oooc:=SUM(Timesheets.' . 
-            $this->_config['leads']['sumColumn'] . $this->_firstRow . ':Timesheets.' . $this->_config['leads']['sumColumn'] . $lastCell . ')');
-        $cell->setStyle('ceBold');
-        */
-    }
-    
-    /**
      * get export config
      *
      * @return array
-     * 
-     * @todo get this from db
      */
     protected function _getExportConfig()
     {
-        /*
-        $config = Tinebase_Core::getConfig();
-        
-        $exportConfig['leads'] = (isset($config->timesheetExport)) ? $config->timesheetExport->toArray() : array(
+        $exportConfig = Tinebase_Config::getInstance()->getConfigAsArray(
+            Tinebase_Model_Config::ODSEXPORTCONFIG, 'Crm', array('leads' => array(
             'header' => array(
                 '{date}', 
                 '{user}',
             ),
-            'customFields' => FALSE,
-            'sumColumn' => 'F',
-            'billableColumn' => 'G',
-            'overviewTable' => TRUE,
             'fields' => array(
-                'start_date' => array(
+                'start' => array(
                     'header'    => $this->_translate->_('Date'),
                     'type'      => 'date', 
                     'width'     => '2,5cm'
@@ -160,104 +114,15 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
                     'type'      => 'string', 
                     'width'     => '10cm'
                 ),
-                'timeaccount_number' => array(
-                    'header'    => $this->_translate->_('Timeaccount Number'),
-                    'type'      => 'timeaccount', 
-                    'field'     => 'number', 
+                'lead_name' => array(
+                    'header'    => $this->_translate->_('Lead Name'),
+                    'type'      => 'string', 
                     'width'     => '5cm',
-                ),                
-                'timeaccount_id' => array(
-                    'header'    => $this->_translate->_('Timeaccount'),
-                    'type'      => 'timeaccount', 
-                    'field'     => 'title', 
-                    'width'     => '7cm',
-                    'replace'   => array('pattern' => "/^XYZ /", 'replacement' => '')
-                ),
-                'account_id' => array(
-                    'header'    => $this->_translate->_('Staff Member'),
-                    'type'      => 'account_id', 
-                    'field'     => 'accountDisplayName', 
-                    'width'     => '4cm'
-                ),
-                'duration' => array(
-                    'header'    => $this->_translate->_('Duration'),
-                    'type'      => 'float', 
-                    'width'     => '2cm',
-                    'divisor'   => 60,
-                    'number'    => TRUE,
-                ),
-                'is_billable_combined' => array(
-                    'header'    => $this->_translate->_('Billable'),
-                    'type'      => 'float', 
-                    'width'     => '3cm'
-                ),
-                'is_cleared_combined' => array(
-                    'header'    => $this->_translate->_('Cleared'),
-                    'type'      => 'float', 
-                    'width'     => '3cm'
                 ),
             )
-        );
-        
-        // timeaccounts export config
-        $exportConfig['timeaccounts'] = array(
-            'header' => array(
-                '{date}', 
-                '{user}',
-            ),
-            'fields' => array(
-                'number' => array(
-                    'header'    => $this->_translate->_('Number'),
-                    'type'      => 'string', 
-                    'width'     => '2,5cm'
-                ),
-                'title' => array(
-                    'header'    => $this->_translate->_('Title'),
-                    'type'      => 'string', 
-                    'width'     => '2,5cm'
-                ),
-                'description' => array(
-                    'header'    => $this->_translate->_('Description'),
-                    'type'      => 'string', 
-                    'width'     => '10cm'
-                ),
-                'created_by' => array(
-                    'header'    => $this->_translate->_('Created By'),
-                    'type'      => 'created_by', 
-                    'field'     => 'accountDisplayName', 
-                    'width'     => '4cm'
-                ),
-                'creation_time' => array(
-                    'header'    => $this->_translate->_('Creation Date'),
-                    'type'      => 'datetime', 
-                    'width'     => '2,5cm'
-                ),
-                'status' => array(
-                    'header'    => $this->_translate->_('Status'),
-                    'type'      => 'string',
-                    'translate' => TRUE, 
-                    'width'     => '3cm'
-                ),
-                'is_billable' => array(
-                    'header'    => $this->_translate->_('Billable'),
-                    'type'      => 'float', 
-                    'width'     => '3cm'
-                ),
-                'billed_in' => array(
-                    'header'    => $this->_translate->_('Cleared In'),
-                    'type'      => 'string', 
-                    'width'     => '3cm'
-                ),
-                'is_open' => array(
-                    'header'    => $this->_translate->_('Open'),
-                    'type'      => 'float', 
-                    'width'     => '3cm'
-                ),
-            )
-        );        
-        
+        )));
+
         return $exportConfig;
-        */
     }    
     
     /**

@@ -21,7 +21,6 @@ Ext.namespace('Tine.Crm');
  * <p>Lead Grid Panel</p>
  * <p><pre>
  * TODO         add 'add task' action again
- * TODO         add ods export
  * TODO         add manage crm right again
  * TODO         add preview panel
  * </pre></p>
@@ -202,7 +201,6 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                         text: this.app.i18n._('Export as ODS'),
                         iconCls: 'action_export',
                         format: 'ods',
-                        disabled: true,
                         exportFunction: 'Crm.exportLead',
                         gridPanel: this
                     })
