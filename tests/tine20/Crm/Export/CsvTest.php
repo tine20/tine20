@@ -23,15 +23,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Crm_Export_Csv
  */
-class Crm_Export_CsvTest extends Crm_AbstractTest
+class Crm_Export_CsvTest extends Crm_Export_AbstractTest
 {
-    /**
-     * json frontend
-     *
-     * @var Crm_Frontend_Json
-     */
-    protected $_json;
-    
     /**
      * csv export class
      *
@@ -40,11 +33,6 @@ class Crm_Export_CsvTest extends Crm_AbstractTest
     protected $_instance;
     
     /**
-     * @var array test objects
-     */
-    protected $_objects = array();
-
-    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -52,9 +40,9 @@ class Crm_Export_CsvTest extends Crm_AbstractTest
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm_Export_CsvTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm_Export_CsvTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -65,33 +53,9 @@ class Crm_Export_CsvTest extends Crm_AbstractTest
     protected function setUp()
     {
         $this->_instance = new Crm_Export_Csv();
-        $this->_json = new Crm_Frontend_Json();
-        
-        $contact = $this->_getContact();
-        $task = $this->_getTask();
-        $lead = $this->_getLead();
-        
-        $leadData = $lead->toArray();
-        $leadData['relations'] = array(
-            array('type'  => 'TASK',    'related_record' => $task->toArray()),
-            array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
-        );
-        
-        $this->_objects['lead'] = $this->_json->saveLead(Zend_Json::encode($leadData));
+        parent::setUp();
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        $this->_json->deleteLeads($this->_objects['lead']['id']);
-        Addressbook_Controller_Contact::getInstance()->delete($this->_objects['lead']['relations'][0]['related_id']);        
-    }
-    
     /**
      * test csv export
      * 
@@ -109,8 +73,7 @@ class Crm_Export_CsvTest extends Crm_AbstractTest
 ', $export);
         unlink($csvFilename);
     }
-}		
-	
+}       
 
 if (PHPUnit_MAIN_METHOD == 'Crm_Export_CsvTest::main') {
     Addressbook_ControllerTest::main();
