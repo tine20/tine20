@@ -480,5 +480,5 @@ msgstr "Domyślne konto e-mail"
 msgid "The default email account to use when sending mails."
 msgstr "Domyślne konto e-mail dla wysyłanych wiadomości"
 
-#~ msgid "Mark Unread"
-#~ msgstr "Oznacz jako nieprzeczytane"
+msgid "Mark Unread"
+msgstr "Oznacz jako nieprzeczytane"

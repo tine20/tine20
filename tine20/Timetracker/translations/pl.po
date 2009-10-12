@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-05 14:25+0100\n"
+"PO-Revision-Date: 2009-09-20 16:18+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -72,7 +72,7 @@ msgstr "Współpracownicy"
 #: Export/Ods.php:205 js/TimesheetEditDialog.js:146
 #: js/TimesheetGridPanel.js:261
 msgid "Duration"
-msgstr "Czas przeliczania"
+msgstr "Czas"
 
 #: Export/Ods.php:217 js/TimesheetEditDialog.js:196
 #: js/TimesheetGridPanel.js:78 js/TimesheetGridPanel.js:218

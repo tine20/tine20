@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-05 14:44+0100\n"
+"PO-Revision-Date: 2009-10-03 17:06+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -70,7 +70,7 @@ msgstr "Uwagi ogólne"
 
 #: js/Asterisk/SipPeerEditDialog.js:68
 msgid "Type"
-msgstr "Typ"
+msgstr "Ikona"
 
 #: js/Asterisk/SipPeerEditDialog.js:77
 msgid "friend"
@@ -85,7 +85,6 @@ msgid "peer"
 msgstr "komputer"
 
 #: js/Asterisk/SipPeerEditDialog.js:83
-#, fuzzy
 msgid "Secret"
 msgstr "Poufne"
 
@@ -176,7 +175,6 @@ msgid "call group"
 msgstr "grupa rozmówców"
 
 #: js/Asterisk/SipPeerGridPanel.js:101
-#, fuzzy
 msgid "caller id"
 msgstr "ID rozmówcy"
 
@@ -271,7 +269,6 @@ msgid "rtp hold timeout"
 msgstr "rtp hold timeout"
 
 #: js/Asterisk/SipPeerGridPanel.js:258
-#, fuzzy
 msgid "secret"
 msgstr "poufne"
 
@@ -358,7 +355,6 @@ msgstr "Dodatkowo"
 
 #: js/Asterisk/VoicemailEditDialog.js:120
 #: js/Asterisk/VoicemailGridPanel.js:109
-#, fuzzy
 msgid "tz"
 msgstr "strefa czasowa"
 
@@ -1007,26 +1003,26 @@ msgstr "Telefony"
 msgid "Templates"
 msgstr "Szablony"
 
-#~ msgid "username"
-#~ msgstr "użytkownik"
+msgid "username"
+msgstr "użytkownik"
 
-#~ msgid "edit myphone"
-#~ msgstr "Edytuj mój numer"
+msgid "edit myphone"
+msgstr "Edytuj mój numer"
 
-#~ msgid "Search: "
-#~ msgstr "Znajdź:"
+msgid "Search: "
+msgstr "Znajdź:"
 
-#~ msgid "Displaying myphones {0} - {1} of {2}"
-#~ msgstr "Wyświetl moje numery  {0} - {1} z {2}"
+msgid "Displaying myphones {0} - {1} of {2}"
+msgstr "Wyświetl moje numery  {0} - {1} z {2}"
 
-#~ msgid "No myphones to display"
-#~ msgstr "Brak numerów"
+msgid "No myphones to display"
+msgstr "Brak numerów"
 
-#~ msgid "add context"
-#~ msgstr "Dodaj kontekst"
+msgid "add context"
+msgstr "Dodaj kontekst"
 
-#~ msgid "delete context"
-#~ msgstr "Usuń kontekst"
+msgid "delete context"
+msgstr "Usuń kontekst"
 
-#~ msgid "Context: "
-#~ msgstr "Kontekst:"
+msgid "Context: "
+msgstr "Kontekst:"

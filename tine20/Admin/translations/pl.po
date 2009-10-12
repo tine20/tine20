@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-09-12 22:24+0100\n"
+"PO-Revision-Date: 2009-09-20 15:44+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -325,7 +325,7 @@ msgstr "Usuń grupę"
 
 #: js/Groups.js:189
 msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Wyświetlanie grup {0} - {1} z {2}"
+msgstr "Wyświetlane grupy {0} - {1} z {2}"
 
 #: js/Groups.js:190 js/Groups.js:245
 msgid "No groups to display"
@@ -459,7 +459,7 @@ msgstr "Usuń funkcję"
 # Das Wort "Role" koennte missverstanden werden. Das Wort "Funkcji" passt besser.
 #: js/Roles.js:189
 msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Wyświetlanie funkcji {0} - {1} z {2}"
+msgstr "Wyświetlane funkcje {0} - {1} z {2}"
 
 #: js/Roles.js:190 js/Roles.js:245
 msgid "No roles to display"
@@ -750,7 +750,7 @@ msgstr "Podczas próby usunięcia kont(a) wystąpił błąd."
 
 #: js/Users.js:288
 msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Wyświetlanie kont {0} - {1} z {2}"
+msgstr "Wyświetlane konta {0} - {1} z {2}"
 
 #: js/Users.js:289
 msgid "No accounts to display"
@@ -814,32 +814,32 @@ msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
 
-#~ msgid "Deleting tag..."
-#~ msgstr "Usuwanie znacznika..."
+msgid "Deleting tag..."
+msgstr "Usuwanie znacznika..."
 
-#~ msgid "name"
-#~ msgstr "nazwa"
+msgid "name"
+msgstr "nazwa"
 
-#~ msgid "status"
-#~ msgstr "status"
+msgid "status"
+msgstr "status"
 
-#~ msgid "Deleting account..."
-#~ msgstr "Usuwanie konta …"
+msgid "Deleting account..."
+msgstr "Usuwanie konta …"
 
-#~ msgid "Some error occurred while trying to delete the account."
-#~ msgstr "Podczas próby usunięcia konta wystąpił błąd."
+msgid "Some error occurred while trying to delete the account."
+msgstr "Podczas próby usunięcia konta wystąpił błąd."
 
-#~ msgid "Saving User Account"
-#~ msgstr "Zapisywanie konta użytkownika"
+msgid "Saving User Account"
+msgstr "Zapisywanie konta użytkownika"
 
-#~ msgid "Could not save user account."
-#~ msgstr "Zapisanie konta użytkownika było niemożliwe."
+msgid "Could not save user account."
+msgstr "Zapisanie konta użytkownika było niemożliwe."
 
-#~ msgid "Add New User Account"
-#~ msgstr "Utwórz nowego użytkownika"
+msgid "Add New User Account"
+msgstr "Utwórz nowego użytkownika"
 
-#~ msgid "Edit User Account \"{0}\""
-#~ msgstr "Edytuj konto użytkownika \"{0}\""
+msgid "Edit User Account \"{0}\""
+msgstr "Edytuj konto użytkownika \"{0}\""
 
-#~ msgid "Forward"
-#~ msgstr "Prześlij dalej"
+msgid "Forward"
+msgstr "Prześlij dalej"
