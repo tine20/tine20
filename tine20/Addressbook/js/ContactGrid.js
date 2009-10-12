@@ -56,6 +56,13 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     initComponent: function() {
         this.recordProxy = Tine.Addressbook.contactBackend;
         
+        this.gridConfig.cm = this.getColumnModel();
+        this.filterToolbar = this.getFilterToolbar();
+        this.detailsPanel = this.getDetailsPanel();
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
+        
         this.actionToolbarItems = this.getToolbarItems();
         this.contextMenuItems = [
             '-',
@@ -66,12 +73,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             this.contextMenuItems.push(this.actions_composeEmail);
         }
         
-        this.gridConfig.cm = this.getColumnModel();
-        this.filterToolbar = this.getFilterToolbar();
-        this.detailsPanel = this.getDetailsPanel();
         
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
         
         Tine.Addressbook.ContactGridPanel.superclass.initComponent.call(this);
         
@@ -85,8 +87,11 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
     getFilterToolbar: function() {
         return new Tine.widgets.grid.FilterToolbar({
             filterModels: Tine.Addressbook.Model.Contact.getFilterModel(),
-             defaultFilter: 'query',
-             filters: []
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },    
     
@@ -209,6 +214,11 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         
         if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
             items.push(new Ext.Button(this.actions_composeEmail));
+        }
+        
+        if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
+            items.push('->');
+            items.push(this.filterToolbar.getQuickFilterField());
         }
         
         return items;
