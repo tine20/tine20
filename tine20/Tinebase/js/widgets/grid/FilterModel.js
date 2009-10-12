@@ -280,11 +280,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             case 'string':
             case 'number':
             default:
-                // @todo: we need a Ext.ux.form.ClearableTextField
-                //        which in contrast to a TriggerField displays
-                //        the trigger in the area of the field and not with
-                //        extra space right of it!
-                value = new Ext.form.TextField({
+                value = new Ext.ux.form.ClearableTextField({
                     //hideTrigger: true,
                     //triggerClass: 'x-form-clear-trigger',
                     filter: filter,
