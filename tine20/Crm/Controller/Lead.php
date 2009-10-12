@@ -127,7 +127,13 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $leads = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds);
         
         if ($_getRelations) {
-            $leads->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $leads->getId(), NULL, array('CUSTOMER', 'PARTNER')));
+            $leads->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations(
+                $this->_modelName, 
+                $this->_backend->getType(), 
+                $leads->getId(), 
+                NULL, 
+                array('CUSTOMER', 'PARTNER', 'TASK', 'RESPONSIBLE')
+            ));
         }
         
         return $leads;

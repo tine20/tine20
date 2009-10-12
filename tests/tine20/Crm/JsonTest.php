@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        finish testAddGetSearchDeleteLead
  * @todo        remove obsolete state/type/products/source tests (when the functions are removed from Json.php)
  */
 
@@ -105,7 +104,6 @@ class Crm_JsonTest extends Crm_AbstractTest
      * try to add a lead and link a contact
      *
      * @todo add note and product
-     * @todo check relations
      */
     public function testAddGetSearchDeleteLead()
     {
@@ -131,8 +129,9 @@ class Crm_JsonTest extends Crm_AbstractTest
         // assertions
         $this->assertTrue($searchLeads['totalcount'] > 0);
         $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
-        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 1);       
-        $this->assertEquals($contact->n_fn, $searchLeads['results'][0]['relations'][0]['related_record']['n_fn']);
+        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 2, 'did not get all relations');       
+        $this->assertEquals($contact->n_fn, $searchLeads['results'][0]['relations'][0]['related_record']['n_fn'], 'contact not found');
+        $this->assertEquals($task->summary, $searchLeads['results'][0]['relations'][1]['related_record']['summary'], 'task not found');
          
         // delete all
         $this->_instance->deleteLeads($savedLead['id']);
