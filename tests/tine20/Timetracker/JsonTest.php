@@ -414,7 +414,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // export & check
         $csvExportClass = new Timetracker_Export_Csv();
-        $result = $csvExportClass->exportTimesheets(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
+        $result = $csvExportClass->generate(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
         
         $this->assertTrue(file_exists($result));
         
@@ -442,7 +442,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // export & check
         $odsExportClass = new Timetracker_Export_Ods();
-        $result = $odsExportClass->exportTimesheets(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
+        $result = $odsExportClass->generate(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
         
         $this->assertTrue(file_exists($result));
         
@@ -473,7 +473,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // export & check
         $odsExportClass = new Timetracker_Export_Ods();
-        $result = $odsExportClass->exportTimeaccounts(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter()));
+        $result = $odsExportClass->generate(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter()));
         
         $this->assertTrue(file_exists($result));
         
