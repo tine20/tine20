@@ -58,12 +58,11 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Controller_Record_Abstract $_controller
      * @return void
      * 
-     * @todo add ods
-     * @todo add export interface for $export object with generate() method
+     * @todo add export interface for $export object with generate() method?
      * @todo support single ids as filter?
-     * @todo use stream here instead of temp file
+     * @todo use stream here instead of temp file?
      */
-    protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_format, Tinebase_Controller_Record_Abstract $_controller)
+    protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_format, Tinebase_Controller_Record_Abstract $_controller = NULL)
     { 
         // create export object
         $exportClass = $_filter->getApplicationName() . '_Export_' . ucfirst(strtolower($_format));
@@ -71,11 +70,9 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             throw new Tinebase_Exception_NotFound('No ' . $_format . ' export class found for ' . $_filter->getApplicationName());
         }
         $export = new $exportClass();
-
-        // generic headers
-        header("Pragma: public");
-        header("Cache-Control: max-age=0");
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $_format);
+
         switch ($_format) {
             case 'pdf':
                 
@@ -107,30 +104,41 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 try {
                     $pdfOutput = $export->render();
                 } catch (Zend_Pdf_Exception $e) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
+                    exit;
                 }
                 
-                // set pdf download headers
-                $filename = 'export.pdf';
-                header("Content-Disposition: inline; filename=$filename"); 
-                header("Content-type: application/x-pdf"); 
-                echo $pdfOutput;
+                $contentType = 'application/x-pdf';
                 break;
                 
             case 'csv':
-                
                 $result = $export->generate($_filter);
-                
-                $filename = 'export.csv';
-                header("Content-Disposition: attachment; filename=$filename");
-                header("Content-Description: csv File");  
-                header("Content-type: text/csv"); 
-                readfile($result);
-                unlink($result);
+                $contentType = 'text/csv';
+                break;
+
+            case 'ods':
+                $result = $export->generate($_filter);
+                $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
                 break;
                 
             default:
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Format not supported: ' . $_format);
+                throw new Tinebase_Exception_UnexpectedValue('Format ' . $_format . ' not supported.');
+        }
+
+        // write headers
+        $filename = 'tine20_export_' . strtolower($_filter->getApplicationName()) . '.' . $_format;
+        header("Pragma: public");
+        header("Cache-Control: max-age=0");
+        header("Content-Disposition: " . (($_format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);
+        header("Content-Description: $_format File");  
+        header("Content-type: $contentType");
+        
+        // output export file
+        if ($_format == 'pdf') {
+            echo $pdfOutput;
+        } else {
+            readfile($result);
+            unlink($result);
         }
     }        
     
