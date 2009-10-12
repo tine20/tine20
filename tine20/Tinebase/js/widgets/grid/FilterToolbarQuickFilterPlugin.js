@@ -60,12 +60,14 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     },
     
     getQuickFilterField: function() {
-        this.quickFilter = new Ext.ux.SearchField({
-            enableKeyEvents: true
-        });
-        
-        this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
-        this.quickFilter.onTrigger2Click = this.quickFilter.onTrigger2Click.createSequence(this.onQuickFilterTrigger, this);
+        if (! this.quickFilter) {
+            this.quickFilter = new Ext.ux.SearchField({
+                enableKeyEvents: true
+            });
+            
+            this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
+            this.quickFilter.onTrigger2Click = this.quickFilter.onTrigger2Click.createSequence(this.onQuickFilterTrigger, this);
+        }
         return this.quickFilter;
     },
     
@@ -77,7 +79,6 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         
         this.ftb.onFilterRowsChange = this.ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
         this.ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
-        
     },
     
     
