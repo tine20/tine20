@@ -21,6 +21,13 @@
 class Tinebase_Export_Csv
 {
     /**
+     * relation types
+     * 
+     * @var array
+     */
+    protected $_relationsTypes = array();
+    
+    /**
      * The php build in fputcsv function is buggy, so we need an own one :-(
      *
      * @param resource $filePointer
@@ -81,7 +88,11 @@ class Tinebase_Export_Csv
         
         foreach ($_records[0] as $fieldName => $value) {
             if (! in_array($fieldName, $skipFields)) {
-                $fields[] = $fieldName;
+                if ($fieldName == 'relations') {
+                    $this->_addRelationTypes($fields);
+                } else {
+                    $fields[] = $fieldName;
+                }
             }
         }
         
@@ -90,12 +101,18 @@ class Tinebase_Export_Csv
         self::fputcsv($filehandle, $fields);
         
         // fill file with records
+        $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
         foreach ($_records as $record) {
-            $recordArray = array();
+            $recordArray = $record->toArray();
+            $csvArray = array();
             foreach ($fields as $fieldName) {
-                $recordArray[] = $record->$fieldName;
+                if (in_array($fieldName, $this->_relationsTypes)) {
+                    $csvArray[] = $this->_addRelations($record, $fieldName);
+                } else {
+                    $csvArray[] = $recordArray[$fieldName];
+                }
             }
-            self::fputcsv($filehandle, $recordArray);
+            self::fputcsv($filehandle, $csvArray);
         }
         
         if (!$_toStdout) {
@@ -103,5 +120,65 @@ class Tinebase_Export_Csv
         }
         
         return $filename;
+    }
+    
+    /**
+     * add relation types
+     * 
+     * @param array $_fields
+     * @return void
+     */
+    protected function _addRelationTypes(array &$_fields)
+    {
+        if (count($this->_relationsTypes) > 0) {
+            foreach ($this->_relationsTypes as $type) {
+                $_fields[] = $type;
+            }
+        } else {
+            $_fields[] = 'relations';
+        }
+    }
+
+    /**
+     * add relation values from related records
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @return string
+     * 
+     * @todo    add index to recordset for type/fieldname?
+     */
+    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName)
+    {
+        $matchingRelations = $_record->relations->filter('type', $_fieldName);
+        
+        $result = '';
+        foreach ($matchingRelations as $relation) {
+            $result .= $this->_getSummary($relation->related_record);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * add relation summary (such as n_fileas, title, ...)
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_type
+     * @return string
+     */
+    protected function _getSummary(Tinebase_Record_Abstract $_record)
+    {
+        $result = '';
+        switch(get_class($_record)) {
+            case 'Addressbook_Model_Contact':
+                $result = $_record->n_fileas . "\n";
+                break;
+            case 'Tasks_Model_Task':
+                $result = $_record->summary . "\n";
+                break;
+        }
+        
+        return $result;
     }
 }
