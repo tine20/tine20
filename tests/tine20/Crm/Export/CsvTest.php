@@ -96,8 +96,6 @@ class Crm_Export_CsvTest extends Crm_AbstractTest
      * test csv export
      * 
      * @return void
-     * 
-     * @todo check task
      */
     public function testExportCsv()
     {
@@ -106,7 +104,8 @@ class Crm_Export_CsvTest extends Crm_AbstractTest
         $export = file_get_contents($csvFilename);
         $this->assertEquals('"lead_name","leadstate_id","leadtype_id","leadsource_id","container_id","description","turnover","probability","start","end","end_scheduled","CUSTOMER","PARTNER","RESPONSIBLE","TASK"
 "PHPUnit","1","1","1","31","Description","200000","70","' . $this->_objects['lead']['start'] . '","","","","Kneschke, Lars
-","",""
+","","phpunit: crm test task
+"
 ', $export);
         unlink($csvFilename);
     }
