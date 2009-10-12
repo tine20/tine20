@@ -45,7 +45,7 @@ class Crm_Export_Ods extends Tinebase_Export_Ods
         $leads = Crm_Controller_Lead::getInstance()->search($_filter);
         $lastCell = count($leads) + $this->_firstRow - 1;
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leads->toArray(), TRUE));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leads->toArray(), TRUE));
         
         Tinebase_User::getInstance()->resolveMultipleUsers($leads, 'created_by', true);
         
