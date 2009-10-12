@@ -80,6 +80,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
      * @var string
      */
     const PAGETITLEPOSTFIX = 'pagetitlepostfix';
+
+    /**
+     * ods export config
+     * 
+     * @var string
+     */
+    const ODSEXPORTCONFIG = 'odsexportconfig';
     
     /**
      * identifier
