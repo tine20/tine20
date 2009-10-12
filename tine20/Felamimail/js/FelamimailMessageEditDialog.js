@@ -19,6 +19,9 @@ Ext.namespace('Tine.Felamimail');
  * <p>Message Compose Dialog</p>
  * <p>This dialog is for composing emails with recipients, body and attachments. 
  * you can choose from which account you want to send the mail.</p>
+ * <p>
+ * TODO         make email note editable
+ * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -121,6 +124,26 @@ Ext.namespace('Tine.Felamimail');
         }, this);
         
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
+
+        /*
+        if (this.record.data.note) {
+            // show message box with note editing textfield
+            //console.log(this.record.data.note);
+            Ext.Msg.prompt(
+                this.app.i18n._('Add Note'),
+                this.app.i18n._('Edit Email Note Text:'), 
+                function(btn, text) {
+                    if (btn == 'ok'){
+                        record.data.note = text;
+                        // TODO set email note on contact
+                    }
+                }, 
+                this,
+                100, // height of input area
+                this.record.data.body 
+            );
+        }
+        */
     },
     
     /**
