@@ -22,7 +22,7 @@ msgstr "Учетная запись электронной почты польз
 msgid "Create and edit email accounts"
 msgstr ""
 
-#: Controller/Message.php:1030 js/FelamimailGridDetailsPanel.js:122
+#: Controller/Message.php:1030 js/FelamimailGridDetailsPanel.js:123
 #: js/FelamimailGridPanel.js:254 js/FelamimailGridPanel.js:306
 #: js/FelamimailMessageEditDialog.js:258
 msgid "Subject"
@@ -36,7 +36,7 @@ msgstr "Тело"
 msgid "Email"
 msgstr "Электронная почта"
 
-#: js/FelamimailAccountEditDialog.js:64 js/FelamimailTreePanel.js:333
+#: js/FelamimailAccountEditDialog.js:64 js/FelamimailTreePanel.js:336
 #: js/Models.js:111
 msgid "Account"
 msgid_plural "Accounts"
@@ -192,24 +192,29 @@ msgstr "Добавить вложение"
 msgid "Remove Attachment"
 msgstr "Удалить вложение"
 
-#: js/FelamimailGridDetailsPanel.js:123 js/FelamimailGridPanel.js:255
+#: js/FelamimailGridDetailsPanel.js:124 js/FelamimailGridPanel.js:255
 #: js/FelamimailGridPanel.js:312 js/FelamimailMessageEditDialog.js:226
 msgid "From"
 msgstr "От"
 
-#: js/FelamimailGridDetailsPanel.js:124
+#: js/FelamimailGridDetailsPanel.js:125
 msgid "Add"
 msgstr "Добавить"
 
-#: js/FelamimailGridDetailsPanel.js:125
+#: js/FelamimailGridDetailsPanel.js:126
 msgid "Add contact to addressbook"
 msgstr "Добавить контакт в адресную книгу"
 
-#: js/FelamimailGridDetailsPanel.js:127 js/FelamimailGridDetailsPanel.js:346
+#: js/FelamimailGridDetailsPanel.js:127
+#, fuzzy
+msgid "Date"
+msgstr "Удалить"
+
+#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:348
 msgid "Show or hide header information"
 msgstr "Показать или скрыть заголовки"
 
-#: js/FelamimailGridDetailsPanel.js:130 js/FelamimailMessageEditDialog.js:167
+#: js/FelamimailGridDetailsPanel.js:132 js/FelamimailMessageEditDialog.js:167
 msgid "Attachments"
 msgstr "Вложения"
 
@@ -295,31 +300,31 @@ msgstr "Ошибка"
 msgid "No Account configured"
 msgstr "Нет настроенных учетных записей"
 
-#: js/FelamimailGridPanel.js:527
+#: js/FelamimailGridPanel.js:533
 msgid "wrote"
 msgstr "писал"
 
-#: js/FelamimailGridPanel.js:529
+#: js/FelamimailGridPanel.js:535
 msgid "Re: "
 msgstr "Re: "
 
-#: js/FelamimailGridPanel.js:536
+#: js/FelamimailGridPanel.js:542
 msgid "Original Message"
 msgstr "Исходное сообщение"
 
-#: js/FelamimailGridPanel.js:544
+#: js/FelamimailGridPanel.js:550
 msgid "Original message"
 msgstr "Исходное сообщение"
 
-#: js/FelamimailGridPanel.js:548
+#: js/FelamimailGridPanel.js:554
 msgid "Fwd: "
 msgstr "Fwd: "
 
-#: js/FelamimailGridPanel.js:665 js/FelamimailMessageEditDialog.js:139
+#: js/FelamimailGridPanel.js:688 js/FelamimailMessageEditDialog.js:139
 msgid "Failed"
 msgstr "Сбой"
 
-#: js/FelamimailGridPanel.js:666
+#: js/FelamimailGridPanel.js:689
 msgid "Some error occured while trying to update the messages."
 msgstr "Произошла ошибка при попытке обновить сообщения."
 
@@ -347,93 +352,97 @@ msgstr "Получатели"
 msgid "Save contact note"
 msgstr ""
 
-#: js/FelamimailRecipientGrid.js:130 js/FelamimailRecipientGrid.js:151
+#: js/FelamimailRecipientGrid.js:151 js/FelamimailRecipientGrid.js:172
 msgid "To:"
 msgstr "To:"
 
-#: js/FelamimailRecipientGrid.js:133 js/FelamimailRecipientGrid.js:152
+#: js/FelamimailRecipientGrid.js:154 js/FelamimailRecipientGrid.js:173
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/FelamimailRecipientGrid.js:136 js/FelamimailRecipientGrid.js:153
+#: js/FelamimailRecipientGrid.js:157 js/FelamimailRecipientGrid.js:174
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/FelamimailTreePanel.js:148 js/FelamimailTreePanel.js:153
-#: js/FelamimailTreePanel.js:164
+#: js/FelamimailRecipientGrid.js:195
+msgid "Remove"
+msgstr ""
+
+#: js/FelamimailTreePanel.js:151 js/FelamimailTreePanel.js:156
+#: js/FelamimailTreePanel.js:167
 msgid "Marked"
 msgstr "Помечено"
 
-#: js/FelamimailTreePanel.js:154
+#: js/FelamimailTreePanel.js:157
 msgid "Contains marked messages"
 msgstr "Содержит помеченные сообщения"
 
-#: js/FelamimailTreePanel.js:169
+#: js/FelamimailTreePanel.js:172
 msgid "Unread"
 msgstr "Непрочитанное"
 
-#: js/FelamimailTreePanel.js:170
+#: js/FelamimailTreePanel.js:173
 msgid "Contains unread messages"
 msgstr "Содержит непрочитанные сообщения"
 
-#: js/FelamimailTreePanel.js:195
+#: js/FelamimailTreePanel.js:198
 msgid "Update Cache"
 msgstr "Обновить кэш"
 
-#: js/FelamimailTreePanel.js:214
+#: js/FelamimailTreePanel.js:217
 msgid "Empty Folder"
 msgstr "Пустая папка"
 
-#: js/FelamimailTreePanel.js:237
+#: js/FelamimailTreePanel.js:240
 msgid "Add Folder"
 msgstr "Добавить папку"
 
-#: js/FelamimailTreePanel.js:242
+#: js/FelamimailTreePanel.js:245
 msgid "New {0}"
 msgstr "Новая {0}"
 
-#: js/FelamimailTreePanel.js:242 js/FelamimailTreePanel.js:245
-#: js/FelamimailTreePanel.js:248 js/FelamimailTreePanel.js:309
+#: js/FelamimailTreePanel.js:245 js/FelamimailTreePanel.js:248
+#: js/FelamimailTreePanel.js:251 js/FelamimailTreePanel.js:312
 msgid "Folder"
 msgstr "Папка"
 
-#: js/FelamimailTreePanel.js:242
+#: js/FelamimailTreePanel.js:245
 msgid "Please enter the name of the new {0}:"
 msgstr "Пожалуйста, введите название новой {0}:"
 
-#: js/FelamimailTreePanel.js:245
+#: js/FelamimailTreePanel.js:248
 msgid "No {0} added"
 msgstr "{0} не добавлена"
 
-#: js/FelamimailTreePanel.js:245
+#: js/FelamimailTreePanel.js:248
 msgid "You have to supply a {0} name!"
 msgstr "Вы должны указать имя {0}!"
 
-#: js/FelamimailTreePanel.js:248
+#: js/FelamimailTreePanel.js:251
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
 
-#: js/FelamimailTreePanel.js:248
+#: js/FelamimailTreePanel.js:251
 msgid "Creating {0}..."
 msgstr "Создание {0}..."
 
-#: js/FelamimailTreePanel.js:276
+#: js/FelamimailTreePanel.js:279
 msgid "Edit Account"
 msgstr "Изменить учетную запись"
 
-#: js/FelamimailTreePanel.js:629
+#: js/FelamimailTreePanel.js:632
 msgid "Totalcount"
 msgstr "Общий счёт"
 
-#: js/FelamimailTreePanel.js:630
+#: js/FelamimailTreePanel.js:633
 msgid "Cache"
 msgstr "Кэш"
 
-#: js/FelamimailTreePanel.js:716
+#: js/FelamimailTreePanel.js:719
 msgid "IMAP Credentials for {0}"
 msgstr "Учётные данные IMAP для {0}"
 
-#: js/FelamimailTreePanel.js:719
+#: js/FelamimailTreePanel.js:722
 msgid "Credentials"
 msgstr "Учётные данные"
 

@@ -21,7 +21,7 @@ msgstr "Compte Email utilisateur"
 msgid "Create and edit email accounts"
 msgstr ""
 
-#: Controller/Message.php:1030 js/FelamimailGridDetailsPanel.js:122
+#: Controller/Message.php:1030 js/FelamimailGridDetailsPanel.js:123
 #: js/FelamimailGridPanel.js:254 js/FelamimailGridPanel.js:306
 #: js/FelamimailMessageEditDialog.js:258
 msgid "Subject"
@@ -35,7 +35,7 @@ msgstr "Corps"
 msgid "Email"
 msgstr "Email"
 
-#: js/FelamimailAccountEditDialog.js:64 js/FelamimailTreePanel.js:333
+#: js/FelamimailAccountEditDialog.js:64 js/FelamimailTreePanel.js:336
 #: js/Models.js:111
 msgid "Account"
 msgid_plural "Accounts"
@@ -190,24 +190,29 @@ msgstr "ajouter une pièce jointe"
 msgid "Remove Attachment"
 msgstr "Supprimer la pièce jointe"
 
-#: js/FelamimailGridDetailsPanel.js:123 js/FelamimailGridPanel.js:255
+#: js/FelamimailGridDetailsPanel.js:124 js/FelamimailGridPanel.js:255
 #: js/FelamimailGridPanel.js:312 js/FelamimailMessageEditDialog.js:226
 msgid "From"
 msgstr "De"
 
-#: js/FelamimailGridDetailsPanel.js:124
+#: js/FelamimailGridDetailsPanel.js:125
 msgid "Add"
 msgstr "Ajouter"
 
-#: js/FelamimailGridDetailsPanel.js:125
+#: js/FelamimailGridDetailsPanel.js:126
 msgid "Add contact to addressbook"
 msgstr "Ajouter au carnet d'adresse"
 
-#: js/FelamimailGridDetailsPanel.js:127 js/FelamimailGridDetailsPanel.js:346
+#: js/FelamimailGridDetailsPanel.js:127
+#, fuzzy
+msgid "Date"
+msgstr "Supprimer"
+
+#: js/FelamimailGridDetailsPanel.js:129 js/FelamimailGridDetailsPanel.js:348
 msgid "Show or hide header information"
 msgstr "Afficher/Masquer l'entête de message"
 
-#: js/FelamimailGridDetailsPanel.js:130 js/FelamimailMessageEditDialog.js:167
+#: js/FelamimailGridDetailsPanel.js:132 js/FelamimailMessageEditDialog.js:167
 msgid "Attachments"
 msgstr "Pièces jointes"
 
@@ -293,31 +298,31 @@ msgstr "Erreur "
 msgid "No Account configured"
 msgstr "Aucun compte configuré"
 
-#: js/FelamimailGridPanel.js:527
+#: js/FelamimailGridPanel.js:533
 msgid "wrote"
 msgstr "a écrit"
 
-#: js/FelamimailGridPanel.js:529
+#: js/FelamimailGridPanel.js:535
 msgid "Re: "
 msgstr "Re: "
 
-#: js/FelamimailGridPanel.js:536
+#: js/FelamimailGridPanel.js:542
 msgid "Original Message"
 msgstr "Message Original"
 
-#: js/FelamimailGridPanel.js:544
+#: js/FelamimailGridPanel.js:550
 msgid "Original message"
 msgstr "message original"
 
-#: js/FelamimailGridPanel.js:548
+#: js/FelamimailGridPanel.js:554
 msgid "Fwd: "
 msgstr "Fwd: "
 
-#: js/FelamimailGridPanel.js:665 js/FelamimailMessageEditDialog.js:139
+#: js/FelamimailGridPanel.js:688 js/FelamimailMessageEditDialog.js:139
 msgid "Failed"
 msgstr "Échoué"
 
-#: js/FelamimailGridPanel.js:666
+#: js/FelamimailGridPanel.js:689
 msgid "Some error occured while trying to update the messages."
 msgstr "Erreur lors du chargement des messages"
 
@@ -345,93 +350,97 @@ msgstr "Destinataires"
 msgid "Save contact note"
 msgstr ""
 
-#: js/FelamimailRecipientGrid.js:130 js/FelamimailRecipientGrid.js:151
+#: js/FelamimailRecipientGrid.js:151 js/FelamimailRecipientGrid.js:172
 msgid "To:"
 msgstr "À:"
 
-#: js/FelamimailRecipientGrid.js:133 js/FelamimailRecipientGrid.js:152
+#: js/FelamimailRecipientGrid.js:154 js/FelamimailRecipientGrid.js:173
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/FelamimailRecipientGrid.js:136 js/FelamimailRecipientGrid.js:153
+#: js/FelamimailRecipientGrid.js:157 js/FelamimailRecipientGrid.js:174
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/FelamimailTreePanel.js:148 js/FelamimailTreePanel.js:153
-#: js/FelamimailTreePanel.js:164
+#: js/FelamimailRecipientGrid.js:195
+msgid "Remove"
+msgstr ""
+
+#: js/FelamimailTreePanel.js:151 js/FelamimailTreePanel.js:156
+#: js/FelamimailTreePanel.js:167
 msgid "Marked"
 msgstr "Marqué"
 
-#: js/FelamimailTreePanel.js:154
+#: js/FelamimailTreePanel.js:157
 msgid "Contains marked messages"
 msgstr "Contient des messages marqués"
 
-#: js/FelamimailTreePanel.js:169
+#: js/FelamimailTreePanel.js:172
 msgid "Unread"
 msgstr "Non-lu"
 
-#: js/FelamimailTreePanel.js:170
+#: js/FelamimailTreePanel.js:173
 msgid "Contains unread messages"
 msgstr "Contient des messages non lus"
 
-#: js/FelamimailTreePanel.js:195
+#: js/FelamimailTreePanel.js:198
 msgid "Update Cache"
 msgstr "Mettre à jour le cache"
 
-#: js/FelamimailTreePanel.js:214
+#: js/FelamimailTreePanel.js:217
 msgid "Empty Folder"
 msgstr "Dossier vide"
 
-#: js/FelamimailTreePanel.js:237
+#: js/FelamimailTreePanel.js:240
 msgid "Add Folder"
 msgstr "Créer un dossier"
 
-#: js/FelamimailTreePanel.js:242
+#: js/FelamimailTreePanel.js:245
 msgid "New {0}"
 msgstr "Nouveau {0}"
 
-#: js/FelamimailTreePanel.js:242 js/FelamimailTreePanel.js:245
-#: js/FelamimailTreePanel.js:248 js/FelamimailTreePanel.js:309
+#: js/FelamimailTreePanel.js:245 js/FelamimailTreePanel.js:248
+#: js/FelamimailTreePanel.js:251 js/FelamimailTreePanel.js:312
 msgid "Folder"
 msgstr "Dossier"
 
-#: js/FelamimailTreePanel.js:242
+#: js/FelamimailTreePanel.js:245
 msgid "Please enter the name of the new {0}:"
 msgstr "Veuillez saisir le nom du nouvau {0}:"
 
-#: js/FelamimailTreePanel.js:245
+#: js/FelamimailTreePanel.js:248
 msgid "No {0} added"
 msgstr "aucun(e) {0} ajouté(e)"
 
-#: js/FelamimailTreePanel.js:245
+#: js/FelamimailTreePanel.js:248
 msgid "You have to supply a {0} name!"
 msgstr "Vous devez mettre un nom de {0}!"
 
-#: js/FelamimailTreePanel.js:248
+#: js/FelamimailTreePanel.js:251
 msgid "Please wait"
 msgstr "Veuillez patienter"
 
-#: js/FelamimailTreePanel.js:248
+#: js/FelamimailTreePanel.js:251
 msgid "Creating {0}..."
 msgstr "Création de {0}..."
 
-#: js/FelamimailTreePanel.js:276
+#: js/FelamimailTreePanel.js:279
 msgid "Edit Account"
 msgstr "Éditer compte"
 
-#: js/FelamimailTreePanel.js:629
+#: js/FelamimailTreePanel.js:632
 msgid "Totalcount"
 msgstr "Total"
 
-#: js/FelamimailTreePanel.js:630
+#: js/FelamimailTreePanel.js:633
 msgid "Cache"
 msgstr "Cache"
 
-#: js/FelamimailTreePanel.js:716
+#: js/FelamimailTreePanel.js:719
 msgid "IMAP Credentials for {0}"
 msgstr "Authentification IMAP de {0}"
 
-#: js/FelamimailTreePanel.js:719
+#: js/FelamimailTreePanel.js:722
 msgid "Credentials"
 msgstr "Identifiants"
 

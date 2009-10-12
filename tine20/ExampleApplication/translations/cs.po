@@ -20,7 +20,7 @@ msgstr "Ukázkové záznamy"
 msgid "All ExampleRecords"
 msgstr "Všechny ukázkové záznamy"
 
-#: js/ExampleRecordEditDialog.js:59 js/ExampleRecordGridPanel.js:54
+#: js/ExampleRecordEditDialog.js:91 js/ExampleRecordGridPanel.js:87
 #: js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
@@ -28,63 +28,63 @@ msgstr[0] "Ukázkový záznam"
 msgstr[1] "Ukázkové záznamy"
 msgstr[2] "Ukázkových záznamů"
 
-#: js/ExampleRecordEditDialog.js:75 js/ExampleRecordGridPanel.js:76
+#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:116
 msgid "Number"
 msgstr "Počet"
 
-#: js/ExampleRecordEditDialog.js:80 js/ExampleRecordGridPanel.js:82
+#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:122
 msgid "Title"
 msgstr "Název"
 
-#: js/ExampleRecordEditDialog.js:89
+#: js/ExampleRecordEditDialog.js:121
 msgid "Unit"
 msgstr "Jednotka"
 
-#: js/ExampleRecordEditDialog.js:93
+#: js/ExampleRecordEditDialog.js:125
 msgid "Unit Price"
 msgstr "Jednotková cena"
 
-#: js/ExampleRecordEditDialog.js:98 js/ExampleRecordGridPanel.js:95
+#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:135
 msgid "Budget"
 msgstr "Rozpočet"
 
-#: js/ExampleRecordEditDialog.js:102
+#: js/ExampleRecordEditDialog.js:134
 msgid "Timesheets are billable"
 msgstr "Pracovní výkazy lze účtovat"
 
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:88
+#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:128
 msgid "Status"
 msgstr "Stav"
 
-#: js/ExampleRecordEditDialog.js:112
+#: js/ExampleRecordEditDialog.js:144
 msgid "closed"
 msgstr "uzavřený"
 
-#: js/ExampleRecordEditDialog.js:112
+#: js/ExampleRecordEditDialog.js:144
 msgid "open"
 msgstr "otevřený"
 
-#: js/ExampleRecordEditDialog.js:114
+#: js/ExampleRecordEditDialog.js:146
 msgid "Billed"
 msgstr "Účtovaný"
 
-#: js/ExampleRecordEditDialog.js:122
+#: js/ExampleRecordEditDialog.js:154
 msgid "not yet billed"
 msgstr "zatím neúčtovaný"
 
-#: js/ExampleRecordEditDialog.js:123
+#: js/ExampleRecordEditDialog.js:155
 msgid "to bill"
 msgstr "k účtování"
 
-#: js/ExampleRecordEditDialog.js:124
+#: js/ExampleRecordEditDialog.js:156
 msgid "billed"
 msgstr "účtovaný"
 
-#: js/ExampleRecordGridPanel.js:55
+#: js/ExampleRecordGridPanel.js:88
 msgid "Description"
 msgstr "Popis"
 
-#: js/ExampleRecordGridPanel.js:117
+#: js/ExampleRecordGridPanel.js:159
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
 

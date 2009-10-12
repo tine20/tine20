@@ -13,9 +13,10 @@ msgstr ""
 "X-Poedit-Country: JAPAN\n"
 
 #: js/Asterisk/ContextEditDialog.js:41 js/Asterisk/ContextGridPanel.js:73
-#: js/Asterisk/SipPeerEditDialog.js:48 js/Asterisk/VoicemailEditDialog.js:71
-#: js/Snom/LocationEditDialog.js:42 js/Snom/LocationGridPanel.js:128
-#: js/Snom/PhoneEditDialog.js:285 js/Snom/TemplateEditDialog.js:42
+#: js/Asterisk/SipPeerEditDialog.js:48 js/Asterisk/SipPeerGridPanel.js:51
+#: js/Asterisk/VoicemailEditDialog.js:69 js/Snom/LocationEditDialog.js:42
+#: js/Snom/LocationGridPanel.js:128 js/Snom/PhoneEditDialog.js:285
+#: js/Snom/TemplateEditDialog.js:42
 msgid "Name"
 msgstr "名前"
 
@@ -28,7 +29,7 @@ msgid "Description"
 msgstr "説明"
 
 #: js/Asterisk/ContextGridPanel.js:51 js/Asterisk/SipPeerEditDialog.js:56
-#: js/Asterisk/VoicemailEditDialog.js:55 js/Models.js:496 js/Voipmanager.js:53
+#: js/Asterisk/VoicemailEditDialog.js:56 js/Models.js:497 js/Voipmanager.js:53
 msgid "Context"
 msgid_plural "Contexts"
 msgstr[0] "コンテキスト"
@@ -51,7 +52,7 @@ msgstr "PIN"
 msgid "adminpin"
 msgstr "管理PIN"
 
-#: js/Asterisk/MeetmeGridPanel.js:51 js/Models.js:586 js/Voipmanager.js:73
+#: js/Asterisk/MeetmeGridPanel.js:51 js/Models.js:588 js/Voipmanager.js:73
 msgid "Meetme"
 msgid_plural "Meetmes"
 msgstr[0] "ミートミー"
@@ -109,7 +110,7 @@ msgid "NAT"
 msgstr "ＮＡＴ"
 
 #: js/Asterisk/SipPeerEditDialog.js:140 js/Asterisk/SipPeerEditDialog.js:151
-#: js/Asterisk/VoicemailEditDialog.js:116 js/Snom/LocationEditDialog.js:164
+#: js/Asterisk/VoicemailEditDialog.js:114 js/Snom/LocationEditDialog.js:164
 #: js/Snom/LocationEditDialog.js:185 js/Snom/PhoneEditDialog.js:528
 #: js/Snom/PhoneEditDialog.js:565 js/Snom/PhoneEditDialog.js:574
 #: js/Snom/PhoneEditDialog.js:583 js/Snom/PhoneEditDialog.js:592
@@ -121,7 +122,7 @@ msgid "off"
 msgstr "オフ"
 
 #: js/Asterisk/SipPeerEditDialog.js:140 js/Asterisk/SipPeerEditDialog.js:151
-#: js/Asterisk/VoicemailEditDialog.js:115 js/Snom/LocationEditDialog.js:163
+#: js/Asterisk/VoicemailEditDialog.js:113 js/Snom/LocationEditDialog.js:163
 #: js/Snom/LocationEditDialog.js:184 js/Snom/PhoneEditDialog.js:525
 #: js/Snom/PhoneEditDialog.js:564 js/Snom/PhoneEditDialog.js:573
 #: js/Snom/PhoneEditDialog.js:582 js/Snom/PhoneEditDialog.js:591
@@ -140,284 +141,285 @@ msgstr "品質"
 msgid "Sip Peer"
 msgstr "Ｓｉｐピア"
 
-#: js/Asterisk/SipPeerGridPanel.js:66 js/Snom/PhoneGridPanel.js:82
+#: js/Asterisk/SipPeerGridPanel.js:67 js/Snom/PhoneGridPanel.js:82
 #: js/Snom/SettingGridPanel.js:66
 msgid "Id"
 msgstr "ＩＤ"
 
-#: js/Asterisk/SipPeerGridPanel.js:73 js/Snom/PhoneEditDialog.js:514
+#: js/Asterisk/SipPeerGridPanel.js:74 js/Snom/PhoneEditDialog.js:514
 #: js/Snom/SettingEditDialog.js:112 js/Snom/SettingEditDialog.js:184
 #: js/Snom/SettingGridPanel.js:73 js/Snom/SoftwareEditDialog.js:61
 #: js/Snom/SoftwareGridPanel.js:73 js/Snom/TemplateGridPanel.js:73
 msgid "name"
 msgstr "名前"
 
-#: js/Asterisk/SipPeerGridPanel.js:79
+#: js/Asterisk/SipPeerGridPanel.js:80
 msgid "account code"
 msgstr "アカウントコード"
 
-#: js/Asterisk/SipPeerGridPanel.js:86
+#: js/Asterisk/SipPeerGridPanel.js:87
 msgid "ama flags"
 msgstr "amaフラグ"
 
-#: js/Asterisk/SipPeerGridPanel.js:93
+#: js/Asterisk/SipPeerGridPanel.js:94
 msgid "call group"
 msgstr "コールグループ"
 
-#: js/Asterisk/SipPeerGridPanel.js:100
+#: js/Asterisk/SipPeerGridPanel.js:101
 msgid "caller id"
 msgstr "コーラーID"
 
-#: js/Asterisk/SipPeerGridPanel.js:106
+#: js/Asterisk/SipPeerGridPanel.js:107
 msgid "can reinvite"
 msgstr "再招待可能"
 
-#: js/Asterisk/SipPeerGridPanel.js:113 js/Asterisk/VoicemailGridPanel.js:85
+#: js/Asterisk/SipPeerGridPanel.js:114 js/Asterisk/VoicemailGridPanel.js:85
 msgid "context"
 msgstr "コンテキスト"
 
-#: js/Asterisk/SipPeerGridPanel.js:119
+#: js/Asterisk/SipPeerGridPanel.js:120
 msgid "default ip"
 msgstr "デフォルトIP"
 
-#: js/Asterisk/SipPeerGridPanel.js:126
+#: js/Asterisk/SipPeerGridPanel.js:127
 msgid "dtmf mode"
 msgstr "DTMFモード"
 
-#: js/Asterisk/SipPeerGridPanel.js:133
+#: js/Asterisk/SipPeerGridPanel.js:134
 msgid "from user"
 msgstr "Fromユーザ"
 
-#: js/Asterisk/SipPeerGridPanel.js:140
+#: js/Asterisk/SipPeerGridPanel.js:141
 msgid "from domain"
 msgstr "Fromドメイン"
 
-#: js/Asterisk/SipPeerGridPanel.js:147
+#: js/Asterisk/SipPeerGridPanel.js:148
 msgid "full contact"
 msgstr "フルコンタクト"
 
-#: js/Asterisk/SipPeerGridPanel.js:154
+#: js/Asterisk/SipPeerGridPanel.js:155
 msgid "host"
 msgstr "ホスト"
 
-#: js/Asterisk/SipPeerGridPanel.js:161
+#: js/Asterisk/SipPeerGridPanel.js:162
 msgid "insecure"
 msgstr "不安定"
 
-#: js/Asterisk/SipPeerGridPanel.js:168 js/Snom/PhoneEditDialog.js:484
+#: js/Asterisk/SipPeerGridPanel.js:169 js/Snom/PhoneEditDialog.js:484
 #: js/Snom/SettingEditDialog.js:147 js/Snom/SettingGridPanel.js:92
 msgid "language"
 msgstr "言語"
 
-#: js/Asterisk/SipPeerGridPanel.js:175 js/Asterisk/VoicemailGridPanel.js:79
+#: js/Asterisk/SipPeerGridPanel.js:176 js/Asterisk/VoicemailGridPanel.js:79
 msgid "mailbox"
 msgstr "メールボックス"
 
-#: js/Asterisk/SipPeerGridPanel.js:181
+#: js/Asterisk/SipPeerGridPanel.js:182
 msgid "md5 secret"
 msgstr "MD5秘密鍵"
 
-#: js/Asterisk/SipPeerGridPanel.js:188
+#: js/Asterisk/SipPeerGridPanel.js:189
 msgid "nat"
 msgstr "NAT"
 
-#: js/Asterisk/SipPeerGridPanel.js:195
+#: js/Asterisk/SipPeerGridPanel.js:196
 msgid "deny"
 msgstr "Deny"
 
-#: js/Asterisk/SipPeerGridPanel.js:202
+#: js/Asterisk/SipPeerGridPanel.js:203
 msgid "permit"
 msgstr "パーミット"
 
-#: js/Asterisk/SipPeerGridPanel.js:209
+#: js/Asterisk/SipPeerGridPanel.js:210
 msgid "mask"
 msgstr "マスク"
 
-#: js/Asterisk/SipPeerGridPanel.js:216
+#: js/Asterisk/SipPeerGridPanel.js:217
 msgid "pickup group"
 msgstr "ピックアップグループ"
 
-#: js/Asterisk/SipPeerGridPanel.js:222
+#: js/Asterisk/SipPeerGridPanel.js:223
 msgid "port"
 msgstr "ポート"
 
-#: js/Asterisk/SipPeerGridPanel.js:229
+#: js/Asterisk/SipPeerGridPanel.js:230
 msgid "qualify"
 msgstr "品質"
 
-#: js/Asterisk/SipPeerGridPanel.js:236
+#: js/Asterisk/SipPeerGridPanel.js:237
 msgid "restrict cid"
 msgstr "制限CID"
 
-#: js/Asterisk/SipPeerGridPanel.js:243
+#: js/Asterisk/SipPeerGridPanel.js:244
 msgid "rtp timeout"
 msgstr "RTPタイムアウト"
 
-#: js/Asterisk/SipPeerGridPanel.js:250
+#: js/Asterisk/SipPeerGridPanel.js:251
 msgid "rtp hold timeout"
 msgstr "RTPホールドタイムアウト"
 
-#: js/Asterisk/SipPeerGridPanel.js:257
+#: js/Asterisk/SipPeerGridPanel.js:258
 msgid "secret"
 msgstr "シークレット"
 
-#: js/Asterisk/SipPeerGridPanel.js:264
+#: js/Asterisk/SipPeerGridPanel.js:265
 msgid "type"
 msgstr "タイプ"
 
-#: js/Asterisk/SipPeerGridPanel.js:270
-msgid "username"
-msgstr "ユーザ名"
+#: js/Asterisk/SipPeerGridPanel.js:271
+#, fuzzy
+msgid "defaultuser"
+msgstr "認証ユーザ"
 
-#: js/Asterisk/SipPeerGridPanel.js:277
+#: js/Asterisk/SipPeerGridPanel.js:278
 msgid "disallow"
 msgstr "非許可"
 
-#: js/Asterisk/SipPeerGridPanel.js:284
+#: js/Asterisk/SipPeerGridPanel.js:285
 msgid "allow"
 msgstr "許可"
 
-#: js/Asterisk/SipPeerGridPanel.js:291
+#: js/Asterisk/SipPeerGridPanel.js:292
 msgid "music on hold"
 msgstr "保留音"
 
-#: js/Asterisk/SipPeerGridPanel.js:298
+#: js/Asterisk/SipPeerGridPanel.js:299
 msgid "reg seconds"
 msgstr "reg秒"
 
-#: js/Asterisk/SipPeerGridPanel.js:304
+#: js/Asterisk/SipPeerGridPanel.js:306
 msgid "ip address"
 msgstr "IPアドレス"
 
-#: js/Asterisk/SipPeerGridPanel.js:311
+#: js/Asterisk/SipPeerGridPanel.js:313
 msgid "reg exten"
 msgstr "reg拡張"
 
-#: js/Asterisk/SipPeerGridPanel.js:318
+#: js/Asterisk/SipPeerGridPanel.js:320
 msgid "can call forward"
 msgstr "転送許可"
 
-#: js/Asterisk/SipPeerGridPanel.js:325
+#: js/Asterisk/SipPeerGridPanel.js:327
 msgid "set var"
 msgstr "VAR設定"
 
-#: js/Asterisk/SipPeerGridPanel.js:332
+#: js/Asterisk/SipPeerGridPanel.js:334
 msgid "notify ringing"
 msgstr "着信通知"
 
-#: js/Asterisk/SipPeerGridPanel.js:339
+#: js/Asterisk/SipPeerGridPanel.js:341
 msgid "use client code"
 msgstr "クライアントコードの使用"
 
-#: js/Asterisk/SipPeerGridPanel.js:346
+#: js/Asterisk/SipPeerGridPanel.js:348
 msgid "auth user"
 msgstr "認証ユーザ"
 
-#: js/Asterisk/SipPeerGridPanel.js:353
+#: js/Asterisk/SipPeerGridPanel.js:355
 msgid "call limit"
 msgstr "通話制限"
 
-#: js/Asterisk/SipPeerGridPanel.js:360
+#: js/Asterisk/SipPeerGridPanel.js:362
 msgid "busy level"
 msgstr "ビジーレベル"
 
-#: js/Asterisk/VoicemailEditDialog.js:78
+#: js/Asterisk/VoicemailEditDialog.js:76
 msgid "Password"
 msgstr "パスワード"
 
-#: js/Asterisk/VoicemailEditDialog.js:86 js/Asterisk/VoicemailGridPanel.js:97
+#: js/Asterisk/VoicemailEditDialog.js:84 js/Asterisk/VoicemailGridPanel.js:97
 msgid "email"
 msgstr "Eメール"
 
-#: js/Asterisk/VoicemailEditDialog.js:92 js/Asterisk/VoicemailGridPanel.js:103
+#: js/Asterisk/VoicemailEditDialog.js:90 js/Asterisk/VoicemailGridPanel.js:103
 msgid "pager"
 msgstr "ポケットベル"
 
-#: js/Asterisk/VoicemailEditDialog.js:98
+#: js/Asterisk/VoicemailEditDialog.js:96
 msgid "Additional"
 msgstr "追加"
 
-#: js/Asterisk/VoicemailEditDialog.js:122
+#: js/Asterisk/VoicemailEditDialog.js:120
 #: js/Asterisk/VoicemailGridPanel.js:109
 msgid "tz"
 msgstr "TZ"
 
-#: js/Asterisk/VoicemailEditDialog.js:128
+#: js/Asterisk/VoicemailEditDialog.js:126
 #: js/Asterisk/VoicemailGridPanel.js:130
 msgid "dialout"
 msgstr "ダイヤルアウト"
 
-#: js/Asterisk/VoicemailEditDialog.js:134
+#: js/Asterisk/VoicemailEditDialog.js:132
 #: js/Asterisk/VoicemailGridPanel.js:137
 msgid "callback"
 msgstr "コールバック"
 
-#: js/Asterisk/VoicemailEditDialog.js:140
+#: js/Asterisk/VoicemailEditDialog.js:138
 #: js/Asterisk/VoicemailGridPanel.js:165
 msgid "sayduration"
 msgstr "接続時間"
 
-#: js/Asterisk/VoicemailEditDialog.js:144
+#: js/Asterisk/VoicemailEditDialog.js:142
 #: js/Asterisk/VoicemailGridPanel.js:172
 msgid "saydurationm"
 msgstr "接続時間"
 
-#: js/Asterisk/VoicemailEditDialog.js:149
+#: js/Asterisk/VoicemailEditDialog.js:147
 #: js/Asterisk/VoicemailGridPanel.js:116
 msgid "attach"
 msgstr "アタッチ"
 
-#: js/Asterisk/VoicemailEditDialog.js:153
+#: js/Asterisk/VoicemailEditDialog.js:151
 #: js/Asterisk/VoicemailGridPanel.js:123
 msgid "saycid"
 msgstr "セイCID"
 
-#: js/Asterisk/VoicemailEditDialog.js:157
+#: js/Asterisk/VoicemailEditDialog.js:155
 #: js/Asterisk/VoicemailGridPanel.js:144
 msgid "review"
 msgstr "レビュー"
 
-#: js/Asterisk/VoicemailEditDialog.js:161
+#: js/Asterisk/VoicemailEditDialog.js:159
 #: js/Asterisk/VoicemailGridPanel.js:151
 msgid "operator"
 msgstr "オペレータ"
 
-#: js/Asterisk/VoicemailEditDialog.js:165
+#: js/Asterisk/VoicemailEditDialog.js:163
 #: js/Asterisk/VoicemailGridPanel.js:158
 msgid "envelope"
 msgstr "封書"
 
-#: js/Asterisk/VoicemailEditDialog.js:169
+#: js/Asterisk/VoicemailEditDialog.js:167
 #: js/Asterisk/VoicemailGridPanel.js:179
 msgid "sendvoicemail"
 msgstr "ボイスメール送信"
 
-#: js/Asterisk/VoicemailEditDialog.js:173
+#: js/Asterisk/VoicemailEditDialog.js:171
 #: js/Asterisk/VoicemailGridPanel.js:186
 msgid "delete"
 msgstr "削除"
 
-#: js/Asterisk/VoicemailEditDialog.js:177
+#: js/Asterisk/VoicemailEditDialog.js:175
 #: js/Asterisk/VoicemailGridPanel.js:193
 msgid "nextaftercmd"
 msgstr "CMD後"
 
-#: js/Asterisk/VoicemailEditDialog.js:181
+#: js/Asterisk/VoicemailEditDialog.js:179
 #: js/Asterisk/VoicemailGridPanel.js:200
 msgid "forcename"
 msgstr "フォース名"
 
-#: js/Asterisk/VoicemailEditDialog.js:185
+#: js/Asterisk/VoicemailEditDialog.js:183
 #: js/Asterisk/VoicemailGridPanel.js:207
 msgid "forcegreetings"
 msgstr "フォースグリーティング"
 
-#: js/Asterisk/VoicemailEditDialog.js:189
+#: js/Asterisk/VoicemailEditDialog.js:187
 #: js/Asterisk/VoicemailGridPanel.js:214
 msgid "hidefromdir"
 msgstr "Dirから隠す"
 
-#: js/Asterisk/VoicemailGridPanel.js:51 js/Models.js:551 js/Voipmanager.js:63
+#: js/Asterisk/VoicemailGridPanel.js:51 js/Models.js:553 js/Voipmanager.js:63
 msgid "Voicemail"
 msgid_plural "Voicemails"
 msgstr[0] "ボイスメール"
@@ -509,27 +511,27 @@ msgid "owners list"
 msgid_plural "owners lists"
 msgstr[0] "オーナーリスト"
 
-#: js/Models.js:462 js/Voipmanager.js:32
+#: js/Models.js:463 js/Voipmanager.js:32
 msgid "SipPeer"
 msgid_plural "SipPeers"
 msgstr[0] "SIPピア"
 
-#: js/Models.js:466
+#: js/Models.js:467
 msgid "sipPeers list"
 msgid_plural "sipPeers lists"
 msgstr[0] "SIPピアリスト"
 
-#: js/Models.js:500
+#: js/Models.js:501
 msgid "contexts list"
 msgid_plural "contexts lists"
 msgstr[0] "コンテキストリスト"
 
-#: js/Models.js:555
+#: js/Models.js:557
 msgid "voicemails list"
 msgid_plural "voicemails lists"
 msgstr[0] "ボイスメールリスト"
 
-#: js/Models.js:590
+#: js/Models.js:592
 msgid "meetmes list"
 msgid_plural "meetmes lists"
 msgstr[0] "ミートミーリスト"
@@ -925,6 +927,9 @@ msgstr "電話"
 #: js/Voipmanager.js:126
 msgid "Templates"
 msgstr "テンプレート"
+
+#~ msgid "username"
+#~ msgstr "ユーザ名"
 
 #~ msgid "edit myphone"
 #~ msgstr "マイフォンの編集"

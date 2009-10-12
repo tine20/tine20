@@ -13,77 +13,77 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/ApplicationGridPanel.js:66
+#: js/ApplicationGridPanel.js:67
 msgid "Name"
 msgstr "Имя"
 
-#: js/ApplicationGridPanel.js:67
+#: js/ApplicationGridPanel.js:68
 msgid "Enabled"
 msgstr "Позволенный"
 
-#: js/ApplicationGridPanel.js:68
+#: js/ApplicationGridPanel.js:69
 msgid "Order"
 msgstr "Последовательность"
 
-#: js/ApplicationGridPanel.js:69
+#: js/ApplicationGridPanel.js:70
 msgid "Installed Version"
 msgstr "Установленная версия"
 
-#: js/ApplicationGridPanel.js:70
+#: js/ApplicationGridPanel.js:71
 msgid "Available Version"
 msgstr "Доступная версия"
 
-#: js/ApplicationGridPanel.js:71
+#: js/ApplicationGridPanel.js:72
 msgid "Status"
 msgstr "Статус"
 
-#: js/ApplicationGridPanel.js:72
+#: js/ApplicationGridPanel.js:73
 msgid "Depends on"
 msgstr "Зависит от"
 
-#: js/ApplicationGridPanel.js:81 js/EnvCheckGridPanel.js:192
+#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:192
 msgid "Install application"
 msgstr "Установить приложение"
 
-#: js/ApplicationGridPanel.js:90
+#: js/ApplicationGridPanel.js:91
 msgid "Uninstall application"
 msgstr "Удалить приложение"
 
-#: js/ApplicationGridPanel.js:99
+#: js/ApplicationGridPanel.js:100
 msgid "Update application"
 msgstr "Обновить приложение"
 
-#: js/ApplicationGridPanel.js:108
-msgid "Go to Tine 2.0 login"
+#: js/ApplicationGridPanel.js:109
+msgid "Go to {0} login"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:171
+#: js/ApplicationGridPanel.js:172
 msgid "uninstall"
 msgstr "удалить"
 
-#: js/ApplicationGridPanel.js:171
+#: js/ApplicationGridPanel.js:172
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Вы действительно хотите удалить приложение(я)?"
 
-#: js/ApplicationGridPanel.js:231
+#: js/ApplicationGridPanel.js:232
 msgid "This may take a while"
 msgstr "Это может занять некоторое время"
 
-#: js/ApplicationGridPanel.js:257
+#: js/ApplicationGridPanel.js:258
 #, fuzzy
 msgid "Shit"
 msgstr "Сдвиг"
 
-#: js/ApplicationGridPanel.js:257
+#: js/ApplicationGridPanel.js:258
 msgid "Where are the backup tapes"
 msgstr "Где находятся резервные ленты"
 
-#: js/ApplicationGridPanel.js:265
+#: js/ApplicationGridPanel.js:266
 msgid "Dependency Violation"
 msgstr ""
 
 #: js/AuthenticationPanel.js:141 js/AuthenticationPanel.js:161
-#: js/EmailPanel.js:150
+#: js/EmailPanel.js:156
 msgid "Backend"
 msgstr ""
 
@@ -112,8 +112,8 @@ msgid "Login name"
 msgstr ""
 
 #: js/AuthenticationPanel.js:227 js/AuthenticationPanel.js:313
-#: js/ConfigManagerPanel.js:69 js/ConfigManagerPanel.js:95
-#: js/EmailPanel.js:190 js/EmailPanel.js:281 js/EmailPanel.js:379
+#: js/ConfigManagerPanel.js:69 js/ConfigManagerPanel.js:100
+#: js/EmailPanel.js:196 js/EmailPanel.js:287
 msgid "Password"
 msgstr "Пароль"
 
@@ -141,8 +141,8 @@ msgstr ""
 msgid "Default admin group name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:291 js/AuthenticationPanel.js:395
-msgid "Allow user to change her password?"
+#: js/AuthenticationPanel.js:291
+msgid "User can change password"
 msgstr ""
 
 #: js/AuthenticationPanel.js:330
@@ -185,6 +185,10 @@ msgstr ""
 msgid "User UUID Attribute name"
 msgstr ""
 
+#: js/AuthenticationPanel.js:395
+msgid "Allow user to change her password?"
+msgstr ""
+
 #: js/AuthenticationPanel.js:410
 #, fuzzy
 msgid "Save config and install"
@@ -206,12 +210,11 @@ msgstr "Информация"
 msgid "Setup Authentication"
 msgstr "Аутентификация установки"
 
-#: js/ConfigManagerPanel.js:65 js/EmailPanel.js:186 js/EmailPanel.js:277
+#: js/ConfigManagerPanel.js:65 js/EmailPanel.js:192 js/EmailPanel.js:283
 msgid "Username"
 msgstr "Имя пользователя"
 
-#: js/ConfigManagerPanel.js:74 js/ConfigManagerPanel.js:87
-#: js/EmailPanel.js:373
+#: js/ConfigManagerPanel.js:74 js/ConfigManagerPanel.js:92
 msgid "Database"
 msgstr "База данных"
 
@@ -219,116 +222,154 @@ msgstr "База данных"
 msgid "Adapter"
 msgstr "Адаптер"
 
-#: js/ConfigManagerPanel.js:83 js/EmailPanel.js:182 js/EmailPanel.js:273
-#: js/EmailPanel.js:370
+#: js/ConfigManagerPanel.js:83 js/EmailPanel.js:188 js/EmailPanel.js:279
 msgid "Hostname"
 msgstr "Имя узла"
 
-#: js/ConfigManagerPanel.js:91 js/EmailPanel.js:376
-msgid "User"
-msgstr "Пользователь"
-
-#: js/ConfigManagerPanel.js:99
-msgid "Prefix"
-msgstr "Префикс"
-
-#: js/ConfigManagerPanel.js:102
-msgid "Logging"
-msgstr "Регистрация"
-
-#: js/ConfigManagerPanel.js:108
-msgid "Filename"
-msgstr "Имя файла"
-
-#: js/ConfigManagerPanel.js:120
-msgid "Priority"
-msgstr "Приоритет"
-
-#: js/ConfigManagerPanel.js:124
-msgid "Caching"
-msgstr "Кэширование"
-
-#: js/ConfigManagerPanel.js:130
-msgid "Path"
-msgstr "Путь"
-
-#: js/ConfigManagerPanel.js:133
-msgid "Lifetime (seconds)"
-msgstr "Время жизни (секунд)"
-
-#: js/ConfigManagerPanel.js:155
-msgid "Download config file"
-msgstr "Загрузить файл конфигурации"
-
-#: js/EmailPanel.js:154
-msgid "Standard IMAP"
-msgstr ""
-
-#: js/EmailPanel.js:164
-msgid "Standard SMTP"
-msgstr ""
-
-#: js/EmailPanel.js:174
-msgid "Imap"
-msgstr ""
-
-#: js/EmailPanel.js:195 js/EmailPanel.js:286
+#: js/ConfigManagerPanel.js:87 js/EmailPanel.js:201 js/EmailPanel.js:292
 #, fuzzy
 msgid "Port"
 msgstr "Приоритет"
 
-#: js/EmailPanel.js:198 js/EmailPanel.js:289
+#: js/ConfigManagerPanel.js:96
+msgid "User"
+msgstr "Пользователь"
+
+#: js/ConfigManagerPanel.js:104
+msgid "Prefix"
+msgstr "Префикс"
+
+#: js/ConfigManagerPanel.js:107
+msgid "Logging"
+msgstr "Регистрация"
+
+#: js/ConfigManagerPanel.js:113
+msgid "Filename"
+msgstr "Имя файла"
+
+#: js/ConfigManagerPanel.js:125
+msgid "Priority"
+msgstr "Приоритет"
+
+#: js/ConfigManagerPanel.js:129
+msgid "Caching"
+msgstr "Кэширование"
+
+#: js/ConfigManagerPanel.js:135
+msgid "Path"
+msgstr "Путь"
+
+#: js/ConfigManagerPanel.js:138
+msgid "Lifetime (seconds)"
+msgstr "Время жизни (секунд)"
+
+#: js/ConfigManagerPanel.js:144
+msgid "Temporary files"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:149
+msgid "Temporary Files Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:152
+msgid "Session files"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:157
+msgid "Session Files Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:180
+msgid "Download config file"
+msgstr "Загрузить файл конфигурации"
+
+#: js/EmailPanel.js:160
+msgid "Standard IMAP"
+msgstr ""
+
+#: js/EmailPanel.js:170
+msgid "Standard SMTP"
+msgstr ""
+
+#: js/EmailPanel.js:180
+msgid "Imap"
+msgstr ""
+
+#: js/EmailPanel.js:204 js/EmailPanel.js:295
 msgid "Secure Connection"
 msgstr ""
 
-#: js/EmailPanel.js:209 js/EmailPanel.js:300 js/EmailPanel.js:316
+#: js/EmailPanel.js:215 js/EmailPanel.js:306 js/EmailPanel.js:322
 msgid "None"
 msgstr ""
 
-#: js/EmailPanel.js:210 js/EmailPanel.js:301
+#: js/EmailPanel.js:216 js/EmailPanel.js:307
 msgid "TLS"
 msgstr ""
 
-#: js/EmailPanel.js:211 js/EmailPanel.js:302
+#: js/EmailPanel.js:217 js/EmailPanel.js:308
 msgid "SSL"
 msgstr ""
 
-#: js/EmailPanel.js:215 js/EmailPanel.js:322
+#: js/EmailPanel.js:221 js/EmailPanel.js:328
 msgid "Domain"
 msgstr ""
 
-#: js/EmailPanel.js:226
+#: js/EmailPanel.js:232
 msgid "No"
 msgstr ""
 
-#: js/EmailPanel.js:226
+#: js/EmailPanel.js:232
 msgid "Yes"
 msgstr ""
 
-#: js/EmailPanel.js:228
+#: js/EmailPanel.js:234
 msgid "Use as default account"
 msgstr ""
 
-#: js/EmailPanel.js:231
+#: js/EmailPanel.js:237
 msgid "Default account name"
 msgstr ""
 
-#: js/EmailPanel.js:265
+#: js/EmailPanel.js:271
 msgid "Smtp"
 msgstr ""
 
-#: js/EmailPanel.js:305
+#: js/EmailPanel.js:311
 #, fuzzy
 msgid "Authentication"
 msgstr "Аутентификация установки"
 
-#: js/EmailPanel.js:317
+#: js/EmailPanel.js:323
 #, fuzzy
 msgid "Login"
 msgstr "Регистрация"
 
-#: js/EmailPanel.js:318
+#: js/EmailPanel.js:324
 msgid "Plain"
+msgstr ""
+
+#: js/EmailPanel.js:377
+#, fuzzy
+msgid "MySql Hostname"
+msgstr "Имя узла"
+
+#: js/EmailPanel.js:380
+#, fuzzy
+msgid "MySql Database"
+msgstr "База данных"
+
+#: js/EmailPanel.js:383
+msgid "MySql User"
+msgstr ""
+
+#: js/EmailPanel.js:386
+#, fuzzy
+msgid "MySql Password"
+msgstr "Пароль"
+
+#: js/EmailPanel.js:390
+msgid "MySql Port"
 msgstr ""
 
 #: js/EnvCheckGridPanel.js:92

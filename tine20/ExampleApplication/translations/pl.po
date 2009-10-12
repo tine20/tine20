@@ -10,7 +10,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
 
 #: js/ExampleApplication.js:29
 msgid "ExampleRecords"
@@ -20,8 +21,7 @@ msgstr "Przykładowe wiersze"
 msgid "All ExampleRecords"
 msgstr "Wszystkie przykładowe wiersze"
 
-#: js/ExampleRecordEditDialog.js:59
-#: js/ExampleRecordGridPanel.js:54
+#: js/ExampleRecordEditDialog.js:91 js/ExampleRecordGridPanel.js:87
 #: js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
@@ -29,67 +29,63 @@ msgstr[0] "Przykładowy wiersz"
 msgstr[1] "przykładowe wiersze"
 msgstr[2] "przykładowych wierszy"
 
-#: js/ExampleRecordEditDialog.js:75
-#: js/ExampleRecordGridPanel.js:76
+#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:116
 msgid "Number"
 msgstr "Ilość"
 
-#: js/ExampleRecordEditDialog.js:80
-#: js/ExampleRecordGridPanel.js:82
+#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:122
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/ExampleRecordEditDialog.js:89
+#: js/ExampleRecordEditDialog.js:121
 msgid "Unit"
 msgstr "Jednostka"
 
-#: js/ExampleRecordEditDialog.js:93
+#: js/ExampleRecordEditDialog.js:125
 msgid "Unit Price"
 msgstr "Cena jednostkowa"
 
-#: js/ExampleRecordEditDialog.js:98
-#: js/ExampleRecordGridPanel.js:95
+#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:135
 msgid "Budget"
 msgstr "Budżet"
 
-#: js/ExampleRecordEditDialog.js:102
+#: js/ExampleRecordEditDialog.js:134
 msgid "Timesheets are billable"
 msgstr "Karty godzin gotowe do przeliczenia"
 
-#: js/ExampleRecordEditDialog.js:106
-#: js/ExampleRecordGridPanel.js:88
+#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:128
 msgid "Status"
 msgstr "Status"
 
-#: js/ExampleRecordEditDialog.js:112
+#: js/ExampleRecordEditDialog.js:144
 msgid "closed"
 msgstr "zakończone"
 
-#: js/ExampleRecordEditDialog.js:112
+#: js/ExampleRecordEditDialog.js:144
 msgid "open"
 msgstr "otwarte"
 
-#: js/ExampleRecordEditDialog.js:114
+#: js/ExampleRecordEditDialog.js:146
 msgid "Billed"
 msgstr "Przeliczone"
 
-#: js/ExampleRecordEditDialog.js:122
+#: js/ExampleRecordEditDialog.js:154
 msgid "not yet billed"
 msgstr "jeszcze nie przeliczone"
 
-#: js/ExampleRecordEditDialog.js:123
+#: js/ExampleRecordEditDialog.js:155
 msgid "to bill"
 msgstr "przelicz"
 
-#: js/ExampleRecordEditDialog.js:124
+#: js/ExampleRecordEditDialog.js:156
 msgid "billed"
 msgstr "przeliczone"
 
-#: js/ExampleRecordGridPanel.js:55
+#: js/ExampleRecordGridPanel.js:88
 msgid "Description"
 msgstr "Opis"
 
-#: js/ExampleRecordGridPanel.js:117
+#: js/ExampleRecordGridPanel.js:159
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
@@ -103,4 +99,3 @@ msgstr[2] "list aplikacji"
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "Przykładowa aplikacja"
-

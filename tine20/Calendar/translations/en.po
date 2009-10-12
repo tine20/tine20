@@ -29,77 +29,77 @@ msgstr "manage resources"
 msgid "All Rights to administrate resources"
 msgstr "All Rights to administrate resources"
 
-#: Controller/Event.php:1125
+#: Controller/Event.php:1157
 #, python-format
 msgid "Alarm for event \"%s\" at %s"
 msgstr "Alarm for event \"%s\" at %s"
 
-#: Controller/Event.php:1126
+#: Controller/Event.php:1158
 msgid "Here is your requested alarm for to following event:"
 msgstr "Here is your requested alarm for to following event:"
 
-#: Controller/Event.php:1129
+#: Controller/Event.php:1161
 #, python-format
 msgid "Event invitation \"%s\" at %s"
 msgstr "Event invitation \"%s\" at %s"
 
-#: Controller/Event.php:1130
+#: Controller/Event.php:1162
 msgid "You have been invited to the following event:"
 msgstr "You have been invited to the following event:"
 
-#: Controller/Event.php:1133
+#: Controller/Event.php:1165
 #, python-format
 msgid "Event \"%s\" at %s has been canceled"
 msgstr "Event \"%s\" at %s has been canceled"
 
-#: Controller/Event.php:1134
+#: Controller/Event.php:1166
 msgid "The following event has been canceled:"
 msgstr "The following event has been canceled:"
 
-#: Controller/Event.php:1138
+#: Controller/Event.php:1170
 #, python-format
 msgid "Event \"%s\" at %s has been rescheduled"
 msgstr "Event \"%s\" at %s has been rescheduled"
 
-#: Controller/Event.php:1139
+#: Controller/Event.php:1171
 msgid "The following event has been rescheduled:"
 msgstr "The following event has been rescheduled:"
 
-#: Controller/Event.php:1140
+#: Controller/Event.php:1172
 msgid "From"
 msgstr "From"
 
-#: Controller/Event.php:1143
+#: Controller/Event.php:1175
 msgid "To"
 msgstr "To"
 
-#: Controller/Event.php:1145
+#: Controller/Event.php:1177
 #, python-format
 msgid "Event \"%s\" at %s has been updated"
 msgstr "Event \"%s\" at %s has been updated"
 
-#: Controller/Event.php:1146
+#: Controller/Event.php:1178
 msgid "The following event has been updated:"
 msgstr "The following event has been updated:"
 
-#: Controller/Event.php:1156
+#: Controller/Event.php:1188
 msgid "Start"
 msgstr "Start"
 
-#: Controller/Event.php:1157
+#: Controller/Event.php:1189
 msgid "End"
 msgstr "End"
 
-#: Controller/Event.php:1158
+#: Controller/Event.php:1190
 msgid "Organizer"
 msgstr "Organizer"
 
-#: Controller/Event.php:1159 js/EventEditDialog.js:100
+#: Controller/Event.php:1191 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:52
 msgid "Location"
 msgstr "Location"
 
-#: Controller/Event.php:1160 js/EventEditDialog.js:161
+#: Controller/Event.php:1192 js/EventEditDialog.js:161
 #: js/ResourceEditDialog.js:74
 msgid "Description"
 msgstr "Description"
@@ -137,9 +137,11 @@ msgstr "User"
 msgid "Group"
 msgstr "Group"
 
-#: js/AttendeeGridPanel.js:154
-msgid "Resouce"
-msgstr "Resouce"
+#: js/AttendeeGridPanel.js:154 js/Model.js:391
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Resource"
+msgstr[1] "Resources"
 
 #: js/AttendeeGridPanel.js:162 js/ResourceEditDialog.js:58
 #: js/ResourcesGridPanel.js:41
@@ -151,18 +153,22 @@ msgid "Status"
 msgstr "Status"
 
 #: js/AttendeeGridPanel.js:199 js/AttendeeGridPanel.js:494
+#: Model/Attender.php:45
 msgid "No response"
 msgstr "No response"
 
 #: js/AttendeeGridPanel.js:200 js/AttendeeGridPanel.js:497
+#: Model/Attender.php:46
 msgid "Accepted"
 msgstr "Accepted"
 
 #: js/AttendeeGridPanel.js:201 js/AttendeeGridPanel.js:500
+#: Model/Attender.php:47
 msgid "Declined"
 msgstr "Declined"
 
 #: js/AttendeeGridPanel.js:202 js/AttendeeGridPanel.js:503
+#: Model/Attender.php:48
 msgid "Tentative"
 msgstr "Tentative"
 
@@ -394,12 +400,6 @@ msgstr[0] "Attender"
 msgstr[1] "Attendee"
 
 #: js/Model.js:391
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Resource"
-msgstr[1] "Resources"
-
-#: js/Model.js:391
 msgid "Resources"
 msgstr "Resources"
 
@@ -512,11 +512,15 @@ msgstr ". Year"
 msgid "of"
 msgstr "of"
 
-#: Model/Attender.php:285
+#: Model/Attender.php:306
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""
 "This contact has been automatically added by the system as an event attender"
+
+#: Model/Attender.php:196
+msgid "unknown)"
+msgstr "unknown)"
 
 #: Preference.php:66
 msgid "Publish Free/Busy Information"

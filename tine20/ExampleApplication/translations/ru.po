@@ -21,7 +21,7 @@ msgstr "ЗаписиПримеры"
 msgid "All ExampleRecords"
 msgstr "Все ЗаписиПримеры"
 
-#: js/ExampleRecordEditDialog.js:59 js/ExampleRecordGridPanel.js:54
+#: js/ExampleRecordEditDialog.js:91 js/ExampleRecordGridPanel.js:87
 #: js/Models.js:50
 msgid "ExampleRecord"
 msgid_plural "ExampleRecords"
@@ -29,63 +29,63 @@ msgstr[0] "ЗаписьПример"
 msgstr[1] "ЗаписиПримеры"
 msgstr[2] "ЗаписейПримеров"
 
-#: js/ExampleRecordEditDialog.js:75 js/ExampleRecordGridPanel.js:76
+#: js/ExampleRecordEditDialog.js:107 js/ExampleRecordGridPanel.js:116
 msgid "Number"
 msgstr "Номер"
 
-#: js/ExampleRecordEditDialog.js:80 js/ExampleRecordGridPanel.js:82
+#: js/ExampleRecordEditDialog.js:112 js/ExampleRecordGridPanel.js:122
 msgid "Title"
 msgstr "Заголовок"
 
-#: js/ExampleRecordEditDialog.js:89
+#: js/ExampleRecordEditDialog.js:121
 msgid "Unit"
 msgstr "Единица"
 
-#: js/ExampleRecordEditDialog.js:93
+#: js/ExampleRecordEditDialog.js:125
 msgid "Unit Price"
 msgstr "Цена за единицу"
 
-#: js/ExampleRecordEditDialog.js:98 js/ExampleRecordGridPanel.js:95
+#: js/ExampleRecordEditDialog.js:130 js/ExampleRecordGridPanel.js:135
 msgid "Budget"
 msgstr "Бюджет"
 
-#: js/ExampleRecordEditDialog.js:102
+#: js/ExampleRecordEditDialog.js:134
 msgid "Timesheets are billable"
 msgstr "Табели оплачиваемы"
 
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:88
+#: js/ExampleRecordEditDialog.js:138 js/ExampleRecordGridPanel.js:128
 msgid "Status"
 msgstr "Статус"
 
-#: js/ExampleRecordEditDialog.js:112
+#: js/ExampleRecordEditDialog.js:144
 msgid "closed"
 msgstr "закрыт"
 
-#: js/ExampleRecordEditDialog.js:112
+#: js/ExampleRecordEditDialog.js:144
 msgid "open"
 msgstr "открыт"
 
-#: js/ExampleRecordEditDialog.js:114
+#: js/ExampleRecordEditDialog.js:146
 msgid "Billed"
 msgstr "Оплачен"
 
-#: js/ExampleRecordEditDialog.js:122
+#: js/ExampleRecordEditDialog.js:154
 msgid "not yet billed"
 msgstr "ещё не оплачен"
 
-#: js/ExampleRecordEditDialog.js:123
+#: js/ExampleRecordEditDialog.js:155
 msgid "to bill"
 msgstr "к оплате"
 
-#: js/ExampleRecordEditDialog.js:124
+#: js/ExampleRecordEditDialog.js:156
 msgid "billed"
 msgstr "оплачен"
 
-#: js/ExampleRecordGridPanel.js:55
+#: js/ExampleRecordGridPanel.js:88
 msgid "Description"
 msgstr "Описание"
 
-#: js/ExampleRecordGridPanel.js:117
+#: js/ExampleRecordGridPanel.js:159
 msgid "Show closed"
 msgstr "Показать закрытые"
 

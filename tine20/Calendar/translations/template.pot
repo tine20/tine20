@@ -14,77 +14,77 @@ msgstr ""
 msgid "All Rights to administrate resources"
 msgstr ""
 
-#: Controller/Event.php:1125
+#: Controller/Event.php:1157
 #, python-format
 msgid "Alarm for event \"%s\" at %s"
 msgstr ""
 
-#: Controller/Event.php:1126
+#: Controller/Event.php:1158
 msgid "Here is your requested alarm for to following event:"
 msgstr ""
 
-#: Controller/Event.php:1129
+#: Controller/Event.php:1161
 #, python-format
 msgid "Event invitation \"%s\" at %s"
 msgstr ""
 
-#: Controller/Event.php:1130
+#: Controller/Event.php:1162
 msgid "You have been invited to the following event:"
 msgstr ""
 
-#: Controller/Event.php:1133
+#: Controller/Event.php:1165
 #, python-format
 msgid "Event \"%s\" at %s has been canceled"
 msgstr ""
 
-#: Controller/Event.php:1134
+#: Controller/Event.php:1166
 msgid "The following event has been canceled:"
 msgstr ""
 
-#: Controller/Event.php:1138
+#: Controller/Event.php:1170
 #, python-format
 msgid "Event \"%s\" at %s has been rescheduled"
 msgstr ""
 
-#: Controller/Event.php:1139
+#: Controller/Event.php:1171
 msgid "The following event has been rescheduled:"
 msgstr ""
 
-#: Controller/Event.php:1140
+#: Controller/Event.php:1172
 msgid "From"
 msgstr ""
 
-#: Controller/Event.php:1143
+#: Controller/Event.php:1175
 msgid "To"
 msgstr ""
 
-#: Controller/Event.php:1145
+#: Controller/Event.php:1177
 #, python-format
 msgid "Event \"%s\" at %s has been updated"
 msgstr ""
 
-#: Controller/Event.php:1146
+#: Controller/Event.php:1178
 msgid "The following event has been updated:"
 msgstr ""
 
-#: Controller/Event.php:1156
+#: Controller/Event.php:1188
 msgid "Start"
 msgstr ""
 
-#: Controller/Event.php:1157
+#: Controller/Event.php:1189
 msgid "End"
 msgstr ""
 
-#: Controller/Event.php:1158
+#: Controller/Event.php:1190
 msgid "Organizer"
 msgstr ""
 
-#: Controller/Event.php:1159 js/EventEditDialog.js:100
+#: Controller/Event.php:1191 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:52
 msgid "Location"
 msgstr ""
 
-#: Controller/Event.php:1160 js/EventEditDialog.js:161
+#: Controller/Event.php:1192 js/EventEditDialog.js:161
 #: js/ResourceEditDialog.js:74
 msgid "Description"
 msgstr ""
@@ -122,9 +122,11 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:154
-msgid "Resouce"
-msgstr ""
+#: js/AttendeeGridPanel.js:154 js/Model.js:391
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/AttendeeGridPanel.js:162 js/ResourceEditDialog.js:58
 #: js/ResourcesGridPanel.js:41
@@ -136,18 +138,22 @@ msgid "Status"
 msgstr ""
 
 #: js/AttendeeGridPanel.js:199 js/AttendeeGridPanel.js:494
+#: Model/Attender.php:45
 msgid "No response"
 msgstr ""
 
 #: js/AttendeeGridPanel.js:200 js/AttendeeGridPanel.js:497
+#: Model/Attender.php:46
 msgid "Accepted"
 msgstr ""
 
 #: js/AttendeeGridPanel.js:201 js/AttendeeGridPanel.js:500
+#: Model/Attender.php:47
 msgid "Declined"
 msgstr ""
 
 #: js/AttendeeGridPanel.js:202 js/AttendeeGridPanel.js:503
+#: Model/Attender.php:48
 msgid "Tentative"
 msgstr ""
 
@@ -373,12 +379,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Model.js:391
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:391
 msgid "Resources"
 msgstr ""
 
@@ -491,9 +491,13 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-#: Model/Attender.php:285
+#: Model/Attender.php:306
 msgid ""
 "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+#: Model/Attender.php:196
+msgid "unknown)"
 msgstr ""
 
 #: Preference.php:66

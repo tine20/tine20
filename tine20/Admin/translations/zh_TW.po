@@ -106,7 +106,7 @@ msgstr "檢視帳號"
 msgid "view computers list and details"
 msgstr "檢視帳號列表和明細"
 
-#: js/Admin.js:20 js/Users.js:484
+#: js/Admin.js:20 js/Users.js:495
 #, fuzzy
 msgid "User"
 msgid_plural "Users"
@@ -141,7 +141,7 @@ msgid "Admin"
 msgstr "管理者"
 
 #: js/Admin.js:284 js/Groups.js:50 js/Roles.js:45 js/Tags.js:56
-#: js/Users.js:181
+#: js/Users.js:182
 msgid "Confirm"
 msgstr "再確認"
 
@@ -158,7 +158,7 @@ msgid "select all"
 msgstr "全選"
 
 #: js/Admin.js:405 js/Applications.js:149 js/Groups.js:131 js/Roles.js:129
-#: js/Tags.js:118 js/Users.js:220
+#: js/Tags.js:118 js/Users.js:221
 msgid "enter searchfilter"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgid "to:"
 msgstr ""
 
 #: js/Admin.js:444 js/Applications.js:166 js/Groups.js:151 js/Roles.js:149
-#: js/Tags.js:138 js/Users.js:236
+#: js/Tags.js:138 js/Users.js:242
 msgid "Search:"
 msgstr "尋找:"
 
@@ -203,36 +203,36 @@ msgstr ""
 msgid "No access log entries to display"
 msgstr ""
 
-#: js/Admin.js:559
+#: js/Admin.js:564
 msgid "Session ID"
 msgstr ""
 
-#: js/Admin.js:560 js/UserEditDialog.js:145
+#: js/Admin.js:565 js/UserEditDialog.js:145
 msgid "Login Name"
 msgstr "登入帳號"
 
-#: js/Admin.js:561 js/Applications.js:237 js/Groups.js:196 js/Groups.js:513
-#: js/Roles.js:196 js/SambaMachineGrid.js:87 js/Tags.js:180
+#: js/Admin.js:566 js/Applications.js:242 js/Groups.js:201 js/Groups.js:517
+#: js/Roles.js:201 js/SambaMachineGrid.js:87 js/Tags.js:185
 msgid "Name"
 msgstr "名字"
 
-#: js/Admin.js:562
+#: js/Admin.js:567
 msgid "IP Address"
 msgstr "IP 位址"
 
-#: js/Admin.js:563
+#: js/Admin.js:568
 msgid "Login Time"
 msgstr "登入時間"
 
-#: js/Admin.js:564
+#: js/Admin.js:569
 msgid "Logout Time"
 msgstr "登出時間"
 
-#: js/Admin.js:565
+#: js/Admin.js:570
 msgid "Account ID"
 msgstr ""
 
-#: js/Admin.js:566
+#: js/Admin.js:571
 msgid "Result"
 msgstr ""
 
@@ -268,15 +268,15 @@ msgstr ""
 msgid "No applications to display"
 msgstr "無此應用程式顯示"
 
-#: js/Applications.js:236
+#: js/Applications.js:241
 msgid "Order"
 msgstr ""
 
-#: js/Applications.js:238 js/UserEditDialog.js:126 js/Users.js:290
+#: js/Applications.js:243 js/UserEditDialog.js:126 js/Users.js:302
 msgid "Status"
 msgstr "狀態"
 
-#: js/Applications.js:239
+#: js/Applications.js:244
 #, fuzzy
 msgid "Version"
 msgstr "版本"
@@ -289,12 +289,12 @@ msgstr "確認刪除已選的群組嗎?"
 msgid "Deleting group(s)..."
 msgstr "正在刪除群組..."
 
-#: js/Groups.js:72 js/Groups.js:403 js/Groups.js:431 js/RoleEditDialog.js:161
-#: js/RoleEditDialog.js:189 js/Roles.js:67 js/Tags.js:365 js/Users.js:201
+#: js/Groups.js:72 js/Groups.js:407 js/Groups.js:435 js/RoleEditDialog.js:161
+#: js/RoleEditDialog.js:189 js/Roles.js:67 js/Tags.js:369 js/Users.js:202
 msgid "Failed"
 msgstr "失敗"
 
-#: js/Groups.js:72 js/Groups.js:431
+#: js/Groups.js:72 js/Groups.js:435
 msgid "Some error occurred while trying to delete the group."
 msgstr ""
 
@@ -314,65 +314,65 @@ msgstr "刪除群組"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Displaying groups {0} - {1} of {2}"
 
-#: js/Groups.js:190 js/Groups.js:241
+#: js/Groups.js:190 js/Groups.js:245
 msgid "No groups to display"
 msgstr "無此群組"
 
-#: js/Groups.js:195 js/Roles.js:195 js/SambaMachineGrid.js:80 js/Users.js:289
+#: js/Groups.js:200 js/Roles.js:200 js/SambaMachineGrid.js:80 js/Users.js:301
 msgid "ID"
 msgstr ""
 
-#: js/Groups.js:197 js/Groups.js:583 js/RoleEditDialog.js:374 js/Roles.js:197
-#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:93 js/Tags.js:181
-#: js/Tags.js:502
+#: js/Groups.js:202 js/Groups.js:587 js/RoleEditDialog.js:374 js/Roles.js:202
+#: js/SambaMachineGrid.js:66 js/SambaMachineGrid.js:93 js/Tags.js:186
+#: js/Tags.js:506
 msgid "Description"
 msgstr "描述"
 
-#: js/Groups.js:364 js/RoleEditDialog.js:123 js/Tags.js:320
+#: js/Groups.js:368 js/RoleEditDialog.js:123 js/Tags.js:324
 msgid "Please wait"
 msgstr "請稍後"
 
-#: js/Groups.js:364 js/RoleEditDialog.js:123
+#: js/Groups.js:368 js/RoleEditDialog.js:123
 msgid "Updating Memberships"
 msgstr "更新會員資料"
 
-#: js/Groups.js:403
+#: js/Groups.js:407
 msgid "Could not save group."
 msgstr "無法儲存群組"
 
-#: js/Groups.js:410 js/RoleEditDialog.js:168 js/Tags.js:370
+#: js/Groups.js:414 js/RoleEditDialog.js:168 js/Tags.js:374
 msgid "Errors"
 msgstr "錯誤"
 
-#: js/Groups.js:410 js/RoleEditDialog.js:168 js/Tags.js:370
+#: js/Groups.js:414 js/RoleEditDialog.js:168 js/Tags.js:374
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/Groups.js:423
+#: js/Groups.js:427
 msgid "Deleting group..."
 msgstr "正在刪除群組..."
 
-#: js/Groups.js:545
+#: js/Groups.js:549
 msgid "Group Members"
 msgstr "群組成員"
 
-#: js/Groups.js:576
+#: js/Groups.js:580
 msgid "Group Name"
 msgstr "群組名稱"
 
-#: js/Groups.js:619 js/Users.js:388
+#: js/Groups.js:623 js/Users.js:399
 msgid "add account"
 msgstr "新增帳號"
 
-#: js/Groups.js:626
+#: js/Groups.js:630
 msgid "remove account"
 msgstr "移除帳號"
 
-#: js/Groups.js:644
+#: js/Groups.js:648
 msgid "Add new group"
 msgstr "加入新群組"
 
-#: js/Groups.js:646
+#: js/Groups.js:650
 msgid "Edit Group \"{0}\""
 msgstr "修改群組 \"{0}\""
 
@@ -396,7 +396,7 @@ msgstr "角色成員"
 msgid "Members"
 msgstr "成員"
 
-#: js/RoleEditDialog.js:336 js/Tags.js:523
+#: js/RoleEditDialog.js:336 js/Tags.js:527
 msgid "Rights"
 msgstr "權限"
 
@@ -408,7 +408,7 @@ msgstr "角色名稱"
 msgid "Loading Role..."
 msgstr "角色載入中..."
 
-#: js/RoleEditDialog.js:407 js/Tags.js:544
+#: js/RoleEditDialog.js:407 js/Tags.js:548
 msgid "Please Wait"
 msgstr "請稍後"
 
@@ -444,7 +444,7 @@ msgstr "刪除角色"
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr ""
 
-#: js/Roles.js:190 js/Roles.js:241
+#: js/Roles.js:190 js/Roles.js:245
 msgid "No roles to display"
 msgstr "無此角色"
 
@@ -481,56 +481,56 @@ msgstr "刪除標籤"
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr ""
 
-#: js/Tags.js:174 js/Tags.js:225
+#: js/Tags.js:174 js/Tags.js:229
 msgid "No tags to display"
 msgstr "無此標記顯示"
 
-#: js/Tags.js:179 js/Tags.js:508
+#: js/Tags.js:184 js/Tags.js:512
 msgid "Color"
 msgstr ""
 
-#: js/Tags.js:320
+#: js/Tags.js:324
 #, fuzzy
 msgid "Updating Tag"
 msgstr "載入標籤中..."
 
-#: js/Tags.js:365
+#: js/Tags.js:369
 msgid "Could not save tag."
 msgstr "無法儲存標記"
 
-#: js/Tags.js:450
+#: js/Tags.js:454
 msgid "Allowed Contexts"
 msgstr ""
 
-#: js/Tags.js:465
+#: js/Tags.js:469
 msgid "Account Rights"
 msgstr "帳號權限"
 
-#: js/Tags.js:470
+#: js/Tags.js:474
 msgid "View"
 msgstr "檢視"
 
-#: js/Tags.js:475
+#: js/Tags.js:479
 msgid "Use"
 msgstr ""
 
-#: js/Tags.js:495
+#: js/Tags.js:499
 msgid "Tag Name"
 msgstr "標籤名稱"
 
-#: js/Tags.js:526
+#: js/Tags.js:530
 msgid "Context"
 msgstr "內容"
 
-#: js/Tags.js:544
+#: js/Tags.js:548
 msgid "Loading Tag..."
 msgstr "載入標籤中..."
 
-#: js/Tags.js:575
+#: js/Tags.js:579
 msgid "Add New Tag"
 msgstr "加入新標籤"
 
-#: js/Tags.js:577
+#: js/Tags.js:581
 msgid "Edit Tag \"{0}\""
 msgstr "編輯標籤 \"{0}\""
 
@@ -546,7 +546,7 @@ msgstr "名字"
 msgid "Last Name"
 msgstr "姓氏"
 
-#: js/UserEditDialog.js:141 js/Users.js:299
+#: js/UserEditDialog.js:141 js/Users.js:311
 msgid "Expires"
 msgstr "過期"
 
@@ -554,7 +554,7 @@ msgstr "過期"
 msgid "never"
 msgstr "從不"
 
-#: js/UserEditDialog.js:152 js/Users.js:296
+#: js/UserEditDialog.js:152 js/Users.js:308
 msgid "Last login at"
 msgstr "最後登入於"
 
@@ -574,7 +574,7 @@ msgstr "密碼"
 msgid "no password set"
 msgstr "未設定密碼"
 
-#: js/UserEditDialog.js:167 js/Users.js:297
+#: js/UserEditDialog.js:167 js/Users.js:309
 msgid "Last login from"
 msgstr "最後登入從"
 
@@ -715,84 +715,84 @@ msgstr ""
 msgid "Passwords don't match"
 msgstr "密碼錯誤"
 
-#: js/Users.js:156
+#: js/Users.js:157
 msgid "Set new password"
 msgstr "設定新密碼"
 
-#: js/Users.js:156
+#: js/Users.js:157
 msgid "Please enter the new password:"
 msgstr "請輸入新密碼"
 
-#: js/Users.js:181
+#: js/Users.js:182
 msgid "Do you really want to delete the selected account(s)?"
 msgstr ""
 
-#: js/Users.js:196
+#: js/Users.js:197
 msgid "Deleting account(s)..."
 msgstr "正在刪除帳號..."
 
-#: js/Users.js:201
+#: js/Users.js:202
 msgid "Some error occurred while trying to delete the account(s)."
 msgstr ""
 
-#: js/Users.js:281
+#: js/Users.js:288
 msgid "Displaying accounts {0} - {1} of {2}"
 msgstr ""
 
-#: js/Users.js:282
+#: js/Users.js:289
 msgid "No accounts to display"
 msgstr "無此帳號"
 
-#: js/Users.js:291
+#: js/Users.js:303
 msgid "Displayname"
 msgstr "顯示暱稱"
 
-#: js/Users.js:292
+#: js/Users.js:304
 msgid "Loginname"
 msgstr "登入帳號"
 
-#: js/Users.js:293
+#: js/Users.js:305
 msgid "Last name"
 msgstr "姓氏"
 
-#: js/Users.js:294
+#: js/Users.js:306
 msgid "First name"
 msgstr "名字"
 
-#: js/Users.js:295
+#: js/Users.js:307
 msgid "Email"
 msgstr "電子郵件"
 
-#: js/Users.js:298
+#: js/Users.js:310
 msgid "Password changed"
 msgstr "變更密碼"
 
-#: js/Users.js:396
+#: js/Users.js:407
 msgid "edit account"
 msgstr "編輯帳號"
 
-#: js/Users.js:404
+#: js/Users.js:415
 msgid "delete account"
 msgstr "刪除帳號"
 
-#: js/Users.js:412
+#: js/Users.js:423
 msgid "enable account"
 msgstr "啟用帳號"
 
-#: js/Users.js:421
+#: js/Users.js:432
 msgid "disable account"
 msgstr "關閉帳號"
 
-#: js/Users.js:430
+#: js/Users.js:441
 msgid "reset password"
 msgstr "重設密碼"
 
-#: js/Users.js:510
+#: js/Users.js:521
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
 
-#: js/Users.js:535
+#: js/Users.js:546
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"

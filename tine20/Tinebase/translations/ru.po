@@ -53,7 +53,7 @@ msgstr "Проверить новые версии на tine20.org"
 msgid "Filter"
 msgstr "Фильтр"
 
-#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:53
+#: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:54
 msgid "Tags"
 msgstr "Тэги"
 
@@ -65,37 +65,37 @@ msgstr "Создано"
 msgid "Activities"
 msgstr "Действия"
 
-#: Frontend/Http.php:329 js/tineInit.js:378
+#: Frontend/Http.php:377 js/tineInit.js:386
 msgid "Authorisation Required"
 msgstr "Необходима регистрация"
 
-#: Frontend/Http.php:330
+#: Frontend/Http.php:378
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
 
-#: Frontend/Http.php:356 js/ExceptionDialog.js:46
+#: Frontend/Http.php:404 js/ExceptionDialog.js:46
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Frontend/Http.php:357 js/ExceptionDialog.js:71
+#: Frontend/Http.php:405 js/ExceptionDialog.js:71
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла ошибка, программа завершилась неправильно."
 
-#: js/common.js:115
+#: js/common.js:139
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} минута"
 msgstr[1] "{0} минуты"
 msgstr[2] "{0} минут"
 
-#: js/common.js:116
+#: js/common.js:140
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} час"
 msgstr[1] "{0} часа"
 msgstr[2] "{0} часов"
 
-#: js/common.js:117
+#: js/common.js:141
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} рабочий день"
@@ -116,10 +116,10 @@ msgstr[0] "список заданий"
 msgstr[1] "списка заданий"
 msgstr[2] "списков заданий"
 
-#: js/ExceptionDialog.js:54 js/MainScreen.js:448
+#: js/ExceptionDialog.js:54 js/MainScreen.js:449
 #: js/widgets/AccountpickerPanel.js:164
 #: js/widgets/container/ContainerSelect.js:373
-#: js/widgets/dialog/EditDialog.js:186
+#: js/widgets/dialog/EditDialog.js:193
 #: js/widgets/dialog/PreferencesDialog.js:129 js/widgets/EditRecord.js:136
 #: js/widgets/tags/TagsMassAttachAction.js:70
 msgid "Cancel"
@@ -144,7 +144,7 @@ msgstr ""
 "издателю, включив краткое описание, что и где Вы делали, когда возникла "
 "ошибка. "
 
-#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:590
+#: js/ExceptionDialog.js:79 js/widgets/tags/TagsPanel.js:595
 msgid "Description"
 msgstr "Описание"
 
@@ -184,7 +184,7 @@ msgstr "Вход в систему"
 msgid "Register"
 msgstr "Регистрация"
 
-#: js/Login.js:61 js/Login.js:98
+#: js/Login.js:61 js/Login.js:99
 msgid "Please enter your login data"
 msgstr "Пожалуйста, введите свои данные входа в систему"
 
@@ -196,30 +196,31 @@ msgstr "Имя пользователя"
 msgid "Password"
 msgstr "Пароль"
 
-#: js/Login.js:126
+#: js/Login.js:127
 msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
-#: js/Login.js:126 js/widgets/container/GrantsDialog.js:136
+#: js/Login.js:127 js/widgets/container/GrantsDialog.js:136
 #: js/widgets/grid/PersistentFilterPicker.js:126
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
 
-#: js/Login.js:138
-msgid "Login successful. Loading Tine 2.0..."
+#: js/Login.js:139
+#, fuzzy
+msgid "Login successful. Loading {0}..."
 msgstr "Успешный вход в систему. Загрузка Tine 2.0..."
 
-#: js/Login.js:138 js/MainScreen.js:533
+#: js/Login.js:139 js/MainScreen.js:534
 msgid "Please wait!"
 msgstr "Пожалуйста, подождите!"
 
-#: js/Login.js:144
+#: js/Login.js:145
 msgid "Login failure"
 msgstr "Регистрация не удалась"
 
-#: js/Login.js:145
+#: js/Login.js:146
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
@@ -252,9 +253,10 @@ msgstr ""
 "Сервер не ответил на Ваш запрос. Пожалуйста проверьте свою сеть или "
 "свяжитесь с Вашим администратором."
 
-#: js/MainScreen.js:208 js/MainScreen.js:381 js/MainScreen.js:396
-msgid "About Tine 2.0"
-msgstr "О Tine 2.0"
+#: js/MainScreen.js:208
+#, fuzzy
+msgid "About {0}"
+msgstr "Добавить {0}"
 
 #: js/MainScreen.js:214
 msgid "Change password"
@@ -269,58 +271,63 @@ msgid "Logout"
 msgstr "Выход"
 
 #: js/MainScreen.js:238
-msgid "Logout from Tine 2.0"
+#, fuzzy
+msgid "Logout from {0}"
 msgstr "Выход из Tine 2.0"
 
-#: js/MainScreen.js:412
+#: js/MainScreen.js:382 js/MainScreen.js:397
+msgid "About Tine 2.0"
+msgstr "О Tine 2.0"
+
+#: js/MainScreen.js:413
 msgid "Change Password For \"{0}\""
 msgstr "Изменить пароль для \"{0}\""
 
-#: js/MainScreen.js:436
+#: js/MainScreen.js:437
 msgid "Old Password"
 msgstr "Старый пароль"
 
-#: js/MainScreen.js:440
+#: js/MainScreen.js:441
 msgid "New Password"
 msgstr "Новый пароль"
 
-#: js/MainScreen.js:444
+#: js/MainScreen.js:445
 msgid "Repeat new Password"
 msgstr "Повторите новый пароль"
 
-#: js/MainScreen.js:454 js/widgets/AccountpickerPanel.js:156
+#: js/MainScreen.js:455 js/widgets/AccountpickerPanel.js:156
 #: js/widgets/container/ContainerSelect.js:382
-#: js/widgets/dialog/EditDialog.js:169
+#: js/widgets/dialog/EditDialog.js:176
 #: js/widgets/dialog/PreferencesDialog.js:121 js/widgets/EditRecord.js:115
 #: js/widgets/tags/TagsMassAttachAction.js:76
 msgid "Ok"
 msgstr "Ок"
 
-#: js/MainScreen.js:463
+#: js/MainScreen.js:464
 msgid "Please Wait!"
 msgstr "Пожалуйста, подождите!"
 
-#: js/MainScreen.js:464
+#: js/MainScreen.js:465
 msgid "changing password..."
 msgstr "изменение пароля..."
 
-#: js/MainScreen.js:475
+#: js/MainScreen.js:476
 msgid "Success"
 msgstr "Успех"
 
-#: js/MainScreen.js:476
+#: js/MainScreen.js:477
 msgid "Your password has been changed."
 msgstr "Ваш пароль изменен."
 
-#: js/MainScreen.js:482 js/MainScreen.js:492
+#: js/MainScreen.js:483 js/MainScreen.js:493
 msgid "Failure"
 msgstr "Сбой"
 
-#: js/MainScreen.js:493
+#: js/MainScreen.js:494
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новые пароли не совпадают, пожалуйста, исправьте их."
 
-#: js/MainScreen.js:511
+#: js/MainScreen.js:512
 msgid ""
 "Installing Gears will improve the performance of Tine 2.0 by caching all "
 "needed files locally on this computer."
@@ -328,18 +335,18 @@ msgstr ""
 "Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
 "локально на этом компьютере."
 
-#: js/MainScreen.js:531 js/widgets/app/GridPanel.js:623
-#: js/widgets/dialog/EditDialog.js:442
+#: js/MainScreen.js:532 js/widgets/app/GridPanel.js:640
+#: js/widgets/dialog/EditDialog.js:451
 #: js/widgets/grid/PersistentFilterPicker.js:124
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "Подтверждение"
 
-#: js/MainScreen.js:531
+#: js/MainScreen.js:532
 msgid "Are you sure you want to logout?"
 msgstr "Вы уверены, что хотите выйти?"
 
-#: js/MainScreen.js:533
+#: js/MainScreen.js:534
 msgid "Logging you out..."
 msgstr "завершаю программу..."
 
@@ -361,11 +368,11 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/tineInit.js:355
+#: js/tineInit.js:363
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/tineInit.js:364
+#: js/tineInit.js:372
 msgid ""
 "The server did not respond to your request. Please check your network or "
 "contact your administrator."
@@ -373,23 +380,23 @@ msgstr ""
 "Сервер не ответил на Ваш запрос. Пожалуйста, проверьте свою сеть или "
 "свяжитесь с Вашим администратором."
 
-#: js/tineInit.js:379
+#: js/tineInit.js:387
 msgid "Your session timed out. You need to login again."
 msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
 
-#: js/tineInit.js:392
+#: js/tineInit.js:400
 msgid "Insufficient Rights"
 msgstr "Недостаточно прав"
 
-#: js/tineInit.js:393
+#: js/tineInit.js:401
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "К сожалению Вам не позволяется выполнить это действие"
 
-#: js/tineInit.js:402
+#: js/tineInit.js:410
 msgid "Not Found"
 msgstr "Не найден"
 
-#: js/tineInit.js:403
+#: js/tineInit.js:411
 #, fuzzy
 msgid ""
 "Sorry, your request could not be completed because the required data could "
@@ -400,11 +407,11 @@ msgstr ""
 "не могут быть найдены. В большинстве случаев это означает, что кто-то уже "
 "удалил данные. Просьба обновить ваш текущий вид."
 
-#: js/tineInit.js:412
+#: js/tineInit.js:420
 msgid "Concurrent Updates"
 msgstr "Параллельные обновления"
 
-#: js/tineInit.js:413
+#: js/tineInit.js:421
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -412,7 +419,7 @@ msgstr ""
 "Вовремя того, как вы изменяли  эту запись, она была изменена кем-то другим. "
 "Вам нужно обновить и сделать изменения снова."
 
-#: js/tineInit.js:669
+#: js/tineInit.js:680
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -636,36 +643,36 @@ msgstr "Время"
 msgid "User"
 msgstr "Пользователь"
 
-#: js/widgets/app/GridPanel.js:242
+#: js/widgets/app/GridPanel.js:254
 msgid "Edit {0}"
 msgstr "Изменить {0}"
 
-#: js/widgets/app/GridPanel.js:253 js/widgets/tree/ContextMenu.js:214
+#: js/widgets/app/GridPanel.js:265 js/widgets/tree/ContextMenu.js:214
 msgid "Add {0}"
 msgstr "Добавить {0}"
 
-#: js/widgets/app/GridPanel.js:263 js/widgets/app/GridPanel.js:264
-#: js/widgets/app/GridPanel.js:266
+#: js/widgets/app/GridPanel.js:275 js/widgets/app/GridPanel.js:276
+#: js/widgets/app/GridPanel.js:278
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Удалить {0}"
 msgstr[1] "Удалить {0}"
 msgstr[2] "Удалить {0}"
 
-#: js/widgets/app/GridPanel.js:286
+#: js/widgets/app/GridPanel.js:298
 #, fuzzy
 msgid "Tagging"
 msgstr "Тэг"
 
-#: js/widgets/app/GridPanel.js:356
+#: js/widgets/app/GridPanel.js:368
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Показаны записи {0} - {1} из {2}"
 
-#: js/widgets/app/GridPanel.js:357
+#: js/widgets/app/GridPanel.js:369
 msgid "No {0} to display"
 msgstr "Нет {0} для отображения"
 
-#: js/widgets/app/GridPanel.js:378
+#: js/widgets/app/GridPanel.js:390
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
@@ -673,36 +680,36 @@ msgstr ""
 "Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
 "фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
 
-#: js/widgets/app/GridPanel.js:608
+#: js/widgets/app/GridPanel.js:625
 msgid "Not Allowed"
 msgstr "Не разрешено"
 
-#: js/widgets/app/GridPanel.js:609
+#: js/widgets/app/GridPanel.js:626
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вам не позволяется удалить все страницы сразу"
 
-#: js/widgets/app/GridPanel.js:621
+#: js/widgets/app/GridPanel.js:638
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Вы действительно хотите удалить выделенную запись"
 msgstr[1] "Вы действительно хотите удалить выделенные записи"
 msgstr[2] "Вы действительно хотите удалить выделенные записи"
 
-#: js/widgets/app/GridPanel.js:627 js/widgets/dialog/EditDialog.js:444
+#: js/widgets/app/GridPanel.js:644 js/widgets/dialog/EditDialog.js:453
 msgid "Deleting {0}"
 msgstr "Удаление {0}"
 
-#: js/widgets/app/GridPanel.js:629
+#: js/widgets/app/GridPanel.js:646
 msgid " ... This may take a long time!"
 msgstr "... Это может занять много времени!"
 
-#: js/widgets/app/GridPanel.js:643 js/widgets/dialog/EditDialog.js:416
-#: js/widgets/dialog/EditDialog.js:454 js/widgets/tags/TagsPanel.js:282
-#: js/widgets/tags/TagsPanel.js:392 js/widgets/tags/TagsPanel.js:425
+#: js/widgets/app/GridPanel.js:660 js/widgets/dialog/EditDialog.js:425
+#: js/widgets/dialog/EditDialog.js:463 js/widgets/tags/TagsPanel.js:287
+#: js/widgets/tags/TagsPanel.js:397 js/widgets/tags/TagsPanel.js:430
 msgid "Failed"
 msgstr "Не удалось"
 
-#: js/widgets/app/GridPanel.js:643 js/widgets/dialog/EditDialog.js:454
+#: js/widgets/app/GridPanel.js:660 js/widgets/dialog/EditDialog.js:463
 msgid "Could not delete {0}."
 msgstr "Не удалось удалить {0}."
 
@@ -720,8 +727,8 @@ msgid "Recently used {0}:"
 msgstr "Недавно используемый {0}:"
 
 #: js/widgets/container/ContainerSelect.js:233
-#: js/widgets/tags/TagsPanel.js:136 js/widgets/tags/TagsPanel.js:440
-#: js/widgets/tags/TagsPanel.js:444
+#: js/widgets/tags/TagsPanel.js:137 js/widgets/tags/TagsPanel.js:445
+#: js/widgets/tags/TagsPanel.js:449
 msgid "personal"
 msgstr "личные"
 
@@ -835,45 +842,45 @@ msgid "1 day before"
 msgstr "1 день до"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:434
+#: js/widgets/dialog/EditDialog.js:443
 #: js/widgets/dialog/PreferencesDialog.js:284
 msgid "Errors"
 msgstr "Ошибки"
 
 #: js/widgets/dialog/CredentialsDialog.js:124
-#: js/widgets/dialog/EditDialog.js:434
+#: js/widgets/dialog/EditDialog.js:443
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте отмеченные ошибки."
 
-#: js/widgets/dialog/EditDialog.js:178 js/widgets/EditRecord.js:126
+#: js/widgets/dialog/EditDialog.js:185 js/widgets/EditRecord.js:126
 msgid "Apply"
 msgstr "Применить"
 
-#: js/widgets/dialog/EditDialog.js:195 js/widgets/EditRecord.js:146
+#: js/widgets/dialog/EditDialog.js:202 js/widgets/EditRecord.js:146
 msgid "delete"
 msgstr "удалить"
 
-#: js/widgets/dialog/EditDialog.js:264
+#: js/widgets/dialog/EditDialog.js:273
 msgid "Add New {0}"
 msgstr "Добавить новый {0}"
 
-#: js/widgets/dialog/EditDialog.js:266
+#: js/widgets/dialog/EditDialog.js:275
 msgid "Edit {0} \"{1}\""
 msgstr "Редактировать {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:310 js/widgets/EditRecord.js:185
+#: js/widgets/dialog/EditDialog.js:319 js/widgets/EditRecord.js:185
 msgid "Saved in"
 msgstr "Сохранено в"
 
-#: js/widgets/dialog/EditDialog.js:330
+#: js/widgets/dialog/EditDialog.js:339
 msgid "Transfering {0}..."
 msgstr "Передача {0}..."
 
-#: js/widgets/dialog/EditDialog.js:416
+#: js/widgets/dialog/EditDialog.js:425
 msgid "Could not save {0}."
 msgstr "Не удалось сохранить {0}."
 
-#: js/widgets/dialog/EditDialog.js:442
+#: js/widgets/dialog/EditDialog.js:451
 msgid "Do you really want to delete this {0}?"
 msgstr "Вы уверены, что хотите удалить {0}?"
 
@@ -1035,51 +1042,51 @@ msgstr "следующий квартал"
 msgid "next year"
 msgstr "следующий год"
 
-#: js/widgets/grid/FilterToolbar.js:120
+#: js/widgets/grid/FilterToolbar.js:126
 msgid "add new filter"
 msgstr "добавить новый фильтр"
 
-#: js/widgets/grid/FilterToolbar.js:126
+#: js/widgets/grid/FilterToolbar.js:132
 msgid "reset all filters"
 msgstr "сбросить все фильтры"
 
-#: js/widgets/grid/FilterToolbar.js:132
+#: js/widgets/grid/FilterToolbar.js:138
 msgid "start search"
 msgstr "начать поиск"
 
-#: js/widgets/grid/FilterToolbar.js:140 js/widgets/grid/FilterToolbar.js:568
+#: js/widgets/grid/FilterToolbar.js:146 js/widgets/grid/FilterToolbar.js:611
 msgid "save filter"
 msgstr "сохранить фильтр"
 
-#: js/widgets/grid/FilterToolbar.js:223
+#: js/widgets/grid/FilterToolbar.js:229
 msgid "select a field"
 msgstr "выберите поле"
 
-#: js/widgets/grid/FilterToolbar.js:248
+#: js/widgets/grid/FilterToolbar.js:254
 msgid "Delete this filter"
 msgstr "Удалить этот фильтр"
 
-#: js/widgets/grid/FilterToolbar.js:279
+#: js/widgets/grid/FilterToolbar.js:285
 msgid "and"
 msgstr "и"
 
-#: js/widgets/grid/FilterToolbar.js:298
+#: js/widgets/grid/FilterToolbar.js:304
 msgid "Show"
 msgstr "Показать"
 
-#: js/widgets/grid/FilterToolbar.js:568
+#: js/widgets/grid/FilterToolbar.js:611
 msgid "Please enter a name for the filter"
 msgstr "Пожалуйста, введите название фильтра"
 
-#: js/widgets/grid/FilterToolbar.js:571 js/widgets/grid/FilterToolbar.js:574
+#: js/widgets/grid/FilterToolbar.js:614 js/widgets/grid/FilterToolbar.js:617
 msgid "Filter not Saved"
 msgstr "Фильтр не сохранен"
 
-#: js/widgets/grid/FilterToolbar.js:571
+#: js/widgets/grid/FilterToolbar.js:614
 msgid "You have to supply a name for the filter!"
 msgstr "Вы должны дать фильтру название!"
 
-#: js/widgets/grid/FilterToolbar.js:574
+#: js/widgets/grid/FilterToolbar.js:617
 msgid ""
 "You have to supply a shorter name! Names of saved filters can only be up to "
 "40 characters long."
@@ -1087,12 +1094,12 @@ msgstr ""
 "Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
 "быть длиннее 40 символов."
 
-#: js/widgets/grid/FilterToolbar.js:577 js/widgets/LangChooser.js:72
-#: js/widgets/LangChooser.js:94 js/widgets/TimezoneChooser.js:74
+#: js/widgets/grid/FilterToolbar.js:620 js/widgets/LangChooser.js:64
+#: js/widgets/TimezoneChooser.js:74
 msgid "Please Wait"
 msgstr "Пожалуйста, подождите"
 
-#: js/widgets/grid/FilterToolbar.js:577
+#: js/widgets/grid/FilterToolbar.js:620
 msgid "Saving filter"
 msgstr "Сохранённый фильтр"
 
@@ -1116,21 +1123,17 @@ msgstr "Удаление фильтра \"{0}\""
 msgid "remove record"
 msgstr "удалить запись"
 
-#: js/widgets/GroupSelect.js:94
+#: js/widgets/GroupSelect.js:99
 msgid "Please Select a Group"
 msgstr "Пожалуйста, выберите группу"
 
-#: js/widgets/LangChooser.js:40 Preference.php:92
+#: js/widgets/LangChooser.js:31 Preference.php:92
 msgid "Language"
 msgstr "Язык"
 
-#: js/widgets/LangChooser.js:72
+#: js/widgets/LangChooser.js:64
 msgid "setting new language..."
 msgstr "установка нового языка..."
-
-#: js/widgets/LangChooser.js:94
-msgid "loading new language..."
-msgstr "загрузка нового языка..."
 
 #: js/widgets/Priority.js:23
 msgid "low"
@@ -1170,124 +1173,124 @@ msgstr ""
 msgid "Select Tag"
 msgstr "Удалить тэг"
 
-#: js/widgets/tags/TagsPanel.js:88 js/widgets/tags/TagsPanel.js:113
+#: js/widgets/tags/TagsPanel.js:89 js/widgets/tags/TagsPanel.js:114
 msgid "Add a new personal tag"
 msgstr "Добавить новый личный тэг"
 
-#: js/widgets/tags/TagsPanel.js:91 js/widgets/tags/TagsPanel.js:116
+#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
 msgid "Add New Personal Tag"
 msgstr "Добавить новый личный тэг"
 
-#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
+#: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr ""
 "Пожалуйста, обратите внимание: Вы создаёте личный тэг. Только Вы можете "
 "видеть его!"
 
-#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
+#: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
 msgid "Enter tag name:"
 msgstr "Введите название тэга:"
 
-#: js/widgets/tags/TagsPanel.js:158
+#: js/widgets/tags/TagsPanel.js:159
 msgid "No Tags to display"
 msgstr "Нет тэгов"
 
-#: js/widgets/tags/TagsPanel.js:181
+#: js/widgets/tags/TagsPanel.js:182
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Отделить тэг"
 msgstr[1] "Отделить тэга"
 msgstr[2] "Отделить тэгов"
 
-#: js/widgets/tags/TagsPanel.js:191
+#: js/widgets/tags/TagsPanel.js:192
 msgid "Edit tag"
 msgstr "Изменить тэг"
 
-#: js/widgets/tags/TagsPanel.js:196 js/widgets/tags/TagsPanel.js:201
+#: js/widgets/tags/TagsPanel.js:197 js/widgets/tags/TagsPanel.js:202
 msgid "Rename Tag"
 msgstr "Переименовать тэг"
 
-#: js/widgets/tags/TagsPanel.js:201
+#: js/widgets/tags/TagsPanel.js:202
 msgid "Please enter a new name:"
 msgstr "Пожалуйста, введите новое имя:"
 
-#: js/widgets/tags/TagsPanel.js:210
+#: js/widgets/tags/TagsPanel.js:211
 msgid "Edit Description"
 msgstr "Изменить описание"
 
-#: js/widgets/tags/TagsPanel.js:215
+#: js/widgets/tags/TagsPanel.js:216
 msgid "Description for tag"
 msgstr "Описание тэга"
 
-#: js/widgets/tags/TagsPanel.js:215
+#: js/widgets/tags/TagsPanel.js:216
 msgid "Please enter new description:"
 msgstr "Пожалуйста, введите новое описание:"
 
-#: js/widgets/tags/TagsPanel.js:224
+#: js/widgets/tags/TagsPanel.js:225
 msgid "Change Color"
 msgstr "Изменить цвет"
 
-#: js/widgets/tags/TagsPanel.js:248
+#: js/widgets/tags/TagsPanel.js:253
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Удалить тэг"
 msgstr[1] "Удалить тэги"
 msgstr[2] "Удалить тэги"
 
-#: js/widgets/tags/TagsPanel.js:261
+#: js/widgets/tags/TagsPanel.js:266
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Вы уверены, что хотите удалить выбранный тэг?"
 msgstr[1] "Вы уверены, что хотите удалить выбранные тэги?"
 msgstr[2] "Вы уверены, что хотите удалить выбранные тэги?"
 
-#: js/widgets/tags/TagsPanel.js:262
+#: js/widgets/tags/TagsPanel.js:267
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "выбранный тэг будет удален и исчезнет из всех записей"
 msgstr[1] "выбранных тэга будут удалены и исчезнут из всех записей"
 msgstr[2] "выбранных тэгов будут удалены и исчезнут из всех записей"
 
-#: js/widgets/tags/TagsPanel.js:266
+#: js/widgets/tags/TagsPanel.js:271
 msgid "Please wait a moment..."
 msgstr "Пожалуйста, подождите минуту..."
 
-#: js/widgets/tags/TagsPanel.js:266
+#: js/widgets/tags/TagsPanel.js:271
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Удаление тэга"
 msgstr[1] "Удаление тэгов"
 msgstr[2] "Удаление тэгов"
 
-#: js/widgets/tags/TagsPanel.js:282
+#: js/widgets/tags/TagsPanel.js:287
 msgid "Could not delete Tag(s)."
 msgstr "Не удалось удалить тэг(и)."
 
-#: js/widgets/tags/TagsPanel.js:344 js/widgets/tags/TagsPanel.js:406
+#: js/widgets/tags/TagsPanel.js:349 js/widgets/tags/TagsPanel.js:411
 msgid "Notice"
 msgstr "Обратите внимание"
 
-#: js/widgets/tags/TagsPanel.js:345 js/widgets/tags/TagsPanel.js:407
+#: js/widgets/tags/TagsPanel.js:350 js/widgets/tags/TagsPanel.js:412
 msgid "The minimum tag length is three."
 msgstr "Минимальная длина тэга - 3 символа."
 
-#: js/widgets/tags/TagsPanel.js:392
+#: js/widgets/tags/TagsPanel.js:397
 msgid "Could not create tag."
 msgstr "Не удалось создать тэг."
 
-#: js/widgets/tags/TagsPanel.js:425
+#: js/widgets/tags/TagsPanel.js:430
 msgid "Could not update tag."
 msgstr "Не удалось обновить тэг."
 
-#: js/widgets/tags/TagsPanel.js:459 js/widgets/tags/TagsPanel.js:517
+#: js/widgets/tags/TagsPanel.js:464 js/widgets/tags/TagsPanel.js:522
 msgid "Enter tag name"
 msgstr "Введите название тэга"
 
-#: js/widgets/tags/TagsPanel.js:460
+#: js/widgets/tags/TagsPanel.js:465
 msgid "Searching..."
 msgstr "Поиск..."
 
-#: js/widgets/tags/TagsPanel.js:594
+#: js/widgets/tags/TagsPanel.js:599
 msgid "Color"
 msgstr "Цвет"
 
@@ -1371,11 +1374,11 @@ msgstr "Эта важное обновление должно быть уста�
 msgid "Please consider updating!"
 msgstr "Пожалуйста, рассмотрите обновление!"
 
-#: Notes.php:379
+#: Notes.php:370
 msgid "by"
 msgstr "у"
 
-#: Notes.php:385
+#: Notes.php:377
 msgid "Changed fields:"
 msgstr "Измененные поля:"
 
@@ -1445,6 +1448,9 @@ msgstr "изменено"
 #: Setup/setup.xml:2519
 msgid "record changed"
 msgstr "запись изменена"
+
+#~ msgid "loading new language..."
+#~ msgstr "загрузка нового языка..."
 
 #~ msgid "Export Date"
 #~ msgstr "Экспорт даты"

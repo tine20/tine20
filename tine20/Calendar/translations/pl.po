@@ -29,77 +29,77 @@ msgstr "edytuj zasoby"
 msgid "All Rights to administrate resources"
 msgstr "Wszelkie uprawnienia do zarządzania zasobami"
 
-#: Controller/Event.php:1125
+#: Controller/Event.php:1157
 #, python-format
 msgid "Alarm for event \"%s\" at %s"
 msgstr ""
 
-#: Controller/Event.php:1126
+#: Controller/Event.php:1158
 msgid "Here is your requested alarm for to following event:"
 msgstr ""
 
-#: Controller/Event.php:1129
+#: Controller/Event.php:1161
 #, python-format
 msgid "Event invitation \"%s\" at %s"
 msgstr ""
 
-#: Controller/Event.php:1130
+#: Controller/Event.php:1162
 msgid "You have been invited to the following event:"
 msgstr ""
 
-#: Controller/Event.php:1133
+#: Controller/Event.php:1165
 #, python-format
 msgid "Event \"%s\" at %s has been canceled"
 msgstr ""
 
-#: Controller/Event.php:1134
+#: Controller/Event.php:1166
 msgid "The following event has been canceled:"
 msgstr ""
 
-#: Controller/Event.php:1138
+#: Controller/Event.php:1170
 #, python-format
 msgid "Event \"%s\" at %s has been rescheduled"
 msgstr ""
 
-#: Controller/Event.php:1139
+#: Controller/Event.php:1171
 msgid "The following event has been rescheduled:"
 msgstr ""
 
-#: Controller/Event.php:1140
+#: Controller/Event.php:1172
 msgid "From"
 msgstr ""
 
-#: Controller/Event.php:1143
+#: Controller/Event.php:1175
 msgid "To"
 msgstr ""
 
-#: Controller/Event.php:1145
+#: Controller/Event.php:1177
 #, python-format
 msgid "Event \"%s\" at %s has been updated"
 msgstr ""
 
-#: Controller/Event.php:1146
+#: Controller/Event.php:1178
 msgid "The following event has been updated:"
 msgstr ""
 
-#: Controller/Event.php:1156
+#: Controller/Event.php:1188
 msgid "Start"
 msgstr "Start"
 
-#: Controller/Event.php:1157
+#: Controller/Event.php:1189
 msgid "End"
 msgstr "Koniec"
 
-#: Controller/Event.php:1158
+#: Controller/Event.php:1190
 msgid "Organizer"
 msgstr "Notes elektroniczny"
 
-#: Controller/Event.php:1159 js/EventEditDialog.js:100
+#: Controller/Event.php:1191 js/EventEditDialog.js:100
 #: js/ResourcesGridPanel.js:52
 msgid "Location"
 msgstr "Miejsce"
 
-#: Controller/Event.php:1160 js/EventEditDialog.js:161
+#: Controller/Event.php:1192 js/EventEditDialog.js:161
 #: js/ResourceEditDialog.js:74
 msgid "Description"
 msgstr "Opis"
@@ -139,9 +139,12 @@ msgstr "Użytkownik"
 msgid "Group"
 msgstr "Grupa"
 
-#: js/AttendeeGridPanel.js:154
-msgid "Resouce"
-msgstr "Zasób"
+#: js/AttendeeGridPanel.js:154 js/Model.js:391
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Zasób"
+msgstr[1] "zasoby"
+msgstr[2] "zasoby"
 
 #: js/AttendeeGridPanel.js:162 js/ResourceEditDialog.js:58
 #: js/ResourcesGridPanel.js:41
@@ -153,18 +156,22 @@ msgid "Status"
 msgstr "Status"
 
 #: js/AttendeeGridPanel.js:199 js/AttendeeGridPanel.js:494
+#: Model/Attender.php:45
 msgid "No response"
 msgstr "Brak odpowiedzi"
 
 #: js/AttendeeGridPanel.js:200 js/AttendeeGridPanel.js:497
+#: Model/Attender.php:46
 msgid "Accepted"
 msgstr "Zaakceptowany"
 
 #: js/AttendeeGridPanel.js:201 js/AttendeeGridPanel.js:500
+#: Model/Attender.php:47
 msgid "Declined"
 msgstr "Odrzucony"
 
 #: js/AttendeeGridPanel.js:202 js/AttendeeGridPanel.js:503
+#: Model/Attender.php:48
 msgid "Tentative"
 msgstr "Niepewny"
 
@@ -401,13 +408,6 @@ msgstr[1] "uczestników"
 msgstr[2] "uczestników"
 
 #: js/Model.js:391
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Zasób"
-msgstr[1] "zasoby"
-msgstr[2] "zasoby"
-
-#: js/Model.js:391
 msgid "Resources"
 msgstr "Zasoby"
 
@@ -521,11 +521,15 @@ msgstr ". rok"
 msgid "of"
 msgstr " "
 
-#: Model/Attender.php:285
+#: Model/Attender.php:306
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""
 "Niniejszy kontakt został dodany automatycznie podczas synchronizacji systemu"
+
+#: Model/Attender.php:196
+msgid "unknown)"
+msgstr ""
 
 #: Preference.php:66
 msgid "Publish Free/Busy Information"
@@ -544,26 +548,31 @@ msgstr "Domyślny kalendarz"
 msgid "The defualt calendar for invitations and new events"
 msgstr "Domyślny kalendarz dla zaproszeń i nowych terminów"
 
-msgid "Notification for Event "
-msgstr "Powiadom o terminach"
+#~ msgid "Resouce"
+#~ msgstr "Zasób"
 
-msgid "Event description:<br/>"
-msgstr "Opis terminu:<br/>"
+#~ msgid "Notification for Event "
+#~ msgstr "Powiadom o terminach"
 
-msgid "Do you realy want to update all events of this recuring event series?"
-msgstr "Czy na pewno chcesz zaktualizować wszystkie terminy z tej serii?"
+#~ msgid "Event description:<br/>"
+#~ msgstr "Opis terminu:<br/>"
 
-msgid ""
-"Your selection contains recuring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Twój wybór zawiera powtarzające się terminy. Należy je usunąć pojedynczo!"
+#~ msgid ""
+#~ "Do you realy want to update all events of this recuring event series?"
+#~ msgstr "Czy na pewno chcesz zaktualizować wszystkie terminy z tej serii?"
 
-msgid "Do you realy want to delete all events of this recuring event series?"
-msgstr "Czy na pewno chcesz usunąć wszystkie terminy z tej serii?"
+#~ msgid ""
+#~ "Your selection contains recuring events. Recuring events must be deleted "
+#~ "seperatly!"
+#~ msgstr ""
+#~ "Twój wybór zawiera powtarzające się terminy. Należy je usunąć pojedynczo!"
 
-msgid "No recuring rule defined"
-msgstr "Termin się nie powtarza"
+#~ msgid ""
+#~ "Do you realy want to delete all events of this recuring event series?"
+#~ msgstr "Czy na pewno chcesz usunąć wszystkie terminy z tej serii?"
+
+#~ msgid "No recuring rule defined"
+#~ msgstr "Termin się nie powtarza"
 
 #~ msgid "teacher"
 #~ msgstr "nauczyciel"
