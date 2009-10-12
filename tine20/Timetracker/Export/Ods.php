@@ -40,6 +40,27 @@ class Timetracker_Export_Ods extends Tinebase_Export_Ods
     protected $_specialFields = array('timeaccount', 'account_id', 'created_by');
     
     /**
+     * generate export
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return string filename
+     */
+    public function generate(Tinebase_Model_Filter_FilterGroup $_filter)
+    {
+        switch ($_filter->getModelName()) {
+            case 'Timetracker_Model_Timesheet' :
+                $result = $this->exportTimesheets($_filter);
+                break;
+            case 'Timetracker_Model_Timeaccount' :
+                $result = $this->exportTimeaccounts($_filter);
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('Invalid filter model.');
+        }
+        return $result;
+    }
+    
+    /**
      * export timesheets to Ods file
      *
      * @param Timetracker_Model_TimesheetFilter $_filter

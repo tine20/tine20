@@ -28,7 +28,7 @@ class Timetracker_Export_Csv extends Tinebase_Export_Csv
      * 
      * @todo add specific export values
      */
-    public function exportTimesheets($_filter) {
+    public function generate(Timetracker_Model_TimesheetFilter $_filter) {
         
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($_filter);
         if (count($timesheets) < 1) {
