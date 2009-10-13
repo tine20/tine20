@@ -215,7 +215,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             this.action_markUnread,
             this.action_deleteRecord,
             '-',
-            this.action_addAccount
+            this.action_addAccount,
+            '->',
+            this.filterToolbar.getQuickFilterField()
         ];
         
         this.actionToolbar = new Ext.Toolbar({
@@ -251,6 +253,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
+                {label: this.app.i18n._('Subject/From'),field: 'query',         operators: ['contains']},
                 {label: this.app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
                 {label: this.app.i18n._('From'),        field: 'from',          operators: ['contains']},
                 {label: this.app.i18n._('To'),          field: 'to',            operators: ['contains']},
@@ -258,8 +261,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 {label: this.app.i18n._('Bcc'),         field: 'bcc',           operators: ['contains']},
                 {label: this.app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true}
              ],
-             defaultFilter: 'subject',
-             filters: []
+             defaultFilter: 'query',
+             filters: [],
+             plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+             ]
         });
     },    
     
