@@ -64,9 +64,12 @@ Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPane
             filterModels: [
                 {label: this.app.i18n._('Computer Name'),    field: 'query',       operators: ['contains']}
                 //{label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
-             ],
-             defaultFilter: 'query',
-             filters: []
+            ],
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },    
     
