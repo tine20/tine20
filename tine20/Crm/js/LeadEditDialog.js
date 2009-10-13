@@ -220,7 +220,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.contactGrid = new Tine.Crm.ContactGridPanel({
             record: this.record,
-            height: 210
+            anchor: '100% 98%'
         });
 
         this.tasksGrid = new Tine.Crm.TaskGridPanel({
@@ -252,128 +252,142 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 items: [{
                     region: 'center',
-                    labelAlign: 'top',
-                    layout: 'form',
-                    height: '100%',
-                    defaults: {
-                        anchor: '100%',
-                        labelSeparator: '',
-                        columnWidth: 1
-                    },
+                    layout: 'border',
                     items: [{
-                        xtype:'textfield',
-                        hideLabel: true,
-                        id: 'lead_name',
-                        emptyText: this.app.i18n._('Enter short name'),
-                        name:'lead_name',
-                        allowBlank: false,
-                        selectOnFocus: true
-                    }, 
-                        this.contactGrid, 
-                    {
-                        xtype: 'panel',
-                        layout:'column',
-                        height: 140,
-                        id: 'lead_combos',
-                        anchor:'100%',
+                        region: 'north',
+                        height: 40,
+                        layout: 'form',
+                        labelAlign: 'top',
+                        defaults: {
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: 1
+                        },
                         items: [{
-                            columnWidth: 0.33,
-                            items:[{
-                                layout: 'form',
-                                defaults: {
-                                    valueField:'id',
-                                    typeAhead: true,
-                                    mode: 'local',
-                                    triggerAction: 'all',
-                                    editable: false,
-                                    allowBlank: false,
-                                    forceSelection: true,
-                                    anchor:'95%',
-                                    xtype: 'combo'
-                                },
-                                items: [{
-                                    fieldLabel: this.app.i18n._('Leadstate'), 
-                                    id:'leadstatus',
-                                    name:'leadstate_id',
-                                    store: Tine.Crm.LeadState.getStore(),
-                                    displayField:'leadstate',
-                                    lazyInit: false,
-                                    value: Tine.Crm.LeadState.getStore().getAt(0).id,
-                                    listeners: {
-                                        'select': function(combo, record, index) {
-                                            if (this.record.data.probability !== null) {
-                                                this.combo_probability.setValue(record.data.probability);
-                                            }
-                                    
-                                            if (this.record.data.endslead == '1') {
-                                                this.combo_endDate.setValue(new Date());
-                                            }
-                                        },
-                                        scope: this
-                                    }
-                                }, {
-                                    fieldLabel: this.app.i18n._('Leadtype'), 
-                                    id:'leadtype',
-                                    name:'leadtype_id',
-                                    store: Tine.Crm.LeadType.getStore(),
-                                    value: Tine.Crm.LeadType.getStore().getAt(0).id,
-                                    displayField:'leadtype'
-                                }, {
-                                    fieldLabel: this.app.i18n._('Leadsource'), 
-                                    id:'leadsource',
-                                    name:'leadsource_id',
-                                    store: Tine.Crm.LeadSource.getStore(),
-                                    value: Tine.Crm.LeadSource.getStore().getAt(0).id,
-                                    displayField:'leadsource'
+                            xtype:'textfield',
+                            hideLabel: true,
+                            id: 'lead_name',
+                            emptyText: this.app.i18n._('Enter short name'),
+                            name:'lead_name',
+                            allowBlank: false,
+                            selectOnFocus: true
+                        }]
+                    }, {
+                        region: 'center',
+                        layout: 'form',
+                        items: [ this.contactGrid ]
+                    }, {
+                        region: 'south',
+                        height: 390,
+                        split: true,
+                        collapseMode: 'mini',
+                        collapsible: true,
+                        items: [{
+                            xtype: 'panel',
+                            layout:'column',
+                            height: 140,
+                            id: 'lead_combos',
+                            anchor:'100%',
+                            labelAlign: 'top',
+                            items: [{
+                                columnWidth: 0.33,
+                                items:[{
+                                    layout: 'form',
+                                    defaults: {
+                                        valueField:'id',
+                                        typeAhead: true,
+                                        mode: 'local',
+                                        triggerAction: 'all',
+                                        editable: false,
+                                        allowBlank: false,
+                                        forceSelection: true,
+                                        anchor:'95%',
+                                        xtype: 'combo'
+                                    },
+                                    items: [{
+                                        fieldLabel: this.app.i18n._('Leadstate'), 
+                                        id:'leadstatus',
+                                        name:'leadstate_id',
+                                        store: Tine.Crm.LeadState.getStore(),
+                                        displayField:'leadstate',
+                                        lazyInit: false,
+                                        value: Tine.Crm.LeadState.getStore().getAt(0).id,
+                                        listeners: {
+                                            'select': function(combo, record, index) {
+                                                if (this.record.data.probability !== null) {
+                                                    this.combo_probability.setValue(record.data.probability);
+                                                }
+                                        
+                                                if (this.record.data.endslead == '1') {
+                                                    this.combo_endDate.setValue(new Date());
+                                                }
+                                            },
+                                            scope: this
+                                        }
+                                    }, {
+                                        fieldLabel: this.app.i18n._('Leadtype'), 
+                                        id:'leadtype',
+                                        name:'leadtype_id',
+                                        store: Tine.Crm.LeadType.getStore(),
+                                        value: Tine.Crm.LeadType.getStore().getAt(0).id,
+                                        displayField:'leadtype'
+                                    }, {
+                                        fieldLabel: this.app.i18n._('Leadsource'), 
+                                        id:'leadsource',
+                                        name:'leadsource_id',
+                                        store: Tine.Crm.LeadSource.getStore(),
+                                        value: Tine.Crm.LeadSource.getStore().getAt(0).id,
+                                        displayField:'leadsource'
+                                    }]
+                                }]
+                            }, {
+                                columnWidth: 0.33,
+                                items:[{
+                                    layout: 'form',
+                                    border:false,
+                                    items: [
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel: this.app.i18n._('Expected turnover'), 
+                                        name: 'turnover',
+                                        selectOnFocus: true,
+                                        anchor: '95%'
+                                    },  
+                                        this.combo_probability
+                                    ]
+                                }]
+                            }, {
+                                columnWidth: 0.33,
+                                items:[{
+                                    layout: 'form',
+                                    border:false,
+                                    items: [
+                                        new Ext.form.DateField({
+                                            fieldLabel: this.app.i18n._('Start'), 
+                                            allowBlank: false,
+                                            id: 'start',             
+                                            anchor: '95%'
+                                        }),
+                                        new Ext.ux.form.ClearableDateField({
+                                            fieldLabel: this.app.i18n._('Estimated end'), 
+                                            id: 'end_scheduled',
+                                            anchor: '95%'
+                                        }),
+                                        this.date_end   
+                                    ]
                                 }]
                             }]
                         }, {
-                            columnWidth: 0.33,
-                            items:[{
-                                layout: 'form',
-                                border:false,
-                                items: [
-                                {
-                                    xtype:'numberfield',
-                                    fieldLabel: this.app.i18n._('Expected turnover'), 
-                                    name: 'turnover',
-                                    selectOnFocus: true,
-                                    anchor: '95%'
-                                },  
-                                    this.combo_probability
-                                ]
-                            }]
-                        }, {
-                            columnWidth: 0.33,
-                            items:[{
-                                layout: 'form',
-                                border:false,
-                                items: [
-                                    new Ext.form.DateField({
-                                        fieldLabel: this.app.i18n._('Start'), 
-                                        allowBlank: false,
-                                        id: 'start',             
-                                        anchor: '95%'
-                                    }),
-                                    new Ext.ux.form.ClearableDateField({
-                                        fieldLabel: this.app.i18n._('Estimated end'), 
-                                        id: 'end_scheduled',
-                                        anchor: '95%'
-                                    }),
-                                    this.date_end   
-                                ]
-                            }]
+                            xtype: 'tabpanel',
+                            id: 'linkPanelBottom',
+                            activeTab: 0,
+                            height: 250,
+                            items: [
+                                this.tasksGrid,
+                                this.productsGrid
+                            ]
                         }]
-                    }, {
-                        xtype: 'tabpanel',
-                        id: 'linkPanelBottom',
-                        activeTab: 0,
-                        height: 250,
-                        items: [
-                            this.tasksGrid,
-                            this.productsGrid
-                        ]
-                    }] // end of center lead panel
+                    }] // end of center lead panel with border layout
                     }, {
                         layout: 'accordion',
                         animate: true,
