@@ -51,7 +51,10 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.Tinebase.widgets.app
         	    {label: this.app.i18n._('Name'), field: 'name' }
         	],
             defaultFilter: 'query',
-            filters: []
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },    
     
