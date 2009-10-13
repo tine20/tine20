@@ -91,12 +91,16 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @return  mixed array 'variable name' => 'data'
      * 
-     * @todo    get defaults from config
-     * @todo    add update script to move default config values to db
      * @todo    add preference for default container_id
      */
     public function getRegistryData()
     {   
+        $defaults = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::APPDEFAULTS, 'Crm', array(
+            'leadstate_id'  => 1,
+            'leadtype_id'   => 1,
+            'leadsource_id' => 1,
+        ));
+        
         // get default container
         $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer(
             Tinebase_Core::getUser()->getId(),
@@ -106,13 +110,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Core::getUser(), 
             $defaultContainerArray['id']
         )->toArray();
-        
-        $defaults = array(
-            'leadstate_id'  => (isset(Tinebase_Core::getConfig()->crm->defaultstate)) ? Tinebase_Core::getConfig()->crm->defaultstate : 1,
-            'leadtype_id'   => (isset(Tinebase_Core::getConfig()->crm->defaulttype)) ? Tinebase_Core::getConfig()->crm->defaulttype : 1,
-            'leadsource_id' => (isset(Tinebase_Core::getConfig()->crm->defaultsource)) ? Tinebase_Core::getConfig()->crm->defaultsource : 1,
-            'container_id'  => $defaultContainerArray,
-        );
+        $defaults['container_id'] = $defaultContainerArray;
         
         $registryData = array(
             'leadtypes'     => $this->getLeadtypes('leadtype','ASC'),
