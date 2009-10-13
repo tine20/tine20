@@ -1,4 +1,4 @@
-/* $Id */
+/* $Id$ */
 
 /*
 Example html code to include Tine 2.0 login box
