@@ -89,6 +89,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const ODSEXPORTCONFIG = 'odsexportconfig';
     
     /**
+     * app defaults
+     * 
+     * @var string
+     */
+    const APPDEFAULTS = 'appdefaults';
+    
+    /**
      * identifier
      * 
      * @var string
