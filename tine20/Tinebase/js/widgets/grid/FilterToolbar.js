@@ -335,21 +335,40 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     onFieldChange: function(filter, newField) {
-        filter.set('field', newField);
-        filter.set('operator', '');
-        filter.set('value', '');
+        var oldOperator = filter.formFields.operator.getValue();
+        var oldValue    = filter.formFields.value.getValue();
+        
+        // only use old operator/value for textfields
+        var f = filter.formFields.value;
+        if (typeof f.selectText != 'function' || typeof f.doQuery == 'function') {
+            oldValue = '';
+        }
         
         filter.formFields.operator.destroy();
         filter.formFields.value.destroy();
         
-        var filterModel = this.getFilterModel(filter.get('field'));
+        var filterModel = this.getFilterModel(newField);
         var fRow = this.el.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
         
         var opEl = fRow.child('td[class=tw-ftb-frow-operator]');
         var valEl = fRow.child('td[class=tw-ftb-frow-value]');
         
+        filter.set('field', newField);
+        filter.set('operator', '');
+        filter.set('value', '');
+        
         filter.formFields.operator = filterModel.operatorRenderer(filter, opEl);
         filter.formFields.value = filterModel.valueRenderer(filter, valEl);
+        
+        // only use old operator/value for textfields
+        var f = filter.formFields.value;
+        if (oldValue && typeof f.selectText == 'function' && typeof f.doQuery != 'function') {
+            if (typeof filter.formFields.operator.setValue == 'function') {
+                filter.formFields.operator.setValue(oldOperator);
+            }
+            filter.formFields.value.setValue(oldValue);
+            filter.formFields.value.selectText.defer(50, filter.formFields.value);
+        }
     },
     
     /**
