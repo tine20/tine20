@@ -218,11 +218,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
             items.push(new Ext.Button(this.actions_composeEmail));
         }
         
-        if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
-            items.push('->');
-            items.push(this.quickSearchFilterToolbarPlugin.getQuickFilterField());
-        }
-        
         return items;
     },
     
