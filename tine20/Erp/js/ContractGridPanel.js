@@ -45,9 +45,12 @@ Tine.Erp.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             filterModels: [
                 {label: this.app.i18n.n_('Contract', 'Contract', 1),    field: 'query',    operators: ['contains']}
                 //{label: this.app.i18n._('Summary'), field: 'summary' }
-             ],
-             defaultFilter: 'query',
-             filters: []
+            ],
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },    
     
