@@ -298,10 +298,16 @@ Ext.extend(Tine.Tinebase.widgets.app.GridPanel, Ext.Panel, {
             this.contextMenuItems.push('-'/*, {xtype: 'menutextitem', text: _('Tagging')}*/, this.action_tagsMassAttach);
         }
         
+        var actionToolbarItems = this.actions.concat(this.actionToolbarItems);
+        if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
+            actionToolbarItems.push('->');
+            actionToolbarItems.push(this.filterToolbar.getQuickFilterField());
+        }
+        
         this.actionToolbar = new Ext.Toolbar({
             split: false,
             height: 26,
-            items: this.actions.concat(this.actionToolbarItems)
+            items: actionToolbarItems
         });
         
         this.contextMenu = new Ext.menu.Menu({
