@@ -247,7 +247,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $notesOfRecords->addIndices(array('record_id'));
         
         // add notes to records
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($notesOfRecords) . ' notes for ' . count($_records) . ' records.');
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($notesOfRecords) . ' notes for ' . count($_records) . ' records.');
         foreach($_records as $record) {
             //$record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
             $record->{$_notesProperty} = $notesOfRecords->filter('record_id', $record->getId());
@@ -372,7 +372,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         if ($_mods !== NULL && count($_mods) > 0) {
             
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' mods to log: ' . $_mods);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Adding "' . $_type . '" system note note to record.');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Adding "' . $_type . '" system note note to record.');
             
             $noteText .= ' | ' .$translate->_('Changed fields:');
             foreach ($_mods as $mod) {
@@ -380,7 +380,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             }
         } else if ($_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED) {
             // nothing changed -> don't add note
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Nothing changed -> don\'t add "changed" note.');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Nothing changed -> don\'t add "changed" note.');
             return FALSE;
         }
         

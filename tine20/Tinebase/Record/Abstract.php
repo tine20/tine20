@@ -439,7 +439,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 }
                 if ($_throwExceptionOnInvalidData) {
                     $e = new Tinebase_Exception_Record_Validation('some fields ' . implode(',', array_keys($inputFilter->getMessages())) . ' have invalid content');
-                    Tinebase_Core::getLogger()->debug(__CLASS__ . ":\n" .
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" .
                         print_r($this->_validationErrors,true). $e);
                     throw $e;
                 }
@@ -785,9 +785,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     if ($this->__get($fieldName)->compare($_record->$fieldName) === 0) {
                         continue;
                     } else {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' datetime for field ' . $fieldName . ' is not equal: ');
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $this->__get($fieldName)->getIso());
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->$fieldName->getIso());
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                            ' datetime for field ' . $fieldName . ' is not equal: '
+                            . $this->__get($fieldName)->getIso() . ' != '
+                            . $_record->$fieldName->getIso()
+                        );
                     } 
                 } elseif (!$_record->$fieldName instanceof Zend_Date
                           && $this->__get($fieldName) == $_record->$fieldName) {

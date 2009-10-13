@@ -285,8 +285,8 @@ abstract class Tinebase_Controller_Record_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
             throw $e;
         }
         
@@ -427,7 +427,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $records = $this->_backend->getMultiple((array)$ids);
         if (count((array)$ids) != count($records)) {
             //throw new Tinebase_Exception_NotFound('Error, only ' . count($records) . ' of ' . count((array)$ids) . ' records exist');
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
         }
                     
         try {        
@@ -452,8 +452,8 @@ abstract class Tinebase_Controller_Record_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getTraceAsString(), true));
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getTraceAsString(), true));
             throw $e;
         }                        
     }
@@ -470,7 +470,7 @@ abstract class Tinebase_Controller_Record_Abstract
         
         $ids = $this->search($_filter, NULL, FALSE, TRUE)->getArrayOfIds();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($ids) . ' records ...');
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($ids) . ' records ...');
         //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($ids, true));
         
         $this->delete($ids);
@@ -587,7 +587,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No permissions to ' . $_action . ' in container ' . $_record->container_id);
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 'No permissions to ' . $_action . ' in container ' . $_record->container_id);
             }
         }
         
@@ -668,7 +668,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . " About to save " . count($alarms) . " alarms for {$_record->id} " 
             //.  print_r($alarms->toArray(), true)
         );
@@ -687,7 +687,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField 
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField 
             //. ' ' . print_r($_alarm->toArray(), true)
             //. print_r($_record->toArray(), true)
         );
@@ -711,7 +711,7 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if ($_record instanceof Tinebase_Record_RecordSet) {
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
             
             $alarms->addIndices(array('record_id'));
             foreach ($_record as $record) {
@@ -726,7 +726,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
         } else if ($_record instanceof Tinebase_Record_Interface) {
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record.");
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record.");
             
             $_record->alarms = $alarms;
 

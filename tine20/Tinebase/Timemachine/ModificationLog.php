@@ -234,7 +234,7 @@ class Tinebase_Timemachine_ModificationLog
             if ($_curRecord->creation_time instanceof Zend_Date) {
                 $_newRecord->last_modified_time = clone $_curRecord->creation_time;    
             } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                     . ' Something went wrong! No creation_time was set in current record: ' 
                     . print_r($_curRecord->toArray(), TRUE)
                 );
@@ -256,7 +256,7 @@ class Tinebase_Timemachine_ModificationLog
             // we loop over the diffs! -> changes over fields which have no diff in storage are not in the loop!
             foreach ($diffs as $diff) {
                 if ($_newRecord[$diff->modified_attribute] instanceof Zend_Date) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " we can't deal with dates yet -> non resolvable conflict!");
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " we can't deal with dates yet -> non resolvable conflict!");
                     throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
                 }
                 if ($_newRecord[$diff->modified_attribute] == $diff->new_value) { 
@@ -268,7 +268,7 @@ class Tinebase_Timemachine_ModificationLog
                     $_newRecord[$diff->modified_attribute] = $diff->new_value;
                     $resolved->addRecord($diff);
                 } else {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " non resolvable conflict!");
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " non resolvable conflict!");
                     throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency confilict!');
                 }
             }

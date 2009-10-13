@@ -128,7 +128,7 @@ class Tinebase_Tags
                 $tags->addRecord(new Tinebase_Model_Tag($tagArray, true));
             }
         }
-        if (count($tags) === 0) {
+        if (count($tags) === 0 && ! empty($_id)) {
             //if (is_string($_id)) {
             //    throw new Tinebase_Exception_NotFound("Tag $_id not found or insufficient rights.");
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tag(s) not found: ' . print_r($_id, true));
