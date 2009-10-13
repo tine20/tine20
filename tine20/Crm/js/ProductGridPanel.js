@@ -19,7 +19,8 @@ Ext.ns('Tine.Crm');
  * Lead Dialog Products Grid Panel
  * 
  * <p>
- * TODO         test + update that when products moved to ERP/Sales Mgmt (use relations then?)
+ * TODO         update that when products moved to ERP/Sales Mgmt (use relations then?) 
+ * TODO         check if we need edit/add actions again
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -92,7 +93,7 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         
         // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
-        this.initActions = Tine.Crm.LinkGridPanel.initActions.createDelegate(this);
+        //this.initActions = Tine.Crm.LinkGridPanel.initActions.createDelegate(this);
         this.initGrid = Tine.Crm.LinkGridPanel.initGrid.createDelegate(this);
         //this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
         this.onUpdate = Ext.emptyFn;
@@ -112,9 +113,6 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             
             return true;
         }, this);
-        
-        this.actionAdd.setDisabled(true);
-        this.actionEdit.setDisabled(true);
         
         Tine.Crm.ProductGridPanel.superclass.initComponent.call(this);
     },
@@ -177,7 +175,42 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 renderer: Ext.util.Format.euMoney
             }]
         });
-    }
+    },
+    
+    /**
+     * init actions
+     */
+    initActions: function() {
+
+        this.actionUnlink = new Ext.Action({
+            requiredGrant: 'editGrant',
+            text: String.format(this.app.i18n._('Unlink {0}'), this.recordClass.getMeta('recordName')),
+            tooltip: String.format(this.app.i18n._('Unlink selected {0}'), this.recordClass.getMeta('recordName')),
+            disabled: true,
+            iconCls: 'actionRemove',
+            onlySingle: true,
+            scope: this,
+            handler: function(_button, _event) {                       
+                var selectedRows = this.getSelectionModel().getSelections();
+                for (var i = 0; i < selectedRows.length; ++i) {
+                    this.store.remove(selectedRows[i]);
+                }           
+            }
+        });
+        
+        // init toolbars and ctx menut / add actions
+        this.bbar = [                
+            this.actionUnlink
+        ];
+        
+        this.actions = [
+            this.actionUnlink
+        ];
+        
+        this.contextMenu = new Ext.menu.Menu({
+            items: this.actions
+        });
+    }    
     
     // obsolete (?) code
     /*

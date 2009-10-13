@@ -63,9 +63,13 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         scope: this,
         handler: function(_button, _event) {
             var selectedRows = this.getSelectionModel().getSelections();
-            
+            var record = selectedRows[0];
+            // unset record id for new records
+            if (record.phantom) {
+                record.id = 0;
+            }
             var editWindow = this.recordEditDialogOpener({
-                record: selectedRows[0],
+                record: record,
                 listeners: {
                     scope: this,
                     'update': this.onUpdate
@@ -121,27 +125,32 @@ Tine.Crm.LinkGridPanel.initStore = function() {
  * init ext grid panel
  * 
  * TODO         add grants for linked entries to disable EDIT?
- * TODO         use action updater?
  */
 Tine.Crm.LinkGridPanel.initGrid = function() {
     this.cm = this.getColumnModel();
     
     this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+
+    // on selectionchange handler
     this.selModel.on('selectionchange', function(sm) {
-        //Tine.widgets.actionUpdater(sm, this.actions, 'container_id', !this.evalGrants);
-        
         var rowCount = sm.getCount();
+        var selectedRows = this.getSelectionModel().getSelections();
+        if (selectedRows.length > 0) {
+            var selectedRecord = selectedRows[0];
+        }
         if (this.record && (this.record.get('container_id') && this.record.get('container_id').account_grants)) {
             for (var i=0; i < this.actions.length; i++) {
                 this.actions[i].setDisabled(
                     ! this.record.get('container_id').account_grants.editGrant 
                     || (this.actions[i].initialConfig.onlySingle && rowCount != 1)
+                    || (this.actions[i] == this.actionEdit && selectedRecord && selectedRecord.phantom == true)
                 );
             }
         }
         
     }, this);
     
+    // on rowcontextmenu handler
     this.on('rowcontextmenu', function(grid, row, e) {
         e.stopEvent();
         var selModel = grid.getSelectionModel();
@@ -158,7 +167,9 @@ Tine.Crm.LinkGridPanel.initGrid = function() {
 /**
  * update event handler for related records
  * 
+ * TODO make this generic
  */
+/*
 Tine.Crm.LinkGridPanel.onUpdate = function(record) {
     var response = {
         responseText: record
@@ -176,3 +187,4 @@ Tine.Crm.LinkGridPanel.onUpdate = function(record) {
         this.store.add(record);
     }
 };
+*/

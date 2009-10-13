@@ -96,7 +96,7 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
         this.initActions = Tine.Crm.LinkGridPanel.initActions.createDelegate(this);
         this.initGrid = Tine.Crm.LinkGridPanel.initGrid.createDelegate(this);
-        this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
+        //this.onUpdate = Tine.Crm.LinkGridPanel.onUpdate.createDelegate(this);
 
         // call delegates
         this.initStore();
@@ -226,6 +226,8 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     
     /**
      * update event handler for related tasks
+     * 
+     * TODO use generic function
      */
     onUpdate: function(task) {
         var response = {

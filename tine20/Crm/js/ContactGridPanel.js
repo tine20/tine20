@@ -238,6 +238,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * update event handler for related contacts
      * 
+     * TODO use generic function
      */
     onUpdate: function(contact) {
         var response = {
