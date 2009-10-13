@@ -40,14 +40,6 @@ Tine.Admin.Applications.Main = function() {
     */
 
     var _enableDisableButtonHandler = function(state) {
-    	//console.log(_button);
-    	/*
-    	var state = 'disabled';
-    	if(_button.id == 'Admin_Accesslog_Action_Enable') {
-    		state = 'enabled';
-    	}
-        */
-    	
         var applicationIds = new Array();
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
@@ -78,16 +70,14 @@ Tine.Admin.Applications.Main = function() {
         text: 'enable application',
         disabled: true,
         handler: _enableDisableButtonHandler.createDelegate(this, ['enabled']),
-        iconCls: 'action_enable',
-        scope: this
+        iconCls: 'action_enable'
     });
 
     var _action_disable = new Ext.Action({
         text: 'disable application',
         disabled: true,
         handler: _enableDisableButtonHandler.createDelegate(this, ['disabled']),
-        iconCls: 'action_disable',
-        scope: this
+        iconCls: 'action_disable'
     });
 
 	var _action_settings = new Ext.Action({
