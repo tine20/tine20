@@ -82,15 +82,15 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
      */
     public function authenticate()
     {
-        Tinebase_Core::getLogger()->debug('trying to authenticate '. $this->getUsername());
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $this->getUsername());
         
         $result = parent::authenticate();
         
         if($result->isValid()) {
             // username and password are correct, let's do some additional tests            
-            Tinebase_Core::getLogger()->debug('authentication of '. $this->getUsername() . ' succeeded');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->getUsername() . ' succeeded');
         } else {
-            Tinebase_Core::getLogger()->debug('authentication of '. $this->getUsername() . ' failed');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->getUsername() . ' failed');
         }
         
         return $result;

@@ -73,12 +73,12 @@ class Tinebase_Record_PersistentObserver
         	$controllerName = $observer->observer_application . '_Controller';
         	
             if(!class_exists($controllerName)) {
-                Tinebase_Core::getLogger()->debug("No such application controller: '$controllerName'");
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " No such application controller: '$controllerName'");
                 continue;
             }
             
             if(!class_exists($_event)) {
-                Tinebase_Core::getLogger()->debug("No such event: '$_event'");
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " No such event: '$_event'");
                 continue;
             }
             
@@ -86,7 +86,7 @@ class Tinebase_Record_PersistentObserver
                 $controller = call_user_func(array($controllerName, 'getInstance'));
             } catch (Exception $e) {
                 // application has no controller or is not useable at all
-                Tinebase_Core::getLogger()->debug("can't get instance of $controllerName : $e");
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Can't get instance of $controllerName : $e");
                 continue;
             }
             

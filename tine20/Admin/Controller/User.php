@@ -216,7 +216,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $this->_userBackend->setPassword($_account->accountLoginName, $_password);
         
-        Tinebase_Core::getLogger()->debug(
+        Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . 
             ' Set new password for user ' . $_account->accountLoginName . '. Must change:' . $_mustChange
         );
@@ -320,7 +320,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $groupsBackend = Tinebase_Group::getInstance();
         foreach ((array)$_accountIds as $accountId) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
             
             $memberships = $groupsBackend->getGroupMemberships($accountId);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));

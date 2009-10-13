@@ -98,7 +98,7 @@ class Tinebase_ImageHelper
     public static function parseImageLink($link)
     {
         $params = array();
-        Tinebase_Core::getLogger()->debug(parse_url($link, PHP_URL_QUERY));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . parse_url($link, PHP_URL_QUERY));
         parse_str(parse_url($link, PHP_URL_QUERY), $params);
         $params['isNewImage'] = false;
         if (isset($params['application']) && $params['application'] == 'Tinebase') {

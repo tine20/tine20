@@ -381,7 +381,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     	    $statement = 'DROP SEQUENCE ' . $this->_db->quoteIdentifier($this->_getIncrementSequenceName($_tableName));
     	    $this->execQueryVoid($statement);
         } catch (Zend_Db_Statement_Exception $e) {
-        	Tinebase_Core::getLogger()->debug("An exception was thrown while dropping sequence for table {$_tableName}: " . $e->getMessage() . "; This might be OK if the table had no sequencer.");
+        	Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " An exception was thrown while dropping sequence for table {$_tableName}: " . $e->getMessage() . "; This might be OK if the table had no sequencer.");
         }
     }
  

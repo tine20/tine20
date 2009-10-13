@@ -125,7 +125,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $account->setFromArray($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
-            Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . "\n" .
                 "Tinebase_Model_User::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);
@@ -160,7 +160,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $account->setFromArray($row);
             } catch (Tinebase_Exception_Record_Validation $e) {
                 $validation_errors = $account->getValidationErrors();
-                Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::_getUserFromSQL: ' . $e->getMessage() . "\n" .
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . "\n" .
                     "Tinebase_Model_User::validation_errors: \n" .
                     print_r($validation_errors,true));
                 throw ($e);

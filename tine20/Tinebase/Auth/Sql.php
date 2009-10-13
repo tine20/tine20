@@ -26,7 +26,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
      */
     public function authenticate()
     {
-        Tinebase_Core::getLogger()->debug('trying to authenticate '. $this->_identity);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $this->_identity);
         
         $result = parent::authenticate();
         
