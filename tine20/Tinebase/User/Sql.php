@@ -118,17 +118,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         // because of the wrong type that is not catched by the block below)
         if ( $row === false ) {
             throw new Tinebase_Exception_NotFound("User $_loginName not found.");
-        } else {
-            try {
-                $account = new $_accountClass();
-                $account->setFromArray($row);
-            } catch (Exception $e) {
-                $validation_errors = $account->getValidationErrors();
-                Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
-                    "Tinebase_Model_User::validation_errors: \n" .
-                    print_r($validation_errors,true));
-                throw ($e);
-            }
+        }
+        
+        try {
+            $account = new $_accountClass();
+            $account->setFromArray($row);
+        } catch (Exception $e) {
+            $validation_errors = $account->getValidationErrors();
+            Tinebase_Core::getLogger()->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
+                "Tinebase_Model_User::validation_errors: \n" .
+                print_r($validation_errors,true));
+            throw ($e);
         }
         
         return $account;
