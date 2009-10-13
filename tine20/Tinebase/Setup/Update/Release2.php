@@ -232,4 +232,118 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.7');
     }
+    
+    /**
+     * update to 2.8
+     * - add OpenId tables
+     */    
+    public function update_7()
+    {
+        $tableDefinition = '
+            <table>
+                <name>openid_assoc</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>macfunc</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>secret</name>
+                        <type>text</type>
+                        <length>254</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>expires</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>
+        ';
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+         
+        $this->_backend->createTable($table);
+        
+        Tinebase_Application::getInstance()->addApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
+            'openid_assoc', 
+            1
+        );
+
+        $tableDefinition = '
+            <table>
+                <name>openid_sites</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>user_identity</name>
+                        <type>text</type>
+                        <length>254</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>site</name>
+                        <type>text</type>
+                        <length>254</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>trusted</name>
+                        <type>text</type>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>user_idenity-site</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>user_identity</name>
+                        </field>
+                        <field>
+                            <name>site</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>
+        ';
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+         
+        $this->_backend->createTable($table);
+        
+        Tinebase_Application::getInstance()->addApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
+            'openid_sites', 
+            1
+        );
+        
+        $this->setApplicationVersion('Tinebase', '2.8');
+    }
 }
