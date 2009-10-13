@@ -307,7 +307,7 @@ class Setup_Controller
                 $message = "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")";
                 
                 $messages[] = $message;
-                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $message);
 
                 list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
         
@@ -328,7 +328,7 @@ class Setup_Controller
                             $db = Setup_Core::getDb();
                             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
                         
-                            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                                 . ' Updating ' . $_application->name . ' - ' . $functionName
                             );
                             
@@ -338,8 +338,8 @@ class Setup_Controller
                 
                         } catch (Exception $e) {
                             Tinebase_TransactionManager::getInstance()->rollBack();
-                            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                             throw $e;
                         }
                             
@@ -352,7 +352,7 @@ class Setup_Controller
                 // update app version 
                 $updatedApp = Tinebase_Application::getInstance()->getApplicationById($_application->getId());
                 $_application->version = $updatedApp->version;
-                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " .  $_application->version);
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " .  $_application->version);
                 
                 break; 
                 
