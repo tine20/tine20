@@ -48,12 +48,15 @@
                 {label: this.app.i18n._('Owner'), field: 'owner', operators: ['contains', 'equals', 'not']},
                 new Tine.RequestTracker.TicketGridStatusFilter({})
                 //{label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
-             ],
-             defaultFilter: 'query',
-             filters: [
+            ],
+            defaultFilter: 'query',
+            filters: [
                 {field: 'status', operator: 'greater', value: 'open'},
                 {field: 'query', operator: 'contains', value: ''}
-             ]
+            ],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },    
     
