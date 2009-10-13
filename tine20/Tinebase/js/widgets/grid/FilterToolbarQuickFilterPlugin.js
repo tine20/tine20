@@ -15,9 +15,32 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
+ * This plugin provides an external filter field (quickfilter) as a plugin of a filtertoolbar.
+ * The filtertoolbar itself will be hidden no filter is set.
+ * 
+ * @example
+ <pre><code>
+    // init quickfilter as plugin of filtertoolbar
+    this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
+    this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+        filterModels: Tine.Addressbook.Model.Contact.getFilterModel(),
+        defaultFilter: 'query',
+        filters: [],
+        plugins: [
+            this.quickSearchFilterToolbarPlugin
+        ]
+    });
+    
+    // put quickfilterfield in a toolbar
+    this.tbar = new Ext.Toolbar({
+        '->',
+        this.quickSearchFilterToolbarPlugin.getQuickFilterField()
+    })
+</code></pre>
  */
 Tine.widgets.grid.FilterToolbarQuickFilterPlugin = function(config) {
-    //this.quickFilter = new Ext.ux.SearchField({});
+    config = config || {};
+    Ext.apply(this, config);
 };
 
 Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
@@ -50,15 +73,17 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     quickFilterRow: null,
     
     /**
-     * bind value field of this.quickFilterRow to this.quickFilter
+     * bind value field of this.quickFilterRow to sync process
      */
     bind: function() {
-        this.quickFilter.on('keyup', this.syncField, this);
         this.quickFilterRow.formFields.value.on('keyup', this.syncField, this);
-        this.quickFilter.on('change', this.syncField, this);
         this.quickFilterRow.formFields.value.on('change', this.syncField, this);
     },
     
+    /**
+     * gets the (extra) quick filter field
+     * @return {}
+     */
     getQuickFilterField: function() {
         if (! this.quickFilter) {
             this.quickFilter = new Ext.ux.SearchField({
@@ -67,21 +92,47 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             
             this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
             this.quickFilter.onTrigger2Click = this.quickFilter.onTrigger2Click.createSequence(this.onQuickFilterTrigger, this);
+            
+            this.quickFilter.on('keyup', this.syncField, this);
+            this.quickFilter.on('change', this.syncField, this);
         }
         return this.quickFilter;
     },
     
+    /**
+     * gets the quick filter field from the filtertoolbar which is in sync with
+     * the (extra) quick filter field. 
+     */
+    getQuickFilterRowField: function() {
+        if (! this.quickFilterRow) {
+            // NOTE: at this point there is no query filter in the filtertoolbar
+            var filter = new this.ftb.record({field: this.quickFilterField, value: this.quickFilter.getValue()});
+            this.ftb.addFilter(filter);
+        }
+        
+        return this.quickFilterRow;
+    },
+    
+    /**
+     * called by filtertoolbar in plugin init process
+     * 
+     * @param {Tine.widgets.grid.FilterToolbar} ftb
+     */
     init: function(ftb) {
         this.ftb = ftb;
         this.ftb.renderFilterRow = this.ftb.renderFilterRow.createSequence(this.onAddFilter, this);
-        this.ftb.onFieldChange   = this.ftb.onFieldChange.createSequence(this.onFilterChange, this);
+        this.ftb.onFieldChange   = this.ftb.onFieldChange.createSequence(this.onFieldChange, this);
         this.ftb.deleteFilter    = this.ftb.deleteFilter.createInterceptor(this.onBeforeDeleteFilter, this);
         
         this.ftb.onFilterRowsChange = this.ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
         this.ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
     },
     
-    
+    /**
+     * called when a filter is added to the filtertoolbar
+     * 
+     * @param {Ext.data.Record} filter
+     */
     onAddFilter: function(filter) {
         if (filter.get('field') == this.quickFilterField && ! this.quickFilterRow) {
             this.quickFilterRow = filter;
@@ -89,9 +140,6 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             
             // preset quickFilter with filterrow value
             this.syncField(filter.formFields.value);
-            
-            //console.log('quickfilter add')
-            //console.log(filter);
         }
         
     },
@@ -99,7 +147,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     /**
      * called when a filter field of the filtertoolbar changes
      */
-    onFilterChange: function(filter, newField) {
+    onFieldChange: function(filter, newField) {
         if (filter == this.quickFilterRow) {
             this.onBeforeDeleteFilter(filter);
         }
@@ -127,6 +175,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         }
     },
     
+    /**
+     * called before a filter row is deleted from filtertoolbar
+     * 
+     * @param {Ext.data.Record} filter
+     */
     onBeforeDeleteFilter: function(filter) {
         if (filter == this.quickFilterRow) {
             this.quickFilter.setValue('');
@@ -140,16 +193,19 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                     return false;
                 }
             }, this);
-            
-            //console.log('quickfilter remove')
-            //console.log(filter);
         }
     },
     
+    /**
+     * called when the (external) quick filter is cleared
+     */
     onQuickFilterClear: function() {
         this.ftb.deleteAllFilters.call(this.ftb);
     },
     
+    /**
+     * called when the (external) filter triggers filter action
+     */
     onQuickFilterTrigger: function() {
         this.ftb.onFiltertrigger.call(this.ftb);
         this.ftb.onFilterRowsChange.call(this.ftb);
@@ -163,19 +219,17 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      */
     syncField: function(field) {
         if (field == this.quickFilter) {
-            this.quickFilterRow.formFields.value.setValue(this.quickFilter.getValue());
+            this.getQuickFilterRowField().formFields.value.setValue(this.quickFilter.getValue());
         } else {
             this.quickFilter.setValue(this.quickFilterRow.formFields.value.getValue());
         }
     },
     
     /**
-     * unbind value field of this.quickFilterRow from this.quickFilter
+     * unbind value field of this.quickFilterRow from sync process
      */
     unbind: function() {
-        this.quickFilter.un('keyup', this.syncField, this);
         this.quickFilterRow.formFields.value.un('keyup', this.syncField, this);
-        this.quickFilter.un('change', this.syncField, this);
         this.quickFilterRow.formFields.value.un('change', this.syncField, this);
     }
 };
