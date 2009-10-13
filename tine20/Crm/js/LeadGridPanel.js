@@ -99,9 +99,12 @@ Tine.Crm.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
                 {filtertype: 'tinebase.tag', app: this.app},
                 {filtertype: 'crm.contact'}
-             ],
-             defaultFilter: 'query',
-             filters: []
+            ],
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },
     
