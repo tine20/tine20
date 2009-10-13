@@ -172,6 +172,9 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             this.ftb.el.dom.style.display = 'none';
         } else {
             this.ftb.el.dom.style.display = '';
+            
+            // fix strange FF layout problem
+            this.ftb.filterStore.getAt(0).formFields.value.syncSize();
         }
     },
     
