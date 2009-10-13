@@ -68,7 +68,10 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.Tinebase.widgets.app.Gri
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: Tine.Timetracker.Model.Timeaccount.getFilterModel(),
             defaultFilter: 'query',
-            filters: []
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },    
     
