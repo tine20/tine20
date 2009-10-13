@@ -92,9 +92,12 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 {label: this.app.i18n._('Due Date'), field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
                 {label: this.app.i18n._('Responsible'), field: 'organizer', valueType: 'user'},
                 new Tine.widgets.tags.TagFilter({app: this.app})
-             ],
-             defaultFilter: 'query',
-             filters: []
+            ],
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },
     
