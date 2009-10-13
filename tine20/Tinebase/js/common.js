@@ -119,7 +119,7 @@ Tine.Tinebase.common = {
                 }
                 result += '<div ext:qtip="' + qtipText + '" style="width: 8px; height: 8px; background-color:' 
                     + tags[i].color 
-                    + '; border: 1px solid black; float: left; margin-right: 2px;">&#160;</div>';
+                    + '; border: 1px solid black; float: left; margin-right: 2px; margin-bottom: 1px;">&#160;</div>';
             }
         }
         return result;
