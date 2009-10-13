@@ -50,9 +50,12 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
             filterModels: [
                 {label: this.app.i18n.ngettext('Course', 'Courses', 1),    field: 'query',       operators: ['contains']}
                 //new Tine.widgets.tags.TagFilter({app: this.app})
-             ],
-             defaultFilter: 'query',
-             filters: []
+            ],
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
         });
     },
     
