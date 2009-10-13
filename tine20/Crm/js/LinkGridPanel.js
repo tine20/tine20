@@ -109,8 +109,10 @@ Tine.Crm.LinkGridPanel.initStore = function() {
     // focus+select new record
     this.store.on('add', function(store, records, index) {
         (function() {
-            this.getView().focusRow(index);
-            this.getSelectionModel().selectRow(index); 
+            if (this.rendered) {
+                this.getView().focusRow(index);
+                this.getSelectionModel().selectRow(index); 
+            }
         }).defer(300, this);
     }, this);
 };

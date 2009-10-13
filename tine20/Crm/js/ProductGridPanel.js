@@ -103,7 +103,7 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.initGrid();
         
         // init store stuff
-        //this.store.setDefaultSort('due', 'asc');
+        this.store.setDefaultSort('product_desc', 'asc');
         
         this.on('newentry', function(productData){
             // add new product to store

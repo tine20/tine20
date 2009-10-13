@@ -77,11 +77,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function() {
 
-        // load contacts/tasks into link grid (only first time this function gets called/store is empty)
+        // load contacts/tasks/products into link grid (only first time this function gets called/store is empty)
         if (this.contactGrid && this.tasksGrid && this.contactGrid.store.getCount() == 0 && this.tasksGrid.store.getCount() == 0) {
             var relations = this.splitRelations();
             this.contactGrid.store.loadData(relations.contacts, true);
             this.tasksGrid.store.loadData(relations.tasks, true);
+        }
+        if (this.productsGrid && this.productsGrid.store.getCount() == 0) {
+            this.productsGrid.store.loadData(this.record.data.products, true);
         }
         
         Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);        
