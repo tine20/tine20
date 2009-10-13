@@ -113,9 +113,10 @@ class Admin_Backend_SambaMachine_Ldap implements Tinebase_Backend_Interface
      * Returns a set of contacts identified by their id's
      * 
      * @param  string|array $_id Ids
+     * @param array $_containerIds all allowed container ids that are added to getMultiple query
      * @return Tinebase_RecordSet of Tinebase_Record_Interface
      */
-    public function getMultiple($_ids)
+    public function getMultiple($_ids, $_containerIds = NULL)
     {
         throw new Tinebase_Exception_NotImplemented();
     }

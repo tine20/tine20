@@ -193,14 +193,16 @@ abstract class Tinebase_Controller_Record_Abstract
     {
     	$this->_checkRight('get');
     	
-        $records = $this->_backend->getMultiple($_ids);
+    	// get all allowed containers and add them to getMultiple query
+    	$containerIds = ($this->_doContainerACLChecks && $_ignoreACL !== TRUE) 
+    	   ? Tinebase_Container::getInstance()->getContainerByACL(
+    	       $this->_currentAccount, 
+    	       $this->_applicationName, 
+    	       Tinebase_Model_Container::GRANT_READ,
+    	       TRUE) 
+    	   : NULL;
+        $records = $this->_backend->getMultiple($_ids, $containerIds);
         
-        foreach ($records as $record) {
-            if ($_ignoreACL !== TRUE && !$this->_checkGrant($record, 'get', FALSE)) {
-                $index = $records->getIndexById($record->getId());
-                unset($records[$index]);
-            } 
-        }
         return $records;
     }    
     
