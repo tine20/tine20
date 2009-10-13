@@ -60,4 +60,4 @@ if(function_exists('memory_get_peak_usage')) {
     $memory = memory_get_usage(true);
 }
 
-Tinebase_Core::getLogger()->debug('index.php ('. __LINE__ . ') TIME: ' . $time . ' seconds ' . $memory/1024/1024 . ' MBytes');
+Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') TIME: ' . $time . ' seconds ' . $memory/1024/1024 . ' MBytes');

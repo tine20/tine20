@@ -60,7 +60,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
     {
         try {
             $method  = $request->getMethod();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
             $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
             $this->_checkJsonKey($method, $jsonKey);

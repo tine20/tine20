@@ -277,7 +277,7 @@ class Tinebase_Core
             case E_USER_NOTICE:
             default:
                 if (Tinebase_Core::isRegistered(Tinebase_Core::LOGGER)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
                 } else {
                     error_log(" $errstr in {$errfile}::{$errline} ($severity)");
                 }
@@ -373,7 +373,7 @@ class Tinebase_Core
 
         self::set(self::LOGGER, $logger);
 
-        $logger->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
+        $logger->info(__METHOD__ . '::' . __LINE__ .' logger initialized');
     }
     
     /**
@@ -387,7 +387,7 @@ class Tinebase_Core
         
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache enabled');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' cache enabled');
             $frontendOptions = array(
                 'cache_id_prefix' => SQL_TABLE_PREFIX,
                 'lifetime' => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
@@ -413,7 +413,7 @@ class Tinebase_Core
                 break;
             }
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cache disabled');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
@@ -579,7 +579,7 @@ class Tinebase_Core
     {
         $session = self::get(self::SESSION);
         
-        self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
+        self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
         $localeString = NULL;
         if ($_localeString == 'auto') {
             

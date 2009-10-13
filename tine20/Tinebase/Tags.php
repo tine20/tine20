@@ -131,7 +131,7 @@ class Tinebase_Tags
         if (count($tags) === 0) {
             //if (is_string($_id)) {
             //    throw new Tinebase_Exception_NotFound("Tag $_id not found or insufficient rights.");
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Tag(s) not found: ' . print_r($_id, true));
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tag(s) not found: ' . print_r($_id, true));
         }
         return $tags;
     }
@@ -361,7 +361,7 @@ class Tinebase_Tags
             $tagsOfRecords[$result['record_id']][] = new Tinebase_Model_Tag($result, true);
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
         foreach($_records as $record) {
             //$record->{$_tagsProperty} = $tagsOfRecords->filter('record_id', $record->getId());
             $record->{$_tagsProperty} = new Tinebase_Record_RecordSet(
@@ -442,7 +442,7 @@ class Tinebase_Tags
         $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
         
         if (empty($recordIds)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' There are no records we could attach the tag to');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' There are no records we could attach the tag to');
             return;
         }
         
