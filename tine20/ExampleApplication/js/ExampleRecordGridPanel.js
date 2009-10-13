@@ -91,9 +91,12 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.Tinebase.widget
                 }),
                 */
                 new Tine.widgets.tags.TagFilter({app: this.app})
-             ],
-             defaultFilter: 'query',
-             filters: []
+            ],
+            defaultFilter: 'query',
+            filters: []/*,
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]*/
         });
     },    
     
