@@ -19,8 +19,9 @@
     background-image:url(../../../images/oxygen/16x16/actions/edit-find.png) !important;
 }
 
-.tw-filtertoolbar  { 
-	/*background-color: #f0f0f0;*/
+.x-panel-bwrap .tw-filtertoolbar  {
+	background-image: none;
+	background-color: #E5EDF8;
 }
 
 
