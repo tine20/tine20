@@ -42,16 +42,15 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
+        
         $relatedFilterConstructor = $this->_options['related_filter'];
-        $relatedFilter = new $relatedFilterConstructor(array(
-            $this->_value,
-        ));
+        $relatedFilter = new $relatedFilterConstructor($this->_value);
         
         $relatedIds = Addressbook_Controller_Contact::getInstance()->search($relatedFilter, NULL, FALSE, TRUE);
         
         $relationFilter = new Tinebase_Model_RelationFilter(array(
-            array('field' => 'own_model',     'operator' => 'equals', 'value' => $this->_options['related_model']),
-            array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_filter']),
+            array('field' => 'own_model',     'operator' => 'equals', 'value' => $_backend->getModelName()),
+            array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model']),
             array('field' => 'related_id',    'operator' => 'in'    , 'value' => $relatedIds)
         ));
         $ownIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
