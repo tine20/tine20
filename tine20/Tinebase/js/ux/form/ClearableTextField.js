@@ -56,5 +56,12 @@ Ext.ux.form.ClearableTextField = Ext.extend(Ext.form.TriggerField, {
     
     onDestroy: function() {
         this.un('keyup', this.checkTrigger);
+    },
+    
+    setValue: function(value) {
+        var ret = this.supr().setValue.call(this, value);
+        this.checkTrigger();
+        
+        return ret;
     }
 });
