@@ -72,7 +72,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     {
         // export first
         $exporter = new Addressbook_Export_Csv();
-        $filename = $exporter->exportContacts(new Addressbook_Model_ContactFilter(array()));
+        $filename = $exporter->generate(new Addressbook_Model_ContactFilter(array()));
         
         // then import
         $result = $this->_instance->import($filename);

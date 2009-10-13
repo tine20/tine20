@@ -76,7 +76,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         $contact = $this->_createContact();
         
 		$pdf = new Addressbook_Export_Pdf();
-		$pdf->generateContactPdf($contact);
+		$pdf->generate($contact);
 		$pdfOutput = $pdf->render();
 		
 		//$pdf->save("test.pdf");
@@ -110,7 +110,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     	$contact = $this->_createContact();
     	
         $pdf = new Addressbook_Export_Pdf();
-        $pdf->generateContactPdf($contact);
+        $pdf->generate($contact);
         $pdfOutput = $pdf->render();
         
         //$pdf->save("test.pdf");

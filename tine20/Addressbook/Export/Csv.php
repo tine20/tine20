@@ -26,7 +26,7 @@ class Addressbook_Export_Csv extends Tinebase_Export_Csv
      * @param Addressbook_Model_ContactFilter $_filter
      * @return string filename
      */
-    public function exportContacts($_filter, $_toStdout = FALSE) {
+    public function generate($_filter, $_toStdout = FALSE) {
         
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => 0,

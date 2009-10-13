@@ -78,7 +78,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $csvExporter = new Addressbook_Export_Csv();
         
-        $csvExporter->exportContacts($filter, TRUE);        
+        $csvExporter->generate($filter, TRUE);        
     }
     
     public function sampledata($_opts/*$_file*/)

@@ -26,7 +26,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
      *
      * @return	string	the contact pdf
      */
-    public function generateContactPdf(Addressbook_Model_Contact $_contact)
+    public function generate(Addressbook_Model_Contact $_contact)
     {
         $locale = Tinebase_Core::get('locale');
         $translate = Tinebase_Translation::getTranslation('Addressbook');
