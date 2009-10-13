@@ -154,6 +154,19 @@ class Tinebase_Core
         ) {
             $server = new Voipmanager_Server_Snom();
             
+        /**************************** OpenID API *****************************/
+            
+        } elseif(
+            (isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'application/xrds+xml') !== FALSE) ||
+            (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'openid') !== FALSE)
+        ) {
+            $server = new Zend_OpenId_Provider(
+                null,
+                null,
+                null,
+                new Tinebase_OpenId_Provider_Storage
+            );
+            
         /**************************** ASTERISK API *****************************/
 
         } elseif(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == 'asterisk-libcurl-agent/1.0') {
