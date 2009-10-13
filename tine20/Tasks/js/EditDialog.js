@@ -17,7 +17,10 @@ Ext.namespace('Tine.Tasks');
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>Tasks Edit Dialog</p>
- * <p></p>
+ * <p>
+ * TODO         refactor this: remove initRecord/containerId/relatedApp, 
+ *              adopt to normal edit dialog flow and add getDefaultData to task model
+ * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
