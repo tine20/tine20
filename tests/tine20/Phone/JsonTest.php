@@ -70,7 +70,9 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         ));       
         
         $this->_objects['setting'] = new Voipmanager_Model_Snom_Setting(array(
-            'id' => 20004
+            'id' => 20004,
+            'name' => 'test setting',
+            'description' => 'test setting',
         ));       
         
         $this->_objects['template'] = new Voipmanager_Model_Snom_Template(array(
@@ -109,19 +111,26 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'lineactive'        => 1
         ));
 
+        $this->_objects['context'] = new Voipmanager_Model_Asterisk_Context(array(
+            'id'                => 1001,
+            'name'              => 'test context',
+            'description'       => 'test context',
+        ));
+        
         $this->_objects['sippeer'] = new Voipmanager_Model_Asterisk_SipPeer(array(
             'id'                => 1001,
+            'context_id'        => 1001
         ));
         
         // create phone, location, template, rights
-        $db = Voipmanager_Controller_Snom_Phone::getInstance()->getDatabaseBackend();
-        $phoneBackend               = new Voipmanager_Backend_Snom_Phone($db);
-        $snomLocationBackend        = new Voipmanager_Backend_Snom_Location($db);
-        $snomSettingBackend         = new Voipmanager_Backend_Snom_Setting($db);
-        $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template($db);     
-        $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software($db); 
-        $snomLineBackend            = new Voipmanager_Backend_Snom_Line($db);
-        $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer($db);
+        $phoneBackend               = new Voipmanager_Backend_Snom_Phone();
+        $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
+        $snomSettingBackend         = new Voipmanager_Backend_Snom_Setting();
+        $snomTemplateBackend        = new Voipmanager_Backend_Snom_Template();     
+        $snomSoftwareBackend        = new Voipmanager_Backend_Snom_Software(); 
+        $snomLineBackend            = new Voipmanager_Backend_Snom_Line();
+        $asteriskSipPeerBackend     = new Voipmanager_Backend_Asterisk_SipPeer();
+        $asteriskContextBackend     = new Voipmanager_Backend_Asterisk_Context();
         
         try {
             $snomSoftwareBackend->create($this->_objects['software']);
@@ -150,6 +159,11 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         }
         try {
             $phoneBackend->setPhoneRights($this->_objects['phone']);
+        } catch (Zend_Db_Statement_Exception $e) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+        }
+        try {
+            $asteriskContextBackend->create($this->_objects['context']);
         } catch (Zend_Db_Statement_Exception $e) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
