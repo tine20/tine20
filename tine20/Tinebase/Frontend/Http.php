@@ -404,7 +404,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if ($success !== TRUE) {
             $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
             
-            $redirectUrl = Tinebase_Config::getInstance()->getConfig('loginUrl', $tinebase, $_SERVER["HTTP_REFERER"]);
+            $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, $tinebase, $_SERVER["HTTP_REFERER"]);
 
             header('Location: ' . $redirectUrl['value']);
             

@@ -539,9 +539,9 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                     callback : function(options, Success, response) {
                         // remove the event handler
                         // the reload() trigers the unload event
-                        var redirect = (Tine.Tinebase.registry.get('logoutRedirectUrl'));
+                        var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
                         if (redirect != '') {
-                            window.location = Tine.Tinebase.registry.get('logoutRedirectUrl');
+                            window.location = Tine.Tinebase.registry.get('redirectUrl');
                         } else {
                             window.location = window.location.href.replace(/#+.*/, '');
                         }
