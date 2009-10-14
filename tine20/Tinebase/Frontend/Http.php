@@ -297,8 +297,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function loginFromPost($username, $password)
     {
-        // try to login user
-        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === TRUE); 
+        if (! empty($username)) {
+            // try to login user
+            $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === TRUE); 
+        } else {
+            $success = FALSE;
+        }
         
         if ($success === TRUE) {
             if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
