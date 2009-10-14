@@ -453,9 +453,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME,
             ),
-            'defaultUsername' => $defaultUsername,
-            'defaultPassword' => $defaultPassword,
-            'titlePostfix'    => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
+            'defaultUsername'   => $defaultUsername,
+            'defaultPassword'   => $defaultPassword,
+            'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
+            'logoutRedirectUrl' => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::LOGOUTREDIRECTURL, NULL, '')->value,
         );
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {

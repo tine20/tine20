@@ -96,6 +96,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const APPDEFAULTS = 'appdefaults';
     
     /**
+     * logout redirect url
+     * 
+     * @var string
+     */
+    const LOGOUTREDIRECTURL = 'logoutRedirectUrl';
+    
+    /**
      * identifier
      * 
      * @var string

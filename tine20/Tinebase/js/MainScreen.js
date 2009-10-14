@@ -539,7 +539,12 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                     callback : function(options, Success, response) {
                         // remove the event handler
                         // the reload() trigers the unload event
-                        window.location = window.location.href.replace(/#+.*/, '');
+                        var redirect = (Tine.Tinebase.registry.get('logoutRedirectUrl'));
+                        if (redirect != '') {
+                            window.location = Tine.Tinebase.registry.get('logoutRedirectUrl');
+                        } else {
+                            window.location = window.location.href.replace(/#+.*/, '');
+                        }
                     }
                 });
             }
