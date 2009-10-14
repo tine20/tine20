@@ -113,7 +113,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'host',
                     allowBlank: false
                 }, {
-                    fieldLabel: this.app.i18n._('Port'),
+                    fieldLabel: this.app.i18n._('Port (Default: 143 / SSL: 993)'),
                     name: 'port',
                     allowBlank: false,
                     maxLength: 5,
@@ -161,7 +161,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Host'),
                     name: 'smtp_hostname'
                 }, {
-                    fieldLabel: this.app.i18n._('Port'),
+                    fieldLabel: this.app.i18n._('Port (Default: 25)'),
                     name: 'smtp_port',
                     maxLength: 5,
                     xtype:'numberfield',
