@@ -64,6 +64,8 @@ class Tasks_Controller extends Tinebase_Controller_Abstract implements Tinebase_
      * 
      * @param string $_referingApplication
      * @return Tinebase_Model_Container container
+     * 
+     * @todo replace this by Tinebase_Container::getDefaultContainer
      */
     public function getDefaultContainer($_referingApplication = 'tasks')
     {
@@ -73,9 +75,7 @@ class Tasks_Controller extends Tinebase_Controller_Abstract implements Tinebase_
         if (isset($taskConfig->$configString)) {
             $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, 'Tasks', $this->_currentAccount, Tinebase_Model_Container::GRANT_ADD);
-            //$containers = $this->getPersonalContainer($this->_currentAccount, $this->_currentAccount->accountId, Tinebase_Model_Container::GRANT_READ);
-            $defaultContainer = $containers[0];
+            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer($this->_currentAccount->accountId, 'Tasks');
         }
         
         return $defaultContainer;
