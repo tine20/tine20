@@ -111,7 +111,6 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'note'                  => 'Bla Bla Bla',
-            'container_id'          => $this->testContainer->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -137,7 +136,6 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
 
         $this->objects['linkedTask'] = new Tasks_Model_Task(array(
             'summary'               => 'task test',
-            'container_id'          => $this->testContainer->id,
         ));
         
         try {
@@ -209,7 +207,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'related_model'          => 'Addressbook_Model_Contact',
             'related_backend'        => Addressbook_Backend_Factory::SQL,
             'related_id'             => $this->objects['linkedContact']->id,
-            'type'                   => 'RESPONSIBLE'
+            'type'                   => 'RESPONSIBLE',
         ));
         $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
