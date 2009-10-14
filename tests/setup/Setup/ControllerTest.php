@@ -62,6 +62,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $this->_installAllApplications(array('defaultAdminGroupName' => 'Administrators', 'defaultUserGroupName' =>  'Users'));
         $this->_installAllApplications();       
     }
        

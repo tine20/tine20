@@ -63,7 +63,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
             'accountLoginName'      => 'tine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
@@ -74,7 +74,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
             'accountLoginName'      => 'tine20phpunit-updated',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
             'accountLastName'       => 'Tine 2.0 Updated',
             'accountFirstName'      => 'PHPUnit Updated',
             'accountEmailAddress'   => 'phpunit@tine20.org'
@@ -217,6 +217,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     public function testSanitizeAccountPrimaryGroupId()
     {
         $account = Tinebase_Core::get('currentAccount');
+        $originalGroupId = $account->accountPrimaryGroup;
         $defaultGroupId = Tinebase_Group::getInstance()->getDefaultGroup()->getId();
         $adminGroupId   = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
         $nonExistingId  = '77777666999';
@@ -232,6 +233,8 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         $account->accountPrimaryGroup = $nonExistingId; 
         $this->assertEquals($defaultGroupId, $account->sanitizeAccountPrimaryGroup());
         $this->assertEquals($defaultGroupId, $account->accountPrimaryGroup);
+        
+        $account->accountPrimaryGroup = $originalGroupId;
     }
 }		
 	
