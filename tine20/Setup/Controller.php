@@ -226,7 +226,7 @@ class Setup_Controller
             unset($_applications[$_applications->getIndexById($tinebase->getId())]);
         
             list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
-            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
             
             for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
                 $messages += $this->updateApplication($tinebase, $majorVersion);
@@ -672,7 +672,7 @@ class Setup_Controller
        
         if ($originalBackend != $newBackend && $this->isInstalled('Addressbook')) {
             if ($originalBackend == Tinebase_User::SQL) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleteing all user accounts, groups, roles and rights');
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleteing all user accounts, groups, roles and rights');
                 //delete all users, groups and roles because they will be imported from new accounts storage backend
                 Tinebase_User::factory(Tinebase_User::SQL)->deleteAllUsers();
                 Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
@@ -909,7 +909,7 @@ class Setup_Controller
             'version'   => (string)$_xml->version
         ));
         
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
         
         $application = Tinebase_Application::getInstance()->addApplication($application);
         
@@ -960,7 +960,7 @@ class Setup_Controller
                         );
                         $definitionBackend->create($definition);
                     } catch (Tinebase_Exception_Record_Validation $erv) {
-                        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' not installing import/export definion: ' . $erv->getMessage());
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' not installing import/export definion: ' . $erv->getMessage());
                     }
                 }
             }
@@ -988,7 +988,7 @@ class Setup_Controller
             }
 
             foreach ($applicationTables as $key => $table) {
-                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "Remove table: $table");
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "Remove table: $table");
                 
                 try {
                     $this->_backend->dropTable($table);
@@ -999,7 +999,7 @@ class Setup_Controller
                 } catch(Zend_Db_Statement_Exception $e) {
                     // we need to catch exceptions here, as we don't want to break here, as a table
                     // might still have some foreign keys
-                    Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "could not drop table $table - " . $e->getMessage());
+                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "could not drop table $table - " . $e->getMessage());
                 }
                 
             }
@@ -1022,7 +1022,7 @@ class Setup_Controller
                     
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "Removed app: " . $_application->name);
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "Removed app: " . $_application->name);
     }
 
     /**
