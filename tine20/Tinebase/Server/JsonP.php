@@ -36,14 +36,26 @@ class Tinebase_Server_JsonP extends Tinebase_Server_Abstract
                 'msg'       => 'not allowed',
             );
         } else {
-            // do some processing ...
-            $responseData = array(
-                'status'    => 'success',
-                'msg'       => 'authentication succseed',
-                //'loginUrl'  => 'https://somedomain/index.php'
-            );
+            
+            $success = FALSE;
+            if (! empty($_GET['username'])) {
+                $authResult = Tinebase_Auth::getInstance()->authenticate($_GET['username'], $_GET['password']);
+                $success = $authResult->isValid();
+            }
+            
+            if ($success) {
+                $responseData = array(
+                    'status'    => 'success',
+                    'msg'       => 'authentication succseed',
+                    //'loginUrl'  => 'https://somedomain/index.php'
+                );
+            } else {
+                $responseData = array(
+                    'status'    => 'fail',
+                    'msg'       => 'authentication failed',
+                );
+            }
         }
-        
         
         header('Content-Type: application/javascript');
         die ($_GET['jsonp'] . '(' . Zend_Json::encode($responseData) . ');');
