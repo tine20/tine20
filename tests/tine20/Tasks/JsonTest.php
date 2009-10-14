@@ -158,6 +158,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
             Zend_Json::encode(array()),
             'Tasks'
         );
+        
+        $this->_backend->deleteTasks($persistentTaskData['id']);
     }
     
     /**
@@ -196,7 +198,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $count);
         
         // delete task
-        // Tasks_Controller_Task::getInstance()->delete($task->getId());
         $this->_backend->deleteTasks(Zend_Json::encode(array($task->getId())));
 
         // search and check again
@@ -239,25 +240,22 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $task->organizer = $organizer;      
         $returned = $this->_backend->saveTask(Zend_Json::encode($task->toArray()));
         $taskId = $returned['id'];
-        
                
         // check search tasks- organizer exists
         $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
-        $this->assertEquals(1, $tasks['totalcount']);
+        $this->assertEquals(1, $tasks['totalcount'], 'more (or less) than one tasks found');
         $this->assertEquals($tasks['results'][0]['organizer']['accountId'], $organizerId);
 
         // check get single task - organizer exists
         $task = $this->_backend->getTask($taskId);
         $this->assertEquals($task['organizer']['accountId'], $organizerId);
 
-
         // delete user
         Tinebase_User::getInstance()->deleteUser($organizerId);       
-        
 
         // test seach search tasks - organizer is deleted
         $tasks = $this->_backend->searchTasks(Zend_Json::encode($this->_getFilter()), Zend_Json::encode($this->_getPaging()));
-        $this->assertEquals(1, $tasks['totalcount']);
+        $this->assertEquals(1, $tasks['totalcount'], 'more (or less) than one tasks found');
 
         $this->assertEquals($tasks['results'][0]['organizer']['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName);
 
