@@ -170,13 +170,13 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $returned = $this->_json->saveAsteriskSipPeer(Zend_Json::encode($test->toArray()));
         $this->assertEquals($test['name'], $returned['name']);
         //print_r($returned);
-        $this->assertEquals($test['context'], $returned['context']['value']);
+        $this->assertEquals($test['context'], $returned['context']);
         $this->assertNotNull($returned['id']);
         
         // test getAsteriskSipPeer($SipPeerId) as well
         $returnedGet = $this->_json->getAsteriskSipPeer($returned['id']);
         $this->assertEquals($test['name'], $returnedGet['name']);
-        $this->assertEquals($test['context'], $returnedGet['context']['value']);
+        $this->assertEquals($test['context'], $returnedGet['context']);
         $this->_json->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['id'])));
     }
     
@@ -189,13 +189,14 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $test = $this->_getAsteriskSipPeer();
         
         $returned = $this->_json->saveAsteriskSipPeer(Zend_Json::encode($test->toArray()));
+        //print_r($returned);
         $returned['name'] = Tinebase_Record_Abstract::generateUID();
-        $returned['context'] = $returned['context']['value'];
+        $returned['context_id'] = $returned['context_id']['value'];
         
         $updated = $this->_json->saveAsteriskSipPeer(Zend_Json::encode($returned));
         
         $this->assertEquals($returned['name'], $updated['name']);
-        $this->assertEquals($returned['context'], $updated['context']['value']);
+        $this->assertEquals($returned['context_id'], $updated['context_id']['value']);
         $this->assertNotNull($updated['id']);
         
         $this->_json->deleteAsteriskSipPeers(Zend_Json::encode(array($returned['id'])));
@@ -228,9 +229,14 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _getAsteriskSipPeer()
     {
+        // create context
+        $context = $this->_getAsteriskContext();
+        $context = $this->_json->saveAsteriskContext(Zend_Json::encode($context->toArray()));
+        
         return new Voipmanager_Model_Asterisk_SipPeer(array(
-            'name' => Tinebase_Record_Abstract::generateUID(),
-            'context' => Tinebase_Record_Abstract::generateUID()
+            'name'          => Tinebase_Record_Abstract::generateUID(),
+            'context'       => $context['name'],
+            'context_id'    => $context['id']
         ), TRUE);
     }
     
@@ -253,7 +259,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     
     
     
-    /** Asterisk MeetMe tests **/
+    /** Asterisk Meetme tests **/
     
     /**
      * test creation of asterisk meetme room
@@ -324,19 +330,20 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _getAsteriskMeetme()
     {
-        return new Voipmanager_Model_Asterisk_MeetMe(array(
+        return new Voipmanager_Model_Asterisk_Meetme(array(
             'confno'  => Tinebase_Record_Abstract::generateUID(),
             'adminpin' => Tinebase_Record_Abstract::generateUID(),
-            'pin' => Tinebase_Record_Abstract::generateUID()
+            'pin' => Tinebase_Record_Abstract::generateUID(),
+            'members' => 1,
         ), TRUE);
     }
     
     /**
-     * get Asterisk MeetMe filter
+     * get Asterisk Meetme filter
      *
      * @return array
      */
-    protected function _getAsteriskMeetMeFilter($_name)
+    protected function _getAsteriskMeetmeFilter($_name)
     {
         return array(
             array(
@@ -384,6 +391,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $returned = $this->_json->saveAsteriskVoicemail(Zend_Json::encode($test->toArray()));
         $returned['fullname'] = Tinebase_Record_Abstract::generateUID();
+        $returned['context_id'] = $returned['context_id']['value'];
         
         $updated = $this->_json->saveAsteriskVoicemail(Zend_Json::encode($returned));
         $this->assertEquals($returned['context'], $updated['context']);
@@ -420,8 +428,13 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _getAsteriskVoicemail()
     {
+        // create context
+        $context = $this->_getAsteriskContext();
+        $context = $this->_json->saveAsteriskContext(Zend_Json::encode($context->toArray()));
+        
         return new Voipmanager_Model_Asterisk_Voicemail(array(
-            'context'  => Tinebase_Record_Abstract::generateUID(),
+            'context'       => $context['name'],
+            'context_id'    => $context['id'],
             'fullname' => Tinebase_Record_Abstract::generateUID()
         ), TRUE);
     }
