@@ -19,7 +19,7 @@ class Setup_Initialize
 {
     
     /**
-     * Return new instance of the concrete Setup_Initialize class for the given {@param $_application}  
+     * Call {@see _initialize} on an instance of the concrete Setup_Initialize class for the given {@param $_application}  
      * 
      * @param Tinebase_Model_Application $_application
      * @param array | optional $_options
@@ -31,6 +31,21 @@ class Setup_Initialize
     	$classname = "{$applicationName}_Setup_Initialize"; 	
     	$instance = new $classname;
     	$instance->_initialize($_application, $_options);
+    }
+    
+    /**
+     * Call {@see _createInitialRights} on an instance of the concrete Setup_Initialize class for the given {@param $_application}  
+     * 
+     * @param Tinebase_Model_Application $_application
+     * @param array | optional $_options
+     * @return void
+     */
+    public static function initializeApplicationRights(Tinebase_Model_Application $_application, $_options = null)
+    {
+    	$applicationName = $_application->name;
+    	$classname = "{$applicationName}_Setup_Initialize"; 	
+    	$instance = new $classname;
+    	$instance->_createInitialRights($_application);
     }
     
     /**

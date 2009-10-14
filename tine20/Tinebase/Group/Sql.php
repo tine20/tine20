@@ -275,6 +275,17 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
     
     /**
+     * Delete all groups returned by {@see getGroups()} using {@see deleteGroups()}
+     * @return void
+     */
+    public function deleteAllGroups()
+    {
+        $groups = $this->getGroups();
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' users');
+        $this->deleteGroups($groups);
+    }
+    
+    /**
      * get list of groups
      *
      * @param string $_filter
@@ -392,14 +403,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY),
             'description'   => 'Group of administrative accounts'
         ));
-        $adminGroup = $this->addGroup($adminGroup);
+        $this->addGroup($adminGroup);
 
         // add the user group
         $userGroup = new Tinebase_Model_Group(array(
             'name'          => Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY),
             'description'   => 'Group of user accounts'
         ));
-        $userGroup = $this->addGroup($userGroup);
+        $this->addGroup($userGroup);
     }
     
     /**

@@ -806,16 +806,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         foreach($users as $user) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' user: ' . print_r($user->toArray(), true));
-            try {
-                $sqluser = $this->_sql->getUserById($user->getId());
-                $this->_sql->updateUser($user);
-            } catch (Tinebase_Exception_NotFound $e) {
-                try {
-                    $this->_sql->addUser($user);
-                } catch (Zend_Db_Statement_Exception $zdse) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add user - ' . $zdse->getMessage());
-                    continue;
-                }
+            $user = $this->_sql->addOrUpdateUser($user);
+            if (!$user instanceof Tinebase_Model_FullUser) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add user "' . $user->accountLoginName . '" => Skipping');
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' classname ' . get_class($user). ' attributes: ' . print_r($user,1));
+                continue;
             }
             $sqlGroupBackend->addGroupMember($user->accountPrimaryGroup, $user);
             

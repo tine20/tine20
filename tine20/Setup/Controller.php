@@ -662,10 +662,37 @@ class Setup_Controller
         Tinebase_Auth::setBackendConfiguration($authenticationProviderData[$authenticationProviderData['backend']]);
         Tinebase_Auth::saveBackendConfiguration();
         
+        
         $accountsStorageData = $_authenticationData['accounts'];       
+        $originalBackend = Tinebase_User::getConfiguredBackend();
+        $newBackend = $accountsStorageData['backend'];
         Tinebase_User::setBackendType($accountsStorageData['backend']);
         Tinebase_User::setBackendConfiguration($accountsStorageData[$accountsStorageData['backend']]);
         Tinebase_User::saveBackendConfiguration();
+       
+        if ($originalBackend != $newBackend && $this->isInstalled('Addressbook')) {
+            if ($originalBackend == Tinebase_User::SQL) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleteing all user accounts, groups, roles and rights');
+                //delete all users, groups and roles because they will be imported from new accounts storage backend
+                Tinebase_User::factory(Tinebase_User::SQL)->deleteAllUsers();
+                Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
+                
+                $roles = Tinebase_Acl_Roles::getInstance();
+                $roles->deleteAllRoles();
+                
+                Tinebase_Group::getInstance()->importGroups();
+                $roles->createInitialRoles();
+                $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+                foreach ($applications as $application)
+                {
+                     Setup_Initialize::initializeApplicationRights($application);
+                }
+                
+                Tinebase_User::getInstance()->importUsers(); //import users(ldap)/create initial users(sql)
+                Tinebase_Group::getInstance()->importGroupMembers(); //import groups members(ldap)
+                
+            }
+        }
     }
     
     /**

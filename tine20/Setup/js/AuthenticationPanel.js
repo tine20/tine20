@@ -71,6 +71,14 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
      * @type Ext.form.ComboBox
      */
     accountsStorageCombo: null,
+    
+    /**
+     * The currently active accounts storage backend
+     * 
+     * @property originalAccountsStorage
+     * @type String
+     */
+    originalAccountsStorage: null,
 
     /**
      * @private
@@ -86,6 +94,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         this.idPrefix                   = Ext.id();
         this.authProviderIdPrefix       = this.idPrefix + '-authProvider-',
         this.accountsStorageIdPrefix    = this.idPrefix + '-accountsStorage-',
+        this.originalAccountsStorage    = Tine.Setup.registry.get(this.registryKey).accounts.backend;
         
         Tine.Setup.AuthenticationPanel.superclass.initComponent.call(this);
     },
@@ -105,8 +114,27 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
      */
     onChangeAccountsStorage: function() {
         var AccountsStorage = this.accountsStorageCombo.getValue();
+
+        if (AccountsStorage == 'Ldap' && AccountsStorage != this.originalAccountsStorage) {
+          Ext.Msg.confirm(this.app.i18n._('Delete all existing users and groups'), this.app.i18n._('Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?'), function(confirmbtn, value) {
+                if (confirmbtn == 'yes') {
+                    this.doOnChangeAccountsStorage(AccountsStorage);
+                } else {
+                  this.accountsStorageCombo.setValue(this.originalAccountsStorage);
+                }
+            }, this);
+        } else {
+          this.doOnChangeAccountsStorage(AccountsStorage);
+        }
+    },
+    
+    /**
+     * Change card layout depending on selected combo box entry
+     */
+    doOnChangeAccountsStorage: function(AccountsStorage) {
         var cardLayout = Ext.getCmp(this.accountsStorageIdPrefix + 'CardLayout').getLayout();
         cardLayout.setActiveItem(this.accountsStorageIdPrefix + AccountsStorage);
+        this.originalAccountsStorage = AccountsStorage;
     },
     
     /**

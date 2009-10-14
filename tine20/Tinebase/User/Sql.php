@@ -495,15 +495,45 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
+     * add or update an user
+     *
+     * @param Tinebase_Model_FullUser $_account
+     * @return Tinebase_Model_FullUser
+     */
+    public function addOrUpdateUser(Tinebase_Model_FullUser $_account)
+    {
+        $result = null;
+        try {
+            $existingUser = $this->getUserByLoginName($_account->accountLoginName);
+            $updatedUser = $_account;
+            $updatedUser->setId($existingUser->getId());
+            $result = $this->updateUser($updatedUser);
+        } catch (Tinebase_Exception_NotFound $e) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Could not get user by loginName "' . $_account->accountLoginName . '": ' . $e->getMessage() . ' => creating new user');
+            try {
+                $result = $this->addUser($_account);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' Failed to add user: ' . print_r($_account->toArray() . 'Error: ' . $e->getMessage(), TRUE));
+            }
+        }
+        
+        return $result;
+        
+    }
+    
+    /**
      * delete a user
      *
      * @param int $_accountId
      */
     public function deleteUser($_accountId)
-    {
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $account = $this->getFullUserById($accountId);
-        
+    {   
+        if ($_accountId instanceof Tinebase_Model_FullUser) {
+            $account = $_accountId;
+        } else {
+            $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+            $account = $this->getFullUserById($accountId);
+        }
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         $groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
@@ -556,6 +586,19 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function deleteUsers(array $_accountIds) {
         foreach ( $_accountIds as $accountId ) {
             $this->deleteUser($accountId);
+        }
+    }
+    
+    /**
+     * Delete all users returned by {@see getUsers()} using {@see deleteUsers()}
+     * @return void
+     */
+    public function deleteAllUsers()
+    {
+        $users = $this->getUsers();
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($users) .' users');
+        foreach ( $users as $user ) {
+            $this->deleteUser($user);
         }
     }
 
@@ -628,7 +671,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'accountEmailAddress'   => NULL,
         ));
 
-        $this->addUser($account);
+        $this->addOrUpdateUser($account);
         Tinebase_Core::set('currentAccount', $account);
         // set the password for the account
         Tinebase_User::getInstance()->setPassword($_loginName, $_password);
