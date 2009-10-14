@@ -529,6 +529,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function deleteUser($_accountId)
     {   
         if ($_accountId instanceof Tinebase_Model_FullUser) {
+            $accountId = $_accountId->getId();
             $account = $_accountId;
         } else {
             $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
