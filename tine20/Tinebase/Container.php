@@ -258,6 +258,8 @@ class Tinebase_Container
     public function getContainerByACL($_accountId, $_application, $_grant, $_onlyIds = FALSE)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app: ' . $_application . ' / account: ' . $_accountId);
 
         $cache = Tinebase_Core::get('cache');
         $cacheId = convertCacheId('getContainerByACL' . $accountId . $_application . $_grant . $_onlyIds);
