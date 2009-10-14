@@ -82,6 +82,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {	
+        // delete all contexts
+        $search = $this->_backends['Asterisk_Context']->search(new Voipmanager_Model_Asterisk_ContextFilter());
+        foreach ($search as $result) {
+            $this->_backends['Asterisk_Context']->delete($result->getId());
+        }        
     }
 
     /**
@@ -310,10 +315,15 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
     
     protected function _getAsteriskSipPeer()
     {
+        // create context
+        $context = $this->_getAsteriskContext();
+        $context = $this->_backends['Asterisk_Context']->create($context);
+        
         return new Voipmanager_Model_Asterisk_SipPeer(array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
             'callerid' => Tinebase_Record_Abstract::generateUID(),
-            'qualify' => 'yes'
+            'qualify' => 'yes',
+            'context_id' => $context->getId()
         ));
     }    
     
@@ -384,9 +394,14 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function _getAsteriskVoicemail()
     {
+        // create context
+        $context = $this->_getAsteriskContext();
+        $context = $this->_backends['Asterisk_Context']->create($context);
+        
         return new Voipmanager_Model_Asterisk_Voicemail(array(
             'mailbox'  => substr(Tinebase_Record_Abstract::generateUID(), 0, 11),
-            'fullname' => Tinebase_Record_Abstract::generateUID()
+            'fullname' => Tinebase_Record_Abstract::generateUID(),
+            'context_id' => $context->getId()
         ));
     }    
 

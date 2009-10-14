@@ -63,6 +63,11 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {	
+        // delete all contexts
+        $search = $this->_json->searchAsteriskContexts('', '');
+        foreach ($search['results'] as $result) {
+            $this->_json->deleteAsteriskContexts($result['id']);
+        }        
     }
     
     /** Asterisk Context tests **/
