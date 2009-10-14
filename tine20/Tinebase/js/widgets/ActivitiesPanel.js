@@ -3,8 +3,10 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * TODO         add to extdoc
  */
  
 Ext.namespace('Tine.widgets', 'Tine.widgets.activities');
@@ -85,12 +87,13 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                     '<div class="x-widget-activities-activitiesitem-text"',
                     '   ext:qtip="{[this.encode(values.note)]} - {[this.render(values.creation_time, "timefull")]} - {[this.render(values.created_by, "user")]}" >', 
                         '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.creation_time, "timefull")]}<br/>',
-                        '{[this.encode(values.note)]}<hr color="#aaaaaa">',
+                        '{[this.encode(values.note, true)]}<hr color="#aaaaaa">',
                     '</div>',
                 '</div>',
             '</tpl>' ,{
-                encode: function(value) {
-                    return Ext.util.Format.htmlEncode(value);
+                encode: function(value, ellipsis) {
+                    var result = Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(value)); 
+                    return (ellipsis) ? Ext.util.Format.ellipsis(result, 300) : result;
                 },
                 render: function(value, type) {
                     switch (type) {
