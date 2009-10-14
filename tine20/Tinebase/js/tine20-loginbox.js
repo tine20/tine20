@@ -96,9 +96,14 @@ Ext.onReady(function(){
                 '<label>{loginname}:</label><br>',
                 '<input type="text" name="username"><br>',
                 '<label>{password}:</label><br>',
-                '<input type="password" name="password"><br>' +
-                '<input type="hidden" name="method" value="{method}"><br><br>',
-            '<div class="tine20loginbutton">{login}</div><br>',
+                '<input type="password" name="password"><br>',
+                '<input type="hidden" name="method" value="{method}">',
+            
+                
+                '<div class="tine20loginmessage">&#160;</div>',
+                '<br>',
+                '<div class="tine20loginbutton">{login}</div>',
+            '</fieldset>',
         '</form>'
     );
     
@@ -112,9 +117,15 @@ Ext.onReady(function(){
     
     Ext.get(Ext.DomQuery.selectNode('div[class=tine20loginbutton]'), loginBoxEl).on('click', function(e, target) {
         var form = Ext.get(target).parent('form');
+        var messageBox = form.child('div[class=tine20loginmessage]');
         
         var username = Ext.DomQuery.selectNode('input[name=username]', form.dom).value;
         var password = Ext.DomQuery.selectNode('input[name=password]', form.dom).value;
+        
+        messageBox.update(String.format('{0} <img src="{1}">', 
+            Tine20.login.translations[config.userLanguage].login,
+            config.tine20Url.replace('index.php', 'images/wait.gif'))
+        );
         
         Tine20.login.checkAuth(config, username, password, function(data) {
             if (data.status == 'success') {
@@ -123,6 +134,7 @@ Ext.onReady(function(){
                 form.dom.submit();
             } else {
                 // show fail message
+                messageBox.update(data.msg);
             }
         });
     });
