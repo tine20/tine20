@@ -281,4 +281,16 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         
         return $accountId;
     }
+    
+    public function sanitizeAccountPrimaryGroup()
+    {  
+        try {
+            Tinebase_Group::getInstance()->getGroupById($this->accountPrimaryGroup);
+        } catch (Tinebase_Exception_Record_NotDefined $e) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Could not resolve accountPrimaryGroupgroup (' . $this->accountPrimaryGroup . '): ' . $e->getMessage() . ' => set default user group id as accountPrimaryGroup for account ' . $this->getId());
+            $this->accountPrimaryGroup = Tinebase_Group::getInstance()->getDefaultGroup()->getId();
+        }
+        
+        return $this->accountPrimaryGroup;
+    }
 }

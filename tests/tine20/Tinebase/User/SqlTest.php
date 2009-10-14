@@ -213,6 +213,26 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         
         $account = $this->_backend->getUserById($this->objects['initialAccount'], 'Tinebase_Model_FullUser');        
     }
+    
+    public function testSanitizeAccountPrimaryGroupId()
+    {
+        $account = Tinebase_Core::get('currentAccount');
+        $defaultGroupId = Tinebase_Group::getInstance()->getDefaultGroup()->getId();
+        $adminGroupId   = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
+        $nonExistingId  = '77777666999';
+        
+        $account->accountPrimaryGroup = $defaultGroupId;  
+        $this->assertEquals($defaultGroupId, $account->sanitizeAccountPrimaryGroup());
+        $this->assertEquals($defaultGroupId, $account->accountPrimaryGroup);
+        
+        $account->accountPrimaryGroup = $adminGroupId; 
+        $this->assertEquals($adminGroupId, $account->sanitizeAccountPrimaryGroup());
+        $this->assertEquals($adminGroupId, $account->accountPrimaryGroup);
+        
+        $account->accountPrimaryGroup = $nonExistingId; 
+        $this->assertEquals($defaultGroupId, $account->sanitizeAccountPrimaryGroup());
+        $this->assertEquals($defaultGroupId, $account->accountPrimaryGroup);
+    }
 }		
 	
 

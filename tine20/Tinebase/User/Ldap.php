@@ -806,6 +806,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         
         foreach($users as $user) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' user: ' . print_r($user->toArray(), true));
+            $user->sanitizeAccountPrimaryGroup();
             $user = $this->_sql->addOrUpdateUser($user);
             if (!$user instanceof Tinebase_Model_FullUser) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add user "' . $user->accountLoginName . '" => Skipping');
