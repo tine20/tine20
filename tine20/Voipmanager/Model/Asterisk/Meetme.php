@@ -55,7 +55,7 @@ class Voipmanager_Model_Asterisk_Meetme extends Tinebase_Record_Abstract
         'confno'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pin'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adminpin'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'members'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'members'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
         'starttime'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'endtime'               => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
