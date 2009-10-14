@@ -146,6 +146,13 @@ class Tinebase_Core
             ) {
             $server = new Tinebase_Server_Json();
 
+        /**************************** JSONP API *****************************/
+            
+        } elseif(
+            isset($_GET['jsonp'])
+        ) {
+            $server = new Tinebase_Server_JsonP();
+            
         /**************************** SNOM API *****************************/
             
         } elseif(
