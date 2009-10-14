@@ -40,7 +40,7 @@ class Tinebase_Server_JsonP extends Tinebase_Server_Abstract
             $responseData = array(
                 'status'    => 'success',
                 'msg'       => 'authentication succseed',
-                'loginUrl'  => 'https://somedomain/index.php'
+                //'loginUrl'  => 'https://somedomain/index.php'
             );
         }
         
