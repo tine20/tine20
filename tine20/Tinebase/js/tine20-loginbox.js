@@ -50,7 +50,7 @@ Tine20.login = {
         
         var config = {
             userLanguage: Tine20.login.detectBrowserLanguage(),
-            authUrl: src.substring(0, src.indexOf('Tinebase'))  + 'index.php'
+            tine20Url: src.substring(0, src.indexOf('Tinebase'))  + 'index.php'
         };
         
         /* parse additional params here */
@@ -63,7 +63,7 @@ Tine20.login = {
         var conn = new Ext.ux.data.jsonp({});
         
         conn.request({
-            url: config.authUrl,
+            url: config.tine20Url,
             params: {
                 method: 'Tinebase.authenticate',
                 username: username,
@@ -97,13 +97,14 @@ Ext.onReady(function(){
                 '<input type="text" name="username"><br>',
                 '<label>{password}:</label><br>',
                 '<input type="password" name="password"><br>' +
-                '<br><br>',
+                '<input type="hidden" name="method" value="{method}"><br><br>',
             '<div class="tine20loginbutton">{login}</div><br>',
         '</form>'
     );
     
     var loginBoxEl = t.append('tine20-login', {
-        formId: 'tine20loginform', 
+        formId: 'tine20loginform',
+        method: 'Tinebase.loginFromPost',
         loginname: Tine20.login.translations[config.userLanguage].loginname,
         password: Tine20.login.translations[config.userLanguage].password,
         login: Tine20.login.translations[config.userLanguage].login
@@ -117,9 +118,9 @@ Ext.onReady(function(){
         
         Tine20.login.checkAuth(config, username, password, function(data) {
             if (data.status == 'success') {
-                console.log(data);
-                console.log(form);
                 // post data
+                form.dom.action = data.loginUrl || config.tine20Url;
+                form.dom.submit();
             } else {
                 // show fail message
             }
@@ -134,7 +135,7 @@ Ext.ns('Ext.ux.data');
  * @class       Ext.ux.data.jsonp
  * @extends     Ext.util.Observable
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id:$
+ * @version     $Id$
  * 
  * @param {Object} config
  * 
