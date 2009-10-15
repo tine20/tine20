@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         completely remove 'settings' button?
+ * TODO         refactor this
  */
  
 Ext.namespace('Tine.Admin');
@@ -21,9 +21,9 @@ Tine.Admin.Applications.Main = function() {
      */
     var _editButtonHandler = function(_button, _event) {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
-        var applicationId = selectedRows[0].id;
-        
-        Tine.Tinebase.common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + applicationId, 600, 400);
+        Tine[selectedRows[0].data.name].AdminPanel.openWindow({});
+        //var applicationId = selectedRows[0].id;
+        //Tine.Tinebase.common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + applicationId, 600, 400);
     };
     
     /**
@@ -148,8 +148,8 @@ Tine.Admin.Applications.Main = function() {
             items: [
                 _action_enable,
                 _action_disable,
-                //'-',
-                //_action_settings,
+                '-',
+                _action_settings,
                 //_action_permissions,
                 '->',
                 this.translation.gettext('Search:'), ' ',
@@ -205,7 +205,7 @@ Tine.Admin.Applications.Main = function() {
             items: [
                 _action_enable,
                 _action_disable,
-                _action_disable
+                _action_settings
                 //_action_permissions
             ]
         });
@@ -244,17 +244,20 @@ Tine.Admin.Applications.Main = function() {
                 if (rowCount < 1) {
                     _action_enable.setDisabled(true);
                     _action_disable.setDisabled(true);
-                    //_action_settings.setDisabled(true);
+                    _action_settings.setDisabled(true);
                     //_action_permissions.setDisabled(true);
                 } else if (rowCount > 1) {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
-                    //_action_settings.setDisabled(true);
+                    _action_settings.setDisabled(true);
                     //_action_permissions.setDisabled(true);
                 } else {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
-                    //_action_settings.setDisabled(true);                
+                    // check if app has admin panel
+                    if (Tine[selected[0].data.name].AdminPanel) {
+                        _action_settings.setDisabled(false);
+                    }
                     //_action_permissions.setDisabled(false);
                 }
                 
