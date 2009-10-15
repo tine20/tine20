@@ -101,6 +101,20 @@ class Crm_JsonTest extends Crm_AbstractTest
     }
     
     /**
+     * test get settings/config
+     * 
+     * @return void
+     * 
+     * @todo finish test
+     */
+    public function testGetSetting()
+    {
+        $result = $this->_instance->getSetting();
+
+        //print_r($result);
+    }
+    
+    /**
      * try to add a lead and link a contact
      *
      * @todo add note and product
@@ -207,66 +221,6 @@ class Crm_JsonTest extends Crm_AbstractTest
         // check if contact is no longer linked
         $lead = Crm_Controller_Lead::getInstance()->get($initialLead['id']);
         $this->assertEquals(1, count($lead->relations));
-        */
-    }
-
-    /**
-     * test leadsources
-     * 
-     * @deprecated
-     */
-    public function testLeadSources()
-    {
-        // test getLeadsources
-        $leadsources = $this->_instance->getLeadsources('id', 'ASC');
-        $this->assertEquals(4, $leadsources['totalcount']);
-
-        /*
-        // test saveLeadsources
-        $this->_instance->saveLeadsources(Zend_Json::encode($leadsources['results']));
-
-        $leadsourcesUpdated = $this->_instance->getLeadsources('id', 'ASC');
-        $this->assertEquals(4, $leadsourcesUpdated['totalcount']);
-        */
-    }
-
-    /**
-     * test leadstates
-     * 
-     * @deprecated
-     */
-    public function testLeadStates()
-    {
-        // test getLeadstates
-        $leadstates = $this->_instance->getLeadstates('id', 'ASC');
-        $this->assertEquals(6, $leadstates['totalcount']);
-
-        /*
-        // test saveLeadstates
-        $this->_instance->saveLeadstates(Zend_Json::encode($leadstates['results']));
-
-        $leadstatesUpdated = $this->_instance->getLeadstates('id', 'ASC');
-        $this->assertEquals(6, $leadstatesUpdated['totalcount']);
-        */
-    }
-
-    /**
-     * test leadtypes
-     * 
-     * @deprecated
-     */
-    public function testLeadTypes()
-    {
-        // test getLeadtypes
-        $leadtypes = $this->_instance->getLeadtypes('id', 'ASC');
-        $this->assertEquals(3, $leadtypes['totalcount']);
-
-        /*
-        // test saveLeadtypes
-        $this->_instance->saveLeadtypes(Zend_Json::encode($leadtypes['results']));
-
-        $leadtypesUpdated = $this->_instance->getLeadtypes('id', 'ASC');
-        $this->assertEquals(3, $leadtypesUpdated['totalcount']);
         */
     }
 

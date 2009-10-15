@@ -154,6 +154,8 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @param string                    $_action   {created|changed}
      * @param Crm_Model_Lead            $_oldLead
      * @return void
+     * 
+     * @todo add leadState/Type/Source again (move that to app controller?)
      */
     protected function sendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_oldLead = NULL)
     {
@@ -164,9 +166,11 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         $view->updater = $_updater;
         $view->lead = $_lead;
+        /*
         $view->leadState = Crm_Controller_LeadStates::getInstance()->getLeadState($_lead->leadstate_id);
         $view->leadType = Crm_Controller_LeadTypes::getInstance()->getLeadType($_lead->leadtype_id);
         $view->leadSource = Crm_Controller_LeadSources::getInstance()->getLeadSource($_lead->leadsource_id);
+        */
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
         //$view->updates = $_updates;
         

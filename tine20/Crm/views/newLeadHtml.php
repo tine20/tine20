@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        add leadstate/source/type again
  */
 ?>
 <h1><?php echo $this->lead->lead_name ?></h1>
@@ -19,15 +20,15 @@
 <table>
   <tr>
     <td><?php echo $this->lang_state ?></td>
-    <td><?php echo $this->leadState->leadstate ?></td>
+    <td><?php /* echo $this->leadState->leadstate */?></td>
   </tr>
   <tr>
     <td><?php echo $this->lang_type ?></td>
-    <td><?php echo $this->leadType->leadtype ?></td>
+    <td><?php /* echo $this->leadType->leadtype */?></td>
   </tr>
   <tr>
     <td><?php echo $this->lang_source ?></td>
-    <td><?php echo $this->leadSource->leadsource ?></td>
+    <td><?php /* echo $this->leadSource->leadsource */?></td>
   </tr>
   <tr>
     <td><?php echo $this->lang_start ?></td>

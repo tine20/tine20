@@ -65,9 +65,9 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
      * @param   Crm_Model_Lead $_lead lead data
      * @param   Zend_Locale $_locale the locale
      * @param   Zend_Translate $_translate
-     * 
      * @return  array  the record
-     *  
+     *
+     * @todo add leadstate/source/type again
      */
     protected function getRecord(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
     {        
@@ -122,7 +122,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                                 $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
-                            } elseif ( $key === 'leadstate_id' ) {
+                            } /*elseif ( $key === 'leadstate_id' ) {
                                 $state = Crm_Controller_LeadStates::getInstance()->getLeadState($_lead->leadstate_id);
                                 $content[] = $state->leadstate;
                             } elseif ( $key === 'leadtype_id' ) {
@@ -131,7 +131,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                             } elseif ( $key === 'leadsource_id' ) {
                                 $source = Crm_Controller_LeadSources::getInstance()->getLeadSource($_lead->leadsource_id);
                                 $content[] = $source->leadsource;
-                            } else {
+                            } */ else {
                                 $content[] = $_lead->$key;
                             }
                         }

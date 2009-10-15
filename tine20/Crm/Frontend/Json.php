@@ -113,7 +113,8 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {   
-        $defaults = parent::getSetting();
+        $settings = $this->getSetting();
+        $defaults = $settings['default'];
         
         // get default container
         $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer(
@@ -127,9 +128,18 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $defaults['container_id'] = $defaultContainerArray;
         
         $registryData = array(
-            'leadtypes'     => $this->getLeadtypes('leadtype','ASC'),
-            'leadstates'    => $this->getLeadStates('leadstate','ASC'),
-            'leadsources'   => $this->getLeadSources('leadsource','ASC'),
+            'leadtypes'     => array(
+                'results' => $settings[Crm_Model_Config::LEADTYPES], 
+                'totalcount' => count($settings[Crm_Model_Config::LEADTYPES])
+            ),
+            'leadstates'    => array(
+                'results' => $settings[Crm_Model_Config::LEADSTATES], 
+                'totalcount' => count($settings[Crm_Model_Config::LEADSTATES])
+            ),
+            'leadsources'   => array(
+                'results' => $settings[Crm_Model_Config::LEADSOURCES], 
+                'totalcount' => count($settings[Crm_Model_Config::LEADSOURCES])
+            ),
             'products'      => $this->getProducts('productsource','ASC'),
             'defaults'      => $defaults,
         );
@@ -142,11 +152,42 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * Returns settings for crm app
      *
      * @return  array record data
-     * @todo    add other settings
+     * @todo    move this to controller or config model?
+     * @todo    use Crm_Model_Config?
+     * @todo    return json store style with totalcount/result?
      */
     public function getSetting()
     {
-        return parent::getSetting();
+        $translate = Tinebase_Translation::getTranslation('Crm');
+        
+        $result['default'] = parent::getSetting();
+        $others = array(
+            Crm_Model_Config::LEADTYPES => array(
+                array('id' => 1, 'leadtype' => $translate->_('Customer')),
+                array('id' => 2, 'leadtype' => $translate->_('Partner')),
+                array('id' => 3, 'leadtype' => $translate->_('Reseller')),
+            ), 
+            Crm_Model_Config::LEADSTATES => array(
+            // @todo check 'endslead' values
+                array('id' => 1, 'leadstate' => $translate->_('open'),                  'probability' => 0,     'endslead' => 0),
+                array('id' => 2, 'leadstate' => $translate->_('contacted'),             'probability' => 10,    'endslead' => 0),
+                array('id' => 3, 'leadstate' => $translate->_('waiting for feedback'),  'probability' => 30,    'endslead' => 0),
+                array('id' => 4, 'leadstate' => $translate->_('quote sent'),            'probability' => 50,    'endslead' => 0),
+                array('id' => 5, 'leadstate' => $translate->_('accepted'),              'probability' => 100,   'endslead' => 1),
+                array('id' => 6, 'leadstate' => $translate->_('lost'),                  'probability' => 0,     'endslead' => 1),
+            ), 
+            Crm_Model_Config::LEADSOURCES => array(
+                array('id' => 1, 'leadsource' => $translate->_('Market')),
+                array('id' => 2, 'leadsource' => $translate->_('Email')),
+                array('id' => 3, 'leadsource' => $translate->_('Telephone')),
+                array('id' => 4, 'leadsource' => $translate->_('Website')),
+            )
+        );
+        foreach ($others as $setting => $defaults) {
+            $result[$setting] = Tinebase_Config::getInstance()->getConfigAsArray($setting, $this->_applicationName, $defaults);
+        }
+        
+        return $result;
     }
 
     /**
@@ -161,81 +202,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return array();
     }
-    
-    /**
-     * get lead sources
-     *
-     * @param string $sort
-     * @param string $dir
-     * @return array
-     * 
-     * @deprecated -> move leadsources to config/settings
-     */
-    public function getLeadsources($sort, $dir)
-    {     
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if($rows = Crm_Controller_LeadSources::getInstance()->getLeadSources($sort, $dir)) {
-            $rows->translate();
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;    
-    } 
-
-    /**
-     * get lead types
-     *
-     * @param string $sort
-     * @param string $dir
-     * @return array
-     * 
-     * @deprecated -> move lead types to config/settings
-     */
-   public function getLeadtypes($sort, $dir)
-    {
-         $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if($rows = Crm_Controller_LeadTypes::getInstance()->getLeadTypes($sort, $dir)) {
-            $rows->translate();
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;    
-    }  
-    
-    /**
-     * get lead states
-     *
-     * @param string $sort
-     * @param string $dir
-     * @return array
-     * 
-     * @deprecated -> move lead states to config/settings
-     */   
-    public function getLeadstates($sort, $dir)
-    {
-         $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if($rows = Crm_Controller_LeadStates::getInstance()->getLeadStates($sort, $dir)) {
-            $rows->translate();
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;   
-    }  
     
     /**
      * get available products
