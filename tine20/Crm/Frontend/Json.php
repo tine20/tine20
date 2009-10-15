@@ -21,11 +21,29 @@
 class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
+     * application name
+     * 
+     * @var string
+     */
+    protected $_applicationName = 'Crm';
+    
+    /**
      * the controller
      *
      * @var Crm_Controller_Lead
      */
     protected $_controller = NULL;
+    
+    /**
+     * default settings
+     * 
+     * @var array
+     */
+    protected $_defaults = array(
+        'leadstate_id'  => 1,
+        'leadtype_id'   => 1,
+        'leadsource_id' => 1,
+    );
     
     /**
      * the constructor
@@ -95,11 +113,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {   
-        $defaults = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::APPDEFAULTS, 'Crm', array(
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-        ));
+        $defaults = parent::getSetting();
         
         // get default container
         $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer(
@@ -123,6 +137,31 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $registryData;
     }
     
+
+    /**
+     * Returns settings for crm app
+     *
+     * @return  array record data
+     * @todo    add other settings
+     */
+    public function getSetting()
+    {
+        return parent::getSetting();
+    }
+
+    /**
+     * creates/updates settings
+     *
+     * @return array created/updated settings
+     * @todo    implement
+     */
+    public function saveSetting($settingData)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($settingData), TRUE));
+        
+        return array();
+    }
+    
     /**
      * get lead sources
      *
@@ -130,7 +169,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $dir
      * @return array
      * 
-     * @deprecated -> move leadsources to config?
+     * @deprecated -> move leadsources to config/settings
      */
     public function getLeadsources($sort, $dir)
     {     
@@ -155,7 +194,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $dir
      * @return array
      * 
-     * @deprecated -> move lead types to config?
+     * @deprecated -> move lead types to config/settings
      */
    public function getLeadtypes($sort, $dir)
     {
@@ -180,7 +219,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $dir
      * @return array
      * 
-     * @deprecated -> move lead states to config?
+     * @deprecated -> move lead states to config/settings
      */   
     public function getLeadstates($sort, $dir)
     {
