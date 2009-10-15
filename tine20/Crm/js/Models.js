@@ -16,7 +16,7 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.Model');
  * @class Tine.Crm.Model.Lead
  * @extends Tine.Tinebase.data.Record
  * 
- * Message Record Definition
+ * Lead Record Definition
  */ 
 Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
         {name: 'id',            type: 'int'},
@@ -133,13 +133,34 @@ Tine.Crm.Model.ProductLink = Tine.Tinebase.data.Record.create([
     }
 });
 
-// work arround nasty ext date bug
-// TODO is that still needed?
-/*
-Tine.Crm.Model.Lead.FixDates = function(lead) {
-    lead.data.start         = lead.data.start         ? Date.parseDate(lead.data.start, Date.patterns.ISO8601Long)         : lead.data.start;
-    lead.data.end           = lead.data.end           ? Date.parseDate(lead.data.end, Date.patterns.ISO8601Long)           : lead.data.end;
-    lead.data.end_scheduled = lead.data.end_scheduled ? Date.parseDate(lead.data.end_scheduled, Date.patterns.ISO8601Long) : lead.data.end_scheduled;
-};
-*/
-        
+/**
+ * @namespace Tine.Crm.Model
+ * @class Tine.Crm.Model.Settings
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Settings Record Definition
+ */ 
+Tine.Crm.Model.Setting = Tine.Tinebase.data.Record.create([
+        {name: 'id'},
+        {name: 'leadstates'},
+        {name: 'leadtypes'},
+        {name: 'leadsources'},
+        {name: 'default_leadstate_id',  type: 'int'},
+        {name: 'default_leadtype_id',   type: 'int'},
+        {name: 'default_leadsource_id', type: 'int'}
+    ], {
+    appName: 'Crm',
+    modelName: 'Setting',
+    idProperty: 'id',
+    titleProperty: 'title',
+    // ngettext('Setting', 'Settings', n);
+    recordName: 'Setting',
+    recordsName: 'Settings',
+    containerProperty: 'container_id',
+    // ngettext('record list', 'record lists', n);
+    containerName: 'Settings',
+    containersName: 'Settings',
+    getTitle: function() {
+        return this.recordName;
+    }
+});

@@ -54,6 +54,8 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Crm/js/ProductGridPanel.js',
         // task grid
             'Crm/js/TaskGridPanel.js',
+        // admin settings panel
+            'Crm/js/AdminPanel.js',
         );
     }
     

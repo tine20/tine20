@@ -82,3 +82,17 @@ Tine.Crm.leadBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Crm.Model.Lead
 });
 
+/**
+ * @namespace Tine.Crm
+ * @class Tine.Crm.settingBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Setting Backend
+ * 
+ * TODO generalize this?
+ */ 
+Tine.Crm.settingsBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Crm',
+    modelName: 'Setting',
+    recordClass: Tine.Crm.Model.Setting
+});
