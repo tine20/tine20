@@ -148,15 +148,13 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * creates/updates settings
      *
      * @return array created/updated settings
-     * 
-     * @todo    implement
-     * @todo    invalidate settings cache: $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
      */
     public function saveSettings($settingsData)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r(Zend_Json::decode($settingsData), TRUE));
+        $settings = new Crm_Model_Config(Zend_Json::decode($settingsData));
+        $result = Crm_Controller::getInstance()->saveSettings($settings)->toArray();
         
-        return array();
+        return $result;
     }
     
     /**

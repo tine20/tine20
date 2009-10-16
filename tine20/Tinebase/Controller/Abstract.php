@@ -117,4 +117,19 @@ abstract class Tinebase_Controller_Abstract
             $this->_defaultsSettings
         );
     }
+    
+    /**
+     * save settings
+     * 
+     * @param array $_settings
+     * @return void
+     */
+    public function saveSettings($_settings)
+    {
+        Tinebase_Config::getInstance()->setConfigForApplication(
+            Tinebase_Model_Config::APPDEFAULTS, 
+            Zend_Json::encode($_settings), 
+            $this->_applicationName
+        );
+    }
 }

@@ -142,6 +142,9 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      * - result is cached
      *
      * @return  Crm_Model_Config
+     * 
+     * @todo check 'endslead' values
+     * @todo generalize this some more?
      */
     public function getSettings()
     {
@@ -164,7 +167,6 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
                     array('id' => 3, 'leadtype' => $translate->_('Reseller')),
                 ), 
                 Crm_Model_Config::LEADSTATES => array(
-                // @todo check 'endslead' values
                     array('id' => 1, 'leadstate' => $translate->_('open'),                  'probability' => 0,     'endslead' => 0),
                     array('id' => 2, 'leadstate' => $translate->_('contacted'),             'probability' => 10,    'endslead' => 0),
                     array('id' => 3, 'leadstate' => $translate->_('waiting for feedback'),  'probability' => 30,    'endslead' => 0),
@@ -188,5 +190,33 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
         }
         
         return $result;
+    }
+    
+    /**
+     * save crm settings
+     * 
+     * @param Crm_Model_Config $_settings
+     * @return Crm_Model_Config
+     * 
+     * @todo generalize this some more?
+     */
+    public function saveSettings($_settings)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating Crm Settings: ' . print_r($_settings->toArray(), TRUE));
+        
+        foreach ($_settings->toArray() as $field => $value) {
+            if ($field == 'id') {
+                continue;
+            } else if ($field == 'defaults') {
+                parent::saveSettings($value);
+            } else {
+                Tinebase_Config::getInstance()->setConfigForApplication($field, Zend_Json::encode($value), $this->_applicationName);
+            }
+        }
+        
+        // invalidate cache
+        Tinebase_Core::get('cache')->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('settings'));
+        
+        return $this->getSettings();
     }
 }

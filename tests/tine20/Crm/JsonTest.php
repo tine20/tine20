@@ -118,6 +118,30 @@ class Crm_JsonTest extends Crm_AbstractTest
     }
     
     /**
+     * test get settings/config
+     * 
+     * @return void
+     */
+    public function testSaveSettings()
+    {
+        $oldSettings = $this->_instance->getSettings();
+        
+        // change some settings
+        $newSettings = $oldSettings;
+        $newSettings['defaults']['leadstate_id'] = 2;
+        $newSettings['leadsources'][] = array(
+            'id' => 5,
+            'leadsource' => 'Another Leadsource'
+        );
+        $anotherResult = $this->_instance->saveSettings(Zend_json::encode($newSettings));
+        $this->assertEquals($anotherResult, $newSettings);
+        
+        // reset original settings
+        $result = $this->_instance->saveSettings(Zend_json::encode($oldSettings));
+        $this->assertEquals($oldSettings, $result);
+    }
+    
+    /**
      * try to add a lead and link a contact
      *
      * @todo add note and product
