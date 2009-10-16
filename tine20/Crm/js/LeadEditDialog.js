@@ -83,7 +83,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.contactGrid.store.loadData(relations.contacts, true);
             this.tasksGrid.store.loadData(relations.tasks, true);
         }
-        if (this.productsGrid && this.productsGrid.store.getCount() == 0) {
+        if (this.productsGrid && this.record.data.products && this.productsGrid.store.getCount() == 0) {
             this.productsGrid.store.loadData(this.record.data.products, true);
         }
         
