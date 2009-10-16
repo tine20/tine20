@@ -144,7 +144,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      * @return  Crm_Model_Config
      * 
      * @todo check 'endslead' values
-     * @todo generalize this some more?
+     * @todo generalize this
      */
     public function getSettings()
     {
@@ -198,7 +198,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      * @param Crm_Model_Config $_settings
      * @return Crm_Model_Config
      * 
-     * @todo generalize this some more?
+     * @todo generalize this
      */
     public function saveSettings($_settings)
     {

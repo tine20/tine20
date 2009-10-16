@@ -20,7 +20,7 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Crm Admin Panel</p>
  * <p><pre>
- * TODO         generalize this?
+ * TODO         generalize this
  * TODO         set title
  * </pre></p>
  * 

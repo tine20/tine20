@@ -139,6 +139,8 @@ Tine.Crm.Model.ProductLink = Tine.Tinebase.data.Record.create([
  * @extends Tine.Tinebase.data.Record
  * 
  * Settings Record Definition
+ * 
+ * TODO         generalize this
  */ 
 Tine.Crm.Model.Settings = Tine.Tinebase.data.Record.create([
         {name: 'id'},

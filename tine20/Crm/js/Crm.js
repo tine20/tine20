@@ -89,7 +89,7 @@ Tine.Crm.leadBackend = new Tine.Tinebase.data.RecordProxy({
  * 
  * Settings Backend
  * 
- * TODO generalize this?
+ * TODO generalize this
  */ 
 Tine.Crm.settingsBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Crm',
