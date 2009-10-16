@@ -84,8 +84,6 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
         $result = '';
         $settings = Crm_Controller::getInstance()->getSettings();
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_fieldName);
-        
         switch ($_fieldName) {
             case 'leadstate_id':
                 $state = arrayGetById($_record->leadstate_id, $settings->leadstates);
@@ -100,8 +98,6 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
                 $result = $source['leadsource'];
                 break;
         }
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $result);
         
         return $result;
     }
