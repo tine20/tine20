@@ -18,26 +18,15 @@ Tine.Admin.Applications.Main = function() {
 
     /**
      * onclick handler for edit action
+     * 
+     * TODO     make that more generic?
      */
     var _editButtonHandler = function(_button, _event) {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
-        Tine[selectedRows[0].data.name].AdminPanel.openWindow({});
-        //var applicationId = selectedRows[0].id;
-        //Tine.Tinebase.common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + applicationId, 600, 400);
+        Tine[selectedRows[0].data.name].AdminPanel.openWindow({
+            record: new Tine[selectedRows[0].data.name].Model.Settings(selectedRows[0].data.name)
+        });
     };
-    
-    /**
-     * onclick handler for permissions action
-     * removed, is replaced by role management
-     */
-    /*
-    var _permissionsButtonHandler = function(_button, _event) {
-        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
-        var applicationId = selectedRows[0].id;
-        
-        Tine.Tinebase.common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + applicationId, 800, 350);
-    };
-    */
 
     var _enableDisableButtonHandler = function(state) {
         var applicationIds = new Array();
@@ -150,7 +139,6 @@ Tine.Admin.Applications.Main = function() {
                 _action_disable,
                 '-',
                 _action_settings,
-                //_action_permissions,
                 '->',
                 this.translation.gettext('Search:'), ' ',
 /*                new Ext.ux.SelectBox({
@@ -206,7 +194,6 @@ Tine.Admin.Applications.Main = function() {
                 _action_enable,
                 _action_disable,
                 _action_settings
-                //_action_permissions
             ]
         });
 
@@ -245,12 +232,10 @@ Tine.Admin.Applications.Main = function() {
                     _action_enable.setDisabled(true);
                     _action_disable.setDisabled(true);
                     _action_settings.setDisabled(true);
-                    //_action_permissions.setDisabled(true);
                 } else if (rowCount > 1) {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     _action_settings.setDisabled(true);
-                    //_action_permissions.setDisabled(true);
                 } else {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
@@ -258,7 +243,6 @@ Tine.Admin.Applications.Main = function() {
                     if (Tine[selected[0].data.name].AdminPanel) {
                         _action_settings.setDisabled(false);
                     }
-                    //_action_permissions.setDisabled(false);
                 }
                 
                 // don't allow to disable Admin, Tinebase or Addressbook as we can't deal with this yet
@@ -319,7 +303,6 @@ Tine.Admin.Applications.Main = function() {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     //_action_settings.setDisabled(true);
-                    //_action_permissions.setDisabled(false);
                 }
             }
             //var record = _grid.getStore().getAt(rowIndex);
@@ -337,6 +320,7 @@ Tine.Admin.Applications.Main = function() {
             this.updateMainToolbar();        
         },
         
+        // TODO generalize that
         updateMainToolbar : function() 
         {
             var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
