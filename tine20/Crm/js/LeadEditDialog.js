@@ -317,9 +317,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                 if (this.record.data.probability !== null) {
                                                     this.combo_probability.setValue(record.data.probability);
                                                 }
-                                        
-                                                if (this.record.data.endslead == '1') {
-                                                    this.combo_endDate.setValue(new Date());
+                                                if (record.data.endslead == '1') {
+                                                    this.date_end.setValue(new Date());
                                                 }
                                             },
                                             scope: this
