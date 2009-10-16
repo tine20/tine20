@@ -66,9 +66,15 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         $csvFilename = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
         
         $export = file_get_contents($csvFilename);
+        //echo $export;
+        
+        $translate = Tinebase_Translation::getTranslation('Crm');
+        
         $defaultContainerId = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId();
-        $this->assertEquals('"lead_name","leadstate_id","leadtype_id","leadsource_id","container_id","description","turnover","probability","start","end","end_scheduled","CUSTOMER","PARTNER","RESPONSIBLE","TASK"
-"PHPUnit","1","1","1","' .$defaultContainerId . '","Description","200000","70","' . $this->_objects['lead']['start'] . '","","","","Kneschke, Lars
+        $this->assertEquals('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","container_id",'
+            . '"description","turnover","probability","start","end","end_scheduled","CUSTOMER","PARTNER","RESPONSIBLE","TASK"
+"PHPUnit","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market') . '","' .$defaultContainerId . '","Description","200000","70","' . $this->_objects['lead']['start'] 
+            . '","","","","Kneschke, Lars
 ","","phpunit: crm test task
 "
 ', $export);

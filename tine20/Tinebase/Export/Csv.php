@@ -28,6 +28,13 @@ class Tinebase_Export_Csv
     protected $_relationsTypes = array();
     
     /**
+     * special fields
+     * 
+     * @var array
+     */
+    protected $_specialFields = array();
+    
+    /**
      * The php build in fputcsv function is buggy, so we need an own one :-(
      *
      * @param resource $filePointer
@@ -59,7 +66,6 @@ class Tinebase_Export_Csv
      * @return string filename
      * 
      * @todo add specific export values
-     * @todo save in special download path
      */
     public function exportRecords(Tinebase_Record_RecordSet $_records, $_toStdout = FALSE, $_skipFields = array()) {
         
@@ -92,6 +98,10 @@ class Tinebase_Export_Csv
                     $this->_addRelationTypes($fields);
                 } else {
                     $fields[] = $fieldName;
+                    if (in_array($fieldName, array_keys($this->_specialFields))) {
+                        // add special field headline afterwards
+                        $fields[] = $this->_specialFields[$fieldName];
+                    }
                 }
             }
         }
@@ -108,6 +118,9 @@ class Tinebase_Export_Csv
             foreach ($fields as $fieldName) {
                 if (in_array($fieldName, $this->_relationsTypes)) {
                     $csvArray[] = $this->_addRelations($record, $fieldName);
+                } else if (in_array($fieldName, $this->_specialFields)) {
+                    $arrayFlipped = array_flip($this->_specialFields);
+                    $csvArray[] = $this->_addSpecialValue($record, $arrayFlipped[$fieldName]);
                 } else {
                     $csvArray[] = $recordArray[$fieldName];
                 }
@@ -180,5 +193,18 @@ class Tinebase_Export_Csv
         }
         
         return $result;
+    }
+    
+    /**
+     * special field value function
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @return string
+     */
+    protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
+    {
+        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Should not be here.');
+        return '';
     }
 }

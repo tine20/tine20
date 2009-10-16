@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add products / state / type / source
+ * @todo        add products
  */
 
 /**
@@ -27,6 +27,13 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
      * @var array
      */
     protected $_relationsTypes = array('CUSTOMER', 'PARTNER', 'RESPONSIBLE', 'TASK');
+
+    /**
+     * special fields
+     * 
+     * @var array
+     */
+    protected $_specialFields = array('leadstate_id' => 'Leadstate', 'leadtype_id' => 'Leadtype', 'leadsource_id' => 'Leadsource');
     
     /**
      * export leads to csv file
@@ -43,7 +50,7 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
             'dir' => 'ASC',
         ));
         
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
         
         $leads = Crm_Controller_Lead::getInstance()->search($_filter, $pagination, TRUE);
         if (count($leads) < 1) {
@@ -61,7 +68,41 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
             'deleted_by'            ,
         );
         
-        $filename = parent::exportRecords($leads, $_toStdout, $skipFields);
+        $filename = $this->exportRecords($leads, $_toStdout, $skipFields);
         return $filename;
+    }
+    
+    /**
+     * special field value function
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_fieldName
+     * @return string
+     */
+    protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
+    {
+        $result = '';
+        $settings = Crm_Controller::getInstance()->getSettings();
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_fieldName);
+        
+        switch ($_fieldName) {
+            case 'leadstate_id':
+                $state = arrayGetById($_record->leadstate_id, $settings->leadstates);
+                $result = $state['leadstate'];
+                break;
+            case 'leadtype_id':
+                $type = arrayGetById($_record->leadtype_id, $settings->leadtypes);
+                $result = $type['leadtype'];
+                break;
+            case 'leadsource_id':
+                $source = arrayGetById($_record->leadsource_id, $settings->leadsources);
+                $result = $source['leadsource'];
+                break;
+        }
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $result);
+        
+        return $result;
     }
 }
