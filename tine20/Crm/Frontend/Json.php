@@ -134,6 +134,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * Returns settings for crm app
      *
      * @return  array record data
+     * 
      * @todo    return json store style with totalcount/result?
      */
     public function getSettings()
@@ -147,7 +148,9 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * creates/updates settings
      *
      * @return array created/updated settings
+     * 
      * @todo    implement
+     * @todo    invalidate settings cache: $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
      */
     public function saveSettings($settingsData)
     {

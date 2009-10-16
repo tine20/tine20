@@ -139,41 +139,52 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
     
     /**
      * Returns settings for crm app
+     * - result is cached
      *
      * @return  Crm_Model_Config
      */
     public function getSettings()
     {
-        $translate = Tinebase_Translation::getTranslation('Crm');
+        $cache = Tinebase_Core::get('cache');
+        $cacheId = convertCacheId('getCrmSettings');
+        $result = $cache->load($cacheId);
         
-        $result = new Crm_Model_Config(array(
-            'defaults' => parent::getSettings()
-        ));
+        if (! $result) {
         
-        $others = array(
-            Crm_Model_Config::LEADTYPES => array(
-                array('id' => 1, 'leadtype' => $translate->_('Customer')),
-                array('id' => 2, 'leadtype' => $translate->_('Partner')),
-                array('id' => 3, 'leadtype' => $translate->_('Reseller')),
-            ), 
-            Crm_Model_Config::LEADSTATES => array(
-            // @todo check 'endslead' values
-                array('id' => 1, 'leadstate' => $translate->_('open'),                  'probability' => 0,     'endslead' => 0),
-                array('id' => 2, 'leadstate' => $translate->_('contacted'),             'probability' => 10,    'endslead' => 0),
-                array('id' => 3, 'leadstate' => $translate->_('waiting for feedback'),  'probability' => 30,    'endslead' => 0),
-                array('id' => 4, 'leadstate' => $translate->_('quote sent'),            'probability' => 50,    'endslead' => 0),
-                array('id' => 5, 'leadstate' => $translate->_('accepted'),              'probability' => 100,   'endslead' => 1),
-                array('id' => 6, 'leadstate' => $translate->_('lost'),                  'probability' => 0,     'endslead' => 1),
-            ), 
-            Crm_Model_Config::LEADSOURCES => array(
-                array('id' => 1, 'leadsource' => $translate->_('Market')),
-                array('id' => 2, 'leadsource' => $translate->_('Email')),
-                array('id' => 3, 'leadsource' => $translate->_('Telephone')),
-                array('id' => 4, 'leadsource' => $translate->_('Website')),
-            )
-        );
-        foreach ($others as $setting => $defaults) {
-            $result->$setting = Tinebase_Config::getInstance()->getConfigAsArray($setting, $this->_applicationName, $defaults);
+            $translate = Tinebase_Translation::getTranslation('Crm');
+            
+            $result = new Crm_Model_Config(array(
+                'defaults' => parent::getSettings()
+            ));
+            
+            $others = array(
+                Crm_Model_Config::LEADTYPES => array(
+                    array('id' => 1, 'leadtype' => $translate->_('Customer')),
+                    array('id' => 2, 'leadtype' => $translate->_('Partner')),
+                    array('id' => 3, 'leadtype' => $translate->_('Reseller')),
+                ), 
+                Crm_Model_Config::LEADSTATES => array(
+                // @todo check 'endslead' values
+                    array('id' => 1, 'leadstate' => $translate->_('open'),                  'probability' => 0,     'endslead' => 0),
+                    array('id' => 2, 'leadstate' => $translate->_('contacted'),             'probability' => 10,    'endslead' => 0),
+                    array('id' => 3, 'leadstate' => $translate->_('waiting for feedback'),  'probability' => 30,    'endslead' => 0),
+                    array('id' => 4, 'leadstate' => $translate->_('quote sent'),            'probability' => 50,    'endslead' => 0),
+                    array('id' => 5, 'leadstate' => $translate->_('accepted'),              'probability' => 100,   'endslead' => 1),
+                    array('id' => 6, 'leadstate' => $translate->_('lost'),                  'probability' => 0,     'endslead' => 1),
+                ), 
+                Crm_Model_Config::LEADSOURCES => array(
+                    array('id' => 1, 'leadsource' => $translate->_('Market')),
+                    array('id' => 2, 'leadsource' => $translate->_('Email')),
+                    array('id' => 3, 'leadsource' => $translate->_('Telephone')),
+                    array('id' => 4, 'leadsource' => $translate->_('Website')),
+                )
+            );
+            foreach ($others as $setting => $defaults) {
+                $result->$setting = Tinebase_Config::getInstance()->getConfigAsArray($setting, $this->_applicationName, $defaults);
+            }
+            
+            // save result and tag it with 'settings'
+            $cache->save($result, $cacheId, array('settings'));
         }
         
         return $result;

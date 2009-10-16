@@ -67,10 +67,11 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
      * @param   Zend_Translate $_translate
      * @return  array  the record
      *
-     * @todo add leadstate/source/type again
      */
     protected function getRecord(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
     {        
+        $settings = Crm_Controller::getInstance()->getSettings();
+        
         $leadFields = array (
             array(  'label' => /* $_translate->_('Lead Data') */ "", 
                     'type' => 'separator' 
@@ -122,16 +123,16 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                                 $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
-                            } /*elseif ( $key === 'leadstate_id' ) {
-                                $state = Crm_Controller_LeadStates::getInstance()->getLeadState($_lead->leadstate_id);
-                                $content[] = $state->leadstate;
+                            } elseif ( $key === 'leadstate_id' ) {
+                                $state = arrayGetById($_lead->leadstate_id, $settings->leadstates);
+                                $content[] = $state['leadstate'];
                             } elseif ( $key === 'leadtype_id' ) {
-                                $type = Crm_Controller_LeadTypes::getInstance()->getLeadType($_lead->leadtype_id);
-                                $content[] = $type->leadtype;
+                                $type = arrayGetById($_lead->leadtype_id, $settings->leadtypes);
+                                $content[] = $type['leadtype'];
                             } elseif ( $key === 'leadsource_id' ) {
-                                $source = Crm_Controller_LeadSources::getInstance()->getLeadSource($_lead->leadsource_id);
-                                $content[] = $source->leadsource;
-                            } */ else {
+                                $source = arrayGetById($_lead->leadsource_id, $settings->leadsources);
+                                $content[] = $source['leadsource'];
+                            } else {
                                 $content[] = $_lead->$key;
                             }
                         }
