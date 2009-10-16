@@ -56,7 +56,6 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-        console.log(this.record);
         if (! this.record.get('default_leadstate_id') ) {
             this.record.set('default_leadstate_id', this.record.data.defaults.leadstate_id);
             this.record.set('default_leadsource_id', this.record.data.defaults.leadsource_id);
