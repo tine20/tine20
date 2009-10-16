@@ -24,6 +24,24 @@ function array_value($_key, array $_array)
 }
 
 /**
+ * get an array in a multidimensional array by its property
+ * 
+ * @param array $_id
+ * @param $_array
+ * @return array
+ */
+function arrayGetById($_id, array $_array, $_idProperty = 'id')
+{
+    foreach ($_array as $sub) {
+        if ($sub[$_idProperty] == $_id) {
+            return $sub;
+        }
+    }
+    
+    return array();
+}
+
+/**
  * converts string with M or K to bytes integer
  * - for example: 50M -> 52428800
  *
