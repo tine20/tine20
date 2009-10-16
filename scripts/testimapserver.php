@@ -14,6 +14,7 @@
  * @todo        check acl
  * @todo        check subscriptions
  * @todo        check quota
+ * @todo        try to delete/move/append messages?
  */
 
 die("<center>THIS SCRIPT IS DISABLED FOR SECURITY REASONS.<br><br><b>PLEASE COMMENT OUT LINE ". __LINE__ ." TO ENABLE THIS SCRIPT</b>.</center>");
