@@ -22,6 +22,7 @@ Ext.namespace('Tine.Crm');
  * <p><pre>
  * TODO         generalize this
  * TODO         set title
+ * TODO         add panels for leadtype/source
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -82,6 +83,13 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.record.set('defaults', defaults);
         
+        // save leadstate / commit store
+        var leadstates = [];
+        this.leadstatePanel.store.each(function(record) {                     
+            leadstates.push(record.data);
+        }, this);
+        this.leadstatePanel.store.commitChanges();
+        this.record.set('leadstates', leadstates);
     },
     
     /**
@@ -93,6 +101,12 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+        
+        this.leadstatePanel = new Tine.Crm.LeadState.GridPanel({
+            title: this.app.i18n._('Leadstates'),
+            frame: true
+        });
+        
         return {
             layout: 'accordion',
             animate: true,
@@ -138,12 +152,9 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     lazyInit: false,
                     value: Tine.Crm.LeadType.getStore().getAt(0).id
                 }]]
-            }, {
-                title: this.app.i18n._('Leadstates'),
-                xtype: 'panel',
-                frame: true,
-                html: ''
-            }, {
+            }, 
+                this.leadstatePanel, 
+            {
                 title: this.app.i18n._('Leadsources'),
                 xtype: 'panel',
                 frame: true,
