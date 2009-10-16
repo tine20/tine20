@@ -140,8 +140,9 @@ Tine.Crm.Model.ProductLink = Tine.Tinebase.data.Record.create([
  * 
  * Settings Record Definition
  */ 
-Tine.Crm.Model.Setting = Tine.Tinebase.data.Record.create([
+Tine.Crm.Model.Settings = Tine.Tinebase.data.Record.create([
         {name: 'id'},
+        {name: 'defaults'},
         {name: 'leadstates'},
         {name: 'leadtypes'},
         {name: 'leadsources'},
@@ -150,12 +151,12 @@ Tine.Crm.Model.Setting = Tine.Tinebase.data.Record.create([
         {name: 'default_leadsource_id', type: 'int'}
     ], {
     appName: 'Crm',
-    modelName: 'Setting',
+    modelName: 'Settings',
     idProperty: 'id',
     titleProperty: 'title',
-    // ngettext('Setting', 'Settings', n);
-    recordName: 'Setting',
-    recordsName: 'Settings',
+    // ngettext('Settings', 'Settings', n);
+    recordName: 'Settings',
+    recordsName: 'Settingss',
     containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'Settings',

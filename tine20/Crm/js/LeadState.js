@@ -9,6 +9,7 @@
  * @version     $Id$
  *
  * TODO         remove/refactor admin lead state 
+ * TODO         don't use json store anymore
  */
 
 Ext.namespace('Tine.Crm', 'Tine.Crm.LeadState');

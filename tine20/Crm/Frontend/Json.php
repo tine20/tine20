@@ -149,9 +149,9 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @return array created/updated settings
      */
-    public function saveSettings($settingsData)
+    public function saveSettings($recordData)
     {
-        $settings = new Crm_Model_Config(Zend_Json::decode($settingsData));
+        $settings = new Crm_Model_Config(Zend_Json::decode($recordData));
         $result = Crm_Controller::getInstance()->saveSettings($settings)->toArray();
         
         return $result;

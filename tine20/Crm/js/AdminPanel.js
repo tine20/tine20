@@ -20,9 +20,8 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Crm Admin Panel</p>
  * <p><pre>
- * TODO         add model
- * TODO         implement
  * TODO         generalize this?
+ * TODO         set title
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -40,8 +39,8 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     //windowNamePrefix: 'LeadEditWindow_',
     appName: 'Crm',
-    recordClass: Tine.Crm.Model.Setting,
-    recordProxy: Tine.Crm.settingBackend,
+    recordClass: Tine.Crm.Model.Settings,
+    recordProxy: Tine.Crm.settingsBackend,
     evalGrants: false,
 
     /**
@@ -57,6 +56,13 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
+        console.log(this.record);
+        if (! this.record.get('default_leadstate_id') ) {
+            this.record.set('default_leadstate_id', this.record.data.defaults.leadstate_id);
+            this.record.set('default_leadsource_id', this.record.data.defaults.leadsource_id);
+            this.record.set('default_leadtype_id', this.record.data.defaults.leadtype_id);
+        }
+        
         Tine.Crm.AdminPanel.superclass.onRecordLoad.call(this);        
     },
     
@@ -68,6 +74,15 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
         Tine.Crm.AdminPanel.superclass.onRecordUpdate.call(this);
+        
+        var defaults = {
+            leadstate_id: this.record.get('default_leadstate_id'), 
+            leadsource_id: this.record.get('default_leadsource_id'), 
+            leadtype_id: this.record.get('default_leadtype_id')
+        };
+        
+        this.record.set('defaults', defaults);
+        
     },
     
     /**
@@ -79,7 +94,68 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
-        
+        return {
+            layout: 'accordion',
+            animate: true,
+            border: true,
+            items: [{
+                title: this.app.i18n._('Defaults'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                xtype: 'columnform',
+                formDefaults: {
+                    xtype:'combo',
+                    anchor: '90%',
+                    labelSeparator: '',
+                    columnWidth: 1,
+                    valueField:'id',
+                    typeAhead: true,
+                    mode: 'local',
+                    triggerAction: 'all',
+                    editable: false,
+                    allowBlank: false,
+                    forceSelection: true
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n._('Leadstate'), 
+                    name:'default_leadstate_id',
+                    store: Tine.Crm.LeadState.getStore(),
+                    displayField:'leadstate',
+                    lazyInit: false,
+                    value: Tine.Crm.LeadState.getStore().getAt(0).id
+                }, {
+                    fieldLabel: this.app.i18n._('Leadsource'), 
+                    name:'default_leadsource_id',
+                    store: Tine.Crm.LeadSource.getStore(),
+                    displayField:'leadsource',
+                    lazyInit: false,
+                    value: Tine.Crm.LeadSource.getStore().getAt(0).id
+                }, {
+                    fieldLabel: this.app.i18n._('Leadtype'), 
+                    name:'default_leadtype_id',
+                    store: Tine.Crm.LeadType.getStore(),
+                    displayField:'leadtype',
+                    lazyInit: false,
+                    value: Tine.Crm.LeadType.getStore().getAt(0).id
+                }]]
+            }, {
+                title: this.app.i18n._('Leadstates'),
+                xtype: 'panel',
+                frame: true,
+                html: ''
+            }, {
+                title: this.app.i18n._('Leadsources'),
+                xtype: 'panel',
+                frame: true,
+                html: ''
+            }, {
+                title: this.app.i18n._('Leadtypes'),
+                xtype: 'panel',
+                frame: true,
+                html: ''
+            }]            
+        };                
     } // end of getFormItems
 });
 
