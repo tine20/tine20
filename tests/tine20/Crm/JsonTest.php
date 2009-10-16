@@ -104,14 +104,17 @@ class Crm_JsonTest extends Crm_AbstractTest
      * test get settings/config
      * 
      * @return void
-     * 
-     * @todo finish test
      */
-    public function testGetSetting()
+    public function testGetSettings()
     {
-        $result = $this->_instance->getSetting();
+        $result = $this->_instance->getSettings();
 
         //print_r($result);
+        
+        $this->assertEquals(array('leadstates', 'leadtypes', 'leadsources', 'defaults'), array_keys($result));
+        $this->assertEquals(6, count($result[Crm_Model_Config::LEADSTATES]));
+        $this->assertEquals(3, count($result[Crm_Model_Config::LEADTYPES]));
+        $this->assertEquals(4, count($result[Crm_Model_Config::LEADSOURCES]));
     }
     
     /**

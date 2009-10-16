@@ -22,20 +22,6 @@
 abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstract implements Tinebase_Frontend_Json_Interface
 {
     /**
-     * application name
-     * 
-     * @var string
-     */
-    protected $_applicationName = 'Tinebase';
-    
-    /**
-     * default settings
-     * 
-     * @var array
-     */
-    protected $_defaults = array();
-    
-    /**
      * Returns registry data of the application.
      *
      * Each application has its own registry to supply static data to the client.
@@ -49,20 +35,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     public function getRegistryData()
     {
         return array();
-    }
-    
-    /**
-     * Returns default settings for app
-     *
-     * @return  array setting data
-     */
-    public function getSetting()
-    {
-        return Tinebase_Config::getInstance()->getConfigAsArray(
-            Tinebase_Model_Config::APPDEFAULTS, 
-            $this->_applicationName, 
-            $this->_defaults
-        );
     }
     
     /************************** protected functions **********************/    

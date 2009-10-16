@@ -20,6 +20,13 @@
 abstract class Tinebase_Controller_Abstract
 {
     /**
+     * default settings
+     * 
+     * @var array
+     */
+    protected $_defaultsSettings = array();
+    
+    /**
      * application name (is needed in checkRight())
      *
      * @var string
@@ -95,5 +102,19 @@ abstract class Tinebase_Controller_Abstract
         }
 
         return $result;
+    }
+    
+    /**
+     * Returns default settings for app
+     *
+     * @return  array settings data
+     */
+    public function getSettings()
+    {
+        return Tinebase_Config::getInstance()->getConfigAsArray(
+            Tinebase_Model_Config::APPDEFAULTS, 
+            $this->_applicationName, 
+            $this->_defaultsSettings
+        );
     }
 }
