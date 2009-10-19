@@ -23,8 +23,10 @@ Tine.Admin.Applications.Main = function() {
      */
     var _editButtonHandler = function(_button, _event) {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
-        Tine[selectedRows[0].data.name].AdminPanel.openWindow({
-            record: new Tine[selectedRows[0].data.name].Model.Settings(selectedRows[0].data.name)
+        var appName = selectedRows[0].data.name;
+        Tine[appName].AdminPanel.openWindow({
+            record: new Tine[selectedRows[0].data.name].Model.Settings(selectedRows[0].data.name),
+            windowTitle: String.format(_('{0} Settings'), appName)
         });
     };
 
