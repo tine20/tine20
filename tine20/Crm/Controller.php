@@ -100,6 +100,8 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
      * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
+     * 
+     * @todo generalize this
      */
     public function createPersonalFolder($_accountId)
     {
@@ -122,21 +124,6 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
         return $container;
     }
 
-    /**
-     * delets the personal folder for deleted accounts
-     *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return void
-     * 
-     * @todo    implement
-     */
-    public function deletePersonalFolder($_accountId)
-    {
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        
-        // delete personal folder here
-    }
-    
     /**
      * Returns settings for crm app
      * - result is cached
