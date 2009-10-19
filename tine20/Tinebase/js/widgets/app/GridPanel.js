@@ -20,7 +20,9 @@ Ext.namespace('Tine.Tinebase.widgets.app');
  * @extends     Ext.Panel
  * 
  * <p>Application Grid Panel</p>
- * <p></p>
+ * <p>
+ * TODO         remove the loadmask on error
+ * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
