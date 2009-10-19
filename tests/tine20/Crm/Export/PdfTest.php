@@ -201,7 +201,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         $lead = Crm_Controller_Lead::getInstance()->get($this->objects['leadWithLink']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_backend'            => 'Sql',
             'own_id'                 => $lead->getId(),
             'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
@@ -222,7 +222,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
 
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();                
-        $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $this->objects['leadWithLink']->getId());    
+        $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $this->objects['leadWithLink']->getId());    
     }
 
     /**
@@ -237,7 +237,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         $lead = Crm_Controller_Lead::getInstance()->get($this->objects['leadWithLink']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_backend'            => 'Sql',
             'own_id'                 => $lead->getId(),
             'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Tasks_Model_Task',
@@ -261,7 +261,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();        
-        $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $this->objects['leadWithLink']->getId());
+        $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $this->objects['leadWithLink']->getId());
     }
     
 }		

@@ -163,7 +163,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
             if (!isset($relation['id'])) {
                 $data = array(
                     'own_model'              => 'Crm_Model_Lead',
-                    'own_backend'            => Crm_Backend_Factory::SQL,
+                    'own_backend'            => 'Sql',
                     'own_id'                 => (isset($decodedLead['id'])) ? $decodedLead['id'] : 0,
                     'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'type'                   => $relation['type'],

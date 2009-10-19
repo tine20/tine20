@@ -316,7 +316,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $lead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_backend'            => 'Sql',
             'own_id'                 => $this->_objects['initialLead']->getId(),
             'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Tasks_Model_Task',
@@ -355,7 +355,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $lead = Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => Crm_Backend_Factory::SQL,
+            'own_backend'            => 'Sql',
             'own_id'                 => $this->_objects['initialLead']->getId(),
             'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
@@ -384,7 +384,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
 
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();        
-        $backend->purgeAllRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $this->_objects['initialLead']->getId());
+        $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $this->_objects['initialLead']->getId());
 
         // delete contact
         Addressbook_Controller_Contact::getInstance()->delete($this->_objects['user']->getId());
@@ -413,7 +413,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($someProducts->toArray(), $resultProducts->toArray());
         
         // get every saved product back from database one by one
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
+        $backend = new Crm_Backend_Products();
         
         foreach ($this->_objects['someProducts'] as $product) {
         	$this->assertEquals($product->toArray(), $backend->get($product->id)->toArray());

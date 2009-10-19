@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @deprecated  this is going to be moved to erp/sales mgmt
  * @todo        extend Tinebase_Controller_Record_Abstract
  */
 
@@ -21,6 +22,20 @@
 class Crm_Controller_LeadProducts extends Tinebase_Controller_Abstract
 {
     /**
+     * lead products backend
+     * 
+     * @var Crm_Backend_LeadProducts
+     */
+    protected $_leadProductsBackend = NULL;
+    
+    /**
+     * products backend
+     * 
+     * @var Crm_Backend_Products
+     */
+    protected $_backend = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -29,6 +44,8 @@ class Crm_Controller_LeadProducts extends Tinebase_Controller_Abstract
     {
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Crm';
+        $this->_leadProductsBackend = new Crm_Backend_LeadProducts();
+        $this->_backend = new Crm_Backend_Products();
     }
 
     /**
@@ -72,8 +89,7 @@ class Crm_Controller_LeadProducts extends Tinebase_Controller_Abstract
      */
     public function getProducts($_sort = 'id', $_dir = 'ASC')
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
-        $result = $backend->getAll($_sort, $_dir);
+        $result = $this->_backend->getAll($_sort, $_dir);
         
         return $result;    
     }     
@@ -87,8 +103,7 @@ class Crm_Controller_LeadProducts extends Tinebase_Controller_Abstract
      */
     public function getProduct($_productId)
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
-        $result = $backend->get($_productId);
+        $result = $this->_backend->get($_productId);
         
         return $result;    
     }     
@@ -105,27 +120,26 @@ class Crm_Controller_LeadProducts extends Tinebase_Controller_Abstract
      */
     public function saveProducts(Tinebase_Record_Recordset $_products)
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
-        $existingProducts = $backend->getAll();
+        $existingProducts = $this->_backend->getAll();
         
         $migration = $existingProducts->getMigration($_products->getArrayOfIds());
         
         // delete
         foreach ($migration['toDeleteIds'] as $id) {
-        	$backend->delete($id);
+        	$this->_backend->delete($id);
         }
         
         // add / create
         foreach ($_products as $product) {
         	if (in_array($product->id, $migration['toCreateIds'])) {
-        		$backend->create($product);
+        		$this->_backend->create($product);
         	}
         }
         
         // update
         foreach ($_products as $product) {
         	if (in_array($product->id, $migration['toUpdateIds'])) {
-        		$backend->update($product);
+        		$this->_backend->update($product);
         	}
         }
         
@@ -142,8 +156,7 @@ class Crm_Controller_LeadProducts extends Tinebase_Controller_Abstract
      */ 
     public function getLeadProducts($_leadId)
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
-        $result = $backend->getByLeadId($_leadId);
+        $result = $this->_leadProductsBackend->getByLeadId($_leadId);
 
         return $result;    
     } 
@@ -158,8 +171,7 @@ class Crm_Controller_LeadProducts extends Tinebase_Controller_Abstract
      */ 
     public function saveLeadProducts($_leadId, Tinebase_Record_Recordset $_products)
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
-        $backend->saveProducts($_leadId, $_products);
+        $this->_leadProductsBackend->saveProducts($_leadId, $_products);
     } 
     
 }

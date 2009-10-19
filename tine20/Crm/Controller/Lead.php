@@ -29,7 +29,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     private function __construct() {
         $this->_applicationName = 'Crm';
         $this->_modelName = 'Crm_Model_Lead';
-        $this->_backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $this->_backend = new Crm_Backend_Leads();
         $this->_currentAccount = Tinebase_Core::getUser();
         
         // send notifications
@@ -264,7 +264,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     {
         $recipients = array();
         
-        $relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', Crm_Backend_Factory::SQL, $_lead->getId(), true);
+        $relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', 'Sql', $_lead->getId(), true);
         
         foreach ($relations as $relation) {
             if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == 'RESPONSIBLE') {
