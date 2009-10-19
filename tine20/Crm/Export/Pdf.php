@@ -124,13 +124,13 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
                             } elseif ( $key === 'leadstate_id' ) {
-                                $state = arrayGetById($_lead->leadstate_id, $settings->leadstates);
+                                $state = $settings->getOptionById($_lead->leadstate_id, 'leadstates');
                                 $content[] = $state['leadstate'];
                             } elseif ( $key === 'leadtype_id' ) {
-                                $type = arrayGetById($_lead->leadtype_id, $settings->leadtypes);
+                                $type = $settings->getOptionById($_lead->leadtype_id, 'leadtypes');
                                 $content[] = $type['leadtype'];
                             } elseif ( $key === 'leadsource_id' ) {
-                                $source = arrayGetById($_lead->leadsource_id, $settings->leadsources);
+                                $source = $settings->getOptionById($_lead->leadsource_id, 'leadsources');
                                 $content[] = $source['leadsource'];
                             } else {
                                 $content[] = $_lead->$key;

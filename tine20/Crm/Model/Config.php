@@ -68,4 +68,26 @@ class Crm_Model_Config extends Tinebase_Record_Abstract
         'defaults'          => array('allowEmpty' => true ),
     );
     
+    /**
+     * get an array in a multidimensional array by its property
+     * 
+     * @param array $_id
+     * @param string $_property
+     * @return array
+     * 
+     * @todo add to generic config/settings model
+     */
+    function getOptionById($_id, $_property, $_idProperty = 'id')
+    {
+        if ($this->has($_property) && isset($this->$_property) && is_array($this->$_property)) {
+            foreach ($this->$_property as $sub) {
+                if ($sub[$_idProperty] == $_id) {
+                    return $sub;
+                }
+            }
+        }
+        
+        return array();
+    }
+    
 } // end of Crm_Model_Config

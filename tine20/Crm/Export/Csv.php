@@ -86,15 +86,15 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
         
         switch ($_fieldName) {
             case 'leadstate_id':
-                $state = arrayGetById($_record->leadstate_id, $settings->leadstates);
+                $state = $settings->getOptionById($_record->leadstate_id, 'leadstates');
                 $result = $state['leadstate'];
                 break;
             case 'leadtype_id':
-                $type = arrayGetById($_record->leadtype_id, $settings->leadtypes);
+                $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
                 $result = $type['leadtype'];
                 break;
             case 'leadsource_id':
-                $source = arrayGetById($_record->leadsource_id, $settings->leadsources);
+                $source = $settings->getOptionById($_record->leadsource_id, 'leadsources');
                 $result = $source['leadsource'];
                 break;
         }
