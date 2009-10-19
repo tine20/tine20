@@ -428,7 +428,7 @@ class Setup_ExtCheck
                     $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
                     if (!$link) {
                         //die('Could not connect to mysql database: ' . mysql_error());
-                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Could not connect to mysql database: ' . mysql_error());
+                        
                         Setup_Core::set(Setup_Core::CHECKDB, FALSE);
                     }                    
                     //echo "mysql version: " . mysql_get_server_info();
@@ -519,8 +519,6 @@ class Setup_ExtCheck
      * get check result data
      *
      * @return array
-     * 
-     * @todo    add message
      */
     public function getData()
     {
@@ -536,14 +534,17 @@ class Setup_ExtCheck
         foreach ($data as $check) {
             list($key, $value) = $check;
             if ($value != 'SUCCESS') {
-                
-                if ($key === 'MySQL') {
-                    $message = 'Could not connect to MySQL DB, version incompatible (' . @mysql_get_server_info() . ') or ';
+                if ($key === 'PHP') {
+                    $message = 'PHP version too low: ' . phpversion();
                 } else {
-                    $message = '';
-                    $result['success'] = FALSE;
+                    if ($key === 'MySQL') {
+                        $message = 'Could not connect to MySQL DB, version incompatible (' . @mysql_get_server_info() . ') or ';
+                    } else {
+                        $message = '';
+                        $result['success'] = FALSE;
+                    }
+                    $message .= 'Extension ' . $key . ' not found.' . $helperLink;
                 }
-                $message .= 'Extension ' . $key . ' not found.' . $helperLink;
                 
                 $result['result'][] = array(
                     'key'       => $key,
