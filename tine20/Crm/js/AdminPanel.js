@@ -21,7 +21,6 @@ Ext.namespace('Tine.Crm');
  * <p>Crm Admin Panel</p>
  * <p><pre>
  * TODO         generalize this
- * TODO         set title
  * TODO         add panels for leadtype/source
  * </pre></p>
  * 
@@ -45,10 +44,20 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
 
     /**
+     * @cfg {String} title of window
+     */
+    windowTitle: '',
+    
+    /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private
      */
     updateToolbars: function() {
+    },
+    
+    onRender: function() {
+        this.supr().onRender.apply(this, arguments);
+        this.window.setTitle(this.windowTitle);
     },
     
     /**
@@ -63,7 +72,12 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.record.set('default_leadtype_id', this.record.data.defaults.leadtype_id);
         }
         
-        Tine.Crm.AdminPanel.superclass.onRecordLoad.call(this);        
+        if (this.fireEvent('load', this) !== false) {
+            this.getForm().loadRecord(this.record);
+            this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
+            
+            this.loadMask.hide();
+        }
     },
     
     /**
@@ -71,6 +85,8 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * - add attachments to record here
      * 
      * @private
+     * 
+     * TODO revert/rollback changes onCancel?
      */
     onRecordUpdate: function() {
         Tine.Crm.AdminPanel.superclass.onRecordUpdate.call(this);
@@ -186,3 +202,93 @@ Tine.Crm.AdminPanel.openWindow = function (config) {
     });
     return window;
 };
+
+Ext.namespace('Tine.Crm.Admin');
+
+/**
+ * @namespace   Tine.Crm.Admin
+ * @class       Tine.Crm.AdminPanel.Grid
+ * @extends     Tine.Crm.Admin.QuickaddGridPanel
+ * 
+ * admin config option quickadd grid panel
+ * 
+ * <p>
+ * TODO         move that to tinebase widgets?
+ * </p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
+    
+    /**
+     * @property recordClass
+     */
+    recordClass: null,
+    
+    /**
+     * @private
+     * @cfg
+     */
+    clicksToEdit:'auto',
+
+    /**
+     * @private
+     */
+    initComponent: function() {
+        this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
+        
+        this.sm = new Ext.grid.RowSelectionModel({multiSelect:true});
+        this.sm.on('selectionchange', function(sm) {
+            var rowCount = sm.getCount();
+            this.deleteAction.setDisabled(rowCount == 0);
+        }, this);
+        
+        this.initActions();
+
+        Tine.Crm.Admin.QuickaddGridPanel.superclass.initComponent.call(this);
+        
+        this.on('newentry', this.onNewentry, this);
+    },
+
+    /**
+     * @private
+     */
+    initActions: function() {
+        this.deleteAction = new Ext.Action({
+            text: this.app.i18n._('Remove Option'),
+            iconCls: 'actionDelete',
+            handler : this.onDelete,
+            scope: this,
+            disabled: true
+        });
+        
+        this.tbar = [this.deleteAction];        
+    },
+    
+    /**
+     * new entry event
+     * 
+     * @param {Object} recordData
+     * @return {Boolean}
+     */
+    onNewentry: function(recordData) {
+        // add new option to store
+        var newOption = new this.recordClass(recordData, this.store.getCount() + 1);
+        this.store.insert(0,newOption);
+        return true;
+    },
+    
+    /**
+     * delete event
+     */
+    onDelete: function() {
+        var selectedRows = this.getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            this.store.remove(selectedRows[i]);
+        }
+    }
+});
+

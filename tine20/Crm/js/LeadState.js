@@ -8,8 +8,7 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         remove/refactor admin lead state 
- * TODO         don't use json store anymore
+ * TODO         don't use json store anymore?
  */
 
 Ext.namespace('Tine.Crm', 'Tine.Crm.LeadState');
@@ -81,13 +80,11 @@ Tine.Crm.LeadState.Renderer = function(_leadstateId) {
 /**
  * @namespace   Tine.Crm.LeadState
  * @class       Tine.Crm.LeadState.GridPanel
- * @extends     Ext.grid.EditorGridPanel
+ * @extends     Tine.Crm.Admin.QuickaddGridPanel
  * 
  * lead states grid panel
  * 
  * <p>
- * TODO         finish (add buttons and more columns)
- * TODO         use quickadd grid?
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -95,50 +92,28 @@ Tine.Crm.LeadState.Renderer = function(_leadstateId) {
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
-Tine.Crm.LeadState.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
+Tine.Crm.LeadState.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
     
     /**
      * @private
      * @cfg
      */
     autoExpandColumn:'leadstate',
-    //plugins: isXlead,
-    /*
-    viewConfig: {
-        forceFit: true
-    },
-    */
-    clicksToEdit:'auto',
+    quickaddMandatory: 'leadstate',
 
     /**
      * @private
      */
     initComponent: function() {
+        this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
         
         this.store = Tine.Crm.LeadState.getStore();
+        this.recordClass = Tine.Crm.LeadState.Model;
         this.cm = this.getColumnModel();
-        this.sm = new Ext.grid.RowSelectionModel({multiSelect:true});
         
         Tine.Crm.LeadState.GridPanel.superclass.initComponent.call(this);
-        
-        /*
-        tbar: [{
-            text: 'new item',
-            iconCls: 'actionAdd',
-            handler : handlerLeadstateAdd
-            },{
-            text: 'delete item',
-            iconCls: 'actionDelete',
-            handler : handlerLeadstateDelete
-            },{
-            text: 'save',
-            iconCls: 'actionSaveAndClose',
-            handler : handlerLeadstateSaveClose 
-        }]
-        */
     },
     
-    // TODO replace percentage combo with Ext.ux.PercentCombo
     getColumnModel: function() {
         return new Ext.grid.ColumnModel([
         { 
@@ -147,84 +122,44 @@ Tine.Crm.LeadState.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             dataIndex: 'id', 
             width: 25, 
             hidden: true 
-        },
-        { 
+        }, { 
             id:'leadstate', 
             header: 'entries', 
             dataIndex: 'leadstate', 
             width: 170, 
             hideable: false, 
-            sortable: false, 
+            sortable: false,
+            quickaddField: new Ext.form.TextField({
+                emptyText: this.app.i18n._('Add a Leadstate...')
+            }),
             editor: new Ext.form.TextField({allowBlank: false}) 
-        }/*,
-        { 
+        }, { 
             id:'probability', 
             header: 'probability', 
             dataIndex: 'probability', 
-            width: 50, 
+            width: 100, 
             hideable: false, 
             sortable: false, 
             renderer: Ext.util.Format.percentage,
             editor: new Ext.ux.PercentCombo({
                 name: 'probability',
                 id: 'probability'
-            }) 
-        }*///, 
-        //isXlead
-        ]);
+            }),
+            quickaddField: new Ext.ux.PercentCombo({
+                autoExpand: true
+            })
+        }, {
+            header: "X Lead?",
+            id:'endslead',
+            dataIndex: 'endslead',
+            width: 50,
+            editor: new Ext.form.Checkbox({}),
+            quickaddField: new Ext.form.Checkbox({
+                name: 'endslead'
+            }),
+            renderer: Tine.Tinebase.common.booleanRenderer
+        }]);
     }
-    /*
-    var isXlead = new Ext.ux.grid.CheckColumn({
-        header: "X Lead?",
-        dataIndex: 'endslead',
-        width: 50
-    });
-    
-    var handlerLeadstateAdd = function(){
-        var p = new Tine.Crm.LeadState.Model({
-            id: null,
-            leadstate: '',
-            probability: null,
-            endslead: false
-        });
-        leadstateGridPanel.stopEditing();
-        Tine.Crm.LeadState.getStore().insert(0, p);
-        leadstateGridPanel.startEditing(0, 0);
-        leadstateGridPanel.fireEvent('celldblclick',this, 0, 1);
-    };
-                
-    var handlerLeadstateDelete = function(){
-        var leadstateGrid  = Ext.getCmp('editLeadstateGrid');
-        var leadstateStore = Tine.Crm.LeadState.getStore();
-        
-        var selectedRows = leadstateGrid.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            leadstateStore.remove(selectedRows[i]);
-        }   
-    };                        
-                
-  
-   var handlerLeadstateSaveClose = function(){
-        var leadstateStore = Tine.Crm.LeadState.getStore();
-        var leadstateJson = Tine.Tinebase.common.getJSONdata(leadstateStore); 
-
-         Ext.Ajax.request({
-            params: {
-                method: 'Crm.saveLeadstates',
-                optionsData: leadstateJson
-            },
-            text: 'Saving leadstates...',
-            success: function(_result, _request){
-                leadstateStore.reload();                
-                leadstateStore.rejectChanges();
-                //Ext.getCmp('filterLeadstate').store.reload();
-            },
-            failure: function(form, action) {
-                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
-            }
-        });          
-    };          
-    */
 });
 
 /**
