@@ -281,6 +281,10 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPan
         var number;
 
         var contact = this.grid.getSelectionModel().getSelected();
+        
+        if (! contact) {
+            return;
+        }
 
         switch(btn.getId()) {
             case 'Addressbook_Contacts_CallContact_Work':
