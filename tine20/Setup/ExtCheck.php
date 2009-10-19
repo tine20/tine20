@@ -418,6 +418,8 @@ class Setup_ExtCheck
                     if (version_compare($value['attributes']['VERSION'], phpversion(), '<')) {
                         $data[] = array($value['attributes']['NAME'], 'SUCCESS');
                     } else {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                            . ' PHP version incompatible: ' . phpversion() . '<' . $value['attributes']['VERSION']);
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
                     }
                     break;
@@ -428,7 +430,7 @@ class Setup_ExtCheck
                     $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
                     if (!$link) {
                         //die('Could not connect to mysql database: ' . mysql_error());
-                        
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Could not connect to mysql database: ' . mysql_error()); 
                         Setup_Core::set(Setup_Core::CHECKDB, FALSE);
                     }                    
                     //echo "mysql version: " . mysql_get_server_info();
