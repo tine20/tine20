@@ -41,6 +41,8 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Crm/js/LeadGridContactFilter.js',
             'Crm/js/LeadGridPanel.js',
             'Crm/js/LeadEditDialog.js',
+        // admin settings panel
+            'Crm/js/AdminPanel.js',
         // lead state/source/type
             'Crm/js/LeadState.js',
             'Crm/js/LeadSource.js',
@@ -54,8 +56,6 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Crm/js/ProductGridPanel.js',
         // task grid
             'Crm/js/TaskGridPanel.js',
-        // admin settings panel
-            'Crm/js/AdminPanel.js',
         );
     }
     
