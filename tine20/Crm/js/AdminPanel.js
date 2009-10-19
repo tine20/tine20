@@ -21,7 +21,7 @@ Ext.namespace('Tine.Crm');
  * <p>Crm Admin Panel</p>
  * <p><pre>
  * TODO         generalize this
- * TODO         add panels for leadtype/source
+ * TODO         revert/rollback changes onCancel
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -86,7 +86,6 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @private
      * 
-     * TODO revert/rollback changes onCancel?
      */
     onRecordUpdate: function() {
         Tine.Crm.AdminPanel.superclass.onRecordUpdate.call(this);
@@ -100,12 +99,25 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('defaults', defaults);
         
         // save leadstate / commit store
-        var leadstates = [];
-        this.leadstatePanel.store.each(function(record) {                     
-            leadstates.push(record.data);
+        this.record.set('leadstates', this.getFromStore(this.leadstatePanel.store));
+        this.record.set('leadtypes', this.getFromStore(this.leadtypePanel.store));
+        this.record.set('leadsources', this.getFromStore(this.leadsourcePanel.store));
+    },
+    
+    /**
+     * get values from store (as array)
+     * 
+     * @param {Ext.data.JsonStore} store
+     * @return {Array}
+     */
+    getFromStore: function(store) {
+        var result = [];
+        store.each(function(record) {                     
+            result.push(record.data);
         }, this);
-        this.leadstatePanel.store.commitChanges();
-        this.record.set('leadstates', leadstates);
+        store.commitChanges();
+        
+        return result;
     },
     
     /**
@@ -119,8 +131,15 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         
         this.leadstatePanel = new Tine.Crm.LeadState.GridPanel({
-            title: this.app.i18n._('Leadstates'),
-            frame: true
+            title: this.app.i18n._('Leadstates')
+        });
+        
+        this.leadtypePanel = new Tine.Crm.LeadType.GridPanel({
+            title: this.app.i18n._('Leadtypes')
+        });
+        
+        this.leadsourcePanel = new Tine.Crm.LeadSource.GridPanel({
+            title: this.app.i18n._('Leadsources')
         });
         
         return {
@@ -169,18 +188,10 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     value: Tine.Crm.LeadType.getStore().getAt(0).id
                 }]]
             }, 
-                this.leadstatePanel, 
-            {
-                title: this.app.i18n._('Leadsources'),
-                xtype: 'panel',
-                frame: true,
-                html: ''
-            }, {
-                title: this.app.i18n._('Leadtypes'),
-                xtype: 'panel',
-                frame: true,
-                html: ''
-            }]            
+                this.leadstatePanel,
+                this.leadtypePanel,
+                this.leadsourcePanel
+            ]            
         };                
     } // end of getFormItems
 });
@@ -233,6 +244,7 @@ Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
      * @cfg
      */
     clicksToEdit:'auto',
+    frame: true,
 
     /**
      * @private
@@ -245,6 +257,8 @@ Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             var rowCount = sm.getCount();
             this.deleteAction.setDisabled(rowCount == 0);
         }, this);
+        
+        this.cm = this.getColumnModel();
         
         this.initActions();
 
@@ -266,6 +280,10 @@ Tine.Crm.Admin.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         });
         
         this.tbar = [this.deleteAction];        
+    },
+    
+    getColumnModel: function() {
+        return new Ext.grid.ColumnModel([]);
     },
     
     /**
