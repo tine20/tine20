@@ -3,9 +3,10 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * TODO         add year to 'inweek' filter?
  */
 
 Ext.namespace('Tine.widgets', 'Tine.widgets.grid');
@@ -135,6 +136,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 {operator: 'before',     label: _('is before')},
                 {operator: 'after',      label: _('is after')},
                 {operator: 'within',     label: _('is within')},
+                {operator: 'inweek',     label: _('is in week #')},
                 {operator: 'startswith', label: _('starts with')},
                 {operator: 'endswith',   label: _('ends with')}
             ]
@@ -147,7 +149,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');
                     break;
                 case 'date':
-                    this.operators.push('equals', 'before', 'after', 'within');
+                    this.operators.push('equals', 'before', 'after', 'within', 'inweek');
                     break;
                 case 'number':
                 case 'percentage':
@@ -215,16 +217,24 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         
         // for date filters we need to rerender the value section
         if (this.valueType == 'date') {
-            var valueType = newOperator == 'within' ? 'withinCombo' : 'datePicker';
-            
-            if (valueType == 'withinCombo') {
-                filter.datePicker.hide();
-                filter.withinCombo.show();
-                filter.formFields.value = filter.withinCombo;
-            } else {
-                filter.withinCombo.hide();
-                filter.datePicker.show();
-                filter.formFields.value = filter.datePicker;
+            switch (newOperator) {
+                case 'within':
+                    filter.numberfield.hide();
+                    filter.datePicker.hide();
+                    filter.withinCombo.show();
+                    filter.formFields.value = filter.withinCombo;                
+                    break;
+                case 'inweek':
+                    filter.withinCombo.hide();
+                    filter.datePicker.hide();
+                    filter.numberfield.show();
+                    filter.formFields.value = filter.numberfield;                
+                    break;
+                default:
+                    filter.withinCombo.hide();
+                    filter.numberfield.hide();
+                    filter.datePicker.show();
+                    filter.formFields.value = filter.datePicker;                
             }
         }
         //console.log('operator change');
@@ -317,7 +327,16 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      */
     dateValueRenderer: function(filter, el) {
         var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
-        var valueType = operator == 'within' ? 'withinCombo' : 'datePicker';
+        
+        var valueType = 'datePicker';
+        switch (operator) {
+            case 'within':
+                valueType = 'withinCombo';
+                break;
+            case 'inweek':
+                valueType = 'numberfield';
+                break;
+        }
         
         var pastOps = [
             ['dayThis',         _('today')], 
@@ -378,6 +397,19 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             width: 200,
             value: pickerValue,
             renderTo: el
+        });
+        
+        filter.numberfield = new Ext.form.NumberField({
+            hidden: valueType != 'numberfield',
+            filter: filter,
+            width: 200,
+            value: pickerValue,
+            renderTo: el,
+            minValue: 1,
+            maxValue: 52,
+            maxLength: 2,   
+            allowDecimals: false,
+            allowNegative: false
         });
         
         // upps, how to get a var i only know the name of???

@@ -9,6 +9,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  * 
+ * @todo        add year to 'inweek' filter?
  */
 
 /**
@@ -30,7 +31,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         2 => 'before',
         3 => 'after',
         4 => 'isnull',
-        5 => 'notnull'
+        5 => 'notnull',
+        6 => 'inweek'
     );
     
     /**
@@ -43,6 +45,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         'after'      => array('sqlop' => ' > ?'),
         'isnull'     => array('sqlop' => ' IS NULL'),
         'notnull'    => array('sqlop' => ' IS NOT NULL'),
+        'inweek'     => array('sqlop' => array(' >= ? ', ' <= ?')),
     );
     
     /**
@@ -79,7 +82,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @param string $_value
      * @return array|string date value
      * 
-     * @todo fix problem with day of week in 'this week' filter (sunday is first day of the week in english locales) 
+     * @todo fix problem with day of week in 'this week' / 'in week #' filter (sunday is first day of the week in english locales) 
      * --> get that info from locale
      */
     protected function _getDateValues($_operator, $_value)
@@ -182,6 +185,19 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_value);
                     $value = '';
             }        
+        } elseif ($_operator === 'inweek') {
+            if ($_value > 52) {
+                $_value = 52;
+            }
+            
+            $date = new Zend_Date();
+            $date->setWeek($_value)
+                 ->setWeekDay(1);
+            
+            $value = array(
+                $date->toString($this->_dateFormat), 
+                $date->setWeekDay(7)->toString($this->_dateFormat), 
+            );                 
         } else  {
             $value = substr($_value, 0, 10);
         }
