@@ -346,4 +346,21 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.8');
     }
+
+    /**
+     * update to 2.9
+     * - renamed erp to sales
+     */    
+    public function update_8()
+    {
+        try {
+            $sales = Tinebase_Application::getInstance()->getApplicationByName('Erp');
+            $sales->name = 'Sales';
+            Tinebase_Application::getInstance()->updateApplication($sales);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Erp application is not installed.');
+        }
+        
+        $this->setApplicationVersion('Tinebase', '2.9');
+    }
 }
