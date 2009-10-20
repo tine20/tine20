@@ -163,7 +163,7 @@ class Setup_Update_Abstract
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_oldTableName),
         );
-        $result = $applicationsTables->update(array('name' => SQL_TABLE_PREFIX . $_newTableName), $where);
+        $result = $applicationsTables->update(array('name' => $_newTableName), $where);
     }
     
     /**
