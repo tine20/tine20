@@ -10,6 +10,7 @@
  * @version     $Id$
  *
  * @todo        add 'getTitleTranslation' function?
+ * @todo        use Tinebase_Backend_Sql?
  * @todo        migrate from Zend_Db_Table to plain Zend_Db
  */
 
@@ -418,6 +419,18 @@ class Tinebase_Application
         );
         
         $this->_db->insert(SQL_TABLE_PREFIX . 'application_tables', $applicationData);
+    }
+    
+    /**
+     * update application
+     * 
+     * @param Tinebase_Model_Application $_application
+     * @return Tinebase_Model_Application
+     */
+    public function updateApplication(Tinebase_Model_Application $_application)
+    {
+        $backend = new Tinebase_Backend_Sql('Tinebase_Model_Application', 'applications', $this->_db, SQL_TABLE_PREFIX);
+        return $backend->update($_application);
     }
     
     /**
