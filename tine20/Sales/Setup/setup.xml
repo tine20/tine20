@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>2.0</version>
+    <version>2.1</version>
     <order>50</order>
     <status>disabled</status>
     <tables>
         <table>
-            <name>erp_numbers</name>
+            <name>sales_numbers</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -54,7 +54,7 @@
             </declaration>
         </table>
         <table>
-            <name>erp_contracts</name>
+            <name>sales_contracts</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -140,7 +140,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>erp_contracts::container_id--container::id</name>
+                    <name>sales_contracts::container_id--container::id</name>
                     <field>
                         <name>container_id</name>
                     </field>

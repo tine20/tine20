@@ -24,7 +24,7 @@ class Sales_Backend_Contract extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_tableName = 'erp_contracts';
+    protected $_tableName = 'sales_contracts';
     
     /**
      * Model name

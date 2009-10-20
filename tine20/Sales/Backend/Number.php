@@ -24,7 +24,7 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_tableName = 'erp_numbers';
+    protected $_tableName = 'sales_numbers';
     
     /**
      * Model name
