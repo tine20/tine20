@@ -36,7 +36,7 @@ class AllTests
         $suite->addTest(Tasks_AllTests::suite());
         $suite->addTest(Voipmanager_AllTests::suite());
         $suite->addTest(Phone_AllTests::suite());
-        $suite->addTest(Erp_AllTests::suite());
+        $suite->addTest(Sales_AllTests::suite());
         $suite->addTest(Timetracker_AllTests::suite());
         $suite->addTest(Courses_AllTests::suite());
         $suite->addTest(Calendar_AllTests::suite());

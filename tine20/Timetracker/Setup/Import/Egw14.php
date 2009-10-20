@@ -410,20 +410,20 @@ class Timetracker_Setup_Import_Egw14
      * create tine contract
      *
      * @param array $_data with egw project data
-     * @return Erp_Model_Contract
+     * @return Sales_Model_Contract
      * 
      * @todo    add more fields?
      */
     protected function _createContract($_data)
     {
-        $contract = new Erp_Model_Contract(array(
+        $contract = new Sales_Model_Contract(array(
             'title'                 => $_data['pm_title'],
             'description'           => $this->_convertDescription($_data['pm_description']),
         ), TRUE);
         
         $this->_counters['contracts']++;
         
-        return Erp_Controller_Contract::getInstance()->create($contract);
+        return Sales_Controller_Contract::getInstance()->create($contract);
     }
 
     /**
@@ -458,8 +458,8 @@ class Timetracker_Setup_Import_Egw14
             'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
             'type'                   => Timetracker_Model_Timeaccount::RELATION_TYPE_CONTRACT,
             'related_id'             => $_contractId,   
-            'related_model'          => 'Erp_Model_Contract',
-            'related_backend'        => Erp_Backend_Contract::TYPE,
+            'related_model'          => 'Sales_Model_Contract',
+            'related_backend'        => Sales_Backend_Contract::TYPE,
             'remark'                 => Timetracker_Model_Timeaccount::RELATION_TYPE_CONTRACT
         ));
            

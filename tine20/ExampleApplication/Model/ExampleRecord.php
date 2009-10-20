@@ -63,7 +63,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked Erp_Model_Contract records) and other metadata
+    // relations (linked ExampleApplication_Model_ExampleRecord records) and other metadata
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),

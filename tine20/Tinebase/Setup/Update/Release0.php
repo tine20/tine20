@@ -1548,7 +1548,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         }
 
         try {
-            $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Erp', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
+            $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
         } catch (Tinebase_Exception_NotFound $enf) {            
             // create it if it doesn't exists
             $newContainer = new Tinebase_Model_Container(array(
