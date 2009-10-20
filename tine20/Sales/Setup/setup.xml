@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>2.1</version>
+    <version>2.2</version>
     <order>50</order>
     <status>disabled</status>
     <tables>
@@ -149,6 +149,73 @@
                         <table>container</table>
                         <field>id</field>
                     </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>sales_products</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>price</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>            
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
                 </index>
             </declaration>
         </table>
