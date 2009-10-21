@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Json.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        remove/replace @deprecated functions
  */
 
 /**
@@ -109,6 +108,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         )->toArray();
         $defaults['container_id'] = $defaultContainerArray;
         
+        $salesJson = new Sales_Frontend_Json();
         $registryData = array(
             'leadtypes'     => array(
                 'results' => $settings[Crm_Model_Config::LEADTYPES], 
@@ -122,7 +122,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'results' => $settings[Crm_Model_Config::LEADSOURCES], 
                 'totalcount' => count($settings[Crm_Model_Config::LEADSOURCES])
             ),
-            'products'      => $this->getProducts('productsource','ASC'),
             'defaults'      => $defaults,
         );
         
@@ -157,61 +156,4 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
     
-    /**
-     * get available products
-     *
-     * @param string $sort
-     * @param string $dir
-     * @return array
-     * 
-     * @deprecated -> move products to sales management
-     */
-    public function getProducts($sort, $dir)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if($rows = Crm_Controller_LeadProducts::getInstance()->getProducts($sort, $dir)) {
-            $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
-        }
-
-        return $result;  
-    }
-    
-    /**
-     * 
-     * @param $optionsData
-     * @return unknown_type
-     * 
-     * @deprecated -> move products to sales management / obsolete code (only as reminder)
-     */
-    public function saveProducts($optionsData)
-    {
-        /*
-        $products = Zend_Json::decode($optionsData);
-         
-        try {
-            $products = new Tinebase_Record_RecordSet('Crm_Model_Product', $products);
-        } catch (Tinebase_Exception_Record_Validation $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errorMessage'      => 'filter NOT ok'
-            );
-            
-            return $result;
-        }
-            
-        
-        if(Crm_Controller_LeadProducts::getInstance()->saveProducts($products) === FALSE) {
-            $result = array('success'   => FALSE);
-        } else {
-            $result = array('success'   => TRUE);
-        }
-        
-        return $result;
-        */       
-    }
 }

@@ -68,13 +68,12 @@ class Crm_JsonTest extends Crm_AbstractTest
      * test get crm registry
      * 
      * @return void
-     * @todo check products as well
      */
     public function testGetRegistryData()
     {
         $registry = $this->_instance->getRegistryData();
         
-        $types = array('leadtypes', 'leadstates', 'leadsources'/*, 'products' */);
+        $types = array('leadtypes', 'leadstates', 'leadsources');
         
         // check data
         foreach ($types as $type) {
@@ -147,19 +146,20 @@ class Crm_JsonTest extends Crm_AbstractTest
     /**
      * try to add a lead and link a contact
      *
-     * @todo add product
      */
     public function testAddGetSearchDeleteLead()
     {
         // create lead with task and contact
-        $contact = $this->_getContact();
-        $task = $this->_getTask();
-        $lead = $this->_getLead();
+        $contact    = $this->_getContact();
+        $task       = $this->_getTask();
+        $lead       = $this->_getLead();
+        $product    = $this->_getProduct();
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
             array('type'  => 'TASK',    'related_record' => $task->toArray()),
             array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
+            array('type'  => 'PRODUCT', 'related_record' => $product->toArray(), 'remark' => array('price' => 200)),
         );
         // add note
         $note = array(
@@ -172,18 +172,42 @@ class Crm_JsonTest extends Crm_AbstractTest
         $getLead = $this->_instance->getLead($savedLead['id']);
         $searchLeads = $this->_instance->searchLeads(Zend_Json::encode($this->_getLeadFilter()), '');
         
+        //print_r($searchLeads);
+        
         // assertions
         $this->assertEquals($getLead, $savedLead);
         $this->assertEquals($getLead['notes'][0]['note'], $note['note']);
         $this->assertTrue($searchLeads['totalcount'] > 0);
         $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
-        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 2, 'did not get all relations');       
-        $this->assertEquals($contact->n_fn, $searchLeads['results'][0]['relations'][0]['related_record']['n_fn'], 'contact not found');
-        $this->assertEquals($task->summary, $searchLeads['results'][0]['relations'][1]['related_record']['summary'], 'task not found');
+        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');     
+
+        // get related records and check relations
+        foreach ($searchLeads['results'][0]['relations'] as $relation) {
+            switch ($relation['type']) {
+                case 'PRODUCT':
+                    //print_r($relation);
+                    $this->assertEquals(200, $relation['remark']['price'], 'product price (remark) does not match');
+                    $relatedProduct = $relation['related_record'];
+                    break;
+                case 'TASK':
+                    $relatedTask = $relation['related_record'];
+                    break;
+                case 'PARTNER':
+                    $relatedContact = $relation['related_record'];
+                    break;
+            }
+        }
+        $this->assertTrue(isset($relatedContact), 'contact not found');
+        $this->assertEquals($contact->n_fn, $relatedContact['n_fn'], 'contact name does not match');
+        $this->assertTrue(isset($relatedTask), 'task not found');
+        $this->assertEquals($task->summary, $relatedTask['summary'], 'task summary does not match');
+        $this->assertTrue(isset($relatedProduct), 'product not found');
+        $this->assertEquals($product->name, $relatedProduct['name'], 'product name does not match');
          
         // delete all
         $this->_instance->deleteLeads($savedLead['id']);
-        Addressbook_Controller_Contact::getInstance()->delete($savedLead['relations'][0]['related_id']);
+        Addressbook_Controller_Contact::getInstance()->delete($relatedContact['id']);
+        Sales_Controller_Product::getInstance()->delete($relatedProduct['id']);
         
         // check if delete worked
         $result = $this->_instance->searchLeads(Zend_Json::encode($this->_getLeadFilter()), '');
@@ -191,22 +215,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         // check if linked task got removed as well
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $task = Tasks_Controller_Task::getInstance()->get($savedLead['relations'][1]['related_id']);
-        
-        // obsolete / only as reminder
-        /*
-        
-        $leadData['products'] = array($this->objects['productLink']);
-        
-        // check linked contacts / tasks
-        $this->assertGreaterThan(0, count($result['relations']));
-        $this->assertEquals($this->objects['contact']->getId(), $result['relations'][0]['related_id']);
-        $this->assertEquals($GLOBALS['Crm_JsonTest']['taskId'], $result['relations'][1]['related_id']);
-
-        // check linked products
-        $this->assertGreaterThan(0, count($result['products']), 'products are missing!');
-        $this->assertEquals($this->objects['productLink']['product_desc'], $result['products'][0]['product_desc']);
-        */                      
+        $task = Tasks_Controller_Task::getInstance()->get($relatedTask['id']);
     }
     
     /**
@@ -293,6 +302,19 @@ class Crm_JsonTest extends Crm_AbstractTest
             'turnover'      => '200000',
             'probability'   => 70,
             'end_scheduled' => NULL,
+        ));
+    }
+    
+    /**
+     * get product
+     * 
+     * @return Sales_Model_Product
+     */
+    protected function _getProduct()
+    {
+        return new Sales_Model_Product(array(
+            'name'  => 'PHPUnit test product',
+            'price' => 10000,        
         ));
     }
     

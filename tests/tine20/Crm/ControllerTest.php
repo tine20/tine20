@@ -173,38 +173,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'summary'              => 'phpunit: crm test task',        
         ));
         
-        // some products
-        $this->_objects['someProducts'] = array(
-                new Crm_Model_Product(array(
-                    'id' => 1001,
-                    'productsource' => 'Just a phpunit test product #1',
-                    'price' => '47.11')),
-                new Crm_Model_Product(array(
-                    'id' => 1002,
-                    'productsource' => 'Just a phpunit test product #2',
-                    'price' => '18.05')),
-                new Crm_Model_Product(array(
-                    'id' => 1003,
-                    'productsource' => 'Just a phpunit test product #3',
-                    'price' => '19.78')),
-                new Crm_Model_Product(array(
-                    'id' => 1004,
-                    'productsource' => 'Just a phpunit test product #4',
-                    'price' => '20.07'))
-        );
-        
-        // products to update
-        $this->_objects['someProductsToUpdate'] = array(
-                new Crm_Model_Product(array(
-                    'id' => 1002,
-                    'productsource' => 'Just a phpunit test product #2 UPDATED',
-                    'price' => '18.05')),
-                new Crm_Model_Product(array(
-                    'id' => 1003,
-                    'productsource' => 'Just a phpunit test product #3 UPDATED',
-                    'price' => '19.78'))
-        );
-        
         $this->objects['note'] = new Tinebase_Model_Note(array(
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',    
@@ -391,49 +359,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Tinebase_Exception_NotFound');        
         Crm_Controller_Lead::getInstance()->get($this->_objects['initialLead']);
-    }
-    
-    /**
-     * try to save / create, update and delete more than one product
-     * 
-     * @todo complete test for products to delete
-     */
-    public function testSaveProducts() {
-    	// save db table content (because of test dependencies)
-    	$savedProducts = Crm_Controller_LeadProducts::getInstance()->getProducts();
-    	
-    	// go!
-    	$someProducts = new Tinebase_Record_RecordSet('Crm_Model_Product',
-                $this->_objects['someProducts']);
-        
-        // save / create some products
-        $resultProducts = Crm_Controller_LeadProducts::getInstance()
-                ->saveProducts($someProducts);
-        
-        $this->assertEquals($someProducts->toArray(), $resultProducts->toArray());
-        
-        // get every saved product back from database one by one
-        $backend = new Crm_Backend_Products();
-        
-        foreach ($this->_objects['someProducts'] as $product) {
-        	$this->assertEquals($product->toArray(), $backend->get($product->id)->toArray());
-        }
-        
-        // update some products
-        $someProducts = new Tinebase_Record_RecordSet('Crm_Model_Product',
-                $this->_objects['someProductsToUpdate']);
-        
-        $resultProducts = Crm_Controller_LeadProducts::getInstance()
-                ->saveProducts($someProducts);
-        
-        foreach ($this->_objects['someProductsToUpdate'] as $product) {
-            $this->assertEquals($product['productsource'],
-                    //$backend->get($product->id)->productsource);
-                    Crm_Controller_LeadProducts::getInstance()->getProduct($product->id)->productsource);
-        }
-        
-        // cleanup
-        Crm_Controller_LeadProducts::getInstance()->saveProducts($savedProducts);
     }
     
     /**

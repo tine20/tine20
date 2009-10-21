@@ -169,6 +169,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     'type'                   => $relation['type'],
                     'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
                     'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
+                    'remark'                 => (isset($relation['remark'])) ? $relation['remark'] : NULL,
                 );
                 
                 // set id from related record (if it didn't got set in javascript frontend)
@@ -189,10 +190,14 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     case 'PARTNER':
                         $data['related_model'] = 'Addressbook_Model_Contact';
                         $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                        break;                    
+                        break;
                     case 'TASK':
                         $data['related_model'] = 'Tasks_Model_Task';
                         $data['related_backend'] = Tasks_Backend_Factory::SQL;
+                        break;                    
+                    case 'PRODUCT':
+                        $data['related_model'] = 'Sales_Model_Product';
+                        $data['related_backend'] = 'Sql';
                         break;                    
                     default:
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE)); 
@@ -200,7 +205,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                 }
 
                 // sanitize container id
-                if (isset($relation['related_record'])) {
+                if (isset($relation['related_record']) && $relation['type'] != 'PRODUCT') {
                     if (! isset($relation['related_record']['container_id'])) {
                         // use default container for app
                         $data['related_record']['container_id'] = Tinebase_Container::getInstance()->getDefaultContainer(

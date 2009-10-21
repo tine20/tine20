@@ -71,50 +71,6 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     /****************************** overwritten functions ************************/
     
     /**
-     * get lead identified by leadId
-     *
-     * @param   int $_id
-     * @return  Crm_Model_Lead
-     */
-    public function get($_id)
-    {
-        $lead = parent::get($_id);
-        
-        // add products
-        $lead->products = Crm_Controller_LeadProducts::getInstance()->getLeadProducts($lead->getId());
-        
-        return $lead;
-    }
-    
-    /**
-     * add Lead
-     *
-     * @param   Tinebase_Record_Interface $_lead the lead to add
-     * @return  Crm_Model_Lead the newly added lead
-     */ 
-    public function create(Tinebase_Record_Interface $_lead)
-    {
-        $lead = parent::create($_lead);
-        $this->_setLeadProducts($lead->getId(), $_lead);
-        
-        return $lead;
-    }
-
-   /**
-     * update Lead
-     *
-     * @param   Tinebase_Record_Interface $_lead the lead to update
-     * @return  Crm_Model_Lead the updated lead
-     */ 
-    public function update(Tinebase_Record_Interface $_lead)
-    {
-        $lead = parent::update($_lead);
-        $this->_setLeadProducts($lead->getId(), $_lead);
-        
-        return $lead;
-    }
-    
-    /**
      * search for leads
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -132,7 +88,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                 $this->_backend->getType(), 
                 $leads->getId(), 
                 NULL, 
-                array('CUSTOMER', 'PARTNER', 'TASK', 'RESPONSIBLE')
+                array('CUSTOMER', 'PARTNER', 'TASK', 'RESPONSIBLE', 'PRODUCT')
             ));
         }
         
@@ -148,6 +104,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @todo:
      *  - add changes to mail body
      *  - find updater in addressbook to notify him
+     *  - add products?
      *  
      * @param Crm_Model_Lead            $_lead
      * @param Tinebase_Model_FullUser   $_updater
@@ -232,27 +189,6 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     }
     
     /*********************** helper functions ************************/
-    
-    /**
-     * set lead products
-     *
-     * @param integer $_leadId
-     * @param Crm_Model_Lead $_lead
-     */
-    protected function _setLeadProducts($_leadId, Crm_Model_Lead $_lead)
-    {
-        // add product links
-        $productsArray = array();
-        if (isset($_lead->products) && is_array($_lead->products)) {
-            foreach ($_lead->products as $product) {
-                $product['lead_id'] = $_leadId; 
-                $productsArray[] = $product;     
-            }
-        }       
-        
-        $products = new Tinebase_Record_RecordSet('Crm_Model_LeadProduct', $productsArray);
-        Crm_Controller_LeadProducts::getInstance()->saveLeadProducts($_leadId, $products);                        
-    }
     
     /**
      * returns recipients for a lead notification
