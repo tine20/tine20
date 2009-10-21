@@ -111,6 +111,46 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     	$this->_uninstallAllApplications();
     }
     
+    public function testSaveAuthenticationRedirectSettings()
+    {
+        $originalRedirectSettings = array(
+          Tinebase_Model_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
+          Tinebase_Model_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value
+        );
+        
+        $newRedirectSettings = array(
+          Tinebase_Model_Config::REDIRECTURL => 'http://tine20.org',
+          Tinebase_Model_Config::REDIRECTTOREFERRER => '1'
+        );
+        
+        $this->_uit->saveAuthentication(array('redirectSettings' => $newRedirectSettings));
+        
+        $storedRedirectSettings = array(
+          Tinebase_Model_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
+          Tinebase_Model_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value
+        );
+        
+        $this->assertEquals($storedRedirectSettings, $newRedirectSettings);
+        
+        
+        //test empty redirectUrl
+        $newRedirectSettings = array(
+          Tinebase_Model_Config::REDIRECTURL => '',
+          Tinebase_Model_Config::REDIRECTTOREFERRER => '0'
+        );
+        
+        $this->_uit->saveAuthentication(array('redirectSettings' => $newRedirectSettings));
+        
+        $storedRedirectSettings = array(
+          Tinebase_Model_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
+          Tinebase_Model_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value
+        );
+        
+        $this->assertEquals($storedRedirectSettings, $newRedirectSettings);
+        
+        $this->_uit->saveAuthentication($originalRedirectSettings);
+    }
+    
     public function testInstallGoupNameOptions()
     {
         $this->_uninstallAllApplications();

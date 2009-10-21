@@ -425,6 +425,32 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     } ]
                 }]
             } ]
+          }, {
+            xtype:'fieldset',
+            collapsible: false,
+            autoHeight:true,
+            title: this.app.i18n._('Redirect Settings'),
+            defaults: {
+                width: 300,
+                xtype: 'textfield'
+            },
+            items: [{
+                inputType: 'text',
+                name: 'redirectSettings_redirectUrl',
+                fieldLabel: this.app.i18n._('Redirect Url (after Logout, redirect to login screen if empty)')
+            }, {
+                xtype: 'combo',
+                listWidth: 300,
+                mode: 'local',
+                forceSelection: true,
+                allowEmpty: false,
+                triggerAction: 'all',
+                selectOnFocus:true,
+                store: [['1', 'Yes'], ['0','No']],
+                name: 'redirectSettings_redirectToReferrer',
+                fieldLabel: this.app.i18n._('Redirect to referring site, if exists'),
+                value: '0'
+            } ]
           } ];
     },
     

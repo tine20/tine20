@@ -226,4 +226,21 @@ class Tinebase_Config
     {
         $this->_backend->delete($_config->getId());
     }
+    
+    /**
+     * Delete config for application (simplified deleteConfig())
+     *
+     * @param string $_name
+     * @param string $_applicationName [optional]
+     * @return Tinebase_Model_Config
+     */
+    public function deleteConfigForApplication($_name, $_applicationName = 'Tinebase')
+    {
+        try {
+            $configRecord = $this->getConfig($_name, Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId());
+            return $this->deleteConfig($configRecord);
+        } catch (Tinebase_Exception_NotFound $e) {
+            //no config found => nothing to delete
+        }
+    }
 }

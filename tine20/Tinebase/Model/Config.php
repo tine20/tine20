@@ -103,6 +103,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const REDIRECTURL = 'redirectUrl';
     
     /**
+     * Config key for Setting "Redirect to referring site if exists?"
+     * 
+     * @var string
+     */
+    const REDIRECTTOREFERRER = 'redirectToReferrer';
+    
+    /**
      * identifier
      * 
      * @var string

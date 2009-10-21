@@ -627,8 +627,9 @@ class Setup_Controller
     public function loadAuthenticationData()
     {
         return array(
-                'authentication' => $this->_getAuthProviderData(),
-                'accounts'       => $this->_getAccountsStorageData()
+                'authentication'    => $this->_getAuthProviderData(),
+                'accounts'          => $this->_getAccountsStorageData(),
+                'redirectSettings'  => $this->_getRedirectSettings()
             );
     }
     
@@ -661,25 +662,52 @@ class Setup_Controller
      */
     protected function _updateAuthentication($_authenticationData)
     {
-        $authenticationProviderData = $_authenticationData['authentication'];
-        Tinebase_Auth::setBackendType($authenticationProviderData['backend']);
+        if (isset($_authenticationData['authentication'])) {
+            $this->_updateAuthenticationProvider($_authenticationData['authentication']);
+        }
+        
+        if (isset($_authenticationData['accounts'])) {
+            $this->_updateAccountsStorage($_authenticationData['accounts']);
+        }
+        
+        if (isset($_authenticationData['redirectSettings'])) {
+          $this->_updateRedirectSettings($_authenticationData['redirectSettings']);
+        }        
+    }
+    
+    /**
+     * Update authentication provider
+     * 
+     * @param array $_data
+     * @return void
+     */
+    protected function _updateAuthenticationProvider($_data)
+    {
+        Tinebase_Auth::setBackendType($_data['backend']);
         
         $excludeKeys = array('adminLoginName', 'adminPassword', 'adminPasswordConfirmation');
         foreach ($excludeKeys as $key) {
-          if (array_key_exists($key, $authenticationProviderData[$authenticationProviderData['backend']])) {
-              unset($authenticationProviderData[$authenticationProviderData['backend']][$key]);
+          if (array_key_exists($key, $_data[$_data['backend']])) {
+              unset($_data[$_data['backend']][$key]);
           }
         }
         
-        Tinebase_Auth::setBackendConfiguration($authenticationProviderData[$authenticationProviderData['backend']]);
+        Tinebase_Auth::setBackendConfiguration($_data[$_data['backend']]);
         Tinebase_Auth::saveBackendConfiguration();
-        
-        
-        $accountsStorageData = $_authenticationData['accounts'];       
+    }
+    
+    /**
+     * Update accountsStorage
+     * 
+     * @param array $_data
+     * @return void
+     */
+    protected function _updateAccountsStorage($_data)
+    {
         $originalBackend = Tinebase_User::getConfiguredBackend();
-        $newBackend = $accountsStorageData['backend'];
-        Tinebase_User::setBackendType($accountsStorageData['backend']);
-        Tinebase_User::setBackendConfiguration($accountsStorageData[$accountsStorageData['backend']]);
+        $newBackend = $_data['backend'];
+        Tinebase_User::setBackendType($_data['backend']);
+        Tinebase_User::setBackendConfiguration($_data[$_data['backend']]);
         Tinebase_User::saveBackendConfiguration();
        
         if ($originalBackend != $newBackend && $this->isInstalled('Addressbook')) {
@@ -708,6 +736,27 @@ class Setup_Controller
     }
     
     /**
+     * Update redirect settings
+     * 
+     * @param array $_data
+     * @return void
+     */
+    protected function _updateRedirectSettings($_data)
+    {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
+        $keys = array(Tinebase_Model_Config::REDIRECTURL, Tinebase_Model_Config::REDIRECTTOREFERRER);
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $_data)) {
+                if (strlen($_data[$key]) === 0) {
+                    Tinebase_Config::getInstance()->deleteConfigForApplication($key);
+                } else {
+                    Tinebase_Config::getInstance()->setConfigForApplication($key, $_data[$key]);
+                }
+            }
+        }
+    }
+    
+    /**
      * 
      * get auth provider data
      * 
@@ -729,6 +778,25 @@ class Setup_Controller
         $result['backend'] = Tinebase_User::getConfiguredBackend();
 
         return $result;
+    }
+    
+    /**
+     * Get redirect Settings from config table.
+     * If Tinebase is not installed, default values will be returned.
+     * 
+     * @return array
+     */
+    protected function _getRedirectSettings()
+    {
+      $return = array(
+              Tinebase_Model_Config::REDIRECTURL => '',
+              Tinebase_Model_Config::REDIRECTTOREFERRER => '0'
+        );       
+      if ($this->isInstalled('Tinebase')) {
+          $return[Tinebase_Model_Config::REDIRECTURL] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value;
+          $return[Tinebase_Model_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value;      
+      }
+      return $return;
     }
 
     
