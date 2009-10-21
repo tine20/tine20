@@ -41,9 +41,11 @@ class Tinebase_Server_JsonP extends Tinebase_Server_Abstract
             if (! empty($_GET['username'])) {
                 $authResult = Tinebase_Auth::getInstance()->authenticate($_GET['username'], $_GET['password']);
                 $success = $authResult->isValid();
+                // destroy session immediately
+                Zend_Session::destroy();
             }
             
-            if ($success) {
+            if ($success === true) {
                 $responseData = array(
                     'status'    => 'success',
                     'msg'       => 'authentication succseed',
