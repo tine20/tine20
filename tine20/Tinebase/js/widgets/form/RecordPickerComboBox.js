@@ -21,7 +21,7 @@ Ext.ns('Tine.Tinebase.widgets.form');
  * Usage:
  * <pre><code>
 var resourcePicker = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-    'model': Tine.Calendar.Model.Resource
+    recordClass: Tine.Calendar.Model.Resource
 });
    </code></pre>
  */
@@ -96,5 +96,19 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     onSelect : function(record, index){
         this.selectedRecord = record;
         return this.supr().onSelect.call(this, record, index);
+    },
+    
+    /**
+     * on keypressed("enter") event to add record
+     * 
+     * @param {Tine.Addressbook.SearchCombo} combo
+     * @param {Event} event
+     */ 
+    onSpecialkey: function(combo, event){
+        if(event.getKey() == event.ENTER){
+            var id = combo.getValue();
+            var record = this.store.getById(id);
+            this.onSelect(record);
+        }
     }
 });
