@@ -19,7 +19,7 @@ Ext.ns('Tine.Crm.Product');
  * Lead Dialog Products Grid Panel
  * 
  * <p>
- * TODO         add product search combo
+ * TODO         allow multiple relations with 1 product or add product quantity?
  * TODO         check if we need edit/add actions again
  * </p>
  * 
@@ -73,7 +73,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     /**
      * record class
-     * @cfg {Tine.Addressbook.Model.Contact} recordClass
+     * @cfg {Tine.Sales.Model.Product} recordClass
      */
     recordClass: null,
     
@@ -158,7 +158,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     /**
-     * init actions
+     * init actions and bars
      */
     initActions: function() {
 
@@ -190,60 +190,35 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.contextMenu = new Ext.menu.Menu({
             items: this.actions
         });
+        this.tbar = new Ext.Panel({
+            layout: 'fit',
+            width: '100%',
+            items: [
+                new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                    emptyText: this.app.i18n._('Search for Products to add ...'),
+                    productsStore: this.store,
+                    blurOnSelect: true,
+                    recordClass: Tine.Sales.Model.Product,
+                    getValue: function() {
+                        return this.selectedRecord ? this.selectedRecord.data : null;
+                    },
+                    onSelect: function(record){
+                        // check if already in?
+                        if (! this.productsStore.getById(record.id)) {
+                            var newRecord = new Ext.data.Record({
+                                price: record.data.price,
+                                remark_price: record.data.price,
+                                name: record.data.name,
+                                relation_type: 'product'
+                            }, record.id);
+                            this.productsStore.insert(0, newRecord);
+                        }
+                            
+                        this.collapse();
+                        this.clearValue();
+                    }
+                })
+            ]
+        });
     }    
-    
-    // obsolete (?) code
-    /*
-    // update price if new product is chosen
-            storeProducts.on('update', function(store, record, index) {
-                if(record.data.product_id && !arguments[1].modified.product_price) {          
-                    var st_productsAvailable = Tine.Crm.Product.getStore();
-                    var preset_price = st_productsAvailable.getById(record.data.product_id);
-                    record.data.product_price = preset_price.data.price;
-                }
-            }); 
-     */
-});
-
-/**
- * product selection combo box
- * 
- * TODO use that again
- */
-Tine.Crm.Product.ComboBox = Ext.extend(Ext.form.ComboBox, {
-
-    /**
-     * @cfg {bool} setPrice in price form field
-     */
-    setPrice: false,
-    
-    name: 'product_combo',
-    hiddenName: 'id',
-    displayField:'productsource',
-    valueField: 'id',
-    allowBlank: false, 
-    typeAhead: true,
-    editable: true,
-    selectOnFocus: true,
-    forceSelection: true, 
-    triggerAction: "all", 
-    mode: 'local', 
-    lazyRender: true,
-    listClass: 'x-combo-list-small',
-
-    //private
-    initComponent: function(){
-
-        Tine.Crm.Product.ComboBox.superclass.initComponent.call(this);        
-
-        if (this.setPrice) {
-            // update price field
-            this.on('select', function(combo, record, index){
-                var priceField = Ext.getCmp('new-product_price');
-                priceField.setValue(record.data.price);
-                
-            }, this);
-        }
-    }
-        
 });

@@ -136,6 +136,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         relation.related_record = record.data;
         
         // add remark values
+        relation.remark = {};
         if (record.data.remark_price) {
             relation.remark.price = record.data.remark_price;
         }
