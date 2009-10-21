@@ -114,6 +114,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
  * 
  * Product Link Record Definition
  */ 
+/*
 Tine.Crm.Model.ProductLink = Tine.Tinebase.data.Record.create([
         {name: 'id'},
         {name: 'product_id'},
@@ -132,6 +133,7 @@ Tine.Crm.Model.ProductLink = Tine.Tinebase.data.Record.create([
         return this.get('product_desc') ? this.get('product_desc') : false;
     }
 });
+*/
 
 /**
  * @namespace Tine.Crm.Model

@@ -14,12 +14,12 @@ Ext.ns('Tine.Crm');
 /**
  * @namespace   Tine.Crm
  * @class       Tine.Crm.ProductGridPanel
- * @extends     Ext.ux.grid.QuickaddGridPanel
+ * @extends     Ext.grid.EditorGridPanel
  * 
  * Lead Dialog Products Grid Panel
  * 
  * <p>
- * TODO         update that when products moved to ERP/Sales Mgmt (use relations then?) 
+ * TODO         add product search combo
  * TODO         check if we need edit/add actions again
  * </p>
  * 
@@ -28,16 +28,13 @@ Ext.ns('Tine.Crm');
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
-Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
+Tine.Crm.ProductGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * grid config
      * @private
      */
-    autoExpandColumn: 'product_desc',
-    quickaddMandatory: 'product_id',
+    autoExpandColumn: 'name',
     clicksToEdit: 1,
-    enableColumnHide:false,
-    enableColumnMove:false,
     loadMask: true,
     
     /**
@@ -89,7 +86,13 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.title = this.app.i18n._('Products');
         //this.recordEditDialogOpener = Tine.Products.EditDialog.openWindow;
         this.recordEditDialogOpener = Ext.emptyFn;
-        this.recordClass = Tine.Crm.Model.ProductLink;
+        this.recordClass = Tine.Sales.Model.Product;
+        
+        this.storeFields = Tine.Sales.Model.ProductArray;
+        this.storeFields.push({name: 'relation'});   // the relation object           
+        this.storeFields.push({name: 'relation_type'});
+        this.storeFields.push({name: 'remark_price'});
+        this.storeFields.push({name: 'remark_description'});
         
         // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
@@ -104,7 +107,7 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.initGrid();
         
         // init store stuff
-        this.store.setDefaultSort('product_desc', 'asc');
+        this.store.setDefaultSort('name', 'asc');
         
         this.on('newentry', function(productData){
             // add new product to store
@@ -129,49 +132,26 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             columns: [
             {
                 header: this.app.i18n._("Product"),
-                id: 'product_id',
-                dataIndex: 'product_id',
-                sortable: true,
-                width: 150,
-                editor: new Tine.Crm.Product.ComboBox({
-                    store: Tine.Crm.Product.getStore() 
-                }),
-                quickaddField: new Tine.Crm.Product.ComboBox({
-                    emptyText: this.app.i18n._('Add a product...'),
-                    store: Tine.Crm.Product.getStore(),
-                    setPrice: true,
-                    id: 'new-product_combo'
-                }),
-                renderer: Tine.Crm.Product.renderer
+                id: 'name',
+                dataIndex: 'name',
+                width: 150
             }, {
-                id: 'product_desc',
                 header: this.app.i18n._("Description"),
-                //width: 100,
-                sortable: true,
-                dataIndex: 'product_desc',
+                id: 'remark_description',
+                dataIndex: 'remark_description',
+                width: 150,
                 editor: new Ext.form.TextField({
-                    allowBlank: false
-                }),
-                quickaddField: new Ext.form.TextField({
-                    allowBlank: false
                 })
             }, {
-                id: 'product_price',
                 header: this.app.i18n._("Price"),
-                dataIndex: 'product_price',
-                width: 80,
-                align: 'right',
+                id: 'remark_price',
+                dataIndex: 'remark_price',
+                width: 150,
                 editor: new Ext.form.NumberField({
                     allowBlank: false,
                     allowNegative: false,
                     decimalSeparator: ','
-                    }),
-                quickaddField: new Ext.form.NumberField({
-                    allowBlank: false,
-                    allowNegative: false,
-                    decimalSeparator: ',',
-                    id: 'new-product_price'
-                    }),  
+                }),
                 renderer: Ext.util.Format.euMoney
             }]
         });
@@ -223,4 +203,46 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }
             }); 
      */
+});
+
+/**
+ * product selection combo box
+ * 
+ */
+Tine.Crm.Product.ComboBox = Ext.extend(Ext.form.ComboBox, {
+
+    /**
+     * @cfg {bool} setPrice in price form field
+     */
+    setPrice: false,
+    
+    name: 'product_combo',
+    hiddenName: 'id',
+    displayField:'productsource',
+    valueField: 'id',
+    allowBlank: false, 
+    typeAhead: true,
+    editable: true,
+    selectOnFocus: true,
+    forceSelection: true, 
+    triggerAction: "all", 
+    mode: 'local', 
+    lazyRender: true,
+    listClass: 'x-combo-list-small',
+
+    //private
+    initComponent: function(){
+
+        Tine.Crm.Product.ComboBox.superclass.initComponent.call(this);        
+
+        if (this.setPrice) {
+            // update price field
+            this.on('select', function(combo, record, index){
+                var priceField = Ext.getCmp('new-product_price');
+                priceField.setValue(record.data.price);
+                
+            }, this);
+        }
+    }
+        
 });

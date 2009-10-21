@@ -78,13 +78,17 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordLoad: function() {
 
         // load contacts/tasks/products into link grid (only first time this function gets called/store is empty)
-        if (this.contactGrid && this.tasksGrid && this.contactGrid.store.getCount() == 0 && this.tasksGrid.store.getCount() == 0) {
+        if (this.contactGrid && this.tasksGrid && this.productsGrid 
+            && this.contactGrid.store.getCount() == 0 
+            && this.tasksGrid.store.getCount() == 0 
+            && this.productsGrid.store.getCount() == 0) {
+                    
             var relations = this.splitRelations();
+            //console.log(relations);
+            
             this.contactGrid.store.loadData(relations.contacts, true);
             this.tasksGrid.store.loadData(relations.tasks, true);
-        }
-        if (this.productsGrid && this.record.data.products && this.productsGrid.store.getCount() == 0) {
-            this.productsGrid.store.loadData(this.record.data.products, true);
+            this.productsGrid.store.loadData(relations.products, true);
         }
         
         Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);        
@@ -99,7 +103,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Crm.LeadEditDialog.superclass.onRecordUpdate.call(this);
         
-        //delete this.record.data.contacts;
         this.getAdditionalData();
     },
     
@@ -132,6 +135,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // save record data        
         relation.related_record = record.data;
         
+        // add remark values
+        if (record.data.remark_price) {
+            relation.remark.price = record.data.remark_price;
+        }
+        if (record.data.remark_description) {
+            relation.remark.description = record.data.remark_description;
+        }
+        
         return relation;
     },
 
@@ -150,15 +161,11 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.tasksGrid.store.each(function(record) {
             relations.push(this.getRelationData(record));
         }, this);
-        
-        // add products
-        var linksProducts = [];
         this.productsGrid.store.each(function(record) {
-            linksProducts.push(record.data);
-        });
-
+            relations.push(this.getRelationData(record));
+        }, this);
+        
         this.record.data.relations = relations;
-        this.record.data.products = linksProducts;
     },
     
     /**
@@ -170,6 +177,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var contacts = [];
         var tasks = []
+        var products = []
         
         var relations = this.record.get('relations');
         
@@ -186,12 +194,17 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 contacts.push(newLinkObject);
             } else if (newLinkObject.relation_type === 'task') {                
                 tasks.push(newLinkObject);
+            } else if (newLinkObject.relation_type === 'product') {
+                newLinkObject.remark_description = relations[i].remark.description;
+                newLinkObject.remark_price = relations[i].remark.price;
+                products.push(newLinkObject);
             }
         }
 
         return {
             contacts: contacts,
-            tasks: tasks
+            tasks: tasks,
+            products: products
         };
     },
 
