@@ -25,10 +25,11 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
      * don't use the constructor. use the singleton 
      */
     private function __construct() {        
-        $this->_applicationName = 'Sales';
-        $this->_modelName = 'Sales_Model_Product';
-        $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'sales_products');
-        $this->_currentAccount = Tinebase_Core::getUser();   
+        $this->_applicationName         = 'Sales';
+        $this->_modelName               = 'Sales_Model_Product';
+        $this->_backend                 = new Tinebase_Backend_Sql($this->_modelName, 'sales_products');
+        $this->_currentAccount          = Tinebase_Core::getUser();
+        $this->_doContainerACLChecks    = FALSE;
     }    
     
     /**
