@@ -109,7 +109,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
      
         $key = 'host';
         Tinebase_Auth::setBackendConfiguration('configured-host', $key);
-
+        $this->assertEquals('configured-host', Tinebase_Auth::getBackendConfiguration($key, 'default-host'));
         Tinebase_Auth::deleteBackendConfiguration($key);
         $this->assertEquals('default-host', Tinebase_Auth::getBackendConfiguration($key, 'default-host'));
         
@@ -117,7 +117,8 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         Tinebase_Auth::deleteBackendConfiguration('non-existing-key');
         $this->assertEquals($configOptionsCount, count(Tinebase_Auth::getBackendConfiguration()));
         
-        $this->assertTrue($configOptionsCount > 0);
+        Tinebase_Auth::setBackendConfiguration('phpunit-dummy-value', $key);
+        $this->assertTrue(count(Tinebase_Auth::getBackendConfiguration()) > 0);
         Tinebase_Auth::deleteBackendConfiguration();
         $this->assertTrue(count(Tinebase_Auth::getBackendConfiguration()) == 0);
     }
