@@ -22,11 +22,18 @@
 class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {   
     /**
-     * contract controller
+     * Contract controller
      *
      * @var Sales_Controller_Contract
      */
     protected $_contractController = NULL;
+    
+    /**
+     * Product controller
+     *
+     * @var Sales_Controller_Product
+     */
+    protected $_productController = NULL;
     
     /**
      * the constructor
@@ -34,8 +41,9 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function __construct()
     {
-        $this->_applicationName = 'Sales';
-        $this->_contractController = Sales_Controller_Contract::getInstance();
+        $this->_applicationName     = 'Sales';
+        $this->_contractController  = Sales_Controller_Contract::getInstance();
+        $this->_productController   = Sales_Controller_Product::getInstance();
     }
     
    /**
@@ -104,5 +112,52 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteContracts($ids)
     {
         $this->_delete($ids, $this->_contractController);
+    }
+    
+    /*************************** products functions *****************************/
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param string $filter json encoded
+     * @param string $paging json encoded
+     * @return array
+     */
+    public function searchProducts($filter, $paging)
+    {
+        return $this->_search($filter, $paging, $this->_productController, 'Sales_Model_ProductFilter');
+    }     
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getProduct($id)
+    {
+        return $this->_get($id, $this->_productController);
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  string $recordData
+     * @return array created/updated record
+     */
+    public function saveProduct($recordData)
+    {
+        return $this->_save($recordData, $this->_productController, 'Product');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param string $ids 
+     * @return string
+     */
+    public function deleteProducts($ids)
+    {
+        $this->_delete($ids, $this->_productController);
     }
 }
