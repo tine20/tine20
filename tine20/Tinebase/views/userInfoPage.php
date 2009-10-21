@@ -21,6 +21,6 @@
         <link rel="openid.server"    href="<?php echo $this->escape($this->openIdUrl) ?>"/>        
     </head>
     <body>
-        This is the info page for user <?php echo $this->escape($this->username) ?>.
+        This is the info page for user <b><?php echo $this->escape($this->username) ?></b>.
     </body>
 </html>
