@@ -210,6 +210,8 @@ class Tinebase_Relations
      * 
      * @param   Tinebase_Record_RecordSet of Tinebase_Model_Relation
      * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo    allowed related models should not be defined here
      */
     protected function _setAppRecord($_relation)
     {
@@ -230,6 +232,9 @@ class Tinebase_Relations
                 $_relation->related_backend = Addressbook_Backend_Factory::SQL;
                 break;
             case 'Tasks_Model_Task':
+                $_relation->related_backend = Tasks_Backend_Factory::SQL;
+                break;
+            case 'Sales_Model_Product':
                 $_relation->related_backend = Tasks_Backend_Factory::SQL;
                 break;
             default:
