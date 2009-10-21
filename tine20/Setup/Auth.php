@@ -55,7 +55,9 @@ class Setup_Auth implements Zend_Auth_Adapter_Interface
         if (isset(Setup_Core::getConfig()->setupuser)) {
             $setupConfig = Setup_Core::getConfig()->setupuser;
             
-            if ($setupConfig->username == $this->_username && $setupConfig->password == $this->_password) {
+            $givenPassword = self::isMd5($setupConfig->password) ? md5($this->_password) : $this->_password;
+            
+            if ($setupConfig->username == $this->_username && $setupConfig->password == $givenPassword) {
                 $code = Zend_Auth_Result::SUCCESS;
                 $messages = array('Login successful');
             } else {
@@ -76,5 +78,16 @@ class Setup_Auth implements Zend_Auth_Adapter_Interface
         );
         
         return $result;
+    }
+    
+    /**
+     * Check if the given {@param $_string} is a md5 hash or not
+     *  
+     * @param String $_string
+     * @return bool
+     */
+    public static function isMd5($_string)
+    {
+        return preg_match('/^[A-Fa-f0-9]{32}$/', $_string);
     }
 }

@@ -591,6 +591,10 @@ class Setup_Controller
      */
     public function saveConfigData($_data, $_merge = TRUE)
     {
+        
+        if (!empty($_data['setupuser']['password']) && !Setup_Auth::isMd5($_data['setupuser']['password'])) {
+          $_data['setupuser']['password'] = md5($_data['setupuser']['password']);
+        }
         if (Setup_Core::configFileExists() && !Setup_Core::configFileWritable()) {
             throw new Setup_Exception('Config File is not writeable.');
         }
