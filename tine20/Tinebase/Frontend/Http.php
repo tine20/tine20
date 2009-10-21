@@ -379,13 +379,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function login()
     {
         // redirect to REDIRECTURL if set
-        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-        $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, $tinebase, null);
-
-        if ($redirectUrl !== null) {
-            
+        $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value;
+        if ($redirectUrl !== '') {
             header('Location: ' . $redirectUrl['value']);
-            
             return;
         }
         
@@ -489,12 +485,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // authentication failed
         // redirect back to loginurl
         if ($success !== TRUE) {
-            $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-
-            $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, $tinebase, $_SERVER["HTTP_REFERER"]);
-
-            header('Location: ' . $redirectUrl['value']);
-            
+            $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, $_SERVER["HTTP_REFERER"])->value;
+            header('Location: ' . $redirectUrl);
             return;
         }
 
