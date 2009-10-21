@@ -9,11 +9,11 @@
  *
  */
  
-Ext.ns('Tine.Crm');
+Ext.ns('Tine.Crm.Product');
 
 /**
- * @namespace   Tine.Crm
- * @class       Tine.Crm.ProductGridPanel
+ * @namespace   Tine.Crm.Product
+ * @class       Tine.Crm.Product.GridPanel
  * @extends     Ext.grid.EditorGridPanel
  * 
  * Lead Dialog Products Grid Panel
@@ -28,7 +28,7 @@ Ext.ns('Tine.Crm');
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
-Tine.Crm.ProductGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
+Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * grid config
      * @private
@@ -117,7 +117,7 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return true;
         }, this);
         
-        Tine.Crm.ProductGridPanel.superclass.initComponent.call(this);
+        Tine.Crm.Product.GridPanel.superclass.initComponent.call(this);
     },
     
     /**
@@ -208,6 +208,7 @@ Tine.Crm.ProductGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 /**
  * product selection combo box
  * 
+ * TODO use that again
  */
 Tine.Crm.Product.ComboBox = Ext.extend(Ext.form.ComboBox, {
 

@@ -9,11 +9,11 @@
  *
  */
  
-Ext.ns('Tine.Crm');
+Ext.ns('Tine.Crm.Task');
 
 /**
  * @namespace   Tine.Crm
- * @class       Tine.Crm.TaskGridPanel
+ * @class       Tine.Crm.Task.GridPanel
  * @extends     Ext.ux.grid.QuickaddGridPanel
  * 
  * Lead Dialog Tasks Grid Panel
@@ -26,7 +26,7 @@ Ext.ns('Tine.Crm');
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
-Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
+Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     /**
      * grid config
      * @private
@@ -144,7 +144,7 @@ Tine.Crm.TaskGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             }
         }, this);        
         
-        Tine.Crm.TaskGridPanel.superclass.initComponent.call(this);
+        Tine.Crm.Task.GridPanel.superclass.initComponent.call(this);
     },
     
     /**

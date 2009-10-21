@@ -9,11 +9,61 @@
  *
  */
  
-Ext.ns('Tine.Crm');
+Ext.ns('Tine.Crm.Contact');
 
 /**
- * @namespace   Tine.Crm
- * @class       Tine.Crm.ContactGridPanel
+ * @namespace   Tine.Crm.Contact
+ * @class       Tine.Crm.Contact.Combo
+ * @extends     Tine.Addressbook.SearchCombo
+ * 
+ * Lead Dialog Contact Search Combo
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+Tine.Crm.Contact.Combo = Ext.extend(Tine.Addressbook.SearchCombo, {
+
+    valueField: 'id',
+    
+    /**
+     * store to hold all contacts of grid
+     * 
+     * @type Ext.data.Store
+     * @property contactsStore
+     */
+    contactsStore: null,
+    
+    //private
+    initComponent: function(){
+        this.contactFields = Tine.Addressbook.Model.ContactArray;
+        this.contactFields.push({name: 'relation'});   // the relation object           
+        this.contactFields.push({name: 'relation_type'});
+        
+        Tine.Crm.Contact.Combo.superclass.initComponent.call(this);        
+    },
+    
+    /**
+     * override default onSelect
+     * 
+     */
+    onSelect: function(record){  
+        record.data.relation_type = 'customer';            
+        
+        // check if already in
+        if (! this.contactsStore.getById(record.id)) {
+            this.contactsStore.add([record]);
+        }
+            
+        this.collapse();
+        this.clearValue();
+    }    
+});
+
+/**
+ * @namespace   Tine.Crm.Contact
+ * @class       Tine.Crm.Contact.GridPanel
  * @extends     Ext.grid.EditorGridPanel
  * 
  * Lead Dialog Contact Grid Panel
@@ -26,7 +76,7 @@ Ext.ns('Tine.Crm');
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
-Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
+Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * grid config
      * @private
@@ -105,7 +155,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // init store stuff
         this.store.setDefaultSort('type', 'asc');   
         
-        Tine.Crm.ContactGridPanel.superclass.initComponent.call(this);
+        Tine.Crm.Contact.GridPanel.superclass.initComponent.call(this);
     },
     
     /**
@@ -158,7 +208,7 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             width: '100%',
             items: [
                 // TODO perhaps we could add an icon/button (i.e. edit-find.png) here
-                new Tine.Crm.ContactCombo({
+                new Tine.Crm.Contact.Combo({
                     contactsStore: this.store,
                     emptyText: this.app.i18n._('Search for Contacts to add ...')
                 })
@@ -211,8 +261,8 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     dataIndex: 'relation_type', 
                     width: 60, 
                     sortable: true,
-                    renderer: Tine.Crm.contactType.Renderer,
-                    editor: new Tine.Crm.contactType.ComboBox({
+                    renderer: Tine.Crm.Contact.typeRenderer,
+                    editor: new Tine.Crm.Contact.TypeComboBox({
                         autoExpand: true,
                         blurOnSelect: true,
                         listClass: 'x-combo-list-small'
@@ -260,13 +310,19 @@ Tine.Crm.ContactGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     }
 });
 
-Ext.namespace('Tine.Crm', 'Tine.Crm.contactType');
-
 /**
- * contact type select combo box
+ * @namespace   Tine.Crm.Contact
+ * @class       Tine.Crm.Contact.TypeComboBox
+ * @extends     Ext.form.ComboBox
  * 
+ * Contact type selection combobox
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  */
-Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, { 
+Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, { 
     /**
      * @cfg {bool} autoExpand Autoexpand comboBox on focus.
      */
@@ -288,7 +344,7 @@ Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
         var translation = new Locale.Gettext();
         translation.textdomain('Crm');
         
-        Tine.Crm.contactType.ComboBox.superclass.initComponent.call(this);
+        Tine.Crm.Contact.TypeComboBox.superclass.initComponent.call(this);
         // allways set a default
         if(!this.value) {
             this.value = 'responsible';
@@ -318,16 +374,15 @@ Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
         }
     }
 });
-Ext.reg('leadcontacttypecombo', Tine.Crm.contactType.ComboBox);
+Ext.reg('leadcontacttypecombo', Tine.Crm.Contact.TypeComboBox);
 
 /**
- * contact type renderer
+ * contact type renderer function
  * 
  * @param   string type
  * @return  contact type icon
- * 
  */
-Tine.Crm.contactType.Renderer = function(type)
+Tine.Crm.Contact.typeRenderer = function(type)
 {
     var translation = new Locale.Gettext();
     translation.textdomain('Crm');

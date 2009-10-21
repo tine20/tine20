@@ -37,7 +37,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * linked contacts grid
      * 
-     * @type Tine.Crm.ContactGridPanel
+     * @type Tine.Crm.Contact.GridPanel
      * @property contactGrid
      */
     contactGrid: null,
@@ -45,7 +45,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * linked tasks grid
      * 
-     * @type Tine.Crm.TaskGridPanel
+     * @type Tine.Crm.Task.GridPanel
      * @property tasksGrid
      */
     tasksGrid: null,
@@ -231,17 +231,17 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             anchor: '95%'
         });
         
-        this.contactGrid = new Tine.Crm.ContactGridPanel({
+        this.contactGrid = new Tine.Crm.Contact.GridPanel({
             record: this.record,
             anchor: '100% 98%'
         });
 
-        this.tasksGrid = new Tine.Crm.TaskGridPanel({
+        this.tasksGrid = new Tine.Crm.Task.GridPanel({
             record: this.record,
             height: '100%'
         });
         
-        this.productsGrid = new Tine.Crm.ProductGridPanel({
+        this.productsGrid = new Tine.Crm.Product.GridPanel({
             record: this.record,
             height: '100%'
         });
