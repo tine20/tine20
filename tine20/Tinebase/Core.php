@@ -139,62 +139,53 @@ class Tinebase_Core
         $server = NULL;
         
         /**************************** JSON API *****************************/
-        
         if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
              (isset($_SERVER['CONTENT_TYPE']) && substr($_SERVER['CONTENT_TYPE'],0,16) == 'application/json')  ||
              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
             ) {
             $server = new Tinebase_Server_Json();
 
-        /**************************** JSONP API *****************************/
             
+        /**************************** JSONP API *****************************/
         } elseif(
             isset($_GET['jsonp'])
         ) {
             $server = new Tinebase_Server_JsonP();
             
-        /**************************** SNOM API *****************************/
             
+        /**************************** SNOM API *****************************/
         } elseif(
             isset($_SERVER['HTTP_USER_AGENT']) && 
             preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])
         ) {
             $server = new Voipmanager_Server_Snom();
             
-        /**************************** OpenID API *****************************/
-            
-        } elseif(
-            (isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'application/xrds+xml') !== FALSE) ||
-            (isset($_SERVER['HTTP_USER_AGENT']) && stripos($_SERVER['HTTP_USER_AGENT'], 'openid') !== FALSE)
-        ) {
-            $server = new Zend_OpenId_Provider(
-                null,
-                null,
-                null,
-                new Tinebase_OpenId_Provider_Storage
-            );
             
         /**************************** ASTERISK API *****************************/
-
         } elseif(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == 'asterisk-libcurl-agent/1.0') {
             $server = new Voipmanager_Server_Asterisk();
             
-        /**************************** ActiveSync API *****************************/
             
-        } elseif($_SERVER['PHP_SELF'] == '/Microsoft-Server-ActiveSync' || 
-                 $_SERVER['SCRIPT_NAME'] == '/Microsoft-Server-ActiveSync' ||
-                 (isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') || 
-                (isset($_SERVER['SCRIPT_URL']) && $_SERVER['SCRIPT_URL'] == '/Microsoft-Server-ActiveSync') ) {
+        /**************************** ActiveSync API *****************************/
+        } elseif(isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') {
             $server = new ActiveSync_Server_Http();
+
             
         /**************************** CLI API *****************************/
-        
         } elseif (php_sapi_name() == 'cli') {
             $server = new Tinebase_Server_Cli();
             
+
         /**************************** HTTP API ****************************/
-        
         } else {
+            
+            /**************************** OpenID *****************************/
+            if (isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'application/xrds+xml') !== FALSE) {
+                $_REQUEST['method'] = 'Tinebase.getXRDS';
+            } elseif (isset($_SERVER['REDIRECT_USERINFOPAGE']) && $_SERVER['REDIRECT_USERINFOPAGE'] == 'true') {
+                $_REQUEST['method'] = 'Tinebase.userInfoPage';
+            }
+            
             $server = new Tinebase_Server_Http();
         }        
         
