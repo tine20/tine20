@@ -17,10 +17,12 @@ Ext.namespace('Tine.Addressbook');
  * 
  * @namespace   Tine.Addressbook
  * @class       Tine.Addressbook.SearchCombo
- * @extends     Tine.Tinebase.widgets.form.SearchCombo
+ * @extends     Ext.form.ComboBox
  * 
  * <p>Contact Search Combobox</p>
- * <p><pre></pre></p>
+ * <p><pre>
+ * TODO         extend Tine.Tinebase.widgets.form.RecordPickerComboBox
+ * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -31,13 +33,25 @@ Ext.namespace('Tine.Addressbook');
  * @constructor
  * Create a new Tine.Addressbook.SearchCombo
  */
-Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.SearchCombo, {
+Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
 
     /**
      * combobox cfg
      * @private
      */
-    id: 'contactSearchCombo',
+	id: 'contactSearchCombo',
+    typeAhead: false,
+    //hideTrigger: true, // IE7 doesn't like that!
+    triggerAction: 'all',
+    pageSize: 10,
+    itemSelector: 'div.search-item',
+    store: null,
+    minChars: 3,
+    
+    /**
+     * @cfg {Boolean} blurOnSelect
+     */
+    blurOnSelect: false,
     
     /**
      * @cfg {Boolean} internalContactsOnly
@@ -45,24 +59,84 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.SearchCombo
     internalContactsOnly: false,
     
     /**
-     * @private
+     * @property additionalFilters
+     * @type Array
      */
-    initComponent: function() {
+    additionalFilters: null,
+    
+    /**
+     * @property selectedRecord
+     * @type Tine.Addressbook.Model.Contact
+     */
+    selectedRecord: null,
+    
+    //private
+    initComponent: function(){
         
-        // init some vars
-        this.valueField = 'n_fn';
-        this.recordFields = Tine.Addressbook.Model.ContactArray;
-        this.searchMethod = 'Addressbook.searchContacts';
+        this.loadingText = _('Searching...');
+    	
+        this.initTemplate();
+        this.initStore();
         
-        // add container filter
-        this.additionalFilters = (this.additionalFilters !== null) ? this.additionalFilters : [];
+        Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);        
+
+        this.on('beforequery', this.onBeforeQuery, this);
+    },
+    
+    /**
+     * use beforequery to set query filter
+     * 
+     * @param {Event} qevent
+     */
+    onBeforeQuery: function(qevent){
+        var filter = [
+            {field: 'query', operator: 'contains', value: qevent.query }
+        ];
+        
         if (this.internalContactsOnly) {
-            this.additionalFilters.push({field: 'container_id', operator: 'specialNode', value: 'internal' });
+            filter.push({field: 'container_id', operator: 'specialNode', value: 'internal' });
         } else {
-            this.additionalFilters.push({field: 'container_id', operator: 'specialNode', value: 'all' });
+            filter.push({field: 'container_id', operator: 'specialNode', value: 'all' });
         }
         
-        Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
+        if (this.additionalFilters !== null && this.additionalFilters.length > 0) {
+            for (var i = 0; i < this.additionalFilters.length; i++) {
+                filter.push(this.additionalFilters[i]);
+            }
+        }
+        
+        this.store.baseParams.filter = Ext.util.JSON.encode(filter);
+    },
+    
+    /**
+     * on select handler
+     * - this needs to be overwritten in most cases
+     * 
+     * @param {Tine.Addressbook.Model.Contact} record
+     */
+    onSelect: function(record){
+        this.selectedRecord = record;
+        this.setValue(record.get('n_fn'));
+        this.collapse();
+        
+        this.fireEvent('select', this, record);
+        if (this.blurOnSelect) {
+            this.fireEvent('blur', this);
+        }
+    },
+    
+    /**
+     * on keypressed("enter") event to add record
+     * 
+     * @param {Tine.Addressbook.SearchCombo} combo
+     * @param {Event} event
+     */ 
+    onSpecialkey: function(combo, event){
+        if(event.getKey() == event.ENTER){
+         	var id = combo.getValue();
+            var record = this.store.getById(id);
+            this.onSelect(record);
+        }
     },
     
     /**
@@ -98,5 +172,50 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.SearchCombo
                 }
             );
         }
+    },
+    
+    /**
+     * get contact store
+     *
+     * @return Ext.data.JsonStore with contacts
+     * @private
+     */
+    initStore: function() {
+        
+        if (! this.store) {
+            
+            if (! this.contactFields) {
+                this.contactFields = Tine.Addressbook.Model.ContactArray;
+            }
+            
+            // create store
+            this.store = new Ext.data.JsonStore({
+                //fields: Tine.Addressbook.Model.Contact,
+                fields: this.contactFields,
+                baseParams: {
+                    method: 'Addressbook.searchContacts'
+                },
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'id',
+                remoteSort: true,
+                sortInfo: {
+                    field: 'n_family',
+                    direction: 'ASC'
+                }            
+            });
+    
+            // prepare filter / get paging from combo
+            this.store.on('beforeload', function(store, options){
+                options.params.paging = Ext.util.JSON.encode({
+                    start: options.params.start,
+                    limit: options.params.limit,
+                    sort: 'n_family',
+                    dir: 'ASC'
+                });
+            }, this);
+        }
+        
+        return this.store;
     }
 });
