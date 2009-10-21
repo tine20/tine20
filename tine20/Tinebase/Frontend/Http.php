@@ -53,12 +53,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
+     * return xrds file
+     * used to autodiscover openId servers
      * 
      * @return void
      */
     public function getXRDS() 
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " selfUrl: " . Zend_OpenId::selfUrl());
+        // http://servername/pathtotine20/users/loginname
+        $url = dirname(dirname(Zend_OpenId::selfUrl())) . '/index.php?method=Tinebase.openId';
         
         header('Content-type: application/xrds+xml');
         
@@ -68,70 +71,120 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
               <XRD>
                 <Service priority="0">
                   <Type>http://specs.openid.net/auth/2.0/signon</Type>
-                  <URI>' . Zend_OpenId::selfUrl() . '?method=Tinebase.openId</URI>
+                  <URI>' . $url . '</URI>
                 </Service>
                 <Service priority="1">
                   <Type>http://openid.net/signon/1.1</Type>
-                  <URI>' . Zend_OpenId::selfUrl() . '?method=Tinebase.openId</URI>
+                  <URI>' . $url . '</URI>
                 </Service>
                 <Service priority="2">
                   <Type>http://openid.net/signon/1.0</Type>
-                  <URI>' . Zend_OpenId::selfUrl() . '?method=Tinebase.openId</URI>
+                  <URI>' . $url . '</URI>
                 </Service>
               </XRD>
             </xrds:XRDS>';
     }
     
     /**
-     * handle OpenId requests
+     * display user info page
+     * 
+     * in the future we can display public informations about the user here too
+     * currently it is only used as entry point for openId
+     * 
+     * @param string $username the username
+     * @return void
+     */
+    public function userInfoPage($username)
+    {
+        // http://servername/pathtotine20/users/loginname
+        $openIdUrl = dirname(dirname(Zend_OpenId::selfUrl())) . '/index.php?method=Tinebase.openId';
+        
+        $view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
+        
+        $view->openIdUrl = $openIdUrl;
+        $view->username = $username;
+
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('userInfoPage.php');
+    }
+    
+    /**
+     * handle all kinds of openId requests
+     * 
      * @return void
      */
     public function openId()
     {
-        Tinebase_Core::getLogger()->debug('index.php ('. __LINE__ . ') TIME: ' . print_r($_SERVER, true));
-        Tinebase_Core::getLogger()->debug('index.php ('. __LINE__ . ') TIME: ' . print_r($_REQUEST, true));
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ");
-        
         $server = new Zend_OpenId_Provider(
             null,
             null,
             null,
             new Tinebase_OpenId_Provider_Storage
         );
+        $server->setOpEndpoint(dirname(Zend_OpenId::selfUrl()) . '/index.php?method=Tinebase.openId');
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " ");
-        
-        if (isset($_GET['openid_action']) && $_GET['openid_action'] === 'login') {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " openId login");
-            $server->login(TEST_ID, TEST_PASSWORD);
+        // handle openId login form
+        if (isset($_POST['openid_action']) && $_POST['openid_action'] === 'login') {
+            $server->login($_POST['openid_identifier'], $_POST['openid_password']);
             unset($_GET['openid_action']);
-            Zend_OpenId::redirect(Zend_OpenId::selfUrl(), $_GET);
+            Zend_OpenId::redirect(dirname(Zend_OpenId::selfUrl()) . '/index.php', $_GET);
+
+        // display openId login form
+        } else if (isset($_GET['openid_action']) && $_GET['openid_action'] === 'login') {
+            $view = new Zend_View();
+            $view->setScriptPath('Tinebase/views');
+            
+            $view->openIdIdentity = $_GET['openid_identity'];
+            $view->loginName = $_GET['openid_identity'];
+    
+            header('Content-Type: text/html; charset=utf-8');
+            echo $view->render('openidLogin.php');
+
+        // handle openId trust form
+        } else if (isset($_POST['openid_action']) && $_POST['openid_action'] === 'trust') {
+            if (isset($_POST['allow'])) {
+                if (isset($_POST['forever'])) {
+                    $server->allowSite($server->getSiteRoot($_GET));
+                }
+                $server->respondToConsumer($_GET);
+            } else if (isset($_POST['deny'])) {
+                if (isset($_POST['forever'])) {
+                    $server->denySite($server->getSiteRoot($_GET));
+                }
+                Zend_OpenId::redirect($_GET['openid_return_to'],
+                                      array('openid.mode'=>'cancel'));
+            }
+
+        // display openId trust form
         } else if (isset($_GET['openid_action']) && $_GET['openid_action'] === 'trust') {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " openId trust");
-            unset($_GET['openid_action']);
-            $server->respondToConsumer($_GET);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " display openId trust screen");
+            $view = new Zend_View();
+            $view->setScriptPath('Tinebase/views');
+
+            $view->openIdConsumer = $server->getSiteRoot($_GET);
+            $view->openIdIdentity = $server->getLoggedInUser();
+    
+            header('Content-Type: text/html; charset=utf-8');
+            echo $view->render('openidTrust.php');
+
+        // handle all other openId requests
         } else {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " openId");
-            
             $result = $server->handle();
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " openId Result: $result");
-            
+
             if (is_string($result)) {
                 echo $result;
             } elseif ($result !== true) {
                 header('HTTP/1.0 403 Forbidden');
                 return;
             }
-            
-            
         }        
         
     }
     
-    
     /**
      * checks if a user is logged in. If not we redirect to login
+     * @todo $this->sessionTimedOut(); does not exist anymore
      */
     protected function checkAuth()
     {
@@ -326,14 +379,32 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function login()
     {
+        // redirect to REDIRECTURL if set
+        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, $tinebase, null);
+
+        if ($redirectUrl !== null) {
+            
+            header('Location: ' . $redirectUrl['value']);
+            
+            return;
+        }
+        
         // check if setup/update required
         $setupController = Setup_Controller::getInstance();
         $applications = Tinebase_Application::getInstance()->getApplications();
         foreach ($applications as $application) {
             if ($application->status == 'enabled' && $setupController->updateNeeded($application)) {
-                $this->setupRequired();
+                $this->_renderSetupRequired();
             }
         }
+        
+        $this->_renderMainScreen();
+        
+        /**
+         * old code used to display user registration
+         * @todo must be reworked
+         * 
         
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
@@ -347,24 +418,40 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         } else {
             $view->userRegistration = 0;
         }        
-        $view->openIdBaseUrl = Zend_OpenId::selfUrl();
         
         echo $view->render('mainscreen.php');
+        */
     }
     
+    /**
+     * renders the main screen
+     * 
+     * @return void
+     */
+    protected function _renderMainScreen()
+    {
+        $view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
+        
+        $view->registryData = array();
+
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+        
+    }
     
     /**
      * renders the setup/update required dialog
      *
      */
-    public function setupRequired()
+    protected function _renderSetupRequired()
     {
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
 
-        header('Content-Type: text/html; charset=utf-8');
-        
         Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Update/Setup required!');
+
+        header('Content-Type: text/html; charset=utf-8');
         echo $view->render('update.php');
         exit();        
     }
@@ -404,7 +491,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // redirect back to loginurl
         if ($success !== TRUE) {
             $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-            
+
             $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, $tinebase, $_SERVER["HTTP_REFERER"]);
 
             header('Location: ' . $redirectUrl['value']);
@@ -412,30 +499,17 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             return;
         }
 
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
-        $view->registryData = array();
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        $this->_renderMainScreen();
     }
     
     /**
-	 * renders the tine main screen 
+	 * checks authentication and display Tine 2.0 main screen 
 	 */
     public function mainScreen()
     {
         $this->checkAuth();
         
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
-        $view->registryData = array();
-        $view->openIdBaseUrl = Zend_OpenId::selfUrl();
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('mainscreen.php');
+        $this->_renderMainScreen();
     }
     
     /**
