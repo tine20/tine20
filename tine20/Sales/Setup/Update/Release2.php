@@ -107,23 +107,27 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
             1
         );
         
-        // add products from crm
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'metacrm_products');
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetchAll();
-
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
+        // check if crm is installed first
+        if (Setup_Controller::getInstance()->isInstalled('Crm')) {
         
-        // insert values into customfield table
-        $productsController = Sales_Controller_Product::getInstance();
-        foreach ($queryResult as $row) {
-            $products = new Sales_Model_Product(array(
-                'id'    => $row['id'],
-                'name'  => $row['productsource'],
-                'price' => $row['price'],
-            ));
-            $productsController->create($products);
+            // add products from crm
+            $select = $this->_db->select()
+                ->from(SQL_TABLE_PREFIX . 'metacrm_products');
+            $stmt = $this->_db->query($select);
+            $queryResult = $stmt->fetchAll();
+    
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
+            
+            // insert values into products table
+            $productsController = Sales_Controller_Product::getInstance();
+            foreach ($queryResult as $row) {
+                $products = new Sales_Model_Product(array(
+                    'id'    => $row['id'],
+                    'name'  => $row['productsource'],
+                    'price' => $row['price'],
+                ));
+                $productsController->create($products);
+            }
         }
             
         $this->setApplicationVersion('Sales', '2.2');
@@ -134,15 +138,43 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
      * - remove old crm products tables
      * 
      * @return void
-     * 
-     * @todo implement
      */
-    public function update_3()
+    public function update_2()
     {
-        //-- drop table metacrm_leadsproducts
-        //-- drop table metacrm_products
-        
-        //$this->setApplicationVersion('Sales', '2.3');
-    }
+        if (Setup_Controller::getInstance()->isInstalled('Crm')) {
+            // get linked products
+            $select = $this->_db->select()
+                ->from(SQL_TABLE_PREFIX . 'metacrm_leads_products');
+            $stmt = $this->_db->query($select);
+            $queryResult = $stmt->fetchAll();
     
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
+            
+            // insert values into relations table
+            $relationsBackend = new Tinebase_Relation_Backend_Sql();
+            foreach ($queryResult as $row) {
+                $relation = new Tinebase_Model_Relation( array(
+                    'own_model'              => 'Crm_Model_Lead',
+                    'own_backend'            => 'Sql',
+                    'own_id'                 => $row['lead_id'],
+                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'type'                   => 'PRODUCT',
+                    'related_model'          => 'Sales_Model_Product',
+                    'related_backend'        => 'Sql',
+                    'related_id'             => $row['product_id'],
+                    'remark'                => Zend_Json::encode(array(
+                        'description'   => $row['product_desc'],
+                        'price'         => $row['product_price']
+                    ))
+                ));
+                $relationsBackend->addRelation($relation);
+            }
+            
+            // drop table metacrm_leadsproducts and metacrm_products 
+            $this->dropTable('metacrm_leads_products');
+            $this->dropTable('metacrm_products');
+        }
+        
+        $this->setApplicationVersion('Sales', '2.3');
+    }
 }
