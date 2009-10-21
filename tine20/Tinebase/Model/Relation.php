@@ -81,12 +81,23 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         'deleted_time'
     );
     
-    /*
-    public function setFromJson($relation)
+    
+    /**
+     * convert remark to array if json encoded
+     * 
+     * @see Tinebase_Record_Abstract::setFromArray
+     *
+     * @param array $_data            the new data to set
+     * 
+     * @todo    always json::encode remarks?
+     */
+    public function setFromArray(array $_data)
     {
+        parent::setFromArray($_data);
         
+        if ($this->remark && is_string($this->remark) && strpos('{', $this->remark) == 0) {
+            $this->remark = Zend_Json::decode($this->remark);
+        }
     }
-    */
-
 } // end of Tinebase_Model_Relation
 ?>

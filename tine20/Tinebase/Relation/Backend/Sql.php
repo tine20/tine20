@@ -87,6 +87,10 @@ class Tinebase_Relation_Backend_Sql
 				
         $data = $_relation->toArray();
         unset($data['related_record']);
+        
+        if (isset($data['remark']) && is_array($data['remark'])) {
+            $data['remark'] = Zend_Json::encode($data['remark']);
+        }
 	    
 	    $this->_dbTable->insert($data);
 		$this->_dbTable->insert($this->_swapRoles($data));		
@@ -107,6 +111,10 @@ class Tinebase_Relation_Backend_Sql
         
         $data = $_relation->toArray();
         unset($data['related_record']);
+        
+        if (isset($data['remark']) && is_array($data['remark'])) {
+            $data['remark'] = Zend_Json::encode($data['remark']);
+        }
         
         foreach (array($data, $this->_swapRoles($data)) as $toUpdate) {
             $where = array(

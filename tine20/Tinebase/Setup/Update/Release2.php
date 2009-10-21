@@ -363,4 +363,22 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.9');
     }
+
+    /**
+     * update to 2.10
+     * - increase relation remark field size
+     */    
+    public function update_9()
+    {
+        //update column definition
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>remark</name>
+                    <type>text</type>
+                </field>');
+        $this->_backend->alterCol('relations', $declaration);
+        
+        $this->setTableVersion('relations', '4');
+        $this->setApplicationVersion('Tinebase', '2.10');
+    }
 }
