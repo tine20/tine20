@@ -651,7 +651,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         }
     }
     
-    public function testStringToForeignKeyStatement_001() 
+    public function testAddAndDropForeignKey() 
     {
      
      $referencedTableName = 'phpunit_foreign';
@@ -721,7 +721,16 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $db->insert(SQL_TABLE_PREFIX . $referencedTableName, array('name' => 'test'));
         $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 1));
         
-        $this->setExpectedException('Zend_Db_Statement_Exception'); //foreign key constraint violation
+        try {
+          $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 999));
+          $this->fail('Expected Zend_Db_Statement_Exception not thrown');
+        } catch (Zend_Db_Statement_Exception $e) {
+          //we expected this exception, everything is alright
+        }
+
+        $this->_backend->dropForeignKey($this->_table->name, $index->name);
+        
+        //now this should work without throwing an Exception
         $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'foreign_id' => 999));
     }
     
