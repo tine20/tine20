@@ -209,8 +209,6 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
 
         $adminUser = Tinebase_User::getInstance()->getFullUserByLoginName('phpunit-admin');
         $this->assertTrue($adminUser instanceof Tinebase_Model_User);
-
-        $this->assertEquals($testAuthenticationData, $savedAuthenticationData, 'JONAS');
         
         //test if Tinebase stack was installed
         $apps = $this->_json->searchApplications();
