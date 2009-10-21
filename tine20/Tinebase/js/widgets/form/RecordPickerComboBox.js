@@ -21,7 +21,7 @@ Ext.ns('Tine.Tinebase.widgets.form');
  * Usage:
  * <pre><code>
 var resourcePicker = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-    'model': Tine.Calendar.Model.Resouce
+    'model': Tine.Calendar.Model.Resource
 });
    </code></pre>
  */
