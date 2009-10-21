@@ -101,9 +101,6 @@ class Tinebase_Auth
      */
     private static $_backendConfigurationDefaults = array(
         self::SQL => array(
-          'adminLoginName' => 'tine20admin',
-          'adminPassword' => 'lars',
-          'adminPasswordConfirmation' => 'lars'
         ),
         self::LDAP => array(
             'host' => '',
@@ -253,7 +250,7 @@ class Tinebase_Auth
             }
         } else {
             if ( ! array_key_exists($_key, $defaultValues)) {
-                throw new Tinebase_Exception_InvalidArgument("Cannot set backend configuration option '$_key' for accounts storage " . self::getConfiguredBackend());
+                throw new Tinebase_Exception_InvalidArgument("Cannot set backend configuration option '$_key' for authentication provider " . self::getConfiguredBackend());
             }
             self::$_backendConfiguration[$_key] = $_value;
         }

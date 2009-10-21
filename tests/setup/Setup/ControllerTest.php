@@ -99,9 +99,13 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     public function testInstallAdminAccountOptions()
     {
     	$this->_uninstallAllApplications();
-    	$this->_installAllApplications(array('adminLoginName' => 'phpunit-admin', 'adminPassword' => 'phpunit-password'));
+    	$this->_uit->installApplications(array('Tinebase'), array('adminLoginName' => 'phpunit-admin', 'adminPassword' => 'phpunit-password'));
     	$adminUser = Tinebase_User::getInstance()->getFullUserByLoginName('phpunit-admin');
     	$this->assertTrue($adminUser instanceof Tinebase_Model_User);
+    	
+    	$this->assertNull(Tinebase_Auth::getBackendConfiguration('adminLoginName'));
+    	$this->assertNull(Tinebase_Auth::getBackendConfiguration('adminPassword'));
+    	$this->assertNull(Tinebase_Auth::getBackendConfiguration('adminConfirmation'));
     	
     	//cleanup
     	$this->_uninstallAllApplications();

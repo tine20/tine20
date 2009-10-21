@@ -659,6 +659,14 @@ class Setup_Controller
     {
         $authenticationProviderData = $_authenticationData['authentication'];
         Tinebase_Auth::setBackendType($authenticationProviderData['backend']);
+        
+        $excludeKeys = array('adminLoginName', 'adminPassword', 'adminPasswordConfirmation');
+        foreach ($excludeKeys as $key) {
+          if (array_key_exists($key, $authenticationProviderData[$authenticationProviderData['backend']])) {
+              unset($authenticationProviderData[$authenticationProviderData['backend']][$key]);
+          }
+        }
+        
         Tinebase_Auth::setBackendConfiguration($authenticationProviderData[$authenticationProviderData['backend']]);
         Tinebase_Auth::saveBackendConfiguration();
         
