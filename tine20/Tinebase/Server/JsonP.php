@@ -48,8 +48,7 @@ class Tinebase_Server_JsonP extends Tinebase_Server_Abstract
             if ($success === true) {
                 $responseData = array(
                     'status'    => 'success',
-                    'msg'       => 'authentication succseed',
-                    //'loginUrl'  => 'https://somedomain/index.php'
+                    'msg'       => 'authentication succseed'
                 );
             } else {
                 $responseData = array(
