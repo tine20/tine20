@@ -363,7 +363,7 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '2.9');
     }
-
+    
     /**
      * update to 2.10
      * - increase relation remark field size
@@ -380,5 +380,34 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
         
         $this->setTableVersion('relations', '4');
         $this->setApplicationVersion('Tinebase', '2.10');
+    }
+    
+    /**
+     * update to 2.11
+     * - add openid column
+     */    
+    public function update_10()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>openid</name>
+                <type>text</type>
+                <length>254</length>
+            </field>
+        ');
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>openid</name>
+                <unique>true</unique>
+                <field>
+                    <name>openid</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('accounts', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '2.11');
     }
 }
