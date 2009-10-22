@@ -270,9 +270,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $model = get_class($_record);
         $backend = ucfirst(strtolower($_backend));        
         
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), TRUE));
+        
         $currentNotesIds = $this->getNotesOfRecord($model, $_record->getId(), $backend)->getArrayOfIds();
         $notes = $_record->$_notesProperty;
-                
+        
         if ($notes instanceOf Tinebase_Record_RecordSet) {
             $notesToSet = $notes;
         } else {
@@ -314,7 +316,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         // delete detached/deleted notes
         $this->deleteNotes($toDetach);
         
-        // add new notes        
+        // add new notes
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($notesToSet) . ' note(s) to record.');         
         foreach ($notesToSet as $note) {
             //if (in_array($note->getId(), $toAttach)) {
             if (!$note->getId()) {
@@ -344,6 +347,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($_note, 'create');
         
         $data = $_note->toArray(FALSE, FALSE);
+        
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE));
 
         $this->_notesTable->insert($data);        
     }
