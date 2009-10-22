@@ -7,7 +7,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        activate different gridpanels if subapp from treepanel is clicked
+ * TODO         activate different gridpanels if subapp from treepanel is clicked
+ * TODO         generalize this
  */
  
 Ext.namespace('Tine.Timetracker');
