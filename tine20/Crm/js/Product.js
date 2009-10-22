@@ -21,6 +21,7 @@ Ext.ns('Tine.Crm.Product');
  * <p>
  * TODO         allow multiple relations with 1 product or add product quantity?
  * TODO         check if we need edit/add actions again
+ * TODO         make resizing work correctly
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -193,9 +194,9 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         this.tbar = new Ext.Panel({
             layout: 'fit',
-            width: '100%',
             items: [
                 new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                    anchor: '90%',
                     emptyText: this.app.i18n._('Search for Products to add ...'),
                     productsStore: this.store,
                     blurOnSelect: true,
