@@ -233,7 +233,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
     	
-        //Tinebase_Core::getLogger()->debug(print_r($_record->toArray(),true));
+        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(),true));
         
         try {
             $db = $this->_backend->getAdapter();
