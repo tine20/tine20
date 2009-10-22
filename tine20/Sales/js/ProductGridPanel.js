@@ -107,16 +107,10 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
                 sortable: true
             },
             columns: [
-            /*
-                {header: this.app.i18n._('Product id'), id: 'id', dataIndex: 'id', width: 20, hidden: true},
                 {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
-                {header: this.app.i18n._('Product name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
-                {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'relations', width: 175, sortable: false, renderer: this.partnerRenderer},
-                {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'relations', width: 175, sortable: false, renderer: this.customerRenderer},
-                {header: this.app.i18n._('Productstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100, renderer: Tine.Sales.ProductState.Renderer},
-                {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
-                {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney }
-                */
+                {header: this.app.i18n._('Name'), id: 'name', dataIndex: 'name', width: 200},
+                {header: this.app.i18n._('Description'), id: 'description', dataIndex: 'description', width: 200, sortable: false},
+                {header: this.app.i18n._('Price'), id: 'price', dataIndex: 'price', width: 75, renderer: Ext.util.Format.euMoney}
             ]
         });
     },
