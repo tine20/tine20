@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         activate different gridpanels if subapp from treepanel is clicked
  */
  
 Ext.namespace('Tine.Sales');
@@ -17,6 +16,9 @@ Ext.namespace('Tine.Sales');
  * @class Tine.Sales.MainScreen
  * @extends Tine.Tinebase.widgets.app.MainScreen
  * MainScreen of the Sales Application <br>
+ * <pre>
+ * TODO         generalize this
+ * </pre>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -26,53 +28,132 @@ Ext.namespace('Tine.Sales');
  * Constructs mainscreen of the Sales application
  */
 Tine.Sales.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
-	/*
-    show: function() {
-        if(this.fireEvent("beforeshow", this) !== false){
-            this.setTreePanel();
-            this.setContentPanel();
-            this.setToolbar();
-            this.updateMainToolbar();
-            
-            this.fireEvent('show', this);
-        }
-        return this;
-    },*/
+    
+    activeContentType: 'Product',
+    
     setContentPanel: function() {
-        if(!this.gridPanel) {
-            var plugins = [];
-            if (typeof(this.treePanel.getFilterPlugin) == 'function') {
-                plugins.push(this.treePanel.getFilterPlugin());
-            }
-            
-            this.gridPanel = new Tine[this.app.appName].ContractGridPanel({
+        
+        // which content panel?
+        var type = this.activeContentType;
+        
+        if (! this[type + 'GridPanel']) {
+            this[type + 'GridPanel'] = new Tine[this.app.appName][type + 'GridPanel']({
                 app: this.app,
-                plugins: plugins
+                plugins: [this.treePanel.getFilterPlugin()]
             });
+            
         }
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-        this.gridPanel.store.load();
-    }    
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this[type + 'GridPanel'], true);
+        this[type + 'GridPanel'].store.load();
+    },
+    
+    getContentPanel: function() {
+        // which content panel?
+        
+        // we always return timesheet grid panel as a quick hack for saving filters
+        return this['Product' + 'GridPanel'];
+    },
+    
+    /**
+     * sets toolbar in mainscreen
+     */
+    setToolbar: function() {
+        var type = this.activeContentType;
+        
+        if (! this[type + 'ActionToolbar']) {
+            this[type + 'ActionToolbar'] = this[type + 'GridPanel'].actionToolbar;
+        }
+        
+        Tine.Tinebase.MainScreen.setActiveToolbar(this[type + 'ActionToolbar'], true);
+    }
 });
 
 /**
  * @namespace Tine.Sales
  * @class Tine.Sales.TreePanel
- * @extends Ext.tree.TreePanel
+ * @extends Tine.widgets.grid.PersistentFilterPicker
+ * 
+ * <pre>
+ * TODO         generalize this
+ * </pre>
  */ 
-Tine.Sales.TreePanel = Ext.extend(Ext.tree.TreePanel,{
+Tine.Sales.TreePanel = Ext.extend(Tine.widgets.grid.PersistentFilterPicker,{
+    
+    filter: [{field: 'model', operator: 'equals', value: 'Sales_Model_ProductFilter'}],
+    
     initComponent: function() {
-    	this.root = new Ext.tree.TreeNode({
-            text: this.app.i18n._('Contracts'),
-            cls: 'treemain',
-            allowDrag: false,
-            allowDrop: true,
+        
+        this.filterMountId = 'Product';
+        
+        this.root = {
             id: 'root',
-            icon: false
-        });
-    	Tine.Sales.TreePanel.superclass.initComponent.call(this);
-	}
+            leaf: false,
+            expanded: true,
+            children: [{
+                text: this.app.i18n._('Products'),
+                id: 'Product',
+                iconCls: 'SalesProduct',
+                expanded: true,
+                children: [{
+                    text: this.app.i18n._('All Products'),
+                    id: 'allproducts',
+                    leaf: true
+                }]
+            }, {
+                text: this.app.i18n._('Contracts'),
+                id : 'Contract',
+                iconCls: 'SalesContracts',
+                expanded: true,
+                children: [{
+                    text: this.app.i18n._('All Contracts'),
+                    id: 'allcontracts',
+                    leaf: true
+                }]
+            }]
+        };
+        
+        Tine.Sales.TreePanel.superclass.initComponent.call(this);
+        
+        this.on('click', function(node) {
+            if (node.attributes.isPersistentFilter != true) {
+                var contentType = node.getPath().split('/')[2];
+                
+                this.app.getMainScreen().activeContentType = contentType;
+                this.app.getMainScreen().show();
+            }
+        }, this);
+    },
+    
+    /**
+     * @private
+     */
+    afterRender: function() {
+        Tine.Sales.TreePanel.superclass.afterRender.call(this);
+        var type = this.app.getMainScreen().activeContentType;
+
+        this.expandPath('/root/' + type + '/allproducts');
+        this.selectPath('/root/' + type + '/allproducts');
+    },
+    
+    /**
+     * returns a filter plugin to be used in a grid
+     * 
+     * TODO     can we remove that?
+     */
+    getFilterPlugin: function() {
+        if (!this.filterPlugin) {
+            var scope = this;
+            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
+                getValue: function() {
+                    return [
+                    ];
+                }
+            });
+        }
+        
+        return this.filterPlugin;
+    }
 });
     
 /**
@@ -81,7 +162,7 @@ Tine.Sales.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 Tine.Sales.contractBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Sales',
     modelName: 'Contract',
-    recordClass: Tine.Sales.Contract
+    recordClass: Tine.Sales.Model.Contract
 });
 
 /**

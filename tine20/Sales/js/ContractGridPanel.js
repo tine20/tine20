@@ -33,7 +33,7 @@ Ext.namespace('Tine.Sales');
  */
 Tine.Sales.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
-    recordClass: Tine.Sales.Contract,
+    recordClass: Tine.Sales.Model.Contract,
     
     // grid specific
     defaultSortInfo: {field: 'title', dir: 'ASC'},

@@ -46,7 +46,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'ContractEditWindow_',
     appName: 'Sales',
-    recordClass: Tine.Sales.Contract,
+    recordClass: Tine.Sales.Model.Contract,
     recordProxy: Tine.Sales.contractBackend,
     //showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],

@@ -71,7 +71,7 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
-        Tine.Sales.GridPanel.superclass.initComponent.call(this);
+        Tine.Sales.ProductGridPanel.superclass.initComponent.call(this);
     },
     
     /**
