@@ -11,6 +11,7 @@
  
 Ext.namespace('Tine.Sales', 'Tine.Sales.Model');
 
+// Product model fields
 Tine.Sales.Model.ProductArray = [
     {name: 'id',            type: 'string'},
     {name: 'name',          type: 'string'},
@@ -57,3 +58,55 @@ Tine.Sales.Model.Product.getDefaultData = function() {
     var data = {};
     return data;
 };
+
+// Contract model fields
+Tine.Sales.Model.ContractArray = Tine.Tinebase.Model.genericFields.concat([
+    // contract only fields
+    { name: 'id' },
+    { name: 'number' },
+    { name: 'title' },
+    { name: 'description' },
+    { name: 'status' },
+    // tine 2.0 notes field
+    { name: 'notes'},
+    // linked contacts/accounts
+    { name: 'customers'},
+    { name: 'accounts'}
+]);
+
+/**
+ * @namespace Tine.Sales.Model
+ * @class Tine.Sales.Model.Contract
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Contract Record Definition
+ */ 
+Tine.Sales.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Sales.Model.ContractArray, {
+    appName: 'Sales',
+    modelName: 'Contract',
+    idProperty: 'id',
+    titleProperty: 'title',
+    // ngettext('Contract', 'Contracts', n);
+    recordName: 'Contracts',
+    recordsName: 'Contracts',
+    containerProperty: 'container_id',
+    // ngettext('contracts list', 'contracts lists', n);
+    containerName: 'contracts list',
+    containersName: 'contracts lists'
+});
+
+/**
+ * @namespace Tine.Sales.Model
+ * 
+ * get default data for a new Contract
+ *  
+ * @return {Object} default data
+ * @static
+ */
+Tine.Sales.Model.Contract.getDefaultData = function() { 
+    return {
+        container_id: Tine.Sales.registry.get('DefaultContainer')
+    };
+};
+
+

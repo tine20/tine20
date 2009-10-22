@@ -78,10 +78,11 @@
         <source src="../tine20/Calendar/js/PagingToolbar.js"/> 
         <source src="../tine20/Calendar/js/ParallelEventsRegistry.js"/> 
         <source src="../tine20/Calendar/js/RrulePanel.js"/> -->
-        <source src="../tine20/Crm/js" match="*.js"/>
+        <!--source src="../tine20/Crm/js" match="*.js"/ -->
         <source src="../tine20/ExampleApplication/js/ExampleRecordGridPanel.js"/>
         <source src="../tine20/ExampleApplication/js/ExampleRecordEditDialog.js"/>
         <source src="../tine20/Felamimail/js" match="*.js"/>
+        <source src="../tine20/Sales/js" match="*.js"/>
         <source src="../tine20/Setup/js" match="*.js"/>
         <source src="../tine20/Tasks/js/EditDialog.js"/>
         <source src="../tine20/Tasks/js/GridPanel.js"/>

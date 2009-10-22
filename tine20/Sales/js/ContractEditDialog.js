@@ -1,10 +1,10 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -12,7 +12,24 @@
 Ext.namespace('Tine.Sales');
 
 /**
- * Sales Edit Dialog
+ * Contract edit dialog
+ * 
+ * @namespace   Tine.Sales
+ * @class       Tine.Sales.ContractEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ * 
+ * <p>Contract Edit Dialog</p>
+ * <p><pre>
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Sales.ContractGridPanel
  */
 Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
@@ -30,7 +47,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowNamePrefix: 'ContractEditWindow_',
     appName: 'Sales',
     recordClass: Tine.Sales.Contract,
-    recordProxy: Tine.Sales.JsonBackend,
+    recordProxy: Tine.Sales.contractBackend,
     //showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     

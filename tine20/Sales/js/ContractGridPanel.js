@@ -1,10 +1,10 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -12,7 +12,24 @@
 Ext.namespace('Tine.Sales');
 
 /**
- * Sales Edit Dialog
+ * Contract grid panel
+ * 
+ * @namespace   Tine.Sales
+ * @class       Tine.Sales.ContractGridPanel
+ * @extends     Tine.Tinebase.widgets.app.GridPanel
+ * 
+ * <p>Contract Grid Panel</p>
+ * <p><pre>
+ * </pre></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Sales.ContractGridPanel
  */
 Tine.Sales.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     // model generics
@@ -26,7 +43,7 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
     },
     
     initComponent: function() {
-        this.recordProxy = Tine.Sales.JsonBackend;
+        this.recordProxy = Tine.Sales.contractBackend;
         
         //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();

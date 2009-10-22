@@ -1,19 +1,30 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO         activate different gridpanels if subapp from treepanel is clicked
- * TODO         move contract model to Models.js
  */
  
 Ext.namespace('Tine.Sales');
 
-// default mainscreen
+/**
+ * @namespace Tine.Sales
+ * @class Tine.Sales.MainScreen
+ * @extends Tine.Tinebase.widgets.app.MainScreen
+ * MainScreen of the Sales Application <br>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * @constructor
+ * Constructs mainscreen of the Sales application
+ */
 Tine.Sales.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
 	/*
     show: function() {
@@ -45,6 +56,11 @@ Tine.Sales.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     }    
 });
 
+/**
+ * @namespace Tine.Sales
+ * @class Tine.Sales.TreePanel
+ * @extends Ext.tree.TreePanel
+ */ 
 Tine.Sales.TreePanel = Ext.extend(Ext.tree.TreePanel,{
     initComponent: function() {
     	this.root = new Ext.tree.TreeNode({
@@ -59,47 +75,10 @@ Tine.Sales.TreePanel = Ext.extend(Ext.tree.TreePanel,{
 	}
 });
     
-// Contract model
-Tine.Sales.ContractArray = Tine.Tinebase.Model.genericFields.concat([
-    // contract only fields
-    { name: 'id' },
-    { name: 'number' },
-    { name: 'title' },
-    { name: 'description' },
-    { name: 'status' },
-    // tine 2.0 notes field
-    { name: 'notes'},
-    // linked contacts/accounts
-    { name: 'customers'},
-    { name: 'accounts'}
-]);
-
-/**
- * Contract record definition
- */
-Tine.Sales.Contract = Tine.Tinebase.data.Record.create(Tine.Sales.ContractArray, {
-    appName: 'Sales',
-    modelName: 'Contract',
-    idProperty: 'id',
-    titleProperty: 'title',
-    // ngettext('Contract', 'Contracts', n);
-    recordName: 'Contracts',
-    recordsName: 'Contracts',
-    containerProperty: 'container_id',
-    // ngettext('contracts list', 'contracts lists', n);
-    containerName: 'contracts list',
-    containersName: 'contracts lists'
-});
-Tine.Sales.Contract.getDefaultData = function() { 
-    return {
-        container_id: Tine.Sales.registry.get('DefaultContainer')
-    };
-};
-
 /**
  * default contracts backend
  */
-Tine.Sales.JsonBackend = new Tine.Tinebase.data.RecordProxy({
+Tine.Sales.contractBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Sales',
     modelName: 'Contract',
     recordClass: Tine.Sales.Contract
