@@ -10,7 +10,6 @@
  * @version     $Id$
  *
  * @todo        add (empty) sendNotifications()
- * @todo        add rights to check to generic functions (do that before extending this class in admin controllers)
  */
 
 /**
