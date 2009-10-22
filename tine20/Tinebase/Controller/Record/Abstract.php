@@ -103,9 +103,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
     {
     	$this->_checkRight('get');
-    	if ($this->_doContainerACLChecks) {
-            $this->checkFilterACL($_filter);
-    	}
+        $this->checkFilterACL($_filter);
         
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
@@ -124,9 +122,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
     {
-        if ($this->_doContainerACLChecks) {
-            $this->checkFilterACL($_filter);
-        }
+        $this->checkFilterACL($_filter);
 
         $count = $this->_backend->searchCount($_filter);
         
@@ -396,10 +392,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function updateMultiple($_filter, $_data)
     {
-        if ($this->_doContainerACLChecks) {
-            $this->checkFilterACL($_filter, 'update');
-        }
         $this->_checkRight('update');
+        $this->checkFilterACL($_filter, 'update');
         
         // get only ids
         $ids = $this->_backend->search($_filter, NULL, TRUE);
