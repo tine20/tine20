@@ -51,7 +51,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.Tinebase.widgets.app.MainScreen, {
     getContentPanel: function() {
         // which content panel?
         
-        // we always return timesheet grid panel as a quick hack for saving filters
+        // we always return product grid panel as a quick hack for saving filters
         return this['Product' + 'GridPanel'];
     },
     
