@@ -56,6 +56,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
         
+        this.loadingText = _('Searching...');
+        
         this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({readOnly: true}, this, 'totalProperty,root,recordClass'));
         
         this.on('beforequery', this.onBeforeQuery, this);
