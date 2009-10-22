@@ -21,6 +21,7 @@ Ext.namespace('Tine.Crm');
  * TODO         simplify relation handling (move init of stores to relation grids and get data from there later?)
  * TODO         make marking of invalid fields work again
  * TODO         add export button
+ * TODO         disable link grids if user has no run right for the app (adb/tasks/sales)
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
