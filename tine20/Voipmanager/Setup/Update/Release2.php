@@ -290,6 +290,12 @@ class Voipmanager_Setup_Update_Release2 extends Setup_Update_Abstract
             );
         }
         
+        // delete any phones which have no valid context_id set
+        $this->_db->delete(
+            SQL_TABLE_PREFIX . 'asterisk_sip_peers',
+            array("context_id = ''")
+        );
+        
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
                 <name>asterisk_sip_peers::context_id--asterisk_context::id</name>
