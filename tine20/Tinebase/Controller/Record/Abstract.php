@@ -587,7 +587,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             } else {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 'No permissions to ' . $_action . ' in container ' . $_record->container_id);
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to ' . $_action . ' in container ' . $_record->container_id);
             }
         }
         
@@ -616,6 +616,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function checkFilterACL(/*Tinebase_Model_Filter_FilterGroup */$_filter, $_action = 'get')
     {
+        if (! $this->_doContainerACLChecks) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
+            return TRUE;
+        }
+        
         $containerFilters = $_filter->getAclFilters();
         
         if (! $containerFilters) {
