@@ -20,7 +20,6 @@ Ext.namespace('Tine.Sales');
  * 
  * <p>Product Grid Panel</p>
  * <p><pre>
- * TODO         use MANAGE_PRODUCTS right to enable/disable buttons 
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -73,6 +72,24 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.Tinebase.widgets.app.GridPanel, {
         this.plugins.push(this.filterToolbar);
         
         Tine.Sales.ProductGridPanel.superclass.initComponent.call(this);
+        
+        // actions depend on manage_products right
+        this.selectionModel.on('selectionchange', function(sm) {
+            var hasManageRight = Tine.Tinebase.common.hasRight('manage', 'Sales', 'products');
+
+            if (hasManageRight) {
+                Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
+                if (this.updateOnSelectionChange && this.detailsPanel) {
+                    this.detailsPanel.onDetailsUpdate(sm);
+                }
+            } else {
+                this.action_editInNewWindow.setDisabled(true);
+                this.action_deleteRecord.setDisabled(true);
+                this.action_tagsMassAttach.setDisabled(true);
+            }
+        }, this);
+
+        this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Sales', 'products'));
     },
     
     /**
